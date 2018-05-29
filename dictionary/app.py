@@ -1,6 +1,6 @@
 import falcon
 
-class DictionaryReource:
+class WordsResource:
     def on_get(self, req, resp, lemma, homonym):
         entry = {
             'lemma': lemma.split(' '),
@@ -10,4 +10,4 @@ class DictionaryReource:
         resp.media = entry
 
 api = application = falcon.API()
-api.add_route('/{lemma}/{homonym}', DictionaryReource())
+api.add_route('/words/{lemma}/{homonym}', WordsResource())

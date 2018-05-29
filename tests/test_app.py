@@ -19,7 +19,7 @@ def test_list_images(client):
         'homonym': homonym
     }
 
-    response = client.simulate_get(f'/{part1} {part2}/{homonym}')
+    response = client.simulate_get(f'/words/{part1} {part2}/{homonym}')
  
     assert json.loads(response.content) == entry
     assert response.status == falcon.HTTP_OK
