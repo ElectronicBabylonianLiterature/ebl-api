@@ -5,3 +5,24 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/425c3968b768ccaa0cdd/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/dictionary/maintainability)
 
 Dictionary API
+
+## Setup
+
+```
+pip install -r requirements.txt
+```
+
+## Running tests
+
+```
+pytest --cov=dictionary tests
+```
+
+## Running the application
+
+The application requires a dictionary file in the format provided by [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser).
+
+```
+docker build -t ebl/dictionary .
+docker run -p 80:8000 --rm -it --name dictionary-api ebl/dictionary --build-arg DICTIONARY_FILE=<dictionary file location>
+```
