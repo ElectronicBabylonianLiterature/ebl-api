@@ -8,12 +8,7 @@ import dictionary.app
 
 @pytest.fixture
 def client():
-    api = dictionary.app.create_app([
-        {
-            'lemma': ['part1', 'part2'],
-            'homonym': 'I'
-        }
-    ])
+    api = dictionary.app.create_app('./tests/dictionary.json')
     return testing.TestClient(api)
 
 def test_get_word(client):
