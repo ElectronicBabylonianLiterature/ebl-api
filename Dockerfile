@@ -1,12 +1,14 @@
 FROM python:3
 
 RUN pip install gunicorn
-RUN pip install falcon
 
 EXPOSE 8000
 
-WORKDIR ./app
+WORKDIR /usr/src/app
 
-COPY . /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 CMD ["gunicorn", "-b :8000", "dictionary.app"]
