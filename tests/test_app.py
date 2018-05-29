@@ -13,11 +13,13 @@ def client():
 def test_list_images(client):
     part1 = 'part1'
     part2 = 'part2'
+    homonym = 'homonym'
     entry = {
-        'lemma': [part1, part2]
+        'lemma': [part1, part2],
+        'homonym': homonym
     }
 
-    response = client.simulate_get(f'/{part1} {part2}')
+    response = client.simulate_get(f'/{part1} {part2}/{homonym}')
  
     assert json.loads(response.content) == entry
     assert response.status == falcon.HTTP_OK
