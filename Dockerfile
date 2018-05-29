@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["gunicorn", "-b :8000", "dictionary.app"]
+CMD ["gunicorn", "-b :8000", "dictionary.app:get_app()"]

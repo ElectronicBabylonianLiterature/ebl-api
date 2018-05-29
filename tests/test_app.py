@@ -3,11 +3,17 @@ import json
 from falcon import testing
 import pytest
 
-from dictionary.app import api
+import dictionary.app
 
 
 @pytest.fixture
 def client():
+    api = dictionary.app.create_app([
+        {
+            'lemma': ['part1', 'part2'],
+            'homonym': 'I'
+        }
+    ])
     return testing.TestClient(api)
 
 def test_get_word(client):
