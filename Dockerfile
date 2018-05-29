@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY ./dictionary ./dictionary
 
 ARG DICTIONARY_FILE=./tests/dictionary.json
 COPY ${DICTIONARY_FILE} ./dictionary.json
