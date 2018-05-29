@@ -2,7 +2,6 @@ import falcon
 
 class DictionaryReource:
     def on_get(self, req, resp):
-        """Handles GET requests"""
         entry = {
             'lemma': ['abā\'u']
         }
