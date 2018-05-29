@@ -29,4 +29,9 @@ def test_lemma_not_found(client):
     response = client.simulate_get(f'/words/unknown/I')
  
     assert response.status == falcon.HTTP_NOT_FOUND
+
+def test_homonym_not_found(client):
+    response = client.simulate_get(f'/words/part1 part2/II')
+ 
+    assert response.status == falcon.HTTP_NOT_FOUND
     
