@@ -7,9 +7,9 @@ class WordsResource:
 
     def on_get(self, req, resp, lemma, homonym):
 
-        compoundLemma = lemma.split(' ')
+        compound_lemma = lemma.split(' ')
 
         try:
-             resp.media = self.dictionary.find(compoundLemma, homonym)
+            resp.media = self.dictionary.find(compound_lemma, homonym)
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND

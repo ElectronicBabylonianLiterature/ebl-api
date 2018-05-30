@@ -4,9 +4,12 @@ class Dictionary(object):
         self.words = words
 
     def find(self, lemma, homonym):
-        matchingWords = [word for word in self.words if word['lemma'] == lemma and word['homonym'] == homonym]
+        def is_match(word):
+            return word['lemma'] == lemma and word['homonym'] == homonym
 
-        if(len(matchingWords) > 0):
-            return matchingWords[0]
+        matching_words = [word for word in self.words if is_match(word)]
+
+        if matching_words:
+            return matching_words[0]
         else:
             raise KeyError
