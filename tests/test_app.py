@@ -21,18 +21,25 @@ def test_get_word(client):
         'homonym': homonym
     }
 
-    response = client.simulate_get(f'/words/{part1} {part2}/{homonym}')
+    result = client.simulate_get(f'/words/{part1} {part2}/{homonym}')
  
-    assert json.loads(response.content) == expectedWord
-    assert response.status == falcon.HTTP_OK
+    assert json.loads(result.content) == expectedWord
+    assert result.status == falcon.HTTP_OK
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 def test_lemma_not_found(client):
-    response = client.simulate_get(f'/words/unknown/I')
+    result = client.simulate_get(f'/words/unknown/I')
  
-    assert response.status == falcon.HTTP_NOT_FOUND
+    assert result.status == falcon.HTTP_NOT_FOUND
 
 def test_homonym_not_found(client):
-    response = client.simulate_get(f'/words/part1 part2/II')
+    result = client.simulate_get(f'/words/part1 part2/II')
  
-    assert response.status == falcon.HTTP_NOT_FOUND
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+def test_cors(client):
+    result = client.simulate_options(f'/words/part1 part2/I', headers={'Access-Control-Request-Method': 'GET'})
+    assert result.headers['Access-Control-Allow-Methods'] == 'GET'
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
+    assert result.headers['Access-Control-Max-Age'] == '86400'
     
