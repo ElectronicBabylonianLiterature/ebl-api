@@ -7,6 +7,7 @@ from .words import WordsResource
 class CORSComponent(object):
     # From https://falcon.readthedocs.io/en/stable/user/faq.html#how-do-i-implement-cors-with-falcon
 
+    # pylint: disable=R0201
     def process_response(self, req, resp, resource, req_succeeded):
         resp.set_header('Access-Control-Allow-Origin', '*')
 
