@@ -9,7 +9,8 @@ Dictionary API
 ## Setup
 
 ```
-pip install -r requirements.txt
+pip install pipenv
+pipenv install --dev
 ```
 
 ## Running tests
@@ -24,5 +25,5 @@ The application requires a dictionary file in the format provided by [dictionary
 
 ```
 docker build -t ebl/dictionary . --build-arg DICTIONARY_FILE=<dictionary file location>
-docker run -p 80:8000 --rm -it --name dictionary-api ebl/dictionary
+docker run -p 8000:8000 --rm -it --name dictionary-api ebl/dictionary
 ```
