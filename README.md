@@ -16,7 +16,8 @@ pipenv install --dev
 ## Running tests
 
 ```
-pytest --cov=dictionary tests
+pipenv run pylint dictionary tests
+pipenv run pytest --cov=dictionary tests
 ```
 
 ## Running the application
