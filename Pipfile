@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 falcon = "==1.4.1"
 falcon-auth = "*"
+cryptography = "*"
 
 [dev-packages]
 pytest = "==3.6.0"
