@@ -6,6 +6,8 @@
 
 Dictionary API
 
+An API to serve a dictionary created with the [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser).
+
 ## Setup
 
 ```
@@ -22,11 +24,21 @@ pipenv run pytest --cov=dictionary tests
 
 ## Running the application
 
-The application requires a dictionary file in the format provided by [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser), a PEM certificate from Auth0 application (can be found under advanced settings) and a configuration JSON for Auth0. The configuration should contain attributes `audience` (the API identofier) and `issuer` (the application doamin).
+The application reads the configuration from following environment variables: `AUTH0_AUDIENCE` (the Auth0 API identifier), `AUTH0_ISSUER` (the Auth0 application domain), and `MONGODB_HOST`.
 
-By default filenames `dictionary.json`, `auth0.pem`, and `auth0.json` are used. If needed a custom filename can be provided via build args (e.g. `--build-arg DICTIONARY_FILE=my-dictionary.json`). See `Dockerfile` for details.
+The application requires a PEM certificate from Auth0 application (can be found under advanced settings) and a configuration JSON for Auth0.By default filenames `auth0.pem` is used. If needed a custom filename can be provided via build args (e.g. `--build-arg PEM_FILE=my_certificate.pem`). See `Dockerfile` for details.
 
+### The API image
+
+Build and run the API image:
 ```
 docker build -t ebl/dictionary . 
-docker run -p 8000:8000 --rm -it --name dictionary-api ebl/dictionary
+docker run -p 8000:8000 --rm -it --env-file=FILE --name dictionary-api ebl/dictionary
+```
+
+### Docker Compse
+
+Run the full API including the database:
+```
+docker-compose up
 ```

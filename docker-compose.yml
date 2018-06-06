@@ -1,0 +1,14 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+    - "8000:8000"
+    links:
+    - mongo
+    environment:
+      - AUTH0_AUDIENCE
+      - AUTH0_ISSUER
+      - MONGODB_HOST
+  mongo:
+    image: mongo
