@@ -7,11 +7,13 @@ name = "pypi"
 falcon = "==1.4.1"
 falcon-auth = "*"
 cryptography = "*"
+pymongo = "*"
 
 [dev-packages]
 pytest = "==3.6.0"
 pytest-cov = "==2.5.1"
 pylint = "*"
+mongomock = "*"
 
 [requires]
 python_version = "3.6"
