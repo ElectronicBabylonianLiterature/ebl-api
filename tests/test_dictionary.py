@@ -5,7 +5,7 @@ from dictionary.dictionary import MongoDictionary
 
 @pytest.fixture
 def dictionary():
-    return MongoDictionary(mongomock.MongoClient())
+    return MongoDictionary(mongomock.MongoClient().dictionary)
 
 def test_create_and_find(dictionary):
     lemma = ['part1', 'part2']

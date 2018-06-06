@@ -15,7 +15,7 @@ from dictionary.dictionary import MongoDictionary
 
 @pytest.fixture
 def mongo_dictionary():
-    mongo_dictionary = MongoDictionary(mongomock.MongoClient())
+    mongo_dictionary = MongoDictionary(mongomock.MongoClient().dictionary)
     return mongo_dictionary
 
 @pytest.fixture

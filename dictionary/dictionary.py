@@ -1,7 +1,7 @@
 class MongoDictionary(object):
 
-    def __init__(self, client):
-        self.database = client.dictionary
+    def __init__(self, database):
+        self.database = database
 
     def create(self, word):
         return self.database.words.insert_one(word).inserted_id
