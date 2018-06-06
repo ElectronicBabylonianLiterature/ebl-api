@@ -41,6 +41,6 @@ def get_app():
                                    verify_claims=['signature', 'exp', 'iat'],
                                    required_claims=['exp', 'iat'])
 
-    dictionary = MongoDictionary(MongoClient(os.environ['MONGODB_HOST'], 27017))
+    dictionary = MongoDictionary(MongoClient(os.environ['MONGODB_URI'], 27017))
 
     return create_app(dictionary, auth0_backend)

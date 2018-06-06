@@ -10,6 +10,6 @@ services:
       - AUTH0_AUDIENCE
       - AUTH0_ISSUER
       - AUTH0_PEM
-      - MONGODB_HOST
+      - MONGODB_URI
   mongo:
     image: mongo

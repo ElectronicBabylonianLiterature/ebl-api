@@ -24,7 +24,7 @@ pipenv run pytest --cov=dictionary tests
 
 ## Running the application
 
-The application reads the configuration from following environment variables: `AUTH0_AUDIENCE` (the Auth0 API identifier), `AUTH0_ISSUER` (the Auth0 application domain), `AUTH0_PEM` (base64 encoded PEM certificate from the Auth0 application found under advanced settings),  and `MONGODB_HOST`.
+The application reads the configuration from following environment variables: `AUTH0_AUDIENCE` (the Auth0 API identifier), `AUTH0_ISSUER` (the Auth0 application domain), `AUTH0_PEM` (base64 encoded PEM certificate from the Auth0 application found under advanced settings),  and `MONGODB_URI`.
 
 ### The API image
 
