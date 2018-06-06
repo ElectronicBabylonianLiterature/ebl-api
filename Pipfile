@@ -8,6 +8,7 @@ falcon = "==1.4.1"
 falcon-auth = "*"
 cryptography = "*"
 pymongo = "*"
+gunicorn = "*"
 
 [dev-packages]
 pytest = "==3.6.0"

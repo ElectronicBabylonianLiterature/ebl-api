@@ -8,7 +8,6 @@ WORKDIR /usr/src/app
 
 COPY Pipfile* ./
 RUN pipenv install
-RUN pipenv install gunicorn
 
 COPY ./dictionary ./dictionary
 
