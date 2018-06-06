@@ -9,6 +9,7 @@ services:
     environment:
       - AUTH0_AUDIENCE
       - AUTH0_ISSUER
+      - AUTH0_PEM
       - MONGODB_HOST
   mongo:
     image: mongo

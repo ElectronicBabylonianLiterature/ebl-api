@@ -1,4 +1,5 @@
 import os
+from base64 import b64decode
 
 import falcon
 from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
@@ -26,10 +27,10 @@ def create_app(dictionary, auth_backend):
 
     return api
 
-def get_app(certificate_path):
-    with open(certificate_path, 'rb') as cert:
-        cert_obj = load_pem_x509_certificate(cert.read(), default_backend())
-        public_key = cert_obj.public_key()
+def get_app():
+    certificate = b64decode(os.environ['AUTH0_PEM'])
+    cert_obj = load_pem_x509_certificate(certificate, default_backend())
+    public_key = cert_obj.public_key()
 
     auth0_backend = JWTAuthBackend(auth0_user_loader,
                                    public_key,

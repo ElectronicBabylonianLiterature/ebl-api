@@ -12,7 +12,4 @@ RUN pipenv install gunicorn
 
 COPY ./dictionary ./dictionary
 
-ARG PEM_FILE=./auth0.pem
-COPY ${PEM_FILE} ./auth0.pem
-
-CMD ["pipenv", "run", "gunicorn", "-b :8000", "dictionary.app:get_app('./auth0.pem')"]
+CMD ["pipenv", "run", "gunicorn", "-b :8000", "dictionary.app:get_app()"]
