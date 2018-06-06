@@ -1,1 +1,1 @@
-web: gunicorn -b :$PORT dictionary.app:get_app()
+web: gunicorn -b :$PORT "dictionary.app:get_app()"
