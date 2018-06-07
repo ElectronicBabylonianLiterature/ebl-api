@@ -5,8 +5,6 @@ import falcon
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 
-from bson.json_util import dumps
-
 import mongomock
 
 import dictionary.app
