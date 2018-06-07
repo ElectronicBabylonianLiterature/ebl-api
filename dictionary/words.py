@@ -1,5 +1,4 @@
 import falcon
-from bson.json_util import dumps
 
 class WordsResource:
 
@@ -12,6 +11,7 @@ class WordsResource:
 
         try:
             word = self.dictionary.find(compound_lemma, homonym)
-            resp.media = dumps(word)
+            word.pop('_id', None)
+            resp.media = word
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND

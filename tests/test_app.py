@@ -32,7 +32,7 @@ def word(mongo_dictionary):
         'lemma': ['part1', 'part2'],
         'homonym':  'I'
     }
-    mongo_dictionary.create(word)
+    mongo_dictionary.create(dict(word))
     return word
 
 def test_get_word(client, word):
@@ -40,7 +40,7 @@ def test_get_word(client, word):
     homonym = word['homonym']
     result = client.simulate_get(f'/words/{lemma}/{homonym}')
 
-    assert json.loads(result.content) == dumps(word)
+    assert json.loads(result.content) == word
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
