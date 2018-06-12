@@ -9,6 +9,7 @@ falcon-auth = "*"
 cryptography = "*"
 pymongo = "*"
 gunicorn = "*"
+newrelic = "*"
 
 [dev-packages]
 pytest = "==3.6.0"
