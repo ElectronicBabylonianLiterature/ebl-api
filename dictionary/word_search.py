@@ -1,5 +1,3 @@
-import falcon
-
 class WordSearch:
 
     def __init__(self, dictionary):
