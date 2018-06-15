@@ -1,5 +1,6 @@
 import json
 import pytest
+from bson.objectid import ObjectId
 
 import falcon
 from falcon import testing
@@ -30,31 +31,43 @@ def word(mongo_dictionary):
         'lemma': ['part1', 'part2'],
         'homonym':  'I'
     }
-    mongo_dictionary.create(dict(word))
+    mongo_dictionary.create(word)
     return word
 
-def test_get_word(client, word):
-    lemma = ' '.join(word['lemma'])
-    homonym = word['homonym']
-    result = client.simulate_get(f'/words/{lemma}/{homonym}')
+@pytest.fixture
+def expected_word(word):
+    return {
+        '_id': str(word['_id']),
+        'lemma': word['lemma'],
+        'homonym':  word['homonym']
+    }
 
-    assert json.loads(result.content) == word
+def test_get_word(client, word, expected_word):
+    object_id = str(word['_id'])
+    result = client.simulate_get(f'/words/{object_id}')
+
+    assert json.loads(result.content) == expected_word
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 def test_lemma_not_found(client):
-    result = client.simulate_get(f'/words/unknown/I')
+    object_id = str(ObjectId())
+    result = client.simulate_get(f'/words/{object_id}')
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
-def test_homonym_not_found(client):
-    result = client.simulate_get(f'/words/part1 part2/II')
+def test_search_word(client, word, expected_word):
+    lemma = ' '.join(word['lemma'])
+    result = client.simulate_get(f'/words/search/{lemma}')
 
-    assert result.status == falcon.HTTP_NOT_FOUND
+    assert json.loads(result.content) == [expected_word]
+    assert result.status == falcon.HTTP_OK
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 def test_cors(client):
+    object_id = str(ObjectId())
     headers = {'Access-Control-Request-Method': 'GET'}
-    result = client.simulate_options(f'/words/part1 part2/I', headers=headers)
+    result = client.simulate_options(f'/words/{object_id}', headers=headers)
 
     assert result.headers['Access-Control-Allow-Methods'] == 'GET'
     assert result.headers['Access-Control-Allow-Origin'] == '*'

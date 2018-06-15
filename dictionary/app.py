@@ -12,6 +12,7 @@ from cryptography.hazmat.backends import default_backend
 from .cors_component import CORSComponent
 from .dictionary import MongoDictionary
 from .words import WordsResource
+from .word_search import WordSearch
 
 
 def auth0_user_loader(token):
@@ -23,7 +24,10 @@ def create_app(dictionary, auth_backend):
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
 
     words = WordsResource(dictionary)
-    api.add_route('/words/{lemma}/{homonym}', words)
+    word_search = WordSearch(dictionary)
+
+    api.add_route('/words/search/{lemma}', word_search)
+    api.add_route('/words/{object_id}', words)
 
     return api
 

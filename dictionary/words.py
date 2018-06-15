@@ -1,17 +1,16 @@
 import falcon
+from bson.objectid import ObjectId
 
 class WordsResource:
 
     def __init__(self, dictionary):
         self.dictionary = dictionary
 
-    def on_get(self, req, resp, lemma, homonym):
-
-        compound_lemma = lemma.split(' ')
+    def on_get(self, req, resp, object_id):
 
         try:
-            word = self.dictionary.find(compound_lemma, homonym)
-            word.pop('_id', None)
+            word = self.dictionary.find(ObjectId(object_id))
+            word['_id'] = object_id
             resp.media = word
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND
