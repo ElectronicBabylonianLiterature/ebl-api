@@ -1,5 +1,6 @@
 import falcon
 from bson.objectid import ObjectId
+from bson.errors import InvalidId
 
 class WordsResource:
 
@@ -12,5 +13,5 @@ class WordsResource:
             word = self.dictionary.find(ObjectId(object_id))
             word['_id'] = object_id
             resp.media = word
-        except KeyError:
+        except (KeyError, InvalidId):
             resp.status = falcon.HTTP_NOT_FOUND

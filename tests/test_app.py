@@ -50,8 +50,14 @@ def test_get_word(client, word, expected_word):
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
-def test_lemma_not_found(client):
+def test_word_not_found(client):
     object_id = str(ObjectId())
+    result = client.simulate_get(f'/words/{object_id}')
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+def test_word_invalid_id(client):
+    object_id = 'invalid object id'
     result = client.simulate_get(f'/words/{object_id}')
 
     assert result.status == falcon.HTTP_NOT_FOUND
