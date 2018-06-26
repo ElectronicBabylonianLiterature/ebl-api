@@ -23,3 +23,12 @@ class MongoDictionary(object):
         })
 
         return [word for word in cursor]
+
+    def update(self, word):
+        result = self.database.words.update_one(
+            {'_id': word['_id']},
+            {'$set': word}
+        )
+
+        if result.matched_count == 0:
+            raise KeyError

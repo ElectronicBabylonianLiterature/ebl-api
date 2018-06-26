@@ -68,3 +68,35 @@ def test_search_finds_duplicates(dictionary):
 
 def test_search_not_found(dictionary):
     assert dictionary.search(['lemma']) == []
+
+def test_update(dictionary):
+    lemma = ['part1', 'part2']
+    new_lemma = ['new']
+    homonym = 'I'
+
+    word = {
+        'lemma': lemma,
+        'homonym': homonym
+    }
+
+    word_id = dictionary.create(word)
+
+    updated_word = {
+        '_id': word_id,
+        'lemma': new_lemma,
+        'homonym': homonym
+    }
+
+    dictionary.update(updated_word)
+
+    assert dictionary.find(word_id) == updated_word
+
+def test_update_word_not_found(dictionary):
+    word = {
+        '_id': ObjectId(),
+        'lemma': ['lemma'],
+        'homonym': 'I'
+    }
+
+    with pytest.raises(KeyError):
+        dictionary.update(word)
