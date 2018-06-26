@@ -1,5 +1,7 @@
 import json
+from urllib import parse
 import pytest
+
 from bson.objectid import ObjectId
 
 import falcon
@@ -28,7 +30,7 @@ def client(mongo_dictionary):
 @pytest.fixture
 def word(mongo_dictionary):
     word = {
-        'lemma': ['part1', 'part2'],
+        'lemma': ['pa[rt?]', 'part2'],
         'homonym':  'I'
     }
     mongo_dictionary.create(word)
@@ -63,7 +65,7 @@ def test_word_invalid_id(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 def test_search_word(client, word, expected_word):
-    lemma = ' '.join(word['lemma'])
+    lemma = parse.quote_plus(' '.join(word['lemma']))
     result = client.simulate_get(f'/words/search/{lemma}')
 
     assert json.loads(result.content) == [expected_word]
