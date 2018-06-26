@@ -75,6 +75,44 @@ def test_cors(client):
     headers = {'Access-Control-Request-Method': 'GET'}
     result = client.simulate_options(f'/words/{object_id}', headers=headers)
 
-    assert result.headers['Access-Control-Allow-Methods'] == 'GET'
+    assert result.headers['Access-Control-Allow-Methods'] == 'GET, POST'
     assert result.headers['Access-Control-Allow-Origin'] == '*'
     assert result.headers['Access-Control-Max-Age'] == '86400'
+
+def test_update_word(client, word):
+    object_id = str(word['_id'])
+    updated_word = {
+        '_id': object_id,
+        'lemma': ['new'],
+        'homonym': word['homonym']
+    }
+    post_result = client.simulate_post(f'/words/{object_id}', body=json.dumps(updated_word))
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+
+    get_result = client.simulate_get(f'/words/{object_id}')
+
+    assert json.loads(get_result.content) == updated_word
+
+def test_update_word_not_found(client):
+    object_id = str(ObjectId())
+    not_found_word = {
+        '_id': object_id,
+        'lemma': ['not_found'],
+        'homonym': 'I'
+    }
+    post_result = client.simulate_post(f'/words/{object_id}', body=json.dumps(not_found_word))
+
+    assert post_result.status == falcon.HTTP_NOT_FOUND
+
+def test_update_invalid_object_id(client):
+    object_id = 'invalid object id'
+    not_found_word = {
+        '_id': object_id,
+        'lemma': ['not_found'],
+        'homonym': 'I'
+    }
+    post_result = client.simulate_post(f'/words/{object_id}', body=json.dumps(not_found_word))
+
+    assert post_result.status == falcon.HTTP_NOT_FOUND
