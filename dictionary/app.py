@@ -26,7 +26,7 @@ def create_app(dictionary, auth_backend):
     words = WordsResource(dictionary)
     word_search = WordSearch(dictionary)
 
-    api.add_route('/words/search/{lemma}', word_search)
+    api.add_route('/words/search/{query}', word_search)
     api.add_route('/words/{object_id}', words)
 
     return api

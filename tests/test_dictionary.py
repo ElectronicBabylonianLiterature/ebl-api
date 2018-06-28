@@ -46,7 +46,24 @@ def test_search_finds_all_homonyms(dictionary):
     }
     dictionary.create(word2)
 
-    assert dictionary.search(lemma) == [word1, word2]
+    assert dictionary.search(' '.join(lemma)) == [word1, word2]
+
+def test_search_finds_by_meaning(dictionary):
+    word1 = {
+        'lemma': ['lemma'],
+        'meaning': 'meaning',
+        'homonym': 'I'
+    }
+    dictionary.create(word1)
+
+    word2 = {
+        'lemma': ['lemma'],
+        'meaning': 'not matching',
+        'homonym': 'II'
+    }
+    dictionary.create(word2)
+
+    assert dictionary.search(word1['meaning'][1:4]) == [word1]
 
 def test_search_finds_duplicates(dictionary):
     lemma = ['part1', 'part2']
@@ -64,10 +81,10 @@ def test_search_finds_duplicates(dictionary):
     }
     dictionary.create(word2)
 
-    assert dictionary.search(lemma) == [word1, word2]
+    assert dictionary.search(' '.join(lemma)) == [word1, word2]
 
 def test_search_not_found(dictionary):
-    assert dictionary.search(['lemma']) == []
+    assert dictionary.search('lemma') == []
 
 def test_update(dictionary):
     lemma = ['part1', 'part2']

@@ -9,7 +9,6 @@ class WordSearch:
         result['_id'] = str(word['_id'])
         return result
 
-    def on_get(self, req, resp, lemma):
-        compound_lemma = lemma.split(' ')
-        words = self.dictionary.search(compound_lemma)
+    def on_get(self, req, resp, query):
+        words = self.dictionary.search(query)
         resp.media = [self.transform_object_id(word) for word in words]

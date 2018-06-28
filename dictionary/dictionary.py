@@ -1,3 +1,5 @@
+import re
+
 class MongoDictionary(object):
 
     def __init__(self, database):
@@ -14,11 +16,13 @@ class MongoDictionary(object):
         else:
             return word
 
-    def search(self, lemma):
+    def search(self, query):
+        lemma = query.split(' ')
         cursor = self.database.words.find({
             '$or': [
                 {'lemma': lemma},
-                {'forms': {'$elemMatch': {'lemma': lemma}}}
+                {'forms': {'$elemMatch': {'lemma': lemma}}},
+                {'meaning': {'$regex': re.escape(query)}}
             ]
         })
 
