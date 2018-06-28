@@ -66,7 +66,7 @@ def test_word_invalid_id(client):
 
 def test_search_word(client, word, expected_word):
     lemma = parse.quote_plus(' '.join(word['lemma']))
-    result = client.simulate_get(f'/words/search/{lemma}')
+    result = client.simulate_get(f'/words', params={'query': lemma})
 
     assert json.loads(result.content) == [expected_word]
     assert result.status == falcon.HTTP_OK

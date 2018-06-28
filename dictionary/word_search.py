@@ -9,6 +9,6 @@ class WordSearch:
         result['_id'] = str(word['_id'])
         return result
 
-    def on_get(self, req, resp, query):
-        words = self.dictionary.search(query)
+    def on_get(self, req, resp):
+        words = self.dictionary.search(req.params['query'])
         resp.media = [self.transform_object_id(word) for word in words]
