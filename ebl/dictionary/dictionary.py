@@ -1,5 +1,6 @@
 import re
 
+
 class MongoDictionary(object):
 
     def __init__(self, database):

@@ -1,15 +1,17 @@
 
 class CORSComponent(object):
-    # From https://falcon.readthedocs.io/en/stable/user/faq.html#how-do-i-implement-cors-with-falcon
+    """
+    From https://falcon.readthedocs.io/en/stable/user/faq.html#how-do-i-implement-cors-with-falcon
+    """  # noqa
     # pylint: disable=R0903
-    # pylint: disable=R0201
+
     def process_response(self, req, resp, _resource, req_succeeded):
+        # pylint: disable=R0201
         resp.set_header('Access-Control-Allow-Origin', '*')
 
-        if (req_succeeded
-                and req.method == 'OPTIONS'
-                and req.get_header('Access-Control-Request-Method')
-           ):
+        is_options = req.method == 'OPTIONS'
+        request_method = req.get_header('Access-Control-Request-Method')
+        if (req_succeeded and is_options and request_method):
             # NOTE(kgriffs): This is a CORS preflight request. Patch the
             #   response accordingly.
 

@@ -16,6 +16,7 @@ pytest = "*"
 pytest-cov = "*"
 pylint = "*"
 mongomock = "*"
+"pytest-pep8" = "*"
 
 [requires]
 python_version = "3.6"

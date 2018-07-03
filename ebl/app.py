@@ -19,6 +19,7 @@ from ebl.dictionary.word_search import WordSearch
 def auth0_user_loader(token):
     return token
 
+
 def create_app(dictionary, auth_backend):
     auth_middleware = FalconAuthMiddleware(auth_backend)
 
@@ -31,6 +32,7 @@ def create_app(dictionary, auth_backend):
     api.add_route('/words/{object_id}', words)
 
     return api
+
 
 def get_app():
     certificate = b64decode(os.environ['AUTH0_PEM'])

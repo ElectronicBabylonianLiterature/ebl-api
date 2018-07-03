@@ -19,6 +19,7 @@ pipenv install --dev
 
 ```
 pipenv run pylint ebl tests
+pipenv run pytest --pep8
 pipenv run pytest --cov=ebl tests
 ```
 

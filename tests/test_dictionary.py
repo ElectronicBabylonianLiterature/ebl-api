@@ -6,9 +6,11 @@ import mongomock
 
 from ebl.dictionary.dictionary import MongoDictionary
 
+
 @pytest.fixture
 def dictionary():
     return MongoDictionary(mongomock.MongoClient().dictionary)
+
 
 def test_create_and_find(dictionary):
     lemma = ['part1', 'part2']
@@ -29,9 +31,11 @@ def test_create_and_find(dictionary):
 
     assert dictionary.find(word_id) == expected_word
 
+
 def test_word_not_found(dictionary):
     with pytest.raises(KeyError):
         dictionary.find(ObjectId())
+
 
 def test_search_finds_all_homonyms(dictionary):
     lemma = ['part1', 'part2']
@@ -50,6 +54,7 @@ def test_search_finds_all_homonyms(dictionary):
 
     assert dictionary.search(' '.join(lemma)) == [word1, word2]
 
+
 def test_search_finds_by_meaning(dictionary):
     word1 = {
         'lemma': ['lemma'],
@@ -66,6 +71,7 @@ def test_search_finds_by_meaning(dictionary):
     dictionary.create(word2)
 
     assert dictionary.search(word1['meaning'][1:4]) == [word1]
+
 
 def test_search_finds_duplicates(dictionary):
     lemma = ['part1', 'part2']
@@ -85,8 +91,10 @@ def test_search_finds_duplicates(dictionary):
 
     assert dictionary.search(' '.join(lemma)) == [word1, word2]
 
+
 def test_search_not_found(dictionary):
     assert dictionary.search('lemma') == []
+
 
 def test_update(dictionary):
     lemma = ['part1', 'part2']
@@ -109,6 +117,7 @@ def test_update(dictionary):
     dictionary.update(updated_word)
 
     assert dictionary.find(word_id) == updated_word
+
 
 def test_update_word_not_found(dictionary):
     word = {

@@ -3,6 +3,7 @@ import falcon
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
+
 class WordsResource:
 
     def __init__(self, dictionary):
