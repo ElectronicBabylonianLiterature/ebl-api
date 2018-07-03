@@ -1,3 +1,5 @@
+# pylint: disable=W0621
+
 import json
 from urllib import parse
 import pytest
@@ -12,7 +14,6 @@ import mongomock
 
 import ebl.app
 from ebl.dictionary.dictionary import MongoDictionary
-
 
 @pytest.fixture
 def mongo_dictionary():
