@@ -8,7 +8,7 @@ class WordsResource:
     def __init__(self, dictionary):
         self.dictionary = dictionary
 
-    def on_get(self, req, resp, object_id):
+    def on_get(self, _req, resp, object_id):
         try:
             word = self.dictionary.find(ObjectId(object_id))
             word['_id'] = object_id
