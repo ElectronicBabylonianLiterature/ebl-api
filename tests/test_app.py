@@ -10,8 +10,8 @@ from falcon_auth import NoneAuthBackend
 
 import mongomock
 
-import dictionary.app
-from dictionary.dictionary import MongoDictionary
+import ebl.app
+from ebl.dictionary.dictionary import MongoDictionary
 
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def client(mongo_dictionary):
     user_loader = lambda: {}
     auth_backend = NoneAuthBackend(user_loader)
 
-    api = dictionary.app.create_app(mongo_dictionary, auth_backend)
+    api = ebl.app.create_app(mongo_dictionary, auth_backend)
     return testing.TestClient(api)
 
 @pytest.fixture

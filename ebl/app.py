@@ -9,10 +9,11 @@ from pymongo import MongoClient
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
 
-from .cors_component import CORSComponent
-from .dictionary import MongoDictionary
-from .words import WordsResource
-from .word_search import WordSearch
+from ebl.cors_component import CORSComponent
+
+from ebl.dictionary.dictionary import MongoDictionary
+from ebl.dictionary.words import WordsResource
+from ebl.dictionary.word_search import WordSearch
 
 
 def auth0_user_loader(token):

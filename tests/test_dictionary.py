@@ -2,7 +2,7 @@ from bson.objectid import ObjectId
 import pytest
 import mongomock
 
-from dictionary.dictionary import MongoDictionary
+from ebl.dictionary.dictionary import MongoDictionary
 
 @pytest.fixture
 def dictionary():

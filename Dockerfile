@@ -4,11 +4,11 @@ RUN pip install pipenv
 
 EXPOSE 8000
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/ebl
 
 COPY Pipfile* ./
 RUN pipenv install
 
-COPY ./dictionary ./dictionary
+COPY ./ebl ./ebl
 
-CMD ["pipenv", "run", "gunicorn", "-b :8000", "dictionary.app:get_app()"]
+CMD ["pipenv", "run", "gunicorn", "-b :8000", "ebl.app:get_app()"]

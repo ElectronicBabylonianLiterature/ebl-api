@@ -18,8 +18,8 @@ pipenv install --dev
 ## Running tests
 
 ```
-pipenv run pylint dictionary tests
-pipenv run pytest --cov=dictionary tests
+pipenv run pylint ebl tests
+pipenv run pytest --cov=ebl tests
 ```
 
 ## Running the application

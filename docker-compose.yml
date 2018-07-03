@@ -11,5 +11,10 @@ services:
       - AUTH0_ISSUER
       - AUTH0_PEM
       - MONGODB_URI
+      - MONGODB_DATABASE
+      - NEW_RELIC_LICENSE_KEY
+      - NEW_RELIC_CONFIG_FILE
   mongo:
     image: mongo
+    ports:
+    - "27017:27017"
