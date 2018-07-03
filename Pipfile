@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-falcon = "==1.4.1"
+falcon = "*"
 falcon-auth = "*"
 cryptography = "*"
 pymongo = "*"
@@ -12,10 +12,10 @@ gunicorn = "*"
 newrelic = "*"
 
 [dev-packages]
-pytest = "==3.6.0"
-pytest-cov = "==2.5.1"
+pytest = "*"
+pytest-cov = "*"
 pylint = "*"
 mongomock = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
