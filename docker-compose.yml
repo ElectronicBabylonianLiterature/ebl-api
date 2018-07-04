@@ -10,8 +10,8 @@ services:
       - AUTH0_AUDIENCE
       - AUTH0_ISSUER
       - AUTH0_PEM
-      - MONGODB_URI
-      - MONGODB_DATABASE
+      - MONGODB_URI=mongodb://mongo:27017
+      - MONGODB_DATABASE=ebl
       - NEW_RELIC_LICENSE_KEY
       - NEW_RELIC_CONFIG_FILE
   mongo:
