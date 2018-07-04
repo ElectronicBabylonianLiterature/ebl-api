@@ -75,6 +75,12 @@ def test_search_word(client, word, expected_word):
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
+def test_search_word_no_query(client):
+    result = client.simulate_get(f'/words')
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
 def test_cors(client):
     object_id = str(ObjectId())
     headers = {'Access-Control-Request-Method': 'GET'}

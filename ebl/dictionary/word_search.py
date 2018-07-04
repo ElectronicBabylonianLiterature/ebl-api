@@ -1,3 +1,6 @@
+import falcon
+
+
 class WordSearch:
 
     def __init__(self, dictionary):
@@ -10,5 +13,8 @@ class WordSearch:
         return result
 
     def on_get(self, req, resp):
-        words = self.dictionary.search(req.params['query'])
-        resp.media = [self.transform_object_id(word) for word in words]
+        if 'query' in req.params:
+            words = self.dictionary.search(req.params['query'])
+            resp.media = [self.transform_object_id(word) for word in words]
+        else:
+            resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
