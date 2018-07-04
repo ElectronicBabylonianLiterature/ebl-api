@@ -14,6 +14,9 @@ services:
       - MONGODB_DATABASE=ebl
       - NEW_RELIC_LICENSE_KEY
       - NEW_RELIC_CONFIG_FILE
+    volumes:
+      - ./ebl:/usr/src/ebl/ebl
+    command:  ["pipenv", "run", "gunicorn",  "--reload", "-b :8000", "ebl.app:get_app()"]
   mongo:
     image: mongo
     ports:

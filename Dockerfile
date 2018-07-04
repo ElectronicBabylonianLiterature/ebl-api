@@ -11,4 +11,4 @@ RUN pipenv install
 
 COPY ./ebl ./ebl
 
-CMD ["pipenv", "run", "gunicorn", "-b :8000", "ebl.app:get_app()"]
+CMD ["pipenv", "run", "gunicorn",  "-b :8000", "ebl.app:get_app()"]
