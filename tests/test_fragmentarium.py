@@ -1,20 +1,7 @@
-# pylint: disable=W0621
 import pytest
-import mongomock
-
-from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 
 
-@pytest.fixture
-def fragmentarium():
-    return MongoFragmentarium(mongomock.MongoClient().fragmentarium)
-
-
-def test_create_and_find(fragmentarium):
-    fragment = {
-        '_id': '1'
-    }
-
+def test_create_and_find(fragmentarium, fragment):
     fragmentarium.create(fragment)
 
     assert fragmentarium.find(fragment['_id']) == fragment

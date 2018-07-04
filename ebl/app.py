@@ -14,22 +14,26 @@ from ebl.cors_component import CORSComponent
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.dictionary.words import WordsResource
 from ebl.dictionary.word_search import WordSearch
+from ebl.fragmentarium.fragmentarium import MongoFragmentarium
+from ebl.fragmentarium.fragments import FragmentsResource
 
 
 def auth0_user_loader(token):
     return token
 
 
-def create_app(dictionary, auth_backend):
+def create_app(dictionary, fragmenatrium, auth_backend):
     auth_middleware = FalconAuthMiddleware(auth_backend)
 
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
 
     words = WordsResource(dictionary)
     word_search = WordSearch(dictionary)
+    fragments = FragmentsResource(fragmenatrium)
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
+    api.add_route('/fragments/{number}', fragments)
 
     return api
 
@@ -49,6 +53,8 @@ def get_app():
                                    required_claims=['exp', 'iat'])
 
     client = MongoClient(os.environ['MONGODB_URI'])
-    dictionary = MongoDictionary(client[os.environ['MONGODB_DATABASE']])
+    database = client[os.environ['MONGODB_DATABASE']]
+    dictionary = MongoDictionary(database)
+    fragmenatrium = MongoFragmentarium(database)
 
-    return create_app(dictionary, auth0_backend)
+    return create_app(dictionary, fragmenatrium, auth0_backend)

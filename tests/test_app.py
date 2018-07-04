@@ -14,23 +14,23 @@ import ebl.app
 
 
 @pytest.fixture
-def client(mongo_dictionary):
+def client(dictionary, fragmentarium):
     def user_loader():
         return {}
 
     auth_backend = NoneAuthBackend(user_loader)
 
-    api = ebl.app.create_app(mongo_dictionary, auth_backend)
+    api = ebl.app.create_app(dictionary, fragmentarium, auth_backend)
     return testing.TestClient(api)
 
 
 @pytest.fixture
-def word(mongo_dictionary):
+def word(dictionary):
     word = {
         'lemma': ['pa[rt?]', 'part2'],
         'homonym':  'I'
     }
-    mongo_dictionary.create(word)
+    dictionary.create(word)
     return word
 
 
@@ -128,3 +128,12 @@ def test_update_invalid_object_id(client):
     post_result = client.simulate_post(f'/words/{object_id}', body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_get_fragment(client, fragmentarium, fragment):
+    fragment_number = fragmentarium.create(fragment)
+    result = client.simulate_get(f'/fragments/{fragment_number}')
+
+    assert json.loads(result.content) == fragment
+    assert result.status == falcon.HTTP_OK
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
