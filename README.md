@@ -4,9 +4,11 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/425c3968b768ccaa0cdd/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/dictionary/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/425c3968b768ccaa0cdd/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/dictionary/maintainability)
 
-Dictionary API
+Electronic Babylonian Literature API
 
-An API to serve a dictionary created with the [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser).
+An API to serve the dictionary and fragmenatrium.
+
+The API requires a MongoDB database. See the [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser) and [fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser) for generating the initial data.
 
 ## Setup
 
