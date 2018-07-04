@@ -10,16 +10,7 @@ import falcon
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 
-import mongomock
-
 import ebl.app
-from ebl.dictionary.dictionary import MongoDictionary
-
-
-@pytest.fixture
-def mongo_dictionary():
-    mongo_dictionary = MongoDictionary(mongomock.MongoClient().dictionary)
-    return mongo_dictionary
 
 
 @pytest.fixture

@@ -1,18 +1,8 @@
-# pylint: disable=W0621
-
 from bson.objectid import ObjectId
 import pytest
-import mongomock
-
-from ebl.dictionary.dictionary import MongoDictionary
 
 
-@pytest.fixture
-def dictionary():
-    return MongoDictionary(mongomock.MongoClient().dictionary)
-
-
-def test_create_and_find(dictionary):
+def test_create_and_find(mongo_dictionary):
     lemma = ['part1', 'part2']
     homonym = 'I'
 
@@ -21,7 +11,7 @@ def test_create_and_find(dictionary):
         'homonym': homonym
     }
 
-    word_id = dictionary.create(word)
+    word_id = mongo_dictionary.create(word)
 
     expected_word = {
         '_id': word_id,
@@ -29,51 +19,51 @@ def test_create_and_find(dictionary):
         'homonym': homonym
     }
 
-    assert dictionary.find(word_id) == expected_word
+    assert mongo_dictionary.find(word_id) == expected_word
 
 
-def test_word_not_found(dictionary):
+def test_word_not_found(mongo_dictionary):
     with pytest.raises(KeyError):
-        dictionary.find(ObjectId())
+        mongo_dictionary.find(ObjectId())
 
 
-def test_search_finds_all_homonyms(dictionary):
+def test_search_finds_all_homonyms(mongo_dictionary):
     lemma = ['part1', 'part2']
 
     word1 = {
         'lemma': lemma,
         'homonym': 'I'
     }
-    dictionary.create(word1)
+    mongo_dictionary.create(word1)
 
     word2 = {
         'lemma': lemma,
         'homonym': 'II'
     }
-    dictionary.create(word2)
+    mongo_dictionary.create(word2)
 
-    assert dictionary.search(' '.join(lemma)) == [word1, word2]
+    assert mongo_dictionary.search(' '.join(lemma)) == [word1, word2]
 
 
-def test_search_finds_by_meaning(dictionary):
+def test_search_finds_by_meaning(mongo_dictionary):
     word1 = {
         'lemma': ['lemma'],
         'meaning': 'meaning',
         'homonym': 'I'
     }
-    dictionary.create(word1)
+    mongo_dictionary.create(word1)
 
     word2 = {
         'lemma': ['lemma'],
         'meaning': 'not matching',
         'homonym': 'II'
     }
-    dictionary.create(word2)
+    mongo_dictionary.create(word2)
 
-    assert dictionary.search(word1['meaning'][1:4]) == [word1]
+    assert mongo_dictionary.search(word1['meaning'][1:4]) == [word1]
 
 
-def test_search_finds_duplicates(dictionary):
+def test_search_finds_duplicates(mongo_dictionary):
     lemma = ['part1', 'part2']
     homonym = 'I'
 
@@ -81,22 +71,22 @@ def test_search_finds_duplicates(dictionary):
         'lemma': lemma,
         'homonym': homonym
     }
-    dictionary.create(word1)
+    mongo_dictionary.create(word1)
 
     word2 = {
         'lemma': lemma,
         'homonym': homonym
     }
-    dictionary.create(word2)
+    mongo_dictionary.create(word2)
 
-    assert dictionary.search(' '.join(lemma)) == [word1, word2]
-
-
-def test_search_not_found(dictionary):
-    assert dictionary.search('lemma') == []
+    assert mongo_dictionary.search(' '.join(lemma)) == [word1, word2]
 
 
-def test_update(dictionary):
+def test_search_not_found(mongo_dictionary):
+    assert mongo_dictionary.search('lemma') == []
+
+
+def test_update(mongo_dictionary):
     lemma = ['part1', 'part2']
     new_lemma = ['new']
     homonym = 'I'
@@ -106,7 +96,7 @@ def test_update(dictionary):
         'homonym': homonym
     }
 
-    word_id = dictionary.create(word)
+    word_id = mongo_dictionary.create(word)
 
     updated_word = {
         '_id': word_id,
@@ -114,12 +104,12 @@ def test_update(dictionary):
         'homonym': homonym
     }
 
-    dictionary.update(updated_word)
+    mongo_dictionary.update(updated_word)
 
-    assert dictionary.find(word_id) == updated_word
+    assert mongo_dictionary.find(word_id) == updated_word
 
 
-def test_update_word_not_found(dictionary):
+def test_update_word_not_found(mongo_dictionary):
     word = {
         '_id': ObjectId(),
         'lemma': ['lemma'],
@@ -127,4 +117,4 @@ def test_update_word_not_found(dictionary):
     }
 
     with pytest.raises(KeyError):
-        dictionary.update(word)
+        mongo_dictionary.update(word)
