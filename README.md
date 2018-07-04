@@ -18,9 +18,9 @@ pipenv install --dev
 ## Running tests
 
 ```
-pipenv run pylint ebl tests
-pipenv run pytest --pep8
-pipenv run pytest --cov=ebl tests
+pipenv run lint 
+pipenv run pep8 
+pipenv run test # 'pipenv run test-ci' to generate an XML report
 ```
 
 ## Running the application

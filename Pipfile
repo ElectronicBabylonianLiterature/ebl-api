@@ -20,3 +20,9 @@ mongomock = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+lint = "pylint ebl tests"
+pep8 = "pytest --pep8"
+test = "pytest --cov=ebl tests"
+test-ci = "pytest --cov=ebl --cov-report xml tests"
