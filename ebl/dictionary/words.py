@@ -8,11 +8,11 @@ from bson.errors import InvalidId
 class WordsResource:
 
     def __init__(self, dictionary):
-        self.dictionary = dictionary
+        self._dictionary = dictionary
 
     def on_get(self, _req, resp, object_id):
         try:
-            word = self.dictionary.find(ObjectId(object_id))
+            word = self._dictionary.find(ObjectId(object_id))
             resp.media = pydash.defaults({'_id': object_id}, word)
         except (KeyError, InvalidId):
             resp.status = falcon.HTTP_NOT_FOUND
@@ -21,6 +21,6 @@ class WordsResource:
         try:
             word = json.loads(req.stream.read())
             word['_id'] = ObjectId(object_id)
-            self.dictionary.update(word)
+            self._dictionary.update(word)
         except (KeyError, InvalidId):
             resp.status = falcon.HTTP_NOT_FOUND
