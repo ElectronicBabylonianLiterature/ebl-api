@@ -1,15 +1,7 @@
-class MongoFragmentarium(object):
+from ebl.mongo_repository import MongoRepository
+
+
+class MongoFragmentarium(MongoRepository):
 
     def __init__(self, database):
-        self.database = database
-
-    def create(self, fragment):
-        return self.database.fragments.insert_one(fragment).inserted_id
-
-    def find(self, number):
-        word = self.database.fragments.find_one({'_id': number})
-
-        if word is None:
-            raise KeyError
-        else:
-            return word
+        super().__init__(database, 'fragments')

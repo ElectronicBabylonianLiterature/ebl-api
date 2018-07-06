@@ -1,25 +1,15 @@
 import re
+from ebl.mongo_repository import MongoRepository
 
 
-class MongoDictionary(object):
+class MongoDictionary(MongoRepository):
 
     def __init__(self, database):
-        self.database = database
-
-    def create(self, word):
-        return self.database.words.insert_one(word).inserted_id
-
-    def find(self, object_id):
-        word = self.database.words.find_one({'_id': object_id})
-
-        if word is None:
-            raise KeyError
-        else:
-            return word
+        super().__init__(database, 'fragments')
 
     def search(self, query):
         lemma = query.split(' ')
-        cursor = self.database.words.find({
+        cursor = self.get_collection().find({
             '$or': [
                 {'lemma': lemma},
                 {'forms': {'$elemMatch': {'lemma': lemma}}},
@@ -30,7 +20,7 @@ class MongoDictionary(object):
         return [word for word in cursor]
 
     def update(self, word):
-        result = self.database.words.update_one(
+        result = self.get_collection().update_one(
             {'_id': word['_id']},
             {'$set': word}
         )
