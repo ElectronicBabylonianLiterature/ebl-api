@@ -1,5 +1,6 @@
 import json
 import falcon
+import pydash
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
@@ -12,8 +13,7 @@ class WordsResource:
     def on_get(self, _req, resp, object_id):
         try:
             word = self.dictionary.find(ObjectId(object_id))
-            word['_id'] = object_id
-            resp.media = word
+            resp.media = pydash.defaults({'_id': object_id}, word)
         except (KeyError, InvalidId):
             resp.status = falcon.HTTP_NOT_FOUND
 
