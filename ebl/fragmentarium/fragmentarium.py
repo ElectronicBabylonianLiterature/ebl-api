@@ -7,7 +7,10 @@ class MongoFragmentarium(MongoRepository):
         super().__init__(database, 'fragments')
 
     def update_transliteration(self, number, transliteration):
-        self.get_collection().update_one(
+        result = self.get_collection().update_one(
             {'_id': number},
             {'$set': {'transliteration': transliteration}}
         )
+
+        if result.matched_count == 0:
+            raise KeyError

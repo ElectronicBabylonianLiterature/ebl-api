@@ -27,3 +27,12 @@ def test_update_transliteration(fragmentarium, fragment):
     )
 
     assert updated_fragment == expected_fragment
+
+
+def test_update_update_transliteration_not_found(fragmentarium):
+    # pylint: disable=C0103
+    with pytest.raises(KeyError):
+        fragmentarium.update_transliteration(
+            'unknown.number',
+            'transliteration'
+        )
