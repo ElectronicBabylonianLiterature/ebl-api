@@ -10,13 +10,14 @@ cryptography = "*"
 pymongo = "*"
 gunicorn = "*"
 newrelic = "*"
+pydash = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
-pylint = "*"
 mongomock = "*"
 "pytest-pep8" = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.6"
