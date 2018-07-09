@@ -1,9 +1,17 @@
 import pydash
 import pytest
 
+COLLECTION = 'fragments'
 
-def test_create_and_find(fragmentarium, fragment):
-    fragmentarium.create(fragment)
+
+def test_create(database, fragmentarium, fragment):
+    fragment_id = fragmentarium.create(fragment)
+
+    assert database[COLLECTION].find_one({'_id': fragment_id}) == fragment
+
+
+def test_find(database, fragmentarium, fragment):
+    database[COLLECTION].insert_one(fragment)
 
     assert fragmentarium.find(fragment['_id']) == fragment
 
@@ -20,10 +28,9 @@ def test_update_transliteration(fragmentarium, fragment):
     fragmentarium.update_transliteration(fragment['_id'], transliteration)
     updated_fragment = fragmentarium.find(fragment['_id'])
 
-    expected_fragment = pydash.assign(
-        {},
-        fragment,
-        {'transliteration': transliteration}
+    expected_fragment = pydash.defaults(
+        {'transliteration': transliteration},
+        fragment
     )
 
     assert updated_fragment == expected_fragment

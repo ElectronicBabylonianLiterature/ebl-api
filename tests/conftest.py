@@ -32,4 +32,7 @@ def word():
 
 @pytest.fixture
 def fragment():
-    return {'_id': '1'}
+    return {
+        '_id': '1',
+        'transliteration': ''
+    }
