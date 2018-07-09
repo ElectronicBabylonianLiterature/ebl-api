@@ -3,15 +3,17 @@ import pydash
 import pytest
 
 
-collection = 'words'
+COLLECTION = 'words'
+
 
 def test_create(database, dictionary, word):
     word_id = dictionary.create(word)
 
-    assert database[collection].find_one({'_id': word_id}) == word
+    assert database[COLLECTION].find_one({'_id': word_id}) == word
+
 
 def test_find(database, dictionary, word):
-    database[collection].insert_one(word).inserted_id
+    database[COLLECTION].insert_one(word)
 
     assert dictionary.find(word['_id']) == word
 
@@ -23,21 +25,21 @@ def test_word_not_found(dictionary):
 
 def test_search_finds_all_homonyms(database, dictionary, word):
     another_word = pydash.defaults({'homonym': 'II'}, word)
-    database[collection].insert_many([word, another_word])
+    database[COLLECTION].insert_many([word, another_word])
 
     assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
 
 
 def test_search_finds_by_meaning(database, dictionary, word):
     another_word = pydash.defaults({'meaning': 'not matching'}, word)
-    database[collection].insert_many([word, another_word])
+    database[COLLECTION].insert_many([word, another_word])
 
     assert dictionary.search(word['meaning'][1:4]) == [word]
 
 
 def test_search_finds_duplicates(database, dictionary, word):
     another_word = pydash.clone_deep(word)
-    database[collection].insert_many([word, another_word])
+    database[COLLECTION].insert_many([word, another_word])
 
     assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
 
