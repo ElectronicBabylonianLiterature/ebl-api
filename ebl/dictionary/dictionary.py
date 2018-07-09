@@ -5,7 +5,7 @@ from ebl.mongo_repository import MongoRepository
 class MongoDictionary(MongoRepository):
 
     def __init__(self, database):
-        super().__init__(database, 'fragments')
+        super().__init__(database, 'words')
 
     def search(self, query):
         lemma = query.split(' ')

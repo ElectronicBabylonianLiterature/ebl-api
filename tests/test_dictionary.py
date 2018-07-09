@@ -1,25 +1,19 @@
 from bson.objectid import ObjectId
+import pydash
 import pytest
 
 
-def test_create_and_find(dictionary):
-    lemma = ['part1', 'part2']
-    homonym = 'I'
+collection = 'words'
 
-    word = {
-        'lemma': lemma,
-        'homonym': homonym
-    }
-
+def test_create(database, dictionary, word):
     word_id = dictionary.create(word)
 
-    expected_word = {
-        '_id': word_id,
-        'lemma': lemma,
-        'homonym': homonym
-    }
+    assert database[collection].find_one({'_id': word_id}) == word
 
-    assert dictionary.find(word_id) == expected_word
+def test_find(database, dictionary, word):
+    database[collection].insert_one(word).inserted_id
+
+    assert dictionary.find(word['_id']) == word
 
 
 def test_word_not_found(dictionary):
@@ -27,94 +21,41 @@ def test_word_not_found(dictionary):
         dictionary.find(ObjectId())
 
 
-def test_search_finds_all_homonyms(dictionary):
-    lemma = ['part1', 'part2']
+def test_search_finds_all_homonyms(database, dictionary, word):
+    another_word = pydash.defaults({'homonym': 'II'}, word)
+    database[collection].insert_many([word, another_word])
 
-    word1 = {
-        'lemma': lemma,
-        'homonym': 'I'
-    }
-    dictionary.create(word1)
-
-    word2 = {
-        'lemma': lemma,
-        'homonym': 'II'
-    }
-    dictionary.create(word2)
-
-    assert dictionary.search(' '.join(lemma)) == [word1, word2]
+    assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
 
 
-def test_search_finds_by_meaning(dictionary):
-    word1 = {
-        'lemma': ['lemma'],
-        'meaning': 'meaning',
-        'homonym': 'I'
-    }
-    dictionary.create(word1)
+def test_search_finds_by_meaning(database, dictionary, word):
+    another_word = pydash.defaults({'meaning': 'not matching'}, word)
+    database[collection].insert_many([word, another_word])
 
-    word2 = {
-        'lemma': ['lemma'],
-        'meaning': 'not matching',
-        'homonym': 'II'
-    }
-    dictionary.create(word2)
-
-    assert dictionary.search(word1['meaning'][1:4]) == [word1]
+    assert dictionary.search(word['meaning'][1:4]) == [word]
 
 
-def test_search_finds_duplicates(dictionary):
-    lemma = ['part1', 'part2']
-    homonym = 'I'
+def test_search_finds_duplicates(database, dictionary, word):
+    another_word = pydash.clone_deep(word)
+    database[collection].insert_many([word, another_word])
 
-    word1 = {
-        'lemma': lemma,
-        'homonym': homonym
-    }
-    dictionary.create(word1)
-
-    word2 = {
-        'lemma': lemma,
-        'homonym': homonym
-    }
-    dictionary.create(word2)
-
-    assert dictionary.search(' '.join(lemma)) == [word1, word2]
+    assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
 
 
 def test_search_not_found(dictionary):
     assert dictionary.search('lemma') == []
 
 
-def test_update(dictionary):
-    lemma = ['part1', 'part2']
+def test_update(dictionary, word):
     new_lemma = ['new']
-    homonym = 'I'
-
-    word = {
-        'lemma': lemma,
-        'homonym': homonym
-    }
-
     word_id = dictionary.create(word)
-
-    updated_word = {
-        '_id': word_id,
-        'lemma': new_lemma,
-        'homonym': homonym
-    }
+    updated_word = pydash.defaults({'lemma': new_lemma}, word)
 
     dictionary.update(updated_word)
 
     assert dictionary.find(word_id) == updated_word
 
 
-def test_update_word_not_found(dictionary):
-    word = {
-        '_id': ObjectId(),
-        'lemma': ['lemma'],
-        'homonym': 'I'
-    }
-
+def test_update_word_not_found(dictionary, word):
     with pytest.raises(KeyError):
-        dictionary.update(word)
+        dictionary.update(pydash.defaults({'_id': ObjectId()}, word))

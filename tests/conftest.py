@@ -4,16 +4,26 @@ import mongomock
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 
+@pytest.fixture
+def database():
+    return mongomock.MongoClient().ebl
 
 @pytest.fixture
-def dictionary():
-    return MongoDictionary(mongomock.MongoClient().ebl)
+def dictionary(database):
+    return MongoDictionary(database)
 
 
 @pytest.fixture
-def fragmentarium():
-    return MongoFragmentarium(mongomock.MongoClient().ebl)
+def fragmentarium(database):
+    return MongoFragmentarium(database)
 
+@pytest.fixture
+def word():
+    return  {
+        'lemma': ['part1', 'part2'],
+        'homonym': 'I',
+        'meaning': 'a meaning'
+    }
 
 @pytest.fixture
 def fragment():
