@@ -11,6 +11,7 @@ pymongo = "*"
 gunicorn = "*"
 newrelic = "*"
 pydash = "*"
+requests = "*"
 
 [dev-packages]
 pytest = "*"

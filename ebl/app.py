@@ -5,6 +5,7 @@ import falcon
 from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
 
 from pymongo import MongoClient
+import requests
 
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
@@ -36,11 +37,18 @@ def create_auth0_backend():
         audience=os.environ['AUTH0_AUDIENCE'],
         issuer=os.environ['AUTH0_ISSUER'],
         verify_claims=['signature', 'exp', 'iat'],
-        required_claims=['exp', 'iat', 'read:words']
+        required_claims=['exp', 'iat', 'openid', 'read:words']
     )
 
 
-def create_app(dictionary, fragmenatrium, auth_backend):
+def fetch_auth0_user_profile(req):
+    issuer = os.environ['AUTH0_ISSUER']
+    url = f'{issuer}userinfo'
+    headers = {'Authorization': req.get_header('Authorization', True)}
+    return requests.get(url, headers=headers).json()
+
+
+def create_app(dictionary, fragmenatrium, auth_backend, fetch_user_profile):
     auth_middleware = FalconAuthMiddleware(auth_backend)
 
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
@@ -48,7 +56,10 @@ def create_app(dictionary, fragmenatrium, auth_backend):
     words = WordsResource(dictionary)
     word_search = WordSearch(dictionary)
     fragments = FragmentsResource(fragmenatrium)
-    transliteration = TranslitarationResource(fragmenatrium)
+    transliteration = TranslitarationResource(
+        fragmenatrium,
+        fetch_user_profile
+    )
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
@@ -66,4 +77,9 @@ def get_app():
     dictionary = MongoDictionary(database)
     fragmenatrium = MongoFragmentarium(database)
 
-    return create_app(dictionary, fragmenatrium, auth0_backend)
+    return create_app(
+        dictionary,
+        fragmenatrium,
+        auth0_backend,
+        fetch_auth0_user_profile
+    )

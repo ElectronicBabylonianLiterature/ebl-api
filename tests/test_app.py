@@ -18,13 +18,19 @@ TEST_USER_NAME = 'test_user'
 @pytest.fixture
 def client(dictionary, fragmentarium):
     def user_loader():
-        return {
-            'sub': TEST_USER_NAME
-        }
+        return {}
+
+    def fetch_user_profile(_):
+        return {'name': TEST_USER_NAME}
 
     auth_backend = NoneAuthBackend(user_loader)
 
-    api = ebl.app.create_app(dictionary, fragmentarium, auth_backend)
+    api = ebl.app.create_app(
+        dictionary,
+        fragmentarium,
+        auth_backend,
+        fetch_user_profile
+    )
     return testing.TestClient(api)
 
 
