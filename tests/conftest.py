@@ -34,5 +34,6 @@ def word():
 def fragment():
     return {
         '_id': '1',
-        'transliteration': ''
+        'transliteration': '',
+        'record': []
     }

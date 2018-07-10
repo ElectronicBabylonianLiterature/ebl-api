@@ -10,6 +10,10 @@ class TranslitarationResource:
     def on_post(self, req, resp, number):
         try:
             transliteration = json.loads(req.stream.read())
-            self._fragmentarium.update_transliteration(number, transliteration)
+            self._fragmentarium.update_transliteration(
+                number,
+                transliteration,
+                req.context['user']['sub']
+            )
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND

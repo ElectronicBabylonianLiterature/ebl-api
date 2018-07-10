@@ -33,8 +33,8 @@ The application reads the configuration from following environment variables:
  - `AUTH0_PEM` (base64 encoded PEM certificate from the Auth0 application found under advanced settings)
  - `MONGODB_URI`.
  - `MONGODB_DATABASE`
-
- In addition if NewRelic is used:
+ 
+ If NewRelic is used:
 - `NEW_RELIC_LICENSE_KEY`
 - `NEW_RELIC_CONFIG_FILE`
 

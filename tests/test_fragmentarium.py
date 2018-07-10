@@ -1,7 +1,10 @@
+import datetime
+from freezegun import freeze_time
 import pydash
 import pytest
 
 COLLECTION = 'fragments'
+USER = 'user@example.com'
 
 
 def test_create(database, fragmentarium, fragment):
@@ -21,15 +24,27 @@ def test_fragment_not_found(fragmentarium):
         fragmentarium.find('unknown id')
 
 
+@freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(fragmentarium, fragment):
     fragmentarium.create(fragment)
     transliteration = 'the transliteration'
 
-    fragmentarium.update_transliteration(fragment['_id'], transliteration)
+    fragmentarium.update_transliteration(
+        fragment['_id'],
+        transliteration,
+        USER
+    )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
     expected_fragment = pydash.defaults(
-        {'transliteration': transliteration},
+        {
+            'transliteration': transliteration,
+            'record': [{
+                'user': USER,
+                'type': 'Transliteration',
+                'date': datetime.datetime.utcnow().isoformat()
+            }]
+        },
         fragment
     )
 
@@ -41,5 +56,6 @@ def test_update_update_transliteration_not_found(fragmentarium):
     with pytest.raises(KeyError):
         fragmentarium.update_transliteration(
             'unknown.number',
-            'transliteration'
+            'transliteration',
+            USER
         )

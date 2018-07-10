@@ -18,6 +18,7 @@ pytest-cov = "*"
 mongomock = "*"
 "pytest-pep8" = "*"
 pylint = "*"
+freezegun = "*"
 
 [requires]
 python_version = "3.6"

@@ -23,6 +23,23 @@ def auth0_user_loader(token):
     return token
 
 
+def create_auth0_backend():
+    certificate = b64decode(os.environ['AUTH0_PEM'])
+    cert_obj = load_pem_x509_certificate(certificate, default_backend())
+    public_key = cert_obj.public_key()
+
+    return JWTAuthBackend(
+        auth0_user_loader,
+        public_key,
+        algorithm='RS256',
+        auth_header_prefix='Bearer',
+        audience=os.environ['AUTH0_AUDIENCE'],
+        issuer=os.environ['AUTH0_ISSUER'],
+        verify_claims=['signature', 'exp', 'iat'],
+        required_claims=['exp', 'iat', 'read:words']
+    )
+
+
 def create_app(dictionary, fragmenatrium, auth_backend):
     auth_middleware = FalconAuthMiddleware(auth_backend)
 
@@ -42,18 +59,7 @@ def create_app(dictionary, fragmenatrium, auth_backend):
 
 
 def get_app():
-    certificate = b64decode(os.environ['AUTH0_PEM'])
-    cert_obj = load_pem_x509_certificate(certificate, default_backend())
-    public_key = cert_obj.public_key()
-
-    auth0_backend = JWTAuthBackend(auth0_user_loader,
-                                   public_key,
-                                   algorithm='RS256',
-                                   auth_header_prefix='Bearer',
-                                   audience=os.environ['AUTH0_AUDIENCE'],
-                                   issuer=os.environ['AUTH0_ISSUER'],
-                                   verify_claims=['signature', 'exp', 'iat'],
-                                   required_claims=['exp', 'iat'])
+    auth0_backend = create_auth0_backend()
 
     client = MongoClient(os.environ['MONGODB_URI'])
     database = client[os.environ['MONGODB_DATABASE']]
