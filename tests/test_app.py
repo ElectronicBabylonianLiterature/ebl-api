@@ -155,6 +155,12 @@ def test_get_fragment(client, fragmentarium, fragment):
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
+def test_fragment_not_found(client):
+    result = client.simulate_get('/fragments/unknown.number')
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
 def test_update_transliteration(client, fragmentarium, fragment):
     fragment_number = fragmentarium.create(fragment)
     updated_transliteration = 'the transliteration'
