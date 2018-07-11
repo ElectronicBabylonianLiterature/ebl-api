@@ -18,6 +18,7 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.transliteration import TranslitarationResource
+from ebl.files import FilesResource
 
 
 def auth0_user_loader(token):
@@ -48,7 +49,10 @@ def fetch_auth0_user_profile(req):
     return requests.get(url, headers=headers).json()
 
 
-def create_app(dictionary, fragmenatrium, auth_backend, fetch_user_profile):
+def create_app(dictionary,
+               fragmenatrium, files,
+               auth_backend,
+               fetch_user_profile):
     auth_middleware = FalconAuthMiddleware(auth_backend)
 
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
@@ -65,6 +69,7 @@ def create_app(dictionary, fragmenatrium, auth_backend, fetch_user_profile):
     api.add_route('/words/{object_id}', words)
     api.add_route('/fragments/{number}', fragments)
     api.add_route('/fragments/{number}/transliteration', transliteration)
+    api.add_route('/images/{file_name}', files)
 
     return api
 
@@ -76,10 +81,12 @@ def get_app():
     database = client.get_database()
     dictionary = MongoDictionary(database)
     fragmenatrium = MongoFragmentarium(database)
+    files = FilesResource(database)
 
     return create_app(
         dictionary,
         fragmenatrium,
+        files,
         auth0_backend,
         fetch_auth0_user_profile
     )

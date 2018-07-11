@@ -15,6 +15,13 @@ import ebl.app
 TEST_USER_NAME = 'test_user'
 
 
+class TestFilesResource:
+    # pylint: disable=R0903
+    # pylint: disable=R0201
+    def on_get(self, _req, resp, _file_name):
+        resp.data = b'ZxYJy6Qj4s5fLErh'
+
+
 @pytest.fixture
 def client(dictionary, fragmentarium):
     def user_loader():
@@ -28,6 +35,7 @@ def client(dictionary, fragmentarium):
     api = ebl.app.create_app(
         dictionary,
         fragmentarium,
+        TestFilesResource(),
         auth_backend,
         fetch_user_profile
     )
