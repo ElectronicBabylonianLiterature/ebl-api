@@ -73,7 +73,7 @@ def get_app():
     auth0_backend = create_auth0_backend()
 
     client = MongoClient(os.environ['MONGODB_URI'])
-    database = client[os.environ['MONGODB_DATABASE']]
+    database = client.get_database()
     dictionary = MongoDictionary(database)
     fragmenatrium = MongoFragmentarium(database)
 
