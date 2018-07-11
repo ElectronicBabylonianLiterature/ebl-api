@@ -145,11 +145,11 @@
         },
         "pydash": {
             "hashes": [
-                "sha256:853e9ecc73abacaebb18713d607faaac915cbfbab074c6a266d5777e0e960eef",
-                "sha256:e283a7839b61020f82585d8df33e50010aeca97632ef56c981a684628014c5fa"
+                "sha256:0ec5eaf199357232f000197023fe624e3ce2585b32efa35731bc5aa215e17bf2",
+                "sha256:16fb11da042359c2b0c7915b1ba6dd8a18e9e1002aa9e591bffec6af400edb28"
             ],
             "index": "pypi",
-            "version": "==4.5.0"
+            "version": "==4.6.0"
         },
         "pyjwt": {
             "hashes": [
