@@ -12,7 +12,7 @@ class TranslitarationResource:
 
     def on_post(self, req, resp, number):
         user = self._fetch_user_profile(req)
-        print(user, flush=True)
+
         try:
             transliteration = json.loads(req.stream.read())
             self._fragmentarium.update_transliteration(
