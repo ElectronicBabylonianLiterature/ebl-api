@@ -12,7 +12,8 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 
-TEST_USER_NAME = 'test_user'
+TEST_USER_NAME = 'test.user@example.com'
+TEST_EBL_NAME = 'User'
 
 
 class TestFilesResource:
@@ -28,7 +29,10 @@ def client(dictionary, fragmentarium):
         return {}
 
     def fetch_user_profile(_):
-        return {'name': TEST_USER_NAME}
+        return {
+            'name': TEST_USER_NAME,
+            'https://ebabylon.org/eblName': TEST_EBL_NAME
+        }
 
     auth_backend = NoneAuthBackend(user_loader)
 
@@ -183,7 +187,7 @@ def test_update_transliteration(client, fragmentarium, fragment):
     updated_fragment = json.loads(get_result.content)
 
     assert updated_fragment['transliteration'] == updated_transliteration
-    assert updated_fragment['record'][-1]['user'] == TEST_USER_NAME
+    assert updated_fragment['record'][-1]['user'] == TEST_EBL_NAME
 
 
 def test_update_transliteration_not_found(client):
