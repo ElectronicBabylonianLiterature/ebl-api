@@ -74,5 +74,6 @@ def fragment():
     return {
         '_id': '1',
         'transliteration': '',
+        'notes': '',
         'record': []
     }

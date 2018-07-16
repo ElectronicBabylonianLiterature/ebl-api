@@ -10,7 +10,7 @@ class MongoFragmentarium(MongoRepository):
     def __init__(self, database):
         super().__init__(database, 'fragments')
 
-    def update_transliteration(self, number, transliteration, user):
+    def update_transliteration(self, number, updates, user):
         fragment = self.get_collection().find_one(
             {'_id': number},
             {'transliteration': 1}
@@ -22,7 +22,10 @@ class MongoFragmentarium(MongoRepository):
             self.get_collection().update_one(
                 {'_id': number},
                 {
-                    '$set': {'transliteration': transliteration},
+                    '$set': {
+                        'transliteration': updates['transliteration'],
+                        'notes': updates['notes']
+                    },
                     '$push': {'record': {
                         'user': user,
                         'type': record_type,

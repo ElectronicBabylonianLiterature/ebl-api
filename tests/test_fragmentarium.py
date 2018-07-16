@@ -27,18 +27,22 @@ def test_fragment_not_found(fragmentarium):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(fragmentarium, fragment):
     fragmentarium.create(fragment)
-    transliteration = 'the transliteration'
+    updates = {
+        'transliteration': 'the transliteration',
+        'notes': fragment['notes']
+    }
 
     fragmentarium.update_transliteration(
         fragment['_id'],
-        transliteration,
+        updates,
         USER
     )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
     expected_fragment = pydash.defaults(
         {
-            'transliteration': transliteration,
+            'transliteration': updates['transliteration'],
+            'notes': fragment['notes'],
             'record': [{
                 'user': USER,
                 'type': 'Transliteration',
@@ -56,18 +60,22 @@ def test_update_transliteration(fragmentarium, fragment):
     fragmentarium.create(pydash.defaults({
         'transliteration': 'old transliteration'
     }, fragment))
-    updated_transliteration = 'the updated transliteration'
+    updates = {
+        'transliteration':  'the updated transliteration',
+        'notes': 'updated notes'
+    }
 
     fragmentarium.update_transliteration(
         fragment['_id'],
-        updated_transliteration,
+        updates,
         USER
     )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
     expected_fragment = pydash.defaults(
         {
-            'transliteration': updated_transliteration,
+            'transliteration': updates['transliteration'],
+            'notes': updates['notes'],
             'record': [{
                 'user': USER,
                 'type': 'Revision',

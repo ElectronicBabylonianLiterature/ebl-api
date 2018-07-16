@@ -23,8 +23,11 @@ def test_update_transliteration(client,
                                 fragment,
                                 fetch_user_profile):
     fragment_number = fragmentarium.create(fragment)
-    updated_transliteration = 'the transliteration'
-    body = json.dumps(updated_transliteration)
+    updates = {
+        'transliteration': 'the transliteration',
+        'notes': 'some notes'
+    }
+    body = json.dumps(updates)
     url = f'/fragments/{fragment_number}'
     post_result = client.simulate_post(url, body=body)
 
@@ -35,7 +38,8 @@ def test_update_transliteration(client,
     updated_fragment = json.loads(get_result.content)
 
     ebl_name = fetch_user_profile(None)['https://ebabylon.org/eblName']
-    assert updated_fragment['transliteration'] == updated_transliteration
+    assert updated_fragment['transliteration'] == updates['transliteration']
+    assert updated_fragment['notes'] == updates['notes']
     assert updated_fragment['record'][-1]['user'] == ebl_name
 
 
