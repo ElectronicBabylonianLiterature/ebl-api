@@ -1,0 +1,17 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - AUTH0_AUDIENCE
+      - AUTH0_ISSUER
+      - AUTH0_PEM
+      - MONGODB_URI
+      - NEW_RELIC_LICENSE_KEY
+      - NEW_RELIC_CONFIG_FILE
+    volumes:
+      - ./ebl:/usr/src/ebl/ebl
+    command:  ["pipenv", "run", "gunicorn",  "--reload", "-b :8000", "ebl.app:get_app()"]
+    restart: on-failure
