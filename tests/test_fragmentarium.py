@@ -88,6 +88,32 @@ def test_update_transliteration(fragmentarium, fragment):
     assert updated_fragment == expected_fragment
 
 
+def test_update_notes(fragmentarium, fragment):
+    fragmentarium.create(fragment)
+    updates = {
+        'transliteration': fragment['transliteration'],
+        'notes': 'new nites'
+    }
+
+    fragmentarium.update_transliteration(
+        fragment['_id'],
+        updates,
+        USER
+    )
+    updated_fragment = fragmentarium.find(fragment['_id'])
+
+    expected_fragment = pydash.defaults(
+        {
+            'transliteration': fragment['transliteration'],
+            'notes': updates['notes'],
+            'record': []
+        },
+        fragment
+    )
+
+    assert updated_fragment == expected_fragment
+
+
 def test_update_update_transliteration_not_found(fragmentarium):
     # pylint: disable=C0103
     with pytest.raises(KeyError):
