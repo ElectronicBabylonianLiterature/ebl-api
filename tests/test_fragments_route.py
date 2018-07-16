@@ -25,7 +25,7 @@ def test_update_transliteration(client,
     fragment_number = fragmentarium.create(fragment)
     updated_transliteration = 'the transliteration'
     body = json.dumps(updated_transliteration)
-    url = f'/fragments/{fragment_number}/transliteration'
+    url = f'/fragments/{fragment_number}'
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_OK
@@ -41,7 +41,7 @@ def test_update_transliteration(client,
 
 def test_update_transliteration_not_found(client):
     # pylint: disable=C0103
-    url = '/fragments/unknown.fragment/transliteration'
+    url = '/fragments/unknown.fragment'
     post_result = client.simulate_post(url, body='"transliteration"')
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
