@@ -10,6 +10,17 @@ class MongoFragmentarium(MongoRepository):
     def __init__(self, database):
         super().__init__(database, 'fragments')
 
+    def update_transliteration(self, number, updates, user):
+        fragment = self.get_collection().find_one(
+            {'_id': number},
+            {'transliteration': 1}
+        )
+
+        if fragment:
+            self._update(updates, fragment, user)
+        else:
+            raise KeyError
+
     def _update(self, updates, fragment, user):
         mongo_update = {
             '$set': {
@@ -31,14 +42,3 @@ class MongoFragmentarium(MongoRepository):
             {'_id': fragment['_id']},
             mongo_update
         )
-
-    def update_transliteration(self, number, updates, user):
-        fragment = self.get_collection().find_one(
-            {'_id': number},
-            {'transliteration': 1}
-        )
-
-        if fragment:
-            self._update(updates, fragment, user)
-        else:
-            raise KeyError
