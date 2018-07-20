@@ -46,7 +46,9 @@ class TestFilesResource:
 @pytest.fixture
 def client(dictionary, fragmentarium, fetch_user_profile):
     def user_loader():
-        return {}
+        return {
+            'scopes': []
+        }
 
     auth_backend = NoneAuthBackend(user_loader)
 
