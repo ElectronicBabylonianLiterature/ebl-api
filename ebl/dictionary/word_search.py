@@ -1,5 +1,6 @@
 import falcon
 import pydash
+from ebl.require_scope import require_scope
 
 
 class WordSearch:
@@ -7,6 +8,7 @@ class WordSearch:
     def __init__(self, dictionary):
         self._dictionary = dictionary
 
+    @falcon.before(require_scope, 'read:words')
     def on_get(self, req, resp):
         if 'query' in req.params:
             words = self._dictionary.search(req.params['query'])

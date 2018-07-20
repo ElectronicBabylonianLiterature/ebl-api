@@ -47,7 +47,12 @@ class TestFilesResource:
 def client(dictionary, fragmentarium, fetch_user_profile):
     def user_loader():
         return {
-            'scopes': []
+            'scope': [
+                'read:words',
+                'write:words',
+                'transliterate:fragments',
+                'read:fragments'
+            ]
         }
 
     auth_backend = NoneAuthBackend(user_loader)
