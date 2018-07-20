@@ -54,7 +54,7 @@ docker-compose build
 
 Run only the API:
 ```
-docker-compose -f .\docker-compose-fe-only.yml up
+docker-compose -f .\docker-compose-api-only.yml up
 ``` 
 
 Run the full API including the database:
