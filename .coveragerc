@@ -1,0 +1,3 @@
+[run]
+omit = ebl/tests/*
+source = ebl
