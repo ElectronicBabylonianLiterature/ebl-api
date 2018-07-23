@@ -1,5 +1,5 @@
 
-class CORSComponent(object):
+class CORSComponent:
     """
     From https://falcon.readthedocs.io/en/stable/user/faq.html#how-do-i-implement-cors-with-falcon
     """  # noqa
