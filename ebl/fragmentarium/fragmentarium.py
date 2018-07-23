@@ -64,7 +64,9 @@ class MongoFragmentarium(MongoRepository):
         sum_lines = Code('function(key, values) {'
                          '  return values.reduce((acc, cur) => acc + cur, 0);'
                          '}')
-        return self.get_collection().inline_map_reduce(
+        result = self.get_collection().inline_map_reduce(
             count_lines,
             sum_lines,
-            query=HAS_TRANSLITERATION)[0]['value']
+            query=HAS_TRANSLITERATION)
+
+        return result[0]['value'] if result else 0

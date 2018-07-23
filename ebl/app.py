@@ -17,6 +17,7 @@ from ebl.dictionary.words import WordsResource
 from ebl.dictionary.word_search import WordSearch
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
+from ebl.fragmentarium.statistics import StatisticsResource
 from ebl.files import FilesResource
 
 
@@ -59,11 +60,13 @@ def create_app(dictionary,
     words = WordsResource(dictionary)
     word_search = WordSearch(dictionary)
     fragments = FragmentsResource(fragmenatrium, fetch_user_profile)
+    statistics = StatisticsResource(fragmenatrium)
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
     api.add_route('/fragments/{number}', fragments)
     api.add_route('/images/{file_name}', files)
+    api.add_route('/statistics', statistics)
 
     return api
 
