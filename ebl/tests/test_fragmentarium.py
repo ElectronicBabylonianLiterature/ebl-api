@@ -122,3 +122,23 @@ def test_update_update_transliteration_not_found(fragmentarium):
             'transliteration',
             USER
         )
+
+
+def test_status(database, fragmentarium, fragment):
+    database[COLLECTION].insert_many([
+        pydash.defaults({'_id': '1', 'transliteration': '''1. first line
+$ingore
+
+'''}, fragment),
+        pydash.defaults({'_id': '2', 'transliteration': '''@ignore
+1'. second line
+2'. third line
+@ignore
+1#. fourth line'''}, fragment),
+        pydash.defaults({'_id': '3', 'transliteration': ''}, fragment),
+    ])
+
+    assert fragmentarium.statistics() == {
+        'transliteratedFragments': 2,
+        'lines': 4
+    }

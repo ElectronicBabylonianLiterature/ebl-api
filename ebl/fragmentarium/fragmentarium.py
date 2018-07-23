@@ -1,8 +1,10 @@
 import datetime
+from bson.code import Code
 from ebl.mongo_repository import MongoRepository
 
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
+HAS_TRANSLITERATION = {'transliteration': {'$ne': ''}}
 
 
 class MongoFragmentarium(MongoRepository):
@@ -42,3 +44,27 @@ class MongoFragmentarium(MongoRepository):
             {'_id': fragment['_id']},
             mongo_update
         )
+
+    def statistics(self):
+        return {
+            'transliteratedFragments': self._get_transliterated_fragments(),
+            'lines': self._get_lines()
+        }
+
+    def _get_transliterated_fragments(self):
+        return self.get_collection().count(HAS_TRANSLITERATION)
+
+    def _get_lines(self):
+        count_lines = Code('function() {'
+                           '  const lines = this.transliteration'
+                           '    .split("\\n")'
+                           '    .filter(line => /^\\d/.test(line));'
+                           '  emit("lines", lines.length);'
+                           '}')
+        sum_lines = Code('function(key, values) {'
+                         '  return values.reduce((acc, cur) => acc + cur, 0);'
+                         '}')
+        return self.get_collection().inline_map_reduce(
+            count_lines,
+            sum_lines,
+            query=HAS_TRANSLITERATION)[0]['value']

@@ -20,6 +20,7 @@ mongomock = "*"
 "pytest-pep8" = "*"
 pylint = "*"
 freezegun = "*"
+pyexecjs = "*"
 
 [requires]
 python_version = "3.6"
