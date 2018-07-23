@@ -49,9 +49,9 @@ docker build -t ebl/dictionary .
 docker run -p 8000:8000 --rm -it --env-file=FILE --name dictionary-api ebl/dictionary
 ```
 
-### Docker Compse
+### Docker Compose
 
-Build teh images:
+Build the images:
 ```
 docker-compose build
 ```
@@ -61,7 +61,7 @@ Run only the API:
 docker-compose -f .\docker-compose-api-only.yml up
 ``` 
 
-Run the full API including the database:
+Run the full backend including the database:
 ```
 docker-compose up
 ```
