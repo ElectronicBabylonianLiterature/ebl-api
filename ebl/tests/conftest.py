@@ -80,6 +80,9 @@ def word():
 def fragment():
     return {
         '_id': '1',
+        'cdliNumber': 'cdli-4',
+        'bmIdNumber': 'bmId-2',
+        'accession': 'accession-3',
         'transliteration': '',
         'notes': '',
         'record': []

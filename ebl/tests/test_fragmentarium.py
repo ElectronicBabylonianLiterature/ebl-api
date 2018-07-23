@@ -1,3 +1,4 @@
+# pylint: disable=W0621
 import datetime
 from freezegun import freeze_time
 import pydash
@@ -5,6 +6,16 @@ import pytest
 
 COLLECTION = 'fragments'
 USER = 'user@example.com'
+
+
+@pytest.fixture
+def another_fragment(fragment):
+    return pydash.defaults({
+        '_id': '2',
+        'accession': 'accession-no-match',
+        'bmIdNumber': 'bmId-no-match',
+        'cdliNumber': 'cdli-no-match'
+    }, fragment)
 
 
 def test_create(database, fragmentarium, fragment):
@@ -149,3 +160,43 @@ def test_statistics_no_fragments(fragmentarium):
         'transliteratedFragments': 0,
         'lines': 0
     }
+
+
+def test_search_finds_by_id(database,
+                            fragmentarium,
+                            fragment,
+                            another_fragment):
+    database[COLLECTION].insert_many([fragment, another_fragment])
+
+    assert fragmentarium.search(fragment['_id']) == [fragment]
+
+
+def test_search_finds_by_bm_id(database,
+                               fragmentarium,
+                               fragment,
+                               another_fragment):
+    database[COLLECTION].insert_many([fragment, another_fragment])
+
+    assert fragmentarium.search(fragment['bmIdNumber']) == [fragment]
+
+
+def test_search_finds_by_accession(database,
+                                   fragmentarium,
+                                   fragment,
+                                   another_fragment):
+    database[COLLECTION].insert_many([fragment, another_fragment])
+
+    assert fragmentarium.search(fragment['accession']) == [fragment]
+
+
+def test_search_finds_by_cdli(database,
+                              fragmentarium,
+                              fragment,
+                              another_fragment):
+    database[COLLECTION].insert_many([fragment, another_fragment])
+
+    assert fragmentarium.search(fragment['cdliNumber']) == [fragment]
+
+
+def test_search_not_found(fragmentarium):
+    assert fragmentarium.search('K.1') == []

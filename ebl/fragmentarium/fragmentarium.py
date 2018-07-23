@@ -70,3 +70,15 @@ class MongoFragmentarium(MongoRepository):
             query=HAS_TRANSLITERATION)
 
         return result[0]['value'] if result else 0
+
+    def search(self, number):
+        cursor = self.get_collection().find({
+            '$or': [
+                {'_id': number},
+                {'cdliNumber': number},
+                {'bmIdNumber': number},
+                {'accession': number}
+            ]
+        })
+
+        return [word for word in cursor]
