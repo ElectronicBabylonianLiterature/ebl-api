@@ -49,3 +49,26 @@ def test_update_transliteration_not_found(client):
     post_result = client.simulate_post(url, body='"transliteration"')
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_search_fragment(client, fragmentarium, fragment):
+    fragmentarium.create(fragment)
+    result = client.simulate_get(f'/fragments', params={
+        'number': fragment['_id']
+    })
+
+    assert json.loads(result.content) == [fragment]
+    assert result.status == falcon.HTTP_OK
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
+
+
+def test_search_fragment_not_found(client):
+    result = client.simulate_get(f'/fragments', params={'number': 'K.1'})
+
+    assert json.loads(result.content) == []
+
+
+def test_search_word_no_query(client):
+    result = client.simulate_get(f'/fragments')
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
