@@ -26,7 +26,7 @@ pipenv install --dev
 ```
 pipenv run lint 
 pipenv run pep8 
-pipenv run test # 'pipenv run test-ci' to generate an XML report
+pipenv run test
 ```
 
 ## Running the application
