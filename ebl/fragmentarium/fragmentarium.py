@@ -80,4 +80,18 @@ class MongoFragmentarium(MongoRepository):
             ]
         })
 
-        return [word for word in cursor]
+        return [fragment for fragment in cursor]
+
+    def find_random(self):
+        cursor = self.get_collection().aggregate([
+            {
+                '$match': HAS_TRANSLITERATION
+            },
+            {
+                '$sample': {
+                    'size': 1
+                }
+            }
+        ])
+
+        return [fragment for fragment in cursor]
