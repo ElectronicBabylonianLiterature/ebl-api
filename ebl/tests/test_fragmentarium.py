@@ -13,7 +13,6 @@ def another_fragment(fragment):
     return pydash.defaults({
         '_id': '2',
         'accession': 'accession-no-match',
-        'bmIdNumber': 'bmId-no-match',
         'cdliNumber': 'cdli-no-match'
     }, fragment)
 
@@ -169,15 +168,6 @@ def test_search_finds_by_id(database,
     database[COLLECTION].insert_many([fragment, another_fragment])
 
     assert fragmentarium.search(fragment['_id']) == [fragment]
-
-
-def test_search_finds_by_bm_id(database,
-                               fragmentarium,
-                               fragment,
-                               another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
-
-    assert fragmentarium.search(fragment['bmIdNumber']) == [fragment]
 
 
 def test_search_finds_by_accession(database,

@@ -76,7 +76,6 @@ class MongoFragmentarium(MongoRepository):
             '$or': [
                 {'_id': number},
                 {'cdliNumber': number},
-                {'bmIdNumber': number},
                 {'accession': number}
             ]
         })
