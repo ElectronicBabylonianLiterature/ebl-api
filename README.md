@@ -14,7 +14,8 @@ The API requires a MongoDB database. See the [dictionary-parser](https://github.
 
 Requirements:
 - Python 3 & pip
-- A JavaScript runtime, e.g. Node.js (Required for running the tests due to MongoDB map_reduce.)
+- A JavaScript runtime, e.g. Node.js (Required for running the tests due to MongoDB `map_reduce`.)
+- Docker (optional for running the application)
 
 ```
 pip install pipenv
