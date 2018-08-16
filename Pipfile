@@ -12,6 +12,7 @@ gunicorn = "*"
 newrelic = "*"
 pydash = "*"
 requests = "*"
+dictdiffer = "*"
 
 [dev-packages]
 pytest = "*"
