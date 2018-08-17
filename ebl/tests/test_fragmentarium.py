@@ -144,7 +144,7 @@ def test_changelog(database, fragmentarium, fragment, user_profile):
     ))
     expected_changelog = {
         'user_profile': pydash.map_keys(user_profile,
-                                        lambda key: key.replace('.', '_')),
+                                        lambda _, key: key.replace('.', '_')),
         'resource_type': COLLECTION,
         'resource_id': _id,
         'date': datetime.datetime.utcnow().isoformat(),
