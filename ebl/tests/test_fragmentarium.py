@@ -1,11 +1,12 @@
 # pylint: disable=W0621
 import datetime
+import json
+from dictdiffer import diff
 from freezegun import freeze_time
 import pydash
 import pytest
 
 COLLECTION = 'fragments'
-USER = 'user@example.com'
 
 
 @pytest.fixture
@@ -35,7 +36,7 @@ def test_fragment_not_found(fragmentarium):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_add_transliteration(fragmentarium, fragment):
+def test_add_transliteration(fragmentarium, fragment, user_profile):
     fragmentarium.create(fragment)
     updates = {
         'transliteration': 'the transliteration',
@@ -45,7 +46,7 @@ def test_add_transliteration(fragmentarium, fragment):
     fragmentarium.update_transliteration(
         fragment['_id'],
         updates,
-        USER
+        user_profile
     )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
@@ -54,7 +55,7 @@ def test_add_transliteration(fragmentarium, fragment):
             'transliteration': updates['transliteration'],
             'notes': fragment['notes'],
             'record': [{
-                'user': USER,
+                'user': user_profile['https://ebabylon.org/eblName'],
                 'type': 'Transliteration',
                 'date': datetime.datetime.utcnow().isoformat()
             }]
@@ -66,7 +67,7 @@ def test_add_transliteration(fragmentarium, fragment):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_update_transliteration(fragmentarium, fragment):
+def test_update_transliteration(fragmentarium, fragment, user_profile):
     fragmentarium.create(pydash.defaults({
         'transliteration': 'old transliteration'
     }, fragment))
@@ -78,7 +79,7 @@ def test_update_transliteration(fragmentarium, fragment):
     fragmentarium.update_transliteration(
         fragment['_id'],
         updates,
-        USER
+        user_profile
     )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
@@ -87,7 +88,7 @@ def test_update_transliteration(fragmentarium, fragment):
             'transliteration': updates['transliteration'],
             'notes': updates['notes'],
             'record': [{
-                'user': USER,
+                'user': user_profile['https://ebabylon.org/eblName'],
                 'type': 'Revision',
                 'date': datetime.datetime.utcnow().isoformat()
             }]
@@ -98,7 +99,7 @@ def test_update_transliteration(fragmentarium, fragment):
     assert updated_fragment == expected_fragment
 
 
-def test_update_notes(fragmentarium, fragment):
+def test_update_notes(fragmentarium, fragment, user_profile):
     fragmentarium.create(fragment)
     updates = {
         'transliteration': fragment['transliteration'],
@@ -108,7 +109,7 @@ def test_update_notes(fragmentarium, fragment):
     fragmentarium.update_transliteration(
         fragment['_id'],
         updates,
-        USER
+        user_profile
     )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
@@ -124,13 +125,44 @@ def test_update_notes(fragmentarium, fragment):
     assert updated_fragment == expected_fragment
 
 
-def test_update_update_transliteration_not_found(fragmentarium):
+@freeze_time("2018-09-07 15:41:24.032")
+def test_changelog(database, fragmentarium, fragment, user_profile):
+    _id = fragmentarium.create(fragment)
+    updates = {
+        'transliteration':  'the updated transliteration',
+        'notes': 'updated notes'
+    }
+
+    fragmentarium.update_transliteration(
+        _id,
+        updates,
+        user_profile
+    )
+
+    expected_diff = json.loads(json.dumps(
+        list(diff(pydash.pick(fragment, 'transliteration', 'notes'), updates))
+    ))
+    expected_changelog = {
+        'user_profile': pydash.map_keys(user_profile,
+                                        lambda key: key.replace('.', '_')),
+        'resource_type': COLLECTION,
+        'resource_id': _id,
+        'date': datetime.datetime.utcnow().isoformat(),
+        'diff': expected_diff
+    }
+    assert database['changelog'].find_one(
+        {'resource_id': _id},
+        {'_id': 0}
+    ) == expected_changelog
+
+
+def test_update_update_transliteration_not_found(fragmentarium, user_profile):
     # pylint: disable=C0103
     with pytest.raises(KeyError):
         fragmentarium.update_transliteration(
             'unknown.number',
             'transliteration',
-            USER
+            user_profile
         )
 
 

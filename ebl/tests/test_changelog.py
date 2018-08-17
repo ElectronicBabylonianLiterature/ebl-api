@@ -2,9 +2,6 @@ import datetime
 import json
 from dictdiffer import diff
 from freezegun import freeze_time
-import mongomock
-
-from ebl.changelog import Changelog
 
 COLLECTION = 'changelog'
 USER = 'user'
@@ -23,16 +20,13 @@ NEW = {
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_add_transliteration():
-    database = mongomock.MongoClient().ebl
-    changelog = Changelog(database)
-
+def test_create(database, changelog):
     _id = changelog.create(RESOURCE_TYPE, USER, OLD, NEW)
 
     expected_diff = json.loads(json.dumps(list(diff(OLD, NEW))))
     expected = {
         '_id': _id,
-        'user': USER,
+        'user_profile': USER,
         'resource_type': RESOURCE_TYPE,
         'resource_id': RESOURCE_ID,
         'date': datetime.datetime.utcnow().isoformat(),

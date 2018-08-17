@@ -1,45 +1,70 @@
 import datetime
 from bson.code import Code
+import pydash
+from ebl.changelog import Changelog
 from ebl.mongo_repository import MongoRepository
 
+COLLECTION = 'fragments'
+EBL_NAME = 'https://ebabylon.org/eblName'
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
 HAS_TRANSLITERATION = {'transliteration': {'$ne': ''}}
 
 
+def _create_record(old_transliteration, user_profile):
+    record_type = REVISION if old_transliteration else TRANSLITERATION
+    user = user_profile[EBL_NAME] or user_profile['name']
+    return {
+        'user': user,
+        'type': record_type,
+        'date': datetime.datetime.utcnow().isoformat()
+    }
+
+
 class MongoFragmentarium(MongoRepository):
 
     def __init__(self, database):
-        super().__init__(database, 'fragments')
+        super().__init__(database, COLLECTION)
+        self._changelog = Changelog(database)
 
-    def update_transliteration(self, number, updates, user):
+    def update_transliteration(self, number, updates, user_profile):
         fragment = self.get_collection().find_one(
             {'_id': number},
-            {'transliteration': 1}
+            {
+                'transliteration': 1,
+                'notes': 1
+            }
         )
 
         if fragment:
-            self._update(updates, fragment, user)
+            self._update(updates, fragment, user_profile)
         else:
             raise KeyError
 
-    def _update(self, updates, fragment, user):
+    def _update(self, updates, fragment, user_profile):
+        updated_fragment = {
+            'transliteration': updates['transliteration'],
+            'notes': updates['notes']
+        }
         mongo_update = {
-            '$set': {
-                'transliteration': updates['transliteration'],
-                'notes': updates['notes']
-            }
+            '$set': updated_fragment
         }
 
         old_transliteration = fragment['transliteration']
         if updates['transliteration'] != old_transliteration:
-            record_type = REVISION if old_transliteration else TRANSLITERATION
-            mongo_update['$push'] = {'record': {
-                'user': user,
-                'type': record_type,
-                'date': datetime.datetime.utcnow().isoformat()
-            }}
+            record = _create_record(old_transliteration, user_profile)
+            mongo_update['$push'] = {
+                'record': record
+            }
 
+        self._changelog.create(
+            COLLECTION,
+            pydash.map_keys(user_profile,
+                            lambda key: key.replace('.', '_')),
+            fragment,
+            pydash.defaults(updated_fragment,
+                            {'_id': fragment['_id']})
+        )
         self.get_collection().update_one(
             {'_id': fragment['_id']},
             mongo_update

@@ -6,6 +6,7 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 
+from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 
@@ -13,6 +14,11 @@ from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 @pytest.fixture
 def database():
     return mongomock.MongoClient().ebl
+
+
+@pytest.fixture
+def changelog(database):
+    return Changelog(database)
 
 
 @pytest.fixture
@@ -26,12 +32,17 @@ def fragmentarium(database):
 
 
 @pytest.fixture
-def fetch_user_profile():
+def user_profile():
+    return {
+        'name': 'test.user@example.com',
+        'https://ebabylon.org/eblName': 'User'
+    }
+
+
+@pytest.fixture
+def fetch_user_profile(user_profile):
     def mock_fetch_user_profile(_):
-        return {
-            'name': 'test.user@example.com',
-            'https://ebabylon.org/eblName': 'User'
-        }
+        return user_profile
 
     return mock_fetch_user_profile
 

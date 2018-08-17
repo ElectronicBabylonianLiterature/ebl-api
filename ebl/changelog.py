@@ -10,9 +10,9 @@ class Changelog:
     def __init__(self, database):
         self._repository = MongoRepository(database, 'changelog')
 
-    def create(self, resource_type, user, old, new):
+    def create(self, resource_type, user_profile, old, new):
         entry = {
-            'user': user,
+            'user_profile': user_profile,
             'resource_type': resource_type,
             'resource_id': old['_id'],
             'date': datetime.datetime.utcnow().isoformat(),

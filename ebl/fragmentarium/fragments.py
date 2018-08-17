@@ -20,14 +20,14 @@ class FragmentsResource:
 
     @falcon.before(require_scope, 'transliterate:fragments')
     def on_post(self, req, resp, number):
-        user = self._fetch_user_profile(req)
+        user_profile = self._fetch_user_profile(req)
 
         try:
             transliteration = json.loads(req.stream.read())
             self._fragmentarium.update_transliteration(
                 number,
                 transliteration,
-                user[EBL_NAME] or user['name']
+                user_profile
             )
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND
