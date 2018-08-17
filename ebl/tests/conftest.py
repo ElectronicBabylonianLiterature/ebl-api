@@ -1,11 +1,14 @@
 # pylint: disable=W0621
+import datetime
+import json
+from dictdiffer import diff
+import pydash
 import pytest
 import mongomock
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 
 import ebl.app
-
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
@@ -98,3 +101,21 @@ def fragment():
         'notes': '',
         'record': []
     }
+
+
+@pytest.fixture
+def make_changelog_entry(user_profile):
+    def _make_changelog_entry(resource_type, resource_id, old, new):
+        return {
+            'user_profile': pydash.map_keys(
+                user_profile,
+                lambda _, key: key.replace('.', '_')
+            ),
+            'resource_type': resource_type,
+            'resource_id': resource_id,
+            'date': datetime.datetime.utcnow().isoformat(),
+            'diff':  json.loads(json.dumps(
+                list(diff(old, new))
+            ))
+        }
+    return _make_changelog_entry

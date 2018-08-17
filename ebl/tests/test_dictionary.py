@@ -1,7 +1,4 @@
-import datetime
-import json
 from bson.objectid import ObjectId
-from dictdiffer import diff
 from freezegun import freeze_time
 import pydash
 import pytest
@@ -63,22 +60,21 @@ def test_update(dictionary, word, user_profile):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_changelog(dictionary, word, user_profile, database):
+def test_changelog(dictionary,
+                   word,
+                   user_profile,
+                   database,
+                   make_changelog_entry):
     word_id = dictionary.create(word)
     updated_word = pydash.defaults({'lemma': ['new']}, word)
     dictionary.update(updated_word, user_profile)
 
-    expected_diff = json.loads(json.dumps(
-        list(diff(word, updated_word))
-    ))
-    expected_changelog = {
-        'user_profile': pydash.map_keys(user_profile,
-                                        lambda _, key: key.replace('.', '_')),
-        'resource_type': COLLECTION,
-        'resource_id': word_id,
-        'date': datetime.datetime.utcnow().isoformat(),
-        'diff': expected_diff
-    }
+    expected_changelog = make_changelog_entry(
+        COLLECTION,
+        word_id,
+        word,
+        updated_word
+    )
     assert database['changelog'].find_one(
         {'resource_id': word_id},
         {'_id': 0}
