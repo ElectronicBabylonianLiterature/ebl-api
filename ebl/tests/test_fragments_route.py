@@ -21,7 +21,8 @@ def test_fragment_not_found(client):
 def test_update_transliteration(client,
                                 fragmentarium,
                                 fragment,
-                                user_profile):
+                                user_profile,
+                                database):
     fragment_number = fragmentarium.create(fragment)
     updates = {
         'transliteration': 'the transliteration',
@@ -41,6 +42,12 @@ def test_update_transliteration(client,
     assert updated_fragment['transliteration'] == updates['transliteration']
     assert updated_fragment['notes'] == updates['notes']
     assert updated_fragment['record'][-1]['user'] == ebl_name
+
+    assert database['changelog'].find_one({
+        'resource_id': fragment_number,
+        'resource_type': 'fragments',
+        'user_profile.name': user_profile['name']
+    })
 
 
 def test_update_transliteration_not_found(client):

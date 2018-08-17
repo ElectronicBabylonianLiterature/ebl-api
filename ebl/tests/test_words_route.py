@@ -63,7 +63,7 @@ def test_search_word_no_query(client):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-def test_update_word(client, word):
+def test_update_word(client, word, user_profile, database):
     object_id = str(word['_id'])
     updated_word = {
         '_id': object_id,
@@ -79,6 +79,11 @@ def test_update_word(client, word):
     get_result = client.simulate_get(f'/words/{object_id}')
 
     assert json.loads(get_result.content) == updated_word
+    assert database['changelog'].find_one({
+        'resource_id': word['_id'],
+        'resource_type': 'words',
+        'user_profile.name': user_profile['name']
+    })
 
 
 def test_update_word_not_found(client):

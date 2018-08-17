@@ -1,11 +1,17 @@
 import re
+import pydash
+from ebl.changelog import Changelog
 from ebl.mongo_repository import MongoRepository
+
+
+COLLECTION = 'words'
 
 
 class MongoDictionary(MongoRepository):
 
     def __init__(self, database):
-        super().__init__(database, 'words')
+        super().__init__(database, COLLECTION)
+        self._changelog = Changelog(database)
 
     def search(self, query):
         lemma = query.split(' ')
@@ -19,11 +25,22 @@ class MongoDictionary(MongoRepository):
 
         return [word for word in cursor]
 
-    def update(self, word):
-        result = self.get_collection().update_one(
-            {'_id': word['_id']},
-            {'$set': word}
+    def update(self, word, user_profile):
+        query = {'_id': word['_id']}
+        old_word = self.get_collection().find_one(
+            query
         )
-
-        if result.matched_count == 0:
+        if old_word:
+            self._changelog.create(
+                COLLECTION,
+                pydash.map_keys(user_profile,
+                                lambda _, key: key.replace('.', '_')),
+                old_word,
+                word
+            )
+            self.get_collection().update_one(
+                query,
+                {'$set': word}
+            )
+        else:
             raise KeyError

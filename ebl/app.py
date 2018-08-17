@@ -58,7 +58,7 @@ def create_app(dictionary,
 
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
 
-    words = WordsResource(dictionary)
+    words = WordsResource(dictionary, fetch_user_profile)
     word_search = WordSearch(dictionary)
     fragments = FragmentsResource(fragmenatrium, fetch_user_profile)
     fragment_search = FragmentSearch(fragmenatrium)
