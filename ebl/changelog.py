@@ -1,12 +1,14 @@
 import datetime
-from dictdiffer import diff
+import dictdiffer
+import pydash
 
 from ebl.mongo_repository import MongoRepository
 
 
 def create_entry(user_profile, resource_type, resource_id, diff):
     return {
-        'user_profile': user_profile,
+        'user_profile': pydash.map_keys(user_profile,
+                                        lambda _, key: key.replace('.', '_')),
         'resource_type': resource_type,
         'resource_id': resource_id,
         'date': datetime.datetime.utcnow().isoformat(),
@@ -25,6 +27,6 @@ class Changelog:
             user_profile,
             resource_type,
             old['_id'],
-            list(diff(old, new))
+            list(dictdiffer.diff(old, new))
         )
         return self._repository.create(entry)

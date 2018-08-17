@@ -59,8 +59,7 @@ class MongoFragmentarium(MongoRepository):
 
         self._changelog.create(
             COLLECTION,
-            pydash.map_keys(user_profile,
-                            lambda _, key: key.replace('.', '_')),
+            user_profile,
             fragment,
             pydash.defaults(updated_fragment,
                             {'_id': fragment['_id']})

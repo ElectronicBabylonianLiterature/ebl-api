@@ -2,9 +2,9 @@ import datetime
 import json
 from dictdiffer import diff
 from freezegun import freeze_time
+import pydash
 
 COLLECTION = 'changelog'
-USER = 'user'
 RESOURCE_TYPE = 'type'
 RESOURCE_ID = 'id'
 OLD = {
@@ -20,16 +20,17 @@ NEW = {
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_create(database, changelog):
-    _id = changelog.create(RESOURCE_TYPE, USER, OLD, NEW)
+def test_create(database, changelog, user_profile):
+    entry_id = changelog.create(RESOURCE_TYPE, user_profile, OLD, NEW)
 
     expected_diff = json.loads(json.dumps(list(diff(OLD, NEW))))
     expected = {
-        '_id': _id,
-        'user_profile': USER,
+        '_id': entry_id,
+        'user_profile': pydash.map_keys(user_profile,
+                                        lambda _, key: key.replace('.', '_')),
         'resource_type': RESOURCE_TYPE,
         'resource_id': RESOURCE_ID,
         'date': datetime.datetime.utcnow().isoformat(),
         'diff': expected_diff
     }
-    assert database[COLLECTION].find_one({'_id': _id}) == expected
+    assert database[COLLECTION].find_one({'_id': entry_id}) == expected

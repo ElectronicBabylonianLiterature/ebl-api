@@ -1,5 +1,4 @@
 import re
-import pydash
 from ebl.changelog import Changelog
 from ebl.mongo_repository import MongoRepository
 
@@ -33,8 +32,7 @@ class MongoDictionary(MongoRepository):
         if old_word:
             self._changelog.create(
                 COLLECTION,
-                pydash.map_keys(user_profile,
-                                lambda _, key: key.replace('.', '_')),
+                user_profile,
                 old_word,
                 word
             )
