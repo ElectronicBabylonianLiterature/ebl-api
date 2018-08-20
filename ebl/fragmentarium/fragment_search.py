@@ -13,5 +13,7 @@ class FragmentSearch:
             resp.media = self._fragmentarium.search(req.params['number'])
         elif 'random' in req.params:
             resp.media = self._fragmentarium.find_random()
+        elif 'interesting' in req.params:
+            resp.media = self._fragmentarium.find_interesting()
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

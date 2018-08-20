@@ -9,6 +9,11 @@ EBL_NAME = 'https://ebabylon.org/eblName'
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
 HAS_TRANSLITERATION = {'transliteration': {'$ne': ''}}
+SAMPLE_SIZE_ONE = {
+    '$sample': {
+        'size': 1
+    }
+}
 
 
 def _create_record(old_transliteration, user_profile):
@@ -108,14 +113,24 @@ class MongoFragmentarium(MongoRepository):
 
     def find_random(self):
         cursor = self.get_collection().aggregate([
+            {'$match': HAS_TRANSLITERATION},
+            SAMPLE_SIZE_ONE
+        ])
+
+        return [fragment for fragment in cursor]
+
+    def find_interesting(self):
+        cursor = self.get_collection().aggregate([
             {
-                '$match': HAS_TRANSLITERATION
-            },
-            {
-                '$sample': {
-                    'size': 1
+                '$match': {
+                    '$and': [
+                        {'transliteration': ''},
+                        {'joins': []},
+                        {'publication': ''}
+                    ]
                 }
-            }
+            },
+            SAMPLE_SIZE_ONE
         ])
 
         return [fragment for fragment in cursor]
