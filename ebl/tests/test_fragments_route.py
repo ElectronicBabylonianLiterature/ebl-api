@@ -79,3 +79,17 @@ def test_search_word_no_query(client):
     result = client.simulate_get(f'/fragments')
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_too_many_params(client):
+    params = {'random': True, 'interesting': True}
+    result = client.simulate_get(f'/fragments', params=params)
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_invalid_param(client):
+    params = {'this_param': 'is wrong'}
+    result = client.simulate_get(f'/fragments', params=params)
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
