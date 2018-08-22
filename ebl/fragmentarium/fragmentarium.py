@@ -126,7 +126,8 @@ class MongoFragmentarium(MongoRepository):
                     '$and': [
                         {'transliteration': ''},
                         {'joins': []},
-                        {'publication': ''}
+                        {'publication': ''},
+                        {'hits': 0}
                     ]
                 }
             },
