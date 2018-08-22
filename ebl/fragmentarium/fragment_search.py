@@ -34,4 +34,4 @@ class FragmentSearch:
         resp.media = self._fragmentarium.find_random()
 
     def _find_interesting(self, _, resp):
-        resp.media = resp.media = self._fragmentarium.find_interesting()
+        resp.media = self._fragmentarium.find_interesting()
