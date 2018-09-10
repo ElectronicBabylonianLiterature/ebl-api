@@ -57,6 +57,7 @@ def test_transliteration_to_signs(sign_list, signs):
         'šu gid₂',
         'BI IS',
         'BIxIS',
+        '|BIxIS|',
         'unknown x'
     ]
     mapped_signs = transliteration_to_signs(clean_transliteration, sign_list)
@@ -65,5 +66,6 @@ def test_transliteration_to_signs(sign_list, signs):
         ['ŠU', 'BU'],
         ['BI', 'IS'],
         ['BIxIS'],
+        ['|BIxIS|'],
         ['X', 'X']
     ]

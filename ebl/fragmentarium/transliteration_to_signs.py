@@ -28,7 +28,7 @@ def _parse_row(row, sign_list):
 
 
 def _parse_value(value, sign_list):
-    if re.fullmatch(r'([.x%&+]?[A-ZṢŠṬ₀-₉]+)+', value):
+    if re.fullmatch(r'\|?([.x%&+]?[A-ZṢŠṬ₀-₉]+)+\|?', value):
         return value
     else:
         return _parse_reading(value, sign_list)
