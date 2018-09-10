@@ -40,10 +40,10 @@ def test_strip_lacuna():
     transliteration =\
         '1.  [... N]U KU₃\n2. [... a]-ba-an\n3. [...] ši [...]\n5. [(... a)]-ba'
     assert clean_transliteration(transliteration) == [
-        'KU₃',
-        'ba an',
+        'NU KU₃',
+        'a ba an',
         'ši',
-        'ba'
+        'a ba'
     ]
 
 

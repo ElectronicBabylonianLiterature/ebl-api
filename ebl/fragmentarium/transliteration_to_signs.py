@@ -6,11 +6,11 @@ UNKNOWN_SIGN = 'X'
 
 
 def clean_transliteration(transliteration):
-    return [re.sub(r'[^\s]*\[.*?\][^\s]*|\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line).strip()
+    return [re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line).strip()
             for line in
             (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s{2,}|\s+\|\s+', ' ', line)
              for line in
-             (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|(MIN)?<<?\(?[^>]+\)?>?>', '', line)
+             (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|(MIN)?<<?\(?[^>]+\)?>?>|\[\(?|\)?\]|\.\.\.', '', line)
               for line in transliteration.split('\n') if
               line and
               not line.startswith('@') and
