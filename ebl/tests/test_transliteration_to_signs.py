@@ -1,43 +1,69 @@
-from ebl.fragmentarium.transliteration_to_signs import clean_transliteration
+# pylint: disable=W0621
+import pytest
+
+from ebl.fragmentarium.transliteration_to_signs import transliteration_to_signs
 
 
-def test_ignored_lines():
-    transliteration = '@reverse\n\n$ end of side\n#note'
-    assert clean_transliteration(transliteration) == []
+@pytest.fixture
+def signs():
+    return [{
+        '_id': 'ŠU',
+        'lists': [],
+        'unicode': [
+            74455
+        ],
+        'notes': [],
+        'internalNotes': [],
+        'literature': [],
+        'values': [
+            {
+                'value': 'šu',
+                'subIndex': 1,
+                'questionable': False,
+                'deprecated': False,
+                'notes': [],
+                'internalNotes': []
+            }
+        ],
+        'forms': []
+    }, {
+        '_id': 'BU',
+        'lists': [],
+        'unicode': [
+            73805
+        ],
+        'notes': [],
+        'internalNotes': [],
+        'literature': [],
+        'values': [
+            {
+                'value': 'gid',
+                'subIndex': 2,
+                'questionable': False,
+                'deprecated': False,
+                'notes': [],
+                'internalNotes': []
+            },
+        ],
+        'forms': []
+    }]
 
 
-def test_strip_line_numbers():
-    transliteration = '1. mu\n2\'. me\n3. %es qa'
-    assert clean_transliteration(transliteration) == [
-        'mu',
-        'me',
-        'qa'
+def test_transliteration_to_signs(sign_list, signs):
+    for sign in signs:
+        sign_list.create(sign)
+
+    clean_transliteration = [
+        'šu gid₂',
+        'BI IS',
+        'BIxIS',
+        'unknown x'
     ]
+    mapped_signs = transliteration_to_signs(clean_transliteration, sign_list)
 
-
-def test_map_spaces():
-    transliteration =\
-        '1. šu-mu gid₂-ba\n2. {giš}BI.IS\n3. {m}{d}\n4. {+tu-um}'
-    assert clean_transliteration(transliteration) == [
-        'šu mu gid₂ ba',
-        'giš BI IS',
-        'm d',
-        'tu um'
-    ]
-
-
-def test_map_readings():
-    transliteration =\
-        '1.  [... N]U KU₃\n2. [... a]-ba-an\n3. [...] ši [...]'
-    assert clean_transliteration(transliteration) == [
-        'KU₃',
-        'ba an',
-        'ši'
-    ]
-
-
-def test_indent():
-    transliteration = '1. ($___$) ša₂'
-    assert clean_transliteration(transliteration) == [
-        'ša₂'
+    assert mapped_signs == [
+        ['ŠU', 'BU'],
+        ['BI', 'IS'],
+        ['BIxIS'],
+        ['X', 'X']
     ]

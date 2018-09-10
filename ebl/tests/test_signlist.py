@@ -43,6 +43,7 @@ def sign():
 
 @pytest.fixture
 def another_sign():
+    # pylint: disable=R0801
     return {
         '_id': 'SI',
         'lists': [],
