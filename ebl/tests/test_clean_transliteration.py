@@ -72,10 +72,17 @@ def test_strip_shifts():
 
 def test_strip_omissions():
     transliteration =\
-        '1.  <NU> KU₃\n2. <(ba)> an\n3. MIN<(an)> ši\n5. <<a>> ba'
+        '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
     assert clean_transliteration(transliteration) == [
         'KU₃',
         'an',
-        'ši',
         'ba'
+    ]
+
+
+def test_min():
+    transliteration =\
+        '3. MIN<(an)> ši'
+    assert clean_transliteration(transliteration) == [
+        'MIN ši'
     ]
