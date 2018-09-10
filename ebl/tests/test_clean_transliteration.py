@@ -7,11 +7,13 @@ def test_ignored_lines():
 
 
 def test_strip_line_numbers():
-    transliteration = '1. mu\n2\'. me\n3. %es qa'
+    transliteration = '1. mu\n2\'. me\n3. %es qa\na+1. e\n1.2. a'
     assert clean_transliteration(transliteration) == [
         'mu',
         'me',
-        'qa'
+        'qa',
+        'e',
+        'a'
     ]
 
 
