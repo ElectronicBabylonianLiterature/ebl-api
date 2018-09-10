@@ -1,15 +1,8 @@
 # pylint: disable=W0621
 import pytest
 
-from ebl.fragmentarium.sign_list import SignList
-
 
 COLLECTION = 'signs'
-
-
-@pytest.fixture
-def sign_list(database):
-    return SignList(database)
 
 
 @pytest.fixture

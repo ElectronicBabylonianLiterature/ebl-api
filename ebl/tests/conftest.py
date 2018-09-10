@@ -12,6 +12,7 @@ import ebl.app
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
+from ebl.fragmentarium.sign_list import MongoSignList
 
 
 @pytest.fixture
@@ -32,6 +33,11 @@ def dictionary(database):
 @pytest.fixture
 def fragmentarium(database):
     return MongoFragmentarium(database)
+
+
+@pytest.fixture
+def sign_list(database):
+    return MongoSignList(database)
 
 
 @pytest.fixture
