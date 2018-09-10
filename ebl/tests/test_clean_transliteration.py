@@ -28,11 +28,12 @@ def test_map_spaces():
 
 def test_strip_lacuna():
     transliteration =\
-        '1.  [... N]U KU₃\n2. [... a]-ba-an\n3. [...] ši [...]'
+        '1.  [... N]U KU₃\n2. [... a]-ba-an\n3. [...] ši [...]\n5. [(... a)]-ba'
     assert clean_transliteration(transliteration) == [
         'KU₃',
         'ba an',
-        'ši'
+        'ši',
+        'ba'
     ]
 
 
@@ -40,4 +41,12 @@ def test_indent():
     transliteration = '1. ($___$) ša₂'
     assert clean_transliteration(transliteration) == [
         'ša₂'
+    ]
+
+def test_strip_flags():
+    transliteration =\
+        '1.  ba! ba? ba# ba*\n2. $KU'
+    assert clean_transliteration(transliteration) == [
+        'ba ba ba ba',
+        'KU'
     ]
