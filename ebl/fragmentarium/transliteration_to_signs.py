@@ -15,7 +15,8 @@ def clean_transliteration(transliteration):
               line and
               not line.startswith('@') and
               not line.startswith('$') and
-              not line.startswith('#')))]
+              not line.startswith('#') and
+              not line.startswith('&')))]
 
 
 def transliteration_to_signs(transliteration, sign_list):

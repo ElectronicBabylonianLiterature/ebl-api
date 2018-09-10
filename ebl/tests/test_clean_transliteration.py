@@ -2,7 +2,7 @@ from ebl.fragmentarium.transliteration_to_signs import clean_transliteration
 
 
 def test_ignored_lines():
-    transliteration = '@reverse\n\n$ end of side\n#note'
+    transliteration = '&K11111\n@reverse\n\n$ end of side\n#note'
     assert clean_transliteration(transliteration) == []
 
 
