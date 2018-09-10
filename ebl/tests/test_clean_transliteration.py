@@ -7,11 +7,10 @@ def test_ignored_lines():
 
 
 def test_strip_line_numbers():
-    transliteration = '1. mu\n2\'. me\n3. %es qa\na+1. e\n1.2. a'
+    transliteration = '1. mu\n2\'. me\na+1. e\n1.2. a'
     assert clean_transliteration(transliteration) == [
         'mu',
         'me',
-        'qa',
         'e',
         'a'
     ]
@@ -52,4 +51,12 @@ def test_strip_flags():
     assert clean_transliteration(transliteration) == [
         'ba ba ba ba',
         'KU'
+    ]
+
+def test_strip_shifts():
+    transliteration =\
+        '1. %es qa\n2. ba %g ba'
+    assert clean_transliteration(transliteration) == [
+        'qa',
+        'ba ba'
     ]
