@@ -10,7 +10,7 @@ def clean_transliteration(transliteration):
             for line in
             (re.sub(r'{\+?|}{?\+?|-|\.|\s{2,}|\s+\|\s+', ' ', line)
              for line in
-             (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+', '', line)
+             (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|(MIN)?<<?\(?[^>]+\)?>?>', '', line)
               for line in transliteration.split('\n') if
               line and
               not line.startswith('@') and

@@ -61,3 +61,14 @@ def test_strip_shifts():
         'qa',
         'ba ba'
     ]
+
+
+def test_strip_omissions():
+    transliteration =\
+        '1.  <NU> KU₃\n2. <(ba)> an\n3. MIN<(an)> ši\n5. <<a>> ba'
+    assert clean_transliteration(transliteration) == [
+        'KU₃',
+        'an',
+        'ši',
+        'ba'
+    ]
