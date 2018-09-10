@@ -6,22 +6,24 @@ UNKNOWN_SIGN = 'X'
 
 
 def clean_transliteration(transliteration):
-    return [re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line).strip()
+    return [re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line).strip()
             for line in
-            (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s{2,}|\s+\|\s+', ' ', line)
+            (re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line)
              for line in
-             (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|'
-                     r'<<?\(?[^>]+\)?>?>|'
-                     r'\[\(?|'
-                     r'\)?\]|'
-                     r'\.\.\.', '', line)
-              for line in transliteration.split('\n') if
-              line and
-              not line.startswith('@') and
-              not line.startswith('$') and
-              not line.startswith('#') and
-              not line.startswith('&') and
-              not line.startswith('=:')))]
+             (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s{2,}|\s+\|\s+', ' ', line)
+              for line in
+              (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|'
+                      r'<<?\(?[^>]+\)?>?>|'
+                      r'\[\(?|'
+                      r'\)?\]|'
+                      r'\.\.\.', '', line)
+               for line in transliteration.split('\n') if
+               line and
+               not line.startswith('@') and
+               not line.startswith('$') and
+               not line.startswith('#') and
+               not line.startswith('&') and
+               not line.startswith('=:'))))]
 
 
 def transliteration_to_signs(transliteration, sign_list):
@@ -33,8 +35,11 @@ def _parse_row(row, sign_list):
 
 
 def _parse_value(value, sign_list):
-    if re.fullmatch(r'\|?([.x%&+]?[A-ZṢŠṬ₀-₉]+)+\|?', value):
-        return value
+    match = re.fullmatch(r'\|?([.x%&+]?[A-ZṢŠṬ₀-₉]+)+\|?|'
+                         r'\d+|'
+                         r'[^\(]+\((.+)\)', value)
+    if match:
+        return match.group(2) or value
     else:
         return _parse_reading(value, sign_list)
 

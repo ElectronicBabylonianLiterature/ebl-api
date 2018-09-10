@@ -37,13 +37,17 @@ def test_map_spaces():
 
 
 def test_strip_lacuna():
-    transliteration =\
-        '1.  [... N]U KU₃\n2. [... a]-ba-an\n3. [...] ši [...]\n5. [(... a)]-ba'
+    transliteration = ('1. [... N]U KU₃\n'
+                       '2. [... a]-ba-an\n'
+                       '3. [...] ši [...]\n'
+                       '5. [(... a)]-ba\n'
+                       '6. [x (x) x]')
     assert clean_transliteration(transliteration) == [
         'NU KU₃',
         'a ba an',
         'ši',
-        'a ba'
+        'a ba',
+        'x x x'
     ]
 
 
@@ -53,6 +57,7 @@ def test_indent():
         'ša₂'
     ]
 
+
 def test_strip_flags():
     transliteration =\
         '1.  ba! ba? ba# ba*\n2. $KU'
@@ -60,6 +65,7 @@ def test_strip_flags():
         'ba ba ba ba',
         'KU'
     ]
+
 
 def test_strip_shifts():
     transliteration =\
@@ -85,4 +91,14 @@ def test_min():
         '3. MIN<(an)> ši'
     assert clean_transliteration(transliteration) == [
         'MIN ši'
+    ]
+
+
+def test_numbers():
+    transliteration =\
+        '1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256'
+    assert clean_transliteration(transliteration) == [
+        '1(AŠ)',
+        '1 2 10 20 30',
+        '256'
     ]

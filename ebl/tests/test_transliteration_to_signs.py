@@ -58,7 +58,9 @@ def test_transliteration_to_signs(sign_list, signs):
         'BI IS',
         'BIxIS',
         '|BIxIS|',
-        'unknown x'
+        'unknown x',
+        '1(AŠ) 1 2 10 20 30 256',
+        'foo(TUKUL)'
     ]
     mapped_signs = transliteration_to_signs(clean_transliteration, sign_list)
 
@@ -67,5 +69,8 @@ def test_transliteration_to_signs(sign_list, signs):
         ['BI', 'IS'],
         ['BIxIS'],
         ['|BIxIS|'],
-        ['X', 'X']
+        ['X', 'X'],
+        # 1, 2, 10, 20, 30 should be inserted manually to the sign list
+        ['AŠ', '1', '2', '10', '20', '30', '256'],
+        ['TUKUL']
     ]
