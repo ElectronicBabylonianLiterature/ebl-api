@@ -18,14 +18,15 @@ def test_strip_line_numbers():
 
 def test_map_spaces():
     transliteration =\
-        '1. šu-mu gid₂-ba\n2. {giš}BI.IS\n3. {m}{d}\n4. {+tu-um}\n5. tu | na\n6. |BIxIS|'
+        '1. šu-mu gid₂-ba\n2. {giš}BI.IS\n3. {m}{d}\n4. {+tu-um}\n5. tu | na\n6. |BIxIS|\n7. mu {{giš}}BI'
     assert clean_transliteration(transliteration) == [
         'šu mu gid₂ ba',
         'giš BI IS',
         'm d',
         'tu um',
         'tu na',
-        '|BIxIS|'
+        '|BIxIS|',
+        'mu giš BI'
     ]
 
 
