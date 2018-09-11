@@ -8,9 +8,9 @@ UNKNOWN_SIGN = 'X'
 def clean_transliteration(transliteration):
     return [re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line).strip()
             for line in
-            (re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line)
+            (re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+|(?<=\s)\s', '', line)
              for line in
-             (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s{2,}|\s+\|\s+', ' ', line)
+             (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s+\|\s+', ' ', line)
               for line in
               (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|'
                       r'<<?\(?[^>]+\)?>?>|'
