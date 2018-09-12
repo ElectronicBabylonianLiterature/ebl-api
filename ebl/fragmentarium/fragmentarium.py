@@ -144,7 +144,7 @@ class MongoFragmentarium(MongoRepository):
         ]
         lines_regexp = r'( .*)?\n.*'.join(line_regexps)
         query = fr'{lines_regexp}(?![^ |\n])'
-        print(query)
+
         cursor = self.get_collection().find(
             {'signs': {
                 '$regex': query
