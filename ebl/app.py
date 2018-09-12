@@ -51,47 +51,37 @@ def fetch_auth0_user_profile(req):
     return requests.get(url, headers=headers).json()
 
 
-def create_app(dictionary,
-               fragmenatrium,
-               sign_list,
-               files,
-               auth_backend,
-               fetch_user_profile):
-    auth_middleware = FalconAuthMiddleware(auth_backend)
-
+def create_app(context):
+    auth_middleware = FalconAuthMiddleware(context['auth_backend'])
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
 
-    words = WordsResource(dictionary, fetch_user_profile)
-    word_search = WordSearch(dictionary)
-    fragments = FragmentsResource(fragmenatrium, fetch_user_profile)
-    fragment_search = FragmentSearch(fragmenatrium, sign_list)
-    statistics = StatisticsResource(fragmenatrium)
+    words = WordsResource(context['dictionary'], context['fetch_user_profile'])
+    word_search = WordSearch(context['dictionary'])
+    fragments = FragmentsResource(context['fragmenatrium'], context['fetch_user_profile'])
+    fragment_search = FragmentSearch(context['fragmenatrium'], context['sign_list'])
+    statistics = StatisticsResource(context['fragmenatrium'])
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
     api.add_route('/fragments', fragment_search)
     api.add_route('/fragments/{number}', fragments)
-    api.add_route('/images/{file_name}', files)
+    api.add_route('/images/{file_name}', context['files'])
     api.add_route('/statistics', statistics)
 
     return api
 
 
 def get_app():
-    auth0_backend = create_auth0_backend()
-
     client = MongoClient(os.environ['MONGODB_URI'])
     database = client.get_database()
-    dictionary = MongoDictionary(database)
-    fragmenatrium = MongoFragmentarium(database)
-    sign_list = MongoSignList(database)
-    files = FilesResource(database)
 
-    return create_app(
-        dictionary,
-        fragmenatrium,
-        sign_list,
-        files,
-        auth0_backend,
-        fetch_auth0_user_profile
-    )
+    context = {
+        'auth_backend': create_auth0_backend(),
+        'dictionary': MongoDictionary(database),
+        'fragmenatrium': MongoFragmentarium(database),
+        'sign_list': MongoSignList(database),
+        'files': FilesResource(database),
+        'fetch_user_profile': fetch_auth0_user_profile
+    }
+
+    return create_app(context)
