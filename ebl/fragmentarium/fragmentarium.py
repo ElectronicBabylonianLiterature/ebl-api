@@ -2,7 +2,9 @@ import datetime
 from bson.code import Code
 import pydash
 from ebl.changelog import Changelog
+from ebl.fragmentarium.signs_search import create_query
 from ebl.mongo_repository import MongoRepository
+
 
 COLLECTION = 'fragments'
 EBL_NAME = 'https://ebabylon.org/eblName'
@@ -137,18 +139,8 @@ class MongoFragmentarium(MongoRepository):
         return [fragment for fragment in cursor]
 
     def search_signs(self, signs):
-        sign_separator = ' '
-        line_regexps = [
-            fr'(?<![^ |\n]){sign_separator.join(row)}'
-            for row in signs
-        ]
-        lines_regexp = r'( .*)?\n.*'.join(line_regexps)
-        query = fr'{lines_regexp}(?![^ |\n])'
-
-        cursor = self.get_collection().find(
-            {'signs': {
-                '$regex': query
-            }}
-        )
-
+        query = create_query(signs)
+        cursor = self.get_collection().find({
+            'signs': {'$regex': query}
+        })
         return [fragment for fragment in cursor]
