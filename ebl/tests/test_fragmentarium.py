@@ -220,3 +220,24 @@ def test_search_finds_by_cdli(database,
 
 def test_search_not_found(fragmentarium):
     assert fragmentarium.search('K.1') == []
+
+
+def test_search_signs(database,
+                      fragmentarium,
+                      transliterated_fragment,
+                      another_fragment):
+    database[COLLECTION].insert_many([
+        transliterated_fragment,
+        another_fragment
+    ])
+
+    assert fragmentarium.search_signs([
+        ['DIŠ', 'UD']
+    ]) == [transliterated_fragment]
+    assert fragmentarium.search_signs([['KU']]) == [transliterated_fragment]
+    assert fragmentarium.search_signs([['UD']]) == [transliterated_fragment]
+    assert fragmentarium.search_signs([
+        ['GI₆', 'DIŠ'],
+        ['U', 'BA', 'MA']
+    ]) == [transliterated_fragment]
+    assert fragmentarium.search_signs([['IGI', 'UD']]) == []

@@ -110,6 +110,30 @@ def fragment():
 
 
 @pytest.fixture
+def transliterated_fragment():
+    return {
+        '_id': '3',
+        'cdliNumber': 'cdli-5',
+        'bmIdNumber': 'bmId-3',
+        'accession': 'accession-4',
+        'transliteration': (
+            '1\'. [...-ku]-nu-ši [...]\n'
+            '2\'. [...] GI₆ ana u₄-m[i ...]\n'
+            '3\'. [... k]i-du u ba-ma-t[i ...]\n'
+            '6\'. [...] x mu ta-ma-tu₂\n'
+        ),
+        'signs': (
+            'KU NU IGI\n'
+            'GI₆ DIŠ UD MI\n'
+            'KI DU U BA MA TI\n'
+            'X MU TA MA UD'
+        ),
+        'notes': '',
+        'record': []
+    }
+
+
+@pytest.fixture
 def make_changelog_entry(user_profile):
     def _make_changelog_entry(resource_type, resource_id, old, new):
         return {

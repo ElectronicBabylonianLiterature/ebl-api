@@ -135,3 +135,20 @@ class MongoFragmentarium(MongoRepository):
         ])
 
         return [fragment for fragment in cursor]
+
+    def search_signs(self, signs):
+        sign_separator = ' '
+        line_regexps = [
+            fr'(?<![^ |\n]){sign_separator.join(row)}'
+            for row in signs
+        ]
+        lines_regexp = r'( .*)?\n.*'.join(line_regexps)
+        query = fr'{lines_regexp}(?![^ |\n])'
+        print(query)
+        cursor = self.get_collection().find(
+            {'signs': {
+                '$regex': query
+            }}
+        )
+
+        return [fragment for fragment in cursor]
