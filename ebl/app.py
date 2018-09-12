@@ -18,6 +18,7 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.fragmentarium.fragmentarium import MongoFragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.statistics import StatisticsResource
+from ebl.fragmentarium.sign_list import MongoSignList
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.files import FilesResource
 
@@ -51,7 +52,9 @@ def fetch_auth0_user_profile(req):
 
 
 def create_app(dictionary,
-               fragmenatrium, files,
+               fragmenatrium,
+               sign_list,
+               files,
                auth_backend,
                fetch_user_profile):
     auth_middleware = FalconAuthMiddleware(auth_backend)
@@ -61,7 +64,7 @@ def create_app(dictionary,
     words = WordsResource(dictionary, fetch_user_profile)
     word_search = WordSearch(dictionary)
     fragments = FragmentsResource(fragmenatrium, fetch_user_profile)
-    fragment_search = FragmentSearch(fragmenatrium)
+    fragment_search = FragmentSearch(fragmenatrium, sign_list)
     statistics = StatisticsResource(fragmenatrium)
 
     api.add_route('/words', word_search)
@@ -81,11 +84,13 @@ def get_app():
     database = client.get_database()
     dictionary = MongoDictionary(database)
     fragmenatrium = MongoFragmentarium(database)
+    sign_list = MongoSignList(database)
     files = FilesResource(database)
 
     return create_app(
         dictionary,
         fragmenatrium,
+        sign_list,
         files,
         auth0_backend,
         fetch_auth0_user_profile

@@ -64,7 +64,7 @@ class TestFilesResource:
 
 
 @pytest.fixture
-def client(dictionary, fragmentarium, fetch_user_profile):
+def client(dictionary, fragmentarium, sign_list, fetch_user_profile):
     def user_loader():
         return {
             'scope': [
@@ -80,6 +80,7 @@ def client(dictionary, fragmentarium, fetch_user_profile):
     api = ebl.app.create_app(
         dictionary,
         fragmentarium,
+        sign_list,
         TestFilesResource(),
         auth_backend,
         fetch_user_profile

@@ -1,4 +1,7 @@
 import falcon
+
+from ebl.fragmentarium.transliteration_to_signs import clean_transliteration
+from ebl.fragmentarium.transliteration_to_signs import transliteration_to_signs
 from ebl.require_scope import require_scope
 
 
@@ -8,8 +11,9 @@ def _unprocessable_entity(_, resp):
 
 class FragmentSearch:
     # pylint: disable=R0903
-    def __init__(self, fragmentarium):
+    def __init__(self, fragmentarium, sign_list):
         self._fragmentarium = fragmentarium
+        self._sign_list = sign_list
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp):
@@ -23,7 +27,8 @@ class FragmentSearch:
         methods = {
             'number': self._search,
             'random': self._find_random,
-            'interesting': self._find_interesting
+            'interesting': self._find_interesting,
+            'transliteration': self._search_transliteration
         }
         return methods.get(param_names[0], _unprocessable_entity)
 
@@ -35,3 +40,9 @@ class FragmentSearch:
 
     def _find_interesting(self, _, resp):
         resp.media = self._fragmentarium.find_interesting()
+
+    def _search_transliteration(self, req, resp):
+        readings = req.params['transliteration']
+        cleaned_readings = clean_transliteration(readings)
+        signs = transliteration_to_signs(cleaned_readings, self._sign_list)
+        resp.media = self._fragmentarium.search_signs(signs)
