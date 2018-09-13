@@ -20,6 +20,7 @@ TEST_DATA = [
         ['U', 'BA', 'MA']
     ], True),
     ([['IGI', 'UD']], False),
+    ([['|U.BA|']], False),
 ]
 
 
