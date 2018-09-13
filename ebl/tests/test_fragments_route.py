@@ -7,7 +7,7 @@ def test_get_fragment(client, fragmentarium, fragment):
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments/{fragment_number}')
 
-    assert json.loads(result.content) == fragment
+    assert result.json == fragment
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
@@ -36,7 +36,7 @@ def test_update_transliteration(client,
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
 
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
-    updated_fragment = json.loads(get_result.content)
+    updated_fragment = get_result.json
 
     ebl_name = user_profile['https://ebabylon.org/eblName']
     assert updated_fragment['transliteration'] == updates['transliteration']

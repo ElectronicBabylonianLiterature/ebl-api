@@ -1,5 +1,4 @@
 # pylint: disable=W0621
-import json
 import falcon
 import pytest
 
@@ -52,14 +51,14 @@ def test_search_fragment(client, fragmentarium, fragment):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert json.loads(result.content) == [fragment]
+    assert result.json == [fragment]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
 def test_search_fragment_not_found(client):
     result = client.simulate_get(f'/fragments', params={'number': 'K.1'})
 
-    assert json.loads(result.content) == []
+    assert result.json == []
 
 
 def test_search_signs(client,
@@ -76,7 +75,7 @@ def test_search_signs(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert json.loads(result.content) == [transliterated_fragment]
+    assert result.json == [transliterated_fragment]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 

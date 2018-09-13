@@ -29,7 +29,7 @@ def test_get_word(client, word, expected_word):
     object_id = str(word['_id'])
     result = client.simulate_get(f'/words/{object_id}')
 
-    assert json.loads(result.content) == expected_word
+    assert result.json == expected_word
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
@@ -52,7 +52,7 @@ def test_search_word(client, word, expected_word):
     lemma = parse.quote_plus(' '.join(word['lemma']))
     result = client.simulate_get(f'/words', params={'query': lemma})
 
-    assert json.loads(result.content) == [expected_word]
+    assert result.json == [expected_word]
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
@@ -78,7 +78,7 @@ def test_update_word(client, word, user_profile, database):
 
     get_result = client.simulate_get(f'/words/{object_id}')
 
-    assert json.loads(get_result.content) == updated_word
+    assert get_result.json == updated_word
     assert database['changelog'].find_one({
         'resource_id': word['_id'],
         'resource_type': 'words',
