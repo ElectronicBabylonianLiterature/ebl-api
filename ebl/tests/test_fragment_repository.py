@@ -92,7 +92,6 @@ def test_update_transliteration_without_record(fragment_repository, fragment):
 
 
 def test_update_update_transliteration_not_found(fragment_repository):
-    # pylint: disable=C0103
     with pytest.raises(KeyError):
         fragment_repository.update_transliteration(
             {'_id': 'unknown.number'},
