@@ -1,5 +1,6 @@
 # pylint: disable=W0621
 import datetime
+import io
 import json
 from dictdiffer import diff
 import pydash
@@ -56,15 +57,48 @@ def fetch_user_profile(user_profile):
     return mock_fetch_user_profile
 
 
-class TestFilesResource:
+class FakeFile:
+    # pylint: disable=R0903
+    def __init__(self, filename, data):
+        self.content_type = 'image/jpeg'
+        self.filename = filename
+        self.data = data
+        self.length = len(data)
+        self._file = io.BytesIO(data)
+
+    def read(self, size=-1):
+        return self._file.read(size)
+
+
+class TestFilesRepository:
     # pylint: disable=R0903
     # pylint: disable=R0201
-    def on_get(self, _req, resp, _file_name):
-        resp.data = b'ZxYJy6Qj4s5fLErh'
+    def __init__(self, file):
+        self._file = file
+
+    def find(self, filename):
+        if self._file.filename == filename:
+            return self._file
+        else:
+            raise KeyError
 
 
 @pytest.fixture
-def context(dictionary, fragmentarium, sign_list, fetch_user_profile):
+def file():
+    return FakeFile('folio.jpg', b'ZxYJy6Qj4s5fLErh')
+
+
+@pytest.fixture
+def file_repository(file):
+    return TestFilesRepository(file)
+
+
+@pytest.fixture
+def context(dictionary,
+            fragmentarium,
+            sign_list,
+            fetch_user_profile,
+            file_repository):
     def user_loader():
         return {
             'scope': [
@@ -80,7 +114,7 @@ def context(dictionary, fragmentarium, sign_list, fetch_user_profile):
         'dictionary': dictionary,
         'fragmenatrium': fragmentarium,
         'sign_list': sign_list,
-        'files': TestFilesResource(),
+        'files': file_repository,
         'fetch_user_profile': fetch_user_profile
     }
 

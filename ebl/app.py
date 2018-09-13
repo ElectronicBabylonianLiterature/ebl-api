@@ -20,7 +20,8 @@ from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.statistics import StatisticsResource
 from ebl.fragmentarium.sign_list import MongoSignList
 from ebl.fragmentarium.fragment_search import FragmentSearch
-from ebl.files import FilesResource
+from ebl.files.files import FilesResource
+from ebl.files.file_repository import GridFsFiles
 
 
 def auth0_user_loader(token):
@@ -62,12 +63,13 @@ def create_app(context):
     fragment_search = FragmentSearch(context['fragmenatrium'],
                                      context['sign_list'])
     statistics = StatisticsResource(context['fragmenatrium'])
+    files = FilesResource(context['files'])
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
     api.add_route('/fragments', fragment_search)
     api.add_route('/fragments/{number}', fragments)
-    api.add_route('/images/{file_name}', context['files'])
+    api.add_route('/images/{file_name}', files)
     api.add_route('/statistics', statistics)
 
     return api
@@ -82,7 +84,7 @@ def get_app():
         'dictionary': MongoDictionary(database),
         'fragmenatrium': MongoFragmentarium(database),
         'sign_list': MongoSignList(database),
-        'files': FilesResource(database),
+        'files': GridFsFiles(database),
         'fetch_user_profile': fetch_auth0_user_profile
     }
 
