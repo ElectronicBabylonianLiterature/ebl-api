@@ -57,8 +57,10 @@ def create_app(context):
 
     words = WordsResource(context['dictionary'], context['fetch_user_profile'])
     word_search = WordSearch(context['dictionary'])
-    fragments = FragmentsResource(context['fragmenatrium'], context['fetch_user_profile'])
-    fragment_search = FragmentSearch(context['fragmenatrium'], context['sign_list'])
+    fragments = FragmentsResource(context['fragmenatrium'],
+                                  context['fetch_user_profile'])
+    fragment_search = FragmentSearch(context['fragmenatrium'],
+                                     context['sign_list'])
     statistics = StatisticsResource(context['fragmenatrium'])
 
     api.add_route('/words', word_search)
