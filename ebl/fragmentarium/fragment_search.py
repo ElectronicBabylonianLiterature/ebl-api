@@ -1,6 +1,6 @@
 import falcon
 
-from ebl.fragmentarium.transliteration_to_signs import clean_transliteration
+from ebl.fragmentarium.clean_transliteration import clean_transliteration
 from ebl.fragmentarium.transliteration_to_signs import transliteration_to_signs
 from ebl.require_scope import require_scope
 
