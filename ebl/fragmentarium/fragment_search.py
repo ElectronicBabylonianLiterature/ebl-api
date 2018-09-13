@@ -1,7 +1,5 @@
 import falcon
 
-from ebl.fragmentarium.clean_transliteration import clean_transliteration
-from ebl.fragmentarium.transliteration_to_signs import transliteration_to_signs
 from ebl.require_scope import require_scope
 
 
@@ -42,7 +40,6 @@ class FragmentSearch:
         resp.media = self._fragmentarium.find_interesting()
 
     def _search_transliteration(self, req, resp):
-        readings = req.params['transliteration']
-        cleaned_readings = clean_transliteration(readings)
-        signs = transliteration_to_signs(cleaned_readings, self._sign_list)
+        transliteration = req.params['transliteration']
+        signs = self._sign_list.map_transliteration(transliteration)
         resp.media = self._fragmentarium.search_signs(signs)

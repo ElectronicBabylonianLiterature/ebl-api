@@ -1,5 +1,6 @@
 from ebl.mongo_repository import MongoRepository
-
+from ebl.fragmentarium.clean_transliteration import clean_transliteration
+from ebl.fragmentarium.transliteration_to_signs import transliteration_to_signs
 
 COLLECTION = 'signs'
 
@@ -20,3 +21,8 @@ class MongoSignList(MongoRepository):
                 }
             }
         })
+
+
+    def map_transliteration(self, transliteration):
+        cleaned_transliteration = clean_transliteration(transliteration)
+        return transliteration_to_signs(cleaned_transliteration, self)
