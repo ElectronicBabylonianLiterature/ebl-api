@@ -2,10 +2,10 @@ class MongoRepository:
 
     def __init__(self, database, collection):
         self._database = database
-        self._collection = collection
+        self.collection = collection
 
     def get_collection(self):
-        return self._database[self._collection]
+        return self._database[self.collection]
 
     def create(self, document):
         return self.get_collection().insert_one(document).inserted_id

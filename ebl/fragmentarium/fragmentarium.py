@@ -1,21 +1,13 @@
 import datetime
-from bson.code import Code
 import pydash
 from ebl.changelog import Changelog
+from ebl.fragmentarium.fragment_repository import MongoFragmenRepository
 from ebl.fragmentarium.signs_search import create_query
-from ebl.mongo_repository import MongoRepository
 
 
-COLLECTION = 'fragments'
 EBL_NAME = 'https://ebabylon.org/eblName'
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
-HAS_TRANSLITERATION = {'transliteration': {'$ne': ''}}
-SAMPLE_SIZE_ONE = {
-    '$sample': {
-        'size': 1
-    }
-}
 
 
 def _create_record(old_transliteration, user_profile):
@@ -28,119 +20,54 @@ def _create_record(old_transliteration, user_profile):
     }
 
 
-class MongoFragmentarium(MongoRepository):
+class Fragmentarium:
 
     def __init__(self, database):
-        super().__init__(database, COLLECTION)
+        self._repository = MongoFragmenRepository(database)
         self._changelog = Changelog(database)
 
     def update_transliteration(self, number, updates, user_profile):
-        fragment = self.get_collection().find_one(
-            {'_id': number},
-            {
-                'transliteration': 1,
-                'notes': 1
-            }
-        )
-
-        if fragment:
-            self._update(updates, fragment, user_profile)
-        else:
-            raise KeyError
-
-    def _update(self, updates, fragment, user_profile):
-        updated_fragment = {
-            'transliteration': updates['transliteration'],
-            'notes': updates['notes']
-        }
-        mongo_update = {
-            '$set': updated_fragment
-        }
-
+        fragment = self._repository.find(number)
+        filtered_updates = pydash.pick(updates, 'transliteration', 'notes')
+        
+        record = None
         old_transliteration = fragment['transliteration']
         if updates['transliteration'] != old_transliteration:
             record = _create_record(old_transliteration, user_profile)
-            mongo_update['$push'] = {
-                'record': record
-            }
 
         self._changelog.create(
-            COLLECTION,
+            self._repository.collection,
             user_profile,
-            fragment,
-            pydash.defaults(updated_fragment,
-                            {'_id': fragment['_id']})
+            pydash.pick(fragment, '_id', 'transliteration', 'notes'),
+            pydash.defaults(filtered_updates, {'_id': number})
         )
-        self.get_collection().update_one(
-            {'_id': fragment['_id']},
-            mongo_update
-        )
+
+        self._repository.update_transliteration(fragment, filtered_updates, record)
 
     def statistics(self):
         return {
-            'transliteratedFragments': self._get_transliterated_fragments(),
-            'lines': self._get_lines()
+            'transliteratedFragments': self._repository.get_transliterated_fragments(),
+            'lines': self._repository.get_lines()
         }
 
-    def _get_transliterated_fragments(self):
-        return self.get_collection().count(HAS_TRANSLITERATION)
-
-    def _get_lines(self):
-        count_lines = Code('function() {'
-                           '  const lines = this.transliteration'
-                           '    .split("\\n")'
-                           '    .filter(line => /^\\d/.test(line));'
-                           '  emit("lines", lines.length);'
-                           '}')
-        sum_lines = Code('function(key, values) {'
-                         '  return values.reduce((acc, cur) => acc + cur, 0);'
-                         '}')
-        result = self.get_collection().inline_map_reduce(
-            count_lines,
-            sum_lines,
-            query=HAS_TRANSLITERATION)
-
-        return result[0]['value'] if result else 0
+    def find(self, number):
+        return self._repository.find(number)
 
     def search(self, number):
-        cursor = self.get_collection().find({
-            '$or': [
-                {'_id': number},
-                {'cdliNumber': number},
-                {'accession': number}
-            ]
-        })
-
-        return [fragment for fragment in cursor]
+        return self._repository.search(number)
 
     def find_random(self):
-        cursor = self.get_collection().aggregate([
-            {'$match': HAS_TRANSLITERATION},
-            SAMPLE_SIZE_ONE
-        ])
-
-        return [fragment for fragment in cursor]
+        return self._repository.find_random
 
     def find_interesting(self):
-        cursor = self.get_collection().aggregate([
-            {
-                '$match': {
-                    '$and': [
-                        {'transliteration': ''},
-                        {'joins': []},
-                        {'publication': ''},
-                        {'hits': 0}
-                    ]
-                }
-            },
-            SAMPLE_SIZE_ONE
-        ])
-
-        return [fragment for fragment in cursor]
+        return self._repository.find_interesting()
 
     def search_signs(self, signs):
         query = create_query(signs)
-        cursor = self.get_collection().find({
-            'signs': {'$regex': query}
-        })
-        return [fragment for fragment in cursor]
+        return self._repository.search_signs(query)
+
+    def get_collection(self):
+        return self._repository.get_collection()
+
+    def create(self, fragment):
+        return self._repository.create(fragment)

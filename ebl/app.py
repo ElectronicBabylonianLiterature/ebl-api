@@ -15,7 +15,7 @@ from ebl.cors_component import CORSComponent
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.dictionary.words import WordsResource
 from ebl.dictionary.word_search import WordSearch
-from ebl.fragmentarium.fragmentarium import MongoFragmentarium
+from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.statistics import StatisticsResource
 from ebl.fragmentarium.sign_list import MongoSignList
@@ -82,7 +82,7 @@ def get_app():
     context = {
         'auth_backend': create_auth0_backend(),
         'dictionary': MongoDictionary(database),
-        'fragmenatrium': MongoFragmentarium(database),
+        'fragmenatrium': Fragmentarium(database),
         'sign_list': MongoSignList(database),
         'files': GridFsFiles(database),
         'fetch_user_profile': fetch_auth0_user_profile
