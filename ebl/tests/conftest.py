@@ -14,6 +14,7 @@ from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.sign_list import MongoSignList
+from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 
 
 @pytest.fixture
@@ -32,13 +33,18 @@ def dictionary(database):
 
 
 @pytest.fixture
-def fragmentarium(database):
-    return Fragmentarium(database)
+def sign_list(database):
+    return MongoSignList(database)
 
 
 @pytest.fixture
-def sign_list(database):
-    return MongoSignList(database)
+def fragment_repository(database):
+    return MongoFragmentRepository(database)
+
+
+@pytest.fixture
+def fragmentarium(fragment_repository, changelog):
+    return Fragmentarium(fragment_repository, changelog)
 
 
 @pytest.fixture
@@ -95,10 +101,12 @@ def file_repository(file):
 
 @pytest.fixture
 def context(dictionary,
-            fragmentarium,
             sign_list,
             fetch_user_profile,
-            file_repository):
+            file_repository,
+            fragment_repository,
+            changelog):
+    # pylint: disable=R0913
     def user_loader():
         return {
             'scope': [
@@ -112,10 +120,11 @@ def context(dictionary,
     return {
         'auth_backend': NoneAuthBackend(user_loader),
         'dictionary': dictionary,
-        'fragmenatrium': fragmentarium,
         'sign_list': sign_list,
         'files': file_repository,
-        'fetch_user_profile': fetch_user_profile
+        'fetch_user_profile': fetch_user_profile,
+        'fragment_repository': fragment_repository,
+        'changelog': changelog
     }
 
 

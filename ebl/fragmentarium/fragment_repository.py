@@ -1,8 +1,4 @@
-import datetime
 from bson.code import Code
-import pydash
-from ebl.changelog import Changelog
-from ebl.fragmentarium.signs_search import create_query
 from ebl.mongo_repository import MongoRepository
 
 
@@ -15,15 +11,14 @@ SAMPLE_SIZE_ONE = {
 }
 
 
-class MongoFragmenRepository(MongoRepository):
+class MongoFragmentRepository(MongoRepository):
     def __init__(self, database):
         super().__init__(database, COLLECTION)
-        self._changelog = Changelog(database)
 
-    def get_transliterated_fragments(self):
+    def count_transliterated_fragments(self):
         return self.get_collection().count(HAS_TRANSLITERATION)
 
-    def get_lines(self):
+    def count_lines(self):
         count_lines = Code('function() {'
                            '  const lines = this.transliteration'
                            '    .split("\\n")'
@@ -82,8 +77,7 @@ class MongoFragmenRepository(MongoRepository):
         })
         return [fragment for fragment in cursor]
 
-    
-    def update_transliteration(self, fragment, updates, record):
+    def update_transliteration(self, number, updates, record):
         mongo_update = {
             '$set': updates
         }
@@ -91,7 +85,10 @@ class MongoFragmenRepository(MongoRepository):
         if record:
             mongo_update['$push'] = {'record': record}
 
-        self.get_collection().update_one(
-            {'_id': fragment['_id']},
+        result = self.get_collection().update_one(
+            {'_id': number},
             mongo_update
         )
+
+        if result.matched_count == 0:
+            raise KeyError

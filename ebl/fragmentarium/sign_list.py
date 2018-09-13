@@ -22,7 +22,6 @@ class MongoSignList(MongoRepository):
             }
         })
 
-
     def map_transliteration(self, transliteration):
         cleaned_transliteration = clean_transliteration(transliteration)
         return transliteration_to_signs(cleaned_transliteration, self)

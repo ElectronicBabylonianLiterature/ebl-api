@@ -22,6 +22,8 @@ from ebl.fragmentarium.sign_list import MongoSignList
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.files.files import FilesResource
 from ebl.files.file_repository import GridFsFiles
+from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
+from ebl.changelog import Changelog
 
 
 def auth0_user_loader(token):
@@ -56,13 +58,16 @@ def create_app(context):
     auth_middleware = FalconAuthMiddleware(context['auth_backend'])
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
 
+    fragmentarium = Fragmentarium(context['fragment_repository'],
+                                  context['changelog'])
+
     words = WordsResource(context['dictionary'], context['fetch_user_profile'])
     word_search = WordSearch(context['dictionary'])
-    fragments = FragmentsResource(context['fragmenatrium'],
+    fragments = FragmentsResource(fragmentarium,
                                   context['fetch_user_profile'])
-    fragment_search = FragmentSearch(context['fragmenatrium'],
+    fragment_search = FragmentSearch(fragmentarium,
                                      context['sign_list'])
-    statistics = StatisticsResource(context['fragmenatrium'])
+    statistics = StatisticsResource(fragmentarium)
     files = FilesResource(context['files'])
 
     api.add_route('/words', word_search)
@@ -82,10 +87,11 @@ def get_app():
     context = {
         'auth_backend': create_auth0_backend(),
         'dictionary': MongoDictionary(database),
-        'fragmenatrium': Fragmentarium(database),
         'sign_list': MongoSignList(database),
         'files': GridFsFiles(database),
-        'fetch_user_profile': fetch_auth0_user_profile
+        'fetch_user_profile': fetch_auth0_user_profile,
+        'fragment_repository': MongoFragmentRepository(database),
+        'changelog': Changelog(database)
     }
 
     return create_app(context)

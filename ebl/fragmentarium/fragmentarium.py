@@ -1,7 +1,5 @@
 import datetime
 import pydash
-from ebl.changelog import Changelog
-from ebl.fragmentarium.fragment_repository import MongoFragmenRepository
 from ebl.fragmentarium.signs_search import create_query
 
 
@@ -22,14 +20,14 @@ def _create_record(old_transliteration, user_profile):
 
 class Fragmentarium:
 
-    def __init__(self, database):
-        self._repository = MongoFragmenRepository(database)
-        self._changelog = Changelog(database)
+    def __init__(self, repository, changelog):
+        self._repository = repository
+        self._changelog = changelog
 
     def update_transliteration(self, number, updates, user_profile):
         fragment = self._repository.find(number)
         filtered_updates = pydash.pick(updates, 'transliteration', 'notes')
-        
+
         record = None
         old_transliteration = fragment['transliteration']
         if updates['transliteration'] != old_transliteration:
@@ -42,12 +40,16 @@ class Fragmentarium:
             pydash.defaults(filtered_updates, {'_id': number})
         )
 
-        self._repository.update_transliteration(fragment, filtered_updates, record)
+        self._repository.update_transliteration(number,
+                                                filtered_updates,
+                                                record)
 
     def statistics(self):
         return {
-            'transliteratedFragments': self._repository.get_transliterated_fragments(),
-            'lines': self._repository.get_lines()
+            'transliteratedFragments': (self
+                                        ._repository
+                                        .count_transliterated_fragments()),
+            'lines': self._repository.count_lines()
         }
 
     def find(self, number):
@@ -65,9 +67,6 @@ class Fragmentarium:
     def search_signs(self, signs):
         query = create_query(signs)
         return self._repository.search_signs(query)
-
-    def get_collection(self):
-        return self._repository.get_collection()
 
     def create(self, fragment):
         return self._repository.create(fragment)
