@@ -2,7 +2,7 @@
 import datetime
 import pydash
 import pytest
-from ebl.fragmentarium.signs_search import create_query
+from ebl.fragmentarium.create_query import create_query
 
 
 COLLECTION = 'fragments'

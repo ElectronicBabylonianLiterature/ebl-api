@@ -1,6 +1,6 @@
 import datetime
 import pydash
-from ebl.fragmentarium.signs_search import create_query
+from ebl.fragmentarium.create_query import create_query
 
 
 EBL_NAME = 'https://ebabylon.org/eblName'
