@@ -59,10 +59,10 @@ class Fragmentarium:
 
     def _create_signs(self, transliteration):
         cleaned_transliteration = clean_transliteration(transliteration)
+        signs = self._sign_list.map_transliteration(cleaned_transliteration)
         return '\n'.join([
             ' '.join(row)
-            for row
-            in self._sign_list.map_transliteration(cleaned_transliteration)
+            for row in signs
         ])
 
     def statistics(self):
