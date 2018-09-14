@@ -2,7 +2,7 @@
 import datetime
 import pydash
 import pytest
-from ebl.fragmentarium.queries import create_query
+from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
 COLLECTION = 'fragments'
@@ -163,9 +163,9 @@ def test_search_signs(database,
         another_fragment
     ])
 
-    assert fragment_repository.search_signs(create_query([
+    assert fragment_repository.search_signs(TransliterationQuery([
         ['DIŠ', 'UD']
     ])) == [transliterated_fragment]
-    assert fragment_repository.search_signs(create_query([
+    assert fragment_repository.search_signs(TransliterationQuery([
         ['IGI', 'UD']
     ])) == []

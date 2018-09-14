@@ -1,6 +1,6 @@
 import datetime
 import pydash
-from ebl.fragmentarium.queries import create_query
+from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliterations import clean
 
 
@@ -86,7 +86,7 @@ class Fragmentarium:
         return self._repository.find_interesting()
 
     def search_signs(self, signs):
-        query = create_query(signs)
+        query = TransliterationQuery(signs)
         return self._repository.search_signs(query)
 
     def create(self, fragment):
