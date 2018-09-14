@@ -1,6 +1,6 @@
 import datetime
 import pydash
-from ebl.fragmentarium.create_query import create_query
+from ebl.fragmentarium.queries import create_query
 from ebl.fragmentarium.transliterations import clean
 
 
