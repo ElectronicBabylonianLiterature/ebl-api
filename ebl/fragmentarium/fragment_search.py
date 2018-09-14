@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.require_scope import require_scope
-from ebl.fragmentarium.clean_transliteration import clean_transliteration
+from ebl.fragmentarium.transliterations import clean
 
 
 def _unprocessable_entity(_, resp):
@@ -42,6 +42,6 @@ class FragmentSearch:
 
     def _search_transliteration(self, req, resp):
         transliteration = req.params['transliteration']
-        cleaned_transliteration = clean_transliteration(transliteration)
+        cleaned_transliteration = clean(transliteration)
         signs = self._sign_list.map_transliteration(cleaned_transliteration)
         resp.media = self._fragmentarium.search_signs(signs)

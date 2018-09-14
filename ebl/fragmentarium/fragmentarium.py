@@ -1,7 +1,7 @@
 import datetime
 import pydash
 from ebl.fragmentarium.create_query import create_query
-from ebl.fragmentarium.clean_transliteration import clean_transliteration
+from ebl.fragmentarium.transliterations import clean
 
 
 EBL_NAME = 'https://ebabylon.org/eblName'
@@ -58,7 +58,7 @@ class Fragmentarium:
                                                 record)
 
     def _create_signs(self, transliteration):
-        cleaned_transliteration = clean_transliteration(transliteration)
+        cleaned_transliteration = clean(transliteration)
         signs = self._sign_list.map_transliteration(cleaned_transliteration)
         return '\n'.join([
             ' '.join(row)
