@@ -38,7 +38,7 @@ def test_fragment_not_found(fragmentarium):
 def test_add_transliteration(fragmentarium, fragment, user_profile):
     fragmentarium.create(fragment)
     updates = {
-        'transliteration': 'the transliteration',
+        'transliteration': 'x x',
         'notes': fragment['notes']
     }
 
@@ -52,6 +52,7 @@ def test_add_transliteration(fragmentarium, fragment, user_profile):
     expected_fragment = pydash.defaults(
         {
             'transliteration': updates['transliteration'],
+            'signs': 'X X',
             'notes': fragment['notes'],
             'record': [{
                 'user': user_profile['https://ebabylon.org/eblName'],
@@ -68,10 +69,10 @@ def test_add_transliteration(fragmentarium, fragment, user_profile):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(fragmentarium, fragment, user_profile):
     fragmentarium.create(pydash.defaults({
-        'transliteration': 'old transliteration'
+        'transliteration': '1. x x'
     }, fragment))
     updates = {
-        'transliteration':  'the updated transliteration',
+        'transliteration': '1. x x\n2. x',
         'notes': 'updated notes'
     }
 
@@ -85,6 +86,7 @@ def test_update_transliteration(fragmentarium, fragment, user_profile):
     expected_fragment = pydash.defaults(
         {
             'transliteration': updates['transliteration'],
+            'signs': 'X X\nX',
             'notes': updates['notes'],
             'record': [{
                 'user': user_profile['https://ebabylon.org/eblName'],
@@ -114,8 +116,8 @@ def test_update_notes(fragmentarium, fragment, user_profile):
 
     expected_fragment = pydash.defaults(
         {
-            'transliteration': fragment['transliteration'],
             'notes': updates['notes'],
+            'signs': '',
             'record': []
         },
         fragment
@@ -132,7 +134,7 @@ def test_changelog(database,
                    make_changelog_entry):
     fragment_id = fragmentarium.create(fragment)
     updates = {
-        'transliteration':  'the updated transliteration',
+        'transliteration':  'x x x',
         'notes': 'updated notes'
     }
 
@@ -145,8 +147,8 @@ def test_changelog(database,
     expected_changelog = make_changelog_entry(
         COLLECTION,
         fragment_id,
-        pydash.pick(fragment, 'transliteration', 'notes'),
-        updates
+        pydash.pick(fragment, 'transliteration', 'notes', 'signs'),
+        pydash.defaults(updates, {'signs': 'X X X'})
     )
     assert database['changelog'].find_one(
         {'resource_id': fragment_id},
@@ -159,7 +161,7 @@ def test_update_update_transliteration_not_found(fragmentarium, user_profile):
     with pytest.raises(KeyError):
         fragmentarium.update_transliteration(
             'unknown.number',
-            'transliteration',
+            {'transliteration': 'transliteration'},
             user_profile
         )
 

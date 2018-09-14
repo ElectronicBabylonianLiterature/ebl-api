@@ -43,8 +43,8 @@ def fragment_repository(database):
 
 
 @pytest.fixture
-def fragmentarium(fragment_repository, changelog):
-    return Fragmentarium(fragment_repository, changelog)
+def fragmentarium(fragment_repository, changelog, sign_list):
+    return Fragmentarium(fragment_repository, changelog, sign_list)
 
 
 @pytest.fixture

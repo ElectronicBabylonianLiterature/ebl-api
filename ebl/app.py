@@ -59,7 +59,8 @@ def create_app(context):
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
 
     fragmentarium = Fragmentarium(context['fragment_repository'],
-                                  context['changelog'])
+                                  context['changelog'],
+                                  context['sign_list'])
 
     words = WordsResource(context['dictionary'], context['fetch_user_profile'])
     word_search = WordSearch(context['dictionary'])

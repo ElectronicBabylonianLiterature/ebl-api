@@ -23,10 +23,10 @@ class FragmentsResource:
         user_profile = self._fetch_user_profile(req)
 
         try:
-            transliteration = json.loads(req.stream.read())
+            updates = json.loads(req.stream.read())
             self._fragmentarium.update_transliteration(
                 number,
-                transliteration,
+                updates,
                 user_profile
             )
         except KeyError:

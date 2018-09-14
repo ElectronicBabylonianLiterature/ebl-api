@@ -1,11 +1,22 @@
 import datetime
 import pydash
 from ebl.fragmentarium.create_query import create_query
+from ebl.fragmentarium.clean_transliteration import clean_transliteration
 
 
 EBL_NAME = 'https://ebabylon.org/eblName'
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
+
+
+def _record_for(fragment, updates, user_profile):
+    old_transliteration = fragment['transliteration']
+    new_transliteration = updates['transliteration']
+
+    if new_transliteration != old_transliteration:
+        return _create_record(old_transliteration, user_profile)
+    else:
+        return None
 
 
 def _create_record(old_transliteration, user_profile):
@@ -20,29 +31,39 @@ def _create_record(old_transliteration, user_profile):
 
 class Fragmentarium:
 
-    def __init__(self, repository, changelog):
+    def __init__(self, repository, changelog, sign_list):
         self._repository = repository
         self._changelog = changelog
+        self._sign_list = sign_list
 
     def update_transliteration(self, number, updates, user_profile):
         fragment = self._repository.find(number)
-        filtered_updates = pydash.pick(updates, 'transliteration', 'notes')
 
-        record = None
-        old_transliteration = fragment['transliteration']
-        if updates['transliteration'] != old_transliteration:
-            record = _create_record(old_transliteration, user_profile)
+        filtered_updates = pydash.pick(updates, 'transliteration', 'notes')
+        filtered_updates['signs'] = self._create_signs(
+            filtered_updates['transliteration']
+        )
+
+        record = _record_for(fragment, updates, user_profile)
 
         self._changelog.create(
             self._repository.collection,
             user_profile,
-            pydash.pick(fragment, '_id', 'transliteration', 'notes'),
+            pydash.pick(fragment, '_id', 'transliteration', 'notes', 'signs'),
             pydash.defaults(filtered_updates, {'_id': number})
         )
 
         self._repository.update_transliteration(number,
                                                 filtered_updates,
                                                 record)
+
+    def _create_signs(self, transliteration):
+        cleaned_transliteration = clean_transliteration(transliteration)
+        return '\n'.join([
+            ' '.join(row)
+            for row
+            in self._sign_list.map_transliteration(cleaned_transliteration)
+        ])
 
     def statistics(self):
         return {
