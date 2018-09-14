@@ -1,8 +1,11 @@
+import re
+import unicodedata
+
 from ebl.mongo_repository import MongoRepository
-from ebl.fragmentarium.clean_transliteration import clean_transliteration
-from ebl.fragmentarium.transliteration_to_signs import transliteration_to_signs
+
 
 COLLECTION = 'signs'
+UNKNOWN_SIGN = 'X'
 
 
 class MongoSignList(MongoRepository):
@@ -22,6 +25,28 @@ class MongoSignList(MongoRepository):
             }
         })
 
-    def map_transliteration(self, transliteration):
-        cleaned_transliteration = clean_transliteration(transliteration)
-        return transliteration_to_signs(cleaned_transliteration, self)
+    def map_transliteration(self, cleaned_transliteration):
+        return [self._parse_row(row) for row in cleaned_transliteration]
+
+    def _parse_row(self, row):
+        return [self._parse_value(value) for value in row.split(' ')]
+
+    def _parse_value(self, value):
+        match = re.fullmatch(r'\|?([.x%&+]?[A-ZṢŠṬ₀-₉]+)+\|?|'
+                             r'\d+|'
+                             r'[^\(]+\((.+)\)', value)
+        if match:
+            return match.group(2) or value
+        else:
+            return self._parse_reading(value)
+
+    def _parse_reading(self, reading):
+        match = re.fullmatch(r'([^₀-₉ₓ]+)([₀-₉ₓ]+)?', reading)
+        if match:
+            value = match.group(1)
+            sub_index = match.group(2) or '1'
+            normalized_sub_index = unicodedata.normalize('NFKC', sub_index)
+            sign = self.search(value, int(normalized_sub_index))
+            return sign['_id'] if sign else UNKNOWN_SIGN
+        else:
+            return UNKNOWN_SIGN

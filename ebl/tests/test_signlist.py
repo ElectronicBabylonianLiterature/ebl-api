@@ -72,6 +72,51 @@ def another_sign():
     }
 
 
+@pytest.fixture
+def signs():
+    return [{
+        '_id': 'ŠU',
+        'lists': [],
+        'unicode': [
+            74455
+        ],
+        'notes': [],
+        'internalNotes': [],
+        'literature': [],
+        'values': [
+            {
+                'value': 'šu',
+                'subIndex': 1,
+                'questionable': False,
+                'deprecated': False,
+                'notes': [],
+                'internalNotes': []
+            }
+        ],
+        'forms': []
+    }, {
+        '_id': 'BU',
+        'lists': [],
+        'unicode': [
+            73805
+        ],
+        'notes': [],
+        'internalNotes': [],
+        'literature': [],
+        'values': [
+            {
+                'value': 'gid',
+                'subIndex': 2,
+                'questionable': False,
+                'deprecated': False,
+                'notes': [],
+                'internalNotes': []
+            },
+        ],
+        'forms': []
+    }]
+
+
 def test_create(database, sign_list, sign):
     sign_name = sign_list.create(sign)
 
@@ -101,3 +146,30 @@ def test_search(database,
 
 def test_search_not_found(sign_list):
     assert sign_list.search('unknown', 1) is None
+
+
+def test_transliteration_to_signs(sign_list, signs):
+    for sign in signs:
+        sign_list.create(sign)
+
+    clean_transliteration = [
+        'šu gid₂',
+        'BI IS',
+        'BIxIS',
+        '|BIxIS|',
+        'unknown x',
+        '1(AŠ) 1 2 10 20 30 256',
+        'foo(TUKUL)'
+    ]
+    mapped_signs = sign_list.map_transliteration(clean_transliteration)
+
+    assert mapped_signs == [
+        ['ŠU', 'BU'],
+        ['BI', 'IS'],
+        ['BIxIS'],
+        ['|BIxIS|'],
+        ['X', 'X'],
+        # 1, 2, 10, 20, 30 should be inserted manually to the sign list
+        ['AŠ', '1', '2', '10', '20', '30', '256'],
+        ['TUKUL']
+    ]
