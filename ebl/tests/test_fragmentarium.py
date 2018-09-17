@@ -224,22 +224,45 @@ def test_search_not_found(fragmentarium):
     assert fragmentarium.search('K.1') == []
 
 
-def test_search_signs(database,
+SEARCH_TRANSLITERATION_DATA = [
+    ('ana u₄', [
+        ['2\'. [...] GI₆ ana u₄-m[i ...]']
+    ]),
+    ('ku', [
+        ['1\'. [...-ku]-nu-ši [...]']
+    ]),
+    ('u₄', [
+        ['2\'. [...] GI₆ ana u₄-m[i ...]'],
+        ['6\'. [...] x mu ta-ma-tu₂']
+    ]),
+    ('GI₆ ana\nu ba ma', [
+        [
+            '2\'. [...] GI₆ ana u₄-m[i ...]',
+            '3\'. [... k]i-du u ba-ma-t[i ...]'
+        ]
+    ]),
+    ('ana u₄', [
+        ['2\'. [...] GI₆ ana u₄-m[i ...]']
+    ]),
+    ('ši tu₂', None),
+]
+
+
+@pytest.mark.parametrize("transliteration,lines", SEARCH_TRANSLITERATION_DATA)
+def test_search_signs(transliteration,
+                      lines,
+                      sign_list,
+                      signs,
                       fragmentarium,
                       transliterated_fragment,
                       another_fragment):
-    database[COLLECTION].insert_many([
-        transliterated_fragment,
-        another_fragment
-    ])
+    # pylint: disable=R0913
+    fragmentarium.create(transliterated_fragment)
+    fragmentarium.create(another_fragment)
+    for sign in signs:
+        sign_list.create(sign)
 
-    assert fragmentarium.search_signs([
-        ['DIŠ', 'UD']
-    ]) == [transliterated_fragment]
-    assert fragmentarium.search_signs([['KU']]) == [transliterated_fragment]
-    assert fragmentarium.search_signs([['UD']]) == [transliterated_fragment]
-    assert fragmentarium.search_signs([
-        ['GI₆', 'DIŠ'],
-        ['U', 'BA', 'MA']
-    ]) == [transliterated_fragment]
-    assert fragmentarium.search_signs([['IGI', 'UD']]) == []
+    result = fragmentarium.search_signs(transliteration)
+    expected = [(transliterated_fragment, lines)] if lines else []
+
+    assert result == expected

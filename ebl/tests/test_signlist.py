@@ -72,51 +72,6 @@ def another_sign():
     }
 
 
-@pytest.fixture
-def signs():
-    return [{
-        '_id': 'ŠU',
-        'lists': [],
-        'unicode': [
-            74455
-        ],
-        'notes': [],
-        'internalNotes': [],
-        'literature': [],
-        'values': [
-            {
-                'value': 'šu',
-                'subIndex': 1,
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            }
-        ],
-        'forms': []
-    }, {
-        '_id': 'BU',
-        'lists': [],
-        'unicode': [
-            73805
-        ],
-        'notes': [],
-        'internalNotes': [],
-        'literature': [],
-        'values': [
-            {
-                'value': 'gid',
-                'subIndex': 2,
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            },
-        ],
-        'forms': []
-    }]
-
-
 def test_create(database, sign_list, sign):
     sign_name = sign_list.create(sign)
 
@@ -129,7 +84,7 @@ def test_find(database, sign_list, sign):
     assert sign_list.find(sign['_id']) == sign
 
 
-def test_fragment_not_found(sign_list):
+def test_sign_not_found(sign_list):
     with pytest.raises(KeyError):
         sign_list.find('unknown id')
 

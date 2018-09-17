@@ -66,8 +66,7 @@ def create_app(context):
     word_search = WordSearch(context['dictionary'])
     fragments = FragmentsResource(fragmentarium,
                                   context['fetch_user_profile'])
-    fragment_search = FragmentSearch(fragmentarium,
-                                     context['sign_list'])
+    fragment_search = FragmentSearch(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
     files = FilesResource(context['files'])
 

@@ -154,18 +154,27 @@ def test_search_not_found(fragment_repository):
     assert fragment_repository.search('K.1') == []
 
 
-def test_search_signs(database,
+SEARCH_SIGNS_DATA = [
+    ([['DIŠ', 'UD']], True),
+    ([['KU']], True),
+    ([['UD']], True),
+    ([
+        ['GI₆', 'DIŠ'],
+        ['U', 'BA', 'MA']
+    ], True),
+    ([['IGI', 'UD']], False),
+]
+
+
+@pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
+def test_search_signs(signs,
+                      is_match,
                       fragment_repository,
                       transliterated_fragment,
                       another_fragment):
-    database[COLLECTION].insert_many([
-        transliterated_fragment,
-        another_fragment
-    ])
+    fragment_repository.create(transliterated_fragment)
+    fragment_repository.create(another_fragment)
 
-    assert fragment_repository.search_signs(TransliterationQuery([
-        ['DIŠ', 'UD']
-    ])) == [transliterated_fragment]
-    assert fragment_repository.search_signs(TransliterationQuery([
-        ['IGI', 'UD']
-    ])) == []
+    result = fragment_repository.search_signs(TransliterationQuery(signs))
+    expected = [transliterated_fragment] if is_match else []
+    assert result == expected

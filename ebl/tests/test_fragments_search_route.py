@@ -1,5 +1,6 @@
 # pylint: disable=W0621
 import falcon
+import pydash
 import pytest
 
 
@@ -75,7 +76,11 @@ def test_search_signs(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [transliterated_fragment]
+    assert result.json == [
+        pydash.set_(transliterated_fragment, 'matching_lines', [
+            ['6\'. [...] x mu ta-ma-tu₂']
+        ])
+    ]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 

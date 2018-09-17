@@ -196,3 +196,46 @@ def make_changelog_entry(user_profile):
             ))
         }
     return _make_changelog_entry
+
+
+@pytest.fixture
+def signs():
+    return [
+        {
+            '_id': sign_data[0],
+            'lists': [],
+            'unicode': [],
+            'notes': [],
+            'internalNotes': [],
+            'literature': [],
+            'values': [[
+                {
+                    'value': value_data[0],
+                    'subIndex': value_data[1],
+                    'questionable': False,
+                    'deprecated': False,
+                    'notes': [],
+                    'internalNotes': []
+                }
+            ] for value_data in sign_data[1]],
+            'forms': []
+        }
+        for sign_data in [
+            ('KU', [('ku', 1)]),
+            ('NU', [('nu', 1)]),
+            ('IGI', [('ši', 1)]),
+            ('DIŠ', [('ana', 1)]),
+            ('UD', [('u', 4), ('tu', 2)]),
+            ('MI', [('mi', 1)]),
+            ('KI', [('ki', 1)]),
+            ('DU', [('du', 1)]),
+            ('U', [('u', 1)]),
+            ('BA', [('ba', 1)]),
+            ('MA', [('ma', 1)]),
+            ('TI', [('ti', 1)]),
+            ('MU', [('mu', 1)]),
+            ('TA', [('ta', 1)]),
+            ('ŠU', [('šu', 1)]),
+            ('BU', [('gid', 2)])
+        ]
+    ]

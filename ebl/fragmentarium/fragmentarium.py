@@ -85,9 +85,15 @@ class Fragmentarium:
     def find_interesting(self):
         return self._repository.find_interesting()
 
-    def search_signs(self, signs):
+    def search_signs(self, transliteration):
+        cleaned_transliteration = clean(transliteration)
+        signs = self._sign_list.map_transliteration(cleaned_transliteration)
         query = TransliterationQuery(signs)
-        return self._repository.search_signs(query)
+        return [
+            (fragment, query.get_matching_lines(fragment))
+            for fragment
+            in self._repository.search_signs(query)
+        ]
 
     def create(self, fragment):
         return self._repository.create(fragment)

@@ -1,7 +1,7 @@
 import falcon
+import pydash
 
 from ebl.require_scope import require_scope
-from ebl.fragmentarium.transliterations import clean
 
 
 def _unprocessable_entity(_, resp):
@@ -10,9 +10,8 @@ def _unprocessable_entity(_, resp):
 
 class FragmentSearch:
     # pylint: disable=R0903
-    def __init__(self, fragmentarium, sign_list):
+    def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
-        self._sign_list = sign_list
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp):
@@ -42,6 +41,12 @@ class FragmentSearch:
 
     def _search_transliteration(self, req, resp):
         transliteration = req.params['transliteration']
-        cleaned_transliteration = clean(transliteration)
-        signs = self._sign_list.map_transliteration(cleaned_transliteration)
-        resp.media = self._fragmentarium.search_signs(signs)
+        resp.media = [
+            pydash.merge(
+                {},
+                fragment_and_lines[0],
+                {'matching_lines': fragment_and_lines[1]}
+            )
+            for fragment_and_lines
+            in self._fragmentarium.search_signs(transliteration)
+        ]

@@ -83,7 +83,7 @@ GET_MATCHING_LINES_DATA = [
             ['6\'. [...] x mu ta-ma-tu₂']
         ]
     ),
-        (
+    (
         [['MA'], ['TA']],
         [
             [
