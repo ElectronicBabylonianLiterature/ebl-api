@@ -7,7 +7,8 @@ SIGNS = (
     'KU NU IGI\n'
     'GI₆ DIŠ GI₆ UD MA\n'
     'KI DU U BA MA TA\n'
-    'X MU TA MA UD'
+    'X MU TA MA UD\n'
+    'ŠU/BU'
 )
 
 
@@ -19,6 +20,7 @@ FRAGMENT = {
         '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]\n'
         '3\'. [... k]i-du u ba-ma-t[a ...]\n'
         '6\'. [...] x mu ta-ma-tu₂\n'
+        '7\'. šu/gid'
     ),
     'signs': SIGNS
 }
@@ -32,6 +34,7 @@ REGEXP_DATA = [
         ['GI₆', 'DIŠ'],
         ['U', 'BA', 'MA']
     ], True),
+    ([['ŠU']], True),
     ([['IGI', 'UD']], False),
     ([['|U.BA|']], False),
 ]
@@ -94,7 +97,11 @@ GET_MATCHING_LINES_DATA = [
                 '6\'. [...] x mu ta-ma-tu₂'
             ]
         ]
-    )
+    ),
+    (
+        [['BU']],
+        [['7\'. šu/gid']]
+    ),
 ]
 
 

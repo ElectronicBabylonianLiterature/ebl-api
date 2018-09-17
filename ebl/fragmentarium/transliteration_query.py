@@ -12,13 +12,17 @@ class TransliterationQuery:
     def regexp(self):
         lines_regexp = (
             pydash.chain(self.signs)
-            .map(lambda row: [regex.escape(sign) for sign in row])
+            .map(lambda row: [
+                fr'([^\s]+/)*{escaped_sign}(/[^\s]+)*'
+                for escaped_sign
+                in (regex.escape(sign) for sign in row)
+            ])
             .map(' '.join)
-            .map(lambda row: fr'(?<![^ |\n]){row}')
+            .map(lambda row: fr'(?<![^|\s]){row}')
             .join(r'( .*)?\n.*')
             .value()
         )
-        return fr'{lines_regexp}(?![^ |\n])'
+        return fr'{lines_regexp}(?![^|\s])'
 
     def get_matching_lines(self, fragment):
         signs = fragment['signs']
