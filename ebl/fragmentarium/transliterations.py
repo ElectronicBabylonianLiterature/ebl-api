@@ -1,10 +1,11 @@
 import re
+import pydash
 
 
 def clean(transliteration):
-    return [re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line).strip()
+    return [pydash.clean(re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line))
             for line in
-            (re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+|(?<=\s)\s', '', line)
+            (re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line)
              for line in
              (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s+\|\s+', ' ', line)
               for line in
