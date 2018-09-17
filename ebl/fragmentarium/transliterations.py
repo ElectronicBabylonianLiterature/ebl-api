@@ -12,7 +12,7 @@ def clean(transliteration):
                                      r'\)?\]|'
                                      r'\.\.\.', '', line))
             .map(lambda line:
-                 re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s+\|\s+', ' ', line))
+                 re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s+\|\s+|\+', ' ', line))
             .map(lambda line:
                  re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line))
             .map(lambda line: re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line))
