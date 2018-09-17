@@ -80,7 +80,7 @@ class Fragmentarium:
         return self._repository.search(number)
 
     def find_random(self):
-        return self._repository.find_random
+        return self._repository.find_random()
 
     def find_interesting(self):
         return self._repository.find_interesting()
