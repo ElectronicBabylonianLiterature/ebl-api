@@ -3,18 +3,21 @@ import pydash
 
 
 def clean(transliteration):
-    return [pydash.clean(re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line))
-            for line in
-            (re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line)
-             for line in
-             (re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s+\|\s+', ' ', line)
-              for line in
-              (re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|'
-                      r'<<?\(?[^>]+\)?>?>|'
-                      r'\[\(?|'
-                      r'\)?\]|'
-                      r'\.\.\.', '', line)
-               for line in filter_lines(transliteration))))]
+    return (pydash
+            .chain(transliteration)
+            .thru(filter_lines)
+            .map(lambda line: re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|'
+                                     r'<<?\(?[^>]+\)?>?>|'
+                                     r'\[\(?|'
+                                     r'\)?\]|'
+                                     r'\.\.\.', '', line))
+            .map(lambda line:
+                 re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\.|\s+\|\s+', ' ', line))
+            .map(lambda line:
+                 re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line))
+            .map(lambda line: re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line))
+            .map(pydash.clean)
+            .value())
 
 
 def filter_lines(transliteration):
