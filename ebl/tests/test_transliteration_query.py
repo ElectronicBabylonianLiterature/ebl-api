@@ -5,8 +5,8 @@ from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 SIGNS = (
     'KU NU IGI\n'
-    'GI₆ DIŠ GI₆ UD MI\n'
-    'KI DU U BA MA TI\n'
+    'GI₆ DIŠ GI₆ UD MA\n'
+    'KI DU U BA MA TA\n'
     'X MU TA MA UD'
 )
 
@@ -16,8 +16,8 @@ FRAGMENT = {
         '1\'. [...-ku]-nu-ši [...]\n'
         '\n'
         '@(obeverse)\n'
-        '2\'. [...] GI₆ ana GI₆ u₄-m[i ...]\n'
-        '3\'. [... k]i-du u ba-ma-t[i ...]\n'
+        '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]\n'
+        '3\'. [... k]i-du u ba-ma-t[a ...]\n'
         '6\'. [...] x mu ta-ma-tu₂\n'
     ),
     'signs': SIGNS
@@ -55,31 +55,44 @@ GET_MATCHING_LINES_DATA = [
     ),
     (
         [['U', 'BA', 'MA']],
-        [['3\'. [... k]i-du u ba-ma-t[i ...]']]
+        [['3\'. [... k]i-du u ba-ma-t[a ...]']]
     ),
     (
         [['GI₆']],
-        [['2\'. [...] GI₆ ana GI₆ u₄-m[i ...]']]
+        [['2\'. [...] GI₆ ana GI₆ u₄-m[a ...]']]
     ),
     (
         [['GI₆', 'DIŠ'], ['U', 'BA', 'MA']],
         [[
-            '2\'. [...] GI₆ ana GI₆ u₄-m[i ...]',
-            '3\'. [... k]i-du u ba-ma-t[i ...]'
+            '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]',
+            '3\'. [... k]i-du u ba-ma-t[a ...]'
         ]]
     ),
     (
         [['NU', 'IGI'], ['GI₆', 'DIŠ']],
         [[
             '1\'. [...-ku]-nu-ši [...]',
-            '2\'. [...] GI₆ ana GI₆ u₄-m[i ...]'
+            '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]'
         ]]
     ),
     (
         [['MA']],
         [
-            ['3\'. [... k]i-du u ba-ma-t[i ...]'],
+            ['2\'. [...] GI₆ ana GI₆ u₄-m[a ...]'],
+            ['3\'. [... k]i-du u ba-ma-t[a ...]'],
             ['6\'. [...] x mu ta-ma-tu₂']
+        ]
+    ),
+        (
+        [['MA'], ['TA']],
+        [
+            [
+                '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]',
+                '3\'. [... k]i-du u ba-ma-t[a ...]'
+            ], [
+                '3\'. [... k]i-du u ba-ma-t[a ...]',
+                '6\'. [...] x mu ta-ma-tu₂'
+            ]
         ]
     )
 ]

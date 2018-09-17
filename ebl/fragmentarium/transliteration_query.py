@@ -1,5 +1,5 @@
-import re
 import pydash
+import regex
 
 from ebl.fragmentarium.transliterations import filter_lines
 
@@ -12,7 +12,7 @@ class TransliterationQuery:
     def regexp(self):
         lines_regexp = (
             pydash.chain(self.signs)
-            .map(lambda row: [re.escape(sign) for sign in row])
+            .map(lambda row: [regex.escape(sign) for sign in row])
             .map(' '.join)
             .map(lambda row: fr'(?<![^ |\n]){row}')
             .join(r'( .*)?\n.*')
@@ -33,7 +33,7 @@ class TransliterationQuery:
                 .value()
             )
 
-        matches = re.finditer(self.regexp, signs)
+        matches = regex.finditer(self.regexp, signs, overlapped=True)
         positions = [
             (match.start(), match.end())
             for match in matches
