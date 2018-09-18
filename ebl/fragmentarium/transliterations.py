@@ -41,11 +41,8 @@ def _clean_value(value):
 
 
 def filter_lines(transliteration):
-    return [line
-            for line in transliteration.split('\n') if
-            line and
-            not line.startswith('@') and
-            not line.startswith('$') and
-            not line.startswith('#') and
-            not line.startswith('&') and
-            not line.startswith('=:')]
+    return [
+        line
+        for line in transliteration.split('\n')
+        if line and not re.match(r'@|\$|#|&|=:', line)
+    ]
