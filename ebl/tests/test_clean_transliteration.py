@@ -30,13 +30,13 @@ def test_map_spaces():
 
     assert clean(transliteration) == [
         'šu mu gid₂ ba',
-        'giš BI IS',
+        'giš bi is',
         'giš |BI.IS|',
         'm d',
         'tu um',
         'tu na',
         '|BIxIS|',
-        'mu giš BI',
+        'mu giš bi',
         'din d x',
         'šu mu',
     ]
@@ -49,7 +49,7 @@ def test_strip_lacuna():
                        '5. [(... a)]-ba\n'
                        '6. [x (x) x]')
     assert clean(transliteration) == [
-        'NU KU₃',
+        'nu ku₃',
         'a ba an',
         'ši',
         'a ba',
@@ -69,7 +69,7 @@ def test_strip_flags():
         '1.  ba! ba? ba# ba*\n2. $KU'
     assert clean(transliteration) == [
         'ba ba ba ba',
-        'KU'
+        'ku'
     ]
 
 
@@ -86,7 +86,7 @@ def test_strip_omissions():
     transliteration =\
         '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
     assert clean(transliteration) == [
-        'KU₃',
+        'ku₃',
         'an',
         'ba'
     ]
@@ -96,7 +96,7 @@ def test_min():
     transliteration =\
         '3. MIN<(an)> ši'
     assert clean(transliteration) == [
-        'MIN ši'
+        'min ši'
     ]
 
 
@@ -119,8 +119,7 @@ def test_graphemes():
                        '6. |BI%IS|\n'
                        '7. |BI@IS|\n'
                        '8. |3×BI|\n'
-                       '9. |3xBI|\n'
-                       '10. ir/|PISANxX|')
+                       '9. |3xBI|')
 
     assert clean(transliteration) == [
         '|BIxIS|',
@@ -131,6 +130,29 @@ def test_graphemes():
         '|BI%IS|',
         '|BI@IS|',
         '|3×BI|',
-        '|3xBI|',
-        'ir/|PISANxX|'
+        '|3xBI|'
+    ]
+
+
+def test_lower_case():
+    transliteration = ('1. gid₂\n'
+                       '2. ši\n'
+                       '3. BI\n'
+                       '4. BI.IS\n'
+                       '5. |BI.IS|\n'
+                       '6. DIŠ\n'
+                       '7. KU₃\n'
+                       '8. ku(KU₃)\n'
+                       '9. ku/|BI×IS|')
+
+    assert clean(transliteration) == [
+        'gid₂',
+        'ši',
+        'bi',
+        'bi is',
+        '|BI.IS|',
+        'diš',
+        'ku₃',
+        'ku(KU₃)',
+        'ku/|BI×IS|'
     ]

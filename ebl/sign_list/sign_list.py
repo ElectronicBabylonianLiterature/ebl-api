@@ -36,10 +36,9 @@ class SignList:
 
     def _parse_reading(self, reading):
         reading_match = re.fullmatch(r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?', reading)
-        variant_match = re.search(r'/', reading)
         if reading_match:
             return self._parse_match(reading_match)
-        elif variant_match:
+        elif '/' in reading:
             return self._parse_variant(reading)
         else:
             return UNKNOWN_SIGN

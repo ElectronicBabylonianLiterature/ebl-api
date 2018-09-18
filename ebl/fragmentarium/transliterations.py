@@ -27,11 +27,17 @@ def clean(transliteration):
 
 
 def _clean_value(value):
-    match = re.fullmatch(r'\|[^|]+\|', value)
-    if match:
+    grapheme = re.fullmatch(r'\|[^|]+\|', value)
+    reading_with_sign = re.fullmatch(r'[^\(]+\(([^\)]+)\)', value)
+    if '/' in value:
+        return '/'.join([
+            _clean_value(part)
+            for part in value.split('/')
+        ])
+    elif grapheme or reading_with_sign:
         return value
     else:
-        return re.sub(r'[.+]', ' ', value)
+        return re.sub(r'[.+]', ' ', value).lower()
 
 
 def filter_lines(transliteration):

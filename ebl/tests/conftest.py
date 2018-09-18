@@ -181,13 +181,13 @@ def transliterated_fragment():
         'accession': 'accession-4',
         'transliteration': (
             '1\'. [...-ku]-nu-ši [...]\n'
-            '2\'. [...] GI₆ ana u₄-m[i ...]\n'
+            '2\'. [...] GI₆ ana u₄-š[u ...]\n'
             '3\'. [... k]i-du u ba-ma-t[i ...]\n'
             '6\'. [...] x mu ta-ma-tu₂\n'
         ),
         'signs': (
             'KU NU IGI\n'
-            'GI₆ DIŠ UD MI\n'
+            'MI DIŠ UD ŠU\n'
             'KI DU U BA MA TI\n'
             'X MU TA MA UD'
         ),
@@ -243,7 +243,7 @@ def signs():
             ('IGI', [('ši', 1)]),
             ('DIŠ', [('ana', 1)]),
             ('UD', [('u', 4), ('tu', 2)]),
-            ('MI', [('mi', 1)]),
+            ('MI', [('mi', 1), ('gi', 6)]),
             ('KI', [('ki', 1)]),
             ('DU', [('du', 1)]),
             ('U', [('u', 1)]),

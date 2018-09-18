@@ -226,23 +226,20 @@ def test_search_not_found(fragmentarium):
 
 SEARCH_TRANSLITERATION_DATA = [
     ('ana u₄', [
-        ['2\'. [...] GI₆ ana u₄-m[i ...]']
+        ['2\'. [...] GI₆ ana u₄-š[u ...]']
     ]),
     ('ku', [
         ['1\'. [...-ku]-nu-ši [...]']
     ]),
     ('u₄', [
-        ['2\'. [...] GI₆ ana u₄-m[i ...]'],
+        ['2\'. [...] GI₆ ana u₄-š[u ...]'],
         ['6\'. [...] x mu ta-ma-tu₂']
     ]),
     ('GI₆ ana\nu ba ma', [
         [
-            '2\'. [...] GI₆ ana u₄-m[i ...]',
+            '2\'. [...] GI₆ ana u₄-š[u ...]',
             '3\'. [... k]i-du u ba-ma-t[i ...]'
         ]
-    ]),
-    ('ana u₄', [
-        ['2\'. [...] GI₆ ana u₄-m[i ...]']
     ]),
     ('ši tu₂', None),
 ]
