@@ -13,8 +13,9 @@ import ebl.app
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import Fragmentarium
-from ebl.sign_list .sign_list import MongoSignList
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
+from ebl.sign_list.sign_list import SignList
+from ebl.sign_list.sign_repository import MongoSignRepository
 
 
 @pytest.fixture
@@ -33,8 +34,13 @@ def dictionary(database):
 
 
 @pytest.fixture
-def sign_list(database):
-    return MongoSignList(database)
+def sign_repository(database):
+    return MongoSignRepository(database)
+
+
+@pytest.fixture
+def sign_list(sign_repository):
+    return SignList(sign_repository)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
@@ -111,7 +117,7 @@ def file_repository(file):
 
 @pytest.fixture
 def context(dictionary,
-            sign_list,
+            sign_repository,
             fetch_user_profile,
             file_repository,
             fragment_repository,
@@ -130,7 +136,7 @@ def context(dictionary,
     return {
         'auth_backend': NoneAuthBackend(user_loader),
         'dictionary': dictionary,
-        'sign_list': sign_list,
+        'sign_repository': sign_repository,
         'files': file_repository,
         'fetch_user_profile': fetch_user_profile,
         'fragment_repository': fragment_repository,
@@ -218,7 +224,7 @@ def signs():
             'notes': [],
             'internalNotes': [],
             'literature': [],
-            'values': [[
+            'values': [
                 {
                     'value': value_data[0],
                     'subIndex': value_data[1],
@@ -227,7 +233,8 @@ def signs():
                     'notes': [],
                     'internalNotes': []
                 }
-            ] for value_data in sign_data[1]],
+                for value_data in sign_data[1]
+            ],
             'forms': []
         }
         for sign_data in [

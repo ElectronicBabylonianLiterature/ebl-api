@@ -1,106 +1,20 @@
-# pylint: disable=W0621
-import pytest
-
-
 COLLECTION = 'signs'
 
 
-@pytest.fixture
-def sign():
-    return {
-        '_id': 'IGI',
-        'lists': [
-            'HZL288'
-        ],
-        'unicode': [
-            74054
-        ],
-        'notes': [],
-        'internalNotes': [],
-        'literature': [],
-        'values': [
-            {
-                'value': 'ši',
-                'subIndex': 1,
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            },
-            {
-                'value': 'panu',
-                'subIndex': 1,
-                'questionable': False,
-                'deprecated': False,
-                'languageRestriction': 'akk',
-                'notes': [],
-                'internalNotes': []
-            }
-        ],
-        'forms': []
-    }
+def test_create_and_find(sign_list, signs):
+    sign_name = sign_list.create(signs[0])
+
+    assert sign_list.find(sign_name) == signs[0]
 
 
-@pytest.fixture
-def another_sign():
-    # pylint: disable=R0801
-    return {
-        '_id': 'SI',
-        'lists': [],
-        'unicode': [],
-        'notes': [],
-        'internalNotes': [],
-        'literature': [],
-        'values': [
-            {
-                'value': 'ši',
-                'subIndex': 2,
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            },
-            {
-                'value': 'hu',
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            },
-        ],
-        'forms': []
-    }
+def test_search(sign_list, signs):
+    sign_list.create(signs[0])
+    sign_list.create(signs[1])
 
-
-def test_create(database, sign_list, sign):
-    sign_name = sign_list.create(sign)
-
-    assert database[COLLECTION].find_one({'_id': sign_name}) == sign
-
-
-def test_find(database, sign_list, sign):
-    database[COLLECTION].insert_one(sign)
-
-    assert sign_list.find(sign['_id']) == sign
-
-
-def test_sign_not_found(sign_list):
-    with pytest.raises(KeyError):
-        sign_list.find('unknown id')
-
-
-def test_search(database,
-                sign_list,
-                sign,
-                another_sign):
-    database[COLLECTION].insert_many([sign, another_sign])
-
-    assert sign_list.search('ši', 1) == sign
-    assert sign_list.search('hu', None) == another_sign
-
-
-def test_search_not_found(sign_list):
-    assert sign_list.search('unknown', 1) is None
+    assert sign_list.search(
+        signs[0]['values'][0]['value'],
+        signs[0]['values'][0]['subIndex']
+    ) == signs[0]
 
 
 def test_transliteration_to_signs(sign_list, signs):

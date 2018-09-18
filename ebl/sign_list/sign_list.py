@@ -1,29 +1,23 @@
 import re
 import unicodedata
 
-from ebl.mongo_repository import MongoRepository
 
-
-COLLECTION = 'signs'
 UNKNOWN_SIGN = 'X'
 
 
-class MongoSignList(MongoRepository):
+class SignList:
 
-    def __init__(self, database):
-        super().__init__(database, COLLECTION)
+    def __init__(self, sign_repository):
+        self._repository = sign_repository
+
+    def create(self, sign):
+        return self._repository.create(sign)
+
+    def find(self, sign_name):
+        return self._repository.find(sign_name)
 
     def search(self, reading, sub_index):
-        sub_index_query =\
-            {'$exists': False} if sub_index is None else sub_index
-        return self.get_collection().find_one({
-            'values': {
-                '$elemMatch': {
-                    'value': reading,
-                    'subIndex': sub_index_query
-                }
-            }
-        })
+        return self._repository.search(reading, sub_index)
 
     def map_transliteration(self, cleaned_transliteration):
         return [self._parse_row(row) for row in cleaned_transliteration]
