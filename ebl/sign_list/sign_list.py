@@ -26,7 +26,7 @@ class SignList:
         return [self._parse_value(value) for value in row.split(' ')]
 
     def _parse_value(self, value):
-        match = re.fullmatch(r'\|?(\d*[.x×%&+]?[A-ZṢŠṬ₀-₉]+)+\|?|'
+        match = re.fullmatch(r'\|?(\d*[.x×%&+@]?[A-ZṢŠṬ₀-₉]+)+\|?|'
                              r'\d+|'
                              r'[^\(]+\((.+)\)', value)
         if match:
