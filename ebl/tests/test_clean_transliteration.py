@@ -19,17 +19,19 @@ def test_strip_line_numbers():
 def test_map_spaces():
     transliteration = ('1. šu-mu gid₂-ba\n'
                        '2. {giš}BI.IS\n'
-                       '3. {m}{d}\n'
-                       '4. {+tu-um}\n'
-                       '5. tu | na\n'
-                       '6. |BIxIS|\n'
-                       '7. mu {{giš}}BI\n'
-                       '8. din-{d}x\n'
-                       '9. šu+mu')
+                       '3. {giš}|BI.IS|\n'
+                       '4. {m}{d}\n'
+                       '5. {+tu-um}\n'
+                       '6. tu | na\n'
+                       '7. |BIxIS|\n'
+                       '8. mu {{giš}}BI\n'
+                       '9. din-{d}x\n'
+                       '10. šu+mu')
 
     assert clean(transliteration) == [
         'šu mu gid₂ ba',
         'giš BI IS',
+        'giš |BI.IS|',
         'm d',
         'tu um',
         'tu na',
@@ -105,4 +107,30 @@ def test_numbers():
         '1(AŠ)',
         '1 2 10 20 30',
         '256'
+    ]
+
+
+def test_graphemes():
+    transliteration = ('1. |BIxIS|\n'
+                       '2. |BI×IS|\n'
+                       '3. |BI.IS|\n'
+                       '4. |BI+IS|\n'
+                       '5. |BI&IS|\n'
+                       '6. |BI%IS|\n'
+                       '7. |BI@IS|\n'
+                       '8. |3×BI|\n'
+                       '9. |3xBI|\n'
+                       '10. ir/|PISANxX|')
+
+    assert clean(transliteration) == [
+        '|BIxIS|',
+        '|BI×IS|',
+        '|BI.IS|',
+        '|BI+IS|',
+        '|BI&IS|',
+        '|BI%IS|',
+        '|BI@IS|',
+        '|3×BI|',
+        '|3xBI|',
+        'ir/|PISANxX|'
     ]
