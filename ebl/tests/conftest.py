@@ -37,9 +37,19 @@ def sign_list(database):
     return MongoSignList(database)
 
 
+class TestFragmentRepository(MongoFragmentRepository):
+    # Mongomock does not support $sample so we need to
+    # stub methods using on it.
+    def find_random(self):
+        return [self.get_collection().find_one({})]
+
+    def find_interesting(self):
+        return [self.get_collection().find_one({})]
+
+
 @pytest.fixture
 def fragment_repository(database):
-    return MongoFragmentRepository(database)
+    return TestFragmentRepository(database)
 
 
 @pytest.fixture

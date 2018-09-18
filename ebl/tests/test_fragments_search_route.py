@@ -1,48 +1,5 @@
-# pylint: disable=W0621
 import falcon
 import pydash
-import pytest
-
-
-@pytest.fixture
-def signs():
-    return [{
-        '_id': 'MA',
-        'lists': [],
-        'unicode': [],
-        'notes': [],
-        'internalNotes': [],
-        'literature': [],
-        'values': [
-            {
-                'value': 'ma',
-                'subIndex': 1,
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            }
-        ],
-        'forms': []
-    }, {
-        '_id': 'UD',
-        'lists': [],
-        'unicode': [],
-        'notes': [],
-        'internalNotes': [],
-        'literature': [],
-        'values': [
-            {
-                'value': 'tu',
-                'subIndex': 2,
-                'questionable': False,
-                'deprecated': False,
-                'notes': [],
-                'internalNotes': []
-            },
-        ],
-        'forms': []
-    }]
 
 
 def test_search_fragment(client, fragmentarium, fragment):
@@ -81,6 +38,34 @@ def test_search_signs(client,
             ['6\'. [...] x mu ta-ma-tu₂']
         ])
     ]
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
+
+
+def test_random(client,
+                fragmentarium,
+                fragment):
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get(f'/fragments', params={
+        'random': True
+    })
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [fragment]
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
+
+
+def test_interesting(client,
+                     fragmentarium,
+                     fragment):
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get(f'/fragments', params={
+        'interesting': True
+    })
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [fragment]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
