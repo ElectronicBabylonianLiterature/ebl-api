@@ -18,7 +18,7 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.statistics import StatisticsResource
-from ebl.fragmentarium.sign_list import MongoSignList
+from ebl.sign_list .sign_list import MongoSignList
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.files.files import FilesResource
 from ebl.files.file_repository import GridFsFiles

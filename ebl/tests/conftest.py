@@ -13,7 +13,7 @@ import ebl.app
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragmentarium.fragmentarium import Fragmentarium
-from ebl.fragmentarium.sign_list import MongoSignList
+from ebl.sign_list .sign_list import MongoSignList
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 
 
