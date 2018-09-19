@@ -52,7 +52,7 @@ class SignList:
 
     def _parse_variant(self, reading):
         return '/'.join([
-            self._parse_reading(part)
+            self._parse_value(part)
             for part
             in reading.split('/')
         ])

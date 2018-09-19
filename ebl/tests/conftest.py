@@ -184,12 +184,14 @@ def transliterated_fragment():
             '2\'. [...] GI₆ ana u₄-š[u ...]\n'
             '3\'. [... k]i-du u ba-ma-t[i ...]\n'
             '6\'. [...] x mu ta-ma-tu₂\n'
+            '7\'. šu/|BI×IS|'
         ),
         'signs': (
             'KU NU IGI\n'
             'MI DIŠ UD ŠU\n'
             'KI DU U BA MA TI\n'
-            'X MU TA MA UD'
+            'X MU TA MA UD\n'
+            'ŠU/|BI×IS|'
         ),
         'notes': '',
         'record': []
