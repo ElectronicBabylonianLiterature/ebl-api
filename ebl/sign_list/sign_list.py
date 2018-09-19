@@ -8,6 +8,7 @@ GRAPHEME_PATTERN = (
     r'[^\(]+\((.+)\)'
 )
 READING_PATTERN = r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?'
+VARIANT_PATTERN = r'([^/]+)(?:/([^/]+))+'
 UNKNOWN_SIGN = 'X'
 
 
@@ -32,16 +33,20 @@ class SignList:
         ]
 
     def _parse_value(self, value):
-        grapheme_match = re.fullmatch(GRAPHEME_PATTERN, value)
-        reading_match = re.fullmatch(READING_PATTERN, value)
-        if grapheme_match:
-            return self._parse_grapheme(grapheme_match)
-        elif reading_match:
-            return self._parse_reading(reading_match)
-        elif '/' in value:
-            return self._parse_variant(value)
-        else:
-            return UNKNOWN_SIGN
+        factories = [
+            (GRAPHEME_PATTERN, self._parse_grapheme),
+            (READING_PATTERN, self._parse_reading),
+            (VARIANT_PATTERN, self._parse_variant)
+        ]
+
+        return next((
+            factory(match)
+            for match, factory in [
+                (re.fullmatch(pattern, value), factory)
+                for pattern, factory in factories
+            ]
+            if match
+        ), UNKNOWN_SIGN)
 
     @staticmethod
     def _parse_grapheme(match):
@@ -57,9 +62,9 @@ class SignList:
         sign = self.search(value, sub_index)
         return sign['_id'] if sign else UNKNOWN_SIGN
 
-    def _parse_variant(self, reading):
+    def _parse_variant(self, match):
         return '/'.join([
             self._parse_value(part)
             for part
-            in reading.split('/')
+            in match.groups()
         ])
