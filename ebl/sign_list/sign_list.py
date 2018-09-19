@@ -2,6 +2,7 @@ import re
 import unicodedata
 
 
+BROKEN_PATTERN = r'x'
 WITH_SIGN_PATTERN = r'[^\(/\|]+\((.+)\)|'
 GRAPHEME_PATTERN = (
     r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉]+([@~][a-z0-9]+)*\)?)+\|?|'
@@ -9,7 +10,7 @@ GRAPHEME_PATTERN = (
 )
 READING_PATTERN = r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?'
 VARIANT_PATTERN = r'([^/]+)(?:/([^/]+))+'
-UNKNOWN_SIGN = 'X'
+UNKNOWN_SIGN = '?'
 
 
 class SignList:
@@ -34,8 +35,9 @@ class SignList:
 
     def _parse_value(self, value):
         factories = [
-            (WITH_SIGN_PATTERN, self._parse_with_sign),
-            (GRAPHEME_PATTERN, self._parse_grapheme),
+            (BROKEN_PATTERN, lambda _match: 'X'),
+            (WITH_SIGN_PATTERN, lambda match: match.group(1)),
+            (GRAPHEME_PATTERN, lambda match: match.group(0)),
             (READING_PATTERN, self._parse_reading),
             (VARIANT_PATTERN, self._parse_variant)
         ]
@@ -48,14 +50,6 @@ class SignList:
             ]
             if match
         ), UNKNOWN_SIGN)
-
-    @staticmethod
-    def _parse_with_sign(match):
-        return match.group(1)
-
-    @staticmethod
-    def _parse_grapheme(match):
-        return match.group(0)
 
     def _parse_reading(self, match):
         value = match.group(1)

@@ -37,7 +37,7 @@ def test_transliteration_to_signs(sign_list, signs):
         '|3xBI|',
         '|GEŠTU~axŠE~a@t|',
         '|(GI&GI)×ŠE₃|',
-        'unknown x',
+        'unknown x X',
         'AŠ 1 2 10 20 30 256',
         'foo(TUKUL)',
         'šu/gid₂',
@@ -67,7 +67,7 @@ def test_transliteration_to_signs(sign_list, signs):
         ['|3xBI|'],
         ['|GEŠTU~axŠE~a@t|'],
         ['|(GI&GI)×ŠE₃|'],
-        ['X', 'X'],
+        ['?', 'X', 'X'],
         # 1, 2, 10, 20, 30 should be inserted manually to the sign list
         ['AŠ', '1', '2', '10', '20', '30', '256'],
         ['TUKUL'],
@@ -78,5 +78,5 @@ def test_transliteration_to_signs(sign_list, signs):
         ['ŠU/AŠ'],
         ['256/NU'],
         ['X/NU'],
-        ['NU/X'],
+        ['NU/?'],
     ]
