@@ -2,6 +2,12 @@ import re
 import unicodedata
 
 
+GRAPHEME_PATTERN = (
+    r'\|?(\d*[.x×%&+@]?[A-ZṢŠṬ₀-₉]+)+\|?|'
+    r'\d+|'
+    r'[^\(]+\((.+)\)'
+)
+READING_PATTERN = r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?'
 UNKNOWN_SIGN = 'X'
 
 
@@ -26,12 +32,8 @@ class SignList:
         ]
 
     def _parse_value(self, value):
-        grapheme_match = re.fullmatch(
-            r'\|?(\d*[.x×%&+@]?[A-ZṢŠṬ₀-₉]+)+\|?|'
-            r'\d+|'
-            r'[^\(]+\((.+)\)', value
-        )
-        reading_match = re.fullmatch(r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?', value)
+        grapheme_match = re.fullmatch(GRAPHEME_PATTERN, value)
+        reading_match = re.fullmatch(READING_PATTERN, value)
         if grapheme_match:
             return self._parse_grapheme(grapheme_match)
         elif reading_match:
