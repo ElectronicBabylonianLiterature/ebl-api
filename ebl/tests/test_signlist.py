@@ -25,6 +25,7 @@ def test_transliteration_to_signs(sign_list, signs):
         'šu gid₂',
         'BI IS',
         'BIxIS',
+        'BI×IS',
         '|BIxIS|',
         '|BI×IS|',
         '|BI.IS|',
@@ -35,10 +36,16 @@ def test_transliteration_to_signs(sign_list, signs):
         '|3×BI|',
         '|3xBI|',
         'unknown x',
-        '1(AŠ) 1 2 10 20 30 256',
+        'AŠ 1 2 10 20 30 256',
         'foo(TUKUL)',
         'šu/gid₂',
-        'šu/|BI×IS|'
+        'šu/gid₂/nu',
+        'šu/|BI×IS|',
+        'foo(TUKUL)/šu',
+        'šu/1(AŠ)',
+        '256/nu',
+        'x/nu',
+        'nu/unknown'
     ]
     mapped_signs = sign_list.map_transliteration(clean_transliteration)
 
@@ -46,6 +53,7 @@ def test_transliteration_to_signs(sign_list, signs):
         ['ŠU', 'BU'],
         ['BI', 'IS'],
         ['BIxIS'],
+        ['BI×IS'],
         ['|BIxIS|'],
         ['|BI×IS|'],
         ['|BI.IS|'],
@@ -60,5 +68,11 @@ def test_transliteration_to_signs(sign_list, signs):
         ['AŠ', '1', '2', '10', '20', '30', '256'],
         ['TUKUL'],
         ['ŠU/BU'],
-        ['ŠU/|BI×IS|']
+        ['ŠU/BU/NU'],
+        ['ŠU/|BI×IS|'],
+        ['TUKUL/ŠU'],
+        ['ŠU/AŠ'],
+        ['256/NU'],
+        ['X/NU'],
+        ['NU/X'],
     ]

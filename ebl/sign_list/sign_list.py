@@ -5,7 +5,7 @@ import unicodedata
 GRAPHEME_PATTERN = (
     r'\|?(\d*[.x×%&+@]?[A-ZṢŠṬ₀-₉]+)+\|?|'
     r'\d+|'
-    r'[^\(]+\((.+)\)'
+    r'[^\(/]+\((.+)\)'
 )
 READING_PATTERN = r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?'
 VARIANT_PATTERN = r'([^/]+)(?:/([^/]+))+'
@@ -66,5 +66,5 @@ class SignList:
         return '/'.join([
             self._parse_value(part)
             for part
-            in match.groups()
+            in match.group(0).split('/')
         ])
