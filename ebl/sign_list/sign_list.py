@@ -21,14 +21,14 @@ class SignList:
 
     def map_transliteration(self, cleaned_transliteration):
         return [
-            [self._parse_value(value) for value in row.split(' ')]  
+            [self._parse_value(value) for value in row.split(' ')]
             for row in cleaned_transliteration
         ]
 
     def _parse_value(self, value):
         grapheme_match = re.fullmatch(
             r'\|?(\d*[.x×%&+@]?[A-ZṢŠṬ₀-₉]+)+\|?|'
-                             r'\d+|'
+            r'\d+|'
             r'[^\(]+\((.+)\)', value
         )
         reading_match = re.fullmatch(r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?', value)
@@ -41,7 +41,8 @@ class SignList:
         else:
             return UNKNOWN_SIGN
 
-    def _parse_grapheme(self, match):
+    @staticmethod
+    def _parse_grapheme(match):
         return match.group(2) or match.group(0)
 
     def _parse_reading(self, match):
