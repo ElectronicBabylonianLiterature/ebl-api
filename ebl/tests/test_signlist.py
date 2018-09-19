@@ -47,7 +47,8 @@ def test_transliteration_to_signs(sign_list, signs):
         'šu/1(AŠ)',
         '256/nu',
         'x/nu',
-        'nu/unknown'
+        'nu/unknown',
+        ''
     ]
     mapped_signs = sign_list.map_transliteration(clean_transliteration)
 
@@ -79,4 +80,5 @@ def test_transliteration_to_signs(sign_list, signs):
         ['256/NU'],
         ['X/NU'],
         ['NU/?'],
+        ['']
     ]

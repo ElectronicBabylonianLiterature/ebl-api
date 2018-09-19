@@ -1,7 +1,6 @@
 import re
 import unicodedata
 
-
 BROKEN_PATTERN = r'x'
 WITH_SIGN_PATTERN = r'[^\(/\|]+\((.+)\)|'
 GRAPHEME_PATTERN = (
@@ -29,7 +28,11 @@ class SignList:
 
     def map_transliteration(self, cleaned_transliteration):
         return [
-            [self._parse_value(value) for value in row.split(' ')]
+            (
+                [self._parse_value(value) for value in row.split(' ')]
+                if row
+                else ['']
+            )
             for row in cleaned_transliteration
         ]
 

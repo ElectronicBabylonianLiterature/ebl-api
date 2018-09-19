@@ -23,6 +23,7 @@ def clean(transliteration):
                 for value in line
             ])
             .map(' '.join)
+            .map(pydash.clean)
             .value())
 
 

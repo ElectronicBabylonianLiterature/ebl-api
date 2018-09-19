@@ -26,7 +26,8 @@ def test_map_spaces():
                        '7. |BIxIS|\n'
                        '8. mu {{giš}}BI\n'
                        '9. din-{d}x\n'
-                       '10. šu+mu')
+                       '10. šu+mu\n'
+                       '11. {d}+a')
 
     assert clean(transliteration) == [
         'šu mu gid₂ ba',
@@ -39,6 +40,7 @@ def test_map_spaces():
         'mu giš bi',
         'din d x',
         'šu mu',
+        'd a'
     ]
 
 
