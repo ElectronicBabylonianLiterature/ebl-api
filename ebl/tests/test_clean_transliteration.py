@@ -111,17 +111,7 @@ def test_numbers():
 
 
 def test_graphemes():
-    transliteration = ('1. |BIxIS|\n'
-                       '2. |BI×IS|\n'
-                       '3. |BI.IS|\n'
-                       '4. |BI+IS|\n'
-                       '5. |BI&IS|\n'
-                       '6. |BI%IS|\n'
-                       '7. |BI@IS|\n'
-                       '8. |3×BI|\n'
-                       '9. |3xBI|')
-
-    assert clean(transliteration) == [
+    graphemes = [
         '|BIxIS|',
         '|BI×IS|',
         '|BI.IS|',
@@ -130,8 +120,17 @@ def test_graphemes():
         '|BI%IS|',
         '|BI@IS|',
         '|3×BI|',
-        '|3xBI|'
+        '|3xBI|',
+        '|GEŠTU~axŠE~a@t|',
+        '|(GI&GI)×ŠE₃|'
     ]
+
+    transliteration = '\n'.join([
+        f'{index}. {grapheme}'
+        for index, grapheme in enumerate(graphemes)
+    ])
+
+    assert clean(transliteration) == graphemes
 
 
 def test_lower_case():
