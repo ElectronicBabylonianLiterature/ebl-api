@@ -8,14 +8,14 @@ def clean(transliteration):
             .thru(filter_lines)
             .map(lambda line: re.sub(r'^[^\.]+\.([^\.]+\.)?\s+|'
                                      r'<<?\(?[^>]+\)?>?>|'
-                                     r'\[\(?|'
-                                     r'\)?\]|'
+                                     r'\[|'
+                                     r'\]|'
                                      r'\.\.\.', '', line))
             .map(lambda line:
                  re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\s+\|\s+', ' ', line))
             .map(lambda line:
                  re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line))
-            .map(lambda line: re.sub(r'(?<=\s)\(([^\(\)]+)\)', r'\1', line))
+            .map(lambda line: re.sub(r'(?<![^\s])\(([^\(\)]+)\)(?!=[^\s])', r'\1', line))
             .map(pydash.clean)
             .map(lambda line: line.split(' '))
             .map(lambda line: [

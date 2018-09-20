@@ -49,13 +49,15 @@ def test_strip_lacuna():
                        '2. [... a]-ba-an\n'
                        '3. [...] ši [...]\n'
                        '5. [(... a)]-ba\n'
-                       '6. [x (x) x]')
+                       '6. [x (x) x]\n'
+                       '7. [(x) (x)]')
     assert clean(transliteration) == [
         'nu ku₃',
         'a ba an',
         'ši',
         'a ba',
-        'x x x'
+        'x x x',
+        'x x'
     ]
 
 
@@ -140,6 +142,7 @@ def test_lower_case():
                        '2. ši\n'
                        '3. BI\n'
                        '4. BI.IS\n'
+                       '4. BI+IS\n'
                        '5. |BI.IS|\n'
                        '6. DIŠ\n'
                        '7. KU₃\n'
@@ -150,6 +153,7 @@ def test_lower_case():
         'gid₂',
         'ši',
         'bi',
+        'bi is',
         'bi is',
         '|BI.IS|',
         'diš',
