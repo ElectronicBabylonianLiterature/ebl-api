@@ -1,12 +1,12 @@
 import re
 import unicodedata
 
+
 BROKEN_PATTERN = r'x'
 WITH_SIGN_PATTERN = r'[^\(/\|]+\((.+)\)|'
-GRAPHEME_PATTERN = (
-    r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉]+([@~][a-z0-9]+)*\)?)+\|?|'
-    r'\d+'
-)
+NUMBER_PATTERN = r'\d+'
+GRAPHEME_PATTERN =\
+    r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉]+([@~][a-z0-9]+)*\)?)+\|?'
 READING_PATTERN = r'([^₀-₉ₓ/]+)([₀-₉ₓ]+)?'
 VARIANT_PATTERN = r'([^/]+)(?:/([^/]+))+'
 UNKNOWN_SIGN = '?'
@@ -38,8 +38,9 @@ class SignList:
 
     def _parse_value(self, value):
         factories = [
-            (BROKEN_PATTERN, lambda _match: 'X'),
+            (BROKEN_PATTERN, lambda _: 'X'),
             (WITH_SIGN_PATTERN, lambda match: match.group(1)),
+            (NUMBER_PATTERN, self._parse_number),
             (GRAPHEME_PATTERN, lambda match: match.group(0)),
             (READING_PATTERN, self._parse_reading),
             (VARIANT_PATTERN, self._parse_variant)
@@ -54,6 +55,10 @@ class SignList:
             if match
         ), UNKNOWN_SIGN)
 
+    def _parse_number(self, match):
+        value = match.group(0)
+        return self._search_or_default(value, 1, value)
+
     def _parse_reading(self, match):
         value = match.group(1)
         sub_index = (
@@ -61,8 +66,7 @@ class SignList:
             if match.group(2)
             else 1
         )
-        sign = self.search(value, sub_index)
-        return sign['_id'] if sign else UNKNOWN_SIGN
+        return self._search_or_default(value, sub_index, UNKNOWN_SIGN)
 
     def _parse_variant(self, match):
         return '/'.join([
@@ -70,3 +74,7 @@ class SignList:
             for part
             in match.group(0).split('/')
         ])
+
+    def _search_or_default(self, value, sub_index, default):
+        sign = self.search(value, sub_index)
+        return sign['_id'] if sign else default

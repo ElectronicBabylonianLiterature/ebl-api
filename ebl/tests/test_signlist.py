@@ -69,8 +69,8 @@ def test_transliteration_to_signs(sign_list, signs):
         ['|GEŠTU~axŠE~a@t|'],
         ['|(GI&GI)×ŠE₃|'],
         ['?', 'X', 'X'],
-        # 1, 2, 10, 20, 30 should be inserted manually to the sign list
-        ['AŠ', '1', '2', '10', '20', '30', '256'],
+        # 1, 2, 5, 10, 20, 30 should be inserted manually to the sign list
+        ['AŠ', 'DIŠ', '2', '10', '20', '30', '256'],
         ['TUKUL'],
         ['ŠU/BU'],
         ['ŠU/BU/NU'],
