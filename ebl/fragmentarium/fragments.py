@@ -3,9 +3,6 @@ import falcon
 from ebl.require_scope import require_scope
 
 
-EBL_NAME = 'https://ebabylon.org/eblName'
-
-
 class FragmentsResource:
     def __init__(self, fragmentarium, fetch_user_profile):
         self._fragmentarium = fragmentarium
