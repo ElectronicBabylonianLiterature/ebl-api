@@ -15,7 +15,8 @@ def clean(transliteration):
                  re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\s+\|\s+', ' ', line))
             .map(lambda line:
                  re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line))
-            .map(lambda line: re.sub(r'(?<![^\s])\(([^\(\)]+)\)(?!=[^\s])', r'\1', line))
+            .map(lambda line:
+                 re.sub(r'(?<![^\s])\(([^\(\)]*)\)(?!=[^\s])', r'\1', line))
             .map(pydash.clean)
             .map(lambda line: line.split(' '))
             .map(lambda line: [
