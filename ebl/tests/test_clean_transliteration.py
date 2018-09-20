@@ -130,7 +130,8 @@ def test_graphemes():
         '|3×BI|',
         '|3xBI|',
         '|GEŠTU~axŠE~a@t|',
-        '|(GI&GI)×ŠE₃|'
+        '|(GI&GI)×ŠE₃|',
+        '|UD.AB@g|'
     ]
 
     transliteration = '\n'.join([
@@ -164,4 +165,16 @@ def test_lower_case():
         'ku₃',
         'ku(KU₃)',
         'ku/|BI×IS|'
+    ]
+
+
+def test_strip_at():
+    transliteration = ('1. lu₂@v\n'
+                       '2. LU₂@v\n'
+                       '3. TA@v')
+
+    assert clean(transliteration) == [
+        'lu₂',
+        'lu₂',
+        'ta'
     ]

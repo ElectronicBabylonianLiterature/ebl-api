@@ -41,7 +41,13 @@ def _clean_value(value):
     elif grapheme or reading_with_sign:
         return value
     else:
-        return re.sub(r'[.+]', ' ', value).lower()
+        return (
+            pydash.chain(value)
+            .reg_exp_replace(r'[.+]', ' ')
+            .reg_exp_replace(r'@[^\s]+', '')
+            .value()
+            .lower()
+        )
 
 
 def filter_lines(transliteration):
