@@ -11,8 +11,10 @@ def clean(transliteration):
                                      r'\[|'
                                      r'\]|'
                                      r'\.\.\.', '', line))
-            .map(lambda line:
-                 re.sub(r'\s*{+\+?|}+({+\+?)?\s*|-|\s+\|\s+', ' ', line))
+            .map(lambda line: re.sub(r'\s*{+\+?|'
+                                     r'}+({+\+?)?\s*|'
+                                     r'-|'
+                                     r'\s+(\||&\d*)\s+', ' ', line))
             .map(lambda line:
                  re.sub(r'\(\$_+\$\)|\?|\*|#|!|\$|%\w+\s+', '', line))
             .map(lambda line:
