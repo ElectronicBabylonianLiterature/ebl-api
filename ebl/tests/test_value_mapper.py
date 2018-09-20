@@ -1,5 +1,5 @@
 import pytest
-from ebl.sign_list.value_mapper import ValueMapper
+from ebl.sign_list.value_mapper import create_value_mapper
 
 
 MAP_DATA = [
@@ -47,10 +47,10 @@ MAP_DATA = [
 
 
 @pytest.mark.parametrize("value,expected", MAP_DATA)
-def test_map(value, expected, sign_repository, signs):
+def test_create_value_mapper(value, expected, sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
 
-    value_mapper = ValueMapper(sign_repository)
+    value_mapper = create_value_mapper(sign_repository)
 
-    assert value_mapper.map(value) == expected
+    assert value_mapper(value) == expected

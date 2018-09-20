@@ -17,19 +17,19 @@ def unicode_to_int(string):
     return int(unicodedata.normalize('NFKC', string))
 
 
-class ValueMapper:
+def get_group(group):
+    return lambda match: match.group(group)
 
-    def __init__(self, sign_repository):
-        self._repository = sign_repository
 
-    def map(self, value):
+def create_value_mapper(sign_repository):
+    def map_(value):
         factories = [
             (BROKEN_PATTERN, lambda _: BROKEN_SIGN),
             (WITH_SIGN_PATTERN, lambda match: match.group(1)),
-            (NUMBER_PATTERN, self._map_number),
+            (NUMBER_PATTERN, map_number),
             (GRAPHEME_PATTERN, lambda match: match.group(0)),
-            (READING_PATTERN, self._map_reading),
-            (VARIANT_PATTERN, self._map_variant)
+            (READING_PATTERN, map_reading),
+            (VARIANT_PATTERN, map_variant)
         ]
 
         return next((
@@ -41,26 +41,28 @@ class ValueMapper:
             if match
         ), UNKNOWN_SIGN)
 
-    def _map_number(self, match):
+    def map_number(match):
         value = match.group(0)
-        return self._search_or_default(value, 1, value)
+        return search_or_default(value, 1, value)
 
-    def _map_reading(self, match):
+    def map_reading(match):
         value = match.group(1)
         sub_index = (
             unicode_to_int(match.group(2))
             if match.group(2)
             else 1
         )
-        return self._search_or_default(value, sub_index, UNKNOWN_SIGN)
+        return search_or_default(value, sub_index, UNKNOWN_SIGN)
 
-    def _map_variant(self, match):
+    def map_variant(match):
         return '/'.join([
-            self.map(part)
+            map_(part)
             for part
             in match.group(0).split('/')
         ])
 
-    def _search_or_default(self, value, sub_index, default):
-        sign = self._repository.search(value, sub_index)
+    def search_or_default(value, sub_index, default):
+        sign = sign_repository.search(value, sub_index)
         return sign['_id'] if sign else default
+
+    return map_
