@@ -1,3 +1,4 @@
+import pydash
 from ebl.mongo_repository import MongoRepository
 
 
@@ -20,3 +21,10 @@ class MongoSignRepository(MongoRepository):
                 }
             }
         })
+
+
+class MemoizingSignRepository(MongoSignRepository):
+
+    def __init__(self, database):
+        super().__init__(database)
+        self.search = pydash.memoize(super().search)

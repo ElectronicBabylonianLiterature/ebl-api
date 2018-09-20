@@ -71,6 +71,13 @@ class MongoFragmentRepository(MongoRepository):
 
         return [fragment for fragment in cursor]
 
+    def find_transliterated(self):
+        cursor = self.get_collection().find(
+            {'transliteration': {'$ne': ''}}
+        )
+
+        return [fragment for fragment in cursor]
+
     def search_signs(self, query):
         cursor = self.get_collection().find({
             'signs': {'$regex': query.regexp}

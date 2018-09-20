@@ -178,3 +178,16 @@ def test_search_signs(signs,
     result = fragment_repository.search_signs(TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
     assert result == expected
+
+
+def test_find_transliterated(database,
+                             fragment_repository,
+                             transliterated_fragment,
+                             another_fragment):
+    database[COLLECTION].insert_many([
+        transliterated_fragment,
+        another_fragment
+    ])
+
+    assert fragment_repository.find_transliterated() ==\
+        [transliterated_fragment]
