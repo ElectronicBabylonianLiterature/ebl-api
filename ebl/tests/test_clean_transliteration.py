@@ -25,6 +25,10 @@ def test_map_spaces():
                        '6. tu | na\n'
                        '6. tu & na\n'
                        '6. tu &2 na\n'
+                       '7. & e\n'
+                       '7. e &\n'
+                       '7. | e\n'
+                       '7. e |\n'
                        '8. mu {{giš}}BI\n'
                        '9. din-{d}x\n'
                        '10. šu+mu\n'
@@ -39,6 +43,10 @@ def test_map_spaces():
         'tu na',
         'tu na',
         'tu na',
+        'e',
+        'e',
+        'e',
+        'e',
         'mu giš bi',
         'din d x',
         'šu mu',
