@@ -62,3 +62,13 @@ Run the full backend including the database:
 ```
 docker-compose up
 ```
+
+## Updating signs in fragments
+
+The Fragmentarium uses the transliteration mapped to signs. The signs are calculated when a fragment is saved,
+but if the sign list is updated the fragments are not automatically updated. The `ebl.fragmentarium.update_signs`
+module contains functionality to update the signs in all the fragments. The module can be run from the command line:
+```
+python -m ebl.fragmentarium.update_signs
+```
+
