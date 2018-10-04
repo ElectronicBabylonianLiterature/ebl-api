@@ -44,7 +44,7 @@ def create_auth0_backend():
         audience=os.environ['AUTH0_AUDIENCE'],
         issuer=os.environ['AUTH0_ISSUER'],
         verify_claims=['signature', 'exp', 'iat'],
-        required_claims=['exp', 'iat', 'openid', 'read:words']
+        required_claims=['exp', 'iat', 'openid']
     )
 
 

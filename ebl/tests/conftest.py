@@ -81,12 +81,13 @@ def fetch_user_profile(user_profile):
 
 class FakeFile:
     # pylint: disable=R0903
-    def __init__(self, filename, data):
+    def __init__(self, filename, data, metadata):
         self.content_type = 'image/jpeg'
         self.filename = filename
         self.data = data
         self.length = len(data)
         self._file = io.BytesIO(data)
+        self.metadata = metadata
 
     def read(self, size=-1):
         return self._file.read(size)
@@ -95,24 +96,39 @@ class FakeFile:
 class TestFilesRepository:
     # pylint: disable=R0903
     # pylint: disable=R0201
-    def __init__(self, file):
-        self._file = file
+    def __init__(self, *files):
+        self._files = files
 
     def find(self, filename):
-        if self._file.filename == filename:
-            return self._file
-        else:
+
+        try:
+            return next(file
+                        for file in self._files
+                        if file.filename == filename)
+        except StopIteration:
             raise KeyError
 
 
 @pytest.fixture
 def file():
-    return FakeFile('folio.jpg', b'ZxYJy6Qj4s5fLErh')
+    return FakeFile('folio1.jpg', b'oyoFLAbXbR', None)
 
 
 @pytest.fixture
-def file_repository(file):
-    return TestFilesRepository(file)
+def file_with_allowed_scope():
+    return FakeFile('folio2.jpg', b'ZTbvOTqvSW', {'scope': 'folio'})
+
+
+@pytest.fixture
+def file_with_restricted_scope():
+    return FakeFile('folio3.jpg', b'klgsFPOutx', {'scope': 'restricted'})
+
+
+@pytest.fixture
+def file_repository(file, file_with_allowed_scope, file_with_restricted_scope):
+    return TestFilesRepository(file,
+                               file_with_allowed_scope,
+                               file_with_restricted_scope)
 
 
 @pytest.fixture
@@ -129,7 +145,8 @@ def context(dictionary,
                 'read:words',
                 'write:words',
                 'transliterate:fragments',
-                'read:fragments'
+                'read:fragments',
+                'read:folio'
             ]
         }
 
