@@ -6,8 +6,24 @@ from cryptography.hazmat.backends import default_backend
 from falcon_auth import JWTAuthBackend
 
 
-def auth0_user_loader(token):
-    return token
+class Auth0Backend:
+
+    def __init__(self, public_key, audience, issuer):
+        self._backend = JWTAuthBackend(
+            lambda payload: payload,
+            public_key,
+            algorithm='RS256',
+            auth_header_prefix='Bearer',
+            audience=audience,
+            issuer=issuer,
+            verify_claims=['signature', 'exp', 'iat'],
+            required_claims=['exp', 'iat', 'openid']
+        )
+        self._issuer = issuer
+
+    def authenticate(self, req, resp, resource):
+        return self._backend.authenticate(req, resp, resource)
+
 
 
 def create_auth0_backend():
@@ -15,15 +31,10 @@ def create_auth0_backend():
     cert_obj = load_pem_x509_certificate(certificate, default_backend())
     public_key = cert_obj.public_key()
 
-    return JWTAuthBackend(
-        auth0_user_loader,
+    return Auth0Backend(
         public_key,
-        algorithm='RS256',
-        auth_header_prefix='Bearer',
-        audience=os.environ['AUTH0_AUDIENCE'],
-        issuer=os.environ['AUTH0_ISSUER'],
-        verify_claims=['signature', 'exp', 'iat'],
-        required_claims=['exp', 'iat', 'openid']
+        os.environ['AUTH0_AUDIENCE'],
+        os.environ['AUTH0_ISSUER']
     )
 
 
