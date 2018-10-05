@@ -64,22 +64,6 @@ def fragmentarium(fragment_repository, changelog, sign_list):
     return Fragmentarium(fragment_repository, changelog, sign_list)
 
 
-@pytest.fixture
-def user_profile():
-    return {
-        'name': 'test.user@example.com',
-        'https://ebabylon.org/eblName': 'User'
-    }
-
-
-@pytest.fixture
-def fetch_user_profile(user_profile):
-    def mock_fetch_user_profile(_):
-        return user_profile
-
-    return mock_fetch_user_profile
-
-
 class FakeFile:
     # pylint: disable=R0903
     def __init__(self, filename, data, metadata):
@@ -145,8 +129,8 @@ def user():
             ]
         },
         {
-            'name': 'john',
-            'https://ebabylon.org/eblName': 'John'
+            'name': 'test.user@example.com',
+            'https://ebabylon.org/eblName': 'User'
         }
     )
 
@@ -154,7 +138,6 @@ def user():
 @pytest.fixture
 def context(dictionary,
             sign_repository,
-            fetch_user_profile,
             file_repository,
             fragment_repository,
             changelog,
@@ -165,7 +148,6 @@ def context(dictionary,
         'dictionary': dictionary,
         'sign_repository': sign_repository,
         'files': file_repository,
-        'fetch_user_profile': fetch_user_profile,
         'fragment_repository': fragment_repository,
         'changelog': changelog
     }
@@ -226,11 +208,11 @@ def transliterated_fragment():
 
 
 @pytest.fixture
-def make_changelog_entry(user_profile):
+def make_changelog_entry(user):
     def _make_changelog_entry(resource_type, resource_id, old, new):
         return {
             'user_profile': pydash.map_keys(
-                user_profile,
+                user.profile,
                 lambda _, key: key.replace('.', '_')
             ),
             'resource_type': resource_type,

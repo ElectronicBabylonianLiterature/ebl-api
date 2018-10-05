@@ -9,21 +9,20 @@ TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
 
 
-def _record_for(fragment, updates, user_profile):
+def _record_for(fragment, updates, user):
     old_transliteration = fragment['transliteration']
     new_transliteration = updates['transliteration']
 
     if new_transliteration != old_transliteration:
-        return _create_record(old_transliteration, user_profile)
+        return _create_record(old_transliteration, user)
     else:
         return None
 
 
-def _create_record(old_transliteration, user_profile):
+def _create_record(old_transliteration, user):
     record_type = REVISION if old_transliteration else TRANSLITERATION
-    user = user_profile[EBL_NAME] or user_profile['name']
     return {
-        'user': user,
+        'user': user.ebl_name,
         'type': record_type,
         'date': datetime.datetime.utcnow().isoformat()
     }
@@ -36,7 +35,7 @@ class Fragmentarium:
         self._changelog = changelog
         self._sign_list = sign_list
 
-    def update_transliteration(self, number, updates, user_profile):
+    def update_transliteration(self, number, updates, user):
         fragment = self._repository.find(number)
 
         filtered_updates = pydash.pick(updates, 'transliteration', 'notes')
@@ -44,11 +43,11 @@ class Fragmentarium:
             filtered_updates['transliteration']
         )
 
-        record = _record_for(fragment, updates, user_profile)
+        record = _record_for(fragment, updates, user)
 
         self._changelog.create(
             self._repository.collection,
-            user_profile,
+            user.profile,
             pydash.pick(fragment, '_id', 'transliteration', 'notes', 'signs'),
             pydash.defaults(filtered_updates, {'_id': number})
         )

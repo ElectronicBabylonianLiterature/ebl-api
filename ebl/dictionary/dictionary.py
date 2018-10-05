@@ -24,7 +24,7 @@ class MongoDictionary(MongoRepository):
 
         return [word for word in cursor]
 
-    def update(self, word, user_profile):
+    def update(self, word, user):
         query = {'_id': word['_id']}
         old_word = self.get_collection().find_one(
             query
@@ -32,7 +32,7 @@ class MongoDictionary(MongoRepository):
         if old_word:
             self._changelog.create(
                 COLLECTION,
-                user_profile,
+                user.profile,
                 old_word,
                 word
             )

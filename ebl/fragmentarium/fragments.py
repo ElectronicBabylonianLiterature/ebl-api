@@ -4,9 +4,8 @@ from ebl.require_scope import require_scope
 
 
 class FragmentsResource:
-    def __init__(self, fragmentarium, fetch_user_profile):
+    def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
-        self._fetch_user_profile = fetch_user_profile
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, _req, resp, number):
@@ -17,14 +16,12 @@ class FragmentsResource:
 
     @falcon.before(require_scope, 'transliterate:fragments')
     def on_post(self, req, resp, number):
-        user_profile = self._fetch_user_profile(req)
-
         try:
             updates = json.loads(req.stream.read())
             self._fragmentarium.update_transliteration(
                 number,
                 updates,
-                user_profile
+                req.context['user']
             )
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND

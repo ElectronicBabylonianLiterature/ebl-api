@@ -21,7 +21,7 @@ def test_fragment_not_found(client):
 def test_update_transliteration(client,
                                 fragmentarium,
                                 fragment,
-                                user_profile,
+                                user,
                                 database):
     fragment_number = fragmentarium.create(fragment)
     updates = {
@@ -38,15 +38,14 @@ def test_update_transliteration(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    ebl_name = user_profile['https://ebabylon.org/eblName']
     assert updated_fragment['transliteration'] == updates['transliteration']
     assert updated_fragment['notes'] == updates['notes']
-    assert updated_fragment['record'][-1]['user'] == ebl_name
+    assert updated_fragment['record'][-1]['user'] == user.ebl_name
 
     assert database['changelog'].find_one({
         'resource_id': fragment_number,
         'resource_type': 'fragments',
-        'user_profile.name': user_profile['name']
+        'user_profile.name': user.profile['name']
     })
 
 

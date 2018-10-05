@@ -58,10 +58,3 @@ def create_auth0_backend():
         os.environ['AUTH0_AUDIENCE'],
         os.environ['AUTH0_ISSUER']
     )
-
-
-def fetch_auth0_user_profile(req):
-    issuer = os.environ['AUTH0_ISSUER']
-    url = f'{issuer}userinfo'
-    headers = {'Authorization': req.get_header('Authorization', True)}
-    return requests.get(url, headers=headers).json()

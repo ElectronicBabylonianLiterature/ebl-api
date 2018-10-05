@@ -8,9 +8,8 @@ from ebl.require_scope import require_scope
 
 class WordsResource:
 
-    def __init__(self, dictionary, fetch_user_profile):
+    def __init__(self, dictionary):
         self._dictionary = dictionary
-        self._fetch_user_profile = fetch_user_profile
 
     @falcon.before(require_scope, 'read:words')
     def on_get(self, _req, resp, object_id):
@@ -22,10 +21,9 @@ class WordsResource:
 
     @falcon.before(require_scope, 'write:words')
     def on_post(self, req, resp, object_id):
-        user_profile = self._fetch_user_profile(req)
         try:
             word = json.loads(req.stream.read())
             word['_id'] = ObjectId(object_id)
-            self._dictionary.update(word, user_profile)
+            self._dictionary.update(word, req.context['user'])
         except (KeyError, InvalidId):
             resp.status = falcon.HTTP_NOT_FOUND

@@ -63,7 +63,7 @@ def test_search_word_no_query(client):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-def test_update_word(client, word, user_profile, database):
+def test_update_word(client, word, user, database):
     object_id = str(word['_id'])
     updated_word = {
         '_id': object_id,
@@ -82,7 +82,7 @@ def test_update_word(client, word, user_profile, database):
     assert database['changelog'].find_one({
         'resource_id': word['_id'],
         'resource_type': 'words',
-        'user_profile.name': user_profile['name']
+        'user_profile.name': user.profile['name']
     })
 
 

@@ -20,7 +20,6 @@ from ebl.files.file_repository import GridFsFiles
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.changelog import Changelog
 from ebl.sign_list.sign_repository import MongoSignRepository
-from ebl.auth0 import fetch_auth0_user_profile
 from ebl.auth0 import create_auth0_backend
 
 
@@ -34,10 +33,9 @@ def create_app(context):
                                   context['changelog'],
                                   sign_list)
 
-    words = WordsResource(context['dictionary'], context['fetch_user_profile'])
+    words = WordsResource(context['dictionary'])
     word_search = WordSearch(context['dictionary'])
-    fragments = FragmentsResource(fragmentarium,
-                                  context['fetch_user_profile'])
+    fragments = FragmentsResource(fragmentarium)
     fragment_search = FragmentSearch(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
     files = FilesResource(context['files'])
@@ -61,7 +59,6 @@ def get_app():
         'dictionary': MongoDictionary(database),
         'sign_repository': MongoSignRepository(database),
         'files': GridFsFiles(database),
-        'fetch_user_profile': fetch_auth0_user_profile,
         'fragment_repository': MongoFragmentRepository(database),
         'changelog': Changelog(database)
     }

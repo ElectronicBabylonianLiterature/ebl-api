@@ -17,8 +17,8 @@ NEW = {
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_create(database, changelog, user_profile, make_changelog_entry):
-    entry_id = changelog.create(RESOURCE_TYPE, user_profile, OLD, NEW)
+def test_create(database, changelog, user, make_changelog_entry):
+    entry_id = changelog.create(RESOURCE_TYPE, user.profile, OLD, NEW)
     expected = make_changelog_entry(
         RESOURCE_TYPE,
         RESOURCE_ID,

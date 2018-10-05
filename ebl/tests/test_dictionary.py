@@ -49,12 +49,12 @@ def test_search_not_found(dictionary):
     assert dictionary.search('lemma') == []
 
 
-def test_update(dictionary, word, user_profile):
+def test_update(dictionary, word, user):
     new_lemma = ['new']
     word_id = dictionary.create(word)
     updated_word = pydash.defaults({'lemma': new_lemma}, word)
 
-    dictionary.update(updated_word, user_profile)
+    dictionary.update(updated_word, user)
 
     assert dictionary.find(word_id) == updated_word
 
@@ -62,12 +62,12 @@ def test_update(dictionary, word, user_profile):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_changelog(dictionary,
                    word,
-                   user_profile,
+                   user,
                    database,
                    make_changelog_entry):
     word_id = dictionary.create(word)
     updated_word = pydash.defaults({'lemma': ['new']}, word)
-    dictionary.update(updated_word, user_profile)
+    dictionary.update(updated_word, user)
 
     expected_changelog = make_changelog_entry(
         COLLECTION,
@@ -81,7 +81,6 @@ def test_changelog(dictionary,
     ) == expected_changelog
 
 
-def test_update_word_not_found(dictionary, word, user_profile):
+def test_update_word_not_found(dictionary, word, user):
     with pytest.raises(KeyError):
-        dictionary.update(pydash.defaults({'_id': ObjectId()}, word),
-                          user_profile)
+        dictionary.update(pydash.defaults({'_id': ObjectId()}, word), user)
