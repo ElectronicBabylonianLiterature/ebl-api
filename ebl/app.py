@@ -1,14 +1,9 @@
 import os
-from base64 import b64decode
 
 import falcon
-from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
+from falcon_auth import FalconAuthMiddleware
 
 from pymongo import MongoClient
-import requests
-
-from cryptography.x509 import load_pem_x509_certificate
-from cryptography.hazmat.backends import default_backend
 
 from ebl.cors_component import CORSComponent
 
@@ -25,34 +20,8 @@ from ebl.files.file_repository import GridFsFiles
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.changelog import Changelog
 from ebl.sign_list.sign_repository import MongoSignRepository
-
-
-def auth0_user_loader(token):
-    return token
-
-
-def create_auth0_backend():
-    certificate = b64decode(os.environ['AUTH0_PEM'])
-    cert_obj = load_pem_x509_certificate(certificate, default_backend())
-    public_key = cert_obj.public_key()
-
-    return JWTAuthBackend(
-        auth0_user_loader,
-        public_key,
-        algorithm='RS256',
-        auth_header_prefix='Bearer',
-        audience=os.environ['AUTH0_AUDIENCE'],
-        issuer=os.environ['AUTH0_ISSUER'],
-        verify_claims=['signature', 'exp', 'iat'],
-        required_claims=['exp', 'iat', 'openid']
-    )
-
-
-def fetch_auth0_user_profile(req):
-    issuer = os.environ['AUTH0_ISSUER']
-    url = f'{issuer}userinfo'
-    headers = {'Authorization': req.get_header('Authorization', True)}
-    return requests.get(url, headers=headers).json()
+from ebl.auth0 import fetch_auth0_user_profile
+from ebl.auth0 import create_auth0_backend
 
 
 def create_app(context):
