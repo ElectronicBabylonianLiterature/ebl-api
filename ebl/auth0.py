@@ -6,6 +6,23 @@ from cryptography.hazmat.backends import default_backend
 from falcon_auth import JWTAuthBackend
 
 
+class Auth0User:
+
+    def __init__(self, access_token, profile):
+        self._access_token = access_token
+        self.profile = profile
+
+    def has_scope(self, scope):
+        return scope in self._access_token['scope']
+
+    @property
+    def ebl_name(self):
+        return self.profile.get(
+            'https://ebabylon.org/eblName',
+            self.profile['name']
+        )
+
+
 class Auth0Backend:
 
     def __init__(self, public_key, audience, issuer):
