@@ -23,6 +23,6 @@ class FilesResource:
         file_scope = (grid_out.metadata or {}).get('scope')
         if (
                 file_scope and
-                f'read:{file_scope}' not in req.context['user']['scope']
+                not req.context['user'].has_scope(f'read:{file_scope}')
         ):
             raise falcon.HTTPForbidden()

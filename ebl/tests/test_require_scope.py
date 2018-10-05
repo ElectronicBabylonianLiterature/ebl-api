@@ -1,6 +1,7 @@
 import falcon
 from falcon_auth import FalconAuthMiddleware, NoneAuthBackend
 from ebl.require_scope import require_scope
+from ebl.auth0 import Auth0User
 
 
 SCOPE = 'write:words'
@@ -16,9 +17,12 @@ class TestResource:
 
 def do_get(scope):
     def user_loader():
-        return {
-            'scope': scope
-        }
+        return Auth0User(
+            {
+                'scope': scope
+            },
+            {}
+        )
 
     auth_backend = NoneAuthBackend(user_loader)
     auth_middleware = FalconAuthMiddleware(auth_backend)

@@ -23,10 +23,10 @@ class Auth0User:
         )
 
 
-class Auth0Backend:
+class Auth0Backend(JWTAuthBackend):
 
     def __init__(self, public_key, audience, issuer):
-        self._backend = JWTAuthBackend(
+        super().__init__(
             lambda payload: payload,
             public_key,
             algorithm='RS256',
@@ -36,11 +36,16 @@ class Auth0Backend:
             verify_claims=['signature', 'exp', 'iat'],
             required_claims=['exp', 'iat', 'openid']
         )
-        self._issuer = issuer
 
     def authenticate(self, req, resp, resource):
-        return self._backend.authenticate(req, resp, resource)
+        access_token = super().authenticate(req, resp, resource)
+        profile = self._fetch_user_profile(req)
+        return Auth0User(access_token, profile)
 
+    def _fetch_user_profile(self, req):
+        url = f'{self.issuer}userinfo'
+        headers = {'Authorization': req.get_header('Authorization', True)}
+        return requests.get(url, headers=headers).json()
 
 
 def create_auth0_backend():

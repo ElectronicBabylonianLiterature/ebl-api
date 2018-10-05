@@ -16,6 +16,7 @@ from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
+from ebl.auth0 import Auth0User
 
 
 @pytest.fixture
@@ -132,15 +133,9 @@ def file_repository(file, file_with_allowed_scope, file_with_restricted_scope):
 
 
 @pytest.fixture
-def context(dictionary,
-            sign_repository,
-            fetch_user_profile,
-            file_repository,
-            fragment_repository,
-            changelog):
-    # pylint: disable=R0913
-    def user_loader():
-        return {
+def user():
+    return Auth0User(
+        {
             'scope': [
                 'read:words',
                 'write:words',
@@ -148,10 +143,25 @@ def context(dictionary,
                 'read:fragments',
                 'read:folio'
             ]
+        },
+        {
+            'name': 'john',
+            'https://ebabylon.org/eblName': 'John'
         }
+    )
 
+
+@pytest.fixture
+def context(dictionary,
+            sign_repository,
+            fetch_user_profile,
+            file_repository,
+            fragment_repository,
+            changelog,
+            user):
+    # pylint: disable=R0913
     return {
-        'auth_backend': NoneAuthBackend(user_loader),
+        'auth_backend': NoneAuthBackend(lambda: user),
         'dictionary': dictionary,
         'sign_repository': sign_repository,
         'files': file_repository,
