@@ -12,15 +12,15 @@ class Auth0User:
         self._access_token = access_token
         self.profile = profile
 
-    def has_scope(self, scope):
-        return scope in self._access_token['scope']
-
     @property
     def ebl_name(self):
         return self.profile.get(
             'https://ebabylon.org/eblName',
             self.profile['name']
         )
+
+    def has_scope(self, scope):
+        return scope in self._access_token['scope']
 
 
 class Auth0Backend(JWTAuthBackend):
@@ -49,12 +49,14 @@ class Auth0Backend(JWTAuthBackend):
 
 
 def create_auth0_backend():
-    certificate = b64decode(os.environ['AUTH0_PEM'])
-    cert_obj = load_pem_x509_certificate(certificate, default_backend())
-    public_key = cert_obj.public_key()
-
     return Auth0Backend(
-        public_key,
+        decode_certificate(os.environ['AUTH0_PEM']),
         os.environ['AUTH0_AUDIENCE'],
         os.environ['AUTH0_ISSUER']
     )
+
+
+def decode_certificate(encoded_certificate):
+    certificate = b64decode(encoded_certificate)
+    cert_obj = load_pem_x509_certificate(certificate, default_backend())
+    return cert_obj.public_key()
