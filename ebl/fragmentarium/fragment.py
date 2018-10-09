@@ -10,9 +10,28 @@ class Fragment:
     def __init__(self, data):
         self._data = copy.deepcopy(data)
 
+    def __eq__(self, other):
+        return isinstance(other, Fragment) and (self._data == other._data)
+
+    @property
+    def number(self):
+        return self._data['_id']
+
+    @property
+    def transliteration(self):
+        return self._data['transliteration']
+
+    @property
+    def notes(self):
+        return self._data['notes']
+
+    @property
+    def signs(self):
+        return self._data.get('signs', None)
+
     def update_transliteration(self, transliteration, notes, user):
         record = Record(self._data['record']).add_entry(
-            self._data['transliteration'],
+            self.transliteration,
             transliteration,
             user
         )
