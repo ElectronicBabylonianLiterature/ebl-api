@@ -1,30 +1,11 @@
-import datetime
 import pydash
+from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliterations import clean
 
 
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
-
-
-def _record_for(fragment, updates, user):
-    old_transliteration = fragment['transliteration']
-    new_transliteration = updates['transliteration']
-
-    if new_transliteration != old_transliteration:
-        return _create_record(old_transliteration, user)
-    else:
-        return None
-
-
-def _create_record(old_transliteration, user):
-    record_type = REVISION if old_transliteration else TRANSLITERATION
-    return {
-        'user': user.ebl_name,
-        'type': record_type,
-        'date': datetime.datetime.utcnow().isoformat()
-    }
 
 
 class Fragmentarium:
@@ -36,24 +17,41 @@ class Fragmentarium:
 
     def update_transliteration(self, number, updates, user):
         fragment = self._repository.find(number)
+        updated_fragment = Fragment(fragment).update_transliteration(
+            updates['transliteration'],
+            updates['notes'],
+            user
+        ).to_dict()
 
-        filtered_updates = pydash.pick(updates, 'transliteration', 'notes')
-        filtered_updates['signs'] = self._create_signs(
-            filtered_updates['transliteration']
-        )
-
-        record = _record_for(fragment, updates, user)
+        filtered_updates = {
+            **pydash.pick(
+                updated_fragment,
+                'transliteration',
+                'notes',
+                'record'
+            ),
+            'signs': self._create_signs(
+                updated_fragment['transliteration']
+            )
+        }
 
         self._changelog.create(
             self._repository.collection,
             user.profile,
-            pydash.pick(fragment, '_id', 'transliteration', 'notes', 'signs'),
-            pydash.defaults(filtered_updates, {'_id': number})
+            pydash.pick(
+                fragment,
+                '_id',
+                'transliteration',
+                'notes',
+                'record',
+                'signs'
+            ),
+            {**filtered_updates, '_id': number}
         )
 
         self._repository.update_transliteration(number,
                                                 filtered_updates,
-                                                record)
+                                                None)
 
     def _create_signs(self, transliteration):
         cleaned_transliteration = clean(transliteration)

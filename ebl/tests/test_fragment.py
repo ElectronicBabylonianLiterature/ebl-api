@@ -73,7 +73,7 @@ def test_update_notes(fragment, user):
 
     expected_fragment = {
         **fragment,
-        'notes':notes
+        'notes': notes
     }
 
     assert updated_fragment.to_dict() == expected_fragment

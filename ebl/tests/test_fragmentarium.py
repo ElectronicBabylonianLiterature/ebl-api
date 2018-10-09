@@ -35,38 +35,6 @@ def test_fragment_not_found(fragmentarium):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_add_transliteration(fragmentarium, fragment, user):
-    fragmentarium.create(fragment)
-    updates = {
-        'transliteration': 'x x',
-        'notes': fragment['notes']
-    }
-
-    fragmentarium.update_transliteration(
-        fragment['_id'],
-        updates,
-        user
-    )
-    updated_fragment = fragmentarium.find(fragment['_id'])
-
-    expected_fragment = pydash.defaults(
-        {
-            'transliteration': updates['transliteration'],
-            'signs': 'X X',
-            'notes': fragment['notes'],
-            'record': [{
-                'user': user.ebl_name,
-                'type': 'Transliteration',
-                'date': datetime.datetime.utcnow().isoformat()
-            }]
-        },
-        fragment
-    )
-
-    assert updated_fragment == expected_fragment
-
-
-@freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(fragmentarium, fragment, user):
     fragmentarium.create(pydash.defaults({
         'transliteration': '1. x x'
@@ -83,45 +51,17 @@ def test_update_transliteration(fragmentarium, fragment, user):
     )
     updated_fragment = fragmentarium.find(fragment['_id'])
 
-    expected_fragment = pydash.defaults(
-        {
-            'transliteration': updates['transliteration'],
-            'signs': 'X X\nX',
-            'notes': updates['notes'],
-            'record': [{
-                'user': user.ebl_name,
-                'type': 'Revision',
-                'date': datetime.datetime.utcnow().isoformat()
-            }]
-        },
-        fragment
-    )
-
-    assert updated_fragment == expected_fragment
-
-
-def test_update_notes(fragmentarium, fragment, user):
-    fragmentarium.create(fragment)
-    updates = {
-        'transliteration': fragment['transliteration'],
-        'notes': 'new nites'
+    expected_fragment = {
+        **fragment,
+        'transliteration': updates['transliteration'],
+        'signs': 'X X\nX',
+        'notes': updates['notes'],
+        'record': [{
+            'user': user.ebl_name,
+            'type': 'Revision',
+            'date': datetime.datetime.utcnow().isoformat()
+        }]
     }
-
-    fragmentarium.update_transliteration(
-        fragment['_id'],
-        updates,
-        user
-    )
-    updated_fragment = fragmentarium.find(fragment['_id'])
-
-    expected_fragment = pydash.defaults(
-        {
-            'notes': updates['notes'],
-            'signs': '',
-            'record': []
-        },
-        fragment
-    )
 
     assert updated_fragment == expected_fragment
 
@@ -147,8 +87,16 @@ def test_changelog(database,
     expected_changelog = make_changelog_entry(
         COLLECTION,
         fragment_id,
-        pydash.pick(fragment, 'transliteration', 'notes', 'signs'),
-        pydash.defaults(updates, {'signs': 'X X X'})
+        pydash.pick(fragment, 'transliteration', 'notes', 'signs', 'record'),
+        {
+            **updates,
+            'signs': 'X X X',
+            'record': [{
+                'user': user.ebl_name,
+                'type': 'Transliteration',
+                'date': datetime.datetime.utcnow().isoformat()
+            }]
+        }
     )
     assert database['changelog'].find_one(
         {'resource_id': fragment_id},
@@ -168,16 +116,16 @@ def test_update_update_transliteration_not_found(fragmentarium, user):
 
 def test_statistics(database, fragmentarium, fragment):
     database[COLLECTION].insert_many([
-        pydash.defaults({'_id': '1', 'transliteration': '''1. first line
+        {**fragment, '_id': '1', 'transliteration': '''1. first line
 $ingore
 
-'''}, fragment),
-        pydash.defaults({'_id': '2', 'transliteration': '''@ignore
+'''},
+        {**fragment, '_id': '2', 'transliteration': '''@ignore
 1'. second line
 2'. third line
 @ignore
-1#. fourth line'''}, fragment),
-        pydash.defaults({'_id': '3', 'transliteration': ''}, fragment),
+1#. fourth line'''},
+        {**fragment, '_id': '3', 'transliteration': ''},
     ])
 
     assert fragmentarium.statistics() == {
