@@ -1,4 +1,8 @@
+from base64 import b64decode
 import os
+
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.backends import default_backend
 
 import falcon
 from falcon_auth import FalconAuthMiddleware
@@ -20,7 +24,7 @@ from ebl.files.file_repository import GridFsFiles
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.changelog import Changelog
 from ebl.sign_list.sign_repository import MongoSignRepository
-from ebl.auth0 import create_auth0_backend
+from ebl.auth0 import Auth0Backend
 
 
 def create_app(context):
@@ -53,9 +57,14 @@ def create_app(context):
 def get_app():
     client = MongoClient(os.environ['MONGODB_URI'])
     database = client.get_database()
+    auth_backend = Auth0Backend(
+        decode_certificate(os.environ['AUTH0_PEM']),
+        os.environ['AUTH0_AUDIENCE'],
+        os.environ['AUTH0_ISSUER']
+    )
 
     context = {
-        'auth_backend': create_auth0_backend(),
+        'auth_backend': auth_backend,
         'dictionary': MongoDictionary(database),
         'sign_repository': MongoSignRepository(database),
         'files': GridFsFiles(database),
@@ -64,3 +73,9 @@ def get_app():
     }
 
     return create_app(context)
+
+
+def decode_certificate(encoded_certificate):
+    certificate = b64decode(encoded_certificate)
+    cert_obj = load_pem_x509_certificate(certificate, default_backend())
+    return cert_obj.public_key()

@@ -1,8 +1,4 @@
-from base64 import b64decode
-import os
 import requests
-from cryptography.x509 import load_pem_x509_certificate
-from cryptography.hazmat.backends import default_backend
 from falcon_auth import JWTAuthBackend
 
 
@@ -10,17 +6,25 @@ class Auth0User:
 
     def __init__(self, access_token, profile):
         self._access_token = access_token
-        self.profile = profile
+        self._profile = profile
+
+    @property
+    def profile(self):
+        return dict(self._profile)
 
     @property
     def ebl_name(self):
-        return self.profile.get(
+        return self._profile.get(
             'https://ebabylon.org/eblName',
-            self.profile['name']
+            self._profile['name']
         )
 
     def has_scope(self, scope):
         return scope in self._access_token['scope']
+
+    def can_read_folio(self, name):
+        scope = f'read:{name}-folios'
+        return self.has_scope(scope)
 
 
 class Auth0Backend(JWTAuthBackend):
@@ -46,17 +50,3 @@ class Auth0Backend(JWTAuthBackend):
         url = f'{self.issuer}userinfo'
         headers = {'Authorization': req.get_header('Authorization', True)}
         return requests.get(url, headers=headers).json()
-
-
-def create_auth0_backend():
-    return Auth0Backend(
-        decode_certificate(os.environ['AUTH0_PEM']),
-        os.environ['AUTH0_AUDIENCE'],
-        os.environ['AUTH0_ISSUER']
-    )
-
-
-def decode_certificate(encoded_certificate):
-    certificate = b64decode(encoded_certificate)
-    cert_obj = load_pem_x509_certificate(certificate, default_backend())
-    return cert_obj.public_key()
