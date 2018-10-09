@@ -4,7 +4,6 @@ from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliterations import clean
 
 
-EBL_NAME = 'https://ebabylon.org/eblName'
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
 
