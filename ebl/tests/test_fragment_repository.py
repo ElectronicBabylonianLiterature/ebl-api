@@ -1,6 +1,3 @@
-# pylint: disable=W0621
-import datetime
-import pydash
 import pytest
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
@@ -8,25 +5,18 @@ from ebl.fragmentarium.transliteration_query import TransliterationQuery
 COLLECTION = 'fragments'
 
 
-@pytest.fixture
-def another_fragment(fragment):
-    return pydash.defaults({
-        '_id': '2',
-        'accession': 'accession-no-match',
-        'cdliNumber': 'cdli-no-match'
-    }, fragment)
-
-
 def test_create(database, fragment_repository, fragment):
-    fragment_id = fragment_repository.create(fragment)
+    fragment_number = fragment_repository.create(fragment)
 
-    assert database[COLLECTION].find_one({'_id': fragment_id}) == fragment
+    assert database[COLLECTION].find_one({
+        '_id': fragment_number
+    }) == fragment.to_dict()
 
 
 def test_find(database, fragment_repository, fragment):
-    database[COLLECTION].insert_one(fragment)
+    database[COLLECTION].insert_one(fragment.to_dict())
 
-    assert fragment_repository.find(fragment['_id']) == fragment
+    assert fragment_repository.find(fragment.number) == fragment
 
 
 def test_fragment_not_found(fragment_repository):
@@ -34,84 +24,41 @@ def test_fragment_not_found(fragment_repository):
         fragment_repository.find('unknown id')
 
 
-def test_update_transliteration_with_record(fragment_repository, fragment):
-    fragment_repository.create(fragment)
-    updates = {
-        'transliteration': 'the transliteration',
-        'notes': fragment['notes']
-    }
-    record = {
-        'user': 'Tester',
-        'type': 'Transliteration',
-        'date': datetime.datetime.utcnow().isoformat()
-    }
+def test_update_transliteration_with_record(fragment_repository,
+                                            fragment,
+                                            user):
+    fragment_number = fragment_repository.create(fragment)
+    updated_fragment =\
+        fragment.update_transliteration('the transliteration', 'notes', user)
 
     fragment_repository.update_transliteration(
-        fragment['_id'],
-        updates,
-        record
+        updated_fragment
     )
-    updated_fragment = fragment_repository.find(fragment['_id'])
+    result = fragment_repository.find(fragment_number)
 
-    expected_fragment = pydash.defaults(
-        {
-            'transliteration': updates['transliteration'],
-            'notes': fragment['notes'],
-            'record': [record]
-        },
-        fragment
-    )
-
-    assert updated_fragment == expected_fragment
+    assert result == updated_fragment
 
 
-def test_update_transliteration_without_record(fragment_repository, fragment):
-    fragment_repository.create(pydash.defaults({
-        'transliteration': 'old transliteration'
-    }, fragment))
-    updates = {
-        'transliteration':  fragment['transliteration'],
-        'notes': 'updated notes'
-    }
-
-    fragment_repository.update_transliteration(
-        fragment['_id'],
-        updates,
-        None
-    )
-    updated_fragment = fragment_repository.find(fragment['_id'])
-
-    expected_fragment = pydash.defaults(
-        {
-            'notes': updates['notes'],
-        },
-        fragment
-    )
-
-    assert updated_fragment == expected_fragment
-
-
-def test_update_update_transliteration_not_found(fragment_repository):
+def test_update_update_transliteration_not_found(fragment_repository,
+                                                 transliterated_fragment):
     with pytest.raises(KeyError):
         fragment_repository.update_transliteration(
-            {'_id': 'unknown.number'},
-            {'transliteration': 'transliteration'},
-            None
+            transliterated_fragment
         )
 
 
 def test_statistics(database, fragment_repository, fragment):
     database[COLLECTION].insert_many([
-        pydash.defaults({'_id': '1', 'transliteration': '''1. first line
+        {**fragment.to_dict(), '_id': '1', 'transliteration': '''1. first line
 $ingore
 
-'''}, fragment),
-        pydash.defaults({'_id': '2', 'transliteration': '''@ignore
+'''},
+        {**fragment.to_dict(), '_id': '2', 'transliteration': '''@ignore
 1'. second line
 2'. third line
 @ignore
-1#. fourth line'''}, fragment),
-        pydash.defaults({'_id': '3', 'transliteration': ''}, fragment),
+1#. fourth line'''},
+        {**fragment.to_dict(), '_id': '3', 'transliteration': ''}
     ])
 
     assert fragment_repository.count_transliterated_fragments() == 2
@@ -127,27 +74,40 @@ def test_search_finds_by_id(database,
                             fragment_repository,
                             fragment,
                             another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
+    database[COLLECTION].insert_many([
+        fragment.to_dict(),
+        another_fragment.to_dict()
+    ])
 
-    assert fragment_repository.search(fragment['_id']) == [fragment]
+    assert fragment_repository.search(fragment.number) == [fragment]
 
 
 def test_search_finds_by_accession(database,
                                    fragment_repository,
                                    fragment,
                                    another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
+    database[COLLECTION].insert_many([
+        fragment.to_dict(),
+        another_fragment.to_dict()
+    ])
 
-    assert fragment_repository.search(fragment['accession']) == [fragment]
+    assert fragment_repository.search(
+        fragment.accession
+    ) == [fragment]
 
 
 def test_search_finds_by_cdli(database,
                               fragment_repository,
                               fragment,
                               another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
+    database[COLLECTION].insert_many([
+        fragment.to_dict(),
+        another_fragment.to_dict()
+    ])
 
-    assert fragment_repository.search(fragment['cdliNumber']) == [fragment]
+    assert fragment_repository.search(
+        fragment.cdli_number
+    ) == [fragment]
 
 
 def test_search_not_found(fragment_repository):
@@ -185,8 +145,8 @@ def test_find_transliterated(database,
                              transliterated_fragment,
                              another_fragment):
     database[COLLECTION].insert_many([
-        transliterated_fragment,
-        another_fragment
+        transliterated_fragment.to_dict(),
+        another_fragment.to_dict()
     ])
 
     assert fragment_repository.find_transliterated() ==\

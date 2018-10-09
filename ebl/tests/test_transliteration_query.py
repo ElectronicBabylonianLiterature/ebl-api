@@ -1,5 +1,6 @@
 import re
 import pytest
+from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
@@ -12,7 +13,7 @@ SIGNS = (
 )
 
 
-FRAGMENT = {
+FRAGMENT = Fragment({
     'transliteration': (
         '1\'. [...-ku]-nu-ši [...]\n'
         '\n'
@@ -23,7 +24,7 @@ FRAGMENT = {
         '7\'. šu/gid'
     ),
     'signs': SIGNS
-}
+})
 
 
 REGEXP_DATA = [

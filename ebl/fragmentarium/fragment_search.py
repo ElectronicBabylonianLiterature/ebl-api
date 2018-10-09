@@ -1,11 +1,6 @@
 import falcon
-import pydash
 
 from ebl.require_scope import require_scope
-
-
-def _unprocessable_entity(_, resp):
-    resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 class FragmentSearch:
@@ -19,7 +14,7 @@ class FragmentSearch:
         if len(param_names) == 1:
             self._select_method(param_names)(req, resp)
         else:
-            _unprocessable_entity(req, resp)
+            self._unprocessable_entity(req, resp)
 
     def _select_method(self, param_names):
         methods = {
@@ -28,25 +23,38 @@ class FragmentSearch:
             'interesting': self._find_interesting,
             'transliteration': self._search_transliteration
         }
-        return methods.get(param_names[0], _unprocessable_entity)
+        return methods.get(param_names[0], self._unprocessable_entity)
 
     def _search(self, req, resp):
-        resp.media = self._fragmentarium.search(req.params['number'])
+        resp.media = self._map_fragments(
+            self._fragmentarium.search(req.params['number'])
+        )
 
     def _find_random(self, _, resp):
-        resp.media = self._fragmentarium.find_random()
+        resp.media = self._map_fragments(
+            self._fragmentarium.find_random()
+        )
 
     def _find_interesting(self, _, resp):
-        resp.media = self._fragmentarium.find_interesting()
+        resp.media = self._map_fragments(
+            self._fragmentarium.find_interesting()
+        )
 
     def _search_transliteration(self, req, resp):
         transliteration = req.params['transliteration']
         resp.media = [
-            pydash.merge(
-                {},
-                fragment_and_lines[0],
-                {'matching_lines': fragment_and_lines[1]}
-            )
+            {
+                **(fragment_and_lines[0].to_dict()),
+                'matching_lines': fragment_and_lines[1]
+            }
             for fragment_and_lines
             in self._fragmentarium.search_signs(transliteration)
         ]
+
+    @staticmethod
+    def _unprocessable_entity(_, resp):
+        resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
+
+    @staticmethod
+    def _map_fragments(fragments):
+        return [fragment.to_dict() for fragment in fragments]

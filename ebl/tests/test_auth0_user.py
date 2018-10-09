@@ -30,6 +30,7 @@ def test_ebl_name(profile, expected):
 
 @pytest.mark.parametrize("scopes,folio_name,expected", [
     ('read:WGL-folios', 'WGL', True),
+    ('write:WGL-folios', 'WGL', False),
     ('read:XXX-folios', 'WGL', False)
 ])
 def test_can_read_folio(scopes, folio_name, expected):

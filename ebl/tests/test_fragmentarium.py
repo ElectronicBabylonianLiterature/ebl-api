@@ -1,32 +1,12 @@
-# pylint: disable=W0621
-import datetime
 from freezegun import freeze_time
-import pydash
 import pytest
+from ebl.fragmentarium.fragment import Fragment
 
 
-COLLECTION = 'fragments'
-
-
-@pytest.fixture
-def another_fragment(fragment):
-    return pydash.defaults({
-        '_id': '2',
-        'accession': 'accession-no-match',
-        'cdliNumber': 'cdli-no-match'
-    }, fragment)
-
-
-def test_create(database, fragmentarium, fragment):
+def test_create_and_find(fragmentarium, fragment):
     fragment_id = fragmentarium.create(fragment)
 
-    assert database[COLLECTION].find_one({'_id': fragment_id}) == fragment
-
-
-def test_find(database, fragmentarium, fragment):
-    database[COLLECTION].insert_one(fragment)
-
-    assert fragmentarium.find(fragment['_id']) == fragment
+    assert fragmentarium.find(fragment_id) == fragment
 
 
 def test_fragment_not_found(fragmentarium):
@@ -35,33 +15,22 @@ def test_fragment_not_found(fragmentarium):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_update_transliteration(fragmentarium, fragment, user):
-    fragmentarium.create(pydash.defaults({
-        'transliteration': '1. x x'
-    }, fragment))
-    updates = {
-        'transliteration': '1. x x\n2. x',
-        'notes': 'updated notes'
-    }
+def test_update_transliteration(fragmentarium, transliterated_fragment, user):
+    fragment_number = fragmentarium.create(transliterated_fragment)
+    transliteration = '1. x x\n2. x'
+    notes = 'updated notes'
 
     fragmentarium.update_transliteration(
-        fragment['_id'],
-        updates,
+        fragment_number,
+        transliteration,
+        notes,
         user
     )
-    updated_fragment = fragmentarium.find(fragment['_id'])
+    updated_fragment = fragmentarium.find(fragment_number)
 
-    expected_fragment = {
-        **fragment,
-        'transliteration': updates['transliteration'],
-        'signs': 'X X\nX',
-        'notes': updates['notes'],
-        'record': [{
-            'user': user.ebl_name,
-            'type': 'Revision',
-            'date': datetime.datetime.utcnow().isoformat()
-        }]
-    }
+    expected_fragment = (transliterated_fragment
+                         .update_transliteration(transliteration, notes, user)
+                         .set_signs('X X\nX'))
 
     assert updated_fragment == expected_fragment
 
@@ -73,30 +42,25 @@ def test_changelog(database,
                    user,
                    make_changelog_entry):
     fragment_id = fragmentarium.create(fragment)
-    updates = {
-        'transliteration':  'x x x',
-        'notes': 'updated notes'
-    }
+    transliteration = 'x x x'
+    notes = 'updated notes'
 
     fragmentarium.update_transliteration(
         fragment_id,
-        updates,
+        transliteration,
+        notes,
         user
     )
 
+    expected_fragment = (fragment
+                         .update_transliteration(transliteration, notes, user)
+                         .set_signs('X X X'))
+
     expected_changelog = make_changelog_entry(
-        COLLECTION,
+        'fragments',
         fragment_id,
-        pydash.pick(fragment, 'transliteration', 'notes', 'signs', 'record'),
-        {
-            **updates,
-            'signs': 'X X X',
-            'record': [{
-                'user': user.ebl_name,
-                'type': 'Transliteration',
-                'date': datetime.datetime.utcnow().isoformat()
-            }]
-        }
+        fragment.to_dict(),
+        expected_fragment.to_dict()
     )
     assert database['changelog'].find_one(
         {'resource_id': fragment_id},
@@ -109,24 +73,26 @@ def test_update_update_transliteration_not_found(fragmentarium, user):
     with pytest.raises(KeyError):
         fragmentarium.update_transliteration(
             'unknown.number',
-            {'transliteration': 'transliteration'},
+            'transliteration',
+            'notes',
             user
         )
 
 
-def test_statistics(database, fragmentarium, fragment):
-    database[COLLECTION].insert_many([
-        {**fragment, '_id': '1', 'transliteration': '''1. first line
+def test_statistics(fragmentarium, fragment):
+    for data in [
+            {**fragment.to_dict(), '_id': '1', 'transliteration': '''1. first line
 $ingore
 
 '''},
-        {**fragment, '_id': '2', 'transliteration': '''@ignore
+            {**fragment.to_dict(), '_id': '2', 'transliteration': '''@ignore
 1'. second line
 2'. third line
 @ignore
 1#. fourth line'''},
-        {**fragment, '_id': '3', 'transliteration': ''},
-    ])
+            {**fragment.to_dict(), '_id': '3', 'transliteration': ''},
+    ]:
+        fragmentarium.create(Fragment(data))
 
     assert fragmentarium.statistics() == {
         'transliteratedFragments': 2,
@@ -141,31 +107,31 @@ def test_statistics_no_fragments(fragmentarium):
     }
 
 
-def test_search_finds_by_id(database,
-                            fragmentarium,
+def test_search_finds_by_id(fragmentarium,
                             fragment,
                             another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
+    fragmentarium.create(fragment)
+    fragmentarium.create(another_fragment)
 
-    assert fragmentarium.search(fragment['_id']) == [fragment]
+    assert fragmentarium.search(fragment.number) == [fragment]
 
 
-def test_search_finds_by_accession(database,
-                                   fragmentarium,
+def test_search_finds_by_accession(fragmentarium,
                                    fragment,
                                    another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
+    fragmentarium.create(fragment)
+    fragmentarium.create(another_fragment)
 
-    assert fragmentarium.search(fragment['accession']) == [fragment]
+    assert fragmentarium.search(fragment.to_dict()['accession']) == [fragment]
 
 
-def test_search_finds_by_cdli(database,
-                              fragmentarium,
+def test_search_finds_by_cdli(fragmentarium,
                               fragment,
                               another_fragment):
-    database[COLLECTION].insert_many([fragment, another_fragment])
+    fragmentarium.create(fragment)
+    fragmentarium.create(another_fragment)
 
-    assert fragmentarium.search(fragment['cdliNumber']) == [fragment]
+    assert fragmentarium.search(fragment.to_dict()['cdliNumber']) == [fragment]
 
 
 def test_search_not_found(fragmentarium):

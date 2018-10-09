@@ -10,17 +10,24 @@ class FragmentsResource:
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, _req, resp, number):
         try:
-            resp.media = self._fragmentarium.find(number)
+            resp.media = self._fragmentarium.find(number).to_dict()
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND
 
     @falcon.before(require_scope, 'transliterate:fragments')
     def on_post(self, req, resp, number):
+        updates = json.loads(req.stream.read())
         try:
-            updates = json.loads(req.stream.read())
+            transliteration = updates['transliteration']
+            notes = updates['notes']
+        except (TypeError, KeyError):
+            raise falcon.HTTPUnprocessableEntity()
+
+        try:
             self._fragmentarium.update_transliteration(
                 number,
-                updates,
+                transliteration,
+                notes,
                 req.context['user']
             )
         except KeyError:

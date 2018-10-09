@@ -1,5 +1,3 @@
-import pydash
-from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliterations import clean
 
@@ -15,43 +13,24 @@ class Fragmentarium:
         self._changelog = changelog
         self._sign_list = sign_list
 
-    def update_transliteration(self, number, updates, user):
+    def update_transliteration(self, number, transliteration, notes, user):
         fragment = self._repository.find(number)
-        updated_fragment = Fragment(fragment).update_transliteration(
-            updates['transliteration'],
-            updates['notes'],
+        updated_fragment = fragment.update_transliteration(
+            transliteration,
+            notes,
             user
-        ).to_dict()
-
-        filtered_updates = {
-            **pydash.pick(
-                updated_fragment,
-                'transliteration',
-                'notes',
-                'record'
-            ),
-            'signs': self._create_signs(
-                updated_fragment['transliteration']
-            )
-        }
+        ).set_signs(
+            self._create_signs(transliteration)
+        )
 
         self._changelog.create(
             self._repository.collection,
             user.profile,
-            pydash.pick(
-                fragment,
-                '_id',
-                'transliteration',
-                'notes',
-                'record',
-                'signs'
-            ),
-            {**filtered_updates, '_id': number}
+            fragment.to_dict(),
+            updated_fragment.to_dict()
         )
 
-        self._repository.update_transliteration(number,
-                                                filtered_updates,
-                                                None)
+        self._repository.update_transliteration(updated_fragment)
 
     def _create_signs(self, transliteration):
         cleaned_transliteration = clean(transliteration)

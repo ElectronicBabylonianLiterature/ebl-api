@@ -25,8 +25,8 @@ class TransliterationQuery:
         return fr'{lines_regexp}(?![^|\s])'
 
     def get_matching_lines(self, fragment):
-        signs = fragment['signs']
-        transliteration = fragment['transliteration']
+        signs = fragment.signs
+        transliteration = fragment.transliteration
 
         def _line_number(position):
             return (

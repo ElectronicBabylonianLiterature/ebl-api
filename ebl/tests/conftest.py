@@ -17,6 +17,7 @@ from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.auth0 import Auth0User
+from ebl.fragmentarium.fragment import Fragment
 
 
 @pytest.fixture
@@ -48,10 +49,10 @@ class TestFragmentRepository(MongoFragmentRepository):
     # Mongomock does not support $sample so we need to
     # stub methods using on it.
     def find_random(self):
-        return [self.get_collection().find_one({})]
+        return [Fragment(self._mongo_collection.find_one({}))]
 
     def find_interesting(self):
-        return [self.get_collection().find_one({})]
+        return [Fragment(self._mongo_collection.find_one({}))]
 
 
 @pytest.fixture
@@ -170,7 +171,7 @@ def word():
 
 @pytest.fixture
 def fragment():
-    return {
+    return Fragment({
         '_id': '1',
         'cdliNumber': 'cdli-4',
         'bmIdNumber': 'bmId-2',
@@ -178,12 +179,22 @@ def fragment():
         'transliteration': '',
         'notes': '',
         'record': []
-    }
+    })
+
+
+@pytest.fixture
+def another_fragment(fragment):
+    return Fragment({
+        **fragment.to_dict(),
+        '_id': '2',
+        'accession': 'accession-no-match',
+        'cdliNumber': 'cdli-no-match'
+    })
 
 
 @pytest.fixture
 def transliterated_fragment():
-    return {
+    return Fragment({
         '_id': '3',
         'cdliNumber': 'cdli-5',
         'bmIdNumber': 'bmId-3',
@@ -203,8 +214,12 @@ def transliterated_fragment():
             'ŠU/|BI×IS|'
         ),
         'notes': '',
-        'record': []
-    }
+        'record': [{
+            'user': 'Tester',
+            'type': 'Transliteration',
+            'date': datetime.datetime.utcnow().isoformat()
+        }]
+    })
 
 
 @pytest.fixture

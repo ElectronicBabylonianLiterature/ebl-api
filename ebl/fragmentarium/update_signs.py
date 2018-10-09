@@ -28,19 +28,17 @@ def create_updater(sign_list, fragment_repository, counter_factory):
         counter = counter_factory(len(fragments))
 
         for fragment in fragments:
-            counter.increment(fragment['_id'])
+            counter.increment(fragment.number)
             update_fragment(fragment)
 
         counter.done()
 
     def update_fragment(fragment):
-        signs = map_transliteration(fragment['transliteration'])
+        signs = map_transliteration(fragment.transliteration)
 
-        if signs != fragment.get('signs', None):
+        if signs != fragment.signs:
             fragment_repository.update_transliteration(
-                fragment['_id'],
-                {'signs': signs},
-                None
+                fragment.set_signs(signs)
             )
 
     def map_transliteration(transliteration):

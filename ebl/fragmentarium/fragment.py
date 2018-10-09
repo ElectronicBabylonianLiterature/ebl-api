@@ -1,6 +1,7 @@
 import copy
 import datetime
 
+
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
 
@@ -11,11 +12,19 @@ class Fragment:
         self._data = copy.deepcopy(data)
 
     def __eq__(self, other):
-        return isinstance(other, Fragment) and (self._data == other._data)
+        return isinstance(other, Fragment) and (self._data == other.to_dict())
 
     @property
     def number(self):
         return self._data['_id']
+
+    @property
+    def accession(self):
+        return self._data['accession']
+
+    @property
+    def cdli_number(self):
+        return self._data['cdliNumber']
 
     @property
     def transliteration(self):
@@ -29,6 +38,10 @@ class Fragment:
     def signs(self):
         return self._data.get('signs', None)
 
+    @property
+    def record(self):
+        return copy.deepcopy(self._data['record'])
+
     def update_transliteration(self, transliteration, notes, user):
         record = Record(self._data['record']).add_entry(
             self.transliteration,
@@ -41,6 +54,12 @@ class Fragment:
             'transliteration': transliteration,
             'notes': notes,
             'record': record.entries
+        })
+
+    def set_signs(self, signs):
+        return Fragment({
+            **self._data,
+            'signs': signs
         })
 
     def to_dict(self):

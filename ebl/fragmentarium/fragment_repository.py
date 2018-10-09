@@ -1,5 +1,7 @@
 from bson.code import Code
+import pydash
 from ebl.mongo_repository import MongoRepository
+from ebl.fragmentarium.fragment import Fragment
 
 
 COLLECTION = 'fragments'
@@ -11,12 +13,20 @@ SAMPLE_SIZE_ONE = {
 }
 
 
-class MongoFragmentRepository(MongoRepository):
+class MongoFragmentRepository():
     def __init__(self, database):
-        super().__init__(database, COLLECTION)
+        self._mongo_repository = MongoRepository(database, COLLECTION)
+
+    @property
+    def collection(self):
+        return self._mongo_repository.collection
+
+    @property
+    def _mongo_collection(self):
+        return self._mongo_repository.get_collection()
 
     def count_transliterated_fragments(self):
-        return self.get_collection().count(HAS_TRANSLITERATION)
+        return self._mongo_collection.count(HAS_TRANSLITERATION)
 
     def count_lines(self):
         count_lines = Code('function() {'
@@ -28,15 +38,21 @@ class MongoFragmentRepository(MongoRepository):
         sum_lines = Code('function(key, values) {'
                          '  return values.reduce((acc, cur) => acc + cur, 0);'
                          '}')
-        result = self.get_collection().inline_map_reduce(
+        result = self._mongo_collection.inline_map_reduce(
             count_lines,
             sum_lines,
             query=HAS_TRANSLITERATION)
 
         return result[0]['value'] if result else 0
 
+    def create(self, fragment):
+        return self._mongo_repository.create(fragment.to_dict())
+
+    def find(self, number):
+        return Fragment(self._mongo_repository.find(number))
+
     def search(self, number):
-        cursor = self.get_collection().find({
+        cursor = self._mongo_collection.find({
             '$or': [
                 {'_id': number},
                 {'cdliNumber': number},
@@ -44,18 +60,18 @@ class MongoFragmentRepository(MongoRepository):
             ]
         })
 
-        return [fragment for fragment in cursor]
+        return self._map_fragments(cursor)
 
     def find_random(self):
-        cursor = self.get_collection().aggregate([
+        cursor = self._mongo_collection.aggregate([
             {'$match': HAS_TRANSLITERATION},
             SAMPLE_SIZE_ONE
         ])
 
-        return [fragment for fragment in cursor]
+        return self._map_fragments(cursor)
 
     def find_interesting(self):
-        cursor = self.get_collection().aggregate([
+        cursor = self._mongo_collection.aggregate([
             {
                 '$match': {
                     '$and': [
@@ -69,33 +85,35 @@ class MongoFragmentRepository(MongoRepository):
             SAMPLE_SIZE_ONE
         ])
 
-        return [fragment for fragment in cursor]
+        return self._map_fragments(cursor)
 
     def find_transliterated(self):
-        cursor = self.get_collection().find(
+        cursor = self._mongo_collection.find(
             {'transliteration': {'$ne': ''}}
         )
 
-        return [fragment for fragment in cursor]
+        return self._map_fragments(cursor)
 
     def search_signs(self, query):
-        cursor = self.get_collection().find({
+        cursor = self._mongo_collection.find({
             'signs': {'$regex': query.regexp}
         })
-        return [fragment for fragment in cursor]
+        return self._map_fragments(cursor)
 
-    def update_transliteration(self, number, updates, record):
-        mongo_update = {
-            '$set': updates
-        }
-
-        if record:
-            mongo_update['$push'] = {'record': record}
-
-        result = self.get_collection().update_one(
-            {'_id': number},
-            mongo_update
+    def update_transliteration(self, fragment):
+        result = self._mongo_collection.update_one(
+            {'_id': fragment.number},
+            {'$set': pydash.omit_by({
+                'transliteration': fragment.transliteration,
+                'notes': fragment.notes,
+                'record': fragment.record,
+                'signs': fragment.signs
+            }, lambda value: value is None)}
         )
 
         if result.matched_count == 0:
             raise KeyError
+
+    @staticmethod
+    def _map_fragments(cursor):
+        return [Fragment(fragment) for fragment in cursor]

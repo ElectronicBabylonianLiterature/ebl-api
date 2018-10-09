@@ -3,13 +3,13 @@ import pydash
 
 
 def test_search_fragment(client, fragmentarium, fragment):
-    fragmentarium.create(fragment)
+    fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments', params={
-        'number': fragment['_id']
+        'number': fragment_number
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment]
+    assert result.json == [fragment.to_dict()]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -34,7 +34,7 @@ def test_search_signs(client,
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [
-        pydash.set_(transliterated_fragment, 'matching_lines', [
+        pydash.set_(transliterated_fragment.to_dict(), 'matching_lines', [
             ['6\'. [...] x mu ta-ma-tu₂']
         ])
     ]
@@ -51,7 +51,7 @@ def test_random(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment]
+    assert result.json == [fragment.to_dict()]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -65,7 +65,7 @@ def test_interesting(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment]
+    assert result.json == [fragment.to_dict()]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 

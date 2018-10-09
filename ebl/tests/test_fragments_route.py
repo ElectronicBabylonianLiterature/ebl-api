@@ -7,7 +7,7 @@ def test_get_fragment(client, fragmentarium, fragment):
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments/{fragment_number}')
 
-    assert result.json == fragment
+    assert result.json == fragment.to_dict()
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
@@ -52,6 +52,18 @@ def test_update_transliteration(client,
 def test_update_transliteration_not_found(client):
     # pylint: disable=C0103
     url = '/fragments/unknown.fragment'
-    post_result = client.simulate_post(url, body='"transliteration"')
+    body = json.dumps({
+        'transliteration': 'the transliteration',
+        'notes': 'some notes'
+    })
+    post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_update_transliteration_invalid_entity(client):
+    # pylint: disable=C0103
+    url = '/fragments/unknown.fragment'
+    post_result = client.simulate_post(url, body='"transliteration"')
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
