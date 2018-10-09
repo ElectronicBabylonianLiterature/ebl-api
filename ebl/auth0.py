@@ -1,3 +1,4 @@
+import copy
 import requests
 from falcon_auth import JWTAuthBackend
 
@@ -5,12 +6,12 @@ from falcon_auth import JWTAuthBackend
 class Auth0User:
 
     def __init__(self, access_token, profile):
-        self._access_token = access_token
-        self._profile = profile
+        self._access_token = copy.deepcopy(access_token)
+        self._profile = copy.deepcopy(profile)
 
     @property
     def profile(self):
-        return dict(self._profile)
+        return copy.deepcopy(self._profile)
 
     @property
     def ebl_name(self):
