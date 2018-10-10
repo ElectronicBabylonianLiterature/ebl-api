@@ -2,13 +2,16 @@ from ebl.fragmentarium.transliterations import Transliteration
 
 
 def test_ignored_lines():
-    transliteration =\
-         Transliteration.without_notes('&K11111\n@reverse\n\n$ end of side\n#note\n=: foo')
+    transliteration = Transliteration.without_notes(
+        '&K11111\n@reverse\n\n$ end of side\n#note\n=: foo'
+    )
     assert transliteration.cleaned == []
 
 
 def test_strip_line_numbers():
-    transliteration = Transliteration.without_notes('1. mu\n2\'. me\na+1. e\n1.2. a')
+    transliteration = Transliteration.without_notes(
+        '1. mu\n2\'. me\na+1. e\n1.2. a'
+    )
     assert transliteration.cleaned == [
         'mu',
         'me',
@@ -104,8 +107,9 @@ def test_strip_shifts():
 
 
 def test_strip_omissions():
-    transliteration =\
-        Transliteration.without_notes('1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba')
+    transliteration = Transliteration.without_notes(
+        '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
+    )
     assert transliteration.cleaned == [
         'ku₃',
         'an',

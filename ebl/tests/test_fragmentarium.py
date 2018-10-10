@@ -168,7 +168,9 @@ def test_search_signs(transliteration,
     for sign in signs:
         sign_list.create(sign)
 
-    result = fragmentarium.search_signs(Transliteration.without_notes(transliteration))
+    result = fragmentarium.search_signs(
+        Transliteration.without_notes(transliteration)
+    )
     expected = [(transliterated_fragment, lines)] if lines else []
 
     assert result == expected

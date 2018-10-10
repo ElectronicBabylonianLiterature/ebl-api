@@ -42,7 +42,8 @@ class FragmentSearch:
         )
 
     def _search_transliteration(self, req, resp):
-        transliteration = Transliteration.without_notes(req.params['transliteration'])
+        transliteration =\
+            Transliteration.without_notes(req.params['transliteration'])
         resp.media = [
             {
                 **(fragment_and_lines[0].to_dict()),

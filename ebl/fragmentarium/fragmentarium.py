@@ -1,5 +1,4 @@
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.transliterations import Transliteration
 
 
 TRANSLITERATION = 'Transliteration'

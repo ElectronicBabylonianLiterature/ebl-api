@@ -95,11 +95,11 @@ class Transliteration:
 
     def __hash__(self):
         return hash((self._atf, self._notes))
-    
+
     @staticmethod
     def without_notes(atf):
         return Transliteration(atf, '', None)
- 
+
     @property
     def atf(self):
         return self._atf
@@ -133,7 +133,7 @@ class Transliteration:
     def with_signs(self, sign_list):
         signs = self.to_signs(sign_list)
         return Transliteration(self.atf, self.notes, signs=signs)
-        
+
     def to_signs(self, sign_list):
         signs = self.to_sign_matrix(sign_list)
         return '\n'.join([

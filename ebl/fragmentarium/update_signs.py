@@ -7,6 +7,7 @@ from ebl.sign_list.sign_list import SignList
 
 
 class ApiUser:
+    # pylint: disable=R0201
     def __init__(self, script_name):
         self._script_name = script_name
 
@@ -58,7 +59,9 @@ def create_updater(sign_list, fragment_repository, counter_factory):
 
         if transliteration.signs != fragment.transliteration.signs:
             fragment_repository.update_transliteration(
-                fragment.update_transliteration(transliteration, ApiUser('update_signs.py'))
+                fragment.update_transliteration(
+                    transliteration, ApiUser('update_signs.py')
+                )
             )
 
     return update_fragments

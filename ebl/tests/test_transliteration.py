@@ -29,6 +29,7 @@ def test_notes():
 
     assert transliteration.notes == 'notes'
 
+
 def test_filtered():
     transliteration = Transliteration.without_notes(
         '&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku\n2. $AN'
