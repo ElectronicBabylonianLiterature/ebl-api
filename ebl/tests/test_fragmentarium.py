@@ -1,6 +1,7 @@
 from freezegun import freeze_time
 import pytest
 from ebl.fragmentarium.fragment import Fragment
+from ebl.fragmentarium.transliterations import Transliteration
 
 
 def test_create_and_find(fragmentarium, fragment):
@@ -17,20 +18,18 @@ def test_fragment_not_found(fragmentarium):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(fragmentarium, transliterated_fragment, user):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    transliteration = '1. x x\n2. x'
-    notes = 'updated notes'
 
     fragmentarium.update_transliteration(
         fragment_number,
-        transliteration,
-        notes,
+        Transliteration('1. x x\n2. x', 'updated notes'),
         user
     )
     updated_fragment = fragmentarium.find(fragment_number)
 
-    expected_fragment = (transliterated_fragment
-                         .update_transliteration(transliteration, notes, user)
-                         .set_signs('X X\nX'))
+    expected_fragment = transliterated_fragment.update_transliteration(
+        Transliteration('1. x x\n2. x', 'updated notes', signs='X X\nX'),
+        user
+    )
 
     assert updated_fragment == expected_fragment
 
@@ -42,19 +41,16 @@ def test_changelog(database,
                    user,
                    make_changelog_entry):
     fragment_id = fragmentarium.create(fragment)
-    transliteration = 'x x x'
-    notes = 'updated notes'
-
     fragmentarium.update_transliteration(
         fragment_id,
-        transliteration,
-        notes,
+        Transliteration('x x x', 'updated notes'),
         user
     )
 
-    expected_fragment = (fragment
-                         .update_transliteration(transliteration, notes, user)
-                         .set_signs('X X X'))
+    expected_fragment = fragment.update_transliteration(
+        Transliteration('x x x', 'updated notes', signs='X X X'),
+        user
+    )
 
     expected_changelog = make_changelog_entry(
         'fragments',
@@ -73,8 +69,7 @@ def test_update_update_transliteration_not_found(fragmentarium, user):
     with pytest.raises(KeyError):
         fragmentarium.update_transliteration(
             'unknown.number',
-            'transliteration',
-            'notes',
+            Transliteration('transliteration', 'notes'),
             user
         )
 
@@ -122,7 +117,7 @@ def test_search_finds_by_accession(fragmentarium,
     fragmentarium.create(fragment)
     fragmentarium.create(another_fragment)
 
-    assert fragmentarium.search(fragment.to_dict()['accession']) == [fragment]
+    assert fragmentarium.search(fragment.accession) == [fragment]
 
 
 def test_search_finds_by_cdli(fragmentarium,
@@ -131,7 +126,7 @@ def test_search_finds_by_cdli(fragmentarium,
     fragmentarium.create(fragment)
     fragmentarium.create(another_fragment)
 
-    assert fragmentarium.search(fragment.to_dict()['cdliNumber']) == [fragment]
+    assert fragmentarium.search(fragment.cdli_number) == [fragment]
 
 
 def test_search_not_found(fragmentarium):
@@ -173,7 +168,7 @@ def test_search_signs(transliteration,
     for sign in signs:
         sign_list.create(sign)
 
-    result = fragmentarium.search_signs(transliteration)
+    result = fragmentarium.search_signs(Transliteration.without_notes(transliteration))
     expected = [(transliterated_fragment, lines)] if lines else []
 
     assert result == expected

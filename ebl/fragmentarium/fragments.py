@@ -1,6 +1,7 @@
 import json
 import falcon
 from ebl.require_scope import require_scope
+from ebl.fragmentarium.transliterations import Transliteration
 
 
 class FragmentsResource:
@@ -16,18 +17,20 @@ class FragmentsResource:
 
     @falcon.before(require_scope, 'transliterate:fragments')
     def on_post(self, req, resp, number):
-        updates = json.loads(req.stream.read())
-        try:
-            transliteration = updates['transliteration']
-            notes = updates['notes']
-        except (TypeError, KeyError):
-            raise falcon.HTTPUnprocessableEntity()
+        def parse_request():
+            body = json.loads(req.stream.read())
+            try:
+                return Transliteration(
+                    body['transliteration'],
+                    body['notes']
+                )
+            except (TypeError, KeyError):
+                raise falcon.HTTPUnprocessableEntity()
 
         try:
             self._fragmentarium.update_transliteration(
                 number,
-                transliteration,
-                notes,
+                parse_request(),
                 req.context['user']
             )
         except KeyError:

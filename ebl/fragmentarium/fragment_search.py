@@ -1,6 +1,7 @@
 import falcon
 
 from ebl.require_scope import require_scope
+from ebl.fragmentarium.transliterations import Transliteration
 
 
 class FragmentSearch:
@@ -41,7 +42,7 @@ class FragmentSearch:
         )
 
     def _search_transliteration(self, req, resp):
-        transliteration = req.params['transliteration']
+        transliteration = Transliteration.without_notes(req.params['transliteration'])
         resp.media = [
             {
                 **(fragment_and_lines[0].to_dict()),

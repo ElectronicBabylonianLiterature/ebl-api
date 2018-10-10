@@ -23,7 +23,9 @@ FRAGMENT = Fragment({
         '6\'. [...] x mu ta-ma-tu₂\n'
         '7\'. šu/gid'
     ),
-    'signs': SIGNS
+    'signs': SIGNS,
+    'notes': '',
+    'record': []
 })
 
 
@@ -109,5 +111,5 @@ GET_MATCHING_LINES_DATA = [
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
     query = TransliterationQuery(query)
-    lines = query.get_matching_lines(FRAGMENT)
+    lines = query.get_matching_lines(FRAGMENT.transliteration)
     assert lines == expected

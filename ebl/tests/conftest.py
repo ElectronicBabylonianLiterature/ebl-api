@@ -188,7 +188,9 @@ def another_fragment(fragment):
         **fragment.to_dict(),
         '_id': '2',
         'accession': 'accession-no-match',
-        'cdliNumber': 'cdli-no-match'
+        'cdliNumber': 'cdli-no-match',
+        'notes': '',
+        'record': []
     })
 
 

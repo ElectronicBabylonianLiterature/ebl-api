@@ -1,17 +1,15 @@
 import pydash
 import regex
 
-from ebl.fragmentarium.transliterations import filter_lines
-
 
 class TransliterationQuery:
     def __init__(self, signs):
-        self.signs = signs
+        self._signs = signs
 
     @property
     def regexp(self):
         lines_regexp = (
-            pydash.chain(self.signs)
+            pydash.chain(self._signs)
             .map(lambda row: [
                 fr'([^\s]+/)*{escaped_sign}(/[^\s]+)*'
                 for escaped_sign
@@ -24,11 +22,10 @@ class TransliterationQuery:
         )
         return fr'{lines_regexp}(?![^|\s])'
 
-    def get_matching_lines(self, fragment):
-        signs = fragment.signs
-        transliteration = fragment.transliteration
+    def get_matching_lines(self, transliteration):
+        signs = transliteration.signs
 
-        def _line_number(position):
+        def line_number(position):
             return (
                 pydash.chain(signs[:position])
                 .chars()
@@ -43,12 +40,12 @@ class TransliterationQuery:
             for match in matches
         ]
         line_numbers = [
-            (_line_number(position[0]), _line_number(position[1]))
+            (line_number(position[0]), line_number(position[1]))
             for position in positions
         ]
 
-        lines = filter_lines(transliteration)
-
+        lines = transliteration.filtered
+        
         return [
             lines[numbers[0]:numbers[1]+1]
             for numbers in pydash.uniq(line_numbers)

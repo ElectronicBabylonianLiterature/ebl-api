@@ -1,5 +1,5 @@
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.transliterations import clean
+from ebl.fragmentarium.transliterations import Transliteration
 
 
 TRANSLITERATION = 'Transliteration'
@@ -13,14 +13,11 @@ class Fragmentarium:
         self._changelog = changelog
         self._sign_list = sign_list
 
-    def update_transliteration(self, number, transliteration, notes, user):
+    def update_transliteration(self, number, transliteration, user):
         fragment = self._repository.find(number)
         updated_fragment = fragment.update_transliteration(
-            transliteration,
-            notes,
+            transliteration.with_signs(self._sign_list),
             user
-        ).set_signs(
-            self._create_signs(transliteration)
         )
 
         self._changelog.create(
@@ -31,14 +28,6 @@ class Fragmentarium:
         )
 
         self._repository.update_transliteration(updated_fragment)
-
-    def _create_signs(self, transliteration):
-        cleaned_transliteration = clean(transliteration)
-        signs = self._sign_list.map_transliteration(cleaned_transliteration)
-        return '\n'.join([
-            ' '.join(row)
-            for row in signs
-        ])
 
     def statistics(self):
         return {
@@ -61,11 +50,10 @@ class Fragmentarium:
         return self._repository.find_interesting()
 
     def search_signs(self, transliteration):
-        cleaned_transliteration = clean(transliteration)
-        signs = self._sign_list.map_transliteration(cleaned_transliteration)
+        signs = transliteration.to_sign_matrix(self._sign_list)
         query = TransliterationQuery(signs)
         return [
-            (fragment, query.get_matching_lines(fragment))
+            (fragment, query.get_matching_lines(fragment.transliteration))
             for fragment
             in self._repository.search_signs(query)
         ]

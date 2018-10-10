@@ -1,6 +1,8 @@
 import datetime
+import json
 from freezegun import freeze_time
 from ebl.fragmentarium.fragment import Fragment
+from ebl.fragmentarium.transliterations import Transliteration
 
 
 def test_to_dict(fragment):
@@ -14,6 +16,10 @@ def test_equality(fragment, transliterated_fragment):
 
     assert new_fragment == fragment
     assert new_fragment != transliterated_fragment
+
+
+def test_hash(fragment):
+    assert hash(fragment) == hash(json.dumps(fragment.to_dict()))
 
 
 def test_accession(fragment):
@@ -34,25 +40,7 @@ def test_transliteration(transliterated_fragment):
     data = transliterated_fragment.to_dict()
     new_fragment = Fragment(data)
 
-    assert new_fragment.transliteration == data['transliteration']
-
-
-def test_notes(transliterated_fragment):
-    data = transliterated_fragment.to_dict()
-    new_fragment = Fragment(data)
-
-    assert new_fragment.notes == data['notes']
-
-
-def test_signs(transliterated_fragment):
-    data = transliterated_fragment.to_dict()
-    new_fragment = Fragment(data)
-
-    assert new_fragment.signs == data['signs']
-
-
-def signs_not_set(fragment):
-    assert fragment.signs is None
+    assert new_fragment.transliteration == Transliteration(data['transliteration'], data['notes'])
 
 
 def test_record(transliterated_fragment):
@@ -64,16 +52,15 @@ def test_record(transliterated_fragment):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(fragment, user):
-    transliteration = 'x x'
+    transliteration = Transliteration('x x', fragment.transliteration.notes)
 
     updated_fragment = fragment.update_transliteration(
         transliteration,
-        fragment.notes,
         user
     )
     expected_fragment = Fragment({
         **fragment.to_dict(),
-        'transliteration': transliteration,
+        'transliteration': transliteration.atf,
         'record': [{
             'user': user.ebl_name,
             'type': 'Transliteration',
@@ -86,19 +73,17 @@ def test_add_transliteration(fragment, user):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(transliterated_fragment, user):
-    transliteration = '1. x x\n2. x'
-    notes = 'updated notes'
-
+    transliteration = Transliteration('1. x x\n2. x', 'updated notes', signs='X X\nX')
     updated_fragment = transliterated_fragment.update_transliteration(
         transliteration,
-        notes,
         user
     )
 
     expected_fragment = Fragment({
         **transliterated_fragment.to_dict(),
-        'transliteration': transliteration,
-        'notes': notes,
+        'transliteration': transliteration.atf,
+        'notes': transliteration.notes,
+        'signs': transliteration.signs,
         'record': [
             *transliterated_fragment.to_dict()['record'],
             {
@@ -113,30 +98,16 @@ def test_update_transliteration(transliterated_fragment, user):
 
 
 def test_update_notes(fragment, user):
-    notes = 'new notes'
+    transliteration  = Transliteration(fragment.transliteration.atf, 'new notes')
 
     updated_fragment = fragment.update_transliteration(
-        fragment.transliteration,
-        notes,
+        transliteration,
         user
     )
 
     expected_fragment = Fragment({
         **fragment.to_dict(),
-        'notes': notes
-    })
-
-    assert updated_fragment == expected_fragment
-
-
-def test_set_signs(fragment):
-    signs = ['X']
-
-    updated_fragment = fragment.set_signs(signs)
-
-    expected_fragment = Fragment({
-        **fragment.to_dict(),
-        'signs': signs
+        'notes': transliteration.notes
     })
 
     assert updated_fragment == expected_fragment

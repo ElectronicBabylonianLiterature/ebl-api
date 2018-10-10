@@ -104,10 +104,10 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': pydash.omit_by({
-                'transliteration': fragment.transliteration,
-                'notes': fragment.notes,
-                'record': fragment.record,
-                'signs': fragment.signs
+                'transliteration': fragment.transliteration.atf,
+                'notes': fragment.transliteration.notes,
+                'signs': fragment.transliteration.signs,
+                'record': fragment.record
             }, lambda value: value is None)}
         )
 

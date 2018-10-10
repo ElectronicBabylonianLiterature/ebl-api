@@ -4,7 +4,27 @@ from pymongo import MongoClient
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_repository import MemoizingSignRepository
 from ebl.sign_list.sign_list import SignList
-from ebl.fragmentarium.transliterations import clean
+
+
+class ApiUser:
+    def __init__(self, script_name):
+        self._script_name = script_name
+
+    @property
+    def profile(self):
+        return {
+            'name': self._script_name
+        }
+
+    @property
+    def ebl_name(self):
+        return 'Script'
+
+    def has_scope(self, _):
+        return False
+
+    def can_read_folio(self, _):
+        return False
 
 
 class Counter:
@@ -34,20 +54,12 @@ def create_updater(sign_list, fragment_repository, counter_factory):
         counter.done()
 
     def update_fragment(fragment):
-        signs = map_transliteration(fragment.transliteration)
+        transliteration = fragment.transliteration.with_signs(sign_list)
 
-        if signs != fragment.signs:
+        if transliteration.signs != fragment.transliteration.signs:
             fragment_repository.update_transliteration(
-                fragment.set_signs(signs)
+                fragment.update_transliteration(transliteration, ApiUser('update_signs.py'))
             )
-
-    def map_transliteration(transliteration):
-        cleaned_transliteration = clean(transliteration)
-        signs = sign_list.map_transliteration(cleaned_transliteration)
-        return '\n'.join([
-            ' '.join(row)
-            for row in signs
-        ])
 
     return update_fragments
 

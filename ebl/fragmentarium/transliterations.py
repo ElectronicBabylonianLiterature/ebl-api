@@ -29,17 +29,6 @@ BRACES_PATTERN = (
 )
 
 
-def clean(transliteration):
-    return (
-        pydash
-        .chain(transliteration)
-        .thru(filter_lines)
-        .map(_clean_line)
-        .map(_clean_values)
-        .value()
-    )
-
-
 def _clean_line(line):
     return (
         pydash
@@ -92,9 +81,65 @@ def _clean_reading(value):
     )
 
 
-def filter_lines(transliteration):
-    return [
-        line
-        for line in transliteration.split('\n')
-        if line and not re.match(r'@|\$|#|&|=:', line)
-    ]
+class Transliteration:
+
+    def __init__(self, atf, notes, signs=None):
+        self._atf = atf
+        self._notes = notes
+        self._signs = signs
+
+    def __eq__(self, other):
+        return (isinstance(other, Transliteration) and
+                (self.atf == other.atf) and
+                (self.notes == other.notes))
+
+    def __hash__(self):
+        return hash((self._atf, self._notes))
+    
+    @staticmethod
+    def without_notes(atf):
+        return Transliteration(atf, '', None)
+ 
+    @property
+    def atf(self):
+        return self._atf
+
+    @property
+    def notes(self):
+        return self._notes
+
+    @property
+    def signs(self):
+        return self._signs
+
+    @property
+    def cleaned(self):
+        return (
+            pydash
+            .chain(self.filtered)
+            .map(_clean_line)
+            .map(_clean_values)
+            .value()
+        )
+
+    @property
+    def filtered(self):
+        return [
+            line
+            for line in self.atf.split('\n')
+            if line and not re.match(r'@|\$|#|&|=:', line)
+        ]
+
+    def with_signs(self, sign_list):
+        signs = self.to_signs(sign_list)
+        return Transliteration(self.atf, self.notes, signs=signs)
+        
+    def to_signs(self, sign_list):
+        signs = self.to_sign_matrix(sign_list)
+        return '\n'.join([
+            ' '.join(row)
+            for row in signs
+        ])
+
+    def to_sign_matrix(self, sign_list):
+        return sign_list.map_transliteration(self.cleaned)

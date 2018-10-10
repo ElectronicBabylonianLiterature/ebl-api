@@ -1,5 +1,8 @@
 import copy
 import datetime
+import json
+import pydash
+from ebl.fragmentarium.transliterations import Transliteration
 
 
 TRANSLITERATION = 'Transliteration'
@@ -13,6 +16,9 @@ class Fragment:
 
     def __eq__(self, other):
         return isinstance(other, Fragment) and (self._data == other.to_dict())
+
+    def __hash__(self):
+        return hash(json.dumps(self._data))
 
     @property
     def number(self):
@@ -28,39 +34,30 @@ class Fragment:
 
     @property
     def transliteration(self):
-        return self._data['transliteration']
-
-    @property
-    def notes(self):
-        return self._data['notes']
-
-    @property
-    def signs(self):
-        return self._data.get('signs', None)
+        return Transliteration(
+            self._data['transliteration'],
+            self._data['notes'],
+            self._data.get('signs', None)
+        )
 
     @property
     def record(self):
         return copy.deepcopy(self._data['record'])
 
-    def update_transliteration(self, transliteration, notes, user):
+    def update_transliteration(self, transliteration, user):
         record = Record(self._data['record']).add_entry(
-            self.transliteration,
-            transliteration,
+            self.transliteration.atf,
+            transliteration.atf,
             user
         )
 
-        return Fragment({
+        return Fragment(pydash.omit_by({
             **self._data,
-            'transliteration': transliteration,
-            'notes': notes,
+            'transliteration': transliteration.atf,
+            'notes': transliteration.notes,
+            'signs': transliteration.signs,
             'record': record.entries
-        })
-
-    def set_signs(self, signs):
-        return Fragment({
-            **self._data,
-            'signs': signs
-        })
+        }, lambda value: value is None))
 
     def to_dict(self):
         return copy.deepcopy(self._data)
