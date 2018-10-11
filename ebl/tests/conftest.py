@@ -102,7 +102,7 @@ def file():
 
 @pytest.fixture
 def file_with_allowed_scope():
-    return FakeFile('folio2.jpg', b'ZTbvOTqvSW', {'scope': 'folio'})
+    return FakeFile('folio2.jpg', b'ZTbvOTqvSW', {'scope': 'WGL-folios'})
 
 
 @pytest.fixture
@@ -126,7 +126,7 @@ def user():
                 'write:words',
                 'transliterate:fragments',
                 'read:fragments',
-                'read:folio'
+                'read:WGL-folios'
             ]
         },
         {
@@ -178,6 +178,10 @@ def fragment():
         'accession': 'accession-3',
         'transliteration': '',
         'notes': '',
+        'folios': [{
+            'name': 'WGL',
+            'number': '1'
+        }],
         'record': []
     })
 
@@ -190,6 +194,10 @@ def another_fragment(fragment):
         'accession': 'accession-no-match',
         'cdliNumber': 'cdli-no-match',
         'notes': '',
+        'folios': [{
+            'name': 'WGL',
+            'number': '2'
+        }],
         'record': []
     })
 
@@ -216,6 +224,10 @@ def transliterated_fragment():
             'ŠU/|BI×IS|'
         ),
         'notes': '',
+        'folios': [{
+            'name': 'WGL',
+            'number': '3'
+        }],
         'record': [{
             'user': 'Tester',
             'type': 'Transliteration',

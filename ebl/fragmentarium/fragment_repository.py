@@ -107,7 +107,7 @@ class MongoFragmentRepository():
                 'transliteration': fragment.transliteration.atf,
                 'notes': fragment.transliteration.notes,
                 'signs': fragment.transliteration.signs,
-                'record': fragment.record
+                'record': fragment.record.entries
             }, lambda value: value is None)}
         )
 

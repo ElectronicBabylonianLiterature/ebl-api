@@ -42,7 +42,11 @@ class Fragment:
 
     @property
     def record(self):
-        return copy.deepcopy(self._data['record'])
+        return Record(self._data['record'])
+
+    @property
+    def folios(self):
+        return Folios(self._data['folios'])
 
     def update_transliteration(self, transliteration, user):
         record = Record(self._data['record']).add_entry(
@@ -68,6 +72,12 @@ class Record:
     def __init__(self, record):
         self._entries = copy.deepcopy(record)
 
+    def __eq__(self, other):
+        return isinstance(other, Record) and (self.entries == other.entries)
+
+    def __hash__(self):
+        return hash(json.dumps(self._entries))
+
     @property
     def entries(self):
         return copy.deepcopy(self._entries)
@@ -89,3 +99,27 @@ class Record:
             'type': record_type,
             'date': datetime.datetime.utcnow().isoformat()
         }
+
+
+class Folios:
+
+    def __init__(self, folios):
+        self._entries = copy.deepcopy(folios)
+
+    def __eq__(self, other):
+        return isinstance(other, Folios) and (self.entries == other.entries)
+
+    def __hash__(self):
+        return hash(json.dumps(self._entries))
+
+    @property
+    def entries(self):
+        return copy.deepcopy(self._entries)
+
+    def filter(self, user):
+        folios = [
+            folio
+            for folio in self._entries
+            if user.can_read_folio(folio['name'])
+        ]
+        return Folios(folios)

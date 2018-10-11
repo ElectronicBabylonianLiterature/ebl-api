@@ -2,6 +2,8 @@ import datetime
 import json
 from freezegun import freeze_time
 from ebl.fragmentarium.fragment import Fragment
+from ebl.fragmentarium.fragment import Record
+from ebl.fragmentarium.fragment import Folios
 from ebl.fragmentarium.transliterations import Transliteration
 
 
@@ -48,7 +50,14 @@ def test_record(transliterated_fragment):
     data = transliterated_fragment.to_dict()
     new_fragment = Fragment(data)
 
-    assert new_fragment.record == data['record']
+    assert new_fragment.record == Record(data['record'])
+
+
+def test_folios(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment(data)
+
+    assert new_fragment.folios == Folios(data['folios'])
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -114,3 +123,22 @@ def test_update_notes(fragment, user):
     })
 
     assert updated_fragment == expected_fragment
+
+
+def test_filter_folios(user):
+    wgl_folio = {
+        'name': 'WGL',
+        'number': '1'
+    }
+    folios = Folios([
+        wgl_folio,
+        {
+            'name': 'XXX',
+            'number': '1'
+        },
+    ])
+    expected = Folios([
+        wgl_folio
+    ])
+
+    assert folios.filter(user) == expected
