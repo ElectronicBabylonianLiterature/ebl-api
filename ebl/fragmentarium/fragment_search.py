@@ -28,17 +28,20 @@ class FragmentSearch:
 
     def _search(self, req, resp):
         resp.media = self._map_fragments(
-            self._fragmentarium.search(req.params['number'])
+            self._fragmentarium.search(req.params['number']),
+            req.context['user']
         )
 
-    def _find_random(self, _, resp):
+    def _find_random(self, req, resp):
         resp.media = self._map_fragments(
-            self._fragmentarium.find_random()
+            self._fragmentarium.find_random(),
+            req.context['user']
         )
 
-    def _find_interesting(self, _, resp):
+    def _find_interesting(self, req, resp):
         resp.media = self._map_fragments(
-            self._fragmentarium.find_interesting()
+            self._fragmentarium.find_interesting(),
+            req.context['user']
         )
 
     def _search_transliteration(self, req, resp):
@@ -46,7 +49,7 @@ class FragmentSearch:
             Transliteration.without_notes(req.params['transliteration'])
         resp.media = [
             {
-                **(fragment_and_lines[0].to_dict()),
+                **(fragment_and_lines[0].to_dict_for(req.context['user'])),
                 'matching_lines': fragment_and_lines[1]
             }
             for fragment_and_lines
@@ -58,5 +61,5 @@ class FragmentSearch:
         resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
     @staticmethod
-    def _map_fragments(fragments):
-        return [fragment.to_dict() for fragment in fragments]
+    def _map_fragments(fragments, user):
+        return [fragment.to_dict_for(user) for fragment in fragments]

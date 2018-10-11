@@ -3,11 +3,11 @@ import json
 import falcon
 
 
-def test_get_fragment(client, fragmentarium, fragment):
+def test_get_fragment(client, fragmentarium, fragment, user):
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments/{fragment_number}')
 
-    assert result.json == fragment.to_dict()
+    assert result.json == fragment.to_dict_for(user)
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 

@@ -9,9 +9,13 @@ class FragmentsResource:
         self._fragmentarium = fragmentarium
 
     @falcon.before(require_scope, 'read:fragments')
-    def on_get(self, _req, resp, number):
+    def on_get(self, req, resp, number):
+        user = req.context['user']
         try:
-            resp.media = self._fragmentarium.find(number).to_dict()
+            resp.media = (self
+                          ._fragmentarium
+                          .find(number)
+                          .to_dict_for(user))
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND
 

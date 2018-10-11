@@ -1,15 +1,14 @@
 import falcon
-import pydash
 
 
-def test_search_fragment(client, fragmentarium, fragment):
+def test_search_fragment(client, fragmentarium, fragment, user):
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments', params={
         'number': fragment_number
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment.to_dict()]
+    assert result.json == [fragment.to_dict_for(user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -23,7 +22,9 @@ def test_search_signs(client,
                       fragmentarium,
                       transliterated_fragment,
                       sign_list,
-                      signs):
+                      signs,
+                      user):
+    # pylint: disable=R0913
     fragmentarium.create(transliterated_fragment)
     for sign in signs:
         sign_list.create(sign)
@@ -34,16 +35,20 @@ def test_search_signs(client,
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [
-        pydash.set_(transliterated_fragment.to_dict(), 'matching_lines', [
-            ['6\'. [...] x mu ta-ma-tu₂']
-        ])
+        {
+            **transliterated_fragment.to_dict_for(user),
+            'matching_lines': [
+                ['6\'. [...] x mu ta-ma-tu₂']
+            ]
+        }
     ]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
 def test_random(client,
                 fragmentarium,
-                fragment):
+                fragment,
+                user):
     fragmentarium.create(fragment)
 
     result = client.simulate_get(f'/fragments', params={
@@ -51,13 +56,14 @@ def test_random(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment.to_dict()]
+    assert result.json == [fragment.to_dict_for(user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
 def test_interesting(client,
                      fragmentarium,
-                     fragment):
+                     fragment,
+                     user):
     fragmentarium.create(fragment)
 
     result = client.simulate_get(f'/fragments', params={
@@ -65,7 +71,7 @@ def test_interesting(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment.to_dict()]
+    assert result.json == [fragment.to_dict_for(user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
