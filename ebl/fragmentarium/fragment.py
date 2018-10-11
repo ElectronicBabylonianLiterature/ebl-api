@@ -63,6 +63,12 @@ class Fragment:
             'record': record.entries
         }, lambda value: value is None))
 
+    def add_matching_lines(self, lines):
+        return Fragment({
+            **self._data,
+            'matching_lines': copy.deepcopy(lines)
+        })
+
     def to_dict(self):
         return copy.deepcopy(self._data)
 

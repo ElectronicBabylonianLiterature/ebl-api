@@ -132,6 +132,16 @@ def test_update_notes(fragment, user):
     assert updated_fragment == expected_fragment
 
 
+def test_add_matching_lines(transliterated_fragment):
+    with_matching_lines =\
+        transliterated_fragment.add_matching_lines([['7\'. šu/gid']])
+
+    assert with_matching_lines.to_dict() == {
+        **transliterated_fragment.to_dict(),
+        'matching_lines': [['7\'. šu/gid']]
+    }
+
+
 def test_filter_folios(user):
     wgl_folio = {
         'name': 'WGL',
