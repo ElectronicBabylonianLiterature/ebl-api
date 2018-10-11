@@ -27,6 +27,7 @@ BRACES_PATTERN = (
     r'\(([^\(\)]*)\)'
     r'(?!=[^\s])'
 )
+VARIANT_SEPARATOR = '/'
 
 
 def _clean_line(line):
@@ -56,7 +57,7 @@ def _clean_values(line):
 def _clean_value(value):
     grapheme = re.fullmatch(r'\|[^|]+\|', value)
     reading_with_sign = re.fullmatch(r'[^\(]+\(([^\)]+)\)', value)
-    if '/' in value:
+    if VARIANT_SEPARATOR in value:
         return _clean_variant(value)
     elif grapheme or reading_with_sign:
         return value
@@ -65,9 +66,9 @@ def _clean_value(value):
 
 
 def _clean_variant(value):
-    return '/'.join([
+    return VARIANT_SEPARATOR.join([
         _clean_value(part)
-        for part in value.split('/')
+        for part in value.split(VARIANT_SEPARATOR)
     ])
 
 
@@ -131,15 +132,11 @@ class Transliteration:
         ]
 
     def with_signs(self, sign_list):
-        signs = self.to_signs(sign_list)
-        return Transliteration(self.atf, self.notes, signs=signs)
-
-    def to_signs(self, sign_list):
-        signs = self.to_sign_matrix(sign_list)
-        return '\n'.join([
+        signs = '\n'.join([
             ' '.join(row)
-            for row in signs
+            for row in self.to_sign_matrix(sign_list)
         ])
+        return Transliteration(self.atf, self.notes, signs)
 
     def to_sign_matrix(self, sign_list):
         return sign_list.map_transliteration(self.cleaned)
