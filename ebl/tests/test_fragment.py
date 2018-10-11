@@ -13,6 +13,13 @@ def test_to_dict(fragment):
     assert new_fragment.to_dict() == fragment.to_dict()
 
 
+def test_to_dict_for(fragment, user):
+    assert fragment.to_dict_for(user) == {
+        **fragment.to_dict(),
+        'folios': fragment.folios.filter(user).entries
+    }
+
+
 def test_equality(fragment, transliterated_fragment):
     new_fragment = Fragment(fragment.to_dict())
 

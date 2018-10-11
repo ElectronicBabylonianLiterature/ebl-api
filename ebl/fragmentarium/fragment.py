@@ -66,6 +66,12 @@ class Fragment:
     def to_dict(self):
         return copy.deepcopy(self._data)
 
+    def to_dict_for(self, user):
+        return {
+            **self.to_dict(),
+            'folios': self.folios.filter(user).entries
+        }
+
 
 class Record:
 

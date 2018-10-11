@@ -178,10 +178,16 @@ def fragment():
         'accession': 'accession-3',
         'transliteration': '',
         'notes': '',
-        'folios': [{
-            'name': 'WGL',
-            'number': '1'
-        }],
+        'folios': [
+            {
+                'name': 'WGL',
+                'number': '1'
+            },
+            {
+                'name': 'XXX',
+                'number': '1'
+            }
+        ],
         'record': []
     })
 
@@ -194,10 +200,16 @@ def another_fragment(fragment):
         'accession': 'accession-no-match',
         'cdliNumber': 'cdli-no-match',
         'notes': '',
-        'folios': [{
-            'name': 'WGL',
-            'number': '2'
-        }],
+        'folios': [
+            {
+                'name': 'WGL',
+                'number': '2'
+            },
+            {
+                'name': 'XXX',
+                'number': '2'
+            }
+        ],
         'record': []
     })
 
@@ -224,10 +236,16 @@ def transliterated_fragment():
             'ŠU/|BI×IS|'
         ),
         'notes': '',
-        'folios': [{
-            'name': 'WGL',
-            'number': '3'
-        }],
+        'folios': [
+            {
+                'name': 'WGL',
+                'number': '3'
+            },
+            {
+                'name': 'XXX',
+                'number': '3'
+            }
+        ],
         'record': [{
             'user': 'Tester',
             'type': 'Transliteration',
