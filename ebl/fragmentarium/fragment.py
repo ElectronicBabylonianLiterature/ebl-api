@@ -63,10 +63,11 @@ class Fragment:
             'record': record.entries
         }, lambda value: value is None))
 
-    def add_matching_lines(self, lines):
+    def add_matching_lines(self, query):
+        matching_lines = query.get_matching_lines(self.transliteration)
         return Fragment({
             **self._data,
-            'matching_lines': copy.deepcopy(lines)
+            'matching_lines': matching_lines
         })
 
     def to_dict(self):

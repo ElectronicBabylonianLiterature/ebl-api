@@ -172,7 +172,10 @@ def test_search_signs(transliteration,
         Transliteration(transliteration)
     )
     expected = [
-        transliterated_fragment.add_matching_lines(lines)
+        Fragment({
+            **transliterated_fragment.to_dict(),
+            'matching_lines': lines
+        })
     ] if lines else []
 
     assert result == expected

@@ -5,6 +5,7 @@ from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.fragment import Record
 from ebl.fragmentarium.fragment import Folios
 from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
 def test_to_dict(fragment):
@@ -133,12 +134,13 @@ def test_update_notes(fragment, user):
 
 
 def test_add_matching_lines(transliterated_fragment):
+    query = TransliterationQuery([['MA', 'UD']])
     with_matching_lines =\
-        transliterated_fragment.add_matching_lines([['7\'. šu/gid']])
+        transliterated_fragment.add_matching_lines(query)
 
     assert with_matching_lines.to_dict() == {
         **transliterated_fragment.to_dict(),
-        'matching_lines': [['7\'. šu/gid']]
+        'matching_lines': [['6\'. [...] x mu ta-ma-tu₂']]
     }
 
 
