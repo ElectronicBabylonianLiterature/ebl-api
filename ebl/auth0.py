@@ -1,4 +1,5 @@
 import copy
+import pydash
 import requests
 from falcon_auth import JWTAuthBackend
 
@@ -13,11 +14,11 @@ class Auth0User:
 
     def __init__(self, access_token, profile_factory):
         self._access_token = copy.deepcopy(access_token)
-        self._profile_factory = profile_factory
+        self._profile_factory = pydash.once(profile_factory)
 
     @property
     def profile(self):
-        return self._profile_factory()
+        return copy.deepcopy(self._profile_factory())
 
     @property
     def ebl_name(self):
@@ -51,6 +52,7 @@ class Auth0Backend(JWTAuthBackend):
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
-        return Auth0User(access_token,  lambda: fetch_user_profile(self.issuer, req.auth))
-
-
+        return Auth0User(
+            access_token,
+            lambda: fetch_user_profile(self.issuer, req.auth)
+        )
