@@ -129,7 +129,7 @@ def user():
                 'read:WGL-folios'
             ]
         },
-        {
+        lambda: {
             'name': 'test.user@example.com',
             'https://ebabylon.org/eblName': 'User'
         }

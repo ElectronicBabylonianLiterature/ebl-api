@@ -11,19 +11,20 @@ def fetch_user_profile(issuer, authorization):
 
 class Auth0User:
 
-    def __init__(self, access_token, profile):
+    def __init__(self, access_token, profile_factory):
         self._access_token = copy.deepcopy(access_token)
-        self._profile = copy.deepcopy(profile)
+        self._profile_factory = profile_factory
 
     @property
     def profile(self):
-        return copy.deepcopy(self._profile)
+        return self._profile_factory()
 
     @property
     def ebl_name(self):
-        return self._profile.get(
+        profile = self.profile
+        return profile.get(
             'https://ebabylon.org/eblName',
-            self._profile['name']
+            profile['name']
         )
 
     def has_scope(self, scope):
@@ -50,7 +51,6 @@ class Auth0Backend(JWTAuthBackend):
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
-        profile = fetch_user_profile(self.issuer, req.auth)
-        return Auth0User(access_token, profile)
+        return Auth0User(access_token,  lambda: fetch_user_profile(self.issuer, req.auth))
 
 
