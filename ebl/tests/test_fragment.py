@@ -91,7 +91,7 @@ def test_add_transliteration(fragment, user):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(transliterated_fragment, user):
     transliteration =\
-        Transliteration('1. x x\n2. x', 'updated notes', signs='X X\nX')
+        Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX')
     updated_fragment = transliterated_fragment.update_transliteration(
         transliteration,
         user

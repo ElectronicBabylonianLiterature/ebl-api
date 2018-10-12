@@ -2,14 +2,14 @@ from ebl.fragmentarium.transliterations import Transliteration
 
 
 def test_ignored_lines():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '&K11111\n@reverse\n\n$ end of side\n#note\n=: foo'
     )
     assert transliteration.cleaned == []
 
 
 def test_strip_line_numbers():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '1. mu\n2\'. me\na+1. e\n1.2. a'
     )
     assert transliteration.cleaned == [
@@ -21,7 +21,7 @@ def test_strip_line_numbers():
 
 
 def test_map_spaces():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '1. šu-mu gid₂-ba\n'
         '2. {giš}BI.IS\n'
         '3. {giš}|BI.IS|\n'
@@ -61,7 +61,7 @@ def test_map_spaces():
 
 
 def test_strip_lacuna():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '1. [... N]U KU₃\n'
         '2. [... a]-ba-an\n'
         '3. [...] ši [...]\n'
@@ -82,7 +82,7 @@ def test_strip_lacuna():
 
 
 def test_indent():
-    transliteration = Transliteration.without_notes('1. ($___$) ša₂')
+    transliteration = Transliteration('1. ($___$) ša₂')
     assert transliteration.cleaned == [
         'ša₂'
     ]
@@ -90,7 +90,7 @@ def test_indent():
 
 def test_strip_flags():
     transliteration =\
-        Transliteration.without_notes('1.  ba! ba? ba# ba*\n2. $KU')
+        Transliteration('1.  ba! ba? ba# ba*\n2. $KU')
     assert transliteration.cleaned == [
         'ba ba ba ba',
         'ku'
@@ -99,7 +99,7 @@ def test_strip_flags():
 
 def test_strip_shifts():
     transliteration =\
-        Transliteration.without_notes('1. %es qa\n2. ba %g ba')
+        Transliteration('1. %es qa\n2. ba %g ba')
     assert transliteration.cleaned == [
         'qa',
         'ba ba'
@@ -107,7 +107,7 @@ def test_strip_shifts():
 
 
 def test_strip_omissions():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
     )
     assert transliteration.cleaned == [
@@ -119,7 +119,7 @@ def test_strip_omissions():
 
 def test_min():
     transliteration =\
-        Transliteration.without_notes('3. MIN<(an)> ši')
+        Transliteration('3. MIN<(an)> ši')
     assert transliteration.cleaned == [
         'min ši'
     ]
@@ -127,7 +127,7 @@ def test_min():
 
 def test_numbers():
     transliteration =\
-        Transliteration.without_notes('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256')
+        Transliteration('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256')
     assert transliteration.cleaned == [
         '1(AŠ)',
         '1 2 10 20 30',
@@ -151,7 +151,7 @@ def test_graphemes():
         '|UD.AB@g|'
     ]
 
-    transliteration = Transliteration.without_notes('\n'.join([
+    transliteration = Transliteration('\n'.join([
         f'{index}. {grapheme}'
         for index, grapheme in enumerate(graphemes)
     ]))
@@ -160,7 +160,7 @@ def test_graphemes():
 
 
 def test_lower_case():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '1. gid₂\n'
         '2. ši\n'
         '3. BI\n'
@@ -188,7 +188,7 @@ def test_lower_case():
 
 
 def test_strip_at():
-    transliteration = Transliteration.without_notes(
+    transliteration = Transliteration(
         '1. lu₂@v\n'
         '2. LU₂@v\n'
         '3. TA@v'

@@ -84,7 +84,7 @@ def _clean_reading(value):
 
 class Transliteration:
 
-    def __init__(self, atf, notes, signs=None):
+    def __init__(self, atf, notes='', signs=None):
         self._atf = atf
         self._notes = notes
         self._signs = signs
@@ -96,10 +96,6 @@ class Transliteration:
 
     def __hash__(self):
         return hash((self._atf, self._notes))
-
-    @staticmethod
-    def without_notes(atf):
-        return Transliteration(atf, '', None)
 
     @property
     def atf(self):

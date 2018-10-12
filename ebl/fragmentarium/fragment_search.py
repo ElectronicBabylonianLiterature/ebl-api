@@ -43,6 +43,5 @@ class FragmentSearch:
         return self._fragmentarium.find_interesting()
 
     def _search_transliteration(self, query):
-        transliteration =\
-            Transliteration.without_notes(query)
+        transliteration = Transliteration(query)
         return self._fragmentarium.search_signs(transliteration)

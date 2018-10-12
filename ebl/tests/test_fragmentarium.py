@@ -27,7 +27,7 @@ def test_update_transliteration(fragmentarium, transliterated_fragment, user):
     updated_fragment = fragmentarium.find(fragment_number)
 
     expected_fragment = transliterated_fragment.update_transliteration(
-        Transliteration('1. x x\n2. x', 'updated notes', signs='X X\nX'),
+        Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX'),
         user
     )
 
@@ -48,7 +48,7 @@ def test_changelog(database,
     )
 
     expected_fragment = fragment.update_transliteration(
-        Transliteration('x x x', 'updated notes', signs='X X X'),
+        Transliteration('x x x', 'updated notes', 'X X X'),
         user
     )
 
@@ -169,7 +169,7 @@ def test_search_signs(transliteration,
         sign_list.create(sign)
 
     result = fragmentarium.search_signs(
-        Transliteration.without_notes(transliteration)
+        Transliteration(transliteration)
     )
     expected = [
         transliterated_fragment.add_matching_lines(lines)
