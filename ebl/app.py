@@ -1,4 +1,5 @@
 from base64 import b64decode
+import logging
 import os
 
 from cryptography.x509 import load_pem_x509_certificate
@@ -27,9 +28,21 @@ from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.auth0 import Auth0Backend
 
 
+def http_error(ex, _req, _resp, _params):
+    raise ex
+
+
+def unexpected_error(_ex, _req, _resp, _params):
+    logging.exception('Unexpected Exception')
+    raise falcon.HTTPInternalServerError()
+
+
 def create_app(context):
     auth_middleware = FalconAuthMiddleware(context['auth_backend'])
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
+    api.add_error_handler(Exception, unexpected_error)
+    api.add_error_handler(falcon.HTTPError, http_error)
+    api.add_error_handler(falcon.HTTPStatus, http_error)
 
     sign_list = SignList(context['sign_repository'])
 

@@ -21,7 +21,7 @@ def do_get(scope):
             {
                 'scope': scope
             },
-            {}
+            lambda: {}
         )
 
     auth_backend = NoneAuthBackend(user_loader)

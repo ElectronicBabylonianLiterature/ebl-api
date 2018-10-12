@@ -7,7 +7,9 @@ from falcon_auth import JWTAuthBackend
 def fetch_user_profile(issuer, authorization):
     url = f'{issuer}userinfo'
     headers = {'Authorization': authorization}
-    return requests.get(url, headers=headers).json()
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
 
 
 class Auth0User:
