@@ -3,6 +3,12 @@ import requests
 from falcon_auth import JWTAuthBackend
 
 
+def fetch_user_profile(issuer, authorization):
+    url = f'{issuer}userinfo'
+    headers = {'Authorization': authorization}
+    return requests.get(url, headers=headers).json()
+
+
 class Auth0User:
 
     def __init__(self, access_token, profile):
@@ -44,10 +50,7 @@ class Auth0Backend(JWTAuthBackend):
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
-        profile = self._fetch_user_profile(req)
+        profile = fetch_user_profile(self.issuer, req.auth)
         return Auth0User(access_token, profile)
 
-    def _fetch_user_profile(self, req):
-        url = f'{self.issuer}userinfo'
-        headers = {'Authorization': req.get_header('Authorization', True)}
-        return requests.get(url, headers=headers).json()
+
