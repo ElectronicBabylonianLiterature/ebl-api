@@ -26,7 +26,7 @@ class MongoFragmentRepository():
         return self._mongo_repository.get_collection()
 
     def count_transliterated_fragments(self):
-        return self._mongo_collection.count(HAS_TRANSLITERATION)
+        return self._mongo_collection.count_documents(HAS_TRANSLITERATION)
 
     def count_lines(self):
         count_lines = Code('function() {'
