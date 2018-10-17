@@ -1,4 +1,3 @@
-# pylint: disable=W0621
 from bson.objectid import ObjectId
 
 

@@ -1,4 +1,3 @@
-# pylint: disable=W0621
 import json
 import falcon
 
@@ -50,7 +49,6 @@ def test_update_transliteration(client,
 
 
 def test_update_transliteration_not_found(client):
-    # pylint: disable=C0103
     url = '/fragments/unknown.fragment'
     body = json.dumps({
         'transliteration': 'the transliteration',
@@ -62,7 +60,6 @@ def test_update_transliteration_not_found(client):
 
 
 def test_update_transliteration_invalid_entity(client):
-    # pylint: disable=C0103
     url = '/fragments/unknown.fragment'
     post_result = client.simulate_post(url, body='"transliteration"')
 
