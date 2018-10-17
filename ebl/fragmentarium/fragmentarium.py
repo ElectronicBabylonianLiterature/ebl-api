@@ -59,3 +59,6 @@ class Fragmentarium:
 
     def create(self, fragment):
         return self._repository.create(fragment)
+
+    def folio_pager(self, folio_name, folio_number, number):
+        return self._repository.folio_pager(folio_name, folio_number, number)

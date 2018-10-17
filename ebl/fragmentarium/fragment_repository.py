@@ -114,6 +114,51 @@ class MongoFragmentRepository():
         if result.matched_count == 0:
             raise KeyError
 
+    def folio_pager(self, folio_name, folio_number, number):
+        base_pipeline = [
+            {'$match': {'folios.0': {'$exists': True}}},
+            {'$unwind': '$folios'},
+            {'$project': {
+                'name': '$folios.name',
+                'number': '$folios.number',
+                'key': {'$concat': ['$folios.number', '-', '$_id']}
+            }},
+            {'$match': {'name': folio_name}},
+        ]
+        ascending = [
+            {'$sort': {'key': 1}},
+            {'$limit': 1}
+        ]
+        descending = [
+            {'$sort': {'key': -1}},
+            {'$limit': 1}
+        ]
+
+        def aggregate(*parts):
+            return self._mongo_collection.aggregate([
+                *base_pipeline,
+                *parts
+            ])
+
+        def get_id(cursor):
+            return cursor.next()['_id'] if cursor.alive else None
+
+        first = aggregate(*ascending)
+        previous = aggregate(
+            {'$match': {'key': {'$lt': f'{folio_number}-{number}'}}},
+            *descending
+        )
+        next_ = aggregate(
+            {'$match': {'key': {'$gt': f'{folio_number}-{number}'}}},
+            *ascending
+        )
+        last = aggregate(*descending)
+
+        return {
+            'previous': get_id(previous) or get_id(last),
+            'next': get_id(next_) or get_id(first)
+        }
+
     @staticmethod
     def _map_fragments(cursor):
         return [Fragment(fragment) for fragment in cursor]

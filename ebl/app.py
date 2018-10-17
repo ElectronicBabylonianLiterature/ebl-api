@@ -26,6 +26,7 @@ from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.changelog import Changelog
 from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.auth0 import Auth0Backend
+from ebl.fragmentarium.folio_pager import FolioPagerResource
 
 
 def http_error(ex, _req, _resp, _params):
@@ -56,6 +57,7 @@ def create_app(context):
     fragment_search = FragmentSearch(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
     files = FilesResource(context['files'])
+    folio_pager = FolioPagerResource(fragmentarium)
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
@@ -63,6 +65,7 @@ def create_app(context):
     api.add_route('/fragments/{number}', fragments)
     api.add_route('/images/{file_name}', files)
     api.add_route('/statistics', statistics)
+    api.add_route('/pager/folios/{folio_name}/{folio_number}/{number}', folio_pager)
 
     return api
 

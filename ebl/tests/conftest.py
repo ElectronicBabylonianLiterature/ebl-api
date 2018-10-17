@@ -54,6 +54,13 @@ class TestFragmentRepository(MongoFragmentRepository):
     def find_interesting(self):
         return [Fragment(self._mongo_collection.find_one({}))]
 
+    def folio_pager(self, _folio_name, _folio_number, _number):
+        fragment = self._mongo_collection.find_one({})
+        return {
+            'previous': fragment['_id'],
+            'next': fragment['_id']
+        }
+
 
 @pytest.fixture
 def fragment_repository(database):
