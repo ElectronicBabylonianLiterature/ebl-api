@@ -65,7 +65,10 @@ def create_app(context):
     api.add_route('/fragments/{number}', fragments)
     api.add_route('/images/{file_name}', files)
     api.add_route('/statistics', statistics)
-    api.add_route('/pager/folios/{folio_name}/{folio_number}/{number}', folio_pager)
+    api.add_route(
+        '/pager/folios/{folio_name}/{folio_number}/{number}',
+        folio_pager
+    )
 
     return api
 
