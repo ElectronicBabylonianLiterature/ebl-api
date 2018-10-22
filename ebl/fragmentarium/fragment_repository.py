@@ -140,8 +140,15 @@ class MongoFragmentRepository():
                 *parts
             ])
 
-        def get_id(cursor):
-            return cursor.next()['_id'] if cursor.alive else None
+        def get_numbers(cursor):
+            if cursor.alive:
+                entry = cursor.next()
+                return {
+                    'fragment_number': entry['_id'],
+                    'folio_number': entry['number']
+                }
+            else:
+                return None
 
         first = aggregate(*ascending)
         previous = aggregate(
@@ -155,8 +162,8 @@ class MongoFragmentRepository():
         last = aggregate(*descending)
 
         return {
-            'previous': get_id(previous) or get_id(last),
-            'next': get_id(next_) or get_id(first)
+            'previous': get_numbers(previous) or get_numbers(last),
+            'next': get_numbers(next_) or get_numbers(first)
         }
 
     @staticmethod

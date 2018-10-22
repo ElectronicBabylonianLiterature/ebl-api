@@ -46,8 +46,8 @@ def sign_list(sign_repository):
 
 
 class TestFragmentRepository(MongoFragmentRepository):
-    # Mongomock does not support $sample so we need to
-    # stub methods using on it.
+    # Mongomock does not support $sample, or $concat so we need to
+    # stub the methods using them.
     def find_random(self):
         return [Fragment(self._mongo_collection.find_one({}))]
 
@@ -55,10 +55,15 @@ class TestFragmentRepository(MongoFragmentRepository):
         return [Fragment(self._mongo_collection.find_one({}))]
 
     def folio_pager(self, _folio_name, _folio_number, _number):
-        fragment = self._mongo_collection.find_one({})
         return {
-            'previous': fragment['_id'],
-            'next': fragment['_id']
+            'previous': {
+                'fragment_number': _number,
+                'folio_number': _folio_number
+            },
+            'next': {
+                'fragment_number': _number,
+                'folio_number': _folio_number
+            }
         }
 
 
