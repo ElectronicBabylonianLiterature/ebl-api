@@ -7,12 +7,12 @@ def test_get_folio_pager(client, fragmentarium, fragment):
 
     assert result.json == {
         'next': {
-            'fragment_number': fragment_number,
-            'folio_number': '1'
+            'fragmentNumber': fragment_number,
+            'folioNumber': '1'
         },
         'previous': {
-            'fragment_number': fragment_number,
-            'folio_number': '1'
+            'fragmentNumber': fragment_number,
+            'folioNumber': '1'
         }
     }
     assert result.status == falcon.HTTP_OK

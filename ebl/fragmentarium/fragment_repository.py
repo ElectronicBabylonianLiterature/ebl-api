@@ -144,8 +144,8 @@ class MongoFragmentRepository():
             if cursor.alive:
                 entry = cursor.next()
                 return {
-                    'fragment_number': entry['_id'],
-                    'folio_number': entry['number']
+                    'fragmentNumber': entry['_id'],
+                    'folioNumber': entry['number']
                 }
             else:
                 return None

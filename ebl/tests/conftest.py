@@ -57,12 +57,12 @@ class TestFragmentRepository(MongoFragmentRepository):
     def folio_pager(self, _folio_name, _folio_number, _number):
         return {
             'previous': {
-                'fragment_number': _number,
-                'folio_number': _folio_number
+                'fragmentNumber': _number,
+                'folioNumber': _folio_number
             },
             'next': {
-                'fragment_number': _number,
-                'folio_number': _folio_number
+                'fragmentNumber': _number,
+                'folioNumber': _folio_number
             }
         }
 
