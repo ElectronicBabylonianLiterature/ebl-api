@@ -134,13 +134,14 @@ class MongoFragmentRepository():
             {'$limit': 1}
         ]
 
-        def aggregate(*parts):
-            return self._mongo_collection.aggregate([
+        def create_query(*parts):
+            return [
                 *base_pipeline,
                 *parts
-            ])
+            ]
 
-        def get_numbers(cursor):
+        def get_numbers(query):
+            cursor = self._mongo_collection.aggregate(query)
             if cursor.alive:
                 entry = cursor.next()
                 return {
@@ -150,16 +151,16 @@ class MongoFragmentRepository():
             else:
                 return None
 
-        first = aggregate(*ascending)
-        previous = aggregate(
+        first = create_query(*ascending)
+        previous = create_query(
             {'$match': {'key': {'$lt': f'{folio_number}-{number}'}}},
             *descending
         )
-        next_ = aggregate(
+        next_ = create_query(
             {'$match': {'key': {'$gt': f'{folio_number}-{number}'}}},
             *ascending
         )
-        last = aggregate(*descending)
+        last = create_query(*descending)
 
         return {
             'previous': get_numbers(previous) or get_numbers(last),
