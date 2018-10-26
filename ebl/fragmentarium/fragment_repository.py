@@ -116,7 +116,7 @@ class MongoFragmentRepository():
 
     def folio_pager(self, folio_name, folio_number, number):
         base_pipeline = [
-            {'$match': {'folios.0': {'$exists': True}}},
+            {'$match': {'folios.name': folio_name}},
             {'$unwind': '$folios'},
             {'$project': {
                 'name': '$folios.name',
