@@ -14,6 +14,7 @@ pydash = "*"
 requests = "*"
 dictdiffer = "*"
 regex = "*"
+jsonschema = "*"
 
 [dev-packages]
 pytest = "*"

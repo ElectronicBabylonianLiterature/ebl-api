@@ -1,5 +1,6 @@
 import json
 import falcon
+import pytest
 
 
 def test_get_fragment(client, fragmentarium, fragment, user):
@@ -59,8 +60,31 @@ def test_update_transliteration_not_found(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_update_transliteration_invalid_entity(client):
-    url = '/fragments/unknown.fragment'
-    post_result = client.simulate_post(url, body='"transliteration"')
+@pytest.mark.parametrize("body", [
+    'transliteration',
+    '"transliteration"',
+    json.dumps({
+        'transliteration': 'the transliteration'
+    }),
+    json.dumps({
+        'notes': 'some notes'
+    }),
+    json.dumps({
+        'transliteration': 1,
+        'notes': 'some notes'
+    }),
+    json.dumps({
+        'transliteration': 'the transliteration',
+        'notes': 1
+    })
+])
+def test_update_transliteration_invalid_entity(client,
+                                               fragmentarium,
+                                               fragment,
+                                               body):
+    fragment_number = fragmentarium.create(fragment)
+    url = f'/fragments/{fragment_number}'
 
-    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_BAD_REQUEST

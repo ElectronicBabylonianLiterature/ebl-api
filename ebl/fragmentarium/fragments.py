@@ -1,7 +1,24 @@
-import json
 import falcon
+from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
 from ebl.fragmentarium.transliterations import Transliteration
+
+
+TRANSLITERATION_DTO_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'transliteration': {
+            'type': 'string'
+        },
+        'notes': {
+            'type': 'string'
+        }
+    },
+    'required': [
+        'transliteration',
+        'notes'
+    ]
+}
 
 
 class FragmentsResource:
@@ -20,13 +37,13 @@ class FragmentsResource:
             resp.status = falcon.HTTP_NOT_FOUND
 
     @falcon.before(require_scope, 'transliterate:fragments')
+    @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
         def parse_request():
-            body = json.loads(req.stream.read())
             try:
                 return Transliteration(
-                    body['transliteration'],
-                    body['notes']
+                    req.media['transliteration'],
+                    req.media['notes']
                 )
             except (TypeError, KeyError):
                 raise falcon.HTTPUnprocessableEntity()
