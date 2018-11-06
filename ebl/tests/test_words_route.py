@@ -7,8 +7,9 @@ from bson.objectid import ObjectId
 
 
 @pytest.fixture
-def word(dictionary):
+def saved_word(dictionary, word):
     word = {
+        **word,
         'lemma': ['pa[rt?]', 'part2'],
         'homonym':  'I'
     }
@@ -17,16 +18,15 @@ def word(dictionary):
 
 
 @pytest.fixture
-def expected_word(word):
+def expected_word(saved_word):
     return {
-        '_id': str(word['_id']),
-        'lemma': word['lemma'],
-        'homonym':  word['homonym']
+        **saved_word,
+        '_id': str(saved_word['_id'])
     }
 
 
-def test_get_word(client, word, expected_word):
-    object_id = str(word['_id'])
+def test_get_word(client, saved_word, expected_word):
+    object_id = str(saved_word['_id'])
     result = client.simulate_get(f'/words/{object_id}')
 
     assert result.json == expected_word
@@ -48,8 +48,8 @@ def test_word_invalid_id(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_search_word(client, word, expected_word):
-    lemma = parse.quote_plus(' '.join(word['lemma']))
+def test_search_word(client, saved_word, expected_word):
+    lemma = parse.quote_plus(' '.join(saved_word['lemma']))
     result = client.simulate_get(f'/words', params={'query': lemma})
 
     assert result.json == [expected_word]
@@ -63,12 +63,12 @@ def test_search_word_no_query(client):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-def test_update_word(client, word, user, database):
-    object_id = str(word['_id'])
+def test_update_word(client, saved_word, user, database):
+    object_id = str(saved_word['_id'])
     updated_word = {
+        **saved_word,
         '_id': object_id,
-        'lemma': ['new'],
-        'homonym': word['homonym']
+        'lemma': ['new']
     }
     body = json.dumps(updated_word)
     post_result = client.simulate_post(f'/words/{object_id}', body=body)
@@ -80,18 +80,17 @@ def test_update_word(client, word, user, database):
 
     assert get_result.json == updated_word
     assert database['changelog'].find_one({
-        'resource_id': word['_id'],
+        'resource_id': saved_word['_id'],
         'resource_type': 'words',
         'user_profile.name': user.profile['name']
     })
 
 
-def test_update_word_not_found(client):
+def test_update_word_not_found(client, word):
     object_id = str(ObjectId())
     not_found_word = {
-        '_id': object_id,
-        'lemma': ['not_found'],
-        'homonym': 'I'
+        **word,
+        '_id': object_id
     }
     body = json.dumps(not_found_word)
 
@@ -100,14 +99,27 @@ def test_update_word_not_found(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_update_invalid_object_id(client):
+def test_update_invalid_object_id(client, word):
     object_id = 'invalid object id'
     not_found_word = {
-        '_id': object_id,
-        'lemma': ['not_found'],
-        'homonym': 'I'
+        **word,
+        '_id': object_id
     }
     body = json.dumps(not_found_word)
     post_result = client.simulate_post(f'/words/{object_id}', body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_update_word_invalid_entity(client, saved_word):
+    object_id = str(saved_word['_id'])
+    invalid_word = {
+        **saved_word,
+        '_id': object_id,
+        'lemma': 'invalid'
+    }
+    body = json.dumps(invalid_word)
+
+    post_result = client.simulate_post(f'/words/{object_id}', body=body)
+
+    assert post_result.status == falcon.HTTP_BAD_REQUEST

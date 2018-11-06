@@ -1,22 +1,51 @@
-import json
 import falcon
+from falcon.media.validators.jsonschema import validate
 import pydash
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from ebl.require_scope import require_scope
 
 
+LEMMA_DTO_SCHEMA = {
+    'type': 'array',
+    'items': {
+        'type': 'string'
+    },
+    'minItems': 1
+}
+
+
+NOTES_DTO_SCHEMA = {
+    'type': 'array',
+    'items': {
+        'type': 'string'
+    }
+}
+
+
+VOWELS_DTO_SCHEMA = {
+    'type': 'array',
+    'items': {
+        'type': 'object',
+        'properties': {
+            'value': {
+                'type': 'array',
+                'items': {
+                    'type': 'string'
+                }
+            },
+            'notes': NOTES_DTO_SCHEMA
+        },
+        'required': ['value', 'notes']
+    }
+}
+
+
 WORD_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
         '_id': {'type': 'string'},
-        'lemma': {
-            'type': 'array',
-            'items': {
-                'type': 'string'
-            },
-            'minItems': 1
-        },
+        'lemma': LEMMA_DTO_SCHEMA,
         'homonym': {'type': 'string'},
         'attested': {'type': 'boolean'},
         'legacyLemma': {'type': 'string'},
@@ -25,19 +54,8 @@ WORD_DTO_SCHEMA = {
             'items': {
                 'type': 'object',
                 'properties': {
-                    'lemma': {
-                        'type': 'array',
-                        'items': {
-                            'type': 'string'
-                        },
-                        'minItems': 1
-                    },
-                    'notes': {
-                        'type': 'array',
-                        'items': {
-                            'type': 'string'
-                        }
-                    },
+                    'lemma': LEMMA_DTO_SCHEMA,
+                    'notes': NOTES_DTO_SCHEMA,
                     'attested': {'type': 'boolean'}
                 },
                 'required': ['lemma', 'notes', 'attested']
@@ -54,10 +72,7 @@ WORD_DTO_SCHEMA = {
                         'items': {'type': 'string'},
                         'minItems': 1
                     },
-                    'notes': {
-                        'type': 'array',
-                        'items': {'type': 'string'}
-                    }
+                    'notes': NOTES_DTO_SCHEMA
                 },
                 'required': ['logogram', 'notes']
             }
@@ -69,19 +84,8 @@ WORD_DTO_SCHEMA = {
                 'items': {
                     'type': 'object',
                     'properties': {
-                        'lemma': {
-                            'type': 'array',
-                            'items': {
-                                'type': 'string'
-                            },
-                            'minItems': 1
-                        },
-                        'notes': {
-                            'type': 'array',
-                            'items': {
-                                'type': 'string'
-                            }
-                        },
+                        'lemma': LEMMA_DTO_SCHEMA,
+                        'notes': NOTES_DTO_SCHEMA,
                         'homonym': {'type': 'string'}
                     },
                     'required': ['lemma', 'notes', 'homonym']
@@ -92,19 +96,8 @@ WORD_DTO_SCHEMA = {
         'derivedFrom': {
             'type': ['null', 'object'],
             'properties': {
-                'lemma': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'string'
-                    },
-                    'minItems': 1
-                },
-                'notes': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'string'
-                    }
-                },
+                'lemma': LEMMA_DTO_SCHEMA,
+                'notes': NOTES_DTO_SCHEMA,
                 'homonym': {'type': 'string'}
             },
             'required': ['lemma', 'notes', 'homonym']
@@ -116,58 +109,14 @@ WORD_DTO_SCHEMA = {
                 'properties': {
                     'key': {'type': 'string'},
                     'meaning': {'type': 'string'},
-                    'vowels': {
-                        'type': 'array',
-                        'items': {
-                            'type': 'object',
-                            'properties': {
-                                'value': {
-                                    'type': 'array',
-                                    'items': {
-                                        'type': 'string'
-                                    },
-                                    'minItems': 2,
-                                    'maxItems': 2
-                                },
-                                'notes': {
-                                    'type': 'array',
-                                    'items': {
-                                        'type': 'string'
-                                    }
-                                }
-                            },
-                            'required': ['value', 'notes']
-                        }
-                    },
+                    'vowels': VOWELS_DTO_SCHEMA,
                     'entries': {
                         'type': 'array',
                         'items': {
                             'type': 'object',
                             'properties': {
                                 'meaning': {'type': 'string'},
-                                'vowels': {
-                                    'type': 'array',
-                                    'items': {
-                                        'type': 'object',
-                                        'properties': {
-                                            'value': {
-                                                'type': 'array',
-                                                'items': {
-                                                    'type': 'string'
-                                                },
-                                                'minItems': 2,
-                                                'maxItems': 2
-                                            },
-                                            'notes': {
-                                                'type': 'array',
-                                                'items': {
-                                                    'type': 'string'
-                                                }
-                                            }
-                                        },
-                                        'required': ['value', 'notes']
-                                    }
-                                }
+                                'vowels': VOWELS_DTO_SCHEMA
                             },
                             'required': ['meaning', 'vowels']
                         }
@@ -186,7 +135,6 @@ WORD_DTO_SCHEMA = {
         'pos': {'type': 'string'}
     },
     'required': [
-        '_id',
         'lemma',
         'homonym',
         'attested',
@@ -198,7 +146,6 @@ WORD_DTO_SCHEMA = {
         'derivedFrom',
         'amplifiedMeanings',
         'source',
-        'roots',
         'pos'
     ]
 }
@@ -218,10 +165,13 @@ class WordsResource:
             resp.status = falcon.HTTP_NOT_FOUND
 
     @falcon.before(require_scope, 'write:words')
+    @validate(WORD_DTO_SCHEMA)
     def on_post(self, req, resp, object_id):
         try:
-            word = json.loads(req.stream.read())
-            word['_id'] = ObjectId(object_id)
+            word = {
+                **req.media,
+                '_id': ObjectId(object_id)
+            }
             self._dictionary.update(word, req.context['user'])
         except (KeyError, InvalidId):
             resp.status = falcon.HTTP_NOT_FOUND

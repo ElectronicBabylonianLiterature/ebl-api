@@ -175,9 +175,67 @@ def client(context):
 @pytest.fixture
 def word():
     return {
-        'lemma': ['part1', 'part2'],
-        'homonym': 'I',
-        'meaning': 'a meaning'
+        "lemma": [
+            'part1',
+            'part2'
+        ],
+        "attested": True,
+        "legacyLemma": "part1 part2",
+        "homonym": "I",
+        "forms": [
+            {
+                "lemma": [
+                    "form1"
+                ],
+                "notes": [],
+                "attested": True
+            },
+            {
+                "lemma": [
+                    "form2"
+                ],
+                "notes": [
+                    'a note'
+                ],
+                "attested": False
+            },
+        ],
+        "meaning": "a meaning",
+        "amplifiedMeanings": [
+            {
+                "meaning": "(*i/i*) meaning",
+                "vowels": [
+                    {
+                        "value": [
+                            "i",
+                            "i"
+                        ],
+                        "notes": []
+                    }
+                ],
+                "key": "G",
+                "entries": []
+            }
+        ],
+        "logograms": [],
+        "derived": [
+            [
+                {
+                    "lemma": [
+                        "derived"
+                    ],
+                    "homonym": "I",
+                    "notes": []
+                }
+            ]
+        ],
+        "derivedFrom": None,
+        "source": "**part1 part2** source",
+        "roots": [
+            "wb'",
+            "'b'"
+        ],
+        "pos": "V"
     }
 
 
