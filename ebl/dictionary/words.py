@@ -145,7 +145,6 @@ WORD_DTO_SCHEMA = {
         'derived',
         'derivedFrom',
         'amplifiedMeanings',
-        'source',
         'pos'
     ]
 }
