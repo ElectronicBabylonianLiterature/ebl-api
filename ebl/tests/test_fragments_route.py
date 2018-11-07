@@ -25,7 +25,7 @@ def test_update_transliteration(client,
                                 database):
     fragment_number = fragmentarium.create(fragment)
     updates = {
-        'transliteration': 'the transliteration',
+        'transliteration': '1. the transliteration',
         'notes': 'some notes'
     }
     body = json.dumps(updates)
@@ -49,10 +49,27 @@ def test_update_transliteration(client,
     })
 
 
+def test_update_transliteration_invalid_atf(client,
+                                            fragmentarium,
+                                            fragment):
+    fragment_number = fragmentarium.create(fragment)
+    updates = {
+        'transliteration': '$ this is not valid',
+        'notes': ''
+    }
+    body = json.dumps(updates)
+    url = f'/fragments/{fragment_number}'
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert post_result.json['description'] ==\
+        'PyOracc could not parse token ID at line 2 at offset 100 with value \'is\'. (line 2)'
+
+
 def test_update_transliteration_not_found(client):
     url = '/fragments/unknown.fragment'
     body = json.dumps({
-        'transliteration': 'the transliteration',
+        'transliteration': '1. the transliteration',
         'notes': 'some notes'
     })
     post_result = client.simulate_post(url, body=body)

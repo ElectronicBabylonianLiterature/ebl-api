@@ -15,6 +15,7 @@ requests = "*"
 dictdiffer = "*"
 regex = "*"
 jsonschema = "*"
+pyoracc = "*"
 
 [dev-packages]
 pytest = "*"
