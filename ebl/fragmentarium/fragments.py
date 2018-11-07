@@ -1,8 +1,8 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
-from pyoracc.atf.common.atffile import AtfFile
 from ebl.require_scope import require_scope
 from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.atf import validate_atf, AtfError
 
 
 TRANSLITERATION_DTO_SCHEMA = {
@@ -40,27 +40,8 @@ class FragmentsResource:
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
-        prefix = (
-            f'&XXX = {number}'
-            '#project: eblo'
-            '#atf: lang akk-x-stdbab'
-            '#atf: use unicode'
-            '#atf: use math'
-            '#atf: use legacy'
-        )
-
         try:
-            atf = req.media['transliteration']
-            AtfFile(
-                f'{prefix}\n{atf}',
-                atftype='oracc'
-            )
-        except (SyntaxError,
-                IndexError,
-                AttributeError,
-                UnicodeDecodeError) as error:
-            raise falcon.HTTPUnprocessableEntity(description=str(error))
-        try:
+            validate_atf(req.media['transliteration'])
             self._fragmentarium.update_transliteration(
                 number,
                 Transliteration(
@@ -69,5 +50,7 @@ class FragmentsResource:
                 ),
                 req.context['user']
             )
+        except AtfError as error:
+            raise falcon.HTTPUnprocessableEntity(description=str(error))
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND
