@@ -39,19 +39,13 @@ class FragmentsResource:
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
-        def parse_request():
-            try:
-                return Transliteration(
-                    req.media['transliteration'],
-                    req.media['notes']
-                )
-            except (TypeError, KeyError):
-                raise falcon.HTTPUnprocessableEntity()
-
         try:
             self._fragmentarium.update_transliteration(
                 number,
-                parse_request(),
+                Transliteration(
+                    req.media['transliteration'],
+                    req.media['notes']
+                ),
                 req.context['user']
             )
         except KeyError:
