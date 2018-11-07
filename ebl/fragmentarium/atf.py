@@ -7,11 +7,11 @@ class AtfError(Exception):
 
 def validate_atf(text):
     prefix = (
-        '&XXX = XXX'
-        '#project: eblo'
-        '#atf: lang akk-x-stdbab'
-        '#atf: use unicode'
-        '#atf: use math'
+        '&XXX = XXX\n'
+        '#project: eblo\n'
+        '#atf: lang akk-x-stdbab\n'
+        '#atf: use unicode\n'
+        '#atf: use math\n'
         '#atf: use legacy'
     )
 
