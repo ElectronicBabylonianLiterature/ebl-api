@@ -62,10 +62,7 @@ def test_update_transliteration_invalid_atf(client,
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert post_result.json['description'] == (
-        'PyOracc could not parse token ID '
-        'at line 7 at offset 107 with value \'is\'. (line 7)'
-    )
+    assert post_result.json['description'] == "Invalid token 'is' at line 1."
 
 
 def test_update_transliteration_not_found(client):
