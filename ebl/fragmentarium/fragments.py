@@ -2,7 +2,7 @@ import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
 from ebl.fragmentarium.transliterations import Transliteration
-from ebl.fragmentarium.atf import validate_atf, AtfError
+from ebl.fragmentarium.atf import validate_atf, AtfSyntaxError
 
 
 TRANSLITERATION_DTO_SCHEMA = {
@@ -50,7 +50,7 @@ class FragmentsResource:
                 ),
                 req.context['user']
             )
-        except AtfError as error:
+        except AtfSyntaxError as error:
             raise falcon.HTTPUnprocessableEntity(description=str(error))
         except KeyError:
             resp.status = falcon.HTTP_NOT_FOUND
