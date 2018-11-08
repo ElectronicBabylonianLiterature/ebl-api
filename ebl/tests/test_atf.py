@@ -11,5 +11,5 @@ def test_invalid_atf():
                        message="Invalid token 'is' at line 1.") as excinfo:
         validate_atf('$ this is not valid')
 
-    assert excinfo.value.lineno == 1
+    assert excinfo.value.line_number == 1
     assert excinfo.value.text == 'is'

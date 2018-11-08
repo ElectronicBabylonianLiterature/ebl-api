@@ -35,7 +35,7 @@ class FragmentsResource:
                           .find(number)
                           .to_dict_for(user))
         except KeyError:
-            resp.status = falcon.HTTP_NOT_FOUND
+            raise falcon.HTTPNotFound()
 
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(TRANSLITERATION_DTO_SCHEMA)
@@ -51,6 +51,11 @@ class FragmentsResource:
                 req.context['user']
             )
         except AtfSyntaxError as error:
-            raise falcon.HTTPUnprocessableEntity(description=str(error))
+            resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
+            resp.media = {
+                'tittle': resp.status,
+                'description': str(error),
+                'lineNumber': error.line_number
+            }
         except KeyError:
-            resp.status = falcon.HTTP_NOT_FOUND
+            raise falcon.HTTPNotFound()

@@ -63,6 +63,7 @@ def test_update_transliteration_invalid_atf(client,
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert post_result.json['description'] == "Invalid token 'is' at line 1."
+    assert post_result.json['lineNumber'] == 1
 
 
 def test_update_transliteration_not_found(client):

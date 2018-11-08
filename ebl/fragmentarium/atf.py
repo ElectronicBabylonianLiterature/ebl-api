@@ -17,9 +17,10 @@ class AtfError(Exception):
 
 class AtfSyntaxError(AtfError):
     def __init__(self, source):
-        self.lineno = source.lineno - len(ATF_HEADING)
+        self.line_number = source.lineno - len(ATF_HEADING)
         self.text = source.text
-        super().__init__(f"Invalid token '{self.text}' at line {self.lineno}.")
+        message = f"Invalid token '{self.text}' at line {self.line_number}."
+        super().__init__(message)
 
 
 def validate_atf(text):
