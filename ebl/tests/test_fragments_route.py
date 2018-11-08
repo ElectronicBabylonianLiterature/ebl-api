@@ -64,7 +64,7 @@ def test_update_transliteration_invalid_atf(client,
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert post_result.json['description'] == (
         'PyOracc could not parse token ID '
-        'at line 2 at offset 102 with value \'is\'. (line 2)'
+        'at line 2 at offset 102 with value \'is\'. (line 7)'
     )
 
 
