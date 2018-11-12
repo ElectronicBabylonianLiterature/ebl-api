@@ -62,7 +62,8 @@ def test_update_transliteration_invalid_atf(client,
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert post_result.json['description'] == "Line 1 is invalid. Please revise."
+    assert post_result.json['description'] ==\
+        "Line 1 is invalid. Please revise."
     assert post_result.json['lineNumber'] == 1
 
 
