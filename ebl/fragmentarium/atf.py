@@ -19,7 +19,7 @@ class AtfSyntaxError(AtfError):
     def __init__(self, source):
         self.line_number = source.lineno - len(ATF_HEADING)
         self.text = source.text
-        message = f"Invalid token '{self.text}' at line {self.line_number}."
+        message = f"Line {self.line_number} is invalid. Please revise."
         super().__init__(message)
 
 
