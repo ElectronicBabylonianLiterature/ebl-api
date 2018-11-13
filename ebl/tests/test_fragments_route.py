@@ -67,8 +67,7 @@ def test_update_transliteration_invalid_atf(client,
         'description': 'Invalid transliteration',
         'errors': [
             {
-                'type': 'SyntaxError',
-                'description': 'Line 1 is invalid.',
+                'description': 'Invalid line',
                 'lineNumber': 1,
             }
         ]

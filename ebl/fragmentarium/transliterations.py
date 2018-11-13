@@ -1,5 +1,6 @@
 import re
 import pydash
+from ebl.fragmentarium.atf import validate_atf, AtfSyntaxError
 
 
 STRIP_PATTERN = (
@@ -28,6 +29,12 @@ BRACES_PATTERN = (
     r'(?!=[^\s])'
 )
 VARIANT_SEPARATOR = '/'
+
+
+class TransliterationError(Exception):
+    def __init__(self, errors):
+        self.errors = errors
+        super().__init__('Invalid transliteration')
 
 
 def _clean_line(line):
@@ -136,3 +143,16 @@ class Transliteration:
 
     def to_sign_matrix(self, sign_list):
         return sign_list.map_transliteration(self.cleaned)
+
+    def validate(self):
+        errors = []
+        try:
+            validate_atf(self.atf)
+        except AtfSyntaxError as error:
+            errors.append({
+                'description': 'Invalid line',
+                'lineNumber': error.line_number
+            })
+
+        if errors:
+            raise TransliterationError(errors)

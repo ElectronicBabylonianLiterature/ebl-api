@@ -1,8 +1,9 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
-from ebl.fragmentarium.transliterations import Transliteration
-from ebl.fragmentarium.atf import validate_atf, AtfSyntaxError
+from ebl.fragmentarium.transliterations import (
+    Transliteration, TransliterationError
+)
 
 
 TRANSLITERATION_DTO_SCHEMA = {
@@ -40,28 +41,23 @@ class FragmentsResource:
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
+        transliteration = Transliteration(
+            req.media['transliteration'],
+            req.media['notes']
+        )
         try:
-            validate_atf(req.media['transliteration'])
+            transliteration.validate()
             self._fragmentarium.update_transliteration(
                 number,
-                Transliteration(
-                    req.media['transliteration'],
-                    req.media['notes']
-                ),
+                transliteration,
                 req.context['user']
             )
-        except AtfSyntaxError as error:
+        except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {
                 'title': resp.status,
-                'description': 'Invalid transliteration',
-                'errors': [
-                    {
-                        'type': 'SyntaxError',
-                        'description': str(error),
-                        'lineNumber': error.line_number
-                    }
-                ]
+                'description': str(error),
+                'errors': error.errors
             }
         except KeyError:
             raise falcon.HTTPNotFound()
