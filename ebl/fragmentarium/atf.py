@@ -19,7 +19,7 @@ class AtfSyntaxError(AtfError):
     def __init__(self, source):
         self.line_number = source.lineno - len(ATF_HEADING)
         self.text = source.text
-        message = f"Line {self.line_number} is invalid. Please revise."
+        message = f"Line {self.line_number} is invalid."
         super().__init__(message)
 
 

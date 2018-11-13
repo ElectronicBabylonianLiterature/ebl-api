@@ -65,17 +65,14 @@ def test_update_transliteration_invalid_atf(client,
     assert post_result.json == {
         'title': '422 Unprocessable Entity',
         'description': 'Invalid transliteration',
-        'lineNumber': 1,
         'errors': [
             {
                 'type': 'SyntaxError',
-                'description': 'Line 1 is invalid. Please revise.',
+                'description': 'Line 1 is invalid.',
                 'lineNumber': 1,
             }
         ]
     }
-
-    assert post_result.json['lineNumber'] == 1
 
 
 def test_update_transliteration_not_found(client):

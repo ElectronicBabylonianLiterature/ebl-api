@@ -55,7 +55,6 @@ class FragmentsResource:
             resp.media = {
                 'title': resp.status,
                 'description': 'Invalid transliteration',
-                'lineNumber': error.line_number,
                 'errors': [
                     {
                         'type': 'SyntaxError',
