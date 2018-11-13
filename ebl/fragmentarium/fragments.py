@@ -53,9 +53,16 @@ class FragmentsResource:
         except AtfSyntaxError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {
-                'tittle': resp.status,
-                'description': str(error),
-                'lineNumber': error.line_number
+                'title': resp.status,
+                'description': 'Invalid transliteration',
+                'lineNumber': error.line_number,
+                'errors': [
+                    {
+                        'type': 'SyntaxError',
+                        'description': str(error),
+                        'lineNumber': error.line_number
+                    }
+                ]
             }
         except KeyError:
             raise falcon.HTTPNotFound()
