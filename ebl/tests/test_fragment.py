@@ -4,7 +4,7 @@ from freezegun import freeze_time
 from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.fragment import Record
 from ebl.fragmentarium.fragment import Folios
-from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 

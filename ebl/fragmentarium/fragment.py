@@ -2,7 +2,7 @@ import copy
 import datetime
 import json
 import pydash
-from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliteration import Transliteration
 
 
 TRANSLITERATION = 'Transliteration'

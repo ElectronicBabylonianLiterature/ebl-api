@@ -1,7 +1,7 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
-from ebl.fragmentarium.transliterations import (
+from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
 

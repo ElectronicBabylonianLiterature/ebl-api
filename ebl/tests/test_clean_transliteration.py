@@ -1,4 +1,4 @@
-from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliteration import Transliteration
 
 
 def test_ignored_lines():

@@ -1,7 +1,7 @@
 from freezegun import freeze_time
 import pytest
 from ebl.fragmentarium.fragment import Fragment
-from ebl.fragmentarium.transliterations import (
+from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
 

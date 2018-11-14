@@ -1,5 +1,5 @@
 import pytest
-from ebl.fragmentarium.transliterations import (
+from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
 

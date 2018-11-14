@@ -1,6 +1,6 @@
 import pytest
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliteration import Transliteration
 
 
 COLLECTION = 'fragments'

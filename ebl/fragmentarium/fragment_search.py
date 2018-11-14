@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.require_scope import require_scope
-from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliteration import Transliteration
 
 
 class FragmentSearch:
