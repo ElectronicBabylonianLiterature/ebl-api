@@ -80,3 +80,44 @@ def test_validate_invalid_atf():
             'lineNumber': 1
         }
     ]
+
+
+def test_validate_invalid_value(sign_list):
+    transliteration =\
+        Transliteration('1. invalid values').with_signs(sign_list)
+
+    with pytest.raises(TransliterationError,
+                       message="Invalid transliteration") as excinfo:
+        transliteration.validate()
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid value',
+            'lineNumber': 1
+        }
+    ]
+
+
+def test_validate_multiple_errors(sign_list):
+    transliteration = Transliteration(
+        '1. invalid values\n$ not valid\n2. more invalid values'
+    ).with_signs(sign_list)
+
+    with pytest.raises(TransliterationError,
+                       message="Invalid transliteration") as excinfo:
+        transliteration.validate()
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid line',
+            'lineNumber': 2
+        },
+        {
+            'description': 'Invalid value',
+            'lineNumber': 1
+        },
+        {
+            'description': 'Invalid value',
+            'lineNumber': 3
+        }
+    ]

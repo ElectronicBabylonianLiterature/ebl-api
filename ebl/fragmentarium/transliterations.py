@@ -145,14 +145,31 @@ class Transliteration:
         return sign_list.map_transliteration(self.cleaned)
 
     def validate(self):
-        errors = []
-        try:
-            validate_atf(self.atf)
-        except AtfSyntaxError as error:
-            errors.append({
-                'description': 'Invalid line',
-                'lineNumber': error.line_number
-            })
-
+        errors = self._get_atf_errors() + self._get_value_errors()
         if errors:
             raise TransliterationError(errors)
+
+    def _get_atf_errors(self):
+        try:
+            validate_atf(self.atf)
+            return []
+        except AtfSyntaxError as error:
+            return [{
+                'description': 'Invalid line',
+                'lineNumber': error.line_number
+            }]
+
+    def _get_value_errors(self):
+        if self.signs is not None:
+            lines = self.atf.split('\n')
+            questionable_lines = [
+                lines.index(self.filtered[index]) + 1
+                for index, line in enumerate(self.signs.split('\n'))
+                if '?' in line
+            ]
+            return [{
+                'description': 'Invalid value',
+                'lineNumber': line_number
+            } for line_number in questionable_lines]
+        else:
+            return []
