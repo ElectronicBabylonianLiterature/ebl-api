@@ -1,7 +1,9 @@
 from freezegun import freeze_time
 import pytest
 from ebl.fragmentarium.fragment import Fragment
-from ebl.fragmentarium.transliterations import Transliteration
+from ebl.fragmentarium.transliterations import (
+    Transliteration, TransliterationError
+)
 
 
 def test_create_and_find(fragmentarium, fragment):
@@ -34,6 +36,17 @@ def test_update_transliteration(fragmentarium, transliterated_fragment, user):
     assert updated_fragment == expected_fragment
 
 
+def test_update_transliteration_invalid(fragmentarium, fragment, user):
+    fragment_number = fragmentarium.create(fragment)
+
+    with pytest.raises(TransliterationError):
+        fragmentarium.update_transliteration(
+            fragment_number,
+            Transliteration('1. invalid values'),
+            user
+        )
+
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_changelog(database,
                    fragmentarium,
@@ -43,12 +56,12 @@ def test_changelog(database,
     fragment_id = fragmentarium.create(fragment)
     fragmentarium.update_transliteration(
         fragment_id,
-        Transliteration('x x x', 'updated notes'),
+        Transliteration('1. x x x', 'updated notes'),
         user
     )
 
     expected_fragment = fragment.update_transliteration(
-        Transliteration('x x x', 'updated notes', 'X X X'),
+        Transliteration('1. x x x', 'updated notes', 'X X X'),
         user
     )
 
@@ -69,22 +82,22 @@ def test_update_update_transliteration_not_found(fragmentarium, user):
     with pytest.raises(KeyError):
         fragmentarium.update_transliteration(
             'unknown.number',
-            Transliteration('transliteration', 'notes'),
+            Transliteration('$ (the transliteration)', 'notes'),
             user
         )
 
 
 def test_statistics(fragmentarium, fragment):
     for data in [
-            {**fragment.to_dict(), '_id': '1', 'transliteration': '''1. first line
+            {**fragment.to_dict(), '_id': '1', 'transliteration': '''1. SU
 $ingore
 
 '''},
             {**fragment.to_dict(), '_id': '2', 'transliteration': '''@ignore
-1'. second line
-2'. third line
+1'. SU
+2'. SU
 @ignore
-1#. fourth line'''},
+1#. SU'''},
             {**fragment.to_dict(), '_id': '3', 'transliteration': ''},
     ]:
         fragmentarium.create(Fragment(data))

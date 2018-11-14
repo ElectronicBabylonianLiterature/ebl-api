@@ -41,15 +41,13 @@ class FragmentsResource:
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
-        transliteration = Transliteration(
-            req.media['transliteration'],
-            req.media['notes']
-        )
         try:
-            transliteration.validate()
             self._fragmentarium.update_transliteration(
                 number,
-                transliteration,
+                Transliteration(
+                    req.media['transliteration'],
+                    req.media['notes']
+                ),
                 req.context['user']
             )
         except TransliterationError as error:

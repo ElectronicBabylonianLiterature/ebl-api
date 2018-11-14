@@ -25,7 +25,7 @@ def test_update_transliteration(client,
                                 database):
     fragment_number = fragmentarium.create(fragment)
     updates = {
-        'transliteration': '1. the transliteration',
+        'transliteration': '$ (the transliteration)',
         'notes': 'some notes'
     }
     body = json.dumps(updates)
@@ -77,7 +77,7 @@ def test_update_transliteration_invalid_atf(client,
 def test_update_transliteration_not_found(client):
     url = '/fragments/unknown.fragment'
     body = json.dumps({
-        'transliteration': '1. the transliteration',
+        'transliteration': '$ (the transliteration)',
         'notes': 'some notes'
     })
     post_result = client.simulate_post(url, body=body)
@@ -89,7 +89,7 @@ def test_update_transliteration_not_found(client):
     'transliteration',
     '"transliteration"',
     json.dumps({
-        'transliteration': 'the transliteration'
+        'transliteration': '$ (the transliteration)'
     }),
     json.dumps({
         'notes': 'some notes'
@@ -99,7 +99,7 @@ def test_update_transliteration_not_found(client):
         'notes': 'some notes'
     }),
     json.dumps({
-        'transliteration': 'the transliteration',
+        'transliteration': '$ (the transliteration)',
         'notes': 1
     })
 ])
