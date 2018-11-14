@@ -33,8 +33,8 @@ VARIANT_SEPARATOR = '/'
 
 class TransliterationError(Exception):
     def __init__(self, errors):
-        self.errors = errors
         super().__init__('Invalid transliteration')
+        self.errors = errors
 
 
 def _clean_line(line):

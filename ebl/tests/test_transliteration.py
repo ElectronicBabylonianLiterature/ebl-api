@@ -1,4 +1,7 @@
-from ebl.fragmentarium.transliterations import Transliteration
+import pytest
+from ebl.fragmentarium.transliterations import (
+    Transliteration, TransliterationError
+)
 
 
 def test_equality():
@@ -44,3 +47,36 @@ def test_with_signs(sign_list, signs):
     transliteration = Transliteration('1. šu gid₂')
 
     assert transliteration.with_signs(sign_list).signs == 'ŠU BU'
+
+
+def test_validate_empty():
+    transliteration = Transliteration('')
+    transliteration.validate()
+
+
+def test_validate_valid_no_signs():
+    transliteration = Transliteration('1. value')
+    transliteration.validate()
+
+
+def test_validate_valid_signs(sign_list, signs):
+    for sign in signs:
+        sign_list.create(sign)
+
+    transliteration = Transliteration('1. šu gid₂').with_signs(sign_list)
+    transliteration.validate()
+
+
+def test_validate_invalid_atf():
+    transliteration = Transliteration('$ this is not valid')
+
+    with pytest.raises(TransliterationError,
+                       message="Invalid transliteration") as excinfo:
+        transliteration.validate()
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid line',
+            'lineNumber': 1
+        }
+    ]
