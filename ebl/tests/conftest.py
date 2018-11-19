@@ -193,7 +193,7 @@ def word():
             },
             {
                 "lemma": [
-                    "form2"
+                    "form2", "part2"
                 ],
                 "notes": [
                     'a note'

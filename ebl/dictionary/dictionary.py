@@ -24,6 +24,21 @@ class MongoDictionary(MongoRepository):
 
         return [word for word in cursor]
 
+    def search_lemma(self, query):
+        lemma = query.split(' ')
+        cursor = self.get_collection().find({
+            '$or': [
+                {
+                    f'{key}.{index}': {'$regex': f'^{re.escape(part)}'}
+                    for index, part
+                    in enumerate(lemma)
+                }
+                for key in ['lemma', 'forms.lemma']
+            ]
+        })
+
+        return [word for word in cursor]
+
     def update(self, word, user):
         query = {'_id': word['_id']}
         old_word = self.get_collection().find_one(
