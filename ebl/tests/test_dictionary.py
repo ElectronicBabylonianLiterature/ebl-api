@@ -4,7 +4,7 @@ import pydash
 import pytest
 
 
-COLLECTION = 'words_new'
+COLLECTION = 'words'
 
 
 def test_create(database, dictionary, word):
@@ -83,7 +83,7 @@ def test_changelog(dictionary,
     dictionary.update(updated_word, user)
 
     expected_changelog = make_changelog_entry(
-        'words',
+        COLLECTION,
         word_id,
         word,
         updated_word
