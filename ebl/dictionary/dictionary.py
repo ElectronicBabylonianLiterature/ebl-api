@@ -9,7 +9,7 @@ COLLECTION = 'words'
 class MongoDictionary(MongoRepository):
 
     def __init__(self, database):
-        super().__init__(database, COLLECTION)
+        super().__init__(database, f'{COLLECTION}_new')
         self._changelog = Changelog(database)
 
     def search(self, query):

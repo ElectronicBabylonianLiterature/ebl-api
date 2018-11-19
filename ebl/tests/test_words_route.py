@@ -3,39 +3,26 @@ import json
 from urllib import parse
 import falcon
 import pytest
-from bson.objectid import ObjectId
 
 
 @pytest.fixture
 def saved_word(dictionary, word):
-    word = {
-        **word,
-        'lemma': ['pa[rt?]', 'part2'],
-        'homonym':  'I'
-    }
+    word = {**word}
     dictionary.create(word)
     return word
 
 
-@pytest.fixture
-def expected_word(saved_word):
-    return {
-        **saved_word,
-        '_id': str(saved_word['_id'])
-    }
-
-
-def test_get_word(client, saved_word, expected_word):
-    object_id = str(saved_word['_id'])
+def test_get_word(client, saved_word):
+    object_id = saved_word['_id']
     result = client.simulate_get(f'/words/{object_id}')
 
-    assert result.json == expected_word
+    assert result.json == saved_word
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
 def test_word_not_found(client):
-    object_id = str(ObjectId())
+    object_id = 'not found'
     result = client.simulate_get(f'/words/{object_id}')
 
     assert result.status == falcon.HTTP_NOT_FOUND
@@ -48,11 +35,11 @@ def test_word_invalid_id(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_search_word(client, saved_word, expected_word):
+def test_search_word(client, saved_word):
     lemma = parse.quote_plus(' '.join(saved_word['lemma']))
     result = client.simulate_get(f'/words', params={'query': lemma})
 
-    assert result.json == [expected_word]
+    assert result.json == [saved_word]
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
@@ -64,7 +51,7 @@ def test_search_word_no_query(client):
 
 
 def test_update_word(client, saved_word, user, database):
-    object_id = str(saved_word['_id'])
+    object_id = saved_word['_id']
     updated_word = {
         **saved_word,
         '_id': object_id,
@@ -87,7 +74,7 @@ def test_update_word(client, saved_word, user, database):
 
 
 def test_update_word_not_found(client, word):
-    object_id = str(ObjectId())
+    object_id = 'not found'
     not_found_word = {
         **word,
         '_id': object_id
@@ -112,7 +99,7 @@ def test_update_invalid_object_id(client, word):
 
 
 def test_update_word_invalid_entity(client, saved_word):
-    object_id = str(saved_word['_id'])
+    object_id = saved_word['_id']
     invalid_word = {
         **saved_word,
         '_id': object_id,

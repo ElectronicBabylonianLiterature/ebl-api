@@ -182,6 +182,7 @@ def word():
         "attested": True,
         "legacyLemma": "part1 part2",
         "homonym": "I",
+        "_id": "part1 part2 I",
         "forms": [
             {
                 "lemma": [

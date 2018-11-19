@@ -4,7 +4,7 @@ import pydash
 import pytest
 
 
-COLLECTION = 'words'
+COLLECTION = 'words_new'
 
 
 def test_create(database, dictionary, word):
@@ -25,24 +25,37 @@ def test_word_not_found(dictionary):
 
 
 def test_search_finds_all_homonyms(database, dictionary, word):
-    another_word = pydash.defaults({'homonym': 'II'}, word)
+    another_word = {
+        **word,
+        '_id': 'part1 part2 II',
+        'homonym': 'II'
+    }
     database[COLLECTION].insert_many([word, another_word])
 
     assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
 
 
 def test_search_finds_by_meaning(database, dictionary, word):
-    another_word = pydash.defaults({'meaning': 'not matching'}, word)
+    another_word = {
+        **word,
+        '_id': 'part1 part2 II',
+        'homonym': 'II',
+        'meaning': 'not matching'
+    }
     database[COLLECTION].insert_many([word, another_word])
 
     assert dictionary.search(word['meaning'][1:4]) == [word]
 
 
 def test_search_finds_duplicates(database, dictionary, word):
-    another_word = pydash.clone_deep(word)
+    another_word = {
+        **word,
+        '_id': 'part1 part2 II',
+        'homonym': 'II'
+    }
     database[COLLECTION].insert_many([word, another_word])
 
-    assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
+    assert dictionary.search(word['meaning'][1:4]) == [word, another_word]
 
 
 def test_search_not_found(dictionary):
@@ -70,7 +83,7 @@ def test_changelog(dictionary,
     dictionary.update(updated_word, user)
 
     expected_changelog = make_changelog_entry(
-        COLLECTION,
+        'words',
         word_id,
         word,
         updated_word
