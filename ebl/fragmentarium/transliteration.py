@@ -2,6 +2,7 @@ import re
 import pydash
 
 
+IGNORE_LINE_PATTERN = r'@|\$|#|&|=:'
 STRIP_PATTERN = (
     r'^[^\.]+\.([^\.]+\.)?\s+|'
     r'<<?\(?[^>]+\)?>?>|'
@@ -130,7 +131,7 @@ class Transliteration:
         return [
             line
             for line in self.atf.split('\n')
-            if line and not re.match(r'@|\$|#|&|=:', line)
+            if line and not re.match(IGNORE_LINE_PATTERN, line)
         ]
 
     def with_signs(self, sign_list):
