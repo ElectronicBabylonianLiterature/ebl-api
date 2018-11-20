@@ -2,6 +2,7 @@ import copy
 import datetime
 import json
 import pydash
+from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
 
 
@@ -48,16 +49,26 @@ class Fragment:
     def folios(self):
         return Folios(self._data['folios'])
 
+    @property
+    def lemmatization(self):
+        return Lemmatization(self._data['lemmatization'])
+
     def update_transliteration(self, transliteration, user):
         record = Record(self._data['record']).add_entry(
             self.transliteration.atf,
             transliteration.atf,
             user
         )
+        lemmatization = (
+            Lemmatization.of_transliteration(transliteration).tokens
+            if self.transliteration.atf != transliteration.atf
+            else self._data.get('lemmatization')
+        )
 
         return Fragment(pydash.omit_by({
             **self._data,
             'transliteration': transliteration.atf,
+            'lemmatization': lemmatization,
             'notes': transliteration.notes,
             'signs': transliteration.signs,
             'record': record.entries

@@ -4,6 +4,7 @@ from freezegun import freeze_time
 from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.fragment import Record
 from ebl.fragmentarium.fragment import Folios
+from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
@@ -68,9 +69,21 @@ def test_folios(fragment):
     assert new_fragment.folios == Folios(data['folios'])
 
 
+def test_lemmatization(fragment):
+    tokens = [
+        ['$ (end of side)']
+    ]
+    data = {
+        **fragment.to_dict(),
+        'lemmatization':tokens
+    }
+    assert Fragment(data).lemmatization == Lemmatization(tokens)
+
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(fragment, user):
     transliteration = Transliteration('x x', fragment.transliteration.notes)
+    lemmatization = Lemmatization.of_transliteration(transliteration)
 
     updated_fragment = fragment.update_transliteration(
         transliteration,
@@ -79,6 +92,7 @@ def test_add_transliteration(fragment, user):
     expected_fragment = Fragment({
         **fragment.to_dict(),
         'transliteration': transliteration.atf,
+        'lemmatization': lemmatization.tokens,
         'record': [{
             'user': user.ebl_name,
             'type': 'Transliteration',
@@ -97,10 +111,12 @@ def test_update_transliteration(transliterated_fragment, user):
         transliteration,
         user
     )
+    lemmatization = Lemmatization.of_transliteration(transliteration)
 
     expected_fragment = Fragment({
         **transliterated_fragment.to_dict(),
         'transliteration': transliteration.atf,
+        'lemmatization': lemmatization.tokens,
         'notes': transliteration.notes,
         'signs': transliteration.signs,
         'record': [
@@ -119,7 +135,6 @@ def test_update_transliteration(transliterated_fragment, user):
 def test_update_notes(fragment, user):
     transliteration =\
         Transliteration(fragment.transliteration.atf, 'new notes')
-
     updated_fragment = fragment.update_transliteration(
         transliteration,
         user

@@ -248,6 +248,7 @@ def fragment():
         'bmIdNumber': 'bmId-2',
         'accession': 'accession-3',
         'transliteration': '',
+        'lemmatization': [],
         'notes': '',
         'folios': [
             {
@@ -299,6 +300,7 @@ def transliterated_fragment():
             '6\'. [...] x mu ta-ma-tu₂\n'
             '7\'. šu/|BI×IS|'
         ),
+        'lemmatization': [],
         'signs': (
             'KU NU IGI\n'
             'MI DIŠ UD ŠU\n'
