@@ -20,4 +20,4 @@ class FragmentSearch:
     def on_get(self, req, resp):
         user = req.context['user']
         fragments = self._dispatch(req)
-        resp.media = [fragment.to_dict_for(user) for fragment in fragments]     
+        resp.media = [fragment.to_dict_for(user) for fragment in fragments]
