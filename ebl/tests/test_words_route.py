@@ -44,8 +44,31 @@ def test_search_word(client, saved_word):
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
+def test_search_word_lemma(client, saved_word):
+    lemma = parse.quote_plus(saved_word['lemma'][0][:2])
+    result = client.simulate_get(f'/words', params={'lemma': lemma})
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [saved_word]
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
+
+
 def test_search_word_no_query(client):
     result = client.simulate_get(f'/words')
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_word_invalid_query(client):
+    result = client.simulate_get(f'/words', params={'invalid': 'lemma'})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_word_double_query(client):
+    result = client.simulate_get(
+        f'/words', params={'query': 'lemma', 'lemma': 'lemma'}
+    )
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
