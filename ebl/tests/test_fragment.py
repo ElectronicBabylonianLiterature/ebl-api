@@ -75,7 +75,7 @@ def test_lemmatization(fragment):
     ]
     data = {
         **fragment.to_dict(),
-        'lemmatization':tokens
+        'lemmatization': tokens
     }
     assert Fragment(data).lemmatization == Lemmatization(tokens)
 
