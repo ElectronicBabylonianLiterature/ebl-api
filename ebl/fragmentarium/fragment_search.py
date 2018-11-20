@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.dispatcher import create_dispatcher
 from ebl.require_scope import require_scope
 from ebl.fragmentarium.transliteration import Transliteration
 
@@ -8,30 +9,18 @@ class FragmentSearch:
     # pylint: disable=R0903
     def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
-        self._commands = {
+        self._dispatch = create_dispatcher({
             'number': self._search,
             'random': self._find_random,
             'interesting': self._find_interesting,
             'transliteration': self._search_transliteration
-        }
+        })
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp):
-        param_names = list(req.params)
         user = req.context['user']
-        if len(param_names) == 1:
-            param = param_names[0]
-            value = req.params[param]
-            fragments = self._get_command(param)(value)
-            resp.media = [fragment.to_dict_for(user) for fragment in fragments]
-        else:
-            raise falcon.HTTPUnprocessableEntity()
-
-    def _get_command(self, param):
-        if param in self._commands:
-            return self._commands[param]
-        else:
-            raise falcon.HTTPUnprocessableEntity()
+        fragments = self._dispatch(req)
+        resp.media = [fragment.to_dict_for(user) for fragment in fragments]
 
     def _search(self, number):
         return self._fragmentarium.search(number)
