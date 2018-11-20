@@ -13,7 +13,10 @@ class FragmentSearch:
             'number': fragmentarium.search,
             'random': lambda _: fragmentarium.find_random(),
             'interesting': lambda _: fragmentarium.find_interesting(),
-            'transliteration': pydash.flow(Transliteration, fragmentarium.search_signs)
+            'transliteration': pydash.flow(
+                Transliteration,
+                fragmentarium.search_signs
+            )
         })
 
     @falcon.before(require_scope, 'read:fragments')
