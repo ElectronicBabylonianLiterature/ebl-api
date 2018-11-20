@@ -1,5 +1,22 @@
+import json
 from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
+
+
+def test_equality():
+    lemmatization = Lemmatization([['token']])
+    similar = Lemmatization([['token']])
+    different = Lemmatization([['another_token']])
+
+    assert lemmatization == similar
+    assert lemmatization != different
+
+
+def test_hash():
+    tokens = [['token']]
+    lemmatization = Lemmatization(tokens)
+
+    assert hash(lemmatization) == hash(json.dumps(tokens))
 
 
 def test_tokens():
