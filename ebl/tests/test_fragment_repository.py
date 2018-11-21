@@ -1,5 +1,6 @@
 import pytest
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliteration import Transliteration
 
@@ -47,6 +48,29 @@ def test_update_update_transliteration_not_found(fragment_repository,
                                                  transliterated_fragment):
     with pytest.raises(NotFoundError):
         fragment_repository.update_transliteration(
+            transliterated_fragment
+        )
+
+
+def test_update_lemmatization(fragment_repository,
+                              transliterated_fragment):
+    fragment_number = fragment_repository.create(transliterated_fragment)
+    updated_fragment = transliterated_fragment.update_lemmatization(
+        Lemmatization([['$ (end of line)']])
+    )
+
+    fragment_repository.update_lemmatization(
+        updated_fragment
+    )
+    result = fragment_repository.find(fragment_number)
+
+    assert result == updated_fragment
+
+
+def test_update_update_lemmatization_not_found(fragment_repository,
+                                               transliterated_fragment):
+    with pytest.raises(NotFoundError):
+        fragment_repository.update_lemmatization(
             transliterated_fragment
         )
 

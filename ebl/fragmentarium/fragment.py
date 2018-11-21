@@ -81,6 +81,12 @@ class Fragment:
             'matching_lines': matching_lines
         })
 
+    def update_lemmatization(self, lemmatization):
+        return Fragment({
+            **self._data,
+            'lemmatization': lemmatization.tokens
+        })
+
     def to_dict(self):
         return copy.deepcopy(self._data)
 

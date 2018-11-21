@@ -116,6 +116,17 @@ class MongoFragmentRepository():
         if result.matched_count == 0:
             raise NotFoundError(f'Fragment {fragment.number} not found.')
 
+    def update_lemmatization(self, fragment):
+        result = self._mongo_collection.update_one(
+            {'_id': fragment.number},
+            {'$set': pydash.omit_by({
+                'lemmatization': fragment.lemmatization.tokens
+            }, lambda value: value is None)}
+        )
+
+        if result.matched_count == 0:
+            raise NotFoundError(f'Fragment {fragment.number} not found.')
+
     def folio_pager(self, folio_name, folio_number, number):
         base_pipeline = [
             {'$match': {'folios.name': folio_name}},

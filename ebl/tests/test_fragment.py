@@ -159,6 +159,17 @@ def test_add_matching_lines(transliterated_fragment):
     }
 
 
+def test_update_lemmatization(fragment):
+    lemmatization = Lemmatization([
+        ['$ (end of side)']
+    ])
+    expected = Fragment({
+        **fragment.to_dict(),
+        'lemmatization': lemmatization.tokens
+    })
+    assert fragment.update_lemmatization(lemmatization) == expected
+
+
 def test_filter_folios(user):
     wgl_folio = {
         'name': 'WGL',
