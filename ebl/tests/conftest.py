@@ -12,6 +12,7 @@ from falcon_auth import NoneAuthBackend
 import ebl.app
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
@@ -104,7 +105,7 @@ class TestFilesRepository:
                         for file in self._files
                         if file.filename == filename)
         except StopIteration:
-            raise KeyError
+            raise NotFoundError()
 
 
 @pytest.fixture

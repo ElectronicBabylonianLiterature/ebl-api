@@ -1,5 +1,6 @@
 import re
 from ebl.changelog import Changelog
+from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 
@@ -56,4 +57,4 @@ class MongoDictionary(MongoRepository):
                 {'$set': word}
             )
         else:
-            raise KeyError
+            raise NotFoundError(f'Word {word["_id"]} not found.')

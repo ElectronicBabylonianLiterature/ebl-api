@@ -1,8 +1,8 @@
 # pylint: disable=W0621
-
 import pytest
 import mongomock
 
+from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 
@@ -19,5 +19,5 @@ def test_create_and_find(repository):
 
 
 def test_document_not_found(repository):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         repository.find('unknown id')

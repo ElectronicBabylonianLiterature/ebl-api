@@ -7,16 +7,13 @@ class FilesResource:
         self._files = files
 
     def on_get(self, req, resp, file_name):
-        try:
-            grid_out = self._files.find(file_name)
+        grid_out = self._files.find(file_name)
 
-            self.check_scope(req, grid_out)
+        self.check_scope(req, grid_out)
 
-            resp.content_type = grid_out.content_type
-            resp.stream_len = grid_out.length
-            resp.stream = grid_out
-        except KeyError:
-            resp.status = falcon.HTTP_NOT_FOUND
+        resp.content_type = grid_out.content_type
+        resp.stream_len = grid_out.length
+        resp.stream = grid_out
 
     @staticmethod
     def check_scope(req, grid_out):

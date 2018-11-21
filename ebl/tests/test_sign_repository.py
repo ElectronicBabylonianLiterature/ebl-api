@@ -1,5 +1,6 @@
 # pylint: disable=W0621
 import pytest
+from ebl.errors import NotFoundError
 
 
 COLLECTION = 'signs'
@@ -85,7 +86,7 @@ def test_find(database, sign_repository, sign):
 
 
 def test_sign_not_found(sign_repository):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         sign_repository.find('unknown id')
 
 

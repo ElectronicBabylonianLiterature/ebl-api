@@ -30,13 +30,10 @@ class FragmentsResource:
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp, number):
         user = req.context['user']
-        try:
-            resp.media = (self
-                          ._fragmentarium
-                          .find(number)
-                          .to_dict_for(user))
-        except KeyError:
-            raise falcon.HTTPNotFound()
+        resp.media = (self
+                      ._fragmentarium
+                      .find(number)
+                      .to_dict_for(user))
 
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(TRANSLITERATION_DTO_SCHEMA)
@@ -57,5 +54,3 @@ class FragmentsResource:
                 'description': str(error),
                 'errors': error.errors
             }
-        except KeyError:
-            raise falcon.HTTPNotFound()

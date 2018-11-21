@@ -1,4 +1,5 @@
 from gridfs import GridFS
+from ebl.errors import NotFoundError
 
 
 class GridFsFiles:
@@ -10,6 +11,6 @@ class GridFsFiles:
         grid_out = self._fs.find_one({"filename": file_name})
 
         if grid_out is None:
-            raise KeyError
+            raise NotFoundError(f'File {file_name} not found.')
         else:
             return grid_out

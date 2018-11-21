@@ -1,4 +1,5 @@
 import pytest
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliteration import Transliteration
 
@@ -21,7 +22,7 @@ def test_find(database, fragment_repository, fragment):
 
 
 def test_fragment_not_found(fragment_repository):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         fragment_repository.find('unknown id')
 
 
@@ -44,7 +45,7 @@ def test_update_transliteration_with_record(fragment_repository,
 
 def test_update_update_transliteration_not_found(fragment_repository,
                                                  transliterated_fragment):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         fragment_repository.update_transliteration(
             transliterated_fragment
         )

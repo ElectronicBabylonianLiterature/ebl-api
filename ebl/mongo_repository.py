@@ -1,3 +1,6 @@
+from ebl.errors import NotFoundError
+
+
 class MongoRepository:
 
     def __init__(self, database, collection):
@@ -14,6 +17,6 @@ class MongoRepository:
         document = self.get_collection().find_one({'_id': object_id})
 
         if document is None:
-            raise KeyError
+            raise NotFoundError(f'Resource {object_id} not found.')
         else:
             return document

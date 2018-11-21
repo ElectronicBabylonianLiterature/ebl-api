@@ -1,6 +1,7 @@
 from bson.code import Code
 import pydash
 from ebl.mongo_repository import MongoRepository
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment import Fragment
 
 
@@ -113,7 +114,7 @@ class MongoFragmentRepository():
         )
 
         if result.matched_count == 0:
-            raise KeyError
+            raise NotFoundError(f'Fragment {fragment.number} not found.')
 
     def folio_pager(self, folio_name, folio_number, number):
         base_pipeline = [

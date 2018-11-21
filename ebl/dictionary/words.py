@@ -154,16 +154,10 @@ class WordsResource:
 
     @falcon.before(require_scope, 'read:words')
     def on_get(self, _req, resp, object_id):
-        try:
-            resp.media = self._dictionary.find(object_id)
-        except KeyError:
-            resp.status = falcon.HTTP_NOT_FOUND
+        resp.media = self._dictionary.find(object_id)
 
     @falcon.before(require_scope, 'write:words')
     @validate(WORD_DTO_SCHEMA)
-    def on_post(self, req, resp, object_id):
-        try:
-            word = {**req.media, '_id': object_id}
-            self._dictionary.update(word, req.context['user'])
-        except KeyError:
-            resp.status = falcon.HTTP_NOT_FOUND
+    def on_post(self, req, _resp, object_id):
+        word = {**req.media, '_id': object_id}
+        self._dictionary.update(word, req.context['user'])

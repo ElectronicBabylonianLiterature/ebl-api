@@ -1,5 +1,6 @@
 from freezegun import freeze_time
 import pytest
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
@@ -13,7 +14,7 @@ def test_create_and_find(fragmentarium, fragment):
 
 
 def test_fragment_not_found(fragmentarium):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         fragmentarium.find('unknown id')
 
 
@@ -79,7 +80,7 @@ def test_changelog(database,
 
 def test_update_update_transliteration_not_found(fragmentarium, user):
     # pylint: disable=C0103
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         fragmentarium.update_transliteration(
             'unknown.number',
             Transliteration('$ (the transliteration)', 'notes'),

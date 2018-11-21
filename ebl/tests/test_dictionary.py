@@ -1,6 +1,7 @@
 from freezegun import freeze_time
 import pydash
 import pytest
+from ebl.errors import NotFoundError
 
 
 COLLECTION = 'words'
@@ -19,7 +20,7 @@ def test_find(database, dictionary, word):
 
 
 def test_word_not_found(dictionary):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         dictionary.find('not found')
 
 
@@ -137,5 +138,5 @@ def test_changelog(dictionary,
 
 
 def test_update_word_not_found(dictionary, word, user):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundError):
         dictionary.update(pydash.defaults({'_id': 'not found'}, word), user)
