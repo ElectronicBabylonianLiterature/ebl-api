@@ -22,7 +22,6 @@ pipenv install --dev
 
 ```
 pipenv run lint 
-pipenv run pep8 
 pipenv run test
 ```
 
