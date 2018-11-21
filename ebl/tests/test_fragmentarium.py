@@ -2,6 +2,7 @@ from freezegun import freeze_time
 import pytest
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment import Fragment
+from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
@@ -49,11 +50,11 @@ def test_update_transliteration_invalid(fragmentarium, fragment, user):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_changelog(database,
-                   fragmentarium,
-                   fragment,
-                   user,
-                   make_changelog_entry):
+def test_transliteration_changelog(database,
+                                   fragmentarium,
+                                   fragment,
+                                   user,
+                                   make_changelog_entry):
     fragment_id = fragmentarium.create(fragment)
     fragmentarium.update_transliteration(
         fragment_id,
@@ -79,11 +80,70 @@ def test_changelog(database,
 
 
 def test_update_update_transliteration_not_found(fragmentarium, user):
-    # pylint: disable=C0103
     with pytest.raises(NotFoundError):
         fragmentarium.update_transliteration(
             'unknown.number',
             Transliteration('$ (the transliteration)', 'notes'),
+            user
+        )
+
+
+@freeze_time("2018-09-07 15:41:24.032")
+def test_lemmatization_transliteration(fragmentarium,
+                                       transliterated_fragment,
+                                       user):
+    fragment_number = fragmentarium.create(transliterated_fragment)
+    lemmatization = Lemmatization([[{'token': '1.', 'uniqueLemma': None}]])
+
+    fragmentarium.update_lemmatization(
+        fragment_number,
+        lemmatization,
+        user
+    )
+    updated_fragment = fragmentarium.find(fragment_number)
+
+    expected_fragment = transliterated_fragment.update_lemmatization(
+        lemmatization
+    )
+
+    assert updated_fragment == expected_fragment
+
+
+@freeze_time("2018-09-07 15:41:24.032")
+def test_lemmatization_changelog(database,
+                                 fragmentarium,
+                                 transliterated_fragment,
+                                 user,
+                                 make_changelog_entry):
+    fragment_number = fragmentarium.create(transliterated_fragment)
+    lemmatization = Lemmatization([[{'token': '1.', 'uniqueLemma': None}]])
+    fragmentarium.update_lemmatization(
+        fragment_number,
+        lemmatization,
+        user
+    )
+
+    expected_fragment = transliterated_fragment.update_lemmatization(
+        lemmatization
+    )
+
+    expected_changelog = make_changelog_entry(
+        'fragments',
+        fragment_number,
+        transliterated_fragment.to_dict(),
+        expected_fragment.to_dict()
+    )
+    assert database['changelog'].find_one(
+        {'resource_id': fragment_number},
+        {'_id': 0}
+    ) == expected_changelog
+
+
+def test_update_update_lemmatization_not_found(fragmentarium, user):
+    with pytest.raises(NotFoundError):
+        fragmentarium.update_lemmatization(
+            'K.1',
+            Lemmatization([[{'token': '1.', 'uniqueLemma': None}]]),
             user
         )
 

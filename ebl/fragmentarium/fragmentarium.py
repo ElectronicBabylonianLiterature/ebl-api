@@ -23,14 +23,17 @@ class Fragmentarium:
             user
         )
 
-        self._changelog.create(
-            self._repository.collection,
-            user.profile,
-            fragment.to_dict(),
-            updated_fragment.to_dict()
+        self._create_changlelog(user, fragment, updated_fragment)
+        self._repository.update_transliteration(updated_fragment)
+
+    def update_lemmatization(self, number, lemmatization, user):
+        fragment = self._repository.find(number)
+        updated_fragment = fragment.update_lemmatization(
+            lemmatization
         )
 
-        self._repository.update_transliteration(updated_fragment)
+        self._create_changlelog(user, fragment, updated_fragment)
+        self._repository.update_lemmatization(updated_fragment)
 
     def statistics(self):
         return {
@@ -66,3 +69,11 @@ class Fragmentarium:
 
     def folio_pager(self, folio_name, folio_number, number):
         return self._repository.folio_pager(folio_name, folio_number, number)
+
+    def _create_changlelog(self, user, fragment, updated_fragment):
+        self._changelog.create(
+            self._repository.collection,
+            user.profile,
+            fragment.to_dict(),
+            updated_fragment.to_dict()
+        )
