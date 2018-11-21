@@ -23,6 +23,7 @@ from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
+from ebl.fragmentarium.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.statistics import StatisticsResource
 
 from ebl.sign_list.sign_list import SignList
@@ -47,6 +48,7 @@ def create_app(context):
     word_search = WordSearch(context['dictionary'])
     fragments = FragmentsResource(fragmentarium)
     fragment_search = FragmentSearch(fragmentarium)
+    lemmatization = LemmatizationResource(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
     files = FilesResource(context['files'])
     folio_pager = FolioPagerResource(fragmentarium)
@@ -55,6 +57,7 @@ def create_app(context):
     api.add_route('/words/{object_id}', words)
     api.add_route('/fragments', fragment_search)
     api.add_route('/fragments/{number}', fragments)
+    api.add_route('/fragments/{number}/lemmatization', lemmatization)
     api.add_route('/images/{file_name}', files)
     api.add_route('/statistics', statistics)
     api.add_route(

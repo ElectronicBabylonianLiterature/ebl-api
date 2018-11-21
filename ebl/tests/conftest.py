@@ -138,6 +138,7 @@ def user():
                 'read:words',
                 'write:words',
                 'transliterate:fragments',
+                'lemmatize:fragments',
                 'read:fragments',
                 'read:WGL-folios'
             ]
