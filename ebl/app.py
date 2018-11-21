@@ -25,6 +25,7 @@ from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.statistics import StatisticsResource
+from ebl.fragmentarium.transliterations import TransliterationResource
 
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
@@ -50,6 +51,7 @@ def create_app(context):
     fragment_search = FragmentSearch(fragmentarium)
     lemmatization = LemmatizationResource(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
+    transliteration = TransliterationResource(fragmentarium)
     files = FilesResource(context['files'])
     folio_pager = FolioPagerResource(fragmentarium)
 
@@ -58,6 +60,7 @@ def create_app(context):
     api.add_route('/fragments', fragment_search)
     api.add_route('/fragments/{number}', fragments)
     api.add_route('/fragments/{number}/lemmatization', lemmatization)
+    api.add_route('/fragments/{number}/transliteration', transliteration)
     api.add_route('/images/{file_name}', files)
     api.add_route('/statistics', statistics)
     api.add_route(
