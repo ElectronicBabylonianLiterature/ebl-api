@@ -13,4 +13,4 @@ class WordSearch:
 
     @falcon.before(require_scope, 'read:words')
     def on_get(self, req, resp):
-        resp.media = self._dispatch(req)
+        resp.media = self._dispatch(req.params)

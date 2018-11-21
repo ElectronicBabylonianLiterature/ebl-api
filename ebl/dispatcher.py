@@ -1,23 +1,22 @@
-import falcon
+class DispatchError(Exception):
+    pass
 
 
 def create_dispatcher(commands):
-    def get_parameter(request):
-        parameter_names = list(request.params)
-        if len(parameter_names) == 1:
-            parameter = parameter_names[0]
-            return parameter, request.params[parameter]
+    def get_parameter(parameters):
+        if len(parameters) == 1:
+            return next(iter(parameters.items()))
         else:
-            raise falcon.HTTPUnprocessableEntity()
+            raise DispatchError("Invalid number of parameters.")
 
-    def get_command(param):
-        if param in commands:
-            return commands[param]
+    def get_command(parameter):
+        if parameter in commands:
+            return commands[parameter]
         else:
-            raise falcon.HTTPUnprocessableEntity()
+            raise DispatchError(f'Invalid parameter {parameter}.')
 
     def execute_command(request):
-        param, value = get_parameter(request)
-        return get_command(param)(value)
+        parameter, value = get_parameter(request)
+        return get_command(parameter)(value)
 
     return execute_command

@@ -1,5 +1,4 @@
 from base64 import b64decode
-import logging
 import os
 
 from cryptography.x509 import load_pem_x509_certificate
@@ -10,40 +9,33 @@ from falcon_auth import FalconAuthMiddleware
 
 from pymongo import MongoClient
 
+from ebl.auth0 import Auth0Backend
+from ebl.changelog import Changelog
 from ebl.cors_component import CORSComponent
+import ebl.error_handler
 
 from ebl.dictionary.dictionary import MongoDictionary
-from ebl.dictionary.words import WordsResource
 from ebl.dictionary.word_search import WordSearch
+from ebl.dictionary.words import WordsResource
+
+from ebl.fragmentarium.folio_pager import FolioPagerResource
+from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.statistics import StatisticsResource
+
 from ebl.sign_list.sign_list import SignList
-from ebl.fragmentarium.fragment_search import FragmentSearch
-from ebl.files.files import FilesResource
-from ebl.files.file_repository import GridFsFiles
-from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.changelog import Changelog
 from ebl.sign_list.sign_repository import MongoSignRepository
-from ebl.auth0 import Auth0Backend
-from ebl.fragmentarium.folio_pager import FolioPagerResource
 
-
-def http_error(ex, _req, _resp, _params):
-    raise ex
-
-
-def unexpected_error(_ex, _req, _resp, _params):
-    logging.exception('Unexpected Exception')
-    raise falcon.HTTPInternalServerError()
+from ebl.files.file_repository import GridFsFiles
+from ebl.files.files import FilesResource
 
 
 def create_app(context):
     auth_middleware = FalconAuthMiddleware(context['auth_backend'])
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
-    api.add_error_handler(Exception, unexpected_error)
-    api.add_error_handler(falcon.HTTPError, http_error)
-    api.add_error_handler(falcon.HTTPStatus, http_error)
+    ebl.error_handler.set_up(api)
 
     sign_list = SignList(context['sign_repository'])
 

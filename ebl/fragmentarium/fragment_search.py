@@ -22,5 +22,5 @@ class FragmentSearch:
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp):
         user = req.context['user']
-        fragments = self._dispatch(req)
+        fragments = self._dispatch(req.params)
         resp.media = [fragment.to_dict_for(user) for fragment in fragments]
