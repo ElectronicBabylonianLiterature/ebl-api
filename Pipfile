@@ -32,4 +32,4 @@ python_version = "3.6"
 [scripts]
 lint = "pylint ebl"
 pep8 = "pytest --pep8"
-test = "pytest --cov=ebl --cov-report term --cov-report xml ebl/tests"
+test = "pytest --cov=ebl --cov-report term --cov-report xml"
