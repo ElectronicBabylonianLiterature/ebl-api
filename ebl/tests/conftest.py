@@ -31,9 +31,16 @@ def changelog(database):
     return Changelog(database)
 
 
+class TestDictinary(MongoDictionary):
+    # Mongomock does not support $addFields so we need to
+    # stub the methods using them.
+    def search_lemma(self, _):
+        return [self.get_collection().find_one({})]
+
+
 @pytest.fixture
 def dictionary(database):
-    return MongoDictionary(database)
+    return TestDictinary(database)
 
 
 @pytest.fixture

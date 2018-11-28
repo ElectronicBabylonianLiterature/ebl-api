@@ -1,12 +1,11 @@
 import re
-import pymongo
 from ebl.changelog import Changelog
 from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 
 COLLECTION = 'words'
-LEMMA_SEARCH_LIMIT = 5
+LEMMA_SEARCH_LIMIT = 10
 
 
 class MongoDictionary(MongoRepository):
@@ -29,16 +28,44 @@ class MongoDictionary(MongoRepository):
 
     def search_lemma(self, query):
         lemma = query.split(' ')
-        cursor = self.get_collection().find({
-            '$or': [
-                {
-                    f'{key}.{index}': {'$regex': f'^{re.escape(part)}'}
-                    for index, part
-                    in enumerate(lemma)
+        cursor = self.get_collection().aggregate([
+            {
+                '$match': {
+                    '$or': [
+                        {
+                            f'{key}.{index}': {'$regex': f'^{re.escape(part)}'}
+                            for index, part
+                            in enumerate(lemma)
+                        }
+                        for key in ['lemma', 'forms.lemma']
+                    ]
                 }
-                for key in ['lemma', 'forms.lemma']
-            ]
-        }).sort('_id', pymongo.ASCENDING).limit(LEMMA_SEARCH_LIMIT)
+            },
+            {
+                '$addFields': {
+                    'lemmaLength':  {
+                        '$sum': {
+                            '$map': {
+                                'input': '$lemma',
+                                'as': 'part',
+                                'in': {'$strLenCP': '$$part'}
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                '$sort': {'lemmaLength': 1, '_id': 1}
+            },
+            {
+                '$limit': LEMMA_SEARCH_LIMIT
+            },
+            {
+                '$project': {
+                    'lemmaLength': 0
+                }
+            }
+        ])
 
         return [word for word in cursor]
 

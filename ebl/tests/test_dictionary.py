@@ -62,65 +62,6 @@ def test_search_not_found(dictionary):
     assert dictionary.search('lemma') == []
 
 
-def test_search_lemma(database, dictionary, word):
-    database[COLLECTION].insert_one(word)
-
-    assert dictionary.search_lemma(word['lemma'][0][:2]) == [word]
-
-
-def test_search_limit_sort(database, dictionary, word):
-    character = 'a'
-    words = [
-        {
-            **word,
-            'lemma': [number * character],
-            '_id': number * character
-        }
-        for number in range(12, 0, -1)
-    ]
-    for word_ in words:
-        database[COLLECTION].insert_one(word_)
-
-    assert dictionary.search_lemma(character) == words[:-6:-1]
-
-
-def test_search_lemma_compound(database, dictionary, word):
-    database[COLLECTION].insert_one(word)
-
-    assert dictionary.search_lemma(
-        f'{word["lemma"][0]} {word["lemma"][1][:2]}'
-    ) == [word]
-
-
-def test_search_lemma_homonyms(database, dictionary, word):
-    another_word = {
-        **word,
-        '_id': f'{" ".join(word["lemma"])} II',
-        'homonym': 'II'
-    }
-    database[COLLECTION].insert_many([word, another_word])
-
-    assert dictionary.search_lemma(word['lemma'][0]) == [word, another_word]
-
-
-def test_search_lemma_forms(database, dictionary, word):
-    database[COLLECTION].insert_one(word)
-
-    assert dictionary.search_lemma(word['forms'][0]['lemma'][0][:2]) == [word]
-
-
-def test_search_lemma_compound_forms(database, dictionary, word):
-    database[COLLECTION].insert_one(word)
-
-    assert dictionary.search_lemma(
-        f'{word["forms"][1]["lemma"][0]} {word["forms"][1]["lemma"][1][:2]}'
-    ) == [word]
-
-
-def test_search_lemma_not_found(dictionary):
-    assert dictionary.search_lemma('lemma') == []
-
-
 def test_update(dictionary, word, user):
     new_lemma = ['new']
     word_id = dictionary.create(word)
