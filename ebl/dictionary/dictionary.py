@@ -33,7 +33,10 @@ class MongoDictionary(MongoRepository):
                 '$match': {
                     '$or': [
                         {
-                            f'{key}.{index}': {'$regex': f'^{re.escape(part)}'}
+                            f'{key}.{index}': {
+                                '$regex': f'^{re.escape(part)}',
+                                '$options': 'i'
+                            }
                             for index, part
                             in enumerate(lemma)
                         }
