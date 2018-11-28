@@ -11,15 +11,18 @@ LEMMATIZATION_DTO_SCHEMA = {
         'items': {
             'type': 'object',
             'properties': {
-                'token': {
+                'value': {
                     'type': 'string'
                 },
                 'uniqueLemma': {
-                    'type': ['null', 'string']
+                    'type': 'array',
+                    'items': {
+                        'type': 'string'
+                    }
                 }
             },
             'required': [
-                'token',
+                'value',
                 'uniqueLemma'
             ]
         }

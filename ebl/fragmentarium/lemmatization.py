@@ -23,8 +23,8 @@ class Lemmatization:
     def of_transliteration(transliteration):
         def create_token(value):
             return {
-                'token': value,
-                'uniqueLemma': None
+                'value': value,
+                'uniqueLemma': []
             }
 
         lines = transliteration.atf.split('\n')

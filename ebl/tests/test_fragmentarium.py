@@ -93,7 +93,7 @@ def test_lemmatization_transliteration(fragmentarium,
                                        transliterated_fragment,
                                        user):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    lemmatization = Lemmatization([[{'token': '1.', 'uniqueLemma': None}]])
+    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
 
     fragmentarium.update_lemmatization(
         fragment_number,
@@ -116,7 +116,7 @@ def test_lemmatization_changelog(database,
                                  user,
                                  make_changelog_entry):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    lemmatization = Lemmatization([[{'token': '1.', 'uniqueLemma': None}]])
+    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
     fragmentarium.update_lemmatization(
         fragment_number,
         lemmatization,
@@ -143,7 +143,7 @@ def test_update_update_lemmatization_not_found(fragmentarium, user):
     with pytest.raises(NotFoundError):
         fragmentarium.update_lemmatization(
             'K.1',
-            Lemmatization([[{'token': '1.', 'uniqueLemma': None}]]),
+            Lemmatization([[{'value': '1.', 'uniqueLemma': []}]]),
             user
         )
 

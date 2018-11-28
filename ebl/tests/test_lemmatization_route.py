@@ -11,8 +11,8 @@ def test_update_lemmatization(client,
     fragment_number = fragmentarium.create(transliterated_fragment)
     tokens = [
         [
-            {'token': 'u₄-šu', 'uniqueLemma': 'aklu I'},
-            {'token': 'ba-ma-ti ', 'uniqueLemma': None}
+            {'value': 'u₄-šu', 'uniqueLemma': ['aklu I']},
+            {'value': 'ba-ma-ti ', 'uniqueLemma': []}
         ]
     ]
     body = json.dumps(tokens)
@@ -46,13 +46,14 @@ def test_update_lemmatization_not_found(client):
     'lemmatization',
     '"lemmatization"',
     json.dumps({
-        'lemmatization': [[{'token': 'u₄-šu', 'uniqueLemma': None}]]
+        'lemmatization': [[{'value': 'u₄-šu', 'uniqueLemma': []}]]
     }),
-    json.dumps([{'token': 'u₄-šu', 'uniqueLemma': None}]),
+    json.dumps([{'value': 'u₄-šu', 'uniqueLemma': []}]),
     json.dumps([['u₄-šu']]),
-    json.dumps([[{'token': 1, 'uniqueLemma': None}]]),
-    json.dumps([[{'token': 'u₄-šu', 'uniqueLemma': 1}]]),
-    json.dumps([[{'token': None, 'uniqueLemma': None}]])
+    json.dumps([[{'value': 1, 'uniqueLemma': []}]]),
+    json.dumps([[{'value': 'u₄-šu', 'uniqueLemma': 1}]]),
+    json.dumps([[{'value': 'u₄-šu', 'uniqueLemma': [1]}]]),
+    json.dumps([[{'value': None, 'uniqueLemma': []}]])
 ])
 def test_update_lemmatization_invalid_entity(client,
                                              fragmentarium,

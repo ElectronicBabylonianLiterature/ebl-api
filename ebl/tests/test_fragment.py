@@ -70,7 +70,7 @@ def test_folios(fragment):
 
 
 def test_lemmatization(fragment):
-    tokens = [[{'token': '1.', 'uniqueLemma': None}]]
+    tokens = [[{'value': '1.', 'uniqueLemma': []}]]
     data = {
         **fragment.to_dict(),
         'lemmatization': tokens
@@ -158,7 +158,7 @@ def test_add_matching_lines(transliterated_fragment):
 
 
 def test_update_lemmatization(fragment):
-    lemmatization = Lemmatization([[{'token': '1.', 'uniqueLemma': None}]])
+    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
     expected = Fragment({
         **fragment.to_dict(),
         'lemmatization': lemmatization.tokens

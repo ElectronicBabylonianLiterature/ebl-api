@@ -56,7 +56,7 @@ def test_update_lemmatization(fragment_repository,
                               transliterated_fragment):
     fragment_number = fragment_repository.create(transliterated_fragment)
     updated_fragment = transliterated_fragment.update_lemmatization(
-        Lemmatization([[{'token': '1.', 'uniqueLemma': None}]])
+        Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
     )
 
     fragment_repository.update_lemmatization(

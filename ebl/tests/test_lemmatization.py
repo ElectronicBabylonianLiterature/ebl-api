@@ -3,20 +3,24 @@ from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
 
 
+TOKENS = [[{'value': 'token', 'uniqueLemma': []}]]
+
+
 def test_equality():
-    lemmatization = Lemmatization([['token']])
-    similar = Lemmatization([['token']])
-    different = Lemmatization([['another_token']])
+    lemmatization = Lemmatization(TOKENS)
+    similar = Lemmatization(TOKENS)
+    different = Lemmatization([[
+        {'value': 'another token', 'uniqueLemma': []}
+    ]])
 
     assert lemmatization == similar
     assert lemmatization != different
 
 
 def test_hash():
-    tokens = [['token']]
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization(TOKENS)
 
-    assert hash(lemmatization) == hash(json.dumps(tokens))
+    assert hash(lemmatization) == hash(json.dumps(TOKENS))
 
 
 def test_tokens():
@@ -53,8 +57,8 @@ def test_of_transliteration():
     assert lemmatization.tokens == [
         [
             {
-                'token': token,
-                'uniqueLemma': None
+                'value': token,
+                'uniqueLemma': []
             }
             for token in line
         ]
