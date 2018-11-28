@@ -1,10 +1,12 @@
 import re
+import pymongo
 from ebl.changelog import Changelog
 from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 
 COLLECTION = 'words'
+LEMMA_SEARCH_LIMIT = 5
 
 
 class MongoDictionary(MongoRepository):
@@ -36,7 +38,7 @@ class MongoDictionary(MongoRepository):
                 }
                 for key in ['lemma', 'forms.lemma']
             ]
-        })
+        }).sort('_id', pymongo.ASCENDING).limit(LEMMA_SEARCH_LIMIT)
 
         return [word for word in cursor]
 

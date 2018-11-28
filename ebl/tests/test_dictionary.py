@@ -68,7 +68,23 @@ def test_search_lemma(database, dictionary, word):
     assert dictionary.search_lemma(word['lemma'][0][:2]) == [word]
 
 
-def test_search_compound(database, dictionary, word):
+def test_search_limit_sort(database, dictionary, word):
+    character = 'a'
+    words = [
+        {
+            **word,
+            'lemma': [number * character],
+            '_id': number * character
+        }
+        for number in range(12, 0, -1)
+    ]
+    for word_ in words:
+        database[COLLECTION].insert_one(word_)
+
+    assert dictionary.search_lemma(character) == words[:-6:-1]
+
+
+def test_search_lemma_compound(database, dictionary, word):
     database[COLLECTION].insert_one(word)
 
     assert dictionary.search_lemma(
