@@ -109,18 +109,6 @@ def test_update_word_not_found(client, word):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_update_invalid_object_id(client, word):
-    object_id = 'invalid object id'
-    not_found_word = {
-        **word,
-        '_id': object_id
-    }
-    body = json.dumps(not_found_word)
-    post_result = client.simulate_post(f'/words/{object_id}', body=body)
-
-    assert post_result.status == falcon.HTTP_NOT_FOUND
-
-
 def test_update_word_invalid_entity(client, saved_word):
     object_id = saved_word['_id']
     invalid_word = {
