@@ -86,9 +86,9 @@ WORD_DTO_SCHEMA = {
                         'homonym': {'type': 'string'}
                     },
                     'required': ['lemma', 'notes', 'homonym']
-                }
+                },
+                'minItems': 1
             },
-            'minItems': 1
         },
         'derivedFrom': {
             'type': ['null', 'object'],
