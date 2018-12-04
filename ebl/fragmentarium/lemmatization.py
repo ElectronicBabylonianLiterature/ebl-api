@@ -1,7 +1,5 @@
 import copy
 import json
-import re
-from ebl.fragmentarium.transliteration import IGNORE_LINE_PATTERN
 
 
 class Lemmatization:
@@ -21,22 +19,8 @@ class Lemmatization:
 
     @staticmethod
     def of_transliteration(transliteration):
-        def create_token(value):
-            return {
-                'value': value,
-                'uniqueLemma': []
-            }
-
-        lines = transliteration.atf.split('\n')
-        tokens = [
-            [
-                create_token(value)
-                for value in (
-                    [line]
-                    if re.match(IGNORE_LINE_PATTERN, line)
-                    else line.split(' ')
-                )
-            ]
-            for line in lines
-        ]
+        tokens = transliteration.tokenize(lambda value: {
+            'value': value,
+            'uniqueLemma': []
+        })
         return Lemmatization(tokens)

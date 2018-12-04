@@ -44,3 +44,29 @@ def test_with_signs(sign_list, signs):
     transliteration = Transliteration('1. šu gid₂')
 
     assert transliteration.with_signs(sign_list).signs == 'ŠU BU'
+
+
+def test_tokenize():
+    transliteration = Transliteration(
+        '&K11111\n'
+        '@reverse\n'
+        '\n'
+        '$ (end of side)\n'
+        '#some notes\n'
+        '=: foo\n'
+        '1. [...] šu-gid₂ k[u ...]\n'
+        '2. x X'
+    )
+
+    expected = [
+        ['&K11111'],
+        ['@reverse'],
+        [''],
+        ['$ (end of side)'],
+        ['#some notes'],
+        ['=: foo'],
+        ['1.', '[...]', 'šu-gid₂', 'k[u', '...]'],
+        ['2.', 'x', 'X']
+    ]
+
+    assert transliteration.tokenize(lambda value: value) == expected

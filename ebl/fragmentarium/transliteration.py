@@ -143,3 +143,17 @@ class Transliteration:
 
     def to_sign_matrix(self, sign_list):
         return sign_list.map_transliteration(self.cleaned)
+
+    def tokenize(self, create_token):
+        lines = self.atf.split('\n')
+        return [
+            [
+                create_token(value)
+                for value in (
+                    [line]
+                    if re.match(IGNORE_LINE_PATTERN, line)
+                    else line.split(' ')
+                )
+            ]
+            for line in lines
+        ]

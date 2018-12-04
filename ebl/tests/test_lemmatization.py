@@ -44,23 +44,9 @@ def test_of_transliteration():
 
     lemmatization = Lemmatization.of_transliteration(transliteration)
 
-    expected = [
-        ['&K11111'],
-        ['@reverse'],
-        [''],
-        ['$ (end of side)'],
-        ['#some notes'],
-        ['=: foo'],
-        ['1.', '[...]', 'šu-gid₂', 'k[u', '...]'],
-        ['2.', 'x', 'X']
-    ]
-    assert lemmatization.tokens == [
-        [
-            {
-                'value': token,
-                'uniqueLemma': []
-            }
-            for token in line
-        ]
-        for line in expected
-    ]
+    expected = transliteration.tokenize(lambda value: {
+        'value': value,
+        'uniqueLemma': []
+    })
+
+    assert lemmatization.tokens == expected
