@@ -19,7 +19,7 @@ STRIP_PATTERN = (
 )
 WHITE_SPACE_PATTERN = (
     r'\s*{+\+?|'
-    r'}+({+\+?)?\s*|'
+    r'}+({+\+?)?\s*?|'
     r'-|'
     r'(^|\s+)(\||&\d*)($|\s+)'
 )
