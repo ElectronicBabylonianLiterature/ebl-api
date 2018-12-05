@@ -1,16 +1,40 @@
+# pylint: disable=W0621
+import copy
 import json
+import pytest
 from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
 
 
-TOKENS = [[{'value': 'token', 'uniqueLemma': []}]]
+@pytest.fixture
+def transliteration():
+    return Transliteration(
+        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+        '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
+        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+        '4. [...] x x an [...]'
+    )
+
+
+def create_token(value, unique_lemma=None):
+    return {
+        'value': value,
+        'uniqueLemma': [] if unique_lemma is None else unique_lemma
+    }
+
+
+def create_lemmatized_token(value):
+    return create_token(value, [value])
+
+
+TOKENS = [[create_token('token')]]
 
 
 def test_equality():
     lemmatization = Lemmatization(TOKENS)
     similar = Lemmatization(TOKENS)
     different = Lemmatization([[
-        {'value': 'another token', 'uniqueLemma': []}
+        create_token('another token')
     ]])
 
     assert lemmatization == similar
@@ -44,109 +68,58 @@ def test_of_transliteration():
 
     lemmatization = Lemmatization.of_transliteration(transliteration)
 
-    expected = transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': []
-    })
+    expected_tokens = transliteration.tokenize(create_token)
 
-    assert lemmatization.tokens == expected
+    assert lemmatization == Lemmatization(expected_tokens)
 
 
-def test_merge_no_changes():
-    transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ  as-tar DINGIR-šu₂\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
-    tokens = transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': [value]
-    })
+def test_merge_no_changes(transliteration):
+    tokens = transliteration.tokenize(create_lemmatized_token)
 
     lemmatization = Lemmatization(tokens)
 
     assert lemmatization.merge(transliteration) == lemmatization
 
 
-def test_merge_add_line():
-    transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
-    tokens = transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': [value]
-    })
+def test_merge_add_line(transliteration):
+    tokens = transliteration.tokenize(create_lemmatized_token)
 
-    new_transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ as-tar DINGIR-šu₂\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
-    new_tokens = new_transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': []
-    })
+    lines = transliteration.atf.split('\n')
+    lines.insert(2, '2. [...] mu [...]')
+    new_transliteration = Transliteration('\n'.join(lines))
+    new_tokens = new_transliteration.tokenize(create_token)
 
-    expected_tokens = [
-        tokens[0],
-        new_tokens[1],
-        tokens[1]
-    ]
+    expected_tokens = copy.deepcopy(tokens)
+    expected_tokens.insert(2, new_tokens[2])
 
     lemmatization = Lemmatization(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
         Lemmatization(expected_tokens).tokens
 
 
-def test_merge_remove_line():
-    transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ as-tar DINGIR-šu₂\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
-    tokens = transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': [value]
-    })
+def test_merge_remove_line(transliteration):
+    tokens = transliteration.tokenize(create_lemmatized_token)
 
-    new_transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
+    lines = transliteration.atf.split('\n')
+    lines.pop(1)
+    new_transliteration = Transliteration('\n'.join(lines))
 
-    expected_tokens = [
-        tokens[0],
-        tokens[2]
-    ]
+    expected_tokens = copy.deepcopy(tokens)
+    expected_tokens.pop(1)
 
     lemmatization = Lemmatization(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
         Lemmatization(expected_tokens).tokens
 
 
-def test_merge_edit_line():
-    transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
-    tokens = transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': [value]
-    })
+def test_merge_edit_line(transliteration):
+    tokens = transliteration.tokenize(create_lemmatized_token)
 
-    new_transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ as-tar DINGIR-šu₂\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
-    )
+    lines = transliteration.atf.split('\n')
+    lines[1] = '2. [...] KI DIŠ as-tar DINGIR-šu₂'
+    new_transliteration = Transliteration('\n'.join(lines))
 
-    expected_tokens = [
-        [*tokens[0]],
-        [*tokens[1]],
-        [*tokens[2]]
-    ]
+    expected_tokens = copy.deepcopy(tokens)
     expected_tokens[1][2] = {
         'value': 'KI',
         'uniqueLemma': []
@@ -157,31 +130,15 @@ def test_merge_edit_line():
         Lemmatization(expected_tokens).tokens
 
 
-def test_merge_edit_lines():
-    transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
-        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
-        '4. [...] x x an [...]'
-    )
-    tokens = transliteration.tokenize(lambda value: {
-        'value': value,
-        'uniqueLemma': [value]
-    })
+def test_merge_edit_lines(transliteration):
+    tokens = transliteration.tokenize(create_lemmatized_token)
 
-    new_transliteration = Transliteration(
-        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] dub₂-bu-da-na KI as-tar DINGIR-šu₂\n'
-        '3. DINGIR ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
-        '4. [...] x x an [...]'
-    )
+    lines = transliteration.atf.split('\n')
+    lines[1] = '2. [...] dub₂-bu-da-na KI as-tar DINGIR-šu₂'
+    lines[2] = '3. DINGIR ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
+    new_transliteration = Transliteration('\n'.join(lines))
 
-    expected_tokens = [
-        [*tokens[0]],
-        [*tokens[1]],
-        [*tokens[2]],
-        [*tokens[3]]
-    ]
+    expected_tokens = copy.deepcopy(tokens)
     expected_tokens[1][2] = {
         'value': 'dub₂-bu-da-na',
         'uniqueLemma': []
