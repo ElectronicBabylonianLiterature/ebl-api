@@ -119,9 +119,9 @@ class MongoFragmentRepository():
     def update_lemmatization(self, fragment):
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
-            {'$set': pydash.omit_by({
+            {'$set': {
                 'lemmatization': fragment.lemmatization.tokens
-            }, lambda value: value is None)}
+            }}
         )
 
         if result.matched_count == 0:

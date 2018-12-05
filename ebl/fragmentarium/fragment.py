@@ -59,16 +59,12 @@ class Fragment:
             transliteration.atf,
             user
         )
-        lemmatization = (
-            Lemmatization.of_transliteration(transliteration).tokens
-            if self.transliteration.atf != transliteration.atf
-            else self._data.get('lemmatization')
-        )
+        lemmatization = self.lemmatization.merge(transliteration)
 
         return Fragment(pydash.omit_by({
             **self._data,
             'transliteration': transliteration.atf,
-            'lemmatization': lemmatization,
+            'lemmatization': lemmatization.tokens,
             'notes': transliteration.notes,
             'signs': transliteration.signs,
             'record': record.entries

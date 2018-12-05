@@ -102,23 +102,25 @@ def test_add_transliteration(fragment, user):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_update_transliteration(transliterated_fragment, user):
+def test_update_transliteration(lemmatized_fragment, user):
+    lines = lemmatized_fragment.transliteration.atf.split('\n')
+    lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
     transliteration =\
-        Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX')
-    updated_fragment = transliterated_fragment.update_transliteration(
+        Transliteration('\n'.join(lines), 'updated notes', 'X X\nX')
+    updated_fragment = lemmatized_fragment.update_transliteration(
         transliteration,
         user
     )
-    lemmatization = Lemmatization.of_transliteration(transliteration)
+    lemmatization = lemmatized_fragment.lemmatization.merge(transliteration)
 
     expected_fragment = Fragment({
-        **transliterated_fragment.to_dict(),
+        **lemmatized_fragment.to_dict(),
         'transliteration': transliteration.atf,
         'lemmatization': lemmatization.tokens,
         'notes': transliteration.notes,
         'signs': transliteration.signs,
         'record': [
-            *transliterated_fragment.to_dict()['record'],
+            *lemmatized_fragment.record.entries,
             {
                 'user': user.ebl_name,
                 'type': 'Revision',

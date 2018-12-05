@@ -309,7 +309,40 @@ def transliterated_fragment():
             '6\'. [...] x mu ta-ma-tu₂\n'
             '7\'. šu/|BI×IS|'
         ),
-        'lemmatization': [],
+        'lemmatization': [
+            [
+                {"value": "1'.", "uniqueLemma": []},
+                {"value": "[...-ku]-nu-ši", "uniqueLemma": []},
+                {"value": "[...]", "uniqueLemma": []}
+            ],
+            [
+                {"value": "2'.", "uniqueLemma": []},
+                {"value": "[...]", "uniqueLemma": []},
+                {"value": "GI₆", "uniqueLemma": []},
+                {"value": "ana", "uniqueLemma": []},
+                {"value": "u₄-š[u", "uniqueLemma": []},
+                {"value": "...]", "uniqueLemma": []}
+            ],
+            [
+                {"value": "3'.", "uniqueLemma": []},
+                {"value": "[...", "uniqueLemma": []},
+                {"value": "k]i-du", "uniqueLemma": []},
+                {"value": "u", "uniqueLemma": []},
+                {"value": "ba-ma-t[i", "uniqueLemma": []},
+                {"value": "...]", "uniqueLemma": []}
+            ],
+            [
+                {"value": "6'.", "uniqueLemma": []},
+                {"value": "[...]", "uniqueLemma": []},
+                {"value": "x", "uniqueLemma": []},
+                {"value": "mu", "uniqueLemma": []},
+                {"value": "ta-ma-tu₂", "uniqueLemma": []}
+            ],
+            [
+                {"value": "7'.", "uniqueLemma": []},
+                {"value": "šu/|BI×IS|", "uniqueLemma": []}
+            ]
+        ],
         'signs': (
             'KU NU IGI\n'
             'MI DIŠ UD ŠU\n'
@@ -333,6 +366,48 @@ def transliterated_fragment():
             'type': 'Transliteration',
             'date': datetime.datetime.utcnow().isoformat()
         }]
+    })
+
+
+@pytest.fixture
+def lemmatized_fragment(transliterated_fragment):
+    return Fragment({
+        **transliterated_fragment.to_dict(),
+        '_id': '4',
+        'lemmatization': [
+            [
+                {"value": "1'.", "uniqueLemma": []},
+                {"value": "[...-ku]-nu-ši", "uniqueLemma": []},
+                {"value": "[...]", "uniqueLemma": []}
+            ],
+            [
+                {"value": "2'.", "uniqueLemma": []},
+                {"value": "[...]", "uniqueLemma": []},
+                {"value": "GI₆", "uniqueLemma": ["ginâ I"]},
+                {"value": "ana", "uniqueLemma": ["ana I"]},
+                {"value": "u₄-š[u", "uniqueLemma": ["ūsu I"]},
+                {"value": "...]", "uniqueLemma": []}
+            ],
+            [
+                {"value": "3'.", "uniqueLemma": []},
+                {"value": "[...", "uniqueLemma": []},
+                {"value": "k]i-du", "uniqueLemma": ["kīdu I"]},
+                {"value": "u", "uniqueLemma": ["u I"]},
+                {"value": "ba-ma-t[i", "uniqueLemma": ["bamātu I"]},
+                {"value": "...]", "uniqueLemma": []}
+            ],
+            [
+                {"value": "6'.", "uniqueLemma": []},
+                {"value": "[...]", "uniqueLemma": []},
+                {"value": "x", "uniqueLemma": []},
+                {"value": "mu", "uniqueLemma": ["mu I"]},
+                {"value": "ta-ma-tu₂", "uniqueLemma": ["tamalāku I"]}
+            ],
+            [
+                {"value": "7'.", "uniqueLemma": []},
+                {"value": "šu/|BI×IS|", "uniqueLemma": []}
+            ]
+        ]
     })
 
 
