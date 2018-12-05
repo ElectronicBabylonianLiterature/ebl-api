@@ -80,7 +80,7 @@ def test_merge_add_line():
 
     new_transliteration = Transliteration(
         '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ  as-tar DINGIR-šu₂\n'
+        '2. [...] KI DIŠ as-tar DINGIR-šu₂\n'
         '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
     )
     new_tokens = new_transliteration.tokenize(lambda value: {
@@ -102,7 +102,7 @@ def test_merge_add_line():
 def test_merge_remove_line():
     transliteration = Transliteration(
         '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ  as-tar DINGIR-šu₂\n'
+        '2. [...] KI DIŠ as-tar DINGIR-šu₂\n'
         '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
     )
     tokens = transliteration.tokenize(lambda value: {
@@ -128,7 +128,7 @@ def test_merge_remove_line():
 def test_merge_edit_line():
     transliteration = Transliteration(
         '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] NA DIŠ  as-tar DINGIR-šu₂\n'
+        '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
         '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
     )
     tokens = transliteration.tokenize(lambda value: {
@@ -138,7 +138,7 @@ def test_merge_edit_line():
 
     new_transliteration = Transliteration(
         '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
-        '2. [...] KI DIŠ  as-tar DINGIR-šu₂\n'
+        '2. [...] KI DIŠ as-tar DINGIR-šu₂\n'
         '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un'
     )
 
@@ -149,6 +149,49 @@ def test_merge_edit_line():
     ]
     expected_tokens[1][2] = {
         'value': 'KI',
+        'uniqueLemma': []
+    }
+
+    lemmatization = Lemmatization(tokens)
+    assert lemmatization.merge(new_transliteration).tokens ==\
+        Lemmatization(expected_tokens).tokens
+
+
+def test_merge_edit_lines():
+    transliteration = Transliteration(
+        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+        '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
+        '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+        '4. [...] x x an [...]'
+    )
+    tokens = transliteration.tokenize(lambda value: {
+        'value': value,
+        'uniqueLemma': [value]
+    })
+
+    new_transliteration = Transliteration(
+        '1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+        '2. [...] dub₂-bu-da-na KI as-tar DINGIR-šu₂\n'
+        '3. DINGIR ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+        '4. [...] x x an [...]'
+    )
+
+    expected_tokens = [
+        [*tokens[0]],
+        [*tokens[1]],
+        [*tokens[2]],
+        [*tokens[3]]
+    ]
+    expected_tokens[1][2] = {
+        'value': 'dub₂-bu-da-na',
+        'uniqueLemma': []
+    }
+    expected_tokens[1][3] = {
+        'value': 'KI',
+        'uniqueLemma': []
+    }
+    expected_tokens[2][1] = {
+        'value': 'DINGIR',
         'uniqueLemma': []
     }
 
