@@ -1,5 +1,19 @@
 import difflib
+from functools import reduce
 import pydash
+
+
+def diff_row(old, new):
+    return difflib.ndiff(
+        [
+            token['value']
+            for token in old
+        ],
+        [
+            token['value']
+            for token in new
+        ]
+    )
 
 
 class State:
@@ -41,6 +55,7 @@ class State:
 
 
 class Merger:
+    # pylint: disable=R0903
     def __init__(self, recursive):
         self._operations = {
             '- ': self._delete_entry,
@@ -50,41 +65,39 @@ class Merger:
         }
         self._recursive = recursive
 
-    def _delete_entry(self, state):
+    @staticmethod
+    def _delete_entry(state):
         state.advance_old(True)
 
+    @staticmethod
+    def _inner_merge(state):
+        diff = diff_row(state.old_line, state.current_new)
+        return Merger(False).merge(
+            state.old_line,
+            state.current_new,
+            diff
+        )
+
     def _add_entry(self, state):
-        if self._recursive and state.old_line is not None:
-            inner_diff = difflib.ndiff(
-                [
-                    token['value']
-                    for token in state.old_line  # pylint: disable=E1133
-                ],
-                [
-                    token['value']
-                    for token in state.current_new
-                ]
-            )
-            merged = Merger(False).merge(
-                state.old_line,
-                state.current_new,
-                inner_diff
-            )
-            state.append(merged)
-        else:
-            state.append(state.current_new)
+        new_entry = (self._inner_merge(state)
+                     if self._recursive and state.old_line is not None
+                     else state.current_new)
+        state.append(new_entry)
         state.advance_new()
 
-    def _keep_entry(self, state):
+    @staticmethod
+    def _keep_entry(state):
         state.append(state.current_old)
         state.advance_new()
         state.advance_old()
 
     def merge(self, old, new, diff):
-        state = State(old, new)
+        def merge_entry(state, entry):
+            self._operations[entry](state)
+            return state
 
-        for line in diff:
-            prefix = line[:2]
-            self._operations[prefix](state)
-
-        return state.result
+        return reduce(
+            merge_entry,
+            [line[:2] for line in diff],
+            State(old, new)
+        ).result
