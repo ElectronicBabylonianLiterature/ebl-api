@@ -61,3 +61,16 @@ def test_update_lemmatization_invalid_entity(client,
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_update_lemmatization_atf_change(client,
+                                         fragmentarium,
+                                         transliterated_fragment):
+    fragment_number = fragmentarium.create(transliterated_fragment)
+    tokens = transliterated_fragment.lemmatization.tokens
+    tokens[0][1]['value'] = 'ana'
+    body = json.dumps(tokens)
+    url = f'/fragments/{fragment_number}/lemmatization'
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
