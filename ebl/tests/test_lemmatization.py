@@ -73,6 +73,14 @@ def test_of_transliteration():
     assert lemmatization == Lemmatization(expected_tokens)
 
 
+def test_of_transliteration_empty():
+    transliteration = Transliteration('')
+
+    lemmatization = Lemmatization.of_transliteration(transliteration)
+
+    assert lemmatization == Lemmatization([])
+
+
 def test_merge_no_changes(transliteration):
     tokens = transliteration.tokenize(create_lemmatized_token)
 

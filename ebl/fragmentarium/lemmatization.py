@@ -1,7 +1,6 @@
 import copy
-import difflib
 import json
-from ebl.fragmentarium.merger import Merger
+from ebl.fragmentarium.merger import Merger, diff_lemmatization
 
 
 class LemmatizationError(Exception):
@@ -28,19 +27,10 @@ class Lemmatization:
         merged_tokens = Merger(True).merge(
             self._tokens,
             self._tokenize(transliteration),
-            self._diff(transliteration),
+            diff_lemmatization,
         )
 
         return Lemmatization(merged_tokens)
-
-    def _diff(self, transliteration):
-        return difflib.ndiff(
-            [
-                ' '.join([token['value'] for token in line])
-                for line in self._tokens
-            ],
-            transliteration.atf.splitlines(keepends=True)
-        )
 
     @staticmethod
     def of_transliteration(transliteration):

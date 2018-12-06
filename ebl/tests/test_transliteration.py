@@ -70,3 +70,9 @@ def test_tokenize():
     ]
 
     assert transliteration.tokenize(lambda value: value) == expected
+
+
+def test_tokenize_empty():
+    transliteration = Transliteration('')
+
+    assert transliteration.tokenize(lambda value: value) == []

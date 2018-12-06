@@ -3,16 +3,22 @@ from functools import reduce
 import pydash
 
 
-def diff_row(old, new):
+def diff(old, new, create_entry):
     return difflib.ndiff(
-        [
-            token['value']
-            for token in old
-        ],
-        [
-            token['value']
-            for token in new
-        ]
+        [create_entry(token) for token in old],
+        [create_entry(token) for token in new]
+    )
+
+
+def diff_row(old, new):
+    return diff(old, new, lambda token: token['value'])
+
+
+def diff_lemmatization(old, new):
+    return diff(
+        old,
+        new,
+        lambda line: ' '.join([token['value'] for token in line])
     )
 
 
@@ -69,11 +75,10 @@ class Merger:
 
     @staticmethod
     def _inner_merge(state):
-        diff = diff_row(state.old_line, state.current_new)
         return Merger(False).merge(
             state.old_line,
             state.current_new,
-            diff
+            diff_row
         )
 
     def _add_entry(self, state):
@@ -89,13 +94,13 @@ class Merger:
         state.advance_new()
         state.advance_old()
 
-    def merge(self, old, new, diff):
+    def merge(self, old, new, differ):
         def merge_entry(state, entry):
             self._operations[entry](state)
             return state
 
         return reduce(
             merge_entry,
-            [line[:2] for line in diff],
+            [line[:2] for line in differ(old, new)],
             State(old, new)
         ).result

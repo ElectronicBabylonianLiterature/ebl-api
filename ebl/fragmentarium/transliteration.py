@@ -145,7 +145,6 @@ class Transliteration:
         return sign_list.map_transliteration(self.cleaned)
 
     def tokenize(self, create_token):
-        lines = self.atf.split('\n')
         return [
             [
                 create_token(value)
@@ -155,5 +154,5 @@ class Transliteration:
                     else line.split(' ')
                 )
             ]
-            for line in lines
-        ]
+            for line in self.atf.split('\n')
+        ] if self.atf else []
