@@ -21,17 +21,15 @@ class State:
         self._old = old
         self._new = new
         self._result = []
-        self._old_index = 0
-        self._new_index = 0
         self._old_line = None
 
     @property
     def current_new(self):
-        return self._new[self._new_index]
+        return self._new[0]
 
     @property
     def current_old(self):
-        return self._old[self._old_index]
+        return self._old[0]
 
     @property
     def result(self):
@@ -42,13 +40,13 @@ class State:
         return self._old_line
 
     def advance_new(self):
-        self._new_index += 1
+        self._new = self._new[1:]
         self._old_line = None
 
     def advance_old(self, save_old_line=False):
         if save_old_line:
             self._old_line = self.current_old
-        self._old_index += 1
+        self._old = self._old[1:]
 
     def append(self, entry):
         self._result.append(entry)
