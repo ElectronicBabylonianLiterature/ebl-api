@@ -155,3 +155,42 @@ def test_merge_edit_lines(transliteration):
     lemmatization = Lemmatization(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
         Lemmatization(expected_tokens).tokens
+
+
+def test_is_compatible(transliteration):
+    lemmatization = Lemmatization.of_transliteration(transliteration)
+
+    assert lemmatization.is_compatible(lemmatization)
+    assert lemmatization.is_compatible(
+        Lemmatization.of_transliteration(transliteration)
+    )
+
+
+@pytest.mark.parametrize("other", [
+    ('1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+     '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+     '4. [...] x x an [...]'),
+    ('1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+     '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
+     '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+     '4. [...] x x an [...]\n'
+     '5. x x x'),
+    ('1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+     '2. [...] NA as-tar DINGIR-šu₂\n'
+     '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+     '4. [...] x x an [...]'),
+    ('1. [...] DIŠ NA DINGIR-šu₂ [...]\n'
+     '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
+     '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+     '4. [...] x x an  as-tar [...]'),
+    ('1. [...] DIŠ KI DINGIR-šu₂ [...]\n'
+     '2. [...] NA DIŠ as-tar DINGIR-šu₂\n'
+     '3. {e#}a₂#-ki-it ni₂ dub₂-bu-da-na | {giš}kiri₆-mah u₃-mu-un\n'
+     '4. [...] x x an [...]'),
+])
+def test_is_not_compatible(other, transliteration):
+    lemmatization = Lemmatization.of_transliteration(transliteration)
+
+    assert not lemmatization.is_compatible(
+        Lemmatization.of_transliteration(Transliteration(other))
+    )

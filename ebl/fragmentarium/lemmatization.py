@@ -90,3 +90,14 @@ class Lemmatization:
                 old_index += 1
                 old_line = None
         return result
+
+    def is_compatible(self, other):
+        def to_values(tokens):
+            return [
+                [
+                    token['value']
+                    for token in line
+                ] for line in tokens
+            ]
+
+        return to_values(self._tokens) == to_values(other.tokens)
