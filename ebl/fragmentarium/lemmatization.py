@@ -3,6 +3,11 @@ import difflib
 import json
 
 
+class LemmatizationError(Exception):
+    def __init__(self):
+        super().__init__('Invalid lemmatization')
+
+
 class Lemmatization:
     def __init__(self, tokens):
         self._tokens = copy.deepcopy(tokens)

@@ -2,7 +2,7 @@ import copy
 import datetime
 import json
 import pydash
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import Transliteration
 
 
@@ -78,10 +78,13 @@ class Fragment:
         })
 
     def update_lemmatization(self, lemmatization):
-        return Fragment({
-            **self._data,
-            'lemmatization': lemmatization.tokens
-        })
+        if self.lemmatization.is_compatible(lemmatization):
+            return Fragment({
+                **self._data,
+                'lemmatization': lemmatization.tokens
+            })
+        else:
+            raise LemmatizationError()
 
     def to_dict(self):
         return copy.deepcopy(self._data)

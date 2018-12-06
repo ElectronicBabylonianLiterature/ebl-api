@@ -55,8 +55,10 @@ def test_update_update_transliteration_not_found(fragment_repository,
 def test_update_lemmatization(fragment_repository,
                               transliterated_fragment):
     fragment_number = fragment_repository.create(transliterated_fragment)
+    tokens = transliterated_fragment.lemmatization.tokens
+    tokens[0][1]['uniqueLemma'] = ['aklu I']
     updated_fragment = transliterated_fragment.update_lemmatization(
-        Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
+        Lemmatization(tokens)
     )
 
     fragment_repository.update_lemmatization(

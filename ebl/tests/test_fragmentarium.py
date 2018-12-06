@@ -93,7 +93,9 @@ def test_lemmatization_transliteration(fragmentarium,
                                        transliterated_fragment,
                                        user):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
+    tokens = transliterated_fragment.lemmatization.tokens
+    tokens[0][1]['uniqueLemma'] = ['aklu I']
+    lemmatization = Lemmatization(tokens)
 
     fragmentarium.update_lemmatization(
         fragment_number,
@@ -116,7 +118,9 @@ def test_lemmatization_changelog(database,
                                  user,
                                  make_changelog_entry):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
+    tokens = transliterated_fragment.lemmatization.tokens
+    tokens[0][1]['uniqueLemma'] = ['aklu I']
+    lemmatization = Lemmatization(tokens)
     fragmentarium.update_lemmatization(
         fragment_number,
         lemmatization,

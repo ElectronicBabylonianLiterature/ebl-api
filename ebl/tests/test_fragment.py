@@ -1,10 +1,11 @@
 import datetime
 import json
 from freezegun import freeze_time
+import pytest
 from ebl.fragmentarium.fragment import Fragment
 from ebl.fragmentarium.fragment import Record
 from ebl.fragmentarium.fragment import Folios
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
@@ -159,13 +160,22 @@ def test_add_matching_lines(transliterated_fragment):
     }
 
 
-def test_update_lemmatization(fragment):
-    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
+def test_update_lemmatization(transliterated_fragment):
+    tokens = transliterated_fragment.lemmatization.tokens
+    tokens[0][1]['uniqueLemma'] = ['nu I']
     expected = Fragment({
-        **fragment.to_dict(),
-        'lemmatization': lemmatization.tokens
+        **transliterated_fragment.to_dict(),
+        'lemmatization': tokens
     })
-    assert fragment.update_lemmatization(lemmatization) == expected
+    lemmatization = Lemmatization(tokens)
+    assert transliterated_fragment.update_lemmatization(lemmatization) ==\
+        expected
+
+
+def test_update_lemmatization_incompatible(fragment):
+    lemmatization = Lemmatization([[{'value': '1.', 'uniqueLemma': []}]])
+    with pytest.raises(LemmatizationError):
+        fragment.update_lemmatization(lemmatization)
 
 
 def test_filter_folios(user):
