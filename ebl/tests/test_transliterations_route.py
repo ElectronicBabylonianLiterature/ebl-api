@@ -1,6 +1,7 @@
 import json
 import falcon
 import pytest
+from ebl.fragmentarium.lemmatization import Lemmatization
 
 
 def test_update_transliteration(client,
@@ -23,7 +24,8 @@ def test_update_transliteration(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    assert updated_fragment['transliteration'] == updates['transliteration']
+    assert Lemmatization(updated_fragment['lemmatization']).atf ==\
+        updates['transliteration']
     assert updated_fragment['notes'] == updates['notes']
     assert updated_fragment['record'][-1]['user'] == user.ebl_name
 

@@ -6,7 +6,7 @@ from ebl.fragmentarium.fragment import Fragment
 
 
 COLLECTION = 'fragments'
-HAS_TRANSLITERATION = {'transliteration': {'$ne': ''}}
+HAS_TRANSLITERATION = {'lemmatization.0': {'$exists': True}}
 SAMPLE_SIZE_ONE = {
     '$sample': {
         'size': 1
@@ -31,8 +31,8 @@ class MongoFragmentRepository():
 
     def count_lines(self):
         count_lines = Code('function() {'
-                           '  const lines = this.transliteration'
-                           '    .split("\\n")'
+                           '  const lines = this.lemmatization'
+                           '    .map(line => line[0] ? line[0].value : "")'
                            '    .filter(line => /^\\d/.test(line));'
                            '  emit("lines", lines.length);'
                            '}')
@@ -50,7 +50,11 @@ class MongoFragmentRepository():
         return self._mongo_repository.create(fragment.to_dict())
 
     def find(self, number):
-        return Fragment(self._mongo_repository.find(number))
+        data = pydash.omit(
+            self._mongo_repository.find(number),
+            'transliteration'
+        )
+        return Fragment(data)
 
     def search(self, number):
         cursor = self._mongo_collection.find({
@@ -76,7 +80,7 @@ class MongoFragmentRepository():
             {
                 '$match': {
                     '$and': [
-                        {'transliteration': ''},
+                        {'lemmatization': []},
                         {'joins': []},
                         {'publication': ''},
                         {'hits': 0}
@@ -90,7 +94,7 @@ class MongoFragmentRepository():
 
     def find_transliterated(self):
         cursor = self._mongo_collection.find(
-            {'transliteration': {'$ne': ''}}
+            {'lemmatization.0': {'$exists': True}}
         )
 
         return self._map_fragments(cursor)
@@ -105,7 +109,6 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': pydash.omit_by({
-                'transliteration': fragment.transliteration.atf,
                 'lemmatization': fragment.lemmatization.tokens,
                 'notes': fragment.transliteration.notes,
                 'signs': fragment.transliteration.signs,
@@ -182,4 +185,7 @@ class MongoFragmentRepository():
 
     @staticmethod
     def _map_fragments(cursor):
-        return [Fragment(fragment) for fragment in cursor]
+        return [
+            Fragment(pydash.omit(fragment, 'transliteration'))
+            for fragment in cursor
+        ]

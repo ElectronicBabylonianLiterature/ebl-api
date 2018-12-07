@@ -52,8 +52,11 @@ def test_transliteration(transliterated_fragment):
     data = transliterated_fragment.to_dict()
     new_fragment = Fragment(data)
 
-    assert new_fragment.transliteration ==\
-        Transliteration(data['transliteration'], data['notes'])
+    assert new_fragment.transliteration == Transliteration(
+        Lemmatization(data['lemmatization']).atf,
+        data['notes'],
+        data['signs']
+    )
 
 
 def test_record(transliterated_fragment):
@@ -90,7 +93,6 @@ def test_add_transliteration(fragment, user):
     )
     expected_fragment = Fragment({
         **fragment.to_dict(),
-        'transliteration': transliteration.atf,
         'lemmatization': lemmatization.tokens,
         'record': [{
             'user': user.ebl_name,
@@ -116,7 +118,6 @@ def test_update_transliteration(lemmatized_fragment, user):
 
     expected_fragment = Fragment({
         **lemmatized_fragment.to_dict(),
-        'transliteration': transliteration.atf,
         'lemmatization': lemmatization.tokens,
         'notes': transliteration.notes,
         'signs': transliteration.signs,

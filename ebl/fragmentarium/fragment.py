@@ -63,7 +63,6 @@ class Fragment:
 
         return Fragment(pydash.omit_by({
             **self._data,
-            'transliteration': lemmatization.atf,
             'lemmatization': lemmatization.tokens,
             'notes': transliteration.notes,
             'signs': transliteration.signs,

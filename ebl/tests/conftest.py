@@ -256,7 +256,6 @@ def fragment():
         'cdliNumber': 'cdli-4',
         'bmIdNumber': 'bmId-2',
         'accession': 'accession-3',
-        'transliteration': '',
         'lemmatization': [],
         'notes': '',
         'folios': [
@@ -302,13 +301,6 @@ def transliterated_fragment():
         'cdliNumber': 'cdli-5',
         'bmIdNumber': 'bmId-3',
         'accession': 'accession-4',
-        'transliteration': (
-            '1\'. [...-ku]-nu-ši [...]\n'
-            '2\'. [...] GI₆ ana u₄-š[u ...]\n'
-            '3\'. [... k]i-du u ba-ma-t[i ...]\n'
-            '6\'. [...] x mu ta-ma-tu₂\n'
-            '7\'. šu/|BI×IS|'
-        ),
         'lemmatization': [
             [
                 {"value": "1'.", "uniqueLemma": []},

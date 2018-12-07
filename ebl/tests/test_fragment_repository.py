@@ -79,16 +79,44 @@ def test_update_update_lemmatization_not_found(fragment_repository,
 
 def test_statistics(database, fragment_repository, fragment):
     database[COLLECTION].insert_many([
-        {**fragment.to_dict(), '_id': '1', 'transliteration': '''1. first line
-$ingore
-
-'''},
-        {**fragment.to_dict(), '_id': '2', 'transliteration': '''@ignore
-1'. second line
-2'. third line
-@ignore
-1#. fourth line'''},
-        {**fragment.to_dict(), '_id': '3', 'transliteration': ''}
+        {**fragment.to_dict(), '_id': '1', 'lemmatization': [
+            [
+                {'value': '1.', 'uniqueLemma': []},
+                {'value': 'first', 'uniqueLemma': []},
+                {'value': 'line', 'uniqueLemma': []}
+            ],
+            [
+                {'value': '$ingore', 'uniqueLemma': []}
+            ],
+            [],
+            [
+                {'value': '', 'uniqueLemma': []}
+            ]
+        ]},
+        {**fragment.to_dict(), '_id': '2', 'lemmatization': [
+            [
+                {'value': '$ingore', 'uniqueLemma': []}
+            ],
+            [
+                {'value': '1.', 'uniqueLemma': []},
+                {'value': 'second', 'uniqueLemma': []},
+                {'value': 'line', 'uniqueLemma': []}
+            ],
+            [
+                {'value': '2.', 'uniqueLemma': []},
+                {'value': 'third', 'uniqueLemma': []},
+                {'value': 'line', 'uniqueLemma': []}
+            ],
+            [
+                {'value': '$ingore', 'uniqueLemma': []}
+            ],
+            [
+                {'value': '1#.', 'uniqueLemma': []},
+                {'value': 'fourth', 'uniqueLemma': []},
+                {'value': 'line', 'uniqueLemma': []}
+            ]
+        ]},
+        {**fragment.to_dict(), '_id': '3', 'lemmatization': []}
     ])
 
     assert fragment_repository.count_transliterated_fragments() == 2

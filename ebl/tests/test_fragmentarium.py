@@ -154,16 +154,20 @@ def test_update_update_lemmatization_not_found(fragmentarium, user):
 
 def test_statistics(fragmentarium, fragment):
     for data in [
-            {**fragment.to_dict(), '_id': '1', 'transliteration': '''1. SU
-$ingore
-
-'''},
-            {**fragment.to_dict(), '_id': '2', 'transliteration': '''@ignore
-1'. SU
-2'. SU
-@ignore
-1#. SU'''},
-            {**fragment.to_dict(), '_id': '3', 'transliteration': ''},
+            {**fragment.to_dict(), '_id': '1', 'lemmatization': [
+                [{'value': '1. SU', 'uniqueLemma': []}],
+                [{'value': '$ingore', 'uniqueLemma': []}],
+                [],
+                [{'value': '', 'uniqueLemma': []}]
+            ]},
+            {**fragment.to_dict(), '_id': '2', 'lemmatization': [
+                [{'value': '$ingore', 'uniqueLemma': []}],
+                [{'value': '1. SU', 'uniqueLemma': []}],
+                [{'value': '2. SU', 'uniqueLemma': []}],
+                [{'value': '$ingore', 'uniqueLemma': []}],
+                [{'value': '1#. SU', 'uniqueLemma': []}]
+            ]},
+            {**fragment.to_dict(), '_id': '3', 'lemmatization': []}
     ]:
         fragmentarium.create(Fragment(data))
 
