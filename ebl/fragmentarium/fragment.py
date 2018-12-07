@@ -36,7 +36,7 @@ class Fragment:
     @property
     def transliteration(self):
         return Transliteration(
-            self._data['transliteration'],
+            self.lemmatization.atf,
             self._data['notes'],
             self._data.get('signs', None)
         )
@@ -55,7 +55,7 @@ class Fragment:
 
     def update_transliteration(self, transliteration, user):
         record = Record(self._data['record']).add_entry(
-            self.transliteration.atf,
+            self.lemmatization.atf,
             transliteration.atf,
             user
         )
@@ -63,7 +63,7 @@ class Fragment:
 
         return Fragment(pydash.omit_by({
             **self._data,
-            'transliteration': transliteration.atf,
+            'transliteration': lemmatization.atf,
             'lemmatization': lemmatization.tokens,
             'notes': transliteration.notes,
             'signs': transliteration.signs,

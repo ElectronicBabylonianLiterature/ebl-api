@@ -1,8 +1,18 @@
 import re
 import pytest
-from ebl.fragmentarium.fragment import Fragment
+from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
+
+ATF = (
+    '1\'. [...-ku]-nu-ši [...]\n'
+    '\n'
+    '@(obeverse)\n'
+    '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]\n'
+    '3\'. [... k]i-du u ba-ma-t[a ...]\n'
+    '6\'. [...] x mu ta-ma-tu₂\n'
+    '7\'. šu/gid'
+)
 
 SIGNS = (
     'KU NU IGI\n'
@@ -11,23 +21,6 @@ SIGNS = (
     'X MU TA MA UD\n'
     'ŠU/BU'
 )
-
-
-FRAGMENT = Fragment({
-    'transliteration': (
-        '1\'. [...-ku]-nu-ši [...]\n'
-        '\n'
-        '@(obeverse)\n'
-        '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]\n'
-        '3\'. [... k]i-du u ba-ma-t[a ...]\n'
-        '6\'. [...] x mu ta-ma-tu₂\n'
-        '7\'. šu/gid'
-    ),
-    'signs': SIGNS,
-    'notes': '',
-    'record': []
-})
-
 
 REGEXP_DATA = [
     ([['DU', 'U']], True),
@@ -110,6 +103,8 @@ GET_MATCHING_LINES_DATA = [
 
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
+    transliteration = Transliteration(ATF, signs=SIGNS)
+
     query = TransliterationQuery(query)
-    lines = query.get_matching_lines(FRAGMENT.transliteration)
+    lines = query.get_matching_lines(transliteration)
     assert lines == expected
