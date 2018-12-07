@@ -23,6 +23,13 @@ class Lemmatization:
     def tokens(self):
         return copy.deepcopy(self._tokens)
 
+    @property
+    def atf(self):
+        return '\n'.join([
+            ' '.join([token['value'] for token in row])
+            for row in self._tokens
+        ])
+
     def merge(self, transliteration):
         merged_tokens = Merger(lambda token: token['value'], 2).merge(
             self._tokens,

@@ -54,6 +54,15 @@ def test_tokens():
     assert lemmatization.tokens == tokens
 
 
+def test_atf():
+    atf = ('1. [...-ku]-nu-ši [...]\n'
+           '2. [...] GI₆ ana u₄-š[u ...]')
+    transliteration = Transliteration(atf)
+    lemmatization = Lemmatization.of_transliteration(transliteration)
+
+    assert lemmatization.atf == atf
+
+
 def test_of_transliteration():
     transliteration = Transliteration(
         '&K11111\n'
