@@ -1,6 +1,6 @@
 import copy
 import json
-from ebl.fragmentarium.merger import Merger, diff_lemmatization
+from ebl.fragmentarium.merger import Merger
 
 
 class LemmatizationError(Exception):
@@ -24,10 +24,9 @@ class Lemmatization:
         return copy.deepcopy(self._tokens)
 
     def merge(self, transliteration):
-        merged_tokens = Merger(True).merge(
+        merged_tokens = Merger(lambda token: token['value'], 2).merge(
             self._tokens,
-            self._tokenize(transliteration),
-            diff_lemmatization,
+            self._tokenize(transliteration)
         )
 
         return Lemmatization(merged_tokens)

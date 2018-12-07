@@ -3,26 +3,29 @@ from functools import reduce
 import pydash
 
 
-def diff(old, new, create_entry):
-    return difflib.ndiff(
-        [create_entry(token) for token in old],
-        [create_entry(token) for token in new]
-    )
+class Differ:
+    # pylint: disable=R0903
+    def __init__(self, map_, dimensions):
+        self._dimensions = dimensions
+        self._map = map_
+
+    def diff(self, old, new):
+        return difflib.ndiff(
+            [self._to_string(entry, self._dimensions) for entry in old],
+            [self._to_string(entry, self._dimensions) for entry in new]
+        )
+
+    def _to_string(self, line, dimensions):
+        if dimensions > 1:
+            return ' '.join([
+                self._to_string(entry, dimensions - 1)
+                for entry in line
+            ])
+        else:
+            return self._map(line)
 
 
-def diff_row(old, new):
-    return diff(old, new, lambda token: token['value'])
-
-
-def diff_lemmatization(old, new):
-    return diff(
-        old,
-        new,
-        lambda line: ' '.join([token['value'] for token in line])
-    )
-
-
-class State:
+class Merge:
     def __init__(self, old, new):
         self._old = old
         self._new = new
@@ -60,47 +63,46 @@ class State:
 
 class Merger:
     # pylint: disable=R0903
-    def __init__(self, recursive):
+    def __init__(self, map_, dimensions):
         self._operations = {
             '- ': self._delete_entry,
             '+ ': self._add_entry,
             '  ': self._keep_entry,
-            '? ': pydash.noop
+            '? ': pydash.identity
         }
-        self._recursive = recursive
+        self._map = map_
+        self._dimensions = dimensions
 
     @staticmethod
     def _delete_entry(state):
         state.advance_old(True)
+        return state
 
-    @staticmethod
-    def _inner_merge(state):
-        return Merger(False).merge(
+    def _inner_merge(self, state):
+        return Merger(self._map, self._dimensions - 1).merge(
             state.old_line,
-            state.current_new,
-            diff_row
+            state.current_new
         )
 
     def _add_entry(self, state):
         new_entry = (self._inner_merge(state)
-                     if self._recursive and state.old_line is not None
+                     if self._dimensions > 1 and state.old_line is not None
                      else state.current_new)
         state.append(new_entry)
         state.advance_new()
+        return state
 
     @staticmethod
     def _keep_entry(state):
         state.append(state.current_old)
         state.advance_new()
         state.advance_old()
+        return state
 
-    def merge(self, old, new, differ):
-        def merge_entry(state, entry):
-            self._operations[entry](state)
-            return state
-
+    def merge(self, old, new):
+        diff = Differ(self._map, self._dimensions).diff(old, new)
         return reduce(
-            merge_entry,
-            [line[:2] for line in differ(old, new)],
-            State(old, new)
+            lambda state, entry: self._operations[entry](state),
+            [line[:2] for line in diff],
+            Merge(old, new)
         ).result
