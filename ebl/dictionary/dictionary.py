@@ -40,7 +40,10 @@ def _create_lemma_search_pipeline(query):
                             '$map': {
                                 'input': "$forms",
                                 'as': "form",
-                                'in': _create_substring_expression(query, '$$form.lemma')
+                                'in': _create_substring_expression(
+                                    query,
+                                    '$$form.lemma'
+                                )
                             }
                         }
                     }
