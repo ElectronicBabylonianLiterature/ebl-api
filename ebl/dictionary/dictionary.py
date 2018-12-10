@@ -27,21 +27,52 @@ class MongoDictionary(MongoRepository):
         return [word for word in cursor]
 
     def search_lemma(self, query):
-        lemma = query.split(' ')
         cursor = self.get_collection().aggregate([
             {
                 '$match': {
-                    '$or': [
-                        {
-                            f'{key}.{index}': {
-                                '$regex': f'^{re.escape(part)}',
-                                '$options': 'i'
-                            }
-                            for index, part
-                            in enumerate(lemma)
+                    '$or': [{
+                        '$expr': {
+                            '$eq': [{
+                                '$substrCP': [{
+                                    '$reduce': {
+                                        'input': "$lemma",
+                                        'initialValue': "",
+                                        'in': {
+                                            '$concat': [
+                                                "$$value",
+                                                "$$this",
+                                                " "
+                                            ]
+                                        }
+                                    }
+                                }, 0, len(query)]
+                            }, query]
                         }
-                        for key in ['lemma', 'forms.lemma']
-                    ]
+                    }, {
+                        '$expr': {
+                            '$anyElementTrue': {
+                                '$map': {
+                                    'input': "$forms",
+                                    'as': "form",
+                                    'in': {'$eq': [{
+                                        '$substrCP': [{
+                                            '$reduce': {
+                                                'input': "$$form.lemma",
+                                                'initialValue': "",
+                                                'in': {
+                                                    '$concat': [
+                                                        "$$value",
+                                                        "$$this",
+                                                        " "
+                                                        ]
+                                                }
+                                            }
+                                        }, 0, len(query)]
+                                    }, query]}
+                                }
+                            }
+                        }
+                    }]
                 }
             },
             {
@@ -57,18 +88,14 @@ class MongoDictionary(MongoRepository):
                     }
                 }
             },
-            {
-                '$sort': {'lemmaLength': 1, '_id': 1}
-            },
-            {
-                '$limit': LEMMA_SEARCH_LIMIT
-            },
-            {
-                '$project': {
-                    'lemmaLength': 0
-                }
-            }
-        ])
+            {'$sort': {'lemmaLength': 1, '_id': 1}},
+            {'$limit': LEMMA_SEARCH_LIMIT},
+            {'$project': {'lemmaLength': 0}}
+        ], collation={
+            'locale': 'en',
+            'strength': 1,
+            'normalization': True
+        })
 
         return [word for word in cursor]
 
