@@ -1,6 +1,37 @@
 from pyoracc.atf.common.atffile import AtfFile
 
 
+ATF_SPEC = {
+    'line_number': r'^[^\.]+\.([^\.]+\.)?',
+    'shift': r'%\w+',
+    'control_line': r'@|\$|#|&',
+    'multiplex_comment': r'=:',
+    'tabulation': r'\(\$_+\$\)',
+    'divider': r'(^|\s+)(\||&\d*)($|\s+)',
+    'flags': {
+        'uncertainty': r'\?',
+        'collation': r'\*',
+        'damage': r'#',
+        'correction': r'!',
+        'not_logogram': r'\$',
+    },
+    'lacuna': {
+        'begin': r'\[',
+        'end': r'\]',
+        'undeterminable': r'\.\.\.'
+    },
+    'determinative_or_gloss': {
+        'begin': r'\s*{+\+?',
+        'end': r'}+({+\+?)?\s*?'
+    },
+    'omission': r'<\(?[^>]+\)?>',
+    'removal': r'<<[^>]+>>',
+    'joiner': '-',
+    'word_separator': ' ',
+    'variant_separator': '/'
+}
+
+
 ATF_HEADING = [
     '&XXX = XXX',
     '#project: eblo',

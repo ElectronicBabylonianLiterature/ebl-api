@@ -1,34 +1,31 @@
 import re
 import pydash
+from ebl.fragmentarium.atf import ATF_SPEC
 
-
-IGNORE_LINE_PATTERN = r'@|\$|#|&|=:'
-STRIP_PATTERN = (
-    r'^[^\.]+\.([^\.]+\.)?\s+|'
-    r'<<?\(?[^>]+\)?>?>|'
-    r'\[|'
-    r'\]|'
-    r'\.\.\.|'
-    r'\(\$_+\$\)|'
-    r'\?|'
-    r'\*|'
-    r'#|'
-    r'!|'
-    r'\$|'
-    r'%\w+\s+'
-)
-WHITE_SPACE_PATTERN = (
-    r'\s*{+\+?|'
-    r'}+({+\+?)?\s*?|'
-    r'-|'
-    r'(^|\s+)(\||&\d*)($|\s+)'
-)
+IGNORE_LINE_PATTERN = r'|'.join([
+    ATF_SPEC['control_line'],
+    ATF_SPEC['multiplex_comment']
+])
+STRIP_PATTERN = r'|'.join([
+    *ATF_SPEC['flags'].values(),
+    *ATF_SPEC['lacuna'].values(),
+    f'{ATF_SPEC["line_number"]}\\s+',
+    ATF_SPEC['removal'],
+    ATF_SPEC['omission'],
+    ATF_SPEC['tabulation'],
+    f'{ATF_SPEC["shift"]}\\s+',
+])
+WHITE_SPACE_PATTERN = r'|'.join([
+    *ATF_SPEC['determinative_or_gloss'].values(),
+    ATF_SPEC['joiner'],
+    ATF_SPEC['divider']
+])
 BRACES_PATTERN = (
     r'(?<![^\s])'
     r'\(([^\(\)]*)\)'
     r'(?!=[^\s])'
 )
-VARIANT_SEPARATOR = '/'
+VARIANT_SEPARATOR = ATF_SPEC['variant_separator']
 
 
 class TransliterationError(Exception):
@@ -151,7 +148,7 @@ class Transliteration:
                 for value in (
                     [line]
                     if re.match(IGNORE_LINE_PATTERN, line)
-                    else line.split(' ')
+                    else line.split(ATF_SPEC['word_separator'])
                 )
             ]
             for line in self.atf.split('\n')
