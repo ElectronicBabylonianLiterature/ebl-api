@@ -8,6 +8,64 @@ COLLECTION = 'words'
 LEMMA_SEARCH_LIMIT = 10
 
 
+def _create_substring_expression(query, _input):
+    return {
+        '$eq': [{
+            '$substrCP': [{
+                '$reduce': {
+                    'input': _input,
+                    'initialValue': '',
+                    'in': {
+                        '$concat': [
+                            '$$value',
+                            '$$this',
+                            ' '
+                        ]
+                    }
+                }
+            }, 0, len(query)]
+        }, query]
+    }
+
+
+def _create_lemma_search_pipeline(query):
+    return [
+        {
+            '$match': {
+                '$or': [{
+                    '$expr': _create_substring_expression(query, '$lemma')
+                }, {
+                    '$expr': {
+                        '$anyElementTrue': {
+                            '$map': {
+                                'input': "$forms",
+                                'as': "form",
+                                'in': _create_substring_expression(query, '$$form.lemma')
+                            }
+                        }
+                    }
+                }]
+            }
+        },
+        {
+            '$addFields': {
+                'lemmaLength':  {
+                    '$sum': {
+                        '$map': {
+                            'input': '$lemma',
+                            'as': 'part',
+                            'in': {'$strLenCP': '$$part'}
+                        }
+                    }
+                }
+            }
+        },
+        {'$sort': {'lemmaLength': 1, '_id': 1}},
+        {'$limit': LEMMA_SEARCH_LIMIT},
+        {'$project': {'lemmaLength': 0}}
+    ]
+
+
 class MongoDictionary(MongoRepository):
 
     def __init__(self, database):
@@ -27,75 +85,14 @@ class MongoDictionary(MongoRepository):
         return [word for word in cursor]
 
     def search_lemma(self, query):
-        cursor = self.get_collection().aggregate([
-            {
-                '$match': {
-                    '$or': [{
-                        '$expr': {
-                            '$eq': [{
-                                '$substrCP': [{
-                                    '$reduce': {
-                                        'input': "$lemma",
-                                        'initialValue': "",
-                                        'in': {
-                                            '$concat': [
-                                                "$$value",
-                                                "$$this",
-                                                " "
-                                            ]
-                                        }
-                                    }
-                                }, 0, len(query)]
-                            }, query]
-                        }
-                    }, {
-                        '$expr': {
-                            '$anyElementTrue': {
-                                '$map': {
-                                    'input': "$forms",
-                                    'as': "form",
-                                    'in': {'$eq': [{
-                                        '$substrCP': [{
-                                            '$reduce': {
-                                                'input': "$$form.lemma",
-                                                'initialValue': "",
-                                                'in': {
-                                                    '$concat': [
-                                                        "$$value",
-                                                        "$$this",
-                                                        " "
-                                                        ]
-                                                }
-                                            }
-                                        }, 0, len(query)]
-                                    }, query]}
-                                }
-                            }
-                        }
-                    }]
-                }
-            },
-            {
-                '$addFields': {
-                    'lemmaLength':  {
-                        '$sum': {
-                            '$map': {
-                                'input': '$lemma',
-                                'as': 'part',
-                                'in': {'$strLenCP': '$$part'}
-                            }
-                        }
-                    }
-                }
-            },
-            {'$sort': {'lemmaLength': 1, '_id': 1}},
-            {'$limit': LEMMA_SEARCH_LIMIT},
-            {'$project': {'lemmaLength': 0}}
-        ], collation={
-            'locale': 'en',
-            'strength': 1,
-            'normalization': True
-        })
+        cursor = self.get_collection().aggregate(
+            _create_lemma_search_pipeline(query),
+            collation={
+                'locale': 'en',
+                'strength': 1,
+                'normalization': True
+            }
+        )
 
         return [word for word in cursor]
 
