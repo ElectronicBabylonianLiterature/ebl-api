@@ -1,4 +1,6 @@
-from ebl.fragmentarium.tokens import Token
+import pytest
+from ebl.fragmentarium.language import Language
+from ebl.fragmentarium.tokens import Token, Word, UniqueLemma
 
 
 def test_token():
@@ -15,10 +17,54 @@ def test_token():
     assert token == equal
     assert hash(token) == hash(equal)
 
-    assert token == equal
-    assert hash(token) == hash(equal)
-
     assert token != other
     assert hash(token) != hash(other)
 
     assert token != value
+
+
+@pytest.mark.parametrize("language,unique_lemma", [
+    (Language.SUMERIAN, None),
+    (Language.EMESAL, tuple()),
+    (Language.AKKADIAN, tuple(UniqueLemma('aklu I'))),
+])
+def test_word(language, unique_lemma):
+    value = 'value'
+    expected_unique_lemma = (
+        tuple()
+        if unique_lemma is None
+        else unique_lemma
+    )
+
+    def create_word():
+        return (
+            Word(value, language)
+            if unique_lemma is None
+            else Word(value, language, unique_lemma)
+        )
+
+    word = create_word()
+
+    equal = create_word()
+    other_language = Word(value, Language.UNKNOWN, expected_unique_lemma)
+    other_value = Word('other value', language, expected_unique_lemma)
+    other_unique_lemma = Word(value, language, tuple(UniqueLemma('waklu I')))
+
+    assert word.value == value
+    assert word.lemmatizable is language.lemmatizable
+    assert word.unique_lemma == expected_unique_lemma
+    assert str(word) == value
+    assert repr(word) ==\
+        f'Word("{value}", "{language}", "{expected_unique_lemma}")'
+
+    assert word == equal
+    assert hash(word) == hash(equal)
+
+    assert word == equal
+    assert hash(word) == hash(equal)
+
+    for not_equal in [other_language, other_value, other_unique_lemma]:
+        assert word != not_equal
+        assert hash(word) != hash(not_equal)
+
+    assert word != value
