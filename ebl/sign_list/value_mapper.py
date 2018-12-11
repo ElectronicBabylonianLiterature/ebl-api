@@ -1,14 +1,15 @@
 import re
 import unicodedata
+from ebl.atf import ATF_SPEC
 
 
-BROKEN_PATTERN = r'x'
-WITH_SIGN_PATTERN = r'[^\(/\|]+\((.+)\)|'
-NUMBER_PATTERN = r'\d+'
-GRAPHEME_PATTERN =\
-    r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|?'
-READING_PATTERN = r'([^₀-₉ₓ/]+)([₀-₉]+)?'
-VARIANT_PATTERN = r'([^/]+)(?:/([^/]+))+'
+BROKEN_PATTERN = ATF_SPEC['unclear']
+WITH_SIGN_PATTERN = ATF_SPEC['with_sign']
+NUMBER_PATTERN = ATF_SPEC['number']
+GRAPHEME_PATTERN = ATF_SPEC['grapheme']
+READING_PATTERN = ATF_SPEC['reading']
+VARIANT_PATTERN = ATF_SPEC['variant']
+VARIANT_SEPARATOR = ATF_SPEC['variant_separator']
 UNKNOWN_SIGN = '?'
 BROKEN_SIGN = 'X'
 
@@ -55,10 +56,10 @@ def create_value_mapper(sign_repository):
         return search_or_default(value, sub_index, UNKNOWN_SIGN)
 
     def map_variant(match):
-        return '/'.join([
+        return VARIANT_SEPARATOR.join([
             map_(part)
             for part
-            in match.group(0).split('/')
+            in match.group(0).split(VARIANT_SEPARATOR)
         ])
 
     def search_or_default(value, sub_index, default):

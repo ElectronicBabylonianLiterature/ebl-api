@@ -1,4 +1,5 @@
 from ebl.sign_list.value_mapper import create_value_mapper
+from ebl.atf import ATF_SPEC
 
 
 class SignList:
@@ -19,7 +20,10 @@ class SignList:
     def map_transliteration(self, cleaned_transliteration):
         return [
             (
-                [self._map_value(value) for value in row.split(' ')]
+                [
+                    self._map_value(value)
+                    for value in row.split(ATF_SPEC['word_separator'])
+                ]
                 if row
                 else ['']
             )

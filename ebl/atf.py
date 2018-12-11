@@ -26,6 +26,13 @@ ATF_SPEC = {
     },
     'omission': r'<\(?[^>]+\)?>',
     'removal': r'<<[^>]+>>',
+    'reading': r'([^₀-₉ₓ/]+)([₀-₉]+)?',
+    'with_sign': r'[^\(/\|]+\((.+)\)|',
+    'grapheme': r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|?',
+    'number': r'\d+',
+    'variant': r'([^/]+)(?:/([^/]+))+',
+    'unclear': 'x',
+    'unindentified': 'X',
     'joiner': '-',
     'word_separator': ' ',
     'variant_separator': '/'
