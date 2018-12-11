@@ -1,6 +1,6 @@
 import re
 import pydash
-from ebl.fragmentarium.atf import ATF_SPEC
+from ebl.atf import ATF_SPEC
 
 IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['control_line'],

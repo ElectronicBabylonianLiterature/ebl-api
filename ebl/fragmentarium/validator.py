@@ -1,4 +1,4 @@
-from ebl.fragmentarium.atf import validate_atf, AtfSyntaxError
+from ebl.atf import validate_atf, AtfSyntaxError
 from ebl.fragmentarium.transliteration import TransliterationError
 
 
