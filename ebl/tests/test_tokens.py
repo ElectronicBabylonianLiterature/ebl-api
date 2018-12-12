@@ -1,4 +1,3 @@
-from typing import Tuple
 import pytest
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.tokens import Token, Word, UniqueLemma, Shift
