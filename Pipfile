@@ -25,6 +25,8 @@ mongomock = "*"
 pylint = "*"
 freezegun = "*"
 pyexecjs = "*"
+mypy = "*"
+mypy-extensions = "*"
 
 [requires]
 python_version = "3.6"
