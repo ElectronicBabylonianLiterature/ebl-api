@@ -25,6 +25,8 @@ pipenv run lint
 pipenv run test
 ```
 
+If there are conflicts between `pylint` and `pep8`, prefer `pep8` way of things.
+
 ## Running the application
 
 The application reads the configuration from following environment variables: 
@@ -71,3 +73,11 @@ module contains functionality to update the signs in all the fragments. The modu
 python -m ebl.fragmentarium.update_signs
 ```
 
+## Type hints
+
+Currectly, it is not mandatory to use type hints, but we are experimenting with them in the domain model.
+
+Type checks can be run with `mypy`:
+```
+pipenv run mypy -m ebl.fragmentarium.tokens -m ebl.fragmentarium.language --ignore-missing-imports
+```
