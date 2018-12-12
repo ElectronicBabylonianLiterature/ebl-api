@@ -35,7 +35,8 @@ class Word(Token):
             self,
             value: str,
             language: Language,
-            unique_lemma: Tuple[UniqueLemma, ...] = tuple()
+            # pylint: disable=C0326
+            unique_lemma: Tuple[UniqueLemma, ...]=tuple()
     ) -> None:
         super().__init__(value)
         self.__language = language
