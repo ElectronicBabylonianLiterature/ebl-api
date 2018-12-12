@@ -68,3 +68,30 @@ class Word(Token):
         properties =\
             f'"{self.value}", "{self.language}", "{self.unique_lemma}"'
         return f'{type(self).__name__}({properties})'
+
+
+class Shift(Token):
+    def __init__(
+            self,
+            value: str
+    ) -> None:
+        super().__init__(value)
+        self.__language = Language.of_atf(value)
+
+    @property
+    def language(self) -> Language:
+        return self.__language
+
+    def __eq__(self, other: Any) -> bool:
+        return (
+            isinstance(other, Shift) and
+            self.value == other.value
+        )
+
+    def __hash__(self) -> int:
+        return hash((self.value, self.language))
+
+    def __repr__(self) -> str:
+        properties =\
+            f'"{self.value}", "{self.language}"'
+        return f'{type(self).__name__}({properties})'

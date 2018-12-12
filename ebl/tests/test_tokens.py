@@ -1,6 +1,7 @@
+from typing import Tuple
 import pytest
 from ebl.fragmentarium.language import Language
-from ebl.fragmentarium.tokens import Token, Word, UniqueLemma
+from ebl.fragmentarium.tokens import Token, Word, UniqueLemma, Shift
 
 
 def test_token():
@@ -69,3 +70,30 @@ def test_word(language, unique_lemma):
 
     assert word != Token(value)
     assert word != value
+
+
+@pytest.mark.parametrize("value,expected_language", [
+    (r'%sux', Language.SUMERIAN,),
+    (r'%es', Language.EMESAL),
+    (r'%sb', Language.AKKADIAN),
+    (r'%foo', Language.UNKNOWN)
+])
+def test_shift(value, expected_language):
+    shift = Shift(value)
+    equal = Shift(value)
+    other = Token(r'%bar')
+
+    assert shift.value == value
+    assert shift.lemmatizable is False
+    assert shift.language == expected_language
+    assert str(shift) == value
+    assert repr(shift) == f'Shift("{value}", "{expected_language}")'
+
+    assert shift == equal
+    assert hash(shift) == hash(equal)
+
+    assert shift != other
+    assert hash(shift) != hash(other)
+
+    assert shift != Token(value)
+    assert shift != value
