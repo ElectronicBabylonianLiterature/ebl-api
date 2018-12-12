@@ -35,7 +35,7 @@ class Word(Token):
             self,
             value: str,
             language: Language,
-            unique_lemma: Tuple[UniqueLemma] = tuple()
+            unique_lemma: Tuple[UniqueLemma, ...] = tuple()
     ) -> None:
         super().__init__(value)
         self.__language = language
@@ -46,7 +46,7 @@ class Word(Token):
         return self.__language
 
     @property
-    def unique_lemma(self) -> Tuple[UniqueLemma]:
+    def unique_lemma(self) -> Tuple[UniqueLemma, ...]:
         return self.__unique_lemma
 
     @property

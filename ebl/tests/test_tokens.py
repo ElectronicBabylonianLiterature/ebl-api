@@ -67,4 +67,5 @@ def test_word(language, unique_lemma):
         assert word != not_equal
         assert hash(word) != hash(not_equal)
 
+    assert word != Token(value)
     assert word != value
