@@ -16,6 +16,8 @@ dictdiffer = "*"
 regex = "*"
 jsonschema = "*"
 pyoracc = "*"
+parsy = "*"
+attr = "*"
 
 [dev-packages]
 pytest = "*"

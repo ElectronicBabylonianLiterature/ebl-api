@@ -23,42 +23,37 @@ def test_token():
     assert token != value
 
 
+def test_word_defaults():
+    value = 'value'
+    word = Word(value)
+
+    assert word.value == value
+    assert word.lemmatizable is True
+    assert word.language == Language.AKKADIAN
+    assert word.unique_lemma == tuple()
+
+
 @pytest.mark.parametrize("language,unique_lemma", [
-    (Language.SUMERIAN, None),
+    (Language.SUMERIAN, (UniqueLemma('ku II'), UniqueLemma('aklu I'))),
     (Language.EMESAL, tuple()),
-    (Language.AKKADIAN, tuple(UniqueLemma('aklu I'))),
+    (Language.AKKADIAN, (UniqueLemma('aklu I'), )),
 ])
 def test_word(language, unique_lemma):
     value = 'value'
-    expected_unique_lemma = (
-        tuple()
-        if unique_lemma is None
-        else unique_lemma
-    )
+    word = Word(value, language, unique_lemma)
 
-    def create_word():
-        return (
-            Word(value, language)
-            if unique_lemma is None
-            else Word(value, language, unique_lemma)
-        )
-
-    word = create_word()
-
-    equal = create_word()
-    other_language = Word(value, Language.UNKNOWN, expected_unique_lemma)
-    other_value = Word('other value', language, expected_unique_lemma)
+    equal = Word(value, language, unique_lemma)
+    other_language = Word(value, Language.UNKNOWN, unique_lemma)
+    other_value = Word('other value', language, unique_lemma)
     other_unique_lemma = Word(value, language, tuple(UniqueLemma('waklu I')))
 
     assert word.value == value
     assert word.lemmatizable is language.lemmatizable
-    assert word.unique_lemma == expected_unique_lemma
+    assert word.language == language
+    assert word.unique_lemma == unique_lemma
     assert str(word) == value
     assert repr(word) ==\
-        f'Word("{value}", "{language}", "{expected_unique_lemma}")'
-
-    assert word == equal
-    assert hash(word) == hash(equal)
+        f'Word("{value}", "{language}", "{unique_lemma}")'
 
     assert word == equal
     assert hash(word) == hash(equal)

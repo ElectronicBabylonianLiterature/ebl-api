@@ -32,10 +32,10 @@ UniqueLemma = NewType('UniqueLemma', str)
 
 class Word(Token):
     def __init__(
+            # pylint: disable=C0326
             self,
             value: str,
-            language: Language,
-            # pylint: disable=C0326
+            language: Language=Language.AKKADIAN,
             unique_lemma: Tuple[UniqueLemma, ...]=tuple()
     ) -> None:
         super().__init__(value)

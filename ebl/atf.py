@@ -27,7 +27,7 @@ ATF_SPEC = {
     'omission': r'<\(?[^>]+\)?>',
     'removal': r'<<[^>]+>>',
     'reading': r'([^₀-₉ₓ/]+)([₀-₉]+)?',
-    'with_sign': r'[^\(/\|]+\((.+)\)|',
+    'with_sign': r'[^\(/\|]+\((.+)\)',
     'grapheme': r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|?',
     'number': r'\d+',
     'variant': r'([^/]+)(?:/([^/]+))+',
@@ -64,7 +64,7 @@ class AtfSyntaxError(AtfError):
 def validate_atf(text):
     prefix = '\n'.join(ATF_HEADING)
     try:
-        AtfFile(f'{prefix}\n{text}', atftype='oracc')
+        return AtfFile(f'{prefix}\n{text}', atftype='oracc')
     except SyntaxError as error:
         raise AtfSyntaxError(error)
     except (IndexError,
