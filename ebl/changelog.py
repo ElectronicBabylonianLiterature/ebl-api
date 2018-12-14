@@ -12,7 +12,7 @@ def create_entry(user_profile, resource_type, resource_id, diff):
         'resource_type': resource_type,
         'resource_id': resource_id,
         'date': datetime.datetime.utcnow().isoformat(),
-        'diff':  diff
+        'diff': diff
     }
 
 

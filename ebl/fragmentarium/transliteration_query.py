@@ -47,6 +47,6 @@ class TransliterationQuery:
         lines = transliteration.filtered
 
         return [
-            lines[numbers[0]:numbers[1]+1]
+            lines[numbers[0]:numbers[1] + 1]
             for numbers in pydash.uniq(line_numbers)
         ]

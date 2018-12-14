@@ -414,7 +414,7 @@ def make_changelog_entry(user):
             'resource_type': resource_type,
             'resource_id': resource_id,
             'date': datetime.datetime.utcnow().isoformat(),
-            'diff':  json.loads(json.dumps(
+            'diff': json.loads(json.dumps(
                 list(diff(old, new))
             ))
         }

@@ -52,7 +52,7 @@ def _create_lemma_search_pipeline(query):
         },
         {
             '$addFields': {
-                'lemmaLength':  {
+                'lemmaLength': {
                     '$sum': {
                         '$map': {
                             'input': '$lemma',
