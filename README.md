@@ -21,7 +21,8 @@ pipenv install --dev
 ## Running tests
 
 ```
-pipenv run lint 
+pipenv run lint
+pipenv run mypy -p ebl
 pipenv run test
 ```
 
