@@ -1,18 +1,23 @@
+# pylint: disable=R0903
 import re
 import typing
 import attr
 import pydash
-from parsy import string, regex, seq, any_char, generate
+from parsy import string, regex, seq
 from ebl.fragmentarium.tokens import Token, Word, Shift
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: str = ''
-    content: typing.List[Token] = attr.Factory(list)
+    content: typing.Tuple[Token, ...] = tuple()
+
+    @classmethod
+    def of_iterable(cls, number: str, content: typing.Iterable[Token]):
+        return cls(number, tuple(content))
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class ControlLine:
     prefix: str = ''
     content: str = ''
@@ -25,6 +30,7 @@ class EmptyLine:
 
 
 def tokenize(input_: str):
+    # pylint: disable=R0914
     tabulation = regex(r'\(\$___\$\)').map(Token).desc('tabulation')
     column = regex(r'&\d*').map(Token).desc('column')
     divider = regex(r'\||:|;|/').map(Token).desc('divider')
@@ -60,7 +66,8 @@ def tokenize(input_: str):
         regex(r'(=:|\$|@|&|#)'),
         regex(r'.*')
     ).combine(ControlLine)
-    text_line = seq(line_number << word_separator, text).combine(Line)
+    text_line =\
+        seq(line_number << word_separator, text).combine(Line.of_iterable)
     empty_line = regex(
         '^$', re.RegexFlag.MULTILINE
     ).map(lambda _: EmptyLine()) << line_separator
