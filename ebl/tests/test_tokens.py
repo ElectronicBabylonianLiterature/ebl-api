@@ -11,16 +11,12 @@ def test_token():
 
     assert token.value == value
     assert token.lemmatizable is False
-    assert str(token) == value
-    assert repr(token) == f'Token("{value}")'
 
     assert token == equal
     assert hash(token) == hash(equal)
 
     assert token != other
     assert hash(token) != hash(other)
-
-    assert token != value
 
 
 def test_word_defaults():
@@ -51,9 +47,6 @@ def test_word(language, unique_lemma):
     assert word.lemmatizable is language.lemmatizable
     assert word.language == language
     assert word.unique_lemma == unique_lemma
-    assert str(word) == value
-    assert repr(word) ==\
-        f'Word("{value}", "{language}", "{unique_lemma}")'
 
     assert word == equal
     assert hash(word) == hash(equal)
@@ -63,7 +56,6 @@ def test_word(language, unique_lemma):
         assert hash(word) != hash(not_equal)
 
     assert word != Token(value)
-    assert word != value
 
 
 @pytest.mark.parametrize("value,expected_language", [
@@ -80,8 +72,6 @@ def test_shift(value, expected_language):
     assert shift.value == value
     assert shift.lemmatizable is False
     assert shift.language == expected_language
-    assert str(shift) == value
-    assert repr(shift) == f'Shift("{value}", "{expected_language}")'
 
     assert shift == equal
     assert hash(shift) == hash(equal)
@@ -90,4 +80,3 @@ def test_shift(value, expected_language):
     assert hash(shift) != hash(other)
 
     assert shift != Token(value)
-    assert shift != value

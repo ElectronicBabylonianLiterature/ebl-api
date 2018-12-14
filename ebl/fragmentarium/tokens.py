@@ -1,98 +1,34 @@
-from typing import Any, Tuple, NewType
+# pylint: disable=R0903
+from typing import Tuple, NewType
+import attr
 from ebl.fragmentarium.language import Language
 
 
-class Token():
-    def __init__(self, value: str) -> None:
-        self.__value = value
-
-    @property
-    def value(self) -> str:
-        return self.__value
+@attr.s(auto_attribs=True, frozen=True)
+class Token:
+    value: str
 
     @property
     def lemmatizable(self) -> bool:
         return False
 
-    def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Token) and (self.value == other.value)
-
-    def __hash__(self) -> int:
-        return hash(self.value)
-
-    def __repr__(self) -> str:
-        return f'{type(self).__name__}("{self.value}")'
-
-    def __str__(self) -> str:
-        return self.value
-
 
 UniqueLemma = NewType('UniqueLemma', str)
 
 
+@attr.s(auto_attribs=True, frozen=True)
 class Word(Token):
-    def __init__(
-            # pylint: disable=C0326
-            self,
-            value: str,
-            language: Language=Language.AKKADIAN,
-            unique_lemma: Tuple[UniqueLemma, ...]=tuple()
-    ) -> None:
-        super().__init__(value)
-        self.__language = language
-        self.__unique_lemma = unique_lemma
-
-    @property
-    def language(self) -> Language:
-        return self.__language
-
-    @property
-    def unique_lemma(self) -> Tuple[UniqueLemma, ...]:
-        return self.__unique_lemma
+    language: Language = Language.AKKADIAN
+    unique_lemma: Tuple[UniqueLemma, ...] = tuple()
 
     @property
     def lemmatizable(self) -> bool:
         return self.language.lemmatizable
 
-    def __eq__(self, other: Any) -> bool:
-        return (
-            isinstance(other, Word) and
-            self.value == other.value and
-            self.language == other.language and
-            self.unique_lemma == other.unique_lemma
-        )
 
-    def __hash__(self) -> int:
-        return hash((self.value, self.language, self.unique_lemma))
-
-    def __repr__(self) -> str:
-        properties =\
-            f'"{self.value}", "{self.language}", "{self.unique_lemma}"'
-        return f'{type(self).__name__}({properties})'
-
-
+@attr.s(auto_attribs=True, frozen=True)
 class Shift(Token):
-    def __init__(
-            self,
-            value: str
-    ) -> None:
-        super().__init__(value)
-        self.__language = Language.of_atf(value)
+    language: Language = attr.ib(init=False)
 
-    @property
-    def language(self) -> Language:
-        return self.__language
-
-    def __eq__(self, other: Any) -> bool:
-        return (
-            isinstance(other, Shift) and
-            self.value == other.value
-        )
-
-    def __hash__(self) -> int:
-        return hash((self.value, self.language))
-
-    def __repr__(self) -> str:
-        properties =\
-            f'"{self.value}", "{self.language}"'
-        return f'{type(self).__name__}({properties})'
+    def __attrs_post_init__(self):
+        object.__setattr__(self, 'language', Language.of_atf(self.value))
