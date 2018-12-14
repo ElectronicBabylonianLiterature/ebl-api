@@ -9,24 +9,31 @@ from ebl.fragmentarium.tokens import Token, Word, Shift
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
-    number: str = ''
+    prefix: str = ''
     content: typing.Tuple[Token, ...] = tuple()
 
     @classmethod
-    def of_iterable(cls, number: str, content: typing.Iterable[Token]):
-        return cls(number, tuple(content))
+    def of_iterable(cls, prefix: str, content: typing.Iterable[Token]):
+        return cls(prefix, tuple(content))
+
+    @classmethod
+    def of_single(cls, prefix: str, content: Token):
+        return cls(prefix, (content, ))
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class ControlLine:
-    prefix: str = ''
-    content: str = ''
+class ControlLine(Line):
+    pass
 
 
-@attr.s
-class EmptyLine:
-    def __eq__(self, other):
-        return isinstance(other, EmptyLine)
+@attr.s(auto_attribs=True, frozen=True)
+class TextLine(Line):
+    pass
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class EmptyLine(Line):
+    pass
 
 
 def tokenize(input_: str):
@@ -64,10 +71,10 @@ def tokenize(input_: str):
 
     control_line = seq(
         regex(r'(=:|\$|@|&|#)'),
-        regex(r'.*')
-    ).combine(ControlLine)
+        regex(r'.*').map(Token)
+    ).combine(ControlLine.of_single)
     text_line =\
-        seq(line_number << word_separator, text).combine(Line.of_iterable)
+        seq(line_number << word_separator, text).combine(TextLine.of_iterable)
     empty_line = regex(
         '^$', re.RegexFlag.MULTILINE
     ).map(lambda _: EmptyLine()) << line_separator
