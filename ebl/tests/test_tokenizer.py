@@ -16,8 +16,7 @@ from ebl.fragmentarium.text import (
     ('=: continuation', [ControlLine.of_single('=:', Token(' continuation'))]),
     ('a+1.a+2. šu', [TextLine('a+1.a+2.', (Word('šu'), ))]),
     ('1. ($___$)', [TextLine('1.', (Token('($___$)'), ))]),
-    ('1. x X', [TextLine('1.', (Token('x'), Token('X')))]),
-    ('1. ...', [TextLine('1.', (Token('...'), ))]),
+    ('1. ... [...]', [TextLine('1.', (Token('...'), Token('[...]')))]),
     ('1. & &12', [TextLine('1.', (Token('&'), Token('&12')))]),
     ('1. | : ; /', [TextLine('1.', (
         Token('|'), Token(':'), Token(';'), Token('/')
@@ -28,12 +27,13 @@ from ebl.fragmentarium.text import (
     ('1. %es %sux %sb %foo', [TextLine('1.', (
         Shift('%es'), Shift('%sux'), Shift('%sb'), Shift('%foo')
     ))]),
-    # ('1. x-ti [...]-x-ti ti-X', [Line('1.', [
-    #     Token('x-ti'), Token('[...]-x-ti'), Token('ti-X')
-    # ])]),
-    # ('1. [... r]u?-u₂-qu', [Line('1.', [
-    #   Token('[...'), Word('r]u?-u₂-qu')
-    # ])]),
+    ('1. x X', [TextLine('1.', (Word('x'), Word('X')))]),
+    ('1. x-ti ti-X', [TextLine('1.', (
+        Word('x-ti'), Word('ti-X')
+    ))]),
+    ('1. [... r]u?-u₂-qu na-a[n-...]', [TextLine('1.', (
+        Token('[...'), Word('r]u?-u₂-qu'), Word('na-a[n-...]')
+    ))]),
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (Word('šu'), Word('gid₂'))),
         TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))

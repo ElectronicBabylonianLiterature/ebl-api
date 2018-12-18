@@ -13,15 +13,13 @@ def tokenize(input_: str):
     divider = regex(r'\||:|;|/').map(Token).desc('divider')
     commentary_protocol =\
         regex(r'!(qt|bs|cm|zz)').map(Token).desc('commentary protocol')
-    unclear = string('x').map(Token).desc('unclear sign')
-    unidentified = string('X').map(Token).desc('unindentified sign')
     shift = (
         regex(r'%\w+')
         .map(Shift)
         .desc('language or register/writing system shift')
     )
     line_number = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
-    lacuna = string('...').map(Token).desc('lacuna')
+    lacuna = regex(r'\[?\.\.\.\]?').map(Token).desc('lacuna')
     word = regex(r'[^\s]+').map(Word).desc('word')
 
     word_separator = string(' ').desc('word separtor')
@@ -32,8 +30,6 @@ def tokenize(input_: str):
         column |
         divider |
         commentary_protocol |
-        unclear |
-        unidentified |
         shift |
         lacuna |
         word
