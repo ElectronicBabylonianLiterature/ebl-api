@@ -11,15 +11,12 @@ REVISION = 'Revision'
 
 
 class Fragment:
-
+    # pylint: disable=R0904
     def __init__(self, data):
         self._data = copy.deepcopy(data)
 
     def __eq__(self, other):
         return isinstance(other, Fragment) and (self._data == other.to_dict())
-
-    def __hash__(self):
-        return hash(json.dumps(self._data))
 
     @property
     def number(self):
@@ -32,6 +29,46 @@ class Fragment:
     @property
     def cdli_number(self):
         return self._data['cdliNumber']
+
+    @property
+    def bm_id_number(self):
+        return self._data['bmIdNumber']
+
+    @property
+    def publication(self):
+        return self._data['publication']
+
+    @property
+    def description(self):
+        return self._data['description']
+
+    @property
+    def collection(self):
+        return self._data['collection']
+
+    @property
+    def script(self):
+        return self._data['script']
+
+    @property
+    def museum(self):
+        return self._data['museum']
+
+    @property
+    def width(self):
+        return {**self._data['width']}
+
+    @property
+    def length(self):
+        return {**self._data['length']}
+
+    @property
+    def thickness(self):
+        return {**self._data['thickness']}
+
+    @property
+    def joins(self):
+        return [*self._data['joins']]
 
     @property
     def transliteration(self):
@@ -52,6 +89,10 @@ class Fragment:
     @property
     def lemmatization(self):
         return Lemmatization(self._data['lemmatization'])
+
+    @property
+    def hits(self):
+        return self._data.get('hits')
 
     def update_transliteration(self, transliteration, user):
         record = Record(self._data['record']).add_entry(
@@ -86,7 +127,28 @@ class Fragment:
             raise LemmatizationError()
 
     def to_dict(self):
-        return copy.deepcopy(self._data)
+        return pydash.omit_by({
+            '_id': self.number,
+            'accession': self.accession,
+            'cdliNumber': self.cdli_number,
+            'bmIdNumber': self.bm_id_number,
+            'publication': self.publication,
+            'description': self.description,
+            'joins': self.joins,
+            'length': self.length,
+            'width': self.width,
+            'thickness': self.thickness,
+            'collection': self.collection,
+            'script': self.script,
+            'notes': self.transliteration.notes,
+            'museum': self.museum,
+            'signs': self.transliteration.signs,
+            'record': self.record.entries,
+            'folios': self.folios.entries,
+            'lemmatization': self.lemmatization.tokens,
+            'hits': self._data.get('hits'),
+            'matching_lines': self._data.get('matching_lines')
+        }, lambda value: value is None)
 
     def to_dict_for(self, user):
         return {

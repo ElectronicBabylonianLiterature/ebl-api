@@ -256,6 +256,15 @@ def fragment():
         'cdliNumber': 'cdli-4',
         'bmIdNumber': 'bmId-2',
         'accession': 'accession-3',
+        'museum': 'Museum',
+        'collection': 'Collection',
+        'publication': 'publication',
+        'description': 'description',
+        'script': 'NA',
+        'joins': [],
+        'width': {},
+        'length': {},
+        'thickness': {},
         'lemmatization': [],
         'notes': '',
         'folios': [
@@ -279,6 +288,7 @@ def another_fragment(fragment):
         '_id': '2',
         'accession': 'accession-no-match',
         'cdliNumber': 'cdli-no-match',
+        'bmIdNumber': 'bmId-2',
         'notes': '',
         'folios': [
             {
@@ -290,7 +300,8 @@ def another_fragment(fragment):
                 'number': '2'
             }
         ],
-        'record': []
+        'record': [],
+        'hits': 5
     })
 
 
@@ -301,6 +312,15 @@ def transliterated_fragment():
         'cdliNumber': 'cdli-5',
         'bmIdNumber': 'bmId-3',
         'accession': 'accession-4',
+        'museum': 'Museum',
+        'collection': 'Collection',
+        'publication': 'publication',
+        'description': 'description',
+        'script': 'NA',
+        'joins': [],
+        'width': {},
+        'length': {},
+        'thickness': {},
         'lemmatization': [
             [
                 {"value": "1'.", "uniqueLemma": []},

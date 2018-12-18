@@ -1,5 +1,4 @@
 import datetime
-import json
 from freezegun import freeze_time
 import pytest
 from ebl.fragmentarium.fragment import Fragment
@@ -36,10 +35,6 @@ def test_equality(fragment, transliterated_fragment):
     assert new_fragment != transliterated_fragment
 
 
-def test_hash(fragment):
-    assert hash(fragment) == hash(json.dumps(fragment.to_dict()))
-
-
 def test_accession(fragment):
     data = fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
@@ -52,6 +47,76 @@ def test_cdli_number(fragment):
     new_fragment = Fragment.from_dict(data)
 
     assert new_fragment.cdli_number == data['cdliNumber']
+
+
+def test_bm_id_number(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.bm_id_number == data['bmIdNumber']
+
+
+def test_publication(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.publication == data['publication']
+
+
+def test_description(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.description == data['description']
+
+
+def test_collection(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.collection == data['collection']
+
+
+def test_script(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.script == data['script']
+
+
+def test_museum(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.museum == data['museum']
+
+
+def test_length(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.length == data['length']
+
+
+def test_width(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.width == data['width']
+
+
+def test_thickness(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.thickness == data['thickness']
+
+
+def test_joins(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.joins == data['joins']
 
 
 def test_transliteration(transliterated_fragment):
@@ -86,6 +151,13 @@ def test_lemmatization(fragment):
         'lemmatization': tokens
     }
     assert Fragment.from_dict(data).lemmatization == Lemmatization(tokens)
+
+
+def test_hits(fragment):
+    data = fragment.to_dict()
+    new_fragment = Fragment.from_dict(data)
+
+    assert new_fragment.hits == data.get('hits')
 
 
 @freeze_time("2018-09-07 15:41:24.032")
