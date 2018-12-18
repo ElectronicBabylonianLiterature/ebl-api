@@ -1,39 +1,9 @@
-# pylint: disable=R0903
 import re
-import typing
-import attr
 import pydash
 from parsy import string, regex, seq
-from ebl.fragmentarium.tokens import Token, Word, Shift
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Line:
-    prefix: str = ''
-    content: typing.Tuple[Token, ...] = tuple()
-
-    @classmethod
-    def of_iterable(cls, prefix: str, content: typing.Iterable[Token]):
-        return cls(prefix, tuple(content))
-
-    @classmethod
-    def of_single(cls, prefix: str, content: Token):
-        return cls(prefix, (content, ))
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class ControlLine(Line):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class TextLine(Line):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class EmptyLine(Line):
-    pass
+from ebl.fragmentarium.tokens import (
+    EmptyLine, TextLine, ControlLine, Token, Word, Shift
+)
 
 
 def tokenize(input_: str):

@@ -1,8 +1,9 @@
 import pytest
-from ebl.fragmentarium.tokenizer import (
-    tokenize, TextLine, ControlLine, EmptyLine
+from ebl.fragmentarium.tokenizer import tokenize
+
+from ebl.fragmentarium.tokens import (
+    Token, Word, Shift, TextLine, ControlLine, EmptyLine
 )
-from ebl.fragmentarium.tokens import Token, Word, Shift
 
 
 @pytest.mark.parametrize("line,expected_tokenization", [
