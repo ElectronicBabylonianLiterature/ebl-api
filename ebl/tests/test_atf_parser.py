@@ -1,6 +1,6 @@
 import pytest
 from ebl.fragmentarium.atf_parser import parse_atf
-
+from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.text import (
     Token, Word, Shift, TextLine, ControlLine, EmptyLine
 )
@@ -37,7 +37,19 @@ from ebl.fragmentarium.text import (
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (Word('šu'), Word('gid₂'))),
         TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))
-    ])
+    ]),
+    ('1. ha-am %sux ha-am %sb ha-am', [TextLine('1.', (
+        Word('ha-am'),
+        Shift('%sux'), Word('ha-am', Language.SUMERIAN),
+        Shift('%sb'), Word('ha-am', Language.AKKADIAN),
+    ))]),
+    ('1. %es ha-am', [TextLine('1.', (
+        Shift('%es'), Word('ha-am', Language.EMESAL)
+    ))]),
+    ('1. %sux ha-am %foo ha-am', [TextLine('1.', (
+        Shift('%sux'), Word('ha-am', Language.SUMERIAN),
+        Shift('%foo'), Word('ha-am', Language.SUMERIAN)
+    ))])
 ])
 def test_parse_atf(line, expected_tokenization):
     assert parse_atf(line) == expected_tokenization
