@@ -1,7 +1,7 @@
 import re
 import pydash
 from parsy import string, regex, seq
-from ebl.fragmentarium.tokens import (
+from ebl.fragmentarium.text import (
     EmptyLine, TextLine, ControlLine, Token, Word, Shift
 )
 

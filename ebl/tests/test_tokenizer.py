@@ -1,7 +1,7 @@
 import pytest
 from ebl.fragmentarium.tokenizer import tokenize
 
-from ebl.fragmentarium.tokens import (
+from ebl.fragmentarium.text import (
     Token, Word, Shift, TextLine, ControlLine, EmptyLine
 )
 
