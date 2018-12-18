@@ -1,6 +1,8 @@
 import pytest
 from ebl.fragmentarium.language import Language
-from ebl.fragmentarium.tokens import Token, Word, UniqueLemma, Shift
+from ebl.fragmentarium.text import (
+    Token, Word, UniqueLemma, Shift, Line
+)
 
 
 def test_token():
@@ -80,3 +82,30 @@ def test_shift(value, expected_language):
     assert hash(shift) != hash(other)
 
     assert shift != Token(value)
+
+
+def test_line():
+    prefix = '1.'
+    token = Token('value')
+    line = Line(prefix, (token, ))
+
+    assert line.prefix == prefix
+    assert line.content == (token, )
+
+
+def test_line_of_iterable():
+    prefix = '1.'
+    tokens = [Token('first'), Token('second')]
+    line = Line.of_iterable(prefix, tokens)
+
+    assert line.prefix == prefix
+    assert line.content == tuple(tokens)
+
+
+def test_line_of_single():
+    prefix = '$'
+    token = Token('only')
+    line = Line.of_single(prefix, token)
+
+    assert line.prefix == prefix
+    assert line.content == (token, )
