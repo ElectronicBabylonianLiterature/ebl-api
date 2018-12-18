@@ -94,6 +94,10 @@ class Fragment:
             'folios': self.folios.filter(user).entries
         }
 
+    @staticmethod
+    def from_dict(data):
+        return Fragment(data)
+
 
 class Record:
 
