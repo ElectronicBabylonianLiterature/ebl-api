@@ -1,5 +1,5 @@
 import pytest
-from ebl.fragmentarium.tokenizer import parse_atf
+from ebl.fragmentarium.atf_parser import parse_atf
 
 from ebl.fragmentarium.text import (
     Token, Word, Shift, TextLine, ControlLine, EmptyLine
