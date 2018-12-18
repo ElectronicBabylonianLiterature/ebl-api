@@ -6,7 +6,7 @@ from ebl.fragmentarium.text import (
 )
 
 
-def tokenize(input_: str):
+def parse_atf(input_: str):
     # pylint: disable=R0914
     tabulation = regex(r'\(\$___\$\)').map(Token).desc('tabulation')
     column = regex(r'&\d*').map(Token).desc('column')

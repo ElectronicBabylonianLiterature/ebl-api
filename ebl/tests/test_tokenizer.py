@@ -1,5 +1,5 @@
 import pytest
-from ebl.fragmentarium.tokenizer import tokenize
+from ebl.fragmentarium.tokenizer import parse_atf
 
 from ebl.fragmentarium.text import (
     Token, Word, Shift, TextLine, ControlLine, EmptyLine
@@ -39,10 +39,10 @@ from ebl.fragmentarium.text import (
         TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))
     ])
 ])
-def test_tokenize(line, expected_tokenization):
-    assert tokenize(line) == expected_tokenization
+def test_parse_atf(line, expected_tokenization):
+    assert parse_atf(line) == expected_tokenization
 
 
-def test_tokenize_invalid():
+def test_parse_atf_invalid():
     with pytest.raises(Exception):
-        tokenize('invalid')
+        parse_atf('invalid')
