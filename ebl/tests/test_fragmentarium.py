@@ -169,7 +169,7 @@ def test_statistics(fragmentarium, fragment):
             ]},
             {**fragment.to_dict(), '_id': '3', 'lemmatization': []}
     ]:
-        fragmentarium.create(Fragment(data))
+        fragmentarium.create(Fragment.from_dict(data))
 
     assert fragmentarium.statistics() == {
         'transliteratedFragments': 2,
@@ -254,7 +254,7 @@ def test_search_signs(transliteration,
         Transliteration(transliteration)
     )
     expected = [
-        Fragment({
+        Fragment.from_dict({
             **transliterated_fragment.to_dict(),
             'matching_lines': lines
         })

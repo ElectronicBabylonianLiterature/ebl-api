@@ -7,7 +7,7 @@ from ebl.fragmentarium.fragment import Fragment
 def test_update_signs(fragment_repository,
                       sign_list,
                       signs, transliterated_fragment):
-    fragment_without_signs = Fragment(
+    fragment_without_signs = Fragment.from_dict(
         pydash.omit(transliterated_fragment.to_dict(), 'signs')
     )
     for sign in signs:

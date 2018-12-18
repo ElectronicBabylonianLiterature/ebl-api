@@ -11,9 +11,15 @@ from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
 def test_to_dict(fragment):
-    new_fragment = Fragment(fragment.to_dict())
+    new_fragment = Fragment.from_dict(fragment.to_dict())
 
     assert new_fragment.to_dict() == fragment.to_dict()
+
+
+def test_from_dict(fragment):
+    new_fragment = Fragment.from_dict(fragment.to_dict())
+
+    assert new_fragment == fragment
 
 
 def test_to_dict_for(fragment, user):
@@ -24,7 +30,7 @@ def test_to_dict_for(fragment, user):
 
 
 def test_equality(fragment, transliterated_fragment):
-    new_fragment = Fragment(fragment.to_dict())
+    new_fragment = Fragment.from_dict(fragment.to_dict())
 
     assert new_fragment == fragment
     assert new_fragment != transliterated_fragment
@@ -36,21 +42,21 @@ def test_hash(fragment):
 
 def test_accession(fragment):
     data = fragment.to_dict()
-    new_fragment = Fragment(data)
+    new_fragment = Fragment.from_dict(data)
 
     assert new_fragment.accession == data['accession']
 
 
 def test_cdli_number(fragment):
     data = fragment.to_dict()
-    new_fragment = Fragment(data)
+    new_fragment = Fragment.from_dict(data)
 
     assert new_fragment.cdli_number == data['cdliNumber']
 
 
 def test_transliteration(transliterated_fragment):
     data = transliterated_fragment.to_dict()
-    new_fragment = Fragment(data)
+    new_fragment = Fragment.from_dict(data)
 
     assert new_fragment.transliteration == Transliteration(
         Lemmatization(data['lemmatization']).atf,
@@ -61,14 +67,14 @@ def test_transliteration(transliterated_fragment):
 
 def test_record(transliterated_fragment):
     data = transliterated_fragment.to_dict()
-    new_fragment = Fragment(data)
+    new_fragment = Fragment.from_dict(data)
 
     assert new_fragment.record == Record(data['record'])
 
 
 def test_folios(fragment):
     data = fragment.to_dict()
-    new_fragment = Fragment(data)
+    new_fragment = Fragment.from_dict(data)
 
     assert new_fragment.folios == Folios(data['folios'])
 
@@ -79,7 +85,7 @@ def test_lemmatization(fragment):
         **fragment.to_dict(),
         'lemmatization': tokens
     }
-    assert Fragment(data).lemmatization == Lemmatization(tokens)
+    assert Fragment.from_dict(data).lemmatization == Lemmatization(tokens)
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -91,7 +97,7 @@ def test_add_transliteration(fragment, user):
         transliteration,
         user
     )
-    expected_fragment = Fragment({
+    expected_fragment = Fragment.from_dict({
         **fragment.to_dict(),
         'lemmatization': lemmatization.tokens,
         'record': [{
@@ -116,7 +122,7 @@ def test_update_transliteration(lemmatized_fragment, user):
     )
     lemmatization = lemmatized_fragment.lemmatization.merge(transliteration)
 
-    expected_fragment = Fragment({
+    expected_fragment = Fragment.from_dict({
         **lemmatized_fragment.to_dict(),
         'lemmatization': lemmatization.tokens,
         'notes': transliteration.notes,
@@ -142,7 +148,7 @@ def test_update_notes(fragment, user):
         user
     )
 
-    expected_fragment = Fragment({
+    expected_fragment = Fragment.from_dict({
         **fragment.to_dict(),
         'notes': transliteration.notes
     })
@@ -164,7 +170,7 @@ def test_add_matching_lines(transliterated_fragment):
 def test_update_lemmatization(transliterated_fragment):
     tokens = transliterated_fragment.lemmatization.tokens
     tokens[0][1]['uniqueLemma'] = ['nu I']
-    expected = Fragment({
+    expected = Fragment.from_dict({
         **transliterated_fragment.to_dict(),
         'lemmatization': tokens
     })

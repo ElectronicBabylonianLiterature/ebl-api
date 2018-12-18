@@ -57,10 +57,10 @@ class TestFragmentRepository(MongoFragmentRepository):
     # Mongomock does not support $sample, or $concat so we need to
     # stub the methods using them.
     def find_random(self):
-        return [Fragment(self._mongo_collection.find_one({}))]
+        return [Fragment.from_dict(self._mongo_collection.find_one({}))]
 
     def find_interesting(self):
-        return [Fragment(self._mongo_collection.find_one({}))]
+        return [Fragment.from_dict(self._mongo_collection.find_one({}))]
 
     def folio_pager(self, _folio_name, _folio_number, _number):
         return {
@@ -251,7 +251,7 @@ def word():
 
 @pytest.fixture
 def fragment():
-    return Fragment({
+    return Fragment.from_dict({
         '_id': '1',
         'cdliNumber': 'cdli-4',
         'bmIdNumber': 'bmId-2',
@@ -274,7 +274,7 @@ def fragment():
 
 @pytest.fixture
 def another_fragment(fragment):
-    return Fragment({
+    return Fragment.from_dict({
         **fragment.to_dict(),
         '_id': '2',
         'accession': 'accession-no-match',
@@ -296,7 +296,7 @@ def another_fragment(fragment):
 
 @pytest.fixture
 def transliterated_fragment():
-    return Fragment({
+    return Fragment.from_dict({
         '_id': '3',
         'cdliNumber': 'cdli-5',
         'bmIdNumber': 'bmId-3',
@@ -363,7 +363,7 @@ def transliterated_fragment():
 
 @pytest.fixture
 def lemmatized_fragment(transliterated_fragment):
-    return Fragment({
+    return Fragment.from_dict({
         **transliterated_fragment.to_dict(),
         '_id': '4',
         'lemmatization': [

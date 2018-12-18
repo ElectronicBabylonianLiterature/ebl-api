@@ -61,7 +61,7 @@ class Fragment:
         )
         lemmatization = self.lemmatization.merge(transliteration)
 
-        return Fragment(pydash.omit_by({
+        return Fragment.from_dict(pydash.omit_by({
             **self._data,
             'lemmatization': lemmatization.tokens,
             'notes': transliteration.notes,
@@ -71,14 +71,14 @@ class Fragment:
 
     def add_matching_lines(self, query):
         matching_lines = query.get_matching_lines(self.transliteration)
-        return Fragment({
+        return Fragment.from_dict({
             **self._data,
             'matching_lines': matching_lines
         })
 
     def update_lemmatization(self, lemmatization):
         if self.lemmatization.is_compatible(lemmatization):
-            return Fragment({
+            return Fragment.from_dict({
                 **self._data,
                 'lemmatization': lemmatization.tokens
             })

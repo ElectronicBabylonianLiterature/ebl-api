@@ -54,7 +54,7 @@ class MongoFragmentRepository():
             self._mongo_repository.find(number),
             'transliteration'
         )
-        return Fragment(data)
+        return Fragment.from_dict(data)
 
     def search(self, number):
         cursor = self._mongo_collection.find({
@@ -186,6 +186,6 @@ class MongoFragmentRepository():
     @staticmethod
     def _map_fragments(cursor):
         return [
-            Fragment(pydash.omit(fragment, 'transliteration'))
+            Fragment.from_dict(pydash.omit(fragment, 'transliteration'))
             for fragment in cursor
         ]
