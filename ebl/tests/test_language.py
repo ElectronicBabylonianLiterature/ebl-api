@@ -1,5 +1,5 @@
 import pytest
-from ebl.fragmentarium.language import Language
+from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
 
 
 def test_lemmatizable():
@@ -28,3 +28,7 @@ def test_lemmatizable():
 ])
 def test_of_atf(atf, expected):
     assert Language.of_atf(atf) == expected
+
+
+def test_default_language():
+    assert DEFAULT_LANGUAGE == Language.AKKADIAN

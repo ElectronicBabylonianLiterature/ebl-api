@@ -31,3 +31,6 @@ class Language(Enum):
             '%es': Language.EMESAL,
         }
         return codes.get(code, cls.UNKNOWN)
+
+
+DEFAULT_LANGUAGE = Language.AKKADIAN

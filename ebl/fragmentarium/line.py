@@ -1,50 +1,8 @@
 # pylint: disable=R0903
-from typing import Any, List, Tuple, NewType, Iterable
+from typing import List, Tuple, Iterable
 import attr
-from ebl.fragmentarium.language import Language
-
-
-DEFAULT_LANGUAGE = Language.AKKADIAN
-UniqueLemma = NewType('UniqueLemma', str)
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Token:
-    value: str
-
-    @property
-    def lemmatizable(self) -> bool:
-        return False
-
-    def accept(self, visitor: Any) -> None:
-        visitor.visit_token(self)
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Word(Token):
-    language: Language = Language.AKKADIAN
-    unique_lemma: Tuple[UniqueLemma, ...] = tuple()
-
-    @property
-    def lemmatizable(self) -> bool:
-        return self.language.lemmatizable
-
-    def set_language(self, language: Language) -> 'Word':
-        return attr.evolve(self, language=language)
-
-    def accept(self, visitor: Any) -> None:
-        visitor.visit_word(self)
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class LanguageShift(Token):
-    language: Language = attr.ib(init=False)
-
-    def __attrs_post_init__(self):
-        object.__setattr__(self, 'language', Language.of_atf(self.value))
-
-    def accept(self, visitor: Any) -> None:
-        visitor.visit_language_shift(self)
+from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
+from ebl.fragmentarium.token import Token, Word, LanguageShift
 
 
 @attr.s(auto_attribs=True, frozen=True)

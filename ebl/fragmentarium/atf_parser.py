@@ -1,9 +1,8 @@
 import re
 import pydash
 from parsy import string, regex, seq
-from ebl.fragmentarium.text import (
-    EmptyLine, TextLine, ControlLine, Token, Word, LanguageShift
-)
+from ebl.fragmentarium.line import EmptyLine, TextLine, ControlLine
+from ebl.fragmentarium.token import Token, Word, LanguageShift
 
 
 LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
