@@ -3,7 +3,7 @@ import pydash
 from parsy import string, regex, seq, generate
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.text import (
-    EmptyLine, TextLine, ControlLine, Token, Word, Shift
+    EmptyLine, TextLine, ControlLine, Token, Word, LanguageShift
 )
 
 
@@ -16,7 +16,7 @@ def parse_atf(input_: str):
         regex(r'!(qt|bs|cm|zz)').map(Token).desc('commentary protocol')
     shift = (
         regex(r'%\w+')
-        .map(Shift)
+        .map(LanguageShift)
         .desc('language or register/writing system shift')
     )
     line_number = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
@@ -54,7 +54,7 @@ def parse_atf(input_: str):
         while token is not None:
             tokens.append(token)
             if (
-                    isinstance(token, Shift) and
+                    isinstance(token, LanguageShift) and
                     token.language is not Language.UNKNOWN
             ):
                 language = token.language

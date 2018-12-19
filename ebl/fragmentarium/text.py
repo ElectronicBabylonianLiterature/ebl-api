@@ -27,7 +27,7 @@ class Word(Token):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Shift(Token):
+class LanguageShift(Token):
     language: Language = attr.ib(init=False)
 
     def __attrs_post_init__(self):

@@ -2,7 +2,7 @@ import pytest
 from ebl.fragmentarium.atf_parser import parse_atf
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.text import (
-    Token, Word, Shift, TextLine, ControlLine, EmptyLine
+    Token, Word, LanguageShift, TextLine, ControlLine, EmptyLine
 )
 
 
@@ -25,7 +25,10 @@ from ebl.fragmentarium.text import (
         Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
     ))]),
     ('1. %es %sux %sb %foo', [TextLine('1.', (
-        Shift('%es'), Shift('%sux'), Shift('%sb'), Shift('%foo')
+        LanguageShift('%es'),
+        LanguageShift('%sux'),
+        LanguageShift('%sb'),
+        LanguageShift('%foo')
     ))]),
     ('1. x X', [TextLine('1.', (Word('x'), Word('X')))]),
     ('1. x-ti ti-X', [TextLine('1.', (
@@ -40,15 +43,15 @@ from ebl.fragmentarium.text import (
     ]),
     ('1. ha-am %sux ha-am %sb ha-am', [TextLine('1.', (
         Word('ha-am'),
-        Shift('%sux'), Word('ha-am', Language.SUMERIAN),
-        Shift('%sb'), Word('ha-am', Language.AKKADIAN),
+        LanguageShift('%sux'), Word('ha-am', Language.SUMERIAN),
+        LanguageShift('%sb'), Word('ha-am', Language.AKKADIAN),
     ))]),
     ('1. %es ha-am', [TextLine('1.', (
-        Shift('%es'), Word('ha-am', Language.EMESAL)
+        LanguageShift('%es'), Word('ha-am', Language.EMESAL)
     ))]),
     ('1. %sux ha-am %foo ha-am', [TextLine('1.', (
-        Shift('%sux'), Word('ha-am', Language.SUMERIAN),
-        Shift('%foo'), Word('ha-am', Language.SUMERIAN)
+        LanguageShift('%sux'), Word('ha-am', Language.SUMERIAN),
+        LanguageShift('%foo'), Word('ha-am', Language.SUMERIAN)
     ))])
 ])
 def test_parse_atf(line, expected_tokenization):

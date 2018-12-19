@@ -1,7 +1,7 @@
 import pytest
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.text import (
-    Token, Word, UniqueLemma, Shift, Line
+    Token, Word, UniqueLemma, LanguageShift, Line
 )
 
 
@@ -66,9 +66,9 @@ def test_word(language, unique_lemma):
     (r'%sb', Language.AKKADIAN),
     (r'%foo', Language.UNKNOWN)
 ])
-def test_shift(value, expected_language):
-    shift = Shift(value)
-    equal = Shift(value)
+def test_language_shift(value, expected_language):
+    shift = LanguageShift(value)
+    equal = LanguageShift(value)
     other = Token(r'%bar')
 
     assert shift.value == value
