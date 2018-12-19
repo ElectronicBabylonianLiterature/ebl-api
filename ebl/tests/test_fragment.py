@@ -95,28 +95,28 @@ def test_length(fragment):
     data = fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
 
-    assert new_fragment.length == data['length']
+    assert new_fragment.length == fragment.length
 
 
 def test_width(fragment):
     data = fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
 
-    assert new_fragment.width == data['width']
+    assert new_fragment.width == fragment.width
 
 
 def test_thickness(fragment):
     data = fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
 
-    assert new_fragment.thickness == data['thickness']
+    assert new_fragment.thickness == fragment.thickness
 
 
 def test_joins(fragment):
     data = fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
 
-    assert new_fragment.joins == data['joins']
+    assert new_fragment.joins == fragment.joins
 
 
 def test_transliteration(transliterated_fragment):

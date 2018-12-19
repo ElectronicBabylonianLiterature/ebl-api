@@ -1,6 +1,8 @@
 import copy
 import datetime
 import json
+from typing import Tuple, Optional
+import attr
 import pydash
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import Transliteration
@@ -10,155 +12,14 @@ TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
 
 
-class Fragment:
-    # pylint: disable=R0904
-    def __init__(self, data):
-        self._data = copy.deepcopy(data)
-
-    def __eq__(self, other):
-        return isinstance(other, Fragment) and (self._data == other.to_dict())
-
-    @property
-    def number(self):
-        return self._data['_id']
-
-    @property
-    def accession(self):
-        return self._data['accession']
-
-    @property
-    def cdli_number(self):
-        return self._data['cdliNumber']
-
-    @property
-    def bm_id_number(self):
-        return self._data['bmIdNumber']
-
-    @property
-    def publication(self):
-        return self._data['publication']
-
-    @property
-    def description(self):
-        return self._data['description']
-
-    @property
-    def collection(self):
-        return self._data['collection']
-
-    @property
-    def script(self):
-        return self._data['script']
-
-    @property
-    def museum(self):
-        return self._data['museum']
-
-    @property
-    def width(self):
-        return {**self._data['width']}
-
-    @property
-    def length(self):
-        return {**self._data['length']}
-
-    @property
-    def thickness(self):
-        return {**self._data['thickness']}
-
-    @property
-    def joins(self):
-        return [*self._data['joins']]
-
-    @property
-    def transliteration(self):
-        return Transliteration(
-            self.lemmatization.atf,
-            self._data['notes'],
-            self._data.get('signs', None)
-        )
-
-    @property
-    def record(self):
-        return Record(self._data['record'])
-
-    @property
-    def folios(self):
-        return Folios(self._data['folios'])
-
-    @property
-    def lemmatization(self):
-        return Lemmatization(self._data['lemmatization'])
-
-    @property
-    def hits(self):
-        return self._data.get('hits')
-
-    def update_transliteration(self, transliteration, user):
-        record = Record(self._data['record']).add_entry(
-            self.lemmatization.atf,
-            transliteration.atf,
-            user
-        )
-        lemmatization = self.lemmatization.merge(transliteration)
-
-        return Fragment.from_dict(pydash.omit_by({
-            **self._data,
-            'lemmatization': lemmatization.tokens,
-            'notes': transliteration.notes,
-            'signs': transliteration.signs,
-            'record': record.entries
-        }, lambda value: value is None))
-
-    def add_matching_lines(self, query):
-        matching_lines = query.get_matching_lines(self.transliteration)
-        return Fragment.from_dict({
-            **self._data,
-            'matching_lines': matching_lines
-        })
-
-    def update_lemmatization(self, lemmatization):
-        if self.lemmatization.is_compatible(lemmatization):
-            return Fragment.from_dict({
-                **self._data,
-                'lemmatization': lemmatization.tokens
-            })
-        else:
-            raise LemmatizationError()
+@attr.s(auto_attribs=True, frozen=True)
+class Measure:
+    # pylint: disable=R0903
+    value: Optional[float] = None
+    note: Optional[str] = None
 
     def to_dict(self):
-        return pydash.omit_by({
-            '_id': self.number,
-            'accession': self.accession,
-            'cdliNumber': self.cdli_number,
-            'bmIdNumber': self.bm_id_number,
-            'publication': self.publication,
-            'description': self.description,
-            'joins': self.joins,
-            'length': self.length,
-            'width': self.width,
-            'thickness': self.thickness,
-            'collection': self.collection,
-            'script': self.script,
-            'notes': self.transliteration.notes,
-            'museum': self.museum,
-            'signs': self.transliteration.signs,
-            'record': self.record.entries,
-            'folios': self.folios.entries,
-            'lemmatization': self.lemmatization.tokens,
-            'hits': self._data.get('hits'),
-            'matching_lines': self._data.get('matching_lines')
-        }, lambda value: value is None)
-
-    def to_dict_for(self, user):
-        return {
-            **self.to_dict(),
-            'folios': self.folios.filter(user).entries
-        }
-
-    @staticmethod
-    def from_dict(data):
-        return Fragment(data)
+        return attr.asdict(self, lambda _, value: value is not None)
 
 
 class Record:
@@ -217,3 +78,122 @@ class Folios:
             if user.can_read_folio(folio['name'])
         ]
         return Folios(folios)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Fragment:
+    number: str
+    accession: str = ''
+    cdli_number: str = ''
+    bm_id_number: str = ''
+    publication: str = ''
+    description: str = ''
+    collection: str = ''
+    script: str = ''
+    museum: str = ''
+    width: Measure = Measure()
+    length: Measure = Measure()
+    thickness: Measure = Measure()
+    joins: Tuple[str, ...] = tuple()
+    record: Record = Record([])
+    folios: Folios = Folios([])
+    lemmatization: Lemmatization = Lemmatization([])
+    signs: Optional[str] = ''
+    notes: str = ''
+    hits: Optional[int] = None
+    matching_lines: Optional[tuple] = None
+
+    @property
+    def transliteration(self):
+        return Transliteration(
+            self.lemmatization.atf,
+            self.notes,
+            self.signs
+        )
+
+    def update_transliteration(self, transliteration, user):
+        record = self.record.add_entry(
+            self.lemmatization.atf,
+            transliteration.atf,
+            user
+        )
+        lemmatization = self.lemmatization.merge(transliteration)
+
+        return attr.evolve(
+            self,
+            lemmatization=lemmatization,
+            notes=transliteration.notes,
+            signs=transliteration.signs,
+            record=record
+        )
+
+    def add_matching_lines(self, query):
+        matching_lines = query.get_matching_lines(self.transliteration)
+        return attr.evolve(
+            self,
+            matching_lines=matching_lines
+        )
+
+    def update_lemmatization(self, lemmatization):
+        if self.lemmatization.is_compatible(lemmatization):
+            return attr.evolve(
+                self,
+                lemmatization=lemmatization
+            )
+        else:
+            raise LemmatizationError()
+
+    def to_dict(self):
+        return pydash.omit_by({
+            '_id': self.number,
+            'accession': self.accession,
+            'cdliNumber': self.cdli_number,
+            'bmIdNumber': self.bm_id_number,
+            'publication': self.publication,
+            'description': self.description,
+            'joins': list(self.joins),
+            'length': self.length.to_dict(),
+            'width': self.width.to_dict(),
+            'thickness': self.thickness.to_dict(),
+            'collection': self.collection,
+            'script': self.script,
+            'notes': self.notes,
+            'museum': self.museum,
+            'signs': self.signs,
+            'record': self.record.entries,
+            'folios': self.folios.entries,
+            'lemmatization': self.lemmatization.tokens,
+            'hits': self.hits,
+            'matching_lines': self.matching_lines
+        }, lambda value: value is None)
+
+    def to_dict_for(self, user):
+        return {
+            **self.to_dict(),
+            'folios': self.folios.filter(user).entries
+        }
+
+    @staticmethod
+    def from_dict(data):
+        return Fragment(
+            data['_id'],
+            data['accession'],
+            data['cdliNumber'],
+            data['bmIdNumber'],
+            data['publication'],
+            data['description'],
+            data['collection'],
+            data['script'],
+            data['museum'],
+            Measure(**data['width']),
+            Measure(**data['length']),
+            Measure(**data['thickness']),
+            tuple(data['joins']),
+            Record(data['record']),
+            Folios(data['folios']),
+            Lemmatization(data['lemmatization']),
+            data.get('signs'),
+            data['notes'],
+            data.get('hits'),
+            data.get('matching_lines')
+        )
