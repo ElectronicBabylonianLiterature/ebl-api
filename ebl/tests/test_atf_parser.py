@@ -6,6 +6,9 @@ from ebl.fragmentarium.text import (
 )
 
 
+DEFAULT_LANGUAGE = Language.AKKADIAN
+
+
 @pytest.mark.parametrize("line,expected_tokenization", [
     ('', []),
     ('\n', [EmptyLine()]),
@@ -24,12 +27,6 @@ from ebl.fragmentarium.text import (
     ('1. !qt !bs !cm !zz', [TextLine('1.', (
         Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
     ))]),
-    ('1. %es %sux %sb %foo', [TextLine('1.', (
-        LanguageShift('%es'),
-        LanguageShift('%sux'),
-        LanguageShift('%sb'),
-        LanguageShift('%foo')
-    ))]),
     ('1. x X', [TextLine('1.', (Word('x'), Word('X')))]),
     ('1. x-ti ti-X', [TextLine('1.', (
         Word('x-ti'), Word('ti-X')
@@ -40,19 +37,7 @@ from ebl.fragmentarium.text import (
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (Word('šu'), Word('gid₂'))),
         TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))
-    ]),
-    ('1. ha-am %sux ha-am %sb ha-am', [TextLine('1.', (
-        Word('ha-am'),
-        LanguageShift('%sux'), Word('ha-am', Language.SUMERIAN),
-        LanguageShift('%sb'), Word('ha-am', Language.AKKADIAN),
-    ))]),
-    ('1. %es ha-am', [TextLine('1.', (
-        LanguageShift('%es'), Word('ha-am', Language.EMESAL)
-    ))]),
-    ('1. %sux ha-am %foo ha-am', [TextLine('1.', (
-        LanguageShift('%sux'), Word('ha-am', Language.SUMERIAN),
-        LanguageShift('%foo'), Word('ha-am', Language.SUMERIAN)
-    ))])
+    ])
 ])
 def test_parse_atf(line, expected_tokenization):
     assert parse_atf(line) == expected_tokenization
@@ -61,3 +46,22 @@ def test_parse_atf(line, expected_tokenization):
 def test_parse_atf_invalid():
     with pytest.raises(Exception):
         parse_atf('invalid')
+
+
+@pytest.mark.parametrize("code,expected_language", [
+    ('%sb', Language.AKKADIAN),
+    ('%sux', Language.SUMERIAN),
+    ('%es', Language.EMESAL),
+    ('%foo', DEFAULT_LANGUAGE)
+])
+def test_parse_atf_language_shifts(code, expected_language):
+    word = 'ha-am'
+    line = f'1. {word} {code} {word} %sb {word}'
+
+    expected = [TextLine('1.', (
+        Word(word, DEFAULT_LANGUAGE),
+        LanguageShift(code), Word(word, expected_language),
+        LanguageShift('%sb'), Word(word, Language.AKKADIAN)
+    ))]
+
+    assert parse_atf(line) == expected
