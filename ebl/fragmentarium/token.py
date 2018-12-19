@@ -22,11 +22,12 @@ class Token:
 @attr.s(auto_attribs=True, frozen=True)
 class Word(Token):
     language: Language = DEFAULT_LANGUAGE
+    normalized: bool = False
     unique_lemma: Tuple[UniqueLemma, ...] = tuple()
 
     @property
     def lemmatizable(self) -> bool:
-        return self.language.lemmatizable
+        return self.language.lemmatizable and not self.normalized
 
     def set_language(self, language: Language) -> 'Word':
         return attr.evolve(self, language=language)

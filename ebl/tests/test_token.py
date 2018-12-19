@@ -26,32 +26,42 @@ def test_word_defaults():
     assert word.value == value
     assert word.lemmatizable is True
     assert word.language == DEFAULT_LANGUAGE
+    assert word.normalized is False
     assert word.unique_lemma == tuple()
 
 
-@pytest.mark.parametrize("language,unique_lemma", [
-    (Language.SUMERIAN, (UniqueLemma('ku II'), UniqueLemma('aklu I'))),
-    (Language.EMESAL, tuple()),
-    (Language.AKKADIAN, (UniqueLemma('aklu I'), )),
+@pytest.mark.parametrize("language,normalized,unique_lemma", [
+    (Language.SUMERIAN, False, (UniqueLemma('ku II'), UniqueLemma('aklu I'))),
+    (Language.SUMERIAN, True, tuple()),
+    (Language.EMESAL, False, tuple()),
+    (Language.EMESAL, True, tuple()),
+    (Language.AKKADIAN, False, (UniqueLemma('aklu I'), )),
+    (Language.AKKADIAN, True, tuple())
 ])
-def test_word(language, unique_lemma):
+def test_word(language, normalized, unique_lemma):
     value = 'value'
-    word = Word(value, language, unique_lemma)
+    word = Word(value, language, normalized, unique_lemma)
 
-    equal = Word(value, language, unique_lemma)
-    other_language = Word(value, Language.UNKNOWN, unique_lemma)
-    other_value = Word('other value', language, unique_lemma)
-    other_unique_lemma = Word(value, language, tuple(UniqueLemma('waklu I')))
+    equal = Word(value, language, normalized, unique_lemma)
+    other_language = Word(value, Language.UNKNOWN, normalized, unique_lemma)
+    other_value = Word('other value', language, normalized, unique_lemma)
+    other_unique_lemma =\
+        Word(value, language, normalized, tuple(UniqueLemma('waklu I')))
+    other_normalized =\
+        Word('other value', language, not normalized, unique_lemma)
 
     assert word.value == value
-    assert word.lemmatizable is language.lemmatizable
+    assert word.lemmatizable is (language.lemmatizable and not normalized)
     assert word.language == language
+    assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
 
     assert word == equal
     assert hash(word) == hash(equal)
 
-    for not_equal in [other_language, other_value, other_unique_lemma]:
+    for not_equal in [
+            other_language, other_value, other_unique_lemma, other_normalized
+    ]:
         assert word != not_equal
         assert hash(word) != hash(not_equal)
 
