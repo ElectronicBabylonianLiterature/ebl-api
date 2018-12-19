@@ -1,8 +1,11 @@
 import pytest
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.text import (
-    Token, Word, UniqueLemma, LanguageShift, Line
+    Token, Word, UniqueLemma, LanguageShift, Line, TextLine, ControlLine
 )
+
+
+DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
 def test_token():
@@ -60,6 +63,16 @@ def test_word(language, unique_lemma):
     assert word != Token(value)
 
 
+def test_word_set_language():
+    value = 'value'
+    unique_lemma = (UniqueLemma('aklu I'), )
+    language = Language.SUMERIAN
+    word = Word(value, Language.AKKADIAN, unique_lemma)
+    expected_word = Word(value, language, unique_lemma)
+
+    assert word.set_language(language) == expected_word
+
+
 @pytest.mark.parametrize("value,expected_language", [
     (r'%sux', Language.SUMERIAN,),
     (r'%es', Language.EMESAL),
@@ -93,19 +106,43 @@ def test_line():
     assert line.content == (token, )
 
 
-def test_line_of_iterable():
+@pytest.mark.parametrize("code,expected_language", [
+    ('%ma', Language.AKKADIAN),
+    ('%mb', Language.AKKADIAN),
+    ('%na', Language.AKKADIAN),
+    ('%nb', Language.AKKADIAN),
+    ('%lb', Language.AKKADIAN),
+    ('%sb', Language.AKKADIAN),
+    ('%a', Language.AKKADIAN),
+    ('%akk', Language.AKKADIAN),
+    ('%eakk', Language.AKKADIAN),
+    ('%oakk', Language.AKKADIAN),
+    ('%ur3akk', Language.AKKADIAN),
+    ('%oa', Language.AKKADIAN),
+    ('%ob', Language.AKKADIAN),
+    ('%sux', Language.SUMERIAN),
+    ('%es', Language.EMESAL),
+    ('%foo', DEFAULT_LANGUAGE)
+])
+def test_line_of_iterable(code, expected_language):
     prefix = '1.'
-    tokens = [Token('first'), Token('second')]
-    line = Line.of_iterable(prefix, tokens)
+    tokens = [
+        Word('first'),
+        LanguageShift(code), Word('second'),
+        LanguageShift('%sb'), Word('third')
+    ]
+    expected_tokens = (
+        Word('first', DEFAULT_LANGUAGE),
+        LanguageShift(code), Word('second', expected_language),
+        LanguageShift('%sb'), Word('third', Language.AKKADIAN))
+    line = TextLine.of_iterable(prefix, tokens)
 
-    assert line.prefix == prefix
-    assert line.content == tuple(tokens)
+    assert line == TextLine(prefix, expected_tokens)
 
 
 def test_line_of_single():
     prefix = '$'
     token = Token('only')
-    line = Line.of_single(prefix, token)
+    line = ControlLine.of_single(prefix, token)
 
-    assert line.prefix == prefix
-    assert line.content == (token, )
+    assert line == ControlLine('$', (token, ))

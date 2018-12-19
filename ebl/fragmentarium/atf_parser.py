@@ -1,6 +1,6 @@
 import re
 import pydash
-from parsy import string, regex, seq, generate
+from parsy import string, regex, seq
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.text import (
     EmptyLine, TextLine, ControlLine, Token, Word, LanguageShift
@@ -20,38 +20,8 @@ SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
 WORD = regex(r'[^\s]+').desc('word')
 
 
-WORD_SEPARATOR = string(' ').many().concat().desc('word separtor')
+WORD_SEPARATOR = string(' ').desc('word separtor')
 LINE_SEPARATOR = regex(r'\n').desc('line separator')
-
-
-@generate('text content')
-def text_content():
-    language = DEFAULT_LANGUAGE
-    generic_token = (
-        TABULATION |
-        COLUMN |
-        DIVIDER |
-        COMMENTARY_PROTOCOL |
-        LACUNA
-    )
-    text_part = ((
-        generic_token.map(Token) |
-        SHIFT.map(LanguageShift) |
-        WORD.map(lambda value: Word(value, language))
-    ) << WORD_SEPARATOR).optional()
-
-    tokens = []
-    token = yield text_part
-    while token is not None:
-        tokens.append(token)
-        if (
-                isinstance(token, LanguageShift) and
-                token.language is not Language.UNKNOWN
-        ):
-            language = token.language
-        token = yield text_part
-
-    return tokens
 
 
 CONTROL_LINE = seq(
@@ -63,7 +33,15 @@ EMPTY_LINE = regex(
 ).map(lambda _: EmptyLine()) << LINE_SEPARATOR
 TEXT_LINE = seq(
     LINE_NUMBER << WORD_SEPARATOR,
-    text_content
+    (
+        TABULATION.map(Token) |
+        COLUMN.map(Token) |
+        DIVIDER.map(Token) |
+        COMMENTARY_PROTOCOL.map(Token) |
+        LACUNA.map(Token) |
+        SHIFT.map(LanguageShift) |
+        WORD.map(Word)
+    ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten)
 ).combine(TextLine.of_iterable)
 
 
