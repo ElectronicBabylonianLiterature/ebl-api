@@ -10,10 +10,21 @@ def test_lemmatizable():
 
 
 @pytest.mark.parametrize("atf,expected", [
-    (r'%sux', Language.SUMERIAN),
-    (r'%es', Language.EMESAL),
-    (r'%sb', Language.AKKADIAN),
-    (r'%foo', Language.UNKNOWN)
+    ('%ma', Language.AKKADIAN),
+    ('%mb', Language.AKKADIAN),
+    ('%na', Language.AKKADIAN),
+    ('%nb', Language.AKKADIAN),
+    ('%lb', Language.AKKADIAN),
+    ('%sb', Language.AKKADIAN),
+    ('%a', Language.AKKADIAN),
+    ('%akk', Language.AKKADIAN),
+    ('%eakk', Language.AKKADIAN),
+    ('%oakk', Language.AKKADIAN),
+    ('%ur3akk', Language.AKKADIAN),
+    ('%oa', Language.AKKADIAN),
+    ('%ob', Language.AKKADIAN),
+    ('%sux', Language.SUMERIAN),
+    ('%es', Language.EMESAL),
 ])
 def test_of_atf(atf, expected):
     assert Language.of_atf(atf) == expected
