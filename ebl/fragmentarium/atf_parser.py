@@ -7,66 +7,68 @@ from ebl.fragmentarium.text import (
 )
 
 
-def parse_atf(input_: str):
-    # pylint: disable=R0914
-    tabulation = regex(r'\(\$___\$\)').map(Token).desc('tabulation')
-    column = regex(r'&\d*').map(Token).desc('column')
-    divider = regex(r'\||:|;|/').map(Token).desc('divider')
-    commentary_protocol =\
-        regex(r'!(qt|bs|cm|zz)').map(Token).desc('commentary protocol')
-    shift = (
-        regex(r'%\w+')
-        .map(LanguageShift)
-        .desc('language or register/writing system shift')
+DEFAULT_LANGUAGE = Language.AKKADIAN
+
+
+LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
+TABULATION = regex(r'\(\$___\$\)').desc('tabulation')
+COLUMN = regex(r'&\d*').desc('column')
+DIVIDER = regex(r'\||:|;|/').desc('divider')
+COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
+LACUNA = regex(r'\[?\.\.\.\]?').desc('lacuna')
+SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
+WORD = regex(r'[^\s]+').desc('word')
+
+
+WORD_SEPARATOR = string(' ').many().concat().desc('word separtor')
+LINE_SEPARATOR = regex(r'\n').desc('line separator')
+
+
+@generate('text content')
+def text_content():
+    language = DEFAULT_LANGUAGE
+    generic_token = (
+        TABULATION |
+        COLUMN |
+        DIVIDER |
+        COMMENTARY_PROTOCOL |
+        LACUNA
     )
-    line_number = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
-    lacuna = regex(r'\[?\.\.\.\]?').map(Token).desc('lacuna')
-    word = regex(r'[^\s]+').desc('word')
+    text_part = ((
+        generic_token.map(Token) |
+        SHIFT.map(LanguageShift) |
+        WORD.map(lambda value: Word(value, language))
+    ) << WORD_SEPARATOR).optional()
 
-    word_separator = string(' ').desc('word separtor')
-    line_separator = regex(r'\n').desc('line separator')
-
-    control_line = seq(
-        regex(r'(=:|\$|@|&|#)'),
-        regex(r'.*').map(Token)
-    ).combine(ControlLine.of_single)
-    empty_line = regex(
-        '^$', re.RegexFlag.MULTILINE
-    ).map(lambda _: EmptyLine()) << line_separator
-
-    @generate('text content')
-    def text_content():
-        default_language = Language.AKKADIAN
-        language = default_language
-
-        text_part = ((
-            tabulation |
-            column |
-            divider |
-            commentary_protocol |
-            shift |
-            lacuna |
-            word.map(lambda value: Word(value, language))
-        ) << word_separator.many()).optional()
-
-        tokens = []
+    tokens = []
+    token = yield text_part
+    while token is not None:
+        tokens.append(token)
+        if (
+                isinstance(token, LanguageShift) and
+                token.language is not Language.UNKNOWN
+        ):
+            language = token.language
         token = yield text_part
-        while token is not None:
-            tokens.append(token)
-            if (
-                    isinstance(token, LanguageShift) and
-                    token.language is not Language.UNKNOWN
-            ):
-                language = token.language
-            token = yield text_part
 
-        return tokens
+    return tokens
 
-    text_line = seq(
-        line_number << word_separator,
-        text_content
-    ).combine(TextLine.of_iterable)
 
-    atf = (control_line | text_line | empty_line).many().sep_by(line_separator)
+CONTROL_LINE = seq(
+    regex(r'(=:|\$|@|&|#)'),
+    regex(r'.*').map(Token)
+).combine(ControlLine.of_single)
+EMPTY_LINE = regex(
+    '^$', re.RegexFlag.MULTILINE
+).map(lambda _: EmptyLine()) << LINE_SEPARATOR
+TEXT_LINE = seq(
+    LINE_NUMBER << WORD_SEPARATOR,
+    text_content
+).combine(TextLine.of_iterable)
 
-    return pydash.flatten(atf.parse(input_))
+
+ATF = (CONTROL_LINE | TEXT_LINE | EMPTY_LINE).many().sep_by(LINE_SEPARATOR)
+
+
+def parse_atf(input_: str):
+    return pydash.flatten(ATF.parse(input_))
