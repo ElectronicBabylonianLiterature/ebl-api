@@ -17,7 +17,7 @@ regex = "*"
 jsonschema = "*"
 pyoracc = "*"
 parsy = "*"
-attr = "*"
+attrs = "*"
 
 [dev-packages]
 pytest = "*"
