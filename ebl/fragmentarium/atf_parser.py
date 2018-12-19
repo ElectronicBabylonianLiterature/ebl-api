@@ -7,9 +7,6 @@ from ebl.fragmentarium.text import (
 )
 
 
-DEFAULT_LANGUAGE = Language.AKKADIAN
-
-
 LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
 TABULATION = regex(r'\(\$___\$\)').desc('tabulation')
 COLUMN = regex(r'&\d*').desc('column')
