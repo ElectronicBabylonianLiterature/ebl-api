@@ -2,7 +2,9 @@
 from typing import List, Tuple, Iterable
 import attr
 from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
-from ebl.fragmentarium.token import Token, Word, LanguageShift
+from ebl.fragmentarium.token import (
+    Token, Word, LanguageShift, DEFAULT_NORMALIZED
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -26,6 +28,7 @@ class TextLine(Line):
         def __init__(self):
             self._tokens: List[Token] = []
             self._language: Language = DEFAULT_LANGUAGE
+            self._normalized: bool = DEFAULT_NORMALIZED
 
         @property
         def tokens(self) -> Tuple[Token, ...]:
@@ -37,11 +40,13 @@ class TextLine(Line):
         def visit_language_shift(self, shift: LanguageShift) -> None:
             if shift.language is not Language.UNKNOWN:
                 self._language = shift.language
+                self._normalized = shift.normalized
 
             self.visit_token(shift)
 
         def visit_word(self, word: Word) -> None:
-            word_with_language = word.set_language(self._language)
+            word_with_language =\
+                word.set_language(self._language, self._normalized)
             self.visit_token(word_with_language)
 
     @classmethod

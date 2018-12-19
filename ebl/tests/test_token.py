@@ -1,6 +1,8 @@
 import pytest
 from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
-from ebl.fragmentarium.token import UniqueLemma, Token, Word, LanguageShift
+from ebl.fragmentarium.token import (
+    UniqueLemma, Token, Word, LanguageShift, DEFAULT_NORMALIZED
+)
 
 
 def test_token():
@@ -26,7 +28,7 @@ def test_word_defaults():
     assert word.value == value
     assert word.lemmatizable is True
     assert word.language == DEFAULT_LANGUAGE
-    assert word.normalized is False
+    assert word.normalized is DEFAULT_NORMALIZED
     assert word.unique_lemma == tuple()
 
 
@@ -72,10 +74,11 @@ def test_word_set_language():
     value = 'value'
     unique_lemma = (UniqueLemma('aklu I'), )
     language = Language.SUMERIAN
-    word = Word(value, Language.AKKADIAN, unique_lemma)
-    expected_word = Word(value, language, unique_lemma)
+    normalized = False
+    word = Word(value, Language.AKKADIAN, not normalized, unique_lemma)
+    expected_word = Word(value, language, normalized, unique_lemma)
 
-    assert word.set_language(language) == expected_word
+    assert word.set_language(language, normalized) == expected_word
 
 
 @pytest.mark.parametrize("value,expected_language", [
@@ -100,3 +103,7 @@ def test_language_shift(value, expected_language):
     assert hash(shift) != hash(other)
 
     assert shift != Token(value)
+
+
+def test_default_normalized():
+    assert DEFAULT_NORMALIZED is False

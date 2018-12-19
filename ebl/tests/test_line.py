@@ -1,7 +1,9 @@
 import pytest
 from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
 from ebl.fragmentarium.line import Line, TextLine, ControlLine
-from ebl.fragmentarium.token import Token, Word, LanguageShift
+from ebl.fragmentarium.token import (
+    Token, Word, LanguageShift, DEFAULT_NORMALIZED
+)
 
 
 def test_line():
@@ -13,25 +15,26 @@ def test_line():
     assert line.content == (token, )
 
 
-@pytest.mark.parametrize("code,expected_language", [
-    ('%ma', Language.AKKADIAN),
-    ('%mb', Language.AKKADIAN),
-    ('%na', Language.AKKADIAN),
-    ('%nb', Language.AKKADIAN),
-    ('%lb', Language.AKKADIAN),
-    ('%sb', Language.AKKADIAN),
-    ('%a', Language.AKKADIAN),
-    ('%akk', Language.AKKADIAN),
-    ('%eakk', Language.AKKADIAN),
-    ('%oakk', Language.AKKADIAN),
-    ('%ur3akk', Language.AKKADIAN),
-    ('%oa', Language.AKKADIAN),
-    ('%ob', Language.AKKADIAN),
-    ('%sux', Language.SUMERIAN),
-    ('%es', Language.EMESAL),
-    ('%foo', DEFAULT_LANGUAGE)
+@pytest.mark.parametrize("code,language,normalized", [
+    ('%ma', Language.AKKADIAN, False),
+    ('%mb', Language.AKKADIAN, False),
+    ('%na', Language.AKKADIAN, False),
+    ('%nb', Language.AKKADIAN, False),
+    ('%lb', Language.AKKADIAN, False),
+    ('%sb', Language.AKKADIAN, False),
+    ('%a', Language.AKKADIAN, False),
+    ('%akk', Language.AKKADIAN, False),
+    ('%eakk', Language.AKKADIAN, False),
+    ('%oakk', Language.AKKADIAN, False),
+    ('%ur3akk', Language.AKKADIAN, False),
+    ('%oa', Language.AKKADIAN, False),
+    ('%ob', Language.AKKADIAN, False),
+    ('%sux', Language.SUMERIAN, False),
+    ('%es', Language.EMESAL, False),
+    ('%n', Language.AKKADIAN, True),
+    ('%foo', DEFAULT_LANGUAGE, DEFAULT_NORMALIZED)
 ])
-def test_line_of_iterable(code, expected_language):
+def test_line_of_iterable(code, language, normalized):
     prefix = '1.'
     tokens = [
         Word('first'),
@@ -39,9 +42,9 @@ def test_line_of_iterable(code, expected_language):
         LanguageShift('%sb'), Word('third')
     ]
     expected_tokens = (
-        Word('first', DEFAULT_LANGUAGE),
-        LanguageShift(code), Word('second', expected_language),
-        LanguageShift('%sb'), Word('third', Language.AKKADIAN))
+        Word('first', DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
+        LanguageShift(code), Word('second', language, normalized),
+        LanguageShift('%sb'), Word('third', Language.AKKADIAN, False))
     line = TextLine.of_iterable(prefix, tokens)
 
     assert line == TextLine(prefix, expected_tokens)
