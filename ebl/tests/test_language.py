@@ -25,6 +25,7 @@ def test_lemmatizable():
     ('%ob', Language.AKKADIAN),
     ('%sux', Language.SUMERIAN),
     ('%es', Language.EMESAL),
+    ('%n', Language.AKKADIAN)
 ])
 def test_of_atf(atf, expected):
     assert Language.of_atf(atf) == expected
