@@ -157,7 +157,7 @@ class Fragment:
     folios: Folios = Folios()
     lemmatization: Lemmatization = Lemmatization([])
     text: Text = Text()
-    signs: Optional[str] = ''
+    signs: Optional[str] = None
     notes: str = ''
     hits: Optional[int] = None
     matching_lines: Optional[tuple] = None

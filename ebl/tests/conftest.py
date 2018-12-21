@@ -2,6 +2,7 @@
 import datetime
 import io
 import json
+import attr
 from dictdiffer import diff
 import pydash
 import pytest
@@ -18,7 +19,10 @@ from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.auth0 import Auth0User
-from ebl.fragmentarium.fragment import Fragment
+from ebl.fragmentarium.fragment import (
+    Fragment, Folios, Folio, Record, RecordEntry
+)
+from ebl.fragmentarium.lemmatization import Lemmatization
 
 
 @pytest.fixture
@@ -251,80 +255,52 @@ def word():
 
 @pytest.fixture
 def fragment():
-    return Fragment.from_dict({
-        '_id': '1',
-        'cdliNumber': 'cdli-4',
-        'bmIdNumber': 'bmId-2',
-        'accession': 'accession-3',
-        'museum': 'Museum',
-        'collection': 'Collection',
-        'publication': 'publication',
-        'description': 'description',
-        'script': 'NA',
-        'joins': [],
-        'width': {},
-        'length': {},
-        'thickness': {},
-        'lemmatization': [],
-        'text': {
-            'lines': []
-        },
-        'notes': '',
-        'folios': [
-            {
-                'name': 'WGL',
-                'number': '1'
-            },
-            {
-                'name': 'XXX',
-                'number': '1'
-            }
-        ],
-        'record': []
-    })
+    return Fragment(
+        number='1',
+        cdli_number='cdli-4',
+        bm_id_number='bmId-2',
+        accession='accession-3',
+        museum='Museum',
+        collection='Collection',
+        publication='publication',
+        description='description',
+        script='NA',
+        folios=Folios((
+            Folio('WGL', '1'),
+            Folio('XXX', '1')
+        ))
+    )
 
 
 @pytest.fixture
 def another_fragment(fragment):
-    return Fragment.from_dict({
-        **fragment.to_dict(),
-        '_id': '2',
-        'accession': 'accession-no-match',
-        'cdliNumber': 'cdli-no-match',
-        'bmIdNumber': 'bmId-2',
-        'notes': '',
-        'folios': [
-            {
-                'name': 'WGL',
-                'number': '2'
-            },
-            {
-                'name': 'XXX',
-                'number': '2'
-            }
-        ],
-        'record': [],
-        'hits': 5
-    })
+    return attr.evolve(
+        fragment,
+        number='2',
+        accession='accession-no-match',
+        cdli_number='cdli-no-match',
+        bm_id_number='bmId-2',
+        folios=Folios((
+            Folio('WGL', '2'),
+            Folio('XXX', '2')
+        )),
+        hits=5
+    )
 
 
 @pytest.fixture
 def transliterated_fragment():
-    return Fragment.from_dict({
-        '_id': '3',
-        'cdliNumber': 'cdli-5',
-        'bmIdNumber': 'bmId-3',
-        'accession': 'accession-4',
-        'museum': 'Museum',
-        'collection': 'Collection',
-        'publication': 'publication',
-        'description': 'description',
-        'script': 'NA',
-        'joins': [],
-        'width': {},
-        'length': {},
-        'thickness': {},
-        'lemmatization': [
+    return Fragment(
+        number='3',
+        cdli_number='cdli-5',
+        bm_id_number='bmId-3',
+        accession='accession-4',
+        museum='Museum',
+        collection='Collection',
+        publication='publication',
+        description='description',
+        script='NA',
+        lemmatization=Lemmatization([
             [
                 {"value": "1'.", "uniqueLemma": []},
                 {"value": "[...-ku]-nu-ši", "uniqueLemma": []},
@@ -357,42 +333,34 @@ def transliterated_fragment():
                 {"value": "7'.", "uniqueLemma": []},
                 {"value": "šu/|BI×IS|", "uniqueLemma": []}
             ]
-        ],
-        'text': {
-            'lines': []
-        },
-        'signs': (
+        ]),
+        signs=(
             'KU NU IGI\n'
             'MI DIŠ UD ŠU\n'
             'KI DU U BA MA TI\n'
             'X MU TA MA UD\n'
             'ŠU/|BI×IS|'
         ),
-        'notes': '',
-        'folios': [
-            {
-                'name': 'WGL',
-                'number': '3'
-            },
-            {
-                'name': 'XXX',
-                'number': '3'
-            }
-        ],
-        'record': [{
-            'user': 'Tester',
-            'type': 'Transliteration',
-            'date': datetime.datetime.utcnow().isoformat()
-        }]
-    })
+        folios=Folios((
+            Folio('WGL', '3'),
+            Folio('XXX', '3')
+        )),
+        record=Record((
+            RecordEntry(
+                'Tester',
+                'Transliteration',
+                datetime.datetime.utcnow().isoformat()
+            ),
+        ))
+    )
 
 
 @pytest.fixture
 def lemmatized_fragment(transliterated_fragment):
-    return Fragment.from_dict({
-        **transliterated_fragment.to_dict(),
-        '_id': '4',
-        'lemmatization': [
+    return attr.evolve(
+        transliterated_fragment,
+        number='4',
+        lemmatization=Lemmatization([
             [
                 {"value": "1'.", "uniqueLemma": []},
                 {"value": "[...-ku]-nu-ši", "uniqueLemma": []},
@@ -425,8 +393,8 @@ def lemmatized_fragment(transliterated_fragment):
                 {"value": "7'.", "uniqueLemma": []},
                 {"value": "šu/|BI×IS|", "uniqueLemma": []}
             ]
-        ]
-    })
+        ])
+    )
 
 
 @pytest.fixture
