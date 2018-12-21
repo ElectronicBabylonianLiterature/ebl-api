@@ -12,6 +12,12 @@ class Line:
     prefix: str = ''
     content: Tuple[Token, ...] = tuple()
 
+    def to_dict(self) -> dict:
+        return {
+            'prefix': self.prefix,
+            'content': [token.to_dict() for token in self.content]
+        }
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
@@ -19,6 +25,12 @@ class ControlLine(Line):
     @classmethod
     def of_single(cls, prefix: str, content: Token):
         return cls(prefix, (content, ))
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'ControlLine'
+        }
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -56,7 +68,19 @@ class TextLine(Line):
             token.accept(visitor)
         return cls(prefix, visitor.tokens)
 
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'TextLine'
+        }
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    pass
+
+    def to_dict(self) -> dict:
+        return {
+            'type': 'EmptyLine',
+            'prefix': '',
+            'content': []
+        }

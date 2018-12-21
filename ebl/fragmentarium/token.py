@@ -19,6 +19,12 @@ class Token:
     def accept(self, visitor: Any) -> None:
         visitor.visit_token(self)
 
+    def to_dict(self) -> dict:
+        return {
+            'type': 'Token',
+            'value': self.value
+        }
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Word(Token):
@@ -36,6 +42,16 @@ class Word(Token):
     def accept(self, visitor: Any) -> None:
         visitor.visit_word(self)
 
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Word',
+            'uniqueLemma': [*self.unique_lemma],
+            'normalized': self.normalized,
+            'language': self.language.name,
+            'lemmatizable': self.lemmatizable
+        }
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class LanguageShift(Token):
@@ -51,3 +67,11 @@ class LanguageShift(Token):
 
     def accept(self, visitor: Any) -> None:
         visitor.visit_language_shift(self)
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'LanguageShift',
+            'normalized': self.normalized,
+            'language': self.language.name
+        }

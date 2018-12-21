@@ -1,6 +1,6 @@
 import pytest
 from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
-from ebl.fragmentarium.line import Line, TextLine, ControlLine
+from ebl.fragmentarium.line import Line, TextLine, ControlLine, EmptyLine
 from ebl.fragmentarium.token import (
     Token, Word, LanguageShift, DEFAULT_NORMALIZED
 )
@@ -56,3 +56,24 @@ def test_line_of_single():
     line = ControlLine.of_single(prefix, token)
 
     assert line == ControlLine('$', (token, ))
+
+
+@pytest.mark.parametrize("line,expected", [
+    (ControlLine.of_single('@', Token('obverse')), {
+        'type': 'ControlLine',
+        'prefix': '@',
+        'content': [Token('obverse').to_dict()]
+    }),
+    (TextLine.of_iterable('1.', [Word('bu')]), {
+        'type': 'TextLine',
+        'prefix': '1.',
+        'content': [Word('bu').to_dict()]
+    }),
+    (EmptyLine(), {
+        'type': 'EmptyLine',
+        'prefix': '',
+        'content': []
+    })
+])
+def test_to_dict(line, expected):
+    assert line.to_dict() == expected

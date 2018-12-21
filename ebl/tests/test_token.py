@@ -13,6 +13,10 @@ def test_token():
 
     assert token.value == value
     assert token.lemmatizable is False
+    assert token.to_dict() == {
+        'type': 'Token',
+        'value': token.value
+    }
 
     assert token == equal
     assert hash(token) == hash(equal)
@@ -57,6 +61,14 @@ def test_word(language, normalized, unique_lemma):
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
+    assert word.to_dict() == {
+        'type': 'Word',
+        'value': word.value,
+        'uniqueLemma': [*unique_lemma],
+        'normalized': normalized,
+        'language': word.language.name,
+        'lemmatizable': word.lemmatizable
+    }
 
     assert word == equal
     assert hash(word) == hash(equal)
@@ -81,20 +93,28 @@ def test_word_set_language():
     assert word.set_language(language, normalized) == expected_word
 
 
-@pytest.mark.parametrize("value,expected_language", [
-    (r'%sux', Language.SUMERIAN,),
-    (r'%es', Language.EMESAL),
-    (r'%sb', Language.AKKADIAN),
-    (r'%foo', Language.UNKNOWN)
+@pytest.mark.parametrize("value,expected_language,normalized", [
+    (r'%sux', Language.SUMERIAN, DEFAULT_NORMALIZED),
+    (r'%es', Language.EMESAL, DEFAULT_NORMALIZED),
+    (r'%sb', Language.AKKADIAN, DEFAULT_NORMALIZED),
+    (r'%n', Language.AKKADIAN, True),
+    (r'%foo', Language.UNKNOWN, DEFAULT_NORMALIZED)
 ])
-def test_language_shift(value, expected_language):
+def test_language_shift(value, expected_language, normalized):
     shift = LanguageShift(value)
     equal = LanguageShift(value)
     other = Token(r'%bar')
 
     assert shift.value == value
     assert shift.lemmatizable is False
+    assert shift.normalized == normalized
     assert shift.language == expected_language
+    assert shift.to_dict() == {
+        'type': 'LanguageShift',
+        'value': shift.value,
+        'normalized': normalized,
+        'language': shift.language.name
+    }
 
     assert shift == equal
     assert hash(shift) == hash(equal)
