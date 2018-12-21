@@ -1,9 +1,7 @@
 import datetime
 from freezegun import freeze_time
 import pytest
-from ebl.fragmentarium.fragment import Fragment
-from ebl.fragmentarium.fragment import Record
-from ebl.fragmentarium.fragment import Folios
+from ebl.fragmentarium.fragment import Fragment, Folios
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
@@ -134,7 +132,7 @@ def test_record(transliterated_fragment):
     data = transliterated_fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
 
-    assert new_fragment.record == Record(data['record'])
+    assert new_fragment.record == transliterated_fragment.record
 
 
 def test_folios(fragment):
@@ -200,7 +198,7 @@ def test_update_transliteration(lemmatized_fragment, user):
         'notes': transliteration.notes,
         'signs': transliteration.signs,
         'record': [
-            *lemmatized_fragment.record.entries,
+            *lemmatized_fragment.record.to_list(),
             {
                 'user': user.ebl_name,
                 'type': 'Revision',

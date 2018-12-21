@@ -112,7 +112,7 @@ class MongoFragmentRepository():
                 'lemmatization': fragment.lemmatization.tokens,
                 'notes': fragment.transliteration.notes,
                 'signs': fragment.transliteration.signs,
-                'record': fragment.record.entries
+                'record': fragment.record.to_list()
             }, lambda value: value is None)}
         )
 

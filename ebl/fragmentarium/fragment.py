@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 import copy
 import datetime
 import json
@@ -14,46 +15,49 @@ REVISION = 'Revision'
 
 @attr.s(auto_attribs=True, frozen=True)
 class Measure:
-    # pylint: disable=R0903
     value: Optional[float] = None
     note: Optional[str] = None
 
-    def to_dict(self):
-        return attr.asdict(self, lambda _, value: value is not None)
+    def to_dict(self) -> dict:
+        return attr.asdict(self, filter=lambda _, value: value is not None)
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class RecordEntry:
+    user: str
+    type: str
+    date: str
+
+    def to_dict(self) -> dict:
+        return attr.asdict(self)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Record:
+    entries: Tuple[RecordEntry, ...] = tuple()
 
-    def __init__(self, record):
-        self._entries = copy.deepcopy(record)
-
-    def __eq__(self, other):
-        return isinstance(other, Record) and (self.entries == other.entries)
-
-    def __hash__(self):
-        return hash(json.dumps(self._entries))
-
-    @property
-    def entries(self):
-        return copy.deepcopy(self._entries)
-
-    def add_entry(self, old_transliteration, new_transliteration, user):
+    def add_entry(self,
+                  old_transliteration: str,
+                  new_transliteration: str, user) -> 'Record':
         if new_transliteration != old_transliteration:
-            return Record([
-                *self._entries,
+            return attr.evolve(self, entries=(
+                *self.entries,
                 self._create_entry(old_transliteration, user)
-            ])
+            ))
         else:
             return self
 
+    def to_list(self):
+        return [entry.to_dict() for entry in self.entries]
+
     @staticmethod
-    def _create_entry(old_transliteration, user):
+    def _create_entry(old_transliteration: str, user) -> RecordEntry:
         record_type = REVISION if old_transliteration else TRANSLITERATION
-        return {
-            'user': user.ebl_name,
-            'type': record_type,
-            'date': datetime.datetime.utcnow().isoformat()
-        }
+        return RecordEntry(
+            user.ebl_name,
+            record_type,
+            datetime.datetime.utcnow().isoformat()
+        )
 
 
 class Folios:
@@ -95,7 +99,7 @@ class Fragment:
     length: Measure = Measure()
     thickness: Measure = Measure()
     joins: Tuple[str, ...] = tuple()
-    record: Record = Record([])
+    record: Record = Record()
     folios: Folios = Folios([])
     lemmatization: Lemmatization = Lemmatization([])
     signs: Optional[str] = ''
@@ -104,14 +108,14 @@ class Fragment:
     matching_lines: Optional[tuple] = None
 
     @property
-    def transliteration(self):
+    def transliteration(self) -> Transliteration:
         return Transliteration(
             self.lemmatization.atf,
             self.notes,
             self.signs
         )
 
-    def update_transliteration(self, transliteration, user):
+    def update_transliteration(self, transliteration, user) -> 'Fragment':
         record = self.record.add_entry(
             self.lemmatization.atf,
             transliteration.atf,
@@ -127,14 +131,14 @@ class Fragment:
             record=record
         )
 
-    def add_matching_lines(self, query):
+    def add_matching_lines(self, query) -> 'Fragment':
         matching_lines = query.get_matching_lines(self.transliteration)
         return attr.evolve(
             self,
             matching_lines=matching_lines
         )
 
-    def update_lemmatization(self, lemmatization):
+    def update_lemmatization(self, lemmatization) -> 'Fragment':
         if self.lemmatization.is_compatible(lemmatization):
             return attr.evolve(
                 self,
@@ -143,7 +147,7 @@ class Fragment:
         else:
             raise LemmatizationError()
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return pydash.omit_by({
             '_id': self.number,
             'accession': self.accession,
@@ -160,21 +164,21 @@ class Fragment:
             'notes': self.notes,
             'museum': self.museum,
             'signs': self.signs,
-            'record': self.record.entries,
+            'record': self.record.to_list(),
             'folios': self.folios.entries,
             'lemmatization': self.lemmatization.tokens,
             'hits': self.hits,
             'matching_lines': self.matching_lines
         }, lambda value: value is None)
 
-    def to_dict_for(self, user):
+    def to_dict_for(self, user) -> dict:
         return {
             **self.to_dict(),
             'folios': self.folios.filter(user).entries
         }
 
     @staticmethod
-    def from_dict(data):
+    def from_dict(data: dict) -> 'Fragment':
         return Fragment(
             data['_id'],
             data['accession'],
@@ -189,7 +193,7 @@ class Fragment:
             Measure(**data['length']),
             Measure(**data['thickness']),
             tuple(data['joins']),
-            Record(data['record']),
+            Record(tuple(RecordEntry(**entry) for entry in data['record'])),
             Folios(data['folios']),
             Lemmatization(data['lemmatization']),
             data.get('signs'),
