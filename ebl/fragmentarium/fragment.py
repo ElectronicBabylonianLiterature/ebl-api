@@ -1,9 +1,12 @@
 # pylint: disable=R0903
 import datetime
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List, Mapping, Callable
 import attr
 import pydash
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
+from ebl.fragmentarium.language import Language
+from ebl.fragmentarium.line import Line, ControlLine, EmptyLine, TextLine
+from ebl.fragmentarium.token import Token, Word, LanguageShift
 from ebl.fragmentarium.transliteration import Transliteration
 
 
@@ -84,6 +87,58 @@ class Folios:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class Text:
+    lines: Tuple[Line, ...] = tuple()
+
+    def to_dict(self) -> dict:
+        return {
+            'lines': [line.to_dict() for line in self.lines]
+        }
+
+    @staticmethod
+    def from_dict(data: dict):
+        token_factories: Mapping[str, Callable[[dict], Token]] = {
+            'Token': lambda data: Token(
+                data['value']
+            ),
+            'Word': lambda data: Word(
+                data['value'],
+                Language[data['language']],
+                data['normalized'],
+                tuple(data['uniqueLemma']),
+            ),
+            'LanguageShift': lambda data: LanguageShift(
+                data['value']
+            )
+        }
+
+        def create_tokens(content: List[dict]):
+            return tuple(
+                token_factories[token['type']](token)
+                for token
+                in content
+            )
+        line_factories: Mapping[str, Callable[[str, List[dict]], Line]] = {
+            'ControlLine':
+                lambda prefix, content: ControlLine(
+                    prefix, create_tokens(content)
+                ),
+            'TextLine':
+                lambda prefix, content: TextLine(
+                    prefix, create_tokens(content)
+                ),
+            'EmptyLine':
+                lambda _prefix, _content: EmptyLine()
+        }
+        lines = tuple(
+            line_factories[line['type']](line['prefix'], line['content'])
+            for line
+            in data['lines']
+        )
+        return Text(lines)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: str
     accession: str = ''
@@ -101,6 +156,7 @@ class Fragment:
     record: Record = Record()
     folios: Folios = Folios()
     lemmatization: Lemmatization = Lemmatization([])
+    text: Text = Text()
     signs: Optional[str] = ''
     notes: str = ''
     hits: Optional[int] = None
@@ -166,6 +222,7 @@ class Fragment:
             'record': self.record.to_list(),
             'folios': self.folios.to_list(),
             'lemmatization': self.lemmatization.tokens,
+            'text': self.text.to_dict(),
             'hits': self.hits,
             'matching_lines': self.matching_lines
         }, lambda value: value is None)
@@ -195,6 +252,7 @@ class Fragment:
             Record(tuple(RecordEntry(**entry) for entry in data['record'])),
             Folios(tuple(Folio(**folio) for folio in data['folios'])),
             Lemmatization(data['lemmatization']),
+            Text.from_dict(data['text']),
             data.get('signs'),
             data['notes'],
             data.get('hits'),

@@ -266,6 +266,9 @@ def fragment():
         'length': {},
         'thickness': {},
         'lemmatization': [],
+        'text': {
+            'lines': []
+        },
         'notes': '',
         'folios': [
             {
@@ -355,6 +358,9 @@ def transliterated_fragment():
                 {"value": "šu/|BI×IS|", "uniqueLemma": []}
             ]
         ],
+        'text': {
+            'lines': []
+        },
         'signs': (
             'KU NU IGI\n'
             'MI DIŠ UD ŠU\n'

@@ -1,8 +1,11 @@
 import datetime
 from freezegun import freeze_time
 import pytest
-from ebl.fragmentarium.fragment import Fragment, Folios, Folio
+from ebl.fragmentarium.fragment import Fragment, Folios, Folio, Text
+from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
+from ebl.fragmentarium.line import ControlLine, TextLine, EmptyLine
+from ebl.fragmentarium.token import Token, Word, LanguageShift
 from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
@@ -149,6 +152,23 @@ def test_lemmatization(fragment):
         'lemmatization': tokens
     }
     assert Fragment.from_dict(data).lemmatization == Lemmatization(tokens)
+
+
+def test_text(fragment):
+    text = Text((
+        ControlLine.of_single('@', Token('obverse')),
+        TextLine.of_iterable('1.', [
+            LanguageShift('%sux'), Word('bu', Language.SUMERIAN)
+        ]),
+        EmptyLine()
+    ))
+    data = {
+        **fragment.to_dict(),
+        'text': {
+            'lines': [line.to_dict() for line in text.lines]
+        }
+    }
+    assert Fragment.from_dict(data).text == text
 
 
 def test_hits(fragment):
