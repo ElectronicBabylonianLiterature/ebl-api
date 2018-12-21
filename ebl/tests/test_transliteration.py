@@ -1,23 +1,6 @@
 from ebl.fragmentarium.transliteration import Transliteration
 
 
-def test_equality():
-    transliteration = Transliteration('transliteration', 'notes')
-    similar = Transliteration('transliteration', 'notes')
-    different_notes = Transliteration('transliteration', 'different')
-    different_atf = Transliteration('different', 'different')
-
-    assert transliteration == similar
-    assert transliteration != different_notes
-    assert transliteration != different_atf
-
-
-def test_hash():
-    transliteration = Transliteration('transliteration', 'notes')
-
-    assert hash(transliteration) == hash(('transliteration', 'notes'))
-
-
 def test_atf():
     transliteration = Transliteration('transliteration', 'notes')
 

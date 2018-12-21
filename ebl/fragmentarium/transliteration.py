@@ -1,4 +1,6 @@
 import re
+from typing import Optional, List, Callable, Any
+import attr
 import pydash
 from ebl.atf import ATF_SPEC
 
@@ -34,7 +36,7 @@ class TransliterationError(Exception):
         self.errors = errors
 
 
-def _clean_line(line):
+def _clean_line(line: str) -> str:
     return (
         pydash
         .chain(line)
@@ -46,7 +48,7 @@ def _clean_line(line):
     )
 
 
-def _clean_values(line):
+def _clean_values(line: str) -> str:
     return (
         pydash
         .chain(line)
@@ -58,7 +60,7 @@ def _clean_values(line):
     )
 
 
-def _clean_value(value):
+def _clean_value(value: str) -> str:
     grapheme = re.fullmatch(r'\|[^|]+\|', value)
     reading_with_sign = re.fullmatch(r'[^\(]+\(([^\)]+)\)', value)
     if VARIANT_SEPARATOR in value:
@@ -69,14 +71,14 @@ def _clean_value(value):
         return _clean_reading(value)
 
 
-def _clean_variant(value):
+def _clean_variant(value: str) -> str:
     return VARIANT_SEPARATOR.join([
         _clean_value(part)
         for part in value.split(VARIANT_SEPARATOR)
     ])
 
 
-def _clean_reading(value):
+def _clean_reading(value: str) -> str:
     return (
         pydash.chain(value)
         .reg_exp_replace(r'[.+]', ' ')
@@ -86,35 +88,14 @@ def _clean_reading(value):
     )
 
 
+@attr.s(auto_attribs=True, frozen=True)
 class Transliteration:
-
-    def __init__(self, atf, notes='', signs=None):
-        self._atf = atf
-        self._notes = notes
-        self._signs = signs
-
-    def __eq__(self, other):
-        return (isinstance(other, Transliteration) and
-                (self.atf == other.atf) and
-                (self.notes == other.notes))
-
-    def __hash__(self):
-        return hash((self._atf, self._notes))
+    atf: str
+    notes: str = ''
+    signs: Optional[str] = None
 
     @property
-    def atf(self):
-        return self._atf
-
-    @property
-    def notes(self):
-        return self._notes
-
-    @property
-    def signs(self):
-        return self._signs
-
-    @property
-    def cleaned(self):
+    def cleaned(self) -> List[str]:
         return (
             pydash
             .chain(self.filtered)
@@ -124,24 +105,24 @@ class Transliteration:
         )
 
     @property
-    def filtered(self):
+    def filtered(self) -> List[str]:
         return [
             line
             for line in self.atf.split('\n')
             if line and not re.match(IGNORE_LINE_PATTERN, line)
         ]
 
-    def with_signs(self, sign_list):
+    def with_signs(self, sign_list) -> 'Transliteration':
         signs = '\n'.join([
             ' '.join(row)
             for row in self.to_sign_matrix(sign_list)
         ])
-        return Transliteration(self.atf, self.notes, signs)
+        return attr.evolve(self, signs=signs)
 
-    def to_sign_matrix(self, sign_list):
+    def to_sign_matrix(self, sign_list) -> List[List[str]]:
         return sign_list.map_transliteration(self.cleaned)
 
-    def tokenize(self, create_token):
+    def tokenize(self, create_token: Callable[[str], Any]) -> List[List[Any]]:
         return [
             [
                 create_token(value)
