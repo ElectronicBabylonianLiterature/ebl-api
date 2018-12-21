@@ -2,7 +2,7 @@ import re
 from typing import Optional, List, Callable, Any
 import attr
 import pydash
-from ebl.atf import ATF_SPEC
+from ebl.text.atf import ATF_SPEC
 
 IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['control_line'],

@@ -1,8 +1,8 @@
 # pylint: disable=R0903
 from typing import List, Tuple, Iterable
 import attr
-from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
-from ebl.fragmentarium.token import (
+from ebl.text.language import Language, DEFAULT_LANGUAGE
+from ebl.text.token import (
     Token, Word, LanguageShift, DEFAULT_NORMALIZED
 )
 

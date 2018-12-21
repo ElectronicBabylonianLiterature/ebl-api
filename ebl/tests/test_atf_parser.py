@@ -1,8 +1,8 @@
 import pytest
-from ebl.fragmentarium.atf_parser import parse_atf
-from ebl.fragmentarium.language import Language
-from ebl.fragmentarium.line import EmptyLine, TextLine, ControlLine
-from ebl.fragmentarium.token import Token, Word, LanguageShift
+from ebl.text.atf_parser import parse_atf
+from ebl.text.language import Language
+from ebl.text.line import EmptyLine, TextLine, ControlLine
+from ebl.text.token import Token, Word, LanguageShift
 
 
 DEFAULT_LANGUAGE = Language.AKKADIAN

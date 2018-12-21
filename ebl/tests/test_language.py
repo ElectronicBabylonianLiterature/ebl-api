@@ -1,5 +1,5 @@
 import pytest
-from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
+from ebl.text.language import Language, DEFAULT_LANGUAGE
 
 
 def test_lemmatizable():

@@ -1,5 +1,5 @@
 from ebl.sign_list.value_mapper import create_value_mapper
-from ebl.atf import ATF_SPEC
+from ebl.text.atf import ATF_SPEC
 
 
 class SignList:

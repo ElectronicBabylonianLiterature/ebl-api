@@ -1,6 +1,6 @@
 from typing import Any, Tuple, NewType
 import attr
-from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
+from ebl.text.language import Language, DEFAULT_LANGUAGE
 
 
 DEFAULT_LANGUAGE = Language.AKKADIAN

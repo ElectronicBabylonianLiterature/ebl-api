@@ -1,6 +1,6 @@
 import re
 import unicodedata
-from ebl.atf import ATF_SPEC
+from ebl.text.atf import ATF_SPEC
 
 
 BROKEN_PATTERN = ATF_SPEC['unclear']

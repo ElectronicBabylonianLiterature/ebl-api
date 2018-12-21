@@ -1,5 +1,5 @@
 import pytest
-from ebl.atf import validate_atf, AtfSyntaxError
+from ebl.text.atf import validate_atf, AtfSyntaxError
 
 
 def test_valid_atf():

@@ -1,7 +1,7 @@
 import pytest
-from ebl.fragmentarium.language import Language, DEFAULT_LANGUAGE
-from ebl.fragmentarium.line import Line, TextLine, ControlLine, EmptyLine
-from ebl.fragmentarium.token import (
+from ebl.text.language import Language, DEFAULT_LANGUAGE
+from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
+from ebl.text.token import (
     Token, Word, LanguageShift, DEFAULT_NORMALIZED
 )
 

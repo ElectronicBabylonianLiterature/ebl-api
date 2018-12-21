@@ -4,10 +4,10 @@ import pytest
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Text, Measure, Record, RecordEntry
 )
-from ebl.fragmentarium.language import Language
+from ebl.text.language import Language
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
-from ebl.fragmentarium.line import ControlLine, TextLine, EmptyLine
-from ebl.fragmentarium.token import Token, Word, LanguageShift
+from ebl.text.line import ControlLine, TextLine, EmptyLine
+from ebl.text.token import Token, Word, LanguageShift
 from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
