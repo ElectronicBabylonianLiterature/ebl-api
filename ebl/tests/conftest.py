@@ -349,7 +349,7 @@ def transliterated_fragment():
             RecordEntry(
                 'Tester',
                 'Transliteration',
-                datetime.datetime.utcnow().isoformat()
+                '2018-12-21T17:05:27.352435'
             ),
         ))
     )
@@ -395,6 +395,17 @@ def lemmatized_fragment(transliterated_fragment):
             ]
         ])
     )
+
+
+@pytest.fixture()
+def record():
+    return Record((
+        RecordEntry(
+            'Tester',
+            'Transliteration',
+            datetime.datetime.utcnow().isoformat()
+        ),
+    ))
 
 
 @pytest.fixture

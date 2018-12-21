@@ -1,7 +1,9 @@
 import datetime
 from freezegun import freeze_time
 import pytest
-from ebl.fragmentarium.fragment import Fragment, Folios, Folio, Text
+from ebl.fragmentarium.fragment import (
+    Fragment, Folios, Folio, Text, Measure, Record, RecordEntry
+)
 from ebl.fragmentarium.language import Language
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.line import ControlLine, TextLine, EmptyLine
@@ -10,13 +12,7 @@ from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
-def test_to_dict(fragment):
-    new_fragment = Fragment.from_dict(fragment.to_dict())
-
-    assert new_fragment.to_dict() == fragment.to_dict()
-
-
-def test_from_dict(fragment):
+def test_dict_serialization(fragment):
     new_fragment = Fragment.from_dict(fragment.to_dict())
 
     assert new_fragment == fragment
@@ -29,120 +25,99 @@ def test_to_dict_for(fragment, user):
     }
 
 
-def test_equality(fragment, transliterated_fragment):
-    new_fragment = Fragment.from_dict(fragment.to_dict())
-
-    assert new_fragment == fragment
-    assert new_fragment != transliterated_fragment
+def test_number(fragment):
+    assert fragment.number == '1'
 
 
 def test_accession(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.accession == data['accession']
+    assert fragment.accession == 'accession-3'
 
 
 def test_cdli_number(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.cdli_number == data['cdliNumber']
+    assert fragment.cdli_number == 'cdli-4'
 
 
 def test_bm_id_number(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.bm_id_number == data['bmIdNumber']
+    assert fragment.bm_id_number == 'bmId-2'
 
 
 def test_publication(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.publication == data['publication']
+    assert fragment.publication == 'publication'
 
 
 def test_description(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.description == data['description']
+    assert fragment.description == 'description'
 
 
 def test_collection(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.collection == data['collection']
+    assert fragment.collection == 'Collection'
 
 
 def test_script(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.script == data['script']
+    assert fragment.script == 'NA'
 
 
 def test_museum(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.museum == data['museum']
+    assert fragment.museum == 'Museum'
 
 
 def test_length(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.length == fragment.length
+    assert fragment.length == Measure()
 
 
 def test_width(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.width == fragment.width
+    assert fragment.width == Measure()
 
 
 def test_thickness(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.thickness == fragment.thickness
+    assert fragment.thickness == Measure()
 
 
 def test_joins(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
+    assert fragment.joins == tuple()
 
-    assert new_fragment.joins == fragment.joins
+
+def test_notes(fragment):
+    assert fragment.notes == ''
+
+
+def test_signs(transliterated_fragment):
+    assert transliterated_fragment.signs == (
+        'KU NU IGI\n'
+        'MI DIŠ UD ŠU\n'
+        'KI DU U BA MA TI\n'
+        'X MU TA MA UD\n'
+        'ŠU/|BI×IS|'
+    )
+
+
+def test_signs_none(fragment):
+    assert fragment.signs is None
 
 
 def test_transliteration(transliterated_fragment):
-    data = transliterated_fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.transliteration == Transliteration(
-        Lemmatization(data['lemmatization']).atf,
-        data['notes'],
-        data['signs']
+    assert transliterated_fragment.transliteration == Transliteration(
+        transliterated_fragment.lemmatization.atf,
+        transliterated_fragment.notes,
+        transliterated_fragment.signs
     )
 
 
 def test_record(transliterated_fragment):
-    data = transliterated_fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.record == transliterated_fragment.record
+    assert transliterated_fragment.record == Record((
+        RecordEntry(
+            'Tester',
+            'Transliteration',
+            '2018-12-21T17:05:27.352435'
+        ),
+    ))
 
 
 def test_folios(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
-
-    assert new_fragment.folios == fragment.folios
+    assert fragment.folios == Folios((
+        Folio('WGL', '1'),
+        Folio('XXX', '1')
+    ))
 
 
 def test_lemmatization(fragment):
@@ -171,17 +146,25 @@ def test_text(fragment):
     assert Fragment.from_dict(data).text == text
 
 
-def test_hits(fragment):
-    data = fragment.to_dict()
-    new_fragment = Fragment.from_dict(data)
+def test_hits(another_fragment):
+    assert another_fragment.hits == 5
 
-    assert new_fragment.hits == data.get('hits')
+
+def test_hits_none(fragment):
+    assert fragment.hits is None
 
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(fragment, user):
     transliteration = Transliteration('x x', fragment.transliteration.notes)
     lemmatization = Lemmatization.of_transliteration(transliteration)
+    record = Record((
+        RecordEntry(
+            user.ebl_name,
+            'Transliteration',
+            datetime.datetime.utcnow().isoformat()
+        ),
+    ))
 
     updated_fragment = fragment.update_transliteration(
         transliteration,
@@ -190,11 +173,7 @@ def test_add_transliteration(fragment, user):
     expected_fragment = Fragment.from_dict({
         **fragment.to_dict(),
         'lemmatization': lemmatization.tokens,
-        'record': [{
-            'user': user.ebl_name,
-            'type': 'Transliteration',
-            'date': datetime.datetime.utcnow().isoformat()
-        }]
+        'record': record.to_list()
     })
 
     assert updated_fragment == expected_fragment
@@ -217,14 +196,11 @@ def test_update_transliteration(lemmatized_fragment, user):
         'lemmatization': lemmatization.tokens,
         'notes': transliteration.notes,
         'signs': transliteration.signs,
-        'record': [
-            *lemmatized_fragment.record.to_list(),
-            {
-                'user': user.ebl_name,
-                'type': 'Revision',
-                'date': datetime.datetime.utcnow().isoformat()
-            }
-        ]
+        'record': lemmatized_fragment.record.add_entry(
+            lemmatized_fragment.lemmatization.atf,
+            transliteration.atf,
+            user
+        ).to_list()
     })
 
     assert updated_fragment == expected_fragment
@@ -286,3 +262,20 @@ def test_filter_folios(user):
     ))
 
     assert folios.filter(user) == expected
+
+
+@pytest.mark.parametrize("old,new,type_", [
+    ('', 'new', 'Transliteration'),
+    ('old', 'new', 'Revision'),
+])
+@freeze_time("2018-09-07 15:41:24.032")
+def test_add_record(old, new, type_, record, user):
+    expected_entry = RecordEntry(
+        user.ebl_name,
+        type_,
+        datetime.datetime.utcnow().isoformat()
+    )
+    assert record.add_entry(old, new, user) == Record((
+        *record.entries,
+        expected_entry
+    ))
