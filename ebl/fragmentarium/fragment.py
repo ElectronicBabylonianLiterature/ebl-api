@@ -1,7 +1,5 @@
 # pylint: disable=R0903
-import copy
 import datetime
-import json
 from typing import Tuple, Optional
 import attr
 import pydash
@@ -40,14 +38,14 @@ class Record:
                   old_transliteration: str,
                   new_transliteration: str, user) -> 'Record':
         if new_transliteration != old_transliteration:
-            return attr.evolve(self, entries=(
+            return Record((
                 *self.entries,
                 self._create_entry(old_transliteration, user)
             ))
         else:
             return self
 
-    def to_list(self):
+    def to_list(self) -> list:
         return [entry.to_dict() for entry in self.entries]
 
     @staticmethod
@@ -60,28 +58,29 @@ class Record:
         )
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class Folio:
+    name: str
+    number: str
+
+    def to_dict(self) -> dict:
+        return attr.asdict(self)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Folios:
+    entries: Tuple[Folio, ...] = tuple()
 
-    def __init__(self, folios):
-        self._entries = copy.deepcopy(folios)
-
-    def __eq__(self, other):
-        return isinstance(other, Folios) and (self.entries == other.entries)
-
-    def __hash__(self):
-        return hash(json.dumps(self._entries))
-
-    @property
-    def entries(self):
-        return copy.deepcopy(self._entries)
-
-    def filter(self, user):
-        folios = [
+    def filter(self, user) -> 'Folios':
+        folios = tuple(
             folio
-            for folio in self._entries
-            if user.can_read_folio(folio['name'])
-        ]
+            for folio in self.entries
+            if user.can_read_folio(folio.name)
+        )
         return Folios(folios)
+
+    def to_list(self) -> list:
+        return [folio.to_dict() for folio in self.entries]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -100,7 +99,7 @@ class Fragment:
     thickness: Measure = Measure()
     joins: Tuple[str, ...] = tuple()
     record: Record = Record()
-    folios: Folios = Folios([])
+    folios: Folios = Folios()
     lemmatization: Lemmatization = Lemmatization([])
     signs: Optional[str] = ''
     notes: str = ''
@@ -165,7 +164,7 @@ class Fragment:
             'museum': self.museum,
             'signs': self.signs,
             'record': self.record.to_list(),
-            'folios': self.folios.entries,
+            'folios': self.folios.to_list(),
             'lemmatization': self.lemmatization.tokens,
             'hits': self.hits,
             'matching_lines': self.matching_lines
@@ -174,7 +173,7 @@ class Fragment:
     def to_dict_for(self, user) -> dict:
         return {
             **self.to_dict(),
-            'folios': self.folios.filter(user).entries
+            'folios': self.folios.filter(user).to_list()
         }
 
     @staticmethod
@@ -194,7 +193,7 @@ class Fragment:
             Measure(**data['thickness']),
             tuple(data['joins']),
             Record(tuple(RecordEntry(**entry) for entry in data['record'])),
-            Folios(data['folios']),
+            Folios(tuple(Folio(**folio) for folio in data['folios'])),
             Lemmatization(data['lemmatization']),
             data.get('signs'),
             data['notes'],

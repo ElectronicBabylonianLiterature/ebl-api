@@ -1,7 +1,7 @@
 import datetime
 from freezegun import freeze_time
 import pytest
-from ebl.fragmentarium.fragment import Fragment, Folios
+from ebl.fragmentarium.fragment import Fragment, Folios, Folio
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import Transliteration
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
@@ -22,7 +22,7 @@ def test_from_dict(fragment):
 def test_to_dict_for(fragment, user):
     assert fragment.to_dict_for(user) == {
         **fragment.to_dict(),
-        'folios': fragment.folios.filter(user).entries
+        'folios': fragment.folios.filter(user).to_list()
     }
 
 
@@ -139,7 +139,7 @@ def test_folios(fragment):
     data = fragment.to_dict()
     new_fragment = Fragment.from_dict(data)
 
-    assert new_fragment.folios == Folios(data['folios'])
+    assert new_fragment.folios == fragment.folios
 
 
 def test_lemmatization(fragment):
@@ -256,19 +256,13 @@ def test_update_lemmatization_incompatible(fragment):
 
 
 def test_filter_folios(user):
-    wgl_folio = {
-        'name': 'WGL',
-        'number': '1'
-    }
-    folios = Folios([
+    wgl_folio = Folio('WGL', '1')
+    folios = Folios((
         wgl_folio,
-        {
-            'name': 'XXX',
-            'number': '1'
-        },
-    ])
-    expected = Folios([
-        wgl_folio
-    ])
+        Folio('XXX', '1')
+    ))
+    expected = Folios((
+        wgl_folio,
+    ))
 
     assert folios.filter(user) == expected
