@@ -9,7 +9,9 @@ from ebl.text.language import Language
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, TextLine, EmptyLine
 from ebl.text.token import Token, Word, LanguageShift
-from ebl.fragmentarium.transliteration import Transliteration
+from ebl.fragmentarium.transliteration import (
+    Transliteration, TransliterationError
+)
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
@@ -211,6 +213,25 @@ def test_update_transliteration(lemmatized_fragment, user):
     })
 
     assert updated_fragment == expected_fragment
+
+
+def test_test_update_transliteration_invalid_value(fragment, user):
+    atf = '1. x\ninvalid line'
+    transliteration = Transliteration(atf, fragment.transliteration.notes)
+
+    with pytest.raises(TransliterationError,
+                       message="Invalid transliteration") as excinfo:
+        fragment.update_transliteration(
+            transliteration,
+            user
+        )
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid line',
+            'lineNumber': 2
+        }
+    ]
 
 
 def test_update_notes(fragment, user):

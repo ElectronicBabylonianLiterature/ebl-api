@@ -4,10 +4,12 @@ from typing import Tuple, Optional
 import attr
 import pydash
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
+from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
-from ebl.fragmentarium.transliteration import Transliteration
-
+from ebl.fragmentarium.transliteration import (
+    Transliteration, TransliterationError
+)
 
 TRANSLITERATION = 'Transliteration'
 REVISION = 'Revision'
@@ -124,16 +126,24 @@ class Fragment:
             user
         )
         lemmatization = self.lemmatization.merge(transliteration)
-        text = parse_atf(transliteration.atf)
 
-        return attr.evolve(
-            self,
-            lemmatization=lemmatization,
-            text=text,
-            notes=transliteration.notes,
-            signs=transliteration.signs,
-            record=record
-        )
+        try:
+            text = parse_atf(transliteration.atf)
+
+            return attr.evolve(
+                self,
+                lemmatization=lemmatization,
+                text=text,
+                notes=transliteration.notes,
+                signs=transliteration.signs,
+                record=record
+            )
+        except AtfSyntaxError as error:
+            errors = [{
+                'description': 'Invalid line',
+                'lineNumber': error.line_number
+            }]
+            raise TransliterationError(errors)
 
     def add_matching_lines(self, query) -> 'Fragment':
         matching_lines = query.get_matching_lines(self.transliteration)
