@@ -12,6 +12,11 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 @pytest.mark.parametrize("line,expected_tokenization", [
     ('', tuple()),
     ('\n', (EmptyLine(), )),
+    ('#first\n\n#second', (
+        ControlLine.of_single('#', Token('first')),
+        EmptyLine(),
+        ControlLine.of_single('#', Token('second'))
+    )),
     ('&K11111', (
         ControlLine.of_single('&', Token('K11111')),
     )),
@@ -34,7 +39,17 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
         TextLine('1.', (Token('($___$)'), )),
     )),
     ('1. ... [...]', (
-        TextLine('1.', (Token('...'), Token('[...]'))),
+        TextLine('1.', (
+            Token('...'),
+            Token('[...]')
+        )),
+    )),
+    ('1. [(x x x)]', (
+        TextLine('1.', (
+            Word('[(x'),
+            Word('x'),
+            Word('x)]')
+        )),
     )),
     ('1. & &12', (
         TextLine('1.', (Token('&'), Token('&12'))),
@@ -49,8 +64,8 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
         )),
     )),
-    ('1. x X', (
-        TextLine('1.', (Word('x'), Word('X'))),
+    ('1. x X x# X#', (
+        TextLine('1.', (Word('x'), Word('X'), Word('x#'), Word('X#'))),
     )),
     ('1. x-ti ti-X', (
         TextLine('1.', (Word('x-ti'), Word('ti-X'))),

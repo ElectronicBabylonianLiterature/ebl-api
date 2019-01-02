@@ -25,7 +25,7 @@ CONTROL_LINE = seq(
     regex(r'.*').map(Token)
 ).combine(ControlLine.of_single)
 EMPTY_LINE = regex(
-    '^$', re.RegexFlag.MULTILINE
+    r'^$', re.RegexFlag.MULTILINE
 ).map(lambda _: EmptyLine()) << LINE_SEPARATOR
 TEXT_LINE = seq(
     LINE_NUMBER << WORD_SEPARATOR,
