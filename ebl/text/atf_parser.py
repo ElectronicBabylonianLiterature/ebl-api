@@ -1,6 +1,7 @@
 import re
 import pydash
-from parsy import string, regex, seq
+from parsy import string, regex, seq, ParseError
+from ebl.text.atf import AtfSyntaxError
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
 from ebl.text.token import Token, Word, LanguageShift
@@ -52,4 +53,8 @@ ATF = (
 
 
 def parse_atf(atf: str):
-    return ATF.parse(atf)
+    try:
+        return ATF.parse(atf)
+    except ParseError as error:
+        line_number = int(error.line_info().split(':')[0]) + 1
+        raise AtfSyntaxError(line_number)

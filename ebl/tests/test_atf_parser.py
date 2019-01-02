@@ -1,4 +1,5 @@
 import pytest
+from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.line import EmptyLine, TextLine, ControlLine
@@ -123,3 +124,11 @@ def test_parse_atf_language_shifts(code, expected_language):
     ))
 
     assert parse_atf(line) == expected
+
+
+def test_invalid_atf():
+    with pytest.raises(AtfSyntaxError,
+                       message="Line 1 is invalid.") as excinfo:
+        parse_atf('1. x\nthis is not valid')
+
+    assert excinfo.value.line_number == 2

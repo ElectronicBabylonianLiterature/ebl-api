@@ -54,9 +54,8 @@ class AtfError(Exception):
 
 
 class AtfSyntaxError(AtfError):
-    def __init__(self, source):
-        self.line_number = source.lineno - len(ATF_HEADING)
-        self.text = source.text
+    def __init__(self, line_number):
+        self.line_number = line_number
         message = f"Line {self.line_number} is invalid."
         super().__init__(message)
 
@@ -66,7 +65,8 @@ def validate_atf(text):
     try:
         return AtfFile(f'{prefix}\n{text}', atftype='oracc')
     except SyntaxError as error:
-        raise AtfSyntaxError(error)
+        line_number = error.lineno - len(ATF_HEADING)
+        raise AtfSyntaxError(line_number)
     except (IndexError,
             AttributeError,
             UnicodeDecodeError) as error:

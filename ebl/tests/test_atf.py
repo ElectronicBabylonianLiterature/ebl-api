@@ -12,4 +12,3 @@ def test_invalid_atf():
         validate_atf('$ this is not valid')
 
     assert excinfo.value.line_number == 1
-    assert excinfo.value.text == 'is'
