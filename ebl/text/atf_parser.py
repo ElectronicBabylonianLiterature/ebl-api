@@ -2,6 +2,7 @@ import re
 import pydash
 from parsy import string, regex, seq
 from ebl.text.line import EmptyLine, TextLine, ControlLine
+from ebl.text.text import Text
 from ebl.text.token import Token, Word, LanguageShift
 
 
@@ -40,8 +41,15 @@ TEXT_LINE = seq(
 ).combine(TextLine.of_iterable)
 
 
-ATF = (CONTROL_LINE | TEXT_LINE | EMPTY_LINE).many().sep_by(LINE_SEPARATOR)
+ATF = (
+    (CONTROL_LINE | TEXT_LINE | EMPTY_LINE)
+    .many()
+    .sep_by(LINE_SEPARATOR)
+    .map(pydash.flatten)
+    .map(tuple)
+    .map(Text)
+)
 
 
-def parse_atf(input_: str):
-    return pydash.flatten(ATF.parse(input_))
+def parse_atf(atf: str):
+    return ATF.parse(atf)
