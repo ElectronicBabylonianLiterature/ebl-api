@@ -102,8 +102,9 @@ class Merger:
 
     def merge(self, old, new):
         diff = Differ(self._map, self._dimensions).diff(old, new)
+        prefix_length = [len(key) for key in self._operations][0]
         return reduce(
             lambda state, entry: self._operations[entry](state),
-            [line[:2] for line in diff],
+            [line[:prefix_length] for line in diff],
             Merge(old, new)
         ).result
