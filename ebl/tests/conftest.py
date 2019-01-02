@@ -18,6 +18,9 @@ from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
+from ebl.text.text import Text
+from ebl.text.line import TextLine
+from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Record, RecordEntry
@@ -334,6 +337,36 @@ def transliterated_fragment():
                 {"value": "šu/|BI×IS|", "uniqueLemma": []}
             ]
         ]),
+        text=Text((
+            TextLine("1'.", (
+                Token('[...'),
+                Word('-ku]-nu-ši'),
+                Token('[...]')
+            )),
+            TextLine("2'.", (
+                Token('[...]'),
+                Word('GI₆'),
+                Word('ana'),
+                Word('u₄-š[u'),
+                Token('...]')
+            )),
+            TextLine("3'.", (
+                Token('[...'),
+                Word('k]i-du'),
+                Word('u'),
+                Word('ba-ma-t[i'),
+                Token('...]')
+            )),
+            TextLine("6'.", (
+                Token('[...]'),
+                Word('x'),
+                Word('mu'),
+                Word('ta-ma-tu₂')
+            )),
+            TextLine("7'.", (
+                Word('šu/|BI×IS|'),
+            ))
+        )),
         signs=(
             'KU NU IGI\n'
             'MI DIŠ UD ŠU\n'

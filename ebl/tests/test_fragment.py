@@ -1,6 +1,7 @@
 import datetime
 from freezegun import freeze_time
 import pytest
+from ebl.text.atf_parser import parse_atf
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Text, Measure, Record, RecordEntry
 )
@@ -156,8 +157,10 @@ def test_hits_none(fragment):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(fragment, user):
-    transliteration = Transliteration('x x', fragment.transliteration.notes)
+    atf = '1. x x'
+    transliteration = Transliteration(atf, fragment.transliteration.notes)
     lemmatization = Lemmatization.of_transliteration(transliteration)
+    text = parse_atf(atf)
     record = Record((
         RecordEntry(
             user.ebl_name,
@@ -173,6 +176,7 @@ def test_add_transliteration(fragment, user):
     expected_fragment = Fragment.from_dict({
         **fragment.to_dict(),
         'lemmatization': lemmatization.tokens,
+        'text': text.to_dict(),
         'record': record.to_list()
     })
 
@@ -183,8 +187,10 @@ def test_add_transliteration(fragment, user):
 def test_update_transliteration(lemmatized_fragment, user):
     lines = lemmatized_fragment.transliteration.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
+    atf = '\n'.join(lines)
+    text = parse_atf(atf)
     transliteration =\
-        Transliteration('\n'.join(lines), 'updated notes', 'X X\nX')
+        Transliteration(atf, 'updated notes', 'X X\nX')
     updated_fragment = lemmatized_fragment.update_transliteration(
         transliteration,
         user
@@ -194,6 +200,7 @@ def test_update_transliteration(lemmatized_fragment, user):
     expected_fragment = Fragment.from_dict({
         **lemmatized_fragment.to_dict(),
         'lemmatization': lemmatization.tokens,
+        'text': text.to_dict(),
         'notes': transliteration.notes,
         'signs': transliteration.signs,
         'record': lemmatized_fragment.record.add_entry(

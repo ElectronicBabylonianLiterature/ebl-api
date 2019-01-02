@@ -4,6 +4,7 @@ from typing import Tuple, Optional
 import attr
 import pydash
 from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
+from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
 from ebl.fragmentarium.transliteration import Transliteration
 
@@ -123,10 +124,12 @@ class Fragment:
             user
         )
         lemmatization = self.lemmatization.merge(transliteration)
+        text = parse_atf(transliteration.atf)
 
         return attr.evolve(
             self,
             lemmatization=lemmatization,
+            text=text,
             notes=transliteration.notes,
             signs=transliteration.signs,
             record=record

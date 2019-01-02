@@ -32,7 +32,7 @@ def test_update_transliteration_with_record(fragment_repository,
                                             user):
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        Transliteration('the transliteration', 'notes'),
+        Transliteration('$ (the transliteration)', 'notes'),
         user
     )
 

@@ -110,6 +110,7 @@ class MongoFragmentRepository():
             {'_id': fragment.number},
             {'$set': pydash.omit_by({
                 'lemmatization': fragment.lemmatization.tokens,
+                'text': fragment.text.to_dict(),
                 'notes': fragment.transliteration.notes,
                 'signs': fragment.transliteration.signs,
                 'record': fragment.record.to_list()
