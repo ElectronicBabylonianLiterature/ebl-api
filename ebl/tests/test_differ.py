@@ -1,4 +1,4 @@
-from ebl.fragmentarium.merger import Differ
+from ebl.merger import Differ
 
 
 def test_diff_one_dimension():

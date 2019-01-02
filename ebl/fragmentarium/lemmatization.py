@@ -1,6 +1,6 @@
 import copy
 import json
-from ebl.fragmentarium.merger import Merger
+from ebl.merger import Merger
 
 
 class LemmatizationError(Exception):

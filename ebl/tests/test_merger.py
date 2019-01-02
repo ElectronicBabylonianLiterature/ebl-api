@@ -1,4 +1,4 @@
-from ebl.fragmentarium.merger import Merger
+from ebl.merger import Merger
 
 
 OLD = [
