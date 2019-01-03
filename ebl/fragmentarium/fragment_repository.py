@@ -124,7 +124,8 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': {
-                'lemmatization': fragment.lemmatization.tokens
+                'lemmatization': fragment.lemmatization.tokens,
+                'text': fragment.text.to_dict()
             }}
         )
 
