@@ -431,6 +431,25 @@ def lemmatized_fragment(transliterated_fragment):
 
 
 @pytest.fixture()
+def lemmatization(transliterated_fragment):
+    tokens = [
+        [
+            (
+                {
+                    'value': token.value,
+                    'uniqueLemma': list(token.unique_lemma)
+                }
+                if token.lemmatizable
+                else {'value': token.value}
+            )
+            for token in line.content
+        ]
+        for line in transliterated_fragment.text.lines
+    ]
+    return Lemmatization(tokens)
+
+
+@pytest.fixture()
 def record():
     return Record((
         RecordEntry(

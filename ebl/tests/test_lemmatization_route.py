@@ -6,11 +6,13 @@ import pytest
 def test_update_lemmatization(client,
                               fragmentarium,
                               transliterated_fragment,
+                              lemmatization,
                               user,
                               database):
+    # pylint: disable=R0913
     fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.lemmatization.tokens
-    tokens[0][1]['uniqueLemma'] = ['aklu I']
+    tokens = lemmatization.tokens
+    tokens[0][0]['uniqueLemma'] = ['aklu I']
     body = json.dumps(tokens)
     url = f'/fragments/{fragment_number}/lemmatization'
     post_result = client.simulate_post(url, body=body)
@@ -65,10 +67,11 @@ def test_update_lemmatization_invalid_entity(client,
 
 def test_update_lemmatization_atf_change(client,
                                          fragmentarium,
-                                         transliterated_fragment):
+                                         transliterated_fragment,
+                                         lemmatization):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.lemmatization.tokens
-    tokens[0][1]['value'] = 'ana'
+    tokens = lemmatization.tokens
+    tokens[0][0]['value'] = 'ana'
     body = json.dumps(tokens)
     url = f'/fragments/{fragment_number}/lemmatization'
     post_result = client.simulate_post(url, body=body)

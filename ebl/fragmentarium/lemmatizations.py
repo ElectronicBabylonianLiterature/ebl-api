@@ -22,8 +22,7 @@ LEMMATIZATION_DTO_SCHEMA = {
                 }
             },
             'required': [
-                'value',
-                'uniqueLemma'
+                'value'
             ]
         }
     }
