@@ -1,7 +1,7 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization
 
 
 LEMMATIZATION_DTO_SCHEMA = {

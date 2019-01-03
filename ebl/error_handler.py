@@ -2,7 +2,7 @@ import logging
 import falcon
 from ebl.dispatcher import DispatchError
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.lemmatization import LemmatizationError
+from ebl.text.lemmatization import LemmatizationError
 
 
 def http_error(ex, _req, _resp, _params):

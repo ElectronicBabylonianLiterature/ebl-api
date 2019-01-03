@@ -25,7 +25,7 @@ from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Record, RecordEntry
 )
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization
 
 
 @pytest.fixture
@@ -428,25 +428,6 @@ def lemmatized_fragment(transliterated_fragment):
             ]
         ])
     )
-
-
-@pytest.fixture()
-def lemmatization(transliterated_fragment):
-    tokens = [
-        [
-            (
-                {
-                    'value': token.value,
-                    'uniqueLemma': list(token.unique_lemma)
-                }
-                if token.lemmatizable
-                else {'value': token.value}
-            )
-            for token in line.content
-        ]
-        for line in transliterated_fragment.text.lines
-    ]
-    return Lemmatization(tokens)
 
 
 @pytest.fixture()

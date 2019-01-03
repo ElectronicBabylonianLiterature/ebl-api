@@ -1,7 +1,7 @@
 import json
 import falcon
 import pytest
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization
 
 
 def test_update_transliteration(client,

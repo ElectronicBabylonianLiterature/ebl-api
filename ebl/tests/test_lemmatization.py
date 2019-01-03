@@ -2,7 +2,7 @@
 import copy
 import json
 import pytest
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
 
 

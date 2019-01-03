@@ -3,11 +3,10 @@ import datetime
 from typing import Tuple, Optional
 import attr
 import pydash
-from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
+from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
-from ebl.text.token import Word
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
@@ -154,20 +153,7 @@ class Fragment:
         )
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Fragment':
-        old_lemmatization = Lemmatization([
-            [
-                (
-                    {
-                        'value': token.value,
-                        'uniqueLemma': token.unique_lemma
-                    }
-                    if isinstance(token, Word)
-                    else {'value': token.value}
-                )
-                for token in line.content
-            ]
-            for line in self.text.lines
-        ])
+        old_lemmatization = self.text.lemmatization
         if old_lemmatization.is_compatible(lemmatization):
             return attr.evolve(
                 self,

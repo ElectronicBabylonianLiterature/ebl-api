@@ -1,6 +1,6 @@
 import pytest
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization
 from ebl.text.token import Token, Word
 from ebl.text.line import TextLine, ControlLine, EmptyLine
 from ebl.text.text import Text
@@ -56,10 +56,9 @@ def test_update_update_transliteration_not_found(fragment_repository,
 
 
 def test_update_lemmatization(fragment_repository,
-                              transliterated_fragment,
-                              lemmatization):
+                              transliterated_fragment):
     fragment_number = fragment_repository.create(transliterated_fragment)
-    tokens = lemmatization.tokens
+    tokens = transliterated_fragment.text.lemmatization.tokens
     tokens[0][0]['uniqueLemma'] = ['aklu I']
     updated_fragment = transliterated_fragment.update_lemmatization(
         Lemmatization(tokens)

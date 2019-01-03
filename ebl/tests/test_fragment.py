@@ -6,7 +6,7 @@ from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Text, Measure, Record, RecordEntry
 )
 from ebl.text.language import Language
-from ebl.fragmentarium.lemmatization import Lemmatization, LemmatizationError
+from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, TextLine, EmptyLine
 from ebl.text.token import Token, Word, LanguageShift
 from ebl.fragmentarium.transliteration import (
@@ -261,8 +261,8 @@ def test_add_matching_lines(transliterated_fragment):
     }
 
 
-def test_update_lemmatization(transliterated_fragment, lemmatization):
-    tokens = lemmatization.tokens
+def test_update_lemmatization(transliterated_fragment):
+    tokens = transliterated_fragment.text.lemmatization.tokens
     tokens[0][0]['uniqueLemma'] = ['nu I']
     expected = Fragment.from_dict({
         **transliterated_fragment.to_dict(),

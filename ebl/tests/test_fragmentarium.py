@@ -2,7 +2,7 @@ from freezegun import freeze_time
 import pytest
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment import Fragment
-from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
@@ -94,10 +94,9 @@ def test_update_update_transliteration_not_found(fragmentarium, user):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_lemmatization(fragmentarium,
                               transliterated_fragment,
-                              lemmatization,
                               user):
     fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = lemmatization.tokens
+    tokens = transliterated_fragment.text.lemmatization.tokens
     tokens[0][0]['uniqueLemma'] = ['aklu I']
     lemmatization = Lemmatization(tokens)
 
@@ -119,12 +118,10 @@ def test_update_lemmatization(fragmentarium,
 def test_lemmatization_changelog(database,
                                  fragmentarium,
                                  transliterated_fragment,
-                                 lemmatization,
                                  user,
                                  make_changelog_entry):
-    # pylint: disable=R0913
     fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = lemmatization.tokens
+    tokens = transliterated_fragment.text.lemmatization.tokens
     tokens[0][0]['uniqueLemma'] = ['aklu I']
     lemmatization = Lemmatization(tokens)
     fragmentarium.update_lemmatization(
