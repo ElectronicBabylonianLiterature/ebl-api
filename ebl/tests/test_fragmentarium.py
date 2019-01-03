@@ -6,6 +6,9 @@ from ebl.fragmentarium.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
+from ebl.text.token import Token, Word
+from ebl.text.line import TextLine, ControlLine, EmptyLine
+from ebl.text.text import Text
 
 
 def test_create_and_find(fragmentarium, fragment):
@@ -154,20 +157,20 @@ def test_update_update_lemmatization_not_found(fragmentarium, user):
 
 def test_statistics(fragmentarium, fragment):
     for data in [
-            {**fragment.to_dict(), '_id': '1', 'lemmatization': [
-                [{'value': '1. SU', 'uniqueLemma': []}],
-                [{'value': '$ingore', 'uniqueLemma': []}],
-                [],
-                [{'value': '', 'uniqueLemma': []}]
-            ]},
-            {**fragment.to_dict(), '_id': '2', 'lemmatization': [
-                [{'value': '$ingore', 'uniqueLemma': []}],
-                [{'value': '1. SU', 'uniqueLemma': []}],
-                [{'value': '2. SU', 'uniqueLemma': []}],
-                [{'value': '$ingore', 'uniqueLemma': []}],
-                [{'value': '1#. SU', 'uniqueLemma': []}]
-            ]},
-            {**fragment.to_dict(), '_id': '3', 'lemmatization': []}
+
+            {**fragment.to_dict(), '_id': '1', 'text': Text((
+                TextLine('1.', (Word('SU'), Word('line'))),
+                ControlLine('$', (Token('ignore'), )),
+                EmptyLine()
+            )).to_dict()},
+            {**fragment.to_dict(), '_id': '2', 'text': Text((
+                ControlLine('$', (Token('ignore'), )),
+                TextLine('1.', (Word('SU'), )),
+                TextLine('1.', (Word('SU'), )),
+                ControlLine('$', (Token('ignore'), )),
+                TextLine('1.', (Word('SU'), )),
+            )).to_dict()},
+            {**fragment.to_dict(), '_id': '3', 'text': Text().to_dict()}
     ]:
         fragmentarium.create(Fragment.from_dict(data))
 

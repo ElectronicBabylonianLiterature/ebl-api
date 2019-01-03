@@ -1,6 +1,9 @@
 import pytest
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.lemmatization import Lemmatization
+from ebl.text.token import Token, Word
+from ebl.text.line import TextLine, ControlLine, EmptyLine
+from ebl.text.text import Text
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliteration import Transliteration
 
@@ -79,44 +82,19 @@ def test_update_update_lemmatization_not_found(fragment_repository,
 
 def test_statistics(database, fragment_repository, fragment):
     database[COLLECTION].insert_many([
-        {**fragment.to_dict(), '_id': '1', 'lemmatization': [
-            [
-                {'value': '1.', 'uniqueLemma': []},
-                {'value': 'first', 'uniqueLemma': []},
-                {'value': 'line', 'uniqueLemma': []}
-            ],
-            [
-                {'value': '$ingore', 'uniqueLemma': []}
-            ],
-            [],
-            [
-                {'value': '', 'uniqueLemma': []}
-            ]
-        ]},
-        {**fragment.to_dict(), '_id': '2', 'lemmatization': [
-            [
-                {'value': '$ingore', 'uniqueLemma': []}
-            ],
-            [
-                {'value': '1.', 'uniqueLemma': []},
-                {'value': 'second', 'uniqueLemma': []},
-                {'value': 'line', 'uniqueLemma': []}
-            ],
-            [
-                {'value': '2.', 'uniqueLemma': []},
-                {'value': 'third', 'uniqueLemma': []},
-                {'value': 'line', 'uniqueLemma': []}
-            ],
-            [
-                {'value': '$ingore', 'uniqueLemma': []}
-            ],
-            [
-                {'value': '1#.', 'uniqueLemma': []},
-                {'value': 'fourth', 'uniqueLemma': []},
-                {'value': 'line', 'uniqueLemma': []}
-            ]
-        ]},
-        {**fragment.to_dict(), '_id': '3', 'lemmatization': []}
+        {**fragment.to_dict(), '_id': '1', 'text': Text((
+            TextLine('1.', (Word('first'), Word('line'))),
+            ControlLine('$', (Token('ignore'), )),
+            EmptyLine()
+        )).to_dict()},
+        {**fragment.to_dict(), '_id': '2', 'text': Text((
+            ControlLine('$', (Token('ignore'), )),
+            TextLine('1.', (Word('second'), )),
+            TextLine('1.', (Word('third'), )),
+            ControlLine('$', (Token('ignore'), )),
+            TextLine('1.', (Word('fourth'), )),
+        )).to_dict()},
+        {**fragment.to_dict(), '_id': '3', 'text': Text().to_dict()}
     ])
 
     assert fragment_repository.count_transliterated_fragments() == 2

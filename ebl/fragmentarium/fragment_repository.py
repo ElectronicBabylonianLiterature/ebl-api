@@ -6,7 +6,7 @@ from ebl.fragmentarium.fragment import Fragment
 
 
 COLLECTION = 'fragments'
-HAS_TRANSLITERATION = {'lemmatization.0': {'$exists': True}}
+HAS_TRANSLITERATION = {'text.lines.0': {'$exists': True}}
 SAMPLE_SIZE_ONE = {
     '$sample': {
         'size': 1
@@ -31,9 +31,8 @@ class MongoFragmentRepository():
 
     def count_lines(self):
         count_lines = Code('function() {'
-                           '  const lines = this.lemmatization'
-                           '    .map(line => line[0] ? line[0].value : "")'
-                           '    .filter(line => /^\\d/.test(line));'
+                           '  const lines = this.text.lines'
+                           '    .filter(line => line.type == "TextLine");'
                            '  emit("lines", lines.length);'
                            '}')
         sum_lines = Code('function(key, values) {'
