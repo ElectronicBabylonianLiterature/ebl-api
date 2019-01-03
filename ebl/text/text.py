@@ -12,7 +12,7 @@ class Text:
 
     @property
     def lemmatization(self) -> Lemmatization:
-        return Lemmatization([
+        return Lemmatization.from_list([
             [
                 (
                     {

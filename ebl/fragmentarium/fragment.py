@@ -104,7 +104,7 @@ class Fragment:
     joins: Tuple[str, ...] = tuple()
     record: Record = Record()
     folios: Folios = Folios()
-    lemmatization: Lemmatization = Lemmatization([])
+    lemmatization: Lemmatization = Lemmatization()
     text: Text = Text()
     signs: Optional[str] = None
     notes: str = ''
@@ -181,7 +181,7 @@ class Fragment:
             'signs': self.signs,
             'record': self.record.to_list(),
             'folios': self.folios.to_list(),
-            'lemmatization': self.lemmatization.tokens,
+            'lemmatization': self.lemmatization.to_list(),
             'text': self.text.to_dict(),
             'hits': self.hits,
             'matching_lines': self.matching_lines
@@ -211,7 +211,7 @@ class Fragment:
             tuple(data['joins']),
             Record(tuple(RecordEntry(**entry) for entry in data['record'])),
             Folios(tuple(Folio(**folio) for folio in data['folios'])),
-            Lemmatization(data['lemmatization']),
+            Lemmatization.from_list(data['lemmatization']),
             Text.from_dict(data['text']),
             data.get('signs'),
             data['notes'],

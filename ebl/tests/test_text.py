@@ -23,7 +23,7 @@ def test_to_dict():
 
 
 def test_lemmatization():
-    assert TEXT.lemmatization == Lemmatization([
+    assert TEXT.lemmatization == Lemmatization.from_list([
         [{'value': 'ha-am', 'uniqueLemma': []}],
         [{'value': ' single ruling'}]
     ])

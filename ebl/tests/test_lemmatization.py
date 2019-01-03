@@ -1,6 +1,5 @@
 # pylint: disable=W0621
 import copy
-import json
 import pytest
 from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import Transliteration
@@ -31,24 +30,20 @@ TOKENS = [[create_token('token')]]
 
 
 def test_equality():
-    lemmatization = Lemmatization(TOKENS)
-    similar = Lemmatization(TOKENS)
-    different = Lemmatization([[
+    lemmatization = Lemmatization.from_list(TOKENS)
+    similar = Lemmatization.from_list(TOKENS)
+    different = Lemmatization.from_list([[
         create_token('another token')
     ]])
 
     assert lemmatization == similar
+    assert hash(lemmatization) == hash(similar)
     assert lemmatization != different
-
-
-def test_hash():
-    lemmatization = Lemmatization(TOKENS)
-
-    assert hash(lemmatization) == hash(json.dumps(TOKENS))
+    assert hash(lemmatization) != hash(different)
 
 
 def test_tokens():
-    tokens = [[]]
+    tokens = (tuple(), )
     lemmatization = Lemmatization(tokens)
 
     assert lemmatization.tokens == tokens
@@ -79,7 +74,7 @@ def test_of_transliteration():
 
     expected_tokens = transliteration.tokenize(create_token)
 
-    assert lemmatization == Lemmatization(expected_tokens)
+    assert lemmatization == Lemmatization.from_list(expected_tokens)
 
 
 def test_of_transliteration_empty():
@@ -87,13 +82,13 @@ def test_of_transliteration_empty():
 
     lemmatization = Lemmatization.of_transliteration(transliteration)
 
-    assert lemmatization == Lemmatization([])
+    assert lemmatization == Lemmatization()
 
 
 def test_merge_no_changes(transliteration):
     tokens = transliteration.tokenize(create_lemmatized_token)
 
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization.from_list(tokens)
 
     assert lemmatization.merge(transliteration) == lemmatization
 
@@ -109,9 +104,9 @@ def test_merge_add_line(transliteration):
     expected_tokens = copy.deepcopy(tokens)
     expected_tokens.insert(2, new_tokens[2])
 
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization.from_list(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
-        Lemmatization(expected_tokens).tokens
+        Lemmatization.from_list(expected_tokens).tokens
 
 
 def test_merge_remove_line(transliteration):
@@ -124,9 +119,9 @@ def test_merge_remove_line(transliteration):
     expected_tokens = copy.deepcopy(tokens)
     expected_tokens.pop(1)
 
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization.from_list(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
-        Lemmatization(expected_tokens).tokens
+        Lemmatization.from_list(expected_tokens).tokens
 
 
 def test_merge_edit_line(transliteration):
@@ -142,9 +137,9 @@ def test_merge_edit_line(transliteration):
         'uniqueLemma': []
     }
 
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization.from_list(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
-        Lemmatization(expected_tokens).tokens
+        Lemmatization.from_list(expected_tokens).tokens
 
 
 def test_merge_edit_lines(transliteration):
@@ -169,9 +164,9 @@ def test_merge_edit_lines(transliteration):
         'uniqueLemma': []
     }
 
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization.from_list(tokens)
     assert lemmatization.merge(new_transliteration).tokens ==\
-        Lemmatization(expected_tokens).tokens
+        Lemmatization.from_list(expected_tokens).tokens
 
 
 def test_is_compatible(transliteration):

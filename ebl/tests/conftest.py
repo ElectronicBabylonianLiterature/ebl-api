@@ -25,7 +25,7 @@ from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Record, RecordEntry
 )
-from ebl.text.lemmatization import Lemmatization
+from ebl.text.lemmatization import Lemmatization, LemmatizationToken
 
 
 @pytest.fixture
@@ -303,40 +303,40 @@ def transliterated_fragment():
         publication='publication',
         description='description',
         script='NA',
-        lemmatization=Lemmatization([
-            [
-                {"value": "1'.", "uniqueLemma": []},
-                {"value": "[...-ku]-nu-ši", "uniqueLemma": []},
-                {"value": "[...]", "uniqueLemma": []}
-            ],
-            [
-                {"value": "2'.", "uniqueLemma": []},
-                {"value": "[...]", "uniqueLemma": []},
-                {"value": "GI₆", "uniqueLemma": []},
-                {"value": "ana", "uniqueLemma": []},
-                {"value": "u₄-š[u", "uniqueLemma": []},
-                {"value": "...]", "uniqueLemma": []}
-            ],
-            [
-                {"value": "3'.", "uniqueLemma": []},
-                {"value": "[...", "uniqueLemma": []},
-                {"value": "k]i-du", "uniqueLemma": []},
-                {"value": "u", "uniqueLemma": []},
-                {"value": "ba-ma-t[i", "uniqueLemma": []},
-                {"value": "...]", "uniqueLemma": []}
-            ],
-            [
-                {"value": "6'.", "uniqueLemma": []},
-                {"value": "[...]", "uniqueLemma": []},
-                {"value": "x", "uniqueLemma": []},
-                {"value": "mu", "uniqueLemma": []},
-                {"value": "ta-ma-tu₂", "uniqueLemma": []}
-            ],
-            [
-                {"value": "7'.", "uniqueLemma": []},
-                {"value": "šu/|BI×IS|", "uniqueLemma": []}
-            ]
-        ]),
+        lemmatization=Lemmatization((
+            (
+                LemmatizationToken("1'."),
+                LemmatizationToken("[...-ku]-nu-ši"),
+                LemmatizationToken("[...]")
+            ),
+            (
+                LemmatizationToken("2'."),
+                LemmatizationToken("[...]"),
+                LemmatizationToken("GI₆"),
+                LemmatizationToken("ana"),
+                LemmatizationToken("u₄-š[u"),
+                LemmatizationToken("...]")
+            ),
+            (
+                LemmatizationToken("3'."),
+                LemmatizationToken("[..."),
+                LemmatizationToken("k]i-du"),
+                LemmatizationToken("u"),
+                LemmatizationToken("ba-ma-t[i"),
+                LemmatizationToken("...]")
+            ),
+            (
+                LemmatizationToken("6'."),
+                LemmatizationToken("[...]"),
+                LemmatizationToken("x"),
+                LemmatizationToken("mu"),
+                LemmatizationToken("ta-ma-tu₂")
+            ),
+            (
+                LemmatizationToken("7'."),
+                LemmatizationToken("šu/|BI×IS|")
+            )
+        )),
         text=Text((
             TextLine("1'.", (
                 Token('[...'),
@@ -393,40 +393,40 @@ def lemmatized_fragment(transliterated_fragment):
     return attr.evolve(
         transliterated_fragment,
         number='4',
-        lemmatization=Lemmatization([
-            [
-                {"value": "1'.", "uniqueLemma": []},
-                {"value": "[...-ku]-nu-ši", "uniqueLemma": []},
-                {"value": "[...]", "uniqueLemma": []}
-            ],
-            [
-                {"value": "2'.", "uniqueLemma": []},
-                {"value": "[...]", "uniqueLemma": []},
-                {"value": "GI₆", "uniqueLemma": ["ginâ I"]},
-                {"value": "ana", "uniqueLemma": ["ana I"]},
-                {"value": "u₄-š[u", "uniqueLemma": ["ūsu I"]},
-                {"value": "...]", "uniqueLemma": []}
-            ],
-            [
-                {"value": "3'.", "uniqueLemma": []},
-                {"value": "[...", "uniqueLemma": []},
-                {"value": "k]i-du", "uniqueLemma": ["kīdu I"]},
-                {"value": "u", "uniqueLemma": ["u I"]},
-                {"value": "ba-ma-t[i", "uniqueLemma": ["bamātu I"]},
-                {"value": "...]", "uniqueLemma": []}
-            ],
-            [
-                {"value": "6'.", "uniqueLemma": []},
-                {"value": "[...]", "uniqueLemma": []},
-                {"value": "x", "uniqueLemma": []},
-                {"value": "mu", "uniqueLemma": ["mu I"]},
-                {"value": "ta-ma-tu₂", "uniqueLemma": ["tamalāku I"]}
-            ],
-            [
-                {"value": "7'.", "uniqueLemma": []},
-                {"value": "šu/|BI×IS|", "uniqueLemma": []}
-            ]
-        ])
+        lemmatization=Lemmatization((
+            (
+                LemmatizationToken("1'."),
+                LemmatizationToken("[...-ku]-nu-ši"),
+                LemmatizationToken("[...]")
+            ),
+            (
+                LemmatizationToken("2'."),
+                LemmatizationToken("[...]"),
+                LemmatizationToken("GI₆", ("ginâ I", )),
+                LemmatizationToken("ana", ("ana I", )),
+                LemmatizationToken("u₄-š[u", ("ūsu I", )),
+                LemmatizationToken("...]")
+            ),
+            (
+                LemmatizationToken("3'."),
+                LemmatizationToken("[..."),
+                LemmatizationToken("k]i-du", ("kīdu I", )),
+                LemmatizationToken("u", ("u I", )),
+                LemmatizationToken("ba-ma-t[i", ("bamātu I", )),
+                LemmatizationToken("...]")
+            ),
+            (
+                LemmatizationToken("6'."),
+                LemmatizationToken("[...]"),
+                LemmatizationToken("x"),
+                LemmatizationToken("mu", ("mu I", )),
+                LemmatizationToken("ta-ma-tu₂", ("tamalāku I", ))
+            ),
+            (
+                LemmatizationToken("7'."),
+                LemmatizationToken("šu/|BI×IS|")
+            )
+        ))
     )
 
 

@@ -129,7 +129,8 @@ def test_lemmatization(fragment):
         **fragment.to_dict(),
         'lemmatization': tokens
     }
-    assert Fragment.from_dict(data).lemmatization == Lemmatization(tokens)
+    assert Fragment.from_dict(data).lemmatization ==\
+        Lemmatization.from_list(tokens)
 
 
 def test_text(fragment):
@@ -177,7 +178,7 @@ def test_add_transliteration(fragment, user):
     )
     expected_fragment = Fragment.from_dict({
         **fragment.to_dict(),
-        'lemmatization': lemmatization.tokens,
+        'lemmatization': lemmatization.to_list(),
         'text': text.to_dict(),
         'record': record.to_list()
     })
@@ -201,7 +202,7 @@ def test_update_transliteration(lemmatized_fragment, user):
 
     expected_fragment = Fragment.from_dict({
         **lemmatized_fragment.to_dict(),
-        'lemmatization': lemmatization.tokens,
+        'lemmatization': lemmatization.to_list(),
         'text': text.to_dict(),
         'notes': transliteration.notes,
         'signs': transliteration.signs,
@@ -262,19 +263,21 @@ def test_add_matching_lines(transliterated_fragment):
 
 
 def test_update_lemmatization(transliterated_fragment):
-    tokens = transliterated_fragment.text.lemmatization.tokens
+    tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[0][0]['uniqueLemma'] = ['nu I']
     expected = Fragment.from_dict({
         **transliterated_fragment.to_dict(),
         'lemmatization': tokens
     })
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization.from_list(tokens)
     assert transliterated_fragment.update_lemmatization(lemmatization) ==\
         expected
 
 
 def test_update_lemmatization_incompatible(fragment):
-    lemmatization = Lemmatization([[{'value': 'mu', 'uniqueLemma': []}]])
+    lemmatization = Lemmatization.from_list(
+        [[{'value': 'mu', 'uniqueLemma': []}]]
+    )
     with pytest.raises(LemmatizationError):
         fragment.update_lemmatization(lemmatization)
 

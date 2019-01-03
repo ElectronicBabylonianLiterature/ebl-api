@@ -108,7 +108,7 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': pydash.omit_by({
-                'lemmatization': fragment.lemmatization.tokens,
+                'lemmatization': fragment.lemmatization.to_list(),
                 'text': fragment.text.to_dict(),
                 'notes': fragment.transliteration.notes,
                 'signs': fragment.transliteration.signs,
@@ -123,7 +123,7 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': {
-                'lemmatization': fragment.lemmatization.tokens,
+                'lemmatization': fragment.lemmatization.to_list(),
                 'text': fragment.text.to_dict()
             }}
         )

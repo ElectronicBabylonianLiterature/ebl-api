@@ -39,6 +39,6 @@ class LemmatizationResource:
     def on_post(self, req, _resp, number):
         self._fragmentarium.update_lemmatization(
             number,
-            Lemmatization(req.media),
+            Lemmatization.from_list(req.media),
             req.context['user']
         )

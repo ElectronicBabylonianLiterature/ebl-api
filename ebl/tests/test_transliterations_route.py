@@ -24,7 +24,7 @@ def test_update_transliteration(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    assert Lemmatization(updated_fragment['lemmatization']).atf ==\
+    assert Lemmatization.from_list(updated_fragment['lemmatization']).atf ==\
         updates['transliteration']
     assert updated_fragment['notes'] == updates['notes']
     assert updated_fragment['record'][-1]['user'] == user.ebl_name
@@ -59,7 +59,7 @@ def test_update_transliteration_merge_lemmatization(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    expected_lemmatization = lemmatized_fragment.lemmatization.tokens
+    expected_lemmatization = lemmatized_fragment.lemmatization.to_list()
     expected_lemmatization[1][3] = {
         'value': 'mu',
         'uniqueLemma': []
