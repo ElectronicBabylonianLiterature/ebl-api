@@ -111,17 +111,9 @@ class Fragment:
     hits: Optional[int] = None
     matching_lines: Optional[tuple] = None
 
-    @property
-    def transliteration(self) -> Transliteration:
-        return Transliteration(
-            self.lemmatization.atf,
-            self.notes,
-            self.signs
-        )
-
     def update_transliteration(self, transliteration, user) -> 'Fragment':
         record = self.record.add_entry(
-            self.lemmatization.atf,
+            self.text.atf,
             transliteration.atf,
             user
         )
@@ -146,7 +138,9 @@ class Fragment:
             raise TransliterationError(errors)
 
     def add_matching_lines(self, query) -> 'Fragment':
-        matching_lines = query.get_matching_lines(self.transliteration)
+        matching_lines = query.get_matching_lines(
+            Transliteration(self.text.atf, self.notes, self.signs)
+        )
         return attr.evolve(
             self,
             matching_lines=matching_lines

@@ -2,6 +2,7 @@ import os
 from pymongo import MongoClient
 
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.transliteration import Transliteration
 from ebl.sign_list.sign_repository import MemoizingSignRepository
 from ebl.sign_list.sign_list import SignList
 
@@ -55,9 +56,12 @@ def create_updater(sign_list, fragment_repository, counter_factory):
         counter.done()
 
     def update_fragment(fragment):
-        transliteration = fragment.transliteration.with_signs(sign_list)
+        transliteration = Transliteration(
+            fragment.text.atf,
+            fragment.notes
+        ).with_signs(sign_list)
 
-        if transliteration.signs != fragment.transliteration.signs:
+        if transliteration.signs != fragment.signs:
             fragment_repository.update_transliteration(
                 fragment.update_transliteration(
                     transliteration, ApiUser('update_signs.py')

@@ -98,14 +98,6 @@ def test_signs_none(fragment):
     assert fragment.signs is None
 
 
-def test_transliteration(transliterated_fragment):
-    assert transliterated_fragment.transliteration == Transliteration(
-        transliterated_fragment.lemmatization.atf,
-        transliterated_fragment.notes,
-        transliterated_fragment.signs
-    )
-
-
 def test_record(transliterated_fragment):
     assert transliterated_fragment.record == Record((
         RecordEntry(
