@@ -2,6 +2,7 @@
 from typing import List, Tuple, Iterable, Sequence
 import attr
 import pydash
+from ebl.text.atf import Atf
 from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import (
@@ -13,6 +14,16 @@ from ebl.text.token import (
 class Line:
     prefix: str = ''
     content: Tuple[Token, ...] = tuple()
+
+    @property
+    def atf(self) -> Atf:
+        return Atf(f'{self.prefix}{self._join_content()}')
+
+    def _join_content(self) -> str:
+        return ' '.join(
+            token.value
+            for token in self.content
+        )
 
     def update_lemmatization(
             self,
@@ -86,6 +97,10 @@ class TextLine(Line):
         for token in content:
             token.accept(visitor)
         return cls(prefix, visitor.tokens)
+
+    @property
+    def atf(self) -> Atf:
+        return Atf(f'{self.prefix} {self._join_content()}')
 
     def to_dict(self) -> dict:
         return {

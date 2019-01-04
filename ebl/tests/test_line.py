@@ -10,12 +10,21 @@ from ebl.text.token import (
 
 
 def test_line():
-    prefix = '1.'
+    prefix = '*'
     token = Token('value')
     line = Line(prefix, (token, ))
 
     assert line.prefix == prefix
     assert line.content == (token, )
+    assert line.atf == '*value'
+
+
+def test_empty_line():
+    line = EmptyLine()
+
+    assert line.prefix == ''
+    assert line.content == tuple()
+    assert line.atf == ''
 
 
 @pytest.mark.parametrize("code,language,normalized", [
@@ -51,6 +60,7 @@ def test_line_of_iterable(code, language, normalized):
     line = TextLine.of_iterable(prefix, tokens)
 
     assert line == TextLine(prefix, expected_tokens)
+    assert line.atf == f'1. first {code} second %sb third'
 
 
 def test_line_of_single():

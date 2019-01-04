@@ -1,4 +1,8 @@
+from typing import NewType
 from pyoracc.atf.common.atffile import AtfFile
+
+
+Atf = NewType('Atf', str)
 
 
 ATF_SPEC = {

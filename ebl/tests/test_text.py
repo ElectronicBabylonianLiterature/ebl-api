@@ -3,6 +3,7 @@ import pytest
 from ebl.text.lemmatization import (
     Lemmatization, LemmatizationToken, LemmatizationError
 )
+from ebl.text.atf import Atf
 from ebl.text.line import Line, TextLine, ControlLine
 from ebl.text.text import Text
 from ebl.text.token import Word, Token
@@ -30,6 +31,13 @@ def test_lemmatization():
         (LemmatizationToken('ha-am', tuple()), ),
         (LemmatizationToken(' single ruling'), ),
     ))
+
+
+def test_atf():
+    assert TEXT.atf == Atf(
+        '1. ha-am\n'
+        '$ single ruling'
+    )
 
 
 def test_update_lemmatization():

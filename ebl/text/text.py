@@ -1,6 +1,7 @@
 from typing import Tuple, List, Mapping, Callable
 import attr
 import pydash
+from ebl.text.atf import Atf
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.language import Language
 from ebl.text.line import Line, ControlLine, EmptyLine, TextLine
@@ -27,6 +28,10 @@ class Text:
             ]
             for line in self.lines
         ])
+
+    @property
+    def atf(self) -> Atf:
+        return Atf('\n'.join(line.atf for line in self.lines))
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Text':
         if self.lemmatization.is_compatible(lemmatization):
