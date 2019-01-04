@@ -34,11 +34,11 @@ class Text:
         return Atf('\n'.join(line.atf for line in self.lines))
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Text':
-        if self.lemmatization.is_compatible(lemmatization):
+        if len(self.lines) == len(lemmatization.tokens):
             zipped = pydash.zip_(self.lines, lemmatization.tokens)
             lines = tuple(
-                pair[0].update_lemmatization(pair[1])
-                for pair in zipped
+                line.update_lemmatization(lemmas)
+                for [line, lemmas] in zipped
             )
             return attr.evolve(
                 self,

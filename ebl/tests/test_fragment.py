@@ -144,7 +144,6 @@ def test_hits_none(fragment):
 def test_add_transliteration(fragment, user):
     atf = '1. x x'
     transliteration = Transliteration(atf, fragment.notes)
-    lemmatization = Lemmatization.of_transliteration(transliteration)
     text = parse_atf(atf)
     record = Record((
         RecordEntry(
@@ -160,7 +159,6 @@ def test_add_transliteration(fragment, user):
     )
     expected_fragment = Fragment.from_dict({
         **fragment.to_dict(),
-        'lemmatization': lemmatization.to_list(),
         'text': text.to_dict(),
         'record': record.to_list()
     })

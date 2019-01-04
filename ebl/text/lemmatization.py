@@ -34,51 +34,6 @@ class LemmatizationToken:
 class Lemmatization:
     tokens: Tuple[Tuple[LemmatizationToken, ...], ...] = tuple()
 
-    @property
-    def atf(self) -> str:
-        return '\n'.join([
-            ' '.join([token.value for token in line])
-            for line in self.tokens
-        ])
-
-    def merge(self, transliteration: Transliteration) -> 'Lemmatization':
-        merged_tokens = Merger(lambda token: token.value, 2).merge(
-            self.tokens,
-            self._tokenize(transliteration)
-        )
-
-        return Lemmatization(tuple(
-            tuple(line)
-            for line in merged_tokens
-        ))
-
-    @staticmethod
-    def of_transliteration(
-            transliteration: Transliteration
-    ) -> 'Lemmatization':
-        tokens = Lemmatization._tokenize(transliteration)
-        return Lemmatization(tokens)
-
-    @staticmethod
-    def _tokenize(
-            transliteration: Transliteration
-    ) -> Tuple[Tuple[LemmatizationToken, ...], ...]:
-        tokens = transliteration.tokenize(
-            lambda value: LemmatizationToken(value, tuple())
-        )
-        return tuple(tuple(line) for line in tokens)
-
-    def is_compatible(self, other: 'Lemmatization') -> bool:
-        def to_values(tokens):
-            return [
-                [
-                    token.value
-                    for token in line
-                ] for line in tokens
-            ]
-
-        return to_values(self.tokens) == to_values(other.tokens)
-
     def to_list(self) -> List[List[dict]]:
         return [
             [token.to_dict() for token in line]
