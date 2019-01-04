@@ -110,8 +110,8 @@ class MongoFragmentRepository():
             {'$set': pydash.omit_by({
                 'lemmatization': fragment.lemmatization.to_list(),
                 'text': fragment.text.to_dict(),
-                'notes': fragment.transliteration.notes,
-                'signs': fragment.transliteration.signs,
+                'notes': fragment.notes,
+                'signs': fragment.signs,
                 'record': fragment.record.to_list()
             }, lambda value: value is None)}
         )

@@ -161,7 +161,7 @@ def test_hits_none(fragment):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(fragment, user):
     atf = '1. x x'
-    transliteration = Transliteration(atf, fragment.transliteration.notes)
+    transliteration = Transliteration(atf, fragment.notes)
     lemmatization = Lemmatization.of_transliteration(transliteration)
     text = parse_atf(atf)
     record = Record((
@@ -218,7 +218,7 @@ def test_update_transliteration(lemmatized_fragment, user):
 
 def test_test_update_transliteration_invalid_value(fragment, user):
     atf = '1. x\ninvalid line'
-    transliteration = Transliteration(atf, fragment.transliteration.notes)
+    transliteration = Transliteration(atf, fragment.notes)
 
     with pytest.raises(TransliterationError,
                        message="Invalid transliteration") as excinfo:

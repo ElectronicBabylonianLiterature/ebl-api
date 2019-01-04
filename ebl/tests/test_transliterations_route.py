@@ -48,7 +48,7 @@ def test_update_transliteration_merge_lemmatization(client,
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
     updates = {
         'transliteration': '\n'.join(lines),
-        'notes': lemmatized_fragment.transliteration.notes
+        'notes': lemmatized_fragment.notes
     }
     body = json.dumps(updates)
     url = f'/fragments/{fragment_number}/transliteration'
