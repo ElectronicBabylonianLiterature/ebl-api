@@ -1,6 +1,7 @@
 import json
 import falcon
 import pytest
+from ebl.text.text import Text
 
 
 def test_update_lemmatization(client,
@@ -21,7 +22,8 @@ def test_update_lemmatization(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    assert updated_fragment['lemmatization'] == tokens
+    assert Text.from_dict(updated_fragment['text']).lemmatization.to_list() ==\
+        tokens
 
     assert database['changelog'].find_one({
         'resource_id': fragment_number,

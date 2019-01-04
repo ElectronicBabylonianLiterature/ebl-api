@@ -25,7 +25,6 @@ from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Record, RecordEntry
 )
-from ebl.text.lemmatization import Lemmatization, LemmatizationToken
 
 
 @pytest.fixture
@@ -303,41 +302,6 @@ def transliterated_fragment():
         publication='publication',
         description='description',
         script='NA',
-        lemmatization=Lemmatization((
-            (
-                LemmatizationToken("1'."),
-                LemmatizationToken("[..."),
-                LemmatizationToken("-ku]-nu-ši", tuple()),
-                LemmatizationToken("[...]")
-            ),
-            (
-                LemmatizationToken("2'."),
-                LemmatizationToken("[...]"),
-                LemmatizationToken("GI₆", tuple()),
-                LemmatizationToken("ana", tuple()),
-                LemmatizationToken("u₄-š[u", tuple()),
-                LemmatizationToken("...]")
-            ),
-            (
-                LemmatizationToken("3'."),
-                LemmatizationToken("[..."),
-                LemmatizationToken("k]i-du", tuple()),
-                LemmatizationToken("u", tuple()),
-                LemmatizationToken("ba-ma-t[i", tuple()),
-                LemmatizationToken("...]")
-            ),
-            (
-                LemmatizationToken("6'."),
-                LemmatizationToken("[...]"),
-                LemmatizationToken("x", tuple()),
-                LemmatizationToken("mu", tuple()),
-                LemmatizationToken("ta-ma-tu₂", tuple())
-            ),
-            (
-                LemmatizationToken("7'."),
-                LemmatizationToken("šu/|BI×IS|", tuple())
-            )
-        )),
         text=Text((
             TextLine("1'.", (
                 Token('[...'),
@@ -394,40 +358,35 @@ def lemmatized_fragment(transliterated_fragment):
     return attr.evolve(
         transliterated_fragment,
         number='4',
-        lemmatization=Lemmatization((
-            (
-                LemmatizationToken("1'."),
-                LemmatizationToken("[..."),
-                LemmatizationToken("-ku]-nu-ši", tuple()),
-                LemmatizationToken("[...]")
-            ),
-            (
-                LemmatizationToken("2'."),
-                LemmatizationToken("[...]"),
-                LemmatizationToken("GI₆", ("ginâ I", )),
-                LemmatizationToken("ana", ("ana I", )),
-                LemmatizationToken("u₄-š[u", ("ūsu I", )),
-                LemmatizationToken("...]")
-            ),
-            (
-                LemmatizationToken("3'."),
-                LemmatizationToken("[..."),
-                LemmatizationToken("k]i-du", ("kīdu I", )),
-                LemmatizationToken("u", ("u I", )),
-                LemmatizationToken("ba-ma-t[i", ("bamātu I", )),
-                LemmatizationToken("...]")
-            ),
-            (
-                LemmatizationToken("6'."),
-                LemmatizationToken("[...]"),
-                LemmatizationToken("x", tuple()),
-                LemmatizationToken("mu", ("mu I", )),
-                LemmatizationToken("ta-ma-tu₂", ("tamalāku I", ))
-            ),
-            (
-                LemmatizationToken("7'."),
-                LemmatizationToken("šu/|BI×IS|", tuple())
-            )
+        text=Text((
+            TextLine("1'.", (
+                Token('[...'),
+                Word('-ku]-nu-ši'),
+                Token('[...]')
+            )),
+            TextLine("2'.", (
+                Token('[...]'),
+                Word('GI₆', unique_lemma=("ginâ I", )),
+                Word('ana', unique_lemma=("ana I", )),
+                Word('u₄-š[u', unique_lemma=("ūsu I", )),
+                Token('...]')
+            )),
+            TextLine("3'.", (
+                Token('[...'),
+                Word('k]i-du', unique_lemma=("kīdu I", )),
+                Word('u', unique_lemma=("u I", )),
+                Word('ba-ma-t[i', unique_lemma=("bamātu I", )),
+                Token('...]')
+            )),
+            TextLine("6'.", (
+                Token('[...]'),
+                Word('x'),
+                Word('mu', unique_lemma=("mu I", )),
+                Word('ta-ma-tu₂', unique_lemma=("tamalāku I", ))
+            )),
+            TextLine("7'.", (
+                Word('šu/|BI×IS|'),
+            ))
         ))
     )
 

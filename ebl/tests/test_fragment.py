@@ -115,16 +115,6 @@ def test_folios(fragment):
     ))
 
 
-def test_lemmatization(fragment):
-    tokens = [[{'value': '1.', 'uniqueLemma': []}]]
-    data = {
-        **fragment.to_dict(),
-        'lemmatization': tokens
-    }
-    assert Fragment.from_dict(data).lemmatization ==\
-        Lemmatization.from_list(tokens)
-
-
 def test_text(fragment):
     text = Text((
         ControlLine.of_single('@', Token('obverse')),
@@ -190,16 +180,14 @@ def test_update_transliteration(lemmatized_fragment, user):
         transliteration,
         user
     )
-    lemmatization = lemmatized_fragment.lemmatization.merge(transliteration)
 
     expected_fragment = Fragment.from_dict({
         **lemmatized_fragment.to_dict(),
-        'lemmatization': lemmatization.to_list(),
         'text': text.to_dict(),
         'notes': transliteration.notes,
         'signs': transliteration.signs,
         'record': lemmatized_fragment.record.add_entry(
-            lemmatized_fragment.lemmatization.atf,
+            lemmatized_fragment.text.atf,
             transliteration.atf,
             user
         ).to_list()

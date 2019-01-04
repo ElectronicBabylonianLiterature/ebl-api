@@ -1,7 +1,8 @@
 import json
 import falcon
 import pytest
-from ebl.text.lemmatization import Lemmatization
+from ebl.text.atf_parser import parse_atf
+from ebl.text.text import Text
 
 
 def test_update_transliteration(client,
@@ -24,7 +25,7 @@ def test_update_transliteration(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    assert Lemmatization.from_list(updated_fragment['lemmatization']).atf ==\
+    assert Text.from_dict(updated_fragment['text']).atf ==\
         updates['transliteration']
     assert updated_fragment['notes'] == updates['notes']
     assert updated_fragment['record'][-1]['user'] == user.ebl_name
@@ -59,13 +60,8 @@ def test_update_transliteration_merge_lemmatization(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    expected_lemmatization = lemmatized_fragment.lemmatization.to_list()
-    expected_lemmatization[1][3] = {
-        'value': 'mu',
-        'uniqueLemma': []
-    }
-
-    assert updated_fragment['lemmatization'] == expected_lemmatization
+    expected_text = parse_atf(updates['transliteration']).to_dict()
+    assert updated_fragment['text'] == expected_text
 
 
 def test_update_transliteration_invalid_atf(client,

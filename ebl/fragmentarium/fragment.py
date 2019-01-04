@@ -3,7 +3,7 @@ import datetime
 from typing import Tuple, Optional
 import attr
 import pydash
-from ebl.text.lemmatization import Lemmatization, LemmatizationError
+from ebl.text.lemmatization import Lemmatization
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
@@ -104,7 +104,6 @@ class Fragment:
     joins: Tuple[str, ...] = tuple()
     record: Record = Record()
     folios: Folios = Folios()
-    lemmatization: Lemmatization = Lemmatization()
     text: Text = Text()
     signs: Optional[str] = None
     notes: str = ''
@@ -117,14 +116,12 @@ class Fragment:
             transliteration.atf,
             user
         )
-        lemmatization = self.lemmatization.merge(transliteration)
 
         try:
             text = parse_atf(transliteration.atf)
 
             return attr.evolve(
                 self,
-                lemmatization=lemmatization,
                 text=text,
                 notes=transliteration.notes,
                 signs=transliteration.signs,
@@ -147,16 +144,11 @@ class Fragment:
         )
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Fragment':
-        old_lemmatization = self.text.lemmatization
-        if old_lemmatization.is_compatible(lemmatization):
-            text = self.text.update_lemmatization(lemmatization)
-            return attr.evolve(
-                self,
-                lemmatization=lemmatization,
-                text=text
-            )
-        else:
-            raise LemmatizationError()
+        text = self.text.update_lemmatization(lemmatization)
+        return attr.evolve(
+            self,
+            text=text
+        )
 
     def to_dict(self) -> dict:
         return pydash.omit_by({
@@ -177,7 +169,6 @@ class Fragment:
             'signs': self.signs,
             'record': self.record.to_list(),
             'folios': self.folios.to_list(),
-            'lemmatization': self.lemmatization.to_list(),
             'text': self.text.to_dict(),
             'hits': self.hits,
             'matching_lines': self.matching_lines
@@ -207,7 +198,6 @@ class Fragment:
             tuple(data['joins']),
             Record(tuple(RecordEntry(**entry) for entry in data['record'])),
             Folios(tuple(Folio(**folio) for folio in data['folios'])),
-            Lemmatization.from_list(data['lemmatization']),
             Text.from_dict(data['text']),
             data.get('signs'),
             data['notes'],

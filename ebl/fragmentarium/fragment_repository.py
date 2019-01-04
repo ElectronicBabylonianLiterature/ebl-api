@@ -79,7 +79,7 @@ class MongoFragmentRepository():
             {
                 '$match': {
                     '$and': [
-                        {'lemmatization': []},
+                        {'text.lines': []},
                         {'joins': []},
                         {'publication': ''},
                         {'hits': 0}
@@ -92,9 +92,7 @@ class MongoFragmentRepository():
         return self._map_fragments(cursor)
 
     def find_transliterated(self):
-        cursor = self._mongo_collection.find(
-            {'lemmatization.0': {'$exists': True}}
-        )
+        cursor = self._mongo_collection.find(HAS_TRANSLITERATION)
 
         return self._map_fragments(cursor)
 
@@ -108,7 +106,6 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': pydash.omit_by({
-                'lemmatization': fragment.lemmatization.to_list(),
                 'text': fragment.text.to_dict(),
                 'notes': fragment.notes,
                 'signs': fragment.signs,
@@ -123,7 +120,6 @@ class MongoFragmentRepository():
         result = self._mongo_collection.update_one(
             {'_id': fragment.number},
             {'$set': {
-                'lemmatization': fragment.lemmatization.to_list(),
                 'text': fragment.text.to_dict()
             }}
         )
