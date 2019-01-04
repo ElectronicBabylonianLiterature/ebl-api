@@ -44,7 +44,7 @@ def test_update_transliteration_merge_lemmatization(client,
     for sign in signs:
         sign_list.create(sign)
     fragment_number = fragmentarium.create(lemmatized_fragment)
-    lines = lemmatized_fragment.transliteration.atf.split('\n')
+    lines = lemmatized_fragment.text.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
     updates = {
         'transliteration': '\n'.join(lines),

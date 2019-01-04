@@ -188,7 +188,7 @@ def test_add_transliteration(fragment, user):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(lemmatized_fragment, user):
-    lines = lemmatized_fragment.transliteration.atf.split('\n')
+    lines = lemmatized_fragment.text.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
     atf = '\n'.join(lines)
     text = parse_atf(atf)
@@ -237,7 +237,7 @@ def test_test_update_transliteration_invalid_value(fragment, user):
 
 def test_update_notes(fragment, user):
     transliteration =\
-        Transliteration(fragment.transliteration.atf, 'new notes')
+        Transliteration(fragment.text.atf, 'new notes')
     updated_fragment = fragment.update_transliteration(
         transliteration,
         user

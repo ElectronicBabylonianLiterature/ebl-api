@@ -306,35 +306,36 @@ def transliterated_fragment():
         lemmatization=Lemmatization((
             (
                 LemmatizationToken("1'."),
-                LemmatizationToken("[...-ku]-nu-ši"),
+                LemmatizationToken("[..."),
+                LemmatizationToken("-ku]-nu-ši", tuple()),
                 LemmatizationToken("[...]")
             ),
             (
                 LemmatizationToken("2'."),
                 LemmatizationToken("[...]"),
-                LemmatizationToken("GI₆"),
-                LemmatizationToken("ana"),
-                LemmatizationToken("u₄-š[u"),
+                LemmatizationToken("GI₆", tuple()),
+                LemmatizationToken("ana", tuple()),
+                LemmatizationToken("u₄-š[u", tuple()),
                 LemmatizationToken("...]")
             ),
             (
                 LemmatizationToken("3'."),
                 LemmatizationToken("[..."),
-                LemmatizationToken("k]i-du"),
-                LemmatizationToken("u"),
-                LemmatizationToken("ba-ma-t[i"),
+                LemmatizationToken("k]i-du", tuple()),
+                LemmatizationToken("u", tuple()),
+                LemmatizationToken("ba-ma-t[i", tuple()),
                 LemmatizationToken("...]")
             ),
             (
                 LemmatizationToken("6'."),
                 LemmatizationToken("[...]"),
-                LemmatizationToken("x"),
-                LemmatizationToken("mu"),
-                LemmatizationToken("ta-ma-tu₂")
+                LemmatizationToken("x", tuple()),
+                LemmatizationToken("mu", tuple()),
+                LemmatizationToken("ta-ma-tu₂", tuple())
             ),
             (
                 LemmatizationToken("7'."),
-                LemmatizationToken("šu/|BI×IS|")
+                LemmatizationToken("šu/|BI×IS|", tuple())
             )
         )),
         text=Text((
@@ -396,7 +397,8 @@ def lemmatized_fragment(transliterated_fragment):
         lemmatization=Lemmatization((
             (
                 LemmatizationToken("1'."),
-                LemmatizationToken("[...-ku]-nu-ši"),
+                LemmatizationToken("[..."),
+                LemmatizationToken("-ku]-nu-ši", tuple()),
                 LemmatizationToken("[...]")
             ),
             (
@@ -418,13 +420,13 @@ def lemmatized_fragment(transliterated_fragment):
             (
                 LemmatizationToken("6'."),
                 LemmatizationToken("[...]"),
-                LemmatizationToken("x"),
+                LemmatizationToken("x", tuple()),
                 LemmatizationToken("mu", ("mu I", )),
                 LemmatizationToken("ta-ma-tu₂", ("tamalāku I", ))
             ),
             (
                 LemmatizationToken("7'."),
-                LemmatizationToken("šu/|BI×IS|")
+                LemmatizationToken("šu/|BI×IS|", tuple())
             )
         ))
     )
