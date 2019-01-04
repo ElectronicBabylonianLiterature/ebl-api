@@ -1,7 +1,9 @@
 # pylint: disable=R0903
-from typing import List, Tuple, Iterable
+from typing import List, Tuple, Iterable, Sequence
 import attr
+import pydash
 from ebl.text.language import Language, DEFAULT_LANGUAGE
+from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import (
     Token, Word, LanguageShift, DEFAULT_NORMALIZED
 )
@@ -11,6 +13,23 @@ from ebl.text.token import (
 class Line:
     prefix: str = ''
     content: Tuple[Token, ...] = tuple()
+
+    def update_lemmatization(
+            self,
+            lemmatization: Sequence[LemmatizationToken]
+    ) -> 'Line':
+        if len(self.content) == len(lemmatization):
+            zipped = pydash.zip_(self.content, lemmatization)
+            content = tuple(
+                pair[0].set_unique_lemma(pair[1])
+                for pair in zipped
+            )
+            return attr.evolve(
+                self,
+                content=content
+            )
+        else:
+            raise LemmatizationError()
 
     def to_dict(self) -> dict:
         return {

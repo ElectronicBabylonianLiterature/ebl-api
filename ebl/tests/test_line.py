@@ -1,5 +1,8 @@
 import pytest
 from ebl.text.language import Language, DEFAULT_LANGUAGE
+from ebl.text.lemmatization import (
+    LemmatizationToken, LemmatizationError
+)
 from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
 from ebl.text.token import (
     Token, Word, LanguageShift, DEFAULT_NORMALIZED
@@ -77,3 +80,40 @@ def test_line_of_single():
 ])
 def test_to_dict(line, expected):
     assert line.to_dict() == expected
+
+
+@pytest.mark.parametrize("line", [
+    ControlLine.of_single('@', Token('obverse')),
+    EmptyLine()
+])
+def test_update_lemmatization(line):
+    lemmatization = tuple(
+        LemmatizationToken(token.value)
+        for token in line.content
+    )
+    assert line.update_lemmatization(lemmatization) == line
+
+
+def test_update_lemmatization_text_line():
+    line = TextLine.of_iterable('1.', [Word('bu')])
+    lemmatization = (LemmatizationToken('bu', ('nu I', )), )
+    expected = TextLine.of_iterable(
+        '1.',
+        [Word('bu', unique_lemma=('nu I', ))]
+    )
+
+    assert line.update_lemmatization(lemmatization) == expected
+
+
+def test_update_lemmatization_incompatible():
+    line = TextLine.of_iterable('1.', [Word('mu')])
+    lemmatization = (LemmatizationToken('bu', ('nu I', )), )
+    with pytest.raises(LemmatizationError):
+        line.update_lemmatization(lemmatization)
+
+
+def test_update_lemmatization_wrong_lenght():
+    line = TextLine.of_iterable('1.', [Word('bu'), Word('bu')])
+    lemmatization = (LemmatizationToken('bu', ('nu I', )), )
+    with pytest.raises(LemmatizationError):
+        line.update_lemmatization(lemmatization)

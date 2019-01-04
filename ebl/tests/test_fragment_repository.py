@@ -59,7 +59,7 @@ def test_update_lemmatization(fragment_repository,
                               transliterated_fragment):
     fragment_number = fragment_repository.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[0][0]['uniqueLemma'] = ['aklu I']
+    tokens[1][1]['uniqueLemma'] = ['aklu I']
     updated_fragment = transliterated_fragment.update_lemmatization(
         Lemmatization.from_list(tokens)
     )

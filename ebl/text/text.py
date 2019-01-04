@@ -1,6 +1,7 @@
 from typing import Tuple, List, Mapping, Callable
 import attr
-from ebl.text.lemmatization import Lemmatization
+import pydash
+from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.language import Language
 from ebl.text.line import Line, ControlLine, EmptyLine, TextLine
 from ebl.text.token import Token, Word, LanguageShift
@@ -26,6 +27,20 @@ class Text:
             ]
             for line in self.lines
         ])
+
+    def update_lemmatization(self, lemmatization: Lemmatization) -> 'Text':
+        if self.lemmatization.is_compatible(lemmatization):
+            zipped = pydash.zip_(self.lines, lemmatization.tokens)
+            lines = tuple(
+                pair[0].update_lemmatization(pair[1])
+                for pair in zipped
+            )
+            return attr.evolve(
+                self,
+                lines=lines
+            )
+        else:
+            raise LemmatizationError()
 
     def to_dict(self) -> dict:
         return {

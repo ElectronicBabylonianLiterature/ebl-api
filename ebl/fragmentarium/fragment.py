@@ -155,9 +155,11 @@ class Fragment:
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Fragment':
         old_lemmatization = self.text.lemmatization
         if old_lemmatization.is_compatible(lemmatization):
+            text = self.text.update_lemmatization(lemmatization)
             return attr.evolve(
                 self,
-                lemmatization=lemmatization
+                lemmatization=lemmatization,
+                text=text
             )
         else:
             raise LemmatizationError()

@@ -264,12 +264,16 @@ def test_add_matching_lines(transliterated_fragment):
 
 def test_update_lemmatization(transliterated_fragment):
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[0][0]['uniqueLemma'] = ['nu I']
+    tokens[1][1]['uniqueLemma'] = ['nu I']
+    lemmatization = Lemmatization.from_list(tokens)
     expected = Fragment.from_dict({
         **transliterated_fragment.to_dict(),
-        'lemmatization': tokens
+        'lemmatization': tokens,
+        'text': (transliterated_fragment
+                 .text.update_lemmatization(lemmatization)
+                 .to_dict())
     })
-    lemmatization = Lemmatization.from_list(tokens)
+
     assert transliterated_fragment.update_lemmatization(lemmatization) ==\
         expected
 

@@ -1,5 +1,6 @@
 import pytest
 from ebl.text.language import Language, DEFAULT_LANGUAGE
+from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import (
     UniqueLemma, Token, Word, LanguageShift, DEFAULT_NORMALIZED
 )
@@ -127,3 +128,44 @@ def test_language_shift(value, expected_language, normalized):
 
 def test_default_normalized():
     assert DEFAULT_NORMALIZED is False
+
+
+@pytest.mark.parametrize("token", [
+    Token('...'),
+    LanguageShift('%sux')
+])
+def test_update_lemmatization_invalid(token):
+    lemma = LemmatizationToken(token.value, tuple())
+    with pytest.raises(LemmatizationError):
+        token.set_unique_lemma(lemma)
+
+
+@pytest.mark.parametrize("token", [
+    Token('...'),
+    LanguageShift('%sux')
+])
+def test_update_lemmatization_lemma(token):
+    lemma = LemmatizationToken(token.value)
+    assert token.set_unique_lemma(lemma) == token
+
+
+def test_set_unique_lemma_word():
+    word = Word('bu')
+    lemma = LemmatizationToken('bu', ('nu I', ))
+    expected = Word('bu', unique_lemma=('nu I', ))
+
+    assert word.set_unique_lemma(lemma) == expected
+
+
+def test_set_unique_lemma_incompatible():
+    word = Word('mu')
+    lemma = LemmatizationToken('bu', ('nu I', ))
+    with pytest.raises(LemmatizationError):
+        word.set_unique_lemma(lemma)
+
+
+def test_set_unique_lemma_not_lemmatizable():
+    word = Word('bu', language=Language.SUMERIAN)
+    lemma = LemmatizationToken('bu', ('nu I', ))
+    with pytest.raises(LemmatizationError):
+        word.set_unique_lemma(lemma)

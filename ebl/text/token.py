@@ -1,6 +1,7 @@
 from typing import Any, Tuple, NewType
 import attr
 from ebl.text.language import Language, DEFAULT_LANGUAGE
+from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
@@ -15,6 +16,15 @@ class Token:
     @property
     def lemmatizable(self) -> bool:
         return False
+
+    def set_unique_lemma(
+            self,
+            lemma: LemmatizationToken
+    ) -> 'Token':
+        if lemma.unique_lemma is None and lemma.value == self.value:
+            return self
+        else:
+            raise LemmatizationError()
 
     def accept(self, visitor: Any) -> None:
         visitor.visit_token(self)
@@ -38,6 +48,19 @@ class Word(Token):
 
     def set_language(self, language: Language, normalized: bool) -> 'Word':
         return attr.evolve(self, language=language, normalized=normalized)
+
+    def set_unique_lemma(
+            self,
+            lemma: LemmatizationToken
+    ) -> 'Word':
+        if not self.value == lemma.value:
+            raise LemmatizationError()
+        elif self.lemmatizable and lemma.unique_lemma is not None:
+            return attr.evolve(self, unique_lemma=lemma.unique_lemma)
+        elif lemma.unique_lemma is None:
+            return self
+        else:
+            raise LemmatizationError()
 
     def accept(self, visitor: Any) -> None:
         visitor.visit_word(self)

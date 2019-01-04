@@ -10,7 +10,7 @@ def test_update_lemmatization(client,
                               database):
     fragment_number = fragmentarium.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[0][0]['uniqueLemma'] = ['aklu I']
+    tokens[1][1]['uniqueLemma'] = ['aklu I']
     body = json.dumps(tokens)
     url = f'/fragments/{fragment_number}/lemmatization'
     post_result = client.simulate_post(url, body=body)
