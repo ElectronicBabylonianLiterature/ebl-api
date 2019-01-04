@@ -1,8 +1,6 @@
 from typing import Optional, Tuple, List
 import attr
 import pydash
-from ebl.merger import Merger
-from ebl.fragmentarium.transliteration import Transliteration
 
 
 class LemmatizationError(Exception):
