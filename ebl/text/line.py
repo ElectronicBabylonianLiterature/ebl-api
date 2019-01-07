@@ -2,6 +2,7 @@
 from typing import List, Tuple, Iterable, Sequence
 import attr
 import pydash
+from ebl.merger import Merger
 from ebl.text.atf import Atf
 from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
@@ -47,6 +48,10 @@ class Line:
             'prefix': self.prefix,
             'content': [token.to_dict() for token in self.content]
         }
+
+    def merge(self, other: 'Line') -> 'Line':
+        # pylint: disable=R0201
+        return other
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -107,6 +112,18 @@ class TextLine(Line):
             **super().to_dict(),
             'type': 'TextLine'
         }
+
+    def merge(self, other: 'Line') -> 'Line':
+        def merge_tokens():
+            return Merger(lambda token: token.value, 1).merge(
+                self.content, other.content
+            )
+
+        return (
+            TextLine.of_iterable(other.prefix, merge_tokens())
+            if isinstance(other, TextLine)
+            else other
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

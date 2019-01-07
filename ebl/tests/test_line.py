@@ -5,7 +5,7 @@ from ebl.text.lemmatization import (
 )
 from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
 from ebl.text.token import (
-    Token, Word, LanguageShift, DEFAULT_NORMALIZED
+    UniqueLemma, Token, Word, LanguageShift, DEFAULT_NORMALIZED
 )
 
 
@@ -127,3 +127,64 @@ def test_update_lemmatization_wrong_lenght():
     lemmatization = (LemmatizationToken('bu', ('nu I', )), )
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
+
+
+@pytest.mark.parametrize('old,new,expected', [
+    (
+        EmptyLine(),
+        TextLine.of_iterable('1.', [Word('bu')]),
+        TextLine.of_iterable('1.', [Word('bu')])
+    ), (
+        TextLine.of_iterable('1.', [Word('bu')]),
+        ControlLine.of_single('$', Token(' single ruling')),
+        ControlLine.of_single('$', Token(' single ruling'))
+    ), (
+        TextLine.of_iterable('1.', [Word('bu')]),
+        TextLine.of_iterable('2.', [Word('bu')]),
+        TextLine.of_iterable('2.', [Word('bu')])
+    ), (
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ]),
+        TextLine.of_iterable('1.', [Word('bu')]),
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ])
+    ), (
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ]),
+        TextLine.of_iterable('1.', [LanguageShift('%sux')]),
+        TextLine.of_iterable('1.', [LanguageShift('%sux')])
+    ), (
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ]),
+        TextLine.of_iterable('1.', [Word('mu')]),
+        TextLine.of_iterable('1.', [Word('mu')])
+    ), (
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('mu', unique_lemma=(UniqueLemma('mu I'), )),
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ]),
+        TextLine.of_iterable('1.', [Word('bu'), Word('bu')]),
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ])
+    ), (
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ]),
+        TextLine.of_iterable('1.', [Word('bu'), Word('mu'), Word('bu')]),
+        TextLine.of_iterable('1.', [
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('mu'),
+            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+        ])
+    )
+])
+def test_merge(old, new, expected):
+    assert old.merge(new) == expected
