@@ -51,9 +51,7 @@ class Text:
     def merge(self, other: 'Text') -> 'Text':
         merged_lines = Merger(
             lambda line: line.atf,
-            inner_merge=lambda state: state.previous_old.merge(
-                state.current_new
-            )
+            inner_merge=lambda old, new: old.merge(new)
         ).merge(
             self.lines, other.lines
         )

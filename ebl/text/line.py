@@ -115,7 +115,7 @@ class TextLine(Line):
 
     def merge(self, other: 'Line') -> 'Line':
         def merge_tokens():
-            return Merger(lambda token: token.value, 1).merge(
+            return Merger(lambda token: token.value).merge(
                 self.content, other.content
             )
 
