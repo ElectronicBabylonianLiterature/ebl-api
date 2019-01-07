@@ -60,7 +60,8 @@ def test_update_transliteration_merge_lemmatization(client,
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
     updated_fragment = get_result.json
 
-    expected_text = parse_atf(updates['transliteration']).to_dict()
+    new_text = parse_atf(updates['transliteration'])
+    expected_text = lemmatized_fragment.text.merge(new_text).to_dict()
     assert updated_fragment['text'] == expected_text
 
 

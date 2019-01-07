@@ -181,7 +181,7 @@ def test_update_transliteration(lemmatized_fragment, user):
 
     expected_fragment = Fragment.from_dict({
         **lemmatized_fragment.to_dict(),
-        'text': text.to_dict(),
+        'text': lemmatized_fragment.text.merge(text).to_dict(),
         'notes': transliteration.notes,
         'signs': transliteration.signs,
         'record': lemmatized_fragment.record.add_entry(

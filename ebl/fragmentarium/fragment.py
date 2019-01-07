@@ -118,7 +118,7 @@ class Fragment:
         )
 
         try:
-            text = parse_atf(transliteration.atf)
+            text = self.text.merge(parse_atf(transliteration.atf))
 
             return attr.evolve(
                 self,
