@@ -69,3 +69,10 @@ def test_merge_edit_lines():
         [{'key': 'a1.1', 'value': None}, {'key': 'a2', 'value': 2}],
         [{'key': 'b1', 'value': 3}, {'key': 'b2.1', 'value': None}]
     ]
+
+
+def test_merge_inner_merge():
+    assert Merger(
+        lambda x: f' {x} ',
+        inner_merge=lambda state: state.previous_old + state.current_new
+    ).merge([1, 2], [1, 3]) == [1, 5]

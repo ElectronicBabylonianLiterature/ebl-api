@@ -4,16 +4,20 @@ from ebl.text.lemmatization import (
     Lemmatization, LemmatizationToken, LemmatizationError
 )
 from ebl.text.atf import Atf
-from ebl.text.line import Line, TextLine, ControlLine
+from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
 from ebl.text.text import Text
-from ebl.text.token import Word, Token
+from ebl.text.token import Word, Token, UniqueLemma
 
 
 LINES: Tuple[Line, ...] = (
-    TextLine('1.', (Word('ha-am'), )),
-    ControlLine('$', (Token(' single ruling'), )),
+    TextLine.of_iterable('1.', [Word('ha-am')]),
+    ControlLine.of_single('$', Token(' single ruling'))
 )
 TEXT: Text = Text(LINES)
+
+
+def test_of_iterable():
+    assert Text.of_iterable(LINES) == TEXT
 
 
 def test_lines():
@@ -70,3 +74,67 @@ def test_update_lemmatization_wrong_lines():
 
     with pytest.raises(LemmatizationError):
         TEXT.update_lemmatization(lemmatization)
+
+
+@pytest.mark.parametrize('old,new,expected', [
+    (
+        Text.of_iterable(LINES),
+        Text.of_iterable(LINES),
+        Text.of_iterable(LINES)
+    ), (
+        Text.of_iterable([EmptyLine()]),
+        Text.of_iterable([
+            ControlLine.of_single('$', Token(' single ruling'))
+        ]),
+        Text.of_iterable([
+            ControlLine.of_single('$', Token(' single ruling'))
+        ])
+    ), (
+        Text.of_iterable([
+            ControlLine.of_single('$', Token(' double ruling')),
+            ControlLine.of_single('$', Token(' single ruling')),
+            EmptyLine()
+        ]),
+        Text.of_iterable([
+            ControlLine.of_single('$', Token(' double ruling')),
+            EmptyLine()
+        ]),
+        Text.of_iterable([
+            ControlLine.of_single('$', Token(' double ruling')),
+            EmptyLine()
+        ]),
+    ), (
+        Text.of_iterable([
+            EmptyLine(),
+            ControlLine.of_single('$', Token(' double ruling')),
+        ]),
+        Text.of_iterable([
+            EmptyLine(),
+            ControlLine.of_single('$', Token(' single ruling')),
+            ControlLine.of_single('$', Token(' double ruling')),
+        ]),
+        Text.of_iterable([
+            EmptyLine(),
+            ControlLine.of_single('$', Token(' single ruling')),
+            ControlLine.of_single('$', Token(' double ruling')),
+        ]),
+    ), (
+        Text.of_iterable([
+            TextLine.of_iterable('1.', [
+                Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
+                Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
+            ])
+        ]),
+        Text.of_iterable([
+            TextLine.of_iterable('1.', [Word('mu'), Word('nu')])
+        ]),
+        Text.of_iterable([
+            TextLine.of_iterable('1.', [
+                Word('mu'),
+                Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
+            ])
+        ])
+    )
+])
+def test_merge(old, new, expected):
+    assert old.merge(new).to_dict() == expected.to_dict()

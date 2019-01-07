@@ -78,7 +78,7 @@ class Merge:
 
 class Merger:
     # pylint: disable=R0903
-    def __init__(self, map_, dimensions):
+    def __init__(self, map_, dimensions=1, inner_merge=None):
         self._operations = {
             '- ': lambda state: state.delete(),
             '+ ': self._add_entry,
@@ -87,17 +87,26 @@ class Merger:
         }
         self._map = map_
         self._dimensions = dimensions
+        self._inner_merge = inner_merge
 
-    def _inner_merge(self, state):
-        return Merger(self._map, self._dimensions - 1).merge(
+    def _default_inner_merge(self, state):
+        return Merger(
+            self._map,
+            self._dimensions - 1
+        ).merge(
             state.previous_old,
             state.current_new
         )
 
     def _add_entry(self, state):
-        new_entry = (self._inner_merge(state)
-                     if self._dimensions > 1 and state.previous_old is not None
-                     else state.current_new)
+        new_entry = (
+            (self._inner_merge or self._default_inner_merge)(state)
+            if (
+                self._dimensions > 1 or
+                self._inner_merge is not None
+            ) and state.previous_old is not None
+            else state.current_new
+        )
         return state.add(new_entry)
 
     def merge(self, old, new):

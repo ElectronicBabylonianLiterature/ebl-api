@@ -1,6 +1,7 @@
-from typing import Tuple, List, Mapping, Callable
+from typing import Tuple, List, Mapping, Callable, Iterable
 import attr
 import pydash
+from ebl.merger import Merger
 from ebl.text.atf import Atf
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.language import Language
@@ -47,13 +48,24 @@ class Text:
         else:
             raise LemmatizationError()
 
+    def merge(self, other: 'Text') -> 'Text':
+        merged_lines = Merger(
+            lambda line: line.atf,
+            inner_merge=lambda state: state.previous_old.merge(
+                state.current_new
+            )
+        ).merge(
+            self.lines, other.lines
+        )
+        return attr.evolve(self, lines=tuple(merged_lines))
+
     def to_dict(self) -> dict:
         return {
             'lines': [line.to_dict() for line in self.lines]
         }
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> 'Text':
         token_factories: Mapping[str, Callable[[dict], Token]] = {
             'Token': lambda data: Token(
                 data['value']
@@ -93,3 +105,7 @@ class Text:
             in data['lines']
         )
         return Text(lines)
+
+    @staticmethod
+    def of_iterable(lines: Iterable[Line]) -> 'Text':
+        return Text(tuple(lines))
