@@ -1,84 +1,96 @@
 import difflib
 from functools import reduce
+from typing import (
+    TypeVar, List, Sequence, Optional, Callable, Mapping, Generic
+)
 import pydash
 
 
-class Differ:
-    # pylint: disable=R0903
-    def __init__(self, map_):
-        self._map = map_
+T = TypeVar('T')  # pylint: disable=C0103
+DiffMapping = Callable[[T], str]
+InnerMerge = Optional[Callable[[T, T], T]]
 
-    def diff(self, old, new):
+
+class Differ(Generic[T]):
+    # pylint: disable=R0903
+    def __init__(self, map_: DiffMapping[T]) -> None:
+        self._map: DiffMapping[T] = map_
+
+    def diff(self, old: Sequence[T], new: Sequence[T]):
         return difflib.ndiff(
             [self._map(entry) for entry in old],
             [self._map(entry) for entry in new]
         )
 
 
-class Merge:
-    def __init__(self, old, new):
-        self._old = old
-        self._new = new
-        self._result = []
-        self._old_line = None
+class Merge(Generic[T]):
+    def __init__(self, old: Sequence[T], new: Sequence[T]) -> None:
+        self._old: Sequence[T] = old
+        self._new: Sequence[T] = new
+        self._result: List[T] = []
+        self._old_line: Optional[T] = None
 
     @property
-    def current_new(self):
+    def current_new(self) -> T:
         return self._new[0]
 
     @property
-    def current_old(self):
+    def current_old(self) -> T:
         return self._old[0]
 
     @property
-    def result(self):
+    def result(self) -> List[T]:
         return self._result
 
     @property
-    def previous_old(self):
+    def previous_old(self) -> Optional[T]:
         return self._old_line
 
-    def _advance_new(self):
+    def _advance_new(self) -> None:
         self._new = self._new[1:]
         self._old_line = None
 
-    def _advance_old(self, save_old_line):
+    def _advance_old(self, save_old_line: bool) -> None:
         if save_old_line:
             self._old_line = self.current_old
         self._old = self._old[1:]
 
-    def _append(self, entry):
+    def _append(self, entry: T) -> None:
         self._result.append(entry)
 
-    def delete(self):
+    def delete(self) -> 'Merge':
         self._advance_old(True)
         return self
 
-    def keep(self):
+    def keep(self) -> 'Merge':
         self._append(self.current_old)
         self._advance_old(False)
         self._advance_new()
         return self
 
-    def add(self, entry):
+    def add(self, entry: T) -> 'Merge':
         self._append(entry)
         self._advance_new()
         return self
 
 
-class Merger:
+class Merger(Generic[T]):
     # pylint: disable=R0903
-    def __init__(self, map_, inner_merge=None):
-        self._operations = {
+    def __init__(
+            self,
+            map_: DiffMapping[T],
+            inner_merge: InnerMerge[T]=None  # pylint: disable=C0326
+    ) -> None:
+        self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             '- ': lambda state: state.delete(),
             '+ ': self._add_entry,
             '  ': lambda state: state.keep(),
             '? ': pydash.identity
         }
-        self._map = map_
-        self._inner_merge = inner_merge
+        self._map: DiffMapping[T] = map_
+        self._inner_merge: InnerMerge[T] = inner_merge
 
-    def _add_entry(self, state):
+    def _add_entry(self, state: Merge[T]) -> Merge[T]:
         new_entry = (
             self._inner_merge(state.previous_old, state.current_new)
             if self._inner_merge is not None and state.previous_old is not None
@@ -86,7 +98,7 @@ class Merger:
         )
         return state.add(new_entry)
 
-    def merge(self, old, new):
+    def merge(self, old: Sequence[T], new: Sequence[T]) -> List[T]:
         diff = Differ(self._map).diff(old, new)
         prefix_length = [len(key) for key in self._operations][0]
         return reduce(

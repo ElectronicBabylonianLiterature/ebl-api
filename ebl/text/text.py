@@ -49,9 +49,15 @@ class Text:
             raise LemmatizationError()
 
     def merge(self, other: 'Text') -> 'Text':
+        def map_(line: Line) -> str:
+            return line.atf
+
+        def inner_merge(old: Line, new: Line) -> Line:
+            return old.merge(new)
+
         merged_lines = Merger(
-            lambda line: line.atf,
-            inner_merge=lambda old, new: old.merge(new)
+            map_,
+            inner_merge
         ).merge(
             self.lines, other.lines
         )
