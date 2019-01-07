@@ -60,6 +60,11 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Token('|'), Token(':'), Token(';'), Token('/')
         )),
     )),
+    ('1. |GAL|', (
+        TextLine('1.', (
+            Word('|GAL|'),
+        )),
+    )),
     ('1. !qt !bs !cm !zz', (
         TextLine('1.', (
             Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')

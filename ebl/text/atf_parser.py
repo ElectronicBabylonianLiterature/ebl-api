@@ -7,18 +7,18 @@ from ebl.text.text import Text
 from ebl.text.token import Token, Word, LanguageShift
 
 
+WORD_SEPARATOR = string(' ').desc('word separtor')
+LINE_SEPARATOR = regex(r'\n').desc('line separator')
+WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'$')
+
 LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
 TABULATION = regex(r'\(\$___\$\)').desc('tabulation')
-COLUMN = regex(r'&\d*').desc('column')
-DIVIDER = regex(r'\||:|;|/').desc('divider')
+COLUMN = regex(r'&\d*').desc('column') << WORD_SEPARATOR_OR_EOL
+DIVIDER = regex(r'\||:|;|/').desc('divider') << WORD_SEPARATOR_OR_EOL
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
 LACUNA = regex(r'\[?\.\.\.\]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
 WORD = regex(r'[^\s]+').desc('word')
-
-
-WORD_SEPARATOR = string(' ').desc('word separtor')
-LINE_SEPARATOR = regex(r'\n').desc('line separator')
 
 
 CONTROL_LINE = seq(
