@@ -1,7 +1,7 @@
 import difflib
 from functools import reduce
 from typing import (
-    TypeVar, List, Sequence, Optional, Callable, Mapping, Generic
+    TypeVar, List, Sequence, Optional, Callable, Mapping, Generic, Iterator
 )
 import pydash
 
@@ -9,18 +9,6 @@ import pydash
 T = TypeVar('T')  # pylint: disable=C0103
 DiffMapping = Callable[[T], str]
 InnerMerge = Optional[Callable[[T, T], T]]
-
-
-class Differ(Generic[T]):
-    # pylint: disable=R0903
-    def __init__(self, map_: DiffMapping[T]) -> None:
-        self._map: DiffMapping[T] = map_
-
-    def diff(self, old: Sequence[T], new: Sequence[T]):
-        return difflib.ndiff(
-            [self._map(entry) for entry in old],
-            [self._map(entry) for entry in new]
-        )
 
 
 class Merge(Generic[T]):
@@ -98,8 +86,14 @@ class Merger(Generic[T]):
         )
         return state.add(new_entry)
 
+    def _diff(self, old: Sequence[T], new: Sequence[T]) -> Iterator[str]:
+        return difflib.ndiff(
+            [self._map(entry) for entry in old],
+            [self._map(entry) for entry in new]
+        )
+
     def merge(self, old: Sequence[T], new: Sequence[T]) -> List[T]:
-        diff = Differ(self._map).diff(old, new)
+        diff = self._diff(old, new)
         prefix_length = [len(key) for key in self._operations][0]
         return reduce(
             lambda state, entry: self._operations[entry](state),
