@@ -51,17 +51,19 @@ def test_update_transliteration_merge_lemmatization(client,
         'transliteration': '\n'.join(lines),
         'notes': lemmatized_fragment.notes
     }
-    body = json.dumps(updates)
-    url = f'/fragments/{fragment_number}/transliteration'
-    post_result = client.simulate_post(url, body=body)
+    post_result = client.simulate_post(
+        f'/fragments/{fragment_number}/transliteration',
+        body=json.dumps(updates)
+    )
 
     assert post_result.status == falcon.HTTP_OK
 
-    get_result = client.simulate_get(f'/fragments/{fragment_number}')
-    updated_fragment = get_result.json
+    updated_fragment =\
+        client.simulate_get(f'/fragments/{fragment_number}').json
 
-    new_text = parse_atf(updates['transliteration'])
-    expected_text = lemmatized_fragment.text.merge(new_text).to_dict()
+    expected_text = lemmatized_fragment.text.merge(
+        parse_atf(updates['transliteration'])
+    ).to_dict()
     assert updated_fragment['text'] == expected_text
 
 
