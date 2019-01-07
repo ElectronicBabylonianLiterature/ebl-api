@@ -71,12 +71,16 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('1. x-ti ti-X', (
         TextLine('1.', (Word('x-ti'), Word('ti-X'))),
     )),
-    ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu', (
+    ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...] -ku', (
         TextLine('1.', (
             Token('[...'), Word('r]u?-u₂-qu'), Word('na-a[n-...]')
         )),
         TextLine('2.', (
             Word('ši-[ku-...-ku]-nu'),
+        )),
+        TextLine('3.', (
+            Token('[...]'),
+            Word('-ku')
         ))
     )),
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', (
