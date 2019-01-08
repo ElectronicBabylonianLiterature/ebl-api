@@ -34,9 +34,7 @@ LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
 TABULATION = string('($___$)').desc('tabulation')
 COLUMN = regex(r'&\d*').desc('column') << WORD_SEPARATOR_OR_EOL
 DIVIDER = (
-    string_from(
-        '|', ':\'', ':"', ':.', '::', ':?', ':', ';', '/'
-    ) +
+    string_from('|', ':\'', ':"', ':.', '::', ':?', ':', ';', '/') +
     FLAG
 ).desc('divider') << WORD_SEPARATOR_OR_EOL
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
@@ -53,29 +51,36 @@ VALUE = seq(
     FLAG
 ).map(pydash.compact).concat().desc('reading')
 GRAPHEME = (
-    regex(r'\$?[A-ZṢŠṬa-zṣšṭ0-9₀-₉\[\]]+') +
+    string('$').at_most(1).concat() +
+    regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉\[\]]+') +
     FLAG
 ).desc('grapheme')
 COMPOUND_GRAPHEME_OPERATOR = char_from('.×%&+()').desc(
     'compound grapheme operator'
 )
+COMPOUND_DELIMITER = string('|').at_most(1).concat()
 COMPUND_PART = variant(GRAPHEME)
 COMPOUND_GRAPHEME = (
     seq(
-        string('|').optional(),
+        COMPOUND_DELIMITER,
         COMPUND_PART,
         (
             COMPOUND_GRAPHEME_OPERATOR.many().concat() +
             COMPUND_PART
         ).many().concat(),
-        string('|').optional()
+        COMPOUND_DELIMITER
     )
     .map(pydash.flatten_deep)
-    .map(pydash.compact)
     .concat()
     .desc('compound grapheme')
 )
-VALUE_WITH_SIGN = VALUE + regex(r'!?\(') + COMPOUND_GRAPHEME + string(')')
+VALUE_WITH_SIGN = (
+    VALUE +
+    string('!').at_most(1).concat() +
+    string('(') +
+    COMPOUND_GRAPHEME +
+    string(')')
+)
 VARIANT = variant(
     UNKNOWN |
     VALUE_WITH_SIGN |
@@ -90,17 +95,11 @@ WORD = seq(
     (JOINER.many().concat() + VARIANT).many(),
     JOINER.many().concat(),
     FLAG
-).map(
-    pydash.flatten_deep
-).map(
-    pydash.compact
-).map(
-    ''.join
-).desc('word')
+).map(pydash.flatten_deep).concat().desc('word')
 
 
 CONTROL_LINE = seq(
-    regex(r'(=:|\$|@|&|#)'),
+    string_from('=:', '$', '@', '&', '#'),
     regex(r'.*').map(Token)
 ).combine(ControlLine.of_single)
 EMPTY_LINE = regex(
