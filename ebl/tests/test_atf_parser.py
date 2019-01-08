@@ -52,12 +52,42 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Word('x)]')
         )),
     )),
+    ('1. <en-da-ab-su₈ ... >', (
+        TextLine('1.', (
+            Word('<en-da-ab-su₈'),
+            Token('...'),
+            Token('>')
+        )),
+    )),
     ('1. & &12', (
         TextLine('1.', (Token('&'), Token('&12'))),
     )),
-    ('1. | : ; /', (
+    ('1. | : :\' :" :. :: ; /', (
         TextLine('1.', (
-            Token('|'), Token(':'), Token(';'), Token('/')
+            Token('|'),
+            Token(':'),
+            Token(':\''),
+            Token(':"'),
+            Token(':.'),
+            Token('::'),
+            Token(';'),
+            Token('/')
+        )),
+    )),
+    ('1. :? :# ::?', (
+        TextLine('1.', (
+            Token(':?'),
+            Token(':#'),
+            Token('::?')
+        )),
+    )),
+    ('1. me-e-li :\n2. ku', (
+        TextLine('1.', (
+            Word('me-e-li'),
+            Token(':')
+        )),
+        TextLine('2.', (
+            Word('ku'),
         )),
     )),
     ('1. |GAL|', (
@@ -76,12 +106,17 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('1. x-ti ti-X', (
         TextLine('1.', (Word('x-ti'), Word('ti-X'))),
     )),
-    ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...] -ku', (
+    ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', (
         TextLine('1.', (
-            Token('[...'), Word('r]u?-u₂-qu'), Word('na-a[n-...]')
+            Token('[...'),
+            Word('r]u?-u₂-qu'),
+            Word('na-a[n-'),
+            Token('...]')
         )),
         TextLine('2.', (
-            Word('ši-[ku-...-ku]-nu'),
+            Word('ši-[ku-'),
+            Token('...'),
+            Word('-ku]-nu')
         )),
         TextLine('3.', (
             Token('[...]'),
@@ -94,7 +129,8 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ))
 ])
 def test_parse_atf(line, expected_tokenization):
-    assert parse_atf(line) == Text(expected_tokenization)
+    assert parse_atf(line).to_dict()['lines'] ==\
+        Text(expected_tokenization).to_dict()['lines']
 
 
 def test_parse_atf_invalid():
