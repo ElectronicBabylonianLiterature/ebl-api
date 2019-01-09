@@ -1,12 +1,15 @@
+import collections
 from typing import Any, Tuple, NewType
 import attr
 from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 
 
+JOINER = '-'
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
 UniqueLemma = NewType('UniqueLemma', str)
+Partial = collections.namedtuple('Partial', 'start end')
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -45,6 +48,13 @@ class Word(Token):
     @property
     def lemmatizable(self) -> bool:
         return self.language.lemmatizable and not self.normalized
+
+    @property
+    def partial(self) -> Partial:
+        return Partial(
+            self.value.startswith(JOINER),
+            self.value.endswith(JOINER)
+        )
 
     def set_language(self, language: Language, normalized: bool) -> 'Word':
         return attr.evolve(self, language=language, normalized=normalized)

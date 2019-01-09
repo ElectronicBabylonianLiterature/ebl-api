@@ -94,3 +94,13 @@ def test_set_unique_lemma_invalid(word):
     lemma = LemmatizationToken('bu', ('nu I', ))
     with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)
+
+
+@pytest.mark.parametrize("word,expected", [
+    (Word('mu-bu'), (False, False)),
+    (Word('-mu-bu'), (True, False)),
+    (Word('mu-bu-'), (False, True)),
+    (Word('-mu-bu-'), (True, True))
+])
+def test_partial(word, expected):
+    assert word.partial == expected
