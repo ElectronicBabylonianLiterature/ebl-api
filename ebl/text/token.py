@@ -76,7 +76,7 @@ class Word(Token):
         }
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class LanguageShift(Token):
     _normalization_shift = '%n'
 
