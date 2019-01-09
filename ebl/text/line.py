@@ -11,6 +11,9 @@ from ebl.text.token import (
 )
 
 
+WORD_SEPARATOR = ' '
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     prefix: str = ''
@@ -18,13 +21,11 @@ class Line:
 
     @property
     def atf(self) -> Atf:
-        return Atf(f'{self.prefix}{self._join_content()}')
-
-    def _join_content(self) -> str:
-        return ' '.join(
+        content = WORD_SEPARATOR.join(
             token.value
             for token in self.content
         )
+        return Atf(f'{self.prefix}{content}')
 
     def update_lemmatization(
             self,
@@ -130,8 +131,7 @@ class TextLine(Line):
             self._force_separator = False
 
         def _append_separator(self) -> None:
-            word_separator = ' '
-            self._parts.append(word_separator)
+            self._parts.append(WORD_SEPARATOR)
 
     @classmethod
     def of_iterable(cls, prefix: str, content: Iterable[Token]):
