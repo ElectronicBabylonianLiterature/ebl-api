@@ -1,4 +1,3 @@
-import json
 import falcon
 
 
@@ -18,19 +17,3 @@ def test_fragment_not_found(client):
     result = client.simulate_get('/fragments/unknown.number')
 
     assert result.status == falcon.HTTP_NOT_FOUND
-
-
-def test_update_transliteration(client,
-                                fragmentarium,
-                                fragment):
-    fragment_number = fragmentarium.create(fragment)
-    updates = {
-        'transliteration': '$ (the transliteration)',
-        'notes': 'some notes'
-    }
-    body = json.dumps(updates)
-    url = f'/fragments/{fragment_number}'
-    post_result = client.simulate_post(url, body=body)
-
-    assert post_result.status == falcon.HTTP_PERMANENT_REDIRECT
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'

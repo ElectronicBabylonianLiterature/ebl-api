@@ -3,6 +3,7 @@ from ebl.require_scope import require_scope
 
 
 class FragmentsResource:
+    # pylint: disable=R0903
     def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
 
@@ -14,7 +15,3 @@ class FragmentsResource:
             **fragment.to_dict_for(user),
             'atf': fragment.text.atf
         }
-
-    def on_post(self, _req, _resp, number):
-        # pylint: disable=R0201
-        raise falcon.HTTPPermanentRedirect(f'{number}/transliteration')
