@@ -71,7 +71,7 @@ class ControlLine(Line):
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
 
-    class TokenVisitor:
+    class LanguageVisitor:
         def __init__(self):
             self._tokens: List[Token] = []
             self._language: Language = DEFAULT_LANGUAGE
@@ -96,16 +96,56 @@ class TextLine(Line):
                 word.set_language(self._language, self._normalized)
             self.visit_token(word_with_language)
 
+    class AtfVisitor:
+        def __init__(self, prefix: str):
+            self._parts: List[str] = [prefix]
+            self._force_separator: bool = True
+            self._omit_separator: bool = False
+
+        @property
+        def result(self) -> Atf:
+            return Atf(''.join(self._parts))
+
+        def visit_token(self, token: Token) -> None:
+            if self._force_separator or not self._omit_separator:
+                self._append_separator()
+
+            self._parts.append(token.value)
+            self._omit_separator = False
+            self._force_separator = False
+
+        def visit_language_shift(self, shift: LanguageShift) -> None:
+            self._append_separator()
+            self._parts.append(shift.value)
+            self._omit_separator = False
+            self._force_separator = True
+
+        def visit_word(self, word: Word) -> None:
+            should_not_omit = not(self._omit_separator or word.partial.start)
+            if (self._force_separator or should_not_omit):
+                self._append_separator()
+
+            self._parts.append(word.value)
+            self._omit_separator = word.partial.end
+            self._force_separator = False
+
+        def _append_separator(self) -> None:
+            word_separator = ' '
+            self._parts.append(word_separator)
+
     @classmethod
     def of_iterable(cls, prefix: str, content: Iterable[Token]):
-        visitor = cls.TokenVisitor()
+        visitor = cls.LanguageVisitor()
         for token in content:
             token.accept(visitor)
         return cls(prefix, visitor.tokens)
 
     @property
     def atf(self) -> Atf:
-        return Atf(f'{self.prefix} {self._join_content()}')
+        visitor = TextLine.AtfVisitor(self.prefix)
+        for token in self.content:
+            token.accept(visitor)
+        return visitor.result
 
     def to_dict(self) -> dict:
         return {

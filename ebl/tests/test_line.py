@@ -63,6 +63,28 @@ def test_line_of_iterable(code, language, normalized):
     assert line.atf == f'1. first {code} second %sb third'
 
 
+@pytest.mark.parametrize("word,token,expected", [
+    (Word('mu-bu'), Token('[...]'), ' mu-bu '),
+    (Word('-mu-bu'), Token('[...]'), '-mu-bu '),
+    (Word('mu-bu-'), Token('[...]'), ' mu-bu-'),
+    (Word('-mu-bu-'), Token('[...]'), '-mu-bu-'),
+    (Word('-mu-bu-'), LanguageShift('%sux'), ' -mu-bu- ')
+])
+def test_text_line_atf(word, token, expected):
+    line = TextLine.of_iterable('1.', [
+        token,
+        word,
+        token,
+    ])
+    assert line.atf == f'{line.prefix} {token.value}{expected}{token.value}'
+
+
+def test_text_line_atf_partial_start():
+    word = Word('-mu')
+    line = TextLine.of_iterable('1.', [word])
+    assert line.atf == f'{line.prefix} {word.value}'
+
+
 def test_line_of_single():
     prefix = '$'
     token = Token('only')
