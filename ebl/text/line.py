@@ -112,14 +112,12 @@ class TextLine(Line):
                 self._append_separator()
 
             self._parts.append(token.value)
-            self._omit_separator = False
-            self._force_separator = False
+            self._set_omit(False)
 
         def visit_language_shift(self, shift: LanguageShift) -> None:
             self._append_separator()
             self._parts.append(shift.value)
-            self._omit_separator = False
-            self._force_separator = True
+            self._set_force()
 
         def visit_word(self, word: Word) -> None:
             should_not_omit = not(self._omit_separator or word.partial.start)
@@ -127,11 +125,18 @@ class TextLine(Line):
                 self._append_separator()
 
             self._parts.append(word.value)
-            self._omit_separator = word.partial.end
-            self._force_separator = False
+            self._set_omit(word.partial.end)
 
         def _append_separator(self) -> None:
             self._parts.append(WORD_SEPARATOR)
+
+        def _set_omit(self, omit):
+            self._omit_separator = omit
+            self._force_separator = False
+
+        def _set_force(self):
+            self._omit_separator = False
+            self._force_separator = True
 
     @classmethod
     def of_iterable(cls, prefix: str, content: Iterable[Token]):
