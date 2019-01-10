@@ -185,9 +185,22 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             LoneDeterminative.of_value('{bu-bu}', Partial(False, False)),
         )),
     ]),
+    ('1. KIMIN {u₂#}[...]', [
+        TextLine('1.', (
+            Word('KIMIN'),
+            LoneDeterminative.of_value('{u₂#}', Partial(False, True)),
+            Token('[...]')
+        ))
+    ]),
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (Word('šu'), Word('gid₂'))),
         TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))
+    ]),
+    ('1. {(he-pi₂ eš-šu₂)}\n2. {(NU SUR)}', [
+        TextLine('1.', (
+            Token('{('), Word('he-pi₂'), Word('eš-šu₂'), Token(')}')
+        )),
+        TextLine('2.', (Token('{('), Word('NU'), Word('SUR'), Token(')}')))
     ])
 ])
 def test_parse_atf(line, expected_tokenization):

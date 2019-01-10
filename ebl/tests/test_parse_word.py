@@ -41,7 +41,11 @@ from ebl.text.token import Word, LoneDeterminative
     ('{d}?nu?-di]m₂?-mu[d?', Word('{d}?nu?-di]m₂?-mu[d?')),
     ('<GAR>?', Word('<GAR>?')),
     ('gam/:', Word('gam/:')),
-    ('MIN<(ta-ne₂-hi)>', Word('MIN<(ta-ne₂-hi)>'))
+    ('lu₂@v', Word('lu₂@v')),
+    ('{lu₂@v}UM.ME.[A]', Word('{lu₂@v}UM.ME.[A]')),
+    ('{lu₂@v}]KAB.SAR-M[EŠ]', Word('{lu₂@v}]KAB.SAR-M[EŠ]')),
+    ('MIN<(ta-ne₂-hi)>', Word('MIN<(ta-ne₂-hi)>')),
+    ('UN#', Word('UN#'))
 ])
 def test_word(atf, expected):
     assert WORD.map(Word).parse(atf) == expected
@@ -49,7 +53,9 @@ def test_word(atf, expected):
 
 @pytest.mark.parametrize("atf,expected", [
     ('<{10}>', LoneDeterminative('<{10}>')),
-    ('{ud]u}?', LoneDeterminative('{ud]u}?'))
+    ('{ud]u}?', LoneDeterminative('{ud]u}?')),
+    ('{u₂#}', LoneDeterminative('{u₂#}')),
+    ('{lu₂@v}', LoneDeterminative('{lu₂@v}'))
 ])
 def test_lone_determinative(atf, expected):
     assert LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf) == expected
