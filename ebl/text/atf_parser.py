@@ -1,6 +1,8 @@
 import re
 import pydash
-from parsy import string, regex, seq, ParseError, char_from, string_from
+from parsy import (
+    string, regex, seq, ParseError, char_from, string_from, decimal_digit
+)
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
@@ -20,12 +22,13 @@ DETERMINATIVE = (
     string_from('{+', '{') |
     string('}') + FLAG
 )
+SINGLE_DOT = regex(r'(?<!\.)\.(?!\.)')
 JOINER = (
     OMISSION |
     GLOSS |
     DETERMINATIVE |
     string_from('-', '{{', '{+', '{', '+', '}}', '}') |
-    regex(r'(?<!\.)\.(?!\.)')
+    SINGLE_DOT
 ).desc('joiner')
 WORD_SEPARATOR = string(' ').desc('word separtor')
 LINE_SEPARATOR = regex(r'\n').desc('line separator')
@@ -38,24 +41,32 @@ DIVIDER = (
     FLAG
 ).desc('divider') << WORD_SEPARATOR_OR_EOL
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
-LACUNA = regex(r'\[?\.\.\.\]?').desc('lacuna')
+LACUNA = regex(r'\[?\(?\.\.\.\)?]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
 UNKNOWN = (
     char_from('Xx') +
     FLAG
 ).desc('unclear or unindentified')
 SUB_INDEX = regex(r'[₀-₉ₓ]+').desc('subindex')
+INLINE_BROKEN = regex(r'(\[\(|\[|\()(?!\.)') | regex(r'(?<!\.)(\)\]|\)|\])')
 VALUE = seq(
-    regex(r"[aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ0-9\[\]()]+"),
+    (
+        char_from('aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ') |
+        decimal_digit |
+        INLINE_BROKEN
+    ).at_least(1).concat(),
     SUB_INDEX.optional(),
     FLAG
 ).map(pydash.compact).concat().desc('reading')
 GRAPHEME = (
     string('$').at_most(1).concat() +
-    regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉\[\]]+') +
+    (
+        regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉]') |
+        INLINE_BROKEN
+    ).at_least(1).concat() +
     FLAG
 ).desc('grapheme')
-COMPOUND_GRAPHEME_OPERATOR = char_from('.×%&+()').desc(
+COMPOUND_GRAPHEME_OPERATOR = (SINGLE_DOT | char_from('×%&+()')).desc(
     'compound grapheme operator'
 )
 COMPOUND_DELIMITER = string('|').at_most(1).concat()

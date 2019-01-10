@@ -11,58 +11,58 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
 @pytest.mark.parametrize("line,expected_tokenization", [
-    ('', tuple()),
-    ('\n', (EmptyLine(), )),
-    ('#first\n\n#second', (
+    ('', []),
+    ('\n', [EmptyLine()]),
+    ('#first\n\n#second', [
         ControlLine.of_single('#', Token('first')),
         EmptyLine(),
         ControlLine.of_single('#', Token('second'))
-    )),
-    ('&K11111', (
-        ControlLine.of_single('&', Token('K11111')),
-    )),
-    ('@reverse', (
-        ControlLine.of_single('@', Token('reverse')),
-    )),
-    ('$ (end of side)', (
-        ControlLine.of_single('$', Token(' (end of side)')),
-    )),
-    ('#some notes', (
-        ControlLine.of_single('#', Token('some notes')),
-    )),
-    ('=: continuation', (
-        ControlLine.of_single('=:', Token(' continuation')),
-    )),
-    ('a+1.a+2. šu', (
-        TextLine('a+1.a+2.', (Word('šu'), )),
-    )),
-    ('1. ($___$)', (
-        TextLine('1.', (Token('($___$)'), )),
-    )),
-    ('1. ... [...]', (
+    ]),
+    ('&K11111', [
+        ControlLine.of_single('&', Token('K11111'))
+    ]),
+    ('@reverse', [
+        ControlLine.of_single('@', Token('reverse'))
+    ]),
+    ('$ (end of side)', [
+        ControlLine.of_single('$', Token(' (end of side)'))
+    ]),
+    ('#some notes', [
+        ControlLine.of_single('#', Token('some notes'))
+    ]),
+    ('=: continuation', [
+        ControlLine.of_single('=:', Token(' continuation'))
+    ]),
+    ('a+1.a+2. šu', [
+        TextLine('a+1.a+2.', (Word('šu'), ))
+    ]),
+    ('1. ($___$)', [
+        TextLine('1.', (Token('($___$)'), ))
+    ]),
+    ('1. ... [...]', [
         TextLine('1.', (
             Token('...'),
             Token('[...]')
-        )),
-    )),
-    ('1. [(x x x)]', (
+        ))
+    ]),
+    ('1. [(x x x)]', [
         TextLine('1.', (
             Word('[(x'),
             Word('x'),
             Word('x)]')
-        )),
-    )),
-    ('1. <en-da-ab-su₈ ... >', (
+        ))
+    ]),
+    ('1. <en-da-ab-su₈ ... >', [
         TextLine('1.', (
             Word('<en-da-ab-su₈'),
             Token('...'),
             Token('>')
-        )),
-    )),
-    ('1. & &12', (
-        TextLine('1.', (Token('&'), Token('&12'))),
-    )),
-    ('1. | : :\' :" :. :: ; /', (
+        ))
+    ]),
+    ('1. & &12', [
+        TextLine('1.', (Token('&'), Token('&12')))
+    ]),
+    ('1. | : :\' :" :. :: ; /', [
         TextLine('1.', (
             Token('|'),
             Token(':'),
@@ -72,41 +72,41 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Token('::'),
             Token(';'),
             Token('/')
-        )),
-    )),
-    ('1. :? :# ::?', (
+        ))
+    ]),
+    ('1. :? :# ::?', [
         TextLine('1.', (
             Token(':?'),
             Token(':#'),
             Token('::?')
-        )),
-    )),
-    ('1. me-e-li :\n2. ku', (
+        ))
+    ]),
+    ('1. me-e-li :\n2. ku', [
         TextLine('1.', (
             Word('me-e-li'),
             Token(':')
         )),
         TextLine('2.', (
             Word('ku'),
-        )),
-    )),
-    ('1. |GAL|', (
+        ))
+    ]),
+    ('1. |GAL|', [
         TextLine('1.', (
             Word('|GAL|'),
-        )),
-    )),
-    ('1. !qt !bs !cm !zz', (
+        ))
+    ]),
+    ('1. !qt !bs !cm !zz', [
         TextLine('1.', (
             Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
-        )),
-    )),
-    ('1. x X x# X#', (
-        TextLine('1.', (Word('x'), Word('X'), Word('x#'), Word('X#'))),
-    )),
-    ('1. x-ti ti-X', (
-        TextLine('1.', (Word('x-ti'), Word('ti-X'))),
-    )),
-    ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', (
+        ))
+    ]),
+    ('1. x X x# X#', [
+        TextLine('1.', (Word('x'), Word('X'), Word('x#'), Word('X#')))
+    ]),
+    ('1. x-ti ti-X', [
+        TextLine('1.', (Word('x-ti'), Word('ti-X')))
+    ]),
+    ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', [
         TextLine('1.', (
             Token('[...'),
             Word('r]u?-u₂-qu'),
@@ -122,15 +122,38 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Token('[...]'),
             Word('-ku')
         ))
-    )),
-    ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', (
+    ]),
+    ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
+        TextLine('1.', (
+            Token('[...]'),
+            Word('-qa-'),
+            Token('[...]'),
+            Word('-ba-'),
+            Token('[...]')
+        )),
+        TextLine('2.', (
+            Word('pa-'),
+            Token('[...]')
+        ))
+    ]),
+    ('1. [a?-ku (...)]\n2. [a?-ku (x)]', [
+        TextLine('1.', (
+            Word('[a?-ku'),
+            Token('(...)]')
+        )),
+        TextLine('2.', (
+            Word('[a?-ku'),
+            Word('(x)]')
+        )),
+    ]),
+    ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (Word('šu'), Word('gid₂'))),
         TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))
-    ))
+    ])
 ])
 def test_parse_atf(line, expected_tokenization):
-    assert parse_atf(line).to_dict()['lines'] ==\
-        Text(expected_tokenization).to_dict()['lines']
+    assert parse_atf(line).lines ==\
+        Text.of_iterable(expected_tokenization).lines
 
 
 def test_parse_atf_invalid():

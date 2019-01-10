@@ -43,7 +43,8 @@ from ebl.text.token import Word
     ('{ud]u}?', Word('{ud]u}?')),
     ('{d}?nu?-di]m₂?-mu[d?', Word('{d}?nu?-di]m₂?-mu[d?')),
     ('<GAR>?', Word('<GAR>?')),
-    ('gam/:', Word('gam/:'))
+    ('gam/:', Word('gam/:')),
+    ('MIN<(ta-ne₂-hi)>', Word('MIN<(ta-ne₂-hi)>'))
 ])
 def test_word(atf, expected):
     assert WORD.map(Word).parse(atf) == expected
