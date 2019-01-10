@@ -1,6 +1,6 @@
 import pytest
-from ebl.text.atf_parser import WORD
-from ebl.text.token import Word
+from ebl.text.atf_parser import WORD, LONE_DETERMINATIVE
+from ebl.text.token import Word, LoneDeterminative
 
 
 @pytest.mark.parametrize("atf,expected", [
@@ -36,11 +36,8 @@ from ebl.text.token import Word
     ('I.{d}[UTU?', Word('I.{d}[UTU?')),
     ('.x.KAM', Word('.x.KAM')),
     ('3.AM₃', Word('3.AM₃')),
-    ('<{he-pi₂', Word('<{he-pi₂')),
-    ('eš-šu₂}>', Word('eš-šu₂}>')),
-    ('<{10}>', Word('<{10}>')),
+    ('<{10}>bu', Word('<{10}>bu')),
     ('KA₂?].DINGIR.RA[{ki}?', Word('KA₂?].DINGIR.RA[{ki}?')),
-    ('{ud]u}?', Word('{ud]u}?')),
     ('{d}?nu?-di]m₂?-mu[d?', Word('{d}?nu?-di]m₂?-mu[d?')),
     ('<GAR>?', Word('<GAR>?')),
     ('gam/:', Word('gam/:')),
@@ -48,3 +45,11 @@ from ebl.text.token import Word
 ])
 def test_word(atf, expected):
     assert WORD.map(Word).parse(atf) == expected
+
+
+@pytest.mark.parametrize("atf,expected", [
+    ('<{10}>', LoneDeterminative('<{10}>')),
+    ('{ud]u}?', LoneDeterminative('{ud]u}?'))
+])
+def test_lone_determinative(atf, expected):
+    assert LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf) == expected

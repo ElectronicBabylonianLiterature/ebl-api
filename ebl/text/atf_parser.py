@@ -6,30 +6,49 @@ from parsy import (
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word, LanguageShift
+from ebl.text.token import (
+    Token, Word, LanguageShift, LoneDeterminative, Partial
+)
 
 
 def variant(parser):
     variant_separator = string('/').desc('variant separator')
     return parser + (variant_separator + parser).many().concat()
 
-FLAG = char_from('!?*#').many().concat().desc('flag')
+
+def determinative(parser):
+    return (
+        OMISSION.at_most(1).concat() +
+        string_from('{+', '{') +
+        parser +
+        string('}') +
+        FLAG +
+        OMISSION.at_most(1).concat()
+    )
+
+
+def sequence(prefix, part, min_=None):
+    joiner_and_part = JOINER.many().concat() + part
+    tail = (
+        joiner_and_part.many().concat()
+        if min_ is None
+        else joiner_and_part.at_least(min_).concat()
+    )
+    return prefix + tail
+
+
 OMISSION = string_from(
     '<<', '<(', '<', '>>', ')>', '>'
 ).desc('omission or removal')
 GLOSS = string_from('{{', '}}')
-DETERMINATIVE = (
-    string_from('{+', '{') |
-    string('}') + FLAG
-)
 SINGLE_DOT = regex(r'(?<!\.)\.(?!\.)')
 JOINER = (
     OMISSION |
     GLOSS |
-    DETERMINATIVE |
-    string_from('-', '{{', '{+', '{', '+', '}}', '}') |
+    string_from('-', '{{', '+', '}}', ) |
     SINGLE_DOT
 ).desc('joiner')
+FLAG = char_from('!?*#').many().concat().desc('flag')
 WORD_SEPARATOR = string(' ').desc('word separtor')
 LINE_SEPARATOR = regex(r'\n').desc('line separator')
 WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'(?=\n|$)')
@@ -100,13 +119,19 @@ VARIANT = variant(
     GRAPHEME |
     DIVIDER
 )
+DETERMINATIVE_SEQUENCE = determinative(sequence(VARIANT, VARIANT))
 WORD = seq(
     JOINER.many().concat(),
-    VARIANT,
-    (JOINER.many().concat() + VARIANT).many(),
+    (
+        sequence(VARIANT, DETERMINATIVE_SEQUENCE | VARIANT) |
+        sequence(DETERMINATIVE_SEQUENCE, DETERMINATIVE_SEQUENCE | VARIANT, 1)
+    ),
     JOINER.many().concat(),
     FLAG
 ).map(pydash.flatten_deep).concat().desc('word')
+LONE_DETERMINATIVE = determinative(
+    VARIANT + (JOINER.many().concat() + VARIANT).many().concat()
+).desc('lone determinative')
 
 
 CONTROL_LINE = seq(
@@ -123,11 +148,41 @@ TEXT_LINE = seq(
         COLUMN.map(Token) |
         DIVIDER.map(Token) |
         COMMENTARY_PROTOCOL.map(Token) |
-        LACUNA.map(Token) |
         SHIFT.map(LanguageShift) |
         WORD.map(Word) |
+        seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(
+            lambda values: [
+                Token(values[0]),
+                LoneDeterminative.of_value(
+                    values[1], Partial(True, True)
+                ),
+                Token(values[2])
+            ]
+        ) |
+        seq(LACUNA, LONE_DETERMINATIVE).map(
+            lambda values: [
+                Token(values[0]),
+                LoneDeterminative.of_value(
+                    values[1], Partial(True, False)
+                )
+            ]
+        ) |
+        seq(LONE_DETERMINATIVE, LACUNA).map(
+            lambda values: [
+                LoneDeterminative.of_value(
+                    values[0], Partial(False, True)
+                ),
+                Token(values[1])
+            ]
+        ) |
+        LONE_DETERMINATIVE.map(
+            lambda value: LoneDeterminative.of_value(
+                value, Partial(False, False)
+            )
+        ) |
+        LACUNA.map(Token) |
         OMISSION.map(Token)
-    ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten)
+    ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten_deep)
 ).combine(TextLine.of_iterable)
 
 

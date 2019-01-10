@@ -4,7 +4,9 @@ from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word, LanguageShift
+from ebl.text.token import (
+    Token, Word, LanguageShift, LoneDeterminative, Partial
+)
 
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
@@ -144,6 +146,43 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
         TextLine('2.', (
             Word('[a?-ku'),
             Word('(x)]')
+        )),
+    ]),
+    (
+        ('1. [...] {bu} [...]\n'
+         '2. [...]{bu} [...]\n'
+         '3. [...] {bu}[...]\n'
+         '4. [...]{bu}[...]'),
+        [
+            TextLine('1.', (
+                Token('[...]'),
+                LoneDeterminative.of_value('{bu}', Partial(False, False)),
+                Token('[...]')
+            )),
+            TextLine('2.', (
+                Token('[...]'),
+                LoneDeterminative.of_value('{bu}', Partial(True, False)),
+                Token('[...]')
+            )),
+            TextLine('3.', (
+                Token('[...]'),
+                LoneDeterminative.of_value('{bu}', Partial(False, True)),
+                Token('[...]')
+            )),
+            TextLine('4.', (
+                Token('[...]'),
+                LoneDeterminative.of_value('{bu}', Partial(True, True)),
+                Token('[...]')
+            ))
+        ]
+    ),
+    ('1. {bu}-nu {bu-bu}-nu\n2. {bu-bu}', [
+        TextLine('1.', (
+            Word('{bu}-nu'),
+            Word('{bu-bu}-nu')
+        )),
+        TextLine('2.', (
+            LoneDeterminative.of_value('{bu-bu}', Partial(False, False)),
         )),
     ]),
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
