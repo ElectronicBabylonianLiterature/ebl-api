@@ -6,7 +6,9 @@ from ebl.text.atf import Atf
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.language import Language
 from ebl.text.line import Line, ControlLine, EmptyLine, TextLine
-from ebl.text.token import Token, Word, LanguageShift
+from ebl.text.token import (
+    Token, Word, LanguageShift, Partial, LoneDeterminative
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -82,6 +84,13 @@ class Text:
             ),
             'LanguageShift': lambda data: LanguageShift(
                 data['value']
+            ),
+            'LoneDeterminative': lambda data: LoneDeterminative(
+                data['value'],
+                Language[data['language']],
+                data['normalized'],
+                tuple(data['uniqueLemma']),
+                Partial(*data['partial'])
             )
         }
 

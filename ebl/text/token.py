@@ -86,6 +86,30 @@ class Word(Token):
         }
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class LoneDeterminative(Word):
+    _partial: Partial = Partial(False, False)
+
+    @staticmethod
+    def of_value(value: str, partial: Partial) -> 'LoneDeterminative':
+        return LoneDeterminative(value, partial=partial)
+
+    @property
+    def lemmatizable(self) -> bool:
+        return False
+
+    @property
+    def partial(self) -> Partial:
+        return self._partial
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'LoneDeterminative',
+            'partial': list(self.partial)
+        }
+
+
 @attr.s(frozen=True)
 class LanguageShift(Token):
     _normalization_shift = '%n'

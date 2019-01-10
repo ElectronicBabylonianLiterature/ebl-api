@@ -5,7 +5,11 @@ from ebl.text.lemmatization import (
 )
 from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
 from ebl.text.token import (
-    UniqueLemma, Token, Word, LanguageShift, DEFAULT_NORMALIZED
+    UniqueLemma,
+    Token, Word,
+    LanguageShift,
+    DEFAULT_NORMALIZED,
+    LoneDeterminative
 )
 
 
@@ -51,16 +55,18 @@ def test_line_of_iterable(code, language, normalized):
     tokens = [
         Word('first'),
         LanguageShift(code), Word('second'),
-        LanguageShift('%sb'), Word('third')
+        LanguageShift('%sb'), LoneDeterminative('{third}')
     ]
     expected_tokens = (
         Word('first', DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
         LanguageShift(code), Word('second', language, normalized),
-        LanguageShift('%sb'), Word('third', Language.AKKADIAN, False))
+        LanguageShift('%sb'), LoneDeterminative(
+            '{third}', Language.AKKADIAN, False
+        ))
     line = TextLine.of_iterable(prefix, tokens)
 
     assert line == TextLine(prefix, expected_tokens)
-    assert line.atf == f'1. first {code} second %sb third'
+    assert line.atf == f'1. first {code} second %sb {{third}}'
 
 
 @pytest.mark.parametrize("word,token,expected", [

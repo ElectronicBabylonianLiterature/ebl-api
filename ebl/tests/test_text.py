@@ -4,8 +4,9 @@ from ebl.text.lemmatization import (
     Lemmatization, LemmatizationToken, LemmatizationError
 )
 from ebl.text.atf import Atf
+from ebl.text.language import Language
 from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
-from ebl.text.text import Text
+from ebl.text.text import Text, LoneDeterminative, LanguageShift, Partial
 from ebl.text.token import Word, Token, UniqueLemma
 
 
@@ -138,3 +139,24 @@ def test_update_lemmatization_wrong_lines():
 ])
 def test_merge(old, new, expected):
     assert old.merge(new).to_dict() == expected.to_dict()
+
+
+@pytest.mark.parametrize('lines', [
+    [EmptyLine()],
+    [ControlLine.of_single('$', Token(' single ruling'))],
+    [
+        TextLine.of_iterable('1.', [
+            Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
+            LanguageShift('%sux'),
+            LoneDeterminative(
+                '{nu}',
+                language=Language.SUMERIAN,
+                partial=Partial(False, True)
+            )
+        ])
+    ]
+])
+def test_from_dict(lines):
+    assert Text.from_dict({
+        'lines': [line.to_dict() for line in lines]
+    }) == Text.of_iterable(lines)
