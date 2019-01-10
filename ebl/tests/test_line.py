@@ -232,6 +232,16 @@ def test_update_lemmatization_wrong_lenght():
             Word('mu'),
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ])
+    ), (
+        TextLine.of_iterable('1.', [
+            Token('{('),
+        ]),
+        TextLine.of_iterable('1.', [
+            DocumentOrientedGloss('{('),
+        ]),
+        TextLine.of_iterable('1.', [
+            DocumentOrientedGloss('{('),
+        ])
     )
 ])
 def test_merge(old, new, expected):

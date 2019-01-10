@@ -181,9 +181,10 @@ class TextLine(Line):
 
     def merge(self, other: 'Line') -> 'Line':
         def merge_tokens():
-            return Merger(lambda token: token.value).merge(
-                self.content, other.content
-            )
+            def map_(token):
+                return f'{type(token)}°{token.value}'
+
+            return Merger(map_).merge(self.content, other.content)
 
         return (
             TextLine.of_iterable(other.prefix, merge_tokens())
