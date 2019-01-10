@@ -9,7 +9,8 @@ from ebl.text.token import (
     Token, Word,
     LanguageShift,
     DEFAULT_NORMALIZED,
-    LoneDeterminative
+    LoneDeterminative,
+    DocumentOrientedGloss
 )
 
 
@@ -76,7 +77,7 @@ def test_line_of_iterable(code, language, normalized):
     (Word('-mu-bu-'), Token('[...]'), '-mu-bu-'),
     (Word('-mu-bu-'), LanguageShift('%sux'), ' -mu-bu- ')
 ])
-def test_text_line_atf(word, token, expected):
+def test_text_line_atf_partials(word, token, expected):
     line = TextLine.of_iterable('1.', [
         token,
         word,
@@ -89,6 +90,16 @@ def test_text_line_atf_partial_start():
     word = Word('-mu')
     line = TextLine.of_iterable('1.', [word])
     assert line.atf == f'{line.prefix} {word.value}'
+
+
+def test_text_line_atf_gloss():
+    line = TextLine.of_iterable('1.', [
+        DocumentOrientedGloss('{('),
+        Word('mu'),
+        Word('bu'),
+        DocumentOrientedGloss(')}')
+    ])
+    assert line.atf == f'{line.prefix} {{(mu bu)}}'
 
 
 def test_line_of_single():
@@ -105,10 +116,19 @@ def test_line_of_single():
         'prefix': '@',
         'content': [Token('obverse').to_dict()]
     }),
-    (TextLine.of_iterable('1.', [Word('bu')]), {
+    (TextLine.of_iterable(
+        '1.',
+        [
+            DocumentOrientedGloss('{('),
+            Word('bu')
+        ]
+    ), {
         'type': 'TextLine',
         'prefix': '1.',
-        'content': [Word('bu').to_dict()]
+        'content': [
+            DocumentOrientedGloss('{(').to_dict(),
+            Word('bu').to_dict()
+        ]
     }),
     (EmptyLine(), {
         'type': 'EmptyLine',

@@ -7,13 +7,28 @@ from ebl.text.atf import AtfSyntaxError
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
 from ebl.text.token import (
-    Token, Word, LanguageShift, LoneDeterminative, Partial
+    Token,
+    Word,
+    LanguageShift,
+    LoneDeterminative,
+    Partial,
+    DocumentOrientedGloss
 )
+
+
+def sequence(prefix, part, joiner, min_=None):
+    joiner_and_part = joiner + part
+    tail = (
+        joiner_and_part.many().concat()
+        if min_ is None
+        else joiner_and_part.at_least(min_).concat()
+    )
+    return prefix + tail
 
 
 def variant(parser):
     variant_separator = string('/').desc('variant separator')
-    return parser + (variant_separator + parser).many().concat()
+    return sequence(parser, parser, variant_separator)
 
 
 def determinative(parser):
@@ -28,14 +43,8 @@ def determinative(parser):
     )
 
 
-def sequence(prefix, part, min_=None):
-    joiner_and_part = JOINER.many().concat() + part
-    tail = (
-        joiner_and_part.many().concat()
-        if min_ is None
-        else joiner_and_part.at_least(min_).concat()
-    )
-    return prefix + tail
+def value_sequence(prefix, part, min_=None):
+    return sequence(prefix, part, JOINER.many().concat(), min_)
 
 
 OMISSION = string_from(
@@ -131,12 +140,14 @@ VARIANT = variant(
     GRAPHEME |
     DIVIDER
 )
-DETERMINATIVE_SEQUENCE = determinative(sequence(VARIANT, VARIANT))
+DETERMINATIVE_SEQUENCE = determinative(value_sequence(VARIANT, VARIANT))
 WORD = seq(
     JOINER.many().concat(),
     (
-        sequence(VARIANT, DETERMINATIVE_SEQUENCE | VARIANT) |
-        sequence(DETERMINATIVE_SEQUENCE, DETERMINATIVE_SEQUENCE | VARIANT, 1)
+        value_sequence(VARIANT, DETERMINATIVE_SEQUENCE | VARIANT) |
+        value_sequence(
+            DETERMINATIVE_SEQUENCE, DETERMINATIVE_SEQUENCE | VARIANT, 1
+        )
     ),
     JOINER.many().concat(),
     FLAG
@@ -160,7 +171,7 @@ TEXT_LINE = seq(
         COLUMN.map(Token) |
         DIVIDER.map(Token) |
         COMMENTARY_PROTOCOL.map(Token) |
-        DOCUMENT_ORIENTED_GLOSS.map(Token) |
+        DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
         SHIFT.map(LanguageShift) |
         WORD.map(Word) |
         seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(

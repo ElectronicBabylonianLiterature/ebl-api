@@ -7,7 +7,7 @@ from ebl.text.atf import Atf
 from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import (
-    Token, Word, LanguageShift, DEFAULT_NORMALIZED
+    Token, Word, LanguageShift, DocumentOrientedGloss, Side, DEFAULT_NORMALIZED
 )
 
 
@@ -97,6 +97,11 @@ class TextLine(Line):
                 word.set_language(self._language, self._normalized)
             self.visit_token(word_with_language)
 
+        def visit_document_oriented_gloss(
+                self, gloss: DocumentOrientedGloss
+        ) -> None:
+            self.visit_token(gloss)
+
     class AtfVisitor:
         def __init__(self, prefix: str):
             self._parts: List[str] = [prefix]
@@ -126,6 +131,22 @@ class TextLine(Line):
 
             self._parts.append(word.value)
             self._set_omit(word.partial.end)
+
+        def visit_document_oriented_gloss(
+                self, gloss: DocumentOrientedGloss
+        ) -> None:
+            def left():
+                self._append_separator()
+                self._parts.append(gloss.value)
+                self._set_omit(True)
+
+            def right():
+                if self._force_separator:
+                    self._append_separator()
+                self._parts.append(gloss.value)
+                self._set_force()
+
+            {Side.LEFT: left, Side.RIGHT: right}[gloss.side]()
 
         def _append_separator(self) -> None:
             self._parts.append(WORD_SEPARATOR)

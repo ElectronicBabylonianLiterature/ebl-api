@@ -2,13 +2,14 @@ import pytest
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import (
-    Token, LanguageShift, DEFAULT_NORMALIZED
+    Token, LanguageShift, DocumentOrientedGloss, Side, DEFAULT_NORMALIZED
 )
 
 
 TOKENS = [
     Token('...'),
-    LanguageShift('%sux')
+    LanguageShift('%sux'),
+    DocumentOrientedGloss('{(')
 ]
 
 
@@ -62,6 +63,29 @@ def test_language_shift(value, expected_language, normalized):
     assert hash(shift) != hash(other)
 
     assert shift != Token(value)
+
+
+def test_document_oriented_gloss():
+    value = '{('
+    gloss = DocumentOrientedGloss(value)
+    equal = DocumentOrientedGloss(value)
+    other = DocumentOrientedGloss(')}')
+
+    assert gloss.value == value
+    assert gloss.side == Side.LEFT
+    assert gloss.lemmatizable is False
+    assert gloss.to_dict() == {
+        'type': 'DocumentOrientedGloss',
+        'value': gloss.value
+    }
+
+    assert other.side == Side.RIGHT
+
+    assert gloss == equal
+    assert hash(gloss) == hash(equal)
+
+    assert gloss != other
+    assert hash(gloss) != hash(other)
 
 
 @pytest.mark.parametrize("token", TOKENS)

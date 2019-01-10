@@ -1,4 +1,5 @@
 import collections
+from enum import Enum, auto
 from typing import Any, Tuple, NewType
 import attr
 from ebl.text.language import Language, DEFAULT_LANGUAGE
@@ -10,6 +11,11 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
 UniqueLemma = NewType('UniqueLemma', str)
 Partial = collections.namedtuple('Partial', 'start end')
+
+
+class Side(Enum):
+    LEFT = auto()
+    RIGHT = auto()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -131,4 +137,20 @@ class LanguageShift(Token):
             'type': 'LanguageShift',
             'normalized': self.normalized,
             'language': self.language.name
+        }
+
+
+@attr.s(frozen=True)
+class DocumentOrientedGloss(Token):
+    def accept(self, visitor: Any) -> None:
+        visitor.visit_document_oriented_gloss(self)
+
+    @property
+    def side(self) -> Side:
+        return Side.LEFT if self.value == '{(' else Side.RIGHT
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'DocumentOrientedGloss'
         }

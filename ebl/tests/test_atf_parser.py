@@ -5,7 +5,12 @@ from ebl.text.language import Language
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
 from ebl.text.token import (
-    Token, Word, LanguageShift, LoneDeterminative, Partial
+    Token,
+    Word,
+    LanguageShift,
+    LoneDeterminative,
+    Partial,
+    DocumentOrientedGloss
 )
 
 
@@ -198,9 +203,17 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1. {(he-pi₂ eš-šu₂)}\n2. {(NU SUR)}', [
         TextLine('1.', (
-            Token('{('), Word('he-pi₂'), Word('eš-šu₂'), Token(')}')
+            DocumentOrientedGloss('{('),
+            Word('he-pi₂'),
+            Word('eš-šu₂'),
+            DocumentOrientedGloss(')}')
         )),
-        TextLine('2.', (Token('{('), Word('NU'), Word('SUR'), Token(')}')))
+        TextLine('2.', (
+            DocumentOrientedGloss('{('),
+            Word('NU'),
+            Word('SUR'),
+            DocumentOrientedGloss(')}')
+        ))
     ])
 ])
 def test_parse_atf(line, expected_tokenization):

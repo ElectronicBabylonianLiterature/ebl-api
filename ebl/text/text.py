@@ -7,7 +7,12 @@ from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.language import Language
 from ebl.text.line import Line, ControlLine, EmptyLine, TextLine
 from ebl.text.token import (
-    Token, Word, LanguageShift, Partial, LoneDeterminative
+    Token,
+    Word,
+    LanguageShift,
+    Partial,
+    LoneDeterminative,
+    DocumentOrientedGloss
 )
 
 
@@ -91,6 +96,9 @@ class Text:
                 data['normalized'],
                 tuple(data['uniqueLemma']),
                 Partial(*data['partial'])
+            ),
+            'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
+                data['value']
             )
         }
 
