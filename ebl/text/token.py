@@ -2,11 +2,12 @@ import collections
 from enum import Enum, auto
 from typing import Any, Tuple, NewType
 import attr
+import pydash
+import ebl.text.atf
 from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 
 
-JOINER = '-'
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
 UniqueLemma = NewType('UniqueLemma', str)
@@ -53,13 +54,20 @@ class Word(Token):
 
     @property
     def lemmatizable(self) -> bool:
-        return self.language.lemmatizable and not self.normalized
+        return (
+            self.language.lemmatizable and
+            not self.normalized and
+            ebl.text.atf.VARIANT_SEPARATOR not in self.value and
+            ebl.text.atf.UNCLEAR_SIGN not in self.value and
+            ebl.text.atf.UNIDENTIFIED_SIGN not in self.value and
+            not pydash.some(self.partial)
+        )
 
     @property
     def partial(self) -> Partial:
         return Partial(
-            self.value.startswith(JOINER),
-            self.value.endswith(JOINER)
+            self.value.startswith(ebl.text.atf.JOINER),
+            self.value.endswith(ebl.text.atf.JOINER)
         )
 
     def set_language(self, language: Language, normalized: bool) -> 'Word':
@@ -69,9 +77,13 @@ class Word(Token):
             self,
             lemma: LemmatizationToken
     ) -> 'Word':
+        lemma_is_compatible = (
+            (self.lemmatizable and lemma.unique_lemma is not None) or
+            lemma.unique_lemma == tuple()
+        )
         if not self.value == lemma.value:
             raise LemmatizationError()
-        elif self.lemmatizable and lemma.unique_lemma is not None:
+        elif lemma_is_compatible:
             return attr.evolve(self, unique_lemma=lemma.unique_lemma)
         elif lemma.unique_lemma is None:
             return self

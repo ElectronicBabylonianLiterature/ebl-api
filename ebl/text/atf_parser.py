@@ -3,7 +3,7 @@ import pydash
 from parsy import (
     string, regex, seq, ParseError, char_from, string_from, decimal_digit
 )
-from ebl.text.atf import AtfSyntaxError
+import ebl.text.atf
 from ebl.text.line import EmptyLine, TextLine, ControlLine
 from ebl.text.text import Text
 from ebl.text.token import (
@@ -27,7 +27,9 @@ def sequence(prefix, part, joiner, min_=None):
 
 
 def variant(parser):
-    variant_separator = string('/').desc('variant separator')
+    variant_separator = string(
+        ebl.text.atf.VARIANT_SEPARATOR
+    ).desc('variant separator')
     return sequence(parser, parser, variant_separator)
 
 
@@ -56,7 +58,7 @@ SINGLE_DOT = regex(r'(?<!\.)\.(?!\.)')
 JOINER = (
     OMISSION |
     LINQUISTIC_GLOSS |
-    string_from('-', '+') |
+    string_from(ebl.text.atf.JOINER, '+') |
     SINGLE_DOT
 ).desc('joiner')
 FLAG = char_from('!?*#').many().concat().desc('flag')
@@ -79,8 +81,9 @@ COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
 LACUNA = regex(r'\[?\(?\.\.\.\)?]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
 UNKNOWN = (
-    char_from('Xx') +
-    FLAG
+    string_from(
+        ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN
+    ) + FLAG
 ).desc('unclear or unindentified')
 SUB_INDEX = regex(r'[₀-₉ₓ]+').desc('subindex')
 INLINE_BROKEN = (
@@ -225,4 +228,4 @@ def parse_atf(atf: str):
         return ATF.parse(atf)
     except ParseError as error:
         line_number = int(error.line_info().split(':')[0]) + 1
-        raise AtfSyntaxError(line_number)
+        raise ebl.text.atf.AtfSyntaxError(line_number)

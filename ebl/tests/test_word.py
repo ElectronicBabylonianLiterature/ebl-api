@@ -42,7 +42,6 @@ def test_word(language, normalized, unique_lemma):
         Word('other value', language, not normalized, unique_lemma)
 
     assert word.value == value
-    assert word.lemmatizable is (language.lemmatizable and not normalized)
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
@@ -67,6 +66,21 @@ def test_word(language, normalized, unique_lemma):
     assert word != Token(value)
 
 
+@pytest.mark.parametrize("word,expected", [
+    (Word('un'), True),
+    (Word('un', normalized=True), False),
+    (Word('un', language=Language.SUMERIAN), False),
+    (Word('un', language=Language.EMESAL), False),
+    (Word('un-x'), False),
+    (Word('X-un'), False),
+    (Word('un-'), False),
+    (Word('-un'), False),
+    (Word('un/ia'), False)
+])
+def test_lemmatizable(word, expected):
+    assert word.lemmatizable == expected
+
+
 def test_set_language():
     value = 'value'
     unique_lemma = (UniqueLemma('aklu I'), )
@@ -86,9 +100,22 @@ def test_set_unique_lemma():
     assert word.set_unique_lemma(lemma) == expected
 
 
+def test_set_unique_lemma_empty():
+    word = Word('bu', Language.SUMERIAN)
+    lemma = LemmatizationToken('bu', tuple())
+    expected = Word('bu', Language.SUMERIAN)
+
+    assert word.set_unique_lemma(lemma) == expected
+
+
 @pytest.mark.parametrize("word", [
     Word('mu'),
-    Word('bu', language=Language.SUMERIAN)
+    Word('bu', language=Language.SUMERIAN),
+    Word('bu-x', language=Language.SUMERIAN),
+    Word('X-bu', language=Language.SUMERIAN),
+    Word('mu/bu', language=Language.SUMERIAN),
+    Word('-bu', language=Language.SUMERIAN),
+    Word('bu-', language=Language.SUMERIAN)
 ])
 def test_set_unique_lemma_invalid(word):
     lemma = LemmatizationToken('bu', ('nu I', ))

@@ -5,6 +5,12 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
+JOINER = '-'
+VARIANT_SEPARATOR = '/'
+UNCLEAR_SIGN = 'x'
+UNIDENTIFIED_SIGN = 'X'
+
+
 ATF_SPEC = {
     'line_number': r'^[^\.]+\.([^\.]+\.)?',
     'shift': r'%\w+',
@@ -35,11 +41,11 @@ ATF_SPEC = {
     'grapheme': r'\|?(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|?',
     'number': r'\d+',
     'variant': r'([^/]+)(?:/([^/]+))+',
-    'unclear': 'x',
-    'unindentified': 'X',
-    'joiner': '-',
+    'unclear': UNCLEAR_SIGN,
+    'unindentified': UNIDENTIFIED_SIGN,
+    'joiner': JOINER,
     'word_separator': ' ',
-    'variant_separator': '/'
+    'variant_separator': VARIANT_SEPARATOR
 }
 
 
