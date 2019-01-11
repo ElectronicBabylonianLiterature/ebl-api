@@ -66,7 +66,7 @@ MODIFIER = (
     string('@') +
     (char_from('cfgstnzkrhv') | decimal_digit.at_least(1).concat())
 ).many().concat()
-WORD_SEPARATOR = string(' ').desc('word separtor')
+WORD_SEPARATOR = string(ebl.text.atf.WORD_SEPARATOR).desc('word separtor')
 LINE_SEPARATOR = regex(r'\n').desc('line separator')
 WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'(?=\n|$)')
 LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')

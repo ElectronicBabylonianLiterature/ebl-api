@@ -5,6 +5,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
+WORD_SEPARATOR = ' '
 JOINER = '-'
 VARIANT_SEPARATOR = '/'
 UNCLEAR_SIGN = 'x'
@@ -44,7 +45,7 @@ ATF_SPEC = {
     'unclear': UNCLEAR_SIGN,
     'unindentified': UNIDENTIFIED_SIGN,
     'joiner': JOINER,
-    'word_separator': ' ',
+    'word_separator': WORD_SEPARATOR,
     'variant_separator': VARIANT_SEPARATOR
 }
 
