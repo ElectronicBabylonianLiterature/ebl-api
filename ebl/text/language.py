@@ -29,6 +29,7 @@ class Language(Enum):
             '%ob': Language.AKKADIAN,
             '%sux': Language.SUMERIAN,
             '%es': Language.EMESAL,
+            '%e': Language.EMESAL,
             '%n': Language.AKKADIAN
         }
         return codes.get(code, cls.UNKNOWN)
