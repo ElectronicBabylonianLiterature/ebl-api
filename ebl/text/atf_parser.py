@@ -161,7 +161,7 @@ LONE_DETERMINATIVE = determinative(
 
 
 CONTROL_LINE = seq(
-    string_from('=:', '$', '@', '&', '#'),
+    regex(r'^(=:|\$|@|&|#)', re.RegexFlag.MULTILINE),
     regex(r'.*').map(Token)
 ).combine(ControlLine.of_single)
 EMPTY_LINE = regex(

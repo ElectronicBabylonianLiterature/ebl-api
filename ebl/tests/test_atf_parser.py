@@ -259,9 +259,13 @@ def test_parse_atf_language_shifts(code, expected_language):
     assert parse_atf(line) == expected
 
 
-def test_invalid_atf():
+@pytest.mark.parametrize('atf,line_number', [
+    ('1. x\nthis is not valid', 2),
+    ("1'. ($____$) x [...]", 1)
+])
+def test_invalid_atf(atf, line_number):
     with pytest.raises(AtfSyntaxError,
                        message="Line 1 is invalid.") as excinfo:
-        parse_atf('1. x\nthis is not valid')
+        parse_atf(atf)
 
-    assert excinfo.value.line_number == 2
+    assert excinfo.value.line_number == line_number
