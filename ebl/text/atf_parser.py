@@ -78,7 +78,7 @@ DIVIDER = (
     FLAG
 ).desc('divider') << WORD_SEPARATOR_OR_EOL
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
-LACUNA = regex(r'\[?\(?\.\.\.\)?]?').desc('lacuna')
+LACUNA = regex(r'\[?\(?\.\.\.\)?\]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
 UNKNOWN = (
     string_from(
