@@ -59,3 +59,8 @@ def test_word(atf, expected):
 ])
 def test_lone_determinative(atf, expected):
     assert LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf) == expected
+
+
+def test_invalid():
+    with pytest.raises(Exception):
+        WORD.parse('sal/: šim')

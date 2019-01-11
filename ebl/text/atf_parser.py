@@ -76,7 +76,7 @@ DIVIDER = (
     string_from('|', ':\'', ':"', ':.', '::', ':?', ':', ';', '/') +
     MODIFIER +
     FLAG
-).desc('divider') << WORD_SEPARATOR_OR_EOL
+).desc('divider')
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
 LACUNA = regex(r'\[?\(?\.\.\.\)?\]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
@@ -172,7 +172,7 @@ TEXT_LINE = seq(
     (
         TABULATION.map(Token) |
         COLUMN.map(Token) |
-        DIVIDER.map(Token) |
+        (DIVIDER << WORD_SEPARATOR_OR_EOL).map(Token) |
         COMMENTARY_PROTOCOL.map(Token) |
         DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
         SHIFT.map(LanguageShift) |

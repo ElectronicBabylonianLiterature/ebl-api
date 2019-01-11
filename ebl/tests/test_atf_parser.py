@@ -214,6 +214,9 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Word('SUR'),
             DocumentOrientedGloss(')}')
         ))
+    ]),
+    ('1.  sal/: šim ', [
+        TextLine('1.', (Word('sal/:'), Word('šim')))
     ])
 ])
 def test_parse_atf(line, expected_tokenization):
