@@ -52,7 +52,11 @@ def value_sequence(prefix, part, min_=None):
 def true_joiner():
     def make_expression(joiner):
         escaped = re.escape(joiner)
-        return f'(?<!{escaped})({escaped})(?!{escaped})'
+        return (
+            f'((?<=\\.\\.\\.)|(?<!{escaped}))'
+            f'({escaped})'
+            f'((?!{escaped})|(?=\\.\\.\\.))'
+        )
 
     joiners = '|'.join(
         make_expression(joiner)

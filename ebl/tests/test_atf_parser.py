@@ -153,6 +153,16 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Word('(x)]')
         )),
     ]),
+    ('1. [...+ku....] [....ku+...]', [
+        TextLine('1.', (
+            Token('[...'),
+            Word('+ku.'),
+            Token('...]'),
+            Token('[...'),
+            Word('.ku+'),
+            Token('...]')
+        ))
+    ]),
     (
         ('1. [...] {bu} [...]\n'
          '2. [...]{bu} [...]\n'
