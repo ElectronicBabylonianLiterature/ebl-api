@@ -49,6 +49,19 @@ def value_sequence(prefix, part, min_=None):
     return sequence(prefix, part, JOINER.many().concat(), min_)
 
 
+def true_joiner():
+    def make_expression(joiner):
+        escaped = re.escape(joiner)
+        return f'(?<!{escaped})({escaped})(?!{escaped})'
+
+    joiners = '|'.join(
+        make_expression(joiner)
+        for joiner
+        in ebl.text.atf.JOINERS
+    )
+    return regex(joiners)
+
+
 OMISSION = string_from(
     '<<', '<(', '<', '>>', ')>', '>'
 ).desc('omission or removal')
@@ -58,8 +71,7 @@ SINGLE_DOT = regex(r'(?<!\.)\.(?!\.)')
 JOINER = (
     OMISSION |
     LINQUISTIC_GLOSS |
-    string_from(ebl.text.atf.JOINER, '+') |
-    SINGLE_DOT
+    true_joiner()
 ).desc('joiner')
 FLAG = char_from('!?*#').many().concat().desc('flag')
 MODIFIER = (

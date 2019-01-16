@@ -6,7 +6,8 @@ Atf = NewType('Atf', str)
 
 
 WORD_SEPARATOR = ' '
-JOINER = '-'
+HYPHEN = '-'
+JOINERS = [HYPHEN, '+', '.']
 VARIANT_SEPARATOR = '/'
 UNCLEAR_SIGN = 'x'
 UNIDENTIFIED_SIGN = 'X'
@@ -44,7 +45,7 @@ ATF_SPEC = {
     'variant': r'([^/]+)(?:/([^/]+))+',
     'unclear': UNCLEAR_SIGN,
     'unindentified': UNIDENTIFIED_SIGN,
-    'joiner': JOINER,
+    'joiner': HYPHEN,
     'word_separator': WORD_SEPARATOR,
     'variant_separator': VARIANT_SEPARATOR
 }

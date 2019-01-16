@@ -66,8 +66,16 @@ class Word(Token):
     @property
     def partial(self) -> Partial:
         return Partial(
-            self.value.startswith(ebl.text.atf.JOINER),
-            self.value.endswith(ebl.text.atf.JOINER)
+            any(
+                self.value.startswith(joiner)
+                for joiner
+                in ebl.text.atf.JOINERS
+            ),
+            any(
+                self.value.endswith(joiner)
+                for joiner
+                in ebl.text.atf.JOINERS
+            )
         )
 
     def set_language(self, language: Language, normalized: bool) -> 'Word':

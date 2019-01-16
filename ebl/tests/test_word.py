@@ -75,6 +75,10 @@ def test_word(language, normalized, unique_lemma):
     (Word('X-un'), False),
     (Word('un-'), False),
     (Word('-un'), False),
+    (Word('un.'), False),
+    (Word('.un'), False),
+    (Word('un+'), False),
+    (Word('+un'), False),
     (Word('un/ia'), False)
 ])
 def test_lemmatizable(word, expected):
@@ -108,17 +112,17 @@ def test_set_unique_lemma_empty():
     assert word.set_unique_lemma(lemma) == expected
 
 
-@pytest.mark.parametrize("word", [
-    Word('mu'),
-    Word('bu', language=Language.SUMERIAN),
-    Word('bu-x', language=Language.SUMERIAN),
-    Word('X-bu', language=Language.SUMERIAN),
-    Word('mu/bu', language=Language.SUMERIAN),
-    Word('-bu', language=Language.SUMERIAN),
-    Word('bu-', language=Language.SUMERIAN)
+@pytest.mark.parametrize("word,value", [
+    (Word('mu'), 'bu'),
+    (Word('bu', language=Language.SUMERIAN), 'bu'),
+    (Word('bu-x'), 'bu-x'),
+    (Word('X-bu'), 'X-bu'),
+    (Word('mu/bu'), 'mu/bu'),
+    (Word('-bu'), '-bu'),
+    (Word('bu-'), 'bu-')
 ])
-def test_set_unique_lemma_invalid(word):
-    lemma = LemmatizationToken('bu', ('nu I', ))
+def test_set_unique_lemma_invalid(word, value):
+    lemma = LemmatizationToken(value, ('nu I', ))
     with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)
 
@@ -127,7 +131,13 @@ def test_set_unique_lemma_invalid(word):
     (Word('mu-bu'), (False, False)),
     (Word('-mu-bu'), (True, False)),
     (Word('mu-bu-'), (False, True)),
-    (Word('-mu-bu-'), (True, True))
+    (Word('-mu-bu-'), (True, True)),
+    (Word('+mu+bu'), (True, False)),
+    (Word('mu+bu+'), (False, True)),
+    (Word('+mu+bu+'), (True, True)),
+    (Word('.mu.bu'), (True, False)),
+    (Word('mu.bu.'), (False, True)),
+    (Word('.mu.bu.'), (True, True))
 ])
 def test_partial(word, expected):
     assert word.partial == expected
