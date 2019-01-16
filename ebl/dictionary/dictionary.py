@@ -5,7 +5,7 @@ from ebl.mongo_repository import MongoRepository
 
 
 COLLECTION = 'words'
-LEMMA_SEARCH_LIMIT = 10
+LEMMA_SEARCH_LIMIT = 15
 
 
 def _create_substring_expression(query, _input):
