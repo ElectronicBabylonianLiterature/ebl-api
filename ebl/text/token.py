@@ -2,7 +2,6 @@ import collections
 from enum import Enum, auto
 from typing import Any, Tuple, NewType
 import attr
-import pydash
 import ebl.text.atf
 from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
