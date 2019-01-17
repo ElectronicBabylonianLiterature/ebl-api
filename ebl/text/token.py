@@ -85,18 +85,22 @@ class Word(Token):
             self,
             lemma: LemmatizationToken
     ) -> 'Word':
-        lemma_is_compatible = (
-            (self.lemmatizable and lemma.unique_lemma is not None) or
-            lemma.unique_lemma == tuple()
-        )
-        if not self.value == lemma.value:
-            raise LemmatizationError()
-        elif lemma_is_compatible:
-            return attr.evolve(self, unique_lemma=lemma.unique_lemma)
-        elif lemma.unique_lemma is None:
-            return self
+        if self.is_compatible(lemma):
+            return (
+                self
+                if lemma.unique_lemma is None
+                else attr.evolve(self, unique_lemma=lemma.unique_lemma)
+            )
         else:
             raise LemmatizationError()
+
+    def is_compatible(self, lemma: LemmatizationToken) -> bool:
+        value_is_compatible = self.value == lemma.value
+        lemma_is_compatible = (
+            (self.lemmatizable and lemma.unique_lemma is not None) or
+            lemma.unique_lemma in [tuple(), None]
+        )
+        return value_is_compatible and lemma_is_compatible
 
     def accept(self, visitor: Any) -> None:
         visitor.visit_word(self)
