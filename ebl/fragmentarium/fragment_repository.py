@@ -6,7 +6,7 @@ from ebl.fragmentarium.fragment import Fragment
 
 
 COLLECTION = 'fragments'
-HAS_TRANSLITERATION = {'text.lines.0': {'$exists': True}}
+HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
 SAMPLE_SIZE_ONE = {
     '$sample': {
         'size': 1
