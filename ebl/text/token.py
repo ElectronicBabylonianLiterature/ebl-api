@@ -54,13 +54,18 @@ class Word(Token):
 
     @property
     def lemmatizable(self) -> bool:
+        non_lemmatizable_chars = [
+            ebl.text.atf.VARIANT_SEPARATOR,
+            ebl.text.atf.UNCLEAR_SIGN,
+            ebl.text.atf.UNIDENTIFIED_SIGN
+        ]
         return (
             self.language.lemmatizable and
             not self.normalized and
-            ebl.text.atf.VARIANT_SEPARATOR not in self.value and
-            ebl.text.atf.UNCLEAR_SIGN not in self.value and
-            ebl.text.atf.UNIDENTIFIED_SIGN not in self.value and
-            not pydash.some(self.partial)
+            all((char not in self.value)
+                for char
+                in non_lemmatizable_chars) and
+            not any(self.partial)
         )
 
     @property
