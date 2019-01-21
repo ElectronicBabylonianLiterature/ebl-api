@@ -43,7 +43,8 @@ def create_app(context):
 
     fragmentarium = Fragmentarium(context['fragment_repository'],
                                   context['changelog'],
-                                  sign_list)
+                                  sign_list,
+                                  context['dictionary'])
 
     words = WordsResource(context['dictionary'])
     word_search = WordSearch(context['dictionary'])

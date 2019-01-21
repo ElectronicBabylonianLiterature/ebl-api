@@ -223,7 +223,7 @@ def test_find_lemmas(fragment_repository,
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(another_lemmatized_fragment)
 
-    assert fragment_repository.find_lemmas('GI₆') == [('ginâ I', )]
+    assert fragment_repository.find_lemmas('GI₆') == [['ginâ I']]
 
 
 def test_find_lemmas_multiple(fragment_repository,
@@ -233,7 +233,7 @@ def test_find_lemmas_multiple(fragment_repository,
     fragment_repository.create(another_lemmatized_fragment)
 
     assert fragment_repository.find_lemmas('ana') ==\
-        [('ana II', ), ('ana I', )]
+        [['ana II'], ['ana I']]
 
 
 def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):

@@ -1,5 +1,4 @@
 import falcon
-from ebl.fragmentarium.fragment import Fragment
 
 
 def test_search_fragment(client, fragmentarium, fragment, user):

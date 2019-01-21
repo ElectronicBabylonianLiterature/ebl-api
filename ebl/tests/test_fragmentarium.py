@@ -264,3 +264,18 @@ def test_search_signs(transliteration,
     ] if lines else []
 
     assert result == expected
+
+
+def test_find_lemmas(fragmentarium,
+                     dictionary,
+                     lemmatized_fragment,
+                     word):
+    matching_word = {
+        **word,
+        '_id': 'ginâ I'
+    }
+    fragmentarium.create(lemmatized_fragment)
+    dictionary.create(word)
+    dictionary.create(matching_word)
+
+    assert fragmentarium.find_lemmas('GI₆') == [[matching_word]]

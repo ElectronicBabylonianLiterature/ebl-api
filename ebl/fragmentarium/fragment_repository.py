@@ -207,11 +207,11 @@ class MongoFragmentRepository():
         ])
 
         return [
-            tuple(
+            [
                 UniqueLemma(unique_lemma)
                 for unique_lemma
                 in result['_id']
-            )
+            ]
             for result
             in cursor
         ]

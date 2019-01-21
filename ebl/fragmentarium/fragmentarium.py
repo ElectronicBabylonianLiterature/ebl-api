@@ -8,10 +8,11 @@ REVISION = 'Revision'
 
 class Fragmentarium:
 
-    def __init__(self, repository, changelog, sign_list):
+    def __init__(self, repository, changelog, sign_list, dictionary):
         self._repository = repository
         self._changelog = changelog
         self._sign_list = sign_list
+        self._dictionary = dictionary
 
     def update_transliteration(self, number, transliteration, user):
         transliteration_with_signs =\
@@ -69,6 +70,17 @@ class Fragmentarium:
 
     def folio_pager(self, folio_name, folio_number, number):
         return self._repository.folio_pager(folio_name, folio_number, number)
+
+    def find_lemmas(self, word):
+        return [
+            [
+                self._dictionary.find(unique_lemma)
+                for unique_lemma
+                in result
+            ]
+            for result
+            in self._repository.find_lemmas(word)
+        ]
 
     def _create_changlelog(self, user, fragment, updated_fragment):
         self._changelog.create(
