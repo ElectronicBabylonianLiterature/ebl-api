@@ -60,14 +60,8 @@ def sign_list(sign_repository):
 
 
 class TestFragmentRepository(MongoFragmentRepository):
-    # Mongomock does not support $sample, or $concat so we need to
+    # Mongomock does not support $concat so we need to
     # stub the methods using them.
-    def find_random(self):
-        return [Fragment.from_dict(self._mongo_collection.find_one({}))]
-
-    def find_interesting(self):
-        return [Fragment.from_dict(self._mongo_collection.find_one({}))]
-
     def folio_pager(self, _folio_name, _folio_number, _number):
         return {
             'previous': {
@@ -271,6 +265,22 @@ def fragment():
             Folio('WGL', '1'),
             Folio('XXX', '1')
         ))
+    )
+
+
+@pytest.fixture
+def interesting_fragment():
+    return Fragment(
+        number='6',
+        cdli_number='cdli-6',
+        bm_id_number='bmId-6',
+        accession='accession-6',
+        museum='Museum',
+        collection='Collection',
+        publication='',
+        description='description',
+        script='NA',
+        hits=0
     )
 
 

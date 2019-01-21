@@ -8,11 +8,14 @@ from ebl.text.token import UniqueLemma
 
 COLLECTION = 'fragments'
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
-SAMPLE_SIZE_ONE = {
-    '$sample': {
-        'size': 1
+
+
+def sample_size_one():
+    return {
+        '$sample': {
+            'size': 1
+        }
     }
-}
 
 
 class MongoFragmentRepository():
@@ -67,7 +70,7 @@ class MongoFragmentRepository():
     def find_random(self):
         cursor = self._mongo_collection.aggregate([
             {'$match': HAS_TRANSLITERATION},
-            SAMPLE_SIZE_ONE
+            sample_size_one()
         ])
 
         return self._map_fragments(cursor)
@@ -84,7 +87,7 @@ class MongoFragmentRepository():
                     ]
                 }
             },
-            SAMPLE_SIZE_ONE
+            sample_size_one()
         ])
 
         return self._map_fragments(cursor)

@@ -25,6 +25,34 @@ def test_find(database, fragment_repository, fragment):
     assert fragment_repository.find(fragment.number) == fragment
 
 
+def find_random(database,
+                fragment_repository,
+                fragment,
+                transliterated_fragment):
+    database[COLLECTION].insert_many(
+        fragment.to_dict(),
+        transliterated_fragment.to_dict()
+    )
+
+    assert fragment_repository.find_random() ==\
+        [transliterated_fragment]
+
+
+def find_interesting(database,
+                     fragment_repository,
+                     fragment,
+                     transliterated_fragment,
+                     interesting_fragment):
+    database[COLLECTION].insert_many(
+        fragment.to_dict(),
+        transliterated_fragment.to_dict(),
+        interesting_fragment.to_dict()
+    )
+
+    assert fragment_repository.find_interesting(fragment.number) ==\
+        interesting_fragment
+
+
 def test_fragment_not_found(fragment_repository):
     with pytest.raises(NotFoundError):
         fragment_repository.find('unknown id')

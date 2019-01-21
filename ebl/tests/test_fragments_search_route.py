@@ -1,4 +1,5 @@
 import falcon
+from ebl.fragmentarium.fragment import Fragment
 
 
 def test_search_fragment(client, fragmentarium, fragment, user):
@@ -47,31 +48,31 @@ def test_search_signs(client,
 
 def test_random(client,
                 fragmentarium,
-                fragment,
+                transliterated_fragment,
                 user):
-    fragmentarium.create(fragment)
+    fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get(f'/fragments', params={
         'random': True
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment.to_dict_for(user)]
+    assert result.json == [transliterated_fragment.to_dict_for(user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
 def test_interesting(client,
                      fragmentarium,
-                     fragment,
+                     interesting_fragment,
                      user):
-    fragmentarium.create(fragment)
+    fragmentarium.create(interesting_fragment)
 
     result = client.simulate_get(f'/fragments', params={
         'interesting': True
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment.to_dict_for(user)]
+    assert result.json == [interesting_fragment.to_dict_for(user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
