@@ -24,6 +24,7 @@ from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.lemmatizations import LemmatizationResource
+from ebl.fragmentarium.lemma_search import LemmaSearch
 from ebl.fragmentarium.statistics import StatisticsResource
 from ebl.fragmentarium.transliterations import TransliterationResource
 
@@ -55,6 +56,7 @@ def create_app(context):
     transliteration = TransliterationResource(fragmentarium)
     files = FilesResource(context['files'])
     folio_pager = FolioPagerResource(fragmentarium)
+    lemma_search = LemmaSearch(fragmentarium)
 
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
@@ -62,6 +64,7 @@ def create_app(context):
     api.add_route('/fragments/{number}', fragments)
     api.add_route('/fragments/{number}/lemmatization', lemmatization)
     api.add_route('/fragments/{number}/transliteration', transliteration)
+    api.add_route('/lemmas', lemma_search)
     api.add_route('/images/{file_name}', files)
     api.add_route('/statistics', statistics)
     api.add_route(
