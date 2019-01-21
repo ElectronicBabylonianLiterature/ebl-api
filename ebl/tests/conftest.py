@@ -37,7 +37,7 @@ def changelog(database):
     return Changelog(database)
 
 
-class TestDictinary(MongoDictionary):
+class TestDictionary(MongoDictionary):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
     def search_lemma(self, _):
@@ -46,7 +46,7 @@ class TestDictinary(MongoDictionary):
 
 @pytest.fixture
 def dictionary(database):
-    return TestDictinary(database)
+    return TestDictionary(database)
 
 
 @pytest.fixture
@@ -81,8 +81,8 @@ def fragment_repository(database):
 
 
 @pytest.fixture
-def fragmentarium(fragment_repository, changelog, sign_list):
-    return Fragmentarium(fragment_repository, changelog, sign_list)
+def fragmentarium(fragment_repository, changelog, sign_list, dictionary):
+    return Fragmentarium(fragment_repository, changelog, sign_list, dictionary)
 
 
 class FakeFile:
