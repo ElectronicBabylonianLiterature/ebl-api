@@ -3,6 +3,7 @@ import pydash
 from ebl.mongo_repository import MongoRepository
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment import Fragment
+from ebl.text.token import UniqueLemma
 
 
 COLLECTION = 'fragments'
@@ -176,6 +177,41 @@ class MongoFragmentRepository():
             'previous': get_numbers(previous) or get_numbers(last),
             'next': get_numbers(next_) or get_numbers(first)
         }
+
+    def find_lemmas(self, word):
+        cursor = self._mongo_collection.aggregate([
+            {'$match': {
+                'text.lines.content': {
+                    '$elemMatch': {
+                        'value': word,
+                        'uniqueLemma': {'$ne': []}
+                    }
+                }
+            }},
+            {'$project': {'lines': '$text.lines'}},
+            {'$unwind': '$lines'},
+            {'$project': {'tokens': '$lines.content'}},
+            {'$unwind': '$tokens'},
+            {'$match': {
+                'tokens.value': word,
+                'tokens.uniqueLemma': {'$ne': []}
+            }},
+            {'$group': {
+                '_id': '$tokens.uniqueLemma',
+                'count': {'$sum': 1}
+            }},
+            {'$sort': {'count': -1}}
+        ])
+
+        return [
+            tuple(
+                UniqueLemma(unique_lemma)
+                for unique_lemma
+                in result['_id']
+            )
+            for result
+            in cursor
+        ]
 
     @staticmethod
     def _map_fragments(cursor):

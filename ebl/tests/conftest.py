@@ -391,6 +391,23 @@ def lemmatized_fragment(transliterated_fragment):
     )
 
 
+@pytest.fixture
+def another_lemmatized_fragment(transliterated_fragment):
+    return attr.evolve(
+        transliterated_fragment,
+        number='5',
+        text=Text((
+            TextLine("1'.", (
+                Word('GI₆', unique_lemma=("ginâ I", )),
+                Word('ana', unique_lemma=("ana II", )),
+                Word('ana', unique_lemma=("ana II", )),
+                Word('u₄-šu', unique_lemma=("ūsu I", ))
+            )),
+        )),
+        signs='MI DIŠ DIŠ UD ŠU'
+    )
+
+
 @pytest.fixture()
 def record():
     return Record((

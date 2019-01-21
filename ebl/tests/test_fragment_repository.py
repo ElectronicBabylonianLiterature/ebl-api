@@ -187,3 +187,27 @@ def test_find_transliterated(database,
 
     assert fragment_repository.find_transliterated() ==\
         [transliterated_fragment]
+
+
+def test_find_lemmas(fragment_repository,
+                     lemmatized_fragment,
+                     another_lemmatized_fragment):
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(another_lemmatized_fragment)
+
+    assert fragment_repository.find_lemmas('GI₆') == [('ginâ I', )]
+
+
+def test_find_lemmas_multiple(fragment_repository,
+                              lemmatized_fragment,
+                              another_lemmatized_fragment):
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(another_lemmatized_fragment)
+
+    assert fragment_repository.find_lemmas('ana') ==\
+        [('ana II', ), ('ana I', )]
+
+
+def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):
+    fragment_repository.create(lemmatized_fragment)
+    assert fragment_repository.find_lemmas('aklu') == []
