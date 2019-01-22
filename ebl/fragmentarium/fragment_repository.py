@@ -1,5 +1,7 @@
+import re
 from bson.code import Code
 import pydash
+from ebl.text.atf import ATF_SPEC
 from ebl.mongo_repository import MongoRepository
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment import Fragment
@@ -182,12 +184,30 @@ class MongoFragmentRepository():
         }
 
     def find_lemmas(self, word):
+        ignore = [
+            ATF_SPEC['lacuna']['begin'],
+            r'\(',
+            r'\)',
+            ATF_SPEC['lacuna']['end'],
+            ATF_SPEC['flags']['uncertainty'],
+            ATF_SPEC['flags']['collation'],
+            ATF_SPEC['flags']['damage'],
+            ATF_SPEC['flags']['correction']
+        ]
+        ignore_regex = f'({"|".join(ignore)})*'
+        word_regex = (
+            '^' +
+            ignore_regex +
+            ''.join([f"{re.escape(char)}{ignore_regex}" for char in word]) +
+            '$'
+        )
+
         cursor = self._mongo_collection.aggregate([
             {'$match': {
                 'text.lines.content': {
                     '$elemMatch': {
-                        'value': word,
-                        'uniqueLemma': {'$ne': []}
+                        'value': {'$regex': word_regex},
+                        'uniqueLemma.0': {'$exists': True}
                     }
                 }
             }},
@@ -196,8 +216,8 @@ class MongoFragmentRepository():
             {'$project': {'tokens': '$lines.content'}},
             {'$unwind': '$tokens'},
             {'$match': {
-                'tokens.value': word,
-                'tokens.uniqueLemma': {'$ne': []}
+                'tokens.value': {'$regex': word_regex},
+                'tokens.uniqueLemma.0': {'$exists': True}
             }},
             {'$group': {
                 '_id': '$tokens.uniqueLemma',
@@ -205,7 +225,6 @@ class MongoFragmentRepository():
             }},
             {'$sort': {'count': -1}}
         ])
-
         return [
             [
                 UniqueLemma(unique_lemma)

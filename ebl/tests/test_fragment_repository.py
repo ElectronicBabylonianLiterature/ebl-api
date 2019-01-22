@@ -1,3 +1,4 @@
+import attr
 import pytest
 from ebl.errors import NotFoundError
 from ebl.text.lemmatization import Lemmatization
@@ -234,6 +235,24 @@ def test_find_lemmas_multiple(fragment_repository,
 
     assert fragment_repository.find_lemmas('ana') ==\
         [['ana II'], ['ana I']]
+
+
+def test_find_lemmas_ignores(fragment_repository,
+                             transliterated_fragment):
+    fragment = attr.evolve(
+        transliterated_fragment,
+        number='5',
+        text=Text.of_iterable([
+            TextLine.of_iterable("1'.", [
+                Word('[(a[(n)]a#*?!)]', unique_lemma=("ana I", ))
+            ])
+        ]),
+        signs='DIŠ'
+    )
+    fragment_repository.create(fragment)
+
+    assert fragment_repository.find_lemmas('ana') ==\
+        [['ana I']]
 
 
 def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):
