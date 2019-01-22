@@ -237,8 +237,8 @@ def test_find_lemmas_multiple(fragment_repository,
         [['ana II'], ['ana I']]
 
 
-def test_find_lemmas_ignores(fragment_repository,
-                             transliterated_fragment):
+def test_find_lemmas_ignores_in_value(fragment_repository,
+                                      transliterated_fragment):
     fragment = attr.evolve(
         transliterated_fragment,
         number='5',
@@ -252,6 +252,14 @@ def test_find_lemmas_ignores(fragment_repository,
     fragment_repository.create(fragment)
 
     assert fragment_repository.find_lemmas('ana') ==\
+        [['ana I']]
+
+
+def test_find_lemmas_ignores_in_query(fragment_repository,
+                                      lemmatized_fragment):
+    fragment_repository.create(lemmatized_fragment)
+
+    assert fragment_repository.find_lemmas('[(a)]n[(a*#!?)]') ==\
         [['ana I']]
 
 

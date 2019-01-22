@@ -195,10 +195,12 @@ class MongoFragmentRepository():
             ATF_SPEC['flags']['correction']
         ]
         ignore_regex = f'({"|".join(ignore)})*'
+        cleaned_word = re.sub(ignore_regex, '', word)
         word_regex = (
-            '^' +
-            ignore_regex +
-            ''.join([f"{re.escape(char)}{ignore_regex}" for char in word]) +
+            f'^{ignore_regex}' +
+            ''.join([
+                f"{re.escape(char)}{ignore_regex}" for char in cleaned_word
+            ]) +
             '$'
         )
 
