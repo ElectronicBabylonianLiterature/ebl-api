@@ -12,6 +12,7 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 from ebl.changelog import Changelog
+from ebl.bibliography.bibliography import MongoBibliography
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragmentarium import Fragmentarium
@@ -47,6 +48,11 @@ class TestDictionary(MongoDictionary):
 @pytest.fixture
 def dictionary(database):
     return TestDictionary(database)
+
+
+@pytest.fixture
+def bibliography(database):
+    return MongoBibliography(database)
 
 
 @pytest.fixture
