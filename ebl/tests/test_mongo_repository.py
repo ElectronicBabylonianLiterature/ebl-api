@@ -2,7 +2,7 @@
 import pytest
 import mongomock
 
-from ebl.errors import NotFoundError
+from ebl.errors import NotFoundError, DuplicateError
 from ebl.mongo_repository import MongoRepository
 
 
@@ -16,6 +16,14 @@ def test_create_and_find(repository):
     insert_id = repository.create(document)
 
     assert repository.find(insert_id) == document
+
+
+def test_create_dulicate(repository):
+    document = {'_id': 'ID', 'data': 'payload'}
+    repository.create(document)
+
+    with pytest.raises(DuplicateError):
+        repository.create(document)
 
 
 def test_document_not_found(repository):
