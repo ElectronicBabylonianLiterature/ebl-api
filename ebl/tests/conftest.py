@@ -495,3 +495,55 @@ def signs():
             ('BU', [('gid', 2)])
         ]
     ]
+
+
+@pytest.fixture
+def bibliography_entry():
+    return {
+        "id": "Q30000000",
+        "title": ("The Synergistic Activity of Thyroid Transcription Factor 1 "
+                  "and Pax 8 Relies on the Promoter/Enhancer Interplay"),
+        "type": "article-journal",
+        "DOI": "10.1210/MEND.16.4.0808",
+        "issued": {
+            "date-parts": [
+                [
+                    2002,
+                    1,
+                    1
+                ]
+            ]
+        },
+        "PMID": "11923479",
+        "volume": "16",
+        "page": "837-846",
+        "issue": "4",
+        "container-title": "Molecular Endocrinology",
+        "author": [
+            {
+                "given": "Stefania",
+                "family": "Miccadei",
+                "_ordinal": 1
+            },
+            {
+                "given": "Rossana",
+                "family": "De Leo",
+                "_ordinal": 2
+            },
+            {
+                "given": "Enrico",
+                "family": "Zammarchi",
+                "_ordinal": 3
+            },
+            {
+                "given": "Pier Giorgio",
+                "family": "Natali",
+                "_ordinal": 4
+            },
+            {
+                "given": "Donato",
+                "family": "Civitareale",
+                "_ordinal": 5
+            }
+        ]
+    }
