@@ -59,6 +59,7 @@ def test_changelog(bibliography,
                    mongo_entry,
                    user,
                    make_changelog_entry):
+    # pylint: disable=R0913
     updated_entry = {
         **bibliography_entry,
         'title': 'New Title'

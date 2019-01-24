@@ -153,7 +153,9 @@ def user():
                 'transliterate:fragments',
                 'lemmatize:fragments',
                 'read:fragments',
-                'read:WGL-folios'
+                'read:WGL-folios',
+                'read:bibliography',
+                'write:bibliography'
             ]
         },
         lambda: {
@@ -169,6 +171,7 @@ def context(dictionary,
             file_repository,
             fragment_repository,
             changelog,
+            bibliography,
             user):
     # pylint: disable=R0913
     return {
@@ -177,7 +180,8 @@ def context(dictionary,
         'sign_repository': sign_repository,
         'files': file_repository,
         'fragment_repository': fragment_repository,
-        'changelog': changelog
+        'changelog': changelog,
+        'bibliography': bibliography
     }
 
 
@@ -522,28 +526,23 @@ def bibliography_entry():
         "author": [
             {
                 "given": "Stefania",
-                "family": "Miccadei",
-                "_ordinal": 1
+                "family": "Miccadei"
             },
             {
                 "given": "Rossana",
-                "family": "De Leo",
-                "_ordinal": 2
+                "family": "De Leo"
             },
             {
                 "given": "Enrico",
-                "family": "Zammarchi",
-                "_ordinal": 3
+                "family": "Zammarchi"
             },
             {
                 "given": "Pier Giorgio",
-                "family": "Natali",
-                "_ordinal": 4
+                "family": "Natali"
             },
             {
                 "given": "Donato",
-                "family": "Civitareale",
-                "_ordinal": 5
+                "family": "Civitareale"
             }
         ]
     }

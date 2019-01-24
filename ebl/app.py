@@ -34,43 +34,64 @@ from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import FilesResource
 
+from ebl.bibliography.bibliography import MongoBibliography
+from ebl.bibliography.bibliography_entries import (
+    BibliographyResource, BibliographyEntriesResource
+)
+
+
+def create_bibliography_routes(api, context):
+    bibliography_resource = BibliographyResource(context['bibliography'])
+    bibliography_entries = BibliographyEntriesResource(context['bibliography'])
+    api.add_route('/bibliography', bibliography_resource)
+    api.add_route('/bibliography/{id_}', bibliography_entries)
+
+
+def create_dictionary_routes(api, context):
+    words = WordsResource(context['dictionary'])
+    word_search = WordSearch(context['dictionary'])
+    api.add_route('/words', word_search)
+    api.add_route('/words/{object_id}', words)
+
+
+def create_fragmentarium_routes(api, context):
+    sign_list = SignList(context['sign_repository'])
+    fragmentarium = Fragmentarium(context['fragment_repository'],
+                                  context['changelog'],
+                                  sign_list,
+                                  context['dictionary'])
+
+    fragments = FragmentsResource(fragmentarium)
+    fragment_search = FragmentSearch(fragmentarium)
+    lemmatization = LemmatizationResource(fragmentarium)
+    statistics = StatisticsResource(fragmentarium)
+    transliteration = TransliterationResource(fragmentarium)
+    folio_pager = FolioPagerResource(fragmentarium)
+    lemma_search = LemmaSearch(fragmentarium)
+
+    api.add_route('/fragments', fragment_search)
+    api.add_route('/fragments/{number}', fragments)
+    api.add_route('/fragments/{number}/lemmatization', lemmatization)
+    api.add_route('/fragments/{number}/transliteration', transliteration)
+    api.add_route('/lemmas', lemma_search)
+    api.add_route('/statistics', statistics)
+    api.add_route(
+        '/pager/folios/{folio_name}/{folio_number}/{number}',
+        folio_pager
+    )
+
 
 def create_app(context):
     auth_middleware = FalconAuthMiddleware(context['auth_backend'])
     api = falcon.API(middleware=[CORSComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
 
-    sign_list = SignList(context['sign_repository'])
+    create_bibliography_routes(api, context)
+    create_dictionary_routes(api, context)
+    create_fragmentarium_routes(api, context)
 
-    fragmentarium = Fragmentarium(context['fragment_repository'],
-                                  context['changelog'],
-                                  sign_list,
-                                  context['dictionary'])
-
-    words = WordsResource(context['dictionary'])
-    word_search = WordSearch(context['dictionary'])
-    fragments = FragmentsResource(fragmentarium)
-    fragment_search = FragmentSearch(fragmentarium)
-    lemmatization = LemmatizationResource(fragmentarium)
-    statistics = StatisticsResource(fragmentarium)
-    transliteration = TransliterationResource(fragmentarium)
     files = FilesResource(context['files'])
-    folio_pager = FolioPagerResource(fragmentarium)
-    lemma_search = LemmaSearch(fragmentarium)
-
-    api.add_route('/words', word_search)
-    api.add_route('/words/{object_id}', words)
-    api.add_route('/fragments', fragment_search)
-    api.add_route('/fragments/{number}', fragments)
-    api.add_route('/fragments/{number}/lemmatization', lemmatization)
-    api.add_route('/fragments/{number}/transliteration', transliteration)
-    api.add_route('/lemmas', lemma_search)
     api.add_route('/images/{file_name}', files)
-    api.add_route('/statistics', statistics)
-    api.add_route(
-        '/pager/folios/{folio_name}/{folio_number}/{number}',
-        folio_pager
-    )
 
     return api
 
@@ -90,7 +111,8 @@ def get_app():
         'sign_repository': MongoSignRepository(database),
         'files': GridFsFiles(database),
         'fragment_repository': MongoFragmentRepository(database),
-        'changelog': Changelog(database)
+        'changelog': Changelog(database),
+        'bibliography': MongoBibliography(database)
     }
 
     return create_app(context)
