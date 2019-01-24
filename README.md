@@ -83,6 +83,6 @@ Type checks can be run with `mypy`:
 pipenv run mypy -m ebl.fragmentarium.tokens -m ebl.fragmentarium.language --ignore-missing-imports
 ```
 
-## Acknowledgemenst
+## Acknowledgements
 
 CSL-JSON schema is based on [citation-style-language/schema](https://github.com/citation-style-language/schema) Copyright (c) 2007-2018 Citation Style Language and contributors. Licensed under MIT License.
