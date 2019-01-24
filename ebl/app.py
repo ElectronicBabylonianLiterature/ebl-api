@@ -11,7 +11,7 @@ from pymongo import MongoClient
 
 from ebl.auth0 import Auth0Backend
 from ebl.changelog import Changelog
-from ebl.cors_component import CORSComponent
+from ebl.cors_component import CorsComponent
 import ebl.error_handler
 
 from ebl.dictionary.dictionary import MongoDictionary
@@ -83,7 +83,7 @@ def create_fragmentarium_routes(api, context):
 
 def create_app(context):
     auth_middleware = FalconAuthMiddleware(context['auth_backend'])
-    api = falcon.API(middleware=[CORSComponent(), auth_middleware])
+    api = falcon.API(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
 
     create_bibliography_routes(api, context)
