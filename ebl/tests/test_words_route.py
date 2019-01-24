@@ -28,13 +28,6 @@ def test_word_not_found(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_word_invalid_id(client):
-    unique_lemma = 'invalid object id'
-    result = client.simulate_get(f'/words/{unique_lemma}')
-
-    assert result.status == falcon.HTTP_NOT_FOUND
-
-
 def test_search_word(client, saved_word):
     lemma = parse.quote_plus(' '.join(saved_word['lemma']))
     result = client.simulate_get(f'/words', params={'query': lemma})
