@@ -1,5 +1,5 @@
 # pylint: disable=R0903
-from typing import Tuple, Iterable, Sequence
+from typing import Tuple, Iterable, Sequence, NewType
 import attr
 import pydash
 from ebl.merger import Merger
@@ -7,6 +7,9 @@ from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import Token
 from ebl.text.visitors import LanguageVisitor, AtfVisitor
+
+
+LineNumber = NewType('LineNumber', str)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -68,11 +71,15 @@ class ControlLine(Line):
 class TextLine(Line):
 
     @classmethod
-    def of_iterable(cls, prefix: str, content: Iterable[Token]):
+    def of_iterable(cls, line_number: LineNumber, content: Iterable[Token]):
         visitor = LanguageVisitor()
         for token in content:
             token.accept(visitor)
-        return cls(prefix, visitor.tokens)
+        return cls(line_number, visitor.tokens)
+
+    @property
+    def line_number(self) -> LineNumber:
+        return LineNumber(self.prefix)
 
     @property
     def atf(self) -> Atf:
@@ -95,7 +102,7 @@ class TextLine(Line):
             return Merger(map_).merge(self.content, other.content)
 
         return (
-            TextLine.of_iterable(other.prefix, merge_tokens())
+            TextLine.of_iterable(other.line_number, merge_tokens())
             if isinstance(other, TextLine)
             else other
         )

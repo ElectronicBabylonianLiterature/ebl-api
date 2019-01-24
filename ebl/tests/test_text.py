@@ -5,13 +5,15 @@ from ebl.text.lemmatization import (
 )
 from ebl.text.atf import Atf
 from ebl.text.language import Language
-from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
+from ebl.text.line import (
+    Line, TextLine, ControlLine, EmptyLine, LineNumber
+)
 from ebl.text.text import Text, LoneDeterminative, LanguageShift, Partial
 from ebl.text.token import Word, Token, UniqueLemma
 
 
 LINES: Tuple[Line, ...] = (
-    TextLine.of_iterable('1.', [Word('ha-am')]),
+    TextLine.of_iterable(LineNumber('1.'), [Word('ha-am')]),
     ControlLine.of_single('$', Token(' single ruling'))
 )
 TEXT: Text = Text(LINES)
@@ -121,16 +123,16 @@ def test_update_lemmatization_wrong_lines():
         ]),
     ), (
         Text.of_iterable([
-            TextLine.of_iterable('1.', [
+            TextLine.of_iterable(LineNumber('1.'), [
                 Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
                 Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
             ])
         ]),
         Text.of_iterable([
-            TextLine.of_iterable('1.', [Word('mu'), Word('nu')])
+            TextLine.of_iterable(LineNumber('1.'), [Word('mu'), Word('nu')])
         ]),
         Text.of_iterable([
-            TextLine.of_iterable('1.', [
+            TextLine.of_iterable(LineNumber('1.'), [
                 Word('mu'),
                 Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
             ])
@@ -145,7 +147,7 @@ def test_merge(old, new, expected):
     [EmptyLine()],
     [ControlLine.of_single('$', Token(' single ruling'))],
     [
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
             LanguageShift('%sux'),
             LoneDeterminative(

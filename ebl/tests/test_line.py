@@ -3,7 +3,9 @@ from ebl.text.language import Language, DEFAULT_LANGUAGE
 from ebl.text.lemmatization import (
     LemmatizationToken, LemmatizationError
 )
-from ebl.text.line import Line, TextLine, ControlLine, EmptyLine
+from ebl.text.line import (
+    Line, TextLine, ControlLine, EmptyLine, LineNumber
+)
 from ebl.text.token import (
     UniqueLemma,
     Token, Word,
@@ -52,7 +54,7 @@ def test_empty_line():
     ('%foo', DEFAULT_LANGUAGE, DEFAULT_NORMALIZED)
 ])
 def test_line_of_iterable(code, language, normalized):
-    prefix = '1.'
+    line_number = LineNumber('1.')
     tokens = [
         Word('first'),
         LanguageShift(code), Word('second'),
@@ -64,9 +66,11 @@ def test_line_of_iterable(code, language, normalized):
         LanguageShift('%sb'), LoneDeterminative(
             '{third}', Language.AKKADIAN, False
         ))
-    line = TextLine.of_iterable(prefix, tokens)
+    line = TextLine.of_iterable(line_number, tokens)
 
-    assert line == TextLine(prefix, expected_tokens)
+    assert line.prefix == line_number
+    assert line.line_number == line_number
+    assert line == TextLine(line_number, expected_tokens)
     assert line.atf == f'1. first {code} second %sb {{third}}'
 
 
@@ -117,7 +121,7 @@ def test_line_of_single():
         'content': [Token('obverse').to_dict()]
     }),
     (TextLine.of_iterable(
-        '1.',
+        LineNumber('1.'),
         [
             DocumentOrientedGloss('{('),
             Word('bu')
@@ -180,66 +184,68 @@ def test_update_lemmatization_wrong_lenght():
 @pytest.mark.parametrize('old,new,expected', [
     (
         EmptyLine(),
-        TextLine.of_iterable('1.', [Word('bu')]),
-        TextLine.of_iterable('1.', [Word('bu')])
+        TextLine.of_iterable(LineNumber('1.'), [Word('bu')]),
+        TextLine.of_iterable(LineNumber('1.'), [Word('bu')])
     ), (
-        TextLine.of_iterable('1.', [Word('bu')]),
+        TextLine.of_iterable(LineNumber('1.'), [Word('bu')]),
         ControlLine.of_single('$', Token(' single ruling')),
         ControlLine.of_single('$', Token(' single ruling'))
     ), (
-        TextLine.of_iterable('1.', [Word('bu')]),
-        TextLine.of_iterable('2.', [Word('bu')]),
-        TextLine.of_iterable('2.', [Word('bu')])
+        TextLine.of_iterable(LineNumber('1.'), [Word('bu')]),
+        TextLine.of_iterable(LineNumber('2.'), [Word('bu')]),
+        TextLine.of_iterable(LineNumber('2.'), [Word('bu')])
     ), (
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ]),
-        TextLine.of_iterable('1.', [Word('bu')]),
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [Word('bu')]),
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ])
     ), (
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ]),
-        TextLine.of_iterable('1.', [LanguageShift('%sux')]),
-        TextLine.of_iterable('1.', [LanguageShift('%sux')])
+        TextLine.of_iterable(LineNumber('1.'), [LanguageShift('%sux')]),
+        TextLine.of_iterable(LineNumber('1.'), [LanguageShift('%sux')])
     ), (
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ]),
-        TextLine.of_iterable('1.', [Word('mu')]),
-        TextLine.of_iterable('1.', [Word('mu')])
+        TextLine.of_iterable(LineNumber('1.'), [Word('mu')]),
+        TextLine.of_iterable(LineNumber('1.'), [Word('mu')])
     ), (
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
             Word('mu', unique_lemma=(UniqueLemma('mu I'), )),
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ]),
-        TextLine.of_iterable('1.', [Word('bu'), Word('bu')]),
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [Word('bu'), Word('bu')]),
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ])
     ), (
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ]),
-        TextLine.of_iterable('1.', [Word('bu'), Word('mu'), Word('bu')]),
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
+            Word('bu'), Word('mu'), Word('bu')
+        ]),
+        TextLine.of_iterable(LineNumber('1.'), [
             Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
             Word('mu'),
             Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
         ])
     ), (
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             Token('{('),
         ]),
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             DocumentOrientedGloss('{('),
         ]),
-        TextLine.of_iterable('1.', [
+        TextLine.of_iterable(LineNumber('1.'), [
             DocumentOrientedGloss('{('),
         ])
     )
