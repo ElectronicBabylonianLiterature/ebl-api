@@ -1,4 +1,3 @@
-import collections
 from enum import Enum, auto
 from typing import NewType, Tuple
 import attr
@@ -6,7 +5,6 @@ from ebl.text.line import LineNumber
 
 
 BibliographyId = NewType('BibliographyId', str)
-PageRange = collections.namedtuple('PageRange', 'start end')
 
 
 class ReferenceType(Enum):
