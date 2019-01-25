@@ -59,7 +59,8 @@ def create_fragmentarium_routes(api, context):
     fragmentarium = Fragmentarium(context['fragment_repository'],
                                   context['changelog'],
                                   sign_list,
-                                  context['dictionary'])
+                                  context['dictionary'],
+                                  context['bibliography'])
 
     fragments = FragmentsResource(fragmentarium)
     fragment_search = FragmentSearch(fragmentarium)

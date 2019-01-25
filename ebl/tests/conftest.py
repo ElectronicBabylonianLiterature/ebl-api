@@ -88,8 +88,16 @@ def fragment_repository(database):
 
 
 @pytest.fixture
-def fragmentarium(fragment_repository, changelog, sign_list, dictionary):
-    return Fragmentarium(fragment_repository, changelog, sign_list, dictionary)
+def fragmentarium(fragment_repository,
+                  changelog,
+                  sign_list,
+                  dictionary,
+                  bibliography):
+    return Fragmentarium(fragment_repository,
+                         changelog,
+                         sign_list,
+                         dictionary,
+                         bibliography)
 
 
 class FakeFile:
@@ -261,8 +269,8 @@ def word():
 
 
 @pytest.fixture
-def reference():
-    return Reference('ref_id', ReferenceType.EDITION)
+def reference(bibliography_entry):
+    return Reference(bibliography_entry['id'], ReferenceType.EDITION)
 
 
 @pytest.fixture

@@ -1,3 +1,4 @@
+from ebl.errors import NotFoundError, DataError
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.validator import Validator
 
@@ -8,11 +9,18 @@ REVISION = 'Revision'
 
 class Fragmentarium:
 
-    def __init__(self, repository, changelog, sign_list, dictionary):
+    def __init__(self,
+                 repository,
+                 changelog,
+                 sign_list,
+                 dictionary,
+                 bibliography):
+        # pylint: disable=R0913
         self._repository = repository
         self._changelog = changelog
         self._sign_list = sign_list
         self._dictionary = dictionary
+        self._bibliography = bibliography
 
     def update_transliteration(self, number, transliteration, user):
         transliteration_with_signs =\
@@ -35,6 +43,28 @@ class Fragmentarium:
 
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_lemmatization(updated_fragment)
+
+    def update_references(self, number, references, user):
+        def is_invalid(reference):
+            try:
+                self._bibliography.find(reference.id)
+                return False
+            except NotFoundError:
+                return True
+
+        fragment = self._repository.find(number)
+        invalid_references = [
+            reference.id
+            for reference in references
+            if is_invalid(reference)
+        ]
+        if invalid_references:
+            raise DataError('Unknown bibliography entries: '
+                            f'{", ".join(invalid_references)}.')
+        updated_fragment = fragment.set_references(references)
+
+        self._create_changlelog(user, fragment, updated_fragment)
+        self._repository.update_references(updated_fragment)
 
     def statistics(self):
         return {

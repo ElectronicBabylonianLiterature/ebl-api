@@ -1,6 +1,7 @@
+# pylint: disable=R0913
 from freezegun import freeze_time
 import pytest
-from ebl.errors import NotFoundError
+from ebl.errors import NotFoundError, DataError
 from ebl.fragmentarium.fragment import Fragment
 from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import (
@@ -244,7 +245,6 @@ def test_search_signs(transliteration,
                       fragmentarium,
                       transliterated_fragment,
                       another_fragment):
-    # pylint: disable=R0913
     fragmentarium.create(transliterated_fragment)
     fragmentarium.create(another_fragment)
     for sign in signs:
@@ -276,3 +276,67 @@ def test_find_lemmas(fragmentarium,
     dictionary.create(matching_word)
 
     assert fragmentarium.find_lemmas('GI₆') == [[matching_word]]
+
+
+def test_update_references(fragmentarium,
+                           fragment,
+                           reference,
+                           bibliography,
+                           bibliography_entry,
+                           user):
+    bibliography.create(bibliography_entry, user)
+    fragment_number = fragmentarium.create(fragment)
+    references = (reference,)
+    fragmentarium.update_references(
+        fragment_number,
+        references,
+        user
+    )
+    updated_fragment = fragmentarium.find(fragment_number)
+    expected_fragment = fragment.set_references(references)
+
+    assert updated_fragment == expected_fragment
+
+
+def test_update_references_invalid(fragmentarium, fragment, reference, user):
+    fragment_number = fragmentarium.create(fragment)
+    references = (reference,)
+
+    with pytest.raises(DataError):
+        fragmentarium.update_references(
+            fragment_number,
+            references,
+            user
+        )
+
+
+@freeze_time("2018-09-07 15:41:24.032")
+def test_references_changelog(database,
+                              fragmentarium,
+                              fragment,
+                              reference,
+                              bibliography,
+                              bibliography_entry,
+                              user,
+                              make_changelog_entry):
+    bibliography.create(bibliography_entry, user)
+    fragment_number = fragmentarium.create(fragment)
+    references = (reference,)
+    fragmentarium.update_references(
+        fragment_number,
+        references,
+        user
+    )
+
+    expected_fragment = fragment.set_references(references)
+
+    expected_changelog = make_changelog_entry(
+        'fragments',
+        fragment_number,
+        fragment.to_dict(),
+        expected_fragment.to_dict()
+    )
+    assert database['changelog'].find_one(
+        {'resource_id': fragment_number},
+        {'_id': 0}
+    ) == expected_changelog

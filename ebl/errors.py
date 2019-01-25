@@ -4,3 +4,7 @@ class NotFoundError(Exception):
 
 class DuplicateError(Exception):
     pass
+
+
+class DataError(Exception):
+    pass
