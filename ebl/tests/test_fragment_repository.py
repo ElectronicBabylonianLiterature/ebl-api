@@ -266,3 +266,22 @@ def test_find_lemmas_ignores_in_query(fragment_repository,
 def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):
     fragment_repository.create(lemmatized_fragment)
     assert fragment_repository.find_lemmas('aklu') == []
+
+
+def test_update_references(fragment_repository, fragment, reference):
+    fragment_number = fragment_repository.create(fragment)
+    references = (reference,)
+    updated_fragment = fragment.set_references(references)
+
+    fragment_repository.update_references(updated_fragment)
+    result = fragment_repository.find(fragment_number)
+
+    assert result == updated_fragment
+
+
+def test_update_update_references(fragment_repository,
+                                  transliterated_fragment):
+    with pytest.raises(NotFoundError):
+        fragment_repository.update_references(
+            transliterated_fragment
+        )

@@ -237,6 +237,20 @@ class MongoFragmentRepository():
             in cursor
         ]
 
+    def update_references(self, fragment):
+        result = self._mongo_collection.update_one(
+            {'_id': fragment.number},
+            {'$set': {
+                'references': [
+                    reference.to_dict()
+                    for reference in fragment.references
+                ]
+            }}
+        )
+
+        if result.matched_count == 0:
+            raise NotFoundError(f'Fragment {fragment.number} not found.')
+
     @staticmethod
     def _map_fragments(cursor):
         return [
