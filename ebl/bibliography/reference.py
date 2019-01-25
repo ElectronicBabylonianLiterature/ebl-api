@@ -20,7 +20,7 @@ class ReferenceType(Enum):
 class Reference():
     id: BibliographyId
     type: ReferenceType
-    pages: Tuple[PageRange, ...] = tuple()
+    pages: str = ''
     notes: str = ''
     lines_cited: Tuple[LineNumber, ...] = tuple()
 
@@ -28,7 +28,7 @@ class Reference():
         return {
             'id': self.id,
             'type': self.type,
-            'pages': [list(page_range) for page_range in self.pages],
+            'pages': self.pages,
             'notes': self.notes,
             'lines_cited': [line_number for line_number in self.lines_cited]
         }
@@ -38,7 +38,7 @@ class Reference():
         return Reference(
             BibliographyId(data['id']),
             ReferenceType(data['type']),
-            tuple(PageRange(*page_range) for page_range in data['pages']),
+            data['pages'],
             data['notes'],
             tuple(
                 LineNumber(line_number)

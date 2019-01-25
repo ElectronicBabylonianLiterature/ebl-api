@@ -1,15 +1,24 @@
 from ebl.bibliography.reference import (
-    BibliographyId, ReferenceType, PageRange, Reference
+    BibliographyId, ReferenceType, Reference
 )
 from ebl.text.line import LineNumber
 
 
 ID = BibliographyId('id')
 TYPE = ReferenceType.EDITION
-PAGES = (PageRange(1, 1), PageRange(3, 5))
+PAGES = '1-6'
 NOTES = 'some notes'
 LINES_CITED = (LineNumber('1.'), LineNumber('2a.2.'))
 REFERENCE = Reference(ID, TYPE, PAGES, NOTES, LINES_CITED)
+
+
+SERIALIZED_REFERENCE = {
+    'id': ID,
+    'type': TYPE,
+    'pages': PAGES,
+    'notes': NOTES,
+    'lines_cited': [line_number for line_number in LINES_CITED]
+}
 
 
 def test_reference():
@@ -23,28 +32,16 @@ def test_reference():
 def test_defaults():
     reference = Reference(ID, TYPE)
 
-    assert reference.pages == tuple()
+    assert reference.pages == ''
     assert reference.notes == ''
     assert reference.lines_cited == tuple()
 
 
 def test_to_dict():
-    assert REFERENCE.to_dict() == {
-        'id': ID,
-        'type': TYPE,
-        'pages': [list(page_range) for page_range in PAGES],
-        'notes': NOTES,
-        'lines_cited': [line_number for line_number in LINES_CITED]
-    }
+    assert REFERENCE.to_dict() == SERIALIZED_REFERENCE
 
 
 def test_from_dict():
-    reference = Reference.from_dict({
-        'id': ID,
-        'type': TYPE,
-        'pages': [list(page_range) for page_range in PAGES],
-        'notes': NOTES,
-        'lines_cited': [line_number for line_number in LINES_CITED]
-    })
+    reference = Reference.from_dict(SERIALIZED_REFERENCE)
 
     assert reference == REFERENCE
