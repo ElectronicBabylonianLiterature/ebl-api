@@ -17,7 +17,7 @@ SERIALIZED_REFERENCE = {
     'type': TYPE.name,
     'pages': PAGES,
     'notes': NOTES,
-    'lines_cited': [line_number for line_number in LINES_CITED]
+    'linesCited': [line_number for line_number in LINES_CITED]
 }
 
 

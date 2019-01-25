@@ -28,7 +28,7 @@ class Reference():
             'type': self.type.name,
             'pages': self.pages,
             'notes': self.notes,
-            'lines_cited': [line_number for line_number in self.lines_cited]
+            'linesCited': [line_number for line_number in self.lines_cited]
         }
 
     @staticmethod
@@ -41,6 +41,6 @@ class Reference():
             tuple(
                 LineNumber(line_number)
                 for line_number
-                in data['lines_cited']
+                in data['linesCited']
             )
         )
