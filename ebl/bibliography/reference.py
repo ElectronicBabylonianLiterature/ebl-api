@@ -25,7 +25,7 @@ class Reference():
     def to_dict(self) -> dict:
         return {
             'id': self.id,
-            'type': self.type,
+            'type': self.type.name,
             'pages': self.pages,
             'notes': self.notes,
             'lines_cited': [line_number for line_number in self.lines_cited]
@@ -35,7 +35,7 @@ class Reference():
     def from_dict(data: dict) -> 'Reference':
         return Reference(
             BibliographyId(data['id']),
-            ReferenceType(data['type']),
+            ReferenceType[data['type']],
             data['pages'],
             data['notes'],
             tuple(
