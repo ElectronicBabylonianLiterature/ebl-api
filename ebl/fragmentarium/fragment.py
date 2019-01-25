@@ -112,6 +112,12 @@ class Fragment:
     matching_lines: Optional[tuple] = None
     references: Tuple[Reference, ...] = tuple()
 
+    def set_references(self, references: Tuple[Reference, ...]) -> 'Fragment':
+        return attr.evolve(
+            self,
+            references=references
+        )
+
     def update_transliteration(self, transliteration, user) -> 'Fragment':
         record = self.record.add_entry(
             self.text.atf,

@@ -300,3 +300,10 @@ def test_add_record(old, new, type_, record, user):
         *record.entries,
         expected_entry
     ))
+
+
+def test_set_references(fragment, reference):
+    references = (reference,)
+    updated_fragment = fragment.set_references(references)
+
+    assert updated_fragment.references == references
