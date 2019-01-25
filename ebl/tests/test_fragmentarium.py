@@ -218,7 +218,7 @@ def test_search_not_found(fragmentarium):
     assert fragmentarium.search('K.1') == []
 
 
-SEARCH_TRANSLITERATION_DATA = [
+@pytest.mark.parametrize("transliteration,lines", [
     ('ana u₄', [
         ['2\'. [...] GI₆ ana u₄-š[u ...]']
     ]),
@@ -236,10 +236,7 @@ SEARCH_TRANSLITERATION_DATA = [
         ]
     ]),
     ('ši tu₂', None),
-]
-
-
-@pytest.mark.parametrize("transliteration,lines", SEARCH_TRANSLITERATION_DATA)
+])
 def test_search_signs(transliteration,
                       lines,
                       sign_list,
