@@ -13,6 +13,7 @@ from falcon_auth import NoneAuthBackend
 import ebl.app
 from ebl.changelog import Changelog
 from ebl.bibliography.bibliography import MongoBibliography
+from ebl.bibliography.reference import Reference, ReferenceType
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragmentarium import Fragmentarium
@@ -260,6 +261,11 @@ def word():
 
 
 @pytest.fixture
+def reference():
+    return Reference('ref_id', ReferenceType.EDITION)
+
+
+@pytest.fixture
 def fragment():
     return Fragment(
         number='1',
@@ -311,7 +317,7 @@ def another_fragment(fragment):
 
 
 @pytest.fixture
-def transliterated_fragment():
+def transliterated_fragment(reference):
     return Fragment(
         number='3',
         cdli_number='cdli-5',
@@ -369,7 +375,8 @@ def transliterated_fragment():
                 'Transliteration',
                 '2018-12-21T17:05:27.352435'
             ),
-        ))
+        )),
+        references=(reference,)
     )
 
 

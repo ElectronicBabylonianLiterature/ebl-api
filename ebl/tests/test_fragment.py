@@ -15,10 +15,10 @@ from ebl.fragmentarium.transliteration import (
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 
 
-def test_dict_serialization(fragment):
-    new_fragment = Fragment.from_dict(fragment.to_dict())
+def test_dict_serialization(lemmatized_fragment):
+    new_fragment = Fragment.from_dict(lemmatized_fragment.to_dict())
 
-    assert new_fragment == fragment
+    assert new_fragment == lemmatized_fragment
 
 
 def test_to_dict_for(fragment, user):
@@ -138,6 +138,14 @@ def test_hits(another_fragment):
 
 def test_hits_none(fragment):
     assert fragment.hits is None
+
+
+def test_references(transliterated_fragment, reference):
+    assert transliterated_fragment.references == (reference,)
+
+
+def test_references_default(fragment):
+    assert fragment.references == tuple()
 
 
 @freeze_time("2018-09-07 15:41:24.032")

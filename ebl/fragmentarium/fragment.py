@@ -3,6 +3,7 @@ import datetime
 from typing import Tuple, Optional
 import attr
 import pydash
+from ebl.bibliography.reference import Reference
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
@@ -109,6 +110,7 @@ class Fragment:
     notes: str = ''
     hits: Optional[int] = None
     matching_lines: Optional[tuple] = None
+    references: Tuple[Reference, ...] = tuple()
 
     def update_transliteration(self, transliteration, user) -> 'Fragment':
         record = self.record.add_entry(
@@ -171,7 +173,10 @@ class Fragment:
             'folios': self.folios.to_list(),
             'text': self.text.to_dict(),
             'hits': self.hits,
-            'matching_lines': self.matching_lines
+            'matching_lines': self.matching_lines,
+            'references': [
+                reference.to_dict() for reference in self.references
+            ]
         }, lambda value: value is None)
 
     def to_dict_for(self, user) -> dict:
@@ -202,5 +207,7 @@ class Fragment:
             data.get('signs'),
             data['notes'],
             data.get('hits'),
-            data.get('matching_lines')
+            data.get('matching_lines'),
+            tuple(Reference.from_dict(reference)
+                  for reference in data['references'])
         )
