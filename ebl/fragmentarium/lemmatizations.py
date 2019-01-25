@@ -5,27 +5,33 @@ from ebl.text.lemmatization import Lemmatization
 
 
 LEMMATIZATION_DTO_SCHEMA = {
-    'type': 'array',
-    'items': {
-        'type': 'array',
-        'items': {
-            'type': 'object',
-            'properties': {
-                'value': {
-                    'type': 'string'
-                },
-                'uniqueLemma': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'string'
-                    }
+    'type': 'object',
+    'properties': {
+        'lemmatization': {
+            'type': 'array',
+            'items': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'value': {
+                            'type': 'string'
+                        },
+                        'uniqueLemma': {
+                            'type': 'array',
+                            'items': {
+                                'type': 'string'
+                            }
+                        }
+                    },
+                    'required': [
+                        'value'
+                    ]
                 }
-            },
-            'required': [
-                'value'
-            ]
+            }
         }
-    }
+    },
+    'required': ['lemmatization']
 }
 
 
@@ -39,6 +45,6 @@ class LemmatizationResource:
     def on_post(self, req, _resp, number):
         self._fragmentarium.update_lemmatization(
             number,
-            Lemmatization.from_list(req.media),
+            Lemmatization.from_list(req.media['lemmatization']),
             req.context['user']
         )
