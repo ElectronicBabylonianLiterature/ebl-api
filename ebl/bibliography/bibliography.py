@@ -56,3 +56,42 @@ class MongoBibliography():
             {'_id': entry['id']},
             mongo_entry
         )
+
+    def search(self, author=None, year=None, title=None):
+        match = {}
+        if author:
+            match['author.0.family'] = author
+        if year:
+            match['issued.date-parts.0.0'] = year
+        if title:
+            match['$expr'] = {
+                '$eq': [
+                    {'$substrCP': ['$title', 0, len(title)]},
+                    title
+                ]
+            }
+        return [
+            create_object_entry(data)
+            for data
+            in self._mongo_repository.get_collection().aggregate(
+                [
+                    {'$match': match},
+                    {'$addFields': {
+                        'primaryYear': {'$arrayElemAt': [
+                            {'$arrayElemAt': ['$issued.date-parts', 0]}, 0
+                        ]}
+                    }},
+                    {'$sort': {
+                        'author.0.family': 1,
+                        'primaryYear': 1,
+                        'title': 1
+                    }},
+                    {'$project': {'primaryYear': 0}}
+                ],
+                collation={
+                    'locale': 'en',
+                    'strength': 1,
+                    'normalization': True
+                }
+            )
+        ]
