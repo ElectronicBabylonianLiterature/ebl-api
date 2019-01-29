@@ -12,7 +12,9 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 from ebl.changelog import Changelog
-from ebl.bibliography.bibliography import MongoBibliography
+from ebl.bibliography.bibliography import (
+    MongoBibliography, create_object_entry
+)
 from ebl.bibliography.reference import Reference, ReferenceType
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
@@ -51,9 +53,18 @@ def dictionary(database):
     return TestDictionary(database)
 
 
+class TestBibliography(MongoBibliography):
+    # Mongomock does not support $addFields so we need to
+    # stub the methods using them.
+    def search(self, _author=None, _year=None, _title=None):
+        return [create_object_entry(
+            self._mongo_repository.get_collection().find_one({})
+        )]
+
+
 @pytest.fixture
 def bibliography(database):
-    return MongoBibliography(database)
+    return TestBibliography(database)
 
 
 @pytest.fixture
