@@ -27,3 +27,17 @@ def test_get_image_not_found(client):
     result = client.simulate_get(f'/images/unknown.jpg')
 
     assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_get_guest_no_scope(guest_client, file):
+    result = guest_client.simulate_get(f'/images/{file.filename}')
+
+    assert result.content == file.data
+
+
+def test_get_guest_scope(guest_client, file_with_allowed_scope):
+    result = guest_client.simulate_get(
+        f'/images/{file_with_allowed_scope.filename}'
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN

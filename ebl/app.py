@@ -33,7 +33,7 @@ from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
 from ebl.files.file_repository import GridFsFiles
-from ebl.files.files import FilesResource
+from ebl.files.files import create_files_resource
 
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.bibliography.bibliography_entries import (
@@ -94,7 +94,7 @@ def create_app(context):
     create_dictionary_routes(api, context)
     create_fragmentarium_routes(api, context)
 
-    files = FilesResource(context['files'])
+    files = create_files_resource(context['auth_backend'])(context['files'])
     api.add_route('/images/{file_name}', files)
 
     return api

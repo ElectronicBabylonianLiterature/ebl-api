@@ -212,6 +212,15 @@ def client(context):
 
 
 @pytest.fixture
+def guest_client(context):
+    api = ebl.app.create_app({
+        **context,
+        'auth_backend': NoneAuthBackend(lambda: None),
+    })
+    return testing.TestClient(api)
+
+
+@pytest.fixture
 def word():
     return {
         "lemma": [

@@ -12,6 +12,24 @@ def fetch_user_profile(issuer, authorization):
     return response.json()
 
 
+class Guest:
+    # pylint: disable=R0201
+
+    @property
+    def profile(self):
+        return {'name': 'Guest'}
+
+    @property
+    def ebl_name(self):
+        return 'Guest'
+
+    def has_scope(self, _):
+        return False
+
+    def can_read_folio(self, _):
+        return False
+
+
 class Auth0User:
 
     def __init__(self, access_token, profile_factory):
