@@ -2,8 +2,8 @@
 import falcon
 
 
-def test_get_statistics(client):
-    result = client.simulate_get('/statistics')
+def test_get_statistics(guest_client):
+    result = guest_client.simulate_get('/statistics')
 
     assert result.json == {
         'transliteratedFragments': 0,
