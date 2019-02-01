@@ -1,7 +1,7 @@
 import json
 import falcon
 import pytest
-from ebl.text.text import Text
+from ebl.text.lemmatization import Lemmatization
 
 
 def test_update_lemmatization(client,
@@ -16,14 +16,20 @@ def test_update_lemmatization(client,
     url = f'/fragments/{fragment_number}/lemmatization'
     post_result = client.simulate_post(url, body=body)
 
+    expected_fragment = transliterated_fragment.update_lemmatization(
+        Lemmatization.from_list(tokens)
+    )
+    expected_json = {
+        **expected_fragment.to_dict_for(user),
+        'atf': expected_fragment.text.atf
+    }
+
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.json == expected_json
 
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
-    updated_fragment = get_result.json
-
-    assert Text.from_dict(updated_fragment['text']).lemmatization.to_list() ==\
-        tokens
+    assert get_result.json == expected_json
 
     assert database['changelog'].find_one({
         'resource_id': fragment_number,
