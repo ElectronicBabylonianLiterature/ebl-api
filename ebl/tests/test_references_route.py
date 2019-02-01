@@ -18,13 +18,18 @@ def test_update_references(client,
     url = f'/fragments/{fragment_number}/references'
     post_result = client.simulate_post(url, body=body)
 
+    expected_fragment = fragment.set_references((reference,))
+    expected_json = {
+        **expected_fragment.to_dict_for(user),
+        'atf': expected_fragment.text.atf,
+    }
+
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.json == expected_json
 
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
-    updated_fragment = get_result.json
-
-    assert updated_fragment['references'] == references
+    assert get_result.json == expected_json
 
 
 def test_update_references_not_found(client):
