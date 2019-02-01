@@ -3,6 +3,7 @@ import falcon
 from freezegun import freeze_time
 import pytest
 from ebl.fragmentarium.transliteration import Transliteration
+from ebl.fragmentarium.dtos import create_response_dto
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -20,13 +21,14 @@ def test_update_transliteration(client,
     url = f'/fragments/{fragment_number}/transliteration'
     post_result = client.simulate_post(url, body=body)
 
-    expected_fragment = fragment.update_transliteration(
-        Transliteration(updates['transliteration'], updates['notes']),
-        user
-    )
     expected_json = {
-        **expected_fragment.to_dict_for(user),
-        'atf': expected_fragment.text.atf,
+        **create_response_dto(
+            fragment.update_transliteration(
+                Transliteration(updates['transliteration'], updates['notes']),
+                user
+            ),
+            user
+        ),
         'signs': ''
     }
 
@@ -61,17 +63,16 @@ def test_update_transliteration_merge_lemmatization(client,
         'transliteration': '\n'.join(lines),
         'notes': lemmatized_fragment.notes
     }
-    expected_fragment = lemmatized_fragment.update_transliteration(
-        Transliteration(
-            updates['transliteration'],
-            updates['notes']
-        ).with_signs(sign_list),
+    expected_json = create_response_dto(
+        lemmatized_fragment.update_transliteration(
+            Transliteration(
+                updates['transliteration'],
+                updates['notes']
+            ).with_signs(sign_list),
+            user
+        ),
         user
     )
-    expected_json = {
-        **expected_fragment.to_dict_for(user),
-        'atf': expected_fragment.text.atf,
-    }
 
     post_result = client.simulate_post(
         f'/fragments/{fragment_number}/transliteration',

@@ -4,6 +4,7 @@ from ebl.require_scope import require_scope
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
+from ebl.fragmentarium.dtos import create_response_dto
 
 
 TRANSLITERATION_DTO_SCHEMA = {
@@ -41,10 +42,7 @@ class TransliterationResource:
                 ),
                 user
             )
-            resp.media = {
-                **updated_fragment.to_dict_for(user),
-                'atf': updated_fragment.text.atf
-            }
+            resp.media = create_response_dto(updated_fragment, user)
         except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {

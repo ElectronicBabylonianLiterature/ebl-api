@@ -2,6 +2,7 @@ import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
 from ebl.bibliography.reference import ReferenceType, Reference
+from ebl.fragmentarium.dtos import create_response_dto
 
 
 REFERENCES_DTO_SCHEMA = {
@@ -64,7 +65,4 @@ class ReferencesResource:
             ),
             user
         )
-        resp.media = {
-            **updated_fragment.to_dict_for(user),
-            'atf': updated_fragment.text.atf
-        }
+        resp.media = create_response_dto(updated_fragment, user)

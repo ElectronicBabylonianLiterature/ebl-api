@@ -1,4 +1,5 @@
 import falcon
+from ebl.fragmentarium.dtos import create_response_dto
 
 
 def test_search_fragment(client, fragmentarium, fragment, user):
@@ -8,7 +9,7 @@ def test_search_fragment(client, fragmentarium, fragment, user):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [fragment.to_dict_for(user)]
+    assert result.json == [create_response_dto(fragment, user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -34,14 +35,15 @@ def test_search_signs(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [
-        {
-            **transliterated_fragment.to_dict_for(user),
-            'matching_lines': [
-                ['6\'. [...] x mu ta-ma-tu₂']
-            ]
-        }
-    ]
+    assert result.json == [{
+        **create_response_dto(
+            transliterated_fragment,
+            user
+        ),
+        'matching_lines': [
+            ['6\'. [...] x mu ta-ma-tu₂']
+        ]
+    }]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -56,7 +58,7 @@ def test_random(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [transliterated_fragment.to_dict_for(user)]
+    assert result.json == [create_response_dto(transliterated_fragment, user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -71,7 +73,7 @@ def test_interesting(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [interesting_fragment.to_dict_for(user)]
+    assert result.json == [create_response_dto(interesting_fragment, user)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 

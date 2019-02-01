@@ -1,6 +1,7 @@
 import json
 import falcon
 import pytest
+from ebl.fragmentarium.dtos import create_response_dto
 
 
 def test_update_references(client,
@@ -18,11 +19,10 @@ def test_update_references(client,
     url = f'/fragments/{fragment_number}/references'
     post_result = client.simulate_post(url, body=body)
 
-    expected_fragment = fragment.set_references((reference,))
-    expected_json = {
-        **expected_fragment.to_dict_for(user),
-        'atf': expected_fragment.text.atf,
-    }
+    expected_json = create_response_dto(
+        fragment.set_references((reference,)),
+        user
+    )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'

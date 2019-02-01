@@ -2,6 +2,7 @@ import json
 import falcon
 import pytest
 from ebl.text.lemmatization import Lemmatization
+from ebl.fragmentarium.dtos import create_response_dto
 
 
 def test_update_lemmatization(client,
@@ -16,13 +17,12 @@ def test_update_lemmatization(client,
     url = f'/fragments/{fragment_number}/lemmatization'
     post_result = client.simulate_post(url, body=body)
 
-    expected_fragment = transliterated_fragment.update_lemmatization(
-        Lemmatization.from_list(tokens)
+    expected_json = create_response_dto(
+        transliterated_fragment.update_lemmatization(
+            Lemmatization.from_list(tokens)
+        ),
+        user
     )
-    expected_json = {
-        **expected_fragment.to_dict_for(user),
-        'atf': expected_fragment.text.atf
-    }
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
