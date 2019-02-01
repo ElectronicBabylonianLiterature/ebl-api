@@ -35,6 +35,8 @@ class Fragmentarium:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
+        return updated_fragment
+
     def update_lemmatization(self, number, lemmatization, user):
         fragment = self._repository.find(number)
         updated_fragment = fragment.update_lemmatization(
@@ -43,6 +45,8 @@ class Fragmentarium:
 
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_lemmatization(updated_fragment)
+
+        return updated_fragment
 
     def update_references(self, number, references, user):
         def is_invalid(reference):
@@ -65,6 +69,8 @@ class Fragmentarium:
 
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_references(updated_fragment)
+
+        return updated_fragment
 
     def statistics(self):
         return {

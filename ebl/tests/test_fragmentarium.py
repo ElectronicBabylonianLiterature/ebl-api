@@ -27,12 +27,12 @@ def test_fragment_not_found(fragmentarium):
 def test_update_transliteration(fragmentarium, transliterated_fragment, user):
     fragment_number = fragmentarium.create(transliterated_fragment)
 
-    fragmentarium.update_transliteration(
+    updated_fragment = fragmentarium.update_transliteration(
         fragment_number,
         Transliteration('1. x x\n2. x', 'updated notes'),
         user
     )
-    updated_fragment = fragmentarium.find(fragment_number)
+    db_fragment = fragmentarium.find(fragment_number)
 
     expected_fragment = transliterated_fragment.update_transliteration(
         Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX'),
@@ -40,6 +40,7 @@ def test_update_transliteration(fragmentarium, transliterated_fragment, user):
     )
 
     assert updated_fragment == expected_fragment
+    assert db_fragment == expected_fragment
 
 
 def test_update_transliteration_invalid(fragmentarium, fragment, user):
@@ -101,18 +102,19 @@ def test_update_lemmatization(fragmentarium,
     tokens[1][1]['uniqueLemma'] = ['aklu I']
     lemmatization = Lemmatization.from_list(tokens)
 
-    fragmentarium.update_lemmatization(
+    updated_fragment = fragmentarium.update_lemmatization(
         fragment_number,
         lemmatization,
         user
     )
-    updated_fragment = fragmentarium.find(fragment_number)
+    db_fragment = fragmentarium.find(fragment_number)
 
     expected_fragment = transliterated_fragment.update_lemmatization(
         lemmatization
     )
 
     assert updated_fragment == expected_fragment
+    assert db_fragment == expected_fragment
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -287,15 +289,16 @@ def test_update_references(fragmentarium,
     bibliography.create(bibliography_entry, user)
     fragment_number = fragmentarium.create(fragment)
     references = (reference,)
-    fragmentarium.update_references(
+    updated_fragment = fragmentarium.update_references(
         fragment_number,
         references,
         user
     )
-    updated_fragment = fragmentarium.find(fragment_number)
+    db_fragment = fragmentarium.find(fragment_number)
     expected_fragment = fragment.set_references(references)
 
     assert updated_fragment == expected_fragment
+    assert db_fragment == expected_fragment
 
 
 def test_update_references_invalid(fragmentarium, fragment, reference, user):
