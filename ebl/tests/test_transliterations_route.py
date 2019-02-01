@@ -1,10 +1,11 @@
 import json
 import falcon
+from freezegun import freeze_time
 import pytest
-from ebl.text.atf_parser import parse_atf
-from ebl.text.text import Text
+from ebl.fragmentarium.transliteration import Transliteration
 
 
+@freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client,
                                 fragmentarium,
                                 fragment,
@@ -19,16 +20,22 @@ def test_update_transliteration(client,
     url = f'/fragments/{fragment_number}/transliteration'
     post_result = client.simulate_post(url, body=body)
 
+    expected_fragment = fragment.update_transliteration(
+        Transliteration(updates['transliteration'], updates['notes']),
+        user
+    )
+    expected_json = {
+        **expected_fragment.to_dict_for(user),
+        'atf': expected_fragment.text.atf,
+        'signs': ''
+    }
+
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.json == expected_json
 
     get_result = client.simulate_get(f'/fragments/{fragment_number}')
-    updated_fragment = get_result.json
-
-    assert Text.from_dict(updated_fragment['text']).atf ==\
-        updates['transliteration']
-    assert updated_fragment['notes'] == updates['notes']
-    assert updated_fragment['record'][-1]['user'] == user.ebl_name
+    assert get_result.json == expected_json
 
     assert database['changelog'].find_one({
         'resource_id': fragment_number,
@@ -37,11 +44,14 @@ def test_update_transliteration(client,
     })
 
 
+@freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration_merge_lemmatization(client,
                                                     fragmentarium,
                                                     lemmatized_fragment,
                                                     signs,
-                                                    sign_list):
+                                                    sign_list,
+                                                    user):
+    # pylint: disable=R0913
     for sign in signs:
         sign_list.create(sign)
     fragment_number = fragmentarium.create(lemmatized_fragment)
@@ -51,20 +61,29 @@ def test_update_transliteration_merge_lemmatization(client,
         'transliteration': '\n'.join(lines),
         'notes': lemmatized_fragment.notes
     }
+    expected_fragment = lemmatized_fragment.update_transliteration(
+        Transliteration(
+            updates['transliteration'],
+            updates['notes']
+        ).with_signs(sign_list),
+        user
+    )
+    expected_json = {
+        **expected_fragment.to_dict_for(user),
+        'atf': expected_fragment.text.atf,
+    }
+
     post_result = client.simulate_post(
         f'/fragments/{fragment_number}/transliteration',
         body=json.dumps(updates)
     )
 
     assert post_result.status == falcon.HTTP_OK
+    assert post_result.json == expected_json
 
     updated_fragment =\
         client.simulate_get(f'/fragments/{fragment_number}').json
-
-    expected_text = lemmatized_fragment.text.merge(
-        parse_atf(updates['transliteration'])
-    ).to_dict()
-    assert updated_fragment['text'] == expected_text
+    assert updated_fragment == expected_json
 
 
 def test_update_transliteration_invalid_atf(client,

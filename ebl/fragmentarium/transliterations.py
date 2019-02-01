@@ -32,14 +32,19 @@ class TransliterationResource:
     @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
         try:
-            self._fragmentarium.update_transliteration(
+            user = req.context['user']
+            updated_fragment = self._fragmentarium.update_transliteration(
                 number,
                 Transliteration(
                     req.media['transliteration'],
                     req.media['notes']
                 ),
-                req.context['user']
+                user
             )
+            resp.media = {
+                **updated_fragment.to_dict_for(user),
+                'atf': updated_fragment.text.atf
+            }
         except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {
