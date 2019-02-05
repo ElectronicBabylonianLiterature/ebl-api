@@ -29,6 +29,7 @@ freezegun = "*"
 pyexecjs = "*"
 mypy = "*"
 mypy-extensions = "*"
+pytest-watch = "*"
 
 [requires]
 python_version = "3.6"
@@ -36,3 +37,4 @@ python_version = "3.6"
 [scripts]
 lint = "pylint ebl"
 test = "pytest --cov=ebl --cov-report term --cov-report xml --pep8"
+ptw = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml --pep8\""
