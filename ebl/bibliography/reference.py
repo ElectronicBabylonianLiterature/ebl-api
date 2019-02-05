@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import NewType, Tuple
+from typing import NewType, Tuple, Optional
 import attr
 from ebl.text.line import LineNumber
 
@@ -21,19 +21,28 @@ class Reference():
     pages: str = ''
     notes: str = ''
     lines_cited: Tuple[LineNumber, ...] = tuple()
+    document: Optional[dict] = None
 
-    def to_dict(self) -> dict:
-        return {
+    def to_dict(self, include_document=False) -> dict:
+        result = {
             'id': self.id,
             'type': self.type.name,
             'pages': self.pages,
             'notes': self.notes,
             'linesCited': [line_number for line_number in self.lines_cited]
         }
+        return (
+            {
+                **result,
+                'document': self.document
+            }
+            if include_document else
+            result
+        )
 
     @staticmethod
     def from_dict(data: dict) -> 'Reference':
-        return Reference(
+        result = Reference(
             BibliographyId(data['id']),
             ReferenceType[data['type']],
             data['pages'],
@@ -43,4 +52,9 @@ class Reference():
                 for line_number
                 in data['linesCited']
             )
+        )
+        return (
+            attr.evolve(result, document=data['document'])
+            if 'document' in data
+            else result
         )

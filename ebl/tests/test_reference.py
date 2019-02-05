@@ -1,19 +1,16 @@
 from ebl.bibliography.reference import (
-    BibliographyId, ReferenceType, Reference
+    ReferenceType, Reference
 )
 from ebl.text.line import LineNumber
 
 
-ID = BibliographyId('id')
 TYPE = ReferenceType.EDITION
 PAGES = '1-6'
 NOTES = 'some notes'
 LINES_CITED = (LineNumber('1.'), LineNumber('2a.2.'))
-REFERENCE = Reference(ID, TYPE, PAGES, NOTES, LINES_CITED)
 
 
 SERIALIZED_REFERENCE = {
-    'id': ID,
     'type': TYPE.name,
     'pages': PAGES,
     'notes': NOTES,
@@ -21,27 +18,53 @@ SERIALIZED_REFERENCE = {
 }
 
 
-def test_reference():
-    assert REFERENCE.id == ID
-    assert REFERENCE.type == TYPE
-    assert REFERENCE.pages == PAGES
-    assert REFERENCE.notes == NOTES
-    assert REFERENCE.lines_cited == LINES_CITED
+def test_reference(reference_with_document, bibliography_entry):
+    assert reference_with_document.id == bibliography_entry['id']
+    assert reference_with_document.type == TYPE
+    assert reference_with_document.pages == PAGES
+    assert reference_with_document.notes == NOTES
+    assert reference_with_document.lines_cited == LINES_CITED
+    assert reference_with_document.document == bibliography_entry
 
 
 def test_defaults():
-    reference = Reference(ID, TYPE)
+    reference = Reference('RN01', TYPE)
 
     assert reference.pages == ''
     assert reference.notes == ''
     assert reference.lines_cited == tuple()
+    assert reference.document is None
 
 
-def test_to_dict():
-    assert REFERENCE.to_dict() == SERIALIZED_REFERENCE
+def test_to_dict(reference_with_document):
+    assert reference_with_document.to_dict() == {
+        **SERIALIZED_REFERENCE,
+        'id': reference_with_document.id
+    }
 
 
-def test_from_dict():
-    reference = Reference.from_dict(SERIALIZED_REFERENCE)
+def test_to_dict_with_document(reference_with_document, bibliography_entry):
+    assert reference_with_document.to_dict(True) == {
+        **SERIALIZED_REFERENCE,
+        'id': reference_with_document.id,
+        'document': bibliography_entry
+    }
 
-    assert reference == REFERENCE
+
+def test_from_dict(reference):
+    result = Reference.from_dict({
+        **SERIALIZED_REFERENCE,
+        'id': reference.id
+    })
+
+    assert result == reference
+
+
+def test_from_dict_with_document(reference_with_document, bibliography_entry):
+    result = Reference.from_dict({
+        **SERIALIZED_REFERENCE,
+        'id': reference_with_document.id,
+        'document': bibliography_entry
+    })
+
+    assert result == reference_with_document
