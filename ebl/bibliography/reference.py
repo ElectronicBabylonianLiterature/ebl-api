@@ -42,7 +42,7 @@ class Reference():
 
     @staticmethod
     def from_dict(data: dict) -> 'Reference':
-        result = Reference(
+        return Reference(
             BibliographyId(data['id']),
             ReferenceType[data['type']],
             data['pages'],
@@ -51,10 +51,6 @@ class Reference():
                 LineNumber(line_number)
                 for line_number
                 in data['linesCited']
-            )
-        )
-        return (
-            attr.evolve(result, document=data['document'])
-            if 'document' in data
-            else result
+            ),
+            data.get('document', None)
         )

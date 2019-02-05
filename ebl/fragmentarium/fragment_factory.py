@@ -9,7 +9,8 @@ class FragmentFactory:
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    def create_from_dict(self, data):
+    @staticmethod
+    def create(data):
         return Fragment(
             data['_id'],
             data['accession'],
@@ -34,3 +35,15 @@ class FragmentFactory:
             tuple(Reference.from_dict(reference)
                   for reference in data['references'])
         )
+
+    def create_denormalized(self, data):
+        return self.create({
+            **data,
+            'references': [
+                {
+                    **reference,
+                    'document': self._bibliography.find(reference['id'])
+                }
+                for reference in data['references']
+            ]
+        })

@@ -158,7 +158,7 @@ class Fragment:
             text=text
         )
 
-    def to_dict(self) -> dict:
+    def to_dict(self, with_dependencies=False) -> dict:
         return pydash.omit_by({
             '_id': self.number,
             'accession': self.accession,
@@ -181,7 +181,8 @@ class Fragment:
             'hits': self.hits,
             'matching_lines': self.matching_lines,
             'references': [
-                reference.to_dict() for reference in self.references
+                reference.to_dict(with_dependencies)
+                for reference in self.references
             ]
         }, lambda value: value is None)
 

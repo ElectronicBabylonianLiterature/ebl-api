@@ -4,7 +4,6 @@ import pydash
 from ebl.text.atf import ATF_SPEC
 from ebl.mongo_repository import MongoRepository
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.fragment import Fragment
 from ebl.text.token import UniqueLemma
 
 
@@ -57,7 +56,7 @@ class MongoFragmentRepository():
 
     def find(self, number):
         data = self._mongo_repository.find(number)
-        return self._fragment_factory.create_from_dict(data)
+        return self._fragment_factory.create(data)
 
     def search(self, number):
         cursor = self._mongo_collection.find({
@@ -254,6 +253,6 @@ class MongoFragmentRepository():
 
     def _map_fragments(self, cursor):
         return [
-            self._fragment_factory.create_from_dict(fragment)
+            self._fragment_factory.create(fragment)
             for fragment in cursor
         ]
