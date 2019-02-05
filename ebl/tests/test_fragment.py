@@ -1,24 +1,16 @@
 import datetime
+import attr
 from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
 from ebl.fragmentarium.fragment import (
-    Fragment, Folios, Folio, Text, Measure, Record, RecordEntry
+    Folios, Folio, Text, Measure, Record, RecordEntry
 )
-from ebl.text.language import Language
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
-from ebl.text.line import ControlLine, TextLine, EmptyLine
-from ebl.text.token import Token, Word, LanguageShift
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
-
-
-def test_dict_serialization(lemmatized_fragment):
-    new_fragment = Fragment.from_dict(lemmatized_fragment.to_dict())
-
-    assert new_fragment == lemmatized_fragment
 
 
 def test_to_dict_for(fragment, user):
@@ -116,20 +108,7 @@ def test_folios(fragment):
 
 
 def test_text(fragment):
-    text = Text((
-        ControlLine.of_single('@', Token('obverse')),
-        TextLine.of_iterable('1.', [
-            LanguageShift('%sux'), Word('bu', Language.SUMERIAN)
-        ]),
-        EmptyLine()
-    ))
-    data = {
-        **fragment.to_dict(),
-        'text': {
-            'lines': [line.to_dict() for line in text.lines]
-        }
-    }
-    assert Fragment.from_dict(data).text == text
+    assert fragment.text == Text()
 
 
 def test_hits(another_fragment):
@@ -165,11 +144,7 @@ def test_add_transliteration(fragment, user):
         transliteration,
         user
     )
-    expected_fragment = Fragment.from_dict({
-        **fragment.to_dict(),
-        'text': text.to_dict(),
-        'record': record.to_list()
-    })
+    expected_fragment = attr.evolve(fragment, text=text, record=record)
 
     assert updated_fragment == expected_fragment
 
@@ -187,17 +162,17 @@ def test_update_transliteration(lemmatized_fragment, user):
         user
     )
 
-    expected_fragment = Fragment.from_dict({
-        **lemmatized_fragment.to_dict(),
-        'text': lemmatized_fragment.text.merge(text).to_dict(),
-        'notes': transliteration.notes,
-        'signs': transliteration.signs,
-        'record': lemmatized_fragment.record.add_entry(
+    expected_fragment = attr.evolve(
+        lemmatized_fragment,
+        text=lemmatized_fragment.text.merge(text),
+        notes=transliteration.notes,
+        signs=transliteration.signs,
+        record=lemmatized_fragment.record.add_entry(
             lemmatized_fragment.text.atf,
             transliteration.atf,
             user
-        ).to_list()
-    })
+        )
+    )
 
     assert updated_fragment == expected_fragment
 
@@ -229,10 +204,10 @@ def test_update_notes(fragment, user):
         user
     )
 
-    expected_fragment = Fragment.from_dict({
-        **fragment.to_dict(),
-        'notes': transliteration.notes
-    })
+    expected_fragment = attr.evolve(
+        fragment,
+        notes=transliteration.notes
+    )
 
     assert updated_fragment == expected_fragment
 
@@ -252,13 +227,10 @@ def test_update_lemmatization(transliterated_fragment):
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][1]['uniqueLemma'] = ['nu I']
     lemmatization = Lemmatization.from_list(tokens)
-    expected = Fragment.from_dict({
-        **transliterated_fragment.to_dict(),
-        'lemmatization': tokens,
-        'text': (transliterated_fragment
-                 .text.update_lemmatization(lemmatization)
-                 .to_dict())
-    })
+    expected = attr.evolve(
+        transliterated_fragment,
+        text=transliterated_fragment.text.update_lemmatization(lemmatization)
+    )
 
     assert transliterated_fragment.update_lemmatization(lemmatization) ==\
         expected

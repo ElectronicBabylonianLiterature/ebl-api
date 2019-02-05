@@ -1,8 +1,8 @@
 # pylint: disable=R0913
+import attr
 from freezegun import freeze_time
 import pytest
 from ebl.errors import NotFoundError, DataError
-from ebl.fragmentarium.fragment import Fragment
 from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
@@ -159,23 +159,23 @@ def test_update_update_lemmatization_not_found(fragmentarium, user):
 
 
 def test_statistics(fragmentarium, fragment):
-    for data in [
+    for test_fragment in [
 
-            {**fragment.to_dict(), '_id': '1', 'text': Text((
+            attr.evolve(fragment, number='1', text=Text((
                 TextLine('1.', (Word('SU'), Word('line'))),
                 ControlLine('$', (Token('ignore'), )),
                 EmptyLine()
-            )).to_dict()},
-            {**fragment.to_dict(), '_id': '2', 'text': Text((
+            ))),
+            attr.evolve(fragment, number='2', text=Text((
                 ControlLine('$', (Token('ignore'), )),
                 TextLine('1.', (Word('SU'), )),
                 TextLine('1.', (Word('SU'), )),
                 ControlLine('$', (Token('ignore'), )),
                 TextLine('1.', (Word('SU'), )),
-            )).to_dict()},
-            {**fragment.to_dict(), '_id': '3', 'text': Text().to_dict()}
+            ))),
+            attr.evolve(fragment, number='3', text=Text())
     ]:
-        fragmentarium.create(Fragment.from_dict(data))
+        fragmentarium.create(test_fragment)
 
     assert fragmentarium.statistics() == {
         'transliteratedFragments': 2,
@@ -256,10 +256,7 @@ def test_search_signs(transliteration,
         Transliteration(transliteration)
     )
     expected = [
-        Fragment.from_dict({
-            **transliterated_fragment.to_dict(),
-            'matching_lines': lines
-        })
+        attr.evolve(transliterated_fragment, matching_lines=lines)
     ] if lines else []
 
     assert result == expected

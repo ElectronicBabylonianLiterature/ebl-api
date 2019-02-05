@@ -21,8 +21,9 @@ def sample_size_one():
 
 
 class MongoFragmentRepository():
-    def __init__(self, database):
+    def __init__(self, database, fragment_factory):
         self._mongo_repository = MongoRepository(database, COLLECTION)
+        self._fragment_factory = fragment_factory
 
     @property
     def collection(self):
@@ -56,7 +57,7 @@ class MongoFragmentRepository():
 
     def find(self, number):
         data = self._mongo_repository.find(number)
-        return Fragment.from_dict(data)
+        return self._fragment_factory.create_from_dict(data)
 
     def search(self, number):
         cursor = self._mongo_collection.find({
@@ -251,9 +252,8 @@ class MongoFragmentRepository():
         if result.matched_count == 0:
             raise NotFoundError(f'Fragment {fragment.number} not found.')
 
-    @staticmethod
-    def _map_fragments(cursor):
+    def _map_fragments(self, cursor):
         return [
-            Fragment.from_dict(fragment)
+            self._fragment_factory.create_from_dict(fragment)
             for fragment in cursor
         ]

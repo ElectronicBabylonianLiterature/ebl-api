@@ -19,6 +19,7 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.dictionary.words import WordsResource
 
 from ebl.fragmentarium.folio_pager import FolioPagerResource
+from ebl.fragmentarium.fragment_factory import FragmentFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
@@ -109,14 +110,18 @@ def get_app():
         os.environ['AUTH0_ISSUER']
     )
 
+    bibliography = MongoBibliography(database)
     context = {
         'auth_backend': auth_backend,
         'dictionary': MongoDictionary(database),
         'sign_repository': MongoSignRepository(database),
         'files': GridFsFiles(database),
-        'fragment_repository': MongoFragmentRepository(database),
+        'fragment_repository': MongoFragmentRepository(
+            database,
+            FragmentFactory(bibliography)
+        ),
         'changelog': Changelog(database),
-        'bibliography': MongoBibliography(database)
+        'bibliography': bibliography
     }
 
     return create_app(context)

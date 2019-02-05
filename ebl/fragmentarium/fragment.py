@@ -190,30 +190,3 @@ class Fragment:
             **self.to_dict(),
             'folios': self.folios.filter(user).to_list()
         }
-
-    @staticmethod
-    def from_dict(data: dict) -> 'Fragment':
-        return Fragment(
-            data['_id'],
-            data['accession'],
-            data['cdliNumber'],
-            data['bmIdNumber'],
-            data['publication'],
-            data['description'],
-            data['collection'],
-            data['script'],
-            data['museum'],
-            Measure(**data['width']),
-            Measure(**data['length']),
-            Measure(**data['thickness']),
-            tuple(data['joins']),
-            Record(tuple(RecordEntry(**entry) for entry in data['record'])),
-            Folios(tuple(Folio(**folio) for folio in data['folios'])),
-            Text.from_dict(data['text']),
-            data.get('signs'),
-            data['notes'],
-            data.get('hits'),
-            data.get('matching_lines'),
-            tuple(Reference.from_dict(reference)
-                  for reference in data['references'])
-        )

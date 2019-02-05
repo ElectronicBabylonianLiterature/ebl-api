@@ -29,6 +29,7 @@ from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
     Fragment, Folios, Folio, Record, RecordEntry
 )
+from ebl.fragmentarium.fragment_factory import FragmentFactory
 
 
 @pytest.fixture
@@ -94,8 +95,13 @@ class TestFragmentRepository(MongoFragmentRepository):
 
 
 @pytest.fixture
-def fragment_repository(database):
-    return TestFragmentRepository(database)
+def fragment_factory(bibliography):
+    return FragmentFactory(bibliography)
+
+
+@pytest.fixture
+def fragment_repository(database, fragment_factory):
+    return TestFragmentRepository(database, fragment_factory)
 
 
 @pytest.fixture
