@@ -207,7 +207,7 @@ def test_test_update_transliteration_invalid_value(fragment, user):
     transliteration = Transliteration(atf, fragment.notes)
 
     with pytest.raises(TransliterationError,
-                       message="Invalid transliteration") as excinfo:
+                       match='Invalid transliteration') as excinfo:
         fragment.update_transliteration(
             transliteration,
             user

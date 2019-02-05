@@ -278,7 +278,7 @@ def test_parse_atf_language_shifts(code, expected_language):
 ])
 def test_invalid_atf(atf, line_number):
     with pytest.raises(AtfSyntaxError,
-                       message="Line 1 is invalid.") as excinfo:
+                       match=f'Line {line_number} is invalid.') as excinfo:
         parse_atf(atf)
 
     assert excinfo.value.line_number == line_number

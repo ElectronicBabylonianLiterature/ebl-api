@@ -27,7 +27,7 @@ def test_validate_invalid_atf():
     transliteration = Transliteration('$ this is not valid')
 
     with pytest.raises(TransliterationError,
-                       message="Invalid transliteration") as excinfo:
+                       match='Invalid transliteration') as excinfo:
         Validator(transliteration).validate()
 
     assert excinfo.value.errors == [
@@ -43,7 +43,7 @@ def test_validate_invalid_value(sign_list):
         Transliteration('1. invalid values').with_signs(sign_list)
 
     with pytest.raises(TransliterationError,
-                       message="Invalid transliteration") as excinfo:
+                       match='Invalid transliteration') as excinfo:
         Validator(transliteration).validate()
 
     assert excinfo.value.errors == [
@@ -60,7 +60,7 @@ def test_validate_multiple_errors(sign_list):
     ).with_signs(sign_list)
 
     with pytest.raises(TransliterationError,
-                       message="Invalid transliteration") as excinfo:
+                       match='Invalid transliteration') as excinfo:
         Validator(transliteration).validate()
 
     assert excinfo.value.errors == [
