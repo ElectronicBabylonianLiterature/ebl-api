@@ -167,7 +167,11 @@ VARIANT = variant(
     GRAPHEME |
     DIVIDER
 )
-DETERMINATIVE_SEQUENCE = determinative(value_sequence(VARIANT, VARIANT))
+DETERMINATIVE_SEQUENCE = (
+    INLINE_BROKEN.at_most(1).concat() +
+    determinative(value_sequence(VARIANT, VARIANT)) +
+    INLINE_BROKEN.at_most(1).concat()
+)
 WORD = seq(
     JOINER.many().concat(),
     (
