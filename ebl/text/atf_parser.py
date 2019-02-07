@@ -117,7 +117,8 @@ VALUE = seq(
     ).at_least(1).concat(),
     SUB_INDEX.optional(),
     MODIFIER,
-    FLAG
+    FLAG,
+    INLINE_BROKEN.at_most(1).concat()
 ).map(pydash.compact).concat().desc('reading')
 GRAPHEME_CHAR = regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉]')
 GRAPHEME = (
