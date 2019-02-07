@@ -158,6 +158,7 @@ class WordsResource:
 
     @falcon.before(require_scope, 'write:words')
     @validate(WORD_DTO_SCHEMA)
-    def on_post(self, req, _resp, object_id):
+    def on_post(self, req, resp, object_id):
         word = {**req.media, '_id': object_id}
         self._dictionary.update(word, req.context['user'])
+        resp.status = falcon.HTTP_NO_CONTENT
