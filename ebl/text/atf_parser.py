@@ -96,34 +96,41 @@ DIVIDER = (
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
 LACUNA = regex(r'\[?\(?\.\.\.\)?\]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
-UNKNOWN = (
-    string_from(
-        ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN
-    ) + FLAG
-).desc('unclear or unindentified')
 SUB_INDEX = regex(r'[₀-₉ₓ]+').desc('subindex')
-INLINE_BROKEN = (
-    regex(r'(\[\(|\[|(?!>{)\()(?!\.)') |
-    regex(r'(?<!\.)(\)\]|\)(?!})|\])')
-)
+INLINE_BROKEN_LEFT = regex(r'(\[\(|\[|(?!>{)\()(?!\.)')
+INLINE_BROKEN_RIGHT = regex(r'(?<!\.)(\)\]|\)(?!})|\])')
+INLINE_BROKEN = INLINE_BROKEN_LEFT | INLINE_BROKEN_RIGHT
+UNKNOWN = (
+    INLINE_BROKEN.at_most(1).concat() +
+    string_from(ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN) +
+    FLAG +
+    INLINE_BROKEN.at_most(1).concat()
+).desc('unclear or unindentified')
+VALUE_CHAR = char_from('aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ')
 VALUE = seq(
     (
-        char_from('aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ') |
-        decimal_digit |
-        INLINE_BROKEN
+        (INLINE_BROKEN + VALUE_CHAR + INLINE_BROKEN) |
+        (INLINE_BROKEN + VALUE_CHAR) |
+        (VALUE_CHAR + INLINE_BROKEN) |
+        VALUE_CHAR |
+        decimal_digit
     ).at_least(1).concat(),
     SUB_INDEX.optional(),
     MODIFIER,
     FLAG
 ).map(pydash.compact).concat().desc('reading')
+GRAPHEME_CHAR = regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉]')
 GRAPHEME = (
     string('$').at_most(1).concat() +
     (
-        regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉]') |
-        INLINE_BROKEN
+        (INLINE_BROKEN + GRAPHEME_CHAR + INLINE_BROKEN) |
+        (INLINE_BROKEN + GRAPHEME_CHAR) |
+        (GRAPHEME_CHAR + INLINE_BROKEN) |
+        GRAPHEME_CHAR
     ).at_least(1).concat() +
     MODIFIER +
-    FLAG
+    FLAG +
+    INLINE_BROKEN.at_most(1).concat()
 ).desc('grapheme')
 COMPOUND_GRAPHEME_OPERATOR = (SINGLE_DOT | char_from('×%&+()')).desc(
     'compound grapheme operator'

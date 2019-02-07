@@ -46,10 +46,12 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('1. ($___$)', [
         TextLine('1.', (Token('($___$)'), ))
     ]),
-    ('1. ... [...]', [
+    ('1. ... [...] (...) [(...)]', [
         TextLine('1.', (
             Token('...'),
-            Token('[...]')
+            Token('[...]'),
+            Token('(...)'),
+            Token('[(...)]')
         ))
     ]),
     ('1. [(x x x)]', [
