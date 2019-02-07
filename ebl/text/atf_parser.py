@@ -88,11 +88,6 @@ WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'(?=\n|$)')
 LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
 TABULATION = string('($___$)').desc('tabulation')
 COLUMN = regex(r'&\d*').desc('column') << WORD_SEPARATOR_OR_EOL
-DIVIDER = (
-    string_from('|', ':\'', ':"', ':.', '::', ':?', ':', ';', '/') +
-    MODIFIER +
-    FLAG
-).desc('divider')
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
 LACUNA = regex(r'\[?\(?\.\.\.\)?\]?').desc('lacuna')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
@@ -100,6 +95,13 @@ SUB_INDEX = regex(r'[₀-₉ₓ]+').desc('subindex')
 INLINE_BROKEN_LEFT = regex(r'(\[\(|\[|(?!>{)\()(?!\.)')
 INLINE_BROKEN_RIGHT = regex(r'(?<!\.)(\)\]|\)(?!})|\])')
 INLINE_BROKEN = INLINE_BROKEN_LEFT | INLINE_BROKEN_RIGHT
+DIVIDER = (
+    INLINE_BROKEN.at_most(1).concat() +
+    string_from('|', ':\'', ':"', ':.', '::', ':?', ':', ';', '/') +
+    MODIFIER +
+    FLAG +
+    INLINE_BROKEN.at_most(1).concat()
+).desc('divider')
 UNKNOWN = (
     INLINE_BROKEN.at_most(1).concat() +
     string_from(ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN) +

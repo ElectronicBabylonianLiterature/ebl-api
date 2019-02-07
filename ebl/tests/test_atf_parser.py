@@ -132,8 +132,12 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Word('-ku')
         ))
     ]),
-    ('1. ša₃] [{d}UTU', [
-        TextLine('1.', (Word('ša₃]'), (Word('[{d}UTU'))))
+    ('1. ša₃] [{d}UTU [:', [
+        TextLine('1.', (
+            Word('ša₃]'),
+            Word('[{d}UTU'),
+            Token('[:')
+        ))
     ]),
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
         TextLine('1.', (
