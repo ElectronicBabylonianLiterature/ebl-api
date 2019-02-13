@@ -36,8 +36,9 @@ class BibliographyResource:
 
     @falcon.before(require_scope, 'write:bibliography')
     @validate(CSL_JSON_SCHEMA)
-    def on_put(self, req, _resp):
+    def on_put(self, req, resp):
         self._bibliography.create(req.media, req.context['user'])
+        resp.status = falcon.HTTP_NO_CONTENT
 
 
 class BibliographyEntriesResource:
@@ -51,6 +52,7 @@ class BibliographyEntriesResource:
 
     @falcon.before(require_scope, 'write:bibliography')
     @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req, _resp, id_):
+    def on_post(self, req, resp, id_):
         entry = {**req.media, 'id': id_}
         self._bibliography.update(entry, req.context['user'])
+        resp.status = falcon.HTTP_NO_CONTENT
