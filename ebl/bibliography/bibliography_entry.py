@@ -130,10 +130,8 @@ CSL_JSON_SCHEMA = {
             ]
         },
         "id": {
-            "type": [
-                "string",
-                "number"
-            ],
+            "type": "string",
+            "pattern": r"^[^/]+$"
         },
         "categories": {
             "type": "array",
