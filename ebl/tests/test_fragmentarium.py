@@ -23,13 +23,6 @@ def test_fragment_not_found(fragmentarium):
         fragmentarium.find('unknown id')
 
 
-def test_find_latest(fragmentarium, fragment, transliterated_fragment):
-    fragmentarium.create(fragment)
-    fragmentarium.create(transliterated_fragment)
-
-    assert fragmentarium.find_latest() == [transliterated_fragment]
-
-
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(fragmentarium, transliterated_fragment, user):
     fragment_number = fragmentarium.create(transliterated_fragment)

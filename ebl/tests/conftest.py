@@ -79,6 +79,13 @@ def sign_list(sign_repository):
 
 
 class TestFragmentRepository(MongoFragmentRepository):
+    # Mongomock does not support $addFields so we need to
+    # stub the methods using them.
+    def find_latest(self):
+        return self._map_fragments(
+            self._mongo_repository.get_collection().find({})
+        )
+
     # Mongomock does not support $concat so we need to
     # stub the methods using them.
     def folio_pager(self, _folio_name, _folio_number, _number):

@@ -102,11 +102,30 @@ class MongoFragmentRepository():
         return self._map_fragments(cursor)
 
     def find_latest(self):
-        cursor = (self._mongo_collection
-                  .find({'record.type': RecordType.TRANSLITERATION.value})
-                  .sort({'record.date': -1})
-                  .limit(NUMBER_OF_LATEST_TRANSLITERATIONS))
-
+        temp_field_name = '_temp'
+        cursor = self._mongo_collection.aggregate([
+            {'$match': {'record.type': RecordType.TRANSLITERATION.value}},
+            {'$addFields': {
+                temp_field_name: {
+                    '$filter': {
+                        'input': '$record',
+                        'as': 'entry',
+                        'cond': {
+                            '$eq': [
+                                '$$entry.type',
+                                RecordType.TRANSLITERATION.value
+                            ]
+                        }
+                    }
+                }
+            }},
+            {'$addFields': {
+                temp_field_name: {'$min': f'${temp_field_name}.date'}
+            }},
+            {'$sort': {temp_field_name: -1}},
+            {'$limit': NUMBER_OF_LATEST_TRANSLITERATIONS},
+            {'$project': {temp_field_name: 0}}
+        ])
         return self._map_fragments(cursor)
 
     def search_signs(self, query):
