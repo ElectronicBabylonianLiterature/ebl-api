@@ -119,10 +119,7 @@ class MongoFragmentRepository():
                     }
                 }
             }},
-            {'$addFields': {
-                temp_field_name: {'$min': f'${temp_field_name}.date'}
-            }},
-            {'$sort': {temp_field_name: -1}},
+            {'$sort': {f'{temp_field_name}.date': -1}},
             {'$limit': NUMBER_OF_LATEST_TRANSLITERATIONS},
             {'$project': {temp_field_name: 0}}
         ])
