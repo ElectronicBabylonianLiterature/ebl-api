@@ -5,10 +5,12 @@ from ebl.text.atf import ATF_SPEC
 from ebl.mongo_repository import MongoRepository
 from ebl.errors import NotFoundError
 from ebl.text.token import UniqueLemma
+from ebl.fragmentarium.fragment import RecordType
 
 
 COLLECTION = 'fragments'
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
+NUMBER_OF_LATEST_TRANSLITERATIONS = 10
 
 
 def sample_size_one():
@@ -96,6 +98,14 @@ class MongoFragmentRepository():
 
     def find_transliterated(self):
         cursor = self._mongo_collection.find(HAS_TRANSLITERATION)
+
+        return self._map_fragments(cursor)
+
+    def find_latest(self):
+        cursor = (self._mongo_collection
+                  .find({'record.type': RecordType.TRANSLITERATION.value})
+                  .sort({'record.date': -1})
+                  .limit(NUMBER_OF_LATEST_TRANSLITERATIONS))
 
         return self._map_fragments(cursor)
 

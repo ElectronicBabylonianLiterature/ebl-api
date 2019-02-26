@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import attr
 import pytest
 from ebl.errors import NotFoundError
@@ -5,6 +6,7 @@ from ebl.text.lemmatization import Lemmatization
 from ebl.text.token import Token, Word
 from ebl.text.line import TextLine, ControlLine, EmptyLine
 from ebl.text.text import Text
+from ebl.fragmentarium.fragment import Record, RecordEntry, RecordType
 from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.transliteration import Transliteration
 
@@ -45,6 +47,47 @@ def test_find_interesting(fragment_repository,
 
     assert fragment_repository.find_interesting() ==\
         [interesting_fragment]
+
+
+def test_find_latest(fragment_repository, fragment):
+    now = datetime.utcnow()
+    first = attr.evolve(fragment, number='K.2', record=Record((
+        RecordEntry(
+            'Alice',
+            RecordType.TRANSLITERATION,
+            (now - timedelta(days=2)).isoformat()
+        ),
+        RecordEntry(
+            'Bob',
+            RecordType.COLLATION,
+            (now - timedelta(days=4)).isoformat()
+        ),
+    )))
+    second = attr.evolve(fragment, number='K.3', record=Record((
+        RecordEntry(
+            'Bob',
+            RecordType.TRANSLITERATION,
+            (now - timedelta(days=3)).isoformat()
+        ),
+        RecordEntry(
+            'Alice',
+            RecordType.COLLATION,
+            (now - timedelta(days=1)).isoformat()
+        ),
+    )))
+    no_transliteration = attr.evolve(fragment, number='K.4', record=Record((
+        RecordEntry(
+            'Bob',
+            RecordType.COLLATION,
+            (now - timedelta(days=1)).isoformat()
+        ),
+    )))
+
+    for a_fragment in fragment, second, first, no_transliteration:
+        fragment_repository.create(a_fragment)
+
+    assert fragment_repository.find_latest() ==\
+        [first, second]
 
 
 def test_fragment_not_found(fragment_repository):
