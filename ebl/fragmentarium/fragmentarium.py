@@ -88,6 +88,9 @@ class Fragmentarium:
     def find_interesting(self):
         return self._repository.find_interesting()
 
+    def find_latest(self):
+        return self._repository.find_latest()
+
     def search_signs(self, transliteration):
         signs = transliteration.to_sign_matrix(self._sign_list)
         query = TransliterationQuery(signs)
