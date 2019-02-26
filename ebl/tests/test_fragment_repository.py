@@ -26,32 +26,25 @@ def test_find(database, fragment_repository, fragment):
     assert fragment_repository.find(fragment.number) == fragment
 
 
-def find_random(database,
-                fragment_repository,
-                fragment,
-                transliterated_fragment):
-    database[COLLECTION].insert_many(
-        fragment.to_dict(),
-        transliterated_fragment.to_dict()
-    )
+def test_find_random(fragment_repository,
+                     fragment,
+                     transliterated_fragment):
+    for a_fragment in fragment, transliterated_fragment:
+        fragment_repository.create(a_fragment)
 
     assert fragment_repository.find_random() ==\
         [transliterated_fragment]
 
 
-def find_interesting(database,
-                     fragment_repository,
-                     fragment,
-                     transliterated_fragment,
-                     interesting_fragment):
-    database[COLLECTION].insert_many(
-        fragment.to_dict(),
-        transliterated_fragment.to_dict(),
-        interesting_fragment.to_dict()
-    )
+def test_find_interesting(fragment_repository,
+                          fragment,
+                          transliterated_fragment,
+                          interesting_fragment):
+    for a_fragment in fragment, transliterated_fragment, interesting_fragment:
+        fragment_repository.create(a_fragment)
 
-    assert fragment_repository.find_interesting(fragment.number) ==\
-        interesting_fragment
+    assert fragment_repository.find_interesting() ==\
+        [interesting_fragment]
 
 
 def test_fragment_not_found(fragment_repository):
