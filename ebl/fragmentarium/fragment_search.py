@@ -14,6 +14,7 @@ class FragmentSearch:
             'number': fragmentarium.search,
             'random': lambda _: fragmentarium.find_random(),
             'interesting': lambda _: fragmentarium.find_interesting(),
+            'latest': lambda _: fragmentarium.find_latest(),
             'transliteration': pydash.flow(
                 Transliteration,
                 fragmentarium.search_signs

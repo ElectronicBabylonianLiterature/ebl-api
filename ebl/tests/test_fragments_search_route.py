@@ -77,6 +77,21 @@ def test_interesting(client,
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
+def test_latest(client,
+                fragmentarium,
+                transliterated_fragment,
+                user):
+    fragmentarium.create(transliterated_fragment)
+
+    result = client.simulate_get(f'/fragments', params={
+        'latest': True
+    })
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [create_response_dto(transliterated_fragment, user)]
+    assert result.headers['Access-Control-Allow-Origin'] == '*'
+
+
 def test_search_fragment_no_query(client):
     result = client.simulate_get(f'/fragments')
 
