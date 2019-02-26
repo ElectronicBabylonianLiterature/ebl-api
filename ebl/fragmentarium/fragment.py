@@ -1,6 +1,7 @@
 # pylint: disable=R0903
 import datetime
-from typing import Tuple, Optional
+from enum import Enum
+from typing import Tuple, Optional, Dict, List, Union
 import attr
 import pydash
 from ebl.bibliography.reference import Reference
@@ -12,27 +13,35 @@ from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
 
-TRANSLITERATION = 'Transliteration'
-REVISION = 'Revision'
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Measure:
     value: Optional[float] = None
     note: Optional[str] = None
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, Union[str, float]]:
         return attr.asdict(self, filter=lambda _, value: value is not None)
+
+
+class RecordType(Enum):
+    TRANSLITERATION = 'Transliteration'
+    REVISION = 'Revision'
+    HISTORICAL_TRANSLITERATION = 'HistoricalTransliteration'
+    COLLATION = 'Collation'
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class RecordEntry:
     user: str
-    type: str
+    type: RecordType
     date: str
 
-    def to_dict(self) -> dict:
-        return attr.asdict(self)
+    def to_dict(self) -> Dict[str, str]:
+        return {
+            'user': self.user,
+            'type': self.type.value,
+            'date': self.date
+        }
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -50,12 +59,16 @@ class Record:
         else:
             return self
 
-    def to_list(self) -> list:
+    def to_list(self) -> List[Dict[str, str]]:
         return [entry.to_dict() for entry in self.entries]
 
     @staticmethod
     def _create_entry(old_transliteration: str, user) -> RecordEntry:
-        record_type = REVISION if old_transliteration else TRANSLITERATION
+        record_type = (
+            RecordType.REVISION
+            if old_transliteration
+            else RecordType.TRANSLITERATION
+        )
         return RecordEntry(
             user.ebl_name,
             record_type,
@@ -68,7 +81,7 @@ class Folio:
     name: str
     number: str
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, str]:
         return attr.asdict(self)
 
 
@@ -84,7 +97,7 @@ class Folios:
         )
         return Folios(folios)
 
-    def to_list(self) -> list:
+    def to_list(self) -> List[Dict[str, str]]:
         return [folio.to_dict() for folio in self.entries]
 
 

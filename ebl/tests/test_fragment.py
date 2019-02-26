@@ -4,7 +4,7 @@ from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
 from ebl.fragmentarium.fragment import (
-    Folios, Folio, Text, Measure, Record, RecordEntry
+    Folios, Folio, Text, Measure, Record, RecordEntry, RecordType
 )
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import (
@@ -94,7 +94,7 @@ def test_record(transliterated_fragment):
     assert transliterated_fragment.record == Record((
         RecordEntry(
             'Tester',
-            'Transliteration',
+            RecordType.TRANSLITERATION,
             '2018-12-21T17:05:27.352435'
         ),
     ))
@@ -135,7 +135,7 @@ def test_add_transliteration(fragment, user):
     record = Record((
         RecordEntry(
             user.ebl_name,
-            'Transliteration',
+            RecordType.TRANSLITERATION,
             datetime.datetime.utcnow().isoformat()
         ),
     ))
@@ -258,8 +258,8 @@ def test_filter_folios(user):
 
 
 @pytest.mark.parametrize("old,new,type_", [
-    ('', 'new', 'Transliteration'),
-    ('old', 'new', 'Revision'),
+    ('', 'new', RecordType.TRANSLITERATION),
+    ('old', 'new', RecordType.REVISION),
 ])
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_record(old, new, type_, record, user):

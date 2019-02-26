@@ -27,7 +27,7 @@ from ebl.text.line import TextLine, LineNumber
 from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
-    Fragment, Folios, Folio, Record, RecordEntry
+    Fragment, Folios, Folio, Record, RecordEntry, RecordType
 )
 from ebl.fragmentarium.fragment_factory import FragmentFactory
 
@@ -416,7 +416,7 @@ def transliterated_fragment(reference):
         record=Record((
             RecordEntry(
                 'Tester',
-                'Transliteration',
+                RecordType.TRANSLITERATION,
                 '2018-12-21T17:05:27.352435'
             ),
         )),
@@ -484,7 +484,7 @@ def record():
     return Record((
         RecordEntry(
             'Tester',
-            'Transliteration',
+            RecordType.TRANSLITERATION,
             datetime.datetime.utcnow().isoformat()
         ),
     ))

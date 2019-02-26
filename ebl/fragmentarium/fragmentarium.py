@@ -3,10 +3,6 @@ from ebl.fragmentarium.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.validator import Validator
 
 
-TRANSLITERATION = 'Transliteration'
-REVISION = 'Revision'
-
-
 class Fragmentarium:
 
     def __init__(self,
