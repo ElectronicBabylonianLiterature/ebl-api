@@ -135,6 +135,7 @@ disable=print-statement,
         exception-escape,
         comprehension-escape,
         no-else-return,
+        no-else-raise,
         missing-docstring,
         R0801
 
