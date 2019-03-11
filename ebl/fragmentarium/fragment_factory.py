@@ -1,10 +1,9 @@
 from ebl.fragmentarium.fragment import (
     Fragment,
-    Folio,
-    Folios,
     Measure,
     UncuratedReference
 )
+from ebl.fragmentarium.folios import Folios, Folio
 from ebl.fragmentarium.record import (
     RecordType,
     RecordEntry,
@@ -12,6 +11,10 @@ from ebl.fragmentarium.record import (
 )
 from ebl.bibliography.reference import Reference
 from ebl.text.text import Text
+
+
+def create_folios(data):
+    return Folios(tuple(Folio(**folio) for folio in data))
 
 
 def create_record(data):
@@ -46,7 +49,7 @@ class FragmentFactory:
             Measure(**data['thickness']),
             tuple(data['joins']),
             create_record(data['record']),
-            Folios(tuple(Folio(**folio) for folio in data['folios'])),
+            create_folios(data['folios']),
             Text.from_dict(data['text']),
             data.get('signs'),
             data['notes'],

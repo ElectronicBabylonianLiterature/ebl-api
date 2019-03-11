@@ -7,6 +7,7 @@ from ebl.text.lemmatization import Lemmatization
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
+from ebl.fragmentarium.folios import Folios
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
 )
@@ -29,31 +30,6 @@ class Measure:
 
     def to_dict(self) -> Dict[str, Union[str, float]]:
         return attr.asdict(self, filter=lambda _, value: value is not None)
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Folio:
-    name: str
-    number: str
-
-    def to_dict(self) -> Dict[str, str]:
-        return attr.asdict(self)
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Folios:
-    entries: Tuple[Folio, ...] = tuple()
-
-    def filter(self, user) -> 'Folios':
-        folios = tuple(
-            folio
-            for folio in self.entries
-            if user.can_read_folio(folio.name)
-        )
-        return Folios(folios)
-
-    def to_list(self) -> List[Dict[str, str]]:
-        return [folio.to_dict() for folio in self.entries]
 
 
 @attr.s(auto_attribs=True, frozen=True)

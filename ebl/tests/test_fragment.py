@@ -2,14 +2,14 @@ import attr
 from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
-from ebl.fragmentarium.fragment import (
-    Folios, Folio, Text, Measure
-)
+from ebl.fragmentarium.fragment import Measure
+from ebl.fragmentarium.folios import Folios, Folio
 from ebl.fragmentarium.record import (
     RecordType,
     RecordEntry,
     Record
 )
+from ebl.text.text import Text
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import (
     Transliteration, TransliterationError
@@ -248,19 +248,6 @@ def test_update_lemmatization_incompatible(fragment):
     )
     with pytest.raises(LemmatizationError):
         fragment.update_lemmatization(lemmatization)
-
-
-def test_filter_folios(user):
-    wgl_folio = Folio('WGL', '1')
-    folios = Folios((
-        wgl_folio,
-        Folio('XXX', '1')
-    ))
-    expected = Folios((
-        wgl_folio,
-    ))
-
-    assert folios.filter(user) == expected
 
 
 def test_set_references(fragment, reference):
