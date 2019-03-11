@@ -1,5 +1,5 @@
 from ebl.errors import NotFoundError, DataError
-from ebl.fragmentarium.transliteration_query import TransliterationQuery
+from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.validator import Validator
 
 

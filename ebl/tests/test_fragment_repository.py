@@ -5,8 +5,8 @@ from ebl.text.lemmatization import Lemmatization
 from ebl.text.token import Token, Word
 from ebl.text.line import TextLine, ControlLine, EmptyLine
 from ebl.text.text import Text
-from ebl.fragmentarium.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.transliteration import Transliteration
+from ebl.fragment.transliteration_query import TransliterationQuery
+from ebl.fragment.transliteration import Transliteration
 
 
 COLLECTION = 'fragments'

@@ -5,7 +5,7 @@ from ebl.text.atf import ATF_SPEC
 from ebl.mongo_repository import MongoRepository
 from ebl.errors import NotFoundError
 from ebl.text.token import UniqueLemma
-from ebl.fragmentarium.record import RecordType
+from ebl.fragment.record import RecordType
 
 
 COLLECTION = 'fragments'

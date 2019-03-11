@@ -1,7 +1,7 @@
 import re
 import pytest
-from ebl.fragmentarium.transliteration import Transliteration
-from ebl.fragmentarium.transliteration_query import TransliterationQuery
+from ebl.fragment.transliteration import Transliteration
+from ebl.fragment.transliteration_query import TransliterationQuery
 
 
 ATF = (

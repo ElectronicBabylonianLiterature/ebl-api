@@ -4,7 +4,7 @@ from freezegun import freeze_time
 import pytest
 from ebl.errors import NotFoundError, DataError
 from ebl.text.lemmatization import Lemmatization
-from ebl.fragmentarium.transliteration import (
+from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.text.token import Token, Word

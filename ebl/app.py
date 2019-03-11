@@ -19,7 +19,7 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.dictionary.words import WordsResource
 
 from ebl.fragmentarium.folio_pager import FolioPagerResource
-from ebl.fragmentarium.fragment_factory import FragmentFactory
+from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium

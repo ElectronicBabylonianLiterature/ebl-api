@@ -1,10 +1,10 @@
-from ebl.fragmentarium.fragment import (
+from ebl.fragment.fragment import (
     Fragment,
     Measure,
     UncuratedReference
 )
-from ebl.fragmentarium.folios import Folios, Folio
-from ebl.fragmentarium.record import (
+from ebl.fragment.folios import Folios, Folio
+from ebl.fragment.record import (
     RecordType,
     RecordEntry,
     Record

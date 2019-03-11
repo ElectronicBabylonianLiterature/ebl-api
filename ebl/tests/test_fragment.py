@@ -2,19 +2,19 @@ import attr
 from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
-from ebl.fragmentarium.fragment import Measure
-from ebl.fragmentarium.folios import Folios, Folio
-from ebl.fragmentarium.record import (
+from ebl.fragment.fragment import Measure
+from ebl.fragment.folios import Folios, Folio
+from ebl.fragment.record import (
     RecordType,
     RecordEntry,
     Record
 )
 from ebl.text.text import Text
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
-from ebl.fragmentarium.transliteration import (
+from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
-from ebl.fragmentarium.transliteration_query import TransliterationQuery
+from ebl.fragment.transliteration_query import TransliterationQuery
 
 
 def test_to_dict_for(fragment, user):

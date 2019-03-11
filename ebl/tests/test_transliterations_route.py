@@ -2,7 +2,7 @@ import json
 import falcon
 from freezegun import freeze_time
 import pytest
-from ebl.fragmentarium.transliteration import Transliteration
+from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.dtos import create_response_dto
 
 

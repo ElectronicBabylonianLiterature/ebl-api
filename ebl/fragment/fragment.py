@@ -7,11 +7,11 @@ from ebl.text.lemmatization import Lemmatization
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
-from ebl.fragmentarium.folios import Folios
-from ebl.fragmentarium.transliteration import (
+from ebl.fragment.folios import Folios
+from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
-from ebl.fragmentarium.record import Record
+from ebl.fragment.record import Record
 
 
 @attr.s(auto_attribs=True, frozen=True)

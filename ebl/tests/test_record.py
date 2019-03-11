@@ -1,7 +1,7 @@
 import datetime
 from freezegun import freeze_time
 import pytest
-from ebl.fragmentarium.record import (
+from ebl.fragment.record import (
     RecordType,
     RecordEntry,
     Record

@@ -2,9 +2,9 @@ import os
 from pymongo import MongoClient
 
 from ebl.bibliography.bibliography import MongoBibliography
-from ebl.fragmentarium.fragment_factory import FragmentFactory
+from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.transliteration import Transliteration
+from ebl.fragment.transliteration import Transliteration
 from ebl.sign_list.sign_repository import MemoizingSignRepository
 from ebl.sign_list.sign_list import SignList
 
