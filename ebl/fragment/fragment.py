@@ -129,7 +129,7 @@ class Fragment:
                 reference.to_dict(with_dependencies)
                 for reference in self.references
             ],
-            'uncurated_references': (
+            'uncuratedReferences': (
                 [
                     reference.to_dict()
                     for reference

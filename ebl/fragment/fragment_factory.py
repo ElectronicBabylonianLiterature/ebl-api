@@ -62,8 +62,8 @@ class FragmentFactory:
                     reference['document'],
                     tuple(reference['pages'])
                 )
-                for reference in data['uncurated_references']
-            ) if 'uncurated_references' in data else None
+                for reference in data['uncuratedReferences']
+            ) if 'uncuratedReferences' in data else None
         )
 
     def create_denormalized(self, data):
