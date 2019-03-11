@@ -4,90 +4,117 @@ from freezegun import freeze_time
 import pytest
 from ebl.errors import NotFoundError, DataError
 from ebl.text.lemmatization import Lemmatization
+from ebl.text.token import UniqueLemma
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
-from ebl.text.token import Token, Word
-from ebl.text.line import TextLine, ControlLine, EmptyLine
-from ebl.text.text import Text
+from ebl.fragment.transliteration_query import TransliterationQuery
 
 
-def test_create_and_find(fragmentarium, fragment):
-    fragment_id = fragmentarium.create(fragment)
+def test_find(fragmentarium, fragment, fragment_repository, when):
+    number = fragment.number
+    when(fragment_repository).find(number).thenReturn(fragment)
 
-    assert fragmentarium.find(fragment_id) == fragment
+    assert fragmentarium.find(number) == fragment
 
 
-def test_fragment_not_found(fragmentarium):
+def test_find_not_found(fragmentarium, fragment_repository, when):
+    number = 'unknown id'
+    when(fragment_repository).find(number).thenRaise(NotFoundError)
+
     with pytest.raises(NotFoundError):
-        fragmentarium.find('unknown id')
+        fragmentarium.find(number)
+
+
+def test_find_random(fragmentarium, fragment, fragment_repository, when):
+    expected = [fragment]
+    when(fragment_repository).find_random().thenReturn(expected)
+    assert fragmentarium.find_random() == expected
+
+
+def test_find_interesting(fragmentarium, fragment, fragment_repository, when):
+    expected = [fragment]
+    when(fragment_repository).find_interesting().thenReturn(expected)
+    assert fragmentarium.find_interesting() == expected
+
+
+def test_find_latest(fragmentarium, fragment, fragment_repository, when):
+    expected = [fragment]
+    when(fragment_repository).find_latest().thenReturn(expected)
+    assert fragmentarium.find_latest() == expected
+
+
+def test_folio_pager(fragmentarium, fragment_repository, when):
+    folio_name = 'WGL'
+    folio_number = '2'
+    number = 'K.2'
+    expected = {
+        'previous': {
+            'fragmentNumber': 'K.1',
+            'folioNumber': '1'
+        },
+        'next': {
+            'fragmentNumber': 'K.3',
+            'folioNumber': '3'
+        }
+    }
+    (when(fragment_repository)
+     .folio_pager(folio_name, folio_number, number)
+     .thenReturn(expected))
+    assert fragmentarium.folio_pager(folio_name, folio_number, number) ==\
+        expected
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_update_transliteration(fragmentarium, transliterated_fragment, user):
-    fragment_number = fragmentarium.create(transliterated_fragment)
-
-    updated_fragment = fragmentarium.update_transliteration(
-        fragment_number,
-        Transliteration('1. x x\n2. x', 'updated notes'),
-        user
-    )
-    db_fragment = fragmentarium.find(fragment_number)
-
+def test_update_transliteration(fragmentarium,
+                                transliterated_fragment,
+                                user,
+                                fragment_repository,
+                                changelog,
+                                when):
+    number = transliterated_fragment.number
     expected_fragment = transliterated_fragment.update_transliteration(
         Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX'),
         user
     )
 
+    when(fragment_repository).find(number).thenReturn(transliterated_fragment)
+    when(changelog).create(
+        'fragments',
+        user.profile,
+        transliterated_fragment.to_dict(),
+        expected_fragment.to_dict()
+    ).thenReturn()
+    (when(fragment_repository)
+     .update_transliteration(expected_fragment)
+     .thenReturn())
+
+    updated_fragment = fragmentarium.update_transliteration(
+        number,
+        Transliteration('1. x x\n2. x', 'updated notes'),
+        user
+    )
     assert updated_fragment == expected_fragment
-    assert db_fragment == expected_fragment
 
 
-def test_update_transliteration_invalid(fragmentarium, fragment, user):
-    fragment_number = fragmentarium.create(fragment)
-
+def test_update_transliteration_invalid(fragmentarium, user):
     with pytest.raises(TransliterationError):
         fragmentarium.update_transliteration(
-            fragment_number,
+            'K.1',
             Transliteration('1. invalid values'),
             user
         )
 
 
-@freeze_time("2018-09-07 15:41:24.032")
-def test_transliteration_changelog(database,
-                                   fragmentarium,
-                                   fragment,
-                                   user,
-                                   make_changelog_entry):
-    fragment_id = fragmentarium.create(fragment)
-    fragmentarium.update_transliteration(
-        fragment_id,
-        Transliteration('1. x x x', 'updated notes'),
-        user
-    )
-
-    expected_fragment = fragment.update_transliteration(
-        Transliteration('1. x x x', 'updated notes', 'X X X'),
-        user
-    )
-
-    expected_changelog = make_changelog_entry(
-        'fragments',
-        fragment_id,
-        fragment.to_dict(),
-        expected_fragment.to_dict()
-    )
-    assert database['changelog'].find_one(
-        {'resource_id': fragment_id},
-        {'_id': 0}
-    ) == expected_changelog
-
-
-def test_update_update_transliteration_not_found(fragmentarium, user):
+def test_update_update_transliteration_not_found(fragmentarium,
+                                                 user,
+                                                 fragment_repository,
+                                                 when):
+    number = 'unknown.number'
+    when(fragment_repository).find(number).thenRaise(NotFoundError)
     with pytest.raises(NotFoundError):
         fragmentarium.update_transliteration(
-            'unknown.number',
+            number,
             Transliteration('$ (the transliteration)', 'notes'),
             user
         )
@@ -96,132 +123,73 @@ def test_update_update_transliteration_not_found(fragmentarium, user):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_lemmatization(fragmentarium,
                               transliterated_fragment,
-                              user):
-    fragment_number = fragmentarium.create(transliterated_fragment)
+                              user,
+                              fragment_repository,
+                              changelog,
+                              when):
+    number = transliterated_fragment.number
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][1]['uniqueLemma'] = ['aklu I']
     lemmatization = Lemmatization.from_list(tokens)
-
-    updated_fragment = fragmentarium.update_lemmatization(
-        fragment_number,
-        lemmatization,
-        user
-    )
-    db_fragment = fragmentarium.find(fragment_number)
-
     expected_fragment = transliterated_fragment.update_lemmatization(
         lemmatization
     )
-
-    assert updated_fragment == expected_fragment
-    assert db_fragment == expected_fragment
-
-
-@freeze_time("2018-09-07 15:41:24.032")
-def test_lemmatization_changelog(database,
-                                 fragmentarium,
-                                 transliterated_fragment,
-                                 user,
-                                 make_changelog_entry):
-    fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][1]['uniqueLemma'] = ['aklu I']
-    lemmatization = Lemmatization.from_list(tokens)
-    fragmentarium.update_lemmatization(
-        fragment_number,
-        lemmatization,
-        user
-    )
-
-    expected_fragment = transliterated_fragment.update_lemmatization(
-        lemmatization
-    )
-
-    expected_changelog = make_changelog_entry(
+    when(fragment_repository).find(number).thenReturn(transliterated_fragment)
+    when(changelog).create(
         'fragments',
-        fragment_number,
+        user.profile,
         transliterated_fragment.to_dict(),
         expected_fragment.to_dict()
+    ).thenReturn()
+    (when(fragment_repository)
+     .update_lemmatization(expected_fragment)
+     .thenReturn())
+
+    updated_fragment = fragmentarium.update_lemmatization(
+        number,
+        lemmatization,
+        user
     )
-    assert database['changelog'].find_one(
-        {'resource_id': fragment_number},
-        {'_id': 0}
-    ) == expected_changelog
+    assert updated_fragment == expected_fragment
 
 
-def test_update_update_lemmatization_not_found(fragmentarium, user):
+def test_update_update_lemmatization_not_found(fragmentarium,
+                                               user,
+                                               fragment_repository,
+                                               when):
+    number = 'K.1'
+    when(fragment_repository).find(number).thenRaise(NotFoundError)
     with pytest.raises(NotFoundError):
         fragmentarium.update_lemmatization(
-            'K.1',
+            number,
             Lemmatization.from_list([[{'value': '1.', 'uniqueLemma': []}]]),
             user
         )
 
 
-def test_statistics(fragmentarium, fragment):
-    for test_fragment in [
+def test_statistics(fragmentarium, fragment_repository, when):
+    transliterated_fragments = 2
+    lines = 4
 
-            attr.evolve(fragment, number='1', text=Text((
-                TextLine('1.', (Word('SU'), Word('line'))),
-                ControlLine('$', (Token('ignore'), )),
-                EmptyLine()
-            ))),
-            attr.evolve(fragment, number='2', text=Text((
-                ControlLine('$', (Token('ignore'), )),
-                TextLine('1.', (Word('SU'), )),
-                TextLine('1.', (Word('SU'), )),
-                ControlLine('$', (Token('ignore'), )),
-                TextLine('1.', (Word('SU'), )),
-            ))),
-            attr.evolve(fragment, number='3', text=Text())
-    ]:
-        fragmentarium.create(test_fragment)
+    (when(fragment_repository)
+     .count_transliterated_fragments()
+     .thenReturn(transliterated_fragments))
+    when(fragment_repository).count_lines().thenReturn(lines)
 
     assert fragmentarium.statistics() == {
-        'transliteratedFragments': 2,
-        'lines': 4
+        'transliteratedFragments': transliterated_fragments,
+        'lines': lines
     }
 
 
-def test_statistics_no_fragments(fragmentarium):
-    assert fragmentarium.statistics() == {
-        'transliteratedFragments': 0,
-        'lines': 0
-    }
+def test_search(fragmentarium, fragment, fragment_repository, when):
+    query = 'K.1'
+    when(fragment_repository).search(query).thenReturn([fragment])
+
+    assert fragmentarium.search(query) == [fragment]
 
 
-def test_search_finds_by_id(fragmentarium,
-                            fragment,
-                            another_fragment):
-    fragmentarium.create(fragment)
-    fragmentarium.create(another_fragment)
-
-    assert fragmentarium.search(fragment.number) == [fragment]
-
-
-def test_search_finds_by_accession(fragmentarium,
-                                   fragment,
-                                   another_fragment):
-    fragmentarium.create(fragment)
-    fragmentarium.create(another_fragment)
-
-    assert fragmentarium.search(fragment.accession) == [fragment]
-
-
-def test_search_finds_by_cdli(fragmentarium,
-                              fragment,
-                              another_fragment):
-    fragmentarium.create(fragment)
-    fragmentarium.create(another_fragment)
-
-    assert fragmentarium.search(fragment.cdli_number) == [fragment]
-
-
-def test_search_not_found(fragmentarium):
-    assert fragmentarium.search('K.1') == []
-
-
-@pytest.mark.parametrize("transliteration,lines", [
+@pytest.mark.parametrize("atf,lines", [
     ('ana u₄', [
         ['2\'. [...] GI₆ ana u₄-š[u ...]']
     ]),
@@ -240,103 +208,89 @@ def test_search_not_found(fragmentarium):
     ]),
     ('ši tu₂', None),
 ])
-def test_search_signs(transliteration,
+def test_search_signs(atf,
                       lines,
                       sign_list,
                       signs,
                       fragmentarium,
                       transliterated_fragment,
-                      another_fragment):
-    fragmentarium.create(transliterated_fragment)
-    fragmentarium.create(another_fragment)
+                      fragment_repository,
+                      when):
     for sign in signs:
         sign_list.create(sign)
 
-    result = fragmentarium.search_signs(
-        Transliteration(transliteration)
-    )
-    expected = [
-        attr.evolve(transliterated_fragment, matching_lines=lines)
-    ] if lines else []
+    transliteration = Transliteration(atf)
+    sign_matrix = transliteration.to_sign_matrix(sign_list)
+    query = TransliterationQuery(sign_matrix)
+    matching_fragments = [transliterated_fragment] if lines else []
+    (when(fragment_repository)
+     .search_signs(query)
+     .thenReturn(matching_fragments))
 
-    assert result == expected
+    expected = [
+        attr.evolve(fragment, matching_lines=lines)
+        for fragment in matching_fragments
+    ]
+    assert fragmentarium.search_signs(transliteration) == expected
 
 
 def test_find_lemmas(fragmentarium,
                      dictionary,
-                     lemmatized_fragment,
-                     word):
-    matching_word = {
-        **word,
-        '_id': 'ginâ I'
-    }
-    fragmentarium.create(lemmatized_fragment)
-    dictionary.create(word)
-    dictionary.create(matching_word)
+                     word,
+                     fragment_repository,
+                     when):
+    query = 'GI₆'
+    unique_lemma = UniqueLemma(word['_id'])
+    when(fragment_repository).find_lemmas(query).thenReturn([[unique_lemma]])
+    when(dictionary).find(unique_lemma).thenReturn(word)
 
-    assert fragmentarium.find_lemmas('GI₆') == [[matching_word]]
+    assert fragmentarium.find_lemmas(query) == [[word]]
 
 
 def test_update_references(fragmentarium,
                            fragment,
                            reference,
                            bibliography,
-                           bibliography_entry,
-                           user):
-    bibliography.create(bibliography_entry, user)
-    fragment_number = fragmentarium.create(fragment)
+                           user,
+                           fragment_repository,
+                           changelog,
+                           when):
+    number = fragment.number
     references = (reference,)
+    expected_fragment = fragment.set_references(references)
+    when(bibliography).find(reference.id).thenReturn(reference)
+    when(fragment_repository).find(number).thenReturn(fragment)
+    when(fragment_repository).update_references(expected_fragment).thenReturn()
+    when(changelog).create(
+        'fragments',
+        user.profile,
+        fragment.to_dict(),
+        expected_fragment.to_dict()
+    ).thenReturn()
+
     updated_fragment = fragmentarium.update_references(
-        fragment_number,
+        number,
         references,
         user
     )
-    db_fragment = fragmentarium.find(fragment_number)
-    expected_fragment = fragment.set_references(references)
-
     assert updated_fragment == expected_fragment
-    assert db_fragment == expected_fragment
 
 
-def test_update_references_invalid(fragmentarium, fragment, reference, user):
-    fragment_number = fragmentarium.create(fragment)
+def test_update_references_invalid(fragmentarium,
+                                   fragment,
+                                   reference,
+                                   bibliography,
+                                   user,
+                                   fragment_repository,
+                                   when):
+    number = fragment.number
+    when(bibliography).find(reference.id).thenRaise(NotFoundError)
+    when(fragment_repository).find(number).thenReturn(fragment)
     references = (reference,)
 
     with pytest.raises(DataError):
         fragmentarium.update_references(
-            fragment_number,
+            number,
             references,
             user
         )
-
-
-@freeze_time("2018-09-07 15:41:24.032")
-def test_references_changelog(database,
-                              fragmentarium,
-                              fragment,
-                              reference,
-                              bibliography,
-                              bibliography_entry,
-                              user,
-                              make_changelog_entry):
-    bibliography.create(bibliography_entry, user)
-    fragment_number = fragmentarium.create(fragment)
-    references = (reference,)
-    fragmentarium.update_references(
-        fragment_number,
-        references,
-        user
-    )
-
-    expected_fragment = fragment.set_references(references)
-
-    expected_changelog = make_changelog_entry(
-        'fragments',
-        fragment_number,
-        fragment.to_dict(),
-        expected_fragment.to_dict()
-    )
-    assert database['changelog'].find_one(
-        {'resource_id': fragment_number},
-        {'_id': 0}
-    ) == expected_changelog

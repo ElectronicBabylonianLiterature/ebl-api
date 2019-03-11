@@ -1,10 +1,11 @@
 import pydash
 import regex
+import attr
 
 
+@attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
-    def __init__(self, signs):
-        self._signs = signs
+    _signs: list
 
     @property
     def regexp(self):

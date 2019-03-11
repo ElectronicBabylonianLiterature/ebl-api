@@ -30,6 +30,7 @@ pyexecjs = "*"
 mypy = "*"
 mypy-extensions = "*"
 pytest-watch = "*"
+pytest-mockito = "*"
 
 [requires]
 python_version = "3.6"
