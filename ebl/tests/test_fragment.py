@@ -1,10 +1,14 @@
-import datetime
 import attr
 from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
 from ebl.fragmentarium.fragment import (
-    Folios, Folio, Text, Measure, Record, RecordEntry, RecordType
+    Folios, Folio, Text, Measure
+)
+from ebl.fragmentarium.record import (
+    RecordType,
+    RecordEntry,
+    Record
 )
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragmentarium.transliteration import (
@@ -140,13 +144,7 @@ def test_add_transliteration(fragment, user):
     atf = '1. x x'
     transliteration = Transliteration(atf, fragment.notes)
     text = parse_atf(atf)
-    record = Record((
-        RecordEntry(
-            user.ebl_name,
-            RecordType.TRANSLITERATION,
-            datetime.datetime.utcnow().isoformat()
-        ),
-    ))
+    record = fragment.record.add_entry('', atf, user)
 
     updated_fragment = fragment.update_transliteration(
         transliteration,
@@ -263,23 +261,6 @@ def test_filter_folios(user):
     ))
 
     assert folios.filter(user) == expected
-
-
-@pytest.mark.parametrize("old,new,type_", [
-    ('', 'new', RecordType.TRANSLITERATION),
-    ('old', 'new', RecordType.REVISION),
-])
-@freeze_time("2018-09-07 15:41:24.032")
-def test_add_record(old, new, type_, record, user):
-    expected_entry = RecordEntry(
-        user.ebl_name,
-        type_,
-        datetime.datetime.utcnow().isoformat()
-    )
-    assert record.add_entry(old, new, user) == Record((
-        *record.entries,
-        expected_entry
-    ))
 
 
 def test_set_references(fragment, reference):

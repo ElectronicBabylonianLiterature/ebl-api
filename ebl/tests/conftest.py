@@ -27,7 +27,12 @@ from ebl.text.line import TextLine, LineNumber
 from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
 from ebl.fragmentarium.fragment import (
-    Fragment, Folios, Folio, Record, RecordEntry, RecordType
+    Fragment, Folios, Folio
+)
+from ebl.fragmentarium.record import (
+    RecordType,
+    RecordEntry,
+    Record
 )
 from ebl.fragmentarium.fragment_factory import FragmentFactory
 

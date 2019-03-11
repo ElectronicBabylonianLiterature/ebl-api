@@ -1,15 +1,28 @@
 from ebl.fragmentarium.fragment import (
     Fragment,
-    RecordType,
-    RecordEntry,
-    Record,
     Folio,
     Folios,
     Measure,
     UncuratedReference
 )
+from ebl.fragmentarium.record import (
+    RecordType,
+    RecordEntry,
+    Record
+)
 from ebl.bibliography.reference import Reference
 from ebl.text.text import Text
+
+
+def create_record(data):
+    return Record(tuple(
+        RecordEntry(
+            entry['user'],
+            RecordType(entry['type']),
+            entry['date']
+        )
+        for entry in data
+    ))
 
 
 class FragmentFactory:
@@ -32,14 +45,7 @@ class FragmentFactory:
             Measure(**data['length']),
             Measure(**data['thickness']),
             tuple(data['joins']),
-            Record(tuple(
-                RecordEntry(
-                    entry['user'],
-                    RecordType(entry['type']),
-                    entry['date']
-                )
-                for entry in data['record']
-            )),
+            create_record(data['record']),
             Folios(tuple(Folio(**folio) for folio in data['folios'])),
             Text.from_dict(data['text']),
             data.get('signs'),
