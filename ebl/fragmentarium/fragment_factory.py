@@ -1,5 +1,12 @@
 from ebl.fragmentarium.fragment import (
-    Fragment, RecordType, RecordEntry, Record, Folio, Folios, Measure
+    Fragment,
+    RecordType,
+    RecordEntry,
+    Record,
+    Folio,
+    Folios,
+    Measure,
+    UncuratedReference
 )
 from ebl.bibliography.reference import Reference
 from ebl.text.text import Text
@@ -40,7 +47,14 @@ class FragmentFactory:
             data.get('hits'),
             data.get('matching_lines'),
             tuple(Reference.from_dict(reference)
-                  for reference in data['references'])
+                  for reference in data['references']),
+            tuple(
+                UncuratedReference(
+                    reference['document'],
+                    tuple(reference['pages'])
+                )
+                for reference in data['uncurated_references']
+            ) if 'uncurated_references' in data else None
         )
 
     def create_denormalized(self, data):

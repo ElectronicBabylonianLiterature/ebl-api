@@ -347,7 +347,8 @@ def interesting_fragment():
         publication='',
         description='description',
         script='NA',
-        hits=0
+        hits=0,
+        uncurated_references=tuple()
     )
 
 

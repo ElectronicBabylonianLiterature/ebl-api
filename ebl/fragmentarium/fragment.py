@@ -15,6 +15,15 @@ from ebl.fragmentarium.transliteration import (
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class UncuratedReference:
+    document: str
+    pages: Tuple[int, ...] = tuple()
+
+    def to_dict(self) -> Dict[str, Union[str, List[int]]]:
+        return attr.asdict(self)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Measure:
     value: Optional[float] = None
     note: Optional[str] = None
@@ -124,6 +133,7 @@ class Fragment:
     hits: Optional[int] = None
     matching_lines: Optional[tuple] = None
     references: Tuple[Reference, ...] = tuple()
+    uncurated_references: Optional[Tuple[UncuratedReference, ...]] = None
 
     def set_references(self, references: Tuple[Reference, ...]) -> 'Fragment':
         return attr.evolve(
@@ -196,7 +206,16 @@ class Fragment:
             'references': [
                 reference.to_dict(with_dependencies)
                 for reference in self.references
-            ]
+            ],
+            'uncurated_references': (
+                [
+                    reference.to_dict()
+                    for reference
+                    in self.uncurated_references  # pylint: disable=E1133
+                ]
+                if self.uncurated_references is not None
+                else None
+            )
         }, lambda value: value is None)
 
     def to_dict_for(self, user) -> dict:

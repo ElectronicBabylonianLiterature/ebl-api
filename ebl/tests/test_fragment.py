@@ -119,6 +119,14 @@ def test_hits_none(fragment):
     assert fragment.hits is None
 
 
+def test_uncurated_references(interesting_fragment):
+    assert interesting_fragment.uncurated_references == tuple()
+
+
+def test_uncurated_references_none(fragment):
+    assert fragment.uncurated_references is None
+
+
 def test_references(transliterated_fragment, reference):
     assert transliterated_fragment.references == (reference,)
 
