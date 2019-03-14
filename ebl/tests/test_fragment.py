@@ -218,14 +218,33 @@ def test_update_notes(fragment, user):
     assert updated_fragment == expected_fragment
 
 
-def test_add_matching_lines(transliterated_fragment):
-    query = TransliterationQuery([['MA', 'UD']])
+@pytest.mark.parametrize("sign_matrix,lines", [
+    ([['DIŠ', 'UD']], [
+        ['2\'. [...] GI₆ ana u₄-š[u ...]']
+    ]),
+    ([['KU']], [
+        ['1\'. [...-ku]-nu-ši [...]']
+    ]),
+    ([['UD']], [
+        ['2\'. [...] GI₆ ana u₄-š[u ...]'],
+        ['6\'. [...] x mu ta-ma-tu₂']
+    ]),
+    ([['MI', 'DIŠ'], ['U', 'BA', 'MA']], [
+        [
+            '2\'. [...] GI₆ ana u₄-š[u ...]',
+            '3\'. [... k]i-du u ba-ma-t[i ...]'
+        ]
+    ]),
+    ([['IGI', 'UD']], [])
+])
+def test_add_matching_lines(sign_matrix, lines, transliterated_fragment):
+    query = TransliterationQuery(sign_matrix)
     with_matching_lines =\
         transliterated_fragment.add_matching_lines(query)
 
     assert with_matching_lines.to_dict() == {
         **transliterated_fragment.to_dict(),
-        'matching_lines': [['6\'. [...] x mu ta-ma-tu₂']]
+        'matching_lines': lines
     }
 
 
