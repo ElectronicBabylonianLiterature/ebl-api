@@ -189,42 +189,42 @@ def test_search(fragmentarium, fragment, fragment_repository, when):
     assert fragmentarium.search(query) == [fragment]
 
 
-@pytest.mark.parametrize("atf,lines", [
-    ('ana u₄', [
+@pytest.mark.parametrize("atf,sign_matrix,lines", [
+    ('ana u₄', [['DIŠ', 'UD']], [
         ['2\'. [...] GI₆ ana u₄-š[u ...]']
     ]),
-    ('ku', [
+    ('ku', [['KU']], [
         ['1\'. [...-ku]-nu-ši [...]']
     ]),
-    ('u₄', [
+    ('u₄', [['UD']], [
         ['2\'. [...] GI₆ ana u₄-š[u ...]'],
         ['6\'. [...] x mu ta-ma-tu₂']
     ]),
-    ('GI₆ ana\nu ba ma', [
+    ('GI₆ ana\nu ba ma', [['MI', 'DIŠ'], ['U', 'BA', 'MA']], [
         [
             '2\'. [...] GI₆ ana u₄-š[u ...]',
             '3\'. [... k]i-du u ba-ma-t[i ...]'
         ]
     ]),
-    ('ši tu₂', None),
+    ('ši tu₂', [['IGI', 'UD']], None)
 ])
 def test_search_signs(atf,
+                      sign_matrix,
                       lines,
                       sign_list,
-                      signs,
                       fragmentarium,
                       transliterated_fragment,
                       fragment_repository,
                       when):
-    for sign in signs:
-        sign_list.create(sign)
-
     transliteration = Transliteration(atf)
-    sign_matrix = transliteration.to_sign_matrix(sign_list)
-    query = TransliterationQuery(sign_matrix)
+    expected_query = TransliterationQuery(sign_matrix)
     matching_fragments = [transliterated_fragment] if lines else []
+
+    (when(sign_list)
+     .map_transliteration(transliteration.cleaned)
+     .thenReturn(sign_matrix))
     (when(fragment_repository)
-     .search_signs(query)
+     .search_signs(expected_query)
      .thenReturn(matching_fragments))
 
     expected = [
