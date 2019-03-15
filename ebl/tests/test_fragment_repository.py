@@ -39,8 +39,14 @@ def test_find_random(fragment_repository,
 def test_find_interesting(fragment_repository,
                           fragment,
                           transliterated_fragment,
+                          uninteresting_fragment,
                           interesting_fragment):
-    for a_fragment in fragment, transliterated_fragment, interesting_fragment:
+    for a_fragment in [
+            fragment,
+            transliterated_fragment,
+            interesting_fragment,
+            uninteresting_fragment
+    ]:
         fragment_repository.create(a_fragment)
 
     assert fragment_repository.find_interesting() ==\

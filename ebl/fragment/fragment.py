@@ -52,7 +52,6 @@ class Fragment:
     text: Text = Text()
     signs: Optional[str] = None
     notes: str = ''
-    hits: Optional[int] = None
     matching_lines: Optional[tuple] = None
     references: Tuple[Reference, ...] = tuple()
     uncurated_references: Optional[Tuple[UncuratedReference, ...]] = None
@@ -123,7 +122,6 @@ class Fragment:
             'record': self.record.to_list(),
             'folios': self.folios.to_list(),
             'text': self.text.to_dict(),
-            'hits': self.hits,
             'matching_lines': self.matching_lines,
             'references': [
                 reference.to_dict(with_dependencies)

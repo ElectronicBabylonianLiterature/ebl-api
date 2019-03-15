@@ -53,7 +53,6 @@ class FragmentFactory:
             Text.from_dict(data['text']),
             data.get('signs'),
             data['notes'],
-            data.get('hits'),
             data.get('matching_lines'),
             tuple(Reference.from_dict(reference)
                   for reference in data['references']),

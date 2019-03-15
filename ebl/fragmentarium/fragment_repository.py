@@ -87,7 +87,8 @@ class MongoFragmentRepository():
                         {'text.lines': []},
                         {'joins': []},
                         {'publication': ''},
-                        {'hits': 0}
+                        {'uncuratedReferences': {'$exists': True}},
+                        {'uncuratedReferences.3': {'$exists': False}}
                     ]
                 }
             },

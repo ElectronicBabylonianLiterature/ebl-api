@@ -26,7 +26,7 @@ from ebl.text.text import Text
 from ebl.text.line import TextLine, LineNumber
 from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
-from ebl.fragment.fragment import Fragment
+from ebl.fragment.fragment import Fragment, UncuratedReference
 from ebl.fragment.folios import Folios, Folio
 from ebl.fragment.record import (
     RecordType,
@@ -351,8 +351,25 @@ def interesting_fragment():
         publication='',
         description='description',
         script='NA',
-        hits=0,
-        uncurated_references=tuple()
+        uncurated_references=(
+            UncuratedReference('7(0)'),
+            UncuratedReference('CAD 51', (34, 56)),
+            UncuratedReference('7(1)')
+        )
+    )
+
+
+@pytest.fixture
+def uninteresting_fragment(interesting_fragment):
+    return attr.evolve(
+        interesting_fragment,
+        number='7',
+        uncurated_references=(
+            UncuratedReference('7(0)'),
+            UncuratedReference('CAD 51', (34, 56)),
+            UncuratedReference('7(1)'),
+            UncuratedReference('CAD 53', (1,)),
+        )
     )
 
 
@@ -368,7 +385,12 @@ def another_fragment(fragment):
             Folio('WGL', '2'),
             Folio('XXX', '2')
         )),
-        hits=5
+        uncurated_references=(
+            UncuratedReference('7(0)'),
+            UncuratedReference('CAD 51', (34, 56)),
+            UncuratedReference('7(1)'),
+            UncuratedReference('CAD 53', (1)),
+        )
     )
 
 

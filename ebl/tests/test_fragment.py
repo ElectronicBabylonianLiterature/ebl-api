@@ -2,7 +2,7 @@ import attr
 from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
-from ebl.fragment.fragment import Measure
+from ebl.fragment.fragment import Measure, UncuratedReference
 from ebl.fragment.folios import Folios, Folio
 from ebl.fragment.record import (
     RecordType,
@@ -115,16 +115,12 @@ def test_text(fragment):
     assert fragment.text == Text()
 
 
-def test_hits(another_fragment):
-    assert another_fragment.hits == 5
-
-
-def test_hits_none(fragment):
-    assert fragment.hits is None
-
-
 def test_uncurated_references(interesting_fragment):
-    assert interesting_fragment.uncurated_references == tuple()
+    assert interesting_fragment.uncurated_references == (
+        UncuratedReference('7(0)'),
+        UncuratedReference('CAD 51', (34, 56)),
+        UncuratedReference('7(1)')
+    )
 
 
 def test_uncurated_references_none(fragment):
