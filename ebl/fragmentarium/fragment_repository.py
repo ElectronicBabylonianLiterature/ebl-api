@@ -87,6 +87,7 @@ class MongoFragmentRepository():
                         {'text.lines': []},
                         {'joins': []},
                         {'publication': ''},
+                        {'collection': 'Kuyunjik'},
                         {'uncuratedReferences': {'$exists': True}},
                         {'uncuratedReferences.3': {'$exists': False}}
                     ]

@@ -5,6 +5,7 @@ from ebl.text.lemmatization import Lemmatization
 from ebl.text.token import Token, Word
 from ebl.text.line import TextLine, ControlLine, EmptyLine
 from ebl.text.text import Text
+from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragment.transliteration import Transliteration
 
@@ -37,17 +38,31 @@ def test_find_random(fragment_repository,
 
 
 def test_find_interesting(fragment_repository,
-                          fragment,
                           transliterated_fragment,
-                          uninteresting_fragment,
                           interesting_fragment):
-    for a_fragment in [
-            fragment,
+    too_many_references = attr.evolve(
+        interesting_fragment,
+        number='7',
+        uncurated_references=(
+            UncuratedReference('7(0)'),
+            UncuratedReference('CAD 51', (34, 56)),
+            UncuratedReference('7(1)'),
+            UncuratedReference('CAD 53', (1,)),
+        )
+    )
+    not_kuyunjik = attr.evolve(
+        interesting_fragment,
+        number='8',
+        collection='Not Kuyunjik'
+    )
+
+    for fragment in [
             transliterated_fragment,
             interesting_fragment,
-            uninteresting_fragment
+            too_many_references,
+            not_kuyunjik
     ]:
-        fragment_repository.create(a_fragment)
+        fragment_repository.create(fragment)
 
     assert fragment_repository.find_interesting() ==\
         [interesting_fragment]

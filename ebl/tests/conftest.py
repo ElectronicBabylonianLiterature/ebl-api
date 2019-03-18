@@ -347,7 +347,7 @@ def interesting_fragment():
         bm_id_number='bmId-6',
         accession='accession-6',
         museum='Museum',
-        collection='Collection',
+        collection='Kuyunjik',
         publication='',
         description='description',
         script='NA',
@@ -355,20 +355,6 @@ def interesting_fragment():
             UncuratedReference('7(0)'),
             UncuratedReference('CAD 51', (34, 56)),
             UncuratedReference('7(1)')
-        )
-    )
-
-
-@pytest.fixture
-def uninteresting_fragment(interesting_fragment):
-    return attr.evolve(
-        interesting_fragment,
-        number='7',
-        uncurated_references=(
-            UncuratedReference('7(0)'),
-            UncuratedReference('CAD 51', (34, 56)),
-            UncuratedReference('7(1)'),
-            UncuratedReference('CAD 53', (1,)),
         )
     )
 
