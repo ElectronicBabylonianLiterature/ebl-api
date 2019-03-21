@@ -129,7 +129,12 @@ WORD_DTO_SCHEMA = {
                 'type': 'string'
             }
         },
-        'pos': {'type': 'string'}
+        'pos': {
+            'type': 'array',
+            'items': {
+                'type': 'string'
+            }
+        }
     },
     'required': [
         'lemma',
