@@ -36,9 +36,13 @@ The application reads the configuration from following environment variables:
  - `AUTH0_PEM` (base64 encoded PEM certificate from the Auth0 application found under advanced settings)
  - `MONGODB_URI` MongoDB connection URI with database
  
- If NewRelic is used:
+If NewRelic is used:
 - `NEW_RELIC_LICENSE_KEY`
 - `NEW_RELIC_CONFIG_FILE`
+
+Sentry:
+- SENTRY_DSN
+- SENTRY_ENVIRONMENT
 
 ### The API image
 

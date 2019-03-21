@@ -18,6 +18,7 @@ jsonschema = "*"
 pyoracc = "*"
 parsy = "*"
 attrs = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 pytest = "*"

@@ -13,6 +13,8 @@ services:
       - MONGODB_URI=mongodb://mongo:27017/ebl
       - NEW_RELIC_LICENSE_KEY
       - NEW_RELIC_CONFIG_FILE
+      - SENTRY_DSN
+      - SENTRY_ENVIRONMENT
     volumes:
       - ./ebl:/usr/src/ebl/ebl
     command:  ["pipenv", "run", "gunicorn",  "--reload", "-b :8000", "ebl.app:get_app()"]

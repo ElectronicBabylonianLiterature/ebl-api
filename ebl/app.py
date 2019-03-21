@@ -9,6 +9,9 @@ from falcon_auth import FalconAuthMiddleware
 
 from pymongo import MongoClient
 
+import sentry_sdk
+from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
+
 from ebl.auth0 import Auth0Backend
 from ebl.changelog import Changelog
 from ebl.cors_component import CorsComponent
@@ -124,7 +127,10 @@ def get_app():
         'bibliography': bibliography
     }
 
-    return create_app(context)
+    app = create_app(context)
+
+    sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
+    return SentryWsgiMiddleware(app)
 
 
 def decode_certificate(encoded_certificate):
