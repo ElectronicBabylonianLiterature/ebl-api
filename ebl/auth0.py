@@ -2,6 +2,7 @@ import copy
 import pydash
 import requests
 from falcon_auth import JWTAuthBackend
+from sentry_sdk import configure_scope
 
 
 def fetch_user_profile(issuer, authorization):
@@ -10,6 +11,11 @@ def fetch_user_profile(issuer, authorization):
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
+
+
+def set_sentry_user(id_):
+    with configure_scope() as scope:
+        scope.user = {'id': id_}
 
 
 class Guest:
@@ -58,7 +64,7 @@ class Auth0User:
 
 class Auth0Backend(JWTAuthBackend):
 
-    def __init__(self, public_key, audience, issuer):
+    def __init__(self, public_key, audience, issuer, set_user=set_sentry_user):
         super().__init__(
             lambda payload: payload,
             public_key,
@@ -69,9 +75,11 @@ class Auth0Backend(JWTAuthBackend):
             verify_claims=['signature', 'exp', 'iat'],
             required_claims=['exp', 'iat', 'openid']
         )
+        self._set_user = set_user
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
+        self._set_user(access_token['sub'])
         return Auth0User(
             access_token,
             lambda: fetch_user_profile(self.issuer, req.auth)
