@@ -36,6 +36,9 @@ from ebl.fragmentarium.transliterations import TransliterationResource
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
+from ebl.corpus.corpus import MongoCorpus
+from ebl.corpus.texts import TextsResource
+
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
 
@@ -89,6 +92,13 @@ def create_fragmentarium_routes(api, context):
     )
 
 
+def create_corpus_routes(api, context):
+    corpus = context['corpus']
+    corpus.create_indexes()
+    texts = TextsResource(corpus)
+    api.add_route('/texts/{category}.{index}', texts)
+
+
 def create_app(context):
     auth_middleware = FalconAuthMiddleware(context['auth_backend'])
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
@@ -97,6 +107,7 @@ def create_app(context):
     create_bibliography_routes(api, context)
     create_dictionary_routes(api, context)
     create_fragmentarium_routes(api, context)
+    create_corpus_routes(api, context)
 
     files = create_files_resource(context['auth_backend'])(context['files'])
     api.add_route('/images/{file_name}', files)
@@ -113,7 +124,7 @@ def get_app():
         os.environ['AUTH0_ISSUER']
     )
 
-    bibliography = MongoBibliography(database)
+    bibliography = MongoCorpus(database)
     context = {
         'auth_backend': auth_backend,
         'dictionary': MongoDictionary(database),
@@ -124,7 +135,8 @@ def get_app():
             FragmentFactory(bibliography)
         ),
         'changelog': Changelog(database),
-        'bibliography': bibliography
+        'bibliography': MongoBibliography(database),
+        'corpus': bibliography
     }
 
     app = create_app(context)

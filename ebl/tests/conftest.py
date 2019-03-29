@@ -12,6 +12,8 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 from ebl.changelog import Changelog
+from ebl.corpus.corpus import MongoCorpus
+from ebl.corpus.text import Text as CorpusText, Chapter, Classification, Period
 from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
@@ -80,6 +82,11 @@ def sign_repository(database):
 @pytest.fixture
 def sign_list(sign_repository):
     return SignList(sign_repository)
+
+
+@pytest.fixture
+def corpus(database):
+    return MongoCorpus(database)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
@@ -192,7 +199,8 @@ def user():
                 'read:fragments',
                 'read:WGL-folios',
                 'read:bibliography',
-                'write:bibliography'
+                'write:bibliography',
+                'read:texts'
             ]
         },
         lambda: {
@@ -209,6 +217,7 @@ def context(dictionary,
             fragment_repository,
             changelog,
             bibliography,
+            corpus,
             user):
     # pylint: disable=R0913
     return {
@@ -218,7 +227,8 @@ def context(dictionary,
         'files': file_repository,
         'fragment_repository': fragment_repository,
         'changelog': changelog,
-        'bibliography': bibliography
+        'bibliography': bibliography,
+        'corpus': corpus
     }
 
 
@@ -617,3 +627,10 @@ def bibliography_entry():
             }
         ]
     }
+
+
+@pytest.fixture
+def text():
+    return CorpusText(1, 3, 'Palm & Vine', (
+        Chapter(Classification.ANCIENT, Period.NEO_BABYLONIAN, 1),
+    ))
