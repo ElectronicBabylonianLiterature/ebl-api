@@ -1,6 +1,8 @@
 import falcon
 from ebl.fragmentarium.dtos import create_response_dto
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import (
+    FragmentFactory, InterestingFragmentFactory
+)
 
 
 def test_search_fragment(client, fragmentarium, user):
@@ -66,8 +68,8 @@ def test_random(client,
 
 def test_interesting(client,
                      fragmentarium,
-                     interesting_fragment,
                      user):
+    interesting_fragment = InterestingFragmentFactory.build()
     fragmentarium.create(interesting_fragment)
 
     result = client.simulate_get(f'/fragments', params={

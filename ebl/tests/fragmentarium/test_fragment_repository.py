@@ -8,7 +8,9 @@ from ebl.text.text import Text
 from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragment.transliteration import Transliteration
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import (
+    FragmentFactory, InterestingFragmentFactory
+)
 
 
 COLLECTION = 'fragments'
@@ -41,11 +43,9 @@ def test_find_random(fragment_repository,
 
 
 def test_find_interesting(fragment_repository,
-                          transliterated_fragment,
-                          interesting_fragment):
-    too_many_references = attr.evolve(
-        interesting_fragment,
-        number='7',
+                          transliterated_fragment,):
+    interesting_fragment = InterestingFragmentFactory.build()
+    too_many_references = InterestingFragmentFactory.build(
         uncurated_references=(
             UncuratedReference('7(0)'),
             UncuratedReference('CAD 51', (34, 56)),
@@ -53,9 +53,7 @@ def test_find_interesting(fragment_repository,
             UncuratedReference('CAD 53', (1,)),
         )
     )
-    not_kuyunjik = attr.evolve(
-        interesting_fragment,
-        number='8',
+    not_kuyunjik = InterestingFragmentFactory.build(
         collection='Not Kuyunjik'
     )
 

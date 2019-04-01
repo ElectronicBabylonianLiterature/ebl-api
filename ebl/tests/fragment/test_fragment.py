@@ -10,7 +10,9 @@ from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import (
+    FragmentFactory, InterestingFragmentFactory
+)
 from ebl.tests.factories.record import RecordFactory
 
 
@@ -126,12 +128,14 @@ def test_text():
     assert fragment.text == Text()
 
 
-def test_uncurated_references(interesting_fragment):
-    assert interesting_fragment.uncurated_references == (
+def test_uncurated_references():
+    uncurated_references = (
         UncuratedReference('7(0)'),
         UncuratedReference('CAD 51', (34, 56)),
         UncuratedReference('7(1)')
     )
+    fragment = FragmentFactory.build(uncurated_references=uncurated_references)
+    assert fragment.uncurated_references == uncurated_references
 
 
 def test_uncurated_references_none():

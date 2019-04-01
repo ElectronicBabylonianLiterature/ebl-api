@@ -328,26 +328,6 @@ def reference_with_document(reference, bibliography_entry):
 
 
 @pytest.fixture
-def interesting_fragment():
-    return Fragment(
-        number='6',
-        cdli_number='cdli-6',
-        bm_id_number='bmId-6',
-        accession='accession-6',
-        museum='Museum',
-        collection='Kuyunjik',
-        publication='',
-        description='description',
-        script='NA',
-        uncurated_references=(
-            UncuratedReference('7(0)'),
-            UncuratedReference('CAD 51', (34, 56)),
-            UncuratedReference('7(1)')
-        )
-    )
-
-
-@pytest.fixture
 def transliterated_fragment(reference):
     return Fragment(
         number='3',

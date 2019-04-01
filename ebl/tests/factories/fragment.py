@@ -1,7 +1,10 @@
+from typing import Tuple
 import factory
 import factory.fuzzy
+
 from ebl.fragment.folios import Folios, Folio
-from ebl.fragment.fragment import Fragment
+from ebl.fragment.fragment import Fragment, UncuratedReference
+from ebl.text.text import Text
 
 
 class FragmentFactory(factory.Factory):
@@ -21,3 +24,15 @@ class FragmentFactory(factory.Factory):
         Folio('WGL', '1'),
         Folio('XXX', '1')
     ))
+
+
+class InterestingFragmentFactory(FragmentFactory):
+        collection = 'Kuyunjik'
+        publication = ''
+        joins: Tuple[str, ...] = tuple()
+        text = Text()
+        uncurated_references = (
+            UncuratedReference('7(0)'),
+            UncuratedReference('CAD 51', (34, 56)),
+            UncuratedReference('7(1)')
+        )
