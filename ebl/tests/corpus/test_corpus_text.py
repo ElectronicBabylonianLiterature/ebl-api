@@ -29,7 +29,7 @@ def test_to_dict():
         'chapters': [
             {
                 'classification': CLASSIFICATION.value,
-                'period': PERIOD.long_name,
+                'period': PERIOD.long_name,  # pylint: disable=E1101
                 'number': 1
             }
         ]
