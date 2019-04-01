@@ -2,16 +2,17 @@ import json
 import falcon
 import pytest
 from ebl.fragmentarium.dtos import create_response_dto
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 def test_update_references(client,
                            fragmentarium,
                            bibliography,
-                           fragment,
                            reference,
                            bibliography_entry,
                            user):
     # pylint: disable=R0913
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     bibliography.create(bibliography_entry, user)
     references = [reference.to_dict()]
@@ -56,8 +57,8 @@ def test_update_references_not_found(client):
 ])
 def test_update_references_invalid_reference(client,
                                              fragmentarium,
-                                             fragment,
                                              body):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     url = f'/fragments/{fragment_number}/references'
 
@@ -68,8 +69,8 @@ def test_update_references_invalid_reference(client,
 
 def test_update_references_invalid_id(client,
                                       fragmentarium,
-                                      fragment,
                                       reference):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     body = json.dumps({'references': [reference.to_dict()]})
     url = f'/fragments/{fragment_number}/references'

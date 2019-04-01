@@ -4,14 +4,15 @@ from freezegun import freeze_time
 import pytest
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.dtos import create_response_dto
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client,
                                 fragmentarium,
-                                fragment,
                                 user,
                                 database):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     updates = {
         'transliteration': '$ (the transliteration)',
@@ -88,8 +89,8 @@ def test_update_transliteration_merge_lemmatization(client,
 
 
 def test_update_transliteration_invalid_atf(client,
-                                            fragmentarium,
-                                            fragment):
+                                            fragmentarium):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     updates = {
         'transliteration': '$ this is not valid',
@@ -143,8 +144,8 @@ def test_update_transliteration_not_found(client):
 ])
 def test_update_transliteration_invalid_entity(client,
                                                fragmentarium,
-                                               fragment,
                                                body):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     url = f'/fragments/{fragment_number}/transliteration'
 

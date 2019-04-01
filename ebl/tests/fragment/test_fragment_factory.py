@@ -1,4 +1,4 @@
-import attr
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 def test_create(fragment_factory, lemmatized_fragment):
@@ -10,17 +10,16 @@ def test_create(fragment_factory, lemmatized_fragment):
 
 
 def test_create_with_dependencies(fragment_factory,
-                                  fragment,
                                   reference_with_document,
                                   bibliography,
                                   bibliography_entry,
                                   user):
     # pylint: disable=R0913
+    fragment = FragmentFactory.build(references=(reference_with_document, ))
     bibliography.create(bibliography_entry, user)
-    expected = attr.evolve(fragment, references=(reference_with_document, ))
 
     new_fragment = fragment_factory.create_denormalized(
-        expected.to_dict(False)
+        fragment.to_dict(False)
     )
 
-    assert new_fragment == expected
+    assert new_fragment == fragment

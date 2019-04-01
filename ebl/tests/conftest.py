@@ -29,7 +29,9 @@ from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
 from ebl.fragment.fragment import Fragment, UncuratedReference
 from ebl.fragment.folios import Folios, Folio
-from ebl.fragment.fragment_factory import FragmentFactory
+import ebl.fragment.fragment_factory as fragment_factory_
+
+from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.factories.record import RecordFactory
 
 
@@ -109,7 +111,7 @@ class TestFragmentRepository(MongoFragmentRepository):
 
 @pytest.fixture
 def fragment_factory(bibliography):
-    return FragmentFactory(bibliography)
+    return fragment_factory_.FragmentFactory(bibliography)
 
 
 @pytest.fixture
@@ -326,25 +328,6 @@ def reference_with_document(reference, bibliography_entry):
 
 
 @pytest.fixture
-def fragment():
-    return Fragment(
-        number='1',
-        cdli_number='cdli-4',
-        bm_id_number='bmId-2',
-        accession='accession-3',
-        museum='Museum',
-        collection='Collection',
-        publication='publication',
-        description='description',
-        script='NA',
-        folios=Folios((
-            Folio('WGL', '1'),
-            Folio('XXX', '1')
-        ))
-    )
-
-
-@pytest.fixture
 def interesting_fragment():
     return Fragment(
         number='6',
@@ -365,9 +348,9 @@ def interesting_fragment():
 
 
 @pytest.fixture
-def another_fragment(fragment):
+def another_fragment():
     return attr.evolve(
-        fragment,
+        FragmentFactory.build(),
         number='2',
         accession='accession-no-match',
         cdli_number='cdli-no-match',

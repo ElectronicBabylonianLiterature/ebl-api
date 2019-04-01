@@ -1,8 +1,10 @@
 import falcon
 from ebl.fragmentarium.dtos import create_response_dto
+from ebl.tests.factories.fragment import FragmentFactory
 
 
-def test_search_fragment(client, fragmentarium, fragment, user):
+def test_search_fragment(client, fragmentarium, user):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments', params={
         'number': fragment_number

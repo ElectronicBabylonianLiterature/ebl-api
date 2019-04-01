@@ -3,6 +3,7 @@ import falcon
 import pytest
 from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.dtos import create_response_dto
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 def test_update_lemmatization(client,
@@ -59,8 +60,8 @@ def test_update_lemmatization_not_found(client):
 ])
 def test_update_lemmatization_invalid_entity(client,
                                              fragmentarium,
-                                             fragment,
                                              body):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     url = f'/fragments/{fragment_number}/lemmatization'
 

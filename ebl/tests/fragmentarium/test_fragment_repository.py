@@ -8,12 +8,14 @@ from ebl.text.text import Text
 from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragment.transliteration import Transliteration
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 COLLECTION = 'fragments'
 
 
-def test_create(database, fragment_repository, fragment):
+def test_create(database, fragment_repository):
+    fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
 
     assert database[COLLECTION].find_one({
@@ -21,15 +23,16 @@ def test_create(database, fragment_repository, fragment):
     }) == fragment.to_dict()
 
 
-def test_find(database, fragment_repository, fragment):
+def test_find(database, fragment_repository):
+    fragment = FragmentFactory.build()
     database[COLLECTION].insert_one(fragment.to_dict())
 
     assert fragment_repository.find(fragment.number) == fragment
 
 
 def test_find_random(fragment_repository,
-                     fragment,
                      transliterated_fragment):
+    fragment = FragmentFactory.build()
     for a_fragment in fragment, transliterated_fragment:
         fragment_repository.create(a_fragment)
 
@@ -74,8 +77,8 @@ def test_fragment_not_found(fragment_repository):
 
 
 def test_update_transliteration_with_record(fragment_repository,
-                                            fragment,
                                             user):
+    fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
         Transliteration('$ (the transliteration)', 'notes'),
@@ -123,21 +126,21 @@ def test_update_update_lemmatization_not_found(fragment_repository,
         )
 
 
-def test_statistics(database, fragment_repository, fragment):
+def test_statistics(database, fragment_repository):
     database[COLLECTION].insert_many([
-        {**fragment.to_dict(), '_id': '1', 'text': Text((
+        FragmentFactory.build(text=Text((
             TextLine('1.', (Word('first'), Word('line'))),
             ControlLine('$', (Token('ignore'), )),
             EmptyLine()
-        )).to_dict()},
-        {**fragment.to_dict(), '_id': '2', 'text': Text((
+        ))).to_dict(),
+        FragmentFactory.build(text=Text((
             ControlLine('$', (Token('ignore'), )),
             TextLine('1.', (Word('second'), )),
             TextLine('1.', (Word('third'), )),
             ControlLine('$', (Token('ignore'), )),
             TextLine('1.', (Word('fourth'), )),
-        )).to_dict()},
-        {**fragment.to_dict(), '_id': '3', 'text': Text().to_dict()}
+        ))).to_dict(),
+        FragmentFactory.build(text=Text()).to_dict()
     ])
 
     assert fragment_repository.count_transliterated_fragments() == 2
@@ -149,25 +152,21 @@ def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_lines() == 0
 
 
-def test_search_finds_by_id(database,
-                            fragment_repository,
-                            fragment,
-                            another_fragment):
+def test_search_finds_by_id(database, fragment_repository):
+    fragment = FragmentFactory.build()
     database[COLLECTION].insert_many([
         fragment.to_dict(),
-        another_fragment.to_dict()
+        FragmentFactory.build().to_dict()
     ])
 
     assert fragment_repository.search(fragment.number) == [fragment]
 
 
-def test_search_finds_by_accession(database,
-                                   fragment_repository,
-                                   fragment,
-                                   another_fragment):
+def test_search_finds_by_accession(database, fragment_repository):
+    fragment = FragmentFactory.build()
     database[COLLECTION].insert_many([
         fragment.to_dict(),
-        another_fragment.to_dict()
+        FragmentFactory.build().to_dict()
     ])
 
     assert fragment_repository.search(
@@ -175,13 +174,11 @@ def test_search_finds_by_accession(database,
     ) == [fragment]
 
 
-def test_search_finds_by_cdli(database,
-                              fragment_repository,
-                              fragment,
-                              another_fragment):
+def test_search_finds_by_cdli(database, fragment_repository):
+    fragment = FragmentFactory.build()
     database[COLLECTION].insert_many([
         fragment.to_dict(),
-        another_fragment.to_dict()
+        FragmentFactory.build().to_dict()
     ])
 
     assert fragment_repository.search(
@@ -282,7 +279,8 @@ def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):
     assert fragment_repository.find_lemmas('aklu') == []
 
 
-def test_update_references(fragment_repository, fragment, reference):
+def test_update_references(fragment_repository, reference):
+    fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     references = (reference,)
     updated_fragment = fragment.set_references(references)

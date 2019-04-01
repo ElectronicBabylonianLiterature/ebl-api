@@ -1,7 +1,9 @@
 import falcon
+from ebl.tests.factories.fragment import FragmentFactory
 
 
-def test_get_folio_pager(client, fragmentarium, fragment):
+def test_get_folio_pager(client, fragmentarium):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/pager/folios/WGL/1/{fragment_number}')
 
@@ -19,7 +21,8 @@ def test_get_folio_pager(client, fragmentarium, fragment):
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
-def test_get_image_no_access(client, fragmentarium, fragment):
+def test_get_image_no_access(client, fragmentarium):
+    fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/pager/folios/XXX/1/{fragment_number}')
 

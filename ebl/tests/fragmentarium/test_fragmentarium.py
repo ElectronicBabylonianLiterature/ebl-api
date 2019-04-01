@@ -9,9 +9,11 @@ from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
+from ebl.tests.factories.fragment import FragmentFactory
 
 
-def test_find(fragmentarium, fragment, fragment_repository, when):
+def test_find(fragmentarium, fragment_repository, when):
+    fragment = FragmentFactory.build()
     number = fragment.number
     when(fragment_repository).find(number).thenReturn(fragment)
 
@@ -26,19 +28,22 @@ def test_find_not_found(fragmentarium, fragment_repository, when):
         fragmentarium.find(number)
 
 
-def test_find_random(fragmentarium, fragment, fragment_repository, when):
+def test_find_random(fragmentarium, fragment_repository, when):
+    fragment = FragmentFactory.build()
     expected = [fragment]
     when(fragment_repository).find_random().thenReturn(expected)
     assert fragmentarium.find_random() == expected
 
 
-def test_find_interesting(fragmentarium, fragment, fragment_repository, when):
+def test_find_interesting(fragmentarium, fragment_repository, when):
+    fragment = FragmentFactory.build()
     expected = [fragment]
     when(fragment_repository).find_interesting().thenReturn(expected)
     assert fragmentarium.find_interesting() == expected
 
 
-def test_find_latest(fragmentarium, fragment, fragment_repository, when):
+def test_find_latest(fragmentarium, fragment_repository, when):
+    fragment = FragmentFactory.build()
     expected = [fragment]
     when(fragment_repository).find_latest().thenReturn(expected)
     assert fragmentarium.find_latest() == expected
@@ -182,8 +187,9 @@ def test_statistics(fragmentarium, fragment_repository, when):
     }
 
 
-def test_search(fragmentarium, fragment, fragment_repository, when):
-    query = 'K.1'
+def test_search(fragmentarium, fragment_repository, when):
+    fragment = FragmentFactory.build()
+    query = fragment.number
     when(fragment_repository).search(query).thenReturn([fragment])
 
     assert fragmentarium.search(query) == [fragment]
@@ -229,13 +235,13 @@ def test_find_lemmas(fragmentarium,
 
 
 def test_update_references(fragmentarium,
-                           fragment,
                            reference,
                            bibliography,
                            user,
                            fragment_repository,
                            changelog,
                            when):
+    fragment = FragmentFactory.build()
     number = fragment.number
     references = (reference,)
     expected_fragment = fragment.set_references(references)
@@ -258,12 +264,12 @@ def test_update_references(fragmentarium,
 
 
 def test_update_references_invalid(fragmentarium,
-                                   fragment,
                                    reference,
                                    bibliography,
                                    user,
                                    fragment_repository,
                                    when):
+    fragment = FragmentFactory.build()
     number = fragment.number
     when(bibliography).find(reference.id).thenRaise(NotFoundError)
     when(fragment_repository).find(number).thenReturn(fragment)
