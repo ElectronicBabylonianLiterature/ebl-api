@@ -1,7 +1,9 @@
 import falcon
+from ebl.tests.factories.corpus import TextFactory
 
 
-def test_get_text(client, corpus, text):
+def test_get_text(client, corpus):
+    text = TextFactory.build()
     corpus.create(text)
     result = client.simulate_get(f'/texts/{text.category}.{text.index}')
 

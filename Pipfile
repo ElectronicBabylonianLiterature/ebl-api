@@ -33,6 +33,7 @@ mypy-extensions = "*"
 pytest-watch = "*"
 pytest-mockito = "*"
 v = {editable = true,version = "*"}
+factory-boy = "*"
 
 [requires]
 python_version = "3.6"

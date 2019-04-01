@@ -1,42 +1,35 @@
 import pydash
 import pytest
+from ebl.tests.factories.corpus import TextFactory
 from ebl.errors import NotFoundError, DuplicateError
 
 
 COLLECTION = 'texts'
-TEXT = {
-    'category': 1,
-    'index': 3,
-    'name': 'Palm & Vine',
-    'chapters': [
-        {
-            'classification': 'Ancient',
-            'period': 'Neo-Babylonian',
-            'number': 1
-        }
-    ]
-}
+TEXT = TextFactory.build()
 
 
-def test_create(database, text, corpus):
-    corpus.create(text)
+def test_create(database, corpus):
+    corpus.create(TEXT)
 
-    result = database[COLLECTION].find_one({'category': 1, 'index': 3})
-    assert pydash.omit(result, '_id') == TEXT
+    result = database[COLLECTION].find_one({
+        'category': TEXT.category,
+        'index': TEXT.index
+    })
+    assert pydash.omit(result, '_id') == TEXT.to_dict()
 
 
-def test_create_duplicate(corpus, text):
+def test_create_duplicate(corpus):
     corpus.create_indexes()
-    corpus.create(text)
+    corpus.create(TEXT)
 
     with pytest.raises(DuplicateError):
-        corpus.create(text)
+        corpus.create(TEXT)
 
 
-def test_find(database, corpus, text):
-    database[COLLECTION].insert_one(TEXT)
+def test_find(database, corpus):
+    database[COLLECTION].insert_one(TEXT.to_dict())
 
-    assert corpus.find(1, 3) == text
+    assert corpus.find(TEXT.category, TEXT.index) == TEXT
 
 
 def test_find_not_found(corpus):

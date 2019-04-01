@@ -13,7 +13,6 @@ from falcon_auth import NoneAuthBackend
 import ebl.app
 from ebl.changelog import Changelog
 from ebl.corpus.corpus import MongoCorpus
-from ebl.corpus.text import Text as CorpusText, Chapter, Classification, Period
 from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
@@ -627,10 +626,3 @@ def bibliography_entry():
             }
         ]
     }
-
-
-@pytest.fixture
-def text():
-    return CorpusText(1, 3, 'Palm & Vine', (
-        Chapter(Classification.ANCIENT, Period.NEO_BABYLONIAN, 1),
-    ))
