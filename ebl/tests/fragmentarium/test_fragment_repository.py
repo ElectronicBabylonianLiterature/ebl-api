@@ -206,10 +206,9 @@ SEARCH_SIGNS_DATA = [
 def test_search_signs(signs,
                       is_match,
                       fragment_repository,
-                      transliterated_fragment,
-                      another_fragment):
+                      transliterated_fragment):
     fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(another_fragment)
+    fragment_repository.create(FragmentFactory.build())
 
     result = fragment_repository.search_signs(TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
@@ -218,11 +217,10 @@ def test_search_signs(signs,
 
 def test_find_transliterated(database,
                              fragment_repository,
-                             transliterated_fragment,
-                             another_fragment):
+                             transliterated_fragment):
     database[COLLECTION].insert_many([
         transliterated_fragment.to_dict(),
-        another_fragment.to_dict()
+        FragmentFactory.build().to_dict()
     ])
 
     assert fragment_repository.find_transliterated() ==\

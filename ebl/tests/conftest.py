@@ -348,27 +348,6 @@ def interesting_fragment():
 
 
 @pytest.fixture
-def another_fragment():
-    return attr.evolve(
-        FragmentFactory.build(),
-        number='2',
-        accession='accession-no-match',
-        cdli_number='cdli-no-match',
-        bm_id_number='bmId-2',
-        folios=Folios((
-            Folio('WGL', '2'),
-            Folio('XXX', '2')
-        )),
-        uncurated_references=(
-            UncuratedReference('7(0)'),
-            UncuratedReference('CAD 51', (34, 56)),
-            UncuratedReference('7(1)'),
-            UncuratedReference('CAD 53', (1)),
-        )
-    )
-
-
-@pytest.fixture
 def transliterated_fragment(reference):
     return Fragment(
         number='3',
