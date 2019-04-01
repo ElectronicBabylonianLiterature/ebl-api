@@ -1,11 +1,7 @@
 import factory
 import factory.fuzzy
 from ebl.corpus.text import Text, Chapter, Classification, Period
-
-
-class TupleFactory(factory.BaseListFactory):
-    class Meta:
-        model = tuple
+from ebl.tests.factories.collections import TupleFactory
 
 
 class ChapterFactory(factory.Factory):

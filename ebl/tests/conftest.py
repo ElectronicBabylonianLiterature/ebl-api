@@ -29,12 +29,8 @@ from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
 from ebl.fragment.fragment import Fragment, UncuratedReference
 from ebl.fragment.folios import Folios, Folio
-from ebl.fragment.record import (
-    RecordType,
-    RecordEntry,
-    Record
-)
 from ebl.fragment.fragment_factory import FragmentFactory
+from ebl.tests.factories.record import RecordFactory
 
 
 @pytest.fixture
@@ -442,13 +438,7 @@ def transliterated_fragment(reference):
             Folio('WGL', '3'),
             Folio('XXX', '3')
         )),
-        record=Record((
-            RecordEntry(
-                'Tester',
-                RecordType.TRANSLITERATION,
-                '2018-12-21T17:05:27.352435'
-            ),
-        )),
+        record=RecordFactory(),
         references=(reference,)
     )
 
@@ -506,17 +496,6 @@ def another_lemmatized_fragment(transliterated_fragment):
         )),
         signs='MI DIŠ DIŠ UD ŠU'
     )
-
-
-@pytest.fixture()
-def record():
-    return Record((
-        RecordEntry(
-            'Tester',
-            RecordType.TRANSLITERATION,
-            datetime.datetime.utcnow().isoformat()
-        ),
-    ))
 
 
 @pytest.fixture

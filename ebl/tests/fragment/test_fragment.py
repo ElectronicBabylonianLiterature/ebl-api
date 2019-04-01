@@ -2,19 +2,15 @@ import attr
 from freezegun import freeze_time
 import pytest
 from ebl.text.atf_parser import parse_atf
-from ebl.fragment.fragment import Measure, UncuratedReference
+from ebl.fragment.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragment.folios import Folios, Folio
-from ebl.fragment.record import (
-    RecordType,
-    RecordEntry,
-    Record
-)
 from ebl.text.text import Text
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
+from ebl.tests.factories.record import RecordFactory
 
 
 def test_to_dict_for(fragment, user):
@@ -94,14 +90,10 @@ def test_signs_none(fragment):
     assert fragment.signs is None
 
 
-def test_record(transliterated_fragment):
-    assert transliterated_fragment.record == Record((
-        RecordEntry(
-            'Tester',
-            RecordType.TRANSLITERATION,
-            '2018-12-21T17:05:27.352435'
-        ),
-    ))
+def test_record():
+    record = RecordFactory.build()
+    fragment = Fragment('X.1', record=record)
+    assert fragment.record == record
 
 
 def test_folios(fragment):
