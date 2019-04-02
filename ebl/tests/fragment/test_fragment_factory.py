@@ -14,7 +14,6 @@ def test_create_with_dependencies(fragment_factory,
                                   bibliography,
                                   bibliography_entry,
                                   user):
-    # pylint: disable=R0913
     fragment = FragmentFactory.build(references=(reference_with_document, ))
     bibliography.create(bibliography_entry, user)
 

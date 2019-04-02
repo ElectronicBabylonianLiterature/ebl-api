@@ -1,7 +1,7 @@
 import falcon
 from ebl.fragmentarium.dtos import create_response_dto
 from ebl.tests.factories.fragment import (
-    FragmentFactory, InterestingFragmentFactory
+    FragmentFactory, InterestingFragmentFactory, TransliteratedFragmentFactory
 )
 
 
@@ -25,11 +25,10 @@ def test_search_fragment_not_found(client):
 
 def test_search_signs(client,
                       fragmentarium,
-                      transliterated_fragment,
                       sign_list,
                       signs,
                       user):
-    # pylint: disable=R0913
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
     for sign in signs:
         sign_list.create(sign)
@@ -53,8 +52,8 @@ def test_search_signs(client,
 
 def test_random(client,
                 fragmentarium,
-                transliterated_fragment,
                 user):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get(f'/fragments', params={
@@ -83,8 +82,8 @@ def test_interesting(client,
 
 def test_latest(client,
                 fragmentarium,
-                transliterated_fragment,
                 user):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get(f'/fragments', params={

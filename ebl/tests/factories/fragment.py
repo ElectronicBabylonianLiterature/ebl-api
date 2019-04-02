@@ -1,10 +1,13 @@
 from typing import Tuple
 import factory
-import factory.fuzzy
 
 from ebl.fragment.folios import Folios, Folio
 from ebl.fragment.fragment import Fragment, UncuratedReference
+from ebl.text.line import TextLine
 from ebl.text.text import Text
+from ebl.text.token import Token, Word
+
+from ebl.tests.factories.record import RecordFactory
 
 
 class FragmentFactory(factory.Factory):
@@ -27,12 +30,57 @@ class FragmentFactory(factory.Factory):
 
 
 class InterestingFragmentFactory(FragmentFactory):
-        collection = 'Kuyunjik'
-        publication = ''
-        joins: Tuple[str, ...] = tuple()
-        text = Text()
-        uncurated_references = (
-            UncuratedReference('7(0)'),
-            UncuratedReference('CAD 51', (34, 56)),
-            UncuratedReference('7(1)')
-        )
+    collection = 'Kuyunjik'
+    publication = ''
+    joins: Tuple[str, ...] = tuple()
+    text = Text()
+    uncurated_references = (
+        UncuratedReference('7(0)'),
+        UncuratedReference('CAD 51', (34, 56)),
+        UncuratedReference('7(1)')
+    )
+
+
+class TransliteratedFragmentFactory(FragmentFactory):
+    text = Text((
+        TextLine("1'.", (
+            Token('[...'),
+            Word('-ku]-nu-ši'),
+            Token('[...]')
+        )),
+        TextLine("2'.", (
+            Token('[...]'),
+            Word('GI₆'),
+            Word('ana'),
+            Word('u₄-š[u'),
+            Token('...]')
+        )),
+        TextLine("3'.", (
+            Token('[...'),
+            Word('k]i-du'),
+            Word('u'),
+            Word('ba-ma-t[i'),
+            Token('...]')
+        )),
+        TextLine("6'.", (
+            Token('[...]'),
+            Word('x'),
+            Word('mu'),
+            Word('ta-ma-tu₂')
+        )),
+        TextLine("7'.", (
+            Word('šu/|BI×IS|'),
+        ))
+    ))
+    signs = (
+        'KU NU IGI\n'
+        'MI DIŠ UD ŠU\n'
+        'KI DU U BA MA TI\n'
+        'X MU TA MA UD\n'
+        'ŠU/|BI×IS|'
+    )
+    folios = Folios((
+        Folio('WGL', '3'),
+        Folio('XXX', '3')
+    ))
+    record = factory.SubFactory(RecordFactory)

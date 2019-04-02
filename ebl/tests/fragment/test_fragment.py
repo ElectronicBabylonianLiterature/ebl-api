@@ -11,7 +11,7 @@ from ebl.fragment.transliteration import (
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.fragment import (
-    FragmentFactory, InterestingFragmentFactory
+    FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.tests.factories.record import RecordFactory
 
@@ -94,7 +94,8 @@ def test_notes():
     assert fragment.notes == ''
 
 
-def test_signs(transliterated_fragment):
+def test_signs():
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     assert transliterated_fragment.signs == (
         'KU NU IGI\n'
         'MI DIŠ UD ŠU\n'
@@ -143,8 +144,9 @@ def test_uncurated_references_none():
     assert fragment.uncurated_references is None
 
 
-def test_references(transliterated_fragment, reference):
-    assert transliterated_fragment.references == (reference,)
+def test_references(reference):
+    fragment = FragmentFactory.build(references=(reference,))
+    assert fragment.references == (reference,)
 
 
 def test_references_default():
@@ -253,7 +255,8 @@ def test_update_notes(user):
     ]),
     ([['IGI', 'UD']], [])
 ])
-def test_add_matching_lines(sign_matrix, lines, transliterated_fragment):
+def test_add_matching_lines(sign_matrix, lines):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     query = TransliterationQuery(sign_matrix)
     with_matching_lines =\
         transliterated_fragment.add_matching_lines(query)
@@ -264,7 +267,8 @@ def test_add_matching_lines(sign_matrix, lines, transliterated_fragment):
     }
 
 
-def test_update_lemmatization(transliterated_fragment):
+def test_update_lemmatization():
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][1]['uniqueLemma'] = ['nu I']
     lemmatization = Lemmatization.from_list(tokens)

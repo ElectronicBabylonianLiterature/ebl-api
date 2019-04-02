@@ -1,7 +1,9 @@
 import falcon
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
-def test_get_fragment(client, fragmentarium, transliterated_fragment, user):
+def test_get_fragment(client, fragmentarium, user):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragmentarium.create(transliterated_fragment)
     result = client.simulate_get(f'/fragments/{fragment_number}')
 

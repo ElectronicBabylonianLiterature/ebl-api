@@ -1,4 +1,3 @@
-import attr
 import pytest
 from ebl.errors import NotFoundError
 from ebl.text.lemmatization import Lemmatization
@@ -9,7 +8,9 @@ from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragment.transliteration import Transliteration
 from ebl.tests.factories.fragment import (
-    FragmentFactory, InterestingFragmentFactory
+    FragmentFactory,
+    InterestingFragmentFactory,
+    TransliteratedFragmentFactory
 )
 
 
@@ -32,9 +33,9 @@ def test_find(database, fragment_repository):
     assert fragment_repository.find(fragment.number) == fragment
 
 
-def test_find_random(fragment_repository,
-                     transliterated_fragment):
+def test_find_random(fragment_repository,):
     fragment = FragmentFactory.build()
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     for a_fragment in fragment, transliterated_fragment:
         fragment_repository.create(a_fragment)
 
@@ -42,8 +43,8 @@ def test_find_random(fragment_repository,
         [transliterated_fragment]
 
 
-def test_find_interesting(fragment_repository,
-                          transliterated_fragment,):
+def test_find_interesting(fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     interesting_fragment = InterestingFragmentFactory.build()
     too_many_references = InterestingFragmentFactory.build(
         uncurated_references=(
@@ -91,16 +92,16 @@ def test_update_transliteration_with_record(fragment_repository,
     assert result == updated_fragment
 
 
-def test_update_update_transliteration_not_found(fragment_repository,
-                                                 transliterated_fragment):
+def test_update_update_transliteration_not_found(fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_transliteration(
             transliterated_fragment
         )
 
 
-def test_update_lemmatization(fragment_repository,
-                              transliterated_fragment):
+def test_update_lemmatization(fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragment_repository.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][1]['uniqueLemma'] = ['aklu I']
@@ -116,8 +117,8 @@ def test_update_lemmatization(fragment_repository,
     assert result == updated_fragment
 
 
-def test_update_update_lemmatization_not_found(fragment_repository,
-                                               transliterated_fragment):
+def test_update_update_lemmatization_not_found(fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_lemmatization(
             transliterated_fragment
@@ -203,8 +204,8 @@ SEARCH_SIGNS_DATA = [
 @pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
 def test_search_signs(signs,
                       is_match,
-                      fragment_repository,
-                      transliterated_fragment):
+                      fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
     fragment_repository.create(FragmentFactory.build())
 
@@ -214,8 +215,8 @@ def test_search_signs(signs,
 
 
 def test_find_transliterated(database,
-                             fragment_repository,
-                             transliterated_fragment):
+                             fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     database[COLLECTION].insert_many([
         transliterated_fragment.to_dict(),
         FragmentFactory.build().to_dict()
@@ -244,11 +245,8 @@ def test_find_lemmas_multiple(fragment_repository,
         [['ana II'], ['ana I']]
 
 
-def test_find_lemmas_ignores_in_value(fragment_repository,
-                                      transliterated_fragment):
-    fragment = attr.evolve(
-        transliterated_fragment,
-        number='5',
+def test_find_lemmas_ignores_in_value(fragment_repository):
+    fragment = FragmentFactory.build(
         text=Text.of_iterable([
             TextLine.of_iterable("1'.", [
                 Word('[(a[(n)]a#*?!)]', unique_lemma=("ana I", ))
@@ -287,8 +285,8 @@ def test_update_references(fragment_repository, reference):
     assert result == updated_fragment
 
 
-def test_update_update_references(fragment_repository,
-                                  transliterated_fragment):
+def test_update_update_references(fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_references(
             transliterated_fragment

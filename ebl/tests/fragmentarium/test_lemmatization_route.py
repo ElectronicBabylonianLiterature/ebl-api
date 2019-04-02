@@ -3,14 +3,16 @@ import falcon
 import pytest
 from ebl.text.lemmatization import Lemmatization
 from ebl.fragmentarium.dtos import create_response_dto
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import (
+    FragmentFactory, TransliteratedFragmentFactory
+)
 
 
 def test_update_lemmatization(client,
                               fragmentarium,
-                              transliterated_fragment,
                               user,
                               database):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragmentarium.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][1]['uniqueLemma'] = ['aklu I']
@@ -70,9 +72,8 @@ def test_update_lemmatization_invalid_entity(client,
     assert post_result.status == falcon.HTTP_BAD_REQUEST
 
 
-def test_update_lemmatization_atf_change(client,
-                                         fragmentarium,
-                                         transliterated_fragment,):
+def test_update_lemmatization_atf_change(client, fragmentarium):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragmentarium.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[0][0]['value'] = 'ana'

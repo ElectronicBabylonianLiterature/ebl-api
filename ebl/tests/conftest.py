@@ -27,12 +27,9 @@ from ebl.text.text import Text
 from ebl.text.line import TextLine, LineNumber
 from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
-from ebl.fragment.fragment import Fragment, UncuratedReference
-from ebl.fragment.folios import Folios, Folio
 import ebl.fragment.fragment_factory as fragment_factory_
 
-from ebl.tests.factories.fragment import FragmentFactory
-from ebl.tests.factories.record import RecordFactory
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
 @pytest.fixture
@@ -328,68 +325,9 @@ def reference_with_document(reference, bibliography_entry):
 
 
 @pytest.fixture
-def transliterated_fragment(reference):
-    return Fragment(
-        number='3',
-        cdli_number='cdli-5',
-        bm_id_number='bmId-3',
-        accession='accession-4',
-        museum='Museum',
-        collection='Collection',
-        publication='publication',
-        description='description',
-        script='NA',
-        text=Text((
-            TextLine("1'.", (
-                Token('[...'),
-                Word('-ku]-nu-ši'),
-                Token('[...]')
-            )),
-            TextLine("2'.", (
-                Token('[...]'),
-                Word('GI₆'),
-                Word('ana'),
-                Word('u₄-š[u'),
-                Token('...]')
-            )),
-            TextLine("3'.", (
-                Token('[...'),
-                Word('k]i-du'),
-                Word('u'),
-                Word('ba-ma-t[i'),
-                Token('...]')
-            )),
-            TextLine("6'.", (
-                Token('[...]'),
-                Word('x'),
-                Word('mu'),
-                Word('ta-ma-tu₂')
-            )),
-            TextLine("7'.", (
-                Word('šu/|BI×IS|'),
-            ))
-        )),
-        signs=(
-            'KU NU IGI\n'
-            'MI DIŠ UD ŠU\n'
-            'KI DU U BA MA TI\n'
-            'X MU TA MA UD\n'
-            'ŠU/|BI×IS|'
-        ),
-        folios=Folios((
-            Folio('WGL', '3'),
-            Folio('XXX', '3')
-        )),
-        record=RecordFactory(),
-        references=(reference,)
-    )
-
-
-@pytest.fixture
-def lemmatized_fragment(transliterated_fragment):
+def lemmatized_fragment():
     return attr.evolve(
-        transliterated_fragment,
-        number='4',
+        TransliteratedFragmentFactory.build(),
         text=Text((
             TextLine("1'.", (
                 Token('[...'),
@@ -424,10 +362,9 @@ def lemmatized_fragment(transliterated_fragment):
 
 
 @pytest.fixture
-def another_lemmatized_fragment(transliterated_fragment):
+def another_lemmatized_fragment():
     return attr.evolve(
-        transliterated_fragment,
-        number='5',
+        TransliteratedFragmentFactory.build(),
         text=Text((
             TextLine("1'.", (
                 Word('GI₆', unique_lemma=("ginâ I", )),

@@ -1,4 +1,3 @@
-# pylint: disable=R0913
 import attr
 from freezegun import freeze_time
 import pytest
@@ -9,7 +8,9 @@ from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import (
+    FragmentFactory, TransliteratedFragmentFactory
+)
 
 
 def test_find(fragmentarium, fragment_repository, when):
@@ -72,11 +73,11 @@ def test_folio_pager(fragmentarium, fragment_repository, when):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(fragmentarium,
-                                transliterated_fragment,
                                 user,
                                 fragment_repository,
                                 changelog,
                                 when):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
     expected_fragment = transliterated_fragment.update_transliteration(
         Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX'),
@@ -127,11 +128,11 @@ def test_update_update_transliteration_not_found(fragmentarium,
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_lemmatization(fragmentarium,
-                              transliterated_fragment,
                               user,
                               fragment_repository,
                               changelog,
                               when):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][1]['uniqueLemma'] = ['aklu I']
@@ -197,9 +198,9 @@ def test_search(fragmentarium, fragment_repository, when):
 
 def test_search_signs(sign_list,
                       fragmentarium,
-                      transliterated_fragment,
                       fragment_repository,
                       when):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
     atf = 'ma-tu₂'
     transliteration = Transliteration(atf)
     sign_matrix = [['MA', 'UD']]
@@ -241,6 +242,7 @@ def test_update_references(fragmentarium,
                            fragment_repository,
                            changelog,
                            when):
+    # pylint: disable=R0913
     fragment = FragmentFactory.build()
     number = fragment.number
     references = (reference,)
@@ -269,6 +271,7 @@ def test_update_references_invalid(fragmentarium,
                                    user,
                                    fragment_repository,
                                    when):
+    # pylint: disable=R0913
     fragment = FragmentFactory.build()
     number = fragment.number
     when(bibliography).find(reference.id).thenRaise(NotFoundError)
