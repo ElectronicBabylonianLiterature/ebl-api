@@ -37,7 +37,8 @@ class MongoCorpus:
                 Chapter(
                     Classification(chapter['classification']),
                     Stage.from_name(chapter['stage']),
-                    chapter['number'],
+                    chapter['name'],
+                    chapter['order'],
                     tuple(
                         Manuscript(
                             manuscript['siglum'],

@@ -9,7 +9,8 @@ INDEX = 2
 NAME = 'Paln & Vine'
 CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
-NUMBER = 1
+NAME = 'IIc'
+ORDER = 1
 SIGLUM = 'UrHel3'
 MUSEUM_NUMBER = 'BM.x'
 ACCESSION = 'K.x'
@@ -19,7 +20,7 @@ TYPE = ManuscriptType.LIBRARY
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, (
-    Chapter(CLASSIFICATION, STAGE, NUMBER, (
+    Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
         Manuscript(
             SIGLUM,
             MUSEUM_NUMBER,
@@ -38,7 +39,8 @@ def test_constructor_sets_correct_fields():
     assert TEXT.name == NAME
     assert TEXT.chapters[0].classification == CLASSIFICATION
     assert TEXT.chapters[0].stage == STAGE
-    assert TEXT.chapters[0].number == NUMBER
+    assert TEXT.chapters[0].name == NAME
+    assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].siglum == SIGLUM
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION
@@ -57,7 +59,8 @@ def test_serializing_to_dict():
             {
                 'classification': CLASSIFICATION.value,
                 'stage': STAGE.long_name,
-                'number': 1,
+                'name': NAME,
+                'order': ORDER,
                 'manuscripts': [
                     {
                         'siglum': SIGLUM,

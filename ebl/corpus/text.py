@@ -165,14 +165,16 @@ ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
 class Chapter:
     classification: Classification
     stage: Stage
-    number: int
+    name: str
+    order: int
     manuscripts: Tuple[Manuscript, ...] = tuple()
 
     def to_dict(self) -> ChapterDict:
         return {
             'classification': self.classification.value,
             'stage': self.stage.long_name,
-            'number': self.number,
+            'name': self.name,
+            'order': self.order,
             'manuscripts': [
                 manuscript.to_dict()
                 for manuscript in self.manuscripts
