@@ -1,7 +1,22 @@
 import factory
 import factory.fuzzy
-from ebl.corpus.text import Text, Chapter, Classification, Stage
+from ebl.corpus.text import (
+    Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
+    ManuscriptType
+)
 from ebl.tests.factories.collections import TupleFactory
+
+
+class Manuscript(factory.Factory):
+    class Meta:
+        model = Manuscript
+
+    siglum = factory.Faker('word')
+    museum_number = factory.Sequence(lambda n: f'M.{n}')
+    accession = factory.Sequence(lambda n: f'A.{n}')
+    period = factory.fuzzy.FuzzyChoice(Period)
+    provenance = factory.fuzzy.FuzzyChoice(Provenance)
+    type = factory.fuzzy.FuzzyChoice(ManuscriptType)
 
 
 class ChapterFactory(factory.Factory):
@@ -11,6 +26,9 @@ class ChapterFactory(factory.Factory):
     classification = factory.fuzzy.FuzzyChoice(Classification)
     stage = factory.fuzzy.FuzzyChoice(Stage)
     number = factory.fuzzy.FuzzyInteger(1)
+    manuscripts = factory.List([
+        factory.SubFactory(Manuscript)
+    ], TupleFactory)
 
 
 class TextFactory(factory.Factory):

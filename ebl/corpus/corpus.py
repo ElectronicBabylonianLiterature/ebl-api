@@ -1,5 +1,8 @@
 import pymongo
-from ebl.corpus.text import Text, Chapter, Classification, Stage
+from ebl.corpus.text import (
+    Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
+    ManuscriptType
+)
 from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
@@ -34,7 +37,18 @@ class MongoCorpus:
                 Chapter(
                     Classification(chapter['classification']),
                     Stage.from_name(chapter['stage']),
-                    chapter['number']
+                    chapter['number'],
+                    tuple(
+                        Manuscript(
+                            manuscript['siglum'],
+                            manuscript['museumNumber'],
+                            manuscript['accession'],
+                            Period.from_name(manuscript['period']),
+                            Provenance.from_name(manuscript['provenance']),
+                            ManuscriptType.from_name(manuscript['type'])
+                        )
+                        for manuscript in chapter['manuscripts']
+                    )
                 )
                 for chapter in text['chapters']
             ))
