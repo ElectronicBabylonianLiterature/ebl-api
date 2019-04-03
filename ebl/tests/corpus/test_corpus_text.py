@@ -1,35 +1,35 @@
-from ebl.corpus.text import Text, Chapter, Classification, Period
+from ebl.corpus.text import Text, Chapter, Classification, Stage
 
 
 CATEGORY = 1
 INDEX = 2
 NAME = 'Paln & Vine'
 CLASSIFICATION = Classification.ANCIENT
-PERIOD = Period.NEO_BABYLONIAN
+STAGE = Stage.NEO_BABYLONIAN
 NUMBER = 1
-TOKEN = Text(CATEGORY, INDEX, NAME, (
-    Chapter(CLASSIFICATION, PERIOD, NUMBER),
+TEXT = Text(CATEGORY, INDEX, NAME, (
+    Chapter(CLASSIFICATION, STAGE, NUMBER),
 ))
 
 
 def test_text():
-    assert TOKEN.category == CATEGORY
-    assert TOKEN.index == INDEX
-    assert TOKEN.name == NAME
-    assert TOKEN.chapters[0].classification == CLASSIFICATION
-    assert TOKEN.chapters[0].period == PERIOD
-    assert TOKEN.chapters[0].number == NUMBER
+    assert TEXT.category == CATEGORY
+    assert TEXT.index == INDEX
+    assert TEXT.name == NAME
+    assert TEXT.chapters[0].classification == CLASSIFICATION
+    assert TEXT.chapters[0].stage == STAGE
+    assert TEXT.chapters[0].number == NUMBER
 
 
 def test_to_dict():
-    assert TOKEN.to_dict() == {
+    assert TEXT.to_dict() == {
         'category': CATEGORY,
         'index': INDEX,
         'name': NAME,
         'chapters': [
             {
                 'classification': CLASSIFICATION.value,
-                'period': PERIOD.long_name,  # pylint: disable=E1101
+                'stage': STAGE.long_name,  # pylint: disable=E1101
                 'number': 1
             }
         ]

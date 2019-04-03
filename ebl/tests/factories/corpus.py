@@ -1,6 +1,6 @@
 import factory
 import factory.fuzzy
-from ebl.corpus.text import Text, Chapter, Classification, Period
+from ebl.corpus.text import Text, Chapter, Classification, Stage
 from ebl.tests.factories.collections import TupleFactory
 
 
@@ -9,7 +9,7 @@ class ChapterFactory(factory.Factory):
         model = Chapter
 
     classification = factory.fuzzy.FuzzyChoice(Classification)
-    period = factory.fuzzy.FuzzyChoice(Period)
+    stage = factory.fuzzy.FuzzyChoice(Stage)
     number = factory.fuzzy.FuzzyInteger(1)
 
 
