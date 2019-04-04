@@ -32,7 +32,8 @@ MANUSCRIPT_DTO_SCHEMA = {
             'enum': [type_.long_name for type_ in ManuscriptType]
         }
     },
-    'required': ['siglum', 'museumNumber', 'accession', 'period', 'provenance', 'type']
+    'required': ['siglum', 'museumNumber', 'accession', 'period', 'provenance',
+                 'type']
 }
 
 
