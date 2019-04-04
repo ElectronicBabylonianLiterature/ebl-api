@@ -1,13 +1,13 @@
 import factory
 import factory.fuzzy
 from ebl.corpus.text import (
-    Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
-    ManuscriptType
+    Text, Chapter, Manuscript, Classification, Stage, Period,
+    Provenance, ManuscriptType
 )
 from ebl.tests.factories.collections import TupleFactory
 
 
-class Manuscript(factory.Factory):
+class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
 
@@ -28,7 +28,7 @@ class ChapterFactory(factory.Factory):
     name = factory.Faker('sentence')
     order = factory.Faker('pyint')
     manuscripts = factory.List([
-        factory.SubFactory(Manuscript)
+        factory.SubFactory(ManuscriptFactory)
     ], TupleFactory)
 
 
@@ -37,9 +37,9 @@ class TextFactory(factory.Factory):
         model = Text
 
     category = factory.fuzzy.FuzzyInteger(0)
-    index = factory.fuzzy.FuzzyInteger(1)
+    index = factory.fuzzy.FuzzyInteger(1, 10)
     name = factory.Faker('sentence')
-    number_of_verses = factory.fuzzy.FuzzyInteger(1)
+    number_of_verses = factory.fuzzy.FuzzyInteger(1, 10000)
     approximate_verses = factory.Iterator([True, False])
     chapters = factory.List([
         factory.SubFactory(ChapterFactory)
