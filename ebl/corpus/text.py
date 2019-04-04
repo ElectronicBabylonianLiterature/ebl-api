@@ -190,6 +190,8 @@ class Text:
     category: int
     index: int
     name: str
+    number_of_verses: int
+    approximate_verses: bool
     chapters: Tuple[Chapter, ...] = tuple()
 
     def to_dict(self) -> TextDict:
@@ -197,28 +199,37 @@ class Text:
             'category': self.category,
             'index': self.index,
             'name': self.name,
+            'numberOfVerses': self.number_of_verses,
+            'approximateVerses': self.approximate_verses,
             'chapters': [chapter.to_dict() for chapter in self.chapters]
         }
 
     @staticmethod
     def from_dict(text: dict) -> 'Text':
-        return Text(text['category'], text['index'], text['name'], tuple(
-            Chapter(
-                Classification(chapter['classification']),
-                Stage.from_name(chapter['stage']),
-                chapter['name'],
-                chapter['order'],
-                tuple(
-                    Manuscript(
-                        manuscript['siglum'],
-                        manuscript['museumNumber'],
-                        manuscript['accession'],
-                        Period.from_name(manuscript['period']),
-                        Provenance.from_name(manuscript['provenance']),
-                        ManuscriptType.from_name(manuscript['type'])
+        return Text(
+            text['category'],
+            text['index'],
+            text['name'],
+            text['numberOfVerses'],
+            text['approximateVerses'],
+            tuple(
+                Chapter(
+                    Classification(chapter['classification']),
+                    Stage.from_name(chapter['stage']),
+                    chapter['name'],
+                    chapter['order'],
+                    tuple(
+                        Manuscript(
+                            manuscript['siglum'],
+                            manuscript['museumNumber'],
+                            manuscript['accession'],
+                            Period.from_name(manuscript['period']),
+                            Provenance.from_name(manuscript['provenance']),
+                            ManuscriptType.from_name(manuscript['type'])
+                        )
+                        for manuscript in chapter['manuscripts']
                     )
-                    for manuscript in chapter['manuscripts']
                 )
+                for chapter in text['chapters']
             )
-            for chapter in text['chapters']
-        ))
+        )

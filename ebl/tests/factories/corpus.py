@@ -36,9 +36,11 @@ class TextFactory(factory.Factory):
     class Meta:
         model = Text
 
-    category = factory.fuzzy.FuzzyInteger(1)
+    category = factory.fuzzy.FuzzyInteger(0)
     index = factory.fuzzy.FuzzyInteger(1)
     name = factory.Faker('sentence')
+    number_of_verses = factory.fuzzy.FuzzyInteger(1)
+    approximate_verses = factory.Iterator([True, False])
     chapters = factory.List([
         factory.SubFactory(ChapterFactory)
     ], TupleFactory)

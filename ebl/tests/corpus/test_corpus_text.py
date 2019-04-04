@@ -7,6 +7,8 @@ from ebl.corpus.text import (
 CATEGORY = 1
 INDEX = 2
 NAME = 'Paln & Vine'
+VERSES = 100
+APPROXIMATE = True
 CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 NAME = 'IIc'
@@ -19,7 +21,7 @@ PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 
 
-TEXT = Text(CATEGORY, INDEX, NAME, (
+TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
     Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
         Manuscript(
             SIGLUM,
@@ -37,6 +39,8 @@ def test_constructor_sets_correct_fields():
     assert TEXT.category == CATEGORY
     assert TEXT.index == INDEX
     assert TEXT.name == NAME
+    assert TEXT.number_of_verses == VERSES
+    assert TEXT.approximate_verses == APPROXIMATE
     assert TEXT.chapters[0].classification == CLASSIFICATION
     assert TEXT.chapters[0].stage == STAGE
     assert TEXT.chapters[0].name == NAME
@@ -55,6 +59,8 @@ def test_serializing_to_dict():
         'category': CATEGORY,
         'index': INDEX,
         'name': NAME,
+        'numberOfVerses': VERSES,
+        'approximateVerses': APPROXIMATE,
         'chapters': [
             {
                 'classification': CLASSIFICATION.value,
