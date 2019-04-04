@@ -182,6 +182,9 @@ class Chapter:
         }
 
 
+TextDict = Dict[str, Union[int, str, List[ChapterDict]]]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
     category: int
@@ -189,10 +192,33 @@ class Text:
     name: str
     chapters: Tuple[Chapter, ...] = tuple()
 
-    def to_dict(self) -> Dict[str, Union[int, str, List[ChapterDict]]]:
+    def to_dict(self) -> TextDict:
         return {
             'category': self.category,
             'index': self.index,
             'name': self.name,
             'chapters': [chapter.to_dict() for chapter in self.chapters]
         }
+
+    @staticmethod
+    def from_dict(text: dict) -> 'Text':
+        return Text(text['category'], text['index'], text['name'], tuple(
+            Chapter(
+                Classification(chapter['classification']),
+                Stage.from_name(chapter['stage']),
+                chapter['name'],
+                chapter['order'],
+                tuple(
+                    Manuscript(
+                        manuscript['siglum'],
+                        manuscript['museumNumber'],
+                        manuscript['accession'],
+                        Period.from_name(manuscript['period']),
+                        Provenance.from_name(manuscript['provenance']),
+                        ManuscriptType.from_name(manuscript['type'])
+                    )
+                    for manuscript in chapter['manuscripts']
+                )
+            )
+            for chapter in text['chapters']
+        ))

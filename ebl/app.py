@@ -37,7 +37,7 @@ from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
 from ebl.corpus.corpus import MongoCorpus
-from ebl.corpus.texts import TextsResource
+from ebl.corpus.texts import TextResource, TextsResource
 
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
@@ -95,8 +95,9 @@ def create_fragmentarium_routes(api, context):
 def create_corpus_routes(api, context):
     corpus = context['corpus']
     corpus.create_indexes()
-    texts = TextsResource(corpus)
-    api.add_route('/texts/{category}/{index}', texts)
+
+    api.add_route('/texts', TextsResource(corpus))
+    api.add_route('/texts/{category}/{index}', TextResource(corpus))
 
 
 def create_app(context):

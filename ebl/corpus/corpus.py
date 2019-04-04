@@ -1,8 +1,5 @@
 import pymongo
-from ebl.corpus.text import (
-    Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
-    ManuscriptType
-)
+from ebl.corpus.text import Text
 from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
@@ -21,7 +18,7 @@ class MongoCorpus:
             ('index', pymongo.ASCENDING)
         ], unique=True)
 
-    def create(self, text):
+    def create(self, text, _=None):
         return self._mongo_repository.create(text.to_dict())
 
     def find(self, category, index):
@@ -33,26 +30,18 @@ class MongoCorpus:
         if text is None:
             raise NotFoundError(f'Text {category}.{index} not found.')
         else:
-            return Text(text['category'], text['index'], text['name'], tuple(
-                Chapter(
-                    Classification(chapter['classification']),
-                    Stage.from_name(chapter['stage']),
-                    chapter['name'],
-                    chapter['order'],
-                    tuple(
-                        Manuscript(
-                            manuscript['siglum'],
-                            manuscript['museumNumber'],
-                            manuscript['accession'],
-                            Period.from_name(manuscript['period']),
-                            Provenance.from_name(manuscript['provenance']),
-                            ManuscriptType.from_name(manuscript['type'])
-                        )
-                        for manuscript in chapter['manuscripts']
-                    )
-                )
-                for chapter in text['chapters']
-            ))
+            return Text.from_dict(text)
+
+    def update(self, category, index, text, _=None):
+        result = self._mongo_collection.update_one(
+            {'category': category, 'index': index},
+            {'$set': text.to_dict()}
+        )
+
+        if result.matched_count == 0:
+            raise NotFoundError(f'Text {category}.{index} not found.')
+        else:
+            return self.find(text.category, text.index)
 
     @property
     def _mongo_collection(self):

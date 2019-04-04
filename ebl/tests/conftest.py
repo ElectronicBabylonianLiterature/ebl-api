@@ -194,7 +194,9 @@ def user():
                 'read:WGL-folios',
                 'read:bibliography',
                 'write:bibliography',
-                'read:texts'
+                'read:texts',
+                'write:texts',
+                'create:texts'
             ]
         },
         lambda: {
