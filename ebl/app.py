@@ -96,7 +96,7 @@ def create_corpus_routes(api, context):
     corpus = context['corpus']
     corpus.create_indexes()
     texts = TextsResource(corpus)
-    api.add_route('/texts/{category}.{index}', texts)
+    api.add_route('/texts/{category}/{index}', texts)
 
 
 def create_app(context):
