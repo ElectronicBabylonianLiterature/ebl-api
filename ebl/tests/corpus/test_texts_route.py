@@ -1,6 +1,7 @@
 import json
 import attr
 import falcon
+import pytest
 from ebl.tests.factories.corpus import TextFactory
 
 
@@ -96,3 +97,21 @@ def test_updating_text_invalid_id(client):
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
+
+
+@pytest.mark.parametrize("body", [
+    TextFactory.build(category='invalid')
+])
+def test_update_transliteration_invalid_entity(client, body):
+    text = TextFactory.build()
+    client.simulate_put(
+        f'/texts',
+        body=json.dumps(text.to_dict())
+    )
+
+    post_result = client.simulate_post(
+        f'/texts/{text.category}/{text.index}',
+        body=json.dumps(body.to_dict())
+    )
+
+    assert post_result.status == falcon.HTTP_BAD_REQUEST
