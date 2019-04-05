@@ -1,10 +1,28 @@
+import pydash
 import pymongo
 from ebl.corpus.text import Text
-from ebl.errors import NotFoundError
+from ebl.errors import NotFoundError, DataError
 from ebl.mongo_repository import MongoRepository
 
 
 COLLECTION = 'texts'
+
+
+def validate(text):
+    duplicate_sigla = (
+        pydash
+        .chain(text.chapters)
+        .flat_map(lambda chapter: chapter.manuscripts)
+        .map_(lambda manuscript: manuscript.siglum)
+        .map_(lambda siglum, _, sigla: (siglum, sigla.count(siglum)))
+        .filter(lambda entry: entry[1] > 1)
+        .map_(lambda entry: entry[0])
+        .uniq()
+        .value()
+    )
+
+    if duplicate_sigla:
+        raise DataError(f'Duplicate sigla: {duplicate_sigla}.')
 
 
 class MongoCorpus:
@@ -19,6 +37,7 @@ class MongoCorpus:
         ], unique=True)
 
     def create(self, text, _=None):
+        validate(text)
         return self._mongo_repository.create(text.to_dict())
 
     def find(self, category, index):
@@ -33,6 +52,7 @@ class MongoCorpus:
             return Text.from_dict(text)
 
     def update(self, category, index, text, _=None):
+        validate(text)
         result = self._mongo_collection.update_one(
             {'category': category, 'index': index},
             {'$set': text.to_dict()}
