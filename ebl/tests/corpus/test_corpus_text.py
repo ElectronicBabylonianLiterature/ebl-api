@@ -19,6 +19,7 @@ ACCESSION = 'K.x'
 PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
+REFERENCES: tuple = tuple()
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
@@ -29,7 +30,8 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
             ACCESSION,
             PERIOD,
             PROVENANCE,
-            TYPE
+            TYPE,
+            REFERENCES
         ),
     )),
 ))
@@ -51,6 +53,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].period == PERIOD
     assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
+    assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
 
 
 def test_serializing_to_dict():
@@ -74,7 +77,8 @@ def test_serializing_to_dict():
                         'accession': ACCESSION,
                         'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
-                        'type': TYPE.long_name
+                        'type': TYPE.long_name,
+                        'references': []
                     }
                 ]
             }

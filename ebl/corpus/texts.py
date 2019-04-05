@@ -30,6 +30,10 @@ MANUSCRIPT_DTO_SCHEMA = {
         'type': {
             'type': 'string',
             'enum': [type_.long_name for type_ in ManuscriptType]
+        },
+        'references': {
+            'type': 'array',
+            'maxItems': 0
         }
     },
     'required': ['siglum', 'museumNumber', 'accession', 'period', 'provenance',

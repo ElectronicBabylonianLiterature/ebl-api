@@ -135,7 +135,7 @@ class Stage(Enum):
         ][0]
 
 
-ManuscriptDict = Dict[str, str]
+ManuscriptDict = Dict[str, Union[str, list]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -146,6 +146,7 @@ class Manuscript:
     period: Period
     provenance: Provenance
     type: ManuscriptType
+    references: tuple = tuple()
 
     def to_dict(self) -> ManuscriptDict:
         return {
@@ -154,8 +155,20 @@ class Manuscript:
             'accession': self.accession,
             'period': self.period.long_name,
             'provenance': self.provenance.long_name,
-            'type': self.type.long_name
+            'type': self.type.long_name,
+            'references': list(self.references)
         }
+
+    @staticmethod
+    def from_dict(manuscript: dict) -> 'Manuscript':
+        return Manuscript(
+            manuscript['siglum'],
+            manuscript['museumNumber'],
+            manuscript['accession'],
+            Period.from_name(manuscript['period']),
+            Provenance.from_name(manuscript['provenance']),
+            ManuscriptType.from_name(manuscript['type'])
+        )
 
 
 ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
@@ -180,6 +193,19 @@ class Chapter:
                 for manuscript in self.manuscripts
             ]
         }
+
+    @staticmethod
+    def from_dict(chapter: dict) -> 'Chapter':
+        return Chapter(
+            Classification(chapter['classification']),
+            Stage.from_name(chapter['stage']),
+            chapter['name'],
+            chapter['order'],
+            tuple(
+                Manuscript.from_dict(manuscript)
+                for manuscript in chapter['manuscripts']
+            )
+        )
 
 
 TextDict = Dict[str, Union[int, str, List[ChapterDict]]]
@@ -213,23 +239,7 @@ class Text:
             text['numberOfVerses'],
             text['approximateVerses'],
             tuple(
-                Chapter(
-                    Classification(chapter['classification']),
-                    Stage.from_name(chapter['stage']),
-                    chapter['name'],
-                    chapter['order'],
-                    tuple(
-                        Manuscript(
-                            manuscript['siglum'],
-                            manuscript['museumNumber'],
-                            manuscript['accession'],
-                            Period.from_name(manuscript['period']),
-                            Provenance.from_name(manuscript['provenance']),
-                            ManuscriptType.from_name(manuscript['type'])
-                        )
-                        for manuscript in chapter['manuscripts']
-                    )
-                )
+                Chapter.from_dict(chapter)
                 for chapter in text['chapters']
             )
         )
