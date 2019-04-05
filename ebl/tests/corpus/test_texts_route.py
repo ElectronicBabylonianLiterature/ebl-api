@@ -108,6 +108,11 @@ def test_updating_text_invalid_id(client):
             ManuscriptFactory.build(siglum='duplicate'),
             ManuscriptFactory.build(siglum='duplicate')
         )),
+    )), falcon.HTTP_UNPROCESSABLE_ENTITY],
+    [TextFactory.build(chapters=(
+        ChapterFactory.build(manuscripts=(
+            ManuscriptFactory.build(museum_number='BM.X', accession='K.X'),
+        )),
     )), falcon.HTTP_UNPROCESSABLE_ENTITY]
 ])
 def test_update_transliteration_invalid_entity(client,

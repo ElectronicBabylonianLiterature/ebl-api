@@ -12,8 +12,8 @@ class ManuscriptFactory(factory.Factory):
         model = Manuscript
 
     siglum = factory.Faker('word')
-    museum_number = factory.Sequence(lambda n: f'M.{n}')
-    accession = factory.Sequence(lambda n: f'A.{n}')
+    museum_number = factory.Sequence(lambda n: f'M.{n}' if n % 2 == 0 else '')
+    accession = factory.Sequence(lambda n: f'A.{n}' if n % 2 != 0 else '')
     period = factory.fuzzy.FuzzyChoice(Period)
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)

@@ -9,6 +9,8 @@ COLLECTION = 'texts'
 
 
 def validate(text):
+    errors = []
+
     duplicate_sigla = (
         pydash
         .chain(text.chapters)
@@ -20,9 +22,27 @@ def validate(text):
         .uniq()
         .value()
     )
-
     if duplicate_sigla:
-        raise DataError(f'Duplicate sigla: {duplicate_sigla}.')
+        errors.append(f'Duplicate sigla: {duplicate_sigla}.')
+
+    double_numbered = (
+        pydash
+        .chain(text.chapters)
+        .flat_map(lambda chapter: chapter.manuscripts)
+        .filter(
+            lambda manuscript:
+            manuscript.museum_number and manuscript.accession
+        )
+        .map_(lambda manuscript: manuscript.siglum)
+        .value()
+    )
+    if double_numbered:
+        errors.append(
+            f'Accession given when museum number present: {double_numbered}'
+        )
+
+    if errors:
+        raise DataError(f'Bad text: {errors}.')
 
 
 class MongoCorpus:
