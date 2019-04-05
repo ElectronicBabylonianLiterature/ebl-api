@@ -73,7 +73,7 @@ TEXT_DTO_SCHEMA = {
         },
         'index': {
             'type': 'integer',
-            'minimum': 1
+            'minimum': 0
         },
         'name': {
             'type': 'string',
