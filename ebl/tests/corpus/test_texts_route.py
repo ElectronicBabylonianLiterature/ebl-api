@@ -104,6 +104,9 @@ def test_updating_text_invalid_id(client):
 @pytest.mark.parametrize("updated_text,expected_status", [
     [TextFactory.build(category='invalid'), falcon.HTTP_BAD_REQUEST],
     [TextFactory.build(chapters=(
+        ChapterFactory.build(name=''),
+    )), falcon.HTTP_BAD_REQUEST],
+    [TextFactory.build(chapters=(
         ChapterFactory.build(manuscripts=(
             ManuscriptFactory.build(siglum='duplicate'),
             ManuscriptFactory.build(siglum='duplicate')
