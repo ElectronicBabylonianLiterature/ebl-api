@@ -125,7 +125,7 @@ def get_app():
         os.environ['AUTH0_ISSUER']
     )
 
-    bibliography = MongoCorpus(database)
+    bibliography = MongoBibliography(database)
     context = {
         'auth_backend': auth_backend,
         'dictionary': MongoDictionary(database),
@@ -136,8 +136,8 @@ def get_app():
             FragmentFactory(bibliography)
         ),
         'changelog': Changelog(database),
-        'bibliography': MongoBibliography(database),
-        'corpus': bibliography
+        'bibliography': bibliography,
+        'corpus': MongoCorpus(database, bibliography)
     }
 
     app = create_app(context)

@@ -16,7 +16,6 @@ from ebl.corpus.corpus import MongoCorpus
 from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
-from ebl.bibliography.reference import Reference, ReferenceType, BibliographyId
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragmentarium import Fragmentarium
@@ -24,7 +23,7 @@ from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.text.text import Text
-from ebl.text.line import TextLine, LineNumber
+from ebl.text.line import TextLine
 from ebl.text.token import Token, Word
 from ebl.auth0 import Auth0User
 import ebl.fragment.fragment_factory as fragment_factory_
@@ -79,8 +78,8 @@ def sign_list(sign_repository):
 
 
 @pytest.fixture
-def corpus(database):
-    return MongoCorpus(database)
+def corpus(database, bibliography):
+    return MongoCorpus(database, bibliography)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
@@ -309,21 +308,6 @@ def word():
         ],
         "pos": ["V"]
     }
-
-
-@pytest.fixture
-def reference(bibliography_entry):
-    return Reference(
-        BibliographyId(bibliography_entry['id']),
-        ReferenceType.EDITION,
-        '1-6', 'some notes',
-        (LineNumber('1.'), LineNumber('2a.2.'))
-    )
-
-
-@pytest.fixture
-def reference_with_document(reference, bibliography_entry):
-    return attr.evolve(reference, document=bibliography_entry)
 
 
 @pytest.fixture

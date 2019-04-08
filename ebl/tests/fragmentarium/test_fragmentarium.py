@@ -8,6 +8,7 @@ from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
@@ -236,7 +237,6 @@ def test_find_lemmas(fragmentarium,
 
 
 def test_update_references(fragmentarium,
-                           reference,
                            bibliography,
                            user,
                            fragment_repository,
@@ -245,6 +245,7 @@ def test_update_references(fragmentarium,
     # pylint: disable=R0913
     fragment = FragmentFactory.build()
     number = fragment.number
+    reference = ReferenceFactory.build()
     references = (reference,)
     expected_fragment = fragment.set_references(references)
     when(bibliography).find(reference.id).thenReturn(reference)
@@ -266,14 +267,13 @@ def test_update_references(fragmentarium,
 
 
 def test_update_references_invalid(fragmentarium,
-                                   reference,
                                    bibliography,
                                    user,
                                    fragment_repository,
                                    when):
-    # pylint: disable=R0913
     fragment = FragmentFactory.build()
     number = fragment.number
+    reference = ReferenceFactory.build()
     when(bibliography).find(reference.id).thenRaise(NotFoundError)
     when(fragment_repository).find(number).thenReturn(fragment)
     references = (reference,)

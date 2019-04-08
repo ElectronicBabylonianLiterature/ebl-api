@@ -1,7 +1,9 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.require_scope import require_scope
-from ebl.bibliography.reference import ReferenceType, Reference
+from ebl.bibliography.reference import (
+    Reference, REFERENCE_DTO_SCHEMA
+)
 from ebl.fragmentarium.dtos import create_response_dto
 
 
@@ -10,38 +12,7 @@ REFERENCES_DTO_SCHEMA = {
     'properties': {
         'references': {
             'type': 'array',
-            'items': {
-                'type': 'object',
-                'properties': {
-                    'id': {
-                        'type': 'string'
-                    },
-                    'type': {
-                        'type': 'string',
-                        'enum': [name for name, _
-                                 in ReferenceType.__members__.items()]
-                    },
-                    'pages': {
-                        'type': 'string'
-                    },
-                    'notes': {
-                        'type': 'string'
-                    },
-                    'linesCited': {
-                        'type': 'array',
-                        'items': {
-                            'type': 'string'
-                        }
-                    }
-                },
-                'required': [
-                    'id',
-                    'type',
-                    'pages',
-                    'notes',
-                    'linesCited'
-                ]
-            }
+            'items': REFERENCE_DTO_SCHEMA
         }
     },
     'required': ['references']

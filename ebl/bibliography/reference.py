@@ -54,3 +54,37 @@ class Reference():
             ),
             data.get('document', None)
         )
+
+
+REFERENCE_DTO_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'id': {
+            'type': 'string'
+        },
+        'type': {
+            'type': 'string',
+            'enum': [name for name, _
+                     in ReferenceType.__members__.items()]
+        },
+        'pages': {
+            'type': 'string'
+        },
+        'notes': {
+            'type': 'string'
+        },
+        'linesCited': {
+            'type': 'array',
+            'items': {
+                'type': 'string'
+            }
+        }
+    },
+    'required': [
+        'id',
+        'type',
+        'pages',
+        'notes',
+        'linesCited'
+    ]
+}

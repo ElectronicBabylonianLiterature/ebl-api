@@ -1,3 +1,4 @@
+import attr
 import pydash
 import pymongo
 from ebl.corpus.text import Text
@@ -47,8 +48,9 @@ def validate(text):
 
 class MongoCorpus:
 
-    def __init__(self, database):
+    def __init__(self, database, bibliography):
         self._mongo_repository = MongoRepository(database, COLLECTION)
+        self._bibliography = bibliography
 
     def create_indexes(self):
         self._mongo_collection.create_index([
@@ -58,21 +60,51 @@ class MongoCorpus:
 
     def create(self, text, _=None):
         validate(text)
+        self._bibliography.validate_references(
+            pydash
+            .chain(text.chapters)
+            .flat_map(lambda chapter: chapter.manuscripts)
+            .flat_map(lambda manuscript: manuscript.references)
+            .value()
+        )
         return self._mongo_repository.create(text.to_dict())
 
     def find(self, category, index):
-        text = self._mongo_collection.find_one({
+        mongo_text = self._mongo_collection.find_one({
             'category': category,
             'index': index
         })
 
-        if text is None:
-            raise NotFoundError(f'Text {category}.{index} not found.')
+        if mongo_text:
+            text = Text.from_dict(mongo_text)
+            try:
+                return attr.evolve(text, chapters=tuple(
+                    attr.evolve(chapter, manuscripts=tuple(
+                        attr.evolve(manuscript, references=tuple(
+                            attr.evolve(
+                                reference,
+                                document=self._bibliography.find(reference.id)
+                            )
+                            for reference in manuscript.references
+                        ))
+                        for manuscript in chapter.manuscripts
+                    ))
+                    for chapter in text.chapters
+                ))
+            except NotFoundError as error:
+                raise Exception(error)
         else:
-            return Text.from_dict(text)
+            raise NotFoundError(f'Text {category}.{index} not found.')
 
     def update(self, category, index, text, _=None):
         validate(text)
+        self._bibliography.validate_references(
+            pydash
+            .chain(text.chapters)
+            .flat_map(lambda chapter: chapter.manuscripts)
+            .flat_map(lambda manuscript: manuscript.references)
+            .value()
+        )
         result = self._mongo_collection.update_one(
             {'category': category, 'index': index},
             {'$set': text.to_dict()}

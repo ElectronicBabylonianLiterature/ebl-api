@@ -1,4 +1,3 @@
-from ebl.errors import NotFoundError, DataError
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.validator import Validator
 
@@ -45,22 +44,9 @@ class Fragmentarium:
         return updated_fragment
 
     def update_references(self, number, references, user):
-        def is_invalid(reference):
-            try:
-                self._bibliography.find(reference.id)
-                return False
-            except NotFoundError:
-                return True
-
         fragment = self._repository.find(number)
-        invalid_references = [
-            reference.id
-            for reference in references
-            if is_invalid(reference)
-        ]
-        if invalid_references:
-            raise DataError('Unknown bibliography entries: '
-                            f'{", ".join(invalid_references)}.')
+        self._bibliography.validate_references(references)
+
         updated_fragment = fragment.set_references(references)
 
         self._create_changlelog(user, fragment, updated_fragment)

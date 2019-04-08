@@ -2,9 +2,20 @@ import json
 import attr
 import falcon
 import pytest
+from ebl.auth0 import Guest
 from ebl.tests.factories.corpus import (
     TextFactory, ChapterFactory, ManuscriptFactory
 )
+
+
+ANY_USER = Guest()
+
+
+def allow_references(text, bibliography):
+    for chapter in text.chapters:
+        for manuscript in chapter.manuscripts:
+            for reference in manuscript.references:
+                bibliography.create(reference.document, ANY_USER)
 
 
 def put_text(client, text):
@@ -16,15 +27,16 @@ def put_text(client, text):
     assert put_result.headers['Access-Control-Allow-Origin'] == '*'
 
 
-def test_created_text_can_be_fetched(client):
+def test_created_text_can_be_fetched(client, bibliography):
     text = TextFactory.build()
+    allow_references(text, bibliography)
     put_text(client, text)
 
     get_result = client.simulate_get(f'/texts/{text.category}/{text.index}')
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert get_result.json == text.to_dict()
+    assert get_result.json == text.to_dict(True)
 
 
 def test_text_not_found(client):
@@ -45,11 +57,12 @@ def test_invalid_index(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_text(client):
+def test_updating_text(client, bibliography):
     text = TextFactory.build()
+    allow_references(text, bibliography)
+    put_text(client, text)
     updated_text = attr.evolve(text, index=2, name='New Name')
 
-    put_text(client, text)
     post_result = client.simulate_post(
         f'/texts/{text.category}/{text.index}',
         body=json.dumps(updated_text.to_dict())
@@ -57,7 +70,7 @@ def test_updating_text(client):
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert post_result.json == updated_text.to_dict()
+    assert post_result.json == updated_text.to_dict(True)
 
     get_result = client.simulate_get(
         f'/texts/{updated_text.category}/{updated_text.index}'
@@ -65,11 +78,12 @@ def test_updating_text(client):
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert get_result.json == updated_text.to_dict()
+    assert get_result.json == updated_text.to_dict(True)
 
 
-def test_updating_text_not_found(client):
+def test_updating_text_not_found(client, bibliography):
     text = TextFactory.build()
+    allow_references(text, bibliography)
 
     post_result = client.simulate_post(
         f'/texts/{text.category}/{text.index}',
@@ -79,12 +93,35 @@ def test_updating_text_not_found(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_text_invalid_category(client):
+def test_updating_invalid_reference(client, bibliography):
     text = TextFactory.build()
+    allow_references(text, bibliography)
+    put_text(client, text)
+    updated_text = TextFactory.build()
+
+    post_result = client.simulate_post(
+        f'/texts/{text.category}/{text.index}',
+        body=json.dumps(updated_text.to_dict())
+    )
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_updating_text_invalid_category(client):
+    text = TextFactory.build(chapters=(
+        ChapterFactory.build(manuscripts=(
+            ManuscriptFactory.build(references=tuple()),
+        )),
+    ))
+    invalid = TextFactory.build(chapters=(
+        ChapterFactory.build(manuscripts=(
+            ManuscriptFactory.build(),
+        )),
+    ))
 
     post_result = client.simulate_post(
         f'/texts/invalid/{text.index}',
-        body=json.dumps(text.to_dict())
+        body=json.dumps(invalid.to_dict())
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -118,10 +155,12 @@ def test_updating_text_invalid_id(client):
         )),
     )), falcon.HTTP_UNPROCESSABLE_ENTITY]
 ])
-def test_update_transliteration_invalid_entity(client,
-                                               updated_text,
-                                               expected_status):
+def test_update_text_invalid_entity(client,
+                                    bibliography,
+                                    updated_text,
+                                    expected_status):
     text = TextFactory.build()
+    allow_references(text, bibliography)
     put_text(client, text)
 
     post_result = client.simulate_post(

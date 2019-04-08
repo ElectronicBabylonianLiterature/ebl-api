@@ -2,7 +2,8 @@
 from freezegun import freeze_time
 import pydash
 import pytest
-from ebl.errors import NotFoundError, DuplicateError
+from ebl.errors import NotFoundError, DuplicateError, DataError
+from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 
 
 @pytest.fixture
@@ -94,3 +95,28 @@ def test_changelog(bibliography,
 def test_update_not_found(bibliography, bibliography_entry, user):
     with pytest.raises(NotFoundError):
         bibliography.update(bibliography_entry, user)
+
+
+def test_validate_references(bibliography, user):
+    reference = ReferenceWithDocumentFactory.build()
+    bibliography.create(reference.document, user)
+    bibliography.validate_references([reference])
+
+
+def test_validate_references_invalid(bibliography, user):
+    valid_reference = ReferenceWithDocumentFactory.build()
+    first_invalid = ReferenceWithDocumentFactory.build()
+    second_invalid = ReferenceWithDocumentFactory.build()
+    bibliography.create(valid_reference.document, user)
+    expected_error = (
+        'Unknown bibliography entries: '
+        f'{first_invalid.id}'
+        ', '
+        f'{second_invalid.id}'
+        '.'
+    )
+
+    with pytest.raises(DataError, match=expected_error):
+        bibliography.validate_references([
+            first_invalid, valid_reference, second_invalid
+        ])

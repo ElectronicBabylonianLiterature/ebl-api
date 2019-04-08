@@ -2,6 +2,7 @@ import falcon
 from falcon.media.validators.jsonschema import validate
 from ebl.errors import NotFoundError
 from ebl.require_scope import require_scope
+from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (
     Text, Period, Provenance, ManuscriptType, Classification, Stage
 )
@@ -33,7 +34,7 @@ MANUSCRIPT_DTO_SCHEMA = {
         },
         'references': {
             'type': 'array',
-            'maxItems': 0
+            'items': REFERENCE_DTO_SCHEMA
         }
     },
     'required': ['siglum', 'museumNumber', 'accession', 'period', 'provenance',
@@ -123,7 +124,7 @@ class TextResource:
     def on_get(self, _, resp, category, index):
         try:
             text = self._corpus.find(int(category), int(index))
-            resp.media = text.to_dict()
+            resp.media = text.to_dict(True)
         except ValueError:
             raise NotFoundError(f'{category}.{index}')
 
@@ -139,6 +140,6 @@ class TextResource:
                 req.context['user']
             )
             updated_text = self._corpus.find(text.category, text.index)
-            resp.media = updated_text.to_dict()
+            resp.media = updated_text.to_dict(Text)
         except ValueError:
             raise NotFoundError(f'{category}.{index}')

@@ -7,6 +7,7 @@ from ebl.text.text import Text
 from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragment.transliteration import Transliteration
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
@@ -273,7 +274,8 @@ def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):
     assert fragment_repository.find_lemmas('aklu') == []
 
 
-def test_update_references(fragment_repository, reference):
+def test_update_references(fragment_repository):
+    reference = ReferenceFactory.build()
     fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     references = (reference,)

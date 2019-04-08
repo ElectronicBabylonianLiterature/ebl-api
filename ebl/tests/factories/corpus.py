@@ -4,6 +4,7 @@ from ebl.corpus.text import (
     Text, Chapter, Manuscript, Classification, Stage, Period,
     Provenance, ManuscriptType
 )
+from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 
 
@@ -17,6 +18,9 @@ class ManuscriptFactory(factory.Factory):
     period = factory.fuzzy.FuzzyChoice(Period)
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
+    references = factory.List([
+        factory.SubFactory(ReferenceWithDocumentFactory)
+    ], TupleFactory)
 
 
 class ChapterFactory(factory.Factory):

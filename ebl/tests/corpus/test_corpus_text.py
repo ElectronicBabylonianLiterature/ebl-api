@@ -2,7 +2,7 @@ from ebl.corpus.text import (
     Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
     ManuscriptType
 )
-
+from ebl.tests.factories.bibliography import ReferenceFactory
 
 CATEGORY = 1
 INDEX = 2
@@ -19,7 +19,7 @@ ACCESSION = 'K.x'
 PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
-REFERENCES: tuple = tuple()
+REFERENCES = (ReferenceFactory.build(), )
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
@@ -78,7 +78,43 @@ def test_serializing_to_dict():
                         'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
-                        'references': []
+                        'references': [
+                            reference.to_dict()
+                            for reference in REFERENCES
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+
+def test_serializing_to_dict_with_documents():
+    # pylint: disable=E1101
+    assert TEXT.to_dict(True) == {
+        'category': CATEGORY,
+        'index': INDEX,
+        'name': NAME,
+        'numberOfVerses': VERSES,
+        'approximateVerses': APPROXIMATE,
+        'chapters': [
+            {
+                'classification': CLASSIFICATION.value,
+                'stage': STAGE.long_name,
+                'name': NAME,
+                'order': ORDER,
+                'manuscripts': [
+                    {
+                        'siglum': SIGLUM,
+                        'museumNumber': MUSEUM_NUMBER,
+                        'accession': ACCESSION,
+                        'period': PERIOD.long_name,
+                        'provenance': PROVENANCE.long_name,
+                        'type': TYPE.long_name,
+                        'references': [
+                            reference.to_dict(True)
+                            for reference in REFERENCES
+                        ]
                     }
                 ]
             }

@@ -1,20 +1,23 @@
 import json
 import falcon
 import pytest
+from ebl.auth0 import Guest
 from ebl.fragmentarium.dtos import create_response_dto
+from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.fragment import FragmentFactory
+
+
+ANY_USER = Guest()
 
 
 def test_update_references(client,
                            fragmentarium,
                            bibliography,
-                           reference,
-                           bibliography_entry,
                            user):
-    # pylint: disable=R0913
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
-    bibliography.create(bibliography_entry, user)
+    reference = ReferenceWithDocumentFactory.build()
+    bibliography.create(reference.document, ANY_USER)
     references = [reference.to_dict()]
     body = json.dumps({'references': references})
     url = f'/fragments/{fragment_number}/references'
@@ -68,8 +71,8 @@ def test_update_references_invalid_reference(client,
 
 
 def test_update_references_invalid_id(client,
-                                      fragmentarium,
-                                      reference):
+                                      fragmentarium):
+    reference = ReferenceWithDocumentFactory.build()
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     body = json.dumps({'references': [reference.to_dict()]})

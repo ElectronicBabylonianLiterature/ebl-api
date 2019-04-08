@@ -1,5 +1,6 @@
 import pydash
 from ebl.changelog import Changelog
+from ebl.errors import DataError, NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 
@@ -95,3 +96,20 @@ class MongoBibliography():
                 }
             )
         ]
+
+    def validate_references(self, references):
+        def is_invalid(reference):
+            try:
+                self.find(reference.id)
+                return False
+            except NotFoundError:
+                return True
+
+        invalid_references = [
+            reference.id
+            for reference in references
+            if is_invalid(reference)
+        ]
+        if invalid_references:
+            raise DataError('Unknown bibliography entries: '
+                            f'{", ".join(invalid_references)}.')

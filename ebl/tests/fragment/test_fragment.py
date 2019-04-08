@@ -10,6 +10,7 @@ from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
@@ -144,7 +145,8 @@ def test_uncurated_references_none():
     assert fragment.uncurated_references is None
 
 
-def test_references(reference):
+def test_references():
+    reference = RecordFactory.build()
     fragment = FragmentFactory.build(references=(reference,))
     assert fragment.references == (reference,)
 
@@ -290,9 +292,9 @@ def test_update_lemmatization_incompatible():
         fragment.update_lemmatization(lemmatization)
 
 
-def test_set_references(reference):
+def test_set_references():
     fragment = FragmentFactory.build()
-    references = (reference,)
+    references = (ReferenceFactory.build(),)
     updated_fragment = fragment.set_references(references)
 
     assert updated_fragment.references == references

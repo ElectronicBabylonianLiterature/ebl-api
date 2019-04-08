@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Dict, List, Tuple, Union
 import attr
+from ebl.bibliography.reference import BibliographyId, Reference, ReferenceType
 
 
 class Classification(Enum):
@@ -135,7 +136,7 @@ class Stage(Enum):
         ][0]
 
 
-ManuscriptDict = Dict[str, Union[str, list]]
+ManuscriptDict = Dict[str, Union[str, List[dict]]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -146,9 +147,9 @@ class Manuscript:
     period: Period
     provenance: Provenance
     type: ManuscriptType
-    references: tuple = tuple()
+    references: Tuple[Reference, ...] = tuple()
 
-    def to_dict(self) -> ManuscriptDict:
+    def to_dict(self, include_documents=False) -> ManuscriptDict:
         return {
             'siglum': self.siglum,
             'museumNumber': self.museum_number,
@@ -156,7 +157,10 @@ class Manuscript:
             'period': self.period.long_name,
             'provenance': self.provenance.long_name,
             'type': self.type.long_name,
-            'references': list(self.references)
+            'references': [
+                reference.to_dict(include_documents)
+                for reference in self.references
+            ]
         }
 
     @staticmethod
@@ -167,7 +171,11 @@ class Manuscript:
             manuscript['accession'],
             Period.from_name(manuscript['period']),
             Provenance.from_name(manuscript['provenance']),
-            ManuscriptType.from_name(manuscript['type'])
+            ManuscriptType.from_name(manuscript['type']),
+            tuple(
+                Reference.from_dict(reference)
+                for reference in manuscript['references']
+            )
         )
 
 
@@ -182,14 +190,14 @@ class Chapter:
     order: int
     manuscripts: Tuple[Manuscript, ...] = tuple()
 
-    def to_dict(self) -> ChapterDict:
+    def to_dict(self, include_documents=False) -> ChapterDict:
         return {
             'classification': self.classification.value,
             'stage': self.stage.long_name,
             'name': self.name,
             'order': self.order,
             'manuscripts': [
-                manuscript.to_dict()
+                manuscript.to_dict(include_documents)
                 for manuscript in self.manuscripts
             ]
         }
@@ -220,14 +228,17 @@ class Text:
     approximate_verses: bool
     chapters: Tuple[Chapter, ...] = tuple()
 
-    def to_dict(self) -> TextDict:
+    def to_dict(self, include_documents=False) -> TextDict:
         return {
             'category': self.category,
             'index': self.index,
             'name': self.name,
             'numberOfVerses': self.number_of_verses,
             'approximateVerses': self.approximate_verses,
-            'chapters': [chapter.to_dict() for chapter in self.chapters]
+            'chapters': [
+                chapter.to_dict(include_documents)
+                for chapter in self.chapters
+            ]
         }
 
     @staticmethod
