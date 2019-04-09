@@ -14,6 +14,10 @@ MANUSCRIPT_DTO_SCHEMA = {
             'type': 'string',
             'minLength': 1
         },
+        'siglumNumber': {
+            'type': 'integer',
+            'minimum': 0
+        },
         'museumNumber': {
             'type': 'string'
         },

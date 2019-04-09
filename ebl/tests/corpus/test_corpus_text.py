@@ -13,7 +13,8 @@ CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 NAME = 'IIc'
 ORDER = 1
-SIGLUM = 'UrHel3'
+SIGLUM = 'deprecated'
+SIGLUM_NUMBER = 1
 MUSEUM_NUMBER = 'BM.x'
 ACCESSION = 'K.x'
 PERIOD = Period.OLD_BABYLONIAN
@@ -26,6 +27,7 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
     Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
         Manuscript(
             SIGLUM,
+            SIGLUM_NUMBER,
             MUSEUM_NUMBER,
             ACCESSION,
             PERIOD,
@@ -48,6 +50,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].name == NAME
     assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].siglum == SIGLUM
+    assert TEXT.chapters[0].manuscripts[0].siglum_number == SIGLUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION
     assert TEXT.chapters[0].manuscripts[0].period == PERIOD
@@ -73,6 +76,7 @@ def test_serializing_to_dict():
                 'manuscripts': [
                     {
                         'siglum': SIGLUM,
+                        'siglumNumber': SIGLUM_NUMBER,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'period': PERIOD.long_name,
@@ -106,6 +110,7 @@ def test_serializing_to_dict_with_documents():
                 'manuscripts': [
                     {
                         'siglum': SIGLUM,
+                        'siglumNumber': SIGLUM_NUMBER,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'period': PERIOD.long_name,

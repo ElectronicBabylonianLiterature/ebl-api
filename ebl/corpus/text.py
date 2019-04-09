@@ -142,6 +142,7 @@ ManuscriptDict = Dict[str, Union[str, List[dict]]]
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
     siglum: str
+    siglum_number: int
     museum_number: str
     accession: str
     period: Period
@@ -152,6 +153,7 @@ class Manuscript:
     def to_dict(self, include_documents=False) -> ManuscriptDict:
         return {
             'siglum': self.siglum,
+            'siglumNumber': self.siglum_number,
             'museumNumber': self.museum_number,
             'accession': self.accession,
             'period': self.period.long_name,
@@ -167,6 +169,7 @@ class Manuscript:
     def from_dict(manuscript: dict) -> 'Manuscript':
         return Manuscript(
             manuscript['siglum'],
+            manuscript['siglumNumber'],
             manuscript['museumNumber'],
             manuscript['accession'],
             Period.from_name(manuscript['period']),

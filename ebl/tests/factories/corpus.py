@@ -1,5 +1,6 @@
 import factory
 import factory.fuzzy
+import pydash
 from ebl.corpus.text import (
     Text, Chapter, Manuscript, Classification, Stage, Period,
     Provenance, ManuscriptType
@@ -13,8 +14,11 @@ class ManuscriptFactory(factory.Factory):
         model = Manuscript
 
     siglum = factory.Faker('word')
-    museum_number = factory.Sequence(lambda n: f'M.{n}' if n % 2 == 0 else '')
-    accession = factory.Sequence(lambda n: f'A.{n}' if n % 2 != 0 else '')
+    siglum_number = factory.Sequence(pydash.identity)
+    museum_number =\
+        factory.Sequence(lambda n: f'M.{n}' if pydash.is_odd(n) else '')
+    accession =\
+        factory.Sequence(lambda n: f'A.{n}' if pydash.is_even(n) else '')
     period = factory.fuzzy.FuzzyChoice(Period)
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
