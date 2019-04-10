@@ -20,6 +20,7 @@ ACCESSION = ''
 PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
+NOTES = 'some notes'
 REFERENCES = (ReferenceFactory.build(), )
 
 
@@ -32,6 +33,7 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
             PERIOD,
             PROVENANCE,
             TYPE,
+            NOTES,
             REFERENCES
         ),
     )),
@@ -55,6 +57,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].period == PERIOD
     assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
+    assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
 
 
@@ -67,6 +70,7 @@ def test_giving_museum_number_and_accession_is_invalid():
             PERIOD,
             PROVENANCE,
             TYPE,
+            NOTES,
             REFERENCES
         )
 
@@ -81,6 +85,7 @@ def test_duplicate_sigla_are_invalid():
                 PERIOD,
                 PROVENANCE,
                 TYPE,
+                NOTES,
                 REFERENCES
             ),
             Manuscript(
@@ -90,6 +95,7 @@ def test_duplicate_sigla_are_invalid():
                 PERIOD,
                 PROVENANCE,
                 TYPE,
+                NOTES,
                 REFERENCES
             ),
         ))
@@ -117,6 +123,7 @@ def test_serializing_to_dict():
                         'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
+                        'notes': NOTES,
                         'references': [
                             reference.to_dict()
                             for reference in REFERENCES
@@ -150,6 +157,7 @@ def test_serializing_to_dict_with_documents():
                         'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
+                        'notes': NOTES,
                         'references': [
                             reference.to_dict(True)
                             for reference in REFERENCES

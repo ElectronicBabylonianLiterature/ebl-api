@@ -156,20 +156,22 @@ UNPROCESSABLE_TEXT = {
             'manuscripts': [
                 {
                     'siglumNumber': 1,
-                    'museumNumber': '',
+                    'museumNumber': 'X.1',
                     'accession': '',
                     'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
+                    'notes': '',
                     'references': []
                 },
                 {
                     'siglumNumber': 1,
-                    'museumNumber': '',
+                    'museumNumber': 'X.2',
                     'accession': '',
                     'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
+                    'notes': '',
                     'references': []
                 }
             ]

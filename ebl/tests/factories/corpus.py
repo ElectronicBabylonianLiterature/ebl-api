@@ -21,6 +21,7 @@ class ManuscriptFactory(factory.Factory):
     period = factory.fuzzy.FuzzyChoice(Period)
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
+    notes = factory.Faker('sentence')
     references = factory.List([
         factory.SubFactory(ReferenceWithDocumentFactory)
     ], TupleFactory)

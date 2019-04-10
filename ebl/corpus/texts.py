@@ -32,13 +32,16 @@ MANUSCRIPT_DTO_SCHEMA = {
             'type': 'string',
             'enum': [type_.long_name for type_ in ManuscriptType]
         },
+        'notes': {
+            'type': 'string'
+        },
         'references': {
             'type': 'array',
             'items': REFERENCE_DTO_SCHEMA
         }
     },
     'required': ['siglumNumber', 'museumNumber', 'accession', 'period',
-                 'provenance', 'type', 'references']
+                 'provenance', 'type', 'notes', 'references']
 }
 
 

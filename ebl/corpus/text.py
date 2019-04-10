@@ -143,11 +143,12 @@ ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
     siglum_number: int
-    museum_number: str
-    accession: str = attr.ib()
-    period: Period
-    provenance: Provenance
-    type: ManuscriptType
+    museum_number: str = ''
+    accession: str = attr.ib(default='')
+    period: Period = Period.NEO_ASSYRIAN
+    provenance: Provenance = Provenance.NINEVEH
+    type: ManuscriptType = ManuscriptType.LIBRARY
+    notes: str = ''
     references: Tuple[Reference, ...] = tuple()
 
     @accession.validator
@@ -170,6 +171,7 @@ class Manuscript:
             'period': self.period.long_name,
             'provenance': self.provenance.long_name,
             'type': self.type.long_name,
+            'notes': self.notes,
             'references': [
                 reference.to_dict(include_documents)
                 for reference in self.references
@@ -185,6 +187,7 @@ class Manuscript:
             Period.from_name(manuscript['period']),
             Provenance.from_name(manuscript['provenance']),
             ManuscriptType.from_name(manuscript['type']),
+            manuscript['notes'],
             tuple(
                 Reference.from_dict(reference)
                 for reference in manuscript['references']
