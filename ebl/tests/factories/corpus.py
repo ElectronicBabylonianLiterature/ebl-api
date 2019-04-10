@@ -13,7 +13,7 @@ class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
 
-    siglum_disambiguator =  factory.Faker('word')
+    siglum_disambiguator = factory.Faker('word')
     museum_number =\
         factory.Sequence(lambda n: f'M.{n}' if pydash.is_odd(n) else '')
     accession =\
