@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Dict, List, Tuple, Union
 import attr
-from ebl.bibliography.reference import BibliographyId, Reference, ReferenceType
+import pydash
+from ebl.bibliography.reference import Reference
 
 
 class Classification(Enum):
@@ -195,7 +196,29 @@ class Chapter:
     stage: Stage
     name: str
     order: int
-    manuscripts: Tuple[Manuscript, ...] = tuple()
+    manuscripts: Tuple[Manuscript, ...] = attr.ib(
+        default=attr.Factory(tuple)
+    )
+
+    @manuscripts.validator
+    def validate_manuscripts(self, _, value):
+        errors = []
+
+        duplicate_sigla = (
+            pydash
+            .chain(value)
+            .map_(lambda manuscript: manuscript.siglum)
+            .map_(lambda siglum, _, sigla: (siglum, sigla.count(siglum)))
+            .filter(lambda entry: entry[1] > 1)
+            .map_(lambda entry: entry[0])
+            .uniq()
+            .value()
+        )
+        if duplicate_sigla:
+            errors.append(f'Duplicate sigla: {duplicate_sigla}.')
+
+        if errors:
+            raise ValueError(f'Invalid manuscripts: {errors}.')
 
     def to_dict(self, include_documents=False) -> ChapterDict:
         return {

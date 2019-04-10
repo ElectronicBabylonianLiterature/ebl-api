@@ -47,7 +47,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].stage == STAGE
     assert TEXT.chapters[0].name == NAME
     assert TEXT.chapters[0].order == ORDER
-    assert TEXT.chapters[0].manuscripts[0].siglum == ''
+    assert TEXT.chapters[0].manuscripts[0].siglum == 'NinOB1'
     assert TEXT.chapters[0].manuscripts[0].siglum_number == SIGLUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION

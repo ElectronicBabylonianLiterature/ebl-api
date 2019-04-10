@@ -3,7 +3,9 @@ import attr
 import falcon
 import pytest
 from ebl.auth0 import Guest
-from ebl.corpus.text import Provenance, Period, ManuscriptType
+from ebl.corpus.text import (
+    Provenance, Period, ManuscriptType, Stage, Classification
+)
 from ebl.tests.factories.corpus import (
     TextFactory, ChapterFactory, ManuscriptFactory
 )
@@ -138,33 +140,54 @@ def test_updating_text_invalid_id(client):
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
+DUPLICATE_MANUSCRIPTS = {
+    'category': 1,
+    'index': 1,
+    'name': 'name',
+    'numberOfVerses': 100,
+    'approximateVerses': False,
+    'chapters': [
+        {
+            'classification': Classification.ANCIENT.value,
+            'stage': Stage.OLD_ASSYRIAN.long_name,
+            'name': 'I',
+            'order': 0,
+            'manuscripts': [
+                {
+                    'siglumNumber': 1,
+                    'museumNumber': '',
+                    'accession': '',
+                    'period': Period.OLD_ASSYRIAN.long_name,
+                    'provenance': Provenance.BABYLON.long_name,
+                    'type': ManuscriptType.SCHOOL.long_name,
+                    'references': []
+                },
+                {
+                    'siglumNumber': 1,
+                    'museumNumber': '',
+                    'accession': '',
+                    'period': Period.OLD_ASSYRIAN.long_name,
+                    'provenance': Provenance.BABYLON.long_name,
+                    'type': ManuscriptType.SCHOOL.long_name,
+                    'references': []
+                }
+            ]
+        }
+    ]
+}
+
 
 @pytest.mark.parametrize("updated_text,expected_status", [
-    [TextFactory.build(category='invalid'), falcon.HTTP_BAD_REQUEST],
+    [TextFactory.build(category='invalid').to_dict(), falcon.HTTP_BAD_REQUEST],
     [TextFactory.build(chapters=(
         ChapterFactory.build(name=''),
-    )), falcon.HTTP_BAD_REQUEST],
-    [TextFactory.build(chapters=(
-        ChapterFactory.build(manuscripts=(
-            ManuscriptFactory.build(
-                provenance=Provenance.BABYLON,
-                period=Period.OLD_ASSYRIAN,
-                type=ManuscriptType.SCHOOL,
-                siglum_number=1
-            ),
-            ManuscriptFactory.build(
-                provenance=Provenance.BABYLON,
-                period=Period.OLD_ASSYRIAN,
-                type=ManuscriptType.SCHOOL,
-                siglum_number=1
-            ),
-        )),
-    )), falcon.HTTP_UNPROCESSABLE_ENTITY],
+    )).to_dict(), falcon.HTTP_BAD_REQUEST],
+    [DUPLICATE_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
     [TextFactory.build(chapters=(
         ChapterFactory.build(manuscripts=(
             ManuscriptFactory.build(museum_number='BM.X', accession='K.X'),
         )),
-    )), falcon.HTTP_UNPROCESSABLE_ENTITY]
+    )).to_dict(), falcon.HTTP_UNPROCESSABLE_ENTITY]
 ])
 def test_update_text_invalid_entity(client,
                                     bibliography,
@@ -176,7 +199,7 @@ def test_update_text_invalid_entity(client,
 
     post_result = client.simulate_post(
         f'/texts/{text.category}/{text.index}',
-        body=json.dumps(updated_text.to_dict())
+        body=json.dumps(updated_text)
     )
 
     assert post_result.status == expected_status

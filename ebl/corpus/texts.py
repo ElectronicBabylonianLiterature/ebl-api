@@ -1,6 +1,6 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
-from ebl.errors import NotFoundError
+from ebl.errors import DataError, NotFoundError
 from ebl.require_scope import require_scope
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (
@@ -101,6 +101,13 @@ TEXT_DTO_SCHEMA = {
 }
 
 
+def parse_text(media):
+    try:
+        return Text.from_dict(media)
+    except ValueError as error:
+        raise DataError(error)
+
+
 @falcon.before(require_scope, 'create:texts')
 class TextsResource:
     # pylint: disable=R0903
@@ -110,7 +117,7 @@ class TextsResource:
     @falcon.before(require_scope, 'create:texts')
     @validate(TEXT_DTO_SCHEMA)
     def on_put(self, req, resp):
-        text = Text.from_dict(req.media)
+        text = parse_text(req.media)
         self._corpus.create(text, req.context['user'])
         resp.status = falcon.HTTP_NO_CONTENT
 
@@ -131,7 +138,7 @@ class TextResource:
     @falcon.before(require_scope, 'write:texts')
     @validate(TEXT_DTO_SCHEMA)
     def on_post(self, req, resp, category, index):
-        text = Text.from_dict(req.media)
+        text = parse_text(req.media)
         try:
             self._corpus.update(
                 int(category),

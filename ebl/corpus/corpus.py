@@ -12,20 +12,6 @@ COLLECTION = 'texts'
 def validate(text):
     errors = []
 
-    duplicate_sigla = (
-        pydash
-        .chain(text.chapters)
-        .flat_map(lambda chapter: chapter.manuscripts)
-        .map_(lambda manuscript: manuscript.siglum)
-        .map_(lambda siglum, _, sigla: (siglum, sigla.count(siglum)))
-        .filter(lambda entry: entry[1] > 1)
-        .map_(lambda entry: entry[0])
-        .uniq()
-        .value()
-    )
-    if duplicate_sigla:
-        errors.append(f'Duplicate sigla: {duplicate_sigla}.')
-
     double_numbered = (
         pydash
         .chain(text.chapters)
