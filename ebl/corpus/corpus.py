@@ -9,29 +9,6 @@ from ebl.mongo_repository import MongoRepository
 COLLECTION = 'texts'
 
 
-def validate(text):
-    errors = []
-
-    double_numbered = (
-        pydash
-        .chain(text.chapters)
-        .flat_map(lambda chapter: chapter.manuscripts)
-        .filter(
-            lambda manuscript:
-            manuscript.museum_number and manuscript.accession
-        )
-        .map_(lambda manuscript: manuscript.siglum)
-        .value()
-    )
-    if double_numbered:
-        errors.append(
-            f'Accession given when museum number present: {double_numbered}'
-        )
-
-    if errors:
-        raise DataError(f'Bad text: {errors}.')
-
-
 class MongoCorpus:
 
     def __init__(self, database, bibliography):
@@ -45,7 +22,6 @@ class MongoCorpus:
         ], unique=True)
 
     def create(self, text, _=None):
-        validate(text)
         self._bibliography.validate_references(
             pydash
             .chain(text.chapters)
@@ -83,7 +59,6 @@ class MongoCorpus:
             raise NotFoundError(f'Text {category}.{index} not found.')
 
     def update(self, category, index, text, _=None):
-        validate(text)
         self._bibliography.validate_references(
             pydash
             .chain(text.chapters)

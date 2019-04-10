@@ -1,3 +1,4 @@
+import pytest
 from ebl.corpus.text import (
     Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
     ManuscriptType
@@ -15,7 +16,7 @@ NAME = 'IIc'
 ORDER = 1
 SIGLUM_NUMBER = 1
 MUSEUM_NUMBER = 'BM.x'
-ACCESSION = 'K.x'
+ACCESSION = ''
 PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
@@ -55,6 +56,43 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
+
+
+def test_giving_museum_number_and_accession_is_invalid():
+    with pytest.raises(ValueError):
+        Manuscript(
+            SIGLUM_NUMBER,
+            'when museam number if given',
+            'then accession not allowed',
+            PERIOD,
+            PROVENANCE,
+            TYPE,
+            REFERENCES
+        )
+
+
+def test_duplicate_sigla_are_invalid():
+    with pytest.raises(ValueError):
+        Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
+            Manuscript(
+                SIGLUM_NUMBER,
+                MUSEUM_NUMBER,
+                ACCESSION,
+                PERIOD,
+                PROVENANCE,
+                TYPE,
+                REFERENCES
+            ),
+            Manuscript(
+                SIGLUM_NUMBER,
+                'duplicates siglum',
+                ACCESSION,
+                PERIOD,
+                PROVENANCE,
+                TYPE,
+                REFERENCES
+            ),
+        ))
 
 
 def test_serializing_to_dict():

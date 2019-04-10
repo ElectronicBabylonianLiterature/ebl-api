@@ -140,7 +140,7 @@ def test_updating_text_invalid_id(client):
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
-DUPLICATE_MANUSCRIPTS = {
+UNPROCESSABLE_TEXT = {
     # pylint: disable=E1101
     'category': 1,
     'index': 1,
@@ -183,12 +183,7 @@ DUPLICATE_MANUSCRIPTS = {
     [TextFactory.build(chapters=(
         ChapterFactory.build(name=''),
     )).to_dict(), falcon.HTTP_BAD_REQUEST],
-    [DUPLICATE_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
-    [TextFactory.build(chapters=(
-        ChapterFactory.build(manuscripts=(
-            ManuscriptFactory.build(museum_number='BM.X', accession='K.X'),
-        )),
-    )).to_dict(), falcon.HTTP_UNPROCESSABLE_ENTITY]
+    [UNPROCESSABLE_TEXT, falcon.HTTP_UNPROCESSABLE_ENTITY],
 ])
 def test_update_text_invalid_entity(client,
                                     bibliography,

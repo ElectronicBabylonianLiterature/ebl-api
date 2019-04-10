@@ -144,11 +144,16 @@ ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
 class Manuscript:
     siglum_number: int
     museum_number: str
-    accession: str
+    accession: str = attr.ib()
     period: Period
     provenance: Provenance
     type: ManuscriptType
     references: Tuple[Reference, ...] = tuple()
+
+    @accession.validator
+    def validate_accession(self, _, value):
+        if self.museum_number and value:
+            raise ValueError(f'Accession given when museum number present.')
 
     @property
     def siglum(self):
