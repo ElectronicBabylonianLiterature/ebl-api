@@ -14,7 +14,7 @@ CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 NAME = 'IIc'
 ORDER = 1
-SIGLUM_NUMBER = 1
+SIGLUM_DISAMBIGUATOR = '1c'
 MUSEUM_NUMBER = 'BM.x'
 ACCESSION = ''
 PERIOD = Period.OLD_BABYLONIAN
@@ -27,7 +27,7 @@ REFERENCES = (ReferenceFactory.build(), )
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
     Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
         Manuscript(
-            SIGLUM_NUMBER,
+            SIGLUM_DISAMBIGUATOR,
             MUSEUM_NUMBER,
             ACCESSION,
             PERIOD,
@@ -51,7 +51,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].name == NAME
     assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].siglum == 'NinOB1'
-    assert TEXT.chapters[0].manuscripts[0].siglum_number == SIGLUM_NUMBER
+    assert TEXT.chapters[0].manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION
     assert TEXT.chapters[0].manuscripts[0].period == PERIOD
@@ -64,7 +64,7 @@ def test_constructor_sets_correct_fields():
 def test_giving_museum_number_and_accession_is_invalid():
     with pytest.raises(ValueError):
         Manuscript(
-            SIGLUM_NUMBER,
+            SIGLUM_DISAMBIGUATOR,
             'when museam number if given',
             'then accession not allowed',
             PERIOD,
@@ -79,7 +79,7 @@ def test_duplicate_sigla_are_invalid():
     with pytest.raises(ValueError):
         Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
             Manuscript(
-                SIGLUM_NUMBER,
+                SIGLUM_DISAMBIGUATOR,
                 MUSEUM_NUMBER,
                 ACCESSION,
                 PERIOD,
@@ -89,7 +89,7 @@ def test_duplicate_sigla_are_invalid():
                 REFERENCES
             ),
             Manuscript(
-                SIGLUM_NUMBER,
+                SIGLUM_DISAMBIGUATOR,
                 'duplicates siglum',
                 ACCESSION,
                 PERIOD,
@@ -117,7 +117,7 @@ def test_serializing_to_dict():
                 'order': ORDER,
                 'manuscripts': [
                     {
-                        'siglumNumber': SIGLUM_NUMBER,
+                        'siglumDisambiguator': SIGLUM_DISAMBIGUATOR,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'period': PERIOD.long_name,
@@ -151,7 +151,7 @@ def test_serializing_to_dict_with_documents():
                 'order': ORDER,
                 'manuscripts': [
                     {
-                        'siglumNumber': SIGLUM_NUMBER,
+                        'siglumDisambiguator': SIGLUM_DISAMBIGUATOR,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'period': PERIOD.long_name,

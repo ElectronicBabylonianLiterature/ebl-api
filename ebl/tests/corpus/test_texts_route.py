@@ -155,7 +155,7 @@ UNPROCESSABLE_TEXT = {
             'order': 0,
             'manuscripts': [
                 {
-                    'siglumNumber': 1,
+                    'siglumDisambiguator': '1c',
                     'museumNumber': 'X.1',
                     'accession': '',
                     'period': Period.OLD_ASSYRIAN.long_name,
@@ -165,7 +165,7 @@ UNPROCESSABLE_TEXT = {
                     'references': []
                 },
                 {
-                    'siglumNumber': 1,
+                    'siglumDisambiguator': '1c',
                     'museumNumber': 'X.2',
                     'accession': '',
                     'period': Period.OLD_ASSYRIAN.long_name,
