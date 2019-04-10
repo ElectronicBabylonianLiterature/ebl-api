@@ -10,7 +10,7 @@ from ebl.fragment.record import RecordType
 
 COLLECTION = 'fragments'
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
-NUMBER_OF_LATEST_TRANSLITERATIONS = 10
+NUMBER_OF_LATEST_TRANSLITERATIONS = 40
 
 
 def sample_size_one():
