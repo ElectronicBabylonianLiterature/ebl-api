@@ -13,7 +13,6 @@ CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 NAME = 'IIc'
 ORDER = 1
-SIGLUM = 'deprecated'
 SIGLUM_NUMBER = 1
 MUSEUM_NUMBER = 'BM.x'
 ACCESSION = 'K.x'
@@ -26,7 +25,6 @@ REFERENCES = (ReferenceFactory.build(), )
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
     Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
         Manuscript(
-            SIGLUM,
             SIGLUM_NUMBER,
             MUSEUM_NUMBER,
             ACCESSION,
@@ -49,7 +47,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].stage == STAGE
     assert TEXT.chapters[0].name == NAME
     assert TEXT.chapters[0].order == ORDER
-    assert TEXT.chapters[0].manuscripts[0].siglum == SIGLUM
+    assert TEXT.chapters[0].manuscripts[0].siglum == ''
     assert TEXT.chapters[0].manuscripts[0].siglum_number == SIGLUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION
@@ -75,7 +73,6 @@ def test_serializing_to_dict():
                 'order': ORDER,
                 'manuscripts': [
                     {
-                        'siglum': SIGLUM,
                         'siglumNumber': SIGLUM_NUMBER,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
@@ -109,7 +106,6 @@ def test_serializing_to_dict_with_documents():
                 'order': ORDER,
                 'manuscripts': [
                     {
-                        'siglum': SIGLUM,
                         'siglumNumber': SIGLUM_NUMBER,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,

@@ -3,6 +3,7 @@ import attr
 import falcon
 import pytest
 from ebl.auth0 import Guest
+from ebl.corpus.text import Provenance, Period, ManuscriptType
 from ebl.tests.factories.corpus import (
     TextFactory, ChapterFactory, ManuscriptFactory
 )
@@ -145,8 +146,18 @@ def test_updating_text_invalid_id(client):
     )), falcon.HTTP_BAD_REQUEST],
     [TextFactory.build(chapters=(
         ChapterFactory.build(manuscripts=(
-            ManuscriptFactory.build(siglum='duplicate'),
-            ManuscriptFactory.build(siglum='duplicate')
+            ManuscriptFactory.build(
+                provenance=Provenance.BABYLON,
+                period=Period.OLD_ASSYRIAN,
+                type=ManuscriptType.SCHOOL,
+                siglum_number=1
+            ),
+            ManuscriptFactory.build(
+                provenance=Provenance.BABYLON,
+                period=Period.OLD_ASSYRIAN,
+                type=ManuscriptType.SCHOOL,
+                siglum_number=1
+            ),
         )),
     )), falcon.HTTP_UNPROCESSABLE_ENTITY],
     [TextFactory.build(chapters=(

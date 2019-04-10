@@ -13,7 +13,6 @@ class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
 
-    siglum = factory.Faker('word')
     siglum_number = factory.Sequence(pydash.identity)
     museum_number =\
         factory.Sequence(lambda n: f'M.{n}' if pydash.is_odd(n) else '')

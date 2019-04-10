@@ -10,10 +10,6 @@ from ebl.corpus.text import (
 MANUSCRIPT_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
-        'siglum': {
-            'type': 'string',
-            'minLength': 1
-        },
         'siglumNumber': {
             'type': 'integer',
             'minimum': 0
@@ -41,8 +37,8 @@ MANUSCRIPT_DTO_SCHEMA = {
             'items': REFERENCE_DTO_SCHEMA
         }
     },
-    'required': ['siglum', 'museumNumber', 'accession', 'period', 'provenance',
-                 'type']
+    'required': ['siglumNumber', 'museumNumber', 'accession', 'period',
+                 'provenance', 'type', 'references']
 }
 
 

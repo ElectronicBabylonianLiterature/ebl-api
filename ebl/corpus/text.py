@@ -136,12 +136,11 @@ class Stage(Enum):
         ][0]
 
 
-ManuscriptDict = Dict[str, Union[str, List[dict]]]
+ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
-    siglum: str
     siglum_number: int
     museum_number: str
     accession: str
@@ -150,9 +149,15 @@ class Manuscript:
     type: ManuscriptType
     references: Tuple[Reference, ...] = tuple()
 
+    @property
+    def siglum(self):
+        return (f'{self.provenance.abbreviation}'
+                f'{self.period.abbreviation}'
+                f'{self.type.abbreviation}'
+                f'{self.siglum_number}')
+
     def to_dict(self, include_documents=False) -> ManuscriptDict:
         return {
-            'siglum': self.siglum,
             'siglumNumber': self.siglum_number,
             'museumNumber': self.museum_number,
             'accession': self.accession,
@@ -168,7 +173,6 @@ class Manuscript:
     @staticmethod
     def from_dict(manuscript: dict) -> 'Manuscript':
         return Manuscript(
-            manuscript['siglum'],
             manuscript['siglumNumber'],
             manuscript['museumNumber'],
             manuscript['accession'],
