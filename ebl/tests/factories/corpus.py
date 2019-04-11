@@ -34,6 +34,7 @@ class ChapterFactory(factory.Factory):
 
     classification = factory.fuzzy.FuzzyChoice(Classification)
     stage = factory.fuzzy.FuzzyChoice(Stage)
+    version = factory.Faker('word')
     name = factory.Faker('sentence')
     order = factory.Faker('pyint')
     manuscripts = factory.List([

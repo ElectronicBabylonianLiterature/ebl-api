@@ -61,6 +61,9 @@ CHAPTER_DTO_SCHEMA = {
             'type': 'string',
             'enum': [stage.long_name for stage in Stage]
         },
+        'version': {
+            'type': 'string'
+        },
         'name': {
             'type': 'string',
             'minLength': 1

@@ -151,6 +151,7 @@ UNPROCESSABLE_TEXT = {
         {
             'classification': Classification.ANCIENT.value,
             'stage': Stage.OLD_ASSYRIAN.long_name,
+            'version': 'A',
             'name': 'I',
             'order': 0,
             'manuscripts': [

@@ -12,6 +12,7 @@ VERSES = 100
 APPROXIMATE = True
 CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
+VERSION = 'A'
 NAME = 'IIc'
 ORDER = 1
 SIGLUM_DISAMBIGUATOR = '1c'
@@ -26,7 +27,7 @@ REFERENCES = (ReferenceFactory.build(), )
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
-    Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
+    Chapter(CLASSIFICATION, STAGE, VERSION, NAME, ORDER, (
         Manuscript(
             SIGLUM_DISAMBIGUATOR,
             MUSEUM_NUMBER,
@@ -50,6 +51,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.approximate_verses == APPROXIMATE
     assert TEXT.chapters[0].classification == CLASSIFICATION
     assert TEXT.chapters[0].stage == STAGE
+    assert TEXT.chapters[0].version == VERSION
     assert TEXT.chapters[0].name == NAME
     assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].siglum == 'NinOB1c'
@@ -68,42 +70,25 @@ def test_constructor_sets_correct_fields():
 def test_giving_museum_number_and_accession_is_invalid():
     with pytest.raises(ValueError):
         Manuscript(
-            SIGLUM_DISAMBIGUATOR,
-            'when museam number if given',
-            'then accession not allowed',
-            PERIOD_MODIFIER,
-            PERIOD,
-            PROVENANCE,
-            TYPE,
-            NOTES,
-            REFERENCES
+            museum_number='when museam number if given',
+            accession='then accession not allowed'
         )
 
 
 def test_duplicate_sigla_are_invalid():
     with pytest.raises(ValueError):
-        Chapter(CLASSIFICATION, STAGE, NAME, ORDER, (
+        Chapter(manuscripts=(
             Manuscript(
-                SIGLUM_DISAMBIGUATOR,
-                MUSEUM_NUMBER,
-                ACCESSION,
-                PERIOD_MODIFIER,
-                PERIOD,
-                PROVENANCE,
-                TYPE,
-                NOTES,
-                REFERENCES
+                siglum_disambiguator=SIGLUM_DISAMBIGUATOR,
+                period=PERIOD,
+                provenance=PROVENANCE,
+                type=TYPE
             ),
             Manuscript(
-                SIGLUM_DISAMBIGUATOR,
-                'duplicates siglum',
-                ACCESSION,
-                PERIOD_MODIFIER,
-                PERIOD,
-                PROVENANCE,
-                TYPE,
-                NOTES,
-                REFERENCES
+                siglum_disambiguator=SIGLUM_DISAMBIGUATOR,
+                period=PERIOD,
+                provenance=PROVENANCE,
+                type=TYPE
             ),
         ))
 
@@ -120,6 +105,7 @@ def test_serializing_to_dict():
             {
                 'classification': CLASSIFICATION.value,
                 'stage': STAGE.long_name,
+                'version': VERSION,
                 'name': NAME,
                 'order': ORDER,
                 'manuscripts': [
@@ -155,6 +141,7 @@ def test_serializing_to_dict_with_documents():
             {
                 'classification': CLASSIFICATION.value,
                 'stage': STAGE.long_name,
+                'version': VERSION,
                 'name': NAME,
                 'order': ORDER,
                 'manuscripts': [

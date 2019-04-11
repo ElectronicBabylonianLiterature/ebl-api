@@ -209,10 +209,11 @@ ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
 
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
-    classification: Classification
-    stage: Stage
-    name: str
-    order: int
+    classification: Classification = Classification.ANCIENT
+    stage: Stage = Stage.NEO_ASSYRIAN
+    version: str = ''
+    name: str = ''
+    order: int = 0
     manuscripts: Tuple[Manuscript, ...] = attr.ib(
         default=attr.Factory(tuple)
     )
@@ -241,6 +242,7 @@ class Chapter:
         return {
             'classification': self.classification.value,
             'stage': self.stage.long_name,
+            'version': self.version,
             'name': self.name,
             'order': self.order,
             'manuscripts': [
@@ -254,6 +256,7 @@ class Chapter:
         return Chapter(
             Classification(chapter['classification']),
             Stage.from_name(chapter['stage']),
+            chapter['version'],
             chapter['name'],
             chapter['order'],
             tuple(
