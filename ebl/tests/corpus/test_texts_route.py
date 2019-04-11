@@ -4,7 +4,7 @@ import falcon
 import pytest
 from ebl.auth0 import Guest
 from ebl.corpus.text import (
-    Provenance, Period, ManuscriptType, Stage, Classification
+    Provenance, PeriodModifier, Period, ManuscriptType, Stage, Classification
 )
 from ebl.tests.factories.corpus import (
     TextFactory, ChapterFactory, ManuscriptFactory
@@ -158,6 +158,7 @@ UNPROCESSABLE_TEXT = {
                     'siglumDisambiguator': '1c',
                     'museumNumber': 'X.1',
                     'accession': '',
+                    'periodModifier': PeriodModifier.NONE.value,
                     'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
@@ -168,6 +169,7 @@ UNPROCESSABLE_TEXT = {
                     'siglumDisambiguator': '1c',
                     'museumNumber': 'X.2',
                     'accession': '',
+                    'periodModifier': PeriodModifier.NONE,
                     'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,

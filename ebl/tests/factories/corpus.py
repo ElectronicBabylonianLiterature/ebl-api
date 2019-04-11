@@ -3,7 +3,7 @@ import factory.fuzzy
 import pydash
 from ebl.corpus.text import (
     Text, Chapter, Manuscript, Classification, Stage, Period,
-    Provenance, ManuscriptType
+    PeriodModifier, Provenance, ManuscriptType
 )
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
@@ -18,6 +18,7 @@ class ManuscriptFactory(factory.Factory):
         factory.Sequence(lambda n: f'M.{n}' if pydash.is_odd(n) else '')
     accession =\
         factory.Sequence(lambda n: f'A.{n}' if pydash.is_even(n) else '')
+    period_modifier = factory.fuzzy.FuzzyChoice(PeriodModifier)
     period = factory.fuzzy.FuzzyChoice(Period)
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)

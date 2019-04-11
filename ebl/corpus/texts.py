@@ -4,7 +4,8 @@ from ebl.errors import DataError, NotFoundError
 from ebl.require_scope import require_scope
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (
-    Text, Period, Provenance, ManuscriptType, Classification, Stage
+    Text, PeriodModifier, Period, Provenance, ManuscriptType, Classification,
+    Stage
 )
 
 MANUSCRIPT_DTO_SCHEMA = {
@@ -18,6 +19,10 @@ MANUSCRIPT_DTO_SCHEMA = {
         },
         'accession': {
             'type': 'string'
+        },
+        'periodModifier': {
+            'type': 'string',
+            'enum': [modifier.value for modifier in PeriodModifier]
         },
         'period': {
             'type': 'string',
@@ -39,8 +44,9 @@ MANUSCRIPT_DTO_SCHEMA = {
             'items': REFERENCE_DTO_SCHEMA
         }
     },
-    'required': ['siglumDisambiguator', 'museumNumber', 'accession', 'period',
-                 'provenance', 'type', 'notes', 'references']
+    'required': ['siglumDisambiguator', 'museumNumber', 'accession',
+                 'periodModifier', 'period', 'provenance', 'type', 'notes',
+                 'references']
 }
 
 

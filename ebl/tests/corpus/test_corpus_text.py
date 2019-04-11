@@ -1,7 +1,7 @@
 import pytest
 from ebl.corpus.text import (
-    Text, Chapter, Manuscript, Classification, Stage, Period, Provenance,
-    ManuscriptType
+    Text, Chapter, Manuscript, Classification, Stage, PeriodModifier, Period,
+    Provenance, ManuscriptType
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 
@@ -17,6 +17,7 @@ ORDER = 1
 SIGLUM_DISAMBIGUATOR = '1c'
 MUSEUM_NUMBER = 'BM.x'
 ACCESSION = ''
+PERIOD_MODIFIER = PeriodModifier.LATE
 PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
@@ -30,6 +31,7 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
             SIGLUM_DISAMBIGUATOR,
             MUSEUM_NUMBER,
             ACCESSION,
+            PERIOD_MODIFIER,
             PERIOD,
             PROVENANCE,
             TYPE,
@@ -55,6 +57,7 @@ def test_constructor_sets_correct_fields():
         SIGLUM_DISAMBIGUATOR
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
     assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION
+    assert TEXT.chapters[0].manuscripts[0].period_modifier == PERIOD_MODIFIER
     assert TEXT.chapters[0].manuscripts[0].period == PERIOD
     assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
@@ -68,6 +71,7 @@ def test_giving_museum_number_and_accession_is_invalid():
             SIGLUM_DISAMBIGUATOR,
             'when museam number if given',
             'then accession not allowed',
+            PERIOD_MODIFIER,
             PERIOD,
             PROVENANCE,
             TYPE,
@@ -83,6 +87,7 @@ def test_duplicate_sigla_are_invalid():
                 SIGLUM_DISAMBIGUATOR,
                 MUSEUM_NUMBER,
                 ACCESSION,
+                PERIOD_MODIFIER,
                 PERIOD,
                 PROVENANCE,
                 TYPE,
@@ -93,6 +98,7 @@ def test_duplicate_sigla_are_invalid():
                 SIGLUM_DISAMBIGUATOR,
                 'duplicates siglum',
                 ACCESSION,
+                PERIOD_MODIFIER,
                 PERIOD,
                 PROVENANCE,
                 TYPE,
@@ -121,6 +127,7 @@ def test_serializing_to_dict():
                         'siglumDisambiguator': SIGLUM_DISAMBIGUATOR,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
+                        'periodModifier': PERIOD_MODIFIER.value,
                         'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
@@ -155,6 +162,7 @@ def test_serializing_to_dict_with_documents():
                         'siglumDisambiguator': SIGLUM_DISAMBIGUATOR,
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
+                        'periodModifier': PERIOD_MODIFIER.value,
                         'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,

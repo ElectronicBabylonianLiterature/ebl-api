@@ -70,6 +70,11 @@ class Provenance(Enum):
         ][0]
 
 
+class PeriodModifier(Enum):
+    NONE = 'None'
+    EARLY = 'Early'
+    LATE = 'Late'
+
 class Period(Enum):
     UR_III = ('Ur III', 'UrIII')
     OLD_ASSYRIAN = ('Old Assyrian', 'OA')
@@ -145,6 +150,7 @@ class Manuscript:
     siglum_disambiguator: str = ''
     museum_number: str = ''
     accession: str = attr.ib(default='')
+    period_modifier: PeriodModifier = PeriodModifier.NONE
     period: Period = Period.NEO_ASSYRIAN
     provenance: Provenance = Provenance.NINEVEH
     type: ManuscriptType = ManuscriptType.LIBRARY
@@ -168,6 +174,7 @@ class Manuscript:
             'siglumDisambiguator': self.siglum_disambiguator,
             'museumNumber': self.museum_number,
             'accession': self.accession,
+            'periodModifier': self.period_modifier.value,
             'period': self.period.long_name,
             'provenance': self.provenance.long_name,
             'type': self.type.long_name,
@@ -184,6 +191,7 @@ class Manuscript:
             manuscript['siglumDisambiguator'],
             manuscript['museumNumber'],
             manuscript['accession'],
+            PeriodModifier(manuscript['periodModifier']),
             Period.from_name(manuscript['period']),
             Provenance.from_name(manuscript['provenance']),
             ManuscriptType.from_name(manuscript['type']),
