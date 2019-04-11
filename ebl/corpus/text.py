@@ -75,6 +75,7 @@ class PeriodModifier(Enum):
     EARLY = 'Early'
     LATE = 'Late'
 
+
 class Period(Enum):
     UR_III = ('Ur III', 'UrIII')
     OLD_ASSYRIAN = ('Old Assyrian', 'OA')

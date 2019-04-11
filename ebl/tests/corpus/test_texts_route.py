@@ -169,7 +169,7 @@ UNPROCESSABLE_TEXT = {
                     'siglumDisambiguator': '1c',
                     'museumNumber': 'X.2',
                     'accession': '',
-                    'periodModifier': PeriodModifier.NONE,
+                    'periodModifier': PeriodModifier.NONE.value,
                     'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
