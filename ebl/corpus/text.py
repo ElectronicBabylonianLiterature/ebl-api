@@ -96,7 +96,10 @@ PERIOD_NAMES = {
 Period = Enum('Period', PERIOD_NAMES)
 
 
-Stage = Enum('Stage', {**PERIOD_NAMES, 'STANDARD_BABYLONIAN': 'Standard Babylonian'})
+Stage = Enum('Stage', {
+    **PERIOD_NAMES,
+    'STANDARD_BABYLONIAN': 'Standard Babylonian'
+})
 
 
 ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
