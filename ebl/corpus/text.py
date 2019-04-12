@@ -37,30 +37,41 @@ class ManuscriptType(Enum):
 
 
 class Provenance(Enum):
-    ASSUR = ('Aššur', 'Ašš')
-    BABYLON = ('Babylon', 'Bab')
-    BABYLONIA = ('Babylonia', 'Baba')
-    BORSIPPA = ('Borsippa', 'Bor')
-    HUZIRINA = ('Ḫuzirina', 'Bor')
-    KALHU = ('Kalḫu', 'Kal')
-    NINEVEH = ('Nineveh', 'Nin')
-    NIPPUR = ('Nippur', 'Nin')
-    SIPPAR = ('Sippar', 'Sip')
-    SADUPPUM = ('Šaduppûm', 'Šad')
-    UR = ('Ur', 'Ur')
-    URUK = ('Uruk', 'Uru')
-    UNCERTAIN = ('Uncertain', 'Unc')
+    ASSYRIA = ('Assyria', None)
+    ASSUR = ('Aššur', 'Assyria')
+    HUZIRINA = ('Ḫuzirina', 'Assyria')
+    KALHU = ('Kalḫu', 'Assyria')
+    KHORSABAD = ('Khorsabad', 'Assyria')
+    NINEVEH = ('Nineveh', 'Assyria')
+    TARBISU = ('Tarbiṣu', 'Assyria')
+    BABYLONIA = ('Babylonia', None)
+    BABYLON = ('Babylon', 'Babylonia')
+    BORSIPPA = ('Borsippa', 'Babylonia')
+    CUTHA = ('Cutha', 'Babylonia')
+    ISIN = ('Isin', 'Babylonia')
+    KIS = ('Kiš', 'Babylonia')
+    LARSA = ('Larsa', 'Babylonia')
+    METURAN = ('Meturan', 'Babylonia')
+    NEREBUN = ('Nērebtum', 'Babylonia')
+    NIPPUR = ('Nippur', 'Babylonia')
+    SIPPAR = ('Sippar', 'Babylonia')
+    SADUPPUM = ('Šaduppûm', 'Babylonia')
+    UR = ('Ur', 'Babylonia')
+    URUK = ('Uruk', 'Babylonia')
+    PERIPHERY = ('Periphery', None)
+    ALALAKS = ('Alalakh', 'Periphery')
+    TELL_EL_AMARNA = ('Tell el-Amarna', 'Periphery')
+    EMAR = ('Emar', 'Periphery')
+    HATTUSA = ('Ḫattuša', 'Periphery')
+    MARI = ('Mari', 'Periphery')
+    MEGIDDO = ('Megiddo', 'Periphery')
+    SUSA = ('Susa', 'Periphery')
+    UGARIT = ('Ugarit', 'Periphery')
+    UNCLEAR = ('Unclear', None)
 
-    def __init__(self, long_name, abbreviation):
+    def __init__(self, long_name, parent):
         self.long_name = long_name
-        self.abbreviation = abbreviation
-
-    @classmethod
-    def from_abbreviation(cls, abbreviation):
-        return [
-            enum for enum in cls
-            if enum.abbreviation == abbreviation
-        ][0]
+        self.parent = parent
 
     @classmethod
     def from_name(cls, name):
