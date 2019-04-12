@@ -54,7 +54,13 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].version == VERSION
     assert TEXT.chapters[0].name == NAME
     assert TEXT.chapters[0].order == ORDER
-    assert TEXT.chapters[0].manuscripts[0].siglum == 'NinOB1c'
+    assert TEXT.chapters[0].manuscripts[0].siglum == (
+        PROVENANCE,
+        PERIOD,
+        TYPE,
+        SIGLUM_DISAMBIGUATOR
+    )
+
     assert TEXT.chapters[0].manuscripts[0].siglum_disambiguator ==\
         SIGLUM_DISAMBIGUATOR
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
@@ -104,7 +110,7 @@ def test_serializing_to_dict():
         'chapters': [
             {
                 'classification': CLASSIFICATION.value,
-                'stage': STAGE.long_name,
+                'stage': STAGE.value,
                 'version': VERSION,
                 'name': NAME,
                 'order': ORDER,
@@ -114,7 +120,7 @@ def test_serializing_to_dict():
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'periodModifier': PERIOD_MODIFIER.value,
-                        'period': PERIOD.long_name,
+                        'period': PERIOD.value,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
                         'notes': NOTES,
@@ -140,7 +146,7 @@ def test_serializing_to_dict_with_documents():
         'chapters': [
             {
                 'classification': CLASSIFICATION.value,
-                'stage': STAGE.long_name,
+                'stage': STAGE.value,
                 'version': VERSION,
                 'name': NAME,
                 'order': ORDER,
@@ -150,7 +156,7 @@ def test_serializing_to_dict_with_documents():
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'periodModifier': PERIOD_MODIFIER.value,
-                        'period': PERIOD.long_name,
+                        'period': PERIOD.value,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
                         'notes': NOTES,

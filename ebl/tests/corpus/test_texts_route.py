@@ -150,7 +150,7 @@ UNPROCESSABLE_TEXT = {
     'chapters': [
         {
             'classification': Classification.ANCIENT.value,
-            'stage': Stage.OLD_ASSYRIAN.long_name,
+            'stage': Stage.OLD_ASSYRIAN.value,
             'version': 'A',
             'name': 'I',
             'order': 0,
@@ -160,7 +160,7 @@ UNPROCESSABLE_TEXT = {
                     'museumNumber': 'X.1',
                     'accession': '',
                     'periodModifier': PeriodModifier.NONE.value,
-                    'period': Period.OLD_ASSYRIAN.long_name,
+                    'period': Period.OLD_ASSYRIAN.value,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
                     'notes': '',
@@ -171,7 +171,7 @@ UNPROCESSABLE_TEXT = {
                     'museumNumber': 'X.2',
                     'accession': '',
                     'periodModifier': PeriodModifier.NONE.value,
-                    'period': Period.OLD_ASSYRIAN.long_name,
+                    'period': Period.OLD_ASSYRIAN.value,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
                     'notes': '',

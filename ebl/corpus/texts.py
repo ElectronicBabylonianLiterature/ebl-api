@@ -26,7 +26,7 @@ MANUSCRIPT_DTO_SCHEMA = {
         },
         'period': {
             'type': 'string',
-            'enum': [period.long_name for period in Period]
+            'enum': [period.value for period in Period]
         },
         'provenance': {
             'type': 'string',
@@ -59,7 +59,7 @@ CHAPTER_DTO_SCHEMA = {
         },
         'stage': {
             'type': 'string',
-            'enum': [stage.long_name for stage in Stage]
+            'enum': [stage.value for stage in Stage]
         },
         'version': {
             'type': 'string'

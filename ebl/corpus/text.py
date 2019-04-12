@@ -77,70 +77,36 @@ class PeriodModifier(Enum):
 
 
 class Period(Enum):
-    UR_III = ('Ur III', 'UrIII')
-    OLD_ASSYRIAN = ('Old Assyrian', 'OA')
-    OLD_BABYLONIAN = ('Old Babylonian', 'OB')
-    MIDDLE_BABYLONIAN = ('Middle Babylonian', 'MB')
-    MIDDLE_ASSYRIAN = ('Middle Assyrian', 'MA')
-    HITTITE = ('Hittite', 'Hit')
-    NEO_ASSYRIAN = ('Neo-Assyrian', 'NA')
-    NEO_BABYLONIAN = ('Neo-Babylonian', 'NB')
-    ACHAEMENID = ('Achaemenid', 'Ach')
-    HELLENISTIC = ('Hellenistic', 'Hel')
-    PARTHIAN = ('Parthian', 'Par')
-    UNCERTAIN = ('Uncertain', 'Unc')
-
-    def __init__(self, long_name, abbreviation):
-        self.long_name = long_name
-        self.abbreviation = abbreviation
-
-    @classmethod
-    def from_abbreviation(cls, abbreviation):
-        return [
-            enum for enum in cls
-            if enum.abbreviation == abbreviation
-        ][0]
-
-    @classmethod
-    def from_name(cls, name):
-        return [
-            enum for enum in cls
-            if enum.long_name == name
-        ][0]
+    UR_III = 'Ur III'
+    OLD_ASSYRIAN = 'Old Assyrian'
+    OLD_BABYLONIAN = 'Old Babylonian'
+    MIDDLE_BABYLONIAN = 'Middle Babylonian'
+    MIDDLE_ASSYRIAN = 'Middle Assyrian'
+    HITTITE = 'Hittite'
+    NEO_ASSYRIAN = 'Neo-Assyrian'
+    NEO_BABYLONIAN = 'Neo-Babylonian'
+    LATE_BABYLONIAN = 'Late Babylonian'
+    PERSIAN = 'Persian'
+    HELLENISTIC = 'Hellenistic'
+    PARTHIAN = 'Parthian'
+    UNCERTAIN = 'Uncertain'
 
 
 class Stage(Enum):
-    UR_III = ('Ur III', 'UrIII')
-    OLD_ASSYRIAN = ('Old Assyrian', 'OA')
-    OLD_BABYLONIAN = ('Old Babylonian', 'OB')
-    MIDDLE_BABYLONIAN = ('Middle Babylonian', 'MB')
-    MIDDLE_ASSYRIAN = ('Middle Assyrian', 'MA')
-    HITTITE = ('Hittite', 'Hit')
-    NEO_ASSYRIAN = ('Neo-Assyrian', 'NA')
-    NEO_BABYLONIAN = ('Neo-Babylonian', 'NB')
-    ACHAEMENID = ('Achaemenid', 'Ach')
-    HELLENISTIC = ('Hellenistic', 'Hel')
-    PARTHIAN = ('Parthian', 'Par')
-    UNCERTAIN = ('Uncertain', 'Unc')
-    STANDARD_BABYLONIAN = ('Standard Babylonian', 'SB')
-
-    def __init__(self, long_name, abbreviation):
-        self.long_name = long_name
-        self.abbreviation = abbreviation
-
-    @classmethod
-    def from_abbreviation(cls, abbreviation):
-        return [
-            enum for enum in cls
-            if enum.abbreviation == abbreviation
-        ][0]
-
-    @classmethod
-    def from_name(cls, name):
-        return [
-            enum for enum in cls
-            if enum.long_name == name
-        ][0]
+    UR_III = 'Ur III'
+    OLD_ASSYRIAN = 'Old Assyrian'
+    OLD_BABYLONIAN = 'Old Babylonian'
+    MIDDLE_BABYLONIAN = 'Middle Babylonian'
+    MIDDLE_ASSYRIAN = 'Middle Assyrian'
+    HITTITE = 'Hittite'
+    NEO_ASSYRIAN = 'Neo-Assyrian'
+    NEO_BABYLONIAN = 'Neo-Babylonian'
+    LATE_BABYLONIAN = 'Late Babylonian'
+    PERSIAN = 'Persian'
+    HELLENISTIC = 'Hellenistic'
+    PARTHIAN = 'Parthian'
+    UNCERTAIN = 'Uncertain'
+    STANDARD_BABYLONIAN = 'Standard Babylonian'
 
 
 ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
@@ -165,10 +131,10 @@ class Manuscript:
 
     @property
     def siglum(self):
-        return (f'{self.provenance.abbreviation}'
-                f'{self.period.abbreviation}'
-                f'{self.type.abbreviation}'
-                f'{self.siglum_disambiguator}')
+        return (self.provenance,
+                self.period,
+                self.type,
+                self.siglum_disambiguator)
 
     def to_dict(self, include_documents=False) -> ManuscriptDict:
         return {
@@ -176,7 +142,7 @@ class Manuscript:
             'museumNumber': self.museum_number,
             'accession': self.accession,
             'periodModifier': self.period_modifier.value,
-            'period': self.period.long_name,
+            'period': self.period.value,
             'provenance': self.provenance.long_name,
             'type': self.type.long_name,
             'notes': self.notes,
@@ -193,7 +159,7 @@ class Manuscript:
             manuscript['museumNumber'],
             manuscript['accession'],
             PeriodModifier(manuscript['periodModifier']),
-            Period.from_name(manuscript['period']),
+            Period(manuscript['period']),
             Provenance.from_name(manuscript['provenance']),
             ManuscriptType.from_name(manuscript['type']),
             manuscript['notes'],
@@ -241,7 +207,7 @@ class Chapter:
     def to_dict(self, include_documents=False) -> ChapterDict:
         return {
             'classification': self.classification.value,
-            'stage': self.stage.long_name,
+            'stage': self.stage.value,
             'version': self.version,
             'name': self.name,
             'order': self.order,
@@ -255,7 +221,7 @@ class Chapter:
     def from_dict(chapter: dict) -> 'Chapter':
         return Chapter(
             Classification(chapter['classification']),
-            Stage.from_name(chapter['stage']),
+            Stage(chapter['stage']),
             chapter['version'],
             chapter['name'],
             chapter['order'],
