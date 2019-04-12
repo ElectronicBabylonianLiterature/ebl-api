@@ -67,7 +67,7 @@ class Provenance(Enum):
     MEGIDDO = ('Megiddo', 'Periphery')
     SUSA = ('Susa', 'Periphery')
     UGARIT = ('Ugarit', 'Periphery')
-    UNCLEAR = ('Unclear', None)
+    UNCERTAIN = ('Uncertain', None)
 
     def __init__(self, long_name, parent):
         self.long_name = long_name
