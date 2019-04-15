@@ -1,5 +1,5 @@
 import attr
-from mockito import any, captor
+from mockito.matchers import any_, captor
 import pydash
 import pytest
 from ebl.auth0 import Guest
@@ -36,9 +36,10 @@ def expect_validate_references(bibliography, when):
 
 
 def test_creating_text(database, corpus, bibliography, changelog, user, when):
+    # pylint: disable=R0913
     expect_validate_references(bibliography, when)
-    old_captor = captor(any(dict))
-    new_captor = captor(any(dict))
+    old_captor = captor(any_(dict))
+    new_captor = captor(any_(dict))
     when(changelog).create(
         COLLECTION,
         user.profile,
