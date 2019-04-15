@@ -61,6 +61,7 @@ def test_find_raises_exception_if_text_not_found(corpus):
 
 
 def test_updating_text(database, corpus, bibliography, changelog, user, when):
+    # pylint: disable=R0913
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     text_id = database[COLLECTION].insert_one(TEXT.to_dict()).inserted_id
     expect_validate_references(bibliography, when)
