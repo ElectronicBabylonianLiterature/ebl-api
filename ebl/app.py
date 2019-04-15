@@ -126,6 +126,7 @@ def get_app():
     )
 
     bibliography = MongoBibliography(database)
+    changelog = Changelog(database)
     context = {
         'auth_backend': auth_backend,
         'dictionary': MongoDictionary(database),
@@ -135,9 +136,9 @@ def get_app():
             database,
             FragmentFactory(bibliography)
         ),
-        'changelog': Changelog(database),
+        'changelog': changelog,
         'bibliography': bibliography,
-        'corpus': MongoCorpus(database, bibliography)
+        'corpus': MongoCorpus(database, bibliography, changelog)
     }
 
     app = create_app(context)

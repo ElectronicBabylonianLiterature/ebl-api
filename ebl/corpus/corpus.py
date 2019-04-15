@@ -11,9 +11,10 @@ COLLECTION = 'texts'
 
 class MongoCorpus:
 
-    def __init__(self, database, bibliography):
+    def __init__(self, database, bibliography, changelog):
         self._mongo_repository = MongoRepository(database, COLLECTION)
         self._bibliography = bibliography
+        self._changelog = changelog
 
     def create_indexes(self):
         self._mongo_collection.create_index([
@@ -58,7 +59,7 @@ class MongoCorpus:
         else:
             raise NotFoundError(f'Text {category}.{index} not found.')
 
-    def update(self, category, index, text, _=None):
+    def update(self, category, index, text, user):
         self._bibliography.validate_references(
             pydash
             .chain(text.chapters)
@@ -66,15 +67,28 @@ class MongoCorpus:
             .flat_map(lambda manuscript: manuscript.references)
             .value()
         )
-        result = self._mongo_collection.update_one(
-            {'category': category, 'index': index},
-            {'$set': text.to_dict()}
-        )
+        old_text = self._mongo_collection.find_one({
+            'category': category,
+            'index': index
+        })
+        if old_text:
+            self._changelog.create(
+                COLLECTION,
+                user.profile,
+                old_text,
+                text.to_dict()
+            )
+            result = self._mongo_collection.update_one(
+                {'category': category, 'index': index},
+                {'$set': text.to_dict()}
+            )
 
-        if result.matched_count == 0:
-            raise NotFoundError(f'Text {category}.{index} not found.')
+            if result.matched_count == 0:
+                raise NotFoundError(f'Text {category}.{index} not found.')
+            else:
+                return self.find(text.category, text.index)
         else:
-            return self.find(text.category, text.index)
+            raise NotFoundError(f'Text {category}.{index} not found.')
 
     @property
     def _mongo_collection(self):

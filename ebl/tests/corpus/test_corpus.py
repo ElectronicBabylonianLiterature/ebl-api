@@ -60,13 +60,19 @@ def test_find_raises_exception_if_text_not_found(corpus):
         corpus.find(1, 1)
 
 
-def test_updating_text(database, corpus, bibliography, when):
+def test_updating_text(database, corpus, bibliography, changelog, user, when):
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
-    database[COLLECTION].insert_one(TEXT.to_dict())
+    text_id = database[COLLECTION].insert_one(TEXT.to_dict()).inserted_id
     expect_validate_references(bibliography, when)
     expect_bibliography(bibliography, when)
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        {**TEXT.to_dict(), '_id': text_id},
+        updated_text.to_dict()
+    ).thenReturn()
 
-    result = corpus.update(TEXT.category, TEXT.index, updated_text)
+    result = corpus.update(TEXT.category, TEXT.index, updated_text, user)
 
     assert result == updated_text
     assert corpus.find(updated_text.category, updated_text.index) ==\
@@ -75,7 +81,8 @@ def test_updating_text(database, corpus, bibliography, when):
 
 def test_updating_non_existing_text_raises_exception(corpus,
                                                      bibliography,
+                                                     user,
                                                      when):
     expect_validate_references(bibliography, when)
     with pytest.raises(NotFoundError):
-        corpus.update(TEXT.category, TEXT.index, TEXT)
+        corpus.update(TEXT.category, TEXT.index, TEXT, user)

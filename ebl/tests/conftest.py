@@ -78,8 +78,8 @@ def sign_list(sign_repository):
 
 
 @pytest.fixture
-def corpus(database, bibliography):
-    return MongoCorpus(database, bibliography)
+def corpus(database, bibliography, changelog):
+    return MongoCorpus(database, bibliography, changelog)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
