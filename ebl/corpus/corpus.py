@@ -76,7 +76,7 @@ class MongoCorpus:
                 COLLECTION,
                 user.profile,
                 old_text,
-                text.to_dict()
+                {**text.to_dict(), '_id': old_text['_id']}
             )
             result = self._mongo_collection.update_one(
                 {'category': category, 'index': index},

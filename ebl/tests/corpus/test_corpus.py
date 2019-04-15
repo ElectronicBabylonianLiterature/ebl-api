@@ -74,7 +74,7 @@ def test_updating_text(database, corpus, bibliography, changelog, user, when):
         COLLECTION,
         user.profile,
         {**TEXT.to_dict(), '_id': text_id},
-        updated_text.to_dict()
+        {**updated_text.to_dict(), '_id': text_id}
     ).thenReturn()
 
     result = corpus.update(TEXT.category, TEXT.index, updated_text, user)
