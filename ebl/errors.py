@@ -8,3 +8,7 @@ class DuplicateError(Exception):
 
 class DataError(Exception):
     pass
+
+
+class Defect(Exception):
+    pass

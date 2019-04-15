@@ -2,7 +2,7 @@ import attr
 import pydash
 import pytest
 from ebl.tests.factories.corpus import TextFactory
-from ebl.errors import NotFoundError, DuplicateError
+from ebl.errors import NotFoundError, DuplicateError, Defect
 
 
 COLLECTION = 'texts'
@@ -62,6 +62,16 @@ def test_finding_text(database, corpus, bibliography, when):
 def test_find_raises_exception_if_text_not_found(corpus):
     with pytest.raises(NotFoundError):
         corpus.find(1, 1)
+
+
+def test_find_raises_exception_if_references_not_found(database,
+                                                       corpus,
+                                                       bibliography,
+                                                       when):
+    when_text_in_collection(database)
+    when(bibliography).find(...).thenRaise(NotFoundError())
+    with pytest.raises(Defect):
+        corpus.find(TEXT.category, TEXT.index)
 
 
 def test_updating_text(database, corpus, bibliography, changelog, user, when):
