@@ -9,7 +9,7 @@ COLLECTION = 'texts'
 TEXT = TextFactory.build()
 
 
-def when_text_in_collection(database, text):
+def when_text_in_collection(database):
     return database[COLLECTION].insert_one(TEXT.to_dict()).inserted_id
 
 
@@ -53,7 +53,7 @@ def test_it_is_not_possible_to_create_duplicates(corpus, bibliography, when):
 
 
 def test_finding_text(database, corpus, bibliography, when):
-    when_text_in_collection(database, TEXT)
+    when_text_in_collection(database)
     expect_bibliography(bibliography, when)
 
     assert corpus.find(TEXT.category, TEXT.index) == TEXT
@@ -67,7 +67,7 @@ def test_find_raises_exception_if_text_not_found(corpus):
 def test_updating_text(database, corpus, bibliography, changelog, user, when):
     # pylint: disable=R0913
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
-    text_id = when_text_in_collection(database, TEXT)
+    text_id = when_text_in_collection(database)
     expect_validate_references(bibliography, when)
     expect_bibliography(bibliography, when)
     when(changelog).create(
