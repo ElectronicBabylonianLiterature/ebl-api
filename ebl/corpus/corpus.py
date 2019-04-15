@@ -35,9 +35,16 @@ class MongoCorpus:
             ('index', pymongo.ASCENDING)
         ], unique=True)
 
-    def create(self, text, _=None):
+    def create(self, text, user):
         self._validate_references(text)
-        return self._mongo_repository.create(text.to_dict())
+        object_id = self._mongo_repository.create(text.to_dict())
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            {'_id': object_id},
+            {**text.to_dict(), '_id': object_id}
+        )
+        return object_id
 
     def find(self, category, index):
         mongo_text = self._find_one(category, index)

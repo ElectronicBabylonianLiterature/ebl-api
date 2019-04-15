@@ -1,12 +1,15 @@
 import attr
+from mockito import any, captor
 import pydash
 import pytest
+from ebl.auth0 import Guest
 from ebl.tests.factories.corpus import TextFactory
 from ebl.errors import NotFoundError, DuplicateError, Defect
 
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()
+ANY_USER = Guest()
 
 
 def when_text_in_collection(database):
@@ -32,24 +35,37 @@ def expect_validate_references(bibliography, when):
     ).thenReturn()
 
 
-def test_creating_text(database, corpus, bibliography, when):
+def test_creating_text(database, corpus, bibliography, changelog, user, when):
     expect_validate_references(bibliography, when)
-    corpus.create(TEXT)
+    old_captor = captor(any(dict))
+    new_captor = captor(any(dict))
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        old_captor,
+        new_captor
+    ).thenReturn()
+
+    corpus.create(TEXT, user)
 
     result = database[COLLECTION].find_one({
         'category': TEXT.category,
         'index': TEXT.index
     })
     assert pydash.omit(result, '_id') == TEXT.to_dict()
+    assert old_captor.value == {'_id': result['_id']}
+    assert new_captor.value == {**TEXT.to_dict(), '_id': result['_id']}
 
 
-def test_it_is_not_possible_to_create_duplicates(corpus, bibliography, when):
+def test_it_is_not_possible_to_create_duplicates(corpus,
+                                                 bibliography,
+                                                 when):
     corpus.create_indexes()
     expect_validate_references(bibliography, when)
-    corpus.create(TEXT)
+    corpus.create(TEXT, ANY_USER)
 
     with pytest.raises(DuplicateError):
-        corpus.create(TEXT)
+        corpus.create(TEXT, ANY_USER)
 
 
 def test_finding_text(database, corpus, bibliography, when):
@@ -96,8 +112,7 @@ def test_updating_text(database, corpus, bibliography, changelog, user, when):
 
 def test_updating_non_existing_text_raises_exception(corpus,
                                                      bibliography,
-                                                     user,
                                                      when):
     expect_validate_references(bibliography, when)
     with pytest.raises(NotFoundError):
-        corpus.update(TEXT.category, TEXT.index, TEXT, user)
+        corpus.update(TEXT.category, TEXT.index, TEXT, ANY_USER)
