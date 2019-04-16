@@ -18,12 +18,9 @@ def raise_invalid_reference(category, index, error):
                  f' references: "{error}"')
 
 
-class MongoCorpus:
-
-    def __init__(self, database, bibliography, changelog):
+class MongoTextRepository:
+    def __init__(self, database):
         self._mongo_repository = MongoRepository(database, COLLECTION)
-        self._bibliography = bibliography
-        self._changelog = changelog
 
     @property
     def _mongo_collection(self):
@@ -35,31 +32,14 @@ class MongoCorpus:
             ('index', pymongo.ASCENDING)
         ], unique=True)
 
-    def create(self, text, user):
-        self._validate_references(text)
-        object_id = self._mongo_repository.create(text.to_dict())
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            {'_id': object_id},
-            {**text.to_dict(), '_id': object_id}
-        )
-        return object_id
+    def create(self, text):
+        return self._mongo_repository.create(text.to_dict())
 
     def find(self, category, index):
         mongo_text = self._find_one(category, index)
-        text = Text.from_dict(mongo_text)
-        return self._hydrate_references(text)
+        return Text.from_dict(mongo_text)
 
-    def update(self, category, index, text, user):
-        self._validate_references(text)
-        old_text = self._find_one(category, index)
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            old_text,
-            {**text.to_dict(), '_id': old_text['_id']}
-        )
+    def update(self, category, index, text):
         result = self._mongo_collection.update_one(
             {'category': category, 'index': index},
             {'$set': text.to_dict()}
@@ -80,6 +60,42 @@ class MongoCorpus:
             return mongo_text
         else:
             raise_text_not_found(category, index)
+
+
+class Corpus:
+    def __init__(self, repository, bibliography, changelog):
+        self._repository = repository
+        self._bibliography = bibliography
+        self._changelog = changelog
+
+    def create_indexes(self):
+        self._repository.create_indexes()
+
+    def create(self, text, user):
+        self._validate_references(text)
+        self._repository.create(text)
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            {'_id': text.id},
+            {**text.to_dict(), '_id': text.id}
+        )
+
+    def find(self, category, index):
+        text = self._repository.find(category, index)
+        return self._hydrate_references(text)
+
+    def update(self, category, index, text, user):
+        self._validate_references(text)
+        old_text = self._repository.find(category, index)
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            {**old_text.to_dict(), '_id': old_text.id},
+            {**text.to_dict(), '_id': text.id}
+        )
+        updated_text = self._repository.update(category, index, text)
+        return self._hydrate_references(updated_text)
 
     def _validate_references(self, text):
         self._bibliography.validate_references(

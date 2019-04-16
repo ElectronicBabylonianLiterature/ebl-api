@@ -1,13 +1,13 @@
 import pytest
 from ebl.corpus.text import (
     Text, Chapter, Manuscript, Classification, Stage, PeriodModifier, Period,
-    Provenance, ManuscriptType
+    Provenance, ManuscriptType, TextId
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 
 CATEGORY = 1
 INDEX = 2
-NAME = 'Paln & Vine'
+NAME = 'Palm & Vine'
 VERSES = 100
 APPROXIMATE = True
 CLASSIFICATION = Classification.ANCIENT
@@ -44,6 +44,7 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
 
 
 def test_constructor_sets_correct_fields():
+    assert TEXT.id == TextId(CATEGORY, INDEX)
     assert TEXT.category == CATEGORY
     assert TEXT.index == INDEX
     assert TEXT.name == NAME

@@ -12,7 +12,7 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 from ebl.changelog import Changelog
-from ebl.corpus.corpus import MongoCorpus
+from ebl.corpus.corpus import Corpus, MongoTextRepository
 from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
@@ -78,8 +78,13 @@ def sign_list(sign_repository):
 
 
 @pytest.fixture
-def corpus(database, bibliography, changelog):
-    return MongoCorpus(database, bibliography, changelog)
+def text_repository(database):
+    return MongoTextRepository(database,)
+
+
+@pytest.fixture
+def corpus(text_repository, bibliography, changelog):
+    return Corpus(text_repository, bibliography, changelog)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
@@ -210,6 +215,7 @@ def context(dictionary,
             sign_repository,
             file_repository,
             fragment_repository,
+            text_repository,
             changelog,
             bibliography,
             corpus,
@@ -223,7 +229,7 @@ def context(dictionary,
         'fragment_repository': fragment_repository,
         'changelog': changelog,
         'bibliography': bibliography,
-        'corpus': corpus
+        'text_repository': text_repository
     }
 
 

@@ -1,5 +1,4 @@
 import attr
-from mockito.matchers import any_, captor
 import pydash
 import pytest
 from ebl.auth0 import Guest
@@ -13,7 +12,7 @@ ANY_USER = Guest()
 
 
 def when_text_in_collection(database):
-    return database[COLLECTION].insert_one(TEXT.to_dict()).inserted_id
+    database[COLLECTION].insert_one(TEXT.to_dict())
 
 
 def expect_bibliography(bibliography, when):
@@ -38,13 +37,11 @@ def expect_validate_references(bibliography, when):
 def test_creating_text(database, corpus, bibliography, changelog, user, when):
     # pylint: disable=R0913
     expect_validate_references(bibliography, when)
-    old_captor = captor(any_(dict))
-    new_captor = captor(any_(dict))
     when(changelog).create(
         COLLECTION,
         user.profile,
-        old_captor,
-        new_captor
+        {'_id': TEXT.id},
+        {**TEXT.to_dict(), '_id': TEXT.id}
     ).thenReturn()
 
     corpus.create(TEXT, user)
@@ -54,8 +51,6 @@ def test_creating_text(database, corpus, bibliography, changelog, user, when):
         'index': TEXT.index
     })
     assert pydash.omit(result, '_id') == TEXT.to_dict()
-    assert old_captor.value == {'_id': result['_id']}
-    assert new_captor.value == {**TEXT.to_dict(), '_id': result['_id']}
 
 
 def test_it_is_not_possible_to_create_duplicates(corpus,
@@ -94,15 +89,15 @@ def test_find_raises_exception_if_references_not_found(database,
 def test_updating_text(database, corpus, bibliography, changelog, user, when):
     # pylint: disable=R0913
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
-    text_id = when_text_in_collection(database)
-    expect_validate_references(bibliography, when)
-    expect_bibliography(bibliography, when)
+    when_text_in_collection(database)
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**TEXT.to_dict(), '_id': text_id},
-        {**updated_text.to_dict(), '_id': text_id}
+        {**TEXT.to_dict(), '_id': TEXT.id},
+        {**updated_text.to_dict(), '_id': updated_text.id}
     ).thenReturn()
+    expect_validate_references(bibliography, when)
+    expect_bibliography(bibliography, when)
 
     result = corpus.update(TEXT.category, TEXT.index, updated_text, user)
 

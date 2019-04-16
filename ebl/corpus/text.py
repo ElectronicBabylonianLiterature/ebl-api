@@ -1,3 +1,4 @@
+import collections
 from enum import Enum
 from typing import Dict, List, Tuple, Union
 import attr
@@ -111,6 +112,9 @@ Stage = Enum('Stage', {
     **PERIOD_NAMES,
     'STANDARD_BABYLONIAN': 'Standard Babylonian'
 })
+
+
+TextId = collections.namedtuple('TextId', ['category', 'index'])
 
 
 ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
@@ -247,6 +251,10 @@ class Text:
     number_of_verses: int
     approximate_verses: bool
     chapters: Tuple[Chapter, ...] = tuple()
+
+    @property
+    def id(self) -> TextId:
+        return TextId(self.category, self.index)
 
     def to_dict(self, include_documents=False) -> TextDict:
         return {

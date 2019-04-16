@@ -36,7 +36,7 @@ from ebl.fragmentarium.transliterations import TransliterationResource
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
-from ebl.corpus.corpus import MongoCorpus
+from ebl.corpus.corpus import Corpus, MongoTextRepository
 from ebl.corpus.texts import TextResource, TextsResource
 
 from ebl.files.file_repository import GridFsFiles
@@ -93,7 +93,11 @@ def create_fragmentarium_routes(api, context):
 
 
 def create_corpus_routes(api, context):
-    corpus = context['corpus']
+    corpus = Corpus(
+        context['text_repository'],
+        context['bibliography'],
+        context['changelog']
+    )
     corpus.create_indexes()
 
     api.add_route('/texts', TextsResource(corpus))
@@ -126,7 +130,6 @@ def get_app():
     )
 
     bibliography = MongoBibliography(database)
-    changelog = Changelog(database)
     context = {
         'auth_backend': auth_backend,
         'dictionary': MongoDictionary(database),
@@ -136,9 +139,9 @@ def get_app():
             database,
             FragmentFactory(bibliography)
         ),
-        'changelog': changelog,
+        'changelog': Changelog(database),
         'bibliography': bibliography,
-        'corpus': MongoCorpus(database, bibliography, changelog)
+        'text_repository': MongoTextRepository(database)
     }
 
     app = create_app(context)
