@@ -5,7 +5,7 @@ from ebl.require_scope import require_scope
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (
     Text, PeriodModifier, Period, Provenance, ManuscriptType, Classification,
-    Stage
+    Stage, TextId
 )
 
 MANUSCRIPT_DTO_SCHEMA = {
@@ -119,6 +119,10 @@ def parse_text(media):
         raise DataError(error)
 
 
+def create_text_id(category, index):
+    return TextId(int(category), int(index))
+
+
 @falcon.before(require_scope, 'create:texts')
 class TextsResource:
     # pylint: disable=R0903
@@ -141,7 +145,7 @@ class TextResource:
     @falcon.before(require_scope, 'read:texts')
     def on_get(self, _, resp, category, index):
         try:
-            text = self._corpus.find(int(category), int(index))
+            text = self._corpus.find(create_text_id(category, index))
             resp.media = text.to_dict(True)
         except ValueError:
             raise NotFoundError(f'{category}.{index}')
@@ -152,12 +156,11 @@ class TextResource:
         text = parse_text(req.media)
         try:
             self._corpus.update(
-                int(category),
-                int(index),
+                create_text_id(category, index),
                 text,
                 req.context['user']
             )
-            updated_text = self._corpus.find(text.category, text.index)
-            resp.media = updated_text.to_dict(Text)
+            updated_text = self._corpus.find(text.id)
+            resp.media = updated_text.to_dict(True)
         except ValueError:
             raise NotFoundError(f'{category}.{index}')

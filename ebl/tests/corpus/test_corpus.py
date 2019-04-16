@@ -2,6 +2,7 @@ import attr
 import pydash
 import pytest
 from ebl.auth0 import Guest
+from ebl.corpus.text import TextId
 from ebl.tests.factories.corpus import TextFactory
 from ebl.errors import NotFoundError, DuplicateError, Defect
 
@@ -68,12 +69,12 @@ def test_finding_text(database, corpus, bibliography, when):
     when_text_in_collection(database)
     expect_bibliography(bibliography, when)
 
-    assert corpus.find(TEXT.category, TEXT.index) == TEXT
+    assert corpus.find(TEXT.id) == TEXT
 
 
 def test_find_raises_exception_if_text_not_found(corpus):
     with pytest.raises(NotFoundError):
-        corpus.find(1, 1)
+        corpus.find(TextId(1, 1))
 
 
 def test_find_raises_exception_if_references_not_found(database,
@@ -83,7 +84,7 @@ def test_find_raises_exception_if_references_not_found(database,
     when_text_in_collection(database)
     when(bibliography).find(...).thenRaise(NotFoundError())
     with pytest.raises(Defect):
-        corpus.find(TEXT.category, TEXT.index)
+        corpus.find(TEXT.id)
 
 
 def test_updating_text(database, corpus, bibliography, changelog, user, when):
@@ -99,10 +100,10 @@ def test_updating_text(database, corpus, bibliography, changelog, user, when):
     expect_validate_references(bibliography, when)
     expect_bibliography(bibliography, when)
 
-    result = corpus.update(TEXT.category, TEXT.index, updated_text, user)
+    result = corpus.update(TEXT.id, updated_text, user)
 
     assert result == updated_text
-    assert corpus.find(updated_text.category, updated_text.index) ==\
+    assert corpus.find(updated_text.id) ==\
         updated_text
 
 
@@ -111,4 +112,4 @@ def test_updating_non_existing_text_raises_exception(corpus,
                                                      when):
     expect_validate_references(bibliography, when)
     with pytest.raises(NotFoundError):
-        corpus.update(TEXT.category, TEXT.index, TEXT, ANY_USER)
+        corpus.update(TEXT.id, TEXT, ANY_USER)

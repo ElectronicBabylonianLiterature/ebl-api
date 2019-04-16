@@ -218,7 +218,6 @@ def context(dictionary,
             text_repository,
             changelog,
             bibliography,
-            corpus,
             user):
     # pylint: disable=R0913
     return {
