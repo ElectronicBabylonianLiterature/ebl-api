@@ -140,6 +140,7 @@ def test_updating_text_invalid_id(client):
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
+
 UNPROCESSABLE_TEXT = {
     # pylint: disable=E1101
     'category': 1,
