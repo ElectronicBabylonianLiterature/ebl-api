@@ -238,7 +238,7 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('1.  sal/: šim ', [
         TextLine('1.', (Word('sal/:'), Word('šim')))
     ]),
-    ('1.  sal →', [
+    ('1.  sal → ', [
         TextLine('1.', (Word('sal'), LineContinuation('→')))
     ])
 ])
@@ -287,7 +287,8 @@ def test_parse_atf_language_shifts(code, expected_language):
 
 @pytest.mark.parametrize('atf,line_number', [
     ('1. x\nthis is not valid', 2),
-    ("1'. ($____$) x [...]", 1)
+    ('1\'. ($____$) x [...]\n$ (too many underscores)', 1),
+    ('1\'. → x\n$ (line continuation in the middle)', 1)
 ])
 def test_invalid_atf(atf, line_number):
     with pytest.raises(AtfSyntaxError,
