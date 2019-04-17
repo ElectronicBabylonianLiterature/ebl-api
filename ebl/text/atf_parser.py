@@ -12,7 +12,8 @@ from ebl.text.token import (
     LanguageShift,
     LoneDeterminative,
     Partial,
-    DocumentOrientedGloss
+    DocumentOrientedGloss,
+    LineContinuation
 )
 
 
@@ -188,7 +189,7 @@ WORD = seq(
 LONE_DETERMINATIVE = determinative(
     VARIANT + (JOINER.many().concat() + VARIANT).many().concat()
 ).desc('lone determinative')
-
+LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
 
 CONTROL_LINE = seq(
     regex(r'^(=:|\$|@|&|#)', re.RegexFlag.MULTILINE),
@@ -238,7 +239,8 @@ TEXT_LINE = seq(
             )
         ) |
         LACUNA.map(Token) |
-        OMISSION.map(Token)
+        OMISSION.map(Token) |
+        LINE_CONTINUATION
     ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten_deep)
 ).combine(TextLine.of_iterable)
 

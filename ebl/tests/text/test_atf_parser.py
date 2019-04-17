@@ -10,14 +10,15 @@ from ebl.text.token import (
     LanguageShift,
     LoneDeterminative,
     Partial,
-    DocumentOrientedGloss
+    DocumentOrientedGloss,
+    LineContinuation
 )
 
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
-@pytest.mark.parametrize("line,expected_tokenization", [
+@pytest.mark.parametrize('line,expected_tokens', [
     ('', []),
     ('\n', [EmptyLine()]),
     ('#first\n\n#second', [
@@ -236,11 +237,14 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1.  sal/: šim ', [
         TextLine('1.', (Word('sal/:'), Word('šim')))
+    ]),
+    ('1.  sal →', [
+        TextLine('1.', (Word('sal'), LineContinuation('→')))
     ])
 ])
-def test_parse_atf(line, expected_tokenization):
+def test_parse_atf(line, expected_tokens):
     assert parse_atf(line).lines ==\
-        Text.of_iterable(expected_tokenization).lines
+        Text.of_iterable(expected_tokens).lines
 
 
 def test_parse_atf_invalid():
