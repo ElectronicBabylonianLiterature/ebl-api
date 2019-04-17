@@ -182,3 +182,12 @@ class DocumentOrientedGloss(Token):
             **super().to_dict(),
             'type': 'DocumentOrientedGloss'
         }
+
+
+@attr.s(frozen=True)
+class LineContinuation(Token):
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'LineContinuation'
+        }

@@ -2,7 +2,8 @@ import pytest
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
 from ebl.text.token import (
-    Token, LanguageShift, DocumentOrientedGloss, Side, DEFAULT_NORMALIZED
+    Token, LanguageShift, DocumentOrientedGloss, Side, DEFAULT_NORMALIZED,
+    LineContinuation
 )
 
 
@@ -106,3 +107,15 @@ def test_set_unique_lemma_with_lemma(token):
 def test_set_unique_lemma_no_lemma(token):
     lemma = LemmatizationToken(token.value)
     assert token.set_unique_lemma(lemma) == token
+
+
+def test_line_continuation():
+    value = '→'
+    continuation = LineContinuation(value)
+
+    assert continuation.value == value
+    assert continuation.lemmatizable is False
+    assert continuation.to_dict() == {
+        'type': 'LineContinuation',
+        'value': continuation.value
+    }
