@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 from typing import Tuple
 import factory
 

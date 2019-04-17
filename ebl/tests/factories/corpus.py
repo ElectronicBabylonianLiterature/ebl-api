@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 import factory
 import factory.fuzzy
 import pydash
