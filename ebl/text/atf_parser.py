@@ -236,7 +236,7 @@ TEXT_LINE = seq(
         LACUNA.map(Token) |
         OMISSION.map(Token)
     ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten_deep) +
-    (LINE_CONTINUATION << WORD_SEPARATOR).at_most(1),
+    (LINE_CONTINUATION << WORD_SEPARATOR.many().concat()).at_most(1),
 ).combine(TextLine.of_iterable)
 
 

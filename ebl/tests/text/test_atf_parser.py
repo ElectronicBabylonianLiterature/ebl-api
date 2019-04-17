@@ -232,8 +232,11 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('1.  sal/: šim ', [
         TextLine('1.', (Word('sal/:'), Word('šim')))
     ]),
-    ('1.  sal → ', [
+    ('1.  sal →', [
         TextLine('1.', (Word('sal'), LineContinuation('→')))
+    ]),
+    ('2.  sal →  ', [
+        TextLine('2.', (Word('sal'), LineContinuation('→')))
     ])
 ])
 def test_parse_atf(line, expected_tokens):
