@@ -47,7 +47,8 @@ ATF_SPEC = {
     'unidentified': UNIDENTIFIED_SIGN,
     'joiner': HYPHEN,
     'word_separator': WORD_SEPARATOR,
-    'variant_separator': VARIANT_SEPARATOR
+    'variant_separator': VARIANT_SEPARATOR,
+    'line_continuation': '→'
 }
 
 

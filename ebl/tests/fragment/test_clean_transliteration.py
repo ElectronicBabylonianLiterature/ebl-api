@@ -207,3 +207,13 @@ def test_strip_at():
         'lu₂',
         'ta'
     ]
+
+
+def test_strip_line_continuation():
+    transliteration = Transliteration(
+        '1. ku →\n'
+    )
+
+    assert transliteration.cleaned == [
+        'ku',
+    ]

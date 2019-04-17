@@ -16,6 +16,7 @@ STRIP_PATTERN = r'|'.join([
     ATF_SPEC['omission'],
     ATF_SPEC['tabulation'],
     f'{ATF_SPEC["shift"]}\\s+',
+    ATF_SPEC['line_continuation']
 ])
 WHITE_SPACE_PATTERN = r'|'.join([
     *ATF_SPEC['determinative_or_gloss'].values(),
