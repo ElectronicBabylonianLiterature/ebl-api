@@ -107,7 +107,7 @@ UNKNOWN = (
     string_from(ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN) +
     FLAG +
     INLINE_BROKEN.at_most(1).concat()
-).desc('unclear or unindentified')
+).desc('unclear or unidentified')
 VALUE_CHAR = char_from('aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ')
 VALUE = seq(
     (

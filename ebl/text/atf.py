@@ -44,7 +44,7 @@ ATF_SPEC = {
     'number': r'\d+',
     'variant': r'([^/]+)(?:/([^/]+))+',
     'unclear': UNCLEAR_SIGN,
-    'unindentified': UNIDENTIFIED_SIGN,
+    'unidentified': UNIDENTIFIED_SIGN,
     'joiner': HYPHEN,
     'word_separator': WORD_SEPARATOR,
     'variant_separator': VARIANT_SEPARATOR
