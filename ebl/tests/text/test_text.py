@@ -8,7 +8,7 @@ from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, LineNumber, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
-from ebl.text.token import Token, UniqueLemma, Word
+from ebl.text.token import Token, UniqueLemma, Word, LineContinuation
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumber('1.'), [Word('ha-am')]),
@@ -51,7 +51,9 @@ def test_update_lemmatization():
     lemmatization = Lemmatization.from_list(tokens)
 
     expected = Text((
-        TextLine('1.', (Word('ha-am', unique_lemma=('nu I', )), )),
+        TextLine('1.', (
+            Word('ha-am', unique_lemma=(UniqueLemma('nu I'), )),
+        )),
         ControlLine('$', (Token(' single ruling'), )),
     ))
 
@@ -152,7 +154,8 @@ def test_merge(old, new, expected):
                 '{nu}',
                 language=Language.SUMERIAN,
                 partial=Partial(False, True)
-            )
+            ),
+            LineContinuation('→')
         ])
     ]
 ])

@@ -9,7 +9,8 @@ from ebl.text.language import Language
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, EmptyLine, Line, TextLine
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
-                            LoneDeterminative, Partial, Token, Word)
+                            LoneDeterminative, Partial, Token, Word,
+                            LineContinuation)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -39,7 +40,7 @@ class Text:
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Text':
         if len(self.lines) == len(lemmatization.tokens):
-            zipped = pydash.zip_(self.lines, lemmatization.tokens)
+            zipped = pydash.zip_(list(self.lines), list(lemmatization.tokens))
             lines = tuple(
                 line.update_lemmatization(lemmas)
                 for [line, lemmas] in zipped
@@ -95,7 +96,8 @@ class Text:
             ),
             'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
                 data['value']
-            )
+            ),
+            'LineContinuation': lambda data: LineContinuation(data['value'])
         }
 
         def create_tokens(content: List[dict]):
