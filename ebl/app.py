@@ -3,6 +3,7 @@ from base64 import b64decode
 
 import falcon
 import sentry_sdk
+from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from falcon_auth import FalconAuthMiddleware
@@ -136,7 +137,7 @@ def get_app():
     app = create_app(context)
 
     sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
-    return sentry_sdk.integrations.wsgi.SentryWsgiMiddleware(app)
+    return SentryWsgiMiddleware(app)
 
 
 def decode_certificate(encoded_certificate):
