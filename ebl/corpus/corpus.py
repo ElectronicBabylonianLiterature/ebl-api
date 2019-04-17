@@ -1,7 +1,8 @@
+from abc import ABC, abstractmethod
 import attr
 import pydash
 import pymongo
-from ebl.corpus.text import Text
+from ebl.corpus.text import Text, TextId
 from ebl.errors import NotFoundError, Defect
 from ebl.mongo_repository import MongoRepository
 
@@ -9,16 +10,30 @@ from ebl.mongo_repository import MongoRepository
 COLLECTION = 'texts'
 
 
-def raise_text_not_found(id_):
-    raise NotFoundError(f'Text {id_.category}.{id_.index} not found.')
+def text_not_found(id_: TextId) -> None:
+    return NotFoundError(f'Text {id_.category}.{id_.index} not found.')
 
 
-def raise_invalid_reference(id_, error):
-    raise Defect(f'Text {id_.category}.{id_.index} has invalid manuscript'
-                 f' references: "{error}"')
+def invalid_reference(id_: TextId, error: Exception) -> None:
+    return Defect(f'Text {id_.category}.{id_.index} has invalid manuscript'
+                  f' references: "{error}"')
 
 
-class MongoTextRepository:
+class TextRepository(ABC):
+    @abstractmethod
+    def create(self, text: Text) -> None:
+        ...
+
+    @abstractmethod
+    def find(self, id_: TextId) -> Text:
+        ...
+
+    @abstractmethod
+    def update(self, id_: TextId, text: Text) -> Text:
+        ...
+
+
+class MongoTextRepository(TextRepository):
     def __init__(self, database):
         self._mongo_repository = MongoRepository(database, COLLECTION)
 
@@ -26,31 +41,31 @@ class MongoTextRepository:
     def _mongo_collection(self):
         return self._mongo_repository.get_collection()
 
-    def create_indexes(self):
+    def create_indexes(self) -> None:
         self._mongo_collection.create_index([
             ('category', pymongo.ASCENDING),
             ('index', pymongo.ASCENDING)
         ], unique=True)
 
-    def create(self, text):
-        return self._mongo_repository.create(text.to_dict())
+    def create(self, text: Text) -> None:
+        self._mongo_repository.create(text.to_dict())
 
-    def find(self, id_):
+    def find(self, id_: TextId) -> Text:
         mongo_text = self._find_one(id_)
         return Text.from_dict(mongo_text)
 
-    def update(self, id_, text):
+    def update(self, id_: TextId, text: Text) -> Text:
         result = self._mongo_collection.update_one(
             {'category': id_.category, 'index': id_.index},
             {'$set': text.to_dict()}
         )
 
         if result.matched_count == 0:
-            raise_text_not_found(id_)
+            raise text_not_found(id_)
         else:
             return self.find(text.id)
 
-    def _find_one(self, id_):
+    def _find_one(self, id_: TextId) -> dict:
         mongo_text = self._mongo_collection.find_one({
             'category': id_.category,
             'index': id_.index
@@ -59,19 +74,19 @@ class MongoTextRepository:
         if mongo_text:
             return mongo_text
         else:
-            raise_text_not_found(id_)
+            raise text_not_found(id_)
 
 
 class Corpus:
-    def __init__(self, repository, bibliography, changelog):
-        self._repository = repository
+    def __init__(self,
+                 repository: TextRepository,
+                 bibliography,
+                 changelog):
+        self._repository: TextRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
 
-    def create_indexes(self):
-        self._repository.create_indexes()
-
-    def create(self, text, user):
+    def create(self, text: Text, user) -> None:
         self._validate_references(text)
         self._repository.create(text)
         self._changelog.create(
@@ -81,11 +96,11 @@ class Corpus:
             {**text.to_dict(), '_id': text.id}
         )
 
-    def find(self, id_):
+    def find(self, id_: TextId) -> Text:
         text = self._repository.find(id_)
         return self._hydrate_references(text)
 
-    def update(self, id_, text, user):
+    def update(self, id_: TextId, text: Text, user) -> Text:
         self._validate_references(text)
         old_text = self._repository.find(id_)
         self._changelog.create(
@@ -97,7 +112,7 @@ class Corpus:
         updated_text = self._repository.update(id_, text)
         return self._hydrate_references(updated_text)
 
-    def _validate_references(self, text):
+    def _validate_references(self, text: Text) -> None:
         self._bibliography.validate_references(
             pydash
             .chain(text.chapters)
@@ -106,7 +121,7 @@ class Corpus:
             .value()
         )
 
-    def _hydrate_references(self, text):
+    def _hydrate_references(self, text: Text) -> Text:
         try:
             return attr.evolve(text, chapters=tuple(
                 attr.evolve(chapter, manuscripts=tuple(
@@ -122,4 +137,4 @@ class Corpus:
                 for chapter in text.chapters
             ))
         except NotFoundError as error:
-            raise_invalid_reference(text.id, error)
+            raise invalid_reference(text.id, error)

@@ -88,7 +88,7 @@ class PeriodModifier(Enum):
     LATE = 'Late'
 
 
-PERIOD_NAMES = {
+PERIOD_NAMES: Dict[str, str] = {
     'UR_III': 'Ur III',
     'OLD_ASSYRIAN': 'Old Assyrian',
     'OLD_BABYLONIAN': 'Old Babylonian',
@@ -105,13 +105,15 @@ PERIOD_NAMES = {
 }
 
 
+STAGE_NAMES: Dict[str, str] = {
+    **PERIOD_NAMES,
+    'STANDARD_BABYLONIAN': 'Standard Babylonian'
+}
+
 Period = Enum('Period', PERIOD_NAMES)
 
 
-Stage = Enum('Stage', {
-    **PERIOD_NAMES,
-    'STANDARD_BABYLONIAN': 'Standard Babylonian'
-})
+Stage = Enum('Stage', STAGE_NAMES)
 
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])

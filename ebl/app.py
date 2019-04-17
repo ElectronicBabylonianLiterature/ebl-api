@@ -98,7 +98,7 @@ def create_corpus_routes(api, context):
         context['bibliography'],
         context['changelog']
     )
-    corpus.create_indexes()
+    context['text_repository'].create_indexes()
 
     api.add_route('/texts', TextsResource(corpus))
     api.add_route('/texts/{category}/{index}', TextResource(corpus))
