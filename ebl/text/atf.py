@@ -32,6 +32,7 @@ ATF_SPEC = {
         'end': r'\]',
         'undeterminable': r'\.\.\.'
     },
+    'alternative_damage': r'[⸢⸣]',
     'determinative_or_gloss': {
         'begin': r'\s*{+\+?',
         'end': r'}+({+\+?)?\s*?'

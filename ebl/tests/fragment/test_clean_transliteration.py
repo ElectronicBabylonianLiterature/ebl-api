@@ -76,7 +76,8 @@ def test_strip_lacuna():
         '5. [(... a)]-ba\n'
         '6. [x (x) x]\n'
         '7. [(x) (x)]\n'
-        '8. [(...)]'
+        '8. [(...)]\n'
+        '9. ⸢ba⸣'
     )
     assert transliteration.cleaned == [
         'nu ku₃',
@@ -85,7 +86,8 @@ def test_strip_lacuna():
         'a ba',
         'x x x',
         'x x',
-        ''
+        '',
+        'ba'
     ]
 
 
