@@ -1,9 +1,9 @@
 from ebl.bibliography.reference import (
-    ReferenceType, Reference
+    ReferenceType, Reference, BibliographyId
 )
 from ebl.text.line import LineNumber
 
-ID = 'RN.1'
+ID = BibliographyId('RN.1')
 TYPE = ReferenceType.EDITION
 PAGES = '1-6'
 NOTES = 'some notes'

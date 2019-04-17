@@ -88,32 +88,37 @@ class PeriodModifier(Enum):
     LATE = 'Late'
 
 
-PERIOD_NAMES: Dict[str, str] = {
-    'UR_III': 'Ur III',
-    'OLD_ASSYRIAN': 'Old Assyrian',
-    'OLD_BABYLONIAN': 'Old Babylonian',
-    'MIDDLE_BABYLONIAN': 'Middle Babylonian',
-    'MIDDLE_ASSYRIAN': 'Middle Assyrian',
-    'HITTITE': 'Hittite',
-    'NEO_ASSYRIAN': 'Neo-Assyrian',
-    'NEO_BABYLONIAN': 'Neo-Babylonian',
-    'LATE_BABYLONIAN': 'Late Babylonian',
-    'PERSIAN': 'Persian',
-    'HELLENISTIC': 'Hellenistic',
-    'PARTHIAN': 'Parthian',
-    'UNCERTAIN': 'Uncertain'
-}
+class Period(Enum):
+    UR_III = 'Ur III'
+    OLD_ASSYRIAN = 'Old Assyrian'
+    OLD_BABYLONIAN = 'Old Babylonian'
+    MIDDLE_BABYLONIAN = 'Middle Babylonian'
+    MIDDLE_ASSYRIAN = 'Middle Assyrian'
+    HITTITE = 'Hittite'
+    NEO_ASSYRIAN = 'Neo-Assyrian'
+    NEO_BABYLONIAN = 'Neo-Babylonian'
+    LATE_BABYLONIAN = 'Late Babylonian'
+    PERSIAN = 'Persian'
+    HELLENISTIC = 'Hellenistic'
+    PARTHIAN = 'Parthian'
+    UNCERTAIN = 'Uncertain'
 
 
-STAGE_NAMES: Dict[str, str] = {
-    **PERIOD_NAMES,
-    'STANDARD_BABYLONIAN': 'Standard Babylonian'
-}
-
-Period = Enum('Period', PERIOD_NAMES)
-
-
-Stage = Enum('Stage', STAGE_NAMES)
+class Stage(Enum):
+    UR_III = 'Ur III'
+    OLD_ASSYRIAN = 'Old Assyrian'
+    OLD_BABYLONIAN = 'Old Babylonian'
+    MIDDLE_BABYLONIAN = 'Middle Babylonian'
+    MIDDLE_ASSYRIAN = 'Middle Assyrian'
+    HITTITE = 'Hittite'
+    NEO_ASSYRIAN = 'Neo-Assyrian'
+    NEO_BABYLONIAN = 'Neo-Babylonian'
+    LATE_BABYLONIAN = 'Late Babylonian'
+    PERSIAN = 'Persian'
+    HELLENISTIC = 'Hellenistic'
+    PARTHIAN = 'Parthian'
+    UNCERTAIN = 'Uncertain'
+    STANDARD_BABYLONIAN = 'Standard Babylonian'
 
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])

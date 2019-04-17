@@ -10,11 +10,11 @@ from ebl.mongo_repository import MongoRepository
 COLLECTION = 'texts'
 
 
-def text_not_found(id_: TextId) -> None:
+def text_not_found(id_: TextId) -> Exception:
     return NotFoundError(f'Text {id_.category}.{id_.index} not found.')
 
 
-def invalid_reference(id_: TextId, error: Exception) -> None:
+def invalid_reference(id_: TextId, error: Exception) -> Exception:
     return Defect(f'Text {id_.category}.{id_.index} has invalid manuscript'
                   f' references: "{error}"')
 
@@ -89,11 +89,12 @@ class Corpus:
     def create(self, text: Text, user) -> None:
         self._validate_references(text)
         self._repository.create(text)
+        new_dict: dict = {**text.to_dict(), '_id': text.id}
         self._changelog.create(
             COLLECTION,
             user.profile,
             {'_id': text.id},
-            {**text.to_dict(), '_id': text.id}
+            new_dict
         )
 
     def find(self, id_: TextId) -> Text:
@@ -103,11 +104,13 @@ class Corpus:
     def update(self, id_: TextId, text: Text, user) -> Text:
         self._validate_references(text)
         old_text = self._repository.find(id_)
+        old_dict: dict = {**old_text.to_dict(), '_id': old_text.id}
+        new_dict: dict = {**text.to_dict(), '_id': text.id}
         self._changelog.create(
             COLLECTION,
             user.profile,
-            {**old_text.to_dict(), '_id': old_text.id},
-            {**text.to_dict(), '_id': text.id}
+            old_dict,
+            new_dict
         )
         updated_text = self._repository.update(id_, text)
         return self._hydrate_references(updated_text)

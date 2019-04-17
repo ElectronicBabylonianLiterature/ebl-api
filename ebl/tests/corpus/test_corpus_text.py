@@ -170,3 +170,9 @@ def test_serializing_to_dict_with_documents():
             }
         ]
     }
+
+
+def test_stage():
+    periods = [period.value for period in Period]
+    stages = [stage.value for stage in Stage]
+    assert stages == [*periods, 'Standard Babylonian']

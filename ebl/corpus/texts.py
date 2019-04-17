@@ -112,14 +112,14 @@ TEXT_DTO_SCHEMA = {
 }
 
 
-def parse_text(media):
+def parse_text(media: dict) -> Text:
     try:
         return Text.from_dict(media)
     except ValueError as error:
         raise DataError(error)
 
 
-def create_text_id(category, index):
+def create_text_id(category: str, index: str) -> TextId:
     return TextId(int(category), int(index))
 
 
@@ -131,7 +131,7 @@ class TextsResource:
 
     @falcon.before(require_scope, 'create:texts')
     @validate(TEXT_DTO_SCHEMA)
-    def on_put(self, req, resp):
+    def on_put(self, req: falcon.Request, resp: falcon.Response) -> None:
         text = parse_text(req.media)
         self._corpus.create(text, req.context['user'])
         resp.status = falcon.HTTP_NO_CONTENT
@@ -143,7 +143,9 @@ class TextResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, 'read:texts')
-    def on_get(self, _, resp, category, index):
+    def on_get(
+            self, _, resp: falcon.Response, category: str, index: str
+    ) -> None:
         try:
             text = self._corpus.find(create_text_id(category, index))
             resp.media = text.to_dict(True)
@@ -152,7 +154,11 @@ class TextResource:
 
     @falcon.before(require_scope, 'write:texts')
     @validate(TEXT_DTO_SCHEMA)
-    def on_post(self, req, resp, category, index):
+    def on_post(self,
+                req: falcon.Request,
+                resp: falcon.Response,
+                category: str,
+                index: str) -> None:
         text = parse_text(req.media)
         try:
             self._corpus.update(
