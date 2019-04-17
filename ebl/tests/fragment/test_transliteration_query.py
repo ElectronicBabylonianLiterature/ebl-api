@@ -1,8 +1,9 @@
 import re
+
 import pytest
+
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.transliteration_query import TransliterationQuery
-
 
 ATF = (
     '1\'. [...-ku]-nu-ši [...]\n'

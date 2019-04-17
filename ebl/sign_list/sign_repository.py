@@ -1,6 +1,6 @@
 import pydash
-from ebl.mongo_repository import MongoRepository
 
+from ebl.mongo_repository import MongoRepository
 
 COLLECTION = 'signs'
 

@@ -1,20 +1,15 @@
 import re
+
 import pydash
-from parsy import (
-    string, regex, seq, ParseError, char_from, string_from, decimal_digit
-)
+from parsy import (ParseError, char_from, decimal_digit, regex, seq, string,
+                   string_from)
+
 import ebl.text.atf
-from ebl.text.line import EmptyLine, TextLine, ControlLine
+from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
-from ebl.text.token import (
-    Token,
-    Word,
-    LanguageShift,
-    LoneDeterminative,
-    Partial,
-    DocumentOrientedGloss,
-    LineContinuation
-)
+from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
+                            LineContinuation, LoneDeterminative, Partial,
+                            Token, Word)
 
 
 def sequence(prefix, part, joiner, min_=None):

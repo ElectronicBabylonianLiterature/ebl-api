@@ -1,6 +1,7 @@
 # pylint: disable=W0621
 import json
 from urllib import parse
+
 import falcon
 import pytest
 

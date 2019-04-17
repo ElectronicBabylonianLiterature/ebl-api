@@ -1,15 +1,11 @@
+from ebl.bibliography.reference import Reference
+from ebl.fragment.folios import Folio, Folios
 from ebl.fragment.fragment import (
     Fragment,
     Measure,
     UncuratedReference
 )
-from ebl.fragment.folios import Folios, Folio
-from ebl.fragment.record import (
-    RecordType,
-    RecordEntry,
-    Record
-)
-from ebl.bibliography.reference import Reference
+from ebl.fragment.record import (Record, RecordEntry, RecordType)
 from ebl.text.text import Text
 
 

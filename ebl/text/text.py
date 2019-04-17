@@ -1,19 +1,15 @@
-from typing import Tuple, List, Mapping, Callable, Iterable
+from typing import Callable, Iterable, List, Mapping, Tuple
+
 import attr
 import pydash
+
 from ebl.merger import Merger
 from ebl.text.atf import Atf
-from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.language import Language
-from ebl.text.line import Line, ControlLine, EmptyLine, TextLine
-from ebl.text.token import (
-    Token,
-    Word,
-    LanguageShift,
-    Partial,
-    LoneDeterminative,
-    DocumentOrientedGloss
-)
+from ebl.text.lemmatization import Lemmatization, LemmatizationError
+from ebl.text.line import ControlLine, EmptyLine, Line, TextLine
+from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
+                            LoneDeterminative, Partial, Token, Word)
 
 
 @attr.s(auto_attribs=True, frozen=True)

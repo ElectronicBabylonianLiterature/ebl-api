@@ -1,10 +1,10 @@
 import attr
 import pydash
 import pytest
-from ebl.auth0 import Guest
-from ebl.tests.factories.corpus import TextFactory
-from ebl.errors import NotFoundError, Defect
 
+from ebl.auth0 import Guest
+from ebl.errors import Defect, NotFoundError
+from ebl.tests.factories.corpus import TextFactory
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()

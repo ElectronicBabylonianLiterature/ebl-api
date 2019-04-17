@@ -1,6 +1,7 @@
 import pytest
-from ebl.text.atf_parser import WORD, LONE_DETERMINATIVE
-from ebl.text.token import Word, LoneDeterminative
+
+from ebl.text.atf_parser import LONE_DETERMINATIVE, WORD
+from ebl.text.token import LoneDeterminative, Word
 
 
 @pytest.mark.parametrize("atf,expected", [

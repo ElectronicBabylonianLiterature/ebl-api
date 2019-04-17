@@ -1,6 +1,6 @@
 import pytest
-from ebl.sign_list.value_mapper import create_value_mapper
 
+from ebl.sign_list.value_mapper import create_value_mapper
 
 MAP_DATA = [
     ('nu', 'NU'),

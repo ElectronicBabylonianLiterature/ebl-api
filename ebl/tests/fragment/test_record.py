@@ -1,11 +1,9 @@
 import datetime
-from freezegun import freeze_time
+
 import pytest
-from ebl.fragment.record import (
-    RecordType,
-    RecordEntry,
-    Record
-)
+from freezegun import freeze_time
+
+from ebl.fragment.record import (Record, RecordEntry, RecordType)
 
 
 @pytest.mark.parametrize("old,new,type_", [

@@ -1,11 +1,10 @@
 # pylint: disable=R0903
-import factory
 import factory.fuzzy
 import pydash
-from ebl.corpus.text import (
-    Text, Chapter, Manuscript, Classification, Stage, Period,
-    PeriodModifier, Provenance, ManuscriptType
-)
+
+from ebl.corpus.text import (Chapter, Classification, Manuscript,
+                             ManuscriptType, Period, PeriodModifier,
+                             Provenance, Stage, Text)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 

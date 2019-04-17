@@ -1,12 +1,13 @@
 import re
-from bson.code import Code
-import pydash
-from ebl.text.atf import ATF_SPEC
-from ebl.mongo_repository import MongoRepository
-from ebl.errors import NotFoundError
-from ebl.text.token import UniqueLemma
-from ebl.fragment.record import RecordType
 
+import pydash
+from bson.code import Code
+
+from ebl.errors import NotFoundError
+from ebl.fragment.record import RecordType
+from ebl.mongo_repository import MongoRepository
+from ebl.text.atf import ATF_SPEC
+from ebl.text.token import UniqueLemma
 
 COLLECTION = 'fragments'
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}

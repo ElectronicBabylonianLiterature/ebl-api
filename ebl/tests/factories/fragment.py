@@ -1,14 +1,14 @@
 # pylint: disable=R0903
 from typing import Tuple
+
 import factory
 
-from ebl.fragment.folios import Folios, Folio
+from ebl.fragment.folios import Folio, Folios
 from ebl.fragment.fragment import Fragment, UncuratedReference
+from ebl.tests.factories.record import RecordFactory
 from ebl.text.line import TextLine
 from ebl.text.text import Text
 from ebl.text.token import Token, Word
-
-from ebl.tests.factories.record import RecordFactory
 
 
 class FragmentFactory(factory.Factory):

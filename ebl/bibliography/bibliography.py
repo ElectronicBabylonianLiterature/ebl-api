@@ -1,8 +1,8 @@
 import pydash
+
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
 from ebl.mongo_repository import MongoRepository
-
 
 COLLECTION = 'bibliography'
 

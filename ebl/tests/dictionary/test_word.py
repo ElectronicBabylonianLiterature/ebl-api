@@ -1,9 +1,8 @@
 import pytest
-from ebl.text.language import Language, DEFAULT_LANGUAGE
-from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
-from ebl.text.token import (
-    UniqueLemma, Token, Word, DEFAULT_NORMALIZED
-)
+
+from ebl.text.language import DEFAULT_LANGUAGE, Language
+from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
+from ebl.text.token import (DEFAULT_NORMALIZED, Token, UniqueLemma, Word)
 
 
 def test_default_normalized():

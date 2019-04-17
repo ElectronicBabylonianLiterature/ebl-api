@@ -1,4 +1,4 @@
-from ebl.fragment.folios import Folios, Folio
+from ebl.fragment.folios import Folio, Folios
 
 
 def test_filter_folios(user):

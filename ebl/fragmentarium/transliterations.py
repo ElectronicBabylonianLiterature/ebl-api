@@ -1,11 +1,11 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
-from ebl.require_scope import require_scope
+
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
 from ebl.fragmentarium.dtos import create_response_dto
-
+from ebl.require_scope import require_scope
 
 TRANSLITERATION_DTO_SCHEMA = {
     'type': 'object',

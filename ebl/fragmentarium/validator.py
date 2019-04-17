@@ -1,5 +1,5 @@
-from ebl.text.atf import validate_atf, AtfSyntaxError
 from ebl.fragment.transliteration import TransliterationError
+from ebl.text.atf import AtfSyntaxError, validate_atf
 
 
 class Validator:

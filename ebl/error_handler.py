@@ -1,7 +1,9 @@
 import logging
+
 import falcon
+
 from ebl.dispatcher import DispatchError
-from ebl.errors import NotFoundError, DuplicateError, DataError
+from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.text.lemmatization import LemmatizationError
 
 

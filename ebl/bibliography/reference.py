@@ -1,8 +1,9 @@
 from enum import Enum, auto
-from typing import NewType, Tuple, Optional
-import attr
-from ebl.text.line import LineNumber
+from typing import NewType, Optional, Tuple
 
+import attr
+
+from ebl.text.line import LineNumber
 
 BibliographyId = NewType('BibliographyId', str)
 

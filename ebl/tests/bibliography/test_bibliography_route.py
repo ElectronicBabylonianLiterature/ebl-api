@@ -1,9 +1,9 @@
 # pylint: disable=W0621
 import json
+
 import falcon
 import pydash
 import pytest
-
 
 INVALID_ENTRIES = [
     lambda entry: {**entry, 'title': 47},

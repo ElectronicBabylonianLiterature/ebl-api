@@ -1,7 +1,9 @@
 import re
-from typing import Optional, List, Callable, Any
+from typing import Any, Callable, List, Optional
+
 import attr
 import pydash
+
 from ebl.text.atf import ATF_SPEC
 
 IGNORE_LINE_PATTERN = r'|'.join([

@@ -1,12 +1,11 @@
 import attr
 import pytest
-from ebl.corpus.text import TextId
-from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (
-    TextFactory, ChapterFactory, ManuscriptFactory
-)
-from ebl.errors import NotFoundError, DuplicateError
 
+from ebl.corpus.text import TextId
+from ebl.errors import DuplicateError, NotFoundError
+from ebl.tests.factories.bibliography import ReferenceFactory
+from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
+                                        TextFactory)
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build(

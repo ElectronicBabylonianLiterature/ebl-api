@@ -1,4 +1,5 @@
 import pytest
+
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )

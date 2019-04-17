@@ -1,17 +1,19 @@
 # pylint: disable=R0903
-from typing import Tuple, Optional, Dict, List, Union
+from typing import Dict, List, Optional, Tuple, Union
+
 import attr
 import pydash
+
 from ebl.bibliography.reference import Reference
-from ebl.text.lemmatization import Lemmatization
-from ebl.text.atf import AtfSyntaxError
-from ebl.text.atf_parser import parse_atf
-from ebl.text.text import Text
 from ebl.fragment.folios import Folios
+from ebl.fragment.record import Record
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
-from ebl.fragment.record import Record
+from ebl.text.atf import AtfSyntaxError
+from ebl.text.atf_parser import parse_atf
+from ebl.text.lemmatization import Lemmatization
+from ebl.text.text import Text
 
 
 @attr.s(auto_attribs=True, frozen=True)

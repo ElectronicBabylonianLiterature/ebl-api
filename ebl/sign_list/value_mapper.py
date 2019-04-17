@@ -1,7 +1,7 @@
 import re
 import unicodedata
-from ebl.text.atf import ATF_SPEC
 
+from ebl.text.atf import ATF_SPEC
 
 BROKEN_PATTERN = ATF_SPEC['unclear']
 WITH_SIGN_PATTERN = ATF_SPEC['with_sign']

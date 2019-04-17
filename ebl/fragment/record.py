@@ -1,7 +1,8 @@
 # pylint: disable=R0903
 import datetime
 from enum import Enum
-from typing import Tuple, Dict, List
+from typing import Dict, List, Tuple
+
 import attr
 
 

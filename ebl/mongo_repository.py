@@ -1,5 +1,6 @@
 from pymongo.errors import DuplicateKeyError
-from ebl.errors import NotFoundError, DuplicateError
+
+from ebl.errors import DuplicateError, NotFoundError
 
 
 class MongoRepository:

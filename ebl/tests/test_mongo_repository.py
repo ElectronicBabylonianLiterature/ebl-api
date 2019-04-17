@@ -1,8 +1,8 @@
 # pylint: disable=W0621
-import pytest
 import mongomock
+import pytest
 
-from ebl.errors import NotFoundError, DuplicateError
+from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 

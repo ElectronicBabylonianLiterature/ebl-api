@@ -1,9 +1,8 @@
 import attr
-from freezegun import freeze_time
 import pytest
-from ebl.errors import NotFoundError, DataError
-from ebl.text.lemmatization import Lemmatization
-from ebl.text.token import UniqueLemma
+from freezegun import freeze_time
+
+from ebl.errors import DataError, NotFoundError
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
 )
@@ -12,6 +11,8 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
+from ebl.text.lemmatization import Lemmatization
+from ebl.text.token import UniqueLemma
 
 
 def test_find(fragmentarium, fragment_repository, when):

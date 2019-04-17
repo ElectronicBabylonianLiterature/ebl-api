@@ -1,6 +1,6 @@
 import falcon
-from falcon_auth import MultiAuthBackend
-from falcon_auth import NoneAuthBackend
+from falcon_auth import MultiAuthBackend, NoneAuthBackend
+
 from ebl.auth0 import Guest
 
 

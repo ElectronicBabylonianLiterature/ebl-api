@@ -1,11 +1,9 @@
 # pylint: disable=R0903
-import factory
 import factory.fuzzy
 
 from ebl.bibliography.reference import BibliographyId, Reference, ReferenceType
-from ebl.text.line import LineNumber
-
 from ebl.tests.factories.collections import TupleFactory
+from ebl.text.line import LineNumber
 
 
 class ReferenceFactory(factory.Factory):

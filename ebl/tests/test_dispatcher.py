@@ -1,6 +1,6 @@
 import pytest
-from ebl.dispatcher import create_dispatcher, DispatchError
 
+from ebl.dispatcher import DispatchError, create_dispatcher
 
 COMMANDS = {
     'a': lambda value: f'a-{value}',

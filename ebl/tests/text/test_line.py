@@ -1,19 +1,11 @@
 import pytest
-from ebl.text.language import Language, DEFAULT_LANGUAGE
-from ebl.text.lemmatization import (
-    LemmatizationToken, LemmatizationError
-)
-from ebl.text.line import (
-    Line, TextLine, ControlLine, EmptyLine, LineNumber
-)
-from ebl.text.token import (
-    UniqueLemma,
-    Token, Word,
-    LanguageShift,
-    DEFAULT_NORMALIZED,
-    LoneDeterminative,
-    DocumentOrientedGloss
-)
+
+from ebl.text.language import DEFAULT_LANGUAGE, Language
+from ebl.text.lemmatization import (LemmatizationError, LemmatizationToken)
+from ebl.text.line import (ControlLine, EmptyLine, Line, LineNumber, TextLine)
+from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
+                            LanguageShift, LoneDeterminative, Token,
+                            UniqueLemma, Word)
 
 
 def test_line():

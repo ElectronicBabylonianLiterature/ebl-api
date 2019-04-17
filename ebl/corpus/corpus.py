@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
+
 import attr
 import pydash
 import pymongo
-from ebl.corpus.text import Text, TextId
-from ebl.errors import NotFoundError, Defect
-from ebl.mongo_repository import MongoRepository
 
+from ebl.corpus.text import Text, TextId
+from ebl.errors import Defect, NotFoundError
+from ebl.mongo_repository import MongoRepository
 
 COLLECTION = 'texts'
 

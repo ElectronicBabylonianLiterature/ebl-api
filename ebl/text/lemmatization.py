@@ -1,4 +1,5 @@
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
+
 import attr
 import pydash
 

@@ -1,51 +1,40 @@
-from base64 import b64decode
 import os
-
-from cryptography.x509 import load_pem_x509_certificate
-from cryptography.hazmat.backends import default_backend
+from base64 import b64decode
 
 import falcon
+import sentry_sdk
+from cryptography.hazmat.backends import default_backend
+from cryptography.x509 import load_pem_x509_certificate
 from falcon_auth import FalconAuthMiddleware
-
 from pymongo import MongoClient
 
-import sentry_sdk
-from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
-
-from ebl.auth0 import Auth0Backend
-from ebl.changelog import Changelog
-from ebl.cors_component import CorsComponent
 import ebl.error_handler
-
+from ebl.auth0 import Auth0Backend
+from ebl.bibliography.bibliography import MongoBibliography
+from ebl.bibliography.bibliography_entries import (BibliographyEntriesResource,
+                                                   BibliographyResource)
+from ebl.changelog import Changelog
+from ebl.corpus.corpus import Corpus, MongoTextRepository
+from ebl.corpus.texts import TextResource, TextsResource
+from ebl.cors_component import CorsComponent
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.dictionary.word_search import WordSearch
 from ebl.dictionary.words import WordsResource
-
-from ebl.fragmentarium.folio_pager import FolioPagerResource
+from ebl.files.file_repository import GridFsFiles
+from ebl.files.files import create_files_resource
 from ebl.fragment.fragment_factory import FragmentFactory
+from ebl.fragmentarium.folio_pager import FolioPagerResource
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
-from ebl.fragmentarium.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.lemma_search import LemmaSearch
+from ebl.fragmentarium.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.references import ReferencesResource
 from ebl.fragmentarium.statistics import StatisticsResource
 from ebl.fragmentarium.transliterations import TransliterationResource
-
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
-
-from ebl.corpus.corpus import Corpus, MongoTextRepository
-from ebl.corpus.texts import TextResource, TextsResource
-
-from ebl.files.file_repository import GridFsFiles
-from ebl.files.files import create_files_resource
-
-from ebl.bibliography.bibliography import MongoBibliography
-from ebl.bibliography.bibliography_entries import (
-    BibliographyResource, BibliographyEntriesResource
-)
 
 
 def create_bibliography_routes(api, context):
@@ -147,7 +136,7 @@ def get_app():
     app = create_app(context)
 
     sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
-    return SentryWsgiMiddleware(app)
+    return sentry_sdk.integrations.wsgi.SentryWsgiMiddleware(app)
 
 
 def decode_certificate(encoded_certificate):

@@ -1,8 +1,8 @@
 import re
+
 from ebl.changelog import Changelog
 from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
-
 
 COLLECTION = 'words'
 LEMMA_SEARCH_LIMIT = 15

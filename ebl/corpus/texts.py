@@ -1,12 +1,11 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
+
+from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
+from ebl.corpus.text import (Classification, ManuscriptType, Period,
+                             PeriodModifier, Provenance, Stage, Text, TextId)
 from ebl.errors import DataError, NotFoundError
 from ebl.require_scope import require_scope
-from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
-from ebl.corpus.text import (
-    Text, PeriodModifier, Period, Provenance, ManuscriptType, Classification,
-    Stage, TextId
-)
 
 MANUSCRIPT_DTO_SCHEMA = {
     'type': 'object',

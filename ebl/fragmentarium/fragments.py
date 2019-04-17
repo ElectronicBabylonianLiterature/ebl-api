@@ -1,4 +1,5 @@
 import falcon
+
 from ebl.require_scope import require_scope
 
 

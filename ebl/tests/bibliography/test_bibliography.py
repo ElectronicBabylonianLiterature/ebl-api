@@ -1,8 +1,9 @@
 # pylint: disable=W0621
-from freezegun import freeze_time
 import pydash
 import pytest
-from ebl.errors import NotFoundError, DuplicateError, DataError
+from freezegun import freeze_time
+
+from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 
 

@@ -1,11 +1,12 @@
 import collections
 from enum import Enum, auto
-from typing import Any, Tuple, NewType
-import attr
-import ebl.text.atf
-from ebl.text.language import Language, DEFAULT_LANGUAGE
-from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
+from typing import Any, NewType, Tuple
 
+import attr
+
+import ebl.text.atf
+from ebl.text.language import Language
+from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False

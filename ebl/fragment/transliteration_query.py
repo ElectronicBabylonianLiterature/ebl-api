@@ -1,6 +1,6 @@
+import attr
 import pydash
 import regex
-import attr
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -1,6 +1,5 @@
-from ebl.bibliography.reference import (
-    ReferenceType, Reference, BibliographyId
-)
+from ebl.bibliography.reference import (BibliographyId, Reference,
+                                        ReferenceType)
 from ebl.text.line import LineNumber
 
 ID = BibliographyId('RN.1')

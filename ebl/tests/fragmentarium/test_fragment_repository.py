@@ -1,19 +1,19 @@
 import pytest
+
 from ebl.errors import NotFoundError
-from ebl.text.lemmatization import Lemmatization
-from ebl.text.token import Token, Word
-from ebl.text.line import TextLine, ControlLine, EmptyLine
-from ebl.text.text import Text
 from ebl.fragment.fragment import UncuratedReference
-from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.fragment.transliteration import Transliteration
+from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
     TransliteratedFragmentFactory
 )
-
+from ebl.text.lemmatization import Lemmatization
+from ebl.text.line import ControlLine, EmptyLine, TextLine
+from ebl.text.text import Text
+from ebl.text.token import Token, Word
 
 COLLECTION = 'fragments'
 

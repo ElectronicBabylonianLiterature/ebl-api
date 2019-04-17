@@ -1,9 +1,9 @@
 from typing import List, Tuple
+
 from ebl.text.atf import Atf, WORD_SEPARATOR
-from ebl.text.language import Language, DEFAULT_LANGUAGE
-from ebl.text.token import (
-    Token, Word, LanguageShift, DocumentOrientedGloss, Side, DEFAULT_NORMALIZED
-)
+from ebl.text.language import DEFAULT_LANGUAGE, Language
+from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
+                            LanguageShift, Side, Token, Word)
 
 
 class LanguageVisitor:

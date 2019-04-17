@@ -1,11 +1,7 @@
 # pylint: disable=R0903
-import factory
 import factory.fuzzy
-from ebl.fragment.record import (
-    RecordType,
-    RecordEntry,
-    Record
-)
+
+from ebl.fragment.record import (Record, RecordEntry, RecordType)
 from ebl.tests.factories.collections import TupleFactory
 
 

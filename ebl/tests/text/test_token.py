@@ -1,11 +1,9 @@
 import pytest
-from ebl.text.language import Language
-from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
-from ebl.text.token import (
-    Token, LanguageShift, DocumentOrientedGloss, Side, DEFAULT_NORMALIZED,
-    LineContinuation
-)
 
+from ebl.text.language import Language
+from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
+from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
+                            LanguageShift, LineContinuation, Side, Token)
 
 TOKENS = [
     Token('...'),

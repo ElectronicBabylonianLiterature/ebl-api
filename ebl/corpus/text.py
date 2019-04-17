@@ -1,8 +1,10 @@
 import collections
 from enum import Enum
 from typing import Dict, List, Tuple, Union
+
 import attr
 import pydash
+
 from ebl.bibliography.reference import Reference
 
 

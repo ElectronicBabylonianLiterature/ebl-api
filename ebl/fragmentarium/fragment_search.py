@@ -2,9 +2,9 @@ import falcon
 import pydash
 
 from ebl.dispatcher import create_dispatcher
-from ebl.require_scope import require_scope
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.dtos import create_response_dto
+from ebl.require_scope import require_scope
 
 
 class FragmentSearch:

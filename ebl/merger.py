@@ -1,10 +1,9 @@
 import difflib
 from functools import reduce
-from typing import (
-    TypeVar, List, Sequence, Optional, Callable, Mapping, Generic, Iterator
-)
-import pydash
+from typing import (Callable, Generic, Iterator, List, Mapping, Optional,
+                    Sequence, TypeVar)
 
+import pydash
 
 T = TypeVar('T')  # pylint: disable=C0103
 DiffMapping = Callable[[T], str]

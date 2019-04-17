@@ -1,8 +1,8 @@
 import pytest
-from ebl.corpus.text import (
-    Text, Chapter, Manuscript, Classification, Stage, PeriodModifier, Period,
-    Provenance, ManuscriptType, TextId
-)
+
+from ebl.corpus.text import (Chapter, Classification, Manuscript,
+                             ManuscriptType, Period, PeriodModifier,
+                             Provenance, Stage, Text, TextId)
 from ebl.tests.factories.bibliography import ReferenceFactory
 
 CATEGORY = 1

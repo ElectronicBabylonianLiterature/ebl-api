@@ -1,7 +1,7 @@
 # pylint: disable=W0621
 import pytest
-from ebl.errors import NotFoundError
 
+from ebl.errors import NotFoundError
 
 COLLECTION = 'signs'
 

@@ -1,8 +1,8 @@
-from freezegun import freeze_time
 import pydash
 import pytest
-from ebl.errors import NotFoundError
+from freezegun import freeze_time
 
+from ebl.errors import NotFoundError
 
 COLLECTION = 'words'
 

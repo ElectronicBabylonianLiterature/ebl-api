@@ -1,11 +1,9 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
-from ebl.require_scope import require_scope
-from ebl.bibliography.reference import (
-    Reference, REFERENCE_DTO_SCHEMA
-)
-from ebl.fragmentarium.dtos import create_response_dto
 
+from ebl.bibliography.reference import (REFERENCE_DTO_SCHEMA, Reference)
+from ebl.fragmentarium.dtos import create_response_dto
+from ebl.require_scope import require_scope
 
 REFERENCES_DTO_SCHEMA = {
     'type': 'object',

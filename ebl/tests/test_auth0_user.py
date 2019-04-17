@@ -1,6 +1,6 @@
 import pytest
-from ebl.auth0 import Auth0User
 
+from ebl.auth0 import Auth0User
 
 PROFILE = {'name': 'john'}
 

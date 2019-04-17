@@ -2,33 +2,33 @@
 import datetime
 import io
 import json
+
 import attr
-from dictdiffer import diff
+import mongomock
 import pydash
 import pytest
-import mongomock
+from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 
 import ebl.app
-from ebl.changelog import Changelog
-from ebl.corpus.corpus import Corpus, MongoTextRepository
+import ebl.fragment.fragment_factory as fragment_factory_
+from ebl.auth0 import Auth0User
 from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
+from ebl.changelog import Changelog
+from ebl.corpus.corpus import Corpus, MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
-from ebl.text.text import Text
-from ebl.text.line import TextLine
-from ebl.text.token import Token, Word
-from ebl.auth0 import Auth0User
-import ebl.fragment.fragment_factory as fragment_factory_
-
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.text.line import TextLine
+from ebl.text.text import Text
+from ebl.text.token import Token, Word
 
 
 @pytest.fixture

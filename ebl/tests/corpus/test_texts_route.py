@@ -1,15 +1,14 @@
 import json
+
 import attr
 import falcon
 import pytest
-from ebl.auth0 import Guest
-from ebl.corpus.text import (
-    Provenance, PeriodModifier, Period, ManuscriptType, Stage, Classification
-)
-from ebl.tests.factories.corpus import (
-    TextFactory, ChapterFactory, ManuscriptFactory
-)
 
+from ebl.auth0 import Guest
+from ebl.corpus.text import (Classification, ManuscriptType, Period,
+                             PeriodModifier, Provenance, Stage)
+from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
+                                        TextFactory)
 
 ANY_USER = Guest()
 

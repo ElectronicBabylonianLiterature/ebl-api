@@ -1,13 +1,14 @@
 # pylint: disable=R0903
-from typing import Tuple, Iterable, Sequence, NewType
+from typing import Iterable, NewType, Sequence, Tuple
+
 import attr
 import pydash
+
 from ebl.merger import Merger
 from ebl.text.atf import Atf, WORD_SEPARATOR
-from ebl.text.lemmatization import LemmatizationToken, LemmatizationError
+from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import Token
-from ebl.text.visitors import LanguageVisitor, AtfVisitor
-
+from ebl.text.visitors import AtfVisitor, LanguageVisitor
 
 LineNumber = NewType('LineNumber', str)
 

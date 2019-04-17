@@ -1,16 +1,14 @@
 from typing import Tuple
+
 import pytest
-from ebl.text.lemmatization import (
-    Lemmatization, LemmatizationToken, LemmatizationError
-)
+
 from ebl.text.atf import Atf
 from ebl.text.language import Language
-from ebl.text.line import (
-    Line, TextLine, ControlLine, EmptyLine, LineNumber
-)
-from ebl.text.text import Text, LoneDeterminative, LanguageShift, Partial
-from ebl.text.token import Word, Token, UniqueLemma
-
+from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
+                                    LemmatizationToken)
+from ebl.text.line import (ControlLine, EmptyLine, Line, LineNumber, TextLine)
+from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
+from ebl.text.token import Token, UniqueLemma, Word
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumber('1.'), [Word('ha-am')]),

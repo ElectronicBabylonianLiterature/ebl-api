@@ -1,6 +1,6 @@
 import attr
-from ebl.fragmentarium.update_signs import create_updater
-from ebl.fragmentarium.update_signs import Counter
+
+from ebl.fragmentarium.update_signs import Counter, create_updater
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 

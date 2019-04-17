@@ -1,19 +1,13 @@
 import pytest
+
 from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
-from ebl.text.line import EmptyLine, TextLine, ControlLine
+from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
-from ebl.text.token import (
-    Token,
-    Word,
-    LanguageShift,
-    LoneDeterminative,
-    Partial,
-    DocumentOrientedGloss,
-    LineContinuation
-)
-
+from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
+                            LineContinuation, LoneDeterminative, Partial,
+                            Token, Word)
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
