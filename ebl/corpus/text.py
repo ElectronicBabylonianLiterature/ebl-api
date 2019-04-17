@@ -152,6 +152,7 @@ class Manuscript:
                 self.siglum_disambiguator)
 
     def to_dict(self, include_documents=False) -> ManuscriptDict:
+        # pylint: disable=E1101
         return {
             'siglumDisambiguator': self.siglum_disambiguator,
             'museumNumber': self.museum_number,
@@ -188,6 +189,27 @@ class Manuscript:
 ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
 
 
+def validate_manuscripts(instance_, attribute_, value):
+    # pylint: disable=W0613
+    errors = []
+
+    duplicate_sigla = (
+        pydash
+        .chain(value)
+        .map_(lambda manuscript: manuscript.siglum)
+        .map_(lambda siglum, _, sigla: (siglum, sigla.count(siglum)))
+        .filter(lambda entry: entry[1] > 1)
+        .map_(lambda entry: entry[0])
+        .uniq()
+        .value()
+    )
+    if duplicate_sigla:
+        errors.append(f'Duplicate sigla: {duplicate_sigla}.')
+
+    if errors:
+        raise ValueError(f'Invalid manuscripts: {errors}.')
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
@@ -196,28 +218,9 @@ class Chapter:
     name: str = ''
     order: int = 0
     manuscripts: Tuple[Manuscript, ...] = attr.ib(
-        default=attr.Factory(tuple)
+        default=attr.Factory(tuple),
+        validator=validate_manuscripts
     )
-
-    @manuscripts.validator
-    def validate_manuscripts(self, _, value):
-        errors = []
-
-        duplicate_sigla = (
-            pydash
-            .chain(value)
-            .map_(lambda manuscript: manuscript.siglum)
-            .map_(lambda siglum, _, sigla: (siglum, sigla.count(siglum)))
-            .filter(lambda entry: entry[1] > 1)
-            .map_(lambda entry: entry[0])
-            .uniq()
-            .value()
-        )
-        if duplicate_sigla:
-            errors.append(f'Duplicate sigla: {duplicate_sigla}.')
-
-        if errors:
-            raise ValueError(f'Invalid manuscripts: {errors}.')
 
     def to_dict(self, include_documents=False) -> ChapterDict:
         return {
@@ -228,7 +231,7 @@ class Chapter:
             'order': self.order,
             'manuscripts': [
                 manuscript.to_dict(include_documents)
-                for manuscript in self.manuscripts
+                for manuscript in self.manuscripts  # pylint: disable=E1133
             ]
         }
 
@@ -261,6 +264,7 @@ class Text:
 
     @property
     def id(self) -> TextId:
+        # pylint: disable=C0103
         return TextId(self.category, self.index)
 
     def to_dict(self, include_documents=False) -> TextDict:

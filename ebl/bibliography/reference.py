@@ -15,7 +15,7 @@ class ReferenceType(Enum):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Reference():
+class Reference:
     id: BibliographyId
     type: ReferenceType
     pages: str = ''
