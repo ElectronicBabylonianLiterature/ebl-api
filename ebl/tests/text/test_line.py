@@ -8,6 +8,9 @@ from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
                             UniqueLemma, Word)
 
 
+LINE_NUMBER = LineNumber('1.')
+
+
 def test_line():
     prefix = '*'
     token = Token('value')
@@ -46,7 +49,6 @@ def test_empty_line():
     ('%foo', DEFAULT_LANGUAGE, DEFAULT_NORMALIZED)
 ])
 def test_line_of_iterable(code, language, normalized):
-    line_number = LineNumber('1.')
     tokens = [
         Word('first'),
         LanguageShift(code), Word('second'),
@@ -58,11 +60,11 @@ def test_line_of_iterable(code, language, normalized):
         LanguageShift('%sb'), LoneDeterminative(
             '{third}', Language.AKKADIAN, False
         ))
-    line = TextLine.of_iterable(line_number, tokens)
+    line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
-    assert line.prefix == line_number
-    assert line.line_number == line_number
-    assert line == TextLine(line_number, expected_tokens)
+    assert line.prefix == LINE_NUMBER
+    assert line.line_number == LINE_NUMBER
+    assert line == TextLine(LINE_NUMBER, expected_tokens)
     assert line.atf == f'1. first {code} second %sb {{third}}'
 
 
@@ -74,7 +76,7 @@ def test_line_of_iterable(code, language, normalized):
     (Word('-mu-bu-'), LanguageShift('%sux'), ' -mu-bu- ')
 ])
 def test_text_line_atf_partials(word, token, expected):
-    line = TextLine.of_iterable('1.', [
+    line = TextLine.of_iterable(LINE_NUMBER, [
         token,
         word,
         token,
@@ -84,12 +86,12 @@ def test_text_line_atf_partials(word, token, expected):
 
 def test_text_line_atf_partial_start():
     word = Word('-mu')
-    line = TextLine.of_iterable('1.', [word])
+    line = TextLine.of_iterable(LINE_NUMBER, [word])
     assert line.atf == f'{line.prefix} {word.value}'
 
 
 def test_text_line_atf_gloss():
-    line = TextLine.of_iterable('1.', [
+    line = TextLine.of_iterable(LINE_NUMBER, [
         DocumentOrientedGloss('{('),
         Word('mu'),
         Word('bu'),
@@ -149,25 +151,25 @@ def test_update_lemmatization(line):
 
 
 def test_update_lemmatization_text_line():
-    line = TextLine.of_iterable('1.', [Word('bu')])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word('bu')])
     lemmatization = (LemmatizationToken('bu', ('nu I', )), )
     expected = TextLine.of_iterable(
-        '1.',
-        [Word('bu', unique_lemma=('nu I', ))]
+        LINE_NUMBER,
+        [Word('bu', unique_lemma=(UniqueLemma('nu I'), ))]
     )
 
     assert line.update_lemmatization(lemmatization) == expected
 
 
 def test_update_lemmatization_incompatible():
-    line = TextLine.of_iterable('1.', [Word('mu')])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word('mu')])
     lemmatization = (LemmatizationToken('bu', ('nu I', )), )
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lenght():
-    line = TextLine.of_iterable('1.', [Word('bu'), Word('bu')])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word('bu'), Word('bu')])
     lemmatization = (LemmatizationToken('bu', ('nu I', )), )
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
@@ -242,5 +244,5 @@ def test_update_lemmatization_wrong_lenght():
         ])
     )
 ])
-def test_merge(old, new, expected):
+def test_merge(old: Line, new: Line, expected: Line):
     assert old.merge(new) == expected
