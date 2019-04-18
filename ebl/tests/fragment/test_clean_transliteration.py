@@ -1,3 +1,5 @@
+import pytest
+
 from ebl.fragment.transliteration import Transliteration
 
 
@@ -221,11 +223,14 @@ def test_strip_line_continuation():
     ]
 
 
-def test_strip_erasure():
-    transliteration = Transliteration(
-        '1. $(erasure) ku'
-    )
+@pytest.mark.parametrize('erasure,cleaned', [
+    ('1. $(erasure) ku', 'ku'),
+    ('1. $(ra (ra) 1(AŠ) <(ra)> [(ra)]) ku', 'ku'),
+    ('1. $(ra) 1(AŠ)', '1(AŠ)'),
+    ('1. $(<(1(AŠ))>) 2(DIŠ)', '2(DIŠ)'),
+    ('1. $([(1(AŠ))]) 2(DIŠ)', '2(DIŠ)')
+])
+def test_strip_erasure(erasure, cleaned):
+    transliteration = Transliteration(erasure)
 
-    assert transliteration.cleaned == [
-        'ku',
-    ]
+    assert transliteration.cleaned == [cleaned]
