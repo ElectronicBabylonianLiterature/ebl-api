@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.text.atf_parser import LONE_DETERMINATIVE, WORD
+from ebl.text.text_parser import LONE_DETERMINATIVE, WORD
 from ebl.text.token import LoneDeterminative, Word
 
 
