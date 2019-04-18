@@ -16,7 +16,7 @@ UNIDENTIFIED_SIGN = 'X'
 ATF_SPEC = {
     'line_number': r'^[^\.]+\.([^\.]+\.)?',
     'shift': r'%\w+',
-    'control_line': r'@|\$|#|&',
+    'control_line': r'@|\$ |#|&',
     'multiplex_comment': r'=:',
     'tabulation': r'\(\$_+\$\)',
     'divider': r'(^|\s+)(\||&\d*)($|\s+)',
