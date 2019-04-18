@@ -213,7 +213,17 @@ def test_strip_at():
 
 def test_strip_line_continuation():
     transliteration = Transliteration(
-        '1. ku →\n'
+        '1. ku →'
+    )
+
+    assert transliteration.cleaned == [
+        'ku'
+    ]
+
+
+def test_strip_erasure():
+    transliteration = Transliteration(
+        '1. $(erasure) ku'
     )
 
     assert transliteration.cleaned == [

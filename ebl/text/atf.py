@@ -49,7 +49,10 @@ ATF_SPEC = {
     'joiner': HYPHEN,
     'word_separator': WORD_SEPARATOR,
     'variant_separator': VARIANT_SEPARATOR,
-    'line_continuation': '→'
+    'line_continuation': '→',
+    'erasure': {
+        'illegible': r'\$\(erasure\)'
+    }
 }
 
 

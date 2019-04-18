@@ -11,6 +11,7 @@ IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['multiplex_comment']
 ])
 STRIP_PATTERN = r'|'.join([
+    *ATF_SPEC['erasure'].values(),
     *ATF_SPEC['flags'].values(),
     *ATF_SPEC['lacuna'].values(),
     f'{ATF_SPEC["line_number"]}\\s+',
@@ -66,7 +67,7 @@ def _clean_values(line: str) -> str:
 
 def _clean_value(value: str) -> str:
     grapheme = re.fullmatch(r'\|[^|]+\|', value)
-    reading_with_sign = re.fullmatch(r'[^\(]+\(([^\)]+)\)', value)
+    reading_with_sign = re.fullmatch(r'[^(]+\(([^)]+)\)', value)
     if VARIANT_SEPARATOR in value:
         return _clean_variant(value)
     elif grapheme or reading_with_sign:
