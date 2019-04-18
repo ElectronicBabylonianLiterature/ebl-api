@@ -5,7 +5,18 @@ from ebl.fragment.transliteration import Transliteration
 
 def test_ignored_lines():
     transliteration = Transliteration(
-        '&K11111\n@reverse\n\n$ end of side\n#note\n=: foo'
+        '&K11111\n'
+        '@reverse\n'
+        '\n'
+        '$ end of side\n'
+        '$single ruling\n'
+        '$ single ruling\n'
+        '$double ruling\n'
+        '$ double ruling\n'
+        '$triple ruling\n'
+        '$ triple ruling\n'
+        '$ (random text)\n'
+        '#note\n=: foo'
     )
     assert transliteration.cleaned == []
 
