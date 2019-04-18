@@ -68,9 +68,9 @@ LINGUISTIC_GLOSS = string_from('{{', '}}')
 DOCUMENT_ORIENTED_GLOSS = string_from('{(', ')}')
 SINGLE_DOT = regex(r'(?<!\.)\.(?!\.)')
 JOINER = (
-        OMISSION |
-        LINGUISTIC_GLOSS |
-        true_joiner()
+    OMISSION |
+    LINGUISTIC_GLOSS |
+    true_joiner()
 ).desc('joiner')
 FLAG = char_from('!?*#').many().concat().desc('flag')
 MODIFIER = (
@@ -185,50 +185,49 @@ LONE_DETERMINATIVE = determinative(
 ERASURE = string('$(erasure)').map(Erasure)
 LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
 
-TEXT = ((TABULATION.map(Token) |
-         COLUMN.map(Token) |
-         ERASURE |
-         (DIVIDER << WORD_SEPARATOR_OR_EOL).map(Token) |
-         COMMENTARY_PROTOCOL.map(Token) |
-         DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
-         SHIFT.map(LanguageShift) |
-         WORD.map(Word) |
-         seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(
-             lambda values: [
-                 Token(values[0]),
-                 LoneDeterminative.of_value(
-                     values[1], Partial(True, True)
-                 ),
-                 Token(values[2])
-             ]
-         ) |
-         seq(LACUNA, LONE_DETERMINATIVE).map(
-             lambda values: [
-                 Token(values[0]),
-                 LoneDeterminative.of_value(
-                     values[1], Partial(True, False)
-                 )
-             ]
-         ) |
-         seq(LONE_DETERMINATIVE, LACUNA).map(
-             lambda values: [
-                 LoneDeterminative.of_value(
-                     values[0], Partial(False, True)
-                 ),
-                 Token(values[1])
-             ]
-         ) |
-         LONE_DETERMINATIVE.map(
-             lambda value: LoneDeterminative.of_value(
-                 value, Partial(False, False)
-             )
-         ) |
-         LACUNA.map(Token) |
-         OMISSION.map(Token)
-         ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten_deep) +
-        (LINE_CONTINUATION << WORD_SEPARATOR.many().concat()).at_most(1))
-
 TEXT_LINE = seq(
     LINE_NUMBER << WORD_SEPARATOR,
-    TEXT,
+    (
+        TABULATION.map(Token) |
+        COLUMN.map(Token) |
+        ERASURE |
+        (DIVIDER << WORD_SEPARATOR_OR_EOL).map(Token) |
+        COMMENTARY_PROTOCOL.map(Token) |
+        DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
+        SHIFT.map(LanguageShift) |
+        WORD.map(Word) |
+        seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(
+            lambda values: [
+                Token(values[0]),
+                LoneDeterminative.of_value(
+                    values[1], Partial(True, True)
+                ),
+                Token(values[2])
+            ]
+        ) |
+        seq(LACUNA, LONE_DETERMINATIVE).map(
+            lambda values: [
+                Token(values[0]),
+                LoneDeterminative.of_value(
+                    values[1], Partial(True, False)
+                )
+            ]
+        ) |
+        seq(LONE_DETERMINATIVE, LACUNA).map(
+            lambda values: [
+                LoneDeterminative.of_value(
+                    values[0], Partial(False, True)
+                ),
+                Token(values[1])
+            ]
+        ) |
+        LONE_DETERMINATIVE.map(
+            lambda value: LoneDeterminative.of_value(
+                value, Partial(False, False)
+            )
+        ) |
+        LACUNA.map(Token) |
+        OMISSION.map(Token)
+    ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten_deep) +
+    (LINE_CONTINUATION << WORD_SEPARATOR.many().concat()).at_most(1)
 ).combine(TextLine.of_iterable)
