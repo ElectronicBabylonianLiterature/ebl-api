@@ -8,6 +8,7 @@ from ebl.text.text import Text
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
                             Token, Word)
+from text.erasure import Erasure
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
@@ -237,7 +238,10 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('2.  sal →  ', [
         TextLine('2.', (Word('sal'), LineContinuation('→')))
-    ])
+    ]),
+    ('1. $(erasure)', [
+        TextLine('1.', (Erasure('$(erasure)'), ))
+    ]),
 ])
 def test_parse_atf(line, expected_tokens):
     assert parse_atf(line).lines ==\
