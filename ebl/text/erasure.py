@@ -1,5 +1,5 @@
 import attr
-from text.token import Token
+from ebl.text.token import Token
 
 
 @attr.s(frozen=True)

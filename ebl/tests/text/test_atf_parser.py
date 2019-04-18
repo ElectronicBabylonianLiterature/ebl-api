@@ -8,7 +8,7 @@ from ebl.text.text import Text
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
                             Token, Word)
-from text.erasure import Erasure
+from ebl.text.erasure import Erasure
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 

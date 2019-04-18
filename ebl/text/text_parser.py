@@ -8,7 +8,7 @@ from ebl.text.line import TextLine
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
                             Token, Word)
-from text.erasure import Erasure
+from ebl.text.erasure import Erasure
 
 
 def sequence(prefix, part, joiner, min_=None):
@@ -139,8 +139,8 @@ COMPOUND_GRAPHEME = (
         COMPOUND_DELIMITER,
         COMPOUND_PART,
         (
-                COMPOUND_GRAPHEME_OPERATOR.many().concat() +
-                COMPOUND_PART
+            COMPOUND_GRAPHEME_OPERATOR.many().concat() +
+            COMPOUND_PART
         ).many().concat(),
         COMPOUND_DELIMITER
     )

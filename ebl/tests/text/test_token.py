@@ -4,7 +4,7 @@ from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
                             LanguageShift, LineContinuation, Side, Token)
-from text.erasure import Erasure
+from ebl.text.erasure import Erasure
 
 TOKENS = [
     Token('...'),
