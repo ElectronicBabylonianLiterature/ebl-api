@@ -133,7 +133,7 @@ class TextsResource:
     def on_put(self, req: falcon.Request, resp: falcon.Response) -> None:
         text = parse_text(req.media)
         self._corpus.create(text, req.context['user'])
-        resp.status = falcon.HTTP_NO_CONTENT
+        resp.status = falcon.HTTP_CREATED
 
 
 class TextResource:

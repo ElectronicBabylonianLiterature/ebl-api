@@ -25,7 +25,7 @@ def put_text(client, text):
         f'/texts',
         body=json.dumps(text.to_dict())
     )
-    assert put_result.status == falcon.HTTP_NO_CONTENT
+    assert put_result.status == falcon.HTTP_CREATED
     assert put_result.headers['Access-Control-Allow-Origin'] == '*'
 
 

@@ -38,7 +38,7 @@ def test_create_entry(client, bibliography_entry):
     body = json.dumps(bibliography_entry)
     put_result = client.simulate_put(f'/bibliography', body=body)
 
-    assert put_result.status == falcon.HTTP_NO_CONTENT
+    assert put_result.status == falcon.HTTP_CREATED
     assert put_result.headers['Access-Control-Allow-Origin'] == '*'
 
     get_result = client.simulate_get(f'/bibliography/{id_}')

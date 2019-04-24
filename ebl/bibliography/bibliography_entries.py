@@ -39,7 +39,7 @@ class BibliographyResource:
     @validate(CSL_JSON_SCHEMA)
     def on_put(self, req, resp):
         self._bibliography.create(req.media, req.context['user'])
-        resp.status = falcon.HTTP_NO_CONTENT
+        resp.status = falcon.HTTP_CREATED
 
 
 class BibliographyEntriesResource:
