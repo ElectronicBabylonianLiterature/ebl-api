@@ -10,6 +10,10 @@ from ebl.require_scope import require_scope
 MANUSCRIPT_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
+        'id': {
+            'type': 'integer',
+            'minimum': 0
+        },
         'siglumDisambiguator': {
             'type': 'string'
         },
@@ -43,7 +47,7 @@ MANUSCRIPT_DTO_SCHEMA = {
             'items': REFERENCE_DTO_SCHEMA
         }
     },
-    'required': ['siglumDisambiguator', 'museumNumber', 'accession',
+    'required': ['id', 'siglumDisambiguator', 'museumNumber', 'accession',
                  'periodModifier', 'period', 'provenance', 'type', 'notes',
                  'references']
 }

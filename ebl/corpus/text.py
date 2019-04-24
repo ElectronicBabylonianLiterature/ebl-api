@@ -131,6 +131,7 @@ ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
 
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
+    id: int
     siglum_disambiguator: str = ''
     museum_number: str = ''
     accession: str = attr.ib(default='')
@@ -156,6 +157,7 @@ class Manuscript:
     def to_dict(self, include_documents=False) -> ManuscriptDict:
         # pylint: disable=E1101
         return {
+            'id': self.id,
             'siglumDisambiguator': self.siglum_disambiguator,
             'museumNumber': self.museum_number,
             'accession': self.accession,
@@ -173,6 +175,7 @@ class Manuscript:
     @staticmethod
     def from_dict(manuscript: dict) -> 'Manuscript':
         return Manuscript(
+            manuscript['id'],
             manuscript['siglumDisambiguator'],
             manuscript['museumNumber'],
             manuscript['accession'],
@@ -193,17 +196,30 @@ ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
 
 def validate_manuscripts(instance_, attribute_, value):
     # pylint: disable=W0613
+    def not_unique(chained_collection):
+        return (
+            chained_collection
+            .map_(lambda entry, _, entries: (entry, entries.count(entry)))
+            .filter(lambda entry: entry[1] > 1)
+            .map_(lambda entry: entry[0])
+            .uniq()
+            .value()
+        )
+
     errors = []
 
-    duplicate_sigla = (
+    duplicate_ids = not_unique(
+        pydash
+        .chain(value)
+        .map_(lambda manuscript: manuscript.id)
+    )
+    if duplicate_ids:
+        errors.append(f'Duplicate manuscript IDs: {duplicate_ids}.')
+
+    duplicate_sigla = not_unique(
         pydash
         .chain(value)
         .map_(lambda manuscript: manuscript.siglum)
-        .map_(lambda siglum, _, sigla: (siglum, sigla.count(siglum)))
-        .filter(lambda entry: entry[1] > 1)
-        .map_(lambda entry: entry[0])
-        .uniq()
-        .value()
     )
     if duplicate_sigla:
         errors.append(f'Duplicate sigla: {duplicate_sigla}.')
