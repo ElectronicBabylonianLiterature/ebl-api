@@ -44,8 +44,11 @@ class BibliographyResource:
     @falcon.before(require_scope, 'write:bibliography')
     @validate(CSL_JSON_SCHEMA)
     def on_post(self, req, resp):
-        self._bibliography.create(req.media, req.context['user'])
+        bibliography_entry = req.media
+        self._bibliography.create(bibliography_entry, req.context['user'])
         resp.status = falcon.HTTP_CREATED
+        resp.location = f'/bibliography/{bibliography_entry["id"]}'
+        resp.media = bibliography_entry
 
 
 class BibliographyEntriesResource:

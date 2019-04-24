@@ -36,10 +36,12 @@ def test_get_entry_not_found(client):
 def test_create_entry(client, bibliography_entry):
     id_ = bibliography_entry['id']
     body = json.dumps(bibliography_entry)
-    put_result = client.simulate_post(f'/bibliography', body=body)
+    post_result = client.simulate_post(f'/bibliography', body=body)
 
-    assert put_result.status == falcon.HTTP_CREATED
-    assert put_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.status == falcon.HTTP_CREATED
+    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.headers['Location'] == f'/bibliography/{id_}'
+    assert post_result.json == bibliography_entry
 
     get_result = client.simulate_get(f'/bibliography/{id_}')
 

@@ -141,6 +141,8 @@ class TextsResource:
         text = parse_text(req.media)
         self._corpus.create(text, req.context['user'])
         resp.status = falcon.HTTP_CREATED
+        resp.location = f'/texts/{text.category}/{text.index}'
+        resp.media = self._corpus.find(text.id).to_dict(True)
 
 
 class TextResource:

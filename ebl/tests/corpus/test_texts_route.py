@@ -21,12 +21,15 @@ def allow_references(text, bibliography):
 
 
 def create_text(client, text):
-    put_result = client.simulate_post(
+    post_result = client.simulate_post(
         f'/texts',
         body=json.dumps(text.to_dict())
     )
-    assert put_result.status == falcon.HTTP_CREATED
-    assert put_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.status == falcon.HTTP_CREATED
+    assert post_result.headers['Location'] ==\
+        f'/texts/{text.category}/{text.index}'
+    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.json == text.to_dict(True)
 
 
 def test_created_text_can_be_fetched(client, bibliography):
