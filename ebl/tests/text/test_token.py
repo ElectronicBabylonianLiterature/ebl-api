@@ -4,7 +4,6 @@ from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
                             LanguageShift, LineContinuation, Side, Token)
-from ebl.text.erasure import Erasure
 
 TOKENS = [
     Token('...'),
@@ -117,16 +116,4 @@ def test_line_continuation():
     assert continuation.to_dict() == {
         'type': 'LineContinuation',
         'value': continuation.value
-    }
-
-
-def test_erasure():
-    value = '$(erasure)'
-    erasure = Erasure(value)
-
-    assert erasure.value == value
-    assert erasure.lemmatizable is False
-    assert erasure.to_dict() == {
-        'type': 'Erasure',
-        'value': erasure.value
     }

@@ -8,7 +8,6 @@ from ebl.text.line import TextLine
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
                             Token, Word)
-from ebl.text.erasure import Erasure
 
 
 def sequence(prefix, part, joiner, min_=None):
@@ -182,7 +181,6 @@ WORD = seq(
 LONE_DETERMINATIVE = determinative(
     VARIANT + (JOINER.many().concat() + VARIANT).many().concat()
 ).desc('lone determinative')
-ERASURE = string('$(erasure)').map(Erasure)
 LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
 
 TEXT_LINE = seq(
@@ -190,7 +188,6 @@ TEXT_LINE = seq(
     (
         TABULATION.map(Token) |
         COLUMN.map(Token) |
-        ERASURE |
         (DIVIDER << WORD_SEPARATOR_OR_EOL).map(Token) |
         COMMENTARY_PROTOCOL.map(Token) |
         DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
