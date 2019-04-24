@@ -130,13 +130,6 @@ class TextsResource:
 
     @falcon.before(require_scope, 'create:texts')
     @validate(TEXT_DTO_SCHEMA)
-    def on_put(self, req: falcon.Request, resp: falcon.Response) -> None:
-        text = parse_text(req.media)
-        self._corpus.create(text, req.context['user'])
-        resp.status = falcon.HTTP_CREATED
-
-    @falcon.before(require_scope, 'create:texts')
-    @validate(TEXT_DTO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         text = parse_text(req.media)
         self._corpus.create(text, req.context['user'])
