@@ -20,8 +20,8 @@ def allow_references(text, bibliography):
                 bibliography.create(reference.document, ANY_USER)
 
 
-def put_text(client, text):
-    put_result = client.simulate_put(
+def create_text(client, text):
+    put_result = client.simulate_post(
         f'/texts',
         body=json.dumps(text.to_dict())
     )
@@ -32,7 +32,7 @@ def put_text(client, text):
 def test_created_text_can_be_fetched(client, bibliography):
     text = TextFactory.build()
     allow_references(text, bibliography)
-    put_text(client, text)
+    create_text(client, text)
 
     get_result = client.simulate_get(f'/texts/{text.category}/{text.index}')
 
@@ -62,7 +62,7 @@ def test_invalid_index(client):
 def test_updating_text(client, bibliography):
     text = TextFactory.build()
     allow_references(text, bibliography)
-    put_text(client, text)
+    create_text(client, text)
     updated_text = attr.evolve(text, index=2, name='New Name')
 
     post_result = client.simulate_post(
@@ -98,7 +98,7 @@ def test_updating_text_not_found(client, bibliography):
 def test_updating_invalid_reference(client, bibliography):
     text = TextFactory.build()
     allow_references(text, bibliography)
-    put_text(client, text)
+    create_text(client, text)
     updated_text = TextFactory.build()
 
     post_result = client.simulate_post(
@@ -196,7 +196,7 @@ def test_update_text_invalid_entity(client,
                                     expected_status):
     text = TextFactory.build()
     allow_references(text, bibliography)
-    put_text(client, text)
+    create_text(client, text)
 
     post_result = client.simulate_post(
         f'/texts/{text.category}/{text.index}',
