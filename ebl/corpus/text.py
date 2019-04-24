@@ -196,9 +196,11 @@ ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
 
 def validate_manuscripts(instance_, attribute_, value):
     # pylint: disable=W0613
-    def not_unique(chained_collection):
+    def not_unique(entry_mapper):
         return (
-            chained_collection
+            pydash
+            .chain(value)
+            .map_(entry_mapper)
             .map_(lambda entry, _, entries: (entry, entries.count(entry)))
             .filter(lambda entry: entry[1] > 1)
             .map_(lambda entry: entry[0])
@@ -208,19 +210,11 @@ def validate_manuscripts(instance_, attribute_, value):
 
     errors = []
 
-    duplicate_ids = not_unique(
-        pydash
-        .chain(value)
-        .map_(lambda manuscript: manuscript.id)
-    )
+    duplicate_ids = not_unique(lambda manuscript: manuscript.id)
     if duplicate_ids:
         errors.append(f'Duplicate manuscript IDs: {duplicate_ids}.')
 
-    duplicate_sigla = not_unique(
-        pydash
-        .chain(value)
-        .map_(lambda manuscript: manuscript.siglum)
-    )
+    duplicate_sigla = not_unique(lambda manuscript: manuscript.siglum)
     if duplicate_sigla:
         errors.append(f'Duplicate sigla: {duplicate_sigla}.')
 
