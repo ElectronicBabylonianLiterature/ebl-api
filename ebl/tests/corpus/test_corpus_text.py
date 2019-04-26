@@ -2,7 +2,7 @@ import pytest
 
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptType, Period, PeriodModifier,
-                             Provenance, Stage, Text, TextId)
+                             Provenance, Stage, Text, TextId, Line)
 from ebl.tests.factories.bibliography import ReferenceFactory
 
 CATEGORY = 1
@@ -25,6 +25,8 @@ PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 NOTES = 'some notes'
 REFERENCES = (ReferenceFactory.build(), )
+LINE_NUMBER = '1.'
+LINE_RECONSTRUCTION = 'idealized text'
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
@@ -41,6 +43,8 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
             NOTES,
             REFERENCES
         ),
+    ), (
+        Line(LINE_NUMBER, LINE_RECONSTRUCTION),
     )),
 ))
 
@@ -74,6 +78,9 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
+    assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
+    assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
+    assert TEXT.chapters[0].lines[0].manuscripts == tuple()
 
 
 def test_giving_museum_number_and_accession_is_invalid():
@@ -150,6 +157,13 @@ def test_serializing_to_dict():
                             for reference in REFERENCES
                         ]
                     }
+                ],
+                'lines': [
+                    {
+                        'number': LINE_NUMBER,
+                        'reconstruction': LINE_RECONSTRUCTION,
+                        'manuscripts': []
+                    }
                 ]
             }
         ]
@@ -186,6 +200,13 @@ def test_serializing_to_dict_with_documents():
                             reference.to_dict(True)
                             for reference in REFERENCES
                         ]
+                    }
+                ],
+                'lines': [
+                    {
+                        'number': LINE_NUMBER,
+                        'reconstruction': LINE_RECONSTRUCTION,
+                        'manuscripts': []
                     }
                 ]
             }

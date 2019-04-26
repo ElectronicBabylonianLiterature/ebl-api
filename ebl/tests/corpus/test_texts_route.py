@@ -182,7 +182,8 @@ INVALID_MANUSCRIPTS = {
                     'notes': '',
                     'references': []
                 }
-            ]
+            ],
+            'lines': []
         }
     ]
 }

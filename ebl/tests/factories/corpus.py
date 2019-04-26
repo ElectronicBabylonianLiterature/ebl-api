@@ -4,7 +4,7 @@ import pydash
 
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptType, Period, PeriodModifier,
-                             Provenance, Stage, Text)
+                             Provenance, Stage, Text, Line)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 
@@ -29,6 +29,15 @@ class ManuscriptFactory(factory.Factory):
     ], TupleFactory)
 
 
+class LineFactory(factory.Factory):
+    class Meta:
+        model = Line
+
+    number = factory.Sequence(lambda n: f'{n}.')
+    reconstruction = factory.Faker('sentence')
+    manuscripts: tuple = tuple()
+
+
 class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
@@ -40,6 +49,9 @@ class ChapterFactory(factory.Factory):
     order = factory.Faker('pyint')
     manuscripts = factory.List([
         factory.SubFactory(ManuscriptFactory)
+    ], TupleFactory)
+    lines = factory.List([
+        factory.SubFactory(LineFactory)
     ], TupleFactory)
 
 

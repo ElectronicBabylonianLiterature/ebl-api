@@ -191,7 +191,30 @@ class Manuscript:
         )
 
 
-ChapterDict = Dict[str, Union[int, str, List[ManuscriptDict]]]
+LineDict = Dict[str, Union[str, List[dict]]]
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Line:
+    number: str
+    reconstruction: str = ''
+    manuscripts: tuple = tuple()
+
+    def to_dict(self) -> LineDict:
+        return {
+            'number': self.number,
+            'reconstruction': self.reconstruction,
+            'manuscripts': []
+        }
+
+    @staticmethod
+    def from_dict(data):
+        return Line(data['number'], data['reconstruction'])
+
+
+ChapterDict = Dict[str, Union[
+    int, str, List[ManuscriptDict], List[LineDict]
+]]
 
 
 def validate_manuscripts(instance_, attribute_, value):
@@ -233,6 +256,7 @@ class Chapter:
         default=attr.Factory(tuple),
         validator=validate_manuscripts
     )
+    lines: Tuple[Line, ...] = tuple()
 
     def to_dict(self, include_documents=False) -> ChapterDict:
         return {
@@ -244,7 +268,8 @@ class Chapter:
             'manuscripts': [
                 manuscript.to_dict(include_documents)
                 for manuscript in self.manuscripts  # pylint: disable=E1133
-            ]
+            ],
+            'lines': [line.to_dict() for line in self.lines]
         }
 
     @staticmethod
@@ -258,6 +283,10 @@ class Chapter:
             tuple(
                 Manuscript.from_dict(manuscript)
                 for manuscript in chapter['manuscripts']
+            ),
+            tuple(
+                Line.from_dict(line)
+                for line in chapter['lines']
             )
         )
 
