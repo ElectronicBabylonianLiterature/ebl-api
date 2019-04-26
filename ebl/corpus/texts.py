@@ -53,6 +53,25 @@ MANUSCRIPT_DTO_SCHEMA = {
 }
 
 
+LINE_DTO_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'number': {
+            'type': 'string',
+            'minLength': 2
+        },
+        'reconstruction': {
+            'type': 'string'
+        },
+        'manuscripts': {
+            'type': 'array',
+            'maxLength': 0
+        }
+    },
+    'required': ['number', 'reconstruction', 'manuscripts']
+}
+
+
 CHAPTER_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
@@ -77,9 +96,14 @@ CHAPTER_DTO_SCHEMA = {
         'manuscripts': {
             'type': 'array',
             'items': MANUSCRIPT_DTO_SCHEMA
+        },
+        'lines': {
+            'type': 'array',
+            'items': LINE_DTO_SCHEMA
         }
     },
-    'required': ['classification', 'stage', 'name', 'order', 'manuscripts']
+    'required': ['classification', 'stage', 'name', 'order', 'manuscripts',
+                 'lines']
 }
 
 
