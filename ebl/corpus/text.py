@@ -1,4 +1,5 @@
 import collections
+import re
 from enum import Enum
 from typing import Dict, List, Tuple, Union
 
@@ -194,9 +195,15 @@ class Manuscript:
 LineDict = Dict[str, Union[str, List[dict]]]
 
 
+def validate_line_number(_instance, _attribute, value):
+    if not re.fullmatch(r'[^ ]+\.', value):
+        raise ValueError(f'Line number "{value}" is not a sequence of '
+                         'non-space characters followed by a period.')
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
-    number: str
+    number: str = attr.ib(validator=validate_line_number)
     reconstruction: str = ''
     manuscripts: tuple = tuple()
 
@@ -217,8 +224,7 @@ ChapterDict = Dict[str, Union[
 ]]
 
 
-def validate_manuscripts(instance_, attribute_, value):
-    # pylint: disable=W0613
+def validate_manuscripts(_instance, _attribute, value):
     def not_unique(entry_mapper):
         return (
             pydash
