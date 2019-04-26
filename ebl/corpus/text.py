@@ -286,7 +286,7 @@ class Chapter:
             ),
             tuple(
                 Line.from_dict(line)
-                for line in chapter['lines']
+                for line in chapter.get('lines', [])
             )
         )
 
