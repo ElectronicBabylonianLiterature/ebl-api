@@ -18,11 +18,20 @@ class ColumnLabel:
     def from_label(column, flag=Status.NONE):
         return ColumnLabel(roman.fromRoman(column.upper()), flag)
 
+    def to_value(self) -> str:
+        roman_column = roman.toRoman(self.column).lower()
+        return f'{roman_column}{self.status.value}'
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class SurfaceLabel:
+    # pylint: disable=R0903
+
     surface: Surface
     status: Status = Status.NONE
+
+    def to_value(self) -> str:
+        return f'{self.surface.label}{self.status.value}'
 
 
 STATUS = char_from(''.join(

@@ -3,8 +3,7 @@ import pytest
 from ebl.text.atf import Surface, Status
 from ebl.text.labels import parse_label, ColumnLabel, SurfaceLabel
 
-
-@pytest.mark.parametrize('input,expected', [
+LABELS = [
     ('o', SurfaceLabel(Surface.OBVERSE)),
     ('r', SurfaceLabel(Surface.REVERSE)),
     ('b.e.', SurfaceLabel(Surface.BOTTOM)),
@@ -29,7 +28,15 @@ from ebl.text.labels import parse_label, ColumnLabel, SurfaceLabel
     ("i'", ColumnLabel(1, Status.PRIME)),
     ('ii?', ColumnLabel(2, Status.UNCERTAIN)),
     ('iii!', ColumnLabel(3, Status.CORRECTION)),
-    ('iv*', ColumnLabel(4, Status.COLLATION)),
-])
-def test_parse_label(input, expected):
-    assert parse_label(input) == expected
+    ('iv*', ColumnLabel(4, Status.COLLATION))
+]
+
+
+@pytest.mark.parametrize('label,expected', LABELS)
+def test_parse_label(label, expected):
+    assert parse_label(label) == expected
+
+
+@pytest.mark.parametrize('label,model', LABELS)
+def test_label_to_value(label, model):
+    assert model.to_value() == label
