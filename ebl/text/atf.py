@@ -93,6 +93,10 @@ def validate_atf(text):
 
 
 class Surface(Enum):
+    """ See "Surface" in
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html
+    """
+
     OBVERSE = ('@obverse', 'o')
     REVERSE = ('@reverse', 'r')
     BOTTOM = ('@bottom', 'b.e.')
@@ -113,7 +117,11 @@ class Surface(Enum):
         ][0]
 
 
-class LabelFlag(Enum):
+class Status(Enum):
+    """ See "Status" in
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
+    """
+
     NONE = ''
     PRIME = "'"
     UNCERTAIN = '?'

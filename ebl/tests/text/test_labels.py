@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.text.atf import Surface, LabelFlag
+from ebl.text.atf import Surface, Status
 from ebl.text.labels import parse_label, ColumnLabel, SurfaceLabel
 
 
@@ -12,10 +12,10 @@ from ebl.text.labels import parse_label, ColumnLabel, SurfaceLabel
     ('l.e.', SurfaceLabel(Surface.LEFT)),
     ('r.e.', SurfaceLabel(Surface.RIGHT)),
     ('t.e.', SurfaceLabel(Surface.TOP)),
-    ("o'", SurfaceLabel(Surface.OBVERSE, LabelFlag.PRIME)),
-    ('r?', SurfaceLabel(Surface.REVERSE, LabelFlag.UNCERTAIN)),
-    ('b.e.!', SurfaceLabel(Surface.BOTTOM, LabelFlag.CORRECTION)),
-    ('e.*', SurfaceLabel(Surface.EDGE, LabelFlag.COLLATION)),
+    ("o'", SurfaceLabel(Surface.OBVERSE, Status.PRIME)),
+    ('r?', SurfaceLabel(Surface.REVERSE, Status.UNCERTAIN)),
+    ('b.e.!', SurfaceLabel(Surface.BOTTOM, Status.CORRECTION)),
+    ('e.*', SurfaceLabel(Surface.EDGE, Status.COLLATION)),
     ('i', ColumnLabel(1)),
     ('ii', ColumnLabel(2)),
     ('iii', ColumnLabel(3)),
@@ -26,10 +26,10 @@ from ebl.text.labels import parse_label, ColumnLabel, SurfaceLabel
     ('viii', ColumnLabel(8)),
     ('ix', ColumnLabel(9)),
     ('x', ColumnLabel(10)),
-    ("i'", ColumnLabel(1, LabelFlag.PRIME)),
-    ('ii?', ColumnLabel(2, LabelFlag.UNCERTAIN)),
-    ('iii!', ColumnLabel(3, LabelFlag.CORRECTION)),
-    ('iv*', ColumnLabel(4, LabelFlag.COLLATION)),
+    ("i'", ColumnLabel(1, Status.PRIME)),
+    ('ii?', ColumnLabel(2, Status.UNCERTAIN)),
+    ('iii!', ColumnLabel(3, Status.CORRECTION)),
+    ('iv*', ColumnLabel(4, Status.COLLATION)),
 ])
 def test_parse_label(input, expected):
     assert parse_label(input) == expected
