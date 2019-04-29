@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 import attr
 from parsy import (regex, char_from, string_from, seq)
 import roman
@@ -6,32 +8,54 @@ from ebl.text.atf import Surface, Status
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class ColumnLabel:
+class Label(ABC):
+    status: Status
+
+    @property
+    @abstractmethod
+    def _label(self) -> str:
+        ...
+
+    @staticmethod
+    def parse(string: str) -> 'Label':
+        return LABEL.parse(string)
+
+    def to_value(self) -> str:
+        return f'{self._label}{self.status.value}'
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ColumnLabel(Label):
     """ See "Column" in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html
     """
 
     column: int
-    status: Status = Status.NONE
 
     @staticmethod
-    def from_label(column, flag=Status.NONE):
-        return ColumnLabel(roman.fromRoman(column.upper()), flag)
+    def from_label(column: str, flag: Status = Status.NONE) -> 'ColumnLabel':
+        return ColumnLabel(flag, roman.fromRoman(column.upper()))
 
-    def to_value(self) -> str:
-        roman_column = roman.toRoman(self.column).lower()
-        return f'{roman_column}{self.status.value}'
+    @property
+    def _label(self) -> str:
+        return roman.toRoman(self.column).lower()
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class SurfaceLabel:
+class SurfaceLabel(Label):
     # pylint: disable=R0903
 
     surface: Surface
-    status: Status = Status.NONE
 
-    def to_value(self) -> str:
-        return f'{self.surface.label}{self.status.value}'
+    @staticmethod
+    def from_label(
+            surface: Surface, flag: Status = Status.NONE
+    ) -> 'SurfaceLabel':
+        return SurfaceLabel(flag, surface)
+
+    @property
+    def _label(self) -> str:
+        return self.surface.label
 
 
 STATUS = char_from(''.join(
@@ -43,9 +67,5 @@ SURFACE = string_from(
     *[surface.label for surface in Surface]
 ).map(Surface.from_label).desc('surface label')
 COLUMN = regex(r'[ivx]+').desc('column label')
-LABEL = (seq(SURFACE, STATUS).combine(SurfaceLabel) |
+LABEL = (seq(SURFACE, STATUS).combine(SurfaceLabel.from_label) |
          seq(COLUMN, STATUS).combine(ColumnLabel.from_label))
-
-
-def parse_label(string: str):
-    return LABEL.parse(string)
