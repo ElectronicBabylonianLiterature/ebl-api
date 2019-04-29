@@ -1,9 +1,9 @@
 import re
 
 import pydash
-from parsy import (ParseError, regex, seq)
+from parsy import ParseError, regex, seq
 
-import ebl.text.atf
+from ebl.text.atf import AtfSyntaxError
 from ebl.text.line import ControlLine, EmptyLine
 from ebl.text.text import Text
 from ebl.text.text_parser import TEXT_LINE
@@ -36,4 +36,4 @@ def parse_atf(atf: str):
         return ATF.parse(atf)
     except ParseError as error:
         line_number = int(error.line_info().split(':')[0]) + 1
-        raise ebl.text.atf.AtfSyntaxError(line_number)
+        raise AtfSyntaxError(line_number)

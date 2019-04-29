@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-falcon = "*"
+falcon = "~=1.4"
 falcon-auth = "*"
 cryptography = "*"
 pymongo = "*"
@@ -19,6 +19,7 @@ pyoracc = "*"
 parsy = "*"
 attrs = "*"
 sentry-sdk = "*"
+roman = "*"
 
 [dev-packages]
 pytest = "*"

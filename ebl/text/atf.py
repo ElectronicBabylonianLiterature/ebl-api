@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import NewType
 
 from pyoracc.atf.common.atffile import AtfFile
@@ -89,3 +90,32 @@ def validate_atf(text):
             AttributeError,
             UnicodeDecodeError) as error:
         raise AtfError(error)
+
+
+class Surface(Enum):
+    OBVERSE = ('@obverse', 'o')
+    REVERSE = ('@reverse', 'r')
+    BOTTOM = ('@bottom', 'b.e.')
+    EDGE = ('@edge', 'e.')
+    LEFT = ('@left', 'l.e.')
+    RIGHT = ('@right', 'r.e.')
+    TOP = ('@top', 't.e.')
+
+    def __init__(self, atf, label):
+        self.atf = atf
+        self.label = label
+
+    @staticmethod
+    def from_label(label):
+        return [
+            enum for enum in Surface
+            if enum.label == label
+        ][0]
+
+
+class LabelFlag(Enum):
+    NONE = ''
+    PRIME = "'"
+    UNCERTAIN = '?'
+    CORRECTION = '!'
+    COLLATION = '*'
