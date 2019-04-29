@@ -43,7 +43,6 @@ class ColumnLabel(Label):
 
 @attr.s(auto_attribs=True, frozen=True)
 class SurfaceLabel(Label):
-    # pylint: disable=R0903
 
     surface: Surface
 
