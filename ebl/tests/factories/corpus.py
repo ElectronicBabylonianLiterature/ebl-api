@@ -1,12 +1,18 @@
 # pylint: disable=R0903
+from typing import Tuple
+
 import factory.fuzzy
 import pydash
 
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptType, Period, PeriodModifier,
-                             Provenance, Stage, Text, Line)
+                             Provenance, Stage, Text, Line, ManuscriptLine)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
+from ebl.text.atf import Surface, Status
+from ebl.text.labels import SurfaceLabel, ColumnLabel
+from ebl.text.line import TextLine
+from ebl.text.token import Word
 
 
 class ManuscriptFactory(factory.Factory):
@@ -29,13 +35,29 @@ class ManuscriptFactory(factory.Factory):
     ], TupleFactory)
 
 
+class ManuscriptLineFactory(factory.Factory):
+    class Meta:
+        model = ManuscriptLine
+
+    manuscript_id = factory.Sequence(lambda n: n)
+    labels = (
+        SurfaceLabel.from_label(Surface.OBVERSE),
+        ColumnLabel.from_label('iii', Status.PRIME)
+    )
+    line = TextLine('1.', (
+        Word('-ku]-nu-ši'),
+    ))
+
+
 class LineFactory(factory.Factory):
     class Meta:
         model = Line
 
     number = factory.Sequence(lambda n: f'{n}.')
     reconstruction = factory.Faker('sentence')
-    manuscripts: tuple = tuple()
+    manuscripts: Tuple[ManuscriptLine, ...] = factory.List([
+        factory.SubFactory(ManuscriptLineFactory)
+    ], TupleFactory)
 
 
 class ChapterFactory(factory.Factory):

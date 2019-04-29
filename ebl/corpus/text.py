@@ -7,6 +7,9 @@ import attr
 import pydash
 
 from ebl.bibliography.reference import Reference
+from ebl.text.labels import Label
+from ebl.text.line import TextLine
+from ebl.text.text import create_tokens
 
 
 class Classification(Enum):
@@ -192,7 +195,35 @@ class Manuscript:
         )
 
 
-LineDict = Dict[str, Union[str, List[dict]]]
+ManuscriptLineDict = Dict[str, Union[int, List[str], dict]]
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ManuscriptLine:
+    manuscript_id: int
+    labels: Tuple[Label, ...]
+    line: TextLine
+
+    def to_dict(self) -> ManuscriptLineDict:
+        return {
+            'manuscriptId': self.manuscript_id,
+            'labels': [label.to_value() for label in self.labels],
+            'line': self.line.to_dict()
+        }
+
+    @staticmethod
+    def from_dict(data):
+        return ManuscriptLine(
+            data['manuscriptId'],
+            tuple(Label.parse(label) for label in data['labels']),
+            TextLine(
+                data['line']['prefix'],
+                create_tokens(data['line']['content'])
+            )
+        )
+
+
+LineDict = Dict[str, Union[str, List[ManuscriptLineDict]]]
 
 
 def validate_line_number(_instance, _attribute, value):
@@ -205,18 +236,20 @@ def validate_line_number(_instance, _attribute, value):
 class Line:
     number: str = attr.ib(validator=validate_line_number)
     reconstruction: str = ''
-    manuscripts: tuple = tuple()
+    manuscripts: Tuple[ManuscriptLine, ...] = tuple()
 
     def to_dict(self) -> LineDict:
         return {
             'number': self.number,
             'reconstruction': self.reconstruction,
-            'manuscripts': []
+            'manuscripts': [line.to_dict() for line in self.manuscripts]
         }
 
     @staticmethod
     def from_dict(data):
-        return Line(data['number'], data['reconstruction'])
+        return Line(data['number'], data['reconstruction'], tuple(
+            ManuscriptLine.from_dict(line) for line in data['manuscripts']
+        ))
 
 
 ChapterDict = Dict[str, Union[

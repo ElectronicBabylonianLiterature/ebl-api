@@ -13,6 +13,40 @@ from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation)
 
 
+def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
+    token_factories: Mapping[str, Callable[[dict], Token]] = {
+        'Token': lambda data: Token(
+            data['value']
+        ),
+        'Word': lambda data: Word(
+            data['value'],
+            Language[data['language']],
+            data['normalized'],
+            tuple(data['uniqueLemma']),
+        ),
+        'LanguageShift': lambda data: LanguageShift(
+            data['value']
+        ),
+        'LoneDeterminative': lambda data: LoneDeterminative(
+            data['value'],
+            Language[data['language']],
+            data['normalized'],
+            tuple(data['uniqueLemma']),
+            Partial(*data['partial'])
+        ),
+        'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
+            data['value']
+        ),
+        'LineContinuation': lambda data: LineContinuation(data['value'])
+    }
+
+    return tuple(
+        token_factories[token['type']](token)
+        for token
+        in content
+    )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
     lines: Tuple[Line, ...] = tuple()
@@ -74,38 +108,6 @@ class Text:
 
     @staticmethod
     def from_dict(data: dict) -> 'Text':
-        token_factories: Mapping[str, Callable[[dict], Token]] = {
-            'Token': lambda data: Token(
-                data['value']
-            ),
-            'Word': lambda data: Word(
-                data['value'],
-                Language[data['language']],
-                data['normalized'],
-                tuple(data['uniqueLemma']),
-            ),
-            'LanguageShift': lambda data: LanguageShift(
-                data['value']
-            ),
-            'LoneDeterminative': lambda data: LoneDeterminative(
-                data['value'],
-                Language[data['language']],
-                data['normalized'],
-                tuple(data['uniqueLemma']),
-                Partial(*data['partial'])
-            ),
-            'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
-                data['value']
-            ),
-            'LineContinuation': lambda data: LineContinuation(data['value'])
-        }
-
-        def create_tokens(content: List[dict]):
-            return tuple(
-                token_factories[token['type']](token)
-                for token
-                in content
-            )
         line_factories: Mapping[str, Callable[[str, List[dict]], Line]] = {
             'ControlLine':
                 lambda prefix, content: ControlLine(

@@ -2,8 +2,13 @@ import pytest
 
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptType, Period, PeriodModifier,
-                             Provenance, Stage, Text, TextId, Line)
+                             Provenance, Stage, Text, TextId, Line,
+                             ManuscriptLine)
 from ebl.tests.factories.bibliography import ReferenceFactory
+from ebl.text.atf import Surface
+from ebl.text.labels import SurfaceLabel
+from ebl.text.line import TextLine
+from ebl.text.token import Word
 
 CATEGORY = 1
 INDEX = 2
@@ -27,6 +32,8 @@ NOTES = 'some notes'
 REFERENCES = (ReferenceFactory.build(), )
 LINE_NUMBER = '1.'
 LINE_RECONSTRUCTION = 'idealized text'
+LABELS = (SurfaceLabel.from_label(Surface.OBVERSE), )
+MANUSCRIPT_TEXT = TextLine('1.', (Word('-ku]-nu-ši'),))
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
@@ -44,7 +51,9 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
             REFERENCES
         ),
     ), (
-        Line(LINE_NUMBER, LINE_RECONSTRUCTION),
+        Line(LINE_NUMBER, LINE_RECONSTRUCTION, (
+            ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+        )),
     )),
 ))
 
@@ -80,7 +89,10 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
-    assert TEXT.chapters[0].lines[0].manuscripts == tuple()
+    assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id ==\
+        MANUSCRIPT_ID
+    assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
+    assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
 
 
 def test_giving_museum_number_and_accession_is_invalid():
@@ -170,7 +182,11 @@ def test_serializing_to_dict():
                     {
                         'number': LINE_NUMBER,
                         'reconstruction': LINE_RECONSTRUCTION,
-                        'manuscripts': []
+                        'manuscripts': [{
+                            'manuscriptId': MANUSCRIPT_ID,
+                            'labels': [label.to_value() for label in LABELS],
+                            'line': MANUSCRIPT_TEXT.to_dict()
+                        }]
                     }
                 ]
             }
@@ -214,7 +230,11 @@ def test_serializing_to_dict_with_documents():
                     {
                         'number': LINE_NUMBER,
                         'reconstruction': LINE_RECONSTRUCTION,
-                        'manuscripts': []
+                        'manuscripts': [{
+                            'manuscriptId': MANUSCRIPT_ID,
+                            'labels': [label.to_value() for label in LABELS],
+                            'line': MANUSCRIPT_TEXT.to_dict()
+                        }]
                     }
                 ]
             }
