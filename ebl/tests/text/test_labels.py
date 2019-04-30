@@ -2,6 +2,7 @@ import pytest
 
 from ebl.text.atf import Surface, Status
 from ebl.text.labels import Label, ColumnLabel, SurfaceLabel
+from text.labels import LabelVisitor
 
 LABELS = [
     ('o', SurfaceLabel(tuple(), Surface.OBVERSE)),
@@ -33,6 +34,20 @@ LABELS = [
     ('iv*', ColumnLabel((Status.COLLATION, ), 4)),
     ("v'?", ColumnLabel((Status.PRIME, Status.UNCERTAIN), 5)),
 ]
+
+
+def test_duplicate_status_is_invalid():
+    class TestLabel(Label):
+
+        def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+            return visitor
+
+        @property
+        def _label(self) -> str:
+            return ''
+
+    with pytest.raises(ValueError):
+        TestLabel((Status.PRIME, Status.PRIME))
 
 
 @pytest.mark.parametrize('label,expected', LABELS)

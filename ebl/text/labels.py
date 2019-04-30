@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import Counter
 from typing import Tuple, Iterable
 
 import attr
@@ -20,7 +21,12 @@ class LabelVisitor(ABC):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Label(ABC):
-    status: Tuple[Status, ...]
+    status: Tuple[Status, ...] = attr.ib()
+
+    @status.validator
+    def validate_status(self, _, value):
+        if any(count > 1 for _, count in Counter(value).items()):
+            raise ValueError(f'Duplicate status in "{value}".')
 
     @property
     @abstractmethod

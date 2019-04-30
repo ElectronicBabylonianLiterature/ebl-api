@@ -42,7 +42,7 @@ class ManuscriptLineFactory(factory.Factory):
     manuscript_id = factory.Sequence(lambda n: n)
     labels = (
         SurfaceLabel.from_label(Surface.OBVERSE),
-        ColumnLabel.from_label('iii', [Status.CORRECTION, Status.CORRECTION])
+        ColumnLabel.from_label('iii', [Status.COLLATION, Status.CORRECTION])
     )
     line = TextLine('1.', (
         Word('-ku]-nu-ši'),
