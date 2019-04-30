@@ -15,7 +15,7 @@ MANUSCRIPT_DTO_SCHEMA = {
     'properties': {
         'id': {
             'type': 'integer',
-            'minimum': 0
+            'minimum': 1
         },
         'siglumDisambiguator': {
             'type': 'string'
@@ -61,7 +61,7 @@ MANUSCRIPT_LINE_DTO_SCHEMA = {
     'properties': {
         'manuscriptId': {
             'type': 'integer',
-            'minimum': 0
+            'minimum': 1
         },
         'labels': {
             'type': 'array',
