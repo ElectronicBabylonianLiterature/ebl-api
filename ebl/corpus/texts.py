@@ -1,11 +1,14 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
+import pydash
 
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
                              PeriodModifier, Provenance, Stage, Text, TextId)
 from ebl.errors import DataError, NotFoundError
 from ebl.require_scope import require_scope
+from ebl.text.text_parser import TEXT_LINE
+
 
 MANUSCRIPT_DTO_SCHEMA = {
     'type': 'object',
@@ -53,19 +56,38 @@ MANUSCRIPT_DTO_SCHEMA = {
 }
 
 
+MANUSCRIPT_LINE_DTO_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'manuscriptId': {
+            'type': 'integer',
+            'minimum': 0
+        },
+        'labels': {
+            'type': 'array',
+            'items': {'type': 'string'},
+            'maxLength': 2
+        },
+        'atf': {
+            'type': 'string'
+        }
+    },
+    'required': ['manuscriptId', 'labels', 'atf']
+}
+
+
 LINE_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
         'number': {
-            'type': 'string',
-            'minLength': 2
+            'type': 'string'
         },
         'reconstruction': {
             'type': 'string'
         },
         'manuscripts': {
             'type': 'array',
-            'maxLength': 0
+            'items': MANUSCRIPT_LINE_DTO_SCHEMA,
         }
     },
     'required': ['number', 'reconstruction', 'manuscripts']
@@ -140,10 +162,53 @@ TEXT_DTO_SCHEMA = {
 
 
 def parse_text(media: dict) -> Text:
+    parsed_media = {
+        **media,
+        'chapters': [
+            {
+                **chapter,
+                'lines': [
+                    {
+                        **line,
+                        'manuscripts': [
+                            pydash.omit({
+                                **manuscript,
+                                'line': (TEXT_LINE
+                                         .parse(manuscript['atf'])
+                                         .to_dict())
+                            }, 'atf') for manuscript in line['manuscripts']
+                        ]
+                    } for line in chapter['lines']
+                ]
+            } for chapter in media['chapters']
+        ]
+    }
     try:
-        return Text.from_dict(media)
+        return Text.from_dict(parsed_media)
     except ValueError as error:
         raise DataError(error)
+
+
+def to_dto(text):
+    return {
+        **text.to_dict(True),
+        'chapters': [
+            {
+                **chapter.to_dict(True),
+                'lines': [
+                    {
+                        **line.to_dict(),
+                        'manuscripts': [
+                            pydash.omit({
+                                **manuscript.to_dict(),
+                                'atf': manuscript.line.atf
+                            }, 'line') for manuscript in line.manuscripts
+                        ]
+                    } for line in chapter.lines
+                ]
+            } for chapter in text.chapters
+        ]
+    }
 
 
 def create_text_id(category: str, index: str) -> TextId:
@@ -163,7 +228,7 @@ class TextsResource:
         self._corpus.create(text, req.context['user'])
         resp.status = falcon.HTTP_CREATED
         resp.location = f'/texts/{text.category}/{text.index}'
-        resp.media = self._corpus.find(text.id).to_dict(True)
+        resp.media = to_dto(self._corpus.find(text.id))
 
 
 class TextResource:
@@ -177,7 +242,7 @@ class TextResource:
     ) -> None:
         try:
             text = self._corpus.find(create_text_id(category, index))
-            resp.media = text.to_dict(True)
+            resp.media = to_dto(text)
         except ValueError:
             raise NotFoundError(f'{category}.{index}')
 
@@ -196,6 +261,6 @@ class TextResource:
                 req.context['user']
             )
             updated_text = self._corpus.find(text.id)
-            resp.media = updated_text.to_dict(True)
+            resp.media = to_dto(updated_text)
         except ValueError:
             raise NotFoundError(f'{category}.{index}')
