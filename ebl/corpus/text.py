@@ -7,7 +7,7 @@ import attr
 import pydash
 
 from ebl.bibliography.reference import Reference
-from ebl.text.labels import Label
+from ebl.text.labels import Label, LabelVisitor, SurfaceLabel, ColumnLabel
 from ebl.text.line import TextLine
 from ebl.text.text import create_tokens
 
@@ -198,13 +198,44 @@ class Manuscript:
 ManuscriptLineDict = Dict[str, Union[int, List[str], dict]]
 
 
+class LabelValidator(LabelVisitor):
+    def __init__(self):
+        self.has_surface = False
+        self.has_column = False
+        self.is_valid = True
+
+    def visit_surface_label(self, label: SurfaceLabel) -> 'LabelValidator':
+        if self.has_surface or self.has_column:
+            self.is_valid = False
+        self.has_surface = True
+        return self
+
+    def visit_column_label(self, label: ColumnLabel) -> 'LabelValidator':
+        if self.has_column:
+            self.is_valid = False
+        self.has_column = True
+        return self
+
+
+def validate_labels(_instance, _attribute, value: Tuple[Label, ...]) -> None:
+    validator = LabelValidator()
+    for label in value:
+        label.accept(validator)
+
+    if not validator.is_valid:
+        raise ValueError(
+            f'Invalid labels "{[value.to_value() for value in value]}".'
+        )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class ManuscriptLine:
     manuscript_id: int
-    labels: Tuple[Label, ...]
+    labels: Tuple[Label, ...] = attr.ib(validator=validate_labels)
     line: TextLine
 
     def to_dict(self) -> ManuscriptLineDict:
+        # pylint: disable=E1133
         return {
             'manuscriptId': self.manuscript_id,
             'labels': [label.to_value() for label in self.labels],

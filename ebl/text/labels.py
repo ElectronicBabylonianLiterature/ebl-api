@@ -7,6 +7,16 @@ import roman
 from ebl.text.atf import Surface, Status
 
 
+class LabelVisitor(ABC):
+    @abstractmethod
+    def visit_surface_label(self, label: 'SurfaceLabel') -> 'LabelVisitor':
+        ...
+
+    @abstractmethod
+    def visit_column_label(self, label: 'ColumnLabel') -> 'LabelVisitor':
+        ...
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Label(ABC):
     status: Status
@@ -14,6 +24,10 @@ class Label(ABC):
     @property
     @abstractmethod
     def _label(self) -> str:
+        ...
+
+    @abstractmethod
+    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         ...
 
     @staticmethod
@@ -40,6 +54,9 @@ class ColumnLabel(Label):
     def _label(self) -> str:
         return roman.toRoman(self.column).lower()
 
+    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+        return visitor.visit_column_label(self)
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class SurfaceLabel(Label):
@@ -55,6 +72,9 @@ class SurfaceLabel(Label):
     @property
     def _label(self) -> str:
         return self.surface.label
+
+    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+        return visitor.visit_surface_label(self)
 
 
 STATUS = char_from(''.join(

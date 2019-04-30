@@ -211,7 +211,10 @@ def to_dto(text):
 
 
 def create_text_id(category: str, index: str) -> TextId:
-    return TextId(int(category), int(index))
+    try:
+        return TextId(int(category), int(index))
+    except ValueError:
+        raise NotFoundError(f'{category}.{index}')
 
 
 @falcon.before(require_scope, 'create:texts')
@@ -239,11 +242,8 @@ class TextResource:
     def on_get(
             self, _, resp: falcon.Response, category: str, index: str
     ) -> None:
-        try:
-            text = self._corpus.find(create_text_id(category, index))
-            resp.media = to_dto(text)
-        except ValueError:
-            raise NotFoundError(f'{category}.{index}')
+        text = self._corpus.find(create_text_id(category, index))
+        resp.media = to_dto(text)
 
     @falcon.before(require_scope, 'write:texts')
     @validate(TEXT_DTO_SCHEMA)
@@ -253,13 +253,10 @@ class TextResource:
                 category: str,
                 index: str) -> None:
         text = parse_text(req.media)
-        try:
-            self._corpus.update(
-                create_text_id(category, index),
-                text,
-                req.context['user']
-            )
-            updated_text = self._corpus.find(text.id)
-            resp.media = to_dto(updated_text)
-        except ValueError:
-            raise NotFoundError(f'{category}.{index}')
+        self._corpus.update(
+            create_text_id(category, index),
+            text,
+            req.context['user']
+        )
+        updated_text = self._corpus.find(text.id)
+        resp.media = to_dto(updated_text)

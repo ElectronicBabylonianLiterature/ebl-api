@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import pytest
 
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
@@ -6,7 +8,7 @@ from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptLine)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
-from ebl.text.labels import SurfaceLabel
+from ebl.text.labels import SurfaceLabel, ColumnLabel, Label
 from ebl.text.line import TextLine
 from ebl.text.token import Word
 
@@ -144,6 +146,23 @@ def test_duplicate_sigla_are_invalid():
                 type=TYPE
             ),
         ))
+
+
+@pytest.mark.parametrize('labels', [
+    (ColumnLabel.from_label('i'),
+     ColumnLabel.from_label('ii')),
+    (SurfaceLabel.from_label(Surface.OBVERSE),
+     SurfaceLabel.from_label(Surface.REVERSE)),
+    (ColumnLabel.from_label('i'),
+     SurfaceLabel.from_label(Surface.REVERSE))
+])
+def test_invalid_labels(labels: Tuple[Label, ...]):
+    with pytest.raises(ValueError):
+        ManuscriptLine(
+            manuscript_id=1,
+            labels=labels,
+            line=TextLine()
+        )
 
 
 def test_serializing_to_dict():
