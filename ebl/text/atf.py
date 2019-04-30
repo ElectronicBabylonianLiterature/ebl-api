@@ -122,7 +122,6 @@ class Status(Enum):
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
     """
 
-    NONE = ''
     PRIME = "'"
     UNCERTAIN = '?'
     CORRECTION = '!'

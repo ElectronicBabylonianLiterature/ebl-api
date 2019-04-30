@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple, Iterable
 
 import attr
 from parsy import (regex, char_from, string_from, seq)
@@ -19,7 +20,7 @@ class LabelVisitor(ABC):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Label(ABC):
-    status: Status
+    status: Tuple[Status, ...]
 
     @property
     @abstractmethod
@@ -35,7 +36,8 @@ class Label(ABC):
         return LABEL.parse(string)
 
     def to_value(self) -> str:
-        return f'{self._label}{self.status.value}'
+        status_value = ''.join([status.value for status in self.status])
+        return f'{self._label}{status_value}'
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -47,8 +49,9 @@ class ColumnLabel(Label):
     column: int
 
     @staticmethod
-    def from_label(column: str, flag: Status = Status.NONE) -> 'ColumnLabel':
-        return ColumnLabel(flag, roman.fromRoman(column.upper()))
+    def from_label(column: str,
+                   status: Iterable[Status] = tuple()) -> 'ColumnLabel':
+        return ColumnLabel(tuple(status), roman.fromRoman(column.upper()))
 
     @property
     def _label(self) -> str:
@@ -64,10 +67,9 @@ class SurfaceLabel(Label):
     surface: Surface
 
     @staticmethod
-    def from_label(
-            surface: Surface, flag: Status = Status.NONE
-    ) -> 'SurfaceLabel':
-        return SurfaceLabel(flag, surface)
+    def from_label(surface: Surface,
+                   status: Iterable[Status] = tuple()) -> 'SurfaceLabel':
+        return SurfaceLabel(tuple(status), surface)
 
     @property
     def _label(self) -> str:
@@ -77,14 +79,12 @@ class SurfaceLabel(Label):
         return visitor.visit_surface_label(self)
 
 
-STATUS = char_from(''.join(
-    [status.value for status in Status if status is not Status.NONE]
-)).optional().map(
-    lambda flag: Status(flag) if flag else Status.NONE
-).desc('label flag')
+STATUS = char_from(
+    ''.join([status.value for status in Status])
+).map(Status).desc('label status')
 SURFACE = string_from(
     *[surface.label for surface in Surface]
 ).map(Surface.from_label).desc('surface label')
 COLUMN = regex(r'[ivx]+').desc('column label')
-LABEL = (seq(SURFACE, STATUS).combine(SurfaceLabel.from_label) |
-         seq(COLUMN, STATUS).combine(ColumnLabel.from_label))
+LABEL = (seq(SURFACE, STATUS.many()).combine(SurfaceLabel.from_label) |
+         seq(COLUMN, STATUS.many()).combine(ColumnLabel.from_label))
