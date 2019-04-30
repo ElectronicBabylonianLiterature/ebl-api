@@ -7,7 +7,8 @@ import attr
 import pydash
 
 from ebl.bibliography.reference import Reference
-from ebl.text.labels import Label, LabelVisitor, SurfaceLabel, ColumnLabel
+from ebl.text.labels import Label, LabelVisitor, SurfaceLabel, ColumnLabel, \
+    LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.text import create_tokens
 
@@ -214,6 +215,11 @@ class LabelValidator(LabelVisitor):
         if self.has_column:
             self.is_valid = False
         self.has_column = True
+        return self
+
+    def visit_line_number_label(self,
+                                label: LineNumberLabel) -> 'LabelValidator':
+        self.is_valid = False
         return self
 
 

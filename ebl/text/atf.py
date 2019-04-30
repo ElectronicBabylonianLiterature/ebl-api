@@ -110,10 +110,17 @@ class Surface(Enum):
         self.label = label
 
     @staticmethod
-    def from_label(label):
+    def from_label(label: str) -> 'Surface':
         return [
             enum for enum in Surface
             if enum.label == label
+        ][0]
+
+    @staticmethod
+    def from_atf(atf: str) -> 'Surface':
+        return [
+            enum for enum in Surface
+            if enum.atf == atf
         ][0]
 
 

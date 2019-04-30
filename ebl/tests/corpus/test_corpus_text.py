@@ -8,7 +8,7 @@ from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptLine)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
-from ebl.text.labels import SurfaceLabel, ColumnLabel, Label
+from ebl.text.labels import SurfaceLabel, ColumnLabel, Label, LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.token import Word
 
@@ -154,7 +154,8 @@ def test_duplicate_sigla_are_invalid():
     (SurfaceLabel.from_label(Surface.OBVERSE),
      SurfaceLabel.from_label(Surface.REVERSE)),
     (ColumnLabel.from_label('i'),
-     SurfaceLabel.from_label(Surface.REVERSE))
+     SurfaceLabel.from_label(Surface.REVERSE)),
+    (LineNumberLabel('1'),)
 ])
 def test_invalid_labels(labels: Tuple[Label, ...]):
     with pytest.raises(ValueError):

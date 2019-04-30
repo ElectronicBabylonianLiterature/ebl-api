@@ -1,60 +1,78 @@
 import pytest
 
 from ebl.text.atf import Surface, Status
-from ebl.text.labels import Label, ColumnLabel, SurfaceLabel
-from text.labels import LabelVisitor
+from ebl.text.labels import (Label, ColumnLabel, SurfaceLabel, LineNumberLabel,
+                             LabelVisitor)
+
 
 LABELS = [
-    ('o', SurfaceLabel(tuple(), Surface.OBVERSE)),
-    ('r', SurfaceLabel(tuple(), Surface.REVERSE)),
-    ('b.e.', SurfaceLabel(tuple(), Surface.BOTTOM)),
-    ('e.', SurfaceLabel(tuple(), Surface.EDGE)),
-    ('l.e.', SurfaceLabel(tuple(), Surface.LEFT)),
-    ('r.e.', SurfaceLabel(tuple(), Surface.RIGHT)),
-    ('t.e.', SurfaceLabel(tuple(), Surface.TOP)),
-    ("o'", SurfaceLabel((Status.PRIME, ), Surface.OBVERSE)),
-    ('r?', SurfaceLabel((Status.UNCERTAIN, ), Surface.REVERSE)),
-    ('b.e.!', SurfaceLabel((Status.CORRECTION, ), Surface.BOTTOM)),
-    ('e.*', SurfaceLabel((Status.COLLATION, ), Surface.EDGE)),
-    ('l.e.*!',
+    ('o', '@obverse', SurfaceLabel(tuple(), Surface.OBVERSE)),
+    ('r', '@reverse', SurfaceLabel(tuple(), Surface.REVERSE)),
+    ('b.e.', '@bottom', SurfaceLabel(tuple(), Surface.BOTTOM)),
+    ('e.', '@edge', SurfaceLabel(tuple(), Surface.EDGE)),
+    ('l.e.', '@left', SurfaceLabel(tuple(), Surface.LEFT)),
+    ('r.e.', '@right', SurfaceLabel(tuple(), Surface.RIGHT)),
+    ('t.e.', '@top', SurfaceLabel(tuple(), Surface.TOP)),
+    ("o'", "@obverse'", SurfaceLabel((Status.PRIME, ), Surface.OBVERSE)),
+    ('r?', '@reverse?', SurfaceLabel((Status.UNCERTAIN, ), Surface.REVERSE)),
+    ('b.e.!', '@bottom!', SurfaceLabel((Status.CORRECTION, ), Surface.BOTTOM)),
+    ('e.*', '@edge*', SurfaceLabel((Status.COLLATION, ), Surface.EDGE)),
+    ('l.e.*!', '@left*!',
      SurfaceLabel((Status.COLLATION, Status.CORRECTION), Surface.LEFT)),
-    ('i', ColumnLabel(tuple(), 1)),
-    ('ii', ColumnLabel(tuple(), 2)),
-    ('iii', ColumnLabel(tuple(), 3)),
-    ('iv', ColumnLabel(tuple(), 4)),
-    ('v', ColumnLabel(tuple(), 5)),
-    ('vi', ColumnLabel(tuple(), 6)),
-    ('vii', ColumnLabel(tuple(), 7)),
-    ('viii', ColumnLabel(tuple(), 8)),
-    ('ix', ColumnLabel(tuple(), 9)),
-    ('x', ColumnLabel(tuple(), 10)),
-    ("i'", ColumnLabel((Status.PRIME, ), 1)),
-    ('ii?', ColumnLabel((Status.UNCERTAIN, ), 2)),
-    ('iii!', ColumnLabel((Status.CORRECTION, ), 3)),
-    ('iv*', ColumnLabel((Status.COLLATION, ), 4)),
-    ("v'?", ColumnLabel((Status.PRIME, Status.UNCERTAIN), 5)),
+    ('i', '@column 1', ColumnLabel(tuple(), 1)),
+    ('ii', '@column 2', ColumnLabel(tuple(), 2)),
+    ('iii', '@column 3', ColumnLabel(tuple(), 3)),
+    ('iv', '@column 4', ColumnLabel(tuple(), 4)),
+    ('v', '@column 5', ColumnLabel(tuple(), 5)),
+    ('vi', '@column 6', ColumnLabel(tuple(), 6)),
+    ('vii', '@column 7', ColumnLabel(tuple(), 7)),
+    ('viii', '@column 8', ColumnLabel(tuple(), 8)),
+    ('ix', '@column 9', ColumnLabel(tuple(), 9)),
+    ('x', '@column 10', ColumnLabel(tuple(), 10)),
+    ("i'", "@column 1'", ColumnLabel((Status.PRIME, ), 1)),
+    ('ii?', '@column 2?', ColumnLabel((Status.UNCERTAIN, ), 2)),
+    ('iii!', '@column 3!', ColumnLabel((Status.CORRECTION, ), 3)),
+    ('iv*', '@column 4*', ColumnLabel((Status.COLLATION, ), 4)),
+    ("v'?", "@column 5'?", ColumnLabel((Status.PRIME, Status.UNCERTAIN), 5)),
+    ('1', '1.', LineNumberLabel('1')),
+    ('a+1', 'a+1.', LineNumberLabel('a+1')),
+    ("2'", "2'.", LineNumberLabel("2'"))
 ]
+
+
+@pytest.mark.parametrize('label,_,expected', LABELS)
+def test_parse_label(label, _, expected):
+    assert Label.parse(label) == expected
+
+
+@pytest.mark.parametrize('label,_,model', LABELS)
+def test_label_to_value(label, _, model):
+    assert model.to_value() == label
+
+
+@pytest.mark.parametrize('_,atf,expected', LABELS)
+def test_parse_atf(_, atf, expected):
+    assert Label.parse_atf(atf) == expected
+
+
+@pytest.mark.parametrize('_,atf,model', LABELS)
+def test_label_to_atf(_, atf, model):
+    assert model.to_atf() == atf
 
 
 def test_duplicate_status_is_invalid():
     class TestLabel(Label):
 
-        def accept(self, visitor: LabelVisitor) -> LabelVisitor:
-            return visitor
+        @property
+        def _atf(self) -> str:
+            return ''
 
         @property
         def _label(self) -> str:
             return ''
 
+        def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+            return visitor
+
     with pytest.raises(ValueError):
         TestLabel((Status.PRIME, Status.PRIME))
-
-
-@pytest.mark.parametrize('label,expected', LABELS)
-def test_parse_label(label, expected):
-    assert Label.parse(label) == expected
-
-
-@pytest.mark.parametrize('label,model', LABELS)
-def test_label_to_value(label, model):
-    assert model.to_value() == label
