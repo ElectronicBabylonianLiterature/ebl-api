@@ -9,8 +9,10 @@ from ebl.auth0 import Guest
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
                              PeriodModifier, Provenance, Stage)
 from ebl.corpus.texts import parse_text, to_dto
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
                                         TextFactory)
+
 
 ANY_USER = Guest()
 
@@ -57,7 +59,13 @@ def create_text(client, text):
 
 
 def test_parse_text():
-    text = TextFactory.build()
+    text = TextFactory.build(chapters=(
+        ChapterFactory.build(manuscripts=(
+            ManuscriptFactory.build(references=(
+                ReferenceFactory.build(),
+            )),
+        )),
+    ))
     dto = create_dto(text)
 
     assert parse_text(dto) == text

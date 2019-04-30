@@ -65,8 +65,7 @@ MANUSCRIPT_LINE_DTO_SCHEMA = {
         },
         'labels': {
             'type': 'array',
-            'items': {'type': 'string'},
-            'maxLength': 2
+            'items': {'type': 'string'}
         },
         'atf': {
             'type': 'string'
