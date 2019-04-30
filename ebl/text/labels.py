@@ -143,16 +143,16 @@ class LineNumberLabel(Label):
 
 STATUS = char_from(
     ''.join([status.value for status in Status])
-).map(Status).desc('label status')
-SURFACE = string_from(
+).map(Status).desc('status')
+
+SURFACE_LABEL = string_from(
     *[surface.label for surface in Surface]
 ).map(Surface.from_label).desc('surface label')
-COLUMN = regex(r'[ivx]+').desc('column label')
-LINE_NUMBER = regex(r'[^\s]+').desc('line number label')
-LABEL = (seq(SURFACE, STATUS.many()).combine(SurfaceLabel.from_label) |
-         seq(COLUMN, STATUS.many()).combine(ColumnLabel.from_label) |
-         LINE_NUMBER.map(LineNumberLabel))
-
+COLUMN_LABEL = regex(r'[ivx]+').desc('column label')
+LINE_NUMBER_LABEL = regex(r'[^\s]+').desc('line number label')
+LABEL = (seq(SURFACE_LABEL, STATUS.many()).combine(SurfaceLabel.from_label) |
+         seq(COLUMN_LABEL, STATUS.many()).combine(ColumnLabel.from_label) |
+         LINE_NUMBER_LABEL.map(LineNumberLabel))
 
 SURFACE_ATF = string_from(
     *[surface.atf for surface in Surface]
