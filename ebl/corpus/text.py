@@ -253,8 +253,8 @@ class ManuscriptLine:
         return ManuscriptLine(
             data['manuscriptId'],
             tuple(Label.parse(label) for label in data['labels']),
-            TextLine(
-                data['line']['prefix'],
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf(data['line']['prefix']),
                 create_tokens(data['line']['content'])
             )
         )
@@ -264,9 +264,9 @@ LineDict = Dict[str, Union[str, List[ManuscriptLineDict]]]
 
 
 def validate_line_number(_instance, _attribute, value):
-    if not re.fullmatch(r'[^ ]+\.', value):
+    if not re.fullmatch(r'[^\s]+', value):
         raise ValueError(f'Line number "{value}" is not a sequence of '
-                         'non-space characters followed by a period.')
+                         'non-space characters.')
 
 
 @attr.s(auto_attribs=True, frozen=True)

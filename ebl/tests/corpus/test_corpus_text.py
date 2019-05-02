@@ -107,7 +107,7 @@ def test_giving_museum_number_and_accession_is_invalid():
 
 
 @pytest.mark.parametrize('number', [
-    '', '.', '1', '12', ' .', '. ', '1 .', ' 1.', '1. '
+    '', ' ', ' 1', '1 ', '1 2', '\t'
 ])
 def test_not_atf_line_number_is_invalid(number):
     with pytest.raises(ValueError):
