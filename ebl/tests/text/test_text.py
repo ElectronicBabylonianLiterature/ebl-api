@@ -6,12 +6,13 @@ from ebl.text.atf import Atf
 from ebl.text.language import Language
 from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
-from ebl.text.line import (ControlLine, EmptyLine, Line, LineNumber, TextLine)
+from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
 from ebl.text.token import Token, UniqueLemma, Word, LineContinuation
+from ebl.text.labels import LineNumberLabel
 
 LINES: Tuple[Line, ...] = (
-    TextLine.of_iterable(LineNumber('1.'), [Word('ha-am')]),
+    TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),
     ControlLine.of_single('$', Token(' single ruling'))
 )
 TEXT: Text = Text(LINES)
@@ -123,16 +124,18 @@ def test_update_lemmatization_wrong_lines():
         ]),
     ), (
         Text.of_iterable([
-            TextLine.of_iterable(LineNumber('1.'), [
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
                 Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
             ])
         ]),
         Text.of_iterable([
-            TextLine.of_iterable(LineNumber('1.'), [Word('mu'), Word('nu')])
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                Word('mu'), Word('nu')
+            ])
         ]),
         Text.of_iterable([
-            TextLine.of_iterable(LineNumber('1.'), [
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('mu'),
                 Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
             ])
@@ -147,7 +150,7 @@ def test_merge(old, new, expected):
     [EmptyLine()],
     [ControlLine.of_single('$', Token(' single ruling'))],
     [
-        TextLine.of_iterable(LineNumber('1.'), [
+        TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
             LanguageShift('%sux'),
             LoneDeterminative(

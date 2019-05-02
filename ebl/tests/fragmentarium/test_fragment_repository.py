@@ -13,7 +13,8 @@ from ebl.tests.factories.fragment import (
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word
+from ebl.text.token import Token, Word, UniqueLemma
+from ebl.text.labels import LineNumberLabel
 
 COLLECTION = 'fragments'
 
@@ -249,8 +250,8 @@ def test_find_lemmas_multiple(fragment_repository,
 def test_find_lemmas_ignores_in_value(fragment_repository):
     fragment = FragmentFactory.build(
         text=Text.of_iterable([
-            TextLine.of_iterable("1'.", [
-                Word('[(a[(n)]a#*?!)]', unique_lemma=("ana I", ))
+            TextLine.of_iterable(LineNumberLabel.from_atf("1'."), [
+                Word('[(a[(n)]a#*?!)]', unique_lemma=(UniqueLemma('ana I'), ))
             ])
         ]),
         signs='DIŠ'

@@ -1,5 +1,5 @@
 # pylint: disable=R0903
-from typing import Iterable, NewType, Sequence, Tuple
+from typing import Iterable, Sequence, Tuple
 
 import attr
 import pydash
@@ -9,8 +9,7 @@ from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import Token
 from ebl.text.visitors import AtfVisitor, LanguageVisitor
-
-LineNumber = NewType('LineNumber', str)
+from ebl.text.labels import LineNumberLabel
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -31,7 +30,7 @@ class Line:
             lemmatization: Sequence[LemmatizationToken]
     ) -> 'Line':
         if len(self.content) == len(lemmatization):
-            zipped = pydash.zip_(self.content, lemmatization)
+            zipped = pydash.zip_(list(self.content), list(lemmatization))
             content = tuple(
                 pair[0].set_unique_lemma(pair[1])
                 for pair in zipped
@@ -72,15 +71,17 @@ class ControlLine(Line):
 class TextLine(Line):
 
     @classmethod
-    def of_iterable(cls, line_number: LineNumber, content: Iterable[Token]):
+    def of_iterable(cls,
+                    line_number: LineNumberLabel,
+                    content: Iterable[Token]):
         visitor = LanguageVisitor()
         for token in content:
             token.accept(visitor)
-        return cls(line_number, visitor.tokens)
+        return cls(line_number.to_atf(), visitor.tokens)
 
     @property
-    def line_number(self) -> LineNumber:
-        return LineNumber(self.prefix)
+    def line_number(self) -> LineNumberLabel:
+        return LineNumberLabel.from_atf(self.prefix)
 
     @property
     def atf(self) -> Atf:

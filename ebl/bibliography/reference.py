@@ -3,7 +3,7 @@ from typing import NewType, Optional, Tuple
 
 import attr
 
-from ebl.text.line import LineNumber
+from ebl.text.labels import LineNumberLabel
 
 BibliographyId = NewType('BibliographyId', str)
 
@@ -21,7 +21,7 @@ class Reference:
     type: ReferenceType
     pages: str = ''
     notes: str = ''
-    lines_cited: Tuple[LineNumber, ...] = tuple()
+    lines_cited: Tuple[LineNumberLabel, ...] = tuple()
     document: Optional[dict] = None
 
     def to_dict(self, include_document=False) -> dict:
@@ -30,7 +30,10 @@ class Reference:
             'type': self.type.name,
             'pages': self.pages,
             'notes': self.notes,
-            'linesCited': [line_number for line_number in self.lines_cited]
+            'linesCited': [
+                line_number.to_value()
+                for line_number in self.lines_cited
+            ]
         }
         return (
             {
@@ -49,7 +52,7 @@ class Reference:
             data['pages'],
             data['notes'],
             tuple(
-                LineNumber(line_number)
+                LineNumberLabel(line_number)
                 for line_number
                 in data['linesCited']
             ),

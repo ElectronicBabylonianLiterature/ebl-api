@@ -129,6 +129,10 @@ class LineNumberLabel(Label):
         super().__init__(tuple())
         object.__setattr__(self, 'number', number)
 
+    @staticmethod
+    def from_atf(atf: str) -> 'LineNumberLabel':
+        return LineNumberLabel(atf[:-1])
+
     @property
     def _label(self) -> str:
         return self.number
@@ -145,22 +149,30 @@ STATUS = char_from(
     ''.join([status.value for status in Status])
 ).map(Status).desc('status')
 
-SURFACE_LABEL = string_from(
-    *[surface.label for surface in Surface]
-).map(Surface.from_label).desc('surface label')
-COLUMN_LABEL = regex(r'[ivx]+').desc('column label')
-LINE_NUMBER_LABEL = regex(r'[^\s]+').desc('line number label')
-LABEL = (seq(SURFACE_LABEL, STATUS.many()).combine(SurfaceLabel.from_label) |
-         seq(COLUMN_LABEL, STATUS.many()).combine(ColumnLabel.from_label) |
-         LINE_NUMBER_LABEL.map(LineNumberLabel))
+SURFACE_LABEL = seq(
+    string_from(
+        *[surface.label for surface in Surface]
+    ).map(Surface.from_label).desc('surface label'),
+    STATUS.many()
+).combine(SurfaceLabel.from_label)
+COLUMN_LABEL = seq(
+    regex(r'[ivx]+').desc('column label'),
+    STATUS.many()
+).combine(ColumnLabel.from_label)
+LINE_NUMBER_LABEL =\
+    regex(r'[^\s]+').map(LineNumberLabel).desc('line number label')
+LABEL = SURFACE_LABEL | COLUMN_LABEL | LINE_NUMBER_LABEL
 
-SURFACE_ATF = string_from(
-    *[surface.atf for surface in Surface]
-).map(Surface.from_atf).desc('surface atf')
-COLUMN_ATF = (string(r'@column ') >> regex(r'\d+').map(int)).desc('column atf')
-LINE_NUMBER_ATF = regex(r'[^\s]+\.').map(
-    lambda atf: atf[:-1]
-).desc('line number atf')
-LABEL_ATF = (seq(SURFACE_ATF, STATUS.many()).combine(SurfaceLabel.from_label) |
-             seq(COLUMN_ATF, STATUS.many()).combine(ColumnLabel.from_int) |
-             LINE_NUMBER_ATF.map(LineNumberLabel))
+SURFACE_ATF = seq(
+    string_from(
+        *[surface.atf for surface in Surface]
+    ).map(Surface.from_atf).desc('surface atf'),
+    STATUS.many()
+).combine(SurfaceLabel.from_label)
+COLUMN_ATF = seq(
+    (string(r'@column ') >> regex(r'\d+').map(int)).desc('column atf'),
+    STATUS.many()
+).combine(ColumnLabel.from_int)
+LINE_NUMBER_ATF =\
+    regex(r'[^\s]+\.').map(LineNumberLabel.from_atf).desc('line number atf')
+LABEL_ATF = SURFACE_ATF | COLUMN_ATF | LINE_NUMBER_ATF

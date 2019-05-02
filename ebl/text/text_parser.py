@@ -8,6 +8,7 @@ from ebl.text.line import TextLine
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
                             Token, Word)
+from ebl.text.labels import LineNumberLabel
 
 
 def sequence(prefix, part, joiner, min_=None):
@@ -78,7 +79,9 @@ MODIFIER = (
 ).many().concat()
 WORD_SEPARATOR = string(ebl.text.atf.WORD_SEPARATOR).desc('word separtor')
 WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'(?=\n|$)')
-LINE_NUMBER = regex(r'[^.\s]+\.').at_least(1).concat().desc('line number')
+LINE_NUMBER = regex(r'[^\s]+\.').map(
+    LineNumberLabel.from_atf
+).desc('line number')
 TABULATION = string('($___$)').desc('tabulation')
 COLUMN = regex(r'&\d*').desc('column') << WORD_SEPARATOR_OR_EOL
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
