@@ -9,7 +9,7 @@ from ebl.errors import Defect, NotFoundError, DataError
 from ebl.mongo_repository import MongoRepository
 from ebl.fragment.transliteration import Transliteration, TransliterationError
 from ebl.fragmentarium.validator import Validator
-
+from text.labels import LineNumberLabel
 
 COLLECTION = 'texts'
 
@@ -19,14 +19,14 @@ def text_not_found(id_: TextId) -> Exception:
 
 
 def invalid_atf(chapter: Chapter,
-                line_number: str,
+                line_number: LineNumberLabel,
                 manuscript_id: int) -> Exception:
     siglum = [manuscript.siglum
               for manuscript in chapter.manuscripts
               if manuscript.id == manuscript_id][0]
     return DataError(
         f'Invalid transliteration on'
-        f' line {line_number}'
+        f' line {line_number.to_value()}'
         f' manuscript {siglum}.'
     )
 
