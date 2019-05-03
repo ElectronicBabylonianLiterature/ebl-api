@@ -5,6 +5,7 @@ import pydash
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
                              PeriodModifier, Provenance, Stage, Text, TextId)
+from ebl.text.labels import LineNumberLabel
 from ebl.errors import DataError, NotFoundError
 from ebl.require_scope import require_scope
 from ebl.text.text_parser import TEXT_LINE
@@ -67,11 +68,14 @@ MANUSCRIPT_LINE_DTO_SCHEMA = {
             'type': 'array',
             'items': {'type': 'string'}
         },
+        'lineNumber': {
+            'type': 'string'
+        },
         'atf': {
             'type': 'string'
         }
     },
-    'required': ['manuscriptId', 'labels', 'atf']
+    'required': ['manuscriptId', 'labels', 'lineNumber', 'atf']
 }
 
 
@@ -161,6 +165,16 @@ TEXT_DTO_SCHEMA = {
 
 
 def parse_text(media: dict) -> Text:
+    def parse_manuscript(manuscript_dto: dict):
+        atf_line_number =\
+            LineNumberLabel(manuscript_dto["lineNumber"]).to_atf()
+        return pydash.omit({
+            **manuscript_dto,
+            'line': (TEXT_LINE
+                     .parse(f'{atf_line_number}{manuscript_dto["atf"]}')
+                     .to_dict())
+        }, 'atf')
+
     parsed_media = {
         **media,
         'chapters': [
@@ -170,12 +184,8 @@ def parse_text(media: dict) -> Text:
                     {
                         **line,
                         'manuscripts': [
-                            pydash.omit({
-                                **manuscript,
-                                'line': (TEXT_LINE
-                                         .parse(manuscript['atf'])
-                                         .to_dict())
-                            }, 'atf') for manuscript in line['manuscripts']
+                            parse_manuscript(manuscript)
+                            for manuscript in line['manuscripts']
                         ]
                     } for line in chapter['lines']
                 ]
@@ -200,7 +210,12 @@ def to_dto(text):
                         'manuscripts': [
                             pydash.omit({
                                 **manuscript.to_dict(),
-                                'atf': manuscript.line.atf
+                                'lineNumber':
+                                    manuscript.line.line_number.to_value(),
+                                'atf': manuscript.line.atf[len(manuscript
+                                                               .line
+                                                               .line_number
+                                                               .to_atf()):]
                             }, 'line') for manuscript in line.manuscripts
                         ]
                     } for line in chapter.lines
