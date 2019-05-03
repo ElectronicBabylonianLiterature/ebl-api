@@ -1,3 +1,4 @@
+import re
 from abc import ABC, abstractmethod
 from collections import Counter
 from typing import Tuple, Iterable
@@ -120,14 +121,24 @@ class SurfaceLabel(Label):
         return visitor.visit_surface_label(self)
 
 
+LINE_NUMBER_EXPRESSION = r'[^\s]+'
+
+
+def is_sequence_of_non_space_characters(_instance, _attribute, value):
+    if not re.fullmatch(LINE_NUMBER_EXPRESSION, value):
+        raise ValueError(f'Line number "{value}" is not a sequence of '
+                         'non-space characters.')
+
+
 @attr.s(auto_attribs=True, frozen=True, init=False)
 class LineNumberLabel(Label):
 
-    number: str
+    number: str = attr.ib(validator=is_sequence_of_non_space_characters)
 
     def __init__(self, number: str):
         super().__init__(tuple())
         object.__setattr__(self, 'number', number)
+        attr.validate(self)
 
     @staticmethod
     def from_atf(atf: str) -> 'LineNumberLabel':
@@ -159,8 +170,9 @@ COLUMN_LABEL = seq(
     regex(r'[ivx]+').desc('column label'),
     STATUS.many()
 ).combine(ColumnLabel.from_label)
-LINE_NUMBER_LABEL =\
-    regex(r'[^\s]+').map(LineNumberLabel).desc('line number label')
+LINE_NUMBER_LABEL = regex(LINE_NUMBER_EXPRESSION)\
+    .map(LineNumberLabel)\
+    .desc('line number label')
 LABEL = SURFACE_LABEL | COLUMN_LABEL | LINE_NUMBER_LABEL
 
 SURFACE_ATF = seq(
@@ -173,6 +185,7 @@ COLUMN_ATF = seq(
     (string(r'@column ') >> regex(r'\d+').map(int)).desc('column atf'),
     STATUS.many()
 ).combine(ColumnLabel.from_int)
-LINE_NUMBER_ATF =\
-    regex(r'[^\s]+\.').map(LineNumberLabel.from_atf).desc('line number atf')
+LINE_NUMBER_ATF = (regex(LINE_NUMBER_EXPRESSION + r'\.')
+                   .map(LineNumberLabel.from_atf)
+                   .desc('line number atf'))
 LABEL_ATF = SURFACE_ATF | COLUMN_ATF | LINE_NUMBER_ATF

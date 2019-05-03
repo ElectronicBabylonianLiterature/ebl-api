@@ -32,7 +32,7 @@ PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 NOTES = 'some notes'
 REFERENCES = (ReferenceFactory.build(), )
-LINE_NUMBER = '1.'
+LINE_NUMBER = LineNumberLabel('1')
 LINE_RECONSTRUCTION = 'idealized text'
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE), )
 MANUSCRIPT_TEXT = TextLine('1.', (Word('-ku]-nu-ši'),))
@@ -104,14 +104,6 @@ def test_giving_museum_number_and_accession_is_invalid():
             museum_number='when museum number if given',
             accession='then accession not allowed'
         )
-
-
-@pytest.mark.parametrize('number', [
-    '', ' ', ' 1', '1 ', '1 2', '\t'
-])
-def test_not_atf_line_number_is_invalid(number):
-    with pytest.raises(ValueError):
-        Line(number)
 
 
 def test_duplicate_ids_are_invalid():
@@ -200,7 +192,7 @@ def test_serializing_to_dict():
                 ],
                 'lines': [
                     {
-                        'number': LINE_NUMBER,
+                        'number': LINE_NUMBER.to_value(),
                         'reconstruction': LINE_RECONSTRUCTION,
                         'manuscripts': [{
                             'manuscriptId': MANUSCRIPT_ID,
@@ -248,7 +240,7 @@ def test_serializing_to_dict_with_documents():
                 ],
                 'lines': [
                     {
-                        'number': LINE_NUMBER,
+                        'number': LINE_NUMBER.to_value(),
                         'reconstruction': LINE_RECONSTRUCTION,
                         'manuscripts': [{
                             'manuscriptId': MANUSCRIPT_ID,

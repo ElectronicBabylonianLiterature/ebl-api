@@ -10,7 +10,7 @@ from ebl.corpus.text import (Chapter, Classification, Manuscript,
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.text.atf import Surface, Status
-from ebl.text.labels import SurfaceLabel, ColumnLabel
+from ebl.text.labels import SurfaceLabel, ColumnLabel, LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.token import Word
 
@@ -53,7 +53,7 @@ class LineFactory(factory.Factory):
     class Meta:
         model = Line
 
-    number = factory.Sequence(lambda n: f'{n}.')
+    number = factory.Sequence(lambda n: LineNumberLabel(str(n)))
     reconstruction = factory.Faker('sentence')
     manuscripts: Tuple[ManuscriptLine, ...] = factory.List([
         factory.SubFactory(ManuscriptLineFactory)

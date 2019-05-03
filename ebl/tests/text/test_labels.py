@@ -60,6 +60,14 @@ def test_label_to_atf(_, atf, model):
     assert model.to_atf() == atf
 
 
+@pytest.mark.parametrize('number', [
+    '', ' ', ' 1', '1 ', '1 2', '\t'
+])
+def test_not_atf_line_number_is_invalid(number):
+    with pytest.raises(ValueError):
+        LineNumberLabel(number)
+
+
 def test_duplicate_status_is_invalid():
     class TestLabel(Label):
 

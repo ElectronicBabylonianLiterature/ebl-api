@@ -1,5 +1,4 @@
 import collections
-import re
 from enum import Enum
 from typing import Dict, List, Tuple, Union
 
@@ -296,30 +295,25 @@ class ManuscriptLine:
 LineDict = Dict[str, Union[str, List[ManuscriptLineDict]]]
 
 
-def validate_line_number(_instance, _attribute, value):
-    if not re.fullmatch(r'[^\s]+', value):
-        raise ValueError(f'Line number "{value}" is not a sequence of '
-                         'non-space characters.')
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
-    number: str = attr.ib(validator=validate_line_number)
+    number: LineNumberLabel
     reconstruction: str = ''
     manuscripts: Tuple[ManuscriptLine, ...] = tuple()
 
     def to_dict(self) -> LineDict:
         return {
-            'number': self.number,
+            'number': self.number.to_value(),
             'reconstruction': self.reconstruction,
             'manuscripts': [line.to_dict() for line in self.manuscripts]
         }
 
     @staticmethod
     def from_dict(data):
-        return Line(data['number'], data['reconstruction'], tuple(
-            ManuscriptLine.from_dict(line) for line in data['manuscripts']
-        ))
+        return Line(LineNumberLabel(data['number']),
+                    data['reconstruction'],
+                    tuple(ManuscriptLine.from_dict(line)
+                          for line in data['manuscripts']))
 
 
 ChapterDict = Dict[str, Union[

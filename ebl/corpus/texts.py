@@ -172,7 +172,7 @@ def parse_text(media: dict) -> Text:
                 LineNumberLabel(manuscript_dto['number']).to_atf()
             line = \
                 TEXT_LINE.parse(f'{atf_line_number} {manuscript_dto["atf"]}')
-        except ParseError as error:
+        except (ParseError, ValueError) as error:
             raise DataError(error)
 
         return pydash.omit({
