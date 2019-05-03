@@ -5,7 +5,7 @@ import pytest
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptType, Period, PeriodModifier,
                              Provenance, Stage, Text, TextId, Line,
-                             ManuscriptLine)
+                             ManuscriptLine, TextSerializer)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
 from ebl.text.labels import SurfaceLabel, ColumnLabel, Label, LineNumberLabel
@@ -160,7 +160,7 @@ def test_invalid_labels(labels: Tuple[Label, ...]):
 
 def test_serializing_to_dict():
     # pylint: disable=E1101
-    assert TEXT.to_dict() == {
+    assert TextSerializer.serialize(TEXT) == {
         'category': CATEGORY,
         'index': INDEX,
         'name': NAME,
@@ -208,7 +208,7 @@ def test_serializing_to_dict():
 
 def test_serializing_to_dict_with_documents():
     # pylint: disable=E1101
-    assert TEXT.to_dict(True) == {
+    assert TextSerializer.serialize(TEXT, True) == {
         'category': CATEGORY,
         'index': INDEX,
         'name': NAME,

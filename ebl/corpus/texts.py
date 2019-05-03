@@ -5,7 +5,8 @@ from parsy import ParseError
 
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
-                             PeriodModifier, Provenance, Stage, Text, TextId)
+                             PeriodModifier, Provenance, Stage, Text, TextId,
+                             ManuscriptLine, TextSerializer)
 from ebl.text.labels import LineNumberLabel
 from ebl.errors import DataError, NotFoundError
 from ebl.require_scope import require_scope
@@ -203,31 +204,23 @@ def parse_text(media: dict) -> Text:
         raise DataError(error)
 
 
+class ApiSerializer(TextSerializer):
+
+    def __init__(self):
+        super().__init__(True)
+
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+        line = manuscript_line.line
+        self.line['manuscripts'].append({
+            'manuscriptId': manuscript_line.manuscript_id,
+            'labels': [label.to_value() for label in manuscript_line.labels],
+            'number': line.line_number.to_value(),
+            'atf': line.atf[len(line.line_number.to_atf()) + 1:]
+        })
+
+
 def to_dto(text):
-    return {
-        **text.to_dict(True),
-        'chapters': [
-            {
-                **chapter.to_dict(True),
-                'lines': [
-                    {
-                        **line.to_dict(),
-                        'manuscripts': [
-                            pydash.omit({
-                                **manuscript.to_dict(),
-                                'number':
-                                    manuscript.line.line_number.to_value(),
-                                'atf': manuscript.line.atf[len(manuscript
-                                                               .line
-                                                               .line_number
-                                                               .to_atf()) + 1:]
-                            }, 'line') for manuscript in line.manuscripts
-                        ]
-                    } for line in chapter.lines
-                ]
-            } for chapter in text.chapters
-        ]
-    }
+    return ApiSerializer.serialize(text)
 
 
 def create_text_id(category: str, index: str) -> TextId:

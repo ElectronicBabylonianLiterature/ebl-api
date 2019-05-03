@@ -1,6 +1,6 @@
 import collections
 from enum import Enum
-from typing import Dict, List, Tuple, Union
+from typing import Tuple
 
 import attr
 import pydash
@@ -163,9 +163,6 @@ class Stage(Enum):
 TextId = collections.namedtuple('TextId', ['category', 'index'])
 
 
-ManuscriptDict = Dict[str, Union[int, str, List[dict]]]
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
     id: int
@@ -191,23 +188,8 @@ class Manuscript:
                 self.type,
                 self.siglum_disambiguator)
 
-    def to_dict(self, include_documents=False) -> ManuscriptDict:
-        # pylint: disable=E1101
-        return {
-            'id': self.id,
-            'siglumDisambiguator': self.siglum_disambiguator,
-            'museumNumber': self.museum_number,
-            'accession': self.accession,
-            'periodModifier': self.period_modifier.value,
-            'period': self.period.long_name,
-            'provenance': self.provenance.long_name,
-            'type': self.type.long_name,
-            'notes': self.notes,
-            'references': [
-                reference.to_dict(include_documents)
-                for reference in self.references
-            ]
-        }
+    def accept(self, visitor: 'TextVisitor') -> None:
+        visitor.visit_manuscript(self)
 
     @staticmethod
     def from_dict(manuscript: dict) -> 'Manuscript':
@@ -226,9 +208,6 @@ class Manuscript:
                 for reference in manuscript['references']
             )
         )
-
-
-ManuscriptLineDict = Dict[str, Union[int, List[str], dict]]
 
 
 class LabelValidator(LabelVisitor):
@@ -272,13 +251,8 @@ class ManuscriptLine:
     labels: Tuple[Label, ...] = attr.ib(validator=validate_labels)
     line: TextLine
 
-    def to_dict(self) -> ManuscriptLineDict:
-        # pylint: disable=E1133
-        return {
-            'manuscriptId': self.manuscript_id,
-            'labels': [label.to_value() for label in self.labels],
-            'line': self.line.to_dict()
-        }
+    def accept(self, visitor: 'TextVisitor') -> None:
+        visitor.visit_manuscript_line(self)
 
     @staticmethod
     def from_dict(data):
@@ -292,21 +266,16 @@ class ManuscriptLine:
         )
 
 
-LineDict = Dict[str, Union[str, List[ManuscriptLineDict]]]
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: LineNumberLabel
     reconstruction: str = ''
     manuscripts: Tuple[ManuscriptLine, ...] = tuple()
 
-    def to_dict(self) -> LineDict:
-        return {
-            'number': self.number.to_value(),
-            'reconstruction': self.reconstruction,
-            'manuscripts': [line.to_dict() for line in self.manuscripts]
-        }
+    def accept(self, visitor: 'TextVisitor') -> None:
+        visitor.visit_line(self)
+        for manuscript_line in self.manuscripts:
+            manuscript_line.accept(visitor)
 
     @staticmethod
     def from_dict(data):
@@ -314,11 +283,6 @@ class Line:
                     data['reconstruction'],
                     tuple(ManuscriptLine.from_dict(line)
                           for line in data['manuscripts']))
-
-
-ChapterDict = Dict[str, Union[
-    int, str, List[ManuscriptDict], List[LineDict]
-]]
 
 
 def validate_manuscripts(_instance, _attribute, value):
@@ -361,19 +325,13 @@ class Chapter:
     )
     lines: Tuple[Line, ...] = tuple()
 
-    def to_dict(self, include_documents=False) -> ChapterDict:
-        return {
-            'classification': self.classification.value,
-            'stage': self.stage.value,
-            'version': self.version,
-            'name': self.name,
-            'order': self.order,
-            'manuscripts': [
-                manuscript.to_dict(include_documents)
-                for manuscript in self.manuscripts  # pylint: disable=E1133
-            ],
-            'lines': [line.to_dict() for line in self.lines]
-        }
+    def accept(self, visitor: 'TextVisitor') -> None:
+        visitor.visit_chapter(self)
+        for manuscript in self.manuscripts:
+            manuscript.accept(visitor)
+
+        for line in self.lines:
+            line.accept(visitor)
 
     @staticmethod
     def from_dict(chapter: dict) -> 'Chapter':
@@ -394,9 +352,6 @@ class Chapter:
         )
 
 
-TextDict = Dict[str, Union[int, str, List[ChapterDict]]]
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
     category: int
@@ -411,18 +366,13 @@ class Text:
         # pylint: disable=C0103
         return TextId(self.category, self.index)
 
-    def to_dict(self, include_documents=False) -> TextDict:
-        return {
-            'category': self.category,
-            'index': self.index,
-            'name': self.name,
-            'numberOfVerses': self.number_of_verses,
-            'approximateVerses': self.approximate_verses,
-            'chapters': [
-                chapter.to_dict(include_documents)
-                for chapter in self.chapters
-            ]
-        }
+    def accept(self, visitor: 'TextVisitor') -> None:
+        visitor.visit_text(self)
+        for chapter in self.chapters:
+            chapter.accept(visitor)
+
+    def to_dict(self, include_documents=False) -> dict:
+        return TextSerializer.serialize(self, include_documents)
 
     @staticmethod
     def from_dict(text: dict) -> 'Text':
@@ -437,3 +387,93 @@ class Text:
                 for chapter in text['chapters']
             )
         )
+
+
+class TextVisitor:
+
+    def visit_text(self, text: Text) -> None:
+        pass
+
+    def visit_chapter(self, chapter: Chapter) -> None:
+        pass
+
+    def visit_manuscript(self, manuscript: Manuscript) -> None:
+        pass
+
+    def visit_line(self, line: Line) -> None:
+        pass
+
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+        pass
+
+
+class TextSerializer(TextVisitor):
+
+    @classmethod
+    def serialize(cls, text: Text, *args):
+        serializer = cls(*args)
+        text.accept(serializer)
+        return serializer.text
+
+    def __init__(self, include_documents):
+        self._include_documents = include_documents
+        self.text = None
+        self.chapter = None
+        self.manuscript = None
+        self.line = None
+        self.manuscript_line = None
+
+    def visit_text(self, text: Text) -> None:
+        self.text = {
+            'category': text.category,
+            'index': text.index,
+            'name': text.name,
+            'numberOfVerses': text.number_of_verses,
+            'approximateVerses': text.approximate_verses,
+            'chapters': []
+        }
+
+    def visit_chapter(self, chapter: Chapter) -> None:
+        self.chapter = {
+            'classification': chapter.classification.value,
+            'stage': chapter.stage.value,
+            'version': chapter.version,
+            'name': chapter.name,
+            'order': chapter.order,
+            'manuscripts': [],
+            'lines': []
+        }
+        self.text['chapters'].append(self.chapter)
+
+    def visit_manuscript(self, manuscript: Manuscript) -> None:
+        self.manuscript = {
+            'id': manuscript.id,
+            'siglumDisambiguator': manuscript.siglum_disambiguator,
+            'museumNumber': manuscript.museum_number,
+            'accession': manuscript.accession,
+            'periodModifier': manuscript.period_modifier.value,
+            'period': manuscript.period.long_name,
+            'provenance': manuscript.provenance.long_name,
+            'type': manuscript.type.long_name,
+            'notes': manuscript.notes,
+            'references': [
+                reference.to_dict(self._include_documents)
+                for reference in manuscript.references
+            ]
+        }
+        self.chapter['manuscripts'].append(self.manuscript)
+
+    def visit_line(self, line: Line) -> None:
+        self.line = {
+            'number': line.number.to_value(),
+            'reconstruction': line.reconstruction,
+            'manuscripts': []
+        }
+        self.chapter['lines'].append(self.line)
+
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+        self.line['manuscripts'].append({
+            'manuscriptId': manuscript_line.manuscript_id,
+            'labels': [label.to_value() for label in manuscript_line.labels],
+            'line': manuscript_line.line.to_dict()
+        })

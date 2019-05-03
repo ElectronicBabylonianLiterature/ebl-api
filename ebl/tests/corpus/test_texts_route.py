@@ -12,34 +12,40 @@ from ebl.corpus.texts import parse_text, to_dto
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
                                         TextFactory)
-
+from ebl.text.labels import LineNumberLabel
+from ebl.text.line import TextLine
+from ebl.text.text import create_tokens
 
 ANY_USER = Guest()
 
 
 def create_dto(text, include_documents=False):
+    dto = text.to_dict(include_documents)
     return {
-        **text.to_dict(include_documents),
+        **dto,
         'chapters': [
             {
-                **chapter.to_dict(include_documents),
+                **chapter,
                 'lines': [
                     {
-                        **line.to_dict(),
+                        **line,
                         'manuscripts': [
                             pydash.omit({
-                                **manuscript.to_dict(),
-                                'number':
-                                    manuscript.line.line_number.to_value(),
-                                'atf': manuscript.line.atf[len(manuscript
-                                                               .line
-                                                               .line_number
-                                                               .to_atf()) + 1:]
-                            }, 'line') for manuscript in line.manuscripts
+                                **manuscript,
+                                'number': manuscript['line']['prefix'][:-1],
+                                'atf': TextLine.of_iterable(
+                                    LineNumberLabel.from_atf(
+                                        manuscript['line']['prefix']
+                                    ),
+                                    create_tokens(
+                                        manuscript['line']['content']
+                                    )
+                                ).atf[len(manuscript['line']['prefix']) + 1:]
+                            }, 'line') for manuscript in line['manuscripts']
                         ]
-                    } for line in chapter.lines
+                    } for line in chapter['lines']
                 ]
-            } for chapter in text.chapters
+            } for chapter in dto['chapters']
         ]
     }
 
