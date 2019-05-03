@@ -1,6 +1,7 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 import pydash
+from parsy import ParseError
 
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
@@ -166,13 +167,17 @@ TEXT_DTO_SCHEMA = {
 
 def parse_text(media: dict) -> Text:
     def parse_manuscript(manuscript_dto: dict):
-        atf_line_number =\
-            LineNumberLabel(manuscript_dto['number']).to_atf()
+        try:
+            atf_line_number =\
+                LineNumberLabel(manuscript_dto['number']).to_atf()
+            line = \
+                TEXT_LINE.parse(f'{atf_line_number} {manuscript_dto["atf"]}')
+        except ParseError as error:
+            raise DataError(error)
+
         return pydash.omit({
             **manuscript_dto,
-            'line': (TEXT_LINE
-                     .parse(f'{atf_line_number}{manuscript_dto["atf"]}')
-                     .to_dict())
+            'line': line.to_dict()
         }, 'atf')
 
     parsed_media = {
@@ -215,7 +220,7 @@ def to_dto(text):
                                 'atf': manuscript.line.atf[len(manuscript
                                                                .line
                                                                .line_number
-                                                               .to_atf()):]
+                                                               .to_atf()) + 1:]
                             }, 'line') for manuscript in line.manuscripts
                         ]
                     } for line in chapter.lines
