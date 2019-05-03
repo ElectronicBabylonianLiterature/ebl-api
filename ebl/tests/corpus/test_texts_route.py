@@ -7,7 +7,7 @@ import pytest
 
 from ebl.auth0 import Guest
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
-                             PeriodModifier, Provenance, Stage, Text)
+                             PeriodModifier, Provenance, Stage)
 from ebl.corpus.texts import parse_text, to_dto
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
@@ -17,7 +17,7 @@ from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
 ANY_USER = Guest()
 
 
-def create_dto(text: Text, include_documents=False):
+def create_dto(text, include_documents=False):
     return {
         **text.to_dict(include_documents),
         'chapters': [
