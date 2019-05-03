@@ -34,7 +34,7 @@ def create_dto(text, include_documents=False):
                                 'atf': manuscript.line.atf[len(manuscript
                                                                .line
                                                                .line_number
-                                                               .to_atf()):]
+                                                               .to_atf()) + 1:]
                             }, 'line') for manuscript in line.manuscripts
                         ]
                     } for line in chapter.lines
