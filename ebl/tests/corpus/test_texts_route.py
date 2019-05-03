@@ -29,7 +29,7 @@ def create_dto(text, include_documents=False):
                         'manuscripts': [
                             pydash.omit({
                                 **manuscript.to_dict(),
-                                'lineNumber':
+                                'number':
                                     manuscript.line.line_number.to_value(),
                                 'atf': manuscript.line.atf[len(manuscript
                                                                .line

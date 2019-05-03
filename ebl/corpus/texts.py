@@ -68,14 +68,14 @@ MANUSCRIPT_LINE_DTO_SCHEMA = {
             'type': 'array',
             'items': {'type': 'string'}
         },
-        'lineNumber': {
+        'number': {
             'type': 'string'
         },
         'atf': {
             'type': 'string'
         }
     },
-    'required': ['manuscriptId', 'labels', 'lineNumber', 'atf']
+    'required': ['manuscriptId', 'labels', 'number', 'atf']
 }
 
 
@@ -167,7 +167,7 @@ TEXT_DTO_SCHEMA = {
 def parse_text(media: dict) -> Text:
     def parse_manuscript(manuscript_dto: dict):
         atf_line_number =\
-            LineNumberLabel(manuscript_dto["lineNumber"]).to_atf()
+            LineNumberLabel(manuscript_dto['number']).to_atf()
         return pydash.omit({
             **manuscript_dto,
             'line': (TEXT_LINE
@@ -210,7 +210,7 @@ def to_dto(text):
                         'manuscripts': [
                             pydash.omit({
                                 **manuscript.to_dict(),
-                                'lineNumber':
+                                'number':
                                     manuscript.line.line_number.to_value(),
                                 'atf': manuscript.line.atf[len(manuscript
                                                                .line
