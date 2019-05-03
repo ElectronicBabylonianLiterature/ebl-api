@@ -18,6 +18,26 @@ class Classification(Enum):
     MODERN = 'Modern'
 
 
+class SiglumEnum(Enum):
+    def __init__(self, long_name, abbreviation):
+        self.long_name = long_name
+        self.abbreviation = abbreviation
+
+    @classmethod
+    def from_abbreviation(cls, abbreviation):
+        return [
+            enum for enum in cls
+            if enum.abbreviation == abbreviation
+        ][0]
+
+    @classmethod
+    def from_name(cls, name):
+        return [
+            enum for enum in cls
+            if enum.long_name == name
+        ][0]
+
+
 class ManuscriptType(Enum):
     LIBRARY = ('Library', '')
     SCHOOL = ('School', 'Sch')
@@ -45,40 +65,41 @@ class ManuscriptType(Enum):
 
 
 class Provenance(Enum):
-    ASSYRIA = ('Assyria', None)
-    ASSUR = ('Aššur', 'Assyria')
-    HUZIRINA = ('Ḫuzirina', 'Assyria')
-    KALHU = ('Kalḫu', 'Assyria')
-    KHORSABAD = ('Khorsabad', 'Assyria')
-    NINEVEH = ('Nineveh', 'Assyria')
-    TARBISU = ('Tarbiṣu', 'Assyria')
-    BABYLONIA = ('Babylonia', None)
-    BABYLON = ('Babylon', 'Babylonia')
-    BORSIPPA = ('Borsippa', 'Babylonia')
-    CUTHA = ('Cutha', 'Babylonia')
-    ISIN = ('Isin', 'Babylonia')
-    KIS = ('Kiš', 'Babylonia')
-    LARSA = ('Larsa', 'Babylonia')
-    METURAN = ('Meturan', 'Babylonia')
-    NEREBUN = ('Nērebtum', 'Babylonia')
-    NIPPUR = ('Nippur', 'Babylonia')
-    SIPPAR = ('Sippar', 'Babylonia')
-    SADUPPUM = ('Šaduppûm', 'Babylonia')
-    UR = ('Ur', 'Babylonia')
-    URUK = ('Uruk', 'Babylonia')
-    PERIPHERY = ('Periphery', None)
-    ALALAKS = ('Alalakh', 'Periphery')
-    TELL_EL_AMARNA = ('Tell el-Amarna', 'Periphery')
-    EMAR = ('Emar', 'Periphery')
-    HATTUSA = ('Ḫattuša', 'Periphery')
-    MARI = ('Mari', 'Periphery')
-    MEGIDDO = ('Megiddo', 'Periphery')
-    SUSA = ('Susa', 'Periphery')
-    UGARIT = ('Ugarit', 'Periphery')
-    UNCERTAIN = ('Uncertain', None)
+    ASSYRIA = ('Assyria', 'Assa', None)
+    ASSUR = ('Aššur', 'Ašš', 'Assyria')
+    HUZIRINA = ('Ḫuzirina', 'Huz', 'Assyria')
+    KALHU = ('Kalḫu', 'Kal', 'Assyria')
+    KHORSABAD = ('Khorsabad', 'Kho', 'Assyria')
+    NINEVEH = ('Nineveh', 'Nin', 'Assyria')
+    TARBISU = ('Tarbiṣu', 'Tar', 'Assyria')
+    BABYLONIA = ('Babylonia', 'Baba', None)
+    BABYLON = ('Babylon', 'Bab', 'Babylonia')
+    BORSIPPA = ('Borsippa', 'Bor', 'Babylonia')
+    CUTHA = ('Cutha', 'Cut', 'Babylonia')
+    ISIN = ('Isin', 'Isn', 'Babylonia')
+    KIS = ('Kiš', 'Kiš', 'Babylonia')
+    LARSA = ('Larsa', 'Lar', 'Babylonia')
+    METURAN = ('Meturan', 'Met', 'Babylonia')
+    NEREBUN = ('Nērebtum', 'Nēr', 'Babylonia')
+    NIPPUR = ('Nippur', 'Nip', 'Babylonia')
+    SIPPAR = ('Sippar', 'Sip', 'Babylonia')
+    SADUPPUM = ('Šaduppûm', 'Šad', 'Babylonia')
+    UR = ('Ur', 'Ur', 'Babylonia')
+    URUK = ('Uruk', 'Urk', 'Babylonia')
+    PERIPHERY = ('Periphery', '', None)
+    ALALAKS = ('Alalakh', 'Ala', 'Periphery')
+    TELL_EL_AMARNA = ('Tell el-Amarna', 'Ama', 'Periphery')
+    EMAR = ('Emar', 'Emr', 'Periphery')
+    HATTUSA = ('Ḫattuša', 'Hat', 'Periphery')
+    MARI = ('Mari', 'Mar', 'Periphery')
+    MEGIDDO = ('Megiddo', 'Meg', 'Periphery')
+    SUSA = ('Susa', 'Sus', 'Periphery')
+    UGARIT = ('Ugarit', 'Uga', 'Periphery')
+    UNCERTAIN = ('Uncertain', 'Unc', None)
 
-    def __init__(self, long_name, parent):
+    def __init__(self, long_name, abbreviation, parent):
         self.long_name = long_name
+        self.abbreviation = abbreviation
         self.parent = parent
 
     @classmethod
@@ -96,19 +117,31 @@ class PeriodModifier(Enum):
 
 
 class Period(Enum):
-    UR_III = 'Ur III'
-    OLD_ASSYRIAN = 'Old Assyrian'
-    OLD_BABYLONIAN = 'Old Babylonian'
-    MIDDLE_BABYLONIAN = 'Middle Babylonian'
-    MIDDLE_ASSYRIAN = 'Middle Assyrian'
-    HITTITE = 'Hittite'
-    NEO_ASSYRIAN = 'Neo-Assyrian'
-    NEO_BABYLONIAN = 'Neo-Babylonian'
-    LATE_BABYLONIAN = 'Late Babylonian'
-    PERSIAN = 'Persian'
-    HELLENISTIC = 'Hellenistic'
-    PARTHIAN = 'Parthian'
-    UNCERTAIN = 'Uncertain'
+    UR_III = ('Ur III', 'Ur3', None)
+    OLD_ASSYRIAN = ('Old Assyrian', 'OA', None)
+    OLD_BABYLONIAN = ('Old Babylonian', 'OB', None)
+    MIDDLE_BABYLONIAN = ('Middle Babylonian', 'MB', None)
+    MIDDLE_ASSYRIAN = ('Middle Assyrian', 'MA', None)
+    HITTITE = ('Hittite', 'Hit', None)
+    NEO_ASSYRIAN = ('Neo-Assyrian', 'NA', None)
+    NEO_BABYLONIAN = ('Neo-Babylonian', 'NB', None)
+    LATE_BABYLONIAN = ('Late Babylonian', 'LB', None)
+    PERSIAN = ('Persian', 'Per', 'Late Babylonian')
+    HELLENISTIC = ('Hellenistic', 'Hel', 'Late Babylonian')
+    PARTHIAN = ('Parthian', 'Par', 'Late Babylonian')
+    UNCERTAIN = ('Uncertain', 'Unc', None)
+
+    def __init__(self, long_name, abbreviation, parent):
+        self.long_name = long_name
+        self.abbreviation = abbreviation
+        self.parent = parent
+
+    @classmethod
+    def from_name(cls, name):
+        return [
+            enum for enum in cls
+            if enum.long_name == name
+        ][0]
 
 
 class Stage(Enum):
@@ -167,7 +200,7 @@ class Manuscript:
             'museumNumber': self.museum_number,
             'accession': self.accession,
             'periodModifier': self.period_modifier.value,
-            'period': self.period.value,
+            'period': self.period.long_name,
             'provenance': self.provenance.long_name,
             'type': self.type.long_name,
             'notes': self.notes,
@@ -185,7 +218,7 @@ class Manuscript:
             manuscript['museumNumber'],
             manuscript['accession'],
             PeriodModifier(manuscript['periodModifier']),
-            Period(manuscript['period']),
+            Period.from_name(manuscript['period']),
             Provenance.from_name(manuscript['provenance']),
             ManuscriptType.from_name(manuscript['type']),
             manuscript['notes'],

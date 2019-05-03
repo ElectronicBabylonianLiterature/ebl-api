@@ -52,8 +52,7 @@ def create_dictionary_routes(api, context):
     api.add_route('/words/{object_id}', words)
 
 
-def create_fragmentarium_routes(api, context):
-    sign_list = SignList(context['sign_repository'])
+def create_fragmentarium_routes(api, context, sign_list):
     fragmentarium = Fragmentarium(context['fragment_repository'],
                                   context['changelog'],
                                   sign_list,
@@ -82,11 +81,12 @@ def create_fragmentarium_routes(api, context):
     )
 
 
-def create_corpus_routes(api, context):
+def create_corpus_routes(api, context, sign_list):
     corpus = Corpus(
         context['text_repository'],
         context['bibliography'],
-        context['changelog']
+        context['changelog'],
+        sign_list
     )
     context['text_repository'].create_indexes()
 
@@ -99,10 +99,11 @@ def create_app(context):
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
 
+    sign_list = SignList(context['sign_repository'])
     create_bibliography_routes(api, context)
     create_dictionary_routes(api, context)
-    create_fragmentarium_routes(api, context)
-    create_corpus_routes(api, context)
+    create_fragmentarium_routes(api, context, sign_list)
+    create_corpus_routes(api, context, sign_list)
 
     files = create_files_resource(context['auth_backend'])(context['files'])
     api.add_route('/images/{file_name}', files)

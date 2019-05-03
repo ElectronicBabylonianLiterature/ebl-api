@@ -4,15 +4,31 @@ import attr
 import pydash
 import pymongo
 
-from ebl.corpus.text import Text, TextId
-from ebl.errors import Defect, NotFoundError
+from ebl.corpus.text import Text, TextId, Chapter
+from ebl.errors import Defect, NotFoundError, DataError
 from ebl.mongo_repository import MongoRepository
+from ebl.fragment.transliteration import Transliteration, TransliterationError
+from ebl.fragmentarium.validator import Validator
+
 
 COLLECTION = 'texts'
 
 
 def text_not_found(id_: TextId) -> Exception:
     return NotFoundError(f'Text {id_.category}.{id_.index} not found.')
+
+
+def invalid_atf(chapter: Chapter,
+                line_number: str,
+                manuscript_id: int) -> Exception:
+    siglum = [manuscript.siglum
+              for manuscript in chapter.manuscripts
+              if manuscript.id == manuscript_id][0]
+    return DataError(
+        f'Invalid transliteration on'
+        f' line {line_number}'
+        f' manuscript {siglum}.'
+    )
 
 
 def invalid_reference(id_: TextId, error: Exception) -> Exception:
@@ -82,13 +98,15 @@ class Corpus:
     def __init__(self,
                  repository: TextRepository,
                  bibliography,
-                 changelog):
+                 changelog,
+                 sign_list):
         self._repository: TextRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
+        self._sign_list = sign_list
 
     def create(self, text: Text, user) -> None:
-        self._validate_references(text)
+        self.validate_text(text)
         self._repository.create(text)
         new_dict: dict = {**text.to_dict(), '_id': text.id}
         self._changelog.create(
@@ -103,8 +121,8 @@ class Corpus:
         return self._hydrate_references(text)
 
     def update(self, id_: TextId, text: Text, user) -> Text:
-        self._validate_references(text)
         old_text = self._repository.find(id_)
+        self.validate_text(text)
         old_dict: dict = {**old_text.to_dict(), '_id': old_text.id}
         new_dict: dict = {**text.to_dict(), '_id': text.id}
         self._changelog.create(
@@ -115,6 +133,22 @@ class Corpus:
         )
         updated_text = self._repository.update(id_, text)
         return self._hydrate_references(updated_text)
+
+    def validate_text(self, text: Text) -> None:
+        self._validate_atf(text)
+        self._validate_references(text)
+
+    def _validate_atf(self, text: Text) -> None:
+        for chapter in text.chapters:
+            for line in chapter.lines:
+                for manuscript in line.manuscripts:
+                    try:
+                        Validator(Transliteration(manuscript.line.atf)
+                                  .with_signs(self._sign_list)).validate()
+                    except TransliterationError:
+                        raise invalid_atf(chapter,
+                                          line.number,
+                                          manuscript.manuscript_id)
 
     def _validate_references(self, text: Text) -> None:
         self._bibliography.validate_references(

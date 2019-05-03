@@ -188,7 +188,7 @@ def test_serializing_to_dict():
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'periodModifier': PERIOD_MODIFIER.value,
-                        'period': PERIOD.value,
+                        'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
                         'notes': NOTES,
@@ -236,7 +236,7 @@ def test_serializing_to_dict_with_documents():
                         'museumNumber': MUSEUM_NUMBER,
                         'accession': ACCESSION,
                         'periodModifier': PERIOD_MODIFIER.value,
-                        'period': PERIOD.value,
+                        'period': PERIOD.long_name,
                         'provenance': PROVENANCE.long_name,
                         'type': TYPE.long_name,
                         'notes': NOTES,
@@ -263,6 +263,6 @@ def test_serializing_to_dict_with_documents():
 
 
 def test_stage():
-    periods = [period.value for period in Period]
+    periods = [period.long_name for period in Period]
     stages = [stage.value for stage in Stage]
     assert stages == [*periods, 'Standard Babylonian']

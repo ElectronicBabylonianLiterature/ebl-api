@@ -34,7 +34,7 @@ MANUSCRIPT_DTO_SCHEMA = {
         },
         'period': {
             'type': 'string',
-            'enum': [period.value for period in Period]
+            'enum': [period.long_name for period in Period]
         },
         'provenance': {
             'type': 'string',

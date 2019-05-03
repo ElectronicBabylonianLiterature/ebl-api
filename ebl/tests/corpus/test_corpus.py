@@ -5,6 +5,7 @@ import pytest
 from ebl.auth0 import Guest
 from ebl.errors import Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
+from ebl.fragment.transliteration import Transliteration
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()
@@ -43,13 +44,28 @@ def expect_validate_references(bibliography, when):
     ).thenReturn()
 
 
+def expect_signs(sign_list, when):
+    (pydash
+     .chain(TEXT.chapters)
+     .flat_map(lambda chapter: chapter.lines)
+     .flat_map(lambda line: line.manuscripts)
+     .map(lambda manuscript: manuscript.line.atf)
+     .map(lambda atf: Transliteration(atf).cleaned)
+     .for_each(lambda cleaned: when(sign_list)
+               .map_transliteration(cleaned)
+               .thenReturn([['X']]))
+     .value())
+
+
 def test_creating_text(corpus,
                        text_repository,
                        bibliography,
                        changelog,
+                       sign_list,
                        user,
                        when):
     # pylint: disable=R0913
+    expect_signs(sign_list, when)
     expect_validate_references(bibliography, when)
     when(changelog).create(
         COLLECTION,
@@ -84,6 +100,7 @@ def test_updating_text(corpus,
                        text_repository,
                        bibliography,
                        changelog,
+                       sign_list,
                        user,
                        when):
     # pylint: disable=R0913
@@ -93,6 +110,7 @@ def test_updating_text(corpus,
         index=DEHYDRATED_TEXT.index + 1,
         name='New Name'
     )
+    expect_signs(sign_list, when)
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     (when(text_repository)
      .update(TEXT.id, updated_text)

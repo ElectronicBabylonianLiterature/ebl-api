@@ -51,6 +51,11 @@ def allow_references(text, bibliography):
                 bibliography.create(reference.document, ANY_USER)
 
 
+def allow_signs(signs, sign_list):
+    for sign in signs:
+        sign_list.create(sign)
+
+
 def create_text(client, text):
     post_result = client.simulate_post(
         f'/texts',
@@ -83,7 +88,8 @@ def test_to_dto():
     assert to_dto(text) == dto
 
 
-def test_created_text_can_be_fetched(client, bibliography):
+def test_created_text_can_be_fetched(client, bibliography, sign_list, signs):
+    allow_signs(signs, sign_list)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -113,7 +119,8 @@ def test_invalid_index(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_text(client, bibliography):
+def test_updating_text(client, bibliography, sign_list, signs):
+    allow_signs(signs, sign_list)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -149,7 +156,8 @@ def test_updating_text_not_found(client, bibliography):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_invalid_reference(client, bibliography):
+def test_updating_invalid_reference(client, bibliography, sign_list, signs):
+    allow_signs(signs, sign_list)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -215,7 +223,7 @@ INVALID_MANUSCRIPTS = {
                     'museumNumber': 'X.1',
                     'accession': '',
                     'periodModifier': PeriodModifier.NONE.value,
-                    'period': Period.OLD_ASSYRIAN.value,
+                    'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
                     'notes': '',
@@ -227,7 +235,7 @@ INVALID_MANUSCRIPTS = {
                     'museumNumber': 'X.2',
                     'accession': '',
                     'periodModifier': PeriodModifier.NONE.value,
-                    'period': Period.OLD_ASSYRIAN.value,
+                    'period': Period.OLD_ASSYRIAN.long_name,
                     'provenance': Provenance.BABYLON.long_name,
                     'type': ManuscriptType.SCHOOL.long_name,
                     'notes': '',
@@ -240,17 +248,65 @@ INVALID_MANUSCRIPTS = {
 }
 
 
+INVALID_SIGNS = {
+    # pylint: disable=E1101
+    'category': 1,
+    'index': 1,
+    'name': 'name',
+    'numberOfVerses': 100,
+    'approximateVerses': False,
+    'chapters': [
+        {
+            'classification': Classification.ANCIENT.value,
+            'stage': Stage.OLD_ASSYRIAN.value,
+            'version': 'A',
+            'name': 'I',
+            'order': 0,
+            'manuscripts': [
+                {
+                    'id': 1,
+                    'siglumDisambiguator': '1c',
+                    'museumNumber': 'X.1',
+                    'accession': '',
+                    'periodModifier': PeriodModifier.NONE.value,
+                    'period': Period.OLD_ASSYRIAN.long_name,
+                    'provenance': Provenance.BABYLON.long_name,
+                    'type': ManuscriptType.SCHOOL.long_name,
+                    'notes': '',
+                    'references': []
+                }
+            ],
+            'lines': [{
+                'number': '1',
+                'reconstruction': 'foo',
+                'manuscripts': [{
+                    'manuscriptId': 1,
+                    'labels': [],
+                    'number': '1',
+                    'atf': 'xxx'
+                }]
+            }]
+        }
+    ]
+}
+
+
 @pytest.mark.parametrize("updated_text,expected_status", [
     [create_dto(TextFactory.build(category='invalid')),
      falcon.HTTP_BAD_REQUEST],
     [create_dto(TextFactory.build(chapters=(ChapterFactory.build(name=''),))),
      falcon.HTTP_BAD_REQUEST],
     [INVALID_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
+    [INVALID_SIGNS, falcon.HTTP_UNPROCESSABLE_ENTITY]
 ])
 def test_update_text_invalid_entity(client,
                                     bibliography,
                                     updated_text,
-                                    expected_status):
+                                    expected_status,
+                                    sign_list,
+                                    signs):
+    # pylint: disable=R0913
+    allow_signs(signs, sign_list)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)

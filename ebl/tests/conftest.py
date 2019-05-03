@@ -28,7 +28,7 @@ from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.text.line import TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word
+from ebl.text.token import Token, Word, UniqueLemma
 
 
 @pytest.fixture
@@ -83,8 +83,8 @@ def text_repository(database):
 
 
 @pytest.fixture
-def corpus(text_repository, bibliography, changelog):
-    return Corpus(text_repository, bibliography, changelog)
+def corpus(text_repository, bibliography, changelog, sign_list):
+    return Corpus(text_repository, bibliography, changelog, sign_list)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
@@ -327,23 +327,23 @@ def lemmatized_fragment():
             )),
             TextLine("2'.", (
                 Token('[...]'),
-                Word('GI₆', unique_lemma=("ginâ I", )),
-                Word('ana', unique_lemma=("ana I", )),
-                Word('u₄-š[u', unique_lemma=("ūsu I", )),
+                Word('GI₆', unique_lemma=(UniqueLemma('ginâ I'),)),
+                Word('ana', unique_lemma=(UniqueLemma('ana I'),)),
+                Word('u₄-š[u', unique_lemma=(UniqueLemma("ūsu I"), )),
                 Token('...]')
             )),
             TextLine("3'.", (
                 Token('[...'),
-                Word('k]i-du', unique_lemma=("kīdu I", )),
-                Word('u', unique_lemma=("u I", )),
-                Word('ba-ma-t[i', unique_lemma=("bamātu I", )),
+                Word('k]i-du', unique_lemma=(UniqueLemma('kīdu I'),)),
+                Word('u', unique_lemma=(UniqueLemma('u I'),)),
+                Word('ba-ma-t[i', unique_lemma=(UniqueLemma('bamātu I'),)),
                 Token('...]')
             )),
             TextLine("6'.", (
                 Token('[...]'),
                 Word('x'),
-                Word('mu', unique_lemma=("mu I", )),
-                Word('ta-ma-tu₂', unique_lemma=("tamalāku I", ))
+                Word('mu', unique_lemma=(UniqueLemma('mu I'),)),
+                Word('ta-ma-tu₂', unique_lemma=(UniqueLemma('tamalāku I'),))
             )),
             TextLine("7'.", (
                 Word('šu/|BI×IS|'),
@@ -358,10 +358,10 @@ def another_lemmatized_fragment():
         TransliteratedFragmentFactory.build(),
         text=Text((
             TextLine("1'.", (
-                Word('GI₆', unique_lemma=("ginâ I", )),
-                Word('ana', unique_lemma=("ana II", )),
-                Word('ana', unique_lemma=("ana II", )),
-                Word('u₄-šu', unique_lemma=("ūsu I", ))
+                Word('GI₆', unique_lemma=(UniqueLemma('ginâ I'),)),
+                Word('ana', unique_lemma=(UniqueLemma('ana II'), )),
+                Word('ana', unique_lemma=(UniqueLemma('ana II'), )),
+                Word('u₄-šu', unique_lemma=(UniqueLemma('ūsu I'), ))
             )),
         )),
         signs='MI DIŠ DIŠ UD ŠU'
