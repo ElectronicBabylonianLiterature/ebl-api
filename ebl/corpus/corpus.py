@@ -4,34 +4,17 @@ import attr
 
 import pymongo
 
+from ebl.corpus.text_validator import TextValidator
 from ebl.corpus.mongo_serializer import serialize, deserialize
-from ebl.corpus.text import Text, TextId, Chapter, TextVisitor,\
-    ManuscriptLine, Line, Manuscript
-from ebl.errors import Defect, NotFoundError, DataError
+from ebl.corpus.text import Text, TextId
+from ebl.errors import Defect, NotFoundError
 from ebl.mongo_repository import MongoRepository
-from ebl.fragment.transliteration import Transliteration, TransliterationError
-from ebl.fragmentarium.validator import Validator
-from ebl.text.labels import LineNumberLabel
-
 
 COLLECTION = 'texts'
 
 
 def text_not_found(id_: TextId) -> Exception:
     return NotFoundError(f'Text {id_.category}.{id_.index} not found.')
-
-
-def invalid_atf(chapter: Chapter,
-                line_number: LineNumberLabel,
-                manuscript_id: int) -> Exception:
-    siglum = [manuscript.siglum
-              for manuscript in chapter.manuscripts
-              if manuscript.id == manuscript_id][0]
-    return DataError(
-        f'Invalid transliteration on'
-        f' line {line_number.to_value()}'
-        f' manuscript {siglum}.'
-    )
 
 
 def invalid_reference(id_: TextId, error: Exception) -> Exception:
@@ -157,30 +140,3 @@ class Corpus:
             ))
         except NotFoundError as error:
             raise invalid_reference(text.id, error)
-
-
-class TextValidator(TextVisitor):
-
-    def __init__(self, bibliography, sign_list):
-        self._bibliography = bibliography
-        self._sign_list = sign_list
-        self._chapter = None
-        self._line = None
-
-    def visit_chapter(self, chapter: Chapter) -> None:
-        self._chapter = chapter
-
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
-        self._bibliography.validate_references(manuscript.references)
-
-    def visit_line(self, line: Line) -> None:
-        self._line = line
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        try:
-            Validator(Transliteration(manuscript_line.line.atf)
-                      .with_signs(self._sign_list)).validate()
-        except TransliterationError:
-            raise invalid_atf(self._chapter,
-                              self._line.number,
-                              manuscript_line.manuscript_id)
