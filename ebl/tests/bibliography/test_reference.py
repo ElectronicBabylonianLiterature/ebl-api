@@ -1,13 +1,11 @@
 from ebl.bibliography.reference import (BibliographyId, Reference,
                                         ReferenceType)
-from ebl.text.labels import LineNumberLabel
 
 ID = BibliographyId('RN.1')
 TYPE = ReferenceType.EDITION
 PAGES = '1-6'
 NOTES = 'some notes'
-LINES_CITED = (LineNumberLabel('1'),
-               LineNumberLabel('2a.2'))
+LINES_CITED = ('o. 1', 'r. iii! 2a.2', "9'")
 
 REFERENCE = Reference(ID, TYPE, PAGES, NOTES, LINES_CITED)
 
@@ -16,7 +14,7 @@ SERIALIZED_REFERENCE = {
     'type': TYPE.name,
     'pages': PAGES,
     'notes': NOTES,
-    'linesCited': [line_number.to_value() for line_number in LINES_CITED]
+    'linesCited': list(LINES_CITED)
 }
 
 

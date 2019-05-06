@@ -3,7 +3,6 @@ import factory.fuzzy
 
 from ebl.bibliography.reference import BibliographyId, Reference, ReferenceType
 from ebl.tests.factories.collections import TupleFactory
-from ebl.text.labels import LineNumberLabel
 
 
 class ReferenceFactory(factory.Factory):
@@ -15,7 +14,7 @@ class ReferenceFactory(factory.Factory):
     pages = factory.Sequence(lambda n: f'{n}-{n+2}, {n+5}')
     notes = factory.Faker('paragraph')
     lines_cited = factory.List([
-        factory.Sequence(lambda n: LineNumberLabel(f"{n}'.{n+1}a"))
+        factory.Sequence(lambda n: f"r. iii*! {n}'.{n+1}a")
     ], TupleFactory)
 
 
