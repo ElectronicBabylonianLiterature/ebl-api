@@ -317,6 +317,19 @@ def validate_manuscripts(_instance, _attribute, value):
         raise ValueError(f'Invalid manuscripts: {errors}.')
 
 
+def validate_lines(instance, _attribute, value):
+    manuscripts_ids = set(manuscript.id for manuscript in instance.manuscripts)
+    manuscripts_ids_from_lines = set(pydash
+                                     .chain(value)
+                                     .flat_map(lambda line: line.manuscripts)
+                                     .map(lambda manuscript: manuscript
+                                          .manuscript_id)
+                                     .value())
+    orphans = manuscripts_ids_from_lines.difference(manuscripts_ids)
+    if orphans:
+        raise ValueError(f'Invalid missing manuscripts: {orphans}.')
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
@@ -328,13 +341,18 @@ class Chapter:
         default=attr.Factory(tuple),
         validator=validate_manuscripts
     )
-    lines: Tuple[Line, ...] = tuple()
+    lines: Tuple[Line, ...] = attr.ib(
+        default=attr.Factory(tuple),
+        validator=validate_lines
+    )
 
     def accept(self, visitor: 'TextVisitor') -> None:
+        # pylint: disable=E1133
+
         if visitor.is_pre_order:
             visitor.visit_chapter(self)
 
-        for manuscript in self.manuscripts:  # pylint: disable=E1133
+        for manuscript in self.manuscripts:
             manuscript.accept(visitor)
 
         for line in self.lines:

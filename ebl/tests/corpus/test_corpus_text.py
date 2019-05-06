@@ -140,6 +140,17 @@ def test_duplicate_sigla_are_invalid():
         ))
 
 
+def test_missing_manuscripts_are_invalid():
+    with pytest.raises(ValueError):
+        Chapter(manuscripts=(
+            Manuscript(MANUSCRIPT_ID),
+        ), lines=(
+            Line(LINE_NUMBER, LINE_RECONSTRUCTION, (
+                ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),
+            )),
+        ))
+
+
 @pytest.mark.parametrize('labels', [
     (ColumnLabel.from_label('i'),
      ColumnLabel.from_label('ii')),
