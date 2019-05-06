@@ -3,7 +3,6 @@ from ebl.corpus.text import TextVisitor, Text, Chapter, Manuscript, \
 
 
 class TextSerializer(TextVisitor):
-
     @classmethod
     def serialize(cls, text: Text, include_documents):
         serializer = cls(include_documents)
@@ -11,6 +10,7 @@ class TextSerializer(TextVisitor):
         return serializer.text
 
     def __init__(self, include_documents):
+        super().__init__(TextVisitor.Order.PRE)
         self._include_documents = include_documents
         self.text = None
         self.chapter = None

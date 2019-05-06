@@ -1,5 +1,5 @@
 import collections
-from enum import Enum
+from enum import Enum, auto
 from typing import Tuple
 
 import attr
@@ -273,9 +273,14 @@ class Line:
     manuscripts: Tuple[ManuscriptLine, ...] = tuple()
 
     def accept(self, visitor: 'TextVisitor') -> None:
-        visitor.visit_line(self)
+        if visitor.is_pre_order:
+            visitor.visit_line(self)
+
         for manuscript_line in self.manuscripts:
             manuscript_line.accept(visitor)
+
+        if visitor.is_post_order:
+            visitor.visit_line(self)
 
     @staticmethod
     def from_dict(data):
@@ -326,12 +331,17 @@ class Chapter:
     lines: Tuple[Line, ...] = tuple()
 
     def accept(self, visitor: 'TextVisitor') -> None:
-        visitor.visit_chapter(self)
+        if visitor.is_pre_order:
+            visitor.visit_chapter(self)
+
         for manuscript in self.manuscripts:  # pylint: disable=E1133
             manuscript.accept(visitor)
 
         for line in self.lines:
             line.accept(visitor)
+
+        if visitor.is_post_order:
+            visitor.visit_chapter(self)
 
     @staticmethod
     def from_dict(chapter: dict) -> 'Chapter':
@@ -367,9 +377,14 @@ class Text:
         return TextId(self.category, self.index)
 
     def accept(self, visitor: 'TextVisitor') -> None:
-        visitor.visit_text(self)
+        if visitor.is_pre_order:
+            visitor.visit_text(self)
+
         for chapter in self.chapters:
             chapter.accept(visitor)
+
+        if visitor.is_post_order:
+            visitor.visit_text(self)
 
     @staticmethod
     def from_dict(text: dict) -> 'Text':
@@ -387,6 +402,21 @@ class Text:
 
 
 class TextVisitor:
+
+    class Order(Enum):
+        PRE = auto()
+        POST = auto()
+
+    def __init__(self, order: 'TextVisitor.Order'):
+        self._order = order
+
+    @property
+    def is_post_order(self) -> bool:
+        return self._order == TextVisitor.Order.POST
+
+    @property
+    def is_pre_order(self) -> bool:
+        return self._order == TextVisitor.Order.PRE
 
     def visit_text(self, text: Text) -> None:
         pass

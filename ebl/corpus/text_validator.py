@@ -22,6 +22,7 @@ def invalid_atf(chapter: Chapter,
 class TextValidator(TextVisitor):
 
     def __init__(self, bibliography, sign_list):
+        super().__init__(TextVisitor.Order.PRE)
         self._bibliography = bibliography
         self._sign_list = sign_list
         self._chapter = None

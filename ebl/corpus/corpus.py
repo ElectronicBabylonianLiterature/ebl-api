@@ -1,13 +1,12 @@
 from abc import ABC, abstractmethod
 
-import attr
-
 import pymongo
 
+from ebl.corpus.text_hydrator import TextHydrator
 from ebl.corpus.text_validator import TextValidator
 from ebl.corpus.mongo_serializer import serialize, deserialize
 from ebl.corpus.text import Text, TextId
-from ebl.errors import Defect, NotFoundError
+from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 COLLECTION = 'texts'
@@ -15,11 +14,6 @@ COLLECTION = 'texts'
 
 def text_not_found(id_: TextId) -> Exception:
     return NotFoundError(f'Text {id_.category}.{id_.index} not found.')
-
-
-def invalid_reference(id_: TextId, error: Exception) -> Exception:
-    return Defect(f'Text {id_.category}.{id_.index} has invalid manuscript'
-                  f' references: "{error}"')
 
 
 class TextRepository(ABC):
@@ -124,19 +118,6 @@ class Corpus:
         text.accept(TextValidator(self._bibliography, self._sign_list))
 
     def _hydrate_references(self, text: Text) -> Text:
-        try:
-            return attr.evolve(text, chapters=tuple(
-                attr.evolve(chapter, manuscripts=tuple(
-                    attr.evolve(manuscript, references=tuple(
-                        attr.evolve(
-                            reference,
-                            document=self._bibliography.find(reference.id)
-                        )
-                        for reference in manuscript.references
-                    ))
-                    for manuscript in chapter.manuscripts
-                ))
-                for chapter in text.chapters
-            ))
-        except NotFoundError as error:
-            raise invalid_reference(text.id, error)
+        hydrator = TextHydrator(self._bibliography)
+        text.accept(hydrator)
+        return hydrator.text
