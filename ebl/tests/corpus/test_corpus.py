@@ -50,6 +50,10 @@ def expect_validate_references(bibliography, when):
     ).thenReturn()
 
 
+def expect_invalid_references(bibliography, when):
+    when(bibliography).validate_references(...).thenRaise(DataError())
+
+
 def expect_signs(sign_list, when, sign='X'):
     (pydash
      .chain(TEXT.chapters)
@@ -89,14 +93,23 @@ def test_creating_text(corpus,
 
 
 def test_create_raises_exception_if_invalid_signs(corpus,
-                                                  text_repository,
                                                   sign_list,
-                                                  user,
                                                   when):
     expect_invalid_signs(sign_list, when)
 
     with pytest.raises(DataError):
-        corpus.create(TEXT, user)
+        corpus.create(TEXT, ANY_USER)
+
+
+def test_create_raises_exception_if_invalid_references(corpus,
+                                                       bibliography,
+                                                       sign_list,
+                                                       when):
+    expect_signs(sign_list, when)
+    expect_invalid_references(bibliography, when)
+
+    with pytest.raises(DataError):
+        corpus.create(TEXT, ANY_USER)
 
 
 def test_finding_text(corpus, text_repository, bibliography, when):
@@ -153,11 +166,24 @@ def test_updating_text(corpus,
 def test_update_raises_exception_if_invalid_signs(corpus,
                                                   text_repository,
                                                   sign_list,
-                                                  user,
                                                   when):
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     expect_invalid_signs(sign_list, when)
 
     with pytest.raises(DataError):
-        corpus.update(TEXT.id, updated_text, user)
+        corpus.update(TEXT.id, updated_text, ANY_USER)
+
+
+def test_update_raises_exception_if_invalid_references(corpus,
+                                                       text_repository,
+                                                       sign_list,
+                                                       bibliography,
+                                                       when):
+    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    expect_signs(sign_list, when)
+    expect_invalid_references(bibliography, when)
+
+    with pytest.raises(DataError):
+        corpus.update(TEXT.id, updated_text, ANY_USER)
