@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 
 import attr
-import pydash
+
 import pymongo
 
 from ebl.corpus.mongo_serializer import serialize, deserialize
-from ebl.corpus.text import Text, TextId, Chapter
+from ebl.corpus.text import Text, TextId, Chapter, TextVisitor,\
+    ManuscriptLine, Line, Manuscript
 from ebl.errors import Defect, NotFoundError, DataError
 from ebl.mongo_repository import MongoRepository
 from ebl.fragment.transliteration import Transliteration, TransliterationError
@@ -108,7 +109,7 @@ class Corpus:
         self._sign_list = sign_list
 
     def create(self, text: Text, user) -> None:
-        self.validate_text(text)
+        self._validate_text(text)
         self._repository.create(text)
         new_dict: dict = {**serialize(text), '_id': text.id}
         self._changelog.create(
@@ -124,7 +125,7 @@ class Corpus:
 
     def update(self, id_: TextId, text: Text, user) -> Text:
         old_text = self._repository.find(id_)
-        self.validate_text(text)
+        self._validate_text(text)
         old_dict: dict = {**serialize(old_text), '_id': old_text.id}
         new_dict: dict = {**serialize(text), '_id': text.id}
         self._changelog.create(
@@ -136,30 +137,8 @@ class Corpus:
         updated_text = self._repository.update(id_, text)
         return self._hydrate_references(updated_text)
 
-    def validate_text(self, text: Text) -> None:
-        self._validate_atf(text)
-        self._validate_references(text)
-
-    def _validate_atf(self, text: Text) -> None:
-        for chapter in text.chapters:
-            for line in chapter.lines:
-                for manuscript in line.manuscripts:
-                    try:
-                        Validator(Transliteration(manuscript.line.atf)
-                                  .with_signs(self._sign_list)).validate()
-                    except TransliterationError:
-                        raise invalid_atf(chapter,
-                                          line.number,
-                                          manuscript.manuscript_id)
-
-    def _validate_references(self, text: Text) -> None:
-        self._bibliography.validate_references(
-            pydash
-            .chain(text.chapters)
-            .flat_map(lambda chapter: chapter.manuscripts)
-            .flat_map(lambda manuscript: manuscript.references)
-            .value()
-        )
+    def _validate_text(self, text: Text) -> None:
+        text.accept(TextValidator(self._bibliography, self._sign_list))
 
     def _hydrate_references(self, text: Text) -> Text:
         try:
@@ -178,3 +157,30 @@ class Corpus:
             ))
         except NotFoundError as error:
             raise invalid_reference(text.id, error)
+
+
+class TextValidator(TextVisitor):
+
+    def __init__(self, bibliography, sign_list):
+        self._bibliography = bibliography
+        self._sign_list = sign_list
+        self._chapter = None
+        self._line = None
+
+    def visit_chapter(self, chapter: Chapter) -> None:
+        self._chapter = chapter
+
+    def visit_manuscript(self, manuscript: Manuscript) -> None:
+        self._bibliography.validate_references(manuscript.references)
+
+    def visit_line(self, line: Line) -> None:
+        self._line = line
+
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+        try:
+            Validator(Transliteration(manuscript_line.line.atf)
+                      .with_signs(self._sign_list)).validate()
+        except TransliterationError:
+            raise invalid_atf(self._chapter,
+                              self._line.number,
+                              manuscript_line.manuscript_id)

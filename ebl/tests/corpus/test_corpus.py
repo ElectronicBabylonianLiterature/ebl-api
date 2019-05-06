@@ -41,13 +41,17 @@ def expect_bibliography(bibliography, when):
 
 
 def expect_validate_references(bibliography, when):
-    when(bibliography).validate_references(
-        pydash
-        .chain(TEXT.chapters)
-        .flat_map(lambda chapter: chapter.manuscripts)
-        .flat_map(lambda manuscript: manuscript.references)
-        .value()
-    ).thenReturn()
+    (pydash
+     .chain(TEXT.chapters)
+     .flat_map(lambda chapter: chapter.manuscripts)
+     .map(lambda manuscript: manuscript.references)
+     .for_each(lambda references:
+               when(bibliography).validate_references(references).thenReturn())
+     .value())
+
+
+def allow_validate_references(bibliography, when):
+    when(bibliography).validate_references(...).thenReturn()
 
 
 def expect_invalid_references(bibliography, when):
@@ -68,7 +72,7 @@ def expect_signs(sign_list, when, sign='X'):
 
 
 def expect_invalid_signs(sign_list, when):
-    expect_signs(sign_list, when, '?')
+    when(sign_list).map_transliteration(...).thenReturn([['?']])
 
 
 def test_creating_text(corpus,
@@ -93,8 +97,10 @@ def test_creating_text(corpus,
 
 
 def test_create_raises_exception_if_invalid_signs(corpus,
+                                                  bibliography,
                                                   sign_list,
                                                   when):
+    allow_validate_references(bibliography, when)
     expect_invalid_signs(sign_list, when)
 
     with pytest.raises(DataError):
@@ -103,9 +109,7 @@ def test_create_raises_exception_if_invalid_signs(corpus,
 
 def test_create_raises_exception_if_invalid_references(corpus,
                                                        bibliography,
-                                                       sign_list,
                                                        when):
-    expect_signs(sign_list, when)
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
@@ -165,10 +169,12 @@ def test_updating_text(corpus,
 
 def test_update_raises_exception_if_invalid_signs(corpus,
                                                   text_repository,
+                                                  bibliography,
                                                   sign_list,
                                                   when):
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    allow_validate_references(bibliography, when)
     expect_invalid_signs(sign_list, when)
 
     with pytest.raises(DataError):
@@ -177,12 +183,10 @@ def test_update_raises_exception_if_invalid_signs(corpus,
 
 def test_update_raises_exception_if_invalid_references(corpus,
                                                        text_repository,
-                                                       sign_list,
                                                        bibliography,
                                                        when):
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    expect_signs(sign_list, when)
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
