@@ -1,7 +1,8 @@
 import attr
 import pytest
 
-from ebl.corpus.text import TextId
+from ebl.corpus.text_serializer import TextSerializer
+from ebl.corpus.text import TextId, Text
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
@@ -17,8 +18,12 @@ TEXT = TextFactory.build(
 )
 
 
+def to_dict(text: Text) -> dict:
+    return TextSerializer.serialize(text, False)
+
+
 def when_text_in_collection(database):
-    database[COLLECTION].insert_one(TEXT.to_dict())
+    database[COLLECTION].insert_one(to_dict(TEXT))
 
 
 def test_creating_text(database, text_repository):
@@ -28,7 +33,7 @@ def test_creating_text(database, text_repository):
         'category': TEXT.category,
         'index': TEXT.index
     }, projection={'_id': False})
-    assert inserted_text == TEXT.to_dict()
+    assert inserted_text == to_dict(TEXT)
 
 
 def test_it_is_not_possible_to_create_duplicates(text_repository):

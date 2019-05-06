@@ -1,17 +1,12 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
-import pydash
-from parsy import ParseError
 
+from ebl.corpus.api_serializer import deserialize, serialize
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
-                             PeriodModifier, Provenance, Stage, Text, TextId,
-                             ManuscriptLine, TextSerializer)
-from ebl.text.labels import LineNumberLabel
-from ebl.errors import DataError, NotFoundError
+                             PeriodModifier, Provenance, Stage, TextId)
+from ebl.errors import NotFoundError
 from ebl.require_scope import require_scope
-from ebl.text.text_parser import TEXT_LINE
-
 
 MANUSCRIPT_DTO_SCHEMA = {
     'type': 'object',
@@ -166,63 +161,6 @@ TEXT_DTO_SCHEMA = {
 }
 
 
-def parse_text(media: dict) -> Text:
-    def parse_manuscript(manuscript_dto: dict):
-        try:
-            atf_line_number =\
-                LineNumberLabel(manuscript_dto['number']).to_atf()
-            line = \
-                TEXT_LINE.parse(f'{atf_line_number} {manuscript_dto["atf"]}')
-        except (ParseError, ValueError) as error:
-            raise DataError(error)
-
-        return pydash.omit({
-            **manuscript_dto,
-            'line': line.to_dict()
-        }, 'atf')
-
-    parsed_media = {
-        **media,
-        'chapters': [
-            {
-                **chapter,
-                'lines': [
-                    {
-                        **line,
-                        'manuscripts': [
-                            parse_manuscript(manuscript)
-                            for manuscript in line['manuscripts']
-                        ]
-                    } for line in chapter['lines']
-                ]
-            } for chapter in media['chapters']
-        ]
-    }
-    try:
-        return Text.from_dict(parsed_media)
-    except ValueError as error:
-        raise DataError(error)
-
-
-class ApiSerializer(TextSerializer):
-
-    def __init__(self):
-        super().__init__(True)
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        line = manuscript_line.line
-        self.line['manuscripts'].append({
-            'manuscriptId': manuscript_line.manuscript_id,
-            'labels': [label.to_value() for label in manuscript_line.labels],
-            'number': line.line_number.to_value(),
-            'atf': line.atf[len(line.line_number.to_atf()) + 1:]
-        })
-
-
-def to_dto(text):
-    return ApiSerializer.serialize(text)
-
-
 def create_text_id(category: str, index: str) -> TextId:
     try:
         return TextId(int(category), int(index))
@@ -239,11 +177,11 @@ class TextsResource:
     @falcon.before(require_scope, 'create:texts')
     @validate(TEXT_DTO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
-        text = parse_text(req.media)
+        text = deserialize(req.media)
         self._corpus.create(text, req.context['user'])
         resp.status = falcon.HTTP_CREATED
         resp.location = f'/texts/{text.category}/{text.index}'
-        resp.media = to_dto(self._corpus.find(text.id))
+        resp.media = serialize(self._corpus.find(text.id))
 
 
 class TextResource:
@@ -256,7 +194,7 @@ class TextResource:
             self, _, resp: falcon.Response, category: str, index: str
     ) -> None:
         text = self._corpus.find(create_text_id(category, index))
-        resp.media = to_dto(text)
+        resp.media = serialize(text)
 
     @falcon.before(require_scope, 'write:texts')
     @validate(TEXT_DTO_SCHEMA)
@@ -265,11 +203,11 @@ class TextResource:
                 resp: falcon.Response,
                 category: str,
                 index: str) -> None:
-        text = parse_text(req.media)
+        text = deserialize(req.media)
         self._corpus.update(
             create_text_id(category, index),
             text,
             req.context['user']
         )
         updated_text = self._corpus.find(text.id)
-        resp.media = to_dto(updated_text)
+        resp.media = serialize(updated_text)

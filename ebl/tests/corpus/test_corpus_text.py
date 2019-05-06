@@ -5,7 +5,7 @@ import pytest
 from ebl.corpus.text import (Chapter, Classification, Manuscript,
                              ManuscriptType, Period, PeriodModifier,
                              Provenance, Stage, Text, TextId, Line,
-                             ManuscriptLine, TextSerializer)
+                             ManuscriptLine)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
 from ebl.text.labels import SurfaceLabel, ColumnLabel, Label, LineNumberLabel
@@ -156,102 +156,6 @@ def test_invalid_labels(labels: Tuple[Label, ...]):
             labels=labels,
             line=TextLine()
         )
-
-
-def test_serializing_to_dict():
-    # pylint: disable=E1101
-    assert TextSerializer.serialize(TEXT) == {
-        'category': CATEGORY,
-        'index': INDEX,
-        'name': NAME,
-        'numberOfVerses': VERSES,
-        'approximateVerses': APPROXIMATE,
-        'chapters': [
-            {
-                'classification': CLASSIFICATION.value,
-                'stage': STAGE.value,
-                'version': VERSION,
-                'name': CHAPTER_NAME,
-                'order': ORDER,
-                'manuscripts': [
-                    {
-                        'id': MANUSCRIPT_ID,
-                        'siglumDisambiguator': SIGLUM_DISAMBIGUATOR,
-                        'museumNumber': MUSEUM_NUMBER,
-                        'accession': ACCESSION,
-                        'periodModifier': PERIOD_MODIFIER.value,
-                        'period': PERIOD.long_name,
-                        'provenance': PROVENANCE.long_name,
-                        'type': TYPE.long_name,
-                        'notes': NOTES,
-                        'references': [
-                            reference.to_dict()
-                            for reference in REFERENCES
-                        ]
-                    }
-                ],
-                'lines': [
-                    {
-                        'number': LINE_NUMBER.to_value(),
-                        'reconstruction': LINE_RECONSTRUCTION,
-                        'manuscripts': [{
-                            'manuscriptId': MANUSCRIPT_ID,
-                            'labels': [label.to_value() for label in LABELS],
-                            'line': MANUSCRIPT_TEXT.to_dict()
-                        }]
-                    }
-                ]
-            }
-        ]
-    }
-
-
-def test_serializing_to_dict_with_documents():
-    # pylint: disable=E1101
-    assert TextSerializer.serialize(TEXT, True) == {
-        'category': CATEGORY,
-        'index': INDEX,
-        'name': NAME,
-        'numberOfVerses': VERSES,
-        'approximateVerses': APPROXIMATE,
-        'chapters': [
-            {
-                'classification': CLASSIFICATION.value,
-                'stage': STAGE.value,
-                'version': VERSION,
-                'name': CHAPTER_NAME,
-                'order': ORDER,
-                'manuscripts': [
-                    {
-                        'id': MANUSCRIPT_ID,
-                        'siglumDisambiguator': SIGLUM_DISAMBIGUATOR,
-                        'museumNumber': MUSEUM_NUMBER,
-                        'accession': ACCESSION,
-                        'periodModifier': PERIOD_MODIFIER.value,
-                        'period': PERIOD.long_name,
-                        'provenance': PROVENANCE.long_name,
-                        'type': TYPE.long_name,
-                        'notes': NOTES,
-                        'references': [
-                            reference.to_dict(True)
-                            for reference in REFERENCES
-                        ]
-                    }
-                ],
-                'lines': [
-                    {
-                        'number': LINE_NUMBER.to_value(),
-                        'reconstruction': LINE_RECONSTRUCTION,
-                        'manuscripts': [{
-                            'manuscriptId': MANUSCRIPT_ID,
-                            'labels': [label.to_value() for label in LABELS],
-                            'line': MANUSCRIPT_TEXT.to_dict()
-                        }]
-                    }
-                ]
-            }
-        ]
-    }
 
 
 def test_stage():

@@ -2,6 +2,8 @@ import attr
 import pydash
 import pytest
 
+from ebl.corpus.text import Text
+from ebl.corpus.text_serializer import TextSerializer
 from ebl.auth0 import Guest
 from ebl.errors import Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
@@ -23,6 +25,10 @@ DEHYDRATED_TEXT = attr.evolve(TEXT, chapters=tuple(
     for chapter in TEXT.chapters
 ))
 ANY_USER = Guest()
+
+
+def to_dict(text: Text) -> dict:
+    return TextSerializer.serialize(text, False)
 
 
 def expect_bibliography(bibliography, when):
@@ -71,7 +77,7 @@ def test_creating_text(corpus,
         COLLECTION,
         user.profile,
         {'_id': TEXT.id},
-        {**TEXT.to_dict(), '_id': TEXT.id}
+        {**to_dict(TEXT), '_id': TEXT.id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
@@ -118,8 +124,8 @@ def test_updating_text(corpus,
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**TEXT.to_dict(), '_id': TEXT.id},
-        {**updated_text.to_dict(), '_id': updated_text.id}
+        {**to_dict(TEXT), '_id': TEXT.id},
+        {**to_dict(updated_text), '_id': updated_text.id}
     ).thenReturn()
     expect_validate_references(bibliography, when)
     expect_bibliography(bibliography, when)

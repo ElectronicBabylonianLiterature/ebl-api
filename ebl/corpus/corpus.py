@@ -4,12 +4,14 @@ import attr
 import pydash
 import pymongo
 
+from ebl.corpus.mongo_serializer import serialize, deserialize
 from ebl.corpus.text import Text, TextId, Chapter
 from ebl.errors import Defect, NotFoundError, DataError
 from ebl.mongo_repository import MongoRepository
 from ebl.fragment.transliteration import Transliteration, TransliterationError
 from ebl.fragmentarium.validator import Validator
-from text.labels import LineNumberLabel
+from ebl.text.labels import LineNumberLabel
+
 
 COLLECTION = 'texts'
 
@@ -65,16 +67,16 @@ class MongoTextRepository(TextRepository):
         ], unique=True)
 
     def create(self, text: Text) -> None:
-        self._mongo_repository.create(text.to_dict())
+        self._mongo_repository.create(serialize(text))
 
     def find(self, id_: TextId) -> Text:
         mongo_text = self._find_one(id_)
-        return Text.from_dict(mongo_text)
+        return deserialize(mongo_text)
 
     def update(self, id_: TextId, text: Text) -> Text:
         result = self._mongo_collection.update_one(
             {'category': id_.category, 'index': id_.index},
-            {'$set': text.to_dict()}
+            {'$set': serialize(text)}
         )
 
         if result.matched_count == 0:
@@ -108,7 +110,7 @@ class Corpus:
     def create(self, text: Text, user) -> None:
         self.validate_text(text)
         self._repository.create(text)
-        new_dict: dict = {**text.to_dict(), '_id': text.id}
+        new_dict: dict = {**serialize(text), '_id': text.id}
         self._changelog.create(
             COLLECTION,
             user.profile,
@@ -123,8 +125,8 @@ class Corpus:
     def update(self, id_: TextId, text: Text, user) -> Text:
         old_text = self._repository.find(id_)
         self.validate_text(text)
-        old_dict: dict = {**old_text.to_dict(), '_id': old_text.id}
-        new_dict: dict = {**text.to_dict(), '_id': text.id}
+        old_dict: dict = {**serialize(old_text), '_id': old_text.id}
+        new_dict: dict = {**serialize(text), '_id': text.id}
         self._changelog.create(
             COLLECTION,
             user.profile,

@@ -2,52 +2,21 @@ import json
 
 import attr
 import falcon
-import pydash
 import pytest
 
 from ebl.auth0 import Guest
 from ebl.corpus.text import (Classification, ManuscriptType, Period,
                              PeriodModifier, Provenance, Stage)
-from ebl.corpus.texts import parse_text, to_dto
+from ebl.corpus.api_serializer import deserialize, ApiSerializer, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
                                         TextFactory)
-from ebl.text.labels import LineNumberLabel
-from ebl.text.line import TextLine
-from ebl.text.text import create_tokens
 
 ANY_USER = Guest()
 
 
 def create_dto(text, include_documents=False):
-    dto = text.to_dict(include_documents)
-    return {
-        **dto,
-        'chapters': [
-            {
-                **chapter,
-                'lines': [
-                    {
-                        **line,
-                        'manuscripts': [
-                            pydash.omit({
-                                **manuscript,
-                                'number': manuscript['line']['prefix'][:-1],
-                                'atf': TextLine.of_iterable(
-                                    LineNumberLabel.from_atf(
-                                        manuscript['line']['prefix']
-                                    ),
-                                    create_tokens(
-                                        manuscript['line']['content']
-                                    )
-                                ).atf[len(manuscript['line']['prefix']) + 1:]
-                            }, 'line') for manuscript in line['manuscripts']
-                        ]
-                    } for line in chapter['lines']
-                ]
-            } for chapter in dto['chapters']
-        ]
-    }
+    return ApiSerializer.serialize(text, include_documents)
 
 
 def allow_references(text, bibliography):
@@ -84,14 +53,14 @@ def test_parse_text():
     ))
     dto = create_dto(text)
 
-    assert parse_text(dto) == text
+    assert deserialize(dto) == text
 
 
 def test_to_dto():
     text = TextFactory.build()
     dto = create_dto(text, True)
 
-    assert to_dto(text) == dto
+    assert serialize(text) == dto
 
 
 def test_created_text_can_be_fetched(client, bibliography, sign_list, signs):
