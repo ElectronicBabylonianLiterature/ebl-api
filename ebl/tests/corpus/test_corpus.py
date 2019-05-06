@@ -5,7 +5,7 @@ import pytest
 from ebl.corpus.text import Text
 from ebl.corpus.text_serializer import TextSerializer
 from ebl.auth0 import Guest
-from ebl.errors import Defect, NotFoundError
+from ebl.errors import Defect, NotFoundError, DataError
 from ebl.tests.factories.corpus import TextFactory
 from ebl.fragment.transliteration import Transliteration
 
@@ -50,7 +50,7 @@ def expect_validate_references(bibliography, when):
     ).thenReturn()
 
 
-def expect_signs(sign_list, when):
+def expect_signs(sign_list, when, sign='X'):
     (pydash
      .chain(TEXT.chapters)
      .flat_map(lambda chapter: chapter.lines)
@@ -59,8 +59,12 @@ def expect_signs(sign_list, when):
      .map(lambda atf: Transliteration(atf).cleaned)
      .for_each(lambda cleaned: when(sign_list)
                .map_transliteration(cleaned)
-               .thenReturn([['X']]))
+               .thenReturn([[sign]]))
      .value())
+
+
+def expect_invalid_signs(sign_list, when):
+    expect_signs(sign_list, when, '?')
 
 
 def test_creating_text(corpus,
@@ -82,6 +86,17 @@ def test_creating_text(corpus,
     when(text_repository).create(TEXT).thenReturn()
 
     corpus.create(TEXT, user)
+
+
+def test_create_raises_exception_if_invalid_signs(corpus,
+                                                  text_repository,
+                                                  sign_list,
+                                                  user,
+                                                  when):
+    expect_invalid_signs(sign_list, when)
+
+    with pytest.raises(DataError):
+        corpus.create(TEXT, user)
 
 
 def test_finding_text(corpus, text_repository, bibliography, when):
@@ -133,3 +148,16 @@ def test_updating_text(corpus,
     result = corpus.update(TEXT.id, updated_text, user)
 
     assert result == updated_text
+
+
+def test_update_raises_exception_if_invalid_signs(corpus,
+                                                  text_repository,
+                                                  sign_list,
+                                                  user,
+                                                  when):
+    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    expect_invalid_signs(sign_list, when)
+
+    with pytest.raises(DataError):
+        corpus.update(TEXT.id, updated_text, user)
