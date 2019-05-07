@@ -4,11 +4,11 @@ from typing import Tuple
 
 import attr
 
+from ebl.corpus.label_validator import LabelValidator
 from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
     PeriodModifier, Period, Stage
 from ebl.bibliography.reference import Reference
-from ebl.text.labels import Label, LabelVisitor, SurfaceLabel, ColumnLabel, \
-    LineNumberLabel
+from ebl.text.labels import Label, LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.text import create_tokens
 
@@ -60,30 +60,6 @@ class Manuscript:
                 for reference in manuscript['references']
             )
         )
-
-
-class LabelValidator(LabelVisitor):
-    def __init__(self):
-        self.has_surface = False
-        self.has_column = False
-        self.is_valid = True
-
-    def visit_surface_label(self, label: SurfaceLabel) -> 'LabelValidator':
-        if self.has_surface or self.has_column:
-            self.is_valid = False
-        self.has_surface = True
-        return self
-
-    def visit_column_label(self, label: ColumnLabel) -> 'LabelValidator':
-        if self.has_column:
-            self.is_valid = False
-        self.has_column = True
-        return self
-
-    def visit_line_number_label(self,
-                                label: LineNumberLabel) -> 'LabelValidator':
-        self.is_valid = False
-        return self
 
 
 def validate_labels(_instance, _attribute, value: Tuple[Label, ...]) -> None:
