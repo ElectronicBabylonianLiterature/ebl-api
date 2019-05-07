@@ -84,7 +84,7 @@ Currectly, it is not mandatory to use type hints, but we are experimenting with 
 
 Type checks can be run with `mypy`:
 ```
-pipenv run mypy -m ebl.fragmentarium.tokens -m ebl.fragmentarium.language --ignore-missing-imports
+pipenv run mypy -p ebl
 ```
 
 ## Acknowledgements
