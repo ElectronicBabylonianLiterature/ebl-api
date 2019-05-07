@@ -3,7 +3,6 @@ from enum import Enum, auto
 from typing import Tuple
 
 import attr
-import pydash
 
 from ebl.bibliography.reference import Reference
 from ebl.text.labels import Label, LabelVisitor, SurfaceLabel, ColumnLabel, \
@@ -290,46 +289,6 @@ class Line:
                           for line in data['manuscripts']))
 
 
-def validate_manuscripts(_instance, _attribute, value):
-    def not_unique(entry_mapper):
-        return (
-            pydash
-            .chain(value)
-            .map_(entry_mapper)
-            .map_(lambda entry, _, entries: (entry, entries.count(entry)))
-            .filter(lambda entry: entry[1] > 1)
-            .map_(lambda entry: entry[0])
-            .uniq()
-            .value()
-        )
-
-    errors = []
-
-    duplicate_ids = not_unique(lambda manuscript: manuscript.id)
-    if duplicate_ids:
-        errors.append(f'Duplicate manuscript IDs: {duplicate_ids}.')
-
-    duplicate_sigla = not_unique(lambda manuscript: manuscript.siglum)
-    if duplicate_sigla:
-        errors.append(f'Duplicate sigla: {duplicate_sigla}.')
-
-    if errors:
-        raise ValueError(f'Invalid manuscripts: {errors}.')
-
-
-def validate_lines(instance, _attribute, value):
-    manuscripts_ids = set(manuscript.id for manuscript in instance.manuscripts)
-    manuscripts_ids_from_lines = set(pydash
-                                     .chain(value)
-                                     .flat_map(lambda line: line.manuscripts)
-                                     .map(lambda manuscript: manuscript
-                                          .manuscript_id)
-                                     .value())
-    orphans = manuscripts_ids_from_lines.difference(manuscripts_ids)
-    if orphans:
-        raise ValueError(f'Invalid missing manuscripts: {orphans}.')
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
@@ -337,18 +296,13 @@ class Chapter:
     version: str = ''
     name: str = ''
     order: int = 0
-    manuscripts: Tuple[Manuscript, ...] = attr.ib(
-        default=attr.Factory(tuple),
-        validator=validate_manuscripts
-    )
-    lines: Tuple[Line, ...] = attr.ib(
-        default=attr.Factory(tuple),
-        validator=validate_lines
-    )
+    manuscripts: Tuple[Manuscript, ...] = tuple()
+    lines: Tuple[Line, ...] = tuple()
+
+    def __attrs_post_init__(self) -> None:
+        self.accept(ManuscriptIdValidator())
 
     def accept(self, visitor: 'TextVisitor') -> None:
-        # pylint: disable=E1133
-
         if visitor.is_pre_order:
             visitor.visit_chapter(self)
 
@@ -450,3 +404,47 @@ class TextVisitor:
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         pass
+
+
+class ManuscriptIdValidator(TextVisitor):
+
+    def __init__(self):
+        super().__init__(TextVisitor.Order.POST)
+        self._manuscripts_ids = []
+        self._sigla = []
+        self._used_manuscripts_ids = set()
+
+    def visit_chapter(self, _) -> None:
+        def get_duplicates(collection: list) -> list:
+            return [item
+                    for item, count
+                    in collections.Counter(collection).items()
+                    if count > 1]
+
+        errors = []
+
+        orphans = self._used_manuscripts_ids - set(self._manuscripts_ids)
+        if orphans:
+            errors.append(f'Missing manuscripts: {orphans}.')
+
+        duplicate_ids = get_duplicates(self._manuscripts_ids)
+        if duplicate_ids:
+            errors.append(f'Duplicate manuscript IDs: {duplicate_ids}.')
+
+        duplicate_sigla = get_duplicates(self._sigla)
+        if duplicate_sigla:
+            errors.append(f'Duplicate sigla: {duplicate_sigla}.')
+
+        if errors:
+            raise ValueError(f'Invalid manuscripts: {errors}.')
+
+        self._manuscripts_ids = []
+        self._sigla = []
+        self._used_manuscripts_ids = set()
+
+    def visit_manuscript(self, manuscript: Manuscript) -> None:
+        self._manuscripts_ids.append(manuscript.id)
+        self._sigla.append(manuscript.siglum)
+
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+        self._used_manuscripts_ids.add(manuscript_line.manuscript_id)
