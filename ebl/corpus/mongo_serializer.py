@@ -1,5 +1,5 @@
 from ebl.corpus.text import Text
-from ebl.corpus.text_serializer import TextSerializer
+from ebl.corpus.text_serializer import TextSerializer, TextDeserializer
 
 
 def serialize(text: Text) -> dict:
@@ -7,4 +7,4 @@ def serialize(text: Text) -> dict:
 
 
 def deserialize(dictionary: dict) -> Text:
-    return Text.from_dict(dictionary)
+    return TextDeserializer.deserialize(dictionary)

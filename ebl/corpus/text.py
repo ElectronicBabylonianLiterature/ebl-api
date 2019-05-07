@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 import collections
 from enum import Enum, auto
 from typing import Tuple
@@ -10,7 +11,6 @@ from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
 from ebl.bibliography.reference import Reference
 from ebl.text.labels import Label, LineNumberLabel
 from ebl.text.line import TextLine
-from ebl.text.text import create_tokens
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])
 
@@ -43,24 +43,6 @@ class Manuscript:
     def accept(self, visitor: 'TextVisitor') -> None:
         visitor.visit_manuscript(self)
 
-    @staticmethod
-    def from_dict(manuscript: dict) -> 'Manuscript':
-        return Manuscript(
-            manuscript['id'],
-            manuscript['siglumDisambiguator'],
-            manuscript['museumNumber'],
-            manuscript['accession'],
-            PeriodModifier(manuscript['periodModifier']),
-            Period.from_name(manuscript['period']),
-            Provenance.from_name(manuscript['provenance']),
-            ManuscriptType.from_name(manuscript['type']),
-            manuscript['notes'],
-            tuple(
-                Reference.from_dict(reference)
-                for reference in manuscript['references']
-            )
-        )
-
 
 def validate_labels(_instance, _attribute, value: Tuple[Label, ...]) -> None:
     validator = LabelValidator()
@@ -82,17 +64,6 @@ class ManuscriptLine:
     def accept(self, visitor: 'TextVisitor') -> None:
         visitor.visit_manuscript_line(self)
 
-    @staticmethod
-    def from_dict(data):
-        return ManuscriptLine(
-            data['manuscriptId'],
-            tuple(Label.parse(label) for label in data['labels']),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf(data['line']['prefix']),
-                create_tokens(data['line']['content'])
-            )
-        )
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
@@ -109,13 +80,6 @@ class Line:
 
         if visitor.is_post_order:
             visitor.visit_line(self)
-
-    @staticmethod
-    def from_dict(data):
-        return Line(LineNumberLabel(data['number']),
-                    data['reconstruction'],
-                    tuple(ManuscriptLine.from_dict(line)
-                          for line in data['manuscripts']))
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -144,24 +108,6 @@ class Chapter:
         if visitor.is_post_order:
             visitor.visit_chapter(self)
 
-    @staticmethod
-    def from_dict(chapter: dict) -> 'Chapter':
-        return Chapter(
-            Classification(chapter['classification']),
-            Stage(chapter['stage']),
-            chapter['version'],
-            chapter['name'],
-            chapter['order'],
-            tuple(
-                Manuscript.from_dict(manuscript)
-                for manuscript in chapter['manuscripts']
-            ),
-            tuple(
-                Line.from_dict(line)
-                for line in chapter.get('lines', [])
-            )
-        )
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
@@ -186,20 +132,6 @@ class Text:
 
         if visitor.is_post_order:
             visitor.visit_text(self)
-
-    @staticmethod
-    def from_dict(text: dict) -> 'Text':
-        return Text(
-            text['category'],
-            text['index'],
-            text['name'],
-            text['numberOfVerses'],
-            text['approximateVerses'],
-            tuple(
-                Chapter.from_dict(chapter)
-                for chapter in text['chapters']
-            )
-        )
 
 
 class TextVisitor:

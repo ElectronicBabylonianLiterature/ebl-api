@@ -2,7 +2,7 @@ import pydash
 from parsy import ParseError
 
 from ebl.corpus.text import Text, ManuscriptLine
-from ebl.corpus.text_serializer import TextSerializer
+from ebl.corpus.text_serializer import TextSerializer, TextDeserializer
 from ebl.errors import DataError
 from ebl.text.labels import LineNumberLabel
 from ebl.text.text_parser import TEXT_LINE
@@ -61,6 +61,6 @@ def deserialize(dto: dict) -> Text:
         ]
     }
     try:
-        return Text.from_dict(parsed_media)
+        return TextDeserializer.deserialize(parsed_media)
     except ValueError as error:
         raise DataError(error)

@@ -1,5 +1,11 @@
+from ebl.bibliography.reference import Reference
+from ebl.corpus.enums import Classification, Stage, PeriodModifier, Period, \
+    Provenance, ManuscriptType
 from ebl.corpus.text import TextVisitor, Text, Chapter, Manuscript, \
     ManuscriptLine, Line
+from ebl.text.labels import LineNumberLabel, Label
+from ebl.text.line import TextLine
+from ebl.text.text import create_tokens
 
 
 class TextSerializer(TextVisitor):
@@ -72,3 +78,75 @@ class TextSerializer(TextVisitor):
             'labels': [label.to_value() for label in manuscript_line.labels],
             'line': manuscript_line.line.to_dict()
         })
+
+
+class TextDeserializer:
+    # pylint: disable=R0201
+
+    @classmethod
+    def deserialize(cls, text: dict):
+        return cls().deserialize_text(text)
+
+    def deserialize_text(self, text: dict) -> Text:
+        return Text(
+            text['category'],
+            text['index'],
+            text['name'],
+            text['numberOfVerses'],
+            text['approximateVerses'],
+            tuple(
+                self.deserialize_chapter(chapter)
+                for chapter in text['chapters']
+            )
+        )
+
+    def deserialize_chapter(self, chapter: dict) -> Chapter:
+        return Chapter(
+            Classification(chapter['classification']),
+            Stage(chapter['stage']),
+            chapter['version'],
+            chapter['name'],
+            chapter['order'],
+            tuple(
+                self.deserialize_manuscript(manuscript)
+                for manuscript in chapter['manuscripts']
+            ),
+            tuple(
+                self.deserialize_line(line)
+                for line in chapter.get('lines', [])
+            )
+        )
+
+    def deserialize_manuscript(self, manuscript: dict) -> Manuscript:
+        return Manuscript(
+            manuscript['id'],
+            manuscript['siglumDisambiguator'],
+            manuscript['museumNumber'],
+            manuscript['accession'],
+            PeriodModifier(manuscript['periodModifier']),
+            Period.from_name(manuscript['period']),
+            Provenance.from_name(manuscript['provenance']),
+            ManuscriptType.from_name(manuscript['type']),
+            manuscript['notes'],
+            tuple(
+                Reference.from_dict(reference)
+                for reference in manuscript['references']
+            )
+        )
+
+    def deserialize_line(self, line: dict) -> Line:
+        return Line(LineNumberLabel(line['number']),
+                    line['reconstruction'],
+                    tuple(self.deserialize_manuscript_line(line)
+                          for line in line['manuscripts']))
+
+    def deserialize_manuscript_line(self,
+                                    manuscript_line: dict) -> ManuscriptLine:
+        return ManuscriptLine(
+            manuscript_line['manuscriptId'],
+            tuple(Label.parse(label) for label in manuscript_line['labels']),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf(manuscript_line['line']['prefix']),
+                create_tokens(manuscript_line['line']['content'])
+            )
+        )
