@@ -36,8 +36,8 @@ class ApiDeserializer(TextDeserializer):
         )
 
 
-def serialize(text: Text) -> dict:
-    return ApiSerializer.serialize(text, True)
+def serialize(text: Text, include_documents=True) -> dict:
+    return ApiSerializer.serialize(text, include_documents)
 
 
 def deserialize(dto: dict) -> Text:

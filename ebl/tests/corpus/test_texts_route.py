@@ -7,7 +7,7 @@ import pytest
 from ebl.auth0 import Guest
 from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
     PeriodModifier, Period, Stage
-from ebl.corpus.api_serializer import deserialize, ApiSerializer, serialize
+from ebl.corpus.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
                                         TextFactory)
@@ -16,7 +16,7 @@ ANY_USER = Guest()
 
 
 def create_dto(text, include_documents=False):
-    return ApiSerializer.serialize(text, include_documents)
+    return serialize(text, include_documents)
 
 
 def allow_references(text, bibliography):
@@ -92,6 +92,25 @@ def test_invalid_index(client):
     result = client.simulate_get('/texts/1/invalid')
 
     assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_listing_texts(client, bibliography, sign_list, signs):
+    allow_signs(signs, sign_list)
+    first_text = TextFactory.build()
+    second_text = TextFactory.build()
+    allow_references(first_text, bibliography)
+    allow_references(second_text, bibliography)
+    create_text(client, first_text)
+    create_text(client, second_text)
+
+    get_result = client.simulate_get(f'/texts')
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert get_result.json == [
+        create_dto(first_text, False),
+        create_dto(second_text, False)
+    ]
 
 
 def test_updating_text(client, bibliography, sign_list, signs):

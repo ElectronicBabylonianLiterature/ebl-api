@@ -15,7 +15,8 @@ from ebl.bibliography.bibliography import MongoBibliography
 from ebl.bibliography.bibliography_entries import (BibliographyEntriesResource,
                                                    BibliographyResource)
 from ebl.changelog import Changelog
-from ebl.corpus.corpus import Corpus, MongoTextRepository
+from ebl.corpus.corpus import Corpus
+from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.corpus.texts import TextResource, TextsResource
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.dictionary import MongoDictionary

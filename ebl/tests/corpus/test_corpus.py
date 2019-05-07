@@ -123,6 +123,12 @@ def test_finding_text(corpus, text_repository, bibliography, when):
     assert corpus.find(TEXT.id) == TEXT
 
 
+def test_listing_texts(corpus, text_repository, when):
+    when(text_repository).list().thenReturn([DEHYDRATED_TEXT])
+
+    assert corpus.list() == [DEHYDRATED_TEXT]
+
+
 def test_find_raises_exception_if_references_not_found(corpus,
                                                        text_repository,
                                                        bibliography,

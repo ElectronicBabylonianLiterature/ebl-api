@@ -175,6 +175,13 @@ class TextsResource:
     def __init__(self, corpus):
         self._corpus = corpus
 
+    @falcon.before(require_scope, 'read:texts')
+    def on_get(
+            self, _, resp: falcon.Response
+    ) -> None:
+        texts = self._corpus.list()
+        resp.media = [serialize(text, False) for text in texts]
+
     @falcon.before(require_scope, 'create:texts')
     @validate(TEXT_DTO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:

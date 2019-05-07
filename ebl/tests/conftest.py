@@ -18,7 +18,8 @@ from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
 from ebl.changelog import Changelog
-from ebl.corpus.corpus import Corpus, MongoTextRepository
+from ebl.corpus.corpus import Corpus
+from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository

@@ -22,8 +22,8 @@ def to_dict(text: Text) -> dict:
     return TextSerializer.serialize(text, False)
 
 
-def when_text_in_collection(database):
-    database[COLLECTION].insert_one(to_dict(TEXT))
+def when_text_in_collection(database, text=TEXT):
+    database[COLLECTION].insert_one(to_dict(text))
 
 
 def test_creating_text(database, text_repository):
@@ -53,6 +53,15 @@ def test_finding_text(database, text_repository):
 def test_find_raises_exception_if_text_not_found(text_repository):
     with pytest.raises(NotFoundError):
         text_repository.find(TextId(1, 1))
+
+
+def test_listing_texts(database, text_repository):
+    another_text = attr.evolve(TEXT, index=2)
+
+    when_text_in_collection(database)
+    when_text_in_collection(database, another_text)
+
+    assert text_repository.list() == [TEXT, another_text]
 
 
 def test_updating_text(database, text_repository):

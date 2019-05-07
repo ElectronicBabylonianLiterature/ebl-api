@@ -82,8 +82,8 @@ class TextFactory(factory.Factory):
     class Meta:
         model = Text
 
-    category = factory.fuzzy.FuzzyInteger(0)
-    index = factory.fuzzy.FuzzyInteger(0)
+    category = factory.Sequence(lambda n: n)
+    index = factory.Sequence(lambda n: n)
     name = factory.Faker('sentence')
     number_of_verses = factory.fuzzy.FuzzyInteger(1, 10000)
     approximate_verses = factory.Iterator([True, False])
