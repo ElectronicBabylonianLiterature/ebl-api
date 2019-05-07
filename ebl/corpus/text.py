@@ -36,33 +36,21 @@ class SiglumEnum(Enum):
         ][0]
 
 
-class ManuscriptType(Enum):
+class SiglumEnumWithParent(SiglumEnum):
+    def __init__(self, long_name, abbreviation, parent):
+        super().__init__(long_name, abbreviation)
+        self.parent = parent
+
+
+class ManuscriptType(SiglumEnum):
     LIBRARY = ('Library', '')
     SCHOOL = ('School', 'Sch')
     VARIA = ('Varia', 'Var')
     COMMENTARY = ('Commentary', 'Com')
     QUOTATION = ('Quotation', 'Quo')
 
-    def __init__(self, long_name, abbreviation):
-        self.long_name = long_name
-        self.abbreviation = abbreviation
 
-    @classmethod
-    def from_abbreviation(cls, abbreviation):
-        return [
-            enum for enum in cls
-            if enum.abbreviation == abbreviation
-        ][0]
-
-    @classmethod
-    def from_name(cls, name):
-        return [
-            enum for enum in cls
-            if enum.long_name == name
-        ][0]
-
-
-class Provenance(Enum):
+class Provenance(SiglumEnumWithParent):
     ASSYRIA = ('Assyria', 'Assa', None)
     ASSUR = ('Aššur', 'Ašš', 'Assyria')
     HUZIRINA = ('Ḫuzirina', 'Huz', 'Assyria')
@@ -95,18 +83,6 @@ class Provenance(Enum):
     UGARIT = ('Ugarit', 'Uga', 'Periphery')
     UNCERTAIN = ('Uncertain', 'Unc', None)
 
-    def __init__(self, long_name, abbreviation, parent):
-        self.long_name = long_name
-        self.abbreviation = abbreviation
-        self.parent = parent
-
-    @classmethod
-    def from_name(cls, name):
-        return [
-            enum for enum in cls
-            if enum.long_name == name
-        ][0]
-
 
 class PeriodModifier(Enum):
     NONE = 'None'
@@ -114,7 +90,7 @@ class PeriodModifier(Enum):
     LATE = 'Late'
 
 
-class Period(Enum):
+class Period(SiglumEnumWithParent):
     UR_III = ('Ur III', 'Ur3', None)
     OLD_ASSYRIAN = ('Old Assyrian', 'OA', None)
     OLD_BABYLONIAN = ('Old Babylonian', 'OB', None)
@@ -128,18 +104,6 @@ class Period(Enum):
     HELLENISTIC = ('Hellenistic', 'Hel', 'Late Babylonian')
     PARTHIAN = ('Parthian', 'Par', 'Late Babylonian')
     UNCERTAIN = ('Uncertain', 'Unc', None)
-
-    def __init__(self, long_name, abbreviation, parent):
-        self.long_name = long_name
-        self.abbreviation = abbreviation
-        self.parent = parent
-
-    @classmethod
-    def from_name(cls, name):
-        return [
-            enum for enum in cls
-            if enum.long_name == name
-        ][0]
 
 
 class Stage(Enum):
