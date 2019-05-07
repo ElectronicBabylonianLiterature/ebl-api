@@ -41,8 +41,8 @@ If NewRelic is used:
 - `NEW_RELIC_CONFIG_FILE`
 
 Sentry:
-- SENTRY_DSN
-- SENTRY_ENVIRONMENT
+- `SENTRY_DSN`
+- `SENTRY_ENVIRONMENT`
 
 ### The API image
 
