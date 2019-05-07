@@ -2,10 +2,11 @@ from typing import Tuple
 
 import pytest
 
-from ebl.corpus.text import (Chapter, Classification, Manuscript,
-                             ManuscriptType, Period, PeriodModifier,
-                             Provenance, Stage, Text, TextId, Line,
+from ebl.corpus.text import (Chapter, Manuscript,
+                             Text, TextId, Line,
                              ManuscriptLine)
+from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
+    PeriodModifier, Period, Stage
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
 from ebl.text.labels import SurfaceLabel, ColumnLabel, Label, LineNumberLabel

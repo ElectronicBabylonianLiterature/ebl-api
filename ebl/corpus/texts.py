@@ -3,8 +3,9 @@ from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.api_serializer import deserialize, serialize
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
-from ebl.corpus.text import (Classification, ManuscriptType, Period,
-                             PeriodModifier, Provenance, Stage, TextId)
+from ebl.corpus.text import (TextId)
+from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
+    PeriodModifier, Period, Stage
 from ebl.errors import NotFoundError
 from ebl.require_scope import require_scope
 

@@ -5,8 +5,8 @@ import falcon
 import pytest
 
 from ebl.auth0 import Guest
-from ebl.corpus.text import (Classification, ManuscriptType, Period,
-                             PeriodModifier, Provenance, Stage)
+from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
+    PeriodModifier, Period, Stage
 from ebl.corpus.api_serializer import deserialize, ApiSerializer, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,

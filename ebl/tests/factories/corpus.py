@@ -4,9 +4,10 @@ from typing import Tuple
 import factory.fuzzy
 import pydash
 
-from ebl.corpus.text import (Chapter, Classification, Manuscript,
-                             ManuscriptType, Period, PeriodModifier,
-                             Provenance, Stage, Text, Line, ManuscriptLine)
+from ebl.corpus.text import (Chapter, Manuscript,
+                             Text, Line, ManuscriptLine)
+from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
+    PeriodModifier, Period, Stage
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.text.atf import Surface, Status
