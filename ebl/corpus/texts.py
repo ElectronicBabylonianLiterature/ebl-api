@@ -1,9 +1,9 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 
-from ebl.corpus.api_serializer import deserialize, serialize
+from ebl.corpus.api_serializer import deserialize, serialize, ApiSerializer
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
-from ebl.corpus.text import (TextId)
+from ebl.corpus.text import (TextId, Chapter, Manuscript, Line, ManuscriptLine)
 from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
     PeriodModifier, Period, Stage
 from ebl.errors import NotFoundError
@@ -169,18 +169,38 @@ def create_text_id(category: str, index: str) -> TextId:
         raise NotFoundError(f'{category}.{index}')
 
 
-@falcon.before(require_scope, 'create:texts')
+class PublicTextSerializer(ApiSerializer):
+    def visit_chapter(self, chapter: Chapter) -> None:
+        pass
+
+    def visit_manuscript(self, manuscript: Manuscript) -> None:
+        pass
+
+    def visit_line(self, line: Line) -> None:
+        pass
+
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+        pass
+
+
 class TextsResource:
     # pylint: disable=R0903
+
+    auth = {
+        'exempt_methods': ['GET']
+    }
+
     def __init__(self, corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, 'read:texts')
-    def on_get(
-            self, _, resp: falcon.Response
-    ) -> None:
+    def on_get(self,
+               _,
+               resp: falcon.Response) -> None:
         texts = self._corpus.list()
-        resp.media = [serialize(text, False) for text in texts]
+        resp.media = [
+            PublicTextSerializer.serialize(text, False)
+            for text in texts
+        ]
 
     @falcon.before(require_scope, 'create:texts')
     @validate(TEXT_DTO_SCHEMA)
@@ -194,6 +214,7 @@ class TextsResource:
 
 class TextResource:
     # pylint: disable=R0903
+
     def __init__(self, corpus):
         self._corpus = corpus
 
