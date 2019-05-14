@@ -1,7 +1,7 @@
 import pytest
 from parsy import ParseError
 
-from text.reconstructed_text_parser import AKKADIAN_WORD
+from ebl.text.reconstructed_text_parser import AKKADIAN_WORD
 
 
 @pytest.mark.parametrize('text,expected', [
