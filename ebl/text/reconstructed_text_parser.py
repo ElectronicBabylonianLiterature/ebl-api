@@ -17,3 +17,6 @@ AKKADIAN_WORD = seq(
 LACUNA = seq(BROKEN_LEFT.optional(),
              string('...'),
              BROKEN_RIGHT.optional())
+
+
+CAESURA = string_from('(||)', '||')

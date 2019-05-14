@@ -1,7 +1,16 @@
 import pytest
 from parsy import ParseError
 
-from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA
+from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA, CAESURA
+
+
+def assert_parse(parser, expected, text):
+    assert [token for token in parser.parse(text) if token] == expected
+
+
+def assert_parse_error(parser, text):
+    with pytest.raises(ParseError):
+        parser.parse(text)
 
 
 @pytest.mark.parametrize('text,expected', [
@@ -29,7 +38,7 @@ from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA
     ('ibnû?)]', ['ibnû', '?', ')]'])
 ])
 def test_word(text, expected):
-    assert [token for token in AKKADIAN_WORD.parse(text) if token] == expected
+    assert_parse(AKKADIAN_WORD, expected, text)
 
 
 @pytest.mark.parametrize('text', [
@@ -43,8 +52,7 @@ def test_word(text, expected):
 
 ])
 def test_invalid_word(text):
-    with pytest.raises(ParseError):
-        AKKADIAN_WORD.parse(text)
+    assert_parse_error(AKKADIAN_WORD, text)
 
 
 @pytest.mark.parametrize('text,expected', [
@@ -60,7 +68,7 @@ def test_invalid_word(text):
     ('[(...)]', ['[(', '...', ')]'])
 ])
 def test_lacuna(text, expected):
-    assert [token for token in LACUNA.parse(text) if token] == expected
+    assert_parse(LACUNA, expected, text)
 
 
 @pytest.mark.parametrize('text', [
@@ -74,5 +82,20 @@ def test_lacuna(text, expected):
 
 ])
 def test_invalid_lacuna(text):
-    with pytest.raises(ParseError):
-        LACUNA.parse(text)
+    assert_parse_error(LACUNA, text)
+
+
+@pytest.mark.parametrize('text,expected', [
+    ('||', '||'),
+    ('(||)', '(||)')
+])
+def test_caesura(text, expected):
+    assert CAESURA.parse(text) == expected
+
+
+@pytest.mark.parametrize('text', [
+    '|', '|||', '||||',
+    '[||]', '[(||)]'
+])
+def test_invalid_caesura(text):
+    assert_parse_error(CAESURA, text)
