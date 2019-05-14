@@ -8,23 +8,36 @@ class Modifier(Enum):
     UNCERTAIN = '?'
 
 
-BROKEN_LEFT = string_from('[(', '[', '(')
-BROKEN_RIGHT = string_from(')]', ']', ')')
-BROKEN = BROKEN_LEFT | BROKEN_RIGHT
+class BrokenOffOpen(Enum):
+    BOTH = '[('
+    BROKEN = '['
+    MAYBE = '('
+
+
+class BrokenOffClose(Enum):
+    BOTH = ')]'
+    BROKEN = ']'
+    MAYBE = ')'
+
+
+BROKEN_OFF_OPEN = from_enum(BrokenOffOpen)
+BROKEN_OFF_CLOSE = from_enum(BrokenOffClose)
+BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 
 AKKADIAN_ALPHABET = char_from('abcdefghiklmnopqrstuwyzâêîûāēīšūṣṭʾ')
 MODIFIER = from_enum(Modifier)
 AKKADIAN_WORD = seq(
-    BROKEN_LEFT.optional(),
-    AKKADIAN_ALPHABET + ((BROKEN + AKKADIAN_ALPHABET) |
+    BROKEN_OFF_OPEN.optional(),
+    AKKADIAN_ALPHABET + ((BROKEN_OFF.map(lambda broken: broken.value) +
+                          AKKADIAN_ALPHABET) |
                          AKKADIAN_ALPHABET).many().concat(),
     MODIFIER.at_most(2),
-    BROKEN_RIGHT.optional()
+    BROKEN_OFF_CLOSE.optional()
 )
 
-LACUNA = seq(BROKEN_LEFT.optional(),
+LACUNA = seq(BROKEN_OFF_OPEN.optional(),
              string('...'),
-             BROKEN_RIGHT.optional())
+             BROKEN_OFF_CLOSE.optional())
 
 
 CAESURA = string_from('(||)', '||')

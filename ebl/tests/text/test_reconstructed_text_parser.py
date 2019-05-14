@@ -2,7 +2,7 @@ import pytest
 from parsy import ParseError
 
 from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA, \
-    CAESURA, FEET_SEPARATOR, Modifier
+    CAESURA, FEET_SEPARATOR, Modifier, BrokenOffOpen, BrokenOffClose
 
 
 def assert_parse(parser, expected, text):
@@ -21,22 +21,22 @@ def assert_parse_error(parser, text):
     ('ibnû#', ['ibnû', [Modifier.BROKEN]]),
     ('ibnû#?', ['ibnû', [Modifier.BROKEN, Modifier.UNCERTAIN]]),
     ('ibnû?#', ['ibnû', [Modifier.UNCERTAIN, Modifier.BROKEN]]),
-    ('[ibnû]', ['[', 'ibnû', ']']),
+    ('[ibnû]', [BrokenOffOpen.BROKEN, 'ibnû', BrokenOffClose.BROKEN]),
     ('ib[nû', ['ib[nû']),
     ('ib]nû', ['ib]nû']),
     ('i[b]nû', ['i[b]nû']),
-    ('ibnû?]', ['ibnû', [Modifier.UNCERTAIN], ']']),
-    ('(ibnû)', ['(', 'ibnû', ')']),
+    ('ibnû?]', ['ibnû', [Modifier.UNCERTAIN], BrokenOffClose.BROKEN]),
+    ('(ibnû)', [BrokenOffOpen.MAYBE, 'ibnû', BrokenOffClose.MAYBE]),
     ('ib(nû', ['ib(nû']),
     ('ib)nû', ['ib)nû']),
     ('i(b)nû', ['i(b)nû']),
-    ('ibnû#)', ['ibnû', [Modifier.BROKEN], ')']),
-    ('[(ibnû)]', ['[(', 'ibnû', ')]']),
+    ('ibnû#)', ['ibnû', [Modifier.BROKEN], BrokenOffClose.MAYBE]),
+    ('[(ibnû)]', [BrokenOffOpen.BOTH, 'ibnû', BrokenOffClose.BOTH]),
     ('ib[(nû', ['ib[(nû']),
     ('ib)]nû', ['ib)]nû']),
     ('i[(b)]nû', ['i[(b)]nû']),
-    ('[i(b)n]û', ['[', 'i(b)n]û']),
-    ('ibnû?)]', ['ibnû', [Modifier.UNCERTAIN], ')]'])
+    ('[i(b)n]û', [BrokenOffOpen.BROKEN, 'i(b)n]û']),
+    ('ibnû?)]', ['ibnû', [Modifier.UNCERTAIN], BrokenOffClose.BOTH])
 ])
 def test_word(text, expected):
     assert_parse(AKKADIAN_WORD, expected, text)
@@ -58,15 +58,15 @@ def test_invalid_word(text):
 
 @pytest.mark.parametrize('text,expected', [
     ('...', ['...']),
-    ('[...', ['[', '...']),
-    ('...]', ['...', ']']),
-    ('[...]', ['[', '...', ']']),
-    ('(...', ['(', '...']),
-    ('...)', ['...', ')']),
-    ('(...)', ['(', '...', ')']),
-    ('[(...', ['[(', '...']),
-    ('...)]', ['...', ')]']),
-    ('[(...)]', ['[(', '...', ')]'])
+    ('[...', [BrokenOffOpen.BROKEN, '...']),
+    ('...]', ['...', BrokenOffClose.BROKEN]),
+    ('[...]', [BrokenOffOpen.BROKEN, '...', BrokenOffClose.BROKEN]),
+    ('(...', [BrokenOffOpen.MAYBE, '...']),
+    ('...)', ['...', BrokenOffClose.MAYBE]),
+    ('(...)', [BrokenOffOpen.MAYBE, '...', BrokenOffClose.MAYBE]),
+    ('[(...', [BrokenOffOpen.BOTH, '...']),
+    ('...)]', ['...', BrokenOffClose.BOTH]),
+    ('[(...)]', [BrokenOffOpen.BOTH, '...', BrokenOffClose.BOTH])
 ])
 def test_lacuna(text, expected):
     assert_parse(LACUNA, expected, text)
