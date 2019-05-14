@@ -1,5 +1,6 @@
 from enum import Enum
 
+import pydash
 from parsy import char_from, seq, string, string_from, from_enum
 
 
@@ -25,12 +26,13 @@ BROKEN_OFF_CLOSE = from_enum(BrokenOffClose)
 BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 
 AKKADIAN_ALPHABET = char_from('abcdefghiklmnopqrstuwyzâêîûāēīšūṣṭʾ')
+AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
 MODIFIER = from_enum(Modifier)
 AKKADIAN_WORD = seq(
     BROKEN_OFF_OPEN.optional(),
-    AKKADIAN_ALPHABET + ((BROKEN_OFF.map(lambda broken: broken.value) +
-                          AKKADIAN_ALPHABET) |
-                         AKKADIAN_ALPHABET).many().concat(),
+    AKKADIAN_STRING,
+    seq(BROKEN_OFF, AKKADIAN_STRING).many()
+).map(pydash.flatten_deep) + seq(
     MODIFIER.at_most(2),
     BROKEN_OFF_CLOSE.optional()
 )
