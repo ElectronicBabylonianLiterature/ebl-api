@@ -1,20 +1,23 @@
-from enum import Enum
+from enum import Enum, unique
 
 import pydash
 from parsy import char_from, seq, string, string_from, from_enum
 
 
+@unique
 class Modifier(Enum):
     BROKEN = '#'
     UNCERTAIN = '?'
 
 
+@unique
 class BrokenOffOpen(Enum):
     BOTH = '[('
     BROKEN = '['
     MAYBE = '('
 
 
+@unique
 class BrokenOffClose(Enum):
     BOTH = ')]'
     BROKEN = ']'
