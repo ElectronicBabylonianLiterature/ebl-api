@@ -16,31 +16,34 @@ def assert_parse_error(parser, text):
 
 @pytest.mark.parametrize('text,expected', [
     ('abcdefghiklmnopqrstuwyzâêîûāēīšūṣṭʾ',
-     ['abcdefghiklmnopqrstuwyzâêîûāēīšūṣṭʾ']),
+     ['abcdefghiklmnopqrstuwyzâêîûāēīšūṣṭʾ', []]),
     ('ibnû?', ['ibnû', [Modifier.UNCERTAIN]]),
     ('ibnû#', ['ibnû', [Modifier.BROKEN]]),
     ('ibnû#?', ['ibnû', [Modifier.BROKEN, Modifier.UNCERTAIN]]),
     ('ibnû?#', ['ibnû', [Modifier.UNCERTAIN, Modifier.BROKEN]]),
-    ('[ibnû]', [BrokenOffOpen.BROKEN, 'ibnû', BrokenOffClose.BROKEN]),
-    ('ib[nû', ['ib', BrokenOffOpen.BROKEN, 'nû']),
-    ('ib]nû', ['ib', BrokenOffClose.BROKEN, 'nû']),
-    ('i[b]nû', ['i', BrokenOffOpen.BROKEN, 'b', BrokenOffClose.BROKEN, 'nû']),
-    ('ibnû?]', ['ibnû', [Modifier.UNCERTAIN], BrokenOffClose.BROKEN]),
-    ('(ibnû)', [BrokenOffOpen.MAYBE, 'ibnû', BrokenOffClose.MAYBE]),
-    ('ib(nû', ['ib', BrokenOffOpen.MAYBE, 'nû']),
-    ('ib)nû', ['ib', BrokenOffClose.MAYBE, 'nû']),
-    ('i(b)nû', ['i', BrokenOffOpen.MAYBE, 'b', BrokenOffClose.MAYBE, 'nû']),
-    ('ibnû#)', ['ibnû', [Modifier.BROKEN], BrokenOffClose.MAYBE]),
-    ('[(ibnû)]', [BrokenOffOpen.BOTH, 'ibnû', BrokenOffClose.BOTH]),
-    ('ib[(nû', ['ib', BrokenOffOpen.BOTH, 'nû']),
-    ('ib)]nû', ['ib', BrokenOffClose.BOTH, 'nû']),
-    ('i[(b)]nû', ['i', BrokenOffOpen.BOTH, 'b', BrokenOffClose.BOTH, 'nû']),
+    ('[ibnû]', [BrokenOffOpen.BROKEN, 'ibnû', BrokenOffClose.BROKEN, []]),
+    ('ib[nû', ['ib', BrokenOffOpen.BROKEN, 'nû', []]),
+    ('ib]nû', ['ib', BrokenOffClose.BROKEN, 'nû', []]),
+    ('i[b]nû', ['i', BrokenOffOpen.BROKEN, 'b', BrokenOffClose.BROKEN, 'nû',
+                []]),
+    ('ibnû?]', ['ibnû', BrokenOffClose.BROKEN, [Modifier.UNCERTAIN]]),
+    ('(ibnû)', [BrokenOffOpen.MAYBE, 'ibnû', BrokenOffClose.MAYBE, []]),
+    ('ib(nû', ['ib', BrokenOffOpen.MAYBE, 'nû', []]),
+    ('ib)nû', ['ib', BrokenOffClose.MAYBE, 'nû', []]),
+    ('i(b)nû', ['i', BrokenOffOpen.MAYBE, 'b', BrokenOffClose.MAYBE, 'nû',
+                []]),
+    ('ibnû#)', ['ibnû', BrokenOffClose.MAYBE, [Modifier.BROKEN]]),
+    ('[(ibnû)]', [BrokenOffOpen.BOTH, 'ibnû', BrokenOffClose.BOTH, []]),
+    ('ib[(nû', ['ib', BrokenOffOpen.BOTH, 'nû', []]),
+    ('ib)]nû', ['ib', BrokenOffClose.BOTH, 'nû', []]),
+    ('i[(b)]nû', ['i', BrokenOffOpen.BOTH, 'b', BrokenOffClose.BOTH, 'nû',
+                  []]),
     ('[i(b)n]û', [BrokenOffOpen.BROKEN, 'i', BrokenOffOpen.MAYBE, 'b',
-                  BrokenOffClose.MAYBE, 'n', BrokenOffClose.BROKEN, 'û']),
-    ('ibnû?)]', ['ibnû', [Modifier.UNCERTAIN], BrokenOffClose.BOTH])
+                  BrokenOffClose.MAYBE, 'n', BrokenOffClose.BROKEN, 'û', []]),
+    ('ibnû?)]', ['ibnû', BrokenOffClose.BOTH, [Modifier.UNCERTAIN]])
 ])
 def test_word(text, expected):
-    assert_parse(AKKADIAN_WORD, expected, text)
+    assert AKKADIAN_WORD.parse(text) == expected
 
 
 @pytest.mark.parametrize('text', [

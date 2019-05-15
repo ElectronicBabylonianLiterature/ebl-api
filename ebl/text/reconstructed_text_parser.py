@@ -28,14 +28,14 @@ BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 AKKADIAN_ALPHABET = char_from('abcdefghiklmnopqrstuwyzâêîûāēīšūṣṭʾ')
 AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
 MODIFIER = from_enum(Modifier)
-AKKADIAN_WORD = seq(
+AKKADIAN_WORD = (seq(
     BROKEN_OFF_OPEN.optional(),
     AKKADIAN_STRING,
     seq(BROKEN_OFF, AKKADIAN_STRING).many()
 ).map(pydash.flatten_deep) + seq(
     MODIFIER.at_most(2),
     BROKEN_OFF_CLOSE.optional()
-)
+).map(pydash.reverse)).map(pydash.partial_right(pydash.reject, pydash.is_none))
 
 LACUNA = seq(BROKEN_OFF_OPEN.optional(),
              string('...'),
