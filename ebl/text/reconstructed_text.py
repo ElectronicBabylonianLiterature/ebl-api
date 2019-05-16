@@ -108,9 +108,9 @@ class Lacuna:
     _broken_off: Tuple[Optional[BrokenOffOpen], Optional[BrokenOffClose]]
 
     def accept(self, visitor):
-        [broken_off.accept(visitor)
-         for broken_off in self._broken_off
-         if broken_off]
+        for broken_off in self._broken_off:
+            if broken_off:
+                broken_off.accept(visitor)
 
     def __str__(self):
         return ''.join(self._generate_parts())
@@ -190,7 +190,7 @@ def validate(line: Iterable[Union[AkkadianWord, Break]]):
     if result.state != (False, False):
         broken_off = []
         if result.state[1]:
-            broken_off.append(BrokenOffClose.MAYBE.value)
+            broken_off.append(BrokenOffClose.MAYBE)
         if result.state[0]:
-            broken_off.append(BrokenOffClose.BROKEN.value)
-        raise ValueError(f'Unclosed broken off {"".join(broken_off)}.')
+            broken_off.append(BrokenOffClose.BROKEN)
+        raise ValueError(f'Unclosed broken off {broken_off}.')
