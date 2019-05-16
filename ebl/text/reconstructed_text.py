@@ -1,7 +1,6 @@
-# pyl
 from abc import ABC, abstractmethod
 from enum import unique, Enum
-from typing import Tuple, Any, Optional
+from typing import Tuple, Optional
 
 import attr
 
@@ -30,9 +29,8 @@ class BrokenOffClose(BrokenOff):
     MAYBE = ')'
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class Part(ABC):
-    _value: Any
 
     @property
     @abstractmethod
@@ -40,8 +38,9 @@ class Part(ABC):
         ...
 
 
-@attr.s(frozen=True)
+@attr.s(auto_attribs=True, frozen=True)
 class StringPart(Part):
+    _value: str
 
     @property
     def is_text(self) -> bool:
@@ -51,8 +50,9 @@ class StringPart(Part):
         return self._value
 
 
-@attr.s(frozen=True)
+@attr.s(auto_attribs=True, frozen=True)
 class BrokenOffPart(Part):
+    _value: BrokenOff
 
     @property
     def is_text(self) -> bool:
