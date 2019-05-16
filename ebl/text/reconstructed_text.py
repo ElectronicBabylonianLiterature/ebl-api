@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import unique, Enum
-from typing import Tuple, Optional
+from functools import reduce
+from typing import Tuple, Optional, Union, Iterable
 
 import attr
 
@@ -12,7 +13,9 @@ class Modifier(Enum):
 
 
 class BrokenOff(Enum):
-    pass
+
+    def accept(self, visitor):
+        visitor.visit_broken_off(self)
 
 
 @unique
@@ -37,6 +40,10 @@ class Part(ABC):
     def is_text(self) -> bool:
         ...
 
+    @abstractmethod
+    def accept(self, visitor):
+        ...
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class StringPart(Part):
@@ -45,6 +52,9 @@ class StringPart(Part):
     @property
     def is_text(self) -> bool:
         return True
+
+    def accept(self, visitor):
+        pass
 
     def __str__(self) -> str:
         return self._value
@@ -58,6 +68,9 @@ class BrokenOffPart(Part):
     def is_text(self) -> bool:
         return False
 
+    def accept(self, visitor):
+        self._value.accept(visitor)
+
     def __str__(self) -> str:
         return self._value.value
 
@@ -67,6 +80,10 @@ class AkkadianWord:
 
     parts: Tuple[Part, ...]
     modifiers: Tuple[Modifier, ...] = tuple()
+
+    def accept(self, visitor):
+        for part in self.parts:
+            part.accept(visitor)
 
     def __str__(self) -> str:
         modifier_string = ''.join([modifier.value
@@ -90,6 +107,11 @@ class AkkadianWord:
 class Lacuna:
     _broken_off: Tuple[Optional[BrokenOffOpen], Optional[BrokenOffClose]]
 
+    def accept(self, visitor):
+        [broken_off.accept(visitor)
+         for broken_off in self._broken_off
+         if broken_off]
+
     def __str__(self):
         return ''.join(self._generate_parts())
 
@@ -107,8 +129,11 @@ class Break(ABC):
 
     @property
     @abstractmethod
-    def _value(self):
+    def _value(self) -> str:
         ...
+
+    def accept(self, visitor):
+        pass
 
     def __str__(self) -> str:
         return f'({self._value})' if self.uncertain else self._value
@@ -118,7 +143,7 @@ class Break(ABC):
 class Caesura(Break):
 
     @property
-    def _value(self):
+    def _value(self) -> str:
         return '||'
 
 
@@ -126,5 +151,46 @@ class Caesura(Break):
 class MetricalFootSeparator(Break):
 
     @property
-    def _value(self):
+    def _value(self) -> str:
         return '|'
+
+
+def validate(line: Iterable[Union[AkkadianWord, Break]]):
+    @attr.s(auto_attribs=True)
+    class Accumulator:
+        state: Tuple[bool, bool] = (False, False)
+
+        def visit_broken_off(self, broken_off):
+            expected = {
+                BrokenOffOpen.BROKEN: (False, False),
+                BrokenOffOpen.MAYBE: (True, False),
+                BrokenOffOpen.BOTH: (False, False),
+                BrokenOffClose.BROKEN: (True, False),
+                BrokenOffClose.MAYBE: (True, True),
+                BrokenOffClose.BOTH: (True, True),
+            }
+            transitions = {
+                BrokenOffOpen.BROKEN: (True, False),
+                BrokenOffOpen.MAYBE: (True, True),
+                BrokenOffOpen.BOTH: (True, True),
+                BrokenOffClose.BROKEN: (False, False),
+                BrokenOffClose.MAYBE: (True, False),
+                BrokenOffClose.BOTH: (False, False),
+            }
+            if self.state == expected[broken_off]:
+                self.state = transitions[broken_off]
+            else:
+                raise ValueError(f'Unexpected broken off: {broken_off}.')
+
+    def iteratee(accumulator, token):
+        token.accept(accumulator)
+        return accumulator
+
+    result = reduce(iteratee, line, Accumulator())
+    if result.state != (False, False):
+        broken_off = []
+        if result.state[1]:
+            broken_off.append(BrokenOffClose.MAYBE.value)
+        if result.state[0]:
+            broken_off.append(BrokenOffClose.BROKEN.value)
+        raise ValueError(f'Unclosed broken off {"".join(broken_off)}.')

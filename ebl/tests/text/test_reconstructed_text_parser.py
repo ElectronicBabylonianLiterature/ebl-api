@@ -5,7 +5,7 @@ from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA, \
     CAESURA, FOOT_SEPARATOR, RECONSTRUCTED_LINE
 from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, \
     BrokenOffClose, AkkadianWord, Lacuna, MetricalFootSeparator, Caesura, \
-    StringPart, BrokenOffPart
+    StringPart, BrokenOffPart, validate
 
 
 def assert_parse(parser, expected, text):
@@ -71,10 +71,9 @@ def test_word(text, expected):
     'ibnû!', 'ibnû?#?',
     ']ibnû', 'ibnû[', '[[ibnû',
     ')ibnû', 'ibnû(', '((ibnû',
-    'i([bnû', 'i])bnû', 'i[)]bnû',
+    'i([bnû', 'i])bnû', 'i[)]bnû', 'i[b][n]û', 'ib[]nû'
     'ibnû?[#', 'ibnû#)?',
     'ibnû]?', 'ibnû)#', 'ibnû)]?'
-
 ])
 def test_invalid_word(text):
     assert_parse_error(AKKADIAN_WORD, text)
@@ -164,3 +163,15 @@ def test_reconstructed_line(text, expected):
 ])
 def test_invalid_reconstructed_line(text):
     assert_parse_error(RECONSTRUCTED_LINE, text)
+
+
+@pytest.mark.parametrize('text', [
+    '[ibnû', '(ibnû', '[(ibnû',
+    'ibnû]', 'ibnû)', 'ibnû)]'
+    '[ibnû)]', '[(ibnû]'
+    '[... [ibnû] ...]', '[(... [ibnû] ...)]', '[(... (ibnû) ...)]'
+])
+def test_validate(text):
+    line = RECONSTRUCTED_LINE.parse(text)
+    with pytest.raises(ValueError):
+        validate(line)
