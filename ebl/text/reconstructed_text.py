@@ -1,7 +1,7 @@
 # pyl
 from abc import ABC, abstractmethod
 from enum import unique, Enum
-from typing import Tuple, Any
+from typing import Tuple, Any, Optional
 
 import attr
 
@@ -84,3 +84,18 @@ class AkkadianWord:
         return (create_string_without_final_broken_off()
                 if last_part.is_text
                 else create_string_with_final_broken_off())
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Lacuna:
+    _broken_off: Tuple[Optional[BrokenOffOpen], Optional[BrokenOffClose]]
+
+    def __str__(self):
+        return ''.join(self._generate_parts())
+
+    def _generate_parts(self):
+        if self._broken_off[0]:
+            yield self._broken_off[0].value
+        yield '...'
+        if self._broken_off[1]:
+            yield self._broken_off[1].value

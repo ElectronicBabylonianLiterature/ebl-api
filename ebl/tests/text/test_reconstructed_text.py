@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
-    BrokenOffOpen, BrokenOffClose, StringPart, BrokenOffPart
+    BrokenOffOpen, BrokenOffClose, StringPart, BrokenOffPart, Lacuna
 
 
 @pytest.mark.parametrize('word,expected', [
@@ -22,3 +22,13 @@ from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
 ])
 def test_akkadian_word(word, expected):
     assert str(word) == expected
+
+
+@pytest.mark.parametrize('lacuna,expected', [
+    (Lacuna((None, None)), '...'),
+    (Lacuna((BrokenOffOpen.BROKEN, None)), '[...'),
+    (Lacuna((None, BrokenOffClose.MAYBE)), '...)'),
+    (Lacuna((BrokenOffOpen.BOTH, BrokenOffClose.MAYBE)), '[(...)')
+])
+def test_lacuna(lacuna, expected):
+    assert str(lacuna) == expected
