@@ -1,4 +1,3 @@
-# pylint: disable=R0903
 from typing import Iterable, Sequence, Tuple
 
 import attr

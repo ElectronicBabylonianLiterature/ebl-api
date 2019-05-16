@@ -1,4 +1,3 @@
-# pylint: disable=R0903
 import collections
 from enum import Enum, auto
 from typing import Tuple

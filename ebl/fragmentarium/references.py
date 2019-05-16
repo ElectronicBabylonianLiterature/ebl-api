@@ -18,7 +18,7 @@ REFERENCES_DTO_SCHEMA = {
 
 
 class ReferencesResource:
-    # pylint: disable=R0903
+
     def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
 

@@ -8,7 +8,6 @@ from ebl.require_scope import require_scope
 
 
 class FragmentSearch:
-    # pylint: disable=R0903
     def __init__(self, fragmentarium):
         self._dispatch = create_dispatcher({
             'number': fragmentarium.search,

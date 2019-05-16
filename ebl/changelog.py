@@ -18,7 +18,6 @@ def create_entry(user_profile, resource_type, resource_id, diff):
 
 
 class Changelog:
-    # pylint: disable=R0903
 
     def __init__(self, database):
         self._repository = MongoRepository(database, 'changelog')

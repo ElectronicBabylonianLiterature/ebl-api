@@ -4,7 +4,7 @@ from ebl.errors import NotFoundError
 
 
 class GridFsFiles:
-    # pylint: disable=R0903
+
     def __init__(self, database):
         self._fs = GridFS(database)
 

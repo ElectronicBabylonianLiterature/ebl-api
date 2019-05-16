@@ -62,11 +62,11 @@ class Merge(Generic[T]):
 
 
 class Merger(Generic[T]):
-    # pylint: disable=R0903
+
     def __init__(
             self,
             map_: DiffMapping[T],
-            inner_merge: InnerMerge[T]=None  # pylint: disable=C0326
+            inner_merge: InnerMerge[T] = None  # pylint: disable=C0326
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             '- ': lambda state: state.delete(),

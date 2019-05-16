@@ -1,4 +1,3 @@
-# pylint: disable=R0903
 from typing import Dict, List, Optional, Tuple, Union
 
 import attr

@@ -5,7 +5,7 @@ from ebl.require_scope import require_scope
 
 
 class WordSearch:
-    # pylint: disable=R0903
+
     def __init__(self, dictionary):
         self._dispatch = create_dispatcher({
             'query': dictionary.search,

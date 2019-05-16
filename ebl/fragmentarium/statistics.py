@@ -1,5 +1,5 @@
 class StatisticsResource:
-    # pylint: disable=R0903
+
     auth = {
         'auth_disabled': True
     }

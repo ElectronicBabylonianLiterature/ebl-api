@@ -15,7 +15,7 @@ def check_scope(user, grid_out):
 
 def create_files_resource(auth_backend):
     class FilesResource:
-        # pylint: disable=R0903
+
         auth = {
             'backend': MultiAuthBackend(
                 auth_backend,

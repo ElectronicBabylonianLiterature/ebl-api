@@ -37,7 +37,7 @@ LEMMATIZATION_DTO_SCHEMA = {
 
 
 class LemmatizationResource:
-    # pylint: disable=R0903
+
     def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
 

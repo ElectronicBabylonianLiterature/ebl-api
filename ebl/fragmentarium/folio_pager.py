@@ -4,7 +4,6 @@ from ebl.require_scope import require_scope
 
 
 class FolioPagerResource:
-    # pylint: disable=R0903
     def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
 

@@ -25,7 +25,7 @@ TRANSLITERATION_DTO_SCHEMA = {
 
 
 class TransliterationResource:
-    # pylint: disable=R0903
+
     def __init__(self, fragmentarium):
         self._fragmentarium = fragmentarium
 

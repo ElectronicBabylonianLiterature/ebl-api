@@ -1,4 +1,3 @@
-# pylint: disable=R0903
 import factory.fuzzy
 
 from ebl.bibliography.reference import BibliographyId, Reference, ReferenceType

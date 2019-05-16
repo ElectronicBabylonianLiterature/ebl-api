@@ -135,7 +135,7 @@ def fragmentarium(fragment_repository,
 
 
 class FakeFile:
-    # pylint: disable=R0903
+
     def __init__(self, filename, data, metadata):
         self.content_type = 'image/jpeg'
         self.filename = filename
@@ -149,7 +149,6 @@ class FakeFile:
 
 
 class TestFilesRepository:
-    # pylint: disable=R0903
     # pylint: disable=R0201
     def __init__(self, *files):
         self._files = files

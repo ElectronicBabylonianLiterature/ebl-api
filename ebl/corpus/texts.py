@@ -184,7 +184,6 @@ class PublicTextSerializer(ApiSerializer):
 
 
 class TextsResource:
-    # pylint: disable=R0903
 
     auth = {
         'exempt_methods': ['GET']
@@ -213,7 +212,6 @@ class TextsResource:
 
 
 class TextResource:
-    # pylint: disable=R0903
 
     def __init__(self, corpus):
         self._corpus = corpus

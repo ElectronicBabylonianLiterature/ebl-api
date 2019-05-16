@@ -1,4 +1,5 @@
 import falcon
+from falcon import testing
 from falcon_auth import FalconAuthMiddleware, NoneAuthBackend
 
 from ebl.auth0 import Auth0User
@@ -9,7 +10,6 @@ SCOPE = 'write:words'
 
 @falcon.before(require_scope, SCOPE)
 class TestResource:
-    # pylint: disable=R0903
     # pylint: disable=R0201
     def on_get(self, _req, resp):
         resp.status = falcon.HTTP_OK
@@ -28,7 +28,7 @@ def do_get(scope):
     auth_middleware = FalconAuthMiddleware(auth_backend)
     api = falcon.API(middleware=[auth_middleware])
     api.add_route('/test', TestResource())
-    client = falcon.testing.TestClient(api)
+    client = testing.TestClient(api)
 
     return client.simulate_get('/test')
 

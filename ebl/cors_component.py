@@ -6,7 +6,6 @@ class CorsComponent:
     Based on:
     https://falcon.readthedocs.io/en/stable/user/faq.html#how-do-i-implement-cors-with-falcon
     """  # noqa
-    # pylint: disable=R0903
 
     def process_response(self, req, resp, _resource, req_succeeded):
         # pylint: disable=R0201
