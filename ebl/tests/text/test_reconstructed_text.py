@@ -1,7 +1,8 @@
 import pytest
 
 from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
-    BrokenOffOpen, BrokenOffClose, StringPart, BrokenOffPart, Lacuna
+    BrokenOffOpen, BrokenOffClose, StringPart, BrokenOffPart, Lacuna, \
+    Caesura, MetricalFootSeparator
 
 
 @pytest.mark.parametrize('word,expected', [
@@ -32,3 +33,19 @@ def test_akkadian_word(word, expected):
 ])
 def test_lacuna(lacuna, expected):
     assert str(lacuna) == expected
+
+
+@pytest.mark.parametrize('caesura,expected', [
+    (Caesura(False), '||'),
+    (Caesura(True), '(||)')
+])
+def test_caesura(caesura, expected):
+    assert str(caesura) == expected
+
+
+@pytest.mark.parametrize('separator,expected', [
+    (MetricalFootSeparator(False), '|'),
+    (MetricalFootSeparator(True), '(|)')
+])
+def test_metrical_foot_separator(separator, expected):
+    assert str(separator) == expected

@@ -99,3 +99,32 @@ class Lacuna:
         yield '...'
         if self._broken_off[1]:
             yield self._broken_off[1].value
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Break(ABC):
+    uncertain: bool
+
+    @property
+    @abstractmethod
+    def _value(self):
+        ...
+
+    def __str__(self) -> str:
+        return f'({self._value})' if self.uncertain else self._value
+
+
+@attr.s(frozen=True)
+class Caesura(Break):
+
+    @property
+    def _value(self):
+        return '||'
+
+
+@attr.s(frozen=True)
+class MetricalFootSeparator(Break):
+
+    @property
+    def _value(self):
+        return '|'
