@@ -161,7 +161,6 @@ def test_reconstructed_line(text, expected):
     '|', '(|)', '||', '(||)', '| ||',
     'ibnû (|)', '|| ibnû', '... (||)', '(|) ...',
     'ibnû | | ibnû', 'ibnû | || ibnû'
-
 ])
 def test_invalid_reconstructed_line(text):
     assert_parse_error(RECONSTRUCTED_LINE, text)
