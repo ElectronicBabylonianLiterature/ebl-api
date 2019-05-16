@@ -1,28 +1,7 @@
-from enum import Enum, unique
-
 import pydash
 from parsy import char_from, seq, string, string_from, from_enum
 
-
-@unique
-class Modifier(Enum):
-    BROKEN = '#'
-    UNCERTAIN = '?'
-
-
-@unique
-class BrokenOffOpen(Enum):
-    BOTH = '[('
-    BROKEN = '['
-    MAYBE = '('
-
-
-@unique
-class BrokenOffClose(Enum):
-    BOTH = ')]'
-    BROKEN = ']'
-    MAYBE = ')'
-
+from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, BrokenOffClose
 
 BROKEN_OFF_OPEN = from_enum(BrokenOffOpen)
 BROKEN_OFF_CLOSE = from_enum(BrokenOffClose)

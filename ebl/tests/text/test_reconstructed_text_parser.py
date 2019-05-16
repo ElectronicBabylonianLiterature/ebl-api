@@ -2,7 +2,8 @@ import pytest
 from parsy import ParseError
 
 from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA, \
-    CAESURA, FEET_SEPARATOR, Modifier, BrokenOffOpen, BrokenOffClose
+    CAESURA, FEET_SEPARATOR
+from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, BrokenOffClose
 
 
 def assert_parse(parser, expected, text):
