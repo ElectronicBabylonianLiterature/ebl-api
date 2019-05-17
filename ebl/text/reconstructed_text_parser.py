@@ -3,7 +3,9 @@ from parsy import char_from, seq, string, string_from, from_enum, ParseError
 
 from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, \
     BrokenOffClose, AkkadianWord, Lacuna, Caesura, MetricalFootSeparator, \
-    BrokenOffPart, StringPart
+    BrokenOffPart, StringPart, LacunaPart
+
+ELLIPSIS = string('...')
 
 BROKEN_OFF_OPEN = from_enum(BrokenOffOpen)
 BROKEN_OFF_CLOSE = from_enum(BrokenOffClose)
@@ -16,16 +18,26 @@ AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
 MODIFIER = from_enum(Modifier)
 AKKADIAN_WORD = (seq(
     BROKEN_OFF_OPEN.map(BrokenOffPart).optional(),
+    seq(ELLIPSIS.map(lambda _: LacunaPart()),
+        BROKEN_OFF.map(BrokenOffPart).optional()).optional(),
     AKKADIAN_STRING.map(StringPart),
-    seq(BROKEN_OFF.map(BrokenOffPart), AKKADIAN_STRING.map(StringPart)).many()
+    (
+        seq(BROKEN_OFF.map(BrokenOffPart),
+            ELLIPSIS.map(lambda _: LacunaPart()),
+            AKKADIAN_STRING.map(StringPart).optional()) |
+        seq(ELLIPSIS.map(lambda _: LacunaPart()),
+            BROKEN_OFF.map(BrokenOffPart).optional(),
+            AKKADIAN_STRING.map(StringPart)) |
+        seq(BROKEN_OFF.map(BrokenOffPart),
+            AKKADIAN_STRING.map(StringPart))
+    ).many(),
+    ELLIPSIS.map(lambda _: LacunaPart()).optional()
 ).map(pydash.flatten_deep) + seq(
     MODIFIER.at_most(2),
     BROKEN_OFF_CLOSE.map(BrokenOffPart).optional()
 ).map(pydash.reverse)).map(pydash.partial_right(pydash.reject, pydash.is_none))
 
-LACUNA = seq(BROKEN_OFF_OPEN.optional(),
-             string('...'),
-             BROKEN_OFF_CLOSE.optional())
+LACUNA = seq(BROKEN_OFF_OPEN.optional(), ELLIPSIS, BROKEN_OFF_CLOSE.optional())
 
 
 CAESURA = string_from('(||)', '||')

@@ -41,7 +41,7 @@ class Part(ABC):
         ...
 
     @abstractmethod
-    def accept(self, visitor):
+    def accept(self, visitor) -> None:
         ...
 
 
@@ -53,7 +53,7 @@ class StringPart(Part):
     def is_text(self) -> bool:
         return True
 
-    def accept(self, visitor):
+    def accept(self, visitor) -> None:
         pass
 
     def __str__(self) -> str:
@@ -68,11 +68,25 @@ class BrokenOffPart(Part):
     def is_text(self) -> bool:
         return False
 
-    def accept(self, visitor):
+    def accept(self, visitor) -> None:
         self._value.accept(visitor)
 
     def __str__(self) -> str:
         return self._value.value
+
+
+@attr.s(frozen=True)
+class LacunaPart(Part):
+
+    @property
+    def is_text(self) -> bool:
+        return True
+
+    def accept(self, visitor):
+        pass
+
+    def __str__(self) -> str:
+        return str(Lacuna((None, None)))
 
 
 @attr.s(auto_attribs=True, frozen=True)

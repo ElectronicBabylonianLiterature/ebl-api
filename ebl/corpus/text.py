@@ -74,6 +74,7 @@ class Line:
 
     @reconstruction.validator
     def validate_reconstruction(self, _, value):
+        # pylint: disable=R0201
         validate(value)
 
     def accept(self, visitor: 'TextVisitor') -> None:
