@@ -18,8 +18,8 @@ def assert_parse_error(parser, text):
 
 
 @pytest.mark.parametrize('text,expected', [
-    ("'ABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄",
-     [StringPart("'ABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄"),
+    ('-ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄',
+     [StringPart('-ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'),
       []]),
     ('ibnû?', [StringPart('ibnû'), [Modifier.UNCERTAIN]]),
     ('ibnû#', [StringPart('ibnû'), [Modifier.BROKEN]]),

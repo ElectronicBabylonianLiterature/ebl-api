@@ -10,7 +10,7 @@ BROKEN_OFF_CLOSE = from_enum(BrokenOffClose)
 BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 
 AKKADIAN_ALPHABET = char_from(
-    "'ABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄"
+    '-ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'
 )
 AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
 MODIFIER = from_enum(Modifier)
