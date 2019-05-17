@@ -5,7 +5,7 @@ from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA, \
     CAESURA, FOOT_SEPARATOR, RECONSTRUCTED_LINE
 from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, \
     BrokenOffClose, AkkadianWord, Lacuna, MetricalFootSeparator, Caesura, \
-    StringPart, BrokenOffPart, validate, LacunaPart
+    StringPart, BrokenOffPart, validate, LacunaPart, SeparatorPart
 
 
 def assert_parse(parser, expected, text):
@@ -18,8 +18,8 @@ def assert_parse_error(parser, text):
 
 
 @pytest.mark.parametrize('text,expected', [
-    ('-ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄',
-     [StringPart('-ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'),
+    ('ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄',
+     [StringPart('ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'),
       []]),
     ('ibnû?', [StringPart('ibnû'), [Modifier.UNCERTAIN]]),
     ('ibnû#', [StringPart('ibnû'), [Modifier.BROKEN]]),
@@ -85,7 +85,18 @@ def assert_parse_error(parser, text):
                   BrokenOffPart(BrokenOffClose.BROKEN), StringPart('nû'), []]),
     ('ib[...]nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
                    LacunaPart(), BrokenOffPart(BrokenOffClose.BROKEN),
-                   StringPart('nû'), []])
+                   StringPart('nû'), []]),
+    ('ib-nû', [StringPart('ib'), SeparatorPart(), StringPart('nû'), []]),
+    ('...-nû', [LacunaPart(), SeparatorPart(), StringPart('nû'), []]),
+    ('ib-...', [StringPart('ib'), SeparatorPart(), LacunaPart(), []]),
+    ('...]-nû', [LacunaPart(), BrokenOffPart(BrokenOffClose.BROKEN),
+                 SeparatorPart(), StringPart('nû'), []]),
+    ('ib-[...', [StringPart('ib'), SeparatorPart(),
+                 BrokenOffPart(BrokenOffOpen.BROKEN), LacunaPart(), []]),
+    ('ib[-nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
+                SeparatorPart(), StringPart('nû'), []]),
+    ('ib-]nû', [StringPart('ib'), SeparatorPart(),
+                BrokenOffPart(BrokenOffClose.BROKEN), StringPart('nû'), []])
 ])
 def test_word(text, expected):
     assert AKKADIAN_WORD.parse(text) == expected
@@ -103,7 +114,8 @@ def test_word(text, expected):
     'ib..nû', '..ibnû', 'ibnû..',
     'ib....nû', '....ibnû', 'ibnû....',
     'ib......nû', '......ibnû', 'ibnû......',
-    '...', '[...]', '(...)', '[(...)]'
+    '...', '[...]', '(...)', '[(...)]',
+    'ib[-]nû', 'ib]-[nû'
 ])
 def test_invalid_word(text):
     assert_parse_error(AKKADIAN_WORD, text)

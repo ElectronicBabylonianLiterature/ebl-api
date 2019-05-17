@@ -89,6 +89,20 @@ class LacunaPart(Part):
         return str(Lacuna((None, None)))
 
 
+@attr.s(frozen=True)
+class SeparatorPart(Part):
+
+    @property
+    def is_text(self) -> bool:
+        return True
+
+    def accept(self, visitor):
+        pass
+
+    def __str__(self) -> str:
+        return '-'
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class AkkadianWord:
 

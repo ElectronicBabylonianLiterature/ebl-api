@@ -2,7 +2,7 @@ import pytest
 
 from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
     BrokenOffOpen, BrokenOffClose, StringPart, BrokenOffPart, Lacuna, \
-    Caesura, MetricalFootSeparator, LacunaPart
+    Caesura, MetricalFootSeparator, LacunaPart, SeparatorPart
 
 
 @pytest.mark.parametrize('word,expected', [
@@ -21,7 +21,9 @@ from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
                    BrokenOffPart(BrokenOffClose.BOTH)),
                   (Modifier.UNCERTAIN, )), 'ibnû?)]'),
     (AkkadianWord((StringPart('ib'), LacunaPart(), StringPart('nû'))),
-     'ib...nû')
+     'ib...nû'),
+    (AkkadianWord((StringPart('ib'), SeparatorPart(), StringPart('nû'))),
+     'ib-nû')
 ])
 def test_akkadian_word(word, expected):
     assert str(word) == expected
