@@ -46,7 +46,9 @@ def create(include_documents):
                 'lines': [
                     {
                         'number': line.number.to_value(),
-                        'reconstruction': line.reconstruction,
+                        'reconstruction': ' '.join(str(token)
+                                                   for token
+                                                   in line.reconstruction),
                         'manuscripts': [{
                             'manuscriptId': manuscript_line.manuscript_id,
                             'labels': [label.to_value()

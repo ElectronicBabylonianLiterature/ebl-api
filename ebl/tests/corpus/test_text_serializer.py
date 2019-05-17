@@ -46,7 +46,9 @@ def to_dict(include_documents):
                 'lines': [
                     {
                         'number': LINE.number.to_value(),
-                        'reconstruction': LINE.reconstruction,
+                        'reconstruction': ' '.join(str(token)
+                                                   for token
+                                                   in LINE.reconstruction),
                         'manuscripts': [{
                             'manuscriptId': MANUSCRIPT_LINE.manuscript_id,
                             'labels': [label.to_value()

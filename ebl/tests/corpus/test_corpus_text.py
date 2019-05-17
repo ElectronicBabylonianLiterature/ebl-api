@@ -11,6 +11,8 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
 from ebl.text.labels import SurfaceLabel, ColumnLabel, Label, LineNumberLabel
 from ebl.text.line import TextLine
+from ebl.text.reconstructed_text import AkkadianWord, StringPart, \
+    BrokenOffPart, BrokenOffOpen
 from ebl.text.token import Word
 
 CATEGORY = 1
@@ -34,7 +36,7 @@ TYPE = ManuscriptType.LIBRARY
 NOTES = 'some notes'
 REFERENCES = (ReferenceFactory.build(), )
 LINE_NUMBER = LineNumberLabel('1')
-LINE_RECONSTRUCTION = 'idealized text'
+LINE_RECONSTRUCTION = (AkkadianWord((StringPart('buāru'),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE), )
 MANUSCRIPT_TEXT = TextLine('1.', (Word('-ku]-nu-ši'),))
 
@@ -167,6 +169,15 @@ def test_invalid_labels(labels: Tuple[Label, ...]):
             manuscript_id=1,
             labels=labels,
             line=TextLine()
+        )
+
+
+def test_invalid_reconstruction():
+    with pytest.raises(ValueError):
+        Line(
+            LINE_NUMBER,
+            (AkkadianWord((BrokenOffPart(BrokenOffOpen.BROKEN), )), ),
+            tuple()
         )
 
 

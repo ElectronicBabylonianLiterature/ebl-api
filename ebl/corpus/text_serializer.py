@@ -5,6 +5,7 @@ from ebl.corpus.text import TextVisitor, Text, Chapter, Manuscript, \
     ManuscriptLine, Line
 from ebl.text.labels import LineNumberLabel, Label
 from ebl.text.line import TextLine
+from ebl.text.reconstructed_text_parser import parse_reconstructed_line
 from ebl.text.text import create_tokens
 
 
@@ -67,7 +68,9 @@ class TextSerializer(TextVisitor):
     def visit_line(self, line: Line) -> None:
         self.line = {
             'number': line.number.to_value(),
-            'reconstruction': line.reconstruction,
+            'reconstruction': ' '.join(str(token)
+                                       for token
+                                       in line.reconstruction),
             'manuscripts': []
         }
         self.chapter['lines'].append(self.line)
@@ -136,7 +139,7 @@ class TextDeserializer:
 
     def deserialize_line(self, line: dict) -> Line:
         return Line(LineNumberLabel(line['number']),
-                    line['reconstruction'],
+                    parse_reconstructed_line(line['reconstruction']),
                     tuple(self.deserialize_manuscript_line(line)
                           for line in line['manuscripts']))
 

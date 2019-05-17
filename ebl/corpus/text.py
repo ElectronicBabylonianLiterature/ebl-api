@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Tuple
+from typing import Tuple, Union
 
 import attr
 
@@ -10,6 +10,7 @@ from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
 from ebl.bibliography.reference import Reference
 from ebl.text.labels import Label, LineNumberLabel
 from ebl.text.line import TextLine
+from ebl.text.reconstructed_text import AkkadianWord, Break, Lacuna, validate
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])
 
@@ -67,8 +68,13 @@ class ManuscriptLine:
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: LineNumberLabel
-    reconstruction: str = ''
+    reconstruction: Tuple[Union[AkkadianWord, Lacuna, Break], ...] =\
+        attr.ib(default=tuple())
     manuscripts: Tuple[ManuscriptLine, ...] = tuple()
+
+    @reconstruction.validator
+    def validate_reconstruction(self, _, value):
+        validate(value)
 
     def accept(self, visitor: 'TextVisitor') -> None:
         if visitor.is_pre_order:

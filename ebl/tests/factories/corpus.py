@@ -12,6 +12,7 @@ from ebl.tests.factories.collections import TupleFactory
 from ebl.text.atf import Surface, Status
 from ebl.text.labels import SurfaceLabel, ColumnLabel, LineNumberLabel
 from ebl.text.line import TextLine
+from ebl.text.reconstructed_text import AkkadianWord, StringPart
 from ebl.text.token import Word
 
 
@@ -54,7 +55,7 @@ class LineFactory(factory.Factory):
         model = Line
 
     number = factory.Sequence(lambda n: LineNumberLabel(str(n)))
-    reconstruction = factory.Faker('sentence')
+    reconstruction = (AkkadianWord((StringPart('buāru'),)),)
     manuscripts: Tuple[ManuscriptLine, ...] = factory.List([
         factory.SubFactory(ManuscriptLineFactory)
     ], TupleFactory)

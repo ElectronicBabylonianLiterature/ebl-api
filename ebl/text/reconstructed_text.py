@@ -155,7 +155,7 @@ class MetricalFootSeparator(Break):
         return '|'
 
 
-def validate(line: Iterable[Union[AkkadianWord, Break]]):
+def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
     @attr.s(auto_attribs=True)
     class Accumulator:
         state: Tuple[bool, bool] = (False, False)

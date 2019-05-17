@@ -1,5 +1,5 @@
 import pydash
-from parsy import char_from, seq, string, string_from, from_enum
+from parsy import char_from, seq, string, string_from, from_enum, ParseError
 
 from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, \
     BrokenOffClose, AkkadianWord, Lacuna, Caesura, MetricalFootSeparator, \
@@ -48,3 +48,10 @@ RECONSTRUCTED_LINE = (
     TEXT_PART +
     seq(WORD_SEPARATOR >> BREAK << WORD_SEPARATOR, TEXT_PART).many()
 ).map(pydash.flatten_deep)
+
+
+def parse_reconstructed_line(text: str):
+    try:
+        return tuple(RECONSTRUCTED_LINE.parse(text))
+    except ParseError as error:
+        raise ValueError(f'Invalid reconstructed line: {text}. {error}')
