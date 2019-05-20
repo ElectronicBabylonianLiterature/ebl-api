@@ -8,7 +8,8 @@ from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
 @pytest.mark.parametrize('word,expected', [
     (AkkadianWord((StringPart('ibnû'), )), 'ibnû'),
     (AkkadianWord((StringPart('ibnû'), ),
-                  (Modifier.UNCERTAIN, Modifier.BROKEN)), 'ibnû?#'),
+                  (Modifier.UNCERTAIN, Modifier.BROKEN, Modifier.CORRECTED)),
+     'ibnû?#!'),
     (AkkadianWord((BrokenOffPart(BrokenOffOpen.BROKEN),
                    StringPart('ibnû'))), '[ibnû'),
     (AkkadianWord((BrokenOffPart(BrokenOffOpen.BOTH),
