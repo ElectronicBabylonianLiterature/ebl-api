@@ -40,7 +40,7 @@ AKKADIAN_WORD = (seq(
     ).many(),
     seq(BETWEEN_STRINGS.optional(), LACUNA_PART).optional()
 ).map(pydash.flatten_deep) + seq(
-    MODIFIER.at_most(2),
+    MODIFIER.at_most(3).map(pydash.uniq),
     BROKEN_OFF_CLOSE_PART.optional()
 ).map(pydash.reverse)).map(pydash.partial_right(pydash.reject, pydash.is_none))
 

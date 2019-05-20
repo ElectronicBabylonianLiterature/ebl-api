@@ -10,6 +10,7 @@ import attr
 class Modifier(Enum):
     BROKEN = '#'
     UNCERTAIN = '?'
+    CORRECTED = '!'
 
 
 class BrokenOff(Enum):

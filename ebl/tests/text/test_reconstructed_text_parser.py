@@ -23,8 +23,12 @@ def assert_parse_error(parser, text):
       []]),
     ('ibnû?', [StringPart('ibnû'), [Modifier.UNCERTAIN]]),
     ('ibnû#', [StringPart('ibnû'), [Modifier.BROKEN]]),
+    ('ibnû!', [StringPart('ibnû'), [Modifier.CORRECTED]]),
     ('ibnû#?', [StringPart('ibnû'), [Modifier.BROKEN, Modifier.UNCERTAIN]]),
     ('ibnû?#', [StringPart('ibnû'), [Modifier.UNCERTAIN, Modifier.BROKEN]]),
+    ('ibnû?#!', [StringPart('ibnû'), [Modifier.UNCERTAIN, Modifier.BROKEN,
+                                      Modifier.CORRECTED]]),
+    ('ibnû##', [StringPart('ibnû'), [Modifier.BROKEN]]),
     ('[ibnû]', [BrokenOffPart(BrokenOffOpen.BROKEN), StringPart('ibnû'),
                 BrokenOffPart(BrokenOffClose.BROKEN), []]),
     ('ib[nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
@@ -104,7 +108,7 @@ def test_word(text, expected):
 
 @pytest.mark.parametrize('text', [
     'x', 'X', 'KUR',
-    'ibnû!', 'ibnû?#?',
+    'ibnû*', 'ibnû?#?!',
     ']ibnû', 'ibnû[', '[[ibnû',
     ')ibnû', 'ibnû(', '((ibnû',
     'i([bnû', 'i])bnû', 'i[)]bnû', 'i[b][n]û', 'ib[]nû'
