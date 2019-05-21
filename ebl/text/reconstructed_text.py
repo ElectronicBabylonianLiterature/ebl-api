@@ -5,8 +5,8 @@ from typing import Iterable, Tuple, Union
 import attr
 import pydash
 
-from ebl.text.enclosure import EnclosureType, EnclosureVariant, Enclosure, \
-    EnclosureVisitor, EnclosureError
+from ebl.text.enclosure import Enclosure, \
+    EnclosureVisitor, EnclosureError, EnclosureValidator
 
 
 @unique
@@ -162,40 +162,6 @@ class MetricalFootSeparator(Break):
 
 
 def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
-    class EnclosureValidator(EnclosureVisitor):
-        def __init__(self):
-            self._state = {
-                EnclosureType.BROKEN_OFF: False,
-                EnclosureType.MAYBE_BROKEN_OFF: False
-            }
-
-        def visit_enclosure(self, enclosure: Enclosure) -> None:
-            expected = {
-                EnclosureType.BROKEN_OFF: None,
-                EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
-            }
-            expected_type = expected[enclosure.type]
-            if (enclosure.variant is EnclosureVariant.OPEN and
-                    not self._state[enclosure.type] and
-                    (not expected_type or self._state[expected_type])):
-                self._state[enclosure.type] = True
-            elif (enclosure.variant is EnclosureVariant.CLOSE and
-                  self._state[enclosure.type] and
-                  not [type_
-                       for type_, open_
-                       in self._state.items()
-                       if open_ and expected[type_] is enclosure.type]):
-                self._state[enclosure.type] = False
-            else:
-                raise EnclosureError(f'Unexpected enclosure {enclosure}.')
-
-        def validate_end_state(self):
-            open_enclosures = [type_
-                               for type_, open_ in self._state.items()
-                               if open_]
-            if open_enclosures:
-                raise EnclosureError(f'Unclosed enclosure {open_enclosures}.')
-
     validator = EnclosureValidator()
     try:
         for token in line:
