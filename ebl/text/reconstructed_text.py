@@ -96,10 +96,9 @@ class AkkadianWord(ReconstructionToken):
     def __str__(self) -> str:
         last_parts = pydash.take_right_while(list(self.parts),
                                              lambda part: not part.is_text)
+        main_parts = self.parts[:len(self.parts) - len(last_parts)]
         return ''.join(
-            [str(part)
-             for part
-             in self.parts[:len(self.parts) - len(last_parts)]] +
+            [str(part) for part in main_parts] +
             [modifier.value for modifier in self.modifiers] +
             [str(part) for part in last_parts]
         )
