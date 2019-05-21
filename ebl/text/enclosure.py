@@ -1,3 +1,4 @@
+from abc import ABC
 from enum import unique, Enum
 
 
@@ -26,8 +27,14 @@ class Enclosure(Enum):
         self.type = type_
         self.variant = variant
 
-    def accept(self, visitor) -> None:
+    def accept(self, visitor: 'EnclosureVisitor') -> None:
         visitor.visit_enclosure(self)
 
     def __str__(self) -> str:
         return self.type.value[self.variant.value]
+
+
+class EnclosureVisitor(ABC):
+
+    def visit_enclosure(self, enclosure: Enclosure) -> None:
+        ...

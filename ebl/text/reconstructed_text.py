@@ -6,7 +6,8 @@ from typing import Iterable, Tuple, Union
 import attr
 import pydash
 
-from ebl.text.enclosure import EnclosureType, EnclosureVariant, Enclosure
+from ebl.text.enclosure import EnclosureType, EnclosureVariant, Enclosure, \
+    EnclosureVisitor
 
 
 @unique
@@ -25,7 +26,7 @@ class Part(ABC):
         ...
 
     @abstractmethod
-    def accept(self, visitor) -> None:
+    def accept(self, visitor: EnclosureVisitor) -> None:
         ...
 
 
@@ -52,7 +53,7 @@ class EnclosurePart(Part):
     def is_text(self) -> bool:
         return False
 
-    def accept(self, visitor) -> None:
+    def accept(self, visitor: EnclosureVisitor) -> None:
         self._value.accept(visitor)
 
     def __str__(self) -> str:
@@ -93,7 +94,7 @@ class AkkadianWord:
     parts: Tuple[Part, ...]
     modifiers: Tuple[Modifier, ...] = tuple()
 
-    def accept(self, visitor):
+    def accept(self, visitor: EnclosureVisitor):
         for part in self.parts:
             part.accept(visitor)
 
@@ -114,7 +115,7 @@ class Lacuna:
     _before: Tuple[Enclosure, ...]
     _after: Tuple[Enclosure, ...]
 
-    def accept(self, visitor):
+    def accept(self, visitor: EnclosureVisitor):
         for enclosure in self._before + self._after:
             enclosure.accept(visitor)
 
@@ -162,14 +163,14 @@ class MetricalFootSeparator(Break):
 
 
 def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
-    class Accumulator:
+    class EnclosureValidator(EnclosureVisitor):
         def __init__(self):
             self.state = {
                 EnclosureType.BROKEN_OFF: False,
                 EnclosureType.MAYBE_BROKEN_OFF: False
             }
 
-        def visit_enclosure(self, enclosure):
+        def visit_enclosure(self, enclosure: Enclosure) -> None:
             expected = {
                 EnclosureType.BROKEN_OFF: None,
                 EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
@@ -194,7 +195,7 @@ def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
         token.accept(accumulator)
         return accumulator
 
-    result = reduce(iteratee, line, Accumulator())
+    result = reduce(iteratee, line, EnclosureValidator())
     open_enclosures = [type_
                        for type_, open_ in result.state.items()
                        if open_]
