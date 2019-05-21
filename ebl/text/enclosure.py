@@ -53,6 +53,11 @@ class EnclosureError(Exception):
 
 
 class EnclosureValidator(EnclosureVisitor):
+    expected = {
+        EnclosureType.BROKEN_OFF: None,
+        EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
+    }
+
     def __init__(self):
         self._state = {
             EnclosureType.BROKEN_OFF: False,
@@ -60,24 +65,26 @@ class EnclosureValidator(EnclosureVisitor):
         }
 
     def visit_enclosure(self, enclosure: Enclosure) -> None:
-        expected = {
-            EnclosureType.BROKEN_OFF: None,
-            EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
-        }
-        expected_type = expected[enclosure.type]
-        if (enclosure.is_open and
-                not self._state[enclosure.type] and
-                (not expected_type or self._state[expected_type])):
+        if self._can_open(enclosure):
             self._state[enclosure.type] = True
-        elif (enclosure.is_close and
-              self._state[enclosure.type] and
-              not [type_
-                   for type_, open_
-                   in self._state.items()
-                   if open_ and expected[type_] is enclosure.type]):
+        elif self._can_close(enclosure):
             self._state[enclosure.type] = False
         else:
             raise EnclosureError(f'Unexpected enclosure {enclosure}.')
+
+    def _can_open(self, enclosure: Enclosure) -> bool:
+        expected_type = self.expected[enclosure.type]
+        return (enclosure.is_open and
+                not self._state[enclosure.type] and
+                (not expected_type or self._state[expected_type]))
+
+    def _can_close(self, enclosure: Enclosure) -> bool:
+        return (enclosure.is_close and
+                self._state[enclosure.type] and
+                not [type_
+                     for type_, open_
+                     in self._state.items()
+                     if open_ and self.expected[type_] is enclosure.type])
 
     def validate_end_state(self):
         open_enclosures = [type_
