@@ -1,20 +1,21 @@
+# type: ignore
 import pydash
 from parsy import ParseError, char_from, from_enum, seq, string, string_from
 
+from ebl.text.enclosure import Enclosures
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart
-from ebl.text.enclosure import Enclosure
 
 ELLIPSIS = string('...')
 
 BROKEN_OFF_OPEN = (
-    string('[').map(lambda _: Enclosure.BROKEN_OFF_OPEN) |
-    string('(').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_OPEN)
+    string('[').map(lambda _: Enclosures.BROKEN_OFF_OPEN) |
+    string('(').map(lambda _: Enclosures.MAYBE_BROKEN_OFF_OPEN)
 )
 BROKEN_OFF_CLOSE = (
-    string(']').map(lambda _: Enclosure.BROKEN_OFF_CLOSE) |
-    string(')').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_CLOSE)
+    string(']').map(lambda _: Enclosures.BROKEN_OFF_CLOSE) |
+    string(')').map(lambda _: Enclosures.MAYBE_BROKEN_OFF_CLOSE)
 )
 BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 

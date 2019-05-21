@@ -27,15 +27,7 @@ class EnclosureType(Enum):
         return ''.join(self._delimiters.values())
 
 
-@unique
-class Enclosure(Enum):
-    BROKEN_OFF_OPEN = (EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN)
-    BROKEN_OFF_CLOSE = (EnclosureType.BROKEN_OFF, EnclosureVariant.CLOSE)
-    MAYBE_BROKEN_OFF_OPEN = (EnclosureType.MAYBE_BROKEN_OFF,
-                             EnclosureVariant.OPEN)
-    MAYBE_BROKEN_OFF_CLOSE = (EnclosureType.MAYBE_BROKEN_OFF,
-                              EnclosureVariant.CLOSE)
-
+class Enclosure:
     def __init__(self, type_: EnclosureType, variant: EnclosureVariant):
         self.type = type_
         self._variant = variant
@@ -53,6 +45,15 @@ class Enclosure(Enum):
 
     def __str__(self) -> str:
         return self.type.get_delimiter(self._variant)
+
+
+Enclosures = Enum('Enclosure', [
+    (f'{type_.name}_OPEN', (type_, EnclosureVariant.OPEN))
+    for type_ in EnclosureType
+] + [
+    (f'{type_.name}_CLOSE', (type_, EnclosureVariant.CLOSE))
+    for type_ in EnclosureType
+], type=Enclosure)  # type: ignore
 
 
 class EnclosureVisitor(ABC):
