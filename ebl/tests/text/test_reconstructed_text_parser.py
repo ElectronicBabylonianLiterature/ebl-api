@@ -1,9 +1,10 @@
 import pytest
 from parsy import ParseError
 
-from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
-    EnclosurePart, Lacuna, LacunaPart, MetricalFootSeparator, Modifier,\
-    SeparatorPart, StringPart, validate
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
+    Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
+    StringPart, validate
+from ebl.text.enclosure import Enclosure
 from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, CAESURA, \
     FOOT_SEPARATOR, LACUNA, RECONSTRUCTED_LINE
 

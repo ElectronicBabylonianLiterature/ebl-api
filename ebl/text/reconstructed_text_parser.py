@@ -1,9 +1,10 @@
 import pydash
 from parsy import ParseError, char_from, from_enum, seq, string, string_from
 
-from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
-    EnclosurePart, Lacuna, LacunaPart, MetricalFootSeparator, Modifier, \
-    SeparatorPart, StringPart
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
+    Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
+    StringPart
+from ebl.text.enclosure import Enclosure
 
 ELLIPSIS = string('...')
 

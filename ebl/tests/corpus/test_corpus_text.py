@@ -10,8 +10,8 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
 from ebl.text.labels import ColumnLabel, Label, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, Enclosure, \
-    EnclosurePart, StringPart
+from ebl.text.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
+from ebl.text.enclosure import Enclosure
 from ebl.text.token import Word
 
 CATEGORY = 1

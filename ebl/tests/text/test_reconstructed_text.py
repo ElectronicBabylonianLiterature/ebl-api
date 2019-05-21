@@ -1,8 +1,9 @@
 import pytest
 
-from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
-    EnclosurePart, Lacuna, LacunaPart, MetricalFootSeparator, Modifier, \
-    SeparatorPart, StringPart
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
+    Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
+    StringPart
+from ebl.text.enclosure import Enclosure
 
 
 @pytest.mark.parametrize('word,expected', [
