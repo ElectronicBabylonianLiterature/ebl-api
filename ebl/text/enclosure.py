@@ -74,17 +74,19 @@ class EnclosureValidator(EnclosureVisitor):
 
     def _can_open(self, enclosure: Enclosure) -> bool:
         expected_type = self.expected[enclosure.type]
-        return (enclosure.is_open and
-                not self._state[enclosure.type] and
-                (not expected_type or self._state[expected_type]))
+        is_closed = not self._state[enclosure.type]
+        parent_is_open = self._state.get(expected_type, True)
+        return enclosure.is_open and is_closed and parent_is_open
 
     def _can_close(self, enclosure: Enclosure) -> bool:
-        return (enclosure.is_close and
-                self._state[enclosure.type] and
-                not [type_
-                     for type_, open_
-                     in self._state.items()
-                     if open_ and self.expected[type_] is enclosure.type])
+        is_open = self._state[enclosure.type]
+        children_are_not_open = not [
+            type_
+            for type_, open_
+            in self._state.items()
+            if open_ and self.expected[type_] is enclosure.type
+        ]
+        return enclosure.is_close and is_open and children_are_not_open
 
     def validate_end_state(self):
         open_enclosures = [type_
