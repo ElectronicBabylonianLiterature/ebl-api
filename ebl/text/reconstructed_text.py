@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
 from enum import Enum, unique
-from typing import Iterable, Tuple, Union
+from typing import Iterable, Tuple
 
 import attr
 import pydash
 
-from ebl.text.enclosure import Enclosure, \
-    EnclosureVisitor, EnclosureError, EnclosureValidator
+from ebl.text.enclosure import Enclosure, EnclosureError, EnclosureValidator, \
+    EnclosureVisitor
+
+
+class ReconstructionToken(ABC):
+    @abstractmethod
+    def accept(self, visitor: EnclosureVisitor) -> None:
+        ...
 
 
 @unique
@@ -24,9 +30,8 @@ class Part(ABC):
     def is_text(self) -> bool:
         ...
 
-    @abstractmethod
     def accept(self, visitor: EnclosureVisitor) -> None:
-        ...
+        pass
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -36,9 +41,6 @@ class StringPart(Part):
     @property
     def is_text(self) -> bool:
         return True
-
-    def accept(self, visitor) -> None:
-        pass
 
     def __str__(self) -> str:
         return self._value
@@ -66,9 +68,6 @@ class LacunaPart(Part):
     def is_text(self) -> bool:
         return True
 
-    def accept(self, visitor):
-        pass
-
     def __str__(self) -> str:
         return str(Lacuna(tuple(), tuple()))
 
@@ -80,20 +79,17 @@ class SeparatorPart(Part):
     def is_text(self) -> bool:
         return True
 
-    def accept(self, visitor):
-        pass
-
     def __str__(self) -> str:
         return '-'
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class AkkadianWord:
+class AkkadianWord(ReconstructionToken):
 
     parts: Tuple[Part, ...]
     modifiers: Tuple[Modifier, ...] = tuple()
 
-    def accept(self, visitor: EnclosureVisitor):
+    def accept(self, visitor: EnclosureVisitor) -> None:
         for part in self.parts:
             part.accept(visitor)
 
@@ -110,11 +106,11 @@ class AkkadianWord:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Lacuna:
+class Lacuna(ReconstructionToken):
     _before: Tuple[Enclosure, ...]
     _after: Tuple[Enclosure, ...]
 
-    def accept(self, visitor: EnclosureVisitor):
+    def accept(self, visitor: EnclosureVisitor) -> None:
         for enclosure in self._before + self._after:
             enclosure.accept(visitor)
 
@@ -130,7 +126,7 @@ class Lacuna:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Break(ABC):
+class Break(ReconstructionToken):
     uncertain: bool
 
     @property
@@ -161,7 +157,7 @@ class MetricalFootSeparator(Break):
         return '|'
 
 
-def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
+def validate(line: Iterable[ReconstructionToken]):
     validator = EnclosureValidator()
     try:
         for token in line:
