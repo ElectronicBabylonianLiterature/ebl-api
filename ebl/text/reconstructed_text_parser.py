@@ -1,15 +1,16 @@
 import pydash
-from parsy import char_from, seq, string, string_from, from_enum, ParseError
+from parsy import ParseError, char_from, from_enum, seq, string, string_from
 
-from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, \
-    BrokenOffClose, AkkadianWord, Lacuna, Caesura, MetricalFootSeparator, \
-    BrokenOffPart, StringPart, LacunaPart, SeparatorPart
-
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
+    EnclosurePart, Lacuna, LacunaPart, MetricalFootSeparator, Modifier, \
+    SeparatorPart, StringPart
 
 ELLIPSIS = string('...')
 
-BROKEN_OFF_OPEN = from_enum(BrokenOffOpen)
-BROKEN_OFF_CLOSE = from_enum(BrokenOffClose)
+BROKEN_OFF_OPEN = string('[').map(lambda _: Enclosure.BROKEN_OFF_OPEN) |\
+                  string('(').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_OPEN)
+BROKEN_OFF_CLOSE = string(']').map(lambda _: Enclosure.BROKEN_OFF_CLOSE) |\
+                   string(')').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_CLOSE)
 BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 
 AKKADIAN_ALPHABET = char_from(
@@ -19,32 +20,34 @@ AKKADIAN_ALPHABET = char_from(
 AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
 
 SEPARATOR_PART = string('-').map(lambda _: SeparatorPart())
-BROKEN_OFF_OPEN_PART = BROKEN_OFF_OPEN.map(BrokenOffPart)
-BROKEN_OFF_CLOSE_PART = BROKEN_OFF_CLOSE.map(BrokenOffPart)
-BROKEN_OFF_PART = BROKEN_OFF.map(BrokenOffPart)
+BROKEN_OFF_OPEN_PART = BROKEN_OFF_OPEN.map(EnclosurePart)
+BROKEN_OFF_CLOSE_PART = BROKEN_OFF_CLOSE.map(EnclosurePart)
+BROKEN_OFF_PART = BROKEN_OFF.map(EnclosurePart)
 LACUNA_PART = ELLIPSIS.map(lambda _: LacunaPart())
 STRING_PART = AKKADIAN_STRING.map(StringPart)
-BETWEEN_STRINGS = (seq(BROKEN_OFF_PART, SEPARATOR_PART) |
-                   seq(SEPARATOR_PART, BROKEN_OFF_PART) |
-                   BROKEN_OFF_PART |
+BETWEEN_STRINGS = (seq(BROKEN_OFF_PART.at_least(1), SEPARATOR_PART) |
+                   seq(SEPARATOR_PART, BROKEN_OFF_PART.at_least(1)) |
+                   BROKEN_OFF_PART.at_least(1) |
                    SEPARATOR_PART)
 MODIFIER = from_enum(Modifier)
-AKKADIAN_WORD = (seq(
-    BROKEN_OFF_OPEN_PART.optional(),
-    seq(LACUNA_PART, BETWEEN_STRINGS.optional()).optional(),
-    STRING_PART,
-    (
-        seq(BETWEEN_STRINGS, STRING_PART | LACUNA_PART) |
-        seq(LACUNA_PART, BETWEEN_STRINGS.optional(), STRING_PART) |
-        STRING_PART
-    ).many(),
-    seq(BETWEEN_STRINGS.optional(), LACUNA_PART).optional()
-).map(pydash.flatten_deep) + seq(
-    MODIFIER.at_most(3).map(pydash.uniq),
-    BROKEN_OFF_CLOSE_PART.optional()
-).map(pydash.reverse)).map(pydash.partial_right(pydash.reject, pydash.is_none))
+AKKADIAN_WORD = (
+    seq(
+        BROKEN_OFF_OPEN_PART.many(),
+        seq(LACUNA_PART, BETWEEN_STRINGS.optional()).optional(),
+        STRING_PART,
+        (
+            seq(BETWEEN_STRINGS, STRING_PART | LACUNA_PART) |
+            seq(LACUNA_PART, BETWEEN_STRINGS.optional(), STRING_PART) |
+            STRING_PART
+        ).many(),
+        seq(BETWEEN_STRINGS.optional(), LACUNA_PART).optional()
+    ).map(pydash.flatten_deep) + seq(
+        MODIFIER.at_most(3).map(pydash.uniq).map(lambda f: [f]),
+        BROKEN_OFF_CLOSE_PART.many()
+    ).map(pydash.reverse).map(pydash.flatten)
+).map(pydash.partial_right(pydash.reject, pydash.is_none))
 
-LACUNA = seq(BROKEN_OFF_OPEN.optional(), ELLIPSIS, BROKEN_OFF_CLOSE.optional())
+LACUNA = seq(BROKEN_OFF_OPEN.many(), ELLIPSIS, BROKEN_OFF_CLOSE.many())
 
 
 CAESURA = string_from('(||)', '||')
@@ -60,7 +63,7 @@ BREAK = (CAESURA.map(lambda token:
 TEXT_PART = (
     AKKADIAN_WORD.map(lambda token: AkkadianWord(tuple(token[:-1]),
                                                  tuple(token[-1]))) |
-    LACUNA.map(lambda token: Lacuna((token[0], token[2])))
+    LACUNA.map(lambda token: Lacuna(tuple(token[0]), tuple(token[2])))
 ).at_least(1).sep_by(WORD_SEPARATOR)
 
 RECONSTRUCTED_LINE = (

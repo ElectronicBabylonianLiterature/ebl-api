@@ -1,8 +1,8 @@
 import pytest
 
-from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
-    BrokenOffOpen, BrokenOffClose, StringPart, BrokenOffPart, Lacuna, \
-    Caesura, MetricalFootSeparator, LacunaPart, SeparatorPart
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
+    EnclosurePart, Lacuna, LacunaPart, MetricalFootSeparator, Modifier, \
+    SeparatorPart, StringPart
 
 
 @pytest.mark.parametrize('word,expected', [
@@ -10,16 +10,18 @@ from ebl.text.reconstructed_text import AkkadianWord, Modifier, \
     (AkkadianWord((StringPart('ibnû'), ),
                   (Modifier.UNCERTAIN, Modifier.BROKEN, Modifier.CORRECTED)),
      'ibnû?#!'),
-    (AkkadianWord((BrokenOffPart(BrokenOffOpen.BROKEN),
+    (AkkadianWord((EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
                    StringPart('ibnû'))), '[ibnû'),
-    (AkkadianWord((BrokenOffPart(BrokenOffOpen.BOTH),
+    (AkkadianWord((EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                   EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
                    StringPart('ib'),
-                   BrokenOffPart(BrokenOffClose.MAYBE),
+                   EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
                    StringPart('nû'),
-                   BrokenOffPart(BrokenOffClose.BROKEN))),
+                   EnclosurePart(Enclosure.BROKEN_OFF_CLOSE))),
      '[(ib)nû]'),
     (AkkadianWord((StringPart('ibnû'),
-                   BrokenOffPart(BrokenOffClose.BOTH)),
+                   EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
+                   EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),),
                   (Modifier.UNCERTAIN, )), 'ibnû?)]'),
     (AkkadianWord((StringPart('ib'), LacunaPart(), StringPart('nû'))),
      'ib...nû'),
@@ -31,10 +33,11 @@ def test_akkadian_word(word, expected):
 
 
 @pytest.mark.parametrize('lacuna,expected', [
-    (Lacuna((None, None)), '...'),
-    (Lacuna((BrokenOffOpen.BROKEN, None)), '[...'),
-    (Lacuna((None, BrokenOffClose.MAYBE)), '...)'),
-    (Lacuna((BrokenOffOpen.BOTH, BrokenOffClose.MAYBE)), '[(...)')
+    (Lacuna(tuple(), tuple()), '...'),
+    (Lacuna((Enclosure.BROKEN_OFF_OPEN, ), tuple()), '[...'),
+    (Lacuna(tuple(), (Enclosure.MAYBE_BROKEN_OFF_CLOSE, )), '...)'),
+    (Lacuna((Enclosure.BROKEN_OFF_OPEN, Enclosure.MAYBE_BROKEN_OFF_OPEN),
+            (Enclosure.MAYBE_BROKEN_OFF_CLOSE, )), '[(...)')
 ])
 def test_lacuna(lacuna, expected):
     assert str(lacuna) == expected

@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from enum import unique, Enum
+from enum import Enum, unique
 from functools import reduce
-from typing import Tuple, Optional, Union, Iterable
+from typing import Iterable, Tuple, Union
 
 import attr
+import pydash
 
 
 @unique
@@ -11,6 +12,38 @@ class Modifier(Enum):
     BROKEN = '#'
     UNCERTAIN = '?'
     CORRECTED = '!'
+
+
+@unique
+class EnclosureType(Enum):
+    BROKEN_OFF = '[]'
+    MAYBE_BROKEN_OFF = '()'
+
+
+@unique
+class EnclosureVariant(Enum):
+    OPEN = 0
+    CLOSE = 1
+
+
+@unique
+class Enclosure(Enum):
+    BROKEN_OFF_OPEN = (EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN)
+    BROKEN_OFF_CLOSE = (EnclosureType.BROKEN_OFF, EnclosureVariant.CLOSE)
+    MAYBE_BROKEN_OFF_OPEN = (EnclosureType.MAYBE_BROKEN_OFF,
+                             EnclosureVariant.OPEN)
+    MAYBE_BROKEN_OFF_CLOSE = (EnclosureType.MAYBE_BROKEN_OFF,
+                              EnclosureVariant.CLOSE)
+
+    def __init__(self, type_: EnclosureType, variant: EnclosureVariant):
+        self.type = type_
+        self.variant = variant
+
+    def accept(self, visitor) -> None:
+        visitor.visit_enclosure(self)
+
+    def __str__(self) -> str:
+        return self.type.value[self.variant.value]
 
 
 class BrokenOff(Enum):
@@ -76,6 +109,21 @@ class BrokenOffPart(Part):
         return self._value.value
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class EnclosurePart(Part):
+    _value: Enclosure
+
+    @property
+    def is_text(self) -> bool:
+        return False
+
+    def accept(self, visitor) -> None:
+        self._value.accept(visitor)
+
+    def __str__(self) -> str:
+        return str(self._value)
+
+
 @attr.s(frozen=True)
 class LacunaPart(Part):
 
@@ -87,7 +135,7 @@ class LacunaPart(Part):
         pass
 
     def __str__(self) -> str:
-        return str(Lacuna((None, None)))
+        return str(Lacuna(tuple(), tuple()))
 
 
 @attr.s(frozen=True)
@@ -115,41 +163,35 @@ class AkkadianWord:
             part.accept(visitor)
 
     def __str__(self) -> str:
-        modifier_string = ''.join([modifier.value
-                                   for modifier in self.modifiers])
-
-        def create_string_without_final_broken_off() -> str:
-            return ''.join([str(part) for part in self.parts]) +\
-                   modifier_string
-
-        def create_string_with_final_broken_off() -> str:
-            return ''.join([str(part) for part in self.parts[:-1]]) +\
-                   modifier_string + str(self.parts[-1])
-
-        last_part = self.parts[-1]
-        return (create_string_without_final_broken_off()
-                if last_part.is_text
-                else create_string_with_final_broken_off())
+        last_parts = pydash.take_right_while(list(self.parts),
+                                             lambda part: not part.is_text)
+        return ''.join(
+            [str(part)
+             for part
+             in self.parts[:len(self.parts)-len(last_parts)]] +
+            [modifier.value for modifier in self.modifiers] +
+            [str(part) for part in last_parts]
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Lacuna:
-    _broken_off: Tuple[Optional[BrokenOffOpen], Optional[BrokenOffClose]]
+    _before: Tuple[Enclosure, ...]
+    _after: Tuple[Enclosure, ...]
 
     def accept(self, visitor):
-        for broken_off in self._broken_off:
-            if broken_off:
-                broken_off.accept(visitor)
+        for enclosure in self._before + self._after:
+            enclosure.accept(visitor)
 
     def __str__(self):
         return ''.join(self._generate_parts())
 
     def _generate_parts(self):
-        if self._broken_off[0]:
-            yield self._broken_off[0].value
+        for enclosure in self._before:
+            yield str(enclosure)
         yield '...'
-        if self._broken_off[1]:
-            yield self._broken_off[1].value
+        for enclosure in self._after:
+            yield str(enclosure)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -185,41 +227,42 @@ class MetricalFootSeparator(Break):
 
 
 def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
-    @attr.s(auto_attribs=True)
     class Accumulator:
-        state: Tuple[bool, bool] = (False, False)
+        def __init__(self):
+            self.state = {
+                EnclosureType.BROKEN_OFF: False,
+                EnclosureType.MAYBE_BROKEN_OFF: False
+            }
 
-        def visit_broken_off(self, broken_off):
+        def visit_enclosure(self, enclosure):
             expected = {
-                BrokenOffOpen.BROKEN: (False, False),
-                BrokenOffOpen.MAYBE: (True, False),
-                BrokenOffOpen.BOTH: (False, False),
-                BrokenOffClose.BROKEN: (True, False),
-                BrokenOffClose.MAYBE: (True, True),
-                BrokenOffClose.BOTH: (True, True),
+                EnclosureType.BROKEN_OFF: None,
+                EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
             }
-            transitions = {
-                BrokenOffOpen.BROKEN: (True, False),
-                BrokenOffOpen.MAYBE: (True, True),
-                BrokenOffOpen.BOTH: (True, True),
-                BrokenOffClose.BROKEN: (False, False),
-                BrokenOffClose.MAYBE: (True, False),
-                BrokenOffClose.BOTH: (False, False),
-            }
-            if self.state == expected[broken_off]:
-                self.state = transitions[broken_off]
+            expected_type = expected[enclosure.type]
+            if (enclosure.variant is EnclosureVariant.OPEN and
+                    not self.state[enclosure.type] and
+                    (not expected_type or self.state[expected_type])):
+                self.state[enclosure.type] = True
+            elif (enclosure.variant is EnclosureVariant.CLOSE and
+                  self.state[enclosure.type] and
+                  not [type_
+                       for type_, open_
+                       in self.state.items()
+                       if open_ and expected[type_] is enclosure.type]):
+                self.state[enclosure.type] = False
             else:
-                raise ValueError(f'Unexpected broken off: {broken_off}.')
+                raise ValueError(f'Unexpected enclosure {enclosure} '
+                                 f'in {[str(part) for part in line]}.')
 
     def iteratee(accumulator, token):
         token.accept(accumulator)
         return accumulator
 
     result = reduce(iteratee, line, Accumulator())
-    if result.state != (False, False):
-        broken_off = []
-        if result.state[1]:
-            broken_off.append(BrokenOffClose.MAYBE)
-        if result.state[0]:
-            broken_off.append(BrokenOffClose.BROKEN)
-        raise ValueError(f'Unclosed broken off {broken_off}.')
+    open_enclosures = [type_
+                       for type_, open_ in result.state.items()
+                       if open_]
+    if open_enclosures:
+        raise ValueError(f'Unclosed enclosure {open_enclosures} '
+                         f'in line {[str(part) for part in line]}.')

@@ -1,11 +1,11 @@
 import pytest
 from parsy import ParseError
 
-from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, LACUNA, \
-    CAESURA, FOOT_SEPARATOR, RECONSTRUCTED_LINE
-from ebl.text.reconstructed_text import Modifier, BrokenOffOpen, \
-    BrokenOffClose, AkkadianWord, Lacuna, MetricalFootSeparator, Caesura, \
-    StringPart, BrokenOffPart, validate, LacunaPart, SeparatorPart
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
+    EnclosurePart, Lacuna, LacunaPart, MetricalFootSeparator, Modifier,\
+    SeparatorPart, StringPart, validate
+from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, CAESURA, \
+    FOOT_SEPARATOR, LACUNA, RECONSTRUCTED_LINE
 
 
 def assert_parse(parser, expected, text):
@@ -29,78 +29,103 @@ def assert_parse_error(parser, text):
     ('ibnû?#!', [StringPart('ibnû'), [Modifier.UNCERTAIN, Modifier.BROKEN,
                                       Modifier.CORRECTED]]),
     ('ibnû##', [StringPart('ibnû'), [Modifier.BROKEN]]),
-    ('[ibnû]', [BrokenOffPart(BrokenOffOpen.BROKEN), StringPart('ibnû'),
-                BrokenOffPart(BrokenOffClose.BROKEN), []]),
-    ('ib[nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
+    ('[ibnû]', [EnclosurePart(Enclosure.BROKEN_OFF_OPEN), StringPart('ibnû'),
+                EnclosurePart(Enclosure.BROKEN_OFF_CLOSE), []]),
+    ('ib[nû', [StringPart('ib'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
                StringPart('nû'), []]),
-    ('ib]nû', [StringPart('ib'), BrokenOffPart(BrokenOffClose.BROKEN),
+    ('ib]nû', [StringPart('ib'), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                StringPart('nû'), []]),
-    ('i[b]nû', [StringPart('i'), BrokenOffPart(BrokenOffOpen.BROKEN),
-                StringPart('b'), BrokenOffPart(BrokenOffClose.BROKEN),
+    ('i[b]nû', [StringPart('i'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                StringPart('b'), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                 StringPart('nû'), []]),
-    ('ibnû?]', [StringPart('ibnû'), BrokenOffPart(BrokenOffClose.BROKEN),
+    ('ibnû?]', [StringPart('ibnû'), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                 [Modifier.UNCERTAIN]]),
-    ('(ibnû)', [BrokenOffPart(BrokenOffOpen.MAYBE), StringPart('ibnû'),
-                BrokenOffPart(BrokenOffClose.MAYBE), []]),
-    ('ib(nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.MAYBE),
+    ('(ibnû)', [EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
+                StringPart('ibnû'),
+                EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE), []]),
+    ('ib(nû', [StringPart('ib'),
+               EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
                StringPart('nû'), []]),
-    ('ib)nû', [StringPart('ib'), BrokenOffPart(BrokenOffClose.MAYBE),
+    ('ib)nû', [StringPart('ib'),
+               EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
                StringPart('nû'), []]),
-    ('i(b)nû', [StringPart('i'), BrokenOffPart(BrokenOffOpen.MAYBE),
-                StringPart('b'), BrokenOffPart(BrokenOffClose.MAYBE),
+    ('i(b)nû', [StringPart('i'),
+                EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
+                StringPart('b'),
+                EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
                 StringPart('nû'), []]),
-    ('ibnû#)', [StringPart('ibnû'), BrokenOffPart(BrokenOffClose.MAYBE),
+    ('ibnû#)', [StringPart('ibnû'),
+                EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
                 [Modifier.BROKEN]]),
-    ('[(ibnû)]', [BrokenOffPart(BrokenOffOpen.BOTH), StringPart('ibnû'),
-                  BrokenOffPart(BrokenOffClose.BOTH), []]),
-    ('ib[(nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BOTH),
+    ('[(ibnû)]', [EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                  EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
+                  StringPart('ibnû'),
+                  EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
+                  EnclosurePart(Enclosure.BROKEN_OFF_CLOSE), []]),
+    ('ib[(nû', [StringPart('ib'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
                 StringPart('nû'), []]),
-    ('ib)]nû', [StringPart('ib'), BrokenOffPart(BrokenOffClose.BOTH),
+    ('ib)]nû', [StringPart('ib'),
+                EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
+                EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                 StringPart('nû'), []]),
-    ('i[(b)]nû', [StringPart('i'), BrokenOffPart(BrokenOffOpen.BOTH),
-                  StringPart('b'), BrokenOffPart(BrokenOffClose.BOTH),
+    ('i[(b)]nû', [StringPart('i'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                  EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
+                  StringPart('b'),
+                  EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
+                  EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                   StringPart('nû'), []]),
-    ('[i(b)n]û', [BrokenOffPart(BrokenOffOpen.BROKEN), StringPart('i'),
-                  BrokenOffPart(BrokenOffOpen.MAYBE), StringPart('b'),
-                  BrokenOffPart(BrokenOffClose.MAYBE), StringPart('n'),
-                  BrokenOffPart(BrokenOffClose.BROKEN), StringPart('û'), []]),
-    ('ibnû?)]', [StringPart('ibnû'), BrokenOffPart(BrokenOffClose.BOTH),
+    ('[i(b)n]û', [EnclosurePart(Enclosure.BROKEN_OFF_OPEN), StringPart('i'),
+                  EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_OPEN),
+                  StringPart('b'),
+                  EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
+                  StringPart('n'),
+                  EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
+                  StringPart('û'), []]),
+    ('ibnû?)]', [StringPart('ibnû'),
+                 EnclosurePart(Enclosure.MAYBE_BROKEN_OFF_CLOSE),
+                 EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                  [Modifier.UNCERTAIN]]),
     ('...ibnû', [LacunaPart(), StringPart('ibnû'), []]),
     ('ibnû...', [StringPart('ibnû'), LacunaPart(), []]),
     ('ib...nû', [StringPart('ib'), LacunaPart(), StringPart('nû'),
                  []]),
-    ('[...ibnû', [BrokenOffPart(BrokenOffOpen.BROKEN), LacunaPart(),
+    ('[...ibnû', [EnclosurePart(Enclosure.BROKEN_OFF_OPEN), LacunaPart(),
                   StringPart('ibnû'), []]),
     ('ibnû...]', [StringPart('ibnû'), LacunaPart(),
-                  BrokenOffPart(BrokenOffClose.BROKEN), []]),
-    ('...]ibnû', [LacunaPart(), BrokenOffPart(BrokenOffClose.BROKEN),
+                  EnclosurePart(Enclosure.BROKEN_OFF_CLOSE), []]),
+    ('...]ibnû', [LacunaPart(), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                   StringPart('ibnû'), []]),
-    ('ibnû[...', [StringPart('ibnû'), BrokenOffPart(BrokenOffOpen.BROKEN),
+    ('ibnû[...', [StringPart('ibnû'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
                   LacunaPart(), []]),
-    ('[...]ibnû', [BrokenOffPart(BrokenOffOpen.BROKEN), LacunaPart(),
-                   BrokenOffPart(BrokenOffClose.BROKEN), StringPart('ibnû'),
+    ('[...]ibnû', [EnclosurePart(Enclosure.BROKEN_OFF_OPEN), LacunaPart(),
+                   EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
+                   StringPart('ibnû'),
                    []]),
-    ('ibnû[...]', [StringPart('ibnû'), BrokenOffPart(BrokenOffOpen.BROKEN),
-                   LacunaPart(), BrokenOffPart(BrokenOffClose.BROKEN), []]),
-    ('ib[...nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
+    ('ibnû[...]', [StringPart('ibnû'),
+                   EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                   LacunaPart(), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
+                   []]),
+    ('ib[...nû', [StringPart('ib'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
                   LacunaPart(), StringPart('nû'), []]),
     ('ib...]nû', [StringPart('ib'), LacunaPart(),
-                  BrokenOffPart(BrokenOffClose.BROKEN), StringPart('nû'), []]),
-    ('ib[...]nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
-                   LacunaPart(), BrokenOffPart(BrokenOffClose.BROKEN),
+                  EnclosurePart(Enclosure.BROKEN_OFF_CLOSE), StringPart('nû'),
+                  []]),
+    ('ib[...]nû', [StringPart('ib'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
+                   LacunaPart(), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                    StringPart('nû'), []]),
     ('ib-nû', [StringPart('ib'), SeparatorPart(), StringPart('nû'), []]),
     ('...-nû', [LacunaPart(), SeparatorPart(), StringPart('nû'), []]),
     ('ib-...', [StringPart('ib'), SeparatorPart(), LacunaPart(), []]),
-    ('...]-nû', [LacunaPart(), BrokenOffPart(BrokenOffClose.BROKEN),
+    ('...]-nû', [LacunaPart(), EnclosurePart(Enclosure.BROKEN_OFF_CLOSE),
                  SeparatorPart(), StringPart('nû'), []]),
     ('ib-[...', [StringPart('ib'), SeparatorPart(),
-                 BrokenOffPart(BrokenOffOpen.BROKEN), LacunaPart(), []]),
-    ('ib[-nû', [StringPart('ib'), BrokenOffPart(BrokenOffOpen.BROKEN),
+                 EnclosurePart(Enclosure.BROKEN_OFF_OPEN), LacunaPart(), []]),
+    ('ib[-nû', [StringPart('ib'), EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
                 SeparatorPart(), StringPart('nû'), []]),
     ('ib-]nû', [StringPart('ib'), SeparatorPart(),
-                BrokenOffPart(BrokenOffClose.BROKEN), StringPart('nû'), []])
+                EnclosurePart(Enclosure.BROKEN_OFF_CLOSE), StringPart('nû'),
+                []])
 ])
 def test_word(text, expected):
     assert AKKADIAN_WORD.parse(text) == expected
@@ -109,9 +134,9 @@ def test_word(text, expected):
 @pytest.mark.parametrize('text', [
     'x', 'X', 'KUR',
     'ibnû*', 'ibnû?#?!',
-    ']ibnû', 'ibnû[', '[[ibnû',
-    ')ibnû', 'ibnû(', '((ibnû',
-    'i([bnû', 'i])bnû', 'i[)]bnû', 'i[b][n]û', 'ib[]nû'
+    ']ibnû', 'ibnû[',
+    ')ibnû', 'ibnû(',
+    'ib[]nû'
     'ibnû?[#', 'ibnû#)?',
     'ibnû]?', 'ibnû)#', 'ibnû)]?',
     'ib.[..nû', '.(..ibnû', 'ibnû.)]..',
@@ -127,15 +152,21 @@ def test_invalid_word(text):
 
 @pytest.mark.parametrize('text,expected', [
     ('...', ['...']),
-    ('[...', [BrokenOffOpen.BROKEN, '...']),
-    ('...]', ['...', BrokenOffClose.BROKEN]),
-    ('[...]', [BrokenOffOpen.BROKEN, '...', BrokenOffClose.BROKEN]),
-    ('(...', [BrokenOffOpen.MAYBE, '...']),
-    ('...)', ['...', BrokenOffClose.MAYBE]),
-    ('(...)', [BrokenOffOpen.MAYBE, '...', BrokenOffClose.MAYBE]),
-    ('[(...', [BrokenOffOpen.BOTH, '...']),
-    ('...)]', ['...', BrokenOffClose.BOTH]),
-    ('[(...)]', [BrokenOffOpen.BOTH, '...', BrokenOffClose.BOTH])
+    ('[...', [[Enclosure.BROKEN_OFF_OPEN], '...']),
+    ('...]', ['...', [Enclosure.BROKEN_OFF_CLOSE]]),
+    ('[...]', [[Enclosure.BROKEN_OFF_OPEN], '...',
+               [Enclosure.BROKEN_OFF_CLOSE]]),
+    ('(...', [[Enclosure.MAYBE_BROKEN_OFF_OPEN], '...']),
+    ('...)', ['...', [Enclosure.MAYBE_BROKEN_OFF_CLOSE]]),
+    ('(...)', [[Enclosure.MAYBE_BROKEN_OFF_OPEN], '...',
+               [Enclosure.MAYBE_BROKEN_OFF_CLOSE]]),
+    ('[(...', [[Enclosure.BROKEN_OFF_OPEN, Enclosure.MAYBE_BROKEN_OFF_OPEN],
+               '...']),
+    ('...)]', ['...', [Enclosure.MAYBE_BROKEN_OFF_CLOSE,
+                       Enclosure.BROKEN_OFF_CLOSE]]),
+    ('[(...)]', [[Enclosure.BROKEN_OFF_OPEN, Enclosure.MAYBE_BROKEN_OFF_OPEN],
+                 '...', [Enclosure.MAYBE_BROKEN_OFF_CLOSE,
+                         Enclosure.BROKEN_OFF_CLOSE]])
 ])
 def test_lacuna(text, expected):
     assert_parse(LACUNA, expected, text)
@@ -143,11 +174,10 @@ def test_lacuna(text, expected):
 
 @pytest.mark.parametrize('text', [
     '.', '..', '....', '......'
-    ']...', '...[', '[[...',
-    ')...', '...(', '...))',
-    '([...', '...])',
+    ']...', '...[',
+    ')...', '...(',
     '.)..', '..].', '..[(.'
-    '...?', '...#',
+    '...?', '...#', '...!'
 
 
 ])
@@ -192,13 +222,13 @@ WORD = AkkadianWord((StringPart('ibnû'),))
 
 @pytest.mark.parametrize('text,expected', [
     ('ibnû', [WORD]),
-    ('...', [Lacuna((None, None))]),
-    ('... ibnû', [Lacuna((None, None)), WORD]),
-    ('ibnû ...', [WORD, Lacuna((None, None))]),
-    ('[...] ibnû', [Lacuna((BrokenOffOpen.BROKEN, BrokenOffClose.BROKEN)),
-                    WORD]),
-    ('ibnû [...]', [WORD, Lacuna((BrokenOffOpen.BROKEN,
-                                  BrokenOffClose.BROKEN))]),
+    ('...', [Lacuna(tuple(), tuple())]),
+    ('... ibnû', [Lacuna(tuple(), tuple()), WORD]),
+    ('ibnû ...', [WORD, Lacuna(tuple(), tuple())]),
+    ('[...] ibnû', [Lacuna((Enclosure.BROKEN_OFF_OPEN, ),
+                           (Enclosure.BROKEN_OFF_CLOSE, )), WORD]),
+    ('ibnû [...]', [WORD, Lacuna((Enclosure.BROKEN_OFF_OPEN, ),
+                                 (Enclosure.BROKEN_OFF_CLOSE, ))]),
     ('...ibnû', [AkkadianWord((LacunaPart(), StringPart('ibnû')))]),
     ('ibnû...', [AkkadianWord((StringPart('ibnû'), LacunaPart()))]),
     ('ib...nû', [AkkadianWord((StringPart('ib'), LacunaPart(),
@@ -225,9 +255,21 @@ def test_invalid_reconstructed_line(text):
     '[ibnû', '(ibnû', '[(ibnû',
     'ibnû]', 'ibnû)', 'ibnû)]'
     '[ibnû)]', '[(ibnû]'
-    '[... [ibnû] ...]', '[(... [ibnû] ...)]', '[(... (ibnû) ...)]'
+    '[... [ibnû] ...]', '[(... [ibnû] ...)]', '[(... (ibnû) ...)]',
+    '[[...', '...))', '([...', '...])',
+    '[[ibnû', '((ibnû', 'i([bnû', 'i])bnû', 'i[)]bnû'
 ])
-def test_validate(text):
+def test_validate_invalid(text):
     line = RECONSTRUCTED_LINE.parse(text)
     with pytest.raises(ValueError):
         validate(line)
+
+
+@pytest.mark.parametrize('text', [
+    '[ma-]ma [ma]-ma [...-]ma',
+    '[(ma-)]ma [ma]-ma [(...)]-ma',
+    '[(ma-)ma ma]-ma [...(-ma)]'
+])
+def test_validate_valid(text):
+    line = RECONSTRUCTED_LINE.parse(text)
+    validate(line)

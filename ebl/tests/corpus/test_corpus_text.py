@@ -2,17 +2,16 @@ from typing import Tuple
 
 import pytest
 
-from ebl.corpus.text import (Chapter, Manuscript,
-                             Text, TextId, Line,
-                             ManuscriptLine)
-from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
-    PeriodModifier, Period, Stage
+from ebl.corpus.enums import Classification, ManuscriptType, Period, \
+    PeriodModifier, Provenance, Stage
+from ebl.corpus.text import (Chapter, Line, Manuscript, ManuscriptLine, Text,
+                             TextId)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
-from ebl.text.labels import SurfaceLabel, ColumnLabel, Label, LineNumberLabel
+from ebl.text.labels import ColumnLabel, Label, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, StringPart, \
-    BrokenOffPart, BrokenOffOpen
+from ebl.text.reconstructed_text import AkkadianWord, Enclosure, \
+    EnclosurePart, StringPart
 from ebl.text.token import Word
 
 CATEGORY = 1
@@ -176,7 +175,7 @@ def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
             LINE_NUMBER,
-            (AkkadianWord((BrokenOffPart(BrokenOffOpen.BROKEN), )), ),
+            (AkkadianWord((EnclosurePart(Enclosure.BROKEN_OFF_OPEN), )), ),
             tuple()
         )
 
