@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from enum import unique, Enum
 
 
@@ -35,7 +35,7 @@ class Enclosure(Enum):
 
 
 class EnclosureVisitor(ABC):
-
+    @abstractmethod
     def visit_enclosure(self, enclosure: Enclosure) -> None:
         ...
 
