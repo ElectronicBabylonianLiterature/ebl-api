@@ -7,10 +7,7 @@ class EnclosureError(Exception):
 
 class ValidationState:
     def __init__(self):
-        self._enclosures = {
-            EnclosureType.BROKEN_OFF: False,
-            EnclosureType.MAYBE_BROKEN_OFF: False
-        }
+        self._enclosures = {type_: False for type_ in EnclosureType}
 
     @property
     def open_enclosures(self):
