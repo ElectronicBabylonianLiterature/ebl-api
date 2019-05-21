@@ -65,39 +65,54 @@ class EnclosureError(Exception):
     pass
 
 
-class EnclosureValidator(EnclosureVisitor):
+class ValidationState:
     def __init__(self):
-        self._state = {
+        self._enclosures = {
             EnclosureType.BROKEN_OFF: False,
             EnclosureType.MAYBE_BROKEN_OFF: False
         }
 
+    @property
+    def open_enclosures(self):
+        return [type_
+                for type_, open_ in self._enclosures.items()
+                if open_]
+
+    def open(self, type_: EnclosureType) -> None:
+        self._enclosures[type_] = True
+
+    def close(self, type_: EnclosureType) -> None:
+        self._enclosures[type_] = False
+
+    def can_open(self, type_: EnclosureType) -> bool:
+        is_closed = not self._enclosures[type_]
+        parent_is_open = self._enclosures.get(type_.parent, True)
+        return is_closed and parent_is_open
+
+    def can_close(self, type_: EnclosureType) -> bool:
+        is_open = self._enclosures[type_]
+        children_are_not_open = not [
+            child_type
+            for child_type, open_
+            in self._enclosures.items()
+            if open_ and child_type.parent is type_
+        ]
+        return is_open and children_are_not_open
+
+
+class EnclosureValidator(EnclosureVisitor):
+    def __init__(self):
+        self._state = ValidationState()
+
     def visit_enclosure(self, enclosure: Enclosure) -> None:
-        if self._can_open(enclosure):
-            self._state[enclosure.type] = True
-        elif self._can_close(enclosure):
-            self._state[enclosure.type] = False
+        if enclosure.is_open and self._state.can_open(enclosure.type):
+            self._state.open(enclosure.type)
+        elif enclosure.is_close and self._state.can_close(enclosure.type):
+            self._state.close(enclosure.type)
         else:
             raise EnclosureError(f'Unexpected enclosure {enclosure}.')
 
-    def _can_open(self, enclosure: Enclosure) -> bool:
-        is_closed = not self._state[enclosure.type]
-        parent_is_open = self._state.get(enclosure.type.parent, True)
-        return enclosure.is_open and is_closed and parent_is_open
-
-    def _can_close(self, enclosure: Enclosure) -> bool:
-        is_open = self._state[enclosure.type]
-        children_are_not_open = not [
-            type_
-            for type_, open_
-            in self._state.items()
-            if open_ and type_.parent is enclosure.type
-        ]
-        return enclosure.is_close and is_open and children_are_not_open
-
     def validate_end_state(self):
-        open_enclosures = [type_
-                           for type_, open_ in self._state.items()
-                           if open_]
+        open_enclosures = self._state.open_enclosures
         if open_enclosures:
             raise EnclosureError(f'Unclosed enclosure {open_enclosures}.')
