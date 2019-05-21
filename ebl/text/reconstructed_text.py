@@ -5,8 +5,8 @@ from typing import Iterable, Tuple
 import attr
 import pydash
 
-from ebl.text.enclosure import Enclosure, EnclosureError, EnclosureValidator, \
-    EnclosureVisitor
+from ebl.text.enclosure import Enclosure, EnclosureVisitor
+from ebl.text.enclosure_validator import EnclosureError, EnclosureValidator
 
 
 class ReconstructionToken(ABC):
