@@ -46,26 +46,6 @@ class Enclosure(Enum):
         return self.type.value[self.variant.value]
 
 
-class BrokenOff(Enum):
-
-    def accept(self, visitor):
-        visitor.visit_broken_off(self)
-
-
-@unique
-class BrokenOffOpen(BrokenOff):
-    BOTH = '[('
-    BROKEN = '['
-    MAYBE = '('
-
-
-@unique
-class BrokenOffClose(BrokenOff):
-    BOTH = ')]'
-    BROKEN = ']'
-    MAYBE = ')'
-
-
 @attr.s(frozen=True)
 class Part(ABC):
 
@@ -92,21 +72,6 @@ class StringPart(Part):
 
     def __str__(self) -> str:
         return self._value
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class BrokenOffPart(Part):
-    _value: BrokenOff
-
-    @property
-    def is_text(self) -> bool:
-        return False
-
-    def accept(self, visitor) -> None:
-        self._value.accept(visitor)
-
-    def __str__(self) -> str:
-        return self._value.value
 
 
 @attr.s(auto_attribs=True, frozen=True)
