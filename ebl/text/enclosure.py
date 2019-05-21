@@ -38,3 +38,7 @@ class EnclosureVisitor(ABC):
 
     def visit_enclosure(self, enclosure: Enclosure) -> None:
         ...
+
+
+class EnclosureError(Exception):
+    pass

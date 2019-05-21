@@ -1,13 +1,12 @@
 from abc import ABC, abstractmethod
 from enum import Enum, unique
-from functools import reduce
 from typing import Iterable, Tuple, Union
 
 import attr
 import pydash
 
 from ebl.text.enclosure import EnclosureType, EnclosureVariant, Enclosure, \
-    EnclosureVisitor
+    EnclosureVisitor, EnclosureError
 
 
 @unique
@@ -165,7 +164,7 @@ class MetricalFootSeparator(Break):
 def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
     class EnclosureValidator(EnclosureVisitor):
         def __init__(self):
-            self.state = {
+            self._state = {
                 EnclosureType.BROKEN_OFF: False,
                 EnclosureType.MAYBE_BROKEN_OFF: False
             }
@@ -177,28 +176,31 @@ def validate(line: Iterable[Union[AkkadianWord, Lacuna, Break]]):
             }
             expected_type = expected[enclosure.type]
             if (enclosure.variant is EnclosureVariant.OPEN and
-                    not self.state[enclosure.type] and
-                    (not expected_type or self.state[expected_type])):
-                self.state[enclosure.type] = True
+                    not self._state[enclosure.type] and
+                    (not expected_type or self._state[expected_type])):
+                self._state[enclosure.type] = True
             elif (enclosure.variant is EnclosureVariant.CLOSE and
-                  self.state[enclosure.type] and
+                  self._state[enclosure.type] and
                   not [type_
                        for type_, open_
-                       in self.state.items()
+                       in self._state.items()
                        if open_ and expected[type_] is enclosure.type]):
-                self.state[enclosure.type] = False
+                self._state[enclosure.type] = False
             else:
-                raise ValueError(f'Unexpected enclosure {enclosure} '
-                                 f'in {[str(part) for part in line]}.')
+                raise EnclosureError(f'Unexpected enclosure {enclosure}.')
 
-    def iteratee(accumulator, token):
-        token.accept(accumulator)
-        return accumulator
+        def validate_end_state(self):
+            open_enclosures = [type_
+                               for type_, open_ in self._state.items()
+                               if open_]
+            if open_enclosures:
+                raise EnclosureError(f'Unclosed enclosure {open_enclosures}.')
 
-    result = reduce(iteratee, line, EnclosureValidator())
-    open_enclosures = [type_
-                       for type_, open_ in result.state.items()
-                       if open_]
-    if open_enclosures:
-        raise ValueError(f'Unclosed enclosure {open_enclosures} '
-                         f'in line {[str(part) for part in line]}.')
+    validator = EnclosureValidator()
+    try:
+        for token in line:
+            token.accept(validator)
+        validator.validate_end_state()
+    except EnclosureError as error:
+        raise ValueError(f'Invalid line {[str(part) for part in line]}: '
+                         f'{error}')
