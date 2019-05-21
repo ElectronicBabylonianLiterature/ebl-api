@@ -1,17 +1,30 @@
 from abc import ABC, abstractmethod
-from enum import unique, Enum
-
-
-@unique
-class EnclosureType(Enum):
-    BROKEN_OFF = '[]'
-    MAYBE_BROKEN_OFF = '()'
+from enum import Enum, unique
 
 
 @unique
 class EnclosureVariant(Enum):
     OPEN = 0
     CLOSE = 1
+
+
+@unique
+class EnclosureType(Enum):
+    BROKEN_OFF = ('[', ']', None)
+    MAYBE_BROKEN_OFF = ('(', ')', BROKEN_OFF)
+
+    def __init__(self, open_: str, close: str, parent: 'EnclosureType'):
+        self._delimiters = {
+            EnclosureVariant.OPEN: open_,
+            EnclosureVariant.CLOSE: close
+        }
+        self.parent = parent
+
+    def get_delimiter(self, variant: EnclosureVariant) -> str:
+        return self._delimiters[variant]
+
+    def __str__(self) -> str:
+        return ''.join(self._delimiters.values())
 
 
 @unique
@@ -25,21 +38,21 @@ class Enclosure(Enum):
 
     def __init__(self, type_: EnclosureType, variant: EnclosureVariant):
         self.type = type_
-        self.variant = variant
+        self._variant = variant
 
     @property
     def is_open(self) -> bool:
-        return self.variant is EnclosureVariant.OPEN
+        return self._variant is EnclosureVariant.OPEN
 
     @property
     def is_close(self) -> bool:
-        return self.variant is EnclosureVariant.CLOSE
+        return self._variant is EnclosureVariant.CLOSE
 
     def accept(self, visitor: 'EnclosureVisitor') -> None:
         visitor.visit_enclosure(self)
 
     def __str__(self) -> str:
-        return self.type.value[self.variant.value]
+        return self.type.get_delimiter(self._variant)
 
 
 class EnclosureVisitor(ABC):
@@ -53,11 +66,6 @@ class EnclosureError(Exception):
 
 
 class EnclosureValidator(EnclosureVisitor):
-    expected = {
-        EnclosureType.BROKEN_OFF: None,
-        EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
-    }
-
     def __init__(self):
         self._state = {
             EnclosureType.BROKEN_OFF: False,
@@ -73,9 +81,8 @@ class EnclosureValidator(EnclosureVisitor):
             raise EnclosureError(f'Unexpected enclosure {enclosure}.')
 
     def _can_open(self, enclosure: Enclosure) -> bool:
-        expected_type = self.expected[enclosure.type]
         is_closed = not self._state[enclosure.type]
-        parent_is_open = self._state.get(expected_type, True)
+        parent_is_open = self._state.get(enclosure.type.parent, True)
         return enclosure.is_open and is_closed and parent_is_open
 
     def _can_close(self, enclosure: Enclosure) -> bool:
@@ -84,7 +91,7 @@ class EnclosureValidator(EnclosureVisitor):
             type_
             for type_, open_
             in self._state.items()
-            if open_ and self.expected[type_] is enclosure.type
+            if open_ and type_.parent is enclosure.type
         ]
         return enclosure.is_close and is_open and children_are_not_open
 
