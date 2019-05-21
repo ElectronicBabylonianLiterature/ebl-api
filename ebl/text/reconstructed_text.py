@@ -17,7 +17,7 @@ class ReconstructionToken(ABC):
 
 @unique
 class Modifier(Enum):
-    BROKEN = '#'
+    DAMAGED = '#'
     UNCERTAIN = '?'
     CORRECTED = '!'
 

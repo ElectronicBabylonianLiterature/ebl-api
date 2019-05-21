@@ -9,7 +9,7 @@ from ebl.text.enclosure import Enclosure
 @pytest.mark.parametrize('word,expected', [
     (AkkadianWord((StringPart('ibnû'), )), 'ibnû'),
     (AkkadianWord((StringPart('ibnû'), ),
-                  (Modifier.UNCERTAIN, Modifier.BROKEN, Modifier.CORRECTED)),
+                  (Modifier.UNCERTAIN, Modifier.DAMAGED, Modifier.CORRECTED)),
      'ibnû?#!'),
     (AkkadianWord((EnclosurePart(Enclosure.BROKEN_OFF_OPEN),
                    StringPart('ibnû'))), '[ibnû'),
