@@ -27,6 +27,14 @@ class Enclosure(Enum):
         self.type = type_
         self.variant = variant
 
+    @property
+    def is_open(self) -> bool:
+        return self.variant is EnclosureVariant.OPEN
+
+    @property
+    def is_close(self) -> bool:
+        return self.variant is EnclosureVariant.CLOSE
+
     def accept(self, visitor: 'EnclosureVisitor') -> None:
         visitor.visit_enclosure(self)
 
@@ -57,11 +65,11 @@ class EnclosureValidator(EnclosureVisitor):
             EnclosureType.MAYBE_BROKEN_OFF: EnclosureType.BROKEN_OFF
         }
         expected_type = expected[enclosure.type]
-        if (enclosure.variant is EnclosureVariant.OPEN and
+        if (enclosure.is_open and
                 not self._state[enclosure.type] and
                 (not expected_type or self._state[expected_type])):
             self._state[enclosure.type] = True
-        elif (enclosure.variant is EnclosureVariant.CLOSE and
+        elif (enclosure.is_close and
               self._state[enclosure.type] and
               not [type_
                    for type_, open_
