@@ -7,10 +7,14 @@ from ebl.text.reconstructed_text import AkkadianWord, Caesura, Enclosure, \
 
 ELLIPSIS = string('...')
 
-BROKEN_OFF_OPEN = string('[').map(lambda _: Enclosure.BROKEN_OFF_OPEN) |\
-                  string('(').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_OPEN)
-BROKEN_OFF_CLOSE = string(']').map(lambda _: Enclosure.BROKEN_OFF_CLOSE) |\
-                   string(')').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_CLOSE)
+BROKEN_OFF_OPEN = (
+    string('[').map(lambda _: Enclosure.BROKEN_OFF_OPEN) |
+    string('(').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_OPEN)
+)
+BROKEN_OFF_CLOSE = (
+    string(']').map(lambda _: Enclosure.BROKEN_OFF_CLOSE) |
+    string(')').map(lambda _: Enclosure.MAYBE_BROKEN_OFF_CLOSE)
+)
 BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
 
 AKKADIAN_ALPHABET = char_from(

@@ -168,7 +168,7 @@ class AkkadianWord:
         return ''.join(
             [str(part)
              for part
-             in self.parts[:len(self.parts)-len(last_parts)]] +
+             in self.parts[:len(self.parts) - len(last_parts)]] +
             [modifier.value for modifier in self.modifiers] +
             [str(part) for part in last_parts]
         )
