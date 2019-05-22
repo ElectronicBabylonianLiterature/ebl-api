@@ -65,7 +65,7 @@ def test_listing_texts(database, text_repository):
 
 
 def test_updating_text(database, text_repository):
-    # pylint: disable=R0913
+
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     when_text_in_collection(database)
 

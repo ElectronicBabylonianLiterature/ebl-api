@@ -20,7 +20,6 @@ def set_sentry_user(id_):
 
 
 class Guest:
-    # pylint: disable=R0201
 
     @property
     def profile(self):

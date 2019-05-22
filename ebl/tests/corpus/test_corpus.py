@@ -82,7 +82,6 @@ def test_creating_text(corpus,
                        sign_list,
                        user,
                        when):
-    # pylint: disable=R0913
     expect_signs(sign_list, when)
     expect_validate_references(bibliography, when)
     when(changelog).create(
@@ -147,7 +146,6 @@ def test_updating_text(corpus,
                        sign_list,
                        user,
                        when):
-    # pylint: disable=R0913
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,

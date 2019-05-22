@@ -10,7 +10,6 @@ SCOPE = 'write:words'
 
 @falcon.before(require_scope, SCOPE)
 class TestResource:
-    # pylint: disable=R0201
     def on_get(self, _req, resp):
         resp.status = falcon.HTTP_OK
 

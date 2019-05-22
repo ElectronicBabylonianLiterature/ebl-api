@@ -5,7 +5,7 @@ from typing import (Callable, Generic, Iterator, List, Mapping, Optional,
 
 import pydash
 
-T = TypeVar('T')  # pylint: disable=C0103
+T = TypeVar('T')
 DiffMapping = Callable[[T], str]
 InnerMerge = Optional[Callable[[T, T], T]]
 
@@ -66,7 +66,7 @@ class Merger(Generic[T]):
     def __init__(
             self,
             map_: DiffMapping[T],
-            inner_merge: InnerMerge[T] = None  # pylint: disable=C0326
+            inner_merge: InnerMerge[T] = None
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             '- ': lambda state: state.delete(),

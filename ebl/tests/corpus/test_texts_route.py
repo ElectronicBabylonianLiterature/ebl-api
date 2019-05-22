@@ -201,7 +201,6 @@ def test_updating_text_invalid_id(client):
 
 
 INVALID_MANUSCRIPTS = {
-    # pylint: disable=E1101
     'category': 1,
     'index': 1,
     'name': 'name',
@@ -247,7 +246,6 @@ INVALID_MANUSCRIPTS = {
 
 
 INVALID_SIGNS = {
-    # pylint: disable=E1101
     'category': 1,
     'index': 1,
     'name': 'name',
@@ -303,7 +301,6 @@ def test_update_text_invalid_entity(client,
                                     expected_status,
                                     sign_list,
                                     signs):
-    # pylint: disable=R0913
     allow_signs(signs, sign_list)
     text = TextFactory.build()
     allow_references(text, bibliography)

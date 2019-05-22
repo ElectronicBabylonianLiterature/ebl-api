@@ -48,7 +48,6 @@ class Line:
         }
 
     def merge(self, other: 'Line') -> 'Line':
-        # pylint: disable=R0201
         return other
 
 

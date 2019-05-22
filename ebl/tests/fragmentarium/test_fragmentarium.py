@@ -243,7 +243,7 @@ def test_update_references(fragmentarium,
                            fragment_repository,
                            changelog,
                            when):
-    # pylint: disable=R0913
+
     fragment = FragmentFactory.build()
     number = fragment.number
     reference = ReferenceFactory.build()

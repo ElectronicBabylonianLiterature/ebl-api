@@ -33,7 +33,6 @@ def test_profile():
 
 
 def test_memoize_profile():
-    # pylint: disable=W0104
     profile_factory = create_profile_factory(PROFILE)
     user = Auth0User({}, profile_factory)
 

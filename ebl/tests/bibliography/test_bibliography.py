@@ -1,4 +1,4 @@
-# pylint: disable=W0621
+
 import pydash
 import pytest
 from freezegun import freeze_time
@@ -61,7 +61,7 @@ def test_changelog(bibliography,
                    mongo_entry,
                    user,
                    make_changelog_entry):
-    # pylint: disable=R0913
+
     updated_entry = {
         **bibliography_entry,
         'title': 'New Title'

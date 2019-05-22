@@ -132,7 +132,7 @@ class Fragment:
                 [
                     reference.to_dict()
                     for reference
-                    in self.uncurated_references  # pylint: disable=E1133
+                    in self.uncurated_references
                 ]
                 if self.uncurated_references is not None
                 else None

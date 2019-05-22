@@ -56,7 +56,7 @@ def test_update_transliteration_merge_lemmatization(client,
                                                     signs,
                                                     sign_list,
                                                     user):
-    # pylint: disable=R0913
+
     for sign in signs:
         sign_list.create(sign)
     fragment_number = fragmentarium.create(lemmatized_fragment)

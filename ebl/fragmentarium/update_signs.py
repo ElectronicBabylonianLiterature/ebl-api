@@ -11,7 +11,7 @@ from ebl.sign_list.sign_repository import MemoizingSignRepository
 
 
 class ApiUser:
-    # pylint: disable=R0201
+
     def __init__(self, script_name):
         self._script_name = script_name
 

@@ -8,7 +8,6 @@ class CorsComponent:
     """  # noqa
 
     def process_response(self, req, resp, _resource, req_succeeded):
-        # pylint: disable=R0201
         resp.set_header('Access-Control-Allow-Origin', '*')
 
         if (req_succeeded and self._is_preflight_request(req)):

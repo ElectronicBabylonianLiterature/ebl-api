@@ -21,12 +21,9 @@ pipenv install --dev
 ## Running tests
 
 ```
-pipenv run lint
 pipenv run mypy -p ebl
 pipenv run test
 ```
-
-If there are conflicts between `pylint` and `pep8`, prefer `pep8` way of things.
 
 ## Running the application
 

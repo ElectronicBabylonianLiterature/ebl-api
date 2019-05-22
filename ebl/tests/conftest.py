@@ -1,4 +1,3 @@
-# pylint: disable=W0621
 import datetime
 import io
 import json
@@ -149,7 +148,6 @@ class FakeFile:
 
 
 class TestFilesRepository:
-    # pylint: disable=R0201
     def __init__(self, *files):
         self._files = files
 
@@ -219,7 +217,6 @@ def context(dictionary,
             changelog,
             bibliography,
             user):
-    # pylint: disable=R0913
     return {
         'auth_backend': NoneAuthBackend(lambda: user),
         'dictionary': dictionary,

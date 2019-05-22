@@ -84,7 +84,6 @@ class TextSerializer(TextVisitor):
 
 
 class TextDeserializer:
-    # pylint: disable=R0201
 
     @classmethod
     def deserialize(cls, text: dict):

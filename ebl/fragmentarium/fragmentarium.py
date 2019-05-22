@@ -10,7 +10,7 @@ class Fragmentarium:
                  sign_list,
                  dictionary,
                  bibliography):
-        # pylint: disable=R0913
+
         self._repository = repository
         self._changelog = changelog
         self._sign_list = sign_list
