@@ -2,10 +2,9 @@ ONE_DAY = '86400'
 
 
 class CorsComponent:
-    """
-    Based on:
+    """ Based on:
     https://falcon.readthedocs.io/en/stable/user/faq.html#how-do-i-implement-cors-with-falcon
-    """  # noqa
+    """
 
     def process_response(self, req, resp, _resource, req_succeeded):
         resp.set_header('Access-Control-Allow-Origin', '*')
