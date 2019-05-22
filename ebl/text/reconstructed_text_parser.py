@@ -71,20 +71,26 @@ def lacuna():
                enclosure(EnclosureVariant.CLOSE).many())
 
 
+CAESURA = '||'
+
+
 def caesura():
-    return string_from('(||)', '||')
+    return string_from(f'({CAESURA})', CAESURA)
+
+
+FOOT_SEPARATOR = '|'
 
 
 def foot_separator():
-    return string_from('(|)', '|')
+    return string_from(f'({FOOT_SEPARATOR})', FOOT_SEPARATOR)
 
 
 def reconstructed_line():
     break_ = (caesura().map(lambda token: Caesura(False)
-                            if token == '||'
+                            if token == CAESURA
                             else Caesura(True)) |
               foot_separator().map(lambda token: MetricalFootSeparator(False)
-                                   if token == '|'
+                                   if token == FOOT_SEPARATOR
                                    else MetricalFootSeparator(True)))
     word_separator = string(' ')
     text_part = (
