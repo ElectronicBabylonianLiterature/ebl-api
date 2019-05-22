@@ -21,6 +21,7 @@ pipenv install --dev
 ## Running tests
 
 ```
+pipenv run flake8
 pipenv run mypy -p ebl
 pipenv run test
 ```
