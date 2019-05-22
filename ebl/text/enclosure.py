@@ -14,6 +14,7 @@ class EnclosureVariant(Enum):
 class EnclosureType(Enum):
     BROKEN_OFF = ('[', ']', None)
     MAYBE_BROKEN_OFF = ('(', ')', BROKEN_OFF)
+    EMENDATION = ('<', '>', None)
 
     def __init__(self, open_: str, close: str, parent: 'EnclosureType'):
         self._delimiters = {
@@ -61,3 +62,5 @@ MAYBE_BROKEN_OFF_OPEN = Enclosure(EnclosureType.MAYBE_BROKEN_OFF,
                                   EnclosureVariant.OPEN)
 MAYBE_BROKEN_OFF_CLOSE = Enclosure(EnclosureType.MAYBE_BROKEN_OFF,
                                    EnclosureVariant.CLOSE)
+EMENDATION_OPEN = Enclosure(EnclosureType.EMENDATION, EnclosureVariant.OPEN)
+EMENDATION_CLOSE = Enclosure(EnclosureType.EMENDATION, EnclosureVariant.CLOSE)

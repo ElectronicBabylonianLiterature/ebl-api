@@ -1,7 +1,8 @@
 import pytest
 
 from ebl.text.enclosure import BROKEN_OFF_OPEN, BROKEN_OFF_CLOSE, \
-    MAYBE_BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_CLOSE
+    MAYBE_BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_CLOSE, EMENDATION_OPEN, \
+    EMENDATION_CLOSE
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart
@@ -21,6 +22,15 @@ from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
                    StringPart('nû'),
                    EnclosurePart(BROKEN_OFF_CLOSE))),
      '[(ib)nû]'),
+    (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN),
+                   EnclosurePart(MAYBE_BROKEN_OFF_OPEN),
+                   EnclosurePart(EMENDATION_OPEN),
+                   StringPart('ib'),
+                   EnclosurePart(MAYBE_BROKEN_OFF_CLOSE),
+                   StringPart('nû'),
+                   EnclosurePart(EMENDATION_CLOSE),
+                   EnclosurePart(BROKEN_OFF_CLOSE))),
+     '[(<ib)nû>]'),
     (AkkadianWord((StringPart('ibnû'),
                    EnclosurePart(MAYBE_BROKEN_OFF_CLOSE),
                    EnclosurePart(BROKEN_OFF_CLOSE),),
