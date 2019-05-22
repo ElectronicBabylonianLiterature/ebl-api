@@ -11,7 +11,7 @@ from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
 from ebl.text.labels import LineNumberLabel
 
 
-def sequence(prefix, part, joiner, min_=None):
+def sequence(prefix, part, joiner, min_=0):
     joiner_and_part = joiner + part
     tail = (
         joiner_and_part.many().concat()
@@ -184,6 +184,13 @@ WORD = seq(
 LONE_DETERMINATIVE = determinative(
     VARIANT + (JOINER.many().concat() + VARIANT).many().concat()
 ).desc('lone determinative')
+ERASURE = seq(string('°'),
+              (DIVIDER | WORD | LONE_DETERMINATIVE)
+              .many().sep_by(WORD_SEPARATOR).map(pydash.flatten),
+              string('~'),
+              (DIVIDER | WORD | LONE_DETERMINATIVE)
+              .many().sep_by(WORD_SEPARATOR).map(pydash.flatten),
+              string('°')).desc('erasure')
 LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
 
 TEXT_LINE = seq(
