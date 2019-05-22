@@ -1,23 +1,28 @@
-# type: ignore
 import pydash
-from parsy import ParseError, char_from, from_enum, seq, string, string_from
+from parsy import ParseError, alt, char_from, from_enum, seq, string, \
+    string_from
 
-from ebl.text.enclosure import BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN, \
-    BROKEN_OFF_CLOSE, MAYBE_BROKEN_OFF_CLOSE
+from ebl.text.enclosure import Enclosure, EnclosureType, EnclosureVariant
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart
 
 ELLIPSIS = string('...')
 
-ENCLOSURE_OPEN = (
-    string('[').map(lambda _: BROKEN_OFF_OPEN) |
-    string('(').map(lambda _: MAYBE_BROKEN_OFF_OPEN)
-)
-ENCLOSURE_CLOSE = (
-    string(']').map(lambda _: BROKEN_OFF_CLOSE) |
-    string(')').map(lambda _: MAYBE_BROKEN_OFF_CLOSE)
-)
+
+def enclosure_side(type_: EnclosureType, variant: EnclosureVariant):
+    return (string(type_.get_delimiter(variant))
+            .map(lambda _: Enclosure(type_, variant)))
+
+
+ENCLOSURE_OPEN = alt(*[
+    enclosure_side(type_, EnclosureVariant.OPEN)
+    for type_ in EnclosureType
+])
+ENCLOSURE_CLOSE = alt(*[
+    enclosure_side(type_, EnclosureVariant.CLOSE)
+    for type_ in EnclosureType
+])
 ENCLOSURE = ENCLOSURE_OPEN | ENCLOSURE_CLOSE
 
 AKKADIAN_ALPHABET = char_from(

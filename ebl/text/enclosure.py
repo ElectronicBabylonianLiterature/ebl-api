@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from enum import Enum, unique
 
+import attr
+
 
 @unique
 class EnclosureVariant(Enum):
@@ -27,10 +29,10 @@ class EnclosureType(Enum):
         return ''.join(self._delimiters.values())
 
 
+@attr.s(auto_attribs=True, frozen=True)
 class Enclosure:
-    def __init__(self, type_: EnclosureType, variant: EnclosureVariant):
-        self.type = type_
-        self._variant = variant
+    type: EnclosureType
+    _variant: EnclosureVariant
 
     @property
     def is_open(self) -> bool:
