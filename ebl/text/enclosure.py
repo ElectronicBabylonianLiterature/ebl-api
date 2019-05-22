@@ -47,16 +47,15 @@ class Enclosure:
         return self.type.get_delimiter(self._variant)
 
 
-Enclosures = Enum('Enclosure', [
-    (f'{type_.name}_OPEN', (type_, EnclosureVariant.OPEN))
-    for type_ in EnclosureType
-] + [
-    (f'{type_.name}_CLOSE', (type_, EnclosureVariant.CLOSE))
-    for type_ in EnclosureType
-], type=Enclosure)  # type: ignore
-
-
 class EnclosureVisitor(ABC):
     @abstractmethod
     def visit_enclosure(self, enclosure: Enclosure) -> None:
         ...
+
+
+BROKEN_OFF_OPEN = Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN)
+BROKEN_OFF_CLOSE = Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.CLOSE)
+MAYBE_BROKEN_OFF_OPEN = Enclosure(EnclosureType.MAYBE_BROKEN_OFF,
+                                  EnclosureVariant.OPEN)
+MAYBE_BROKEN_OFF_CLOSE = Enclosure(EnclosureType.MAYBE_BROKEN_OFF,
+                                   EnclosureVariant.CLOSE)

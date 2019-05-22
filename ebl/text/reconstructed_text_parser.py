@@ -2,22 +2,23 @@
 import pydash
 from parsy import ParseError, char_from, from_enum, seq, string, string_from
 
-from ebl.text.enclosure import Enclosures
+from ebl.text.enclosure import BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN, \
+    BROKEN_OFF_CLOSE, MAYBE_BROKEN_OFF_CLOSE
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart
 
 ELLIPSIS = string('...')
 
-BROKEN_OFF_OPEN = (
-    string('[').map(lambda _: Enclosures.BROKEN_OFF_OPEN) |
-    string('(').map(lambda _: Enclosures.MAYBE_BROKEN_OFF_OPEN)
+ENCLOSURE_OPEN = (
+    string('[').map(lambda _: BROKEN_OFF_OPEN) |
+    string('(').map(lambda _: MAYBE_BROKEN_OFF_OPEN)
 )
-BROKEN_OFF_CLOSE = (
-    string(']').map(lambda _: Enclosures.BROKEN_OFF_CLOSE) |
-    string(')').map(lambda _: Enclosures.MAYBE_BROKEN_OFF_CLOSE)
+ENCLOSURE_CLOSE = (
+    string(']').map(lambda _: BROKEN_OFF_CLOSE) |
+    string(')').map(lambda _: MAYBE_BROKEN_OFF_CLOSE)
 )
-BROKEN_OFF = BROKEN_OFF_OPEN | BROKEN_OFF_CLOSE
+ENCLOSURE = ENCLOSURE_OPEN | ENCLOSURE_CLOSE
 
 AKKADIAN_ALPHABET = char_from(
     'ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'
@@ -26,9 +27,9 @@ AKKADIAN_ALPHABET = char_from(
 AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
 
 SEPARATOR_PART = string('-').map(lambda _: SeparatorPart())
-BROKEN_OFF_OPEN_PART = BROKEN_OFF_OPEN.map(EnclosurePart)
-BROKEN_OFF_CLOSE_PART = BROKEN_OFF_CLOSE.map(EnclosurePart)
-BROKEN_OFF_PART = BROKEN_OFF.map(EnclosurePart)
+BROKEN_OFF_OPEN_PART = ENCLOSURE_OPEN.map(EnclosurePart)
+BROKEN_OFF_CLOSE_PART = ENCLOSURE_CLOSE.map(EnclosurePart)
+BROKEN_OFF_PART = ENCLOSURE.map(EnclosurePart)
 LACUNA_PART = ELLIPSIS.map(lambda _: LacunaPart())
 STRING_PART = AKKADIAN_STRING.map(StringPart)
 BETWEEN_STRINGS = (seq(BROKEN_OFF_PART.at_least(1), SEPARATOR_PART) |
@@ -53,7 +54,7 @@ AKKADIAN_WORD = (
     ).map(pydash.reverse).map(pydash.flatten)
 ).map(pydash.partial_right(pydash.reject, pydash.is_none))
 
-LACUNA = seq(BROKEN_OFF_OPEN.many(), ELLIPSIS, BROKEN_OFF_CLOSE.many())
+LACUNA = seq(ENCLOSURE_OPEN.many(), ELLIPSIS, ENCLOSURE_CLOSE.many())
 
 
 CAESURA = string_from('(||)', '||')

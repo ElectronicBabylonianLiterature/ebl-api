@@ -225,11 +225,11 @@
         },
         "pydash": {
             "hashes": [
-                "sha256:0c8160c09dbb1e12e0576e932ea28a1981ddeb2d0286bbe7af130dc77986daa4",
-                "sha256:80af34f4fb1b9f3f113c39d7e7191fe641b5da9885bb4453eebe017dafdd3cf3"
+                "sha256:bc6fe03097634f5cf49f271ff6bb808a53a9950aa8ad24d93b6f4baaf6547b11",
+                "sha256:ec151c9877f9c095e4548a97fa12164900ee2f5c271d3d19a966702ce6def9ca"
             ],
             "index": "pypi",
-            "version": "==4.7.4"
+            "version": "==4.7.5"
         },
         "pyjwt": {
             "hashes": [

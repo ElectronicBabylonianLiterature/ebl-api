@@ -8,7 +8,7 @@ from ebl.corpus.text import (Chapter, Line, Manuscript, ManuscriptLine, Text,
                              TextId)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.text.atf import Surface
-from ebl.text.enclosure import Enclosures
+from ebl.text.enclosure import BROKEN_OFF_OPEN
 from ebl.text.labels import ColumnLabel, Label, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
@@ -175,7 +175,7 @@ def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
             LINE_NUMBER,
-            (AkkadianWord((EnclosurePart(Enclosures.BROKEN_OFF_OPEN), )), ),
+            (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN), )), ),
             tuple()
         )
 
