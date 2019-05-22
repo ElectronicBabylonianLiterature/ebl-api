@@ -1,14 +1,14 @@
 import pytest
 from parsy import ParseError
 
-from ebl.text.enclosure import BROKEN_OFF_OPEN, BROKEN_OFF_CLOSE, \
-    MAYBE_BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_CLOSE, EMENDATION_OPEN, \
-    EMENDATION_CLOSE
+from ebl.text.enclosure import BROKEN_OFF_CLOSE, BROKEN_OFF_OPEN, \
+    EMENDATION_CLOSE, EMENDATION_OPEN, MAYBE_BROKEN_OFF_CLOSE, \
+    MAYBE_BROKEN_OFF_OPEN
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart, validate
-from ebl.text.reconstructed_text_parser import AKKADIAN_WORD, CAESURA, \
-    FOOT_SEPARATOR, LACUNA, RECONSTRUCTED_LINE
+from ebl.text.reconstructed_text_parser import akkadian_word, caesura, \
+    foot_separator, lacuna, reconstructed_line
 
 
 def assert_parse(parser, expected, text):
@@ -181,7 +181,7 @@ def assert_parse_error(parser, text):
                 []])
 ])
 def test_word(text, expected):
-    assert AKKADIAN_WORD.parse(text) == expected
+    assert akkadian_word().parse(text) == expected
 
 
 @pytest.mark.parametrize('text', [
@@ -201,7 +201,7 @@ def test_word(text, expected):
     'ib[-]nû', 'ib]-[nû'
 ])
 def test_invalid_word(text):
-    assert_parse_error(AKKADIAN_WORD, text)
+    assert_parse_error(akkadian_word(), text)
 
 
 @pytest.mark.parametrize('text,expected', [
@@ -224,7 +224,7 @@ def test_invalid_word(text):
                          BROKEN_OFF_CLOSE]])
 ])
 def test_lacuna(text, expected):
-    assert_parse(LACUNA, expected, text)
+    assert_parse(lacuna(), expected, text)
 
 
 @pytest.mark.parametrize('text', [
@@ -237,7 +237,7 @@ def test_lacuna(text, expected):
 
 ])
 def test_invalid_lacuna(text):
-    assert_parse_error(LACUNA, text)
+    assert_parse_error(lacuna(), text)
 
 
 @pytest.mark.parametrize('text,expected', [
@@ -245,7 +245,7 @@ def test_invalid_lacuna(text):
     ('(||)', '(||)')
 ])
 def test_caesura(text, expected):
-    assert CAESURA.parse(text) == expected
+    assert caesura().parse(text) == expected
 
 
 @pytest.mark.parametrize('text', [
@@ -253,7 +253,7 @@ def test_caesura(text, expected):
     '[||]', '[(||)]'
 ])
 def test_invalid_caesura(text):
-    assert_parse_error(CAESURA, text)
+    assert_parse_error(caesura(), text)
 
 
 @pytest.mark.parametrize('text,expected', [
@@ -261,7 +261,7 @@ def test_invalid_caesura(text):
     ('(|)', '(|)')
 ])
 def test_feet_separator(text, expected):
-    assert FOOT_SEPARATOR.parse(text) == expected
+    assert foot_separator().parse(text) == expected
 
 
 @pytest.mark.parametrize('text', [
@@ -269,7 +269,7 @@ def test_feet_separator(text, expected):
     '[|]', '[(|)]'
 ])
 def test_invalid_feet_separator(text):
-    assert_parse_error(FOOT_SEPARATOR, text)
+    assert_parse_error(foot_separator(), text)
 
 
 WORD = AkkadianWord((StringPart('ibnû'),))
@@ -294,7 +294,7 @@ WORD = AkkadianWord((StringPart('ibnû'),))
     ('ibnû (||) ibnû', [WORD, Caesura(True), WORD]),
 ])
 def test_reconstructed_line(text, expected):
-    assert RECONSTRUCTED_LINE.parse(text) == expected
+    assert reconstructed_line().parse(text) == expected
 
 
 @pytest.mark.parametrize('text', [
@@ -303,7 +303,7 @@ def test_reconstructed_line(text, expected):
     'ibnû | | ibnû', 'ibnû | || ibnû'
 ])
 def test_invalid_reconstructed_line(text):
-    assert_parse_error(RECONSTRUCTED_LINE, text)
+    assert_parse_error(reconstructed_line(), text)
 
 
 @pytest.mark.parametrize('text', [
@@ -315,7 +315,7 @@ def test_invalid_reconstructed_line(text):
     '[[ibnû', '((ibnû', 'i([bnû', 'i])bnû', 'i[)]bnû'
 ])
 def test_validate_invalid(text):
-    line = RECONSTRUCTED_LINE.parse(text)
+    line = reconstructed_line().parse(text)
     with pytest.raises(ValueError):
         validate(line)
 
@@ -326,5 +326,5 @@ def test_validate_invalid(text):
     '[(ma-)ma ma]-ma [...(-ma)]'
 ])
 def test_validate_valid(text):
-    line = RECONSTRUCTED_LINE.parse(text)
+    line = reconstructed_line().parse(text)
     validate(line)

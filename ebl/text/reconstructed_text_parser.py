@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pydash
 from parsy import ParseError, alt, char_from, from_enum, seq, string, \
     string_from
@@ -15,77 +17,88 @@ def enclosure_side(type_: EnclosureType, variant: EnclosureVariant):
             .map(lambda _: Enclosure(type_, variant)))
 
 
-ENCLOSURE_OPEN = alt(*[
-    enclosure_side(type_, EnclosureVariant.OPEN)
-    for type_ in EnclosureType
-])
-ENCLOSURE_CLOSE = alt(*[
-    enclosure_side(type_, EnclosureVariant.CLOSE)
-    for type_ in EnclosureType
-])
-ENCLOSURE = ENCLOSURE_OPEN | ENCLOSURE_CLOSE
-
-AKKADIAN_ALPHABET = char_from(
-    'ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'
-)
-
-AKKADIAN_STRING = AKKADIAN_ALPHABET.at_least(1).concat()
-
-SEPARATOR_PART = string('-').map(lambda _: SeparatorPart())
-BROKEN_OFF_OPEN_PART = ENCLOSURE_OPEN.map(EnclosurePart)
-BROKEN_OFF_CLOSE_PART = ENCLOSURE_CLOSE.map(EnclosurePart)
-BROKEN_OFF_PART = ENCLOSURE.map(EnclosurePart)
-LACUNA_PART = ELLIPSIS.map(lambda _: LacunaPart())
-STRING_PART = AKKADIAN_STRING.map(StringPart)
-BETWEEN_STRINGS = (seq(BROKEN_OFF_PART.at_least(1), SEPARATOR_PART) |
-                   seq(SEPARATOR_PART, BROKEN_OFF_PART.at_least(1)) |
-                   BROKEN_OFF_PART.at_least(1) |
-                   SEPARATOR_PART)
-MODIFIER = from_enum(Modifier)
-AKKADIAN_WORD = (
-    seq(
-        BROKEN_OFF_OPEN_PART.many(),
-        seq(LACUNA_PART, BETWEEN_STRINGS.optional()).optional(),
-        STRING_PART,
-        (
-            seq(BETWEEN_STRINGS, STRING_PART | LACUNA_PART) |
-            seq(LACUNA_PART, BETWEEN_STRINGS.optional(), STRING_PART) |
-            STRING_PART
-        ).many(),
-        seq(BETWEEN_STRINGS.optional(), LACUNA_PART).optional()
-    ).map(pydash.flatten_deep) + seq(
-        MODIFIER.at_most(3).map(pydash.uniq).map(lambda f: [f]),
-        BROKEN_OFF_CLOSE_PART.many()
-    ).map(pydash.reverse).map(pydash.flatten)
-).map(pydash.partial_right(pydash.reject, pydash.is_none))
-
-LACUNA = seq(ENCLOSURE_OPEN.many(), ELLIPSIS, ENCLOSURE_CLOSE.many())
+def enclosure(variant: Optional[EnclosureVariant] = None):
+    variants = [variant] if variant else EnclosureVariant
+    sides = [enclosure_side(type_, variant)
+             for type_ in EnclosureType
+             for variant in variants]
+    return alt(*sides)
 
 
-CAESURA = string_from('(||)', '||')
+def akkadian_string():
+    akkadian_alphabet = char_from(
+        'ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄'
+    )
+    return akkadian_alphabet.at_least(1).concat()
 
-FOOT_SEPARATOR = string_from('(|)', '|')
 
-WORD_SEPARATOR = string(' ')
-BREAK = (CAESURA.map(lambda token:
-                     Caesura(False) if token == '||' else Caesura(True)) |
-         FOOT_SEPARATOR.map(lambda token: MetricalFootSeparator(False)
-                            if token == '|'
-                            else MetricalFootSeparator(True)))
-TEXT_PART = (
-    AKKADIAN_WORD.map(lambda token: AkkadianWord(tuple(token[:-1]),
-                                                 tuple(token[-1]))) |
-    LACUNA.map(lambda token: Lacuna(tuple(token[0]), tuple(token[2])))
-).at_least(1).sep_by(WORD_SEPARATOR)
+def akkadian_word():
+    separator_part = string('-').map(lambda _: SeparatorPart())
+    broken_off_open_part = enclosure(EnclosureVariant.OPEN).map(EnclosurePart)
+    broken_off_close_part = (enclosure(EnclosureVariant.CLOSE)
+                             .map(EnclosurePart))
+    broken_off_part = enclosure().map(EnclosurePart)
+    lacuna_part = ELLIPSIS.map(lambda _: LacunaPart())
+    string_part = akkadian_string().map(StringPart)
+    between_strings = (seq(broken_off_part.at_least(1), separator_part) |
+                       seq(separator_part, broken_off_part.at_least(1)) |
+                       broken_off_part.at_least(1) |
+                       separator_part)
+    modifier = from_enum(Modifier)
+    return (
+        seq(
+            broken_off_open_part.many(),
+            seq(lacuna_part, between_strings.optional()).optional(),
+            string_part,
+            (
+                seq(between_strings, string_part | lacuna_part) |
+                seq(lacuna_part, between_strings.optional(), string_part) |
+                string_part
+            ).many(),
+            seq(between_strings.optional(), lacuna_part).optional()
+        ).map(pydash.flatten_deep) + seq(
+            modifier.at_most(3).map(pydash.uniq).map(lambda f: [f]),
+            broken_off_close_part.many()
+        ).map(pydash.reverse).map(pydash.flatten)
+    ).map(pydash.partial_right(pydash.reject, pydash.is_none))
 
-RECONSTRUCTED_LINE = (
-    TEXT_PART +
-    seq(WORD_SEPARATOR >> BREAK << WORD_SEPARATOR, TEXT_PART).many()
-).map(pydash.flatten_deep)
+
+def lacuna():
+    return seq(enclosure(EnclosureVariant.OPEN).many(),
+               ELLIPSIS,
+               enclosure(EnclosureVariant.CLOSE).many())
+
+
+def caesura():
+    return string_from('(||)', '||')
+
+
+def foot_separator():
+    return string_from('(|)', '|')
+
+
+def reconstructed_line():
+    break_ = (caesura().map(lambda token: Caesura(False)
+                            if token == '||'
+                            else Caesura(True)) |
+              foot_separator().map(lambda token: MetricalFootSeparator(False)
+                                   if token == '|'
+                                   else MetricalFootSeparator(True)))
+    word_separator = string(' ')
+    text_part = (
+        akkadian_word().map(lambda token: AkkadianWord(tuple(token[:-1]),
+                                                       tuple(token[-1]))) |
+        lacuna().map(lambda token: Lacuna(tuple(token[0]), tuple(token[2])))
+    ).at_least(1).sep_by(word_separator)
+
+    return (
+        text_part +
+        seq(word_separator >> break_ << word_separator, text_part).many()
+    ).map(pydash.flatten_deep)
 
 
 def parse_reconstructed_line(text: str):
     try:
-        return tuple(RECONSTRUCTED_LINE.parse(text))
+        return tuple(reconstructed_line().parse(text))
     except ParseError as error:
         raise ValueError(f'Invalid reconstructed line: {text}. {error}')
