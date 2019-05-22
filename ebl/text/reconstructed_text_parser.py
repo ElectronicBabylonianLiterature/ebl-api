@@ -18,7 +18,9 @@ def enclosure_side(type_: EnclosureType, variant: EnclosureVariant):
 
 
 def enclosure(variant: Optional[EnclosureVariant] = None):
-    variants = [variant] if variant else EnclosureVariant
+    variants = [variant] if variant else [variant
+                                          for variant
+                                          in EnclosureVariant]
     sides = [enclosure_side(type_, variant)
              for type_ in EnclosureType
              for variant in variants]
