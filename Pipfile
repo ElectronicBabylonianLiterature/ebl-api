@@ -41,5 +41,5 @@ python_version = "3.7"
 
 [scripts]
 lint = "pylint ebl"
-test = "pytest --cov=ebl --cov-report term --cov-report xml --pep8"
-ptw = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml --pep8\""
+test = "pytest --cov=ebl --cov-report term --cov-report xml"
+ptw = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
