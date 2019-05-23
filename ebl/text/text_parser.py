@@ -187,7 +187,7 @@ LONE_DETERMINATIVE = determinative(
 ERASURE = seq(string('°'),
               (DIVIDER | WORD | LONE_DETERMINATIVE)
               .many().sep_by(WORD_SEPARATOR).map(pydash.flatten),
-              string('~'),
+              string('\\'),
               (DIVIDER | WORD | LONE_DETERMINATIVE)
               .many().sep_by(WORD_SEPARATOR).map(pydash.flatten),
               string('°')).desc('erasure')
