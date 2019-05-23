@@ -235,15 +235,14 @@ def test_strip_line_continuation():
 
 
 @pytest.mark.parametrize('erasure,cleaned', [
-    ('1. $(erasure) ku', 'ku'),
-    ('$(erasure) ku', 'ku'),
-    ('1. $(ra (ra) 1(AŠ) <(ra)> [(ra)]) ku', 'ku'),
-    ('1. $(ra) 1(AŠ)', '1(AŠ)'),
-    ('1. $(<(1(AŠ))>) 2(DIŠ)', '2(DIŠ)'),
-    ('1. $([(1(AŠ))]) 2(DIŠ)', '2(DIŠ)'),
-    ('1. $ra$ ku', 'ra ku'),
-    ('1. $(ra)$ku$', 'ku'),
-    ('1. $$KU$', 'ku')
+    ('1. °\\° ku', 'ku'),
+    ('°\\°  ku', 'ku'),
+    ('1. °ra (ra) 1(AŠ) <(ra)> [(ra)]\\° ku', 'ku'),
+    ('1. °<(1(AŠ))>\\° 2(DIŠ)', '2(DIŠ)'),
+    ('1. °[(1(AŠ))]\\° 2(DIŠ)', '2(DIŠ)'),
+    ('1. °\\ra° ku', 'ra ku'),
+    ('1. °ra\\ku°', 'ku'),
+    ('1. °\\KU°', 'ku')
 ])
 def test_strip_erasure(erasure, cleaned):
     transliteration = Transliteration(erasure)

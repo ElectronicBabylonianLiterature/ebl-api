@@ -52,8 +52,8 @@ ATF_SPEC = {
     'variant_separator': VARIANT_SEPARATOR,
     'line_continuation': '→',
     'erasure': {
-        'illegible': r'\$\(erasure\)',
-        'legible': r'\$\(([^()]|\(([^()]|\([^()]+\))+\))*\)'
+        'illegible': r'°[^\°]*\\',
+        'delimiter': r'°'
     }
 }
 
