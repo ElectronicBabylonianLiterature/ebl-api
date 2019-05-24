@@ -45,6 +45,7 @@ class AtfVisitor(TokenVisitor):
         self._parts: List[str] = [prefix]
         self._force_separator: bool = True
         self._omit_separator: bool = False
+        self._memory = None
 
     @property
     def result(self) -> Atf:
@@ -64,7 +65,7 @@ class AtfVisitor(TokenVisitor):
 
     def visit_word(self, word: Word) -> None:
         should_not_omit = not(self._omit_separator or word.partial.start)
-        if (self._force_separator or should_not_omit):
+        if self._force_separator or should_not_omit:
             self._append_separator()
 
         self._parts.append(word.value)
@@ -88,7 +89,10 @@ class AtfVisitor(TokenVisitor):
 
     def visit_erasure(self, erasure: Erasure):
         def left():
-            self._append_separator()
+            self._push_state()
+            if self._force_separator or not self._omit_separator:
+                self._append_separator()
+
             self._parts.append(erasure.value)
             self._set_omit(True)
 
@@ -98,7 +102,7 @@ class AtfVisitor(TokenVisitor):
 
         def right():
             self._parts.append(erasure.value)
-            self._set_force()
+            self._pop_state()
 
         {Side.LEFT: left,
          Side.CENTER: center,
@@ -114,3 +118,10 @@ class AtfVisitor(TokenVisitor):
     def _set_force(self):
         self._omit_separator = False
         self._force_separator = True
+
+    def _push_state(self):
+        self._memory = (self._omit_separator, self._force_separator)
+
+    def _pop_state(self):
+        self._omit_separator, self._force_separator = self._memory
+        self._memory = None
