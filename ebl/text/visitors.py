@@ -36,8 +36,8 @@ class LanguageVisitor(TokenVisitor):
     ) -> None:
         self.visit_token(gloss)
 
-    def visit_erasure(self, erasure: Erasure):
-        pass
+    def visit_erasure(self, erasure: Erasure) -> None:
+        self.visit_token(erasure)
 
 
 class AtfVisitor(TokenVisitor):

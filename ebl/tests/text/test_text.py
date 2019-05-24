@@ -8,7 +8,7 @@ from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
-from ebl.text.token import Token, Word, LineContinuation
+from ebl.text.token import Token, Word, LineContinuation, Erasure, Side
 from ebl.dictionary.word import WordId
 from ebl.text.labels import LineNumberLabel
 
@@ -159,6 +159,9 @@ def test_merge(old, new, expected):
                 language=Language.SUMERIAN,
                 partial=Partial(False, True)
             ),
+            Erasure('°', Side.LEFT),
+            Erasure('~', Side.CENTER),
+            Erasure('°', Side.RIGHT),
             LineContinuation('→')
         ])
     ]

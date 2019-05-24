@@ -10,7 +10,7 @@ from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, EmptyLine, Line, TextLine
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LoneDeterminative, Partial, Token, Word,
-                            LineContinuation)
+                            LineContinuation, Erasure, Side)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
@@ -37,7 +37,9 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
         'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
             data['value']
         ),
-        'LineContinuation': lambda data: LineContinuation(data['value'])
+        'LineContinuation': lambda data: LineContinuation(data['value']),
+        'Erasure': lambda data: Erasure(data['value'],
+                                        Side[data['side']])
     }
 
     return tuple(
