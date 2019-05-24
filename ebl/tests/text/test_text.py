@@ -160,7 +160,7 @@ def test_merge(old, new, expected):
                 partial=Partial(False, True)
             ),
             Erasure('°', Side.LEFT),
-            Erasure('~', Side.CENTER),
+            Erasure('\\', Side.CENTER),
             Erasure('°', Side.RIGHT),
             LineContinuation('→')
         ])

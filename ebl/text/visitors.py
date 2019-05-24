@@ -87,7 +87,22 @@ class AtfVisitor(TokenVisitor):
         {Side.LEFT: left, Side.RIGHT: right}[gloss.side]()
 
     def visit_erasure(self, erasure: Erasure):
-        pass
+        def left():
+            self._append_separator()
+            self._parts.append(erasure.value)
+            self._set_omit(True)
+
+        def center():
+            self._parts.append(erasure.value)
+            self._set_omit(True)
+
+        def right():
+            self._parts.append(erasure.value)
+            self._set_force()
+
+        {Side.LEFT: left,
+         Side.CENTER: center,
+         Side.RIGHT: right}[erasure.side]()
 
     def _append_separator(self) -> None:
         self._parts.append(WORD_SEPARATOR)

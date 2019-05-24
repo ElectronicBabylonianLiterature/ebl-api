@@ -1,13 +1,13 @@
 import pytest
 
+from ebl.dictionary.word import WordId
+from ebl.text.labels import LineNumberLabel
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import (LemmatizationError, LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
-from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
-                            LanguageShift, LoneDeterminative, Token,
+from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
+                            LanguageShift, LoneDeterminative, Side, Token,
                             Word)
-from ebl.dictionary.word import WordId
-from ebl.text.labels import LineNumberLabel
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 
@@ -100,6 +100,22 @@ def test_text_line_atf_gloss():
         DocumentOrientedGloss(')}')
     ])
     assert line.atf == f'{line.prefix} {{(mu bu)}}'
+
+
+@pytest.mark.parametrize('erasure,expected', [
+    ([Erasure('°', Side.LEFT), Erasure('\\', Side.CENTER),
+      Erasure('°', Side.RIGHT)], '°\\°'),
+    ([Erasure('°', Side.LEFT), Word('mu-bu'), Erasure('\\', Side.CENTER),
+      Erasure('°', Side.RIGHT)], '°mu-bu\\°'),
+    ([Erasure('°', Side.LEFT), Erasure('\\', Side.CENTER),  Word('mu-bu'),
+      Erasure('°', Side.RIGHT)], '°\\mu-bu°'),
+    ([Erasure('°', Side.LEFT),  Word('mu-bu'), Erasure('\\', Side.CENTER),
+      Word('mu-bu'), Erasure('°', Side.RIGHT)], '°mu-bu\\mu-bu°'),
+])
+def test_text_line_atf_erasure(word, erasure, expected):
+    word = Word('mu-bu')
+    line = TextLine.of_iterable(LINE_NUMBER, [word, *erasure, word])
+    assert line.atf == f'{line.prefix} {word.value} {expected} {word.value}'
 
 
 def test_line_of_single():
