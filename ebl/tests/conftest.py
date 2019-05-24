@@ -28,7 +28,8 @@ from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.text.line import TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word, UniqueLemma
+from ebl.text.token import Token, Word
+from ebl.dictionary.word import UniqueLemma
 
 
 @pytest.fixture

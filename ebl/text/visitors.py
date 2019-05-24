@@ -2,11 +2,11 @@ from typing import List, Tuple
 
 from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.language import DEFAULT_LANGUAGE, Language
-from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
-                            LanguageShift, Side, Token, Word, Erasure)
+from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
+                            LanguageShift, Side, Token, TokenVisitor, Word)
 
 
-class LanguageVisitor:
+class LanguageVisitor(TokenVisitor):
     def __init__(self):
         self._tokens: List[Token] = []
         self._language: Language = DEFAULT_LANGUAGE
@@ -40,7 +40,7 @@ class LanguageVisitor:
         pass
 
 
-class AtfVisitor:
+class AtfVisitor(TokenVisitor):
     def __init__(self, prefix: str):
         self._parts: List[str] = [prefix]
         self._force_separator: bool = True

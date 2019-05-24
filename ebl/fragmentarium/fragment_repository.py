@@ -7,7 +7,7 @@ from ebl.errors import NotFoundError
 from ebl.fragment.record import RecordType
 from ebl.mongo_repository import MongoRepository
 from ebl.text.atf import ATF_SPEC
-from ebl.text.token import UniqueLemma
+from ebl.dictionary.word import UniqueLemma
 
 COLLECTION = 'fragments'
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}

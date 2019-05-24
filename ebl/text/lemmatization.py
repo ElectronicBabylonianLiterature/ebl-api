@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple
 import attr
 import pydash
 
-from ebl.text.token import UniqueLemma
+from ebl.dictionary.word import UniqueLemma
 
 
 class LemmatizationError(Exception):

@@ -1,16 +1,17 @@
 import collections
+from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Any, NewType, Tuple
+from typing import Tuple
 
 import attr
 
 import ebl.text.atf
+from ebl.dictionary.word import UniqueLemma
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
-UniqueLemma = NewType('UniqueLemma', str)
 Partial = collections.namedtuple('Partial', 'start end')
 
 
@@ -37,7 +38,7 @@ class Token:
         else:
             raise LemmatizationError()
 
-    def accept(self, visitor: Any) -> None:
+    def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_token(self)
 
     def to_dict(self) -> dict:
@@ -108,7 +109,7 @@ class Word(Token):
         )
         return value_is_compatible and lemma_is_compatible
 
-    def accept(self, visitor: Any) -> None:
+    def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_word(self)
 
     def to_dict(self) -> dict:
@@ -158,7 +159,7 @@ class LanguageShift(Token):
     def normalized(self):
         return self.value == LanguageShift._normalization_shift
 
-    def accept(self, visitor: Any) -> None:
+    def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_language_shift(self)
 
     def to_dict(self) -> dict:
@@ -172,7 +173,7 @@ class LanguageShift(Token):
 
 @attr.s(frozen=True)
 class DocumentOrientedGloss(Token):
-    def accept(self, visitor: Any) -> None:
+    def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_document_oriented_gloss(self)
 
     @property
@@ -190,7 +191,7 @@ class DocumentOrientedGloss(Token):
 class Erasure(Token):
     side: Side
 
-    def accept(self, visitor: Any) -> None:
+    def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_erasure(self)
 
     def to_dict(self) -> dict:
@@ -208,3 +209,27 @@ class LineContinuation(Token):
             **super().to_dict(),
             'type': 'LineContinuation'
         }
+
+
+class TokenVisitor(ABC):
+    @abstractmethod
+    def visit_token(self, token: Token) -> None:
+        ...
+
+    @abstractmethod
+    def visit_language_shift(self, shift: LanguageShift) -> None:
+        ...
+
+    @abstractmethod
+    def visit_word(self, word: Word) -> None:
+        ...
+
+    @abstractmethod
+    def visit_document_oriented_gloss(
+            self, gloss: DocumentOrientedGloss
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def visit_erasure(self, erasure: Erasure):
+        ...

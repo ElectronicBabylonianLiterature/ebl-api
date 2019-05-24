@@ -13,7 +13,8 @@ from ebl.tests.factories.fragment import (
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word, UniqueLemma
+from ebl.text.token import Token, Word
+from ebl.dictionary.word import UniqueLemma
 from ebl.text.labels import LineNumberLabel
 
 COLLECTION = 'fragments'

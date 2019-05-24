@@ -2,7 +2,8 @@ import pytest
 
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
-from ebl.text.token import (DEFAULT_NORMALIZED, Token, UniqueLemma, Word)
+from ebl.text.token import (DEFAULT_NORMALIZED, Token, Word)
+from ebl.dictionary.word import UniqueLemma
 
 
 def test_default_normalized():
@@ -97,8 +98,8 @@ def test_set_language():
 
 def test_set_unique_lemma():
     word = Word('bu')
-    lemma = LemmatizationToken('bu', ('nu I', ))
-    expected = Word('bu', unique_lemma=('nu I', ))
+    lemma = LemmatizationToken('bu', (UniqueLemma('nu I'), ))
+    expected = Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
 
     assert word.set_unique_lemma(lemma) == expected
 
@@ -121,7 +122,7 @@ def test_set_unique_lemma_empty():
     (Word('bu-'), 'bu-')
 ])
 def test_set_unique_lemma_invalid(word, value):
-    lemma = LemmatizationToken(value, ('nu I', ))
+    lemma = LemmatizationToken(value, (UniqueLemma('nu I'), ))
     with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)
 

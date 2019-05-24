@@ -5,7 +5,8 @@ from ebl.text.lemmatization import (LemmatizationError, LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
                             LanguageShift, LoneDeterminative, Token,
-                            UniqueLemma, Word)
+                            Word)
+from ebl.dictionary.word import UniqueLemma
 from ebl.text.labels import LineNumberLabel
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
@@ -153,7 +154,7 @@ def test_update_lemmatization(line):
 
 def test_update_lemmatization_text_line():
     line = TextLine.of_iterable(LINE_NUMBER, [Word('bu')])
-    lemmatization = (LemmatizationToken('bu', ('nu I', )), )
+    lemmatization = (LemmatizationToken('bu', (UniqueLemma('nu I'), )), )
     expected = TextLine.of_iterable(
         LINE_NUMBER,
         [Word('bu', unique_lemma=(UniqueLemma('nu I'), ))]
@@ -164,14 +165,14 @@ def test_update_lemmatization_text_line():
 
 def test_update_lemmatization_incompatible():
     line = TextLine.of_iterable(LINE_NUMBER, [Word('mu')])
-    lemmatization = (LemmatizationToken('bu', ('nu I', )), )
+    lemmatization = (LemmatizationToken('bu', (UniqueLemma('nu I'), )), )
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lenght():
     line = TextLine.of_iterable(LINE_NUMBER, [Word('bu'), Word('bu')])
-    lemmatization = (LemmatizationToken('bu', ('nu I', )), )
+    lemmatization = (LemmatizationToken('bu', (UniqueLemma('nu I'), )), )
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 

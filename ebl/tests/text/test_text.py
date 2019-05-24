@@ -8,7 +8,8 @@ from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
-from ebl.text.token import Token, UniqueLemma, Word, LineContinuation
+from ebl.text.token import Token, Word, LineContinuation
+from ebl.dictionary.word import UniqueLemma
 from ebl.text.labels import LineNumberLabel
 
 LINES: Tuple[Line, ...] = (

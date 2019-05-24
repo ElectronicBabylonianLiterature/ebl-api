@@ -12,7 +12,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.text.lemmatization import Lemmatization
-from ebl.text.token import UniqueLemma
+from ebl.dictionary.word import UniqueLemma
 
 
 def test_find(fragmentarium, fragment_repository, when):
