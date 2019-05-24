@@ -12,7 +12,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.text.lemmatization import Lemmatization
-from ebl.dictionary.word import UniqueLemma
+from ebl.dictionary.word import WordId
 
 
 def test_find(fragmentarium, fragment_repository, when):
@@ -230,7 +230,7 @@ def test_find_lemmas(fragmentarium,
                      fragment_repository,
                      when):
     query = 'GI₆'
-    unique_lemma = UniqueLemma(word['_id'])
+    unique_lemma = WordId(word['_id'])
     when(fragment_repository).find_lemmas(query).thenReturn([[unique_lemma]])
     when(dictionary).find(unique_lemma).thenReturn(word)
 

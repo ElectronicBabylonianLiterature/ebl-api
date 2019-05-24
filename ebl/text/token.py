@@ -6,7 +6,7 @@ from typing import Tuple
 import attr
 
 import ebl.text.atf
-from ebl.dictionary.word import UniqueLemma
+from ebl.dictionary.word import WordId
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 
@@ -52,7 +52,7 @@ class Token:
 class Word(Token):
     language: Language = DEFAULT_LANGUAGE
     normalized: bool = DEFAULT_NORMALIZED
-    unique_lemma: Tuple[UniqueLemma, ...] = tuple()
+    unique_lemma: Tuple[WordId, ...] = tuple()
 
     @property
     def lemmatizable(self) -> bool:

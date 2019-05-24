@@ -1,3 +1,3 @@
 from typing import NewType
 
-UniqueLemma = NewType('UniqueLemma', str)
+WordId = NewType('WordId', str)

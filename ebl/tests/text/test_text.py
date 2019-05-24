@@ -9,7 +9,7 @@ from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
 from ebl.text.token import Token, Word, LineContinuation
-from ebl.dictionary.word import UniqueLemma
+from ebl.dictionary.word import WordId
 from ebl.text.labels import LineNumberLabel
 
 LINES: Tuple[Line, ...] = (
@@ -54,7 +54,7 @@ def test_update_lemmatization():
 
     expected = Text((
         TextLine('1.', (
-            Word('ha-am', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('ha-am', unique_lemma=(WordId('nu I'),)),
         )),
         ControlLine('$', (Token(' single ruling'), )),
     ))
@@ -126,8 +126,8 @@ def test_update_lemmatization_wrong_lines():
     ), (
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
-                Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
+                Word('nu', unique_lemma=(WordId('nu I'),)),
+                Word('nu', unique_lemma=(WordId('nu I'),))
             ])
         ]),
         Text.of_iterable([
@@ -138,7 +138,7 @@ def test_update_lemmatization_wrong_lines():
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('mu'),
-                Word('nu', unique_lemma=(UniqueLemma('nu I'), ))
+                Word('nu', unique_lemma=(WordId('nu I'),))
             ])
         ])
     )
@@ -152,7 +152,7 @@ def test_merge(old, new, expected):
     [ControlLine.of_single('$', Token(' single ruling'))],
     [
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('nu', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('nu', unique_lemma=(WordId('nu I'),)),
             LanguageShift('%sux'),
             LoneDeterminative(
                 '{nu}',

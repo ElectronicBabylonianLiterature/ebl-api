@@ -3,7 +3,7 @@ import pytest
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import (DEFAULT_NORMALIZED, Token, Word)
-from ebl.dictionary.word import UniqueLemma
+from ebl.dictionary.word import WordId
 
 
 def test_default_normalized():
@@ -22,11 +22,11 @@ def test_defaults():
 
 
 @pytest.mark.parametrize("language,normalized,unique_lemma", [
-    (Language.SUMERIAN, False, (UniqueLemma('ku II'), UniqueLemma('aklu I'))),
+    (Language.SUMERIAN, False, (WordId('ku II'), WordId('aklu I'))),
     (Language.SUMERIAN, True, tuple()),
     (Language.EMESAL, False, tuple()),
     (Language.EMESAL, True, tuple()),
-    (Language.AKKADIAN, False, (UniqueLemma('aklu I'), )),
+    (Language.AKKADIAN, False, (WordId('aklu I'),)),
     (Language.AKKADIAN, True, tuple())
 ])
 def test_word(language, normalized, unique_lemma):
@@ -37,7 +37,7 @@ def test_word(language, normalized, unique_lemma):
     other_language = Word(value, Language.UNKNOWN, normalized, unique_lemma)
     other_value = Word('other value', language, normalized, unique_lemma)
     other_unique_lemma =\
-        Word(value, language, normalized, tuple(UniqueLemma('waklu I')))
+        Word(value, language, normalized, tuple(WordId('waklu I')))
     other_normalized =\
         Word('other value', language, not normalized, unique_lemma)
 
@@ -87,7 +87,7 @@ def test_lemmatizable(word, expected):
 
 def test_set_language():
     value = 'value'
-    unique_lemma = (UniqueLemma('aklu I'), )
+    unique_lemma = (WordId('aklu I'),)
     language = Language.SUMERIAN
     normalized = False
     word = Word(value, Language.AKKADIAN, not normalized, unique_lemma)
@@ -98,8 +98,8 @@ def test_set_language():
 
 def test_set_unique_lemma():
     word = Word('bu')
-    lemma = LemmatizationToken('bu', (UniqueLemma('nu I'), ))
-    expected = Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+    lemma = LemmatizationToken('bu', (WordId('nu I'),))
+    expected = Word('bu', unique_lemma=(WordId('nu I'),))
 
     assert word.set_unique_lemma(lemma) == expected
 
@@ -122,7 +122,7 @@ def test_set_unique_lemma_empty():
     (Word('bu-'), 'bu-')
 ])
 def test_set_unique_lemma_invalid(word, value):
-    lemma = LemmatizationToken(value, (UniqueLemma('nu I'), ))
+    lemma = LemmatizationToken(value, (WordId('nu I'),))
     with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)
 

@@ -7,7 +7,7 @@ from ebl.errors import NotFoundError
 from ebl.fragment.record import RecordType
 from ebl.mongo_repository import MongoRepository
 from ebl.text.atf import ATF_SPEC
-from ebl.dictionary.word import UniqueLemma
+from ebl.dictionary.word import WordId
 
 COLLECTION = 'fragments'
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
@@ -258,7 +258,7 @@ class MongoFragmentRepository():
         ])
         return [
             [
-                UniqueLemma(unique_lemma)
+                WordId(unique_lemma)
                 for unique_lemma
                 in result['_id']
             ]

@@ -6,7 +6,7 @@ from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
                             LanguageShift, LoneDeterminative, Token,
                             Word)
-from ebl.dictionary.word import UniqueLemma
+from ebl.dictionary.word import WordId
 from ebl.text.labels import LineNumberLabel
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
@@ -154,10 +154,10 @@ def test_update_lemmatization(line):
 
 def test_update_lemmatization_text_line():
     line = TextLine.of_iterable(LINE_NUMBER, [Word('bu')])
-    lemmatization = (LemmatizationToken('bu', (UniqueLemma('nu I'), )), )
+    lemmatization = (LemmatizationToken('bu', (WordId('nu I'),)),)
     expected = TextLine.of_iterable(
         LINE_NUMBER,
-        [Word('bu', unique_lemma=(UniqueLemma('nu I'), ))]
+        [Word('bu', unique_lemma=(WordId('nu I'),))]
     )
 
     assert line.update_lemmatization(lemmatization) == expected
@@ -165,14 +165,14 @@ def test_update_lemmatization_text_line():
 
 def test_update_lemmatization_incompatible():
     line = TextLine.of_iterable(LINE_NUMBER, [Word('mu')])
-    lemmatization = (LemmatizationToken('bu', (UniqueLemma('nu I'), )), )
+    lemmatization = (LemmatizationToken('bu', (WordId('nu I'),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lenght():
     line = TextLine.of_iterable(LINE_NUMBER, [Word('bu'), Word('bu')])
-    lemmatization = (LemmatizationToken('bu', (UniqueLemma('nu I'), )), )
+    lemmatization = (LemmatizationToken('bu', (WordId('nu I'),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
@@ -192,15 +192,15 @@ def test_update_lemmatization_wrong_lenght():
         TextLine.of_iterable(LineNumberLabel.from_atf('2.'), [Word('bu')])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('bu')]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             LanguageShift('%sux')
@@ -210,35 +210,35 @@ def test_update_lemmatization_wrong_lenght():
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('mu')]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('mu')])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
-            Word('mu', unique_lemma=(UniqueLemma('mu I'), )),
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),)),
+            Word('mu', unique_lemma=(WordId('mu I'),)),
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu'), Word('bu')
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),)),
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),)),
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu'), Word('mu'), Word('bu')
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), )),
+            Word('bu', unique_lemma=(WordId('nu I'),)),
             Word('mu'),
-            Word('bu', unique_lemma=(UniqueLemma('nu I'), ))
+            Word('bu', unique_lemma=(WordId('nu I'),))
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
