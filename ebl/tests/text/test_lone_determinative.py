@@ -2,7 +2,7 @@ import pytest
 
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.token import (DEFAULT_NORMALIZED, LoneDeterminative, Partial,
-                            Token)
+                            Token, ErasureState)
 
 
 def test_of_value():
@@ -46,7 +46,8 @@ def test_word(language, normalized, partial):
         'normalized': normalized,
         'language': lone_determinative.language.name,
         'lemmatizable': lone_determinative.lemmatizable,
-        'partial': list(partial)
+        'partial': list(partial),
+        'erasure': ErasureState.NONE.name
     }
 
     assert lone_determinative == equal

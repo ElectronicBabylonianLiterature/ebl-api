@@ -1,9 +1,9 @@
 import pytest
 
+from ebl.dictionary.word import WordId
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
-from ebl.text.token import (DEFAULT_NORMALIZED, Token, Word)
-from ebl.dictionary.word import WordId
+from ebl.text.token import (DEFAULT_NORMALIZED, ErasureState, Token, Word)
 
 
 def test_default_normalized():
@@ -31,7 +31,8 @@ def test_defaults():
 ])
 def test_word(language, normalized, unique_lemma):
     value = 'value'
-    word = Word(value, language, normalized, unique_lemma)
+    erasure = ErasureState.NONE
+    word = Word(value, language, normalized, unique_lemma, erasure)
 
     equal = Word(value, language, normalized, unique_lemma)
     other_language = Word(value, Language.UNKNOWN, normalized, unique_lemma)
@@ -40,6 +41,8 @@ def test_word(language, normalized, unique_lemma):
         Word(value, language, normalized, tuple(WordId('waklu I')))
     other_normalized =\
         Word('other value', language, not normalized, unique_lemma)
+    other_erasure = Word(value, language, normalized, unique_lemma,
+                         ErasureState.ERASED)
 
     assert word.value == value
     assert word.language == language
@@ -51,14 +54,16 @@ def test_word(language, normalized, unique_lemma):
         'uniqueLemma': [*unique_lemma],
         'normalized': normalized,
         'language': word.language.name,
-        'lemmatizable': word.lemmatizable
+        'lemmatizable': word.lemmatizable,
+        'erasure': erasure.name
     }
 
     assert word == equal
     assert hash(word) == hash(equal)
 
     for not_equal in [
-            other_language, other_value, other_unique_lemma, other_normalized
+        other_language, other_value, other_unique_lemma, other_normalized,
+        other_erasure
     ]:
         assert word != not_equal
         assert hash(word) != hash(not_equal)

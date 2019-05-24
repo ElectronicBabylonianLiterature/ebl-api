@@ -21,6 +21,12 @@ class Side(Enum):
     RIGHT = auto()
 
 
+class ErasureState(Enum):
+    NONE = auto()
+    ERASED = auto()
+    OVER_ERASED = auto()
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Token:
     value: str
@@ -53,6 +59,7 @@ class Word(Token):
     language: Language = DEFAULT_LANGUAGE
     normalized: bool = DEFAULT_NORMALIZED
     unique_lemma: Tuple[WordId, ...] = tuple()
+    erasure: ErasureState = ErasureState.NONE
 
     @property
     def lemmatizable(self) -> bool:
@@ -64,6 +71,7 @@ class Word(Token):
         return (
             self.language.lemmatizable and
             not self.normalized and
+            self.erasure is not ErasureState.ERASED and
             all((char not in self.value)
                 for char
                 in non_lemmatizable_chars) and
@@ -87,6 +95,9 @@ class Word(Token):
 
     def set_language(self, language: Language, normalized: bool) -> 'Word':
         return attr.evolve(self, language=language, normalized=normalized)
+
+    def set_erasure(self, erasure: ErasureState,) -> 'Word':
+        return attr.evolve(self, erasure=erasure)
 
     def set_unique_lemma(
             self,
@@ -119,7 +130,8 @@ class Word(Token):
             'uniqueLemma': [*self.unique_lemma],
             'normalized': self.normalized,
             'language': self.language.name,
-            'lemmatizable': self.lemmatizable
+            'lemmatizable': self.lemmatizable,
+            'erasure': self.erasure.name
         }
 
 
