@@ -7,7 +7,7 @@ import ebl.text.atf
 from ebl.text.line import TextLine
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
-                            Token, Word)
+                            Token, Word, Side, Erasure, ErasureState)
 from ebl.text.labels import LineNumberLabel
 
 
@@ -184,13 +184,25 @@ WORD = seq(
 LONE_DETERMINATIVE = determinative(
     VARIANT + (JOINER.many().concat() + VARIANT).many().concat()
 ).desc('lone determinative')
-ERASURE = seq(string('°'),
-              (DIVIDER | WORD | LONE_DETERMINATIVE)
-              .many().sep_by(WORD_SEPARATOR).map(pydash.flatten),
-              string('\\'),
-              (DIVIDER | WORD | LONE_DETERMINATIVE)
-              .many().sep_by(WORD_SEPARATOR).map(pydash.flatten),
-              string('°')).desc('erasure')
+
+
+def erasure_part(erasure: ErasureState):
+    return ((DIVIDER.map(Token) |
+             WORD.map(lambda value: Word(value, erasure=erasure)) |
+             LONE_DETERMINATIVE.map(lambda value: LoneDeterminative
+                                    .of_value(value,
+                                              Partial(False, False))))
+            .many()
+            .sep_by(WORD_SEPARATOR)
+            .map(pydash.flatten))
+
+
+ERASURE = (seq(string('°').map(lambda value: Erasure(value, Side.LEFT)),
+               erasure_part(ErasureState.ERASED),
+               string('\\').map(lambda value: Erasure(value, Side.CENTER)),
+               erasure_part(ErasureState.OVER_ERASED),
+               string('°').map(lambda value: Erasure(value, Side.RIGHT)))
+           .desc('erasure'))
 LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
 
 TEXT_LINE = seq(

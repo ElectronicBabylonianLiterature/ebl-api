@@ -1,14 +1,25 @@
 import pytest
 
 from ebl.text.text_parser import ERASURE
+from ebl.text.token import Word, Erasure, Side, ErasureState
+
+ERASURE_LEFT = Erasure('°', Side.LEFT)
+ERASURE_CENTER = Erasure('\\', Side.CENTER)
+ERASURE_RIGHT = Erasure('°', Side.RIGHT)
 
 
-@pytest.mark.parametrize('atf,expected', [
-    ('°ku\\ku°', ['°', ['ku'], '\\', ['ku'], '°']),
-    ('°\\ku°', ['°', [], '\\', ['ku'], '°']),
-    ('°ku\\°', ['°', ['ku'], '\\', [], '°']),
-    ('°\\°', ['°', [], '\\', [], '°']),
-    ('°x X\\X x°', ['°', ['x', 'X'], '\\', ['X', 'x'], '°'])
+@pytest.mark.parametrize('atf,erased,over_erased', [
+    ('°ku\\ku°', [Word('ku', erasure=ErasureState.ERASED)],
+     [Word('ku', erasure=ErasureState.OVER_ERASED)]),
+    ('°\\ku°', [], [Word('ku', erasure=ErasureState.OVER_ERASED)]),
+    ('°ku\\°', [Word('ku', erasure=ErasureState.ERASED)], []),
+    ('°\\°', [], []),
+    ('°x X\\X x°',
+     [Word('x', erasure=ErasureState.ERASED),
+      Word('X', erasure=ErasureState.ERASED)],
+     [Word('X', erasure=ErasureState.OVER_ERASED),
+      Word('x', erasure=ErasureState.OVER_ERASED)])
 ])
-def test_word(atf, expected):
-    assert ERASURE.parse(atf) == expected
+def test_word(atf, erased, over_erased):
+    assert ERASURE.parse(atf) == [ERASURE_LEFT, erased, ERASURE_CENTER,
+                                  over_erased, ERASURE_RIGHT]

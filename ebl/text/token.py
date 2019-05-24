@@ -140,8 +140,11 @@ class LoneDeterminative(Word):
     _partial: Partial = Partial(False, False)
 
     @staticmethod
-    def of_value(value: str, partial: Partial) -> 'LoneDeterminative':
-        return LoneDeterminative(value, partial=partial)
+    def of_value(value: str,
+                 partial: Partial,
+                 erasure: ErasureState = ErasureState.NONE) -> \
+            'LoneDeterminative':
+        return LoneDeterminative(value, erasure=erasure, partial=partial)
 
     @property
     def lemmatizable(self) -> bool:
