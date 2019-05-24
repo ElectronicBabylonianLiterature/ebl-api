@@ -215,6 +215,7 @@ TEXT_LINE = seq(
         DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
         SHIFT.map(LanguageShift) |
         WORD.map(Word) |
+        ERASURE |
         seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(
             lambda values: [
                 Token(values[0]),

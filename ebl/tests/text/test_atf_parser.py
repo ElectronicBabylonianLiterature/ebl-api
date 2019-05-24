@@ -7,7 +7,7 @@ from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
 from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
                             LineContinuation, LoneDeterminative, Partial,
-                            Token, Word)
+                            Token, Word, ErasureState, Erasure, Side)
 
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
@@ -232,6 +232,15 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1.  sal/: šim ', [
         TextLine('1.', (Word('sal/:'), Word('šim')))
+    ]),
+    ('1. °me-e-li\\ku°', [
+        TextLine('1.', (
+            Erasure('°', Side.LEFT),
+            Word('me-e-li', erasure=ErasureState.ERASED),
+            Erasure('\\', Side.CENTER),
+            Word('ku', erasure=ErasureState.OVER_ERASED),
+            Erasure('°', Side.RIGHT),
+        )),
     ]),
     ('1.  sal →', [
         TextLine('1.', (Word('sal'), LineContinuation('→')))
