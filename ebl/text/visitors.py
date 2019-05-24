@@ -3,7 +3,7 @@ from typing import List, Tuple
 from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
-                            LanguageShift, Side, Token, Word)
+                            LanguageShift, Side, Token, Word, Erasure)
 
 
 class LanguageVisitor:
@@ -35,6 +35,9 @@ class LanguageVisitor:
             self, gloss: DocumentOrientedGloss
     ) -> None:
         self.visit_token(gloss)
+
+    def visit_erasure(self, erasure: Erasure):
+        pass
 
 
 class AtfVisitor:
@@ -82,6 +85,9 @@ class AtfVisitor:
             self._set_force()
 
         {Side.LEFT: left, Side.RIGHT: right}[gloss.side]()
+
+    def visit_erasure(self, erasure: Erasure):
+        pass
 
     def _append_separator(self) -> None:
         self._parts.append(WORD_SEPARATOR)

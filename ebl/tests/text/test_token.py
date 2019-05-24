@@ -3,7 +3,8 @@ import pytest
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
-                            LanguageShift, LineContinuation, Side, Token)
+                            LanguageShift, LineContinuation, Side, Token,
+                            Erasure)
 
 TOKENS = [
     Token('...'),
@@ -105,6 +106,20 @@ def test_set_unique_lemma_with_lemma(token):
 def test_set_unique_lemma_no_lemma(token):
     lemma = LemmatizationToken(token.value)
     assert token.set_unique_lemma(lemma) == token
+
+
+def test_erasure():
+    value = '°'
+    side = Side.LEFT
+    erasure = Erasure(value, side)
+
+    assert erasure.value == value
+    assert erasure.lemmatizable is False
+    assert erasure.to_dict() == {
+        'type': 'Erasure',
+        'value': erasure.value,
+        'side': side.name
+    }
 
 
 def test_line_continuation():

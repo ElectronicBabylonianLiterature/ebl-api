@@ -16,6 +16,7 @@ Partial = collections.namedtuple('Partial', 'start end')
 
 class Side(Enum):
     LEFT = auto()
+    CENTER = auto()
     RIGHT = auto()
 
 
@@ -182,6 +183,21 @@ class DocumentOrientedGloss(Token):
         return {
             **super().to_dict(),
             'type': 'DocumentOrientedGloss'
+        }
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Erasure(Token):
+    side: Side
+
+    def accept(self, visitor: Any) -> None:
+        visitor.visit_erasure(self)
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Erasure',
+            'side': self.side.name
         }
 
 

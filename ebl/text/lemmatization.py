@@ -3,6 +3,8 @@ from typing import List, Optional, Tuple
 import attr
 import pydash
 
+from ebl.text.token import UniqueLemma
+
 
 class LemmatizationError(Exception):
     def __init__(self):
@@ -12,7 +14,7 @@ class LemmatizationError(Exception):
 @attr.s(auto_attribs=True, frozen=True)
 class LemmatizationToken:
     value: str
-    unique_lemma: Optional[Tuple[str, ...]] = None
+    unique_lemma: Optional[Tuple[UniqueLemma, ...]] = None
 
     def to_dict(self) -> dict:
         return pydash.map_keys(
