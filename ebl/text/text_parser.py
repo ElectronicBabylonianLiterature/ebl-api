@@ -157,6 +157,8 @@ VALUE_WITH_SIGN = (
     COMPOUND_GRAPHEME +
     string(')')
 )
+
+
 VARIANT = variant(
     UNKNOWN |
     VALUE_WITH_SIGN |
@@ -170,13 +172,41 @@ DETERMINATIVE_SEQUENCE = (
     determinative(value_sequence(VARIANT, VARIANT)) +
     INLINE_BROKEN.at_most(1).concat()
 )
+WORD_PARTS = (value_sequence(VARIANT, DETERMINATIVE_SEQUENCE | VARIANT) |
+              value_sequence(
+                  DETERMINATIVE_SEQUENCE, DETERMINATIVE_SEQUENCE | VARIANT, 1))
+
+
+def erasure_part(state: ErasureState):
+    return ((DIVIDER.map(Token) |
+             WORD.map(lambda value: Word(value, erasure=state)) |
+             LONE_DETERMINATIVE.map(lambda value: LoneDeterminative
+                                    .of_value(value, Partial(False, False))))
+            .many()
+            .sep_by(WORD_SEPARATOR)
+            .map(pydash.flatten))
+
+
+def erasure(map_tokens: bool, part_parser=erasure_part):
+    return (seq(string('°').map(lambda value: Erasure(value, Side.LEFT)
+                                if map_tokens else value),
+                part_parser(ErasureState.ERASED),
+                string('\\').map(lambda value: Erasure(value, Side.CENTER)
+                                 if map_tokens else value),
+                part_parser(ErasureState.OVER_ERASED),
+                string('°').map(lambda value: Erasure(value, Side.RIGHT)
+                                if map_tokens else value))
+            .desc('erasure'))
+
+
+PARTS_WITH_ERASURE = erasure(False, lambda _:  WORD_PARTS
+                             .many()).map(pydash.flatten_deep).concat() | \
+                     WORD_PARTS.map(pydash.flatten_deep).concat()
 WORD = seq(
     JOINER.many().concat(),
     (
-        value_sequence(VARIANT, DETERMINATIVE_SEQUENCE | VARIANT) |
-        value_sequence(
-            DETERMINATIVE_SEQUENCE, DETERMINATIVE_SEQUENCE | VARIANT, 1
-        )
+            value_sequence(PARTS_WITH_ERASURE, PARTS_WITH_ERASURE, 1) |
+            WORD_PARTS
     ),
     JOINER.many().concat(),
     FLAG
@@ -186,23 +216,6 @@ LONE_DETERMINATIVE = determinative(
 ).desc('lone determinative')
 
 
-def erasure_part(erasure: ErasureState):
-    return ((DIVIDER.map(Token) |
-             WORD.map(lambda value: Word(value, erasure=erasure)) |
-             LONE_DETERMINATIVE.map(lambda value: LoneDeterminative
-                                    .of_value(value,
-                                              Partial(False, False))))
-            .many()
-            .sep_by(WORD_SEPARATOR)
-            .map(pydash.flatten))
-
-
-ERASURE = (seq(string('°').map(lambda value: Erasure(value, Side.LEFT)),
-               erasure_part(ErasureState.ERASED),
-               string('\\').map(lambda value: Erasure(value, Side.CENTER)),
-               erasure_part(ErasureState.OVER_ERASED),
-               string('°').map(lambda value: Erasure(value, Side.RIGHT)))
-           .desc('erasure'))
 LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
 
 TEXT_LINE = seq(
@@ -214,8 +227,8 @@ TEXT_LINE = seq(
         COMMENTARY_PROTOCOL.map(Token) |
         DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
         SHIFT.map(LanguageShift) |
+        erasure(True) << WORD_SEPARATOR_OR_EOL |
         WORD.map(Word) |
-        ERASURE |
         seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(
             lambda values: [
                 Token(values[0]),

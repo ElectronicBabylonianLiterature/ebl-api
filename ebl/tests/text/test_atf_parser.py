@@ -242,6 +242,26 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
             Erasure('°', Side.RIGHT),
         )),
     ]),
+    ('1. me-e-li-°\\ku°', [
+        TextLine('1.', (
+            Word('me-e-li-°\\ku°'),
+        )),
+    ]),
+    ('1. °me-e-li\\°-ku', [
+        TextLine('1.', (
+            Word('°me-e-li\\°-ku'),
+        )),
+    ]),
+    ('1. me-°e\\li°-ku', [
+        TextLine('1.', (
+            Word('me-°e\\li°-ku'),
+        )),
+    ]),
+    ('1. me-°e\\li°-me-°e\\li°-ku', [
+        TextLine('1.', (
+                Word('me-°e\\li°-me-°e\\li°-ku'),
+        )),
+    ]),
     ('1.  sal →', [
         TextLine('1.', (Word('sal'), LineContinuation('→')))
     ]),
@@ -295,6 +315,8 @@ def test_parse_atf_language_shifts(code, expected_language):
 @pytest.mark.parametrize('atf,line_number', [
     ('1. x\nthis is not valid', 2),
     ('1\'. ($____$) x [...]\n$ (too many underscores)', 1),
+    ('1. me°-e\\li°-ku', 1),
+    ('1. me-°e\\li-°ku', 1),
     ('1\'. → x\n$ (line continuation in the middle)', 1)
 ])
 def test_invalid_atf(atf, line_number):

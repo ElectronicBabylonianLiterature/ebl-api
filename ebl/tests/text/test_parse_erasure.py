@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.text.text_parser import ERASURE
+from ebl.text.text_parser import erasure
 from ebl.text.token import Word, Erasure, Side, ErasureState
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)
@@ -20,6 +20,6 @@ ERASURE_RIGHT = Erasure('°', Side.RIGHT)
      [Word('X', erasure=ErasureState.OVER_ERASED),
       Word('x', erasure=ErasureState.OVER_ERASED)])
 ])
-def test_word(atf, erased, over_erased):
-    assert ERASURE.parse(atf) == [ERASURE_LEFT, erased, ERASURE_CENTER,
-                                  over_erased, ERASURE_RIGHT]
+def test_erasure(atf, erased, over_erased):
+    assert erasure(True).parse(atf) == [ERASURE_LEFT, erased, ERASURE_CENTER,
+                                        over_erased, ERASURE_RIGHT]
