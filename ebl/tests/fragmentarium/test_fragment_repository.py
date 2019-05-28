@@ -204,7 +204,7 @@ SEARCH_SIGNS_DATA = [
 ]
 
 
-@pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
+@pytest.mark.parametrize('signs,is_match', SEARCH_SIGNS_DATA)
 def test_search_signs(signs,
                       is_match,
                       fragment_repository):
@@ -248,27 +248,37 @@ def test_find_lemmas_multiple(fragment_repository,
         [['ana II'], ['ana I']]
 
 
-def test_find_lemmas_ignores_in_value(fragment_repository):
+@pytest.mark.parametrize('value', [
+    '[(a[(n)]a#*?!)]',
+    '°\\ana°'
+])
+def test_find_lemmas_ignores_in_value(value, fragment_repository):
     fragment = FragmentFactory.build(
         text=Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf("1'."), [
-                Word('[(a[(n)]a#*?!)]', unique_lemma=(WordId('ana I'),))
+                Word(value,  unique_lemma=(WordId('ana I'),))
             ])
         ]),
         signs='DIŠ'
     )
     fragment_repository.create(fragment)
 
-    assert fragment_repository.find_lemmas('ana') ==\
-        [['ana I']]
+    assert fragment_repository.find_lemmas('ana') == [['ana I']]
 
 
-def test_find_lemmas_ignores_in_query(fragment_repository,
+@pytest.mark.parametrize('query,expected', [
+    ('[(a)]n[(a*#!?)]', [['ana I']]),
+    ('°ana\\me-e-li°', []),
+    ('°me-e-li\\ana°', [['ana I']]),
+    ('°\\ana°', [['ana I']])
+])
+def test_find_lemmas_ignores_in_query(query,
+                                      expected,
+                                      fragment_repository,
                                       lemmatized_fragment):
     fragment_repository.create(lemmatized_fragment)
 
-    assert fragment_repository.find_lemmas('[(a)]n[(a*#!?)]') ==\
-        [['ana I']]
+    assert fragment_repository.find_lemmas(query) == expected
 
 
 def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):

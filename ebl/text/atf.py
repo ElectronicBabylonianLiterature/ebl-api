@@ -50,11 +50,13 @@ ATF_SPEC = {
     'joiner': HYPHEN,
     'word_separator': WORD_SEPARATOR,
     'variant_separator': VARIANT_SEPARATOR,
+}
+
+ATF_EXTENSIONS = {
+    'erasure_boundary': '°',
+    'erasure_delimiter': '\\',
+    'erasure_illegible': r'°[^\°]*\\',
     'line_continuation': '→',
-    'erasure': {
-        'illegible': r'°[^\°]*\\',
-        'delimiter': r'°'
-    }
 }
 
 

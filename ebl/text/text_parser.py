@@ -188,14 +188,17 @@ def erasure_part(state: ErasureState):
 
 
 def erasure(map_tokens: bool, part_parser=erasure_part):
-    return (seq(string('°').map(lambda value: Erasure(value, Side.LEFT)
-                                if map_tokens else value),
+    return (seq(string(ebl.text.atf.ATF_EXTENSIONS['erasure_boundary'])
+                .map(lambda value: Erasure(value, Side.LEFT)
+                     if map_tokens else value),
                 part_parser(ErasureState.ERASED),
-                string('\\').map(lambda value: Erasure(value, Side.CENTER)
-                                 if map_tokens else value),
+                string(ebl.text.atf.ATF_EXTENSIONS['erasure_delimiter'])
+                .map(lambda value: Erasure(value, Side.CENTER)
+                     if map_tokens else value),
                 part_parser(ErasureState.OVER_ERASED),
-                string('°').map(lambda value: Erasure(value, Side.RIGHT)
-                                if map_tokens else value))
+                string(ebl.text.atf.ATF_EXTENSIONS['erasure_boundary'])
+                .map(lambda value: Erasure(value, Side.RIGHT)
+                     if map_tokens else value))
             .desc('erasure'))
 
 

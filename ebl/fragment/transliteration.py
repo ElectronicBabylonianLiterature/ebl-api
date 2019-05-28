@@ -4,14 +4,15 @@ from typing import Any, Callable, List, Optional
 import attr
 import pydash
 
-from ebl.text.atf import ATF_SPEC
+from ebl.text.atf import ATF_SPEC, ATF_EXTENSIONS
 
 IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['control_line'],
     ATF_SPEC['multiplex_comment']
 ])
 STRIP_PATTERN = r'|'.join([
-    *ATF_SPEC['erasure'].values(),
+    ATF_EXTENSIONS['erasure_illegible'],
+    ATF_EXTENSIONS['erasure_boundary'],
     *ATF_SPEC['flags'].values(),
     *ATF_SPEC['lacuna'].values(),
     f'{ATF_SPEC["line_number"]}\\s+',
@@ -19,7 +20,7 @@ STRIP_PATTERN = r'|'.join([
     ATF_SPEC['omission'],
     ATF_SPEC['tabulation'],
     f'{ATF_SPEC["shift"]}\\s+',
-    ATF_SPEC['line_continuation'],
+    ATF_EXTENSIONS['line_continuation'],
     ATF_SPEC['alternative_damage']
 ])
 WHITE_SPACE_PATTERN = r'|'.join([

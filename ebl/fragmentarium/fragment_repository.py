@@ -6,7 +6,7 @@ from bson.code import Code
 from ebl.errors import NotFoundError
 from ebl.fragment.record import RecordType
 from ebl.mongo_repository import MongoRepository
-from ebl.text.atf import ATF_SPEC
+from ebl.text.atf import ATF_SPEC, ATF_EXTENSIONS
 from ebl.dictionary.word import WordId
 
 COLLECTION = 'fragments'
@@ -221,7 +221,9 @@ class MongoFragmentRepository():
             ATF_SPEC['flags']['uncertainty'],
             ATF_SPEC['flags']['collation'],
             ATF_SPEC['flags']['damage'],
-            ATF_SPEC['flags']['correction']
+            ATF_SPEC['flags']['correction'],
+            ATF_EXTENSIONS['erasure_illegible'],
+            ATF_EXTENSIONS['erasure_boundary']
         ]
         ignore_regex = f'({"|".join(ignore)})*'
         cleaned_word = re.sub(ignore_regex, '', word)
