@@ -72,7 +72,9 @@ def create(include_documents):
                             'number': manuscript_line.line.prefix[:-1],
                             'atf': (manuscript_line.line
                                     .atf[len(manuscript_line
-                                             .line.prefix) + 1:])
+                                             .line.prefix) + 1:]),
+                            'atfTokens': (manuscript_line.line
+                                          .to_dict()['content'])
                         }]
                     }
                 ]

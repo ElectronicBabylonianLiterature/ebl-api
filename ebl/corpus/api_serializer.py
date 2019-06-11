@@ -26,7 +26,8 @@ class ApiSerializer(TextSerializer):
             'manuscriptId': manuscript_line.manuscript_id,
             'labels': [label.to_value() for label in manuscript_line.labels],
             'number': line.line_number.to_value(),
-            'atf': line.atf[len(line.line_number.to_atf()) + 1:]
+            'atf': line.atf[len(line.line_number.to_atf()) + 1:],
+            'atfTokens': manuscript_line.line.to_dict()['content']
         })
 
     def visit_line(self, line: Line) -> None:
