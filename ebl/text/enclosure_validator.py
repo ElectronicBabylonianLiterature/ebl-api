@@ -1,4 +1,8 @@
-from ebl.text.enclosure import EnclosureType, EnclosureVisitor, Enclosure
+from typing import Iterable
+
+from ebl.text.enclosure import EnclosureType, Enclosure
+from ebl.text.reconstructed_text import ReconstructionTokenVisitor, \
+    ReconstructionToken
 
 
 class EnclosureError(Exception):
@@ -37,7 +41,7 @@ class ValidationState:
         return is_open and children_are_not_open
 
 
-class EnclosureValidator(EnclosureVisitor):
+class EnclosureValidator(ReconstructionTokenVisitor):
     def __init__(self):
         self._state = ValidationState()
 
@@ -53,3 +57,14 @@ class EnclosureValidator(EnclosureVisitor):
         open_enclosures = self._state.open_enclosures
         if open_enclosures:
             raise EnclosureError(f'Unclosed enclosure {open_enclosures}.')
+
+
+def validate(line: Iterable[ReconstructionToken]):
+    validator = EnclosureValidator()
+    try:
+        for token in line:
+            token.accept(validator)
+        validator.validate_end_state()
+    except EnclosureError as error:
+        raise ValueError(f'Invalid line {[str(part) for part in line]}: '
+                         f'{error}')

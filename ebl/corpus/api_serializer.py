@@ -1,9 +1,11 @@
 from parsy import ParseError
 
-from ebl.corpus.text import Text, ManuscriptLine
+from ebl.corpus.text import Text, ManuscriptLine, Line
 from ebl.corpus.text_serializer import TextSerializer, TextDeserializer
 from ebl.errors import DataError
 from ebl.text.labels import LineNumberLabel, Label
+from ebl.text.reconstructed_text import AkkadianWord, Lacuna, \
+    MetricalFootSeparator, Caesura, ReconstructionToken
 from ebl.text.text_parser import TEXT_LINE
 
 
@@ -12,6 +14,12 @@ class ApiSerializer(TextSerializer):
     def __init__(self, include_documents=True):
         super().__init__(include_documents)
 
+    @staticmethod
+    def serialize_public(text: Text):
+        serializer = ApiSerializer(False)
+        serializer.visit_text(text)
+        return serializer.text
+
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         line = manuscript_line.line
         self.line['manuscripts'].append({
@@ -19,6 +27,33 @@ class ApiSerializer(TextSerializer):
             'labels': [label.to_value() for label in manuscript_line.labels],
             'number': line.line_number.to_value(),
             'atf': line.atf[len(line.line_number.to_atf()) + 1:]
+        })
+
+    def visit_line(self, line: Line) -> None:
+        super().visit_line(line)
+        self.line['reconstructionTokens'] = []
+
+    def visit_akkadian_word(self, word: AkkadianWord):
+        self._visit_reconstruction_token('AkkadianWord', word)
+
+    def visit_lacuna(self, lacuna: Lacuna) -> None:
+        self._visit_reconstruction_token('Lacuna', lacuna)
+
+    def visit_metrical_foot_separator(
+            self,
+            separator: MetricalFootSeparator
+    ) -> None:
+        self._visit_reconstruction_token('MetricalFootSeparator', separator)
+
+    def visit_caesura(self, caesura: Caesura) -> None:
+        self._visit_reconstruction_token('Caesura', caesura)
+
+    def _visit_reconstruction_token(self,
+                                    type: str,
+                                    token: ReconstructionToken) -> None:
+        self.line['reconstructionTokens'].append({
+            'type': type,
+            'value': str(token)
         })
 
 

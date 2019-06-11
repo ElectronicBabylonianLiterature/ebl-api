@@ -10,9 +10,12 @@ from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.text.atf import Surface, Status
+from ebl.text.enclosure import Enclosure, EnclosureType, EnclosureVariant
 from ebl.text.labels import SurfaceLabel, ColumnLabel, LineNumberLabel
 from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, StringPart
+from ebl.text.reconstructed_text import AkkadianWord, StringPart, Lacuna, \
+    MetricalFootSeparator, LacunaPart, Caesura, EnclosurePart, SeparatorPart, \
+    Modifier
 from ebl.text.token import Word
 
 
@@ -55,7 +58,20 @@ class LineFactory(factory.Factory):
         model = Line
 
     number = factory.Sequence(lambda n: LineNumberLabel(str(n)))
-    reconstruction = (AkkadianWord((StringPart('buāru'),)),)
+    reconstruction = (AkkadianWord((StringPart('buāru'),)),
+                      MetricalFootSeparator(True),
+                      Lacuna((Enclosure(EnclosureType.BROKEN_OFF,
+                                        EnclosureVariant.OPEN), ),
+                             tuple()),
+                      Caesura(False),
+                      AkkadianWord((LacunaPart(),
+                                    EnclosurePart(Enclosure(
+                                        EnclosureType.BROKEN_OFF,
+                                        EnclosureVariant.CLOSE
+                                    )),
+                                    SeparatorPart(),
+                                    StringPart('buāru')),
+                                   (Modifier.DAMAGED, )))
     manuscripts: Tuple[ManuscriptLine, ...] = factory.List([
         factory.SubFactory(ManuscriptLineFactory)
     ], TupleFactory)

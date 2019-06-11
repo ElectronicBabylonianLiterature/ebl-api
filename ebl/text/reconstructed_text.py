@@ -1,17 +1,33 @@
 from abc import ABC, abstractmethod
 from enum import Enum, unique
-from typing import Iterable, Tuple
+from typing import Tuple
 
 import attr
 import pydash
 
 from ebl.text.enclosure import Enclosure, EnclosureVisitor
-from ebl.text.enclosure_validator import EnclosureError, EnclosureValidator
+
+
+class ReconstructionTokenVisitor(EnclosureVisitor):
+    def visit_akkadian_word(self, word: 'AkkadianWord') -> None:
+        pass
+
+    def visit_lacuna(self, lacuna: 'Lacuna') -> None:
+        pass
+
+    def visit_metrical_foot_separator(
+            self,
+            separator: 'MetricalFootSeparator'
+    ) -> None:
+        pass
+
+    def visit_caesura(self, caesura: 'Caesura') -> None:
+        pass
 
 
 class ReconstructionToken(ABC):
     @abstractmethod
-    def accept(self, visitor: EnclosureVisitor) -> None:
+    def accept(self, visitor: ReconstructionTokenVisitor) -> None:
         ...
 
 
@@ -89,7 +105,8 @@ class AkkadianWord(ReconstructionToken):
     parts: Tuple[Part, ...]
     modifiers: Tuple[Modifier, ...] = tuple()
 
-    def accept(self, visitor: EnclosureVisitor) -> None:
+    def accept(self, visitor: ReconstructionTokenVisitor) -> None:
+        visitor.visit_akkadian_word(self)
         for part in self.parts:
             part.accept(visitor)
 
@@ -109,7 +126,8 @@ class Lacuna(ReconstructionToken):
     _before: Tuple[Enclosure, ...]
     _after: Tuple[Enclosure, ...]
 
-    def accept(self, visitor: EnclosureVisitor) -> None:
+    def accept(self, visitor: ReconstructionTokenVisitor) -> None:
+        visitor.visit_lacuna(self)
         for enclosure in self._before + self._after:
             enclosure.accept(visitor)
 
@@ -133,9 +151,6 @@ class Break(ReconstructionToken):
     def _value(self) -> str:
         ...
 
-    def accept(self, visitor):
-        pass
-
     def __str__(self) -> str:
         return f'({self._value})' if self.uncertain else self._value
 
@@ -147,6 +162,9 @@ class Caesura(Break):
     def _value(self) -> str:
         return '||'
 
+    def accept(self, visitor: ReconstructionTokenVisitor):
+        visitor.visit_caesura(self)
+
 
 @attr.s(frozen=True)
 class MetricalFootSeparator(Break):
@@ -155,13 +173,5 @@ class MetricalFootSeparator(Break):
     def _value(self) -> str:
         return '|'
 
-
-def validate(line: Iterable[ReconstructionToken]):
-    validator = EnclosureValidator()
-    try:
-        for token in line:
-            token.accept(validator)
-        validator.validate_end_state()
-    except EnclosureError as error:
-        raise ValueError(f'Invalid line {[str(part) for part in line]}: '
-                         f'{error}')
+    def accept(self, visitor: ReconstructionTokenVisitor):
+        visitor.visit_metrical_foot_separator(self)

@@ -6,7 +6,8 @@ from ebl.text.enclosure import BROKEN_OFF_CLOSE, BROKEN_OFF_OPEN, \
     MAYBE_BROKEN_OFF_OPEN
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
-    StringPart, validate
+    StringPart
+from ebl.text.enclosure_validator import validate
 from ebl.text.reconstructed_text_parser import akkadian_word, caesura, \
     foot_separator, lacuna, reconstructed_line
 

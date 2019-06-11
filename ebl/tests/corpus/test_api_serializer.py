@@ -49,6 +49,22 @@ def create(include_documents):
                         'reconstruction': ' '.join(str(token)
                                                    for token
                                                    in line.reconstruction),
+                        'reconstructionTokens': [{
+                            'type': 'AkkadianWord',
+                            'value': 'buāru'
+                        }, {
+                            'type': 'MetricalFootSeparator',
+                            'value': '(|)'
+                        }, {
+                            'type': 'Lacuna',
+                            'value': '[...'
+                        }, {
+                            'type': 'Caesura',
+                            'value': '||'
+                        }, {
+                            'type': 'AkkadianWord',
+                            'value': '...]-buāru#'
+                        }],
                         'manuscripts': [{
                             'manuscriptId': manuscript_line.manuscript_id,
                             'labels': [label.to_value()

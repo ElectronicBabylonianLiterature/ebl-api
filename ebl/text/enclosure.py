@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from enum import Enum, unique
 
 import attr
@@ -50,10 +49,9 @@ class Enclosure:
         return self.type.get_delimiter(self._variant)
 
 
-class EnclosureVisitor(ABC):
-    @abstractmethod
+class EnclosureVisitor():
     def visit_enclosure(self, enclosure: Enclosure) -> None:
-        ...
+        pass
 
 
 BROKEN_OFF_OPEN = Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN)

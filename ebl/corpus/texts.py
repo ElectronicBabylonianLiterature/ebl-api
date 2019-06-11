@@ -3,7 +3,7 @@ from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.api_serializer import deserialize, serialize, ApiSerializer
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
-from ebl.corpus.text import (TextId, Chapter, Manuscript, Line, ManuscriptLine)
+from ebl.corpus.text import (TextId, Text)
 from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
     PeriodModifier, Period, Stage
 from ebl.errors import NotFoundError
@@ -169,18 +169,8 @@ def create_text_id(category: str, index: str) -> TextId:
         raise NotFoundError(f'{category}.{index}')
 
 
-class PublicTextSerializer(ApiSerializer):
-    def visit_chapter(self, chapter: Chapter) -> None:
-        pass
-
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
-        pass
-
-    def visit_line(self, line: Line) -> None:
-        pass
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        pass
+def serialize_public_text(text: Text):
+    return ApiSerializer.serialize_public(text)
 
 
 class TextsResource:
@@ -197,7 +187,7 @@ class TextsResource:
                resp: falcon.Response) -> None:
         texts = self._corpus.list()
         resp.media = [
-            PublicTextSerializer.serialize(text, False)
+            serialize_public_text(text)
             for text in texts
         ]
 

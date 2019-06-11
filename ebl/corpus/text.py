@@ -10,7 +10,9 @@ from ebl.corpus.enums import Classification, ManuscriptType, Period, \
 from ebl.corpus.label_validator import LabelValidator
 from ebl.text.labels import Label, LineNumberLabel
 from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import ReconstructionToken, validate
+from ebl.text.reconstructed_text import ReconstructionToken, \
+    ReconstructionTokenVisitor
+from ebl.text.enclosure_validator import validate
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])
 
@@ -81,6 +83,9 @@ class Line:
         if visitor.is_pre_order:
             visitor.visit_line(self)
 
+        for token in self.reconstruction:
+            token.accept(visitor)
+
         for manuscript_line in self.manuscripts:
             manuscript_line.accept(visitor)
 
@@ -140,7 +145,7 @@ class Text:
             visitor.visit_text(self)
 
 
-class TextVisitor:
+class TextVisitor(ReconstructionTokenVisitor):
 
     class Order(Enum):
         PRE = auto()
