@@ -97,7 +97,7 @@ class TextLine(Line):
     def merge(self, other: 'Line') -> 'Line':
         def merge_tokens():
             def map_(token):
-                return f'{type(token)}°{token.value}'
+                return f'{type(token)}⋮{token.value}'
 
             return Merger(map_).merge(self.content, other.content)
 
