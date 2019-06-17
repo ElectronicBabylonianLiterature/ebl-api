@@ -14,13 +14,16 @@ def test_of_value():
     assert lone_determinative.language == DEFAULT_LANGUAGE
     assert lone_determinative.normalized is DEFAULT_NORMALIZED
     assert lone_determinative.unique_lemma == tuple()
+    assert lone_determinative.erasure == ErasureState.NONE
+    assert lone_determinative.alignment is None
+    assert lone_determinative.has_apparatus_entry is None
 
 
 @pytest.mark.parametrize("language,normalized,partial", [
     (Language.SUMERIAN, False, Partial(False, True)),
     (Language.AKKADIAN, True, Partial(True, False))
 ])
-def test_word(language, normalized, partial):
+def test_lone_determinative(language, normalized, partial):
     value = '{mu}'
     lone_determinative =\
         LoneDeterminative(value, language, normalized, partial=partial)

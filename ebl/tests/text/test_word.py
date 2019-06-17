@@ -19,6 +19,9 @@ def test_defaults():
     assert word.language == DEFAULT_LANGUAGE
     assert word.normalized is DEFAULT_NORMALIZED
     assert word.unique_lemma == tuple()
+    assert word.erasure == ErasureState.NONE
+    assert word.alignment is None
+    assert word.has_apparatus_entry is None
 
 
 @pytest.mark.parametrize("language,normalized,unique_lemma", [

@@ -1,9 +1,10 @@
 import collections
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Tuple
+from typing import Tuple, Optional
 
 import attr
+import pydash
 
 import ebl.text.atf
 from ebl.dictionary.word import WordId
@@ -60,6 +61,8 @@ class Word(Token):
     normalized: bool = DEFAULT_NORMALIZED
     unique_lemma: Tuple[WordId, ...] = tuple()
     erasure: ErasureState = ErasureState.NONE
+    alignment: Optional[int] = None
+    has_apparatus_entry: Optional[bool] = None
 
     @property
     def lemmatizable(self) -> bool:
@@ -124,15 +127,17 @@ class Word(Token):
         visitor.visit_word(self)
 
     def to_dict(self) -> dict:
-        return {
+        return pydash.omit_by({
             **super().to_dict(),
             'type': 'Word',
             'uniqueLemma': [*self.unique_lemma],
             'normalized': self.normalized,
             'language': self.language.name,
             'lemmatizable': self.lemmatizable,
-            'erasure': self.erasure.name
-        }
+            'erasure': self.erasure.name,
+            'alignment': self.alignment,
+            'hasApparatusEntry': self.has_apparatus_entry
+        }, lambda value: value is None)
 
 
 @attr.s(auto_attribs=True, frozen=True)
