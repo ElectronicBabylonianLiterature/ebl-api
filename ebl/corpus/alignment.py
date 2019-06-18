@@ -27,8 +27,20 @@ class AlignmentToken:
 class Alignment:
     _lines: Tuple[Tuple[Tuple[AlignmentToken, ...], ...], ...]
 
-    def get_manuscript_line(self, line_index: int, manuscript_index: int):
-        return self._lines[line_index][manuscript_index]
+    def get_line(self,
+                 line_index: int) -> Tuple[Tuple[AlignmentToken, ...], ...]:
+        return self._lines[line_index]
+
+    def get_manuscript_line(
+            self, line_index: int, manuscript_index: int
+    ) -> Tuple[AlignmentToken, ...]:
+        return self.get_line(line_index)[manuscript_index]
+
+    def get_number_of_lines(self) -> int:
+        return len(self._lines)
+
+    def get_number_of_manuscripts(self, line_index: int) -> int:
+        return len(self.get_line(line_index))
 
     @staticmethod
     def from_dict(data):

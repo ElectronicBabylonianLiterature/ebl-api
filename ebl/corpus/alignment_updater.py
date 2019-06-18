@@ -2,7 +2,7 @@ from typing import List, Optional
 
 import attr
 
-from ebl.corpus.alignment import Alignment
+from ebl.corpus.alignment import Alignment, AlignmentError
 from ebl.corpus.text import TextVisitor, Text, Chapter, Line, ManuscriptLine
 from ebl.errors import Defect
 
@@ -32,8 +32,13 @@ class AlignmentUpdater(TextVisitor):
 
     @property
     def current_alignment(self):
-        return self._alignment.get_manuscript_line(self.line_index,
-                                                   self.manuscript_line_index)
+        try:
+            return self._alignment.get_manuscript_line(
+                self.line_index,
+                self.manuscript_line_index
+            )
+        except IndexError:
+            raise AlignmentError()
 
     def get_text(self) -> Text:
         if self._text:
@@ -46,19 +51,28 @@ class AlignmentUpdater(TextVisitor):
         self._chapters = []
 
     def visit_chapter(self, chapter: Chapter) -> None:
-        self._chapters.append(
-            attr.evolve(chapter, lines=tuple(self._lines))
-            if self.chapter_index == self._chapter_index_to_align
-            else chapter
-        )
-        self._lines = []
+        if self._alignment.get_number_of_lines() == len(chapter.lines):
+            self._chapters.append(
+                attr.evolve(chapter, lines=tuple(self._lines))
+                if self.chapter_index == self._chapter_index_to_align
+                else chapter
+            )
+            self._lines = []
+        else:
+            raise AlignmentError()
 
     def visit_line(self, line: Line) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
-            self._lines.append(
-                attr.evolve(line, manuscripts=tuple(self._manuscript_lines))
-            )
-            self._manuscript_lines = []
+            if self._alignment.get_number_of_manuscripts(
+                    self.line_index
+            ) == len(line.manuscripts):
+                self._lines.append(
+                    attr.evolve(line,
+                                manuscripts=tuple(self._manuscript_lines))
+                )
+                self._manuscript_lines = []
+            else:
+                raise AlignmentError()
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         if len(self._chapters) == self._chapter_index_to_align:

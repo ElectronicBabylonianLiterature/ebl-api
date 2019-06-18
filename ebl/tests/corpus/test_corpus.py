@@ -2,7 +2,7 @@ import attr
 import pydash
 import pytest
 
-from ebl.corpus.alignment import Alignment, AlignmentToken
+from ebl.corpus.alignment import Alignment, AlignmentToken, AlignmentError
 from ebl.corpus.text import Text
 from ebl.corpus.text_serializer import TextSerializer
 from ebl.auth0 import Guest
@@ -232,7 +232,49 @@ def test_updating_alignment(corpus,
 
     alignment = Alignment((
         (
-            (AlignmentToken('-ku]-nu-ši', 0, True), ),
+            (AlignmentToken('-ku]-nu-ši', 0, True),),
         ),
     ))
     corpus.update_alignment(TEXT.id, 0, alignment, user)
+
+
+@pytest.mark.parametrize('alignment', [
+    Alignment((
+            (
+                    (AlignmentToken('-ku]-nu-ši', 0, True),
+                     AlignmentToken('-ku]-nu-ši', 0, True),),
+            ),
+    )),
+    Alignment((
+            (
+                    tuple(),
+            ),
+    )),
+    Alignment((
+            (
+                    (AlignmentToken('-ku]-nu-ši', 0, True),),
+                    (AlignmentToken('-ku]-nu-ši', 0, True),)
+            ),
+    )),
+    Alignment((
+            tuple()
+    )),
+    Alignment((
+            (
+                    (AlignmentToken('-ku]-nu-ši', 0, True),),
+            ),
+            (
+                    (AlignmentToken('-ku]-nu-ši', 0, True),),
+            )
+    )),
+    Alignment(tuple()),
+
+])
+def test_invalid_alignment(alignment,
+                           corpus,
+                           text_repository,
+                           bibliography,
+                           when):
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    with pytest.raises(AlignmentError):
+        corpus.update_alignment(TEXT.id, 0, alignment, ANY_USER)
