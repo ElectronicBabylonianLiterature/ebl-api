@@ -1,10 +1,13 @@
 import json
 
 import falcon
+import attr
 
 from ebl.auth0 import Guest
 from ebl.corpus.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
+from ebl.text.line import TextLine
+from ebl.text.token import Word
 
 ANY_USER = Guest()
 
@@ -39,17 +42,32 @@ def test_updating_alignment(client, bibliography, sign_list, signs):
     allow_references(text, bibliography)
     create_text(client, text)
     chapter_index = 0
+    updated_text = attr.evolve(text, chapters=(
+        attr.evolve(text.chapters[chapter_index], lines=(
+            attr.evolve(text.chapters[0].lines[0], manuscripts=(
+                attr.evolve(
+                    text.chapters[0].lines[0].manuscripts[0],
+                    line=TextLine('1.', (Word('-ku]-nu-ši',
+                                         alignment=0,
+                                         has_apparatus_entry=True),))
+                ),
+            )),
+        )),
+    ))
     dto = {
         'alignment': [
             [
-                {
-                    'value': '-ku]-nu-ši',
-                    'alignment': 0,
-                    'hasApparatusEntry': True
-                }
+                [
+                    {
+                        'value': '-ku]-nu-ši',
+                        'alignment': 0,
+                        'hasApparatusEntry': True
+                    }
+                ]
             ]
         ]
     }
+    expected_text = create_dto(updated_text, True)
 
     post_result = client.simulate_post(
         f'/texts/{text.category}/{text.index}'
@@ -59,11 +77,11 @@ def test_updating_alignment(client, bibliography, sign_list, signs):
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert post_result.json == create_dto(text, True)
+    assert post_result.json == expected_text
 
     get_result = client.simulate_get(
         f'/texts/{text.category}/{text.index}'
     )
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == create_dto(text, True)
+    assert get_result.json == expected_text

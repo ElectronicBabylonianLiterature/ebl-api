@@ -1,6 +1,7 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 
+from ebl.corpus.alignment import Alignment
 from ebl.corpus.api_serializer import deserialize, serialize, ApiSerializer
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
 from ebl.corpus.text import (TextId, Text)
@@ -170,19 +171,23 @@ ALIGNMENT_DTO_SCHEMA = {
             'items': {
                 'type': 'array',
                 'items': {
-                    'type': 'object',
-                    'properties': {
-                        'value': {
-                            'type': 'string'
+                    'type': 'array',
+                    'items': {
+                        'type': 'object',
+                        'properties': {
+                            'value': {
+                                'type': 'string'
+                            },
+                            'alignment': {
+                                'type': ['integer', 'null'],
+                                'minimum': 0
+                            },
+                            'hasApparatusEntry': {
+                                'type': ['boolean', 'null']
+                            },
                         },
-                        'alignment': {
-                            'type': ['integer', 'null']
-                        },
-                        'hasApparatusEntry': {
-                            'type': ['boolean', 'null']
-                        },
-                    },
-                    'required': ['value']
+                        'required': ['value']
+                    }
                 }
             }
         }
@@ -195,7 +200,14 @@ def create_text_id(category: str, index: str) -> TextId:
     try:
         return TextId(int(category), int(index))
     except ValueError:
-        raise NotFoundError(f'{category}.{index}')
+        raise NotFoundError(f'Text {category}.{index} not found.')
+
+
+def create_chapter_index(chapter_index: str) -> int:
+    try:
+        return int(chapter_index)
+    except ValueError:
+        raise NotFoundError(f'Chapter {chapter_index} not found.')
 
 
 def serialize_public_text(text: Text):
@@ -272,5 +284,9 @@ class AlignmentResource:
                 category: str,
                 index: str,
                 chapter_index: str) -> None:
+        self._corpus.update_alignment(create_text_id(category, index),
+                                      create_chapter_index(chapter_index),
+                                      Alignment.of(req.media['alignment']),
+                                      req.context['user'])
         updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)

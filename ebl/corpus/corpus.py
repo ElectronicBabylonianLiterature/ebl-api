@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from ebl.corpus.alignment import Alignment
+from ebl.corpus.alignment_updater import AlignmentUpdater
 from ebl.corpus.text_hydrator import TextHydrator
 from ebl.corpus.text_validator import TextValidator
 from ebl.corpus.mongo_serializer import serialize
@@ -69,6 +71,26 @@ class Corpus:
         )
         updated_text = self._repository.update(id_, text)
         return self._hydrate_references(updated_text)
+
+    def update_alignment(self,
+                         id_: TextId,
+                         chapter_index: int,
+                         alignment: Alignment,
+                         user):
+        old_text = self._repository.find(id_)
+
+        updater = AlignmentUpdater(chapter_index, alignment)
+        old_text.accept(updater)
+        updated_text = updater.get_text()
+        old_dict: dict = {**serialize(old_text), '_id': old_text.id}
+        new_dict: dict = {**serialize(updated_text), '_id': updated_text.id}
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            old_dict,
+            new_dict
+        )
+        self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
         text.accept(TextValidator(self._bibliography, self._sign_list))

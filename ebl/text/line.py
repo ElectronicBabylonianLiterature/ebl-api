@@ -3,6 +3,7 @@ from typing import Iterable, Sequence, Tuple
 import attr
 import pydash
 
+from ebl.corpus.alignment import AlignmentToken, AlignmentError
 from ebl.merger import Merger
 from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
@@ -40,6 +41,25 @@ class Line:
             )
         else:
             raise LemmatizationError()
+
+    def update_alignment(
+            self,
+            alignment: Sequence[AlignmentToken]
+    ) -> 'Line':
+        if len(self.content) == len(alignment):
+            zipped = pydash.zip_(list(self.content), list(alignment))
+            content = tuple(
+                attr.evolve(pair[0],
+                            alignment=pair[1].alignment,
+                            has_apparatus_entry=pair[1].has_apparatus_entry)
+                for pair in zipped
+            )
+            return attr.evolve(
+                self,
+                content=content
+            )
+        else:
+            raise AlignmentError()
 
     def to_dict(self) -> dict:
         return {

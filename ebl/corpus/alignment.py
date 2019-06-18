@@ -3,6 +3,11 @@ from typing import Optional, Tuple
 import attr
 
 
+class AlignmentError(Exception):
+    def __init__(self):
+        super().__init__('Invalid alignment')
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class AlignmentToken:
     value: str
@@ -12,18 +17,21 @@ class AlignmentToken:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Alignment:
-    lines: Tuple[Tuple[AlignmentToken, ...], ...]
+    lines: Tuple[Tuple[Tuple[AlignmentToken, ...], ...], ...]
 
     @staticmethod
     def of(data):
         return Alignment(tuple(
             tuple(
-                AlignmentToken(
-                    token['value'],
-                    token.get('alignment'),
-                    token.get('hasApparatusEntry')
+                tuple(
+                    AlignmentToken(
+                        token['value'],
+                        token.get('alignment'),
+                        token.get('hasApparatusEntry')
+                    )
+                    for token in manuscript
                 )
-                for token in line
+                for manuscript in line
             )
             for line in data
         ))

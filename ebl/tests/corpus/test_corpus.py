@@ -2,12 +2,15 @@ import attr
 import pydash
 import pytest
 
+from ebl.corpus.alignment import Alignment, AlignmentToken
 from ebl.corpus.text import Text
 from ebl.corpus.text_serializer import TextSerializer
 from ebl.auth0 import Guest
 from ebl.errors import Defect, NotFoundError, DataError
 from ebl.tests.factories.corpus import TextFactory
 from ebl.fragment.transliteration import Transliteration
+from ebl.text.line import TextLine
+from ebl.text.token import Word
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()
@@ -195,3 +198,56 @@ def test_update_raises_exception_if_invalid_references(corpus,
 
     with pytest.raises(DataError):
         corpus.update(TEXT.id, updated_text, ANY_USER)
+
+
+def test_updating_alignment(corpus,
+                            text_repository,
+                            bibliography,
+                            changelog,
+                            sign_list,
+                            user,
+                            when):
+    updated_text = attr.evolve(TEXT, chapters=(
+        attr.evolve(TEXT.chapters[0], lines=(
+            attr.evolve(TEXT.chapters[0].lines[0], manuscripts=(
+                attr.evolve(
+                    TEXT.chapters[0].lines[0].manuscripts[0],
+                    line=TextLine('1.', (Word('-ku]-nu-ši',
+                                              alignment=0,
+                                              has_apparatus_entry=True),))
+                ),
+            )),
+        )),
+    ))
+    dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
+        attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(
+            attr.evolve(DEHYDRATED_TEXT.chapters[0].lines[0], manuscripts=(
+                attr.evolve(
+                    DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
+                    line=TextLine('1.', (Word('-ku]-nu-ši',
+                                              alignment=0,
+                                              has_apparatus_entry=True),))
+                ),
+            )),
+        )),
+    ))
+    # expect_signs(sign_list, when)
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    (when(text_repository)
+     .update(TEXT.id, dehydrated_updated_text)
+     .thenReturn(dehydrated_updated_text))
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        {**to_dict(TEXT), '_id': TEXT.id},
+        {**to_dict(updated_text), '_id': updated_text.id}
+    ).thenReturn()
+    # expect_validate_references(bibliography, when)
+    # expect_bibliography(bibliography, when)
+
+    alignment = Alignment((
+        (
+            (AlignmentToken('-ku]-nu-ši', 0, True), ),
+        ),
+    ))
+    corpus.update_alignment(TEXT.id, 0, alignment, user)
