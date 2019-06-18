@@ -61,14 +61,7 @@ class Corpus:
     def update(self, id_: TextId, text: Text, user) -> Text:
         old_text = self._repository.find(id_)
         self._validate_text(text)
-        old_dict: dict = {**serialize(old_text), '_id': old_text.id}
-        new_dict: dict = {**serialize(text), '_id': text.id}
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            old_dict,
-            new_dict
-        )
+        self._create_changelog(old_text, text, user)
         updated_text = self._repository.update(id_, text)
         return self._hydrate_references(updated_text)
 
@@ -82,14 +75,7 @@ class Corpus:
         updater = AlignmentUpdater(chapter_index, alignment)
         old_text.accept(updater)
         updated_text = updater.get_text()
-        old_dict: dict = {**serialize(old_text), '_id': old_text.id}
-        new_dict: dict = {**serialize(updated_text), '_id': updated_text.id}
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            old_dict,
-            new_dict
-        )
+        self._create_changelog(old_text, updated_text, user)
         self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
@@ -99,3 +85,13 @@ class Corpus:
         hydrator = TextHydrator(self._bibliography)
         text.accept(hydrator)
         return hydrator.text
+
+    def _create_changelog(self, old_text, new_text, user):
+        old_dict: dict = {**serialize(old_text), '_id': old_text.id}
+        new_dict: dict = {**serialize(new_text), '_id': new_text.id}
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            old_dict,
+            new_dict
+        )
