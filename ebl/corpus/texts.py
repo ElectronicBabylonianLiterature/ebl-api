@@ -162,6 +162,35 @@ TEXT_DTO_SCHEMA = {
 }
 
 
+ALIGNMENT_DTO_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'alignment': {
+            'type': 'array',
+            'items': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'value': {
+                            'type': 'string'
+                        },
+                        'alignment': {
+                            'type': ['integer', 'null']
+                        },
+                        'hasApparatusEntry': {
+                            'type': ['boolean', 'null']
+                        },
+                    },
+                    'required': ['value']
+                }
+            }
+        }
+    },
+    'required': ['alignment']
+}
+
+
 def create_text_id(category: str, index: str) -> TextId:
     try:
         return TextId(int(category), int(index))
@@ -227,4 +256,21 @@ class TextResource:
             req.context['user']
         )
         updated_text = self._corpus.find(text.id)
+        resp.media = serialize(updated_text)
+
+
+class AlignmentResource:
+
+    def __init__(self, corpus):
+        self._corpus = corpus
+
+    @falcon.before(require_scope, 'write:texts')
+    @validate(ALIGNMENT_DTO_SCHEMA)
+    def on_post(self,
+                req: falcon.Request,
+                resp: falcon.Response,
+                category: str,
+                index: str,
+                chapter_index: str) -> None:
+        updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)

@@ -17,7 +17,7 @@ from ebl.bibliography.bibliography_entries import (BibliographyEntriesResource,
 from ebl.changelog import Changelog
 from ebl.corpus.corpus import Corpus
 from ebl.corpus.mongo_text_repository import MongoTextRepository
-from ebl.corpus.texts import TextResource, TextsResource
+from ebl.corpus.texts import TextResource, TextsResource, AlignmentResource
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.dictionary.word_search import WordSearch
@@ -93,6 +93,10 @@ def create_corpus_routes(api, context, sign_list):
 
     api.add_route('/texts', TextsResource(corpus))
     api.add_route('/texts/{category}/{index}', TextResource(corpus))
+    api.add_route(
+        '/texts/{category}/{index}/chapters/{chapter_index}/alignment',
+        AlignmentResource(corpus)
+    )
 
 
 def create_app(context):
