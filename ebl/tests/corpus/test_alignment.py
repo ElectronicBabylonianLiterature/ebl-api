@@ -2,7 +2,7 @@ from ebl.corpus.alignment import AlignmentToken, Alignment
 
 
 def test_alignment():
-    assert Alignment.of([[[
+    assert Alignment.from_dict([[[
         {
             'value': '-ku]-nu-ši',
             'alignment': 0,
@@ -16,7 +16,7 @@ def test_alignment():
 
 
 def test_only_value():
-    assert Alignment.of([[[
+    assert Alignment.from_dict([[[
             {
                 'value': '-ku]-nu-ši'
             }

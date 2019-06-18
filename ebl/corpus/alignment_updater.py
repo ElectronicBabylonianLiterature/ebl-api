@@ -12,11 +12,28 @@ class AlignmentUpdater(TextVisitor):
     def __init__(self, chapter_index: int, alignment: Alignment):
         super().__init__(TextVisitor.Order.POST)
         self._alignment = alignment
-        self._chapter_index = chapter_index
+        self._chapter_index_to_align = chapter_index
         self._text: Optional[Text] = None
         self._chapters: List[Chapter] = []
         self._lines: List[Line] = []
         self._manuscript_lines: List[ManuscriptLine] = []
+
+    @property
+    def chapter_index(self):
+        return len(self._chapters)
+
+    @property
+    def line_index(self):
+        return len(self._lines)
+
+    @property
+    def manuscript_line_index(self):
+        return len(self._manuscript_lines)
+
+    @property
+    def current_alignment(self):
+        return self._alignment.get_manuscript_line(self.line_index,
+                                                   self.manuscript_line_index)
 
     def get_text(self) -> Text:
         if self._text:
@@ -31,23 +48,22 @@ class AlignmentUpdater(TextVisitor):
     def visit_chapter(self, chapter: Chapter) -> None:
         self._chapters.append(
             attr.evolve(chapter, lines=tuple(self._lines))
-            if len(self._chapters) == self._chapter_index
+            if self.chapter_index == self._chapter_index_to_align
             else chapter
         )
         self._lines = []
 
     def visit_line(self, line: Line) -> None:
-        if len(self._chapters) == self._chapter_index:
+        if len(self._chapters) == self._chapter_index_to_align:
             self._lines.append(
                 attr.evolve(line, manuscripts=tuple(self._manuscript_lines))
             )
             self._manuscript_lines = []
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        if len(self._chapters) == self._chapter_index:
+        if len(self._chapters) == self._chapter_index_to_align:
             updated_line = manuscript_line.line.update_alignment(
-                self._alignment.lines[len(self._lines)][
-                    len(self._manuscript_lines)]
+                self.current_alignment
             )
             self._manuscript_lines.append(
                 attr.evolve(

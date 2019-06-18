@@ -55,7 +55,6 @@ MANUSCRIPT_DTO_SCHEMA = {
                  'references']
 }
 
-
 MANUSCRIPT_LINE_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
@@ -77,7 +76,6 @@ MANUSCRIPT_LINE_DTO_SCHEMA = {
     'required': ['manuscriptId', 'labels', 'number', 'atf']
 }
 
-
 LINE_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
@@ -94,7 +92,6 @@ LINE_DTO_SCHEMA = {
     },
     'required': ['number', 'reconstruction', 'manuscripts']
 }
-
 
 CHAPTER_DTO_SCHEMA = {
     'type': 'object',
@@ -130,7 +127,6 @@ CHAPTER_DTO_SCHEMA = {
                  'lines']
 }
 
-
 TEXT_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
@@ -161,7 +157,6 @@ TEXT_DTO_SCHEMA = {
     'required': ['category', 'index', 'name', 'numberOfVerses',
                  'approximateVerses', 'chapters']
 }
-
 
 ALIGNMENT_DTO_SCHEMA = {
     'type': 'object',
@@ -215,7 +210,6 @@ def serialize_public_text(text: Text):
 
 
 class TextsResource:
-
     auth = {
         'exempt_methods': ['GET']
     }
@@ -286,7 +280,8 @@ class AlignmentResource:
                 chapter_index: str) -> None:
         self._corpus.update_alignment(create_text_id(category, index),
                                       create_chapter_index(chapter_index),
-                                      Alignment.of(req.media['alignment']),
+                                      Alignment.from_dict(
+                                          req.media['alignment']),
                                       req.context['user'])
         updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)
