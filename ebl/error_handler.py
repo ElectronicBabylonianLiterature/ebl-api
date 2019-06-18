@@ -2,6 +2,7 @@ import logging
 
 import falcon
 
+from ebl.corpus.alignment import AlignmentError
 from ebl.dispatcher import DispatchError
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.text.lemmatization import LemmatizationError
@@ -30,6 +31,7 @@ def duplicate_error(ex, _req, _resp, _params):
 
 def set_up(api):
     api.add_error_handler(Exception, unexpected_error)
+    api.add_error_handler(AlignmentError, unprocessable_entity)
     api.add_error_handler(DispatchError, unprocessable_entity)
     api.add_error_handler(LemmatizationError, unprocessable_entity)
     api.add_error_handler(NotFoundError, not_found_error)

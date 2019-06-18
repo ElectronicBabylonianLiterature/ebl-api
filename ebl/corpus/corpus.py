@@ -7,6 +7,7 @@ from ebl.corpus.text_hydrator import TextHydrator
 from ebl.corpus.text_validator import TextValidator
 from ebl.corpus.mongo_serializer import serialize
 from ebl.corpus.text import Text, TextId
+from ebl.errors import NotFoundError
 
 COLLECTION = 'texts'
 
@@ -71,12 +72,14 @@ class Corpus:
                          alignment: Alignment,
                          user):
         old_text = self._repository.find(id_)
-
-        updater = AlignmentUpdater(chapter_index, alignment)
-        old_text.accept(updater)
-        updated_text = updater.get_text()
-        self._create_changelog(old_text, updated_text, user)
-        self._repository.update(id_, updated_text)
+        if chapter_index < len(old_text.chapters):
+            updater = AlignmentUpdater(chapter_index, alignment)
+            old_text.accept(updater)
+            updated_text = updater.get_text()
+            self._create_changelog(old_text, updated_text, user)
+            self._repository.update(id_, updated_text)
+        else:
+            raise NotFoundError(f'Chapter {chapter_index} not found.')
 
     def _validate_text(self, text: Text) -> None:
         text.accept(TextValidator(self._bibliography, self._sign_list))
