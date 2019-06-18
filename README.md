@@ -78,7 +78,7 @@ python -m ebl.fragmentarium.update_signs
 
 ## Type hints
 
-Currectly, it is not mandatory to use type hints, but we are experimenting with them in the domain model.
+It is not mandatory to use type hints, but try to use them whenever possible, especially in the domain model.
 
 Type checks can be run with `mypy`:
 ```
@@ -87,4 +87,5 @@ pipenv run mypy -p ebl
 
 ## Acknowledgements
 
-CSL-JSON schema is based on [citation-style-language/schema](https://github.com/citation-style-language/schema) Copyright (c) 2007-2018 Citation Style Language and contributors. Licensed under MIT License.
+CSL-JSON schema is based on [citation-style-language/schema](https://github.com/citation-style-language/schema)
+Copyright (c) 2007-2018 Citation Style Language and contributors. Licensed under MIT License.
