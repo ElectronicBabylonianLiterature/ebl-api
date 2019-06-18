@@ -207,18 +207,6 @@ def test_updating_alignment(corpus,
                             sign_list,
                             user,
                             when):
-    updated_text = attr.evolve(TEXT, chapters=(
-        attr.evolve(TEXT.chapters[0], lines=(
-            attr.evolve(TEXT.chapters[0].lines[0], manuscripts=(
-                attr.evolve(
-                    TEXT.chapters[0].lines[0].manuscripts[0],
-                    line=TextLine('1.', (Word('-ku]-nu-ši',
-                                              alignment=0,
-                                              has_apparatus_entry=True),))
-                ),
-            )),
-        )),
-    ))
     dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
         attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(
             attr.evolve(DEHYDRATED_TEXT.chapters[0].lines[0], manuscripts=(
@@ -231,7 +219,6 @@ def test_updating_alignment(corpus,
             )),
         )),
     ))
-    # expect_signs(sign_list, when)
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     (when(text_repository)
      .update(TEXT.id, dehydrated_updated_text)
@@ -239,11 +226,9 @@ def test_updating_alignment(corpus,
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**to_dict(TEXT), '_id': TEXT.id},
-        {**to_dict(updated_text), '_id': updated_text.id}
+        {**to_dict(DEHYDRATED_TEXT), '_id': DEHYDRATED_TEXT.id},
+        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
     ).thenReturn()
-    # expect_validate_references(bibliography, when)
-    # expect_bibliography(bibliography, when)
 
     alignment = Alignment((
         (
