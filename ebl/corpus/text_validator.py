@@ -1,9 +1,14 @@
-from ebl.corpus.text import Chapter, TextVisitor, Manuscript, Line, \
-    ManuscriptLine
+from collections import Counter
+
+from ebl.corpus.alignment import AlignmentError
+from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine, \
+    TextVisitor
 from ebl.errors import DataError
 from ebl.fragment.transliteration import Transliteration, TransliterationError
 from ebl.fragmentarium.validator import Validator
 from ebl.text.labels import LineNumberLabel
+from ebl.text.token import DocumentOrientedGloss, Erasure, LanguageShift, \
+    Token, TokenVisitor, Word
 
 
 def invalid_atf(chapter: Chapter,
@@ -17,6 +22,33 @@ def invalid_atf(chapter: Chapter,
         f' line {line_number.to_value()}'
         f' manuscript {siglum}.'
     )
+
+
+class AlignmentVisitor(TokenVisitor):
+
+    def __init__(self):
+        self.alignments = []
+
+    def visit_token(self, token: Token) -> None:
+        pass
+
+    def visit_language_shift(self, shift: LanguageShift) -> None:
+        pass
+
+    def visit_word(self, word: Word) -> None:
+        if word.alignment is not None:
+            self.alignments.append(word.alignment)
+
+    def visit_document_oriented_gloss(self,
+                                      gloss: DocumentOrientedGloss) -> None:
+        pass
+
+    def visit_erasure(self, erasure: Erasure):
+        pass
+
+    def validate(self):
+        if any(count > 1 for _, count in Counter(self.alignments).items()):
+            raise AlignmentError()
 
 
 class TextValidator(TextVisitor):
@@ -45,3 +77,8 @@ class TextValidator(TextVisitor):
             raise invalid_atf(self._chapter,
                               self._line.number,
                               manuscript_line.manuscript_id)
+
+        alignment_validator = AlignmentVisitor()
+        for token in manuscript_line.line.content:
+            token.accept(alignment_validator)
+        alignment_validator.validate()

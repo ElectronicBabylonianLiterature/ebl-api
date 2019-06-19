@@ -1,9 +1,26 @@
 import pytest
 
+from ebl.corpus.alignment import AlignmentToken, AlignmentError
 from ebl.dictionary.word import WordId
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import (DEFAULT_NORMALIZED, ErasureState, Token, Word)
+
+LEMMATIZABLE_TEST_WORDS = [
+    (Word('un'), True),
+    (Word('un', normalized=True), False),
+    (Word('un', language=Language.SUMERIAN), False),
+    (Word('un', language=Language.EMESAL), False),
+    (Word('un-x'), False),
+    (Word('X-un'), False),
+    (Word('un-'), False),
+    (Word('-un'), False),
+    (Word('un.'), False),
+    (Word('.un'), False),
+    (Word('un+'), False),
+    (Word('+un'), False),
+    (Word('un/ia'), False)
+]
 
 
 def test_default_normalized():
@@ -74,23 +91,14 @@ def test_word(language, normalized, unique_lemma):
     assert word != Token(value)
 
 
-@pytest.mark.parametrize("word,expected", [
-    (Word('un'), True),
-    (Word('un', normalized=True), False),
-    (Word('un', language=Language.SUMERIAN), False),
-    (Word('un', language=Language.EMESAL), False),
-    (Word('un-x'), False),
-    (Word('X-un'), False),
-    (Word('un-'), False),
-    (Word('-un'), False),
-    (Word('un.'), False),
-    (Word('.un'), False),
-    (Word('un+'), False),
-    (Word('+un'), False),
-    (Word('un/ia'), False)
-])
+@pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)
 def test_lemmatizable(word, expected):
     assert word.lemmatizable == expected
+
+
+@pytest.mark.parametrize("word,_", LEMMATIZABLE_TEST_WORDS)
+def test_alignable(word, _):
+    assert word.alignable == word.lemmatizable
 
 
 def test_set_language():
@@ -133,6 +141,37 @@ def test_set_unique_lemma_invalid(word, value):
     lemma = LemmatizationToken(value, (WordId('nu I'),))
     with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)
+
+
+def test_set_alignment():
+    word = Word('bu')
+    alignment = AlignmentToken('bu', 1, True)
+    expected = Word('bu', alignment=1, has_apparatus_entry=True)
+
+    assert word.set_alignment(alignment) == expected
+
+
+def test_set_alignment_empty():
+    word = Word('bu', Language.SUMERIAN)
+    alignment = AlignmentToken('bu', None, None)
+    expected = Word('bu', Language.SUMERIAN)
+
+    assert word.set_alignment(alignment) == expected
+
+
+@pytest.mark.parametrize("word,value", [
+    (Word('mu'), 'bu'),
+    (Word('bu', language=Language.SUMERIAN), 'bu'),
+    (Word('bu-x'), 'bu-x'),
+    (Word('X-bu'), 'X-bu'),
+    (Word('mu/bu'), 'mu/bu'),
+    (Word('-bu'), '-bu'),
+    (Word('bu-'), 'bu-')
+])
+def test_set_alignment_invalid(word, value):
+    alignment = AlignmentToken(value, 0, False)
+    with pytest.raises(AlignmentError):
+        word.set_alignment(alignment)
 
 
 @pytest.mark.parametrize("word,expected", [

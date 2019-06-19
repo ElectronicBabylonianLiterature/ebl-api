@@ -1,4 +1,4 @@
-from typing import Iterable, Sequence, Tuple
+from typing import Iterable, Sequence, Tuple, TypeVar, Callable, Type
 
 import attr
 import pydash
@@ -10,6 +10,8 @@ from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import Token
 from ebl.text.visitors import AtfVisitor, LanguageVisitor
 from ebl.text.labels import LineNumberLabel
+
+T = TypeVar('T')
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -29,29 +31,27 @@ class Line:
             self,
             lemmatization: Sequence[LemmatizationToken]
     ) -> 'Line':
-        if len(self.content) == len(lemmatization):
-            zipped = pydash.zip_(list(self.content), list(lemmatization))
-            content = tuple(
-                pair[0].set_unique_lemma(pair[1])
-                for pair in zipped
-            )
-            return attr.evolve(
-                self,
-                content=content
-            )
-        else:
-            raise LemmatizationError()
+        def updater(token, lemmatization_token):
+            return token.set_unique_lemma(lemmatization_token)
+
+        return self._update_tokens(lemmatization, updater, LemmatizationError)
 
     def update_alignment(
             self,
             alignment: Sequence[AlignmentToken]
     ) -> 'Line':
-        if len(self.content) == len(alignment):
-            zipped = pydash.zip_(list(self.content), list(alignment))
+        def updater(token, alignment_token):
+            return token.set_alignment(alignment_token)
+
+        return self._update_tokens(alignment, updater, AlignmentError)
+
+    def _update_tokens(self, updates: Sequence[T],
+                       updater: Callable[[Token, T], Token],
+                       error_class: Type[Exception]) -> 'Line':
+        if len(self.content) == len(updates):
+            zipped = pydash.zip_(list(self.content), list(updates))
             content = tuple(
-                attr.evolve(pair[0],
-                            alignment=pair[1].alignment,
-                            has_apparatus_entry=pair[1].has_apparatus_entry)
+                updater(pair[0], pair[1])
                 for pair in zipped
             )
             return attr.evolve(
@@ -59,7 +59,7 @@ class Line:
                 content=content
             )
         else:
-            raise AlignmentError()
+            raise error_class()
 
     def to_dict(self) -> dict:
         return {
@@ -76,7 +76,7 @@ class ControlLine(Line):
 
     @classmethod
     def of_single(cls, prefix: str, content: Token):
-        return cls(prefix, (content, ))
+        return cls(prefix, (content,))
 
     def to_dict(self) -> dict:
         return {

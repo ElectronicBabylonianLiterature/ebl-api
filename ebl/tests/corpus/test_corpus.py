@@ -43,9 +43,9 @@ def expect_bibliography(bibliography, when):
                  .thenReturn(reference.document))
 
 
-def expect_validate_references(bibliography, when):
+def expect_validate_references(bibliography, when, text=TEXT):
     (pydash
-     .chain(TEXT.chapters)
+     .chain(text.chapters)
      .flat_map(lambda chapter: chapter.manuscripts)
      .map(lambda manuscript: manuscript.references)
      .for_each(lambda references:
@@ -212,13 +212,15 @@ def test_updating_alignment(corpus,
             attr.evolve(DEHYDRATED_TEXT.chapters[0].lines[0], manuscripts=(
                 attr.evolve(
                     DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
-                    line=TextLine('1.', (Word('-ku]-nu-ši',
+                    line=TextLine('1.', (Word('ku]-nu-ši',
                                               alignment=0,
                                               has_apparatus_entry=True),))
                 ),
             )),
         )),
     ))
+    expect_signs(sign_list, when)
+    expect_validate_references(bibliography, when, DEHYDRATED_TEXT)
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     (when(text_repository)
      .update(TEXT.id, dehydrated_updated_text)
@@ -232,7 +234,7 @@ def test_updating_alignment(corpus,
 
     alignment = Alignment((
         (
-            (AlignmentToken('-ku]-nu-ši', 0, True),),
+            (AlignmentToken('ku]-nu-ši', 0, True),),
         ),
     ))
     corpus.update_alignment(TEXT.id, 0, alignment, user)
@@ -241,8 +243,8 @@ def test_updating_alignment(corpus,
 @pytest.mark.parametrize('alignment', [
     Alignment((
             (
-                    (AlignmentToken('-ku]-nu-ši', 0, True),
-                     AlignmentToken('-ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0, True),
+                     AlignmentToken('ku]-nu-ši', 0, True),),
             ),
     )),
     Alignment((
@@ -252,8 +254,8 @@ def test_updating_alignment(corpus,
     )),
     Alignment((
             (
-                    (AlignmentToken('-ku]-nu-ši', 0, True),),
-                    (AlignmentToken('-ku]-nu-ši', 0, True),)
+                    (AlignmentToken('ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0, True),)
             ),
     )),
     Alignment((
@@ -261,13 +263,18 @@ def test_updating_alignment(corpus,
     )),
     Alignment((
             (
-                    (AlignmentToken('-ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0, True),),
             ),
             (
-                    (AlignmentToken('-ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0, True),),
             )
     )),
     Alignment(tuple()),
+    Alignment((
+        (
+            (AlignmentToken('invalid value', 0, True),),
+        ),
+    ))
 
 ])
 def test_invalid_alignment(alignment,

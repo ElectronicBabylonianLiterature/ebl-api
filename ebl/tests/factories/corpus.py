@@ -49,7 +49,7 @@ class ManuscriptLineFactory(factory.Factory):
         ColumnLabel.from_label('iii', [Status.COLLATION, Status.CORRECTION])
     )
     line = TextLine('1.', (
-        Word('-ku]-nu-ši'),
+        Word('ku]-nu-ši'),
     ))
 
 

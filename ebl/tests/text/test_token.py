@@ -1,5 +1,6 @@
 import pytest
 
+from ebl.corpus.alignment import AlignmentToken, AlignmentError
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
@@ -106,6 +107,26 @@ def test_set_unique_lemma_with_lemma(token):
 def test_set_unique_lemma_no_lemma(token):
     lemma = LemmatizationToken(token.value)
     assert token.set_unique_lemma(lemma) == token
+
+
+@pytest.mark.parametrize("token", TOKENS)
+def test_set_alignment_incompatible(token):
+    alignment = AlignmentToken('other-value', None, None)
+    with pytest.raises(AlignmentError):
+        token.set_alignment(alignment)
+
+
+@pytest.mark.parametrize("token", TOKENS)
+def test_set_non_empty_alignment(token):
+    alignment = AlignmentToken(token.value, 0, False)
+    with pytest.raises(AlignmentError):
+        token.set_alignment(alignment)
+
+
+@pytest.mark.parametrize("token", TOKENS)
+def test_set_alignment_no_alignment(token):
+    alignment = AlignmentToken(token.value, None, None)
+    assert token.set_alignment(alignment) == token
 
 
 def test_erasure():

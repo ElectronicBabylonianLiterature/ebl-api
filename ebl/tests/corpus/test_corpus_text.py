@@ -37,7 +37,7 @@ REFERENCES = (ReferenceFactory.build(), )
 LINE_NUMBER = LineNumberLabel('1')
 LINE_RECONSTRUCTION = (AkkadianWord((StringPart('buāru'),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE), )
-MANUSCRIPT_TEXT = TextLine('1.', (Word('-ku]-nu-ši'),))
+MANUSCRIPT_TEXT = TextLine('1.', (Word('ku]-nu-ši'),))
 
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (

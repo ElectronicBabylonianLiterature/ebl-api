@@ -61,9 +61,7 @@ class Corpus:
 
     def update(self, id_: TextId, text: Text, user) -> Text:
         old_text = self._repository.find(id_)
-        self._validate_text(text)
-        self._create_changelog(old_text, text, user)
-        updated_text = self._repository.update(id_, text)
+        updated_text = self._update(id_, old_text, text, user)
         return self._hydrate_references(updated_text)
 
     def update_alignment(self,
@@ -76,8 +74,7 @@ class Corpus:
             updater = AlignmentUpdater(chapter_index, alignment)
             old_text.accept(updater)
             updated_text = updater.get_text()
-            self._create_changelog(old_text, updated_text, user)
-            self._repository.update(id_, updated_text)
+            self._update(id_, old_text, updated_text, user)
         else:
             raise NotFoundError(f'Chapter {chapter_index} not found.')
 
@@ -98,3 +95,9 @@ class Corpus:
             old_dict,
             new_dict
         )
+
+    def _update(self, id_, old_text, text, user):
+        self._validate_text(text)
+        self._create_changelog(old_text, text, user)
+        updated_text = self._repository.update(id_, text)
+        return updated_text

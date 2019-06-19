@@ -7,6 +7,7 @@ import attr
 import pydash
 
 import ebl.text.atf
+from ebl.corpus.alignment import AlignmentToken, AlignmentError
 from ebl.dictionary.word import WordId
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
@@ -36,6 +37,10 @@ class Token:
     def lemmatizable(self) -> bool:
         return False
 
+    @property
+    def alignable(self) -> bool:
+        return self.lemmatizable
+
     def set_unique_lemma(
             self,
             lemma: LemmatizationToken
@@ -44,6 +49,16 @@ class Token:
             return self
         else:
             raise LemmatizationError()
+
+    def set_alignment(self, alignment: AlignmentToken):
+        if (
+                alignment.alignment is None
+                and alignment.has_apparatus_entry is None
+                and alignment.value == self.value
+        ):
+            return self
+        else:
+            raise AlignmentError()
 
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_token(self)
@@ -72,13 +87,13 @@ class Word(Token):
             ebl.text.atf.UNIDENTIFIED_SIGN
         ]
         return (
-            self.language.lemmatizable and
-            not self.normalized and
-            self.erasure is not ErasureState.ERASED and
-            all((char not in self.value)
-                for char
-                in non_lemmatizable_chars) and
-            not any(self.partial)
+                self.language.lemmatizable and
+                not self.normalized and
+                self.erasure is not ErasureState.ERASED and
+                all((char not in self.value)
+                    for char
+                    in non_lemmatizable_chars) and
+                not any(self.partial)
         )
 
     @property
@@ -99,7 +114,7 @@ class Word(Token):
     def set_language(self, language: Language, normalized: bool) -> 'Word':
         return attr.evolve(self, language=language, normalized=normalized)
 
-    def set_erasure(self, erasure: ErasureState,) -> 'Word':
+    def set_erasure(self, erasure: ErasureState, ) -> 'Word':
         return attr.evolve(self, erasure=erasure)
 
     def set_unique_lemma(
@@ -118,10 +133,25 @@ class Word(Token):
     def is_compatible(self, lemma: LemmatizationToken) -> bool:
         value_is_compatible = self.value == lemma.value
         lemma_is_compatible = (
-            (self.lemmatizable and lemma.unique_lemma is not None) or
-            lemma.unique_lemma in [tuple(), None]
+                (self.lemmatizable and lemma.unique_lemma is not None) or
+                lemma.unique_lemma in [tuple(), None]
         )
         return value_is_compatible and lemma_is_compatible
+
+    def set_alignment(self, alignment: AlignmentToken):
+        if (
+                self.value == alignment.value
+                and (self.alignable or (
+                     alignment.alignment is None
+                     and alignment.has_apparatus_entry is None))
+        ):
+            return attr.evolve(
+                self,
+                alignment=alignment.alignment,
+                has_apparatus_entry=alignment.has_apparatus_entry
+            )
+        else:
+            raise AlignmentError()
 
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_word(self)
