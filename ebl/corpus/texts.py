@@ -1,13 +1,11 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 
-from ebl.corpus.alignment import Alignment
-from ebl.corpus.api_serializer import deserialize, serialize, ApiSerializer
+from ebl.corpus.api_serializer import deserialize, serialize
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
-from ebl.corpus.text import (TextId, Text)
 from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
     PeriodModifier, Period, Stage
-from ebl.errors import NotFoundError
+from ebl.corpus.text_utils import create_text_id, serialize_public_text
 from ebl.require_scope import require_scope
 
 MANUSCRIPT_DTO_SCHEMA = {
@@ -158,56 +156,6 @@ TEXT_DTO_SCHEMA = {
                  'approximateVerses', 'chapters']
 }
 
-ALIGNMENT_DTO_SCHEMA = {
-    'type': 'object',
-    'properties': {
-        'alignment': {
-            'type': 'array',
-            'items': {
-                'type': 'array',
-                'items': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'object',
-                        'properties': {
-                            'value': {
-                                'type': 'string'
-                            },
-                            'alignment': {
-                                'type': ['integer', 'null'],
-                                'minimum': 0
-                            },
-                            'hasApparatusEntry': {
-                                'type': ['boolean', 'null']
-                            },
-                        },
-                        'required': ['value']
-                    }
-                }
-            }
-        }
-    },
-    'required': ['alignment']
-}
-
-
-def create_text_id(category: str, index: str) -> TextId:
-    try:
-        return TextId(int(category), int(index))
-    except ValueError:
-        raise NotFoundError(f'Text {category}.{index} not found.')
-
-
-def create_chapter_index(chapter_index: str) -> int:
-    try:
-        return int(chapter_index)
-    except ValueError:
-        raise NotFoundError(f'Chapter {chapter_index} not found.')
-
-
-def serialize_public_text(text: Text):
-    return ApiSerializer.serialize_public(text)
-
 
 class TextsResource:
     auth = {
@@ -262,26 +210,4 @@ class TextResource:
             req.context['user']
         )
         updated_text = self._corpus.find(text.id)
-        resp.media = serialize(updated_text)
-
-
-class AlignmentResource:
-
-    def __init__(self, corpus):
-        self._corpus = corpus
-
-    @falcon.before(require_scope, 'write:texts')
-    @validate(ALIGNMENT_DTO_SCHEMA)
-    def on_post(self,
-                req: falcon.Request,
-                resp: falcon.Response,
-                category: str,
-                index: str,
-                chapter_index: str) -> None:
-        self._corpus.update_alignment(create_text_id(category, index),
-                                      create_chapter_index(chapter_index),
-                                      Alignment.from_dict(
-                                          req.media['alignment']),
-                                      req.context['user'])
-        updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)
