@@ -51,15 +51,16 @@ class AlignmentUpdater(TextVisitor):
         self._chapters = []
 
     def visit_chapter(self, chapter: Chapter) -> None:
-        if self._alignment.get_number_of_lines() == len(chapter.lines):
-            self._chapters.append(
-                attr.evolve(chapter, lines=tuple(self._lines))
-                if self.chapter_index == self._chapter_index_to_align
-                else chapter
-            )
-            self._lines = []
+        if len(self._chapters) == self._chapter_index_to_align:
+            if self._alignment.get_number_of_lines() == len(chapter.lines):
+                self._chapters.append(
+                    attr.evolve(chapter, lines=tuple(self._lines))
+                )
+            else:
+                raise AlignmentError()
         else:
-            raise AlignmentError()
+            self._chapters.append(chapter)
+        self._lines = []
 
     def visit_line(self, line: Line) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
