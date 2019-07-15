@@ -111,21 +111,21 @@ def test_set_unique_lemma_no_lemma(token):
 
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_alignment_incompatible(token):
-    alignment = AlignmentToken('other-value', None, None)
+    alignment = AlignmentToken('other-value', None)
     with pytest.raises(AlignmentError):
         token.set_alignment(alignment)
 
 
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_non_empty_alignment(token):
-    alignment = AlignmentToken(token.value, 0, False)
+    alignment = AlignmentToken(token.value, 0)
     with pytest.raises(AlignmentError):
         token.set_alignment(alignment)
 
 
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_alignment_no_alignment(token):
-    alignment = AlignmentToken(token.value, None, None)
+    alignment = AlignmentToken(token.value, None)
     assert token.set_alignment(alignment) == token
 
 

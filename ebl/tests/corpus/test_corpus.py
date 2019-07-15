@@ -212,9 +212,7 @@ def test_updating_alignment(corpus,
             attr.evolve(DEHYDRATED_TEXT.chapters[0].lines[0], manuscripts=(
                 attr.evolve(
                     DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
-                    line=TextLine('1.', (Word('ku]-nu-ši',
-                                              alignment=0,
-                                              has_apparatus_entry=True),))
+                    line=TextLine('1.', (Word('ku]-nu-ši', alignment=0),))
                 ),
             )),
         )),
@@ -234,7 +232,7 @@ def test_updating_alignment(corpus,
 
     alignment = Alignment((
         (
-            (AlignmentToken('ku]-nu-ši', 0, True),),
+            (AlignmentToken('ku]-nu-ši', 0),),
         ),
     ))
     corpus.update_alignment(TEXT.id, 0, alignment, user)
@@ -243,8 +241,8 @@ def test_updating_alignment(corpus,
 @pytest.mark.parametrize('alignment', [
     Alignment((
             (
-                    (AlignmentToken('ku]-nu-ši', 0, True),
-                     AlignmentToken('ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0),
+                     AlignmentToken('ku]-nu-ši', 0),),
             ),
     )),
     Alignment((
@@ -254,8 +252,8 @@ def test_updating_alignment(corpus,
     )),
     Alignment((
             (
-                    (AlignmentToken('ku]-nu-ši', 0, True),),
-                    (AlignmentToken('ku]-nu-ši', 0, True),)
+                    (AlignmentToken('ku]-nu-ši', 0),),
+                    (AlignmentToken('ku]-nu-ši', 0),)
             ),
     )),
     Alignment((
@@ -263,16 +261,16 @@ def test_updating_alignment(corpus,
     )),
     Alignment((
             (
-                    (AlignmentToken('ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0),),
             ),
             (
-                    (AlignmentToken('ku]-nu-ši', 0, True),),
+                    (AlignmentToken('ku]-nu-ši', 0),),
             )
     )),
     Alignment(tuple()),
     Alignment((
         (
-            (AlignmentToken('invalid value', 0, True),),
+            (AlignmentToken('invalid value', 0),),
         ),
     ))
 

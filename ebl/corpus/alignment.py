@@ -12,25 +12,12 @@ class AlignmentError(Exception):
 class AlignmentToken:
     value: str
     alignment: Optional[int]
-    has_apparatus_entry: Optional[bool] = attr.ib()
-
-    @has_apparatus_entry.validator
-    def _check_has_apparatus_entry(self, attribute, value):
-        if value is None and self.alignment is not None:
-            raise ValueError(
-                'has_apparatus_entry cannot be None if alignment is not None.'
-            )
-        elif value is not None and self.alignment is None:
-            raise ValueError(
-                'has_apparatus_entry must be None if alignment is None.'
-            )
 
     @staticmethod
     def from_dict(data):
         return AlignmentToken(
             data['value'],
             data.get('alignment'),
-            data.get('hasApparatusEntry')
         )
 
 

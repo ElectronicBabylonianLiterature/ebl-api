@@ -53,7 +53,6 @@ class Token:
     def set_alignment(self, alignment: AlignmentToken):
         if (
                 alignment.alignment is None
-                and alignment.has_apparatus_entry is None
                 and alignment.value == self.value
         ):
             return self
@@ -77,7 +76,6 @@ class Word(Token):
     unique_lemma: Tuple[WordId, ...] = tuple()
     erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
-    has_apparatus_entry: Optional[bool] = None
 
     @property
     def lemmatizable(self) -> bool:
@@ -141,14 +139,11 @@ class Word(Token):
     def set_alignment(self, alignment: AlignmentToken):
         if (
                 self.value == alignment.value
-                and (self.alignable or (
-                     alignment.alignment is None
-                     and alignment.has_apparatus_entry is None))
+                and (self.alignable or alignment.alignment is None)
         ):
             return attr.evolve(
                 self,
-                alignment=alignment.alignment,
-                has_apparatus_entry=alignment.has_apparatus_entry
+                alignment=alignment.alignment
             )
         else:
             raise AlignmentError()
@@ -165,8 +160,7 @@ class Word(Token):
             'language': self.language.name,
             'lemmatizable': self.lemmatizable,
             'erasure': self.erasure.name,
-            'alignment': self.alignment,
-            'hasApparatusEntry': self.has_apparatus_entry
+            'alignment': self.alignment
         }, lambda value: value is None)
 
 

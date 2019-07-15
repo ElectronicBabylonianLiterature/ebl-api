@@ -16,7 +16,6 @@ def test_of_value():
     assert lone_determinative.unique_lemma == tuple()
     assert lone_determinative.erasure == ErasureState.NONE
     assert lone_determinative.alignment is None
-    assert lone_determinative.has_apparatus_entry is None
 
 
 @pytest.mark.parametrize("language,normalized,partial", [

@@ -17,8 +17,7 @@ DTO = {
             [
                 {
                     'value': 'ku]-nu-ši',
-                    'alignment': 0,
-                    'hasApparatusEntry': True
+                    'alignment': 0
                 }
             ]
         ]
@@ -61,9 +60,7 @@ def test_updating_alignment(client, bibliography, sign_list, signs):
             attr.evolve(text.chapters[0].lines[0], manuscripts=(
                 attr.evolve(
                     text.chapters[0].lines[0].manuscripts[0],
-                    line=TextLine('1.', (Word('ku]-nu-ši',
-                                              alignment=0,
-                                              has_apparatus_entry=True),))
+                    line=TextLine('1.', (Word('ku]-nu-ši', alignment=0),))
                 ),
             )),
         )),

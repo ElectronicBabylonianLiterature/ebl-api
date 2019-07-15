@@ -153,7 +153,7 @@ def test_merge(old, new, expected):
     [
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('nu', unique_lemma=(WordId('nu I'),)),
-            Word('nu', alignment=1, has_apparatus_entry=False),
+            Word('nu', alignment=1),
             LanguageShift('%sux'),
             LoneDeterminative(
                 '{nu}',

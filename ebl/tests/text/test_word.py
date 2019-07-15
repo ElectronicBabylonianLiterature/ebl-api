@@ -38,7 +38,6 @@ def test_defaults():
     assert word.unique_lemma == tuple()
     assert word.erasure == ErasureState.NONE
     assert word.alignment is None
-    assert word.has_apparatus_entry is None
 
 
 @pytest.mark.parametrize("language,normalized,unique_lemma", [
@@ -145,15 +144,15 @@ def test_set_unique_lemma_invalid(word, value):
 
 def test_set_alignment():
     word = Word('bu')
-    alignment = AlignmentToken('bu', 1, True)
-    expected = Word('bu', alignment=1, has_apparatus_entry=True)
+    alignment = AlignmentToken('bu', 1)
+    expected = Word('bu', alignment=1)
 
     assert word.set_alignment(alignment) == expected
 
 
 def test_set_alignment_empty():
     word = Word('bu', Language.SUMERIAN)
-    alignment = AlignmentToken('bu', None, None)
+    alignment = AlignmentToken('bu', None)
     expected = Word('bu', Language.SUMERIAN)
 
     assert word.set_alignment(alignment) == expected
@@ -169,7 +168,7 @@ def test_set_alignment_empty():
     (Word('bu-'), 'bu-')
 ])
 def test_set_alignment_invalid(word, value):
-    alignment = AlignmentToken(value, 0, False)
+    alignment = AlignmentToken(value, 0)
     with pytest.raises(AlignmentError):
         word.set_alignment(alignment)
 

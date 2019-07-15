@@ -25,10 +25,7 @@ ALIGNMENT_DTO_SCHEMA = {
                             'alignment': {
                                 'type': ['integer', 'null'],
                                 'minimum': 0
-                            },
-                            'hasApparatusEntry': {
-                                'type': ['boolean', 'null']
-                            },
+                            }
                         },
                         'required': ['value']
                     }
