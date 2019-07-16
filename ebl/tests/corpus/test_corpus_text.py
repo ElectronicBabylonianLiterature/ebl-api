@@ -14,6 +14,7 @@ from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
 from ebl.text.token import Word
 
+
 CATEGORY = 1
 INDEX = 2
 NAME = 'Palm & Vine'
@@ -39,6 +40,8 @@ LINE_RECONSTRUCTION = (AkkadianWord((StringPart('buāru'),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE), )
 MANUSCRIPT_TEXT = TextLine('1.', (Word('ku]-nu-ši'),))
 
+LINE = Line(LINE_NUMBER, LINE_RECONSTRUCTION,
+            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),))
 
 TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
     Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER, (
@@ -55,9 +58,7 @@ TEXT = Text(CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (
             REFERENCES
         ),
     ), (
-        Line(LINE_NUMBER, LINE_RECONSTRUCTION, (
-            ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
-        )),
+        LINE,
     )),
 ))
 

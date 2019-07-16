@@ -12,6 +12,7 @@ from ebl.text.visitors import AtfVisitor, LanguageVisitor
 from ebl.text.labels import LineNumberLabel
 
 T = TypeVar('T')
+L = TypeVar('L', 'TextLine', 'Line')
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -67,7 +68,7 @@ class Line:
             'content': [token.to_dict() for token in self.content]
         }
 
-    def merge(self, other: 'Line') -> 'Line':
+    def merge(self, other: Type['Line']) -> Type['Line']:
         return other
 
 
@@ -114,7 +115,7 @@ class TextLine(Line):
             'type': 'TextLine'
         }
 
-    def merge(self, other: 'Line') -> 'Line':
+    def merge(self, other: L) -> L:
         def merge_tokens():
             def map_(token):
                 return f'{type(token)}⋮{token.value}'

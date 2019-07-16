@@ -66,6 +66,10 @@ class ManuscriptLine:
     def accept(self, visitor: 'TextVisitor') -> None:
         visitor.visit_manuscript_line(self)
 
+    def merge(self, other: 'ManuscriptLine') -> 'ManuscriptLine':
+        merged_line = self.line.merge(other.line)
+        return attr.evolve(other, line=merged_line)
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
