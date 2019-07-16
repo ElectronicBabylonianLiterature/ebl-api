@@ -68,7 +68,7 @@ class Line:
             'content': [token.to_dict() for token in self.content]
         }
 
-    def merge(self, other: Type['Line']) -> Type['Line']:
+    def merge(self, other: 'Line') -> 'Line':
         return other
 
 
