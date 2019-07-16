@@ -1,9 +1,10 @@
 import pytest
 
-from ebl.corpus.text import ManuscriptLine, Line
+from ebl.corpus.enums import Classification, Stage
+from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.word import WordId
 from ebl.text.atf import Surface
-from ebl.text.labels import SurfaceLabel, ColumnLabel, LineNumberLabel
+from ebl.text.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, StringPart
 from ebl.text.token import Word
@@ -99,7 +100,57 @@ LINE = Line(LINE_NUMBER, LINE_RECONSTRUCTION,
                  (ManuscriptLine(MANUSCRIPT_ID, LABELS,
                                  TEXT_LINE.merge(NEW_TEXT_LINE)),
                   ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE)))
-    ),
+    )
 ])
 def test_merge_line(old, new, expected):
+    assert old.merge(new) == expected
+
+
+CLASSIFICATION = Classification.ANCIENT
+STAGE = Stage.NEO_BABYLONIAN
+VERSION = 'A'
+CHAPTER_NAME = 'I'
+ORDER = 1
+MANUSCRIPT = Manuscript(MANUSCRIPT_ID)
+CHAPTER = Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
+                  (MANUSCRIPT,), (LINE,))
+
+NEW_CLASSIFICATION = Classification.MODERN
+NEW_STAGE = Stage.MIDDLE_ASSYRIAN
+NEW_VERSION = 'B'
+NEW_CHAPTER_NAME = 'II'
+NEW_ORDER = 2
+NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator='b')
+NEW_LINE = Line(LINE_NUMBER, LINE_RECONSTRUCTION,
+                (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),))
+
+
+@pytest.mark.parametrize('old,new,expected', [
+    (
+            CHAPTER,
+            CHAPTER,
+            CHAPTER
+    ),
+    (
+            Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
+                    (MANUSCRIPT,), (LINE,)),
+            Chapter(NEW_CLASSIFICATION, NEW_STAGE, NEW_VERSION,
+                    NEW_CHAPTER_NAME, NEW_ORDER, (MANUSCRIPT, NEW_MANUSCRIPT),
+                    (LINE,)),
+            Chapter(NEW_CLASSIFICATION, NEW_STAGE, NEW_VERSION,
+                    NEW_CHAPTER_NAME, NEW_ORDER, (MANUSCRIPT, NEW_MANUSCRIPT),
+                    (LINE,))
+    ),
+    (
+            Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
+                    (MANUSCRIPT,), (Line(LineNumberLabel("1'"), tuple(),
+                                         (ManuscriptLine(MANUSCRIPT_ID, LABELS,
+                                                         TEXT_LINE),)), LINE)),
+            Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
+                    (MANUSCRIPT,), (NEW_LINE, NEW_LINE)),
+            Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
+                    (MANUSCRIPT,), (LINE.merge(NEW_LINE), NEW_LINE)),
+    )
+])
+def test_merge_chapter(old, new, expected):
     assert old.merge(new) == expected

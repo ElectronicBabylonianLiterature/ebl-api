@@ -75,6 +75,12 @@ class ManuscriptLine:
         return attr.evolve(self, line=self.line.strip_alignments())
 
 
+def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
+    labels = ' '.join(label.to_atf() for label in manuscript_line.labels)
+    manuscript_id = manuscript_line.manuscript_id
+    return f'{manuscript_id}⋮{labels}⋮{manuscript_line.line.atf}'
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: LineNumberLabel
@@ -101,18 +107,12 @@ class Line:
             visitor.visit_line(self)
 
     def merge(self, other: 'Line') -> 'Line':
-        def map_(manuscript_line: ManuscriptLine) -> str:
-            labels = ' '.join(
-                label.to_atf() for label in manuscript_line.labels)
-            manuscript_id = manuscript_line.manuscript_id
-            return f'{manuscript_id}⋮{labels}⋮{manuscript_line.line.atf}'
-
         def inner_merge(old: ManuscriptLine,
                         new: ManuscriptLine) -> ManuscriptLine:
             return old.merge(new)
 
         merged_manuscripts = Merger(
-            map_,
+            map_manuscript_line,
             inner_merge
         ).merge(
             self.manuscripts, other.manuscripts
@@ -129,6 +129,15 @@ class Line:
             for manuscript_line in self.manuscripts
         )
         return attr.evolve(self, manuscripts=stripped_manuscripts)
+
+
+def map_line(line: Line) -> str:
+    number = line.number.to_atf()
+    reconstruction = ' '.join(str(token) for token in line.reconstruction)
+    lines = '⋮⋮'.join(
+        map_manuscript_line(manuscript_line) for manuscript_line in
+        line.manuscripts)
+    return f'{number}⋮⋮{reconstruction}⋮⋮{lines}'
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -156,6 +165,18 @@ class Chapter:
 
         if visitor.is_post_order:
             visitor.visit_chapter(self)
+
+    def merge(self, other: 'Chapter') -> 'Chapter':
+        def inner_merge(old: Line, new: Line) -> Line:
+            return old.merge(new)
+
+        merged_lines = Merger(
+            map_line,
+            inner_merge
+        ).merge(
+            self.lines, other.lines
+        )
+        return attr.evolve(other, lines=tuple(merged_lines))
 
 
 @attr.s(auto_attribs=True, frozen=True)
