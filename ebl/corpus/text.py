@@ -8,6 +8,7 @@ from ebl.bibliography.reference import Reference
 from ebl.corpus.enums import Classification, ManuscriptType, Period, \
     PeriodModifier, Provenance, Stage
 from ebl.corpus.label_validator import LabelValidator
+from ebl.merger import Merger
 from ebl.text.labels import Label, LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import ReconstructionToken, \
@@ -70,11 +71,14 @@ class ManuscriptLine:
         merged_line = self.line.merge(other.line)
         return attr.evolve(other, line=merged_line)
 
+    def strip_alignments(self) -> 'ManuscriptLine':
+        return attr.evolve(self, line=self.line.strip_alignments())
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: LineNumberLabel
-    reconstruction: Tuple[ReconstructionToken, ...] =\
+    reconstruction: Tuple[ReconstructionToken, ...] = \
         attr.ib(default=tuple())
     manuscripts: Tuple[ManuscriptLine, ...] = tuple()
 
@@ -95,6 +99,36 @@ class Line:
 
         if visitor.is_post_order:
             visitor.visit_line(self)
+
+    def merge(self, other: 'Line') -> 'Line':
+        def map_(manuscript_line: ManuscriptLine) -> str:
+            labels = ' '.join(
+                label.to_atf() for label in manuscript_line.labels)
+            manuscript_id = manuscript_line.manuscript_id
+            return f'{manuscript_id}⋮{labels}⋮{manuscript_line.line.atf}'
+
+        def inner_merge(old: ManuscriptLine,
+                        new: ManuscriptLine) -> ManuscriptLine:
+            return old.merge(new)
+
+        merged_manuscripts = Merger(
+            map_,
+            inner_merge
+        ).merge(
+            self.manuscripts, other.manuscripts
+        )
+        merged = attr.evolve(other, manuscripts=tuple(merged_manuscripts))
+
+        return (merged.strip_alignments()
+                if self.reconstruction != other.reconstruction
+                else merged)
+
+    def strip_alignments(self) -> 'Line':
+        stripped_manuscripts = tuple(
+            manuscript_line.strip_alignments()
+            for manuscript_line in self.manuscripts
+        )
+        return attr.evolve(self, manuscripts=stripped_manuscripts)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -150,7 +184,6 @@ class Text:
 
 
 class TextVisitor(ReconstructionTokenVisitor):
-
     class Order(Enum):
         PRE = auto()
         POST = auto()

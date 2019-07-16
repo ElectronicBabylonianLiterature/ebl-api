@@ -59,6 +59,9 @@ class Token:
         else:
             raise AlignmentError()
 
+    def strip_alignment(self):
+        return self
+
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_token(self)
 
@@ -147,6 +150,9 @@ class Word(Token):
             )
         else:
             raise AlignmentError()
+
+    def strip_alignment(self):
+        return attr.evolve(self, alignment=None)
 
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_word(self)

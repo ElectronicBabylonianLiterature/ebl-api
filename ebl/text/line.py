@@ -71,6 +71,9 @@ class Line:
     def merge(self, other: 'Line') -> 'Line':
         return other
 
+    def strip_alignments(self):
+        return self
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
@@ -127,6 +130,13 @@ class TextLine(Line):
             if isinstance(other, TextLine)
             else other
         )
+
+    def strip_alignments(self) -> 'TextLine':
+        stripped_content = tuple(
+            token.strip_alignment()
+            for token in self.content
+        )
+        return attr.evolve(self, content=stripped_content)
 
 
 @attr.s(auto_attribs=True, frozen=True)
