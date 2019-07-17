@@ -278,8 +278,47 @@ def test_updating_alignment(corpus,
 def test_invalid_alignment(alignment,
                            corpus,
                            text_repository,
-                           bibliography,
                            when):
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     with pytest.raises(AlignmentError):
         corpus.update_alignment(TEXT.id, 0, alignment, ANY_USER)
+
+
+def test_updating_manuscripts(corpus,
+                              text_repository,
+                              bibliography,
+                              changelog,
+                              sign_list,
+                              user,
+                              when):
+    dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
+        attr.evolve(DEHYDRATED_TEXT.chapters[0], manuscripts=(
+            attr.evolve(DEHYDRATED_TEXT.chapters[0].manuscripts[0],
+                        notes='Updated manuscript.'),
+        )),
+    ))
+    expect_signs(sign_list, when)
+    expect_validate_references(bibliography, when, DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    (when(text_repository)
+     .update(TEXT.id, dehydrated_updated_text)
+     .thenReturn(dehydrated_updated_text))
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        {**to_dict(DEHYDRATED_TEXT), '_id': DEHYDRATED_TEXT.id},
+        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
+    ).thenReturn()
+
+    manuscripts = (
+        dehydrated_updated_text.chapters[0].manuscripts[0],
+    )
+    corpus.update_manuscripts(TEXT.id, 0, manuscripts, user)
+
+
+def test_invalid_manuscripts(corpus,
+                             text_repository,
+                             when):
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    with pytest.raises(DataError):
+        corpus.update_manuscripts(TEXT.id, 0, tuple(), ANY_USER)

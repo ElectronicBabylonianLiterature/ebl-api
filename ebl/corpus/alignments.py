@@ -3,8 +3,7 @@ from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.alignment import Alignment
 from ebl.corpus.api_serializer import serialize
-from ebl.corpus.text_utils import create_text_id
-from ebl.errors import NotFoundError
+from ebl.corpus.text_utils import create_chapter_index, create_text_id
 from ebl.require_scope import require_scope
 
 ALIGNMENT_DTO_SCHEMA = {
@@ -57,10 +56,3 @@ class AlignmentResource:
                                       req.context['user'])
         updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)
-
-
-def create_chapter_index(chapter_index: str) -> int:
-    try:
-        return int(chapter_index)
-    except ValueError:
-        raise NotFoundError(f'Chapter {chapter_index} not found.')
