@@ -1,26 +1,19 @@
-from typing import List, Optional
+from typing import List
 
 import attr
 
 from ebl.corpus.alignment import Alignment, AlignmentError
-from ebl.corpus.text import TextVisitor, Text, Chapter, Line, ManuscriptLine
-from ebl.errors import Defect
+from ebl.corpus.chapter_updater import ChapterUpdater
+from ebl.corpus.text import Chapter, Line, ManuscriptLine
 
 
-class AlignmentUpdater(TextVisitor):
+class AlignmentUpdater(ChapterUpdater):
 
     def __init__(self, chapter_index: int, alignment: Alignment):
-        super().__init__(TextVisitor.Order.POST)
+        super().__init__(chapter_index)
         self._alignment = alignment
-        self._chapter_index_to_align = chapter_index
-        self._text: Optional[Text] = None
-        self._chapters: List[Chapter] = []
         self._lines: List[Line] = []
         self._manuscript_lines: List[ManuscriptLine] = []
-
-    @property
-    def chapter_index(self):
-        return len(self._chapters)
 
     @property
     def line_index(self):
@@ -39,28 +32,6 @@ class AlignmentUpdater(TextVisitor):
             )
         except IndexError:
             raise AlignmentError()
-
-    def get_text(self) -> Text:
-        if self._text:
-            return self._text
-        else:
-            raise Defect('get_text called before accepting the visitor.')
-
-    def visit_text(self, text: Text) -> None:
-        self._text = attr.evolve(text, chapters=tuple(self._chapters))
-        self._chapters = []
-
-    def visit_chapter(self, chapter: Chapter) -> None:
-        if len(self._chapters) == self._chapter_index_to_align:
-            if self._alignment.get_number_of_lines() == len(chapter.lines):
-                self._chapters.append(
-                    attr.evolve(chapter, lines=tuple(self._lines))
-                )
-            else:
-                raise AlignmentError()
-        else:
-            self._chapters.append(chapter)
-        self._lines = []
 
     def visit_line(self, line: Line) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
@@ -86,3 +57,12 @@ class AlignmentUpdater(TextVisitor):
                     line=updated_line
                 )
             )
+
+    def _update_chapter(self, chapter: Chapter) -> Chapter:
+        if self._alignment.get_number_of_lines() == len(chapter.lines):
+            return attr.evolve(chapter, lines=tuple(self._lines))
+        else:
+            raise AlignmentError()
+
+    def _after_chapter_update(self) -> None:
+        self._lines = []
