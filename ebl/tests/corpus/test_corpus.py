@@ -316,9 +316,17 @@ def test_updating_manuscripts(corpus,
     corpus.update_manuscripts(TEXT.id, 0, manuscripts, user)
 
 
-def test_invalid_manuscripts(corpus,
+@pytest.mark.parametrize('manuscripts', [
+    tuple(),
+    (
+        DEHYDRATED_TEXT.chapters[0].manuscripts[0],
+        DEHYDRATED_TEXT.chapters[0].manuscripts[0]
+    )
+])
+def test_invalid_manuscripts(manuscripts,
+                             corpus,
                              text_repository,
                              when):
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     with pytest.raises(DataError):
-        corpus.update_manuscripts(TEXT.id, 0, tuple(), ANY_USER)
+        corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
