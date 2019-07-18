@@ -3,11 +3,12 @@ from typing import List, Tuple
 
 from ebl.corpus.alignment import Alignment
 from ebl.corpus.alignment_updater import AlignmentUpdater
+from ebl.corpus.lines_updater import LinesUpdater
 from ebl.corpus.manuscripts_updater import ManuscriptUpdater
 from ebl.corpus.text_hydrator import TextHydrator
 from ebl.corpus.text_validator import TextValidator
 from ebl.corpus.mongo_serializer import serialize
-from ebl.corpus.text import Text, TextId, Manuscript
+from ebl.corpus.text import Text, TextId, Manuscript, Line
 from ebl.errors import NotFoundError
 
 COLLECTION = 'texts'
@@ -87,6 +88,20 @@ class Corpus:
         old_text = self._repository.find(id_)
         if chapter_index < len(old_text.chapters):
             updater = ManuscriptUpdater(chapter_index, manuscripts)
+            old_text.accept(updater)
+            updated_text = updater.get_text()
+            self._update(id_, old_text, updated_text, user)
+        else:
+            raise NotFoundError(f'Chapter {chapter_index} not found.')
+
+    def update_lines(self,
+                     id_: TextId,
+                     chapter_index: int,
+                     lines: Tuple[Line, ...],
+                     user):
+        old_text = self._repository.find(id_)
+        if chapter_index < len(old_text.chapters):
+            updater = LinesUpdater(chapter_index, lines)
             old_text.accept(updater)
             updated_text = updater.get_text()
             self._update(id_, old_text, updated_text, user)

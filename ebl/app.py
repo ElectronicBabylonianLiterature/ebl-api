@@ -16,6 +16,7 @@ from ebl.bibliography.bibliography_entries import (BibliographyEntriesResource,
                                                    BibliographyResource)
 from ebl.changelog import Changelog
 from ebl.corpus.corpus import Corpus
+from ebl.corpus.lines import LinesResource
 from ebl.corpus.manuscripts import ManuscriptsResource
 from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.corpus.texts import TextResource, TextsResource
@@ -102,6 +103,10 @@ def create_corpus_routes(api, context, sign_list):
     api.add_route(
         '/texts/{category}/{index}/chapters/{chapter_index}/manuscripts',
         ManuscriptsResource(corpus)
+    )
+    api.add_route(
+        '/texts/{category}/{index}/chapters/{chapter_index}/lines',
+        LinesResource(corpus)
     )
 
 

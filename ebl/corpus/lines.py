@@ -4,28 +4,28 @@ from falcon.media.validators.jsonschema import validate
 from ebl.corpus.alignments import create_chapter_index
 from ebl.corpus.api_serializer import ApiDeserializer, serialize
 from ebl.corpus.text_utils import create_text_id
-from ebl.corpus.texts import MANUSCRIPT_DTO_SCHEMA
+from ebl.corpus.texts import LINE_DTO_SCHEMA
 from ebl.require_scope import require_scope
 
-MANUSCRIPTS_DTO_SCHEMA = {
+LINES_DTO_SCHEMA = {
     'type': 'object',
     'properties': {
-        'manuscripts': {
+        'lines': {
             'type': 'array',
-            'items': MANUSCRIPT_DTO_SCHEMA
+            'items': LINE_DTO_SCHEMA
         }
     },
-    'required': ['manuscripts']
+    'required': ['lines']
 }
 
 
-class ManuscriptsResource:
+class LinesResource:
 
     def __init__(self, corpus):
         self._corpus = corpus
 
     @falcon.before(require_scope, 'write:texts')
-    @validate(MANUSCRIPTS_DTO_SCHEMA)
+    @validate(LINES_DTO_SCHEMA)
     def on_post(self,
                 req: falcon.Request,
                 resp: falcon.Response,
@@ -33,13 +33,13 @@ class ManuscriptsResource:
                 index: str,
                 chapter_index: str) -> None:
         deserializer = ApiDeserializer()
-        self._corpus.update_manuscripts(
+        self._corpus.update_lines(
             create_text_id(category, index),
             create_chapter_index(chapter_index),
             tuple(
-                deserializer.deserialize_manuscript(manuscript)
-                for manuscript
-                in req.media['manuscripts']
+                deserializer.deserialize_line(line)
+                for line
+                in req.media['lines']
             ),
             req.context['user']
         )

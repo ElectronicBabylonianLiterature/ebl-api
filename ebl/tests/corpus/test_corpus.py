@@ -9,6 +9,7 @@ from ebl.auth0 import Guest
 from ebl.errors import Defect, NotFoundError, DataError
 from ebl.tests.factories.corpus import TextFactory
 from ebl.fragment.transliteration import Transliteration
+from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.token import Word
 
@@ -330,3 +331,33 @@ def test_invalid_manuscripts(manuscripts,
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     with pytest.raises(DataError):
         corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
+
+
+def test_updating_lines(corpus,
+                        text_repository,
+                        bibliography,
+                        changelog,
+                        sign_list,
+                        user,
+                        when):
+    dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
+        attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(
+            attr.evolve(DEHYDRATED_TEXT.chapters[0].lines[0],
+                        number=LineNumberLabel.from_atf("1'.")),
+        )),
+    ))
+    expect_signs(sign_list, when)
+    expect_validate_references(bibliography, when, DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    (when(text_repository)
+     .update(TEXT.id, dehydrated_updated_text)
+     .thenReturn(dehydrated_updated_text))
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        {**to_dict(DEHYDRATED_TEXT), '_id': DEHYDRATED_TEXT.id},
+        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
+    ).thenReturn()
+
+    lines = dehydrated_updated_text.chapters[0].lines
+    corpus.update_lines(TEXT.id, 0, lines, user)
