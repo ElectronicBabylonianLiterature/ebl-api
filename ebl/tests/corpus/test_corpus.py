@@ -3,14 +3,16 @@ import pydash
 import pytest
 
 from ebl.corpus.alignment import Alignment, AlignmentToken, AlignmentError
-from ebl.corpus.text import Text
+from ebl.corpus.text import Text, ManuscriptLine, Line
 from ebl.corpus.text_serializer import TextSerializer
 from ebl.auth0 import Guest
+from ebl.dictionary.word import WordId
 from ebl.errors import Defect, NotFoundError, DataError
 from ebl.tests.factories.corpus import TextFactory
 from ebl.fragment.transliteration import Transliteration
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
+from ebl.text.reconstructed_text import AkkadianWord, StringPart
 from ebl.text.token import Word
 
 COLLECTION = 'texts'
@@ -62,9 +64,9 @@ def expect_invalid_references(bibliography, when):
     when(bibliography).validate_references(...).thenRaise(DataError())
 
 
-def expect_signs(sign_list, when, sign='X'):
+def expect_signs(sign_list, when, sign='X', text=TEXT):
     (pydash
-     .chain(TEXT.chapters)
+     .chain(text.chapters)
      .flat_map(lambda chapter: chapter.lines)
      .flat_map(lambda line: line.manuscripts)
      .map(lambda manuscript: manuscript.line.atf)
@@ -360,4 +362,67 @@ def test_updating_lines(corpus,
     ).thenReturn()
 
     lines = dehydrated_updated_text.chapters[0].lines
+    corpus.update_lines(TEXT.id, 0, lines, user)
+
+
+def test_merging_lines(corpus,
+                       text_repository,
+                       bibliography,
+                       changelog,
+                       sign_list,
+                       user,
+                       when):
+    number = LineNumberLabel('1')
+    reconstruction = (AkkadianWord((StringPart('buāru'),)),)
+    text_line = TextLine('1.', (
+        Word('kur',
+             unique_lemma=(WordId('word1'),),
+             alignment=0),
+        Word('ra',
+             unique_lemma=(WordId('word2'),),
+             alignment=1)
+    ))
+    manuscript_id = DEHYDRATED_TEXT.chapters[0].manuscripts[0].id
+    line = Line(number, reconstruction, (
+        ManuscriptLine(manuscript_id,
+                       tuple(),
+                       text_line),
+    ))
+    new_text_line = TextLine('1.', (
+        Word('kur'),
+        Word('pa')
+    ))
+    new_line = Line(number, reconstruction, (
+        ManuscriptLine(manuscript_id,
+                       tuple(),
+                       text_line.merge(new_text_line)),
+    ))
+    dehydrated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
+        attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(line, )),
+    ))
+    dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
+        attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(new_line, )),
+    ))
+    expect_signs(sign_list, when, text=dehydrated_updated_text)
+    expect_validate_references(bibliography, when, dehydrated_text)
+    when(text_repository).find(TEXT.id).thenReturn(dehydrated_text)
+    (when(text_repository)
+     .update(TEXT.id, dehydrated_updated_text)
+     .thenReturn(dehydrated_updated_text))
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        {**to_dict(dehydrated_text), '_id': dehydrated_text.id},
+        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
+    ).thenReturn()
+
+    lines = (
+        Line(number, reconstruction, (
+            ManuscriptLine(
+                manuscript_id,
+                tuple(),
+                new_text_line
+            ),
+        )),
+    )
     corpus.update_lines(TEXT.id, 0, lines, user)

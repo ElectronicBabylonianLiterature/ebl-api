@@ -14,4 +14,4 @@ class LinesUpdater(ChapterUpdater):
         self._lines = lines
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
-        return attr.evolve(chapter, lines=self._lines)
+        return chapter.merge(attr.evolve(chapter, lines=self._lines))
