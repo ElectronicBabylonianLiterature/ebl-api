@@ -169,7 +169,6 @@ def test_updating_text(corpus,
                        sign_list,
                        user,
                        when):
-    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
         index=DEHYDRATED_TEXT.index + 1,
@@ -178,11 +177,8 @@ def test_updating_text(corpus,
     expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
                        dehydrated_updated_text, sign_list, text_repository,
                        user, when)
-    expect_bibliography(bibliography, when)
 
-    result = corpus.update(TEXT.id, dehydrated_updated_text, user)
-
-    assert result == updated_text
+    corpus.update(TEXT.id, dehydrated_updated_text, user)
 
 
 def test_update_raises_exception_if_invalid_signs(corpus,

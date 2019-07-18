@@ -28,7 +28,7 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def update(self, id_: TextId, text: Text) -> Text:
+    def update(self, id_: TextId, text: Text) -> None:
         ...
 
 
@@ -61,10 +61,9 @@ class Corpus:
     def list(self) -> List[Text]:
         return self._repository.list()
 
-    def update(self, id_: TextId, text: Text, user) -> Text:
+    def update(self, id_: TextId, text: Text, user) -> None:
         old_text = self._repository.find(id_)
-        updated_text = self._update(id_, old_text, text, user)
-        return self._hydrate_references(updated_text)
+        self._update(id_, old_text, text, user)
 
     def update_alignment(self,
                          id_: TextId,
@@ -120,5 +119,4 @@ class Corpus:
     def _update(self, id_, old_text, text, user):
         self._validate_text(text)
         self._create_changelog(old_text, text, user)
-        updated_text = self._repository.update(id_, text)
-        return updated_text
+        self._repository.update(id_, text)

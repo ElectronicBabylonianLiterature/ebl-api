@@ -39,7 +39,7 @@ class MongoTextRepository(TextRepository):
                 for mongo_text
                 in self._mongo_collection.find()]
 
-    def update(self, id_: TextId, text: Text) -> Text:
+    def update(self, id_: TextId, text: Text) -> None:
         result = self._mongo_collection.update_one(
             {'category': id_.category, 'index': id_.index},
             {'$set': serialize(text)}
@@ -47,8 +47,6 @@ class MongoTextRepository(TextRepository):
 
         if result.matched_count == 0:
             raise text_not_found(id_)
-        else:
-            return self.find(text.id)
 
     def _find_one(self, id_: TextId) -> dict:
         mongo_text = self._mongo_collection.find_one({

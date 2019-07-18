@@ -65,13 +65,11 @@ def test_listing_texts(database, text_repository):
 
 
 def test_updating_text(database, text_repository):
-
     updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
     when_text_in_collection(database)
 
-    result = text_repository.update(TEXT.id, updated_text)
+    text_repository.update(TEXT.id, updated_text)
 
-    assert result == updated_text
     assert text_repository.find(updated_text.id) == updated_text
 
 
