@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 from ebl.corpus.alignment import Alignment
 from ebl.corpus.alignment_updater import AlignmentUpdater
+from ebl.corpus.chapter_updater import ChapterUpdater
 from ebl.corpus.lines_updater import LinesUpdater
 from ebl.corpus.manuscripts_updater import ManuscriptUpdater
 from ebl.corpus.mongo_serializer import serialize
@@ -70,32 +71,32 @@ class Corpus:
                          chapter_index: int,
                          alignment: Alignment,
                          user):
-        old_text = self._repository.find(id_)
-        updater = AlignmentUpdater(chapter_index, alignment)
-        old_text.accept(updater)
-        updated_text = updater.get_text()
-        self._update(id_, old_text, updated_text, user)
+        self._update_chapter(id_,
+                             AlignmentUpdater(chapter_index, alignment),
+                             user)
 
     def update_manuscripts(self,
                            id_: TextId,
                            chapter_index: int,
                            manuscripts: Tuple[Manuscript, ...],
                            user):
-        old_text = self._repository.find(id_)
-        updater = ManuscriptUpdater(chapter_index, manuscripts)
-        old_text.accept(updater)
-        updated_text = updater.get_text()
-        self._update(id_, old_text, updated_text, user)
+        self._update_chapter(id_,
+                             ManuscriptUpdater(chapter_index, manuscripts),
+                             user)
 
     def update_lines(self,
                      id_: TextId,
                      chapter_index: int,
                      lines: Tuple[Line, ...],
                      user):
+        self._update_chapter(id_, LinesUpdater(chapter_index, lines), user)
+
+    def _update_chapter(self,
+                        id_: TextId,
+                        updater: ChapterUpdater,
+                        user):
         old_text = self._repository.find(id_)
-        updater = LinesUpdater(chapter_index, lines)
-        old_text.accept(updater)
-        updated_text = updater.get_text()
+        updated_text = updater.update(old_text)
         self._update(id_, old_text, updated_text, user)
 
     def _validate_text(self, text: Text) -> None:

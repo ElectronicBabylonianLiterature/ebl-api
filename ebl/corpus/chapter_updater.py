@@ -13,11 +13,12 @@ class ChapterUpdater(TextVisitor):
         self._text: Optional[Text] = None
         self._chapter_index_to_align = chapter_index
 
-    def get_text(self) -> Text:
+    def update(self, text: Text) -> Text:
+        text.accept(self)
         if self._text:
             return self._text
         else:
-            raise Defect('get_text called before accepting the visitor.')
+            raise Defect('Result text was not set.')
 
     def visit_text(self, text: Text) -> None:
         if self._chapter_index_to_align < len(text.chapters):
