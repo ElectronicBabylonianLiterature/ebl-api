@@ -4,7 +4,6 @@ import attr
 
 from ebl.corpus.chapter_updater import ChapterUpdater
 from ebl.corpus.text import Chapter, Manuscript
-from ebl.errors import DataError
 
 
 class ManuscriptUpdater(ChapterUpdater):
@@ -15,7 +14,4 @@ class ManuscriptUpdater(ChapterUpdater):
         self._manuscripts = manuscripts
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
-        try:
-            return attr.evolve(chapter, manuscripts=self._manuscripts)
-        except ValueError as error:
-            raise DataError(error)
+        return attr.evolve(chapter, manuscripts=self._manuscripts)

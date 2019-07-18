@@ -5,11 +5,10 @@ from ebl.corpus.alignment import Alignment
 from ebl.corpus.alignment_updater import AlignmentUpdater
 from ebl.corpus.lines_updater import LinesUpdater
 from ebl.corpus.manuscripts_updater import ManuscriptUpdater
+from ebl.corpus.mongo_serializer import serialize
+from ebl.corpus.text import Line, Manuscript, Text, TextId
 from ebl.corpus.text_hydrator import TextHydrator
 from ebl.corpus.text_validator import TextValidator
-from ebl.corpus.mongo_serializer import serialize
-from ebl.corpus.text import Text, TextId, Manuscript, Line
-from ebl.errors import NotFoundError
 
 COLLECTION = 'texts'
 
@@ -72,13 +71,10 @@ class Corpus:
                          alignment: Alignment,
                          user):
         old_text = self._repository.find(id_)
-        if chapter_index < len(old_text.chapters):
-            updater = AlignmentUpdater(chapter_index, alignment)
-            old_text.accept(updater)
-            updated_text = updater.get_text()
-            self._update(id_, old_text, updated_text, user)
-        else:
-            raise NotFoundError(f'Chapter {chapter_index} not found.')
+        updater = AlignmentUpdater(chapter_index, alignment)
+        old_text.accept(updater)
+        updated_text = updater.get_text()
+        self._update(id_, old_text, updated_text, user)
 
     def update_manuscripts(self,
                            id_: TextId,
@@ -86,13 +82,10 @@ class Corpus:
                            manuscripts: Tuple[Manuscript, ...],
                            user):
         old_text = self._repository.find(id_)
-        if chapter_index < len(old_text.chapters):
-            updater = ManuscriptUpdater(chapter_index, manuscripts)
-            old_text.accept(updater)
-            updated_text = updater.get_text()
-            self._update(id_, old_text, updated_text, user)
-        else:
-            raise NotFoundError(f'Chapter {chapter_index} not found.')
+        updater = ManuscriptUpdater(chapter_index, manuscripts)
+        old_text.accept(updater)
+        updated_text = updater.get_text()
+        self._update(id_, old_text, updated_text, user)
 
     def update_lines(self,
                      id_: TextId,
@@ -100,13 +93,10 @@ class Corpus:
                      lines: Tuple[Line, ...],
                      user):
         old_text = self._repository.find(id_)
-        if chapter_index < len(old_text.chapters):
-            updater = LinesUpdater(chapter_index, lines)
-            old_text.accept(updater)
-            updated_text = updater.get_text()
-            self._update(id_, old_text, updated_text, user)
-        else:
-            raise NotFoundError(f'Chapter {chapter_index} not found.')
+        updater = LinesUpdater(chapter_index, lines)
+        old_text.accept(updater)
+        updated_text = updater.get_text()
+        self._update(id_, old_text, updated_text, user)
 
     def _validate_text(self, text: Text) -> None:
         text.accept(TextValidator(self._bibliography, self._sign_list))
