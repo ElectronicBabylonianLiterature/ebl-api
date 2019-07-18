@@ -81,6 +81,23 @@ def expect_invalid_signs(sign_list, when):
     when(sign_list).map_transliteration(...).thenReturn([['?']])
 
 
+def expect_text_update(bibliography, changelog, dehydrated_text,
+                       dehydrated_updated_text, sign_list, text_repository,
+                       user, when):
+    expect_signs(sign_list, when, text=dehydrated_updated_text)
+    expect_validate_references(bibliography, when, dehydrated_text)
+    when(text_repository).find(TEXT.id).thenReturn(dehydrated_text)
+    (when(text_repository)
+     .update(TEXT.id, dehydrated_updated_text)
+     .thenReturn(dehydrated_updated_text))
+    when(changelog).create(
+        COLLECTION,
+        user.profile,
+        {**to_dict(dehydrated_text), '_id': dehydrated_text.id},
+        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
+    ).thenReturn()
+
+
 def test_creating_text(corpus,
                        text_repository,
                        bibliography,
@@ -158,21 +175,12 @@ def test_updating_text(corpus,
         index=DEHYDRATED_TEXT.index + 1,
         name='New Name'
     )
-    expect_signs(sign_list, when)
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    (when(text_repository)
-     .update(TEXT.id, updated_text)
-     .thenReturn(dehydrated_updated_text))
-    when(changelog).create(
-        COLLECTION,
-        user.profile,
-        {**to_dict(TEXT), '_id': TEXT.id},
-        {**to_dict(updated_text), '_id': updated_text.id}
-    ).thenReturn()
-    expect_validate_references(bibliography, when)
+    expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
+                       dehydrated_updated_text, sign_list, text_repository,
+                       user, when)
     expect_bibliography(bibliography, when)
 
-    result = corpus.update(TEXT.id, updated_text, user)
+    result = corpus.update(TEXT.id, dehydrated_updated_text, user)
 
     assert result == updated_text
 
@@ -220,18 +228,9 @@ def test_updating_alignment(corpus,
             )),
         )),
     ))
-    expect_signs(sign_list, when)
-    expect_validate_references(bibliography, when, DEHYDRATED_TEXT)
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    (when(text_repository)
-     .update(TEXT.id, dehydrated_updated_text)
-     .thenReturn(dehydrated_updated_text))
-    when(changelog).create(
-        COLLECTION,
-        user.profile,
-        {**to_dict(DEHYDRATED_TEXT), '_id': DEHYDRATED_TEXT.id},
-        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
-    ).thenReturn()
+    expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
+                       dehydrated_updated_text, sign_list, text_repository,
+                       user, when)
 
     alignment = Alignment((
         (
@@ -300,18 +299,9 @@ def test_updating_manuscripts(corpus,
                         notes='Updated manuscript.'),
         )),
     ))
-    expect_signs(sign_list, when)
-    expect_validate_references(bibliography, when, DEHYDRATED_TEXT)
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    (when(text_repository)
-     .update(TEXT.id, dehydrated_updated_text)
-     .thenReturn(dehydrated_updated_text))
-    when(changelog).create(
-        COLLECTION,
-        user.profile,
-        {**to_dict(DEHYDRATED_TEXT), '_id': DEHYDRATED_TEXT.id},
-        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
-    ).thenReturn()
+    expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
+                       dehydrated_updated_text, sign_list, text_repository,
+                       user, when)
 
     manuscripts = (
         dehydrated_updated_text.chapters[0].manuscripts[0],
@@ -348,18 +338,9 @@ def test_updating_lines(corpus,
                         number=LineNumberLabel.from_atf("1'.")),
         )),
     ))
-    expect_signs(sign_list, when)
-    expect_validate_references(bibliography, when, DEHYDRATED_TEXT)
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    (when(text_repository)
-     .update(TEXT.id, dehydrated_updated_text)
-     .thenReturn(dehydrated_updated_text))
-    when(changelog).create(
-        COLLECTION,
-        user.profile,
-        {**to_dict(DEHYDRATED_TEXT), '_id': DEHYDRATED_TEXT.id},
-        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
-    ).thenReturn()
+    expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
+                       dehydrated_updated_text, sign_list, text_repository,
+                       user, when)
 
     lines = dehydrated_updated_text.chapters[0].lines
     corpus.update_lines(TEXT.id, 0, lines, user)
@@ -403,18 +384,9 @@ def test_merging_lines(corpus,
     dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
         attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(new_line, )),
     ))
-    expect_signs(sign_list, when, text=dehydrated_updated_text)
-    expect_validate_references(bibliography, when, dehydrated_text)
-    when(text_repository).find(TEXT.id).thenReturn(dehydrated_text)
-    (when(text_repository)
-     .update(TEXT.id, dehydrated_updated_text)
-     .thenReturn(dehydrated_updated_text))
-    when(changelog).create(
-        COLLECTION,
-        user.profile,
-        {**to_dict(dehydrated_text), '_id': dehydrated_text.id},
-        {**to_dict(dehydrated_updated_text), '_id': dehydrated_updated_text.id}
-    ).thenReturn()
+    expect_text_update(bibliography, changelog, dehydrated_text,
+                       dehydrated_updated_text, sign_list, text_repository,
+                       user, when)
 
     lines = (
         Line(number, reconstruction, (
