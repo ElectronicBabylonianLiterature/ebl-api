@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from parsy import ParseError
 
 from ebl.corpus.text import Text, ManuscriptLine, Line
@@ -79,5 +81,17 @@ def serialize(text: Text, include_documents=True) -> dict:
 def deserialize(dto: dict) -> Text:
     try:
         return ApiDeserializer.deserialize(dto)
+    except (ValueError, ParseError) as error:
+        raise DataError(error)
+
+
+def deserialize_lines(lines: list) -> Tuple[Line, ...]:
+    deserializer = ApiDeserializer()
+    try:
+        return tuple(
+            deserializer.deserialize_line(line)
+            for line
+            in lines
+        )
     except (ValueError, ParseError) as error:
         raise DataError(error)

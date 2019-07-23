@@ -2,7 +2,7 @@ import falcon
 from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.alignments import create_chapter_index
-from ebl.corpus.api_serializer import ApiDeserializer, serialize
+from ebl.corpus.api_serializer import deserialize_lines, serialize
 from ebl.corpus.text_utils import create_text_id
 from ebl.corpus.texts import LINE_DTO_SCHEMA
 from ebl.require_scope import require_scope
@@ -32,15 +32,10 @@ class LinesResource:
                 category: str,
                 index: str,
                 chapter_index: str) -> None:
-        deserializer = ApiDeserializer()
         self._corpus.update_lines(
             create_text_id(category, index),
             create_chapter_index(chapter_index),
-            tuple(
-                deserializer.deserialize_line(line)
-                for line
-                in req.media['lines']
-            ),
+            deserialize_lines(req.media['lines']),
             req.context['user']
         )
         updated_text = self._corpus.find(create_text_id(category, index))
