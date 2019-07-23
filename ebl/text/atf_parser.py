@@ -35,5 +35,9 @@ def parse_atf(atf: str):
     try:
         return ATF.parse(atf)
     except ParseError as error:
-        line_number = int(error.line_info().split(':')[0]) + 1
-        raise AtfSyntaxError(line_number)
+        raise atf_syntax_error(error)
+
+
+def atf_syntax_error(error):
+    line_number = int(error.line_info().split(':')[0]) + 1
+    return AtfSyntaxError(line_number)
