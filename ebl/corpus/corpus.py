@@ -61,10 +61,6 @@ class Corpus:
     def list(self) -> List[Text]:
         return self._repository.list()
 
-    def update(self, id_: TextId, text: Text, user) -> None:
-        old_text = self._repository.find(id_)
-        self._update(id_, old_text, text, user)
-
     def update_alignment(self,
                          id_: TextId,
                          chapter_index: int,
@@ -96,7 +92,9 @@ class Corpus:
                         user):
         old_text = self._repository.find(id_)
         updated_text = updater.update(old_text)
-        self._update(id_, old_text, updated_text, user)
+        self._validate_text(updated_text)
+        self._create_changelog(old_text, updated_text, user)
+        self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
         text.accept(TextValidator(self._bibliography, self._sign_list))
@@ -115,8 +113,3 @@ class Corpus:
             old_dict,
             new_dict
         )
-
-    def _update(self, id_, old_text, text, user):
-        self._validate_text(text)
-        self._create_changelog(old_text, text, user)
-        self._repository.update(id_, text)

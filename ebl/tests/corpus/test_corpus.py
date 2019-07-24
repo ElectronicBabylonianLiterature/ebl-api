@@ -162,51 +162,6 @@ def test_find_raises_exception_if_references_not_found(corpus,
         corpus.find(TEXT.id)
 
 
-def test_updating_text(corpus,
-                       text_repository,
-                       bibliography,
-                       changelog,
-                       sign_list,
-                       user,
-                       when):
-    dehydrated_updated_text = attr.evolve(
-        DEHYDRATED_TEXT,
-        index=DEHYDRATED_TEXT.index + 1,
-        name='New Name'
-    )
-    expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
-                       dehydrated_updated_text, sign_list, text_repository,
-                       user, when)
-
-    corpus.update(TEXT.id, dehydrated_updated_text, user)
-
-
-def test_update_raises_exception_if_invalid_signs(corpus,
-                                                  text_repository,
-                                                  bibliography,
-                                                  sign_list,
-                                                  when):
-    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    allow_validate_references(bibliography, when)
-    expect_invalid_signs(sign_list, when)
-
-    with pytest.raises(DataError):
-        corpus.update(TEXT.id, updated_text, ANY_USER)
-
-
-def test_update_raises_exception_if_invalid_references(corpus,
-                                                       text_repository,
-                                                       bibliography,
-                                                       when):
-    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
-    expect_invalid_references(bibliography, when)
-
-    with pytest.raises(DataError):
-        corpus.update(TEXT.id, updated_text, ANY_USER)
-
-
 def test_updating_alignment(corpus,
                             text_repository,
                             bibliography,

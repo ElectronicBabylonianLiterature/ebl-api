@@ -195,19 +195,3 @@ class TextResource:
     ) -> None:
         text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(text)
-
-    @falcon.before(require_scope, 'write:texts')
-    @validate(TEXT_DTO_SCHEMA)
-    def on_post(self,
-                req: falcon.Request,
-                resp: falcon.Response,
-                category: str,
-                index: str) -> None:
-        text = deserialize(req.media)
-        self._corpus.update(
-            create_text_id(category, index),
-            text,
-            req.context['user']
-        )
-        updated_text = self._corpus.find(text.id)
-        resp.media = serialize(updated_text)
