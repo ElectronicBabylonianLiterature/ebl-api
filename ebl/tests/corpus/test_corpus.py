@@ -321,6 +321,20 @@ def test_invalid_manuscripts(manuscripts,
         corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
 
 
+def test_update_manuscripts_raises_exception_if_invalid_references(
+       corpus,
+       text_repository,
+       bibliography,
+       when
+):
+    manuscripts = TEXT.chapters[0].manuscripts
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    expect_invalid_references(bibliography, when)
+
+    with pytest.raises(DataError):
+        corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
+
+
 def test_updating_lines(corpus,
                         text_repository,
                         bibliography,
@@ -394,3 +408,19 @@ def test_merging_lines(corpus,
         )),
     )
     corpus.update_lines(TEXT.id, 0, lines, user)
+
+
+def test_update_lines_raises_exception_if_invalid_signs(
+        corpus,
+        text_repository,
+        bibliography,
+        sign_list,
+        when
+):
+    lines = TEXT.chapters[0].lines
+    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    allow_validate_references(bibliography, when)
+    expect_invalid_signs(sign_list, when)
+
+    with pytest.raises(DataError):
+        corpus.update_lines(TEXT.id, 0, lines, ANY_USER)
