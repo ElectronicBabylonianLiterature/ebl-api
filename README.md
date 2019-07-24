@@ -42,6 +42,10 @@ Sentry:
 - `SENTRY_DSN`
 - `SENTRY_ENVIRONMENT`
 
+Mongo-express (used when running with docker-compose):
+- `MONGOEXPRESS_LOGIN`
+- `MONGOEXPRESS_PASSWORD`
+
 ### The API image
 
 Build and run the API image:
@@ -62,10 +66,11 @@ Run only the API:
 docker-compose -f .\docker-compose-api-only.yml up
 ``` 
 
-Run the full backend including the database:
+Run the full backend including the database and admin interface:
 ```
 docker-compose up
 ```
+
 
 ## Updating signs in fragments
 

@@ -3,9 +3,9 @@ services:
   api:
     build: .
     ports:
-    - "8000:8000"
+      - 8000:8000
     links:
-    - mongo
+      - mongo
     environment:
       - AUTH0_AUDIENCE
       - AUTH0_ISSUER
@@ -18,7 +18,18 @@ services:
     volumes:
       - ./ebl:/usr/src/ebl/ebl
     command:  ["pipenv", "run", "gunicorn",  "--reload", "-b :8000", "ebl.app:get_app()"]
-    restart: on-failure
+    restart: always
   mongo:
+    # If ports are opened the DB must use authentication.
     image: mongo
-    restart: on-failure
+    restart: always
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    links:
+      - mongo
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
