@@ -109,3 +109,6 @@ parselog.txt
 # IDEs
 .vscode/
 .idea/
+
+# Docker
+docker-entrypoint-initdb.d/

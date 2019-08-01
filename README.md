@@ -42,7 +42,25 @@ Sentry:
 - `SENTRY_DSN`
 - `SENTRY_ENVIRONMENT`
 
-Mongo-express (used when running with docker-compose):
+For docker compose with DB:
+
+Create a script to create the MongoDB user in `./docker-entrypoint-initdb.d/create-users.js`:
+
+```
+db.createUser(
+  {
+    user: "ebl-api",
+    pwd: "<password>",
+    roles: [
+       { role: "readWrite", db: "ebl" }
+    ]
+  }
+)
+```
+
+- `MONGODB_URI` use `mongodb://ebl-api:<password>@mongo:27017/ebl`
+- `MONGO_INITDB_ROOT_USERNAME`
+- `MONGO_INITDB_ROOT_PASSWORD`
 - `MONGOEXPRESS_LOGIN`
 - `MONGOEXPRESS_PASSWORD`
 

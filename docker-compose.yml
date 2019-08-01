@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   api:
     build: .
@@ -10,7 +10,7 @@ services:
       - AUTH0_AUDIENCE
       - AUTH0_ISSUER
       - AUTH0_PEM
-      - MONGODB_URI=mongodb://mongo:27017/ebl
+      - MONGODB_URI
       - NEW_RELIC_LICENSE_KEY
       - NEW_RELIC_CONFIG_FILE
       - SENTRY_DSN
@@ -20,9 +20,19 @@ services:
     command:  ["pipenv", "run", "gunicorn",  "--reload", "-b :8000", "ebl.app:get_app()"]
     restart: always
   mongo:
-    # If ports are opened the DB must use authentication.
     image: mongo
+    ports:
+      - 27017:27017
     restart: always
+    volumes:
+      - ebl-mongodb:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=ebl
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+    secrets:
+      - source: mongo_users
+        target: /docker-entrypoint-initdb.d/create-users.js
   mongo-express:
     image: mongo-express
     restart: always
@@ -33,3 +43,12 @@ services:
     environment:
       - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
       - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_SITE_GRIDFS_ENABLED=true
+volumes:
+  ebl-mongodb:
+    driver: local
+secrets:
+  mongo_users:
+    file: ./docker-entrypoint-initdb.d/create-users.js
