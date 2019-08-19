@@ -1,1 +1,1 @@
-web: NEW_RELIC_CONFIG_FILE=newrelic.ini newrelic-admin run-program waitress-serve --port=$PORT --call "ebl.app:get_app"
+web: NEW_RELIC_CONFIG_FILE=newrelic.ini newrelic-admin run-program waitress-serve --port=$PORT --threads=$WEB_CONCURRENCY --call "ebl.app:get_app"
