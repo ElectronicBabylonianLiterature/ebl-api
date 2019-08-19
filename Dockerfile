@@ -9,6 +9,7 @@ WORKDIR /usr/src/ebl
 COPY Pipfile* ./
 RUN pipenv install --dev
 
+COPY run_tests.sh ./
 COPY .coveragerc ./
 COPY mypy.ini ./
 COPY ./ebl ./ebl
