@@ -10,6 +10,7 @@ COPY Pipfile* ./
 RUN pipenv install --dev
 
 COPY run_tests.sh ./
+RUN chmod +x ./run_tests.sh
 COPY .coveragerc ./
 COPY mypy.ini ./
 COPY ./ebl ./ebl
