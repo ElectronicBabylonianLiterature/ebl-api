@@ -30,7 +30,7 @@ class SignList:
             for row in cleaned_transliteration
         ]
 
-        def map_sign(sign):
+        def sign_to_query(sign):
             return [
                 [(value['value'], value.get('subIndex')), sign['_id']]
                 for value in sign['values']
@@ -43,7 +43,7 @@ class SignList:
             .reject(pydash.is_string)
             .map(lambda reading: reading.key)
             .thru(self._repository.search_many)
-            .flat_map(map_sign)
+            .flat_map(sign_to_query)
             .from_pairs()
             .value()
         )
@@ -54,7 +54,9 @@ class SignList:
                 if pydash.is_string(reading)
                 else (
                     VARIANT_SEPARATOR.join([
-                        sign_map.get(variant.key, variant.default)
+                        (variant
+                         if pydash.is_string(variant)
+                         else sign_map.get(variant.key, variant.default))
                         for variant
                         in reading
                     ])
