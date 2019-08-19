@@ -100,3 +100,31 @@ def test_search(database,
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search('unknown', 1) is None
+
+
+def test_search_many_one_reading(sign_repository, sign, another_sign):
+    sign_repository.create(sign)
+    sign_repository.create(another_sign)
+    value: dict = sign['values'][0]
+
+    assert sign_repository.search_many([
+        (value['value'], value['subIndex'])
+    ]) == [sign]
+
+
+def test_search_many_multiple_readings(sign_repository, sign, another_sign):
+    sign_repository.create(sign)
+    sign_repository.create(another_sign)
+    first_value: dict = sign['values'][0]
+    second_value: dict = another_sign['values'][0]
+    assert sign_repository.search_many([
+        (first_value['value'], first_value['subIndex']),
+        (second_value['value'], second_value['subIndex'])
+    ]) == [sign, another_sign]
+
+
+def test_search_many_no_readings(sign_repository, sign, another_sign):
+    sign_repository.create(sign)
+    sign_repository.create(another_sign)
+
+    assert sign_repository.search_many([]) == []

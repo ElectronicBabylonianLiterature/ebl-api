@@ -20,6 +20,7 @@ def test_transliteration_to_signs(sign_list, signs):
 
     clean_transliteration = [
         'šu gid₂ |BI×IS| BI',
+        'šu/gid₂',
         'unknown x X',
         '1(AŠ) 1 2 10 20 30 256',
         ''
@@ -28,6 +29,7 @@ def test_transliteration_to_signs(sign_list, signs):
 
     assert mapped_signs == [
         ['ŠU', 'BU', '|BI×IS|', 'BI'],
+        ['ŠU/BU'],
         ['?', 'X', 'X'],
         ['AŠ', 'DIŠ', '2', 'U', '20', '30', '256'],
         ['']

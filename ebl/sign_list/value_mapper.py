@@ -1,5 +1,8 @@
 import re
 import unicodedata
+from typing import Optional, Union, List
+
+import attr
 
 from ebl.text.atf import ATF_SPEC
 
@@ -22,7 +25,20 @@ def get_group(group):
     return lambda match: match.group(group)
 
 
-def create_value_mapper(sign_repository):
+@attr.s(auto_attribs=True, frozen=True)
+class Reading:
+    reading: str
+    sub_index: Optional[int]
+    default: str
+
+    @property
+    def key(self):
+        return self.reading, self.sub_index
+
+
+def map_cleaned_reading(cleaned_reading: str) -> Union[
+    str, Reading, List[Union[str, Reading]]
+]:
     def map_(value):
         factories = [
             (BROKEN_PATTERN, lambda _: BROKEN_SIGN),
@@ -44,26 +60,21 @@ def create_value_mapper(sign_repository):
 
     def map_number(match):
         value = match.group(0)
-        return search_or_default(value, 1, value)
+        return Reading(value, 1, value)
 
     def map_reading(match):
-        value = match.group(1)
         sub_index = (
             unicode_to_int(match.group(2))
             if match.group(2)
             else 1
         )
-        return search_or_default(value, sub_index, UNKNOWN_SIGN)
+        return Reading(match.group(1), sub_index, UNKNOWN_SIGN)
 
     def map_variant(match):
-        return VARIANT_SEPARATOR.join([
+        return [
             map_(part)
             for part
             in match.group(0).split(VARIANT_SEPARATOR)
-        ])
+        ]
 
-    def search_or_default(value, sub_index, default):
-        sign = sign_repository.search(value, sub_index)
-        return sign['_id'] if sign else default
-
-    return map_
+    return map_(cleaned_reading)
