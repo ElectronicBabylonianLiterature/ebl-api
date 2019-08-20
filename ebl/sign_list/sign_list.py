@@ -1,5 +1,6 @@
 import pydash
-from ebl.sign_list.value_mapper import map_cleaned_reading, VARIANT_SEPARATOR
+
+from ebl.sign_list.value_mapper import map_cleaned_reading
 from ebl.text.atf import ATF_SPEC
 
 
@@ -19,18 +20,14 @@ class SignList:
 
     def map_transliteration(self, cleaned_transliteration):
         values = [
-            (
-                [
-                    map_cleaned_reading(value)
-                    for value in row.split(ATF_SPEC['word_separator'])
-                ]
-                if row
-                else ['']
-            )
+            [
+                map_cleaned_reading(value)
+                for value in row.split(ATF_SPEC['word_separator'])
+            ]
             for row in cleaned_transliteration
         ]
 
-        def sign_to_query(sign):
+        def sign_to_pair(sign):
             return [
                 [(value['value'], value.get('subIndex')), sign['_id']]
                 for value in sign['values']
@@ -40,29 +37,16 @@ class SignList:
             pydash
             .chain(values)
             .flatten_deep()
-            .reject(pydash.is_string)
-            .map(lambda reading: reading.key)
+            .flat_map(lambda reading: reading.keys)
             .thru(self._repository.search_many)
-            .flat_map(sign_to_query)
+            .flat_map(sign_to_pair)
             .from_pairs()
             .value()
         )
 
         return [
             [
-                reading
-                if pydash.is_string(reading)
-                else (
-                    VARIANT_SEPARATOR.join([
-                        (variant
-                         if pydash.is_string(variant)
-                         else sign_map.get(variant.key, variant.default))
-                        for variant
-                        in reading
-                    ])
-                    if pydash.is_list(reading)
-                    else sign_map.get(reading.key, reading.default)
-                )
+                reading.to_sign(sign_map)
                 for reading in row
             ]
             for row in values

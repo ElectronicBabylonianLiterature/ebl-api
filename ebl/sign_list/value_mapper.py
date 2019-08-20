@@ -1,20 +1,20 @@
 import re
 import unicodedata
-from typing import Optional, Union, List
+from abc import ABC, abstractmethod
+from typing import List, Mapping, Optional, Sequence, Tuple, Union
 
 import attr
 
-from ebl.text.atf import ATF_SPEC
+from ebl.text.atf import ATF_SPEC, UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
 
-BROKEN_PATTERN = ATF_SPEC['unclear']
+EMPTY_PATTERN = '^$'
+UNCLEAR_PATTERN = ATF_SPEC['unclear']
 WITH_SIGN_PATTERN = ATF_SPEC['with_sign']
 NUMBER_PATTERN = ATF_SPEC['number']
 GRAPHEME_PATTERN = ATF_SPEC['grapheme']
 READING_PATTERN = ATF_SPEC['reading']
 VARIANT_PATTERN = ATF_SPEC['variant']
-VARIANT_SEPARATOR = ATF_SPEC['variant_separator']
-UNKNOWN_SIGN = '?'
-BROKEN_SIGN = 'X'
+INVALID_READING = '?'
 
 
 def unicode_to_int(string):
@@ -25,8 +25,23 @@ def get_group(group):
     return lambda match: match.group(group)
 
 
+ReadingKey = Tuple[str, Optional[int]]
+SignMap = Mapping[ReadingKey, str]
+
+
+@attr.s(frozen=True)
+class Value(ABC):
+    @abstractmethod
+    def to_sign(self, sign_map: SignMap) -> str:
+        ...
+
+    @property
+    def keys(self) -> Sequence[ReadingKey]:
+        return []
+
+
 @attr.s(auto_attribs=True, frozen=True)
-class Reading:
+class Reading(Value):
     reading: str
     sub_index: Optional[int]
     default: str
@@ -35,16 +50,48 @@ class Reading:
     def key(self):
         return self.reading, self.sub_index
 
+    @property
+    def keys(self) -> Sequence[ReadingKey]:
+        return [self.key]
+
+    def to_sign(self, sign_map: SignMap) -> str:
+        return sign_map.get(self.key, self.default)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class NotReading(Value):
+    value: str
+
+    def to_sign(self, _) -> str:
+        return self.value
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Variant(Value):
+    values: Tuple[Union[Reading, NotReading], ...]
+
+    @property
+    def keys(self) -> Sequence[ReadingKey]:
+        return [key for value in self.values for key in value.keys]
+
+    def to_sign(self, sign_map: SignMap) -> str:
+        return VARIANT_SEPARATOR.join([
+            value.to_sign(sign_map)
+            for value
+            in self.values
+        ])
+
 
 def map_cleaned_reading(cleaned_reading: str) -> Union[
-    str, Reading, List[Union[str, Reading]]
+    Value, List[Value]
 ]:
     def map_(value):
         factories = [
-            (BROKEN_PATTERN, lambda _: BROKEN_SIGN),
-            (WITH_SIGN_PATTERN, lambda match: match.group(1)),
+            (EMPTY_PATTERN, lambda _: NotReading('')),
+            (UNCLEAR_PATTERN, lambda _: NotReading(UNIDENTIFIED_SIGN)),
+            (WITH_SIGN_PATTERN, lambda match: NotReading(match.group(1))),
             (NUMBER_PATTERN, map_number),
-            (GRAPHEME_PATTERN, lambda match: match.group(0)),
+            (GRAPHEME_PATTERN, lambda match: NotReading(match.group(0))),
             (READING_PATTERN, map_reading),
             (VARIANT_PATTERN, map_variant)
         ]
@@ -56,7 +103,7 @@ def map_cleaned_reading(cleaned_reading: str) -> Union[
                 for pattern, factory in factories
             ]
             if match
-        ), UNKNOWN_SIGN)
+        ), NotReading(INVALID_READING))
 
     def map_number(match):
         value = match.group(0)
@@ -68,13 +115,13 @@ def map_cleaned_reading(cleaned_reading: str) -> Union[
             if match.group(2)
             else 1
         )
-        return Reading(match.group(1), sub_index, UNKNOWN_SIGN)
+        return Reading(match.group(1), sub_index, INVALID_READING)
 
     def map_variant(match):
-        return [
+        return Variant(tuple(
             map_(part)
             for part
             in match.group(0).split(VARIANT_SEPARATOR)
-        ]
+        ))
 
     return map_(cleaned_reading)
