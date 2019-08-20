@@ -2,6 +2,7 @@ import attr
 import pytest
 from freezegun import freeze_time
 
+from ebl.dictionary.word import WordId
 from ebl.errors import DataError, NotFoundError
 from ebl.fragment.transliteration import (
     Transliteration, TransliterationError
@@ -12,7 +13,6 @@ from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.text.lemmatization import Lemmatization
-from ebl.dictionary.word import WordId
 
 
 def test_find(fragmentarium, fragment_repository, when):
@@ -211,7 +211,7 @@ def test_search_signs(sign_list,
     matching_fragments = [transliterated_fragment]
 
     (when(sign_list)
-     .map_transliteration(transliteration.cleaned)
+     .map_readings(transliteration.values)
      .thenReturn(sign_matrix))
     (when(fragment_repository)
      .search_signs(expected_query)

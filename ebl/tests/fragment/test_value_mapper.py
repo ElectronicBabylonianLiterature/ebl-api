@@ -1,7 +1,7 @@
 import pytest
 
-from ebl.sign_list.value_mapper import INVALID_READING, NotReading, Reading, \
-    Variant, map_cleaned_reading
+from ebl.fragment.value import INVALID_READING, NotReading, Reading, Variant
+from ebl.fragment.value_mapper import parse_reading
 
 MAP_DATA = [
     ('nu', Reading('nu', 1, INVALID_READING)),
@@ -79,4 +79,4 @@ MAP_DATA = [
 
 @pytest.mark.parametrize("value,expected", MAP_DATA)
 def test_create_value_mapper2(value, expected):
-    assert map_cleaned_reading(value) == expected
+    assert parse_reading(value) == expected

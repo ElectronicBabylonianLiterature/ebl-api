@@ -1,7 +1,8 @@
+from typing import Sequence
+
 import pydash
 
-from ebl.sign_list.value_mapper import map_cleaned_reading
-from ebl.text.atf import ATF_SPEC
+from ebl.fragment.value import SignMap, Value
 
 
 class SignList:
@@ -18,25 +19,19 @@ class SignList:
     def search(self, reading, sub_index):
         return self._repository.search(reading, sub_index)
 
-    def map_transliteration(self, cleaned_transliteration):
-        values = [
-            [
-                map_cleaned_reading(value)
-                for value in row.split(ATF_SPEC['word_separator'])
-            ]
-            for row in cleaned_transliteration
-        ]
-
+    def map_readings(
+        self, values: Sequence[Sequence[Value]]
+    ) -> Sequence[Sequence[str]]:
         def sign_to_pair(sign):
             return [
                 [(value['value'], value.get('subIndex')), sign['_id']]
                 for value in sign['values']
             ]
 
-        sign_map = (
+        sign_map: SignMap = (
             pydash
             .chain(values)
-            .flatten_deep()
+            .flatten()
             .flat_map(lambda reading: reading.keys)
             .thru(self._repository.search_many)
             .flat_map(sign_to_pair)

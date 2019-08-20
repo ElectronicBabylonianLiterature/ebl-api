@@ -2,14 +2,15 @@ import attr
 import pydash
 import pytest
 
-from ebl.corpus.alignment import Alignment, AlignmentToken, AlignmentError
-from ebl.corpus.text import Text, ManuscriptLine, Line
-from ebl.corpus.text_serializer import TextSerializer
 from ebl.auth0 import Guest
+from ebl.corpus.alignment import Alignment, AlignmentError, AlignmentToken
+from ebl.corpus.text import Line, ManuscriptLine, Text
+from ebl.corpus.text_serializer import TextSerializer
 from ebl.dictionary.word import WordId
-from ebl.errors import Defect, NotFoundError, DataError
-from ebl.tests.factories.corpus import TextFactory
+from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragment.transliteration import Transliteration
+from ebl.fragment.value import INVALID_READING
+from ebl.tests.factories.corpus import TextFactory
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, StringPart
@@ -70,15 +71,15 @@ def expect_signs(sign_list, when, sign='X', text=TEXT):
      .flat_map(lambda chapter: chapter.lines)
      .flat_map(lambda line: line.manuscripts)
      .map(lambda manuscript: manuscript.line.atf)
-     .map(lambda atf: Transliteration(atf).cleaned)
-     .for_each(lambda cleaned: when(sign_list)
-               .map_transliteration(cleaned)
+     .map(lambda atf: Transliteration(atf).values)
+     .for_each(lambda values: when(sign_list)
+               .map_readings(values)
                .thenReturn([[sign]]))
      .value())
 
 
 def expect_invalid_signs(sign_list, when):
-    when(sign_list).map_transliteration(...).thenReturn([['?']])
+    when(sign_list).map_readings(...).thenReturn([[INVALID_READING]])
 
 
 def expect_text_update(bibliography, changelog, dehydrated_text,

@@ -1,10 +1,12 @@
 import re
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Sequence
 
 import attr
 import pydash
 
-from ebl.text.atf import ATF_SPEC, ATF_EXTENSIONS
+from ebl.fragment.value import Value
+from ebl.fragment.value_mapper import parse_reading
+from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC
 
 IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['control_line'],
@@ -126,7 +128,19 @@ class Transliteration:
         return attr.evolve(self, signs=signs)
 
     def to_sign_matrix(self, sign_list) -> List[List[str]]:
-        return sign_list.map_transliteration(self.cleaned)
+        return sign_list.map_readings(self.values)
+
+    @property
+    def values(self) -> Sequence[Sequence[Value]]:
+        return (
+            pydash
+            .chain(self.cleaned)
+            .map(lambda row: [
+                parse_reading(value)
+                for value in row.split(ATF_SPEC['word_separator'])
+            ])
+            .value()
+        )
 
     def tokenize(self, create_token: Callable[[str], Any]) -> List[List[Any]]:
         return [
