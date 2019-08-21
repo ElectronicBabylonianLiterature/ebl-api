@@ -1,12 +1,11 @@
 import pydash
-from bson.code import Code
 
-from ebl.errors import NotFoundError
-from ebl.fragmentarium.queries import HAS_TRANSLITERATION, fragment_is, \
-    number_is, aggregate_random, aggregate_lemmas, aggregate_latest, \
-    aggregate_interesting
-from ebl.mongo_repository import MongoRepository
 from ebl.dictionary.word import WordId
+from ebl.errors import NotFoundError
+from ebl.fragmentarium.queries import HAS_TRANSLITERATION, \
+    aggregate_interesting, aggregate_latest, aggregate_lemmas, \
+    aggregate_random, fragment_is, number_is
+from ebl.mongo_repository import MongoRepository
 
 COLLECTION = 'fragments'
 
@@ -28,20 +27,15 @@ class MongoFragmentRepository():
         return self._mongo_collection.count_documents(HAS_TRANSLITERATION)
 
     def count_lines(self):
-        count_lines = Code('function() {'
-                           '  const lines = this.text.lines'
-                           '    .filter(line => line.type == "TextLine");'
-                           '  emit("lines", lines.length);'
-                           '}')
-        sum_lines = Code('function(key, values) {'
-                         '  return values.reduce((acc, cur) => acc + cur, 0);'
-                         '}')
-        result = self._mongo_collection.inline_map_reduce(
-            count_lines,
-            sum_lines,
-            query=HAS_TRANSLITERATION)
+        result = self._mongo_collection.aggregate([
+            {'$match': {'text.lines.type': 'TextLine'}},
+            {'$unwind': '$text.lines'},
+            {'$replaceRoot': {'newRoot': '$text.lines'}},
+            {'$match': {'type': 'TextLine'}},
+            {'$count': 'lines'}
+        ])
 
-        return result[0]['value'] if result else 0
+        return result.next()['lines']
 
     def create(self, fragment):
         return self._mongo_repository.create(fragment.to_dict())
