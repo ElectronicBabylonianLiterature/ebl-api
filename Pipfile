@@ -20,6 +20,7 @@ attrs = "*"
 sentry-sdk = "*"
 roman = "*"
 waitress = "*"
+falcon-apispec = "*"
 
 [dev-packages]
 pytest = "*"

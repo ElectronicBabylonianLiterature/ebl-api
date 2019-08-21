@@ -3,11 +3,13 @@ from base64 import b64decode
 
 import falcon
 import sentry_sdk
-from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
+from apispec import APISpec
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
+from falcon_apispec import FalconPlugin
 from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
+from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
 from ebl.auth0 import Auth0Backend
@@ -15,12 +17,12 @@ from ebl.bibliography.bibliography import MongoBibliography
 from ebl.bibliography.bibliography_entries import (BibliographyEntriesResource,
                                                    BibliographyResource)
 from ebl.changelog import Changelog
+from ebl.corpus.alignments import AlignmentResource
 from ebl.corpus.corpus import Corpus
 from ebl.corpus.lines import LinesResource
 from ebl.corpus.manuscripts import ManuscriptsResource
 from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.corpus.texts import TextResource, TextsResource
-from ebl.corpus.alignments import AlignmentResource
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.dictionary.word_search import WordSearch
@@ -42,21 +44,25 @@ from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
 
-def create_bibliography_routes(api, context):
+def create_bibliography_routes(api, context, spec):
     bibliography_resource = BibliographyResource(context['bibliography'])
     bibliography_entries = BibliographyEntriesResource(context['bibliography'])
     api.add_route('/bibliography', bibliography_resource)
     api.add_route('/bibliography/{id_}', bibliography_entries)
+    spec.path(resource=bibliography_resource)
+    spec.path(resource=bibliography_entries)
 
 
-def create_dictionary_routes(api, context):
+def create_dictionary_routes(api, context, spec):
     words = WordsResource(context['dictionary'])
     word_search = WordSearch(context['dictionary'])
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
+    spec.path(resource=words)
+    spec.path(resource=word_search)
 
 
-def create_fragmentarium_routes(api, context, sign_list):
+def create_fragmentarium_routes(api, context, sign_list, spec):
     fragmentarium = Fragmentarium(context['fragment_repository'],
                                   context['changelog'],
                                   sign_list,
@@ -84,8 +90,17 @@ def create_fragmentarium_routes(api, context, sign_list):
         folio_pager
     )
 
+    spec.path(resource=fragment_search)
+    spec.path(resource=fragments)
+    spec.path(resource=lemmatization)
+    spec.path(resource=references)
+    spec.path(resource=transliteration)
+    spec.path(resource=lemma_search)
+    spec.path(resource=statistics)
+    spec.path(resource=folio_pager)
 
-def create_corpus_routes(api, context, sign_list):
+
+def create_corpus_routes(api, context, sign_list, spec):
     corpus = Corpus(
         context['text_repository'],
         context['bibliography'],
@@ -94,20 +109,32 @@ def create_corpus_routes(api, context, sign_list):
     )
     context['text_repository'].create_indexes()
 
-    api.add_route('/texts', TextsResource(corpus))
-    api.add_route('/texts/{category}/{index}', TextResource(corpus))
+    texts = TextsResource(corpus)
+    text = TextResource(corpus)
+    alignment = AlignmentResource(corpus)
+    manuscript = ManuscriptsResource(corpus)
+    lines = LinesResource(corpus)
+
+    api.add_route('/texts', texts)
+    api.add_route('/texts/{category}/{index}', text)
     api.add_route(
         '/texts/{category}/{index}/chapters/{chapter_index}/alignment',
-        AlignmentResource(corpus)
+        alignment
     )
     api.add_route(
         '/texts/{category}/{index}/chapters/{chapter_index}/manuscripts',
-        ManuscriptsResource(corpus)
+        manuscript
     )
+
     api.add_route(
         '/texts/{category}/{index}/chapters/{chapter_index}/lines',
-        LinesResource(corpus)
-    )
+        lines)
+
+    spec.path(resource=texts)
+    spec.path(resource=text)
+    spec.path(resource=alignment)
+    spec.path(resource=manuscript)
+    spec.path(resource=lines)
 
 
 def create_app(context):
@@ -115,14 +142,24 @@ def create_app(context):
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
 
+    spec = APISpec(
+        title="Electronic Babylonian Literature",
+        version="0.0.1",
+        openapi_version='3.0',
+        plugins=[FalconPlugin(api)],
+    )
+
     sign_list = SignList(context['sign_repository'])
-    create_bibliography_routes(api, context)
-    create_dictionary_routes(api, context)
-    create_fragmentarium_routes(api, context, sign_list)
-    create_corpus_routes(api, context, sign_list)
+    create_bibliography_routes(api, context, spec)
+    create_dictionary_routes(api, context, spec)
+    create_fragmentarium_routes(api, context, sign_list, spec)
+    create_corpus_routes(api, context, sign_list, spec)
 
     files = create_files_resource(context['auth_backend'])(context['files'])
     api.add_route('/images/{file_name}', files)
+    spec.path(resource=files)
+
+    print(spec.to_yaml(), flush=True)
 
     return api
 
