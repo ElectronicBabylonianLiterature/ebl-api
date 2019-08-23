@@ -99,6 +99,15 @@ module contains functionality to update the signs in all the fragments. The modu
 python -m ebl.fragmentarium.update_signs
 ```
 
+## Validating fragments in the database
+
+Improving the parser can lead to existing transliterations becoming invalid, if syntax quirks have been abused.
+The `ebl.fragmentarium.validate_fragments` module can be used to print out a list of invalid fragments based on
+the current parser implementation. 
+```
+python -m ebl.fragmentarium.validate_fragments
+```
+
 ## Type hints
 
 It is not mandatory to use type hints, but try to use them whenever possible, especially in the domain model.
