@@ -43,6 +43,8 @@ from ebl.fragmentarium.transliterations import TransliterationResource
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
+API_VERSION = '0.0.1'
+
 
 def create_bibliography_routes(api, context, spec):
     bibliography_resource = BibliographyResource(context['bibliography'])
@@ -144,10 +146,47 @@ def create_app(context):
 
     spec = APISpec(
         title="Electronic Babylonian Literature",
-        version="0.0.1",
-        openapi_version='3.0',
+        version=API_VERSION,
+        openapi_version='3.0.0',
         plugins=[FalconPlugin(api)],
     )
+    authorization_url = (
+        f'{os.environ.get("AUTH0_ISSUER")}authorize'
+        f'?audience={os.environ.get("AUTH0_AUDIENCE")}'
+    )
+    auth0_scheme = {
+        'type': "oauth2",
+        'flows': {
+            'implicit': {
+                'authorizationUrl': authorization_url,
+                'scopes': {
+                    'openid': '',
+                    'profile': '',
+                    'read:words': '',
+                    'write:words': '',
+                    'read:fragments': '',
+                    'transliterate:fragments': '',
+                    'read:MJG-folios': '',
+                    'read:WGL-folios': '',
+                    'read:FWG-folios': '',
+                    'read:EL-folios': '',
+                    'read:AKG-folios': '',
+                    'lemmatize:fragments': '',
+                    'access:beta': '',
+                    'read:bibliography': '',
+                    'write:bibliography': '',
+                    'read:WRM-folios': '',
+                    'read:texts': '',
+                    'write:texts': '',
+                    'create:texts': '',
+                    'read:CB-folios': '',
+                    'read:JS-folios': '',
+                }
+            }
+        }
+    }
+
+    spec.components.security_scheme("auth0", auth0_scheme)
 
     sign_list = SignList(context['sign_repository'])
     create_bibliography_routes(api, context, spec)
@@ -159,7 +198,19 @@ def create_app(context):
     api.add_route('/images/{file_name}', files)
     spec.path(resource=files)
 
-    print(spec.to_yaml(), flush=True)
+    class OpenApiResource:
+        auth = {'auth_disabled': True}
+
+        def on_get(self, _req, resp):
+            resp.content_type = falcon.MEDIA_YAML
+            resp.body = spec.to_yaml()
+
+    open_api = OpenApiResource()
+    api.add_route(
+        '/ebl.yml',
+        open_api
+    )
+    spec.path(resource=open_api)
 
     return api
 
