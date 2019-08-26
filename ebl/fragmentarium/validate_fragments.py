@@ -28,12 +28,13 @@ def update_fragments(sign_list, fragment_repository):
                 user
             )
         except TransliterationError as error:
-            lines = '\t'.join(
-                fragment.text.lines[error['lineNumber'] - 1].atf
-                for error in error.errors
-            )
             invalid += 1
-            print(f'{fragment.number}\t{lines}')
+            for index, error in enumerate(error.errors):
+                atf = fragment.text.lines[error["lineNumber"] - 1].atf
+                number = (fragment.number
+                          if index == 0 else
+                          len(fragment.number) * ' ')
+                print(f'{number}\t{atf}')
 
     print('# ========================')
     print(f'# Invalid fragments: {invalid}')

@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.text.atf import AtfSyntaxError
+from ebl.fragment.transliteration import TransliterationError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.line import ControlLine, EmptyLine, TextLine
@@ -15,7 +15,7 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 
 @pytest.mark.parametrize('line,expected_tokens', [
     ('', []),
-    ('\n', [EmptyLine()]),
+    ('\n', []),
     ('#first\n\n#second', [
         ControlLine.of_single('#', Token('first')),
         EmptyLine(),
@@ -385,16 +385,19 @@ def test_parse_atf_language_shifts(code, expected_language):
     assert parse_atf(line) == expected
 
 
-@pytest.mark.parametrize('atf,line_number', [
-    ('1. x\nthis is not valid', 2),
-    ('1\'. ($____$) x [...]\n$ (too many underscores)', 1),
-    ('1. me°-e\\li°-ku', 1),
-    ('1. me-°e\\li-°ku', 1),
-    ('1\'. → x\n$ (line continuation in the middle)', 1)
+@pytest.mark.parametrize('atf,line_numbers', [
+    ('1. x\nthis is not valid', [2]),
+    ('1\'. ($____$) x [...]\n$ (too many underscores)', [1]),
+    ('1. me°-e\\li°-ku', [1]),
+    ('1. me-°e\\li-°ku', [1]),
+    ('1\'. → x\n$ (line continuation in the middle)', [1]),
+    ('this is not valid\nthis is not valid', [1, 2])
 ])
-def test_invalid_atf(atf, line_number):
-    with pytest.raises(AtfSyntaxError,
-                       match=f'Line {line_number} is invalid.') as excinfo:
+def test_invalid_atf(atf, line_numbers):
+    with pytest.raises(TransliterationError) as excinfo:
         parse_atf(atf)
 
-    assert excinfo.value.line_number == line_number
+    assert excinfo.value.errors == [{
+        'description': 'Invalid line',
+        'lineNumber': line_number
+    } for line_number in line_numbers]

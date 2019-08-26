@@ -7,9 +7,8 @@ from ebl.bibliography.reference import Reference
 from ebl.fragment.folios import Folios
 from ebl.fragment.record import Record
 from ebl.fragment.transliteration import (
-    Transliteration, TransliterationError
+    Transliteration
 )
-from ebl.text.atf import AtfSyntaxError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.text import Text
@@ -70,22 +69,15 @@ class Fragment:
             user
         )
 
-        try:
-            text = self.text.merge(parse_atf(transliteration.atf))
+        text = self.text.merge(parse_atf(transliteration.atf))
 
-            return attr.evolve(
-                self,
-                text=text,
-                notes=transliteration.notes,
-                signs=transliteration.signs,
-                record=record
-            )
-        except AtfSyntaxError as error:
-            errors = [{
-                'description': 'Invalid line',
-                'lineNumber': error.line_number
-            }]
-            raise TransliterationError(errors)
+        return attr.evolve(
+            self,
+            text=text,
+            notes=transliteration.notes,
+            signs=transliteration.signs,
+            record=record
+        )
 
     def add_matching_lines(self, query) -> 'Fragment':
         matching_lines = query.get_matching_lines(

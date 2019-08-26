@@ -3,13 +3,12 @@ import re
 import pydash
 from parsy import ParseError, regex, seq
 
-from ebl.text.atf import AtfSyntaxError
+from ebl.fragment.transliteration import TransliterationError
+from ebl.text.atf import ATF_PARSER_VERSION
 from ebl.text.line import ControlLine, EmptyLine
 from ebl.text.text import Text
 from ebl.text.text_parser import TEXT_LINE
 from ebl.text.token import Token
-
-LINE_SEPARATOR = regex(r'\n').desc('line separator')
 
 CONTROL_LINE = seq(
     regex(r'^(=:|\$|@|&|#)', re.RegexFlag.MULTILINE),
@@ -17,26 +16,38 @@ CONTROL_LINE = seq(
 ).combine(ControlLine.of_single)
 
 EMPTY_LINE = regex(
-    r'^$', re.RegexFlag.MULTILINE
-).map(lambda _: EmptyLine()) << LINE_SEPARATOR
+    r'^$'
+).map(lambda _: EmptyLine())
 
-ATF = (
-    (CONTROL_LINE | TEXT_LINE | EMPTY_LINE)
-    .many()
-    .sep_by(LINE_SEPARATOR)
-    .map(pydash.flatten)
-    .map(tuple)
-    .map(Text)
-)
+LINE = CONTROL_LINE | TEXT_LINE | EMPTY_LINE
 
 
 def parse_atf(atf: str):
-    try:
-        return ATF.parse(atf)
-    except ParseError as error:
-        raise atf_syntax_error(error)
+    def parse_line(line: str, line_number: int):
+        try:
+            return (LINE.parse(line), None)
+        except ParseError:
+            return (None,  {
+                'description': 'Invalid line',
+                'lineNumber': line_number + 1
+            })
 
+    def check_errors(pairs):
+        errors = [
+            error
+            for line, error in pairs
+            if error is not None
+        ]
+        if any(errors):
+            raise TransliterationError(errors)
 
-def atf_syntax_error(error):
-    line_number = int(error.line_info().split(':')[0]) + 1
-    return AtfSyntaxError(line_number)
+    lines = tuple(pydash
+                  .chain(atf)
+                  .split('\n')
+                  .map(parse_line)
+                  .tap(check_errors)
+                  .map(lambda pair: pair[0])
+                  .drop_right_while(lambda line: line.prefix == '')
+                  .value())
+
+    return Text(lines, ATF_PARSER_VERSION)
