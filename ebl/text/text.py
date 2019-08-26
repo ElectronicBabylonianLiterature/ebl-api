@@ -4,7 +4,7 @@ import attr
 import pydash
 
 from ebl.merger import Merger
-from ebl.text.atf import Atf
+from ebl.text.atf import ATF_PARSER_VERSION, Atf, DEFAULT_ATF_PARSER_VERSION
 from ebl.text.language import Language
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, EmptyLine, Line, TextLine
@@ -66,6 +66,7 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
     lines: Tuple[Line, ...] = tuple()
+    parser_version: str = ATF_PARSER_VERSION
 
     @property
     def lemmatization(self) -> Lemmatization:
@@ -115,11 +116,17 @@ class Text:
         ).merge(
             self.lines, other.lines
         )
-        return attr.evolve(self, lines=tuple(merged_lines))
+        return attr.evolve(self,
+                           lines=tuple(merged_lines),
+                           parser_version=other.parser_version)
+
+    def set_parser_version(self, parser_version: str) -> 'Text':
+        return attr.evolve(self, parser_version=parser_version)
 
     def to_dict(self) -> dict:
         return {
-            'lines': [line.to_dict() for line in self.lines]
+            'lines': [line.to_dict() for line in self.lines],
+            'parser_version': self.parser_version
         }
 
     @staticmethod
@@ -141,7 +148,8 @@ class Text:
             for line
             in data['lines']
         )
-        return Text(lines)
+        return Text(lines, data.get('parser_version',
+                                    DEFAULT_ATF_PARSER_VERSION))
 
     @staticmethod
     def of_iterable(lines: Iterable[Line]) -> 'Text':

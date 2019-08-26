@@ -2,34 +2,45 @@ from typing import Tuple
 
 import pytest
 
-from ebl.text.atf import Atf
+from ebl.dictionary.word import WordId
+from ebl.text.atf import ATF_PARSER_VERSION, Atf
+from ebl.text.labels import LineNumberLabel
 from ebl.text.language import Language
 from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
-from ebl.text.token import Token, Word, LineContinuation, Erasure, Side
-from ebl.dictionary.word import WordId
-from ebl.text.labels import LineNumberLabel
+from ebl.text.token import Erasure, LineContinuation, Side, Token, Word
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),
     ControlLine.of_single('$', Token(' single ruling'))
 )
-TEXT: Text = Text(LINES)
+PARSER_VERSION = '1.0.0'
+TEXT: Text = Text(LINES, PARSER_VERSION)
 
 
 def test_of_iterable():
-    assert Text.of_iterable(LINES) == TEXT
+    assert Text.of_iterable(LINES) == Text(LINES, ATF_PARSER_VERSION)
 
 
 def test_lines():
     assert TEXT.lines == LINES
 
 
+def test_version():
+    assert TEXT.parser_version == PARSER_VERSION
+
+
+def test_set_version():
+    new_version = '2.0.0'
+    assert TEXT.set_parser_version(new_version).parser_version == new_version
+
+
 def test_to_dict():
     assert TEXT.to_dict() == {
-        'lines': [line.to_dict() for line in LINES]
+        'lines': [line.to_dict() for line in LINES],
+        'parser_version': TEXT.parser_version
     }
 
 
@@ -57,7 +68,7 @@ def test_update_lemmatization():
             Word('ha-am', unique_lemma=(WordId('nu I'),)),
         )),
         ControlLine('$', (Token(' single ruling'), )),
-    ))
+    ), TEXT.parser_version)
 
     assert TEXT.update_lemmatization(lemmatization) == expected
 
@@ -143,8 +154,11 @@ def test_update_lemmatization_wrong_lines():
         ])
     )
 ])
-def test_merge(old, new, expected):
-    assert old.merge(new).to_dict() == expected.to_dict()
+def test_merge(old: Text, new: Text, expected: Text) -> None:
+    new_version = f'{old.parser_version}-test'
+    assert old.merge(
+        new.set_parser_version(new_version)
+    ).to_dict() == expected.set_parser_version(new_version).to_dict()
 
 
 @pytest.mark.parametrize('lines', [
@@ -168,6 +182,8 @@ def test_merge(old, new, expected):
     ]
 ])
 def test_from_dict(lines):
+    parser_version = '2.3.1'
     assert Text.from_dict({
-        'lines': [line.to_dict() for line in lines]
-    }) == Text.of_iterable(lines)
+        'lines': [line.to_dict() for line in lines],
+        'parser_version': '2.3.1'
+    }) == Text.of_iterable(lines).set_parser_version(parser_version)

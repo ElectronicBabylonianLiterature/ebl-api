@@ -9,7 +9,6 @@ from ebl.text.text import Text
 from ebl.text.text_parser import TEXT_LINE
 from ebl.text.token import Token
 
-
 LINE_SEPARATOR = regex(r'\n').desc('line separator')
 
 CONTROL_LINE = seq(
