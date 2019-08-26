@@ -1,4 +1,5 @@
 from collections import Counter
+from typing import Union
 
 from ebl.corpus.alignment import AlignmentError
 from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine, \
@@ -7,8 +8,9 @@ from ebl.errors import DataError
 from ebl.fragment.transliteration import Transliteration, TransliterationError
 from ebl.fragmentarium.validator import Validator
 from ebl.text.labels import LineNumberLabel
-from ebl.text.token import DocumentOrientedGloss, Erasure, LanguageShift, \
-    Token, TokenVisitor, Word
+from ebl.text.token import BrokenAway, DocumentOrientedGloss, Erasure, \
+    LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
+    Word
 
 
 def invalid_atf(chapter: Chapter,
@@ -41,6 +43,16 @@ class AlignmentVisitor(TokenVisitor):
 
     def visit_document_oriented_gloss(self,
                                       gloss: DocumentOrientedGloss) -> None:
+        pass
+
+    def visit_broken_away(
+            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
+    ) -> None:
+        pass
+
+    def visit_omission_or_removal(
+            self, omission: OmissionOrRemoval
+    ) -> None:
         pass
 
     def visit_erasure(self, erasure: Erasure):

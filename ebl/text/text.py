@@ -8,9 +8,10 @@ from ebl.text.atf import Atf
 from ebl.text.language import Language
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, EmptyLine, Line, TextLine
-from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
-                            LoneDeterminative, Partial, Token, Word,
-                            LineContinuation, Erasure, Side, ErasureState)
+from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
+                            ErasureState, LanguageShift, LineContinuation,
+                            LoneDeterminative, OmissionOrRemoval, Partial,
+                            PerhapsBrokenAway, Side, Token, Word)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
@@ -39,6 +40,15 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             Partial(*data['partial'])
         ),
         'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
+            data['value']
+        ),
+        'BrokenAway': lambda data: BrokenAway(
+            data['value']
+        ),
+        'PerhapsBrokenAway': lambda data: PerhapsBrokenAway(
+            data['value']
+        ),
+        'OmissionOrRemoval': lambda data: OmissionOrRemoval(
             data['value']
         ),
         'LineContinuation': lambda data: LineContinuation(data['value']),
