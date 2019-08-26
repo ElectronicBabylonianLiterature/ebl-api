@@ -4,11 +4,12 @@ import pydash
 from parsy import (char_from, decimal_digit, regex, seq, string, string_from)
 
 import ebl.text.atf
-from ebl.text.line import TextLine
-from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
-                            LineContinuation, LoneDeterminative, Partial,
-                            Token, Word, Side, Erasure, ErasureState)
 from ebl.text.labels import LineNumberLabel
+from ebl.text.line import TextLine
+from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
+                            ErasureState, LanguageShift, LineContinuation,
+                            LoneDeterminative, OmissionOrRemoval, Partial,
+                            PerhapsBrokenAway, Side, Token, Word)
 
 
 def sequence(prefix, part, joiner, min_=0):
@@ -32,16 +33,23 @@ def determinative(parser):
     return (
         OMISSION.at_most(1).concat() +
         string_from('{+', '{') +
+        BROKEN_AWAY_LEFT.at_most(1).concat() +
         parser +
+        BROKEN_AWAY_RIGHT.at_most(1).concat() +
         string('}') +
-        MODIFIER +
-        FLAG +
         OMISSION.at_most(1).concat()
     )
 
 
 def value_sequence(prefix, part, min_=None):
-    return sequence(prefix, part, JOINER.many().concat(), min_)
+    return sequence(prefix,
+                    part,
+                    (INLINE_BROKEN_RIGHT.at_most(1).concat() +
+                     OMISSION_RIGHT.at_most(1).concat() +
+                     JOINER.many().concat() +
+                     OMISSION_LEFT.at_most(1).concat() +
+                     INLINE_BROKEN_LEFT.at_most(1).concat()),
+                    min_)
 
 
 def true_joiner():
@@ -61,16 +69,17 @@ def true_joiner():
     return regex(joiners)
 
 
-OMISSION = string_from(
-    '<<', '<(', '<', '>>', ')>', '>'
-).desc('omission or removal')
-LINGUISTIC_GLOSS = string_from('{{', '}}')
+OMISSION_LEFT = string_from('<<', '<(', '<').desc('left omission or removal')
+OMISSION_RIGHT = string_from('>>', ')>', '>').desc('right omission or removal')
+OMISSION = (OMISSION_LEFT | OMISSION_RIGHT).desc('omission or removal')
+LINGUISTIC_GLOSS_LEFT = string_from('{{')
+LINGUISTIC_GLOSS_RIGHT = string_from('}}')
 DOCUMENT_ORIENTED_GLOSS = string_from('{(', ')}')
 SINGLE_DOT = regex(r'(?<!\.)\.(?!\.)')
 JOINER = (
-    OMISSION |
-    LINGUISTIC_GLOSS |
-    true_joiner()
+    LINGUISTIC_GLOSS_RIGHT |
+    true_joiner() |
+    LINGUISTIC_GLOSS_LEFT
 ).desc('joiner')
 FLAG = char_from('!?*#').many().concat().desc('flag')
 MODIFIER = (
@@ -85,9 +94,15 @@ LINE_NUMBER = regex(r'[^\s]+\.').map(
 TABULATION = string('($___$)').desc('tabulation')
 COLUMN = regex(r'&\d*').desc('column') << WORD_SEPARATOR_OR_EOL
 COMMENTARY_PROTOCOL = regex(r'!(qt|bs|cm|zz)').desc('commentary protocol')
-LACUNA = regex(r'\[?\(?\.\.\.\)?\]?').desc('lacuna')
+UNKNOWN_NUMBER_OF_SIGNS = string('...')
 SHIFT = regex(r'%\w+').desc('language or register/writing system shift')
 SUB_INDEX = regex(r'[₀-₉ₓ]+').desc('subindex')
+BROKEN_AWAY_LEFT = string('[')
+BROKEN_AWAY_RIGHT = string(']')
+BROKEN_AWAY = BROKEN_AWAY_LEFT | BROKEN_AWAY_RIGHT
+PERHAPS_BROKEN_AWAY_LEFT = string('(')
+PERHAPS_BROKEN_AWAY_RIGHT = string(')')
+PERHAPS_BROKEN_AWAY = PERHAPS_BROKEN_AWAY_LEFT | PERHAPS_BROKEN_AWAY_RIGHT
 INLINE_BROKEN_LEFT = regex(r'(\[\(|\[|(?<!{)\()(?!\.)')
 INLINE_BROKEN_RIGHT = regex(r'(?<!\.)(\)\]|\)(?!})|\])')
 INLINE_BROKEN = INLINE_BROKEN_LEFT | INLINE_BROKEN_RIGHT
@@ -99,37 +114,29 @@ DIVIDER = (
     INLINE_BROKEN.at_most(1).concat()
 ).desc('divider')
 UNKNOWN = (
-    INLINE_BROKEN.at_most(1).concat() +
     string_from(ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN) +
-    FLAG +
-    INLINE_BROKEN.at_most(1).concat()
+    FLAG
 ).desc('unclear or unidentified')
 VALUE_CHAR = char_from('aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ')
 VALUE = seq(
+    (VALUE_CHAR | decimal_digit),
     (
-        (INLINE_BROKEN + VALUE_CHAR + INLINE_BROKEN) |
-        (INLINE_BROKEN + VALUE_CHAR) |
-        (VALUE_CHAR + INLINE_BROKEN) |
-        VALUE_CHAR |
-        decimal_digit
-    ).at_least(1).concat(),
+        INLINE_BROKEN.at_most(1).concat() +
+        (VALUE_CHAR | decimal_digit)
+    ).many().concat(),
     SUB_INDEX.optional(),
     MODIFIER,
     FLAG,
-    INLINE_BROKEN.at_most(1).concat()
 ).map(pydash.compact).concat().desc('reading')
 GRAPHEME_CHAR = regex(r'[A-ZṢŠṬa-zṣšṭ0-9₀-₉]')
 GRAPHEME = (
-    string('$').at_most(1).concat() +
+    string('$').at_most(1).concat() + GRAPHEME_CHAR +
     (
-        (INLINE_BROKEN + GRAPHEME_CHAR + INLINE_BROKEN) |
-        (INLINE_BROKEN + GRAPHEME_CHAR) |
-        (GRAPHEME_CHAR + INLINE_BROKEN) |
+        INLINE_BROKEN.at_most(1).concat() +
         GRAPHEME_CHAR
-    ).at_least(1).concat() +
+    ).many().concat() +
     MODIFIER +
-    FLAG +
-    INLINE_BROKEN.at_most(1).concat()
+    FLAG
 ).desc('grapheme')
 COMPOUND_GRAPHEME_OPERATOR = (SINGLE_DOT | char_from('×%&+()')).desc(
     'compound grapheme operator'
@@ -167,14 +174,14 @@ VARIANT = variant(
     GRAPHEME |
     DIVIDER
 )
-DETERMINATIVE_SEQUENCE = (
-    INLINE_BROKEN.at_most(1).concat() +
-    determinative(value_sequence(VARIANT, VARIANT)) +
-    INLINE_BROKEN.at_most(1).concat()
+DETERMINATIVE_SEQUENCE = determinative(value_sequence(VARIANT, VARIANT))
+
+WORD_PARTS = (
+        value_sequence(VARIANT,
+                       DETERMINATIVE_SEQUENCE | VARIANT) |
+        value_sequence(DETERMINATIVE_SEQUENCE,
+                       DETERMINATIVE_SEQUENCE | VARIANT, 1)
 )
-WORD_PARTS = (value_sequence(VARIANT, DETERMINATIVE_SEQUENCE | VARIANT) |
-              value_sequence(
-                  DETERMINATIVE_SEQUENCE, DETERMINATIVE_SEQUENCE | VARIANT, 1))
 
 
 def erasure_part(state: ErasureState):
@@ -206,64 +213,62 @@ PARTS_WITH_ERASURE = erasure(False, lambda _:  WORD_PARTS
                              .many()).map(pydash.flatten_deep).concat() | \
                      WORD_PARTS.map(pydash.flatten_deep).concat()
 WORD = seq(
-    JOINER.many().concat(),
+    (
+            JOINER.at_least(1).concat() +
+            INLINE_BROKEN_LEFT.at_most(1).concat()
+    ).at_most(1).concat(),
+    OMISSION_LEFT.at_most(1).concat() +
     (
             value_sequence(PARTS_WITH_ERASURE, PARTS_WITH_ERASURE, 1) |
             WORD_PARTS
     ),
-    JOINER.many().concat(),
-    FLAG
+    OMISSION_RIGHT.at_most(1).concat() +
+    (
+            INLINE_BROKEN_RIGHT.at_most(1).concat() +
+            JOINER.at_least(1).concat()
+    ).at_most(1).concat()
 ).map(pydash.flatten_deep).concat().desc('word')
 LONE_DETERMINATIVE = determinative(
     VARIANT + (JOINER.many().concat() + VARIANT).many().concat()
 ).desc('lone determinative')
 
 
-LINE_CONTINUATION = string('→').map(LineContinuation).desc('line continuation')
+LINE_CONTINUATION =\
+    string('→').map(LineContinuation).desc('line continuation')
 
 TEXT_LINE = seq(
     LINE_NUMBER << WORD_SEPARATOR,
     (
-        TABULATION.map(Token) |
-        COLUMN.map(Token) |
-        (DIVIDER << WORD_SEPARATOR_OR_EOL).map(Token) |
-        COMMENTARY_PROTOCOL.map(Token) |
-        DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
-        SHIFT.map(LanguageShift) |
-        erasure(True) << WORD_SEPARATOR_OR_EOL |
-        WORD.map(Word) |
-        seq(LACUNA, LONE_DETERMINATIVE, LACUNA).map(
-            lambda values: [
-                Token(values[0]),
-                LoneDeterminative.of_value(
-                    values[1], Partial(True, True)
-                ),
-                Token(values[2])
-            ]
-        ) |
-        seq(LACUNA, LONE_DETERMINATIVE).map(
-            lambda values: [
-                Token(values[0]),
-                LoneDeterminative.of_value(
-                    values[1], Partial(True, False)
-                )
-            ]
-        ) |
-        seq(LONE_DETERMINATIVE, LACUNA).map(
-            lambda values: [
-                LoneDeterminative.of_value(
-                    values[0], Partial(False, True)
-                ),
-                Token(values[1])
-            ]
-        ) |
-        LONE_DETERMINATIVE.map(
-            lambda value: LoneDeterminative.of_value(
-                value, Partial(False, False)
-            )
-        ) |
-        LACUNA.map(Token) |
-        OMISSION.map(Token)
+            TABULATION.map(Token) |
+            COLUMN.map(Token) |
+            (DIVIDER << WORD_SEPARATOR_OR_EOL).map(Token) |
+            COMMENTARY_PROTOCOL.map(Token) |
+            DOCUMENT_ORIENTED_GLOSS.map(DocumentOrientedGloss) |
+            SHIFT.map(LanguageShift) |
+            erasure(True) << WORD_SEPARATOR_OR_EOL |
+            WORD.map(Word) |
+            seq(
+                (UNKNOWN_NUMBER_OF_SIGNS.map(Token) |
+                 BROKEN_AWAY_RIGHT.map(BrokenAway) |
+                 PERHAPS_BROKEN_AWAY_RIGHT.map(PerhapsBrokenAway)).optional(),
+                LONE_DETERMINATIVE,
+                (UNKNOWN_NUMBER_OF_SIGNS.map(Token) |
+                 BROKEN_AWAY_LEFT.map(BrokenAway) |
+                 PERHAPS_BROKEN_AWAY_LEFT.map(PerhapsBrokenAway)).optional()
+            ).map(
+                lambda values: [token for token in [
+                    values[0],
+                    LoneDeterminative.of_value(
+                        values[1], Partial(values[0] is not None,
+                                           values[2] is not None)
+                    ),
+                    values[2]
+                ] if token is not None]
+            ) |
+            OMISSION.map(OmissionOrRemoval) |
+            BROKEN_AWAY.map(BrokenAway) |
+            PERHAPS_BROKEN_AWAY.map(PerhapsBrokenAway) |
+            UNKNOWN_NUMBER_OF_SIGNS.map(Token)
     ).many().sep_by(WORD_SEPARATOR).map(pydash.flatten_deep) +
     (LINE_CONTINUATION << WORD_SEPARATOR.many().concat()).at_most(1)
 ).combine(TextLine.of_iterable)

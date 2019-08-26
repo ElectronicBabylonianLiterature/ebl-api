@@ -30,7 +30,7 @@ from ebl.text.token import LoneDeterminative, Word
     ('{iti}]ŠE', Word('{iti}]ŠE')),
     ('šu/|BI×IS|', Word('šu/|BI×IS|')),
     ('{kur}aš+šur', Word('{kur}aš+šur')),
-    ('i-le-ʾe-[e]', Word('i-le-ʾe-[e]')),
+    ('i-le-ʾe-[e', Word('i-le-ʾe-[e')),
     ('U₄.27/29.KAM', Word('U₄.27/29.KAM')),
     ('x/m[a', Word('x/m[a')),
     ('SAL.{+mu-ru-ub}[LA', Word('SAL.{+mu-ru-ub}[LA')),
@@ -38,15 +38,18 @@ from ebl.text.token import LoneDeterminative, Word
     ('.x.KAM', Word('.x.KAM')),
     ('3.AM₃', Word('3.AM₃')),
     ('<{10}>bu', Word('<{10}>bu')),
-    ('KA₂?].DINGIR.RA[{ki}?', Word('KA₂?].DINGIR.RA[{ki}?')),
-    ('{d}?nu?-di]m₂?-mu[d?', Word('{d}?nu?-di]m₂?-mu[d?')),
-    ('<GAR>?', Word('<GAR>?')),
+    ('KA₂?].DINGIR.RA[{ki?}', Word('KA₂?].DINGIR.RA[{ki?}')),
+    ('{d?}nu?-di]m₂?-mu[d?', Word('{d?}nu?-di]m₂?-mu[d?')),
+    ('<GAR?>', Word('<GAR?>')),
     ('gam/:', Word('gam/:')),
     ('lu₂@v', Word('lu₂@v')),
-    ('{lu₂@v}UM.ME.[A]', Word('{lu₂@v}UM.ME.[A]')),
-    ('{lu₂@v}]KAB.SAR-M[EŠ]', Word('{lu₂@v}]KAB.SAR-M[EŠ]')),
+    ('{lu₂@v}UM.ME.[A', Word('{lu₂@v}UM.ME.[A')),
+    ('{lu₂@v}]KAB.SAR-M[EŠ', Word('{lu₂@v}]KAB.SAR-M[EŠ')),
     ('MIN<(ta-ne₂-hi)>', Word('MIN<(ta-ne₂-hi)>')),
-    ('UN#', Word('UN#'))
+    ('UN#', Word('UN#')),
+    ('he₂-<(pa₃)>', Word('he₂-<(pa₃)>')),
+    ('{[i]ti}AB', Word('{[i]ti}AB')),
+    ('in]-', Word('in]-')),
 ])
 def test_word(atf, expected):
     assert WORD.map(Word).parse(atf) == expected
@@ -54,14 +57,30 @@ def test_word(atf, expected):
 
 @pytest.mark.parametrize("atf,expected", [
     ('<{10}>', LoneDeterminative('<{10}>')),
-    ('{ud]u}?', LoneDeterminative('{ud]u}?')),
+    ('{ud]u?}', LoneDeterminative('{ud]u?}')),
     ('{u₂#}', LoneDeterminative('{u₂#}')),
-    ('{lu₂@v}', LoneDeterminative('{lu₂@v}'))
+    ('{lu₂@v}', LoneDeterminative('{lu₂@v}')),
+    ('{k[i]}', LoneDeterminative('{k[i]}'))
 ])
 def test_lone_determinative(atf, expected):
     assert LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf) == expected
 
 
-def test_invalid():
+@pytest.mark.parametrize('atf', [
+    '{udu}?'
+])
+def test_invalid_lone_determinative(atf):
     with pytest.raises(Exception):
-        WORD.parse('sal/: šim')
+        LONE_DETERMINATIVE.parse(atf)
+
+
+@pytest.mark.parametrize('atf', [
+    'sal/: šim',
+    '<GAR>?',
+    'KA₂]?.DINGIR.RA[{ki?}',
+    'KA₂?].DINGIR.RA[{ki}?',
+    'k[a]?'
+])
+def test_invalid(atf):
+    with pytest.raises(Exception):
+        WORD.parse(atf)

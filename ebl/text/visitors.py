@@ -1,9 +1,11 @@
-from typing import List, Tuple
+from typing import Callable, List, Tuple, Union
 
 from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.language import DEFAULT_LANGUAGE, Language
-from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
-                            LanguageShift, Side, Token, TokenVisitor, Word)
+from ebl.text.token import (BrokenAway, DEFAULT_NORMALIZED,
+                            DocumentOrientedGloss, Erasure, LanguageShift,
+                            OmissionOrRemoval, PerhapsBrokenAway, Side, Token,
+                            TokenVisitor, Word)
 
 
 class LanguageVisitor(TokenVisitor):
@@ -35,6 +37,16 @@ class LanguageVisitor(TokenVisitor):
             self, gloss: DocumentOrientedGloss
     ) -> None:
         self.visit_token(gloss)
+
+    def visit_broken_away(
+            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
+    ) -> None:
+        self.visit_token(broken_away)
+
+    def visit_omission_or_removal(
+            self, omission: OmissionOrRemoval
+    ) -> None:
+        self.visit_token(omission)
 
     def visit_erasure(self, erasure: Erasure) -> None:
         self.visit_token(erasure)
@@ -74,7 +86,8 @@ class AtfVisitor(TokenVisitor):
             self, gloss: DocumentOrientedGloss
     ) -> None:
         def left():
-            self._append_separator()
+            if not self._omit_separator:
+                self._append_separator()
             self._parts.append(gloss.value)
             self._set_omit(True)
 
@@ -85,6 +98,31 @@ class AtfVisitor(TokenVisitor):
             self._set_force()
 
         {Side.LEFT: left, Side.RIGHT: right}[gloss.side]()
+
+    def visit_broken_away(
+            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
+    ) -> None:
+        self._side(broken_away.side)(broken_away)
+
+    def visit_omission_or_removal(
+            self, omission: OmissionOrRemoval
+    ) -> None:
+        self._side(omission.side)(omission)
+
+    def _side(self, side: Side) -> Callable[[Token], None]:
+        return {
+            Side.LEFT: self._left,
+            Side.RIGHT: self._right
+        }[side]
+
+    def _left(self, token: Token) -> None:
+        if not self._omit_separator:
+            self._append_separator()
+        self._parts.append(token.value)
+        self._set_omit(True)
+
+    def _right(self, token: Token) -> None:
+        self._parts.append(token.value)
 
     def visit_erasure(self, erasure: Erasure):
         def left():

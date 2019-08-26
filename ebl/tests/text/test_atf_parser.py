@@ -5,10 +5,10 @@ from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
-from ebl.text.token import (DocumentOrientedGloss, LanguageShift,
-                            LineContinuation, LoneDeterminative, Partial,
-                            Token, Word, ErasureState, Erasure, Side)
-
+from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
+                            ErasureState, LanguageShift, LineContinuation,
+                            LoneDeterminative, OmissionOrRemoval, Partial,
+                            PerhapsBrokenAway, Side, Token, Word)
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
@@ -37,31 +37,34 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
         ControlLine.of_single('=:', Token(' continuation'))
     ]),
     ('a+1.a+2. šu', [
-        TextLine('a+1.a+2.', (Word('šu'), ))
+        TextLine('a+1.a+2.', (Word('šu'),))
     ]),
     ('1. ($___$)', [
-        TextLine('1.', (Token('($___$)'), ))
+        TextLine('1.', (Token('($___$)'),))
     ]),
     ('1. ... [...] (...) [(...)]', [
         TextLine('1.', (
-            Token('...'),
-            Token('[...]'),
-            Token('(...)'),
-            Token('[(...)]')
+                Token('...'),
+                BrokenAway('['), Token('...'), BrokenAway(']'),
+                PerhapsBrokenAway('('), Token('...'), PerhapsBrokenAway(')'),
+                BrokenAway('['), PerhapsBrokenAway('('), Token('...'),
+                PerhapsBrokenAway(')'), BrokenAway(']')
         ))
     ]),
     ('1. [(x x x)]', [
         TextLine('1.', (
-            Word('[(x'),
-            Word('x'),
-            Word('x)]')
+                BrokenAway('['), PerhapsBrokenAway('('),
+                Word('x'),
+                Word('x'),
+                Word('x'),
+                PerhapsBrokenAway(')'), BrokenAway(']')
         ))
     ]),
     ('1. <en-da-ab-su₈ ... >', [
         TextLine('1.', (
-            Word('<en-da-ab-su₈'),
-            Token('...'),
-            Token('>')
+                Word('<en-da-ab-su₈'),
+                Token('...'),
+                OmissionOrRemoval('>')
         ))
     ]),
     ('1. & &12', [
@@ -69,40 +72,40 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1. | : :\' :" :. :: ; /', [
         TextLine('1.', (
-            Token('|'),
-            Token(':'),
-            Token(':\''),
-            Token(':"'),
-            Token(':.'),
-            Token('::'),
-            Token(';'),
-            Token('/')
+                Token('|'),
+                Token(':'),
+                Token(':\''),
+                Token(':"'),
+                Token(':.'),
+                Token('::'),
+                Token(';'),
+                Token('/')
         ))
     ]),
     ('1. :? :# ::?', [
         TextLine('1.', (
-            Token(':?'),
-            Token(':#'),
-            Token('::?')
+                Token(':?'),
+                Token(':#'),
+                Token('::?')
         ))
     ]),
     ('1. me-e-li :\n2. ku', [
         TextLine('1.', (
-            Word('me-e-li'),
-            Token(':')
+                Word('me-e-li'),
+                Token(':')
         )),
         TextLine('2.', (
-            Word('ku'),
+                Word('ku'),
         ))
     ]),
     ('1. |GAL|', [
         TextLine('1.', (
-            Word('|GAL|'),
+                Word('|GAL|'),
         ))
     ]),
     ('1. !qt !bs !cm !zz', [
         TextLine('1.', (
-            Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
+                Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
         ))
     ]),
     ('1. x X x# X#', [
@@ -113,59 +116,85 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', [
         TextLine('1.', (
-            Token('[...'),
-            Word('r]u?-u₂-qu'),
-            Word('na-a[n-'),
-            Token('...]')
+                BrokenAway('['),
+                Token('...'),
+                Word('r]u?-u₂-qu'),
+                Word('na-a[n-'),
+                Token('...'),
+                BrokenAway(']')
         )),
         TextLine('2.', (
-            Word('ši-[ku-'),
-            Token('...'),
-            Word('-ku]-nu')
+                Word('ši-[ku-'),
+                Token('...'),
+                Word('-ku]-nu')
         )),
         TextLine('3.', (
-            Token('[...]'),
-            Word('-ku')
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                Word('-ku'),
         ))
     ]),
     ('1. ša₃] [{d}UTU [:', [
         TextLine('1.', (
-            Word('ša₃]'),
-            Word('[{d}UTU'),
-            Token('[:')
+                Word('ša₃'),
+                BrokenAway(']'),
+                BrokenAway('['),
+                Word('{d}UTU'),
+                Token('[:')
         ))
     ]),
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
         TextLine('1.', (
-            Token('[...]'),
-            Word('-qa-'),
-            Token('[...]'),
-            Word('-ba-'),
-            Token('[...]')
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                Word('-qa-'),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                Word('-ba-'),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']')
         )),
         TextLine('2.', (
-            Word('pa-'),
-            Token('[...]')
+                Word('pa-'),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']')
         ))
     ]),
     ('1. [a?-ku (...)]\n2. [a?-ku (x)]', [
         TextLine('1.', (
-            Word('[a?-ku'),
-            Token('(...)]')
+            BrokenAway('['),
+            Word('a?-ku'),
+            PerhapsBrokenAway('('),
+            Token('...'),
+            PerhapsBrokenAway(')'),
+            BrokenAway(']')
         )),
         TextLine('2.', (
-            Word('[a?-ku'),
-            Word('(x)]')
+            BrokenAway('['),
+            Word('a?-ku'),
+            PerhapsBrokenAway('('),
+            Word('x'),
+            PerhapsBrokenAway(')'),
+            BrokenAway(']')
         )),
     ]),
     ('1. [...+ku....] [....ku+...]', [
         TextLine('1.', (
-            Token('[...'),
+            BrokenAway('['),
+            Token('...'),
             Word('+ku.'),
-            Token('...]'),
-            Token('[...'),
+            Token('...'),
+            BrokenAway(']'),
+            BrokenAway('['),
+            Token('...'),
             Word('.ku+'),
-            Token('...]')
+            Token('...'),
+            BrokenAway(']')
         ))
     ]),
     (
@@ -175,41 +204,63 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
          '4. [...]{bu}[...]'),
         [
             TextLine('1.', (
-                Token('[...]'),
-                LoneDeterminative.of_value('{bu}', Partial(False, False)),
-                Token('[...]')
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                LoneDeterminative.of_value('{bu}',
+                                           Partial(False, False)),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']')
             )),
             TextLine('2.', (
-                Token('[...]'),
-                LoneDeterminative.of_value('{bu}', Partial(True, False)),
-                Token('[...]')
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                LoneDeterminative.of_value('{bu}',
+                                           Partial(True, False)),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']')
             )),
             TextLine('3.', (
-                Token('[...]'),
-                LoneDeterminative.of_value('{bu}', Partial(False, True)),
-                Token('[...]')
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                LoneDeterminative.of_value('{bu}',
+                                           Partial(False, True)),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']')
             )),
             TextLine('4.', (
-                Token('[...]'),
-                LoneDeterminative.of_value('{bu}', Partial(True, True)),
-                Token('[...]')
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
+                LoneDeterminative.of_value('{bu}',
+                                           Partial(True, True)),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']')
             ))
         ]
     ),
     ('1. {bu}-nu {bu-bu}-nu\n2. {bu-bu}', [
         TextLine('1.', (
-            Word('{bu}-nu'),
-            Word('{bu-bu}-nu')
+                Word('{bu}-nu'),
+                Word('{bu-bu}-nu')
         )),
         TextLine('2.', (
-            LoneDeterminative.of_value('{bu-bu}', Partial(False, False)),
+                LoneDeterminative.of_value('{bu-bu}', Partial(False, False)),
         )),
     ]),
     ('1. KIMIN {u₂#}[...]', [
         TextLine('1.', (
-            Word('KIMIN'),
-            LoneDeterminative.of_value('{u₂#}', Partial(False, True)),
-            Token('[...]')
+                Word('KIMIN'),
+                LoneDeterminative.of_value('{u₂#}', Partial(False, True)),
+                BrokenAway('['),
+                Token('...'),
+                BrokenAway(']'),
         ))
     ]),
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
@@ -218,16 +269,16 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1. {(he-pi₂ eš-šu₂)}\n2. {(NU SUR)}', [
         TextLine('1.', (
-            DocumentOrientedGloss('{('),
-            Word('he-pi₂'),
-            Word('eš-šu₂'),
-            DocumentOrientedGloss(')}')
+                DocumentOrientedGloss('{('),
+                Word('he-pi₂'),
+                Word('eš-šu₂'),
+                DocumentOrientedGloss(')}')
         )),
         TextLine('2.', (
-            DocumentOrientedGloss('{('),
-            Word('NU'),
-            Word('SUR'),
-            DocumentOrientedGloss(')}')
+                DocumentOrientedGloss('{('),
+                Word('NU'),
+                Word('SUR'),
+                DocumentOrientedGloss(')}')
         ))
     ]),
     ('1.  sal/: šim ', [
@@ -235,26 +286,26 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
     ('1. °me-e-li\\ku°', [
         TextLine('1.', (
-            Erasure('°', Side.LEFT),
-            Word('me-e-li', erasure=ErasureState.ERASED),
-            Erasure('\\', Side.CENTER),
-            Word('ku', erasure=ErasureState.OVER_ERASED),
-            Erasure('°', Side.RIGHT),
+                Erasure('°', Side.LEFT),
+                Word('me-e-li', erasure=ErasureState.ERASED),
+                Erasure('\\', Side.CENTER),
+                Word('ku', erasure=ErasureState.OVER_ERASED),
+                Erasure('°', Side.RIGHT),
         )),
     ]),
     ('1. me-e-li-°\\ku°', [
         TextLine('1.', (
-            Word('me-e-li-°\\ku°'),
+                Word('me-e-li-°\\ku°'),
         )),
     ]),
     ('1. °me-e-li\\°-ku', [
         TextLine('1.', (
-            Word('°me-e-li\\°-ku'),
+                Word('°me-e-li\\°-ku'),
         )),
     ]),
     ('1. me-°e\\li°-ku', [
         TextLine('1.', (
-            Word('me-°e\\li°-ku'),
+                Word('me-°e\\li°-ku'),
         )),
     ]),
     ('1. me-°e\\li°-me-°e\\li°-ku', [
@@ -262,16 +313,38 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
                 Word('me-°e\\li°-me-°e\\li°-ku'),
         )),
     ]),
-    ('1.  sal →', [
+    ('1. sal →', [
         TextLine('1.', (Word('sal'), LineContinuation('→')))
     ]),
-    ('2.  sal →  ', [
+    ('2. sal →  ', [
         TextLine('2.', (Word('sal'), LineContinuation('→')))
-    ])
+    ]),
+    ('1. [{(he-pi₂ e]š-šu₂)}', [
+        TextLine('1.', (
+            BrokenAway('['), DocumentOrientedGloss('{('), Word('he-pi₂'),
+            Word('e]š-šu₂'), DocumentOrientedGloss(')}'))),
+    ]),
+    ('1. [{iti}...]', [
+        TextLine('1.', (
+            BrokenAway('['),
+            LoneDeterminative('{iti}', partial=Partial(False, True)),
+            Token('...'),
+            BrokenAway(']')))
+    ]),
+    ('2. RA{k[i]}', [
+        TextLine('2.', (Word('RA{k[i]}'),))
+    ]),
+    ('2.  in]-<(...)>', [
+        TextLine('2.', (Word('in]-'),
+                        OmissionOrRemoval('<('),
+                        Token('...'),
+                        OmissionOrRemoval(')>')))
+
+    ]),
 ])
 def test_parse_atf(line, expected_tokens):
-    assert parse_atf(line).lines ==\
-        Text.of_iterable(expected_tokens).lines
+    assert parse_atf(line).lines == \
+           Text.of_iterable(expected_tokens).lines
 
 
 def test_parse_atf_invalid():

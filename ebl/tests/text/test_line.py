@@ -5,6 +5,7 @@ from ebl.text.labels import LineNumberLabel
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import (LemmatizationError, LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
+from ebl.text.text_parser import TEXT_LINE
 from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
                             LanguageShift, LoneDeterminative, Side, Token,
                             Word)
@@ -68,6 +69,24 @@ def test_line_of_iterable(code, language, normalized):
 
     assert line == TextLine(LINE_NUMBER.to_atf(), expected_tokens)
     assert line.atf == f'1. first {code} second %sb {{third}}'
+
+
+@pytest.mark.parametrize('atf', [
+    '1. [{(he-pi₂ e]š-šu₂)}',
+    '2. [he₂-<(pa₃)>]',
+    '3. [{iti}...]',
+    '4. [(x x x)]',
+    '5. [...]-qa-[...]-ba-[...]',
+    '6. [...+ku....] [....ku+...]',
+    '7. [...] {bu} [...]',
+    '8. [...]{bu} [...]',
+    '9. [...] {bu}[...]',
+    '10. [...]{bu}[...]',
+    '11. in]-<(...)>'
+])
+def test_text_line_atf(atf):
+    line = TEXT_LINE.parse(atf)
+    assert line.atf == atf
 
 
 @pytest.mark.parametrize("word,token,expected", [

@@ -1,13 +1,13 @@
 import collections
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Tuple, Optional
+from typing import Optional, Tuple, Union
 
 import attr
 import pydash
 
 import ebl.text.atf
-from ebl.corpus.alignment import AlignmentToken, AlignmentError
+from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.dictionary.word import WordId
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
@@ -237,6 +237,38 @@ class DocumentOrientedGloss(Token):
         }
 
 
+@attr.s(frozen=True)
+class BrokenAway(Token):
+    def accept(self, visitor: 'TokenVisitor') -> None:
+        visitor.visit_broken_away(self)
+
+    @property
+    def side(self) -> Side:
+        return Side.LEFT if self.value == '[' else Side.RIGHT
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'BrokenAway'
+        }
+
+
+@attr.s(frozen=True)
+class PerhapsBrokenAway(Token):
+    def accept(self, visitor: 'TokenVisitor') -> None:
+        visitor.visit_broken_away(self)
+
+    @property
+    def side(self) -> Side:
+        return Side.LEFT if self.value == '(' else Side.RIGHT
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'PerhapsBrokenAway'
+        }
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Erasure(Token):
     side: Side
@@ -249,6 +281,24 @@ class Erasure(Token):
             **super().to_dict(),
             'type': 'Erasure',
             'side': self.side.name
+        }
+
+
+@attr.s(frozen=True)
+class OmissionOrRemoval(Token):
+    def accept(self, visitor: 'TokenVisitor') -> None:
+        visitor.visit_omission_or_removal(self)
+
+    @property
+    def side(self) -> Side:
+        return Side.LEFT if (
+                self.value in ['<(', '<', '<<']
+        ) else Side.RIGHT
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'OmissionOrRemoval'
         }
 
 
@@ -277,6 +327,18 @@ class TokenVisitor(ABC):
     @abstractmethod
     def visit_document_oriented_gloss(
             self, gloss: DocumentOrientedGloss
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def visit_broken_away(
+            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def visit_omission_or_removal(
+            self, omission: OmissionOrRemoval
     ) -> None:
         ...
 
