@@ -115,6 +115,11 @@ def test_update_entry_invalid(transform, client, saved_entry):
         'author': 'Author',
         'year': 2019,
         'title': 'Title'
+    },
+    {
+        'author': 'Author',
+        'year': '',
+        'title': ''
     }
 ])
 def test_search(client, saved_entry, params):
