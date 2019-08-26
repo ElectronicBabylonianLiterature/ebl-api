@@ -2,11 +2,11 @@ import os
 
 from pymongo import MongoClient
 
+from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragment.transliteration import Transliteration, TransliterationError
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.update_signs import ApiUser
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MemoizingSignRepository
 

@@ -1,4 +1,6 @@
 import copy
+from abc import ABC, abstractmethod
+from typing import Any, Callable
 
 import pydash
 import requests
@@ -6,7 +8,7 @@ from falcon_auth import JWTAuthBackend
 from sentry_sdk import configure_scope
 
 
-def fetch_user_profile(issuer, authorization):
+def fetch_user_profile(issuer: str, authorization: str):
     url = f'{issuer}userinfo'
     headers = {'Authorization': authorization}
     response = requests.get(url, headers=headers)
@@ -14,12 +16,32 @@ def fetch_user_profile(issuer, authorization):
     return response.json()
 
 
-def set_sentry_user(id_):
+def set_sentry_user(id_: str) -> None:
     with configure_scope() as scope:
         scope.user = {'id': id_}
 
 
-class Guest:
+class User(ABC):
+
+    @property
+    @abstractmethod
+    def profile(self) -> dict:
+        ...
+
+    @property
+    @abstractmethod
+    def ebl_name(self) -> str:
+        ...
+
+    def has_scope(self, scope: str) -> bool:
+        return False
+
+    def can_read_folio(self, name: str) -> bool:
+        scope = f'read:{name}-folios'
+        return self.has_scope(scope)
+
+
+class Guest(User):
 
     @property
     def profile(self):
@@ -29,16 +51,26 @@ class Guest:
     def ebl_name(self):
         return 'Guest'
 
-    def has_scope(self, _):
-        return False
 
-    def can_read_folio(self, _):
-        return False
+class ApiUser(User):
+
+    def __init__(self, script_name: str):
+        self._script_name = script_name
+
+    @property
+    def profile(self):
+        return {
+            'name': self._script_name
+        }
+
+    @property
+    def ebl_name(self):
+        return 'Script'
 
 
-class Auth0User:
+class Auth0User(User):
 
-    def __init__(self, access_token, profile_factory):
+    def __init__(self, access_token: dict, profile_factory: Callable[[], Any]):
         self._access_token = copy.deepcopy(access_token)
         self._profile_factory = pydash.once(profile_factory)
 
@@ -56,10 +88,6 @@ class Auth0User:
 
     def has_scope(self, scope):
         return scope in self._access_token['scope']
-
-    def can_read_folio(self, name):
-        scope = f'read:{name}-folios'
-        return self.has_scope(scope)
 
 
 class Auth0Backend(JWTAuthBackend):

@@ -2,34 +2,13 @@ import os
 
 from pymongo import MongoClient
 
+from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MemoizingSignRepository
-
-
-class ApiUser:
-
-    def __init__(self, script_name):
-        self._script_name = script_name
-
-    @property
-    def profile(self):
-        return {
-            'name': self._script_name
-        }
-
-    @property
-    def ebl_name(self):
-        return 'Script'
-
-    def has_scope(self, _):
-        return False
-
-    def can_read_folio(self, _):
-        return False
 
 
 class Counter:
