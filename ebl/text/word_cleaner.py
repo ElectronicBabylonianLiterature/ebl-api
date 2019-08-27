@@ -1,3 +1,4 @@
+# type: ignore
 import re
 
 from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC
