@@ -11,6 +11,7 @@ from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.dictionary.word import WordId
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
+from ebl.text.word_cleaner import clean_word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
@@ -61,6 +62,9 @@ class Token:
 
     def strip_alignment(self):
         return self
+
+    def merge(self, token: 'Token') -> 'Token':
+        return token
 
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_token(self)
@@ -153,6 +157,21 @@ class Word(Token):
 
     def strip_alignment(self):
         return attr.evolve(self, alignment=None)
+
+    def merge(self, token: Token) -> Token:
+        def clean_values_are_equal():
+            return clean_word(self.value) == clean_word(token.value)
+
+        if type(token) == Word and clean_values_are_equal():
+            return (token
+                    .set_unique_lemma(
+                        LemmatizationToken(token.value, self.unique_lemma)
+                    )
+                    .set_alignment(
+                        AlignmentToken(token.value, self.alignment)
+                    ))
+        else:
+            return token
 
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_word(self)

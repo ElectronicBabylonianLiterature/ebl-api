@@ -1,15 +1,15 @@
-from typing import Iterable, Sequence, Tuple, TypeVar, Callable, Type
+from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
 
 import attr
 import pydash
 
-from ebl.corpus.alignment import AlignmentToken, AlignmentError
+from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.merger import Merger
 from ebl.text.atf import Atf, WORD_SEPARATOR
+from ebl.text.labels import LineNumberLabel
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
 from ebl.text.token import Token
 from ebl.text.visitors import AtfVisitor, LanguageVisitor
-from ebl.text.labels import LineNumberLabel
 
 T = TypeVar('T')
 L = TypeVar('L', 'TextLine', 'Line')
@@ -123,7 +123,10 @@ class TextLine(Line):
             def map_(token):
                 return f'{type(token)}⋮{token.value}'
 
-            return Merger(map_).merge(self.content, other.content)
+            def inner_merge(old: Token, new: Token) -> Token:
+                return old.merge(new)
+
+            return Merger(map_, inner_merge).merge(self.content, other.content)
 
         return (
             TextLine.of_iterable(other.line_number, merge_tokens())

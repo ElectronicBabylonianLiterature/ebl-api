@@ -6,8 +6,9 @@ from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import (LemmatizationError, LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text_parser import TEXT_LINE
-from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
-                            LanguageShift, LoneDeterminative, Side, Token,
+from ebl.text.token import (BrokenAway, DEFAULT_NORMALIZED,
+                            DocumentOrientedGloss, Erasure, LanguageShift,
+                            LoneDeterminative, Side, Token,
                             Word)
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
@@ -284,6 +285,21 @@ def test_update_lemmatization_wrong_lenght():
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             DocumentOrientedGloss('{('),
+        ])
+    ), (
+        TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+            Word('{ku}#?', unique_lemma=(WordId('nu I'),)),
+            Word('{bu}', unique_lemma=(WordId('bu I'),)),
+            Word('ku-[nu]#?', unique_lemma=(WordId('kunu I'),), alignment=4),
+        ]),
+        TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+            Word('{ku#?}'),  Word('{bu}'),  Word('[k(u)-nu#?'), BrokenAway(']')
+        ]),
+        TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+            Word('{ku#?}', unique_lemma=(WordId('nu I'),)),
+            Word('{bu}', unique_lemma=(WordId('bu I'),)),
+            Word('[k(u)-nu#?', unique_lemma=(WordId('kunu I'),), alignment=4),
+            BrokenAway(']')
         ])
     )
 ])

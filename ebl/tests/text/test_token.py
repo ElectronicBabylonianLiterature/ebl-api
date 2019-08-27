@@ -1,11 +1,10 @@
 import pytest
 
-from ebl.corpus.alignment import AlignmentToken, AlignmentError
+from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
-from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss,
-                            LanguageShift, LineContinuation, Side, Token,
-                            Erasure)
+from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
+                            LanguageShift, LineContinuation, Side, Token)
 
 TOKENS = [
     Token('...'),
@@ -127,6 +126,13 @@ def test_set_non_empty_alignment(token):
 def test_set_alignment_no_alignment(token):
     alignment = AlignmentToken(token.value, None)
     assert token.set_alignment(alignment) == token
+
+
+@pytest.mark.parametrize('old', TOKENS)
+@pytest.mark.parametrize('new', TOKENS)
+def test_merge(old, new):
+    merged = old.merge(new)
+    assert merged == new
 
 
 def test_erasure():

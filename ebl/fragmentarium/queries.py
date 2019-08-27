@@ -1,7 +1,7 @@
 import re
 
 from ebl.fragment.record import RecordType
-from ebl.text.atf import ATF_SPEC, ATF_EXTENSIONS
+from ebl.text.word_cleaner import IGNORE_REGEX, clean_word
 
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS = 40
@@ -37,24 +37,11 @@ def aggregate_random():
 
 
 def aggregate_lemmas(word):
-    ignore = [
-        ATF_SPEC['lacuna']['begin'],
-        r'\(',
-        r'\)',
-        ATF_SPEC['lacuna']['end'],
-        ATF_SPEC['flags']['uncertainty'],
-        ATF_SPEC['flags']['collation'],
-        ATF_SPEC['flags']['damage'],
-        ATF_SPEC['flags']['correction'],
-        ATF_EXTENSIONS['erasure_illegible'],
-        ATF_EXTENSIONS['erasure_boundary']
-    ]
-    ignore_regex = f'({"|".join(ignore)})*'
-    cleaned_word = re.sub(ignore_regex, '', word)
+    cleaned_word = clean_word(word)
     word_regex = (
-            f'^{ignore_regex}' +
+            f'^{IGNORE_REGEX}' +
             ''.join([
-                f"{re.escape(char)}{ignore_regex}" for char in cleaned_word
+                f"{re.escape(char)}{IGNORE_REGEX}" for char in cleaned_word
             ]) +
             '$'
     )

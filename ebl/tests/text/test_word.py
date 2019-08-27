@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.corpus.alignment import AlignmentToken, AlignmentError
+from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.dictionary.word import WordId
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
@@ -171,6 +171,27 @@ def test_set_alignment_invalid(word, value):
     alignment = AlignmentToken(value, 0)
     with pytest.raises(AlignmentError):
         word.set_alignment(alignment)
+
+
+@pytest.mark.parametrize('old,new,expected', [
+    (Word('bu', alignment=1),
+     Token('...'),
+     Token('...')),
+    (Word('bu', alignment=1, unique_lemma=(WordId('nu I'),)),
+     Word('bu'),
+     Word('bu', alignment=1, unique_lemma=(WordId('nu I'),))),
+    (Word('[(bu)', alignment=1),
+     Word('bu'),
+     Word('bu', alignment=1)),
+    (Word('bu#!?*', alignment=1),
+     Word('bu'),
+     Word('bu', alignment=1)),
+    (Word('bu', alignment=1),
+     Word('bu#!?*'),
+     Word('bu#!?*', alignment=1)),
+])
+def test_merge(old, new, expected):
+    assert old.merge(new) == expected
 
 
 @pytest.mark.parametrize("word,expected", [
