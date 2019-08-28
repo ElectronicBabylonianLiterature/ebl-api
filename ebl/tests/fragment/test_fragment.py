@@ -273,7 +273,7 @@ def test_add_matching_lines(sign_matrix, lines):
 def test_update_lemmatization():
     transliterated_fragment = TransliteratedFragmentFactory.build()
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][1]['uniqueLemma'] = ['nu I']
+    tokens[1][3]['uniqueLemma'] = ['nu I']
     lemmatization = Lemmatization.from_list(tokens)
     expected = attr.evolve(
         transliterated_fragment,

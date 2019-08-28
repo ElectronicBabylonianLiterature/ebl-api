@@ -1,5 +1,6 @@
 import pytest
 
+from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration import Transliteration
@@ -10,12 +11,11 @@ from ebl.tests.factories.fragment import (
     InterestingFragmentFactory,
     TransliteratedFragmentFactory
 )
+from ebl.text.labels import LineNumberLabel
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
 from ebl.text.token import Token, Word
-from ebl.dictionary.word import WordId
-from ebl.text.labels import LineNumberLabel
 
 COLLECTION = 'fragments'
 
@@ -107,7 +107,7 @@ def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragment_repository.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][1]['uniqueLemma'] = ['aklu I']
+    tokens[1][3]['uniqueLemma'] = ['aklu I']
     updated_fragment = transliterated_fragment.update_lemmatization(
         Lemmatization.from_list(tokens)
     )

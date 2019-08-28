@@ -137,7 +137,7 @@ def test_update_lemmatization(fragmentarium,
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][1]['uniqueLemma'] = ['aklu I']
+    tokens[1][3]['uniqueLemma'] = ['aklu I']
     lemmatization = Lemmatization.from_list(tokens)
     expected_fragment = transliterated_fragment.update_lemmatization(
         lemmatization

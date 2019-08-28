@@ -10,7 +10,8 @@ from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
-from ebl.text.token import Erasure, LineContinuation, Side, Token, Word
+from ebl.text.token import BrokenAway, Erasure, LineContinuation, \
+    PerhapsBrokenAway, Side, Token, Word
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),
@@ -150,6 +151,32 @@ def test_update_lemmatization_wrong_lines():
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('mu'),
                 Word('nu', unique_lemma=(WordId('nu I'),))
+            ])
+        ])
+    ), (
+        Text.of_iterable([
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                Word('[ku-(nu)]',
+                     unique_lemma=(WordId('kunu I'),),
+                     alignment=4),
+            ]),
+        ]),
+        Text.of_iterable([
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                BrokenAway('['),
+                Word('ku-(nu'),
+                PerhapsBrokenAway(')'),
+                BrokenAway(']')
+            ]),
+        ]),
+        Text.of_iterable([
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                BrokenAway('['),
+                Word('ku-(nu',
+                     unique_lemma=(WordId('kunu I'),),
+                     alignment=4),
+                PerhapsBrokenAway(')'),
+                BrokenAway(']')
             ])
         ])
     )

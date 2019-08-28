@@ -105,14 +105,14 @@ class Text:
 
     def merge(self, other: 'Text') -> 'Text':
         def map_(line: Line) -> str:
-            return line.atf
+            types = [token.to_dict()['type'] for token in line.content]
+            return '⋮'.join([line.atf] + types)
 
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
 
         merged_lines = Merger(
-            map_,
-            inner_merge
+            map_, inner_merge
         ).merge(
             self.lines, other.lines
         )

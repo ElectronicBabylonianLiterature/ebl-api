@@ -7,7 +7,7 @@ from ebl.fragment.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.text.line import TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word
+from ebl.text.token import BrokenAway, Token, Word
 
 
 class FragmentFactory(factory.Factory):
@@ -44,26 +44,36 @@ class InterestingFragmentFactory(FragmentFactory):
 class TransliteratedFragmentFactory(FragmentFactory):
     text = Text((
         TextLine("1'.", (
-            Token('[...'),
+            BrokenAway('['),
+            Token('...'),
             Word('-ku]-nu-ši'),
-            Token('[...]')
+            BrokenAway('['),
+            Token('...'),
+            BrokenAway(']'),
         )),
         TextLine("2'.", (
-            Token('[...]'),
+            BrokenAway('['),
+            Token('...'),
+            BrokenAway(']'),
             Word('GI₆'),
             Word('ana'),
             Word('u₄-š[u'),
-            Token('...]')
+            Token('...'),
+            BrokenAway(']'),
         )),
         TextLine("3'.", (
-            Token('[...'),
+            BrokenAway('['),
+            Token('...'),
             Word('k]i-du'),
             Word('u'),
             Word('ba-ma-t[i'),
-            Token('...]')
+            Token('...'),
+            BrokenAway(']'),
         )),
         TextLine("6'.", (
-            Token('[...]'),
+            BrokenAway('['),
+            Token('...'),
+            BrokenAway(']'),
             Word('x'),
             Word('mu'),
             Word('ta-ma-tu₂')
