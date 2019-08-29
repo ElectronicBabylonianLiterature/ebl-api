@@ -3,7 +3,7 @@ import pytest
 from ebl.fragment.transliteration import (
     Transliteration
 )
-from ebl.fragmentarium.validator import Validator
+from ebl.fragment.validator import Validator
 from ebl.text.transliteration_error import TransliterationError
 
 

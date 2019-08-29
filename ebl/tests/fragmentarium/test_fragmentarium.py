@@ -106,10 +106,15 @@ def test_update_transliteration(fragmentarium,
     assert updated_fragment == expected_fragment
 
 
-def test_update_transliteration_invalid(fragmentarium, user):
+def test_update_transliteration_invalid(fragmentarium,
+                                        fragment_repository,
+                                        user,
+                                        when):
+    fragment = FragmentFactory.build()
+    when(fragment_repository).find(fragment.number).thenReturn(fragment)
     with pytest.raises(TransliterationError):
         fragmentarium.update_transliteration(
-            'K.1',
+            fragment.number,
             Transliteration('1. invalid values'),
             user
         )

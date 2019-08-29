@@ -1,5 +1,4 @@
 from ebl.fragment.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.validator import Validator
 
 
 class Fragmentarium:
@@ -20,7 +19,6 @@ class Fragmentarium:
     def update_transliteration(self, number, transliteration, user):
         transliteration_with_signs =\
             transliteration.with_signs(self._sign_list)
-        Validator(transliteration_with_signs).validate()
         fragment = self._repository.find(number)
         updated_fragment = fragment.update_transliteration(
             transliteration_with_signs,

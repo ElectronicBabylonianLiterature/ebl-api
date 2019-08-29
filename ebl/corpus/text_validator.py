@@ -6,7 +6,7 @@ from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine, \
     TextVisitor
 from ebl.errors import DataError
 from ebl.fragment.transliteration import Transliteration
-from ebl.fragmentarium.validator import Validator
+from ebl.fragment.validator import Validator
 from ebl.text.labels import LineNumberLabel
 from ebl.text.token import BrokenAway, DocumentOrientedGloss, Erasure, \
     LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \

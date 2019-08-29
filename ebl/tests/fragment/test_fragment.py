@@ -203,7 +203,7 @@ def test_update_transliteration(lemmatized_fragment, user):
     assert updated_fragment == expected_fragment
 
 
-def test_test_update_transliteration_invalid_value(user):
+def test_test_update_transliteration_invalid_line(user):
     fragment = FragmentFactory.build()
     atf = '1. x\ninvalid line'
     transliteration = Transliteration(atf, fragment.notes)
@@ -219,6 +219,44 @@ def test_test_update_transliteration_invalid_value(user):
         {
             'description': 'Invalid line',
             'lineNumber': 2
+        }
+    ]
+
+
+def test_test_update_transliteration_invalid_atf(user):
+    fragment = FragmentFactory.build()
+    transliteration = Transliteration('1. {kur}?', fragment.notes)
+
+    with pytest.raises(TransliterationError,
+                       match='Invalid transliteration') as excinfo:
+        fragment.update_transliteration(
+            transliteration,
+            user
+        )
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid line',
+            'lineNumber': 1
+        }
+    ]
+
+
+def test_test_update_transliteration_invalid_reading(user):
+    fragment = FragmentFactory.build()
+    transliteration = Transliteration('1. invalid', fragment.notes, '?')
+
+    with pytest.raises(TransliterationError,
+                       match='Invalid transliteration') as excinfo:
+        fragment.update_transliteration(
+            transliteration,
+            user
+        )
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid value',
+            'lineNumber': 1
         }
     ]
 

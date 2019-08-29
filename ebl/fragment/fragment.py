@@ -3,12 +3,14 @@ from typing import Dict, List, Optional, Tuple, Union
 import attr
 import pydash
 
+from ebl.auth0 import User
 from ebl.bibliography.reference import Reference
 from ebl.fragment.folios import Folios
 from ebl.fragment.record import Record
 from ebl.fragment.transliteration import (
     Transliteration
 )
+from ebl.fragment.validator import Validator
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.text import Text
 
@@ -61,7 +63,11 @@ class Fragment:
             references=references
         )
 
-    def update_transliteration(self, transliteration, user) -> 'Fragment':
+    def update_transliteration(self,
+                               transliteration: Transliteration,
+                               user: User) -> 'Fragment':
+        Validator(transliteration).validate()
+
         record = self.record.add_entry(
             self.text.atf,
             transliteration.atf,
