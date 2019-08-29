@@ -189,6 +189,12 @@ def test_set_alignment_invalid(word, value):
     (Word('bu', alignment=1),
      Word('bu#!?*'),
      Word('bu#!?*', alignment=1)),
+    (Word('bu', unique_lemma=(WordId('nu I'),)),
+     Word('bu', language=Language.SUMERIAN),
+     Word('bu', language=Language.SUMERIAN)),
+    (Word('bu', alignment=1),
+     Word('bu', language=Language.SUMERIAN),
+     Word('bu', language=Language.SUMERIAN)),
 ])
 def test_merge(old, new, expected):
     assert old.merge(new) == expected

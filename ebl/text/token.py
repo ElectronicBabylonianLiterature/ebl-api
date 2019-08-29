@@ -126,22 +126,19 @@ class Word(Token):
             self,
             lemma: LemmatizationToken
     ) -> 'Word':
-        if self.is_compatible(lemma):
+        value_is_compatible = self.value == lemma.value
+        lemma_is_compatible = (
+            (self.lemmatizable and lemma.unique_lemma is not None) or
+            lemma.unique_lemma in [tuple(), None]
+        )
+        if value_is_compatible and lemma_is_compatible:
             return (
                 self
                 if lemma.unique_lemma is None
                 else attr.evolve(self, unique_lemma=lemma.unique_lemma)
             )
         else:
-            raise LemmatizationError()
-
-    def is_compatible(self, lemma: LemmatizationToken) -> bool:
-        value_is_compatible = self.value == lemma.value
-        lemma_is_compatible = (
-                (self.lemmatizable and lemma.unique_lemma is not None) or
-                lemma.unique_lemma in [tuple(), None]
-        )
-        return value_is_compatible and lemma_is_compatible
+            raise LemmatizationError(f'Cannot apply {lemma} to {self}.')
 
     def set_alignment(self, alignment: AlignmentToken):
         if (
@@ -163,13 +160,21 @@ class Word(Token):
             return clean_word(self.value) == clean_word(token.value)
 
         if type(token) == Word and clean_values_are_equal():
-            return (token
-                    .set_unique_lemma(
+            try:
+                result = token
+                if token.lemmatizable:
+                    result = result.set_unique_lemma(
                         LemmatizationToken(token.value, self.unique_lemma)
                     )
-                    .set_alignment(
+                if token.alignable:
+                    result = result.set_alignment(
                         AlignmentToken(token.value, self.alignment)
-                    ))
+                    )
+                return result
+            except LemmatizationError:
+                print(self)
+                print(token)
+                raise
         else:
             return token
 
