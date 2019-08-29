@@ -1,23 +1,18 @@
 import os
 
-from progress.bar import Bar
 from pymongo import MongoClient
 
 from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
-from ebl.changelog import Changelog
-from ebl.dictionary.dictionary import MongoDictionary
 from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MemoizingSignRepository
-from ebl.text.lemmatization import LemmatizationError
 from ebl.text.transliteration_error import TransliterationError
 
 
-def update_fragments(fragment_repository, fragmentarium):
+def update_fragments(sign_list, fragment_repository):
     user = ApiUser('validate_fragments.py')
     invalid = 0
     fragments = fragment_repository.find_transliterated()
