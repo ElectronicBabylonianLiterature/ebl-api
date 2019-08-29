@@ -1,9 +1,10 @@
 import pytest
 
 from ebl.fragment.transliteration import (
-    Transliteration, TransliterationError
+    Transliteration
 )
 from ebl.fragmentarium.validator import Validator
+from ebl.text.transliteration_error import TransliterationError
 
 
 def test_validate_empty():

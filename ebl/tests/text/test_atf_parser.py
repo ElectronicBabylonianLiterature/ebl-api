@@ -1,6 +1,5 @@
 import pytest
 
-from ebl.fragment.transliteration import TransliterationError
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.line import ControlLine, EmptyLine, TextLine
@@ -9,6 +8,7 @@ from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
                             ErasureState, LanguageShift, LineContinuation,
                             LoneDeterminative, OmissionOrRemoval, Partial,
                             PerhapsBrokenAway, Side, Token, Word)
+from ebl.text.transliteration_error import TransliterationError
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 

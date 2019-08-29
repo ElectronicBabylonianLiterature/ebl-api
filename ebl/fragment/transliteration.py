@@ -7,6 +7,8 @@ import pydash
 from ebl.fragment.value import Value
 from ebl.fragment.value_mapper import parse_reading
 from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC
+from ebl.text.atf_parser import parse_atf
+from ebl.text.text import Text
 
 IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['control_line'],
@@ -36,12 +38,6 @@ BRACES_PATTERN = (
     r'(?!=[^\s])'
 )
 VARIANT_SEPARATOR = ATF_SPEC['variant_separator']
-
-
-class TransliterationError(Exception):
-    def __init__(self, errors):
-        super().__init__('Invalid transliteration')
-        self.errors = errors
 
 
 def _clean_line(line: str) -> str:
@@ -154,3 +150,6 @@ class Transliteration:
             ]
             for line in self.atf.split('\n')
         ] if self.atf else []
+
+    def parse(self) -> Text:
+        return parse_atf(self.atf)

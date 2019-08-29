@@ -9,7 +9,6 @@ from ebl.fragment.record import Record
 from ebl.fragment.transliteration import (
     Transliteration
 )
-from ebl.text.atf_parser import parse_atf
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.text import Text
 
@@ -69,7 +68,7 @@ class Fragment:
             user
         )
 
-        text = self.text.merge(parse_atf(transliteration.atf))
+        text = self.text.merge(transliteration.parse())
 
         return attr.evolve(
             self,

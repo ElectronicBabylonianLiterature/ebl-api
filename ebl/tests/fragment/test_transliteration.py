@@ -1,5 +1,10 @@
+import pytest
+
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.value import NotReading, Reading
+from ebl.text.atf_parser import parse_atf
+from ebl.text.text import Text
+from ebl.text.transliteration_error import TransliterationError
 
 
 def test_atf():
@@ -79,3 +84,16 @@ def test_tokenize_empty():
     transliteration = Transliteration('')
 
     assert transliteration.tokenize(lambda value: value) == []
+
+
+@pytest.mark.parametrize('transliteration,expected', [
+    (Transliteration(''), Text()),
+    (Transliteration('1. kur'), parse_atf('1. kur'))
+])
+def test_parse(transliteration, expected):
+    assert transliteration.parse() == expected
+
+
+def test_parse_invalid():
+    with pytest.raises(TransliterationError):
+        Transliteration('invalid atf').parse()

@@ -5,7 +5,7 @@ from freezegun import freeze_time
 from ebl.dictionary.word import WordId
 from ebl.errors import DataError, NotFoundError
 from ebl.fragment.transliteration import (
-    Transliteration, TransliterationError
+    Transliteration
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -13,6 +13,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.text.lemmatization import Lemmatization
+from ebl.text.transliteration_error import TransliterationError
 
 
 def test_find(fragmentarium, fragment_repository, when):

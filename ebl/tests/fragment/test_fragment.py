@@ -5,7 +5,7 @@ from freezegun import freeze_time
 from ebl.fragment.folios import Folio, Folios
 from ebl.fragment.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragment.transliteration import (
-    Transliteration, TransliterationError
+    Transliteration
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -16,6 +16,7 @@ from ebl.tests.factories.record import RecordFactory
 from ebl.text.atf_parser import parse_atf
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.text import Text
+from ebl.text.transliteration_error import TransliterationError
 
 
 def test_to_dict_for(user):
