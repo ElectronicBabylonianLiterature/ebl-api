@@ -155,20 +155,18 @@ class Word(Token):
     def merge(self, token: Token) -> Token:
         clean_values_are_equal =\
             clean_word(self.value) == clean_word(token.value)
+        is_compatible = type(token) == Word and clean_values_are_equal
 
-        if type(token) == Word and clean_values_are_equal:
-            result = token
-            if token.lemmatizable:
-                result = result.set_unique_lemma(
-                    LemmatizationToken(token.value, self.unique_lemma)
-                )
-            if token.alignable:
-                result = result.set_alignment(
-                    AlignmentToken(token.value, self.alignment)
-                )
-            return result
-        else:
-            return token
+        result = token
+        if is_compatible and token.lemmatizable:
+            result = result.set_unique_lemma(
+                LemmatizationToken(token.value, self.unique_lemma)
+            )
+        if is_compatible and token.alignable:
+            result = result.set_alignment(
+                AlignmentToken(token.value, self.alignment)
+            )
+        return result
 
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_word(self)
