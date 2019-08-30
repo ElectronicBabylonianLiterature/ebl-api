@@ -129,11 +129,8 @@ class Word(Token):
         value_is_compatible = self.value == lemma.value
         lemma_is_compatible = self.lemmatizable or not lemma.unique_lemma
         if value_is_compatible and lemma_is_compatible:
-            return (
-                self
-                if lemma.unique_lemma is None
-                else attr.evolve(self, unique_lemma=lemma.unique_lemma)
-            )
+            return attr.evolve(self,
+                               unique_lemma=lemma.unique_lemma or tuple())
         else:
             raise LemmatizationError(f'Cannot apply {lemma} to {self}.')
 
