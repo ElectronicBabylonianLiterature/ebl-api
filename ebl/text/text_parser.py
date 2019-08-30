@@ -7,10 +7,9 @@ import ebl.text.atf
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
-                            LanguageShift, LineContinuation,
-                            OmissionOrRemoval,
-                            PerhapsBrokenAway, Side, Token)
-from ebl.text.word import ErasureState, LoneDeterminative, Partial, Word
+                            ErasureState, LanguageShift, LineContinuation,
+                            LoneDeterminative, OmissionOrRemoval, Partial,
+                            PerhapsBrokenAway, Side, Token, Word)
 
 
 def sequence(prefix, part, joiner, min_=0):

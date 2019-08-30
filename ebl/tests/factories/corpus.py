@@ -15,7 +15,7 @@ from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart
-from ebl.text.word import Word
+from ebl.text.token import Word
 
 
 class ManuscriptFactory(factory.Factory):

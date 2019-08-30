@@ -4,8 +4,7 @@ from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.dictionary.word import WordId
 from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
-from ebl.text.token import (Token)
-from ebl.text.word import DEFAULT_NORMALIZED, ErasureState, Word
+from ebl.text.token import (DEFAULT_NORMALIZED, ErasureState, Token, Word)
 
 LEMMATIZABLE_TEST_WORDS = [
     (Word('un'), True),

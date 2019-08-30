@@ -11,13 +11,11 @@ from ebl.tests.factories.fragment import (
     InterestingFragmentFactory,
     TransliteratedFragmentFactory
 )
-from ebl.text.atf import Atf
 from ebl.text.labels import LineNumberLabel
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token
-from ebl.text.word import Word
+from ebl.text.token import Token, Word
 
 COLLECTION = 'fragments'
 
@@ -85,7 +83,7 @@ def test_update_transliteration_with_record(fragment_repository,
     fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        Transliteration(Atf('$ (the transliteration)'), 'notes'),
+        Transliteration('$ (the transliteration)', 'notes'),
         user
     )
 

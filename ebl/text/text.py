@@ -9,10 +9,9 @@ from ebl.text.language import Language
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.line import ControlLine, EmptyLine, Line, TextLine
 from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
-                            LanguageShift, LineContinuation,
-                            OmissionOrRemoval,
-                            PerhapsBrokenAway, Side, Token)
-from ebl.text.word import ErasureState, LoneDeterminative, Partial, Word
+                            ErasureState, LanguageShift, LineContinuation,
+                            LoneDeterminative, OmissionOrRemoval, Partial,
+                            PerhapsBrokenAway, Side, Token, Word)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:

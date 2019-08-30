@@ -1,8 +1,7 @@
 import pytest
 
 from ebl.text.text_parser import erasure
-from ebl.text.token import Erasure, Side
-from ebl.text.word import ErasureState, Word
+from ebl.text.token import Erasure, ErasureState, Side, Word
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)
 ERASURE_CENTER = Erasure('\\', Side.CENTER)
