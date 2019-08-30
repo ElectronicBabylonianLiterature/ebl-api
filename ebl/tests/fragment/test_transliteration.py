@@ -2,32 +2,42 @@ import pytest
 
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.value import NotReading, Reading
+from ebl.text.atf import Atf
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
 from ebl.text.transliteration_error import TransliterationError
 
 
 def test_atf():
-    transliteration = Transliteration('transliteration', 'notes')
+    atf = Atf('1. kur')
+    transliteration = Transliteration(atf)
 
-    assert transliteration.atf == 'transliteration'
+    assert transliteration.atf == atf
 
 
 def test_notes():
-    transliteration = Transliteration('transliteration', 'notes')
+    notes = 'notes'
+    transliteration = Transliteration(notes=notes)
 
-    assert transliteration.notes == 'notes'
+    assert transliteration.notes == notes
+
+
+def test_signs():
+    signs = 'X'
+    transliteration = Transliteration(signs=signs)
+
+    assert transliteration.signs == signs
 
 
 def test_filtered():
     transliteration = Transliteration(
-        '&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku\n2. $AN'
+        Atf('&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku\n2. $AN')
     )
     assert transliteration.filtered == ['1. ku', '2. $AN']
 
 
 def test_values():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '&K11111\n'
         '@reverse\n'
         '\n'
@@ -37,7 +47,7 @@ def test_values():
         '1. ku X x\n'
         '2. $AN |BI×IS|\n'
         '3. nuₓ'
-    )
+    ))
     assert transliteration.values == [
         [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
         [Reading('an', 1, '?'), NotReading('|BI×IS|')],
@@ -49,13 +59,13 @@ def test_with_signs(sign_list, signs):
     for sign in signs:
         sign_list.create(sign)
 
-    transliteration = Transliteration('1. šu gid₂')
+    transliteration = Transliteration(Atf('1. šu gid₂'))
 
     assert transliteration.with_signs(sign_list).signs == 'ŠU BU'
 
 
 def test_tokenize():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '&K11111\n'
         '@reverse\n'
         '\n'
@@ -64,7 +74,7 @@ def test_tokenize():
         '=: foo\n'
         '1. [...] šu-gid₂ k[u ...]\n'
         '2. x X'
-    )
+    ))
 
     expected = [
         ['&K11111'],
@@ -81,14 +91,14 @@ def test_tokenize():
 
 
 def test_tokenize_empty():
-    transliteration = Transliteration('')
+    transliteration = Transliteration()
 
     assert transliteration.tokenize(lambda value: value) == []
 
 
 @pytest.mark.parametrize('transliteration,expected', [
-    (Transliteration(''), Text()),
-    (Transliteration('1. kur'), parse_atf('1. kur'))
+    (Transliteration(), Text()),
+    (Transliteration(Atf('1. kur')), parse_atf(Atf('1. kur')))
 ])
 def test_parse(transliteration, expected):
     assert transliteration.parse() == expected
@@ -96,4 +106,4 @@ def test_parse(transliteration, expected):
 
 def test_parse_invalid():
     with pytest.raises(TransliterationError):
-        Transliteration('invalid atf').parse()
+        Transliteration(Atf('invalid atf')).parse()

@@ -6,7 +6,7 @@ import pydash
 
 from ebl.fragment.value import Value
 from ebl.fragment.value_mapper import parse_reading
-from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC
+from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC, Atf
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
 
@@ -94,7 +94,7 @@ def _clean_reading(value: str) -> str:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Transliteration:
-    atf: str
+    atf: Atf = Atf('')
     notes: str = ''
     signs: Optional[str] = None
 

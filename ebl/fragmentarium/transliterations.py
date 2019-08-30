@@ -6,6 +6,7 @@ from ebl.fragment.transliteration import (
 )
 from ebl.fragmentarium.dtos import create_response_dto
 from ebl.require_scope import require_scope
+from ebl.text.atf import Atf
 from ebl.text.transliteration_error import TransliterationError
 
 TRANSLITERATION_DTO_SCHEMA = {
@@ -38,7 +39,7 @@ class TransliterationResource:
             updated_fragment = self._fragmentarium.update_transliteration(
                 number,
                 Transliteration(
-                    req.media['transliteration'],
+                    Atf(req.media['transliteration']),
                     req.media['notes']
                 ),
                 user
