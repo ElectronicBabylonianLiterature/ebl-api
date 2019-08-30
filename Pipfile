@@ -21,6 +21,7 @@ sentry-sdk = "*"
 roman = "*"
 waitress = "*"
 falcon-apispec = "*"
+progress = "*"
 
 [dev-packages]
 pytest = "*"

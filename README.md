@@ -68,8 +68,8 @@ db.createUser(
 
 Build and run the API image:
 ```
-docker build -t ebl/dictionary . 
-docker run -p 8000:8000 --rm -it --env-file=FILE --name dictionary-api ebl/dictionary
+docker build -t ebl/api . 
+docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
 ```
 
 ### Docker Compose
@@ -96,16 +96,17 @@ The Fragmentarium uses the transliteration mapped to signs. The signs are calcul
 but if the sign list is updated the fragments are not automatically updated. The `ebl.fragmentarium.update_signs`
 module contains functionality to update the signs in all the fragments. The module can be run from the command line:
 ```
-python -m ebl.fragmentarium.update_signs
+pipenv run python -m ebl.fragmentarium.update_signs
 ```
 
-## Validating fragments in the database
+## Updating transliterations in fragments
 
-Improving the parser can lead to existing transliterations becoming invalid, if syntax quirks have been abused.
-The `ebl.fragmentarium.validate_fragments` module can be used to print out a list of invalid fragments based on
-the current parser implementation. 
+Improving the parser can lead to existing transliterations to have obsolete tokens or becoming invalid.
+The `ebl.fragmentarium.update_fragments` module can be used to reparse all fragments. A list of invalid
+fragments is saved to `invalid_fragments.tsv`.
+
 ```
-python -m ebl.fragmentarium.validate_fragments
+pipenv run  python -m ebl.fragmentarium.update_fragments
 ```
 
 ## Type hints
