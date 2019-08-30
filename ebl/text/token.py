@@ -127,10 +127,7 @@ class Word(Token):
             lemma: LemmatizationToken
     ) -> 'Word':
         value_is_compatible = self.value == lemma.value
-        lemma_is_compatible = (
-            (self.lemmatizable and lemma.unique_lemma is not None) or
-            lemma.unique_lemma in [tuple(), None]
-        )
+        lemma_is_compatible = self.lemmatizable or not lemma.unique_lemma
         if value_is_compatible and lemma_is_compatible:
             return (
                 self
