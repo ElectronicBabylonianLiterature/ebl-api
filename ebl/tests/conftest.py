@@ -20,6 +20,7 @@ from ebl.changelog import Changelog
 from ebl.corpus.corpus import Corpus
 from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
+from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
@@ -28,8 +29,8 @@ from ebl.sign_list.sign_repository import MongoSignRepository
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.text.line import TextLine
 from ebl.text.text import Text
-from ebl.text.token import Token, Word
-from ebl.dictionary.word import WordId
+from ebl.text.token import Token
+from ebl.text.word import Word
 
 
 @pytest.fixture

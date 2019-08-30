@@ -7,7 +7,7 @@ from ebl.text.atf import Surface
 from ebl.text.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, StringPart
-from ebl.text.token import Word
+from ebl.text.word import Word
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)

@@ -1,14 +1,16 @@
 import pytest
 
+from ebl.text.atf import Atf
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
 from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
-                            ErasureState, LanguageShift, LineContinuation,
-                            LoneDeterminative, OmissionOrRemoval, Partial,
-                            PerhapsBrokenAway, Side, Token, Word)
+                            LanguageShift, LineContinuation,
+                            OmissionOrRemoval,
+                            PerhapsBrokenAway, Side, Token)
 from ebl.text.transliteration_error import TransliterationError
+from ebl.text.word import ErasureState, LoneDeterminative, Partial, Word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
@@ -349,7 +351,7 @@ def test_parse_atf(line, expected_tokens):
 
 def test_parse_atf_invalid():
     with pytest.raises(Exception):
-        parse_atf('invalid')
+        parse_atf(Atf('invalid'))
 
 
 @pytest.mark.parametrize("code,expected_language", [
@@ -372,7 +374,7 @@ def test_parse_atf_invalid():
 ])
 def test_parse_atf_language_shifts(code, expected_language):
     word = 'ha-am'
-    line = f'1. {word} {code} {word} %sb {word}'
+    line = Atf(f'1. {word} {code} {word} %sb {word}')
 
     expected = Text((
         TextLine('1.', (
@@ -395,7 +397,7 @@ def test_parse_atf_language_shifts(code, expected_language):
 ])
 def test_invalid_atf(atf, line_numbers):
     with pytest.raises(TransliterationError) as excinfo:
-        parse_atf(atf)
+        parse_atf(Atf(atf))
 
     assert excinfo.value.errors == [{
         'description': 'Invalid line',

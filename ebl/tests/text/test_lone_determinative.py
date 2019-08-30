@@ -1,8 +1,10 @@
 import pytest
 
 from ebl.text.language import DEFAULT_LANGUAGE, Language
-from ebl.text.token import (DEFAULT_NORMALIZED, LoneDeterminative, Partial,
-                            Token, ErasureState)
+from ebl.text.token import (Token)
+from ebl.text.word import DEFAULT_NORMALIZED, ErasureState, \
+    LoneDeterminative, \
+    Partial
 
 
 def test_of_value():

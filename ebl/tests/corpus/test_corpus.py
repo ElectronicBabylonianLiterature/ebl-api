@@ -14,7 +14,7 @@ from ebl.tests.factories.corpus import TextFactory
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, StringPart
-from ebl.text.token import Word
+from ebl.text.word import Word
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()

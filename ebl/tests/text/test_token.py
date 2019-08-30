@@ -3,8 +3,9 @@ import pytest
 from ebl.corpus.alignment import AlignmentError, AlignmentToken
 from ebl.text.language import Language
 from ebl.text.lemmatization import LemmatizationError, LemmatizationToken
-from ebl.text.token import (DEFAULT_NORMALIZED, DocumentOrientedGloss, Erasure,
+from ebl.text.token import (DocumentOrientedGloss, Erasure,
                             LanguageShift, LineContinuation, Side, Token)
+from ebl.text.word import DEFAULT_NORMALIZED
 
 TOKENS = [
     Token('...'),

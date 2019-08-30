@@ -3,20 +3,19 @@ from typing import Tuple
 import factory.fuzzy
 import pydash
 
-from ebl.corpus.text import (Chapter, Manuscript,
-                             Text, Line, ManuscriptLine)
-from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
-    PeriodModifier, Period, Stage
+from ebl.corpus.enums import Classification, ManuscriptType, Period, \
+    PeriodModifier, Provenance, Stage
+from ebl.corpus.text import (Chapter, Line, Manuscript, ManuscriptLine, Text)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.text.atf import Surface, Status
+from ebl.text.atf import Status, Surface
 from ebl.text.enclosure import Enclosure, EnclosureType, EnclosureVariant
-from ebl.text.labels import SurfaceLabel, ColumnLabel, LineNumberLabel
+from ebl.text.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, StringPart, Lacuna, \
-    MetricalFootSeparator, LacunaPart, Caesura, EnclosurePart, SeparatorPart, \
-    Modifier
-from ebl.text.token import Word
+from ebl.text.reconstructed_text import AkkadianWord, Caesura, EnclosurePart, \
+    Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
+    StringPart
+from ebl.text.word import Word
 
 
 class ManuscriptFactory(factory.Factory):

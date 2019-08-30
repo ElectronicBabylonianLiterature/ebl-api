@@ -2,10 +2,11 @@ from typing import Callable, List, Tuple, Union
 
 from ebl.text.atf import Atf, WORD_SEPARATOR
 from ebl.text.language import DEFAULT_LANGUAGE, Language
-from ebl.text.token import (BrokenAway, DEFAULT_NORMALIZED,
-                            DocumentOrientedGloss, Erasure, LanguageShift,
-                            OmissionOrRemoval, PerhapsBrokenAway, Side, Token,
-                            TokenVisitor, Word)
+from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
+                            LanguageShift,
+                            OmissionOrRemoval, PerhapsBrokenAway, Side, Token)
+from ebl.text.token_visitor import TokenVisitor
+from ebl.text.word import DEFAULT_NORMALIZED, Word
 
 
 class LanguageVisitor(TokenVisitor):

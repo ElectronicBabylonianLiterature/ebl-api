@@ -6,10 +6,11 @@ from ebl.text.language import DEFAULT_LANGUAGE, Language
 from ebl.text.lemmatization import (LemmatizationError, LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
 from ebl.text.text_parser import TEXT_LINE
-from ebl.text.token import (BrokenAway, DEFAULT_NORMALIZED,
-                            DocumentOrientedGloss, Erasure, LanguageShift,
-                            LoneDeterminative, Side, Token,
-                            Word)
+from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
+                            LanguageShift,
+
+                            Side, Token)
+from ebl.text.word import DEFAULT_NORMALIZED, LoneDeterminative, Word
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 

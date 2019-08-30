@@ -7,7 +7,8 @@ from ebl.fragment.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.text.line import TextLine
 from ebl.text.text import Text
-from ebl.text.token import BrokenAway, Token, Word
+from ebl.text.token import BrokenAway, Token
+from ebl.text.word import Word
 
 
 class FragmentFactory(factory.Factory):

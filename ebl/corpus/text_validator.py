@@ -9,9 +9,10 @@ from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.validator import Validator
 from ebl.text.labels import LineNumberLabel
 from ebl.text.token import BrokenAway, DocumentOrientedGloss, Erasure, \
-    LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
-    Word
+    LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token
+from ebl.text.token_visitor import TokenVisitor
 from ebl.text.transliteration_error import TransliterationError
+from ebl.text.word import Word
 
 
 def invalid_atf(chapter: Chapter,

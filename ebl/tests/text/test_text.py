@@ -9,9 +9,10 @@ from ebl.text.language import Language
 from ebl.text.lemmatization import (Lemmatization, LemmatizationError,
                                     LemmatizationToken)
 from ebl.text.line import (ControlLine, EmptyLine, Line, TextLine)
-from ebl.text.text import LanguageShift, LoneDeterminative, Partial, Text
+from ebl.text.text import LanguageShift, Text
 from ebl.text.token import BrokenAway, Erasure, LineContinuation, \
-    PerhapsBrokenAway, Side, Token, Word
+    PerhapsBrokenAway, Side, Token
+from ebl.text.word import LoneDeterminative, Partial, Word
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),

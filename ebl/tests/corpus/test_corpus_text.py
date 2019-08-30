@@ -12,8 +12,7 @@ from ebl.text.enclosure import BROKEN_OFF_OPEN
 from ebl.text.labels import ColumnLabel, Label, LineNumberLabel, SurfaceLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
-from ebl.text.token import Word
-
+from ebl.text.word import Word
 
 CATEGORY = 1
 INDEX = 2
