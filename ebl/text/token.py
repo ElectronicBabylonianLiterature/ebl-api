@@ -156,25 +156,20 @@ class Word(Token):
         return attr.evolve(self, alignment=None)
 
     def merge(self, token: Token) -> Token:
-        def clean_values_are_equal():
-            return clean_word(self.value) == clean_word(token.value)
+        clean_values_are_equal =\
+            clean_word(self.value) == clean_word(token.value)
 
-        if type(token) == Word and clean_values_are_equal():
-            try:
-                result = token
-                if token.lemmatizable:
-                    result = result.set_unique_lemma(
-                        LemmatizationToken(token.value, self.unique_lemma)
-                    )
-                if token.alignable:
-                    result = result.set_alignment(
-                        AlignmentToken(token.value, self.alignment)
-                    )
-                return result
-            except LemmatizationError:
-                print(self)
-                print(token)
-                raise
+        if type(token) == Word and clean_values_are_equal:
+            result = token
+            if token.lemmatizable:
+                result = result.set_unique_lemma(
+                    LemmatizationToken(token.value, self.unique_lemma)
+                )
+            if token.alignable:
+                result = result.set_alignment(
+                    AlignmentToken(token.value, self.alignment)
+                )
+            return result
         else:
             return token
 
