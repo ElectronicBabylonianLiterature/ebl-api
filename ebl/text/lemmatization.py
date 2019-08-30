@@ -7,8 +7,8 @@ from ebl.dictionary.word import WordId
 
 
 class LemmatizationError(Exception):
-    def __init__(self, message=''):
-        super().__init__(message or 'Invalid lemmatization')
+    def __init__(self, message='Invalid lemmatization'):
+        super().__init__(message)
 
 
 @attr.s(auto_attribs=True, frozen=True)
