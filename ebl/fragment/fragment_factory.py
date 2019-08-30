@@ -1,10 +1,7 @@
 from ebl.bibliography.reference import Reference
 from ebl.fragment.folios import Folio, Folios
-from ebl.fragment.fragment import (
-    Fragment,
-    Measure,
-    UncuratedReference
-)
+from ebl.fragment.fragment import (Fragment, FragmentNumber, Measure,
+                                   UncuratedReference)
 from ebl.fragment.record import (Record, RecordEntry, RecordType)
 from ebl.text.text import Text
 
@@ -31,7 +28,7 @@ class FragmentFactory:
     @staticmethod
     def create(data):
         return Fragment(
-            data['_id'],
+            FragmentNumber(data['_id']),
             data['accession'],
             data['cdliNumber'],
             data['bmIdNumber'],

@@ -3,7 +3,7 @@ import re
 import pydash
 from parsy import ParseError, regex, seq
 
-from ebl.text.atf import ATF_PARSER_VERSION
+from ebl.text.atf import ATF_PARSER_VERSION, Atf
 from ebl.text.line import ControlLine, EmptyLine
 from ebl.text.text import Text
 from ebl.text.text_parser import TEXT_LINE
@@ -22,7 +22,7 @@ EMPTY_LINE = regex(
 LINE = CONTROL_LINE | TEXT_LINE | EMPTY_LINE
 
 
-def parse_atf(atf: str):
+def parse_atf(atf: Atf):
     def parse_line(line: str, line_number: int):
         try:
             return (LINE.parse(line), None)

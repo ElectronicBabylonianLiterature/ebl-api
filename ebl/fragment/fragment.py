@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, NewType, Optional, Tuple, Union
 
 import attr
 import pydash
@@ -13,6 +13,8 @@ from ebl.fragment.transliteration import (
 from ebl.fragment.validator import Validator
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.text import Text
+
+FragmentNumber = NewType('FragmentNumber', str)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -35,7 +37,7 @@ class Measure:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Fragment:
-    number: str
+    number: FragmentNumber
     accession: str = ''
     cdli_number: str = ''
     bm_id_number: str = ''
