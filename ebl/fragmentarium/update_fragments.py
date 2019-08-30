@@ -17,51 +17,75 @@ from ebl.text.lemmatization import LemmatizationError
 from ebl.text.transliteration_error import TransliterationError
 
 
-def update_fragments(fragment_repository, fragmentarium):
+def update_fragment(fragmentarium, fragment):
+    transliteration = Transliteration(
+        fragment.text.atf,
+        fragment.notes
+    )
     user = ApiUser('update_fragments.py')
-    invalid_atf = 0
-    invalid_lemmas = 0
-    updated = 0
-    errors = []
-    fragments = [
+    fragmentarium.update_transliteration(fragment.number,
+                                         transliteration,
+                                         user)
+
+
+def find_transliterated(fragment_repository):
+    return [
         fragment.number for fragment
         in fragment_repository.find_transliterated()
     ]
 
-    with Bar('Updating', max=len(fragments)) as bar:
-        for number in fragments:
-            fragment = fragmentarium.find(number)
-            transliteration = Transliteration(
-                fragment.text.atf,
-                fragment.notes
-            )
 
+class State:
+    def __init__(self):
+        self.invalid_atf = 0
+        self.invalid_lemmas = 0
+        self.updated = 0
+        self.errors = []
+
+    def add_updated(self):
+        self.updated += 1
+
+    def add_lemmatization_error(self, error, fragment):
+        self.invalid_lemmas += 1
+        self.errors.append(f'{fragment.number}\t{error}')
+
+    def add_transliteration_error(self, transliteration_error, fragment):
+        self.invalid_atf += 1
+        for index, error in enumerate(transliteration_error.errors):
+            atf = fragment.text.lines[error['lineNumber'] - 1].atf
+            number = (fragment.number
+                      if index == 0 else
+                      len(fragment.number) * ' ')
+            self.errors.append(f'{number}\t{atf}')
+
+    def to_tsv(self):
+        return '\n'.join([
+            *self.errors,
+            f'# Updated fragments: {self.updated}',
+            f'# Invalid ATF: {self.invalid_atf}',
+            f'# Invalid lemmas: {self.invalid_lemmas}',
+        ])
+
+
+def update_fragments(fragment_repository, fragmentarium):
+    state = State()
+    numbers = find_transliterated(fragment_repository)
+
+    with Bar('Updating', max=len(numbers)) as bar:
+        for number in numbers:
             try:
-                fragmentarium.update_transliteration(fragment.number,
-                                                     transliteration,
-                                                     user)
-                updated += 1
+                fragment = fragmentarium.find(number)
+                update_fragment(fragmentarium, fragment)
+                state.add_updated()
             except TransliterationError as error:
-                invalid_atf += 1
-                for index, error in enumerate(error.errors):
-                    atf = fragment.text.lines[error['lineNumber'] - 1].atf
-                    number = (fragment.number
-                              if index == 0 else
-                              len(fragment.number) * ' ')
-                    errors.append(f'{number}\t{atf}')
+                state.add_transliteration_error(error, fragment)
             except LemmatizationError as error:
-                invalid_lemmas += 1
-                errors.append(f'{fragment.number}\t{error}')
+                state.add_lemmatization_error(error, fragment)
 
             bar.next()
 
     with open('invalid_fragments.tsv', 'w', encoding='utf-8') as file:
-        file.write('\n'.join([
-            *errors,
-            f'# Updated fragments: {updated}',
-            f'# Invalid ATF: {invalid_atf}',
-            f'# Invalid lemmas: {invalid_lemmas}',
-        ]))
+        file.write(state.to_tsv())
 
 
 if __name__ == '__main__':
