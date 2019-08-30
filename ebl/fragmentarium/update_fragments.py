@@ -24,12 +24,13 @@ def update_fragments(fragment_repository, fragmentarium):
     updated = 0
     errors = []
     fragments = [
-        fragment for fragment
+        fragment.number for fragment
         in fragment_repository.find_transliterated()
     ]
 
     with Bar('Updating', max=len(fragments)) as bar:
-        for fragment in fragments:
+        for number in fragments:
+            fragment = fragmentarium.find(number)
             transliteration = Transliteration(
                 fragment.text.atf,
                 fragment.notes
