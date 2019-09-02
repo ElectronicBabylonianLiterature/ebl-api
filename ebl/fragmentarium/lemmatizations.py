@@ -44,7 +44,7 @@ class LemmatizationResource:
     @falcon.before(require_scope, 'lemmatize:fragments')
     @validate(LEMMATIZATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
-        user = req.context['user']
+        user = req.context.user
         updated_fragment = self._fragmentarium.update_lemmatization(
             number,
             Lemmatization.from_list(req.media['lemmatization']),

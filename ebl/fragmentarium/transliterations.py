@@ -35,7 +35,7 @@ class TransliterationResource:
     @validate(TRANSLITERATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
         try:
-            user = req.context['user']
+            user = req.context.user
             updated_fragment = self._fragmentarium.update_transliteration(
                 number,
                 Transliteration(

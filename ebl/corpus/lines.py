@@ -36,7 +36,7 @@ class LinesResource:
             create_text_id(category, index),
             create_chapter_index(chapter_index),
             deserialize_lines(req.media['lines']),
-            req.context['user']
+            req.context.user
         )
         updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)

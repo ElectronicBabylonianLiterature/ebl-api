@@ -22,7 +22,7 @@ class FragmentSearch:
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp):
-        user = req.context['user']
+        user = req.context.user
         fragments = self._dispatch(req.params)
         resp.media = [
             create_response_dto(fragment, user)

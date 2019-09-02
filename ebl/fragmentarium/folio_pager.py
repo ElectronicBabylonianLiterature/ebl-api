@@ -10,7 +10,7 @@ class FolioPagerResource:
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp, folio_name, folio_number, number):
 
-        if req.context['user'].can_read_folio(folio_name):
+        if req.context.user.can_read_folio(folio_name):
             resp.media = (self
                           ._fragmentarium
                           .folio_pager(folio_name, folio_number, number))

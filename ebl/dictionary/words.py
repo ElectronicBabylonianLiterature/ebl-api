@@ -165,5 +165,5 @@ class WordsResource:
     @validate(WORD_DTO_SCHEMA)
     def on_post(self, req, resp, object_id):
         word = {**req.media, '_id': object_id}
-        self._dictionary.update(word, req.context['user'])
+        self._dictionary.update(word, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT

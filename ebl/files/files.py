@@ -29,7 +29,7 @@ def create_files_resource(auth_backend):
         def on_get(self, req, resp, file_name):
             grid_out = self._files.find(file_name)
 
-            check_scope(req.context['user'], grid_out)
+            check_scope(req.context.user, grid_out)
 
             resp.content_type = grid_out.content_type
             resp.stream_len = grid_out.length

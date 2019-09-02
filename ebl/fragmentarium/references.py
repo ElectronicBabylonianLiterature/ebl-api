@@ -25,7 +25,7 @@ class ReferencesResource:
     @falcon.before(require_scope, 'transliterate:fragments')
     @validate(REFERENCES_DTO_SCHEMA)
     def on_post(self, req, resp, number):
-        user = req.context['user']
+        user = req.context.user
         updated_fragment = self._fragmentarium.update_references(
             number,
             tuple(

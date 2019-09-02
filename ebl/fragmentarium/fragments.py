@@ -10,7 +10,7 @@ class FragmentsResource:
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp, number):
-        user = req.context['user']
+        user = req.context.user
         fragment = self._fragmentarium.find(number)
         resp.media = {
             **fragment.to_dict_for(user),

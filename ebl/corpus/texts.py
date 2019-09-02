@@ -1,10 +1,10 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 
-from ebl.corpus.api_serializer import deserialize, serialize
 from ebl.bibliography.reference import REFERENCE_DTO_SCHEMA
-from ebl.corpus.enums import Classification, ManuscriptType, Provenance, \
-    PeriodModifier, Period, Stage
+from ebl.corpus.api_serializer import deserialize, serialize
+from ebl.corpus.enums import Classification, ManuscriptType, Period, \
+    PeriodModifier, Provenance, Stage
 from ebl.corpus.text_utils import create_text_id, serialize_public_text
 from ebl.require_scope import require_scope
 
@@ -178,7 +178,7 @@ class TextsResource:
     @validate(TEXT_DTO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         text = deserialize(req.media)
-        self._corpus.create(text, req.context['user'])
+        self._corpus.create(text, req.context.user)
         resp.status = falcon.HTTP_CREATED
         resp.location = f'/texts/{text.category}/{text.index}'
         resp.media = serialize(self._corpus.find(text.id))

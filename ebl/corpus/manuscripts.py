@@ -41,7 +41,7 @@ class ManuscriptsResource:
                 for manuscript
                 in req.media['manuscripts']
             ),
-            req.context['user']
+            req.context.user
         )
         updated_text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(updated_text)
