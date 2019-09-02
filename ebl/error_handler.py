@@ -8,24 +8,24 @@ from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.text.lemmatization import LemmatizationError
 
 
-def http_error(ex, _req, _resp, _params):
+def http_error(_req, _resp, ex, _params):
     raise ex
 
 
-def unexpected_error(_ex, _req, _resp, _params):
+def unexpected_error(_req, _resp, _ex, _params):
     logging.exception('Unexpected Exception')
     raise falcon.HTTPInternalServerError()
 
 
-def unprocessable_entity(ex, _req, _resp, _params):
+def unprocessable_entity(_req, _resp, ex, _params):
     raise falcon.HTTPUnprocessableEntity(description=str(ex))
 
 
-def not_found_error(ex, _req, _resp, _params):
+def not_found_error(_req, _resp, ex, _params):
     raise falcon.HTTPNotFound(description=str(ex))
 
 
-def duplicate_error(ex, _req, _resp, _params):
+def duplicate_error(_req, _resp, ex, _params):
     raise falcon.HTTPConflict(description=str(ex))
 
 
