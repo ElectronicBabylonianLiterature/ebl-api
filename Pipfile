@@ -22,6 +22,7 @@ roman = "*"
 waitress = "*"
 falcon-apispec = "*"
 progress = "*"
+lark-parser = "*"
 
 [dev-packages]
 pytest = "*"

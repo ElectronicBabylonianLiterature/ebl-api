@@ -1,10 +1,15 @@
 import pytest
 
+from ebl.text.lark_parser import parse_word
 from ebl.text.text_parser import LONE_DETERMINATIVE, WORD
 from ebl.text.token import LoneDeterminative, Word
 
 
-@pytest.mark.parametrize("atf,expected", [
+@pytest.mark.parametrize('parser', [
+    lambda atf: WORD.map(Word).parse(atf),
+    parse_word
+])
+@pytest.mark.parametrize('atf,expected', [
     ('x', Word('x')),
     ('X', Word('X')),
     ('x#', Word('x#')),
@@ -51,29 +56,41 @@ from ebl.text.token import LoneDeterminative, Word
     ('{[i]ti}AB', Word('{[i]ti}AB')),
     ('in]-', Word('in]-')),
 ])
-def test_word(atf, expected):
-    assert WORD.map(Word).parse(atf) == expected
+def test_word(parser, atf, expected):
+    assert parser(atf) == expected
 
 
-@pytest.mark.parametrize("atf,expected", [
+@pytest.mark.parametrize('parser', [
+    lambda atf: LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf),
+    parse_word
+])
+@pytest.mark.parametrize('atf,expected', [
     ('<{10}>', LoneDeterminative('<{10}>')),
     ('{ud]u?}', LoneDeterminative('{ud]u?}')),
     ('{u₂#}', LoneDeterminative('{u₂#}')),
     ('{lu₂@v}', LoneDeterminative('{lu₂@v}')),
     ('{k[i]}', LoneDeterminative('{k[i]}'))
 ])
-def test_lone_determinative(atf, expected):
-    assert LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf) == expected
+def test_lone_determinative(parser, atf, expected):
+    assert parser(atf) == expected
 
 
+@pytest.mark.parametrize('parser', [
+    LONE_DETERMINATIVE.parse,
+    parse_word
+])
 @pytest.mark.parametrize('atf', [
     '{udu}?'
 ])
-def test_invalid_lone_determinative(atf):
+def test_invalid_lone_determinative(parser, atf):
     with pytest.raises(Exception):
-        LONE_DETERMINATIVE.parse(atf)
+        parser(atf)
 
 
+@pytest.mark.parametrize('parser', [
+    WORD.parse,
+    parse_word
+])
 @pytest.mark.parametrize('atf', [
     'sal/: šim',
     '<GAR>?',
@@ -81,6 +98,6 @@ def test_invalid_lone_determinative(atf):
     'KA₂?].DINGIR.RA[{ki}?',
     'k[a]?'
 ])
-def test_invalid(atf):
+def test_invalid(parser, atf):
     with pytest.raises(Exception):
-        WORD.parse(atf)
+        parser(atf)
