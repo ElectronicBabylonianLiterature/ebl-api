@@ -2,6 +2,7 @@ import pytest
 
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
+from ebl.text.lark_parser import parse_atf_lark
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
 from ebl.text.token import (BrokenAway, DocumentOrientedGloss, Erasure,
@@ -17,6 +18,11 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('', []),
     ('\n', []),
     ('#first\n\n#second', [
+        ControlLine.of_single('#', Token('first')),
+        EmptyLine(),
+        ControlLine.of_single('#', Token('second'))
+    ]),
+    ('#first\n \n#second', [
         ControlLine.of_single('#', Token('first')),
         EmptyLine(),
         ControlLine.of_single('#', Token('second'))
@@ -334,7 +340,7 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ('2. RA{k[i]}', [
         TextLine('2.', (Word('RA{k[i]}'),))
     ]),
-    ('2.  in]-<(...)>', [
+    ('2. in]-<(...)>', [
         TextLine('2.', (Word('in]-'),
                         OmissionOrRemoval('<('),
                         Token('...'),
@@ -343,16 +349,26 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
     ]),
 ])
 def test_parse_atf(line, expected_tokens):
-    assert parse_atf(line).lines == \
+    # parse_atf(line)
+
+    assert parse_atf_lark(line).lines == \
            Text.of_iterable(expected_tokens).lines
 
 
-def test_parse_atf_invalid():
+@pytest.mark.parametrize('parser', [
+    parse_atf,
+    parse_atf_lark
+])
+def test_parse_atf_invalid(parser):
     with pytest.raises(Exception):
-        parse_atf('invalid')
+        parser('invalid')
 
 
-@pytest.mark.parametrize("code,expected_language", [
+@pytest.mark.parametrize('parser', [
+    parse_atf,
+    parse_atf_lark
+])
+@pytest.mark.parametrize('code,expected_language', [
     ('%ma', Language.AKKADIAN),
     ('%mb', Language.AKKADIAN),
     ('%na', Language.AKKADIAN),
@@ -370,7 +386,7 @@ def test_parse_atf_invalid():
     ('%es', Language.EMESAL),
     ('%foo', DEFAULT_LANGUAGE)
 ])
-def test_parse_atf_language_shifts(code, expected_language):
+def test_parse_atf_language_shifts(parser, code, expected_language):
     word = 'ha-am'
     line = f'1. {word} {code} {word} %sb {word}'
 
@@ -382,9 +398,13 @@ def test_parse_atf_language_shifts(code, expected_language):
         )),
     ))
 
-    assert parse_atf(line) == expected
+    assert parser(line) == expected
 
 
+@pytest.mark.parametrize('parser', [
+    parse_atf,
+    parse_atf_lark
+])
 @pytest.mark.parametrize('atf,line_numbers', [
     ('1. x\nthis is not valid', [2]),
     ('1\'. ($____$) x [...]\n$ (too many underscores)', [1]),
@@ -393,9 +413,9 @@ def test_parse_atf_language_shifts(code, expected_language):
     ('1\'. → x\n$ (line continuation in the middle)', [1]),
     ('this is not valid\nthis is not valid', [1, 2])
 ])
-def test_invalid_atf(atf, line_numbers):
+def test_invalid_atf(parser, atf, line_numbers):
     with pytest.raises(TransliterationError) as excinfo:
-        parse_atf(atf)
+        parser(atf)
 
     assert excinfo.value.errors == [{
         'description': 'Invalid line',

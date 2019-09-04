@@ -55,6 +55,7 @@ from ebl.text.token import LoneDeterminative, Word
     ('he₂-<(pa₃)>', Word('he₂-<(pa₃)>')),
     ('{[i]ti}AB', Word('{[i]ti}AB')),
     ('in]-', Word('in]-')),
+    ('<en-da-ab>', Word('<en-da-ab>')),
 ])
 def test_word(parser, atf, expected):
     assert parser(atf) == expected

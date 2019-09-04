@@ -1,0 +1,156 @@
+?start: line
+
+?line: empty_line
+     | control_line
+     | text_line
+
+empty_line: /^\s+$/
+
+!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
+
+text_line: LINE_NUMBER " " text
+LINE_NUMBER: /[^ ]+/ "."
+
+
+text: token (_WORD_SEPARATOR? token)* LINE_CONTINUATION?
+
+LINE_CONTINUATION: "→"
+
+token: TABULATION
+     | COLUMN
+     | _divider_and_separator
+     | COMMENTARY_PROTOCOL
+     | DOCUMENT_ORIENTED_GLOSS -> document_oriented_gloss
+     | SHIFT -> language_shift
+     | erasure
+     | word
+     | lone_determinative_complex
+     | omission_or_removal
+     | BROKEN_AWAY -> broken_away
+     | perhaps_broken_away
+     | unknown_number_of_signs
+
+_divider_and_separator.4: DIVIDER _WORD_SEPARATOR
+lone_determinative_complex.2:  lone_determinative_prefix lone_determinative lone_determinative_suffix
+lone_determinative_prefix: (UNKNOWN_NUMBER_OF_SIGNS | CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY)?
+lone_determinative_suffix: (UNKNOWN_NUMBER_OF_SIGNS | OPEN_BROKEN_AWAY | OPEN_PERHAPS_BROKEN_AWAY)?
+omission_or_removal.-1: OMISSION
+perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
+unknown_number_of_signs.4: UNKNOWN_NUMBER_OF_SIGNS
+
+TABULATION: "($___$)"
+
+COLUMN: "&" ("0".."9")*
+
+COMMENTARY_PROTOCOL: "!qt" | "!bs" | "!cm" | "!zz"
+
+DOCUMENT_ORIENTED_GLOSS: "{(" | ")}"
+
+SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
+
+erasure: "°" erasure_part "\\" erasure_part "°"
+erasure_part: ((DIVIDER | word | lone_determinative) (_WORD_SEPARATOR (DIVIDER | word | lone_determinative))*)?
+
+PERHAPS_BROKEN_AWAY: OPEN_PERHAPS_BROKEN_AWAY
+                   | CLOSE_PERHAPS_BROKEN_AWAY
+OPEN_PERHAPS_BROKEN_AWAY: "("
+CLOSE_PERHAPS_BROKEN_AWAY: ")"
+
+UNKNOWN_NUMBER_OF_SIGNS: "..."
+
+_WORD_SEPARATOR: " "
+
+
+?any_word: lone_determinative | word
+
+DIVIDER: INLINE_BROKEN_AWAY? DIVIDER_SYMBOL MODIFIER FLAG INLINE_BROKEN_AWAY?
+DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":?" | ":" | ";" | "/"
+
+OMISSION: OPEN_OMISSION
+        | CLOSE_OMISSION
+OPEN_OMISSION: "<<" | "<(" | "<"
+CLOSE_OMISSION: ">>" | ")>" | ">"
+
+BROKEN_AWAY: OPEN_BROKEN_AWAY
+           | CLOSE_BROKEN_AWAY
+OPEN_BROKEN_AWAY: "["
+CLOSE_BROKEN_AWAY: "]"
+
+INLINE_BROKEN_AWAY: OPEN_INLINE_BROKEN_AWAY 
+                  | CLOSE_INLINE_BROKEN_AWAY
+OPEN_INLINE_BROKEN_AWAY: /(\[\(|\[|(?<!{)\()(?!\.)/
+CLOSE_INLINE_BROKEN_AWAY: /(?<!\.)(\)\]|\)(?!})|\])/
+
+lone_determinative: LD_PREFIX VARIANT (JOINER* VARIANT)* LD_SUFFIX
+LD_PREFIX: OMISSION? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
+LD_SUFFIX: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE OMISSION?
+
+word.3: WORD_PREFIX? OPEN_OMISSION? WORD_BODY CLOSE_OMISSION? WORD_SUFFIX?
+WORD_PREFIX: LINGUISTIC_GLOSS? JOINER LINGUISTIC_GLOSS? OPEN_INLINE_BROKEN_AWAY?
+           | LINGUISTIC_GLOSS JOINER? LINGUISTIC_GLOSS? OPEN_INLINE_BROKEN_AWAY?
+WORD_BODY: (INLINE_ERASURE (PART_JOINER (INLINE_ERASURE | PARTS))* | PARTS)
+WORD_SUFFIX: CLOSE_INLINE_BROKEN_AWAY? LINGUISTIC_GLOSS? JOINER LINGUISTIC_GLOSS?
+           | CLOSE_INLINE_BROKEN_AWAY? LINGUISTIC_GLOSS? JOINER? LINGUISTIC_GLOSS
+
+INLINE_ERASURE: "°" PARTS "\\" PARTS "°"
+
+PARTS: DETERMINATIVE (PART_JOINER? (DETERMINATIVE | VARIANT))+
+     | VARIANT (PART_JOINER? (DETERMINATIVE | VARIANT))*
+
+DETERMINATIVE: D_PREFIX VARIANT (PART_JOINER VARIANT)* D_SUFFIX
+D_PREFIX: OMISSION? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
+D_SUFFIX: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE OMISSION?
+OPEN_DETERMINATIVE: "{+" | "{"
+CLOSE_DETERMINATIVE: "}"
+
+PART_JOINER: ANY_CLOSE? JOINER ANY_OPEN?
+           | ANY_CLOSE JOINER? ANY_OPEN?
+           | ANY_CLOSE? JOINER? ANY_OPEN
+ANY_CLOSE: CLOSE_INLINE_BROKEN_AWAY CLOSE_OMISSION? LINGUISTIC_GLOSS*
+         | CLOSE_INLINE_BROKEN_AWAY? CLOSE_OMISSION LINGUISTIC_GLOSS*
+         | CLOSE_INLINE_BROKEN_AWAY? CLOSE_OMISSION? LINGUISTIC_GLOSS+
+ANY_OPEN: LINGUISTIC_GLOSS* OPEN_OMISSION OPEN_INLINE_BROKEN_AWAY?
+        | LINGUISTIC_GLOSS* OPEN_OMISSION? OPEN_INLINE_BROKEN_AWAY
+        | LINGUISTIC_GLOSS+ OPEN_OMISSION? OPEN_INLINE_BROKEN_AWAY?
+JOINER: "-" | "+" | "."
+LINGUISTIC_GLOSS: "{{" 
+                | "}}"
+
+VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)*
+VARIANT_PART: UNKNOWN
+            | VALUE_WITH_SIGN
+            | VALUE 
+            | COMPOUND_GRAPHEME 
+            | GRAPHEME
+            | DIVIDER
+ 
+VALUE_WITH_SIGN: VALUE "!"? "(" COMPOUND_GRAPHEME ")"
+
+VALUE: VALUE_NAME SUB_INDEX? MODIFIER FLAG
+VALUE_NAME:  VALUE_CHARACTER (INLINE_BROKEN_AWAY? VALUE_CHARACTER)*
+VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h" 
+               | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
+               | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
+               | "z" | "ḫ" | "ʾ" | "0".."9"
+SUB_INDEX: ("₀".."₉" | "ₓ")+
+
+COMPOUND_GRAPHEME: "|"? COMPOUND_PART (COMPOUND_OPERATOR COMPOUND_PART)* "|"?
+COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
+COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+" | "(" | ")"
+
+GRAPHEME: "$"?  GRAPHEME_NAME MODIFIER FLAG
+GRAPHEME_NAME: GRAPHEME_CHARACTER (INLINE_BROKEN_AWAY? GRAPHEME_CHARACTER)*
+GRAPHEME_CHARACTER: "a".."z"
+                  | "A".."Z"
+                  | "Ṣ" | "Š" | "Ṭ"
+                  | "ṣ" | "š" | "ṭ"
+                  | "0".."9"
+                  | "₀".."₉"
+
+UNKNOWN: ("X" | "x") FLAG
+
+VARIANT_SEPARATOR: "/"
+
+FLAG: ("!" | "?" | "*" | "#")*
+MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))*
+MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
