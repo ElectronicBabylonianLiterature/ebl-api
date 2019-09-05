@@ -15,4 +15,7 @@ COPY .coveragerc ./
 COPY mypy.ini ./
 COPY ./ebl ./ebl
 
+COPY ./docs ./docs
+RUN chmod -R -wx ./docs
+
 CMD ["pipenv", "run", "gunicorn",  "-b :8000", "ebl.app:get_app()"]

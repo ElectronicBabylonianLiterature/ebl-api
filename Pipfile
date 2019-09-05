@@ -22,6 +22,7 @@ roman = "*"
 waitress = "*"
 falcon-apispec = "*"
 progress = "*"
+lark-parser = "*"
 
 [dev-packages]
 pytest = "*"
@@ -37,6 +38,7 @@ v = {editable = true,version = "*"}
 factory-boy = "*"
 rope = "*"
 flake8 = "*"
+pyhamcrest = "*"
 
 [requires]
 python_version = "3.7"

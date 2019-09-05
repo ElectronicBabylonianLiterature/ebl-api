@@ -107,11 +107,9 @@ INLINE_BROKEN_LEFT = regex(r'(\[\(|\[|(?<!{)\()(?!\.)')
 INLINE_BROKEN_RIGHT = regex(r'(?<!\.)(\)\]|\)(?!})|\])')
 INLINE_BROKEN = INLINE_BROKEN_LEFT | INLINE_BROKEN_RIGHT
 DIVIDER = (
-    INLINE_BROKEN.at_most(1).concat() +
     string_from('|', ':\'', ':"', ':.', '::', ':?', ':', ';', '/') +
     MODIFIER +
-    FLAG +
-    INLINE_BROKEN.at_most(1).concat()
+    FLAG
 ).desc('divider')
 UNKNOWN = (
     string_from(ebl.text.atf.UNIDENTIFIED_SIGN, ebl.text.atf.UNCLEAR_SIGN) +
