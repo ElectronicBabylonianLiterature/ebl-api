@@ -161,7 +161,8 @@ def test_parser_version(parser, version):
                 BrokenAway(']'),
                 BrokenAway('['),
                 Word('{d}UTU'),
-                Token('[:')
+                BrokenAway('['),
+                Token(':')
         ))
     ]),
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
@@ -365,6 +366,18 @@ def test_parser_version(parser, version):
 def test_parse_atf(parser, line, expected_tokens):
     assert parser(line).lines == \
            Text.of_iterable(expected_tokens).lines
+
+
+def test_foo():
+    line, expected_tokens = ('1. :? :# ::?', [
+        TextLine('1.', (
+                Token(':?'),
+                Token(':#'),
+                Token('::?')
+        ))
+    ])
+    assert parse_atf_lark(line).lines == \
+        Text.of_iterable(expected_tokens).lines
 
 
 @pytest.mark.parametrize('parser', [

@@ -4,31 +4,31 @@
      | control_line
      | text_line
 
-empty_line: /\s+/? _NEW_LINE?
+empty_line: /\s+/?
 
-!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/? _NEW_LINE
+!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
 
-text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR* _NEW_LINE?
+text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 LINE_NUMBER: /[^ ]+/ "."
 
 
 text: _head _tail* line_continuation?
-_head: have_both
+_head: _have_both
      | _omit_left
-     | (_omit_right | divider_and_separator)+ have_both
-_tail: _WORD_SEPARATOR _omit_right* have_both
+     | _omit_right+ _have_both?
+_tail: _WORD_SEPARATOR _omit_right* _have_both?
      | _WORD_SEPARATOR? _omit_left+
-     | _WORD_SEPARATOR _omit_right* divider_and_separator  _omit_right* have_both?
 
 line_continuation: _WORD_SEPARATOR* LINE_CONTINUATION
 LINE_CONTINUATION: "→"
 
-have_both: TABULATION
+_have_both: TABULATION
          | COLUMN
          | COMMENTARY_PROTOCOL
-         | SHIFT -> language_shift
+         | language_shift
          | erasure
          | word
+         | divider
          | lone_determinative_complex
          | unknown_number_of_signs
          | _partial_complex
@@ -41,7 +41,7 @@ _omit_right: oba
            | oo
            | odog
 
-divider_and_separator.4: DIVIDER (_WORD_SEPARATOR | _NEW_LINE)
+divider.4: DIVIDER
 unknown_number_of_signs.4: UNKNOWN_NUMBER_OF_SIGNS
 lone_determinative_complex.2:  lone_determinative_prefix lone_determinative lone_determinative_suffix
 lone_determinative_prefix: (unknown_number_of_signs _omit_left?)?
@@ -61,6 +61,7 @@ odog: OPEN_DOCUMENT_ORIENTED_GLOSS
 omission_or_removal.-1: OMISSION
 broken_away.-1: BROKEN_AWAY
 perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
+language_shift: SHIFT
 
 _NEW_LINE: /\n/
 
@@ -96,7 +97,7 @@ _WORD_SEPARATOR: " "
          | left_partial_word
          | partial_word
 
-DIVIDER: INLINE_BROKEN_AWAY? DIVIDER_SYMBOL MODIFIER FLAG INLINE_BROKEN_AWAY?
+DIVIDER: DIVIDER_SYMBOL MODIFIER FLAG
 DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":?" | ":" | ";" | "/"
 
 OMISSION: OPEN_OMISSION

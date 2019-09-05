@@ -1,5 +1,6 @@
 import attr
 import pydash
+from lark.exceptions import UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
 from lark.tree import Tree
@@ -66,7 +67,7 @@ class TreeToLine(TreeToErasure):
         return EmptyLine()
 
     @v_args(inline=True)
-    def control_line(self, prefix, content, _):
+    def control_line(self, prefix, content):
         return ControlLine.of_single(prefix, EblToken(content))
 
     @v_args(inline=True)
@@ -176,15 +177,15 @@ def parse_line(atf):
 
 def parse_atf_lark(atf):
     def parse_line_(line: str, line_number: int):
-        #try:
-        return ((parse_line(line + '\n'), None)
-                if line else
-                (EmptyLine(), None))
-        #except UnexpectedInput as ex:
-        #    return (None,  {
-        #        'description': 'Invalid line: ' + ex.get_context(line, 4),
-        #        'lineNumber': line_number + 1
-        #    })
+        try:
+            return ((parse_line(line), None)
+                    if line else
+                    (EmptyLine(), None))
+        except UnexpectedInput as ex:
+            return (None,  {
+                'description': 'Invalid line: ' + ex.get_context(line, 6),
+                'lineNumber': line_number + 1
+            })
 
     def check_errors(pairs):
         errors = [
