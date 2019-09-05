@@ -8,35 +8,60 @@ empty_line: /^\s+$/
 
 !control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
 
-text_line: LINE_NUMBER " " text
+text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 LINE_NUMBER: /[^ ]+/ "."
 
 
-text: token (_WORD_SEPARATOR? token)* LINE_CONTINUATION?
+text: _head _tail* line_continuation?
+_head: have_both
+     | _omit_left
+     | _omit_right+ have_both
+_tail: _WORD_SEPARATOR _omit_right* have_both
+     | _WORD_SEPARATOR? _omit_left+
 
+line_continuation: _WORD_SEPARATOR+ LINE_CONTINUATION
 LINE_CONTINUATION: "→"
 
-token: TABULATION
-     | COLUMN
-     | _divider_and_separator
-     | COMMENTARY_PROTOCOL
-     | DOCUMENT_ORIENTED_GLOSS -> document_oriented_gloss
-     | SHIFT -> language_shift
-     | erasure
-     | word
-     | lone_determinative_complex
-     | omission_or_removal
-     | BROKEN_AWAY -> broken_away
-     | perhaps_broken_away
-     | unknown_number_of_signs
+have_both: TABULATION
+         | COLUMN
+         | divider
+         | COMMENTARY_PROTOCOL
+         | SHIFT -> language_shift
+         | erasure
+         | word
+         | lone_determinative_complex
+         | unknown_number_of_signs
+         | _partial_complex
+_omit_left: cba
+          | cpba
+          | co
+          | cdog
+_omit_right: oba
+           | opba
+           | oo
+           | odog
 
-_divider_and_separator.4: DIVIDER _WORD_SEPARATOR
-lone_determinative_complex.2:  lone_determinative_prefix lone_determinative lone_determinative_suffix
-lone_determinative_prefix: (UNKNOWN_NUMBER_OF_SIGNS | CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY)?
-lone_determinative_suffix: (UNKNOWN_NUMBER_OF_SIGNS | OPEN_BROKEN_AWAY | OPEN_PERHAPS_BROKEN_AWAY)?
-omission_or_removal.-1: OMISSION
-perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
+divider.4: DIVIDER _WORD_SEPARATOR
 unknown_number_of_signs.4: UNKNOWN_NUMBER_OF_SIGNS
+lone_determinative_complex.2:  lone_determinative_prefix lone_determinative lone_determinative_suffix
+lone_determinative_prefix: (unknown_number_of_signs _omit_left?)?
+lone_determinative_suffix: (_omit_right? unknown_number_of_signs)?
+_partial_complex: right_partial_word (_omit_right? unknown_number_of_signs _omit_left? partial_word)* (_omit_right? unknown_number_of_signs)?
+               | (unknown_number_of_signs _omit_left?)? (partial_word _omit_right? unknown_number_of_signs _omit_left?)* left_partial_word
+               | (unknown_number_of_signs _omit_left?)? (partial_word _omit_right? unknown_number_of_signs _omit_left?)* partial_word (_omit_right? unknown_number_of_signs)?
+               | right_partial_word (_omit_right? unknown_number_of_signs _omit_left? partial_word)* _omit_right? unknown_number_of_signs _omit_left? left_partial_word
+cba: CLOSE_BROKEN_AWAY
+cpba: CLOSE_PERHAPS_BROKEN_AWAY
+co: CLOSE_OMISSION
+cdog: CLOSE_DOCUMENT_ORIENTED_GLOSS
+oba: OPEN_BROKEN_AWAY
+opba: OPEN_PERHAPS_BROKEN_AWAY
+oo: OPEN_OMISSION
+odog: OPEN_DOCUMENT_ORIENTED_GLOSS
+omission_or_removal.-1: OMISSION
+broken_away.-1: BROKEN_AWAY
+perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
+
 
 TABULATION: "($___$)"
 
@@ -44,11 +69,14 @@ COLUMN: "&" ("0".."9")*
 
 COMMENTARY_PROTOCOL: "!qt" | "!bs" | "!cm" | "!zz"
 
-DOCUMENT_ORIENTED_GLOSS: "{(" | ")}"
+DOCUMENT_ORIENTED_GLOSS: OPEN_DOCUMENT_ORIENTED_GLOSS
+                       | CLOSE_DOCUMENT_ORIENTED_GLOSS
+OPEN_DOCUMENT_ORIENTED_GLOSS: "{("
+CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
 
 SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
 
-erasure: "°" erasure_part "\\" erasure_part "°"
+erasure.-1: "°" erasure_part "\\" erasure_part "°"
 erasure_part: ((DIVIDER | word | lone_determinative) (_WORD_SEPARATOR (DIVIDER | word | lone_determinative))*)?
 
 PERHAPS_BROKEN_AWAY: OPEN_PERHAPS_BROKEN_AWAY
@@ -61,7 +89,11 @@ UNKNOWN_NUMBER_OF_SIGNS: "..."
 _WORD_SEPARATOR: " "
 
 
-?any_word: lone_determinative | word
+?any_word: lone_determinative
+         | word
+         | right_partial_word
+         | left_partial_word
+         | partial_word
 
 DIVIDER: INLINE_BROKEN_AWAY? DIVIDER_SYMBOL MODIFIER FLAG INLINE_BROKEN_AWAY?
 DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":?" | ":" | ";" | "/"
@@ -85,14 +117,13 @@ lone_determinative: LD_PREFIX VARIANT (JOINER* VARIANT)* LD_SUFFIX
 LD_PREFIX: OMISSION? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
 LD_SUFFIX: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE OMISSION?
 
-word.3: WORD_PREFIX? OPEN_OMISSION? WORD_BODY CLOSE_OMISSION? WORD_SUFFIX?
-WORD_PREFIX: LINGUISTIC_GLOSS? JOINER LINGUISTIC_GLOSS? OPEN_INLINE_BROKEN_AWAY?
-           | LINGUISTIC_GLOSS JOINER? LINGUISTIC_GLOSS? OPEN_INLINE_BROKEN_AWAY?
-WORD_BODY: (INLINE_ERASURE (PART_JOINER (INLINE_ERASURE | PARTS))* | PARTS)
-WORD_SUFFIX: CLOSE_INLINE_BROKEN_AWAY? LINGUISTIC_GLOSS? JOINER LINGUISTIC_GLOSS?
-           | CLOSE_INLINE_BROKEN_AWAY? LINGUISTIC_GLOSS? JOINER? LINGUISTIC_GLOSS
+word.3: LINGUISTIC_GLOSS? OPEN_OMISSION? WORD_BODY CLOSE_OMISSION? LINGUISTIC_GLOSS?
+left_partial_word: JOINER OPEN_INLINE_BROKEN_AWAY? LINGUISTIC_GLOSS? OPEN_OMISSION? WORD_BODY CLOSE_OMISSION? LINGUISTIC_GLOSS?
+right_partial_word: LINGUISTIC_GLOSS? OPEN_OMISSION? WORD_BODY CLOSE_OMISSION? LINGUISTIC_GLOSS? CLOSE_INLINE_BROKEN_AWAY? JOINER
+partial_word: JOINER OPEN_INLINE_BROKEN_AWAY? LINGUISTIC_GLOSS? OPEN_OMISSION? WORD_BODY CLOSE_OMISSION? LINGUISTIC_GLOSS? CLOSE_INLINE_BROKEN_AWAY? JOINER
+WORD_BODY: (INLINE_ERASURE | PARTS) (PART_JOINER (INLINE_ERASURE | PARTS))*
 
-INLINE_ERASURE: "°" PARTS "\\" PARTS "°"
+INLINE_ERASURE: "°" PARTS? "\\" PARTS? "°"
 
 PARTS: DETERMINATIVE (PART_JOINER? (DETERMINATIVE | VARIANT))+
      | VARIANT (PART_JOINER? (DETERMINATIVE | VARIANT))*

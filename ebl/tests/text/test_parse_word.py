@@ -56,6 +56,10 @@ from ebl.text.token import LoneDeterminative, Word
     ('{[i]ti}AB', Word('{[i]ti}AB')),
     ('in]-', Word('in]-')),
     ('<en-da-ab>', Word('<en-da-ab>')),
+    ('me-e-li-°\\ku°', Word('me-e-li-°\\ku°')),
+    ('°me-e-li\\°-ku', Word('°me-e-li\\°-ku')),
+    ('me-°e\\li°-ku', Word('me-°e\\li°-ku')),
+    ('me-°e\\li°-me-°e\\li°-ku', Word('me-°e\\li°-me-°e\\li°-ku')),
 ])
 def test_word(parser, atf, expected):
     assert parser(atf) == expected

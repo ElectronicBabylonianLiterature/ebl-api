@@ -1,6 +1,5 @@
 import attr
 import pydash
-from lark.exceptions import UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
 from lark.tree import Tree
@@ -11,9 +10,9 @@ from ebl.text.labels import LineNumberLabel
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
 from ebl.text.token import BrokenAway, DocumentOrientedGloss, Erasure, \
-    ErasureState, LanguageShift, LoneDeterminative, OmissionOrRemoval, \
-    Partial, \
-    PerhapsBrokenAway, Side, Token as EblToken, Word
+    ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
+    OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, Token as EblToken, \
+    Word
 from ebl.text.transliteration_error import TransliterationError
 
 
@@ -24,6 +23,21 @@ class TreeToWord(Transformer):
         ))
 
     def word(self, tokens):
+        return Word(''.join(
+            token.value for token in tokens
+        ))
+
+    def left_partial_word(self, tokens):
+        return Word(''.join(
+            token.value for token in tokens
+        ))
+
+    def right_partial_word(self, tokens):
+        return Word(''.join(
+            token.value for token in tokens
+        ))
+
+    def partial_word(self, tokens):
         return Word(''.join(
             token.value for token in tokens
         ))
@@ -79,11 +93,43 @@ class TreeToLine(TreeToErasure):
         return PerhapsBrokenAway(str(value))
 
     @v_args(inline=True)
+    def cba(self, value):
+        return BrokenAway(str(value))
+
+    @v_args(inline=True)
+    def cpba(self, value):
+        return PerhapsBrokenAway(str(value))
+
+    @v_args(inline=True)
+    def oba(self, value):
+        return BrokenAway(str(value))
+
+    @v_args(inline=True)
+    def opba(self, value):
+        return PerhapsBrokenAway(str(value))
+
+    @v_args(inline=True)
     def omission_or_removal(self, value):
         return OmissionOrRemoval(str(value))
 
     @v_args(inline=True)
+    def oo(self, value):
+        return OmissionOrRemoval(str(value))
+
+    @v_args(inline=True)
+    def co(self, value):
+        return OmissionOrRemoval(str(value))
+
+    @v_args(inline=True)
     def document_oriented_gloss(self, value):
+        return DocumentOrientedGloss(str(value))
+
+    @v_args(inline=True)
+    def odog(self, value):
+        return DocumentOrientedGloss(str(value))
+
+    @v_args(inline=True)
+    def cdog(self, value):
         return DocumentOrientedGloss(str(value))
 
     @v_args(inline=True)
@@ -104,6 +150,9 @@ class TreeToLine(TreeToErasure):
                         end=len(suffix.children) > 0)),
             suffix.children
         ])
+
+    def line_continuation(self, _):
+        return LineContinuation('→')
 
 
 WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')
@@ -127,13 +176,13 @@ def parse_line(atf):
 
 def parse_atf_lark(atf: Atf):
     def parse_line_(line: str, line_number: int):
-        try:
-            return (parse_line(line), None) if line else (EmptyLine(), None)
-        except UnexpectedInput as ex:
-            return (None,  {
-                'description': 'Invalid line: ' + ex.get_context(line, 4),
-                'lineNumber': line_number + 1
-            })
+        # try:
+        return (parse_line(line), None) if line else (EmptyLine(), None)
+        # except UnexpectedInput as ex:
+        #    return (None,  {
+        #        'description': 'Invalid line: ' + ex.get_context(line, 4),
+        #        'lineNumber': line_number + 1
+        #    })
 
     def check_errors(pairs):
         errors = [
