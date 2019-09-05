@@ -212,7 +212,6 @@ def create_app(context):
     )
     spec.path(resource=open_api)
 
-    api.add_static_route('/documentation', '/usr/src/ebl/docs', True)
     return api
 
 
