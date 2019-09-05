@@ -16,7 +16,7 @@ CONTROL_LINE = seq(
 ).combine(ControlLine.of_single)
 
 EMPTY_LINE = regex(
-    r'^$'
+    r'^\s*$'
 ).map(lambda _: EmptyLine())
 
 LINE = CONTROL_LINE | TEXT_LINE | EMPTY_LINE

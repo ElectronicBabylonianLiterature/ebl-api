@@ -152,5 +152,6 @@ class Text:
                                     DEFAULT_ATF_PARSER_VERSION))
 
     @staticmethod
-    def of_iterable(lines: Iterable[Line]) -> 'Text':
-        return Text(tuple(lines))
+    def of_iterable(lines: Iterable[Line],
+                    parser_version: str = ATF_PARSER_VERSION) -> 'Text':
+        return Text(tuple(lines), parser_version)

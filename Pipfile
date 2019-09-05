@@ -38,6 +38,7 @@ v = {editable = true,version = "*"}
 factory-boy = "*"
 rope = "*"
 flake8 = "*"
+pyhamcrest = "*"
 
 [requires]
 python_version = "3.7"

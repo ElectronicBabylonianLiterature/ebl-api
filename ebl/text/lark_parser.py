@@ -5,7 +5,7 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
-from ebl.text.atf import Atf
+from ebl.text.atf import ATF_PARSER_VERSION
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import ControlLine, EmptyLine, TextLine
 from ebl.text.text import Text
@@ -66,7 +66,7 @@ class TreeToLine(TreeToErasure):
         return EmptyLine()
 
     @v_args(inline=True)
-    def control_line(self, prefix, content):
+    def control_line(self, prefix, content, _):
         return ControlLine.of_single(prefix, EblToken(content))
 
     @v_args(inline=True)
@@ -174,11 +174,13 @@ def parse_line(atf):
     return TreeToLine().transform(tree)
 
 
-def parse_atf_lark(atf: Atf):
+def parse_atf_lark(atf):
     def parse_line_(line: str, line_number: int):
-        # try:
-        return (parse_line(line), None) if line else (EmptyLine(), None)
-        # except UnexpectedInput as ex:
+        #try:
+        return ((parse_line(line + '\n'), None)
+                if line else
+                (EmptyLine(), None))
+        #except UnexpectedInput as ex:
         #    return (None,  {
         #        'description': 'Invalid line: ' + ex.get_context(line, 4),
         #        'lineNumber': line_number + 1
@@ -202,4 +204,4 @@ def parse_atf_lark(atf: Atf):
                   .drop_right_while(lambda line: line.prefix == '')
                   .value())
 
-    return Text(lines, '0.2.0')
+    return Text(lines, f'{ATF_PARSER_VERSION}-lark')

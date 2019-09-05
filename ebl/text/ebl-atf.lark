@@ -4,27 +4,27 @@
      | control_line
      | text_line
 
-empty_line: /^\s+$/
+empty_line: /\s+/? _NEW_LINE?
 
-!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
+!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/? _NEW_LINE
 
-text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR*
+text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR* _NEW_LINE?
 LINE_NUMBER: /[^ ]+/ "."
 
 
 text: _head _tail* line_continuation?
 _head: have_both
      | _omit_left
-     | _omit_right+ have_both
+     | (_omit_right | divider_and_separator)+ have_both
 _tail: _WORD_SEPARATOR _omit_right* have_both
      | _WORD_SEPARATOR? _omit_left+
+     | _WORD_SEPARATOR _omit_right* divider_and_separator  _omit_right* have_both?
 
-line_continuation: _WORD_SEPARATOR+ LINE_CONTINUATION
+line_continuation: _WORD_SEPARATOR* LINE_CONTINUATION
 LINE_CONTINUATION: "→"
 
 have_both: TABULATION
          | COLUMN
-         | divider
          | COMMENTARY_PROTOCOL
          | SHIFT -> language_shift
          | erasure
@@ -41,7 +41,7 @@ _omit_right: oba
            | oo
            | odog
 
-divider.4: DIVIDER _WORD_SEPARATOR
+divider_and_separator.4: DIVIDER (_WORD_SEPARATOR | _NEW_LINE)
 unknown_number_of_signs.4: UNKNOWN_NUMBER_OF_SIGNS
 lone_determinative_complex.2:  lone_determinative_prefix lone_determinative lone_determinative_suffix
 lone_determinative_prefix: (unknown_number_of_signs _omit_left?)?
@@ -62,6 +62,7 @@ omission_or_removal.-1: OMISSION
 broken_away.-1: BROKEN_AWAY
 perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
 
+_NEW_LINE: /\n/
 
 TABULATION: "($___$)"
 

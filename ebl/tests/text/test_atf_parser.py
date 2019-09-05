@@ -1,5 +1,7 @@
 import pytest
+from hamcrest import assert_that, contains, has_entries, starts_with
 
+from ebl.text.atf import ATF_PARSER_VERSION
 from ebl.text.atf_parser import parse_atf
 from ebl.text.language import Language
 from ebl.text.lark_parser import parse_atf_lark
@@ -14,6 +16,18 @@ from ebl.text.transliteration_error import TransliterationError
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
+@pytest.mark.parametrize('parser,version', [
+    (parse_atf, ATF_PARSER_VERSION),
+    (parse_atf_lark, f'{ATF_PARSER_VERSION}-lark')
+])
+def test_parser_version(parser, version):
+    assert parser('1. kur').parser_version == version
+
+
+@pytest.mark.parametrize('parser', [
+    parse_atf,
+    parse_atf_lark
+])
 @pytest.mark.parametrize('line,expected_tokens', [
     ('', []),
     ('\n', []),
@@ -348,10 +362,8 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 
     ]),
 ])
-def test_parse_atf(line, expected_tokens):
-    # parse_atf(line)
-
-    assert parse_atf_lark(line).lines == \
+def test_parse_atf(parser, line, expected_tokens):
+    assert parser(line).lines == \
            Text.of_iterable(expected_tokens).lines
 
 
@@ -398,7 +410,7 @@ def test_parse_atf_language_shifts(parser, code, expected_language):
         )),
     ))
 
-    assert parser(line) == expected
+    assert parser(line).lines == expected.lines
 
 
 @pytest.mark.parametrize('parser', [
@@ -417,7 +429,7 @@ def test_invalid_atf(parser, atf, line_numbers):
     with pytest.raises(TransliterationError) as excinfo:
         parser(atf)
 
-    assert excinfo.value.errors == [{
-        'description': 'Invalid line',
+    assert_that(excinfo.value.errors, contains(*[has_entries({
+        'description': starts_with('Invalid line'),
         'lineNumber': line_number
-    } for line_number in line_numbers]
+    }) for line_number in line_numbers]))
