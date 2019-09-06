@@ -51,7 +51,8 @@ Text is a series of tokens separated by a word separator (space). The separator 
 | Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
 | Unknown Number of Signs | `...` | No | No | |
 | Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
-| Omission or Removal | `<<`, `<(`, `<`, `>>`, `)>`, or `>` | No | No | See Presence below. |
+| Removal | `<<`, `>>` | No | No | See Presence below. |
+| Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
 | Broken Away | `[` or `]`| No | No | See Presence below. |
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
@@ -126,10 +127,9 @@ A presence cannot be nested within itself.
 | --------------|------|-------|-------|------------|-----------|
 | Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
 | Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
-| Perhaps Accidental Omission | `(` | `)` | Top-level, Word | Should be inside *Accidental Omission*. | |
 | Removal | `<<` | `>>` | Top-level, Word | | |
 | Broken Away | `[` | `]`| Top-level, Word, Grapheme | |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. | |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
@@ -137,12 +137,12 @@ See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/p
 
 Glosses cannot be nested within other glosses in the same scope.
 
-| Gloss Type | Open | Close | Scope | Semantics |
-|------------|------|-------|-------|-----------|
-| Document Oriented Gloss | `{(` | `)}` | Top-level | |
-| Linguistic Gloss | `{{` | `}}` | Word | |
-| Determinative | `{` | `}` | Word | |
-| Phonetic Gloss | `{+` | `}` | Word | |
+| Gloss Type | Open | Close | Scope | Constraints |Semantics |
+|------------|------|-------|-------|-------------|----------|
+| Document Oriented Gloss | `{(` | `)}` | Top-level | | |
+| Linguistic Gloss | `{{` | `}}` | Word | | |
+| Determinative | `{` | `}` | Word |  | |
+| Phonetic Gloss | `{+` | `}` | Word | Cannot appear alone. | |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
