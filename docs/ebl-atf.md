@@ -136,12 +136,12 @@ See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/p
 
 Glosses cannot be nested within other glosses in the same scope.
 
-| Gloss Type | Open | Close | Scope | Constraints |Semantics |
-|------------|------|-------|-------|-------------|----------|
-| Document Oriented Gloss | `{(` | `)}` | Top-level | | |
-| Linguistic Gloss | `{{` | `}}` | Word | | |
-| Determinative | `{` | `}` | Word |  | |
-| Phonetic Gloss | `{+` | `}` | Word | Cannot appear alone. | |
+| Gloss Type | Open | Close | Scope | Constraints | Semantics | Examples |
+|------------|------|-------|-------|-------------|-----------|----------|
+| Document Oriented Gloss | `{(` | `)}` | Top-level | | | `{(1(u))}` `{(%a he-pi₂ eš-šu₂)}` |
+| Linguistic Gloss | `{{` | `}}` | Word | | | `du₃-am₃{{mu-un-<(du₃)>}}` |
+| Determinative | `{` | `}` | Word | | | `{d}utu` `larsa{ki}` |
+| Phonetic Gloss | `{+` | `}` | Word | Cannot appear alone. | | `{+u₃-mu₂}u₂-mu₁₁` `AN{+e}` |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
@@ -195,30 +195,26 @@ A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lon
 
 ```ebnf
 word = [ joiner, open-iniline-broken-away ],
-       [ linguistic-gloss ],
        ( inline-erasure, { part-joiner, ( inline-erasure | parts ) } | parts )
-       [ linguistic-gloss ],
        [ close-inline-broken-away, joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = variant, { part-joiner, ( determinative | variant ) }
+parts = ( variant | linguistic-gloss ), { part-joiner, ( determinative | variant | linguistic-gloss ) }
       | determinative, { part-joiner,  ( determinative | variant )}-;
 
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
 
 determinative = '{', variant,  { part-joiner, variant }, '}';
 
-part-joiner = [ linguistic-gloss ]
-              [ close-omission ],
+part-joiner = [ close-omission ],
               [ close-iniline-broken-away ],
               [ joiner ],
               [ open-iniline-broken-away ],
-              [ open-omission ],
-              [ linguistic-gloss ];
+              [ open-omission ];
               
 joiner = '-' | '+' | '.';
-linguistic-gloss = '{{' | '}}';
+linguistic-gloss = '{{' parts '}}';
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown | value-with-sign | value | compound-grapheme | grapheme | divider;
