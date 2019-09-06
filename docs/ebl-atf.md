@@ -126,7 +126,7 @@ A presence cannot be nested within itself.
 | --------------|------|-------|-------|------------|
 | Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. |
 | Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Accidental Omission*. |
+| Perhaps Accidental Omission | `(` | `)` | Top-level, Word | Should be inside *Accidental Omission*. |
 | Removal | `<<` | `>>` | Top-level, Word | |
 | Broken Away | `[` | `]`| Top-level, Word, Grapheme |
 | Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. |
@@ -141,7 +141,7 @@ Glosses cannot be nested within other glosses in the same scope.
 |------------|------|-------|-------|
 | Document Oriented Gloss | `{(` | `)}` | Top-level |
 | Linguistic Gloss | `{{` | `}}` | Word |
-| Determinative | `{+` | `}` | Word |
+| Determinative | `{` | `}` | Word |
 | Phonetic Gloss | `{+` | `}` | Word |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
