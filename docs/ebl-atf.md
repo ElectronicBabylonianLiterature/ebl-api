@@ -1,4 +1,9 @@
-eBL-ATF is based on [Oracc-ATF](http://oracc.museum.upenn.edu/doc/help/editinginatf/index.html) but is not fully compatible with other ATF flavours. eBL-ATF uses UTF-8 encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form) ([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)). eBL-ATF can be empty or consist of lines separated by a newline character.
+eBL-ATF is based on [Oracc-ATF](http://oracc.museum.upenn.edu/doc/help/editinginatf/index.html) but is not fully compatible with other ATF flavours. eBL-ATF uses UTF-8 encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form) ([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)). 
+
+The EBNF grammar below is an idealized representation of the eBL-ATF as it does not deal with ambiguities and implentattional details necessary to create the domain model in practice. A fully functional grammar is defined in [ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/text/ebl-atf.lark). The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark). See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/) and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
+
+
+eBL-ATF can be empty or consist of lines separated by a newline character.
 
 ```ebnf
 ebl-atf = [ line, { '\n', line } ];
