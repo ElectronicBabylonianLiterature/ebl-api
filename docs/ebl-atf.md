@@ -70,7 +70,7 @@ token = tabulation
       | shift
       | erasure, ( word-separator | eol ) 
       | word
-      | lone-determinative
+      | determinative
       | omission
       | broken-away
       | perhaps-broken-away
@@ -195,42 +195,36 @@ A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lon
 - The language is not normalized.
 
 ```ebnf
-lone-determinative = [ omission ],
-                     open-determinative,
-                     [ broken-away-open ],
-                     variant, { { joiner }, variant }
-                     [ broken-away-close ],
-                     close-determinative,
-                     [ omission ];
-
-word = [ { joiner }-, open-iniline-broken-away ],
+word = [ joiner, open-iniline-broken-away ],
+       [ linguistic-gloss ],
        [ open-omission ],
        ( inline-erasure, { part-joiner, inline-erasure | parts } | parts )
+       [ linguistic-gloss ],
        [ close-omission ],
-       [ close-inline-broken-away, { joiner }- ];
+       [ close-inline-broken-away, joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = variant,  { part-joiner, ( determinative | variant ) }
+parts = variant, { part-joiner, ( determinative | variant ) }
       | determinative, { part-joiner,  ( determinative | variant )}-;
 
+phonetic-gloss = [ omission ],
+                 '{+', variant,  { part-joiner, variant }, '}',
+                 [ omission ];
+
 determinative = [ omission ],
-                open-determinative,
-                [ open-broken-away ],
-                variant,  { part-joiner, variant },
-                [ close-broken-away ],
-                close-determinative
+                '{', variant,  { part-joiner, variant }, '}'
                 [ omission ];
-open-determinative = '{+' | '{';
-close-determinative = '}';
 
-part-joiner = [ close-iniline-broken-away ],
+part-joiner = [ linguistic-gloss ]
               [ close-omission ],
-              { joiner },
+              [ close-iniline-broken-away ],
+              joiner?,
+              [ open-iniline-broken-away ],
               [ open-omission ],
-              [ open-iniline-broken-away ];
-
-joiner = linguistic-gloss | '-' | '+' | '.';
+              [ linguistic-gloss ];
+              
+joiner = '-' | '+' | '.';
 linguistic-gloss = '{{' | '}}';
 
 variant = variant-part, { variant-separator , variant-part };
