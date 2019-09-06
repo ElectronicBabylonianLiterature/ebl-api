@@ -45,15 +45,15 @@ Text is a series of tokens separated by a word separator (space). The separator 
 | Column       | `&` or `&` followed by numbers | No | No | |
 | Divider      | `\|`, `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | See  Commentary Protocols below. |
-| Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
 | Shift | `%` followed by one or more word characters | No | No | See Shifts below for a list of supported codes. |
 | Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
-| Lone Determinative | A word consisting only a determinative part. | No | No | See Glosses below. |
+| Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
+| Unknown Number of Signs | `...` | No | No | |
+| Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
 | Omission or Removal | `<<`, `<(`, `<`, `>>`, `)>`, or `>` | No | No | See Presence below. |
 | Broken Away | `[` or `]`| No | No | See Presence below. |
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
-| Unknown Number of Signs | `...` | No | No | |
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
@@ -122,14 +122,14 @@ See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/p
 
 A presence cannot be nested within itself.
 
-| Presence Type | Open | Close | Scope | Constraint |
-| --------------|------|-------|-------|------------|
-| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. |
-| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. |
-| Perhaps Accidental Omission | `(` | `)` | Top-level, Word | Should be inside *Accidental Omission*. |
-| Removal | `<<` | `>>` | Top-level, Word | |
-| Broken Away | `[` | `]`| Top-level, Word, Grapheme |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. |
+| Presence Type | Open | Close | Scope | Constraint | Semantics |
+| --------------|------|-------|-------|------------|-----------|
+| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
+| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
+| Perhaps Accidental Omission | `(` | `)` | Top-level, Word | Should be inside *Accidental Omission*. | |
+| Removal | `<<` | `>>` | Top-level, Word | | |
+| Broken Away | `[` | `]`| Top-level, Word, Grapheme | |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. | |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
@@ -137,23 +137,23 @@ See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/p
 
 Glosses cannot be nested within other glosses in the same scope.
 
-| Gloss Type | Open | Close | Scope |
-|------------|------|-------|-------|
-| Document Oriented Gloss | `{(` | `)}` | Top-level |
-| Linguistic Gloss | `{{` | `}}` | Word |
-| Determinative | `{` | `}` | Word |
-| Phonetic Gloss | `{+` | `}` | Word |
+| Gloss Type | Open | Close | Scope | Semantics |
+|------------|------|-------|-------|-----------|
+| Document Oriented Gloss | `{(` | `)}` | Top-level | |
+| Linguistic Gloss | `{{` | `}}` | Word | |
+| Determinative | `{` | `}` | Word | |
+| Phonetic Gloss | `{+` | `}` | Word | |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
 ### Commentary protocols
 
-| Protocol |
-|----------|
-| `!qt` |
-| `!bs` |
-| `!cm` |
-| `!zz` |
+| Protocol | Semantics |
+|----------|-----------|
+| `!qt` | |
+| `!bs` | |
+| `!cm` | |
+| `!zz` | |
 
 ### Shifts
 
