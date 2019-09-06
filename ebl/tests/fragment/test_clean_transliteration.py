@@ -1,10 +1,11 @@
 import pytest
 
 from ebl.fragment.transliteration import Transliteration
+from ebl.text.atf import Atf
 
 
 def test_ignored_lines():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '&K11111\n'
         '@reverse\n'
         '\n'
@@ -17,24 +18,25 @@ def test_ignored_lines():
         '$ triple ruling\n'
         '$ (random text)\n'
         '#note\n=: foo'
-    )
+    ))
     assert transliteration.cleaned == []
 
 
 def test_strip_line_numbers():
-    transliteration = Transliteration(
-        '1. mu\n2\'. me\na+1. e\n1.2. a'
-    )
+    transliteration = Transliteration(Atf(
+        '1. mu\n2\'. me\na+1. e\n1.2. a\n3. kur. ra'
+    ))
     assert transliteration.cleaned == [
         'mu',
         'me',
         'e',
-        'a'
+        'a',
+        'kur ra'
     ]
 
 
 def test_map_spaces():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '1. šu-mu gid₂-ba\n'
         '2. {giš}BI.IS\n'
         '3. {giš}|BI.IS|\n'
@@ -55,7 +57,7 @@ def test_map_spaces():
         '9. din-{d}x\n'
         '10. šu+mu\n'
         '11. {d}+a'
-    )
+    ))
 
     assert transliteration.cleaned == [
         'šu mu gid₂ ba',
@@ -82,7 +84,7 @@ def test_map_spaces():
 
 
 def test_strip_lacuna():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '1. [... N]U KU₃\n'
         '2. [... a]-ba-an\n'
         '3. [...] ši [...]\n'
@@ -91,7 +93,7 @@ def test_strip_lacuna():
         '7. [(x) (x)]\n'
         '8. [(...)]\n'
         '9. ⸢ba⸣'
-    )
+    ))
     assert transliteration.cleaned == [
         'nu ku₃',
         'a ba an',
@@ -105,7 +107,7 @@ def test_strip_lacuna():
 
 
 def test_indent():
-    transliteration = Transliteration('1. ($___$) ša₂')
+    transliteration = Transliteration(Atf('1. ($___$) ša₂'))
     assert transliteration.cleaned == [
         'ša₂'
     ]
@@ -113,7 +115,7 @@ def test_indent():
 
 def test_strip_flags():
     transliteration =\
-        Transliteration('1.  ba! ba? ba# ba*\n2. $KU')
+        Transliteration(Atf('1.  ba! ba? ba# ba*\n2. $KU'))
     assert transliteration.cleaned == [
         'ba ba ba ba',
         'ku'
@@ -122,7 +124,7 @@ def test_strip_flags():
 
 def test_strip_shifts():
     transliteration =\
-        Transliteration('1. %es qa\n2. ba %g ba')
+        Transliteration(Atf('1. %es qa\n2. ba %g ba'))
     assert transliteration.cleaned == [
         'qa',
         'ba ba'
@@ -130,9 +132,9 @@ def test_strip_shifts():
 
 
 def test_strip_omissions():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
-    )
+    ))
     assert transliteration.cleaned == [
         'ku₃',
         'an',
@@ -142,7 +144,7 @@ def test_strip_omissions():
 
 def test_min():
     transliteration =\
-        Transliteration('3. MIN<(an)> ši')
+        Transliteration(Atf('3. MIN<(an)> ši'))
     assert transliteration.cleaned == [
         'min ši'
     ]
@@ -150,7 +152,7 @@ def test_min():
 
 def test_numbers():
     transliteration =\
-        Transliteration('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256')
+        Transliteration(Atf('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256'))
     assert transliteration.cleaned == [
         '1(AŠ)',
         '1 2 10 20 30',
@@ -174,16 +176,16 @@ def test_graphemes():
         '|UD.AB@g|'
     ]
 
-    transliteration = Transliteration('\n'.join([
+    transliteration = Transliteration(Atf('\n'.join([
         f'{index}. {grapheme}'
         for index, grapheme in enumerate(graphemes)
-    ]))
+    ])))
 
     assert transliteration.cleaned == graphemes
 
 
 def test_lower_case():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '1. gid₂\n'
         '2. ši\n'
         '3. BI\n'
@@ -194,7 +196,7 @@ def test_lower_case():
         '7. KU₃\n'
         '8. ku(KU₃)\n'
         '9. ku/|BI×IS|'
-    )
+    ))
 
     assert transliteration.cleaned == [
         'gid₂',
@@ -211,11 +213,11 @@ def test_lower_case():
 
 
 def test_strip_at():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '1. lu₂@v\n'
         '2. LU₂@v\n'
         '3. TA@v'
-    )
+    ))
 
     assert transliteration.cleaned == [
         'lu₂',
@@ -225,9 +227,9 @@ def test_strip_at():
 
 
 def test_strip_line_continuation():
-    transliteration = Transliteration(
+    transliteration = Transliteration(Atf(
         '1. ku →'
-    )
+    ))
 
     assert transliteration.cleaned == [
         'ku'
@@ -245,6 +247,6 @@ def test_strip_line_continuation():
     ('1. °\\KU°', 'ku')
 ])
 def test_strip_erasure(erasure, cleaned):
-    transliteration = Transliteration(erasure)
+    transliteration = Transliteration(Atf(erasure))
 
     assert transliteration.cleaned == [cleaned]
