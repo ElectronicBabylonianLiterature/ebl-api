@@ -58,7 +58,7 @@ Text is a series of tokens separated by a word separator (space). The separator 
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ token, { [word-separator], token } ], [ line-continuation ];
+text = [ (token | document-oriented-gloss), { [word-separator], (token | document-oriented-gloss) } ], [ line-continuation ];
 
 line-continuation = '→';
 
@@ -66,7 +66,6 @@ token = tabulation
       | column
       | divider, ( word-separator | eol ) 
       | commentary-protocol
-      | document-oriented-gloss
       | shift
       | erasure, ( word-separator | eol ) 
       | word
@@ -85,7 +84,7 @@ divider-symbol = '|' | ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
 commentary-protocol = '!qt' | '!bs' | '!cm' | '!zz';
 
-document-oriented-gloss = '{(' | ')}';
+document-oriented-gloss = '{(', token, { [word-separator], token } ,')}';
 
 shift = '%', { word-character }-;
 
