@@ -1,5 +1,6 @@
 import os
 
+from progress.bar import Bar
 from pymongo import MongoClient
 
 from ebl.auth0 import ApiUser
@@ -11,31 +12,19 @@ from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MemoizingSignRepository
 
 
-class Counter:
-    def __init__(self, total):
-        self.total = total
-        self.current = 0
-
-    def increment(self, number):
-        self.current += 1
-        print(self.total - self.current, number)
-
-    @staticmethod
-    def done():
-        print('Updating signs done!')
-
-
-def create_updater(sign_list, fragment_repository, counter_factory):
+def create_updater(sign_list, fragment_repository):
 
     def update_fragments():
         fragments = fragment_repository.find_transliterated()
-        counter = counter_factory(len(fragments))
 
-        for fragment in fragments:
-            counter.increment(fragment.number)
-            update_fragment(fragment)
-
-        counter.done()
+        with Bar(
+            'Updating',
+            max=len(fragments),
+            suffix='%(index)d/%(max)d [%(elapsed_td)s / %(eta_td)s]'
+        ) as bar:
+            for fragment in fragments:
+                update_fragment(fragment)
+                bar.next()
 
     def update_fragment(fragment):
         transliteration = Transliteration(
@@ -62,4 +51,4 @@ if __name__ == '__main__':
         DATABASE,
         FragmentFactory(MongoBibliography(DATABASE))
     )
-    create_updater(SIGN_LIST, FRAGMENT_REPOSITORY, Counter)()
+    create_updater(SIGN_LIST, FRAGMENT_REPOSITORY)()
