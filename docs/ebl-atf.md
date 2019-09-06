@@ -219,7 +219,7 @@ determinative = [ omission ],
 part-joiner = [ linguistic-gloss ]
               [ close-omission ],
               [ close-iniline-broken-away ],
-              joiner?,
+              [ joiner ],
               [ open-iniline-broken-away ],
               [ open-omission ],
               [ linguistic-gloss ];
