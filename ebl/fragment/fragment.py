@@ -55,7 +55,7 @@ class Fragment:
     text: Text = Text()
     signs: Optional[str] = None
     notes: str = ''
-    matching_lines: Optional[tuple] = None
+    matching_lines: Optional[Tuple[Tuple[str, ...], ...]] = None
     references: Tuple[Reference, ...] = tuple()
     uncurated_references: Optional[Tuple[UncuratedReference, ...]] = None
 

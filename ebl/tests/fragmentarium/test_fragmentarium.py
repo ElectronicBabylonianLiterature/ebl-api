@@ -1,9 +1,9 @@
-import attr
 import pytest
 from freezegun import freeze_time
 
 from ebl.dictionary.word import WordId
 from ebl.errors import DataError, NotFoundError
+from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragment.transliteration import (
     Transliteration
 )
@@ -12,6 +12,7 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
+from ebl.text.atf import Atf
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.transliteration_error import TransliterationError
 
@@ -34,23 +35,20 @@ def test_find_not_found(fragmentarium, fragment_repository, when):
 
 def test_find_random(fragmentarium, fragment_repository, when):
     fragment = FragmentFactory.build()
-    expected = [fragment]
-    when(fragment_repository).find_random().thenReturn(expected)
-    assert fragmentarium.find_random() == expected
+    when(fragment_repository).find_random().thenReturn([fragment])
+    assert fragmentarium.find_random() == [FragmentInfo.of(fragment)]
 
 
 def test_find_interesting(fragmentarium, fragment_repository, when):
     fragment = FragmentFactory.build()
-    expected = [fragment]
-    when(fragment_repository).find_interesting().thenReturn(expected)
-    assert fragmentarium.find_interesting() == expected
+    when(fragment_repository).find_interesting().thenReturn([fragment])
+    assert fragmentarium.find_interesting() == [FragmentInfo.of(fragment)]
 
 
 def test_find_latest(fragmentarium, fragment_repository, when):
     fragment = FragmentFactory.build()
-    expected = [fragment]
-    when(fragment_repository).find_latest().thenReturn(expected)
-    assert fragmentarium.find_latest() == expected
+    when(fragment_repository).find_latest().thenReturn([fragment])
+    assert fragmentarium.find_latest() == [FragmentInfo.of(fragment)]
 
 
 def test_folio_pager(fragmentarium, fragment_repository, when):
@@ -83,7 +81,7 @@ def test_update_transliteration(fragmentarium,
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
     expected_fragment = transliterated_fragment.update_transliteration(
-        Transliteration('1. x x\n2. x', 'updated notes', 'X X\nX'),
+        Transliteration(Atf('1. x x\n2. x'), 'updated notes', 'X X\nX'),
         user
     )
 
@@ -100,7 +98,7 @@ def test_update_transliteration(fragmentarium,
 
     updated_fragment = fragmentarium.update_transliteration(
         number,
-        Transliteration('1. x x\n2. x', 'updated notes'),
+        Transliteration(Atf('1. x x\n2. x'), 'updated notes'),
         user
     )
     assert updated_fragment == expected_fragment
@@ -115,7 +113,7 @@ def test_update_transliteration_invalid(fragmentarium,
     with pytest.raises(TransliterationError):
         fragmentarium.update_transliteration(
             fragment.number,
-            Transliteration('1. invalid values'),
+            Transliteration(Atf('1. invalid values')),
             user
         )
 
@@ -129,7 +127,7 @@ def test_update_update_transliteration_not_found(fragmentarium,
     with pytest.raises(NotFoundError):
         fragmentarium.update_transliteration(
             number,
-            Transliteration('$ (the transliteration)', 'notes'),
+            Transliteration(Atf('$ (the transliteration)'), 'notes'),
             user
         )
 
@@ -201,7 +199,7 @@ def test_search(fragmentarium, fragment_repository, when):
     query = fragment.number
     when(fragment_repository).search(query).thenReturn([fragment])
 
-    assert fragmentarium.search(query) == [fragment]
+    assert fragmentarium.search(query) == [FragmentInfo.of(fragment)]
 
 
 def test_search_signs(sign_list,
@@ -209,10 +207,8 @@ def test_search_signs(sign_list,
                       fragment_repository,
                       when):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    atf = 'ma-tu₂'
-    transliteration = Transliteration(atf)
+    transliteration = Transliteration(Atf('ma-tu₂'))
     sign_matrix = [['MA', 'UD']]
-    lines = [['6\'. [...] x mu ta-ma-tu₂']]
     expected_query = TransliterationQuery(sign_matrix)
     matching_fragments = [transliterated_fragment]
 
@@ -223,8 +219,9 @@ def test_search_signs(sign_list,
      .search_signs(expected_query)
      .thenReturn(matching_fragments))
 
+    expected_lines = (('6\'. [...] x mu ta-ma-tu₂',),)
     expected = [
-        attr.evolve(fragment, matching_lines=lines)
+        FragmentInfo.of(fragment, expected_lines)
         for fragment in matching_fragments
     ]
     assert fragmentarium.search_signs(transliteration) == expected

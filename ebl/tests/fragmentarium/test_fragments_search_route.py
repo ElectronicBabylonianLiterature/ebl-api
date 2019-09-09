@@ -1,8 +1,14 @@
 import falcon
+from hamcrest import assert_that, has_entry, has_properties
 
+from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragmentarium.dtos import create_fragment_info_dto
 from ebl.tests.factories.fragment import FragmentFactory, \
     InterestingFragmentFactory, TransliteratedFragmentFactory
+
+
+def expected_fragment_info_dto(fragment):
+    return create_fragment_info_dto(FragmentInfo.of(fragment))
 
 
 def test_search_fragment(client, fragmentarium):
@@ -13,7 +19,7 @@ def test_search_fragment(client, fragmentarium):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_fragment_info_dto(fragment)]
+    assert result.json == [expected_fragment_info_dto(fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -38,8 +44,8 @@ def test_search_signs(client,
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [{
-        **create_fragment_info_dto(transliterated_fragment),
-        'matching_lines': [
+        **expected_fragment_info_dto(transliterated_fragment),
+        'matchingLines': [
             ['6\'. [...] x mu ta-ma-tu₂']
         ]
     }]
@@ -55,7 +61,7 @@ def test_random(client, fragmentarium):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_fragment_info_dto(transliterated_fragment)]
+    assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -68,7 +74,7 @@ def test_interesting(client, fragmentarium):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_fragment_info_dto(interesting_fragment)]
+    assert result.json == [expected_fragment_info_dto(interesting_fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -81,7 +87,7 @@ def test_latest(client, fragmentarium):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_fragment_info_dto(transliterated_fragment)]
+    assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 

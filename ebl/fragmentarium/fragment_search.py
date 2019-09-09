@@ -1,14 +1,16 @@
 import falcon
 import pydash
+from falcon import Request, Response
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.dtos import create_fragment_info_dto
+from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.require_scope import require_scope
 
 
 class FragmentSearch:
-    def __init__(self, fragmentarium):
+    def __init__(self, fragmentarium: Fragmentarium):
         self._dispatch = create_dispatcher({
             'number': fragmentarium.search,
             'random': lambda _: fragmentarium.find_random(),
@@ -21,7 +23,7 @@ class FragmentSearch:
         })
 
     @falcon.before(require_scope, 'read:fragments')
-    def on_get(self, req, resp):
+    def on_get(self, req: Request, resp: Response) -> None:
         fragments = self._dispatch(req.params)
         resp.media = [
             create_fragment_info_dto(fragment)

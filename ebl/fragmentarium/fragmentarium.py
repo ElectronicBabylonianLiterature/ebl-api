@@ -3,6 +3,7 @@ from typing import Dict, List, Tuple
 from ebl.auth0 import User
 from ebl.bibliography.reference import Reference
 from ebl.fragment.fragment import Fragment, FragmentNumber
+from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.text.lemmatization import Lemmatization
@@ -78,23 +79,32 @@ class Fragmentarium:
     def find(self, number: FragmentNumber) -> Fragment:
         return self._repository.find(number)
 
-    def search(self, number: str) -> List[Fragment]:
-        return self._repository.search(number)
+    def search(self, number: str) -> List[FragmentInfo]:
+        return list(map(FragmentInfo.of, self._repository.search(number)))
 
-    def find_random(self) -> List[Fragment]:
-        return self._repository.find_random()
+    def find_random(self) -> List[FragmentInfo]:
+        return list(map(FragmentInfo.of, self._repository.find_random()))
 
-    def find_interesting(self) -> List[Fragment]:
-        return self._repository.find_interesting()
+    def find_interesting(self) -> List[FragmentInfo]:
+        return list(map(FragmentInfo.of, self._repository.find_interesting()))
 
-    def find_latest(self) -> List[Fragment]:
-        return self._repository.find_latest()
+    def find_latest(self) -> List[FragmentInfo]:
+        return [FragmentInfo.of(fragment)
+                for fragment
+                in self._repository.find_latest()]
 
-    def search_signs(self, transliteration: Transliteration) -> List[Fragment]:
+    def search_signs(self,
+                     transliteration: Transliteration) -> List[FragmentInfo]:
         signs = transliteration.to_sign_matrix(self._sign_list)
         query = TransliterationQuery(signs)
         return [
-            fragment.add_matching_lines(query)
+            FragmentInfo.of(
+                fragment,
+                tuple(
+                    tuple(line)
+                    for line
+                    in fragment.add_matching_lines(query).matching_lines)
+                )
             for fragment
             in self._repository.search_signs(query)
         ]
