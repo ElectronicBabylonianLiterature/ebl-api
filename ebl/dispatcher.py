@@ -10,21 +10,19 @@ Command = Callable[[str], T]
 Dispatcher = Callable[[dict], T]
 
 
-def create_dispatcher(commands: Mapping[str, Command]) -> Dispatcher:
-    def get_parameter(parameters: dict) -> Tuple[str, str]:
-        if len(parameters) == 1:
-            return next(iter(parameters.items()))
-        else:
-            raise DispatchError("Invalid number of parameters.")
+def get_parameter(parameters: dict) -> Tuple[str, str]:
+    if len(parameters) == 1:
+        return next(iter(parameters.items()))
+    else:
+        raise DispatchError("Invalid number of parameters.")
 
-    def get_command(parameter: str) -> Command:
+
+def create_dispatcher(commands: Mapping[str, Command]) -> Dispatcher:
+    def dispatch(parameters: dict) -> T:
+        parameter, value = get_parameter(parameters)
         try:
-            return commands[parameter]
+            return commands[parameter](value)
         except KeyError:
             raise DispatchError(f'Invalid parameter {parameter}.')
 
-    def execute_command(parameters: dict) -> T:
-        parameter, value = get_parameter(parameters)
-        return get_command(parameter)(value)
-
-    return execute_command
+    return dispatch
