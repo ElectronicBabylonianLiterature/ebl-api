@@ -98,13 +98,7 @@ class Fragmentarium:
         signs = transliteration.to_sign_matrix(self._sign_list)
         query = TransliterationQuery(signs)
         return [
-            FragmentInfo.of(
-                fragment,
-                tuple(
-                    tuple(line)
-                    for line
-                    in fragment.add_matching_lines(query).matching_lines)
-                )
+            FragmentInfo.of(fragment, fragment.get_matching_lines(query))
             for fragment
             in self._repository.search_signs(query)
         ]

@@ -55,7 +55,6 @@ class Fragment:
     text: Text = Text()
     signs: Optional[str] = None
     notes: str = ''
-    matching_lines: Optional[Tuple[Tuple[str, ...], ...]] = None
     references: Tuple[Reference, ...] = tuple()
     uncurated_references: Optional[Tuple[UncuratedReference, ...]] = None
 
@@ -86,14 +85,11 @@ class Fragment:
             record=record
         )
 
-    def add_matching_lines(self, query) -> 'Fragment':
+    def get_matching_lines(self, query) -> Tuple[Tuple[str, ...], ...]:
         matching_lines = query.get_matching_lines(
-            Transliteration(self.text.atf, self.notes, self.signs)
+            Transliteration(self.text.atf, signs=self.signs)
         )
-        return attr.evolve(
-            self,
-            matching_lines=matching_lines
-        )
+        return tuple(tuple(line) for line in matching_lines)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> 'Fragment':
         text = self.text.update_lemmatization(lemmatization)
@@ -122,7 +118,6 @@ class Fragment:
             'record': self.record.to_list(),
             'folios': self.folios.to_list(),
             'text': self.text.to_dict(),
-            'matching_lines': self.matching_lines,
             'references': [
                 reference.to_dict(with_dependencies)
                 for reference in self.references

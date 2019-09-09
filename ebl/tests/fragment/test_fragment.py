@@ -3,7 +3,8 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.fragment.folios import Folio, Folios
-from ebl.fragment.fragment import Fragment, Measure, UncuratedReference
+from ebl.fragment.fragment import Fragment, Measure, UncuratedReference, \
+    FragmentNumber
 from ebl.fragment.transliteration import (
     Transliteration
 )
@@ -13,6 +14,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.tests.factories.record import RecordFactory
+from ebl.text.atf import Atf
 from ebl.text.atf_parser import parse_atf
 from ebl.text.lemmatization import Lemmatization, LemmatizationError
 from ebl.text.text import Text
@@ -115,7 +117,7 @@ def test_signs_none():
 
 def test_record():
     record = RecordFactory.build()
-    fragment = Fragment('X.1', record=record)
+    fragment = Fragment(FragmentNumber('X.1'), record=record)
     assert fragment.record == record
 
 
@@ -161,7 +163,7 @@ def test_references_default():
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()
-    atf = '1. x x'
+    atf = Atf('1. x x')
     transliteration = Transliteration(atf, fragment.notes)
     text = parse_atf(atf)
     record = fragment.record.add_entry('', atf, user)
@@ -179,7 +181,7 @@ def test_add_transliteration(user):
 def test_update_transliteration(lemmatized_fragment, user):
     lines = lemmatized_fragment.text.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
-    atf = '\n'.join(lines)
+    atf = Atf('\n'.join(lines))
     text = parse_atf(atf)
     transliteration =\
         Transliteration(atf, 'updated notes', 'X X\nX')
@@ -205,7 +207,7 @@ def test_update_transliteration(lemmatized_fragment, user):
 
 def test_test_update_transliteration_invalid_line(user):
     fragment = FragmentFactory.build()
-    atf = '1. x\ninvalid line'
+    atf = Atf('1. x\ninvalid line')
     transliteration = Transliteration(atf, fragment.notes)
 
     with pytest.raises(TransliterationError,
@@ -225,7 +227,7 @@ def test_test_update_transliteration_invalid_line(user):
 
 def test_test_update_transliteration_invalid_atf(user):
     fragment = FragmentFactory.build()
-    transliteration = Transliteration('1. {kur}?', fragment.notes)
+    transliteration = Transliteration(Atf('1. {kur}?'), fragment.notes)
 
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
@@ -244,7 +246,7 @@ def test_test_update_transliteration_invalid_atf(user):
 
 def test_test_update_transliteration_invalid_reading(user):
     fragment = FragmentFactory.build()
-    transliteration = Transliteration('1. invalid', fragment.notes, '?')
+    transliteration = Transliteration(Atf('1. invalid'), fragment.notes, '?')
 
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
@@ -279,34 +281,31 @@ def test_update_notes(user):
 
 
 @pytest.mark.parametrize("sign_matrix,lines", [
-    ([['DIŠ', 'UD']], [
-        ['2\'. [...] GI₆ ana u₄-š[u ...]']
-    ]),
-    ([['KU']], [
-        ['1\'. [...-ku]-nu-ši [...]']
-    ]),
-    ([['UD']], [
-        ['2\'. [...] GI₆ ana u₄-š[u ...]'],
-        ['6\'. [...] x mu ta-ma-tu₂']
-    ]),
-    ([['MI', 'DIŠ'], ['U', 'BA', 'MA']], [
-        [
+    ([['DIŠ', 'UD']], (
+        ('2\'. [...] GI₆ ana u₄-š[u ...]', ),
+    )),
+    ([['KU']], (
+        ('1\'. [...-ku]-nu-ši [...]', ),
+    )),
+    ([['UD']], (
+        ('2\'. [...] GI₆ ana u₄-š[u ...]', ),
+        ('6\'. [...] x mu ta-ma-tu₂', )
+    )),
+    ([['MI', 'DIŠ'], ['U', 'BA', 'MA']], (
+        (
             '2\'. [...] GI₆ ana u₄-š[u ...]',
             '3\'. [... k]i-du u ba-ma-t[i ...]'
-        ]
-    ]),
-    ([['IGI', 'UD']], [])
+        ),
+    )),
+    ([['IGI', 'UD']], ())
 ])
-def test_add_matching_lines(sign_matrix, lines):
+def test_get_matching_lines(sign_matrix, lines):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     query = TransliterationQuery(sign_matrix)
-    with_matching_lines =\
-        transliterated_fragment.add_matching_lines(query)
 
-    assert with_matching_lines.to_dict() == {
-        **transliterated_fragment.to_dict(),
-        'matching_lines': lines
-    }
+    matching_lines = transliterated_fragment.get_matching_lines(query)
+
+    assert matching_lines == lines
 
 
 def test_update_lemmatization():
