@@ -1,5 +1,4 @@
 import falcon
-from hamcrest import assert_that, has_entry, has_properties
 
 from ebl.fragmentarium.dtos import create_fragment_info_dto
 from ebl.tests.factories.fragment import FragmentFactory, \
