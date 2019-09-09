@@ -194,15 +194,15 @@ A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lon
 - The language is not normalized.
 
 ```ebnf
-word = [ joiner, open-iniline-broken-away ],
+word = [ joiner, open-iniline-broken-away | { determinative }- ],
        ( inline-erasure, { part-joiner, ( inline-erasure | parts ) } | parts )
-       [ close-inline-broken-away, joiner ];
+       [ { determinative }- | close-inline-broken-away, joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | linguistic-gloss ), { part-joiner, ( determinative | variant | linguistic-gloss ) }
-      | determinative, { part-joiner,  ( determinative | variant )}-;
+parts = ( variant | linguistic-gloss | phonetic-gloss ), { part-joiner, ( variant | linguistic-gloss | phonetic-gloss ) };
 
+linguistic-gloss = '{{' [ part-joiner ], variant,  { part-joiner, variant }, [ part-joiner ] '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
 
 determinative = '{', variant,  { part-joiner, variant }, '}';
@@ -214,7 +214,7 @@ part-joiner = [ close-omission ],
               [ open-omission ];
               
 joiner = '-' | '+' | '.';
-linguistic-gloss = '{{' parts '}}';
+
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown | value-with-sign | value | compound-grapheme | logogram | divider;
