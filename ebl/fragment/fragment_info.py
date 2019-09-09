@@ -1,10 +1,6 @@
-from typing import Tuple
-
 import attr
 
-from ebl.fragment.fragment import Fragment, FragmentNumber
-
-Lines = Tuple[Tuple[str, ...], ...]
+from ebl.fragment.fragment import Fragment, FragmentNumber, Lines
 
 
 @attr.s(frozen=True, auto_attribs=True)

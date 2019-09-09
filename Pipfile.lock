@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "446999fb9d873e79f4c54197f65253cabc53f7061f2402ef415a4f618e37b81e"
+            "sha256": "9a27f32572623aa230a26e051f4ae1d0953a49225ffea9ba2e2515eca40a81ec"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -174,10 +174,10 @@
         },
         "lark-parser": {
             "hashes": [
-                "sha256:64676473e0e45363ea4840dc68be442c9dfab05bf3847d176e551dfbbacbd470"
+                "sha256:00080827281eee9c9f305dd948c824646f2ea97fe9dbde903be1b608ae786459"
             ],
             "index": "pypi",
-            "version": "==0.7.4"
+            "version": "==0.7.5"
         },
         "mako": {
             "hashes": [
@@ -217,6 +217,14 @@
                 "sha256:e249096428b3ae81b08327a63a485ad0878de3fb939049038579ac0ef61e17e7"
             ],
             "version": "==1.1.1"
+        },
+        "marshmallow": {
+            "hashes": [
+                "sha256:159c3ed37094d66867bbacdf2e7effd7c7ad88c6b11f9b398ff5ea1d118508c3",
+                "sha256:51188df086da5c427c3c193faddf7f95857ee4053dbf2d083e5cbfd846b2fb29"
+            ],
+            "index": "pypi",
+            "version": "==3.0.3"
         },
         "newrelic": {
             "hashes": [

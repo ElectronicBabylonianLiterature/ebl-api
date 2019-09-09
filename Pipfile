@@ -23,6 +23,7 @@ waitress = "*"
 falcon-apispec = "*"
 progress = "*"
 lark-parser = "*"
+marshmallow = "*"
 
 [dev-packages]
 pytest = "*"

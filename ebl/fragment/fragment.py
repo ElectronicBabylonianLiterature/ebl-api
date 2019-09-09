@@ -15,6 +15,7 @@ from ebl.text.lemmatization import Lemmatization
 from ebl.text.text import Text
 
 FragmentNumber = NewType('FragmentNumber', str)
+Lines = Tuple[Tuple[str, ...], ...]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -85,7 +86,7 @@ class Fragment:
             record=record
         )
 
-    def get_matching_lines(self, query) -> Tuple[Tuple[str, ...], ...]:
+    def get_matching_lines(self, query) -> Lines:
         matching_lines = query.get_matching_lines(
             Transliteration(self.text.atf, signs=self.signs)
         )

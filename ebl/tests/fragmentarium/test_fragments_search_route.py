@@ -1,13 +1,13 @@
 import falcon
 
 from ebl.fragment.fragment_info import FragmentInfo
-from ebl.fragmentarium.dtos import create_fragment_info_dto
+from ebl.fragmentarium.fragment_search import FragmentInfoSchema
 from ebl.tests.factories.fragment import FragmentFactory, \
     InterestingFragmentFactory, TransliteratedFragmentFactory
 
 
-def expected_fragment_info_dto(fragment):
-    return create_fragment_info_dto(FragmentInfo.of(fragment))
+def expected_fragment_info_dto(fragment, lines=tuple()):
+    return FragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
 
 
 def test_search_fragment(client, fragmentarium):
@@ -42,12 +42,10 @@ def test_search_signs(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [{
-        **expected_fragment_info_dto(transliterated_fragment),
-        'matchingLines': [
-            ['6\'. [...] x mu ta-ma-tu₂']
-        ]
-    }]
+    assert result.json == [expected_fragment_info_dto(
+        transliterated_fragment,
+        (('6\'. [...] x mu ta-ma-tu₂',),)
+    )]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 

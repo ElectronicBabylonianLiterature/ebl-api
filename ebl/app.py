@@ -4,6 +4,7 @@ from base64 import b64decode
 import falcon
 import sentry_sdk
 from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from falcon_apispec import FalconPlugin
@@ -32,7 +33,8 @@ from ebl.files.files import create_files_resource
 from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragmentarium.folio_pager import FolioPagerResource
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.fragment_search import FragmentSearch
+from ebl.fragmentarium.fragment_search import FragmentSearch, \
+    FragmentInfoSchema
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.lemma_search import LemmaSearch
@@ -92,6 +94,8 @@ def create_fragmentarium_routes(api, context, sign_list, spec):
         folio_pager
     )
 
+    spec.components.schema('FragmentInfo',
+                           schema=FragmentInfoSchema)
     spec.path(resource=fragment_search)
     spec.path(resource=fragments)
     spec.path(resource=lemmatization)
@@ -148,7 +152,7 @@ def create_app(context):
         title="Electronic Babylonian Literature",
         version=API_VERSION,
         openapi_version='3.0.0',
-        plugins=[FalconPlugin(api)],
+        plugins=[FalconPlugin(api), MarshmallowPlugin()],
     )
     authorization_url = (
         f'{os.environ.get("AUTH0_ISSUER")}authorize'
@@ -204,6 +208,7 @@ def create_app(context):
         def on_get(self, _req, resp):
             resp.content_type = falcon.MEDIA_YAML
             resp.body = spec.to_yaml()
+            # resp.media = spec.to_dict()
 
     open_api = OpenApiResource()
     api.add_route(
