@@ -217,10 +217,15 @@ joiner = '-' | '+' | '.';
 linguistic-gloss = '{{' parts '}}';
 
 variant = variant-part, { variant-separator , variant-part };
-variant-part = unknown | value-with-sign | value | compound-grapheme | grapheme | divider;
+variant-part = unknown | value-with-sign | value | compound-grapheme | logogram | divider;
+
+logogram = logogram-character, { [ iniline-broken-away ], logogram-character }, [ sub-index ], modifier, flag;
+logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' | 'I'
+                   | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' | 'R' | 'S'
+                   | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ'
+                   | decimal-digit;     
 
 value-with-sign = value, [ '!' ], '(', compound-grapheme, ')';
-
 value = value-character, { [ iniline-broken-away ], value-character }, [ sub-index ], modifier, flag;
 value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' | 'i'
                 | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q' | 'r' | 's'
@@ -228,9 +233,7 @@ value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' 
                 | decimal-digit;
 sub-index = { sub-index-character }-;
 
-compound-grapheme = [ '|' ],
-                    compound-part, { { compound-operator }, compound-part },
-                    [ '|' ];
+compound-grapheme = '|', compound-part, { { compound-operator }, compound-part }, '|';
 compound-part = grapheme, { variant-separator, grapheme };
 compound-operator = '.' | '×' | '%' | '&' | '+' | '(' | ')';
 
