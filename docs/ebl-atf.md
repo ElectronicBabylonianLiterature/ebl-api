@@ -225,7 +225,7 @@ logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | '
                    | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ'
                    | decimal-digit;     
 
-value-with-sign = value, [ '!' ], '(', compound-grapheme, ')';
+value-with-sign = value, '(', ( compound-grapheme | grapheme ), ')';
 value = value-character, { [ iniline-broken-away ], value-character }, [ sub-index ], modifier, flag;
 value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' | 'i'
                 | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q' | 'r' | 's'
