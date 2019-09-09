@@ -3,7 +3,7 @@ import pydash
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragment.transliteration import Transliteration
-from ebl.fragmentarium.dtos import create_response_dto
+from ebl.fragmentarium.dtos import create_fragment_info_dto
 from ebl.require_scope import require_scope
 
 
@@ -22,9 +22,8 @@ class FragmentSearch:
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req, resp):
-        user = req.context.user
         fragments = self._dispatch(req.params)
         resp.media = [
-            create_response_dto(fragment, user)
+            create_fragment_info_dto(fragment)
             for fragment in fragments
         ]

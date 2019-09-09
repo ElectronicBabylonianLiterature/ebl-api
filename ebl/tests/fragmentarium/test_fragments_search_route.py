@@ -1,12 +1,12 @@
 import falcon
+from hamcrest import assert_that, has_entry, has_properties
 
-from ebl.fragmentarium.dtos import create_response_dto
-from ebl.tests.factories.fragment import (
-    FragmentFactory, InterestingFragmentFactory, TransliteratedFragmentFactory
-)
+from ebl.fragmentarium.dtos import create_fragment_info_dto
+from ebl.tests.factories.fragment import FragmentFactory, \
+    InterestingFragmentFactory, TransliteratedFragmentFactory
 
 
-def test_search_fragment(client, fragmentarium, user):
+def test_search_fragment(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
     result = client.simulate_get(f'/fragments', params={
@@ -14,7 +14,7 @@ def test_search_fragment(client, fragmentarium, user):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_response_dto(fragment, user)]
+    assert result.json == [create_fragment_info_dto(fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
@@ -27,8 +27,7 @@ def test_search_fragment_not_found(client):
 def test_search_signs(client,
                       fragmentarium,
                       sign_list,
-                      signs,
-                      user):
+                      signs):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
     for sign in signs:
@@ -40,10 +39,7 @@ def test_search_signs(client,
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [{
-        **create_response_dto(
-            transliterated_fragment,
-            user
-        ),
+        **create_fragment_info_dto(transliterated_fragment),
         'matching_lines': [
             ['6\'. [...] x mu ta-ma-tu₂']
         ]
@@ -51,9 +47,7 @@ def test_search_signs(client,
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
-def test_random(client,
-                fragmentarium,
-                user):
+def test_random(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
@@ -62,13 +56,11 @@ def test_random(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_response_dto(transliterated_fragment, user)]
+    assert result.json == [create_fragment_info_dto(transliterated_fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
-def test_interesting(client,
-                     fragmentarium,
-                     user):
+def test_interesting(client, fragmentarium):
     interesting_fragment = InterestingFragmentFactory.build()
     fragmentarium.create(interesting_fragment)
 
@@ -77,13 +69,11 @@ def test_interesting(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_response_dto(interesting_fragment, user)]
+    assert result.json == [create_fragment_info_dto(interesting_fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
-def test_latest(client,
-                fragmentarium,
-                user):
+def test_latest(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
@@ -92,7 +82,7 @@ def test_latest(client,
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [create_response_dto(transliterated_fragment, user)]
+    assert result.json == [create_fragment_info_dto(transliterated_fragment)]
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
