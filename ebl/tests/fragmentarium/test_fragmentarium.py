@@ -51,6 +51,12 @@ def test_find_latest(fragmentarium, fragment_repository, when):
     assert fragmentarium.find_latest() == [FragmentInfo.of(fragment)]
 
 
+def test_needs_revision(fragmentarium, fragment_repository, when):
+    fragment_info = FragmentInfo.of(TransliteratedFragmentFactory.build())
+    when(fragment_repository).find_needs_revision().thenReturn([fragment_info])
+    assert fragmentarium.find_needs_revision() == [fragment_info]
+
+
 def test_folio_pager(fragmentarium, fragment_repository, when):
     folio_name = 'WGL'
     folio_number = '2'

@@ -27,6 +27,7 @@ class FragmentSearch:
             'random': lambda _: fragmentarium.find_random(),
             'interesting': lambda _: fragmentarium.find_interesting(),
             'latest': lambda _: fragmentarium.find_latest(),
+            'needsRevision': lambda _: fragmentarium.find_needs_revision(),
             'transliteration': pydash.flow(
                 Transliteration,
                 fragmentarium.search_signs
@@ -68,6 +69,10 @@ class FragmentSearch:
               type: boolean
           - in: query
             name: latest
+            schema:
+              type: boolean
+          - in: query
+            name: needsRevision
             schema:
               type: boolean
           - in: query

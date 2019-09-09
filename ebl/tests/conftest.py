@@ -22,6 +22,7 @@ from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
+from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign_list import SignList
@@ -95,6 +96,15 @@ class TestFragmentRepository(MongoFragmentRepository):
         return self._map_fragments(
             self._mongo_repository.get_collection().find({})
         )
+
+    # Mongomock does not support $addFields so we need to
+    # stub the methods using them.
+    def find_needs_revision(self):
+        return [FragmentInfo.of(fragment)
+                for fragment
+                in self._map_fragments(
+                    self._mongo_repository.get_collection().find({})
+                )]
 
     # Mongomock does not support $concat so we need to
     # stub the methods using them.

@@ -95,6 +95,75 @@ def aggregate_latest():
     ]
 
 
+def aggregate_needs_revision():
+    return [
+        {'$match': {'record.type': 'Transliteration'}},
+        {'$unwind': '$record'},
+        {'$sort': {'record.date': 1}},
+        {'$group': {
+            '_id': '$_id',
+            'accession': {'$first': '$accession'},
+            'description': {'$first': '$description'},
+            'record': {'$push': '$record'}
+        }},
+        {
+            '$addFields': {
+                'transliterations': {
+                    '$filter': {
+                        'input': '$record',
+                        'as': 'item',
+                        'cond': {'$eq': ['$$item.type', 'Transliteration']}
+                    }
+                },
+                'revisions': {
+                    '$filter': {
+                        'input': '$record',
+                        'as': 'item',
+                        'cond': {'$eq': ['$$item.type', 'Revision']}
+                    }
+                }
+            }
+        },
+        {
+            '$addFields': {
+                'transliterators': {
+                    '$map':
+                        {
+                            'input': '$transliterations',
+                            'as': 'item',
+                            'in': '$$item.user'
+                        }
+                },
+                'dates': {
+                    '$map':
+                        {
+                            'input': '$transliterations',
+                            'as': 'item',
+                            'in': '$$item.date'
+                        }
+                },
+                'revisors':
+                    {
+                        '$map':
+                            {
+                                'input': '$revisions',
+                                'as': 'item',
+                                'in': '$$item.user'
+                            }
+                    }
+            }
+        },
+        {'$match': {'$expr': {
+            '$eq': [{'$setDifference': ['$revisors', '$transliterators']},
+                    []]}}},
+        {'$project': {'accession': 1, 'description': 1,
+                      'date': {'$arrayElemAt': ['$dates', 0]},
+                      'editor': {'$arrayElemAt': ['$transliterators', 0]}}},
+        {'$sort': {'date': 1}},
+        {'$limit': 20}
+    ]
+
+
 def aggregate_interesting():
     return [
         {

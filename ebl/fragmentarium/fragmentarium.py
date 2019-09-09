@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple
 
 from ebl.auth0 import User
@@ -9,10 +10,80 @@ from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.text.lemmatization import Lemmatization
 
 
+class FragmentRepository(ABC):
+    @property
+    @abstractmethod
+    def collection(self):
+        ...
+
+    @abstractmethod
+    def create(self, fragment: Fragment) -> FragmentNumber:
+        ...
+
+    @abstractmethod
+    def find(self, number: FragmentNumber) -> Fragment:
+        ...
+
+    @abstractmethod
+    def update_transliteration(self, fragment: Fragment) -> None:
+        ...
+
+    @abstractmethod
+    def update_lemmatization(self, fragment: Fragment) -> None:
+        ...
+
+    @abstractmethod
+    def update_references(self, fragment: Fragment) -> None:
+        ...
+
+    @abstractmethod
+    def count_transliterated_fragments(self) -> int:
+        ...
+
+    @abstractmethod
+    def count_lines(self) -> int:
+        ...
+
+    @abstractmethod
+    def search(self, number: str) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def find_random(self) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def find_interesting(self) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def find_latest(self) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def find_needs_revision(self) -> List[FragmentInfo]:
+        ...
+
+    @abstractmethod
+    def search_signs(self, query: TransliterationQuery) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def folio_pager(self,
+                    folio_name: str,
+                    folio_number: str,
+                    number: FragmentNumber) -> dict:
+        ...
+
+    @abstractmethod
+    def find_lemmas(self, word: str) -> List[List[dict]]:
+        ...
+
+
 class Fragmentarium:
 
     def __init__(self,
-                 repository,
+                 repository: FragmentRepository,
                  changelog,
                  sign_list,
                  dictionary,
@@ -89,9 +160,10 @@ class Fragmentarium:
         return list(map(FragmentInfo.of, self._repository.find_interesting()))
 
     def find_latest(self) -> List[FragmentInfo]:
-        return [FragmentInfo.of(fragment)
-                for fragment
-                in self._repository.find_latest()]
+        return list(map(FragmentInfo.of, self._repository.find_latest()))
+
+    def find_needs_revision(self) -> List[FragmentInfo]:
+        return self._repository.find_needs_revision()
 
     def search_signs(self,
                      transliteration: Transliteration) -> List[FragmentInfo]:

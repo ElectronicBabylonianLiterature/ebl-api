@@ -88,6 +88,19 @@ def test_latest(client, fragmentarium):
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
+def test_needs_revision(client, fragmentarium):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    fragmentarium.create(transliterated_fragment)
+
+    result = client.simulate_get(f'/fragments', params={
+        'needsRevision': True
+    })
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
+    assert result.headers['Access-Control-Allow-Origin']
+
+
 def test_search_fragment_no_query(client):
     result = client.simulate_get(f'/fragments')
 
