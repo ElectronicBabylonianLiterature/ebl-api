@@ -72,10 +72,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def find_needs_revision(self):
         cursor = self._mongo_collection.aggregate(aggregate_needs_revision())
-        return [
-            FragmentInfoSchema().load(info)
-            for info in cursor
-        ]
+        return FragmentInfoSchema(many=True).load(cursor)
 
     def search_signs(self, query):
         cursor = self._mongo_collection.find({
