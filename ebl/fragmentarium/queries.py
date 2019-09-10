@@ -4,7 +4,7 @@ from ebl.fragment.record import RecordType
 from ebl.text.word_cleaner import IGNORE_REGEX, clean_word
 
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
-NUMBER_OF_LATEST_TRANSLITERATIONS = 40
+NUMBER_OF_LATEST_TRANSLITERATIONS = 20
 NUMBER_OF_NEEDS_REVISION = 20
 
 
