@@ -1,12 +1,13 @@
 from ebl.auth0 import Guest
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
-from ebl.tests.factories.fragment import FragmentFactory
-
+from ebl.tests.factories.fragment import FragmentFactory, \
+    LemmatizedFragmentFactory
 
 ANY_USER = Guest()
 
 
-def test_create(fragment_factory, lemmatized_fragment):
+def test_create(fragment_factory):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     new_fragment = fragment_factory.create(
         lemmatized_fragment.to_dict()
     )

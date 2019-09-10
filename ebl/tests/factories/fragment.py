@@ -2,6 +2,7 @@ from typing import Tuple
 
 import factory
 
+from ebl.dictionary.word import WordId
 from ebl.fragment.folios import Folio, Folios
 from ebl.fragment.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
@@ -94,3 +95,36 @@ class TransliteratedFragmentFactory(FragmentFactory):
         Folio('XXX', '3')
     ))
     record = factory.SubFactory(RecordFactory)
+
+
+class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
+    text = Text((
+            TextLine("1'.", (
+                Token('[...'),
+                Word('-ku]-nu-ši'),
+                Token('[...]')
+            )),
+            TextLine("2'.", (
+                Token('[...]'),
+                Word('GI₆', unique_lemma=(WordId('ginâ I'),)),
+                Word('ana', unique_lemma=(WordId('ana I'),)),
+                Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),)),
+                Token('...]')
+            )),
+            TextLine("3'.", (
+                Token('[...'),
+                Word('k]i-du', unique_lemma=(WordId('kīdu I'),)),
+                Word('u', unique_lemma=(WordId('u I'),)),
+                Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),)),
+                Token('...]')
+            )),
+            TextLine("6'.", (
+                Token('[...]'),
+                Word('x'),
+                Word('mu', unique_lemma=(WordId('mu I'),)),
+                Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),))
+            )),
+            TextLine("7'.", (
+                Word('šu/|BI×IS|'),
+            ))
+        ))

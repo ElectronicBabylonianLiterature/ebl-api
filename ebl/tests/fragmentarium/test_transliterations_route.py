@@ -6,7 +6,9 @@ from freezegun import freeze_time
 
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragmentarium.dtos import create_response_dto
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import FragmentFactory, \
+    LemmatizedFragmentFactory
+from ebl.text.atf import Atf
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -27,7 +29,8 @@ def test_update_transliteration(client,
     expected_json = {
         **create_response_dto(
             fragment.update_transliteration(
-                Transliteration(updates['transliteration'], updates['notes']),
+                Transliteration(Atf(updates['transliteration']),
+                                updates['notes']),
                 user
             ),
             user
@@ -52,13 +55,13 @@ def test_update_transliteration(client,
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration_merge_lemmatization(client,
                                                     fragmentarium,
-                                                    lemmatized_fragment,
                                                     signs,
                                                     sign_list,
                                                     user):
 
     for sign in signs:
         sign_list.create(sign)
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_number = fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'

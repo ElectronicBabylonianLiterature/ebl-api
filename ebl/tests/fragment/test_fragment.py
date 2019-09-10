@@ -3,16 +3,16 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.fragment.folios import Folio, Folios
-from ebl.fragment.fragment import Fragment, Measure, UncuratedReference, \
-    FragmentNumber
+from ebl.fragment.fragment import Fragment, FragmentNumber, Measure, \
+    UncuratedReference
 from ebl.fragment.transliteration import (
     Transliteration
 )
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.fragment import (
-    FragmentFactory, TransliteratedFragmentFactory
-)
+from ebl.tests.factories.fragment import (FragmentFactory,
+                                          LemmatizedFragmentFactory,
+                                          TransliteratedFragmentFactory)
 from ebl.tests.factories.record import RecordFactory
 from ebl.text.atf import Atf
 from ebl.text.atf_parser import parse_atf
@@ -178,7 +178,8 @@ def test_add_transliteration(user):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_update_transliteration(lemmatized_fragment, user):
+def test_update_transliteration(user):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     lines = lemmatized_fragment.text.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
     atf = Atf('\n'.join(lines))

@@ -1,11 +1,13 @@
 import falcon
 
+from ebl.tests.factories.fragment import LemmatizedFragmentFactory
+
 
 def test_search_fragment(client,
                          fragmentarium,
                          dictionary,
-                         lemmatized_fragment,
                          word):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     matching_word = {
         **word,
         '_id': 'ginâ I'

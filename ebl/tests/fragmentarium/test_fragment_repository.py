@@ -6,11 +6,11 @@ from ebl.fragment.fragment import UncuratedReference
 from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    InterestingFragmentFactory,
-    TransliteratedFragmentFactory
-)
+from ebl.tests.factories.fragment import (FragmentFactory,
+                                          InterestingFragmentFactory,
+                                          LemmatizedFragmentFactory,
+                                          TransliteratedFragmentFactory)
+from ebl.text.atf import Atf
 from ebl.text.labels import LineNumberLabel
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.line import ControlLine, EmptyLine, TextLine
@@ -83,7 +83,7 @@ def test_update_transliteration_with_record(fragment_repository,
     fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        Transliteration('$ (the transliteration)', 'notes'),
+        Transliteration(Atf('$ (the transliteration)'), 'notes'),
         user
     )
 
@@ -230,8 +230,8 @@ def test_find_transliterated(database,
 
 
 def test_find_lemmas(fragment_repository,
-                     lemmatized_fragment,
                      another_lemmatized_fragment):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(another_lemmatized_fragment)
 
@@ -239,8 +239,8 @@ def test_find_lemmas(fragment_repository,
 
 
 def test_find_lemmas_multiple(fragment_repository,
-                              lemmatized_fragment,
                               another_lemmatized_fragment):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(another_lemmatized_fragment)
 
@@ -274,14 +274,15 @@ def test_find_lemmas_ignores_in_value(value, fragment_repository):
 ])
 def test_find_lemmas_ignores_in_query(query,
                                       expected,
-                                      fragment_repository,
-                                      lemmatized_fragment):
+                                      fragment_repository):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
 
     assert fragment_repository.find_lemmas(query) == expected
 
 
-def test_find_lemmas_not_found(fragment_repository, lemmatized_fragment):
+def test_find_lemmas_not_found(fragment_repository):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
     assert fragment_repository.find_lemmas('aklu') == []
 
