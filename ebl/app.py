@@ -30,7 +30,6 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.dictionary.words import WordsResource
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
-from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragmentarium.folio_pager import FolioPagerResource
 from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
@@ -235,10 +234,7 @@ def get_app():
         'dictionary': MongoDictionary(database),
         'sign_repository': MongoSignRepository(database),
         'files': GridFsFiles(database),
-        'fragment_repository': MongoFragmentRepository(
-            database,
-            FragmentFactory(bibliography)
-        ),
+        'fragment_repository': MongoFragmentRepository(database),
         'changelog': Changelog(database),
         'bibliography': bibliography,
         'text_repository': MongoTextRepository(database)

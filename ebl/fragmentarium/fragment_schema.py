@@ -8,27 +8,6 @@ from ebl.fragment.record import (Record, RecordEntry, RecordType)
 from ebl.text.text import Text
 
 
-class FragmentFactory:
-    def __init__(self, bibliography):
-        self._bibliography = bibliography
-
-    @staticmethod
-    def create(data):
-        return FragmentSchema(unknown=True).load(data)
-
-    def create_denormalized(self, data):
-        return self.create({
-            **data,
-            'references': [
-                {
-                    **reference,
-                    'document': self._bibliography.find(reference['id'])
-                }
-                for reference in data['references']
-            ]
-        })
-
-
 class MeasureSchema(Schema):
     value = fields.Float(missing=None)
     note = fields.String(missing=None)

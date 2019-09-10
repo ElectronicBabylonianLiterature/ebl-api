@@ -10,7 +10,6 @@ from falcon import testing
 from falcon_auth import NoneAuthBackend
 
 import ebl.app
-import ebl.fragment.fragment_factory as fragment_factory_
 from ebl.auth0 import Auth0User
 from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
@@ -116,13 +115,8 @@ class TestFragmentRepository(MongoFragmentRepository):
 
 
 @pytest.fixture
-def fragment_factory(bibliography):
-    return fragment_factory_.FragmentFactory(bibliography)
-
-
-@pytest.fixture
-def fragment_repository(database, fragment_factory):
-    return TestFragmentRepository(database, fragment_factory)
+def fragment_repository(database):
+    return TestFragmentRepository(database)
 
 
 @pytest.fixture

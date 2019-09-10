@@ -3,6 +3,7 @@ import pydash
 from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.fragment_schema import FragmentSchema
 from ebl.fragmentarium.fragmentarium import FragmentRepository
 from ebl.fragmentarium.queries import HAS_TRANSLITERATION, \
     aggregate_interesting, aggregate_latest, aggregate_lemmas, \
@@ -13,9 +14,8 @@ COLLECTION = 'fragments'
 
 
 class MongoFragmentRepository(FragmentRepository):
-    def __init__(self, database, fragment_factory):
+    def __init__(self, database):
         self._mongo_repository = MongoRepository(database, COLLECTION)
-        self._fragment_factory = fragment_factory
 
     @property
     def collection(self):
@@ -44,7 +44,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def find(self, number):
         data = self._mongo_repository.find(number)
-        return self._fragment_factory.create(data)
+        return FragmentSchema(unknown=True).load(data)
 
     def search(self, number):
         cursor = self._mongo_collection.find(number_is(number))
@@ -185,7 +185,4 @@ class MongoFragmentRepository(FragmentRepository):
             raise NotFoundError(f'Fragment {fragment.number} not found.')
 
     def _map_fragments(self, cursor):
-        return [
-            self._fragment_factory.create(fragment)
-            for fragment in cursor
-        ]
+        return FragmentSchema(unknown=True, many=True).load(cursor)
