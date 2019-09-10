@@ -1,3 +1,4 @@
+import attr
 import pytest
 
 from ebl.dictionary.word import WordId
@@ -18,6 +19,20 @@ from ebl.text.text import Text
 from ebl.text.token import Token, Word
 
 COLLECTION = 'fragments'
+
+
+ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
+    TransliteratedFragmentFactory.build(),
+    text=Text((
+        TextLine("1'.", (
+            Word('GI₆', unique_lemma=(WordId('ginâ I'),)),
+            Word('ana', unique_lemma=(WordId('ana II'),)),
+            Word('ana', unique_lemma=(WordId('ana II'),)),
+            Word('u₄-šu', unique_lemma=(WordId('ūsu I'),))
+        )),
+    )),
+    signs='MI DIŠ DIŠ UD ŠU'
+)
 
 
 def test_create(database, fragment_repository):
@@ -229,20 +244,18 @@ def test_find_transliterated(database,
         [transliterated_fragment]
 
 
-def test_find_lemmas(fragment_repository,
-                     another_lemmatized_fragment):
+def test_find_lemmas(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(another_lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert fragment_repository.find_lemmas('GI₆') == [['ginâ I']]
 
 
-def test_find_lemmas_multiple(fragment_repository,
-                              another_lemmatized_fragment):
+def test_find_lemmas_multiple(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(another_lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert fragment_repository.find_lemmas('ana') ==\
         [['ana II'], ['ana I']]

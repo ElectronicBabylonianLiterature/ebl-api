@@ -2,7 +2,6 @@ import datetime
 import io
 import json
 
-import attr
 import mongomock
 import pydash
 import pytest
@@ -20,17 +19,12 @@ from ebl.changelog import Changelog
 from ebl.corpus.corpus import Corpus
 from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
-from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
-from ebl.tests.factories.fragment import TransliteratedFragmentFactory
-from ebl.text.line import TextLine
-from ebl.text.text import Text
-from ebl.text.token import Word
 
 
 @pytest.fixture
@@ -321,22 +315,6 @@ def word():
         ],
         "pos": ["V"]
     }
-
-
-@pytest.fixture
-def another_lemmatized_fragment():
-    return attr.evolve(
-        TransliteratedFragmentFactory.build(),
-        text=Text((
-            TextLine("1'.", (
-                Word('GI₆', unique_lemma=(WordId('ginâ I'),)),
-                Word('ana', unique_lemma=(WordId('ana II'),)),
-                Word('ana', unique_lemma=(WordId('ana II'),)),
-                Word('u₄-šu', unique_lemma=(WordId('ūsu I'),))
-            )),
-        )),
-        signs='MI DIŠ DIŠ UD ŠU'
-    )
 
 
 @pytest.fixture
