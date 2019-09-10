@@ -5,6 +5,7 @@ from ebl.text.word_cleaner import IGNORE_REGEX, clean_word
 
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS = 40
+NUMBER_OF_NEEDS_REVISION = 20
 
 
 def fragment_is(fragment):
@@ -104,6 +105,7 @@ def aggregate_needs_revision():
             '_id': '$_id',
             'accession': {'$first': '$accession'},
             'description': {'$first': '$description'},
+            'script': {'$first': '$script'},
             'record': {'$push': '$record'}
         }},
         {
@@ -134,7 +136,7 @@ def aggregate_needs_revision():
                             'in': '$$item.user'
                         }
                 },
-                'dates': {
+                'transliterationDates': {
                     '$map':
                         {
                             'input': '$transliterations',
@@ -156,11 +158,17 @@ def aggregate_needs_revision():
         {'$match': {'$expr': {
             '$eq': [{'$setDifference': ['$revisors', '$transliterators']},
                     []]}}},
-        {'$project': {'accession': 1, 'description': 1,
-                      'date': {'$arrayElemAt': ['$dates', 0]},
-                      'editor': {'$arrayElemAt': ['$transliterators', 0]}}},
-        {'$sort': {'date': 1}},
-        {'$limit': 20}
+        {'$project': {'_id': 0, 'number': '$_id', 'accession': 1,
+                      'description': 1, 'script': 1,
+                      'editionDate': {
+                          '$arrayElemAt': ['$transliterationDates', 0]
+                      },
+                      'editor': {
+                          '$arrayElemAt': ['$transliterators', 0]
+                      }
+                      }},
+        {'$sort': {'editionDate': 1}},
+        {'$limit': NUMBER_OF_NEEDS_REVISION}
     ]
 
 

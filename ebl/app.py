@@ -32,9 +32,9 @@ from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
 from ebl.fragment.fragment_factory import FragmentFactory
 from ebl.fragmentarium.folio_pager import FolioPagerResource
+from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.fragment_search import FragmentSearch, \
-    FragmentInfoSchema
+from ebl.fragmentarium.fragment_search import FragmentSearch
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.fragmentarium.fragments import FragmentsResource
 from ebl.fragmentarium.lemma_search import LemmaSearch

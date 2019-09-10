@@ -2,12 +2,11 @@ import pydash
 
 from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragment.fragment import FragmentNumber
-from ebl.fragment.fragment_info import FragmentInfo
+from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.fragmentarium import FragmentRepository
 from ebl.fragmentarium.queries import HAS_TRANSLITERATION, \
     aggregate_interesting, aggregate_latest, aggregate_lemmas, \
-    aggregate_random, fragment_is, number_is, aggregate_needs_revision
+    aggregate_needs_revision, aggregate_random, fragment_is, number_is
 from ebl.mongo_repository import MongoRepository
 
 COLLECTION = 'fragments'
@@ -74,11 +73,7 @@ class MongoFragmentRepository(FragmentRepository):
     def find_needs_revision(self):
         cursor = self._mongo_collection.aggregate(aggregate_needs_revision())
         return [
-            FragmentInfo(FragmentNumber(info['_id']),
-                         info['accession'],
-                         info['script'],
-                         info['description'],
-                         tuple())
+            FragmentInfoSchema().load(info)
             for info in cursor
         ]
 

@@ -1,23 +1,12 @@
 import falcon
 import pydash
 from falcon import Request, Response
-from marshmallow import Schema, fields
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragment.transliteration import Transliteration
+from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.require_scope import require_scope
-
-
-class FragmentInfoSchema(Schema):
-    number = fields.String()
-    accession = fields.String()
-    script = fields.String()
-    description = fields.String()
-    matching_lines = fields.List(
-        fields.List(fields.String()),
-        data_key="matchingLines"
-    )
 
 
 class FragmentSearch:
