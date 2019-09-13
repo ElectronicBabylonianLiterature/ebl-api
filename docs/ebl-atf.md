@@ -202,7 +202,7 @@ inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
 parts = ( variant | linguistic-gloss | phonetic-gloss ), { part-joiner, ( variant | linguistic-gloss | phonetic-gloss ) };
 
-linguistic-gloss = '{{' [ part-joiner ], variant,  { part-joiner, variant }, [ part-joiner ] '}}';
+linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
 
 determinative = '{', variant,  { part-joiner, variant }, '}';
