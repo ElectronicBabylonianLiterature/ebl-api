@@ -79,7 +79,7 @@ tabulation = '($___$)';
 
 column = '&', { decimal-digit };
 
-divider = [ iniline-broken-away ], divider-symbol, modifier, flag, [ iniline-broken-away ];
+divider = divider-symbol, modifier, flag;
 divider-symbol = '|' | ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
 commentary-protocol = '!qt' | '!bs' | '!cm' | '!zz';
