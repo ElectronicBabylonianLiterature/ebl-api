@@ -25,6 +25,6 @@ def test_create_fragment_info_dto():
         'script': info.script,
         'description': info.description,
         'matchingLines': [[line]],
-        'editor': record_entry[0].user if is_transliteration else '',
-        'editionDate': record_entry[0].date if is_transliteration else ''
+        'editor': record_entry.user if is_transliteration else '',
+        'editionDate': record_entry.date if is_transliteration else ''
     }
