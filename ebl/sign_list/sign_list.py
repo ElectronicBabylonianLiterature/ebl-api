@@ -24,8 +24,8 @@ class SignList:
     ) -> Sequence[Sequence[str]]:
         def sign_to_pair(sign):
             return [
-                [(value['value'], value.get('subIndex')), sign['_id']]
-                for value in sign['values']
+                [(value.value, value.sub_index), sign.name]
+                for value in sign.values
             ]
 
         sign_map: SignMap = (

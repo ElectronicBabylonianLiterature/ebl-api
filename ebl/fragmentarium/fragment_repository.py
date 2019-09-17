@@ -1,4 +1,5 @@
 import pydash
+from marshmallow import EXCLUDE
 
 from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
@@ -44,7 +45,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def find(self, number):
         data = self._mongo_repository.find(number)
-        return FragmentSchema(unknown=True).load(data)
+        return FragmentSchema(unknown=EXCLUDE).load(data)
 
     def search(self, number):
         cursor = self._mongo_collection.find(number_is(number))
@@ -185,4 +186,4 @@ class MongoFragmentRepository(FragmentRepository):
             raise NotFoundError(f'Fragment {fragment.number} not found.')
 
     def _map_fragments(self, cursor):
-        return FragmentSchema(unknown=True, many=True).load(cursor)
+        return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)

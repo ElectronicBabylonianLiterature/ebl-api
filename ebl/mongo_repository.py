@@ -1,3 +1,5 @@
+from pymongo.collection import Collection
+from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 
 from ebl.errors import DuplicateError, NotFoundError
@@ -5,11 +7,11 @@ from ebl.errors import DuplicateError, NotFoundError
 
 class MongoRepository:
 
-    def __init__(self, database, collection):
+    def __init__(self, database: Database, collection: str):
         self._database = database
         self.collection = collection
 
-    def get_collection(self):
+    def get_collection(self) -> Collection:
         return self._database[self.collection]
 
     def create(self, document):

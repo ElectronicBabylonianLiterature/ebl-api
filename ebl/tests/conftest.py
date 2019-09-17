@@ -22,6 +22,7 @@ from ebl.errors import NotFoundError
 from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
+from ebl.sign_list.sign import Sign, Value
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
@@ -332,26 +333,10 @@ def make_changelog_entry(user):
 @pytest.fixture
 def signs():
     return [
-        {
-            '_id': sign_data[0],
-            'lists': [],
-            'unicode': [],
-            'notes': [],
-            'internalNotes': [],
-            'literature': [],
-            'values': [
-                {
-                    'value': value_data[0],
-                    'subIndex': value_data[1],
-                    'questionable': False,
-                    'deprecated': False,
-                    'notes': [],
-                    'internalNotes': []
-                }
-                for value_data in sign_data[1]
-            ],
-            'forms': []
-        }
+        Sign(sign_data[0], tuple(), tuple(
+            Value(value_data[0], value_data[1])
+            for value_data in sign_data[1]
+        ))
         for sign_data in [
             ('KU', [('ku', 1)]),
             ('NU', [('nu', 1)]),

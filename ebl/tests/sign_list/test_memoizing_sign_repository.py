@@ -3,8 +3,8 @@ from ebl.sign_list.sign_repository import MemoizingSignRepository
 
 def test_search_memoization(database, signs):
     sign = signs[0]
-    value = sign['values'][0]['value']
-    sub_index = sign['values'][0]['subIndex']
+    value = sign.values[0].value
+    sub_index = sign.values[0].sub_index
 
     memoizing_sign_repository = MemoizingSignRepository(database)
     memoizing_sign_repository.create(sign)
@@ -17,8 +17,8 @@ def test_search_memoization(database, signs):
 
 def test_search_many_memoization(database, signs):
     sign = signs[0]
-    value = sign['values'][0]['value']
-    sub_index = sign['values'][0]['subIndex']
+    value = sign.values[0].value
+    sub_index = sign.values[0].sub_index
 
     memoizing_sign_repository = MemoizingSignRepository(database)
     memoizing_sign_repository.create(sign)
