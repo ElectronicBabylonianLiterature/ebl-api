@@ -18,5 +18,16 @@ class Value:
 @attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: str
-    lists: Tuple[SignListRecord, ...]
-    values: Tuple[Value, ...]
+    lists: Tuple[SignListRecord, ...] = tuple()
+    values: Tuple[Value, ...] = tuple()
+
+    @property
+    def standardization(self):
+        standardization_list = 'ABZ'
+        try:
+            return [f'{record.name}{record.number}'
+                    for record
+                    in self.lists
+                    if record.name == standardization_list][0]
+        except IndexError:
+            return self.name
