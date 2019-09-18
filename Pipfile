@@ -24,6 +24,7 @@ falcon-apispec = "*"
 progress = "*"
 lark-parser = "*"
 marshmallow = "*"
+inflect = "*"
 
 [dev-packages]
 pytest = "*"

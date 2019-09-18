@@ -9,13 +9,10 @@ from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.text.lemmatization import Lemmatization
 
+COLLECTION = 'fragments'
+
 
 class FragmentRepository(ABC):
-    @property
-    @abstractmethod
-    def collection(self):
-        ...
-
     @abstractmethod
     def create(self, fragment: Fragment) -> FragmentNumber:
         ...
@@ -200,7 +197,7 @@ class Fragmentarium:
                            fragment: Fragment,
                            updated_fragment: Fragment) -> None:
         self._changelog.create(
-            self._repository.collection,
+            COLLECTION,
             user.profile,
             fragment.to_dict(),
             updated_fragment.to_dict()

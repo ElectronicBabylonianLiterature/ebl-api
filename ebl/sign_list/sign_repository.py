@@ -4,6 +4,7 @@ import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
+from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 from ebl.sign_list.sign import Sign, SignListRecord, Value
 
@@ -53,25 +54,27 @@ class MongoSignRepository(MongoRepository):
         super().__init__(database, COLLECTION)
 
     def create(self, sign: Sign) -> str:
-        return super().create(SignSchema().dump(sign))
+        return super()._insert_one(SignSchema().dump(sign))
 
     def find(self, name: str) -> Sign:
-        data = super().find(name)
+        data = super()._find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         sub_index_query = \
             {'$exists': False} if sub_index is None else sub_index
-        data = self.get_collection().find_one({
-            'values': {
-                '$elemMatch': {
-                    'value': reading,
-                    'subIndex': sub_index_query
+        try:
+            data = super()._find_one({
+                'values': {
+                    '$elemMatch': {
+                        'value': reading,
+                        'subIndex': sub_index_query
+                    }
                 }
-            }
-        })
-        return (cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
-                if data else None)
+            })
+            return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
+        except NotFoundError:
+            return None
 
     def search_many(self,
                     readings: List[Tuple[str, Optional[int]]]) -> List[Sign]:
@@ -87,7 +90,7 @@ class MongoSignRepository(MongoRepository):
 
             return cast(List[Sign], SignSchema(unknown=EXCLUDE,
                                                many=True).load(
-                self.get_collection().find({
+                super()._find_many({
                     'values': {
                         '$elemMatch': {
                             '$or': value_queries

@@ -17,10 +17,10 @@ def create_entry(user_profile, resource_type, resource_id, diff):
     }
 
 
-class Changelog:
+class Changelog(MongoRepository):
 
     def __init__(self, database):
-        self._repository = MongoRepository(database, 'changelog')
+        super().__init__(database, 'changelog')
 
     def create(self, resource_type, user_profile, old, new):
         entry = create_entry(
@@ -29,4 +29,4 @@ class Changelog:
             old['_id'],
             list(dictdiffer.diff(old, new))
         )
-        return self._repository.create(entry)
+        return super()._insert_one(entry)

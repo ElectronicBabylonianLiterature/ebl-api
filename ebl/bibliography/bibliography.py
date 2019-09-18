@@ -21,14 +21,11 @@ def create_object_entry(entry):
     )
 
 
-class MongoBibliography():
+class MongoBibliography(MongoRepository):
 
     def __init__(self, database):
-        self._mongo_repository = MongoRepository(database, COLLECTION)
+        super().__init__(database, COLLECTION)
         self._changelog = Changelog(database)
-
-    def _get_collection(self):
-        return self._mongo_repository.get_collection()
 
     def create(self, entry, user):
         mongo_entry = create_mongo_entry(entry)
@@ -38,14 +35,14 @@ class MongoBibliography():
             {'_id': entry['id']},
             mongo_entry
         )
-        return self._mongo_repository.create(mongo_entry)
+        return super()._insert_one(mongo_entry)
 
     def find(self, id_):
-        data = self._mongo_repository.find(id_)
+        data = super()._find_one_by_id(id_)
         return create_object_entry(data)
 
     def update(self, entry, user):
-        old_entry = self._mongo_repository.find(entry['id'])
+        old_entry = super()._find_one_by_id(entry['id'])
         mongo_entry = create_mongo_entry(entry)
         self._changelog.create(
             COLLECTION,
@@ -53,10 +50,7 @@ class MongoBibliography():
             old_entry,
             mongo_entry
         )
-        self._get_collection().replace_one(
-            {'_id': entry['id']},
-            mongo_entry
-        )
+        super()._replace_one(mongo_entry)
 
     def search(self, author=None, year=None, title=None):
         match = {}
@@ -74,7 +68,7 @@ class MongoBibliography():
         return [
             create_object_entry(data)
             for data
-            in self._mongo_repository.get_collection().aggregate(
+            in super()._aggregate(
                 [
                     {'$match': match},
                     {'$addFields': {

@@ -1,7 +1,6 @@
 import re
 
 from ebl.changelog import Changelog
-from ebl.errors import NotFoundError
 from ebl.mongo_repository import MongoRepository
 
 COLLECTION = 'words'
@@ -75,9 +74,15 @@ class MongoDictionary(MongoRepository):
         super().__init__(database, COLLECTION)
         self._changelog = Changelog(database)
 
+    def create(self, document):
+        return super()._insert_one(document)
+
+    def find(self, id_):
+        return super()._find_one_by_id(id_)
+
     def search(self, query):
         lemma = query.split(' ')
-        cursor = self.get_collection().find({
+        cursor = super()._find_many({
             '$or': [
                 {'lemma': lemma},
                 {'forms': {'$elemMatch': {'lemma': lemma}}},
@@ -88,7 +93,7 @@ class MongoDictionary(MongoRepository):
         return [word for word in cursor]
 
     def search_lemma(self, query):
-        cursor = self.get_collection().aggregate(
+        cursor = super()._aggregate(
             _create_lemma_search_pipeline(query),
             collation={
                 'locale': 'en',
@@ -100,20 +105,14 @@ class MongoDictionary(MongoRepository):
         return [word for word in cursor]
 
     def update(self, word, user):
-        query = {'_id': word['_id']}
-        old_word = self.get_collection().find_one(
-            query
+        old_word = self.find(word['_id'])
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            old_word,
+            word
         )
-        if old_word:
-            self._changelog.create(
-                COLLECTION,
-                user.profile,
-                old_word,
-                word
-            )
-            self.get_collection().update_one(
-                query,
-                {'$set': word}
-            )
-        else:
-            raise NotFoundError(f'Word {word["_id"]} not found.')
+        super()._update_one(
+            {'_id': word['_id']},
+            {'$set': word}
+        )

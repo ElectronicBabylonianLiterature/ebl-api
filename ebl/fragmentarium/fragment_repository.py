@@ -2,7 +2,6 @@ import pydash
 from marshmallow import EXCLUDE
 
 from ebl.dictionary.word import WordId
-from ebl.errors import NotFoundError
 from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.fragment_schema import FragmentSchema
 from ebl.fragmentarium.fragmentarium import FragmentRepository
@@ -14,23 +13,15 @@ from ebl.mongo_repository import MongoRepository
 COLLECTION = 'fragments'
 
 
-class MongoFragmentRepository(FragmentRepository):
+class MongoFragmentRepository(MongoRepository, FragmentRepository):
     def __init__(self, database):
-        self._mongo_repository = MongoRepository(database, COLLECTION)
-
-    @property
-    def collection(self):
-        return self._mongo_repository.collection
-
-    @property
-    def _mongo_collection(self):
-        return self._mongo_repository.get_collection()
+        MongoRepository.__init__(self, database, COLLECTION)
 
     def count_transliterated_fragments(self):
-        return self._mongo_collection.count_documents(HAS_TRANSLITERATION)
+        return super()._count_documents(HAS_TRANSLITERATION)
 
     def count_lines(self):
-        result = self._mongo_collection.aggregate([
+        result = super()._aggregate([
             {'$match': {'text.lines.type': 'TextLine'}},
             {'$unwind': '$text.lines'},
             {'$replaceRoot': {'newRoot': '$text.lines'}},
@@ -41,48 +32,48 @@ class MongoFragmentRepository(FragmentRepository):
         return result.next()['lines']
 
     def create(self, fragment):
-        return self._mongo_repository.create(fragment.to_dict())
+        return super()._insert_one(fragment.to_dict())
 
     def find(self, number):
-        data = self._mongo_repository.find(number)
+        data = super()._find_one_by_id(number)
         return FragmentSchema(unknown=EXCLUDE).load(data)
 
     def search(self, number):
-        cursor = self._mongo_collection.find(number_is(number))
+        cursor = super()._find_many(number_is(number))
 
         return self._map_fragments(cursor)
 
     def find_random(self):
-        cursor = self._mongo_collection.aggregate(aggregate_random())
+        cursor = super()._aggregate(aggregate_random())
 
         return self._map_fragments(cursor)
 
     def find_interesting(self):
-        cursor = self._mongo_collection.aggregate(aggregate_interesting())
+        cursor = super()._aggregate(aggregate_interesting())
 
         return self._map_fragments(cursor)
 
     def find_transliterated(self):
-        cursor = self._mongo_collection.find(HAS_TRANSLITERATION)
+        cursor = super()._find_many(HAS_TRANSLITERATION)
 
         return self._map_fragments(cursor)
 
     def find_latest(self):
-        cursor = self._mongo_collection.aggregate(aggregate_latest())
+        cursor = super()._aggregate(aggregate_latest())
         return self._map_fragments(cursor)
 
     def find_needs_revision(self):
-        cursor = self._mongo_collection.aggregate(aggregate_needs_revision())
+        cursor = super()._aggregate(aggregate_needs_revision())
         return FragmentInfoSchema(many=True).load(cursor)
 
     def search_signs(self, query):
-        cursor = self._mongo_collection.find({
+        cursor = super()._find_many({
             'signs': {'$regex': query.regexp}
         })
         return self._map_fragments(cursor)
 
     def update_transliteration(self, fragment):
-        result = self._mongo_collection.update_one(
+        super()._update_one(
             fragment_is(fragment),
             {'$set': pydash.omit_by({
                 'text': fragment.text.to_dict(),
@@ -92,19 +83,13 @@ class MongoFragmentRepository(FragmentRepository):
             }, lambda value: value is None)}
         )
 
-        if result.matched_count == 0:
-            raise NotFoundError(f'Fragment {fragment.number} not found.')
-
     def update_lemmatization(self, fragment):
-        result = self._mongo_collection.update_one(
+        super()._update_one(
             fragment_is(fragment),
             {'$set': {
                 'text': fragment.text.to_dict()
             }}
         )
-
-        if result.matched_count == 0:
-            raise NotFoundError(f'Fragment {fragment.number} not found.')
 
     def folio_pager(self, folio_name, folio_number, number):
         base_pipeline = [
@@ -133,7 +118,7 @@ class MongoFragmentRepository(FragmentRepository):
             ]
 
         def get_numbers(query):
-            cursor = self._mongo_collection.aggregate(query)
+            cursor = super()._aggregate(query)
             if cursor.alive:
                 entry = cursor.next()
                 return {
@@ -160,7 +145,7 @@ class MongoFragmentRepository(FragmentRepository):
         }
 
     def find_lemmas(self, word):
-        cursor = self._mongo_collection.aggregate(aggregate_lemmas(word))
+        cursor = super()._aggregate(aggregate_lemmas(word))
         return [
             [
                 WordId(unique_lemma)
@@ -172,7 +157,7 @@ class MongoFragmentRepository(FragmentRepository):
         ]
 
     def update_references(self, fragment):
-        result = self._mongo_collection.update_one(
+        super()._update_one(
             fragment_is(fragment),
             {'$set': {
                 'references': [
@@ -181,9 +166,6 @@ class MongoFragmentRepository(FragmentRepository):
                 ]
             }}
         )
-
-        if result.matched_count == 0:
-            raise NotFoundError(f'Fragment {fragment.number} not found.')
 
     def _map_fragments(self, cursor):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)

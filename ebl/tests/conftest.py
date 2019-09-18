@@ -41,7 +41,7 @@ class TestDictionary(MongoDictionary):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
     def search_lemma(self, _):
-        return [self.get_collection().find_one({})]
+        return [super()._find_one({})]
 
 
 @pytest.fixture
@@ -54,7 +54,7 @@ class TestBibliography(MongoBibliography):
     # stub the methods using them.
     def search(self, _author=None, _year=None, _title=None):
         return [create_object_entry(
-            self._mongo_repository.get_collection().find_one({})
+            super()._find_one({})
         )]
 
 
@@ -88,7 +88,7 @@ class TestFragmentRepository(MongoFragmentRepository):
     # stub the methods using them.
     def find_latest(self):
         return self._map_fragments(
-            self._mongo_repository.get_collection().find({})
+            super()._find_many({})
         )
 
     # Mongomock does not support $addFields so we need to
@@ -97,7 +97,7 @@ class TestFragmentRepository(MongoFragmentRepository):
         return [FragmentInfo.of(fragment)
                 for fragment
                 in self._map_fragments(
-                    self._mongo_repository.get_collection().find({})
+                    super()._find_many({})
                 )]
 
     # Mongomock does not support $concat so we need to
