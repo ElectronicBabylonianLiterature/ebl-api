@@ -147,37 +147,38 @@ See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/p
 
 ### Commentary protocols
 
-| Protocol | Semantics |
+The Commentary protocol is used to change the display color of the text that follows it. It has to be declared at the beginning of every line. Once declared, it is valid until another protocol replaces it.
+
+| Protocol | Description |
 |----------|-----------|
-| `!qt` | |
-| `!bs` | |
-| `!cm` | |
-| `!zz` | |
+| `!qt` | `Quotation` |
+| `!bs` | `Base Text` |
+| `!cm` | `Commentary` |
+| `!zz` | `Uncertain` |
 
 ### Shifts
 
 Shifts change the language and normalization of the subsequent words until another shift or the end of the line. If no shifts are present *Akkadian* is used as the default language.
 
-| Shift | Language | Normalized |
-| ------|----------|------------|
-| `%n` | Akkadian | Yes |
-| `%ma` | Akkadian | No |
-| `%mb` | Akkadian | No |
-| `%na` | Akkadian | No |
-| `%nb` | Akkadian | No |
-| `%lb` | Akkadian | No |
-| `%sb` | Akkadian | No |
-| `%a` | Akkadian | No |
-| `%akk` | Akkadian | No |
-| `%eakk` | Akkadian | No |
-| `%oakk` | Akkadian | No |
-| `%ur3akk` | Akkadian | No |
-| `%oa` | Akkadian | No |
-| `%ob` | Akkadian | No |
-| `%sux` | Sumerian | No |
-| `%es` | Emesal | No |
-| `%e` | Emesal | No |
-| `%n` | Akkadian | No |
+| Shift | Language | Dialect | Normalized |
+| ------|----------|---------|------------|
+| `%n` | Akkadian | | Yes |
+| `%ma` | Akkadian | Middle Assyrian | No |
+| `%mb` | Akkadian | Middle Babylonian | No |
+| `%na` | Akkadian | Neo-Assyrian | No |
+| `%nb` | Akkadian | Neo-Babylonian | No |
+| `%lb` | Akkadian | Late Babylonian | No |
+| `%sb` | Akkadian | Standard Babylonian | No |
+| `%a` | Akkadian | | No |
+| `%akk` | Akkadian | | No |
+| `%eakk` | Akkadian | Early Akkadian | No |
+| `%oakk` | Akkadian | Old Akkadian | No |
+| `%ur3akk` | Akkadian | Ur III Akkadian | No |
+| `%oa` | Akkadian | Old Assyrian | No |
+| `%ob` | Akkadian | Old Babylonian | No |
+| `%sux` | Sumerian | | No |
+| `%es` | Sumerian | Emesal | No |
+| `%e` | Sumerian | Emesal | No |
 
 Any other shifts are considered valid and have language *Unknown*. *Akkadian* and *Unknown* are lemmatizable.
 
