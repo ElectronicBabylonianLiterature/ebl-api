@@ -24,7 +24,8 @@ class SignList:
     ) -> Sequence[Sequence[str]]:
         def sign_to_pair(sign):
             return [
-                [(value.value, value.sub_index), sign.name]
+                [(value.value, value.sub_index),
+                 sign.standardization.replace('/', '\\u002F')]
                 for value in sign.values
             ]
 

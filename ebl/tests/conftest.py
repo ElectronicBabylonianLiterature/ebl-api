@@ -22,7 +22,7 @@ from ebl.errors import NotFoundError
 from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
-from ebl.sign_list.sign import Sign, Value
+from ebl.sign_list.sign import Sign, SignListRecord, Value
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
 
@@ -333,27 +333,28 @@ def make_changelog_entry(user):
 @pytest.fixture
 def signs():
     return [
-        Sign(sign_data[0], tuple(), tuple(
-            Value(value_data[0], value_data[1])
-            for value_data in sign_data[1]
-        ))
-        for sign_data in [
-            ('KU', [('ku', 1)]),
-            ('NU', [('nu', 1)]),
-            ('IGI', [('ši', 1)]),
-            ('DIŠ', [('ana', 1), ('1', 1)]),
-            ('UD', [('u', 4), ('tu', 2)]),
-            ('MI', [('mi', 1), ('gi', 6)]),
-            ('KI', [('ki', 1)]),
-            ('DU', [('du', 1)]),
-            ('U', [('u', 1), ('10', 1)]),
-            ('BA', [('ba', 1)]),
-            ('MA', [('ma', 1)]),
-            ('TI', [('ti', 1)]),
-            ('MU', [('mu', 1)]),
-            ('TA', [('ta', 1)]),
-            ('ŠU', [('šu', 1)]),
-            ('BU', [('gid', 2)])
+        Sign(name,
+             tuple(SignListRecord(list_name, number)
+                   for list_name, number in lists),
+             tuple(Value(value_name, sub_index)
+                   for value_name, sub_index in values))
+        for name, values, lists in [
+            ('KU', [('ku', 1)], [('KWU', '869')]),
+            ('NU', [('nu', 1)], [('ABZ', '075')]),
+            ('IGI', [('ši', 1)], [('HZL', '288'), ('ABZ', '207a/207b')]),
+            ('DIŠ', [('ana', 1), ('1', 1)], []),
+            ('UD', [('u', 4), ('tu', 2)], []),
+            ('MI', [('mi', 1), ('gi', 6)], []),
+            ('KI', [('ki', 1)], []),
+            ('DU', [('du', 1)], []),
+            ('U', [('u', 1), ('10', 1)], []),
+            ('BA', [('ba', 1)], []),
+            ('MA', [('ma', 1)], []),
+            ('TI', [('ti', 1)], []),
+            ('MU', [('mu', 1)], []),
+            ('TA', [('ta', 1)], []),
+            ('ŠU', [('šu', 1)], []),
+            ('BU', [('gid', 2)], []),
         ]
     ]
 
