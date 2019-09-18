@@ -8,20 +8,20 @@ from ebl.fragmentarium.fragmentarium import FragmentRepository
 from ebl.fragmentarium.queries import HAS_TRANSLITERATION, \
     aggregate_interesting, aggregate_latest, aggregate_lemmas, \
     aggregate_needs_revision, aggregate_random, fragment_is, number_is
-from ebl.mongo_repository import MongoRepository
+from ebl.mongo_collection import MongoCollection
 
 COLLECTION = 'fragments'
 
 
-class MongoFragmentRepository(MongoRepository, FragmentRepository):
+class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
-        MongoRepository.__init__(self, database, COLLECTION)
+        self._collection = MongoCollection(database, COLLECTION)
 
     def count_transliterated_fragments(self):
-        return super()._count_documents(HAS_TRANSLITERATION)
+        return self._collection.count_documents(HAS_TRANSLITERATION)
 
     def count_lines(self):
-        result = super()._aggregate([
+        result = self._collection.aggregate([
             {'$match': {'text.lines.type': 'TextLine'}},
             {'$unwind': '$text.lines'},
             {'$replaceRoot': {'newRoot': '$text.lines'}},
@@ -32,48 +32,48 @@ class MongoFragmentRepository(MongoRepository, FragmentRepository):
         return result.next()['lines']
 
     def create(self, fragment):
-        return super()._insert_one(fragment.to_dict())
+        return self._collection.insert_one(fragment.to_dict())
 
     def find(self, number):
-        data = super()._find_one_by_id(number)
+        data = self._collection.find_one_by_id(number)
         return FragmentSchema(unknown=EXCLUDE).load(data)
 
     def search(self, number):
-        cursor = super()._find_many(number_is(number))
+        cursor = self._collection.find_many(number_is(number))
 
         return self._map_fragments(cursor)
 
     def find_random(self):
-        cursor = super()._aggregate(aggregate_random())
+        cursor = self._collection.aggregate(aggregate_random())
 
         return self._map_fragments(cursor)
 
     def find_interesting(self):
-        cursor = super()._aggregate(aggregate_interesting())
+        cursor = self._collection.aggregate(aggregate_interesting())
 
         return self._map_fragments(cursor)
 
     def find_transliterated(self):
-        cursor = super()._find_many(HAS_TRANSLITERATION)
+        cursor = self._collection.find_many(HAS_TRANSLITERATION)
 
         return self._map_fragments(cursor)
 
     def find_latest(self):
-        cursor = super()._aggregate(aggregate_latest())
+        cursor = self._collection.aggregate(aggregate_latest())
         return self._map_fragments(cursor)
 
     def find_needs_revision(self):
-        cursor = super()._aggregate(aggregate_needs_revision())
+        cursor = self._collection.aggregate(aggregate_needs_revision())
         return FragmentInfoSchema(many=True).load(cursor)
 
     def search_signs(self, query):
-        cursor = super()._find_many({
+        cursor = self._collection.find_many({
             'signs': {'$regex': query.regexp}
         })
         return self._map_fragments(cursor)
 
     def update_transliteration(self, fragment):
-        super()._update_one(
+        self._collection.update_one(
             fragment_is(fragment),
             {'$set': pydash.omit_by({
                 'text': fragment.text.to_dict(),
@@ -84,7 +84,7 @@ class MongoFragmentRepository(MongoRepository, FragmentRepository):
         )
 
     def update_lemmatization(self, fragment):
-        super()._update_one(
+        self._collection.update_one(
             fragment_is(fragment),
             {'$set': {
                 'text': fragment.text.to_dict()
@@ -118,7 +118,7 @@ class MongoFragmentRepository(MongoRepository, FragmentRepository):
             ]
 
         def get_numbers(query):
-            cursor = super()._aggregate(query)
+            cursor = self._collection.aggregate(query)
             if cursor.alive:
                 entry = cursor.next()
                 return {
@@ -145,7 +145,7 @@ class MongoFragmentRepository(MongoRepository, FragmentRepository):
         }
 
     def find_lemmas(self, word):
-        cursor = super()._aggregate(aggregate_lemmas(word))
+        cursor = self._collection.aggregate(aggregate_lemmas(word))
         return [
             [
                 WordId(unique_lemma)
@@ -157,7 +157,7 @@ class MongoFragmentRepository(MongoRepository, FragmentRepository):
         ]
 
     def update_references(self, fragment):
-        super()._update_one(
+        self._collection.update_one(
             fragment_is(fragment),
             {'$set': {
                 'references': [

@@ -5,7 +5,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
-from ebl.mongo_repository import MongoRepository
+from ebl.mongo_collection import MongoCollection
 from ebl.sign_list.sign import Sign, SignListRecord, Value
 
 COLLECTION = 'signs'
@@ -48,23 +48,23 @@ class SignSchema(Schema):
         return Sign(**data)
 
 
-class MongoSignRepository(MongoRepository):
+class MongoSignRepository:
 
     def __init__(self, database: Database):
-        super().__init__(database, COLLECTION)
+        self._collection = MongoCollection(database, COLLECTION)
 
     def create(self, sign: Sign) -> str:
-        return super()._insert_one(SignSchema().dump(sign))
+        return self._collection.insert_one(SignSchema().dump(sign))
 
     def find(self, name: str) -> Sign:
-        data = super()._find_one_by_id(name)
+        data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         sub_index_query = \
             {'$exists': False} if sub_index is None else sub_index
         try:
-            data = super()._find_one({
+            data = self._collection.find_one({
                 'values': {
                     '$elemMatch': {
                         'value': reading,
@@ -90,7 +90,7 @@ class MongoSignRepository(MongoRepository):
 
             return cast(List[Sign], SignSchema(unknown=EXCLUDE,
                                                many=True).load(
-                super()._find_many({
+                self._collection.find_many({
                     'values': {
                         '$elemMatch': {
                             '$or': value_queries

@@ -2,7 +2,7 @@ import pydash
 
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
-from ebl.mongo_repository import MongoRepository
+from ebl.mongo_collection import MongoCollection
 
 COLLECTION = 'bibliography'
 
@@ -21,10 +21,10 @@ def create_object_entry(entry):
     )
 
 
-class MongoBibliography(MongoRepository):
+class MongoBibliography:
 
     def __init__(self, database):
-        super().__init__(database, COLLECTION)
+        self._collection = MongoCollection(database, COLLECTION)
         self._changelog = Changelog(database)
 
     def create(self, entry, user):
@@ -35,14 +35,14 @@ class MongoBibliography(MongoRepository):
             {'_id': entry['id']},
             mongo_entry
         )
-        return super()._insert_one(mongo_entry)
+        return self._collection.insert_one(mongo_entry)
 
     def find(self, id_):
-        data = super()._find_one_by_id(id_)
+        data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
 
     def update(self, entry, user):
-        old_entry = super()._find_one_by_id(entry['id'])
+        old_entry = self._collection.find_one_by_id(entry['id'])
         mongo_entry = create_mongo_entry(entry)
         self._changelog.create(
             COLLECTION,
@@ -50,7 +50,7 @@ class MongoBibliography(MongoRepository):
             old_entry,
             mongo_entry
         )
-        super()._replace_one(mongo_entry)
+        self._collection.replace_one(mongo_entry)
 
     def search(self, author=None, year=None, title=None):
         match = {}
@@ -68,7 +68,7 @@ class MongoBibliography(MongoRepository):
         return [
             create_object_entry(data)
             for data
-            in super()._aggregate(
+            in self._collection.aggregate(
                 [
                     {'$match': match},
                     {'$addFields': {

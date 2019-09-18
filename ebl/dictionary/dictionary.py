@@ -1,7 +1,7 @@
 import re
 
 from ebl.changelog import Changelog
-from ebl.mongo_repository import MongoRepository
+from ebl.mongo_collection import MongoCollection
 
 COLLECTION = 'words'
 LEMMA_SEARCH_LIMIT = 15
@@ -68,21 +68,21 @@ def _create_lemma_search_pipeline(query):
     ]
 
 
-class MongoDictionary(MongoRepository):
+class MongoDictionary:
 
     def __init__(self, database):
-        super().__init__(database, COLLECTION)
+        self._collection = MongoCollection(database, COLLECTION)
         self._changelog = Changelog(database)
 
     def create(self, document):
-        return super()._insert_one(document)
+        return self._collection.insert_one(document)
 
     def find(self, id_):
-        return super()._find_one_by_id(id_)
+        return self._collection.find_one_by_id(id_)
 
     def search(self, query):
         lemma = query.split(' ')
-        cursor = super()._find_many({
+        cursor = self._collection.find_many({
             '$or': [
                 {'lemma': lemma},
                 {'forms': {'$elemMatch': {'lemma': lemma}}},
@@ -93,7 +93,7 @@ class MongoDictionary(MongoRepository):
         return [word for word in cursor]
 
     def search_lemma(self, query):
-        cursor = super()._aggregate(
+        cursor = self._collection.aggregate(
             _create_lemma_search_pipeline(query),
             collation={
                 'locale': 'en',
@@ -112,7 +112,7 @@ class MongoDictionary(MongoRepository):
             old_word,
             word
         )
-        super()._update_one(
+        self._collection.update_one(
             {'_id': word['_id']},
             {'$set': word}
         )

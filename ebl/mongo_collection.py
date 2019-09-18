@@ -6,7 +6,7 @@ from pymongo.errors import DuplicateKeyError
 from ebl.errors import DuplicateError, NotFoundError
 
 
-class MongoRepository:
+class MongoCollection:
 
     def __init__(self, database: Database, collection: str):
         self.__database = database
@@ -14,7 +14,7 @@ class MongoRepository:
         self.__resource_noun = (inflect.engine().singular_noun(collection) or
                                 collection).title()
 
-    def _insert_one(self, document):
+    def insert_one(self, document):
         try:
             return self.__get_collection().insert_one(document).inserted_id
         except DuplicateKeyError:
@@ -22,10 +22,10 @@ class MongoRepository:
                 f'{self.__resource_noun} {document["_id"]} already exists.'
             )
 
-    def _find_one_by_id(self, id_):
-        return self._find_one({'_id': id_})
+    def find_one_by_id(self, id_):
+        return self.find_one({'_id': id_})
 
-    def _find_one(self, query):
+    def find_one(self, query):
         document = self.__get_collection().find_one(query)
 
         if document is None:
@@ -33,13 +33,13 @@ class MongoRepository:
         else:
             return document
 
-    def _find_many(self, query):
+    def find_many(self, query):
         return self.__get_collection().find(query)
 
-    def _aggregate(self, pipeline, **kwargs):
+    def aggregate(self, pipeline, **kwargs):
         return self.__get_collection().aggregate(pipeline, **kwargs)
 
-    def _replace_one(self, document):
+    def replace_one(self, document):
         result = self.__get_collection().replace_one(
             {'_id': document['_id']},
             document
@@ -49,17 +49,17 @@ class MongoRepository:
         else:
             return result
 
-    def _update_one(self, query, update):
+    def update_one(self, query, update):
         result = self.__get_collection().update_one(query, update)
         if result.matched_count == 0:
             raise self.__not_found_error(query)
         else:
             return result
 
-    def _count_documents(self, query) -> int:
+    def count_documents(self, query) -> int:
         return self.__get_collection().count_documents(query)
 
-    def _create_index(self, index, **kwargs):
+    def create_index(self, index, **kwargs):
         return self.__get_collection().create_index(index, **kwargs)
 
     def __not_found_error(self, query):

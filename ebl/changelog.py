@@ -3,7 +3,7 @@ import datetime
 import dictdiffer
 import pydash
 
-from ebl.mongo_repository import MongoRepository
+from ebl.mongo_collection import MongoCollection
 
 
 def create_entry(user_profile, resource_type, resource_id, diff):
@@ -17,10 +17,10 @@ def create_entry(user_profile, resource_type, resource_id, diff):
     }
 
 
-class Changelog(MongoRepository):
+class Changelog:
 
     def __init__(self, database):
-        super().__init__(database, 'changelog')
+        self._collection = MongoCollection(database, 'changelog')
 
     def create(self, resource_type, user_profile, old, new):
         entry = create_entry(
@@ -29,4 +29,4 @@ class Changelog(MongoRepository):
             old['_id'],
             list(dictdiffer.diff(old, new))
         )
-        return super()._insert_one(entry)
+        return self._collection.insert_one(entry)
