@@ -1,27 +1,24 @@
 import pytest
 
-from ebl.fragment.value import INVALID_READING, NotReading, Reading, Variant
+from ebl.fragment.value import CompoundGrapheme, INVALID_READING, NotReading, \
+    Reading, Variant
 from ebl.fragment.value_mapper import parse_reading
 
 MAP_DATA = [
     ('nu', Reading('nu', 1, INVALID_READING)),
     ('šu', Reading('šu', 1, INVALID_READING)),
     ('gid₂', Reading('gid', 2, INVALID_READING)),
-    ('BI', NotReading('BI')),
-    ('NUₓ', NotReading('NUₓ')),
-    ('BIxIS', NotReading('BIxIS')),
-    ('BI×IS', NotReading('BI×IS')),
-    ('|BIxIS|', NotReading('|BIxIS|')),
-    ('|BI×IS|', NotReading('|BI×IS|')),
-    ('|BI.IS|', NotReading('|BI.IS|')),
-    ('|BI+IS|', NotReading('|BI+IS|')),
-    ('|BI&IS|', NotReading('|BI&IS|')),
-    ('|BI%IS|', NotReading('|BI%IS|')),
-    ('|BI@IS|', NotReading('|BI@IS|')),
-    ('|3×BI|', NotReading('|3×BI|')),
-    ('|3xBI|', NotReading('|3xBI|')),
-    ('|GEŠTU~axŠE~a@t|', NotReading('|GEŠTU~axŠE~a@t|')),
-    ('|(GI&GI)×ŠE₃|', NotReading('|(GI&GI)×ŠE₃|')),
+    ('|BIxIS|', CompoundGrapheme('|BIxIS|')),
+    ('|BI×IS|', CompoundGrapheme('|BI×IS|')),
+    ('|BI.IS|', CompoundGrapheme('|BI.IS|')),
+    ('|BI+IS|', CompoundGrapheme('|BI+IS|')),
+    ('|BI&IS|', CompoundGrapheme('|BI&IS|')),
+    ('|BI%IS|', CompoundGrapheme('|BI%IS|')),
+    ('|BI@IS|', CompoundGrapheme('|BI@IS|')),
+    ('|3×BI|', CompoundGrapheme('|3×BI|')),
+    ('|3xBI|', CompoundGrapheme('|3xBI|')),
+    ('|GEŠTU~axŠE~a@t|', CompoundGrapheme('|GEŠTU~axŠE~a@t|')),
+    ('|(GI&GI)×ŠE₃|', CompoundGrapheme('|(GI&GI)×ŠE₃|')),
     ('unknown', Reading('unknown', 1, INVALID_READING)),
     ('nuₓ', NotReading('?')),
     ('x', NotReading('X')),
@@ -30,6 +27,7 @@ MAP_DATA = [
     # 1, 2, 5, 10, 20, 30 should be inserted manually to the sign list
     ('1', Reading('1', 1, '1')),
     ('foo(TUKUL)', NotReading('TUKUL')),
+    ('foo(|BI×IS|)', NotReading('|BI×IS|')),
     ('šu/gid₂', Variant((
         Reading('šu', 1, INVALID_READING),
         Reading('gid', 2, INVALID_READING)
@@ -41,19 +39,23 @@ MAP_DATA = [
     ))),
     ('šu/|BI×IS|', Variant((
         Reading('šu', 1, INVALID_READING),
-        NotReading('|BI×IS|')
+        CompoundGrapheme('|BI×IS|')
     ))),
     ('|BI×IS|/šu', Variant((
-        NotReading('|BI×IS|'),
+        CompoundGrapheme('|BI×IS|'),
         Reading('šu', 1, INVALID_READING)
     ))),
     ('šu/|BI×IS|/nu', Variant((
         Reading('šu', 1, INVALID_READING),
-        NotReading('|BI×IS|'),
+        CompoundGrapheme('|BI×IS|'),
         Reading('nu', 1, INVALID_READING)
     ))),
     ('foo(TUKUL)/šu', Variant((
         NotReading('TUKUL'),
+        Reading('šu', 1, INVALID_READING)
+    ))),
+    ('foo(|BI×IS|)/šu', Variant((
+        NotReading('|BI×IS|'),
         Reading('šu', 1, INVALID_READING)
     ))),
     ('šu/1(AŠ)', Variant((
@@ -78,5 +80,5 @@ MAP_DATA = [
 
 
 @pytest.mark.parametrize("value,expected", MAP_DATA)
-def test_create_value_mapper2(value, expected):
+def test_create_value_mapper(value, expected):
     assert parse_reading(value) == expected

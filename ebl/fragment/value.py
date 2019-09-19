@@ -9,7 +9,9 @@ INVALID_READING = '?'
 
 
 ReadingKey = Tuple[str, Optional[int]]
-SignMap = Mapping[ReadingKey, str]
+CompoundGraphemeKey = str
+AnyKey = Union[ReadingKey, CompoundGraphemeKey]
+SignMap = Mapping[AnyKey, str]
 
 
 @attr.s(frozen=True)
@@ -20,7 +22,7 @@ class Value(ABC):
         ...
 
     @property
-    def keys(self) -> Sequence[ReadingKey]:
+    def keys(self) -> Sequence[AnyKey]:
         return []
 
 
@@ -51,11 +53,27 @@ class NotReading(Value):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Variant(Value):
-    values: Tuple[Union[Reading, NotReading], ...]
+class CompoundGrapheme(Value):
+    name: str
 
     @property
-    def keys(self) -> Sequence[ReadingKey]:
+    def key(self):
+        return self.name
+
+    @property
+    def keys(self) -> Sequence[CompoundGraphemeKey]:
+        return [self.key]
+
+    def to_sign(self, sign_map: SignMap) -> str:
+        return sign_map.get(self.key, self.name)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Variant(Value):
+    values: Tuple[Union[Reading, NotReading, CompoundGrapheme], ...]
+
+    @property
+    def keys(self) -> Sequence[AnyKey]:
         return [key for value in self.values for key in value.keys]
 
     def to_sign(self, sign_map: SignMap) -> str:
@@ -81,10 +99,14 @@ class ValueFactory:
 
     @staticmethod
     def create_variant(
-            values: Tuple[Union[Reading, NotReading], ...]
+            values: Tuple[Union[Reading, NotReading, CompoundGrapheme], ...]
     ) -> Variant:
         return Variant(values)
 
     @staticmethod
     def create_not_reading(value: str) -> NotReading:
         return NotReading(value)
+
+    @staticmethod
+    def create_compound_grapheme(value: str) -> CompoundGrapheme:
+        return CompoundGrapheme(value)

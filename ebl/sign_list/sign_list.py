@@ -23,11 +23,15 @@ class SignList:
         self, values: Sequence[Sequence[Value]]
     ) -> Sequence[Sequence[str]]:
         def sign_to_pair(sign):
-            return [
-                [(value.value, value.sub_index),
-                 sign.standardization.replace('/', '\\u002F')]
+            standardization = (sign.standardization
+                               .replace('/', '\\u002F')
+                               .replace(' ', '\\u0020'))
+            mapping = [
+                [(value.value, value.sub_index), standardization]
                 for value in sign.values
             ]
+            mapping.append([sign.name, standardization])
+            return mapping
 
         sign_map: SignMap = (
             pydash
