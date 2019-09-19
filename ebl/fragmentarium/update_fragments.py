@@ -7,7 +7,7 @@ from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
-from ebl.fragment.transliteration import Transliteration
+from ebl.fragment.transliteration_factory import TransliterationFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign_list import SignList
@@ -16,8 +16,8 @@ from ebl.text.lemmatization import LemmatizationError
 from ebl.text.transliteration_error import TransliterationError
 
 
-def update_fragment(fragmentarium, fragment):
-    transliteration = Transliteration(
+def update_fragment(transliteration_factory, fragmentarium, fragment):
+    transliteration = transliteration_factory.create(
         fragment.text.atf,
         fragment.notes
     )
@@ -66,7 +66,9 @@ class State:
         ])
 
 
-def update_fragments(fragment_repository, fragmentarium):
+def update_fragments(fragment_repository,
+                     transliteration_factory,
+                     fragmentarium):
     state = State()
     numbers = find_transliterated(fragment_repository)
 
@@ -74,7 +76,9 @@ def update_fragments(fragment_repository, fragmentarium):
         for number in numbers:
             try:
                 fragment = fragmentarium.find(number)
-                update_fragment(fragmentarium, fragment)
+                update_fragment(transliteration_factory,
+                                fragmentarium,
+                                fragment)
                 state.add_updated()
             except TransliterationError as error:
                 state.add_transliteration_error(error, fragment)
@@ -96,7 +100,10 @@ if __name__ == '__main__':
     FRAGMENTARIUM = Fragmentarium(
         FRAGMENT_REPOSITORY,
         Changelog(DATABASE),
-        SIGN_LIST,
         MongoDictionary(DATABASE),
-        MongoBibliography(DATABASE))
-    update_fragments(FRAGMENT_REPOSITORY, FRAGMENTARIUM)
+        MongoBibliography(DATABASE)
+    )
+    TRANSLITERATION_FACTORY = TransliterationFactory(SIGN_LIST)
+    update_fragments(FRAGMENT_REPOSITORY,
+                     TRANSLITERATION_FACTORY,
+                     FRAGMENTARIUM)
