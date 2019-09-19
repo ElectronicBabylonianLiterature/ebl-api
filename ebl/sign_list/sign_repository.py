@@ -1,11 +1,12 @@
-from typing import List, Optional, cast
+from functools import reduce
+from typing import List, Optional, Sequence, Tuple, cast
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
-from ebl.fragment.value import AnyKey
+from ebl.fragment.value import AnyKey, CompoundGraphemeKey, ReadingKey
 from ebl.mongo_collection import MongoCollection
 from ebl.sign_list.sign import Sign, SignListRecord, Value
 
@@ -49,6 +50,60 @@ class SignSchema(Schema):
         return Sign(**data)
 
 
+def create_value_query(keys: Sequence[ReadingKey]):
+    value_queries = [
+        {
+            'value': value,
+            'subIndex': {
+                '$exists': False
+            } if sub_index is None else sub_index
+        } for value, sub_index in keys
+    ]
+    return {
+        'values': {
+            '$elemMatch': {
+                '$or': value_queries
+            }
+        }
+    }
+
+
+def creates_name_query(keys: Sequence[CompoundGraphemeKey]):
+    return {
+
+        '_id': {
+            '$in': keys
+        }
+    }
+
+
+def partition_keys(keys: Sequence[AnyKey]) -> Tuple[
+    Sequence[ReadingKey],
+    Sequence[CompoundGraphemeKey]
+]:
+    def partition(acc, key):
+        values, names = acc
+        if type(key) == tuple:
+            values.append(cast(ReadingKey, key))
+        else:
+            names.append(CompoundGraphemeKey(key))
+        return values, names
+
+    return reduce(partition, keys, ([], []))
+
+
+def create_signs_query(keys: List[AnyKey]):
+    values, names = partition_keys(keys)
+    sub_queries: list = []
+    if values:
+        sub_queries.append(create_value_query(values))
+    if names:
+        sub_queries.append(creates_name_query(names))
+    return {
+        '$or': sub_queries
+    }
+
+
 class MongoSignRepository:
 
     def __init__(self, database: Database):
@@ -79,37 +134,11 @@ class MongoSignRepository:
 
     def search_many(self, readings: List[AnyKey]) -> List[Sign]:
         if readings:
-            queries: list = []
-            value_queries = [
-                {
-                    'value':  key[0],
-                    'subIndex': {
-                        '$exists': False
-                    } if key[1] is None else key[1]
-                } for key in readings if type(key) is tuple
-            ]
-            if value_queries:
-                queries.append({
-                    'values': {
-                        '$elemMatch': {
-                            '$or': value_queries
-                        }
-                    }
-                })
-            names = [key for key in readings if type(key) is str]
-            if names:
-                queries.append({
-                    '_id': {
-                        '$in': names
-                    }
-                })
-
-            return cast(List[Sign], SignSchema(unknown=EXCLUDE,
-                                               many=True).load(
-                self._collection.find_many({
-                    '$or': queries
-                })
-            ))
+            query = create_signs_query(readings)
+            return cast(List[Sign],
+                        SignSchema(unknown=EXCLUDE, many=True).load(
+                            self._collection.find_many(query)
+                        ))
         else:
             return []
 
