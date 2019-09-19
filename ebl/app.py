@@ -30,6 +30,7 @@ from ebl.dictionary.word_search import WordSearch
 from ebl.dictionary.words import WordsResource
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
+from ebl.fragment.transliteration_factory import TransliterationFactory
 from ebl.fragmentarium.folio_pager import FolioPagerResource
 from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
@@ -68,16 +69,18 @@ def create_dictionary_routes(api, context, spec):
 def create_fragmentarium_routes(api, context, sign_list, spec):
     fragmentarium = Fragmentarium(context['fragment_repository'],
                                   context['changelog'],
-                                  sign_list,
                                   context['dictionary'],
                                   context['bibliography'])
+    transliteration_factory = TransliterationFactory(sign_list)
 
     fragments = FragmentsResource(fragmentarium)
-    fragment_search = FragmentSearch(fragmentarium)
+    fragment_search = FragmentSearch(fragmentarium,
+                                     transliteration_factory)
     lemmatization = LemmatizationResource(fragmentarium)
     references = ReferencesResource(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
-    transliteration = TransliterationResource(fragmentarium)
+    transliteration = TransliterationResource(fragmentarium,
+                                              transliteration_factory)
     folio_pager = FolioPagerResource(fragmentarium)
     lemma_search = LemmaSearch(fragmentarium)
 
@@ -110,7 +113,7 @@ def create_corpus_routes(api, context, sign_list, spec):
         context['text_repository'],
         context['bibliography'],
         context['changelog'],
-        sign_list
+        TransliterationFactory(sign_list)
     )
     context['text_repository'].create_indexes()
 

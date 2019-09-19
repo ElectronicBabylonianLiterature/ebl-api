@@ -1,32 +1,31 @@
 import pytest
 
-from ebl.fragment.transliteration import (
-    Transliteration
-)
+from ebl.fragment.transliteration import Transliteration
 from ebl.fragment.validator import Validator
+from ebl.text.atf import Atf
 from ebl.text.transliteration_error import TransliterationError
 
 
 def test_validate_empty():
-    transliteration = Transliteration('')
+    transliteration = Transliteration(Atf(''))
     Validator(transliteration).validate()
 
 
 def test_validate_valid_no_signs():
-    transliteration = Transliteration('1. value')
+    transliteration = Transliteration(Atf('1. value'))
     Validator(transliteration).validate()
 
 
-def test_validate_valid_signs(sign_list, signs):
+def test_validate_valid_signs(transliteration_factory, sign_list, signs):
     for sign in signs:
         sign_list.create(sign)
 
-    transliteration = Transliteration('1. šu gid₂').with_signs(sign_list)
+    transliteration = Transliteration(Atf('1. šu gid₂'), signs='ŠU BU')
     Validator(transliteration).validate()
 
 
 def test_validate_invalid_atf():
-    transliteration = Transliteration('$ this is not valid')
+    transliteration = Transliteration(Atf('$ this is not valid'))
 
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
@@ -41,8 +40,7 @@ def test_validate_invalid_atf():
 
 
 def test_validate_invalid_value(sign_list):
-    transliteration =\
-        Transliteration('1. invalid values').with_signs(sign_list)
+    transliteration = Transliteration(Atf('1. invalid values'), signs='? ?')
 
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
@@ -58,8 +56,9 @@ def test_validate_invalid_value(sign_list):
 
 def test_validate_multiple_errors(sign_list):
     transliteration = Transliteration(
-        '1. invalid values\n$ not valid\n2. more invalid values'
-    ).with_signs(sign_list)
+        Atf('1. invalid values\n$ not valid\n2. more invalid values'),
+        signs='? ?\n? ? ?'
+    )
 
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
@@ -83,8 +82,9 @@ def test_validate_multiple_errors(sign_list):
 
 def test_get_errors(sign_list):
     transliteration = Transliteration(
-        '1. invalid values\n$ not valid\n2. more invalid values'
-    ).with_signs(sign_list)
+        Atf('1. invalid values\n$ not valid\n2. more invalid values'),
+        signs='? ?\n? ? ?'
+    )
 
     assert Validator(transliteration).get_errors() == [
         {

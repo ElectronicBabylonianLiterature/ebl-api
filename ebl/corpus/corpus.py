@@ -37,11 +37,11 @@ class Corpus:
                  repository: TextRepository,
                  bibliography,
                  changelog,
-                 sign_list):
+                 transliteration_factory):
         self._repository: TextRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
-        self._sign_list = sign_list
+        self._transliteration_factory = transliteration_factory
 
     def create(self, text: Text, user) -> None:
         self._validate_text(text)
@@ -97,7 +97,8 @@ class Corpus:
         self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
-        text.accept(TextValidator(self._bibliography, self._sign_list))
+        text.accept(TextValidator(self._bibliography,
+                                  self._transliteration_factory))
 
     def _hydrate_references(self, text: Text) -> Text:
         hydrator = TextHydrator(self._bibliography)

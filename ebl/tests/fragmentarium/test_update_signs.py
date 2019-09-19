@@ -1,5 +1,6 @@
 import attr
 
+from ebl.fragment.transliteration_factory import TransliterationFactory
 from ebl.fragmentarium.update_signs import create_updater
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
@@ -13,6 +14,6 @@ def test_update_signs(fragment_repository,
         sign_list.create(sign)
     number = fragment_repository.create(fragment_without_signs)
 
-    create_updater(sign_list, fragment_repository)()
+    create_updater(TransliterationFactory(sign_list), fragment_repository)()
 
     assert fragment_repository.find(number) == transliterated_fragment
