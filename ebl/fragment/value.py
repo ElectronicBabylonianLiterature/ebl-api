@@ -8,9 +8,9 @@ from ebl.text.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
 INVALID_READING = '?'
 
 
-ReadingKey = Tuple[str, Optional[int]]
-CompoundGraphemeKey = str
-AnyKey = Union[ReadingKey, CompoundGraphemeKey]
+ValueKey = Tuple[str, Optional[int]]
+NameKey = str
+AnyKey = Union[ValueKey, NameKey]
 SignMap = Mapping[AnyKey, str]
 
 
@@ -37,7 +37,7 @@ class Reading(Value):
         return self.reading, self.sub_index
 
     @property
-    def keys(self) -> Sequence[ReadingKey]:
+    def keys(self) -> Sequence[ValueKey]:
         return [self.key]
 
     def to_sign(self, sign_map: SignMap) -> str:
@@ -53,7 +53,7 @@ class NotReading(Value):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class CompoundGrapheme(Value):
+class Grapheme(Value):
     name: str
 
     @property
@@ -61,7 +61,7 @@ class CompoundGrapheme(Value):
         return self.name
 
     @property
-    def keys(self) -> Sequence[CompoundGraphemeKey]:
+    def keys(self) -> Sequence[NameKey]:
         return [self.key]
 
     def to_sign(self, sign_map: SignMap) -> str:
@@ -70,7 +70,7 @@ class CompoundGrapheme(Value):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Variant(Value):
-    values: Tuple[Union[Reading, NotReading, CompoundGrapheme], ...]
+    values: Tuple[Union[Reading, NotReading, Grapheme], ...]
 
     @property
     def keys(self) -> Sequence[AnyKey]:
@@ -99,7 +99,7 @@ class ValueFactory:
 
     @staticmethod
     def create_variant(
-            values: Tuple[Union[Reading, NotReading, CompoundGrapheme], ...]
+            values: Tuple[Union[Reading, NotReading, Grapheme], ...]
     ) -> Variant:
         return Variant(values)
 
@@ -108,5 +108,5 @@ class ValueFactory:
         return NotReading(value)
 
     @staticmethod
-    def create_compound_grapheme(value: str) -> CompoundGrapheme:
-        return CompoundGrapheme(value)
+    def create_compound_grapheme(value: str) -> Grapheme:
+        return Grapheme(value)

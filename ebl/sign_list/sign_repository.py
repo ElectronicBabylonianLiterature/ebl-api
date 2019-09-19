@@ -6,7 +6,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
-from ebl.fragment.value import AnyKey, CompoundGraphemeKey, ReadingKey
+from ebl.fragment.value import AnyKey, NameKey, ValueKey
 from ebl.mongo_collection import MongoCollection
 from ebl.sign_list.sign import Sign, SignListRecord, Value
 
@@ -50,7 +50,7 @@ class SignSchema(Schema):
         return Sign(**data)
 
 
-def create_value_query(keys: Sequence[ReadingKey]):
+def create_value_query(keys: Sequence[ValueKey]):
     value_queries = [
         {
             'value': value,
@@ -68,7 +68,7 @@ def create_value_query(keys: Sequence[ReadingKey]):
     }
 
 
-def creates_name_query(keys: Sequence[CompoundGraphemeKey]):
+def creates_name_query(keys: Sequence[NameKey]):
     return {
 
         '_id': {
@@ -78,15 +78,15 @@ def creates_name_query(keys: Sequence[CompoundGraphemeKey]):
 
 
 def partition_keys(keys: Sequence[AnyKey]) -> Tuple[
-    Sequence[ReadingKey],
-    Sequence[CompoundGraphemeKey]
+    Sequence[ValueKey],
+    Sequence[NameKey]
 ]:
     def partition(acc, key):
         values, names = acc
         if type(key) == tuple:
-            values.append(cast(ReadingKey, key))
+            values.append(cast(ValueKey, key))
         else:
-            names.append(CompoundGraphemeKey(key))
+            names.append(NameKey(key))
         return values, names
 
     return reduce(partition, keys, ([], []))
