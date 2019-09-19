@@ -1,5 +1,5 @@
 import re
-from typing import Any, Callable, List, Optional, Sequence
+from typing import List, Optional, Sequence
 
 import attr
 import pydash
@@ -137,19 +137,6 @@ class Transliteration:
             ])
             .value()
         )
-
-    def tokenize(self, create_token: Callable[[str], Any]) -> List[List[Any]]:
-        return [
-            [
-                create_token(value)
-                for value in (
-                    [line]
-                    if re.match(IGNORE_LINE_PATTERN, line)
-                    else line.split(ATF_SPEC['word_separator'])
-                )
-            ]
-            for line in self.atf.split('\n')
-        ] if self.atf else []
 
     def parse(self) -> Text:
         return parse_atf(self.atf)
