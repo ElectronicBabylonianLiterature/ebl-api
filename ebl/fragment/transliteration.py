@@ -119,12 +119,9 @@ class Transliteration:
     def with_signs(self, sign_list) -> 'Transliteration':
         signs = '\n'.join([
             ' '.join(row)
-            for row in self.to_sign_matrix(sign_list)
+            for row in sign_list.map_readings(self.values)
         ])
         return attr.evolve(self, signs=signs)
-
-    def to_sign_matrix(self, sign_list) -> List[List[str]]:
-        return sign_list.map_readings(self.values)
 
     @property
     def values(self) -> Sequence[Sequence[Value]]:

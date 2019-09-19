@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.fragment.transliteration import Transliteration
-from ebl.fragment.value import CompoundGrapheme, NotReading, Reading
+from ebl.fragment.value import Grapheme, NotReading, Reading
 from ebl.text.atf import Atf
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
@@ -50,7 +50,7 @@ def test_values():
     ))
     assert transliteration.values == [
         [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
-        [Reading('an', 1, '?'), CompoundGrapheme('|BI×IS|')],
+        [Reading('an', 1, '?'), Grapheme('|BI×IS|')],
         [NotReading('?')]
     ]
 

@@ -164,7 +164,7 @@ class Fragmentarium:
 
     def search_signs(self,
                      transliteration: Transliteration) -> List[FragmentInfo]:
-        signs = transliteration.to_sign_matrix(self._sign_list)
+        signs = self._sign_list.map_readings(transliteration.values)
         query = TransliterationQuery(signs)
         return [
             FragmentInfo.of(fragment, fragment.get_matching_lines(query))
