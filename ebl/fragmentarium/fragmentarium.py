@@ -82,13 +82,11 @@ class Fragmentarium:
     def __init__(self,
                  repository: FragmentRepository,
                  changelog,
-                 sign_list,
                  dictionary,
                  bibliography):
 
         self._repository = repository
         self._changelog = changelog
-        self._sign_list = sign_list
         self._dictionary = dictionary
         self._bibliography = bibliography
 
@@ -99,7 +97,7 @@ class Fragmentarium:
         fragment = self._repository.find(number)
 
         updated_fragment = fragment.update_transliteration(
-            transliteration.with_signs(self._sign_list),
+            transliteration,
             user
         )
 
@@ -162,10 +160,7 @@ class Fragmentarium:
     def find_needs_revision(self) -> List[FragmentInfo]:
         return self._repository.find_needs_revision()
 
-    def search_signs(self,
-                     transliteration: Transliteration) -> List[FragmentInfo]:
-        signs = self._sign_list.map_readings(transliteration.values)
-        query = TransliterationQuery(signs)
+    def search_signs(self, query: TransliterationQuery) -> List[FragmentInfo]:
         return [
             FragmentInfo.of(fragment, fragment.get_matching_lines(query))
             for fragment

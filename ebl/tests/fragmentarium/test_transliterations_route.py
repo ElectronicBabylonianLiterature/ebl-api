@@ -5,6 +5,7 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.fragment.transliteration import Transliteration
+from ebl.fragment.transliteration_factory import TransliterationFactory
 from ebl.fragmentarium.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, \
     LemmatizedFragmentFactory
@@ -69,12 +70,12 @@ def test_update_transliteration_merge_lemmatization(client,
         'transliteration': '\n'.join(lines),
         'notes': lemmatized_fragment.notes
     }
+    updated_transliteration = TransliterationFactory(
+        sign_list
+    ).create(updates['transliteration'], updates['notes'])
     expected_json = create_response_dto(
         lemmatized_fragment.update_transliteration(
-            Transliteration(
-                updates['transliteration'],
-                updates['notes']
-            ).with_signs(sign_list),
+            updated_transliteration,
             user
         ),
         user

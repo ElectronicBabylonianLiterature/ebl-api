@@ -86,8 +86,11 @@ def test_update_transliteration(fragmentarium,
                                 when):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
+    transliteration = Transliteration(Atf('1. x x\n2. x'),
+                                      'updated notes',
+                                      'X X\nX')
     expected_fragment = transliterated_fragment.update_transliteration(
-        Transliteration(Atf('1. x x\n2. x'), 'updated notes', 'X X\nX'),
+        transliteration,
         user
     )
 
@@ -104,7 +107,7 @@ def test_update_transliteration(fragmentarium,
 
     updated_fragment = fragmentarium.update_transliteration(
         number,
-        Transliteration(Atf('1. x x\n2. x'), 'updated notes'),
+        transliteration,
         user
     )
     assert updated_fragment == expected_fragment
@@ -119,7 +122,7 @@ def test_update_transliteration_invalid(fragmentarium,
     with pytest.raises(TransliterationError):
         fragmentarium.update_transliteration(
             fragment.number,
-            Transliteration(Atf('1. invalid values')),
+            Transliteration(Atf('1. invalid values'), signs='? ?'),
             user
         )
 
@@ -208,21 +211,14 @@ def test_search(fragmentarium, fragment_repository, when):
     assert fragmentarium.search(query) == [FragmentInfo.of(fragment)]
 
 
-def test_search_signs(sign_list,
-                      fragmentarium,
-                      fragment_repository,
-                      when):
+def test_search_signs(fragmentarium, fragment_repository, when):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    transliteration = Transliteration(Atf('ma-tu₂'))
     sign_matrix = [['MA', 'UD']]
-    expected_query = TransliterationQuery(sign_matrix)
+    query = TransliterationQuery(sign_matrix)
     matching_fragments = [transliterated_fragment]
 
-    (when(sign_list)
-     .map_readings(transliteration.values)
-     .thenReturn(sign_matrix))
     (when(fragment_repository)
-     .search_signs(expected_query)
+     .search_signs(query)
      .thenReturn(matching_fragments))
 
     expected_lines = (('6\'. [...] x mu ta-ma-tu₂',),)
@@ -230,7 +226,7 @@ def test_search_signs(sign_list,
         FragmentInfo.of(fragment, expected_lines)
         for fragment in matching_fragments
     ]
-    assert fragmentarium.search_signs(transliteration) == expected
+    assert fragmentarium.search_signs(query) == expected
 
 
 def test_find_lemmas(fragmentarium,
