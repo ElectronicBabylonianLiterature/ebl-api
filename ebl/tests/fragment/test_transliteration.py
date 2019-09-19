@@ -64,38 +64,6 @@ def test_with_signs(sign_list, signs):
     assert transliteration.with_signs(sign_list).signs == 'ŠU BU'
 
 
-def test_tokenize():
-    transliteration = Transliteration(Atf(
-        '&K11111\n'
-        '@reverse\n'
-        '\n'
-        '$ (end of side)\n'
-        '#some notes\n'
-        '=: foo\n'
-        '1. [...] šu-gid₂ k[u ...]\n'
-        '2. x X'
-    ))
-
-    expected = [
-        ['&K11111'],
-        ['@reverse'],
-        [''],
-        ['$ (end of side)'],
-        ['#some notes'],
-        ['=: foo'],
-        ['1.', '[...]', 'šu-gid₂', 'k[u', '...]'],
-        ['2.', 'x', 'X']
-    ]
-
-    assert transliteration.tokenize(lambda value: value) == expected
-
-
-def test_tokenize_empty():
-    transliteration = Transliteration()
-
-    assert transliteration.tokenize(lambda value: value) == []
-
-
 @pytest.mark.parametrize('transliteration,expected', [
     (Transliteration(), Text()),
     (Transliteration(Atf('1. kur')), parse_atf(Atf('1. kur')))
