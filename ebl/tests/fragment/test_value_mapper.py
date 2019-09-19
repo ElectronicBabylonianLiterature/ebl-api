@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.fragment.value import CompoundGrapheme, INVALID_READING, NotReading, \
+from ebl.fragment.value import Grapheme, INVALID_READING, NotReading, \
     Reading, Variant
 from ebl.fragment.value_mapper import parse_reading
 
@@ -8,17 +8,17 @@ MAP_DATA = [
     ('nu', Reading('nu', 1, INVALID_READING)),
     ('šu', Reading('šu', 1, INVALID_READING)),
     ('gid₂', Reading('gid', 2, INVALID_READING)),
-    ('|BIxIS|', CompoundGrapheme('|BIxIS|')),
-    ('|BI×IS|', CompoundGrapheme('|BI×IS|')),
-    ('|BI.IS|', CompoundGrapheme('|BI.IS|')),
-    ('|BI+IS|', CompoundGrapheme('|BI+IS|')),
-    ('|BI&IS|', CompoundGrapheme('|BI&IS|')),
-    ('|BI%IS|', CompoundGrapheme('|BI%IS|')),
-    ('|BI@IS|', CompoundGrapheme('|BI@IS|')),
-    ('|3×BI|', CompoundGrapheme('|3×BI|')),
-    ('|3xBI|', CompoundGrapheme('|3xBI|')),
-    ('|GEŠTU~axŠE~a@t|', CompoundGrapheme('|GEŠTU~axŠE~a@t|')),
-    ('|(GI&GI)×ŠE₃|', CompoundGrapheme('|(GI&GI)×ŠE₃|')),
+    ('|BIxIS|', Grapheme('|BIxIS|')),
+    ('|BI×IS|', Grapheme('|BI×IS|')),
+    ('|BI.IS|', Grapheme('|BI.IS|')),
+    ('|BI+IS|', Grapheme('|BI+IS|')),
+    ('|BI&IS|', Grapheme('|BI&IS|')),
+    ('|BI%IS|', Grapheme('|BI%IS|')),
+    ('|BI@IS|', Grapheme('|BI@IS|')),
+    ('|3×BI|', Grapheme('|3×BI|')),
+    ('|3xBI|', Grapheme('|3xBI|')),
+    ('|GEŠTU~axŠE~a@t|', Grapheme('|GEŠTU~axŠE~a@t|')),
+    ('|(GI&GI)×ŠE₃|', Grapheme('|(GI&GI)×ŠE₃|')),
     ('unknown', Reading('unknown', 1, INVALID_READING)),
     ('nuₓ', NotReading('?')),
     ('x', NotReading('X')),
@@ -39,15 +39,15 @@ MAP_DATA = [
     ))),
     ('šu/|BI×IS|', Variant((
         Reading('šu', 1, INVALID_READING),
-        CompoundGrapheme('|BI×IS|')
+        Grapheme('|BI×IS|')
     ))),
     ('|BI×IS|/šu', Variant((
-        CompoundGrapheme('|BI×IS|'),
+        Grapheme('|BI×IS|'),
         Reading('šu', 1, INVALID_READING)
     ))),
     ('šu/|BI×IS|/nu', Variant((
         Reading('šu', 1, INVALID_READING),
-        CompoundGrapheme('|BI×IS|'),
+        Grapheme('|BI×IS|'),
         Reading('nu', 1, INVALID_READING)
     ))),
     ('foo(TUKUL)/šu', Variant((
