@@ -1,10 +1,11 @@
-from typing import List, Optional, Tuple, cast
+from typing import List, Optional, cast
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
+from ebl.fragment.value import AnyKey
 from ebl.mongo_collection import MongoCollection
 from ebl.sign_list.sign import Sign, SignListRecord, Value
 
@@ -76,26 +77,37 @@ class MongoSignRepository:
         except NotFoundError:
             return None
 
-    def search_many(self,
-                    readings: List[Tuple[str, Optional[int]]]) -> List[Sign]:
+    def search_many(self, readings: List[AnyKey]) -> List[Sign]:
         if readings:
+            queries: list = []
             value_queries = [
                 {
-                    'value': reading,
+                    'value':  key[0],
                     'subIndex': {
                         '$exists': False
-                    } if sub_index is None else sub_index
-                } for (reading, sub_index) in readings
+                    } if key[1] is None else key[1]
+                } for key in readings if type(key) is tuple
             ]
-
-            return cast(List[Sign], SignSchema(unknown=EXCLUDE,
-                                               many=True).load(
-                self._collection.find_many({
+            if value_queries:
+                queries.append({
                     'values': {
                         '$elemMatch': {
                             '$or': value_queries
                         }
                     }
+                })
+            names = [key for key in readings if type(key) is str]
+            if names:
+                queries.append({
+                    '_id': {
+                        '$in': names
+                    }
+                })
+
+            return cast(List[Sign], SignSchema(unknown=EXCLUDE,
+                                               many=True).load(
+                self._collection.find_many({
+                    '$or': queries
                 })
             ))
         else:

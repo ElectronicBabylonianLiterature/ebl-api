@@ -102,7 +102,7 @@ def test_notes():
 def test_signs():
     transliterated_fragment = TransliteratedFragmentFactory.build()
     assert transliterated_fragment.signs == (
-        'KU ABZ075 ABZ207a\\u002F207b\n'
+        'KU ABZ075 ABZ207a\\u002F207b\\u0020X\n'
         'MI DIŠ UD ŠU\n'
         'KI DU U BA MA TI\n'
         'X MU TA MA UD\n'

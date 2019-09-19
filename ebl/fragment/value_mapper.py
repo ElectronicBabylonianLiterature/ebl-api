@@ -6,6 +6,7 @@ from ebl.text.atf import ATF_SPEC, VARIANT_SEPARATOR
 
 EMPTY_PATTERN = '^$'
 UNCLEAR_PATTERN = ATF_SPEC['unclear']
+UNIDENTIFIED_PATTER = 'X'
 WITH_SIGN_PATTERN = ATF_SPEC['with_sign']
 NUMBER_PATTERN = ATF_SPEC['number']
 GRAPHEME_PATTERN = ATF_SPEC['grapheme']
@@ -26,11 +27,13 @@ def parse_reading(cleaned_reading: str) -> Value:
         factories = [
             (EMPTY_PATTERN, lambda _: ValueFactory.EMPTY),
             (UNCLEAR_PATTERN, lambda _: ValueFactory.UNIDENTIFIED),
+            (UNIDENTIFIED_PATTER, lambda _: ValueFactory.UNIDENTIFIED),
             (WITH_SIGN_PATTERN,
              lambda match: ValueFactory.create_not_reading(match.group(1))),
             (NUMBER_PATTERN, map_number),
             (GRAPHEME_PATTERN,
-             lambda match: ValueFactory.create_not_reading(match.group(0))),
+             lambda match: ValueFactory.create_compound_grapheme(
+                 match.group(0))),
             (READING_PATTERN, map_reading),
             (VARIANT_PATTERN, map_variant)
         ]
