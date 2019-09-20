@@ -1,16 +1,20 @@
 import pytest
 
 from ebl.fragment.value import Grapheme, INVALID_READING, NotReading, \
-    Reading, Variant
+    Reading, \
+    SplittableGrapheme, Variant
 from ebl.fragment.value_mapper import parse_reading
 
-MAP_DATA = [
+
+@pytest.mark.parametrize('value,expected', [
     ('nu', Reading('nu', 1, INVALID_READING)),
     ('šu', Reading('šu', 1, INVALID_READING)),
     ('gid₂', Reading('gid', 2, INVALID_READING)),
     ('|BIxIS|', Grapheme('|BIxIS|')),
     ('|BI×IS|', Grapheme('|BI×IS|')),
-    ('|BI.IS|', Grapheme('|BI.IS|')),
+    ('|BI.IS|', SplittableGrapheme((Grapheme('BI'), Grapheme('IS')))),
+    ('|BI.IS+IS|', SplittableGrapheme((Grapheme('BI'), Grapheme('IS+IS')))),
+    ('|BI.(IS+IS)|',  Grapheme('|BI.(IS+IS)|')),
     ('|BI+IS|', Grapheme('|BI+IS|')),
     ('|BI&IS|', Grapheme('|BI&IS|')),
     ('|BI%IS|', Grapheme('|BI%IS|')),
@@ -36,6 +40,10 @@ MAP_DATA = [
         Reading('šu', 1, INVALID_READING),
         Reading('gid', 2, INVALID_READING),
         Reading('nu', 1, INVALID_READING)
+    ))),
+    ('šu/|BI.IS|', Variant((
+        Reading('šu', 1, INVALID_READING),
+        Grapheme('|BI.IS|')
     ))),
     ('šu/|BI×IS|', Variant((
         Reading('šu', 1, INVALID_READING),
@@ -76,11 +84,8 @@ MAP_DATA = [
         NotReading('X')
     ))),
     ('', NotReading(''))
-]
-
-
-@pytest.mark.parametrize('value,expected', MAP_DATA)
-def test_create_value_mapper(value, expected):
+])
+def test_parse_reading(value, expected):
     assert parse_reading(value) == expected
 
 
@@ -93,3 +98,31 @@ def test_nested_variants_are_invalid():
             )),
             NotReading('X')
         ))
+
+
+def test_variant_cannot_contain_splittable_grapheme():
+    with pytest.raises(ValueError):
+        Variant((
+            SplittableGrapheme((
+                Grapheme('BI'),
+                Grapheme('BI')
+            )),
+            NotReading('X')
+        ))
+
+
+@pytest.mark.parametrize('value', [
+    Reading('šu', 1, INVALID_READING),
+    NotReading('X'),
+    Variant((
+        Reading('kur', 1, INVALID_READING),
+        NotReading('X')
+    )),
+    SplittableGrapheme((
+        Grapheme('BI'),
+        Grapheme('BI')
+    ))
+])
+def test_splittable_grapheme_can_only_contain_graphemes(value):
+    with pytest.raises(ValueError):
+        SplittableGrapheme((value, Grapheme('BI')))

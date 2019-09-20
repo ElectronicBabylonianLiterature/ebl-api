@@ -69,6 +69,27 @@ class Grapheme(Value):
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class SplittableGrapheme(Value):
+    values: Tuple[Value, ...] = attr.ib()
+
+    @values.validator
+    def _check_values(self, _attribute, value):
+        if any(type(entry) != Grapheme for entry in value):
+            raise ValueError('SplittableGrapheme can only contain Graphemes.')
+
+    @property
+    def keys(self) -> Sequence[AnyKey]:
+        return [key for value in self.values for key in value.keys]
+
+    def to_sign(self, sign_map: SignMap) -> str:
+        return ' '.join([
+            value.to_sign(sign_map)
+            for value
+            in self.values
+        ])
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Variant(Value):
     values: Tuple[Value, ...] = attr.ib()
 
@@ -76,6 +97,8 @@ class Variant(Value):
     def _check_values(self, _attribute, value):
         if any(type(entry) == Variant for entry in value):
             raise ValueError('Variants cannot be nested.')
+        if any(type(entry) == SplittableGrapheme for entry in value):
+            raise ValueError('Variants cannot contain SplittableGraphemes.')
 
     @property
     def keys(self) -> Sequence[AnyKey]:
@@ -109,3 +132,8 @@ class ValueFactory:
     @staticmethod
     def create_grapheme(value: str) -> Grapheme:
         return Grapheme(value)
+
+    @staticmethod
+    def create_splittable_grapheme(value: str) -> SplittableGrapheme:
+        graphemes = value.strip('|').split('.')
+        return SplittableGrapheme(tuple(map(Grapheme, graphemes)))
