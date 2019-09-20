@@ -107,9 +107,5 @@ class ValueFactory:
         return Variant(values)
 
     @staticmethod
-    def create_not_reading(value: str) -> NotReading:
-        return NotReading(value)
-
-    @staticmethod
     def create_grapheme(value: str) -> Grapheme:
         return Grapheme(value)

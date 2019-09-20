@@ -213,7 +213,7 @@ SEARCH_SIGNS_DATA = [
     ([['UD']], True),
     ([
         ['MI', 'DIŠ'],
-        ['U', 'BA', 'MA']
+        ['ABZ411', 'BA', 'MA']
     ], True),
     ([['IGI', 'UD']], False),
 ]
