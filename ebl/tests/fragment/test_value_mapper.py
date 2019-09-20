@@ -82,3 +82,14 @@ MAP_DATA = [
 @pytest.mark.parametrize("value,expected", MAP_DATA)
 def test_create_value_mapper(value, expected):
     assert parse_reading(value) == expected
+
+
+def test_nested_variants_are_invalid():
+    with pytest.raises(ValueError):
+        Variant((
+            Variant((
+                Reading('kur', 1, INVALID_READING),
+                NotReading('X'),
+            )),
+            NotReading('X')
+        ))

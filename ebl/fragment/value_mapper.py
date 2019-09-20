@@ -22,48 +22,47 @@ def get_group(group):
     return lambda match: match.group(group)
 
 
+def map_number(match):
+    value = match.group(0)
+    return ValueFactory.create_number(value)
+
+
+def map_reading(match):
+    sub_index = (
+        unicode_to_int(match.group(2))
+        if match.group(2)
+        else 1
+    )
+    return ValueFactory.create_reading(match.group(1), sub_index)
+
+
+def map_variant(match):
+    return ValueFactory.create_variant(tuple(
+        parse_reading(part)
+        for part
+        in match.group(0).split(VARIANT_SEPARATOR)
+    ))
+
+
 def parse_reading(cleaned_reading: str) -> Value:
-    def map_(value):
-        factories = [
-            (EMPTY_PATTERN, lambda _: ValueFactory.EMPTY),
-            (UNCLEAR_PATTERN, lambda _: ValueFactory.UNIDENTIFIED),
-            (UNIDENTIFIED_PATTER, lambda _: ValueFactory.UNIDENTIFIED),
-            (WITH_SIGN_PATTERN,
-             lambda match: ValueFactory.create_grapheme(match.group(1))),
-            (NUMBER_PATTERN, map_number),
-            (GRAPHEME_PATTERN,
-             lambda match: ValueFactory.create_grapheme(
-                 match.group(0))),
-            (READING_PATTERN, map_reading),
-            (VARIANT_PATTERN, map_variant)
+    factories = [
+        (EMPTY_PATTERN, lambda _: ValueFactory.EMPTY),
+        (UNCLEAR_PATTERN, lambda _: ValueFactory.UNIDENTIFIED),
+        (UNIDENTIFIED_PATTER, lambda _: ValueFactory.UNIDENTIFIED),
+        (WITH_SIGN_PATTERN,
+         lambda match: ValueFactory.create_grapheme(match.group(1))),
+        (NUMBER_PATTERN, map_number),
+        (GRAPHEME_PATTERN,
+         lambda match: ValueFactory.create_grapheme(match.group(0))),
+        (READING_PATTERN, map_reading),
+        (VARIANT_PATTERN, map_variant)
+    ]
+
+    return next((
+        factory(match)
+        for match, factory in [
+            (re.fullmatch(pattern, cleaned_reading), factory)
+            for pattern, factory in factories
         ]
-
-        return next((
-            factory(match)
-            for match, factory in [
-                (re.fullmatch(pattern, value), factory)
-                for pattern, factory in factories
-            ]
-            if match
-        ), ValueFactory.INVALID)
-
-    def map_number(match):
-        value = match.group(0)
-        return ValueFactory.create_number(value)
-
-    def map_reading(match):
-        sub_index = (
-            unicode_to_int(match.group(2))
-            if match.group(2)
-            else 1
-        )
-        return ValueFactory.create_reading(match.group(1), sub_index)
-
-    def map_variant(match):
-        return ValueFactory.create_variant(tuple(
-            map_(part)
-            for part
-            in match.group(0).split(VARIANT_SEPARATOR)
-        ))
-
-    return map_(cleaned_reading)
+        if match
+    ), ValueFactory.INVALID)
