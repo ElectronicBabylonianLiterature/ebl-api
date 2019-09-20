@@ -46,8 +46,10 @@ class SignList:
 
         return [
             [
-                reading.to_sign(sign_map)
+                reading_part
                 for reading in row
+                for reading_part in reading.to_sign(sign_map).split(' ')
+
             ]
             for row in values
         ]
