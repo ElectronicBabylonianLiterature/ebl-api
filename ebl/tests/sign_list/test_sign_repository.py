@@ -8,7 +8,7 @@ COLLECTION = 'signs'
 
 
 @pytest.fixture
-def mongo_sign():
+def mongo_sign_igi():
     return {
         '_id': 'IGI',
         'lists': [
@@ -47,16 +47,16 @@ def mongo_sign():
 
 
 @pytest.fixture
-def sign(mongo_sign):
-    return Sign(mongo_sign['_id'],
+def sign_igi(mongo_sign_igi):
+    return Sign(mongo_sign_igi['_id'],
                 tuple(map(lambda data: SignListRecord(**data),
-                          mongo_sign['lists'])),
+                          mongo_sign_igi['lists'])),
                 tuple(map(lambda data: Value(data['value'], data['subIndex']),
-                          mongo_sign['values'])))
+                          mongo_sign_igi['values'])))
 
 
 @pytest.fixture
-def another_mongo_sign():
+def mongo_sign_si():
     return {
         '_id': 'SI',
         'lists': [],
@@ -86,13 +86,13 @@ def another_mongo_sign():
 
 
 @pytest.fixture
-def another_sign(another_mongo_sign):
+def sign_si(mongo_sign_si):
     return Sign(
-        another_mongo_sign['_id'],
+        mongo_sign_si['_id'],
         tuple(map(lambda data: SignListRecord(**data),
-                  another_mongo_sign['lists'])),
+                  mongo_sign_si['lists'])),
         tuple(map(lambda data: Value(data['value'], data.get('subIndex')),
-                  another_mongo_sign['values']))
+                  mongo_sign_si['values']))
     )
 
 
@@ -130,17 +130,17 @@ def test_dump():
     assert SignSchema().dump(sign) == data
 
 
-def test_create(database, sign_repository, sign):
-    sign_name = sign_repository.create(sign)
+def test_create(database, sign_repository, sign_igi):
+    sign_name = sign_repository.create(sign_igi)
 
     assert database[COLLECTION].find_one({'_id': sign_name}) ==\
-        SignSchema().dump(sign)
+        SignSchema().dump(sign_igi)
 
 
-def test_find(database, sign_repository, sign, mongo_sign):
-    database[COLLECTION].insert_one(mongo_sign)
+def test_find(database, sign_repository, sign_igi, mongo_sign_igi):
+    database[COLLECTION].insert_one(mongo_sign_igi)
 
-    assert sign_repository.find(mongo_sign['_id']) == sign
+    assert sign_repository.find(mongo_sign_igi['_id']) == sign_igi
 
 
 def test_sign_not_found(sign_repository):
@@ -150,44 +150,44 @@ def test_sign_not_found(sign_repository):
 
 def test_search(database,
                 sign_repository,
-                sign,
-                mongo_sign,
-                another_sign,
-                another_mongo_sign):
-    database[COLLECTION].insert_many([mongo_sign, another_mongo_sign])
+                sign_igi,
+                mongo_sign_igi,
+                sign_si,
+                mongo_sign_si):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
 
-    assert sign_repository.search('ši', 1) == sign
-    assert sign_repository.search('hu', None) == another_sign
+    assert sign_repository.search('ši', 1) == sign_igi
+    assert sign_repository.search('hu', None) == sign_si
 
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search('unknown', 1) is None
 
 
-def test_search_many_one_reading(sign_repository, sign, another_sign):
-    sign_repository.create(sign)
-    sign_repository.create(another_sign)
-    value = sign.values[0]
+def test_search_many_one_reading(sign_repository, sign_igi, sign_si):
+    sign_repository.create(sign_igi)
+    sign_repository.create(sign_si)
+    value = sign_igi.values[0]
 
     assert sign_repository.search_many([
         (value.value, value.sub_index)
-    ]) == [sign]
+    ]) == [sign_igi]
 
 
-def test_search_many_multiple_readings(sign_repository, sign, another_sign):
-    sign_repository.create(sign)
-    sign_repository.create(another_sign)
-    first_value = sign.values[0]
-    second_value = another_sign.values[0]
+def test_search_many_multiple_readings(sign_repository, sign_igi, sign_si):
+    sign_repository.create(sign_igi)
+    sign_repository.create(sign_si)
+    first_value = sign_igi.values[0]
+    second_value = sign_si.values[0]
     assert sign_repository.search_many([
         (first_value.value, first_value.sub_index),
         (second_value.value, second_value.sub_index)
-    ]) == [sign, another_sign]
+    ]) == [sign_igi, sign_si]
 
 
-def test_search_many_no_readings(sign_repository, mongo_sign,
-                                 another_mongo_sign):
-    sign_repository.create(mongo_sign)
-    sign_repository.create(another_mongo_sign)
+def test_search_many_no_readings(sign_repository, mongo_sign_igi,
+                                 mongo_sign_si):
+    sign_repository.create(mongo_sign_igi)
+    sign_repository.create(mongo_sign_si)
 
     assert sign_repository.search_many([]) == []
