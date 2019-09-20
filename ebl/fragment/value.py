@@ -70,7 +70,12 @@ class Grapheme(Value):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Variant(Value):
-    values: Tuple[Union[Reading, NotReading, Grapheme], ...]
+    values: Tuple[Value, ...] = attr.ib()
+
+    @values.validator
+    def _check_values(self, _attribute, value):
+        if any(type(entry) == Variant for entry in value):
+            raise ValueError('Variants cannot be nested.')
 
     @property
     def keys(self) -> Sequence[AnyKey]:
@@ -98,9 +103,7 @@ class ValueFactory:
         return Reading(value, 1, value)
 
     @staticmethod
-    def create_variant(
-            values: Tuple[Union[Reading, NotReading, Grapheme], ...]
-    ) -> Variant:
+    def create_variant(values: Tuple[Value, ...]) -> Variant:
         return Variant(values)
 
     @staticmethod
