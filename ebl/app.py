@@ -42,8 +42,11 @@ from ebl.fragmentarium.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.references import ReferencesResource
 from ebl.fragmentarium.statistics import StatisticsResource
 from ebl.fragmentarium.transliterations import TransliterationResource
-from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
+from ebl.transliteration_search.transliteration_query_factory import \
+    TransliterationQueryFactory
+from ebl.transliteration_search.transliteration_search_service import \
+    TransliterationSearch
 
 API_VERSION = '0.0.1'
 
@@ -66,21 +69,23 @@ def create_dictionary_routes(api, context, spec):
     spec.path(resource=word_search)
 
 
-def create_fragmentarium_routes(api, context, sign_list, spec):
+def create_fragmentarium_routes(api, context, transliteration_search, spec):
     fragmentarium = Fragmentarium(context['fragment_repository'],
                                   context['changelog'],
                                   context['dictionary'],
                                   context['bibliography'])
-    transliteration_factory = TransliterationFactory(sign_list)
 
     fragments = FragmentsResource(fragmentarium)
-    fragment_search = FragmentSearch(fragmentarium,
-                                     transliteration_factory)
+    fragment_search = \
+        FragmentSearch(fragmentarium,
+                       TransliterationQueryFactory(transliteration_search))
     lemmatization = LemmatizationResource(fragmentarium)
     references = ReferencesResource(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
-    transliteration = TransliterationResource(fragmentarium,
-                                              transliteration_factory)
+    transliteration = TransliterationResource(
+        fragmentarium,
+        TransliterationFactory(transliteration_search)
+    )
     folio_pager = FolioPagerResource(fragmentarium)
     lemma_search = LemmaSearch(fragmentarium)
 
@@ -108,12 +113,12 @@ def create_fragmentarium_routes(api, context, sign_list, spec):
     spec.path(resource=folio_pager)
 
 
-def create_corpus_routes(api, context, sign_list, spec):
+def create_corpus_routes(api, context, transliteration_search, spec):
     corpus = Corpus(
         context['text_repository'],
         context['bibliography'],
         context['changelog'],
-        TransliterationFactory(sign_list)
+        TransliterationFactory(transliteration_search)
     )
     context['text_repository'].create_indexes()
 
@@ -194,11 +199,11 @@ def create_app(context):
 
     spec.components.security_scheme("auth0", auth0_scheme)
 
-    sign_list = SignList(context['sign_repository'])
+    transliteration_search = TransliterationSearch(context['sign_repository'])
     create_bibliography_routes(api, context, spec)
     create_dictionary_routes(api, context, spec)
-    create_fragmentarium_routes(api, context, sign_list, spec)
-    create_corpus_routes(api, context, sign_list, spec)
+    create_fragmentarium_routes(api, context, transliteration_search, spec)
+    create_corpus_routes(api, context, transliteration_search, spec)
 
     files = create_files_resource(context['auth_backend'])(context['files'])
     api.add_route('/images/{file_name}', files)

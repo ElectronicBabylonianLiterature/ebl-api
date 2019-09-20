@@ -7,7 +7,6 @@ from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragment.transliteration import (
     Transliteration
 )
-from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
@@ -15,6 +14,8 @@ from ebl.tests.factories.fragment import (
 from ebl.text.atf import Atf
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.transliteration_error import TransliterationError
+from ebl.transliteration_search.transliteration_query import \
+    TransliterationQuery
 
 
 def test_find(fragmentarium, fragment_repository, when):

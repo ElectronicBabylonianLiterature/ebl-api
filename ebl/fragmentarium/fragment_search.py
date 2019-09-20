@@ -9,7 +9,9 @@ from ebl.require_scope import require_scope
 
 
 class FragmentSearch:
-    def __init__(self, fragmentarium: Fragmentarium, transliteration_factory):
+    def __init__(self,
+                 fragmentarium: Fragmentarium,
+                 transliteration_query_factory):
         self._dispatch = create_dispatcher({
             'number': fragmentarium.search,
             'random': lambda _: fragmentarium.find_random(),
@@ -17,7 +19,7 @@ class FragmentSearch:
             'latest': lambda _: fragmentarium.find_latest(),
             'needsRevision': lambda _: fragmentarium.find_needs_revision(),
             'transliteration': pydash.flow(
-                transliteration_factory.create_query,
+                transliteration_query_factory.create,
                 fragmentarium.search_signs
             )
         })

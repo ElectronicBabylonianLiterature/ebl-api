@@ -1,9 +1,10 @@
 import pytest
 
-from ebl.fragment.value import Grapheme, INVALID_READING, NotReading, \
+from ebl.transliteration_search.value import Grapheme, INVALID_READING, \
+    NotReading, \
     Reading, \
     SplittableGrapheme, Variant
-from ebl.fragment.value_mapper import parse_reading
+from ebl.transliteration_search.value_mapper import parse_reading
 
 
 @pytest.mark.parametrize('value,expected', [

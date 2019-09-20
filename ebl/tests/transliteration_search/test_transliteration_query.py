@@ -3,9 +3,11 @@ import re
 import pytest
 
 from ebl.fragment.transliteration import Transliteration
-from ebl.fragment.transliteration_query import TransliterationQuery
+from ebl.text.atf import Atf
+from ebl.transliteration_search.transliteration_query import \
+    TransliterationQuery
 
-ATF = (
+ATF = Atf(
     '1\'. [...-ku]-nu-ši [...]\n'
     '\n'
     '@(obeverse)\n'

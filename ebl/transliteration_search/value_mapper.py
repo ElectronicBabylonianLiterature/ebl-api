@@ -1,8 +1,8 @@
 import re
 import unicodedata
 
-from ebl.fragment.value import Value, ValueFactory
 from ebl.text.atf import ATF_SPEC, VARIANT_SEPARATOR
+from ebl.transliteration_search.value import Value, ValueFactory
 
 EMPTY_PATTERN = '^$'
 UNCLEAR_PATTERN = ATF_SPEC['unclear']
