@@ -23,11 +23,11 @@ MAP_DATA = [
     ('nuₓ', NotReading('?')),
     ('x', NotReading('X')),
     ('X', NotReading('X')),
-    ('1(AŠ)', NotReading('AŠ')),
+    ('1(AŠ)', Grapheme('AŠ')),
     # 1, 2, 5, 10, 20, 30 should be inserted manually to the sign list
     ('1', Reading('1', 1, '1')),
-    ('foo(TUKUL)', NotReading('TUKUL')),
-    ('foo(|BI×IS|)', NotReading('|BI×IS|')),
+    ('foo(TUKUL)', Grapheme('TUKUL')),
+    ('foo(|BI×IS|)', Grapheme('|BI×IS|')),
     ('šu/gid₂', Variant((
         Reading('šu', 1, INVALID_READING),
         Reading('gid', 2, INVALID_READING)
@@ -51,16 +51,16 @@ MAP_DATA = [
         Reading('nu', 1, INVALID_READING)
     ))),
     ('foo(TUKUL)/šu', Variant((
-        NotReading('TUKUL'),
+        Grapheme('TUKUL'),
         Reading('šu', 1, INVALID_READING)
     ))),
     ('foo(|BI×IS|)/šu', Variant((
-        NotReading('|BI×IS|'),
+        Grapheme('|BI×IS|'),
         Reading('šu', 1, INVALID_READING)
     ))),
     ('šu/1(AŠ)', Variant((
         Reading('šu', 1, INVALID_READING),
-        NotReading('AŠ')
+        Grapheme('AŠ')
     ))),
     ('256/nu', Variant((
         Reading('256', 1, '256'),
