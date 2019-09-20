@@ -8,12 +8,12 @@ from ebl.corpus.text import Line, ManuscriptLine, Text
 from ebl.corpus.text_serializer import TextSerializer
 from ebl.dictionary.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
-from ebl.fragment.transliteration import Transliteration
 from ebl.tests.factories.corpus import TextFactory
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, StringPart
 from ebl.text.token import Word
+from ebl.transliteration_search.clean_atf import CleanAtf
 from ebl.transliteration_search.value import INVALID_READING
 
 COLLECTION = 'texts'
@@ -71,7 +71,7 @@ def expect_signs(transliteration_search, when, sign='X', text=TEXT):
      .flat_map(lambda chapter: chapter.lines)
      .flat_map(lambda line: line.manuscripts)
      .map(lambda manuscript: manuscript.line.atf)
-     .map(lambda atf: Transliteration(atf).values)
+     .map(lambda atf: CleanAtf(atf).values)
      .for_each(lambda values: when(transliteration_search)
                .map_readings(values)
                .thenReturn([[sign]]))

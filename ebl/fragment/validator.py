@@ -1,5 +1,6 @@
 from ebl.text.atf import AtfSyntaxError, validate_atf
 from ebl.text.transliteration_error import TransliterationError
+from ebl.transliteration_search.clean_atf import CleanAtf
 
 
 class Validator:
@@ -28,7 +29,9 @@ class Validator:
         lines = self._transliteration.atf.split('\n')
 
         def get_line_number(filtered_line_number):
-            line = self._transliteration.filtered[filtered_line_number]
+            line = CleanAtf(
+                self._transliteration.atf
+            ).filtered[filtered_line_number]
             return lines.index(line) + 1
 
         if self._transliteration.signs is not None:

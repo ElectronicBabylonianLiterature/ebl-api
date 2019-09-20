@@ -1,18 +1,18 @@
 import re
 
-from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC
+from ebl.text.atf import ATF_EXTENSIONS, FLAGS, LACUNA
 
 IGNORE = [
-        ATF_SPEC['lacuna']['begin'],  # type: ignore
+        LACUNA['begin'],
         r'\(',
         r'\)',
-        ATF_SPEC['lacuna']['end'],  # type: ignore
-        ATF_SPEC['flags']['uncertainty'],  # type: ignore
-        ATF_SPEC['flags']['collation'],  # type: ignore
-        ATF_SPEC['flags']['damage'],  # type: ignore
-        ATF_SPEC['flags']['correction'],  # type: ignore
-        ATF_EXTENSIONS['erasure_illegible'],  # type: ignore
-        ATF_EXTENSIONS['erasure_boundary']  # type: ignore
+        LACUNA['end'],
+        FLAGS['uncertainty'],
+        FLAGS['collation'],
+        FLAGS['damage'],
+        FLAGS['correction'],
+        ATF_EXTENSIONS['erasure_illegible'],
+        ATF_EXTENSIONS['erasure_boundary']
     ]
 IGNORE_REGEX = f'({"|".join(IGNORE)})*'
 

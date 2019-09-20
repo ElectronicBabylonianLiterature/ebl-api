@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import NewType
+from typing import Mapping, NewType
 
 from pyoracc.atf.common.atffile import AtfFile
 
@@ -16,46 +16,29 @@ VARIANT_SEPARATOR = '/'
 UNCLEAR_SIGN = 'x'
 UNIDENTIFIED_SIGN = 'X'
 
+FLAGS: Mapping[str, str] = {
+    'uncertainty': r'\?',
+    'collation': r'\*',
+    'damage': r'#',
+    'correction': r'!',
+    'not_logogram': r'\$',
+}
 
-ATF_SPEC = {
-    'line_number': r'^[^ ]+\.',
-    'shift': r'%\w+',
-    'control_line': r'^(@|\$(( ?(single|double|triple))| )|#|&)',
-    'multiplex_comment': r'=:',
-    'tabulation': r'\(\$_+\$\)',
-    'divider': r'(^|\s+)(\||&\d*)($|\s+)',
-    'flags': {
-        'uncertainty': r'\?',
-        'collation': r'\*',
-        'damage': r'#',
-        'correction': r'!',
-        'not_logogram': r'\$',
-    },
-    'lacuna': {
-        'begin': r'\[',
-        'end': r'\]',
-        'undeterminable': r'\.\.\.'
-    },
-    'alternative_damage': r'[⸢⸣]',
-    'determinative_or_gloss': {
-        'begin': r'\s*{+\+?',
-        'end': r'}+({+\+?)?\s*?'
-    },
-    'omission': r'<\(?[^>]+\)?>',
-    'removal': r'<<[^>]+>>',
+LACUNA: Mapping[str, str] = {
+    'begin': r'\[',
+    'end': r'\]',
+    'undeterminable': r'\.\.\.'
+}
+
+ATF_SPEC: Mapping[str, str] = {
     'reading': r'([^₀-₉ₓ/]+)([₀-₉]+)?',
     'with_sign': r'[^\(/\|]+\((.+)\)',
     'grapheme': r'\|(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|',
     'number': r'\d+',
     'variant': r'([^/]+)(?:/([^/]+))+',
-    'unclear': UNCLEAR_SIGN,
-    'unidentified': UNIDENTIFIED_SIGN,
-    'joiner': HYPHEN,
-    'word_separator': WORD_SEPARATOR,
-    'variant_separator': VARIANT_SEPARATOR,
 }
 
-ATF_EXTENSIONS = {
+ATF_EXTENSIONS: Mapping[str, str] = {
     'erasure_boundary': '°',
     'erasure_delimiter': '\\',
     'erasure_illegible': r'°[^\°]*\\',
