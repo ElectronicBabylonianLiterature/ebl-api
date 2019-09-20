@@ -9,12 +9,12 @@ from ebl.corpus.text_serializer import TextSerializer
 from ebl.dictionary.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragment.transliteration import Transliteration
-from ebl.fragment.value import INVALID_READING
 from ebl.tests.factories.corpus import TextFactory
 from ebl.text.labels import LineNumberLabel
 from ebl.text.line import TextLine
 from ebl.text.reconstructed_text import AkkadianWord, StringPart
 from ebl.text.token import Word
+from ebl.transliteration_search.value import INVALID_READING
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()
@@ -65,27 +65,29 @@ def expect_invalid_references(bibliography, when):
     when(bibliography).validate_references(...).thenRaise(DataError())
 
 
-def expect_signs(sign_list, when, sign='X', text=TEXT):
+def expect_signs(transliteration_search, when, sign='X', text=TEXT):
     (pydash
      .chain(text.chapters)
      .flat_map(lambda chapter: chapter.lines)
      .flat_map(lambda line: line.manuscripts)
      .map(lambda manuscript: manuscript.line.atf)
      .map(lambda atf: Transliteration(atf).values)
-     .for_each(lambda values: when(sign_list)
+     .for_each(lambda values: when(transliteration_search)
                .map_readings(values)
                .thenReturn([[sign]]))
      .value())
 
 
-def expect_invalid_signs(sign_list, when):
-    when(sign_list).map_readings(...).thenReturn([[INVALID_READING]])
+def expect_invalid_signs(transliteration_search, when):
+    when(transliteration_search).map_readings(...).thenReturn(
+        [[INVALID_READING]]
+    )
 
 
 def expect_text_update(bibliography, changelog, dehydrated_text,
-                       dehydrated_updated_text, sign_list, text_repository,
-                       user, when):
-    expect_signs(sign_list, when, text=dehydrated_updated_text)
+                       dehydrated_updated_text, transliteration_search,
+                       text_repository, user, when):
+    expect_signs(transliteration_search, when, text=dehydrated_updated_text)
     expect_validate_references(bibliography, when, dehydrated_text)
     when(text_repository).find(TEXT.id).thenReturn(dehydrated_text)
     (when(text_repository)
@@ -103,10 +105,10 @@ def test_creating_text(corpus,
                        text_repository,
                        bibliography,
                        changelog,
-                       sign_list,
+                       transliteration_search,
                        user,
                        when):
-    expect_signs(sign_list, when)
+    expect_signs(transliteration_search, when)
     expect_validate_references(bibliography, when)
     when(changelog).create(
         COLLECTION,
@@ -121,10 +123,10 @@ def test_creating_text(corpus,
 
 def test_create_raises_exception_if_invalid_signs(corpus,
                                                   bibliography,
-                                                  sign_list,
+                                                  transliteration_search,
                                                   when):
     allow_validate_references(bibliography, when)
-    expect_invalid_signs(sign_list, when)
+    expect_invalid_signs(transliteration_search, when)
 
     with pytest.raises(DataError):
         corpus.create(TEXT, ANY_USER)
@@ -167,7 +169,7 @@ def test_updating_alignment(corpus,
                             text_repository,
                             bibliography,
                             changelog,
-                            sign_list,
+                            transliteration_search,
                             user,
                             when):
     dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
@@ -181,8 +183,8 @@ def test_updating_alignment(corpus,
         )),
     ))
     expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
-                       dehydrated_updated_text, sign_list, text_repository,
-                       user, when)
+                       dehydrated_updated_text, transliteration_search,
+                       text_repository, user, when)
 
     alignment = Alignment((
         (
@@ -242,7 +244,7 @@ def test_updating_manuscripts(corpus,
                               text_repository,
                               bibliography,
                               changelog,
-                              sign_list,
+                              transliteration_search,
                               user,
                               when):
     dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
@@ -252,8 +254,8 @@ def test_updating_manuscripts(corpus,
         )),
     ))
     expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
-                       dehydrated_updated_text, sign_list, text_repository,
-                       user, when)
+                       dehydrated_updated_text, transliteration_search,
+                       text_repository, user, when)
 
     manuscripts = (
         dehydrated_updated_text.chapters[0].manuscripts[0],
@@ -295,7 +297,7 @@ def test_updating_lines(corpus,
                         text_repository,
                         bibliography,
                         changelog,
-                        sign_list,
+                        transliteration_search,
                         user,
                         when):
     dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
@@ -305,8 +307,8 @@ def test_updating_lines(corpus,
         )),
     ))
     expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
-                       dehydrated_updated_text, sign_list, text_repository,
-                       user, when)
+                       dehydrated_updated_text, transliteration_search,
+                       text_repository, user, when)
 
     lines = dehydrated_updated_text.chapters[0].lines
     corpus.update_lines(TEXT.id, 0, lines, user)
@@ -316,7 +318,7 @@ def test_merging_lines(corpus,
                        text_repository,
                        bibliography,
                        changelog,
-                       sign_list,
+                       transliteration_search,
                        user,
                        when):
     number = LineNumberLabel('1')
@@ -351,8 +353,8 @@ def test_merging_lines(corpus,
         attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(new_line, )),
     ))
     expect_text_update(bibliography, changelog, dehydrated_text,
-                       dehydrated_updated_text, sign_list, text_repository,
-                       user, when)
+                       dehydrated_updated_text, transliteration_search,
+                       text_repository, user, when)
 
     lines = (
         Line(number, reconstruction, (
@@ -370,13 +372,13 @@ def test_update_lines_raises_exception_if_invalid_signs(
         corpus,
         text_repository,
         bibliography,
-        sign_list,
+        transliteration_search,
         when
 ):
     lines = TEXT.chapters[0].lines
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     allow_validate_references(bibliography, when)
-    expect_invalid_signs(sign_list, when)
+    expect_invalid_signs(transliteration_search, when)
 
     with pytest.raises(DataError):
         corpus.update_lines(TEXT.id, 0, lines, ANY_USER)

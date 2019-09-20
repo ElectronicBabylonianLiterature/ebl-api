@@ -6,8 +6,9 @@ from ebl.bibliography.reference import Reference
 from ebl.fragment.fragment import Fragment, FragmentNumber
 from ebl.fragment.fragment_info import FragmentInfo
 from ebl.fragment.transliteration import Transliteration
-from ebl.fragment.transliteration_query import TransliterationQuery
 from ebl.text.lemmatization import Lemmatization
+from ebl.transliteration_search.transliteration_query import \
+    TransliterationQuery
 
 COLLECTION = 'fragments'
 

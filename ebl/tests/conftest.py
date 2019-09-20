@@ -26,6 +26,8 @@ from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign import Sign, SignListRecord, Value
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MongoSignRepository
+from ebl.transliteration_search.transliteration_search_service import \
+    TransliterationSearch
 
 
 @pytest.fixture
@@ -75,8 +77,13 @@ def sign_list(sign_repository):
 
 
 @pytest.fixture
-def transliteration_factory(sign_list):
-    return TransliterationFactory(sign_list)
+def transliteration_factory(transliteration_search):
+    return TransliterationFactory(transliteration_search)
+
+
+@pytest.fixture
+def transliteration_search(sign_repository):
+    return TransliterationSearch(sign_repository)
 
 
 @pytest.fixture

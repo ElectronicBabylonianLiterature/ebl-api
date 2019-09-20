@@ -6,9 +6,9 @@ from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
-from ebl.fragment.value import AnyKey, NameKey, ValueKey
 from ebl.mongo_collection import MongoCollection
 from ebl.sign_list.sign import Sign, SignListRecord, Value
+from ebl.transliteration_search.value import AnyKey, NameKey, ValueKey
 
 COLLECTION = 'signs'
 

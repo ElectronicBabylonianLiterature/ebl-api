@@ -4,11 +4,11 @@ from typing import List, Optional, Sequence
 import attr
 import pydash
 
-from ebl.fragment.value import Value
-from ebl.fragment.value_mapper import parse_reading
 from ebl.text.atf import ATF_EXTENSIONS, ATF_SPEC, Atf
 from ebl.text.atf_parser import parse_atf
 from ebl.text.text import Text
+from ebl.transliteration_search.value import Value
+from ebl.transliteration_search.value_mapper import parse_reading
 
 IGNORE_LINE_PATTERN = r'|'.join([
     ATF_SPEC['control_line'],
@@ -116,10 +116,10 @@ class Transliteration:
             if line and not re.match(IGNORE_LINE_PATTERN, line)
         ]
 
-    def with_signs(self, sign_list) -> 'Transliteration':
+    def with_signs(self, transliteration_search) -> 'Transliteration':
         signs = '\n'.join([
             ' '.join(row)
-            for row in sign_list.map_readings(self.values)
+            for row in transliteration_search.map_readings(self.values)
         ])
         return attr.evolve(self, signs=signs)
 
