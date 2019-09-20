@@ -33,7 +33,7 @@ class Reading(Value):
     default: str
 
     @property
-    def key(self):
+    def key(self) -> ValueKey:
         return self.reading, self.sub_index
 
     @property
@@ -57,7 +57,7 @@ class Grapheme(Value):
     name: str
 
     @property
-    def key(self):
+    def key(self) -> NameKey:
         return self.name
 
     @property
@@ -108,5 +108,5 @@ class ValueFactory:
         return NotReading(value)
 
     @staticmethod
-    def create_compound_grapheme(value: str) -> Grapheme:
+    def create_grapheme(value: str) -> Grapheme:
         return Grapheme(value)

@@ -29,10 +29,10 @@ def parse_reading(cleaned_reading: str) -> Value:
             (UNCLEAR_PATTERN, lambda _: ValueFactory.UNIDENTIFIED),
             (UNIDENTIFIED_PATTER, lambda _: ValueFactory.UNIDENTIFIED),
             (WITH_SIGN_PATTERN,
-             lambda match: ValueFactory.create_not_reading(match.group(1))),
+             lambda match: ValueFactory.create_grapheme(match.group(1))),
             (NUMBER_PATTERN, map_number),
             (GRAPHEME_PATTERN,
-             lambda match: ValueFactory.create_compound_grapheme(
+             lambda match: ValueFactory.create_grapheme(
                  match.group(0))),
             (READING_PATTERN, map_reading),
             (VARIANT_PATTERN, map_variant)
