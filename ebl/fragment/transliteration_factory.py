@@ -1,5 +1,6 @@
 from ebl.fragment.transliteration import Transliteration
 from ebl.text.atf import Atf
+from ebl.transliteration_search.clean_atf import CleanAtf
 
 
 class TransliterationFactory:
@@ -7,6 +8,5 @@ class TransliterationFactory:
         self._transliteration_search_service = transliteration_search_service
 
     def create(self, atf: Atf, notes: str = ''):
-        return Transliteration(atf, notes).with_signs(
-            self._transliteration_search_service
-        )
+        signs = CleanAtf(atf).to_signs(self._transliteration_search_service)
+        return Transliteration(atf, notes, signs)

@@ -2,6 +2,8 @@ import attr
 import pydash
 import regex
 
+from ebl.transliteration_search.clean_atf import CleanAtf
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
@@ -45,7 +47,7 @@ class TransliterationQuery:
             for position in positions
         ]
 
-        lines = transliteration.filtered
+        lines = CleanAtf(transliteration.atf).filtered
 
         return [
             lines[numbers[0]:numbers[1] + 1]

@@ -1,11 +1,53 @@
 import pytest
 
-from ebl.fragment.transliteration import Transliteration
 from ebl.text.atf import Atf
+from ebl.transliteration_search.clean_atf import CleanAtf
+from ebl.transliteration_search.value import Grapheme, NotReading, Reading
+
+
+def test_atf():
+    atf = Atf('1. kur')
+
+    assert CleanAtf(atf).atf == atf
+
+
+def test_filtered():
+    clean_atf = CleanAtf(
+        Atf('&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku\n2. $AN')
+    )
+    assert clean_atf.filtered == ['1. ku', '2. $AN']
+
+
+def test_values():
+    clean_atf = CleanAtf(Atf(
+        '&K11111\n'
+        '@reverse\n'
+        '\n'
+        '$ end of side\n'
+        '#note\n'
+        '=: foo\n'
+        '1. ku X x\n'
+        '2. $AN |BI×IS|\n'
+        '3. nuₓ'
+    ))
+    assert clean_atf.values == [
+        [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
+        [Reading('an', 1, '?'), Grapheme('|BI×IS|')],
+        [NotReading('?')]
+    ]
+
+
+def test_to_signs(transliteration_search, sign_list, signs):
+    for sign in signs:
+        sign_list.create(sign)
+
+    clean_atf = CleanAtf(Atf('1. šu gid₂'))
+
+    assert clean_atf.to_signs(transliteration_search) == 'ŠU BU'
 
 
 def test_ignored_lines():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '&K11111\n'
         '@reverse\n'
         '\n'
@@ -19,14 +61,14 @@ def test_ignored_lines():
         '$ (random text)\n'
         '#note\n=: foo'
     ))
-    assert transliteration.cleaned == []
+    assert clean_atf.cleaned == []
 
 
 def test_strip_line_numbers():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1. mu\n2\'. me\na+1. e\n1.2. a\n3. kur. ra'
     ))
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'mu',
         'me',
         'e',
@@ -36,7 +78,7 @@ def test_strip_line_numbers():
 
 
 def test_map_spaces():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1. šu-mu gid₂-ba\n'
         '2. {giš}BI.IS\n'
         '3. {giš}|BI.IS|\n'
@@ -59,7 +101,7 @@ def test_map_spaces():
         '11. {d}+a'
     ))
 
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'šu mu gid₂ ba',
         'giš bi is',
         'giš |BI.IS|',
@@ -84,7 +126,7 @@ def test_map_spaces():
 
 
 def test_strip_lacuna():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1. [... N]U KU₃\n'
         '2. [... a]-ba-an\n'
         '3. [...] ši [...]\n'
@@ -94,7 +136,7 @@ def test_strip_lacuna():
         '8. [(...)]\n'
         '9. ⸢ba⸣'
     ))
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'nu ku₃',
         'a ba an',
         'ši',
@@ -107,35 +149,35 @@ def test_strip_lacuna():
 
 
 def test_indent():
-    transliteration = Transliteration(Atf('1. ($___$) ša₂'))
-    assert transliteration.cleaned == [
+    clean_atf = CleanAtf(Atf('1. ($___$) ša₂'))
+    assert clean_atf.cleaned == [
         'ša₂'
     ]
 
 
 def test_strip_flags():
-    transliteration =\
-        Transliteration(Atf('1.  ba! ba? ba# ba*\n2. $KU'))
-    assert transliteration.cleaned == [
+    clean_atf =\
+        CleanAtf(Atf('1.  ba! ba? ba# ba*\n2. $KU'))
+    assert clean_atf.cleaned == [
         'ba ba ba ba',
         'ku'
     ]
 
 
 def test_strip_shifts():
-    transliteration =\
-        Transliteration(Atf('1. %es qa\n2. ba %g ba'))
-    assert transliteration.cleaned == [
+    clean_atf =\
+        CleanAtf(Atf('1. %es qa\n2. ba %g ba'))
+    assert clean_atf.cleaned == [
         'qa',
         'ba ba'
     ]
 
 
 def test_strip_omissions():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
     ))
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'ku₃',
         'an',
         'ba'
@@ -143,17 +185,17 @@ def test_strip_omissions():
 
 
 def test_min():
-    transliteration =\
-        Transliteration(Atf('3. MIN<(an)> ši'))
-    assert transliteration.cleaned == [
+    clean_atf =\
+        CleanAtf(Atf('3. MIN<(an)> ši'))
+    assert clean_atf.cleaned == [
         'min ši'
     ]
 
 
 def test_numbers():
-    transliteration =\
-        Transliteration(Atf('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256'))
-    assert transliteration.cleaned == [
+    clean_atf =\
+        CleanAtf(Atf('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256'))
+    assert clean_atf.cleaned == [
         '1(AŠ)',
         '1 2 10 20 30',
         '256'
@@ -176,16 +218,16 @@ def test_graphemes():
         '|UD.AB@g|'
     ]
 
-    transliteration = Transliteration(Atf('\n'.join([
+    clean_atf = CleanAtf(Atf('\n'.join([
         f'{index}. {grapheme}'
         for index, grapheme in enumerate(graphemes)
     ])))
 
-    assert transliteration.cleaned == graphemes
+    assert clean_atf.cleaned == graphemes
 
 
 def test_lower_case():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1. gid₂\n'
         '2. ši\n'
         '3. BI\n'
@@ -198,7 +240,7 @@ def test_lower_case():
         '9. ku/|BI×IS|'
     ))
 
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'gid₂',
         'ši',
         'bi',
@@ -213,13 +255,13 @@ def test_lower_case():
 
 
 def test_strip_at():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1. lu₂@v\n'
         '2. LU₂@v\n'
         '3. TA@v'
     ))
 
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'lu₂',
         'lu₂',
         'ta'
@@ -227,11 +269,11 @@ def test_strip_at():
 
 
 def test_strip_line_continuation():
-    transliteration = Transliteration(Atf(
+    clean_atf = CleanAtf(Atf(
         '1. ku →'
     ))
 
-    assert transliteration.cleaned == [
+    assert clean_atf.cleaned == [
         'ku'
     ]
 
@@ -247,6 +289,6 @@ def test_strip_line_continuation():
     ('1. °\\KU°', 'ku')
 ])
 def test_strip_erasure(erasure, cleaned):
-    transliteration = Transliteration(Atf(erasure))
+    clean_atf = CleanAtf(Atf(erasure))
 
-    assert transliteration.cleaned == [cleaned]
+    assert clean_atf.cleaned == [cleaned]

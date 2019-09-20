@@ -1,12 +1,13 @@
 import re
 import unicodedata
 
-from ebl.text.atf import ATF_SPEC, VARIANT_SEPARATOR
+from ebl.text.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
+    VARIANT_SEPARATOR
 from ebl.transliteration_search.value import Value, ValueFactory
 
 EMPTY_PATTERN = '^$'
-UNCLEAR_PATTERN = ATF_SPEC['unclear']
-UNIDENTIFIED_PATTER = 'X'
+UNCLEAR_PATTERN = UNCLEAR_SIGN
+UNIDENTIFIED_PATTER = UNIDENTIFIED_SIGN
 WITH_SIGN_PATTERN = ATF_SPEC['with_sign']
 NUMBER_PATTERN = ATF_SPEC['number']
 GRAPHEME_PATTERN = ATF_SPEC['grapheme']
