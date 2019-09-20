@@ -104,7 +104,7 @@ def test_signs():
     assert transliterated_fragment.signs == (
         'KU ABZ075 ABZ207a\\u002F207b\\u0020X\n'
         'MI DIŠ UD ŠU\n'
-        'KI DU U BA MA TI\n'
+        'KI DU ABZ411 BA MA TI\n'
         'X MU TA MA UD\n'
         'ŠU/|BI×IS|'
     )
@@ -292,7 +292,7 @@ def test_update_notes(user):
         ('2\'. [...] GI₆ ana u₄-š[u ...]', ),
         ('6\'. [...] x mu ta-ma-tu₂', )
     )),
-    ([['MI', 'DIŠ'], ['U', 'BA', 'MA']], (
+    ([['MI', 'DIŠ'], ['ABZ411', 'BA', 'MA']], (
         (
             '2\'. [...] GI₆ ana u₄-š[u ...]',
             '3\'. [... k]i-du u ba-ma-t[i ...]'

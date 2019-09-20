@@ -1,5 +1,4 @@
 from ebl.fragment.value import ValueFactory
-from ebl.text.atf import UNIDENTIFIED_SIGN
 
 
 def test_create_and_find(sign_list, signs):
@@ -36,7 +35,8 @@ def test_map_readings(sign_list, signs):
         [ValueFactory.create_variant((ValueFactory.create_reading('ši', 1),
                                       ValueFactory.create_reading('ma', 1)))],
         [ValueFactory.create_reading('unknown', 1),
-         ValueFactory.create_not_reading(UNIDENTIFIED_SIGN)],
+         ValueFactory.INVALID,
+         ValueFactory.UNIDENTIFIED],
         [ValueFactory.create_grapheme('AŠ'),
          ValueFactory.create_number('1'),
          ValueFactory.create_number('2'),
@@ -52,6 +52,6 @@ def test_map_readings(sign_list, signs):
          'ABZ081'],
         ['ABZ531+588', '|(AŠ&AŠ@180)×U|', '|A.EDIN.LAL|', 'ABZ075'],
         ['ABZ207a\\u002F207b\\u0020X/MA'],
-        ['?', 'X'],
-        ['ABZ001', 'DIŠ', '2', 'U', '20', '30', '256'],
+        ['?', '?', 'X'],
+        ['ABZ001', 'DIŠ', '2', 'ABZ411', 'ABZ471', '30', '256'],
     ]

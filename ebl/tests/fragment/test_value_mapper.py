@@ -79,7 +79,7 @@ MAP_DATA = [
 ]
 
 
-@pytest.mark.parametrize("value,expected", MAP_DATA)
+@pytest.mark.parametrize('value,expected', MAP_DATA)
 def test_create_value_mapper(value, expected):
     assert parse_reading(value) == expected
 
