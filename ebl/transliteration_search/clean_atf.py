@@ -130,12 +130,6 @@ class CleanAtf:
             if line and not re.match(IGNORE_LINE_PATTERN, line)
         ]
 
-    def to_signs(self, transliteration_search) -> str:
-        return '\n'.join([
-            ' '.join(row)
-            for row in transliteration_search.map_readings(self.values)
-        ])
-
     @property
     def values(self) -> Sequence[Sequence[Value]]:
         return (

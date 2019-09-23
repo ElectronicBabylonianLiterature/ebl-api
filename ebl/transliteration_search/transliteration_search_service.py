@@ -2,6 +2,8 @@ from typing import Sequence
 
 import pydash
 
+from ebl.text.atf import Atf
+from ebl.transliteration_search.clean_atf import CleanAtf
 from ebl.transliteration_search.value import SignMap, Value
 
 
@@ -10,7 +12,14 @@ class TransliterationSearch:
     def __init__(self, sign_repository):
         self._repository = sign_repository
 
-    def map_readings(
+    def convert_atf_to_signs(self, atf: Atf) -> str:
+        values = CleanAtf(atf).values
+        return '\n'.join([
+            ' '.join(row)
+            for row in self.convert_values_to_signs(values)
+        ])
+
+    def convert_values_to_signs(
         self, values: Sequence[Sequence[Value]]
     ) -> Sequence[Sequence[str]]:
         def sign_to_pair(sign):

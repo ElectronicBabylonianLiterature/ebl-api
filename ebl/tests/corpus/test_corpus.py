@@ -73,13 +73,13 @@ def expect_signs(transliteration_search, when, sign='X', text=TEXT):
      .map(lambda manuscript: manuscript.line.atf)
      .map(lambda atf: CleanAtf(atf).values)
      .for_each(lambda values: when(transliteration_search)
-               .map_readings(values)
+               .convert_values_to_signs(values)
                .thenReturn([[sign]]))
      .value())
 
 
 def expect_invalid_signs(transliteration_search, when):
-    when(transliteration_search).map_readings(...).thenReturn(
+    when(transliteration_search).convert_values_to_signs(...).thenReturn(
         [[INVALID_READING]]
     )
 
