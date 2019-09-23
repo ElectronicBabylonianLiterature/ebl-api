@@ -2,18 +2,18 @@ import attr
 import pydash
 import pytest
 
+from ebl.atf.clean_atf import CleanAtf
 from ebl.auth0 import Guest
 from ebl.corpus.alignment import Alignment, AlignmentError, AlignmentToken
 from ebl.corpus.text import Line, ManuscriptLine, Text
 from ebl.corpus.text_serializer import TextSerializer
 from ebl.dictionary.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
+from ebl.reconstruction.reconstructed_text import AkkadianWord, StringPart
 from ebl.tests.factories.corpus import TextFactory
-from ebl.text.labels import LineNumberLabel
-from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, StringPart
-from ebl.text.token import Word
-from ebl.transliteration_search.clean_atf import CleanAtf
+from ebl.transliteration.labels import LineNumberLabel
+from ebl.transliteration.line import TextLine
+from ebl.transliteration.token import Word
 from ebl.transliteration_search.value import INVALID_READING
 
 COLLECTION = 'texts'

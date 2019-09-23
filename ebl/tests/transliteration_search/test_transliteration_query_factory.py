@@ -1,4 +1,4 @@
-from ebl.text.atf import Atf
+from ebl.atf.atf import Atf
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 from ebl.transliteration_search.transliteration_query_factory import \

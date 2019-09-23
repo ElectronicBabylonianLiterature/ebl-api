@@ -5,8 +5,8 @@ from ebl.auth0 import User
 from ebl.bibliography.reference import Reference
 from ebl.fragment.fragment import Fragment, FragmentNumber
 from ebl.fragment.fragment_info import FragmentInfo
-from ebl.fragment.transliteration import Transliteration
-from ebl.text.lemmatization import Lemmatization
+from ebl.fragment.transliteration_update import TransliterationUpdate
+from ebl.transliteration.lemmatization import Lemmatization
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -93,7 +93,7 @@ class Fragmentarium:
 
     def update_transliteration(self,
                                number: FragmentNumber,
-                               transliteration: Transliteration,
+                               transliteration: TransliterationUpdate,
                                user: User) -> Fragment:
         fragment = self._repository.find(number)
 

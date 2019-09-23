@@ -2,17 +2,20 @@ from typing import Tuple
 
 import pytest
 
+from ebl.atf.atf import Surface
 from ebl.corpus.enums import Classification, ManuscriptType, Period, \
     PeriodModifier, Provenance, Stage
 from ebl.corpus.text import (Chapter, Line, Manuscript, ManuscriptLine, Text,
                              TextId)
+from ebl.reconstruction.enclosure import BROKEN_OFF_OPEN
+from ebl.reconstruction.reconstructed_text import AkkadianWord, \
+    EnclosurePart, \
+    StringPart
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.text.atf import Surface
-from ebl.text.enclosure import BROKEN_OFF_OPEN
-from ebl.text.labels import ColumnLabel, Label, LineNumberLabel, SurfaceLabel
-from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
-from ebl.text.token import Word
+from ebl.transliteration.labels import ColumnLabel, Label, LineNumberLabel, \
+    SurfaceLabel
+from ebl.transliteration.line import TextLine
+from ebl.transliteration.token import Word
 
 CATEGORY = 1
 INDEX = 2

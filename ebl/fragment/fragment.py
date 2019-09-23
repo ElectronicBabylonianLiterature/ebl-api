@@ -7,11 +7,11 @@ from ebl.auth0 import User
 from ebl.bibliography.reference import Reference
 from ebl.fragment.folios import Folios
 from ebl.fragment.record import Record
-from ebl.fragment.transliteration import (
-    Transliteration
+from ebl.fragment.transliteration_update import (
+    TransliterationUpdate
 )
-from ebl.text.lemmatization import Lemmatization
-from ebl.text.text import Text
+from ebl.transliteration.lemmatization import Lemmatization
+from ebl.transliteration.text import Text
 
 FragmentNumber = NewType('FragmentNumber', str)
 Lines = Tuple[Tuple[str, ...], ...]
@@ -65,7 +65,7 @@ class Fragment:
         )
 
     def update_transliteration(self,
-                               transliteration: Transliteration,
+                               transliteration: TransliterationUpdate,
                                user: User) -> 'Fragment':
         record = self.record.add_entry(
             self.text.atf,
@@ -85,7 +85,7 @@ class Fragment:
 
     def get_matching_lines(self, query) -> Lines:
         matching_lines = query.get_matching_lines(
-            Transliteration(self.text.atf, signs=self.signs)
+            TransliterationUpdate(self.text.atf, signs=self.signs)
         )
         return tuple(tuple(line) for line in matching_lines)
 

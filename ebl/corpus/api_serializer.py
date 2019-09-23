@@ -2,13 +2,13 @@ from typing import Tuple
 
 from parsy import ParseError
 
-from ebl.corpus.text import Text, ManuscriptLine, Line
-from ebl.corpus.text_serializer import TextSerializer, TextDeserializer
+from ebl.corpus.text import Line, ManuscriptLine, Text
+from ebl.corpus.text_serializer import TextDeserializer, TextSerializer
 from ebl.errors import DataError
-from ebl.text.labels import LineNumberLabel, Label
-from ebl.text.reconstructed_text import AkkadianWord, Lacuna, \
-    MetricalFootSeparator, Caesura, ReconstructionToken
-from ebl.text.text_parser import TEXT_LINE
+from ebl.reconstruction.reconstructed_text import AkkadianWord, Caesura, \
+    Lacuna, MetricalFootSeparator, ReconstructionToken
+from ebl.transliteration.labels import Label, LineNumberLabel
+from ebl.transliteration.text_parser import TEXT_LINE
 
 
 class ApiSerializer(TextSerializer):

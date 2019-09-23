@@ -5,7 +5,7 @@ from ebl.fragment.folios import Folio, Folios
 from ebl.fragment.fragment import (Fragment, FragmentNumber, Measure,
                                    UncuratedReference)
 from ebl.fragment.record import (Record, RecordEntry, RecordType)
-from ebl.text.text import Text
+from ebl.transliteration.text import Text
 
 
 class MeasureSchema(Schema):

@@ -3,7 +3,7 @@ from falcon.media.validators.jsonschema import validate
 
 from ebl.fragmentarium.dtos import create_response_dto
 from ebl.require_scope import require_scope
-from ebl.text.lemmatization import Lemmatization
+from ebl.transliteration.lemmatization import Lemmatization
 
 LEMMATIZATION_DTO_SCHEMA = {
     'type': 'object',

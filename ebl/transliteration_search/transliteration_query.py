@@ -2,7 +2,7 @@ import attr
 import pydash
 import regex
 
-from ebl.transliteration_search.clean_atf import CleanAtf
+from ebl.atf.clean_atf import CleanAtf
 
 
 @attr.s(auto_attribs=True, frozen=True)

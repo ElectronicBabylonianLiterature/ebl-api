@@ -20,7 +20,8 @@ from ebl.corpus.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
 from ebl.fragment.fragment_info import FragmentInfo
-from ebl.fragment.transliteration_factory import TransliterationFactory
+from ebl.fragment.transliteration_update_factory import \
+    TransliterationUpdateFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign import Sign, SignListRecord, Value
@@ -78,7 +79,7 @@ def sign_list(sign_repository):
 
 @pytest.fixture
 def transliteration_factory(transliteration_search):
-    return TransliterationFactory(transliteration_search)
+    return TransliterationUpdateFactory(transliteration_search)
 
 
 @pytest.fixture

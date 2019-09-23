@@ -1,18 +1,18 @@
 import pytest
 from freezegun import freeze_time
 
+from ebl.atf.atf import Atf
 from ebl.dictionary.word import WordId
 from ebl.errors import DataError, NotFoundError
 from ebl.fragment.fragment_info import FragmentInfo
-from ebl.fragment.transliteration import (
-    Transliteration
+from ebl.fragment.transliteration_update import (
+    TransliterationUpdate
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
-from ebl.text.atf import Atf
-from ebl.text.lemmatization import Lemmatization
+from ebl.transliteration.lemmatization import Lemmatization
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -86,9 +86,9 @@ def test_update_transliteration(fragmentarium,
                                 when):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
-    transliteration = Transliteration(Atf('1. x x\n2. x'),
-                                      'updated notes',
-                                      'X X\nX')
+    transliteration = TransliterationUpdate(Atf('1. x x\n2. x'),
+                                            'updated notes',
+                                            'X X\nX')
     expected_fragment = transliterated_fragment.update_transliteration(
         transliteration,
         user
@@ -122,7 +122,7 @@ def test_update_update_transliteration_not_found(fragmentarium,
     with pytest.raises(NotFoundError):
         fragmentarium.update_transliteration(
             number,
-            Transliteration(Atf('$ (the transliteration)'), 'notes'),
+            TransliterationUpdate(Atf('$ (the transliteration)'), 'notes'),
             user
         )
 

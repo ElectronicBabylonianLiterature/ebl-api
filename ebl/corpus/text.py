@@ -9,11 +9,11 @@ from ebl.corpus.enums import Classification, ManuscriptType, Period, \
     PeriodModifier, Provenance, Stage
 from ebl.corpus.label_validator import LabelValidator
 from ebl.merger import Merger
-from ebl.text.labels import Label, LineNumberLabel
-from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import ReconstructionToken, \
+from ebl.reconstruction.enclosure_validator import validate
+from ebl.reconstruction.reconstructed_text import ReconstructionToken, \
     ReconstructionTokenVisitor
-from ebl.text.enclosure_validator import validate
+from ebl.transliteration.labels import Label, LineNumberLabel
+from ebl.transliteration.line import TextLine
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])
 
