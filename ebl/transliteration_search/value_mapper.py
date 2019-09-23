@@ -11,8 +11,6 @@ UNIDENTIFIED_PATTER = UNIDENTIFIED_SIGN
 WITH_SIGN_PATTERN = ATF_SPEC['with_sign']
 NUMBER_PATTERN = ATF_SPEC['number']
 GRAPHEME_PATTERN = ATF_SPEC['grapheme']
-SPLITTABLE_GRAPHEME_PATTERN =\
-    r'\|(\d*[.x×%&+@]?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*)+\|',
 READING_PATTERN = ATF_SPEC['reading']
 VARIANT_PATTERN = ATF_SPEC['variant']
 
