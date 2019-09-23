@@ -13,7 +13,6 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.text.atf import Atf
 from ebl.text.lemmatization import Lemmatization
-from ebl.text.transliteration_error import TransliterationError
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -112,20 +111,6 @@ def test_update_transliteration(fragmentarium,
         user
     )
     assert updated_fragment == expected_fragment
-
-
-def test_update_transliteration_invalid(fragmentarium,
-                                        fragment_repository,
-                                        user,
-                                        when):
-    fragment = FragmentFactory.build()
-    when(fragment_repository).find(fragment.number).thenReturn(fragment)
-    with pytest.raises(TransliterationError):
-        fragmentarium.update_transliteration(
-            fragment.number,
-            Transliteration(Atf('1. invalid values'), signs='? ?'),
-            user
-        )
 
 
 def test_update_update_transliteration_not_found(fragmentarium,

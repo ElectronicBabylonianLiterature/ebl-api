@@ -37,5 +37,56 @@ def test_parse(transliteration, expected):
 
 
 def test_parse_invalid():
+    transliteration = Transliteration(Atf('1. ö invalid atf'))
     with pytest.raises(TransliterationError):
-        Transliteration(Atf('invalid atf')).parse()
+        transliteration.parse()
+
+
+def test_validate_valid_signs(transliteration_factory, sign_list, signs):
+    Transliteration(Atf('1. šu gid₂'), signs='ŠU BU')
+
+
+def test_invalid_atf():
+    with pytest.raises(TransliterationError,
+                       match='Invalid transliteration') as excinfo:
+        Transliteration(Atf('$ this is not valid'))
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid line',
+            'lineNumber': 1
+        }
+    ]
+
+
+def test_validate_invalid_value(sign_list):
+    with pytest.raises(TransliterationError,
+                       match='Invalid transliteration') as excinfo:
+        Transliteration(Atf('1. invalid values'), signs='? ?')
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid value',
+            'lineNumber': 1
+        }
+    ]
+
+
+def test_validate_multiple_errors(sign_list):
+    with pytest.raises(TransliterationError,
+                       match='Invalid transliteration') as excinfo:
+        Transliteration(
+            Atf('1. invalid values\n$ (valid)\n2. more invalid values'),
+            signs='? ?\n? ? ?'
+        )
+
+    assert excinfo.value.errors == [
+        {
+            'description': 'Invalid value',
+            'lineNumber': 1
+        },
+        {
+            'description': 'Invalid value',
+            'lineNumber': 3
+        }
+    ]

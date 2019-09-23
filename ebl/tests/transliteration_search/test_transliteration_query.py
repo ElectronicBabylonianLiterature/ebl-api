@@ -10,7 +10,7 @@ from ebl.transliteration_search.transliteration_query import \
 ATF = Atf(
     '1\'. [...-ku]-nu-ši [...]\n'
     '\n'
-    '@(obeverse)\n'
+    '@obverse\n'
     '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]\n'
     '3\'. [... k]i-du u ba-ma-t[a ...]\n'
     '6\'. [...] x mu ta-ma-tu₂\n'
