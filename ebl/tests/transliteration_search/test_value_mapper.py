@@ -33,6 +33,7 @@ from ebl.transliteration_search.value_mapper import parse_reading
     ('1', Reading('1', 1, '1')),
     ('foo(TUKUL)', Grapheme('TUKUL')),
     ('foo(|BI×IS|)', Grapheme('|BI×IS|')),
+    ('foo(|BI.IS|)',  SplittableGrapheme((Grapheme('BI'), Grapheme('IS')))),
     ('šu/gid₂', Variant((
         Reading('šu', 1, INVALID_READING),
         Reading('gid', 2, INVALID_READING)
