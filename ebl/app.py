@@ -79,7 +79,8 @@ def create_fragmentarium_routes(api, context, transliteration_search, spec):
     fragments = FragmentsResource(fragmentarium)
     fragment_search = \
         FragmentSearch(fragmentarium,
-                       TransliterationQueryFactory(transliteration_search))
+                       TransliterationQueryFactory(transliteration_search),
+                       transliteration_search)
     lemmatization = LemmatizationResource(fragmentarium)
     references = ReferencesResource(fragmentarium)
     statistics = StatisticsResource(fragmentarium)
@@ -200,7 +201,10 @@ def create_app(context):
 
     spec.components.security_scheme("auth0", auth0_scheme)
 
-    transliteration_search = TransliterationSearch(context['sign_repository'])
+    transliteration_search = TransliterationSearch(
+        context['sign_repository'],
+        context['fragment_repository']
+    )
     create_bibliography_routes(api, context, spec)
     create_dictionary_routes(api, context, spec)
     create_fragmentarium_routes(api, context, transliteration_search, spec)

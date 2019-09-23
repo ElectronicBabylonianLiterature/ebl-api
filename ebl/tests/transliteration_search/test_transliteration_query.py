@@ -3,7 +3,8 @@ import re
 import pytest
 
 from ebl.atf.atf import Atf
-from ebl.fragment.transliteration_update import TransliterationUpdate
+from ebl.tests.factories.fragment import FragmentFactory
+from ebl.transliteration.atf_parser import parse_atf
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -100,14 +101,17 @@ GET_MATCHING_LINES_DATA = [
     (
         [['BU']],
         [['7\'. šu/gid']]
-    ),
+    )
 ]
 
 
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
-    transliteration = TransliterationUpdate(ATF, signs=SIGNS)
+    transliterated_fragment = FragmentFactory.build(
+        text=parse_atf(ATF),
+        signs=SIGNS
+    )
 
     query = TransliterationQuery(query)
-    lines = query.get_matching_lines(transliteration)
-    assert lines == expected
+    lines = query.get_matching_lines(transliterated_fragment)
+    assert lines == tuple(map(tuple, expected))
