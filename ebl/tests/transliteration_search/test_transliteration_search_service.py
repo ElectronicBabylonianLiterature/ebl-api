@@ -1,4 +1,14 @@
+from ebl.text.atf import Atf
 from ebl.transliteration_search.value import ValueFactory
+
+
+def test_convert_to_signs(transliteration_search, sign_list, signs):
+    for sign in signs:
+        sign_list.create(sign)
+
+    atf = Atf('1. šu gid₂')
+
+    assert transliteration_search.convert_atf_to_signs(atf) == 'ŠU BU'
 
 
 def test_map_readings(transliteration_search, sign_repository, signs):
@@ -30,7 +40,7 @@ def test_map_readings(transliteration_search, sign_repository, signs):
          ValueFactory.create_number('30'),
          ValueFactory.create_number('256')]
     ]
-    mapped_signs = transliteration_search.map_readings(values)
+    mapped_signs = transliteration_search.convert_values_to_signs(values)
 
     assert mapped_signs == [
         ['KU', 'BU', 'ABZ075', 'ABZ207a\\u002F207b\\u0020X', '|A.EDIN.LAL|',

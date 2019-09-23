@@ -10,5 +10,5 @@ class TransliterationQueryFactory:
 
     def create(self, atf: Atf):
         values = CleanAtf(atf).values
-        signs = self._transliteration_search.map_readings(values)
+        signs = self._transliteration_search.convert_values_to_signs(values)
         return TransliterationQuery(signs)

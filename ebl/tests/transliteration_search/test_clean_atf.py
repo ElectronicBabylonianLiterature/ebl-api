@@ -37,15 +37,6 @@ def test_values():
     ]
 
 
-def test_to_signs(transliteration_search, sign_list, signs):
-    for sign in signs:
-        sign_list.create(sign)
-
-    clean_atf = CleanAtf(Atf('1. šu gid₂'))
-
-    assert clean_atf.to_signs(transliteration_search) == 'ŠU BU'
-
-
 def test_ignored_lines():
     clean_atf = CleanAtf(Atf(
         '&K11111\n'
