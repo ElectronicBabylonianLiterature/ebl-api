@@ -10,7 +10,6 @@ from ebl.fragment.record import Record
 from ebl.fragment.transliteration import (
     Transliteration
 )
-from ebl.fragment.validator import Validator
 from ebl.text.lemmatization import Lemmatization
 from ebl.text.text import Text
 
@@ -68,8 +67,6 @@ class Fragment:
     def update_transliteration(self,
                                transliteration: Transliteration,
                                user: User) -> 'Fragment':
-        Validator(transliteration).validate()
-
         record = self.record.add_entry(
             self.text.atf,
             transliteration.atf,

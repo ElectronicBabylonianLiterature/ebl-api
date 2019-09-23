@@ -5,7 +5,6 @@ from ebl.corpus.alignment import AlignmentError
 from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine, \
     TextVisitor
 from ebl.errors import DataError
-from ebl.fragment.validator import Validator
 from ebl.text.labels import LineNumberLabel
 from ebl.text.token import BrokenAway, DocumentOrientedGloss, Erasure, \
     LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
@@ -83,9 +82,7 @@ class TextValidator(TextVisitor):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         try:
-            Validator(
-                self._transliteration_factory.create(manuscript_line.line.atf)
-            ).validate()
+            self._transliteration_factory.create(manuscript_line.line.atf)
         except TransliterationError:
             raise invalid_atf(self._chapter,
                               self._line.number,
