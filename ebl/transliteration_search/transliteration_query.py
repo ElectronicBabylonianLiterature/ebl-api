@@ -3,6 +3,8 @@ import pydash
 import regex
 
 from ebl.atf.clean_atf import CleanAtf
+from ebl.fragment.fragment import Fragment
+from ebl.fragment.fragment_info import Lines
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -25,8 +27,8 @@ class TransliterationQuery:
         )
         return fr'{lines_regexp}(?![^|\s])'
 
-    def get_matching_lines(self, transliteration):
-        signs = transliteration.signs
+    def get_matching_lines(self, fragment: Fragment) -> Lines:
+        signs = fragment.signs
 
         def line_number(position):
             return (
@@ -47,9 +49,9 @@ class TransliterationQuery:
             for position in positions
         ]
 
-        lines = CleanAtf(transliteration.atf).filtered
+        lines = CleanAtf(fragment.text.atf).filtered
 
-        return [
-            lines[numbers[0]:numbers[1] + 1]
+        return tuple(
+            tuple(lines[numbers[0]:numbers[1] + 1])
             for numbers in pydash.uniq(line_numbers)
-        ]
+        )

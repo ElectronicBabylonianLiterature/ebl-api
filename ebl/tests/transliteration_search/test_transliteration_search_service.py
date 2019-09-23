@@ -1,8 +1,12 @@
 from ebl.atf.atf import Atf
+from ebl.fragment.fragment_info import FragmentInfo
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.transliteration_search.transliteration_query import \
+    TransliterationQuery
 from ebl.transliteration_search.value import ValueFactory
 
 
-def test_convert_to_signs(transliteration_search, sign_list, signs):
+def test_convert_atf_to_signs(transliteration_search, sign_list, signs):
     for sign in signs:
         sign_list.create(sign)
 
@@ -11,7 +15,9 @@ def test_convert_to_signs(transliteration_search, sign_list, signs):
     assert transliteration_search.convert_atf_to_signs(atf) == 'ŠU BU'
 
 
-def test_map_readings(transliteration_search, sign_repository, signs):
+def test_convert_values_to_signs(transliteration_search,
+                                 sign_repository,
+                                 signs):
     for sign in signs:
         sign_repository.create(sign)
 
@@ -51,3 +57,21 @@ def test_map_readings(transliteration_search, sign_repository, signs):
         ['?', '?', 'X'],
         ['ABZ001', 'DIŠ', '2', 'ABZ411', 'ABZ471', '30', '256'],
     ]
+
+
+def test_search(transliteration_search, fragment_repository, when):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    sign_matrix = [['MA', 'UD']]
+    query = TransliterationQuery(sign_matrix)
+    matching_fragments = [transliterated_fragment]
+
+    (when(fragment_repository)
+     .search_signs(query)
+     .thenReturn(matching_fragments))
+
+    expected_lines = (('6\'. [...] x mu ta-ma-tu₂',),)
+    expected = [
+        FragmentInfo.of(fragment, expected_lines)
+        for fragment in matching_fragments
+    ]
+    assert transliteration_search.search(query) == expected

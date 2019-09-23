@@ -18,8 +18,6 @@ from ebl.transliteration.atf_parser import parse_atf
 from ebl.transliteration.lemmatization import Lemmatization, LemmatizationError
 from ebl.transliteration.text import Text
 from ebl.transliteration.transliteration_error import TransliterationError
-from ebl.transliteration_search.transliteration_query import \
-    TransliterationQuery
 
 
 def test_to_dict_for(user):
@@ -241,34 +239,6 @@ def test_update_notes(user):
     )
 
     assert updated_fragment == expected_fragment
-
-
-@pytest.mark.parametrize("sign_matrix,lines", [
-    ([['DIŠ', 'UD']], (
-        ('2\'. [...] GI₆ ana u₄-š[u ...]', ),
-    )),
-    ([['KU']], (
-        ('1\'. [...-ku]-nu-ši [...]', ),
-    )),
-    ([['UD']], (
-        ('2\'. [...] GI₆ ana u₄-š[u ...]', ),
-        ('6\'. [...] x mu ta-ma-tu₂', )
-    )),
-    ([['MI', 'DIŠ'], ['ABZ411', 'BA', 'MA']], (
-        (
-            '2\'. [...] GI₆ ana u₄-š[u ...]',
-            '3\'. [... k]i-du u ba-ma-t[i ...]'
-        ),
-    )),
-    ([['IGI', 'UD']], ())
-])
-def test_get_matching_lines(sign_matrix, lines):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    query = TransliterationQuery(sign_matrix)
-
-    matching_lines = transliterated_fragment.get_matching_lines(query)
-
-    assert matching_lines == lines
 
 
 def test_update_lemmatization():

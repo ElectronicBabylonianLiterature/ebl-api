@@ -1,8 +1,12 @@
+from typing import Tuple
+
 import attr
 import pydash
 
-from ebl.fragment.fragment import Fragment, FragmentNumber, Lines
+from ebl.fragment.fragment import Fragment, FragmentNumber
 from ebl.fragment.record import RecordEntry, RecordType
+
+Lines = Tuple[Tuple[str, ...], ...]
 
 
 @attr.s(frozen=True, auto_attribs=True)

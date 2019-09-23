@@ -13,8 +13,6 @@ from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.transliteration.lemmatization import Lemmatization
-from ebl.transliteration_search.transliteration_query import \
-    TransliterationQuery
 
 
 def test_find(fragmentarium, fragment_repository, when):
@@ -195,24 +193,6 @@ def test_search(fragmentarium, fragment_repository, when):
     when(fragment_repository).search(query).thenReturn([fragment])
 
     assert fragmentarium.search(query) == [FragmentInfo.of(fragment)]
-
-
-def test_search_signs(fragmentarium, fragment_repository, when):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    sign_matrix = [['MA', 'UD']]
-    query = TransliterationQuery(sign_matrix)
-    matching_fragments = [transliterated_fragment]
-
-    (when(fragment_repository)
-     .search_signs(query)
-     .thenReturn(matching_fragments))
-
-    expected_lines = (('6\'. [...] x mu ta-ma-tu₂',),)
-    expected = [
-        FragmentInfo.of(fragment, expected_lines)
-        for fragment in matching_fragments
-    ]
-    assert fragmentarium.search_signs(query) == expected
 
 
 def test_find_lemmas(fragmentarium,

@@ -83,8 +83,8 @@ def transliteration_factory(transliteration_search):
 
 
 @pytest.fixture
-def transliteration_search(sign_repository):
-    return TransliterationSearch(sign_repository)
+def transliteration_search(sign_repository, fragment_repository):
+    return TransliterationSearch(sign_repository, fragment_repository)
 
 
 @pytest.fixture
