@@ -1,21 +1,21 @@
 import attr
 import pytest
 
+from ebl.atf.atf import Atf
 from ebl.dictionary.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragment.fragment import UncuratedReference
-from ebl.fragment.transliteration import Transliteration
+from ebl.fragment.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
-from ebl.text.atf import Atf
-from ebl.text.labels import LineNumberLabel
-from ebl.text.lemmatization import Lemmatization
-from ebl.text.line import ControlLine, EmptyLine, TextLine
-from ebl.text.text import Text
-from ebl.text.token import Token, Word
+from ebl.transliteration.labels import LineNumberLabel
+from ebl.transliteration.lemmatization import Lemmatization
+from ebl.transliteration.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.text import Text
+from ebl.transliteration.token import Token, Word
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -99,7 +99,7 @@ def test_update_transliteration_with_record(fragment_repository,
     fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        Transliteration(Atf('$ (the transliteration)'), 'notes'),
+        TransliterationUpdate(Atf('$ (the transliteration)'), 'notes'),
         user
     )
 

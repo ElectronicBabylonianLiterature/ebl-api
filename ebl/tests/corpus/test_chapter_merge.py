@@ -1,13 +1,14 @@
 import pytest
 
+from ebl.atf.atf import Surface
 from ebl.corpus.enums import Classification, Stage
 from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.word import WordId
-from ebl.text.atf import Surface
-from ebl.text.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
-from ebl.text.line import TextLine
-from ebl.text.reconstructed_text import AkkadianWord, StringPart
-from ebl.text.token import Word
+from ebl.reconstruction.reconstructed_text import AkkadianWord, StringPart
+from ebl.transliteration.labels import ColumnLabel, LineNumberLabel, \
+    SurfaceLabel
+from ebl.transliteration.line import TextLine
+from ebl.transliteration.token import Word
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)

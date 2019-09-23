@@ -4,11 +4,11 @@ import falcon
 import pytest
 from freezegun import freeze_time
 
-from ebl.fragment.transliteration import Transliteration
+from ebl.atf.atf import Atf
+from ebl.fragment.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, \
     LemmatizedFragmentFactory
-from ebl.text.atf import Atf
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -29,8 +29,8 @@ def test_update_transliteration(client,
     expected_json = {
         **create_response_dto(
             fragment.update_transliteration(
-                Transliteration(Atf(updates['transliteration']),
-                                updates['notes']),
+                TransliterationUpdate(Atf(updates['transliteration']),
+                                      updates['notes']),
                 user
             ),
             user

@@ -1,5 +1,5 @@
-from ebl.text.labels import LabelVisitor, SurfaceLabel, ColumnLabel, \
-    LineNumberLabel
+from ebl.transliteration.labels import ColumnLabel, LabelVisitor, \
+    LineNumberLabel, SurfaceLabel
 
 
 class LabelValidator(LabelVisitor):

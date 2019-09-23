@@ -4,7 +4,8 @@ from progress.bar import Bar
 from pymongo import MongoClient
 
 from ebl.auth0 import ApiUser
-from ebl.fragment.transliteration_factory import TransliterationFactory
+from ebl.fragment.transliteration_update_factory import \
+    TransliterationUpdateFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MemoizingSignRepository
@@ -46,4 +47,5 @@ if __name__ == '__main__':
     SIGN_REPOSITORY = MemoizingSignRepository(DATABASE)
     SIGN_LIST = SignList(SIGN_REPOSITORY)
     FRAGMENT_REPOSITORY = MongoFragmentRepository(DATABASE)
-    create_updater(TransliterationFactory(SIGN_LIST), FRAGMENT_REPOSITORY)()
+    create_updater(TransliterationUpdateFactory(SIGN_LIST),
+                   FRAGMENT_REPOSITORY)()

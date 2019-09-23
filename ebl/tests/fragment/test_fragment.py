@@ -2,22 +2,22 @@ import attr
 import pytest
 from freezegun import freeze_time
 
+from ebl.atf.atf import Atf
 from ebl.fragment.folios import Folio, Folios
 from ebl.fragment.fragment import Fragment, FragmentNumber, Measure, \
     UncuratedReference
-from ebl.fragment.transliteration import (
-    Transliteration
+from ebl.fragment.transliteration_update import (
+    TransliterationUpdate
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
 from ebl.tests.factories.record import RecordFactory
-from ebl.text.atf import Atf
-from ebl.text.atf_parser import parse_atf
-from ebl.text.lemmatization import Lemmatization, LemmatizationError
-from ebl.text.text import Text
-from ebl.text.transliteration_error import TransliterationError
+from ebl.transliteration.atf_parser import parse_atf
+from ebl.transliteration.lemmatization import Lemmatization, LemmatizationError
+from ebl.transliteration.text import Text
+from ebl.transliteration.transliteration_error import TransliterationError
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -165,7 +165,7 @@ def test_references_default():
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()
     atf = Atf('1. x x')
-    transliteration = Transliteration(atf, fragment.notes)
+    transliteration = TransliterationUpdate(atf, fragment.notes)
     text = parse_atf(atf)
     record = fragment.record.add_entry('', atf, user)
 
@@ -186,7 +186,7 @@ def test_update_transliteration(user):
     atf = Atf('\n'.join(lines))
     text = parse_atf(atf)
     transliteration =\
-        Transliteration(atf, 'updated notes', 'X X\nX')
+        TransliterationUpdate(atf, 'updated notes', 'X X\nX')
     updated_fragment = lemmatized_fragment.update_transliteration(
         transliteration,
         user
@@ -209,7 +209,7 @@ def test_update_transliteration(user):
 
 def test_test_update_transliteration_invalid_atf(user):
     fragment = FragmentFactory.build()
-    transliteration = Transliteration(Atf('1. {kur}?'), fragment.notes)
+    transliteration = TransliterationUpdate(Atf('1. {kur}?'), fragment.notes)
 
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
@@ -229,7 +229,7 @@ def test_test_update_transliteration_invalid_atf(user):
 def test_update_notes(user):
     fragment = FragmentFactory.build()
     transliteration =\
-        Transliteration(fragment.text.atf, 'new notes')
+        TransliterationUpdate(fragment.text.atf, 'new notes')
     updated_fragment = fragment.update_transliteration(
         transliteration,
         user

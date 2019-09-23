@@ -2,8 +2,8 @@ import re
 
 import pytest
 
-from ebl.fragment.transliteration import Transliteration
-from ebl.text.atf import Atf
+from ebl.atf.atf import Atf
+from ebl.fragment.transliteration_update import TransliterationUpdate
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery
 
@@ -106,7 +106,7 @@ GET_MATCHING_LINES_DATA = [
 
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
-    transliteration = Transliteration(ATF, signs=SIGNS)
+    transliteration = TransliterationUpdate(ATF, signs=SIGNS)
 
     query = TransliterationQuery(query)
     lines = query.get_matching_lines(transliteration)

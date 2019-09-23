@@ -1,7 +1,7 @@
 import re
 import unicodedata
 
-from ebl.text.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
+from ebl.atf.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
     VARIANT_SEPARATOR
 from ebl.transliteration_search.value import Value, ValueFactory
 

@@ -7,13 +7,14 @@ from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
-from ebl.fragment.transliteration_factory import TransliterationFactory
+from ebl.fragment.transliteration_update_factory import \
+    TransliterationUpdateFactory
 from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.fragmentarium import Fragmentarium
 from ebl.sign_list.sign_list import SignList
 from ebl.sign_list.sign_repository import MemoizingSignRepository
-from ebl.text.lemmatization import LemmatizationError
-from ebl.text.transliteration_error import TransliterationError
+from ebl.transliteration.lemmatization import LemmatizationError
+from ebl.transliteration.transliteration_error import TransliterationError
 
 
 def update_fragment(transliteration_factory, fragmentarium, fragment):
@@ -103,7 +104,7 @@ if __name__ == '__main__':
         MongoDictionary(DATABASE),
         MongoBibliography(DATABASE)
     )
-    TRANSLITERATION_FACTORY = TransliterationFactory(SIGN_LIST)
+    TRANSLITERATION_FACTORY = TransliterationUpdateFactory(SIGN_LIST)
     update_fragments(FRAGMENT_REPOSITORY,
                      TRANSLITERATION_FACTORY,
                      FRAGMENTARIUM)

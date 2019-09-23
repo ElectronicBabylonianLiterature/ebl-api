@@ -1,4 +1,4 @@
-from ebl.text.lemmatization import Lemmatization
+from ebl.transliteration.lemmatization import Lemmatization
 
 
 def create_token(value, unique_lemma=None):

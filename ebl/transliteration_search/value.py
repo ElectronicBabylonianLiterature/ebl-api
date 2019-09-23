@@ -3,7 +3,7 @@ from typing import Mapping, Optional, Sequence, Tuple, Union
 
 import attr
 
-from ebl.text.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
+from ebl.atf.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
 
 INVALID_READING = '?'
 

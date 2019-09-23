@@ -1,12 +1,13 @@
 from ebl.bibliography.reference import Reference
-from ebl.corpus.enums import Classification, Stage, PeriodModifier, Period, \
-    Provenance, ManuscriptType
-from ebl.corpus.text import TextVisitor, Text, Chapter, Manuscript, \
-    ManuscriptLine, Line
-from ebl.text.labels import LineNumberLabel, Label
-from ebl.text.line import TextLine
-from ebl.text.reconstructed_text_parser import parse_reconstructed_line
-from ebl.text.text import create_tokens
+from ebl.corpus.enums import Classification, ManuscriptType, Period, \
+    PeriodModifier, Provenance, Stage
+from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine, Text, \
+    TextVisitor
+from ebl.reconstruction.reconstructed_text_parser import \
+    parse_reconstructed_line
+from ebl.transliteration.labels import Label, LineNumberLabel
+from ebl.transliteration.line import TextLine
+from ebl.transliteration.text import create_tokens
 
 
 class TextSerializer(TextVisitor):

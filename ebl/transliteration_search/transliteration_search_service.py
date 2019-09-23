@@ -2,8 +2,8 @@ from typing import Sequence
 
 import pydash
 
-from ebl.text.atf import Atf
-from ebl.transliteration_search.clean_atf import CleanAtf
+from ebl.atf.atf import Atf
+from ebl.atf.clean_atf import CleanAtf
 from ebl.transliteration_search.value import SignMap, Value
 
 
