@@ -161,13 +161,6 @@ class Fragmentarium:
     def find_needs_revision(self) -> List[FragmentInfo]:
         return self._repository.find_needs_revision()
 
-    def search_signs(self, query: TransliterationQuery) -> List[FragmentInfo]:
-        return [
-            FragmentInfo.of(fragment, fragment.get_matching_lines(query))
-            for fragment
-            in self._repository.search_signs(query)
-        ]
-
     def create(self, fragment: Fragment) -> FragmentNumber:
         return self._repository.create(fragment)
 
