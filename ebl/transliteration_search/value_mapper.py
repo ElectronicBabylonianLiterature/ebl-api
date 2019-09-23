@@ -45,13 +45,20 @@ def map_variant(match):
     ))
 
 
-def map_grapheme(match):
-    grapheme = match.group(0)
-    return (
-        ValueFactory.create_splittable_grapheme(grapheme)
-        if '.' in grapheme and '(' not in grapheme and ')' not in grapheme
-        else ValueFactory.create_grapheme(grapheme)
-    )
+def map_splittable_grapheme_from_group(index: int):
+    def map_(match):
+        grapheme = match.group(index)
+        return (
+            ValueFactory.create_splittable_grapheme(grapheme)
+            if is_splittable(grapheme)
+            else ValueFactory.create_grapheme(grapheme)
+        )
+
+    return map_
+
+
+def is_splittable(grapheme):
+    return '.' in grapheme and '(' not in grapheme and ')' not in grapheme
 
 
 def map_grapheme_from_group(index: int):
@@ -66,11 +73,11 @@ def parse_reading(cleaned_reading: str, is_in_variant=False) -> Value:
         (EMPTY_PATTERN, lambda _: ValueFactory.EMPTY),
         (UNCLEAR_PATTERN, lambda _: ValueFactory.UNIDENTIFIED),
         (UNIDENTIFIED_PATTER, lambda _: ValueFactory.UNIDENTIFIED),
-        (WITH_SIGN_PATTERN, map_grapheme_from_group(1)),
+        (WITH_SIGN_PATTERN, map_splittable_grapheme_from_group(1)),
         (NUMBER_PATTERN, map_number),
         (GRAPHEME_PATTERN, (map_grapheme_from_group(0)
                             if is_in_variant
-                            else map_grapheme)),
+                            else map_splittable_grapheme_from_group(0))),
         (READING_PATTERN, map_reading),
         (VARIANT_PATTERN, map_variant)
     ]
