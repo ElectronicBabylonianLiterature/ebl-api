@@ -220,7 +220,6 @@ def create_app(context):
         def on_get(self, _req, resp):
             resp.content_type = falcon.MEDIA_YAML
             resp.body = spec.to_yaml()
-            # resp.media = spec.to_dict()
 
     open_api = OpenApiResource()
     api.add_route(
