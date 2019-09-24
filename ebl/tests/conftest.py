@@ -2,6 +2,7 @@ import datetime
 import io
 import json
 
+import attr
 import mongomock
 import pydash
 import pytest
@@ -245,16 +246,16 @@ def context(dictionary,
             changelog,
             bibliography,
             user):
-    return {
-        'auth_backend': NoneAuthBackend(lambda: user),
-        'dictionary': dictionary,
-        'sign_repository': sign_repository,
-        'files': file_repository,
-        'fragment_repository': fragment_repository,
-        'changelog': changelog,
-        'bibliography': bibliography,
-        'text_repository': text_repository
-    }
+    return ebl.app.Context(
+        auth_backend=NoneAuthBackend(lambda: user),
+        dictionary=dictionary,
+        sign_repository=sign_repository,
+        files=file_repository,
+        fragment_repository=fragment_repository,
+        changelog=changelog,
+        bibliography=bibliography,
+        text_repository=text_repository
+    )
 
 
 @pytest.fixture
@@ -265,10 +266,10 @@ def client(context):
 
 @pytest.fixture
 def guest_client(context):
-    api = ebl.app.create_app({
-        **context,
-        'auth_backend': NoneAuthBackend(lambda: None),
-    })
+    api = ebl.app.create_app(attr.evolve(
+        context,
+        auth_backend=NoneAuthBackend(lambda: None)
+    ))
     return testing.TestClient(api)
 
 
