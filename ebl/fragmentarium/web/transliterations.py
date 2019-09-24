@@ -2,6 +2,7 @@ import falcon
 from falcon.media.validators.jsonschema import validate
 
 from ebl.atf.atf import Atf
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.require_scope import require_scope
 from ebl.transliteration.transliteration_error import TransliterationError
@@ -25,8 +26,8 @@ TRANSLITERATION_DTO_SCHEMA = {
 
 class TransliterationResource:
 
-    def __init__(self, fragmentarium, transliteration_factory):
-        self._fragmentarium = fragmentarium
+    def __init__(self, updater: FragmentUpdater, transliteration_factory):
+        self._updater = updater
         self._transliteration_factory = transliteration_factory
 
     @falcon.before(require_scope, 'transliterate:fragments')
@@ -34,7 +35,7 @@ class TransliterationResource:
     def on_post(self, req, resp, number):
         try:
             user = req.context.user
-            updated_fragment = self._fragmentarium.update_transliteration(
+            updated_fragment = self._updater.update_transliteration(
                 number,
                 self._create_transliteration(req.media),
                 user

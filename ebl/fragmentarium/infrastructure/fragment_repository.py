@@ -2,7 +2,8 @@ import pydash
 from marshmallow import EXCLUDE
 
 from ebl.dictionary.domain.word import WordId
-from ebl.fragmentarium.application.fragmentarium import FragmentRepository
+from ebl.fragmentarium.application.fragment_repository import \
+    FragmentRepository
 from ebl.fragmentarium.infrastructure.fragment_info_schema import \
     FragmentInfoSchema
 from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema

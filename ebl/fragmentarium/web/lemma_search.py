@@ -1,14 +1,15 @@
 import falcon
 
 from ebl.dispatcher import create_dispatcher
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.require_scope import require_scope
 
 
 class LemmaSearch:
 
-    def __init__(self, fragmentarium):
+    def __init__(self, finder: FragmentFinder):
         self._dispatch = create_dispatcher({
-            'word': fragmentarium.find_lemmas,
+            'word': finder.find_lemmas,
         })
 
     @falcon.before(require_scope, 'read:fragments')
