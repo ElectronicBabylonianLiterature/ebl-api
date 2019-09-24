@@ -6,8 +6,7 @@ from pymongo import MongoClient
 from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.changelog import Changelog
-from ebl.dictionary.dictionary import MongoDictionary
-from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
 from ebl.fragmentarium.infrastructure.fragment_repository import \
@@ -18,15 +17,15 @@ from ebl.transliteration.lemmatization import LemmatizationError
 from ebl.transliteration.transliteration_error import TransliterationError
 
 
-def update_fragment(transliteration_factory, fragmentarium, fragment):
+def update_fragment(transliteration_factory, updater, fragment):
     transliteration = transliteration_factory.create(
         fragment.text.atf,
         fragment.notes
     )
     user = ApiUser('update_fragments.py')
-    fragmentarium.update_transliteration(fragment.number,
-                                         transliteration,
-                                         user)
+    updater.update_transliteration(fragment.number,
+                                   transliteration,
+                                   user)
 
 
 def find_transliterated(fragment_repository):
@@ -70,16 +69,16 @@ class State:
 
 def update_fragments(fragment_repository,
                      transliteration_factory,
-                     fragmentarium):
+                     updater):
     state = State()
     numbers = find_transliterated(fragment_repository)
 
     with Bar('Updating', max=len(numbers)) as bar:
         for number in numbers:
             try:
-                fragment = fragmentarium.find(number)
+                fragment = fragment_repository.find(number)
                 update_fragment(transliteration_factory,
-                                fragmentarium,
+                                updater,
                                 fragment)
                 state.add_updated()
             except TransliterationError as error:
@@ -99,13 +98,12 @@ if __name__ == '__main__':
     SIGN_REPOSITORY = MemoizingSignRepository(DATABASE)
     SIGN_LIST = SignList(SIGN_REPOSITORY)
     FRAGMENT_REPOSITORY = MongoFragmentRepository(DATABASE)
-    FRAGMENTARIUM = Fragmentarium(
+    FRAGMENT_UPDATER = FragmentUpdater(
         FRAGMENT_REPOSITORY,
         Changelog(DATABASE),
-        MongoDictionary(DATABASE),
         MongoBibliography(DATABASE)
     )
     TRANSLITERATION_FACTORY = TransliterationUpdateFactory(SIGN_LIST)
     update_fragments(FRAGMENT_REPOSITORY,
                      TRANSLITERATION_FACTORY,
-                     FRAGMENTARIUM)
+                     FRAGMENT_UPDATER)
