@@ -2,10 +2,11 @@ import attr
 import pytest
 
 from ebl.atf.atf import Atf
-from ebl.dictionary.word import WordId
+from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragment.fragment import UncuratedReference
-from ebl.fragment.transliteration_update import TransliterationUpdate
+from ebl.fragmentarium.application.transliteration_update import \
+    TransliterationUpdate
+from ebl.fragmentarium.domain.fragment import UncuratedReference
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,

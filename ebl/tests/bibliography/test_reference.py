@@ -1,5 +1,5 @@
-from ebl.bibliography.reference import (BibliographyId, Reference,
-                                        ReferenceType)
+from ebl.bibliography.domain.reference import (BibliographyId, Reference,
+                                               ReferenceType)
 
 ID = BibliographyId('RN.1')
 TYPE = ReferenceType.EDITION

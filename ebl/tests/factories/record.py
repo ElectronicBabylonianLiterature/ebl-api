@@ -1,6 +1,6 @@
 import factory.fuzzy
 
-from ebl.fragment.record import (Record, RecordEntry, RecordType)
+from ebl.fragmentarium.domain.record import (Record, RecordEntry, RecordType)
 from ebl.tests.factories.collections import TupleFactory
 
 

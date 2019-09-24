@@ -15,38 +15,41 @@ from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 import ebl.error_handler
 from ebl.auth0 import Auth0Backend
 from ebl.bibliography.bibliography import MongoBibliography
-from ebl.bibliography.bibliography_entries import (BibliographyEntriesResource,
-                                                   BibliographyResource)
+from ebl.bibliography.web.bibliography_entries import (
+    BibliographyEntriesResource,
+    BibliographyResource)
 from ebl.changelog import Changelog
-from ebl.corpus.alignments import AlignmentResource
-from ebl.corpus.corpus import Corpus
-from ebl.corpus.lines import LinesResource
-from ebl.corpus.manuscripts import ManuscriptsResource
-from ebl.corpus.mongo_text_repository import MongoTextRepository
-from ebl.corpus.texts import TextResource, TextsResource
+from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
+from ebl.corpus.web.alignments import AlignmentResource
+from ebl.corpus.web.lines import LinesResource
+from ebl.corpus.web.manuscripts import ManuscriptsResource
+from ebl.corpus.web.texts import TextResource, TextsResource
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.dictionary import MongoDictionary
-from ebl.dictionary.word_search import WordSearch
-from ebl.dictionary.words import WordsResource
+from ebl.dictionary.web.word_search import WordSearch
+from ebl.dictionary.web.words import WordsResource
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
-from ebl.fragment.transliteration_update_factory import \
+from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.fragmentarium.folio_pager import FolioPagerResource
-from ebl.fragmentarium.fragment_info_schema import FragmentInfoSchema
-from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.fragment_search import FragmentSearch
-from ebl.fragmentarium.fragmentarium import Fragmentarium
-from ebl.fragmentarium.fragments import FragmentsResource
-from ebl.fragmentarium.lemma_search import LemmaSearch
-from ebl.fragmentarium.lemmatizations import LemmatizationResource
-from ebl.fragmentarium.references import ReferencesResource
-from ebl.fragmentarium.statistics import StatisticsResource
-from ebl.fragmentarium.transliterations import TransliterationResource
-from ebl.sign_list.sign_repository import MongoSignRepository
+from ebl.fragmentarium.infrastructure.fragment_info_schema import \
+    FragmentInfoSchema
+from ebl.fragmentarium.infrastructure.fragment_repository import \
+    MongoFragmentRepository
+from ebl.fragmentarium.web.folio_pager import FolioPagerResource
+from ebl.fragmentarium.web.fragment_search import FragmentSearch
+from ebl.fragmentarium.web.fragments import FragmentsResource
+from ebl.fragmentarium.web.lemma_search import LemmaSearch
+from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
+from ebl.fragmentarium.web.references import ReferencesResource
+from ebl.fragmentarium.web.statistics import StatisticsResource
+from ebl.fragmentarium.web.transliterations import TransliterationResource
+from ebl.signlist.infrastructure.sign_repository import MongoSignRepository
 from ebl.transliteration_search.transliteration_query_factory import \
     TransliterationQueryFactory
-from ebl.transliteration_search.transliteration_search_service import \
+from ebl.transliteration_search.transliteration_search import \
     TransliterationSearch
 
 API_VERSION = '0.0.1'

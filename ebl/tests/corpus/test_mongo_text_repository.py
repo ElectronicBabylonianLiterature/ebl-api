@@ -1,8 +1,8 @@
 import attr
 import pytest
 
-from ebl.corpus.text_serializer import TextSerializer
-from ebl.corpus.text import TextId, Text
+from ebl.corpus.application.text_serializer import TextSerializer
+from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,

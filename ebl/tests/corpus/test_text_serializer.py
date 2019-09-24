@@ -1,8 +1,7 @@
-from ebl.corpus.text_serializer import TextSerializer
+from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
-from ebl.tests.factories.corpus import ManuscriptFactory,\
-    ManuscriptLineFactory, LineFactory, ChapterFactory, TextFactory
-
+from ebl.tests.factories.corpus import ChapterFactory, LineFactory, \
+    ManuscriptFactory, ManuscriptLineFactory, TextFactory
 
 REFERENCES = (ReferenceWithDocumentFactory.build(), )
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)

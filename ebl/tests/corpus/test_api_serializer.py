@@ -1,8 +1,8 @@
-from ebl.corpus.api_serializer import serialize, deserialize
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory, \
-    ReferenceFactory
-from ebl.tests.factories.corpus import ManuscriptFactory, \
-    ManuscriptLineFactory, LineFactory, ChapterFactory, TextFactory
+from ebl.corpus.web.api_serializer import deserialize, serialize
+from ebl.tests.factories.bibliography import ReferenceFactory, \
+    ReferenceWithDocumentFactory
+from ebl.tests.factories.corpus import ChapterFactory, LineFactory, \
+    ManuscriptFactory, ManuscriptLineFactory, TextFactory
 
 
 def create(include_documents):

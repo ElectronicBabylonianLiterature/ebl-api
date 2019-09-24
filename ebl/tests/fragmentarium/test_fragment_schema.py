@@ -1,5 +1,5 @@
 from ebl.auth0 import Guest
-from ebl.fragmentarium.fragment_schema import FragmentSchema
+from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.fragment import FragmentFactory, \
     LemmatizedFragmentFactory

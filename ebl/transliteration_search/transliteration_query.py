@@ -3,8 +3,8 @@ import pydash
 import regex
 
 from ebl.atf.clean_atf import CleanAtf
-from ebl.fragment.fragment import Fragment
-from ebl.fragment.fragment_info import Lines
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment_info import Lines
 
 
 @attr.s(auto_attribs=True, frozen=True)
