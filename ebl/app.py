@@ -1,6 +1,7 @@
 import os
 from base64 import b64decode
 
+import attr
 import falcon
 import sentry_sdk
 from apispec import APISpec
@@ -9,6 +10,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from falcon_apispec import FalconPlugin
 from falcon_auth import FalconAuthMiddleware
+from falcon_auth.backends import AuthBackend
 from pymongo import MongoClient
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
@@ -32,6 +34,8 @@ from ebl.dictionary.web.words import WordsResource
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_repository import \
+    FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import \
@@ -57,31 +61,46 @@ from ebl.transliteration_search.transliteration_search import \
 API_VERSION = '0.0.1'
 
 
-def create_bibliography_routes(api, context, spec):
-    bibliography_resource = BibliographyResource(context['bibliography'])
-    bibliography_entries = BibliographyEntriesResource(context['bibliography'])
+@attr.s(auto_attribs=True, frozen=True)
+class Context:
+    auth_backend: AuthBackend
+    dictionary: MongoDictionary
+    sign_repository: MongoSignRepository
+    files: GridFsFiles
+    fragment_repository: FragmentRepository
+    changelog: Changelog
+    bibliography: MongoBibliography
+    text_repository: MongoTextRepository
+
+
+def create_bibliography_routes(api, context: Context, spec):
+    bibliography_resource = BibliographyResource(context.bibliography)
+    bibliography_entries = BibliographyEntriesResource(context.bibliography)
     api.add_route('/bibliography', bibliography_resource)
     api.add_route('/bibliography/{id_}', bibliography_entries)
     spec.path(resource=bibliography_resource)
     spec.path(resource=bibliography_entries)
 
 
-def create_dictionary_routes(api, context, spec):
-    words = WordsResource(context['dictionary'])
-    word_search = WordSearch(context['dictionary'])
+def create_dictionary_routes(api, context: Context, spec):
+    words = WordsResource(context.dictionary)
+    word_search = WordSearch(context.dictionary)
     api.add_route('/words', word_search)
     api.add_route('/words/{object_id}', words)
     spec.path(resource=words)
     spec.path(resource=word_search)
 
 
-def create_fragmentarium_routes(api, context, transliteration_search, spec):
-    fragmentarium = Fragmentarium(context['fragment_repository'])
-    finder = FragmentFinder(context['fragment_repository'],
-                            context['dictionary'])
-    updater = FragmentUpdater(context['fragment_repository'],
-                              context['changelog'],
-                              context['bibliography'])
+def create_fragmentarium_routes(api,
+                                context: Context,
+                                transliteration_search,
+                                spec):
+    fragmentarium = Fragmentarium(context.fragment_repository)
+    finder = FragmentFinder(context.fragment_repository,
+                            context.dictionary)
+    updater = FragmentUpdater(context.fragment_repository,
+                              context.changelog,
+                              context.bibliography)
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
@@ -123,14 +142,17 @@ def create_fragmentarium_routes(api, context, transliteration_search, spec):
     spec.path(resource=folio_pager)
 
 
-def create_corpus_routes(api, context, transliteration_search, spec):
+def create_corpus_routes(api,
+                         context: Context,
+                         transliteration_search,
+                         spec):
     corpus = Corpus(
-        context['text_repository'],
-        context['bibliography'],
-        context['changelog'],
+        context.text_repository,
+        context.bibliography,
+        context.changelog,
         TransliterationUpdateFactory(transliteration_search)
     )
-    context['text_repository'].create_indexes()
+    context.text_repository.create_indexes()
 
     texts = TextsResource(corpus)
     text = TextResource(corpus)
@@ -160,8 +182,8 @@ def create_corpus_routes(api, context, transliteration_search, spec):
     spec.path(resource=lines)
 
 
-def create_app(context):
-    auth_middleware = FalconAuthMiddleware(context['auth_backend'])
+def create_app(context: Context):
+    auth_middleware = FalconAuthMiddleware(context.auth_backend)
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
 
@@ -210,15 +232,15 @@ def create_app(context):
     spec.components.security_scheme("auth0", auth0_scheme)
 
     transliteration_search = TransliterationSearch(
-        context['sign_repository'],
-        context['fragment_repository']
+        context.sign_repository,
+        context.fragment_repository
     )
     create_bibliography_routes(api, context, spec)
     create_dictionary_routes(api, context, spec)
     create_fragmentarium_routes(api, context, transliteration_search, spec)
     create_corpus_routes(api, context, transliteration_search, spec)
 
-    files = create_files_resource(context['auth_backend'])(context['files'])
+    files = create_files_resource(context.auth_backend)(context.files)
     api.add_route('/images/{file_name}', files)
     spec.path(resource=files)
 
@@ -249,16 +271,16 @@ def get_app():
     )
 
     bibliography = MongoBibliography(database)
-    context = {
-        'auth_backend': auth_backend,
-        'dictionary': MongoDictionary(database),
-        'sign_repository': MongoSignRepository(database),
-        'files': GridFsFiles(database),
-        'fragment_repository': MongoFragmentRepository(database),
-        'changelog': Changelog(database),
-        'bibliography': bibliography,
-        'text_repository': MongoTextRepository(database)
-    }
+    context = Context(
+        auth_backend=auth_backend,
+        dictionary=MongoDictionary(database),
+        sign_repository=MongoSignRepository(database),
+        files=GridFsFiles(database),
+        fragment_repository=MongoFragmentRepository(database),
+        changelog=Changelog(database),
+        bibliography=bibliography,
+        text_repository=MongoTextRepository(database)
+    )
 
     app = create_app(context)
 
