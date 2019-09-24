@@ -19,6 +19,8 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
@@ -143,10 +145,20 @@ def fragmentarium(fragment_repository,
                   changelog,
                   dictionary,
                   bibliography):
-    return Fragmentarium(fragment_repository,
-                         changelog,
-                         dictionary,
-                         bibliography)
+    return Fragmentarium(fragment_repository)
+
+
+@pytest.fixture
+def fragment_finder(fragment_repository, dictionary):
+    return FragmentFinder(fragment_repository,
+                          dictionary)
+
+
+@pytest.fixture
+def fragment_updater(fragment_repository,
+                     changelog,
+                     bibliography):
+    return FragmentUpdater(fragment_repository, changelog, bibliography)
 
 
 class FakeFile:

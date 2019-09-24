@@ -31,6 +31,8 @@ from ebl.dictionary.web.word_search import WordSearch
 from ebl.dictionary.web.words import WordsResource
 from ebl.files.file_repository import GridFsFiles
 from ebl.files.files import create_files_resource
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
@@ -74,25 +76,28 @@ def create_dictionary_routes(api, context, spec):
 
 
 def create_fragmentarium_routes(api, context, transliteration_search, spec):
-    fragmentarium = Fragmentarium(context['fragment_repository'],
-                                  context['changelog'],
-                                  context['dictionary'],
-                                  context['bibliography'])
+    fragmentarium = Fragmentarium(context['fragment_repository'])
+    finder = FragmentFinder(context['fragment_repository'],
+                            context['dictionary'])
+    updater = FragmentUpdater(context['fragment_repository'],
+                              context['changelog'],
+                              context['bibliography'])
 
-    fragments = FragmentsResource(fragmentarium)
+    statistics = StatisticsResource(fragmentarium)
+    fragments = FragmentsResource(finder)
     fragment_search = \
         FragmentSearch(fragmentarium,
+                       finder,
                        TransliterationQueryFactory(transliteration_search),
                        transliteration_search)
-    lemmatization = LemmatizationResource(fragmentarium)
-    references = ReferencesResource(fragmentarium)
-    statistics = StatisticsResource(fragmentarium)
+    lemmatization = LemmatizationResource(updater)
+    references = ReferencesResource(updater)
     transliteration = TransliterationResource(
-        fragmentarium,
+        updater,
         TransliterationUpdateFactory(transliteration_search)
     )
-    folio_pager = FolioPagerResource(fragmentarium)
-    lemma_search = LemmaSearch(fragmentarium)
+    folio_pager = FolioPagerResource(finder)
+    lemma_search = LemmaSearch(finder)
 
     api.add_route('/fragments', fragment_search)
     api.add_route('/fragments/{number}', fragments)

@@ -3,6 +3,7 @@ import pydash
 from falcon import Request, Response
 
 from ebl.dispatcher import create_dispatcher
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.infrastructure.fragment_info_schema import \
     FragmentInfoSchema
@@ -12,12 +13,13 @@ from ebl.require_scope import require_scope
 class FragmentSearch:
     def __init__(self,
                  fragmentarium: Fragmentarium,
+                 finder: FragmentFinder,
                  transliteration_query_factory,
                  transliteration_search):
         self._dispatch = create_dispatcher({
-            'number': fragmentarium.search,
-            'random': lambda _: fragmentarium.find_random(),
-            'interesting': lambda _: fragmentarium.find_interesting(),
+            'number': finder.search,
+            'random': lambda _: finder.find_random(),
+            'interesting': lambda _: finder.find_interesting(),
             'latest': lambda _: fragmentarium.find_latest(),
             'needsRevision': lambda _: fragmentarium.find_needs_revision(),
             'transliteration': pydash.flow(
