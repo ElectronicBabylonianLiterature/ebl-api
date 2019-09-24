@@ -1,4 +1,4 @@
-from ebl.corpus.alignment import AlignmentToken, Alignment
+from ebl.corpus.domain.alignment import Alignment, AlignmentToken
 
 
 def test_alignment():

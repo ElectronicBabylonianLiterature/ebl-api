@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple
 import attr
 import pydash
 
-from ebl.dictionary.word import WordId
+from ebl.dictionary.domain.word import WordId
 
 
 class LemmatizationError(Exception):

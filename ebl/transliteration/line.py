@@ -4,7 +4,7 @@ import attr
 import pydash
 
 from ebl.atf.atf import Atf, WORD_SEPARATOR
-from ebl.corpus.alignment import AlignmentError, AlignmentToken
+from ebl.corpus.domain.alignment import AlignmentError, AlignmentToken
 from ebl.merger import Merger
 from ebl.transliteration.labels import LineNumberLabel
 from ebl.transliteration.lemmatization import LemmatizationError, \

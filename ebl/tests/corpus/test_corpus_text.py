@@ -3,14 +3,15 @@ from typing import Tuple
 import pytest
 
 from ebl.atf.atf import Surface
-from ebl.corpus.enums import Classification, ManuscriptType, Period, \
+from ebl.corpus.domain.enclosure import BROKEN_OFF_OPEN
+from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
     PeriodModifier, Provenance, Stage
-from ebl.corpus.text import (Chapter, Line, Manuscript, ManuscriptLine, Text,
-                             TextId)
-from ebl.reconstruction.enclosure import BROKEN_OFF_OPEN
-from ebl.reconstruction.reconstructed_text import AkkadianWord, \
+from ebl.corpus.domain.reconstructed_text import AkkadianWord, \
     EnclosurePart, \
     StringPart
+from ebl.corpus.domain.text import (Chapter, Line, Manuscript, ManuscriptLine,
+                                    Text,
+                                    TextId)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.labels import ColumnLabel, Label, LineNumberLabel, \
     SurfaceLabel

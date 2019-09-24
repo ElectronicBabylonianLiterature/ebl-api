@@ -4,11 +4,12 @@ from progress.bar import Bar
 from pymongo import MongoClient
 
 from ebl.auth0 import ApiUser
-from ebl.fragment.transliteration_update_factory import \
+from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.sign_list.sign_list import SignList
-from ebl.sign_list.sign_repository import MemoizingSignRepository
+from ebl.fragmentarium.infrastructure.fragment_repository import \
+    MongoFragmentRepository
+from ebl.signlist.application.sign_list import SignList
+from ebl.signlist.infrastructure.sign_repository import MemoizingSignRepository
 
 
 def create_updater(transliteration_factory, fragment_repository):

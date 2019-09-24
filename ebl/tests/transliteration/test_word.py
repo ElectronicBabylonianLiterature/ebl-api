@@ -1,7 +1,7 @@
 import pytest
 
-from ebl.corpus.alignment import AlignmentError, AlignmentToken
-from ebl.dictionary.word import WordId
+from ebl.corpus.domain.alignment import AlignmentError, AlignmentToken
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.lemmatization import LemmatizationError, \
     LemmatizationToken

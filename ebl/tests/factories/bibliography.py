@@ -1,6 +1,7 @@
 import factory.fuzzy
 
-from ebl.bibliography.reference import BibliographyId, Reference, ReferenceType
+from ebl.bibliography.domain.reference import BibliographyId, Reference, \
+    ReferenceType
 from ebl.tests.factories.collections import TupleFactory
 
 

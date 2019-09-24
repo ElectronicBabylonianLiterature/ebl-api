@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.dictionary.word import WordId
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.labels import LineNumberLabel
 from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.lemmatization import (LemmatizationError,

@@ -4,15 +4,16 @@ import factory.fuzzy
 import pydash
 
 from ebl.atf.atf import Status, Surface
-from ebl.corpus.enums import Classification, ManuscriptType, Period, \
-    PeriodModifier, Provenance, Stage
-from ebl.corpus.text import (Chapter, Line, Manuscript, ManuscriptLine, Text)
-from ebl.reconstruction.enclosure import Enclosure, EnclosureType, \
+from ebl.corpus.domain.enclosure import Enclosure, EnclosureType, \
     EnclosureVariant
-from ebl.reconstruction.reconstructed_text import AkkadianWord, Caesura, \
+from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
+    PeriodModifier, Provenance, Stage
+from ebl.corpus.domain.reconstructed_text import AkkadianWord, Caesura, \
     EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \
     StringPart
+from ebl.corpus.domain.text import (Chapter, Line, Manuscript, ManuscriptLine,
+                                    Text)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.labels import ColumnLabel, LineNumberLabel, \

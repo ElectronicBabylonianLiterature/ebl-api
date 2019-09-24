@@ -5,8 +5,9 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.atf.atf import Atf
-from ebl.fragment.transliteration_update import TransliterationUpdate
-from ebl.fragmentarium.dtos import create_response_dto
+from ebl.fragmentarium.application.transliteration_update import \
+    TransliterationUpdate
+from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, \
     LemmatizedFragmentFactory
 

@@ -3,7 +3,7 @@ from typing import Tuple
 import pytest
 
 from ebl.atf.atf import ATF_PARSER_VERSION, Atf
-from ebl.dictionary.word import WordId
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.labels import LineNumberLabel
 from ebl.transliteration.language import Language
 from ebl.transliteration.lemmatization import (Lemmatization,

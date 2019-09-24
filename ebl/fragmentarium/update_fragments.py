@@ -7,12 +7,13 @@ from ebl.auth0 import ApiUser
 from ebl.bibliography.bibliography import MongoBibliography
 from ebl.changelog import Changelog
 from ebl.dictionary.dictionary import MongoDictionary
-from ebl.fragment.transliteration_update_factory import \
+from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.fragmentarium import Fragmentarium
-from ebl.sign_list.sign_list import SignList
-from ebl.sign_list.sign_repository import MemoizingSignRepository
+from ebl.fragmentarium.infrastructure.fragment_repository import \
+    MongoFragmentRepository
+from ebl.signlist.application.sign_list import SignList
+from ebl.signlist.infrastructure.sign_repository import MemoizingSignRepository
 from ebl.transliteration.lemmatization import LemmatizationError
 from ebl.transliteration.transliteration_error import TransliterationError
 

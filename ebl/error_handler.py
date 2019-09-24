@@ -2,7 +2,7 @@ import logging
 
 import falcon
 
-from ebl.corpus.alignment import AlignmentError
+from ebl.corpus.domain.alignment import AlignmentError
 from ebl.dispatcher import DispatchError
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.transliteration.lemmatization import LemmatizationError

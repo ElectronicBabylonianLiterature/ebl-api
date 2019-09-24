@@ -1,5 +1,5 @@
 from ebl.atf.atf import Atf
-from ebl.fragment.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration_search.transliteration_query import \
     TransliterationQuery

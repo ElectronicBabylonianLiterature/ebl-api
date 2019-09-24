@@ -2,9 +2,9 @@ from typing import Tuple
 
 import factory
 
-from ebl.dictionary.word import WordId
-from ebl.fragment.folios import Folio, Folios
-from ebl.fragment.fragment import Fragment, UncuratedReference
+from ebl.dictionary.domain.word import WordId
+from ebl.fragmentarium.domain.folios import Folio, Folios
+from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.line import TextLine
 from ebl.transliteration.text import Text

@@ -15,19 +15,20 @@ from ebl.bibliography.bibliography import (
     MongoBibliography, create_object_entry
 )
 from ebl.changelog import Changelog
-from ebl.corpus.corpus import Corpus
-from ebl.corpus.mongo_text_repository import MongoTextRepository
+from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
-from ebl.fragment.fragment_info import FragmentInfo
-from ebl.fragment.transliteration_update_factory import \
+from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.fragmentarium.fragment_repository import MongoFragmentRepository
-from ebl.fragmentarium.fragmentarium import Fragmentarium
-from ebl.sign_list.sign import Sign, SignListRecord, Value
-from ebl.sign_list.sign_list import SignList
-from ebl.sign_list.sign_repository import MongoSignRepository
-from ebl.transliteration_search.transliteration_search_service import \
+from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.infrastructure.fragment_repository import \
+    MongoFragmentRepository
+from ebl.signlist.application.sign_list import SignList
+from ebl.signlist.domain.sign import Sign, SignListRecord, Value
+from ebl.signlist.infrastructure.sign_repository import MongoSignRepository
+from ebl.transliteration_search.transliteration_search import \
     TransliterationSearch
 
 

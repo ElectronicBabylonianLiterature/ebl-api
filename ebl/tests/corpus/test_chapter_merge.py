@@ -1,10 +1,10 @@
 import pytest
 
 from ebl.atf.atf import Surface
-from ebl.corpus.enums import Classification, Stage
-from ebl.corpus.text import Chapter, Line, Manuscript, ManuscriptLine
-from ebl.dictionary.word import WordId
-from ebl.reconstruction.reconstructed_text import AkkadianWord, StringPart
+from ebl.corpus.domain.enums import Classification, Stage
+from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.line import TextLine

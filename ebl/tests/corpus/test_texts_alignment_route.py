@@ -5,7 +5,7 @@ import falcon
 import pytest
 
 from ebl.auth0 import Guest
-from ebl.corpus.api_serializer import serialize
+from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.line import TextLine
 from ebl.transliteration.token import Word

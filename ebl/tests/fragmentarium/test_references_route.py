@@ -4,7 +4,7 @@ import falcon
 import pytest
 
 from ebl.auth0 import Guest
-from ebl.fragmentarium.dtos import create_response_dto
+from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.fragment import FragmentFactory
 
