@@ -31,12 +31,12 @@ def test_search_fragment_not_found(client):
 
 def test_search_signs(client,
                       fragmentarium,
-                      sign_list,
+                      sign_repository,
                       signs):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
     for sign in signs:
-        sign_list.create(sign)
+        sign_repository.create(sign)
 
     result = client.simulate_get(f'/fragments', params={
         'transliteration': 'ma-tu₂'

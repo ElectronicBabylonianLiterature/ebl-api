@@ -28,7 +28,6 @@ from ebl.fragmentarium.application.transliteration_update_factory import \
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
-from ebl.signlist.application.sign_list import SignList
 from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.domain.sign import Sign, SignListRecord, Value
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
@@ -73,11 +72,6 @@ def bibliography(database):
 @pytest.fixture
 def sign_repository(database):
     return MongoSignRepository(database)
-
-
-@pytest.fixture
-def sign_list(sign_repository):
-    return SignList(sign_repository)
 
 
 @pytest.fixture

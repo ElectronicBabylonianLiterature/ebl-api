@@ -49,8 +49,8 @@ def create_text(client, text):
     assert post_result.status == falcon.HTTP_CREATED
 
 
-def test_updating_alignment(client, bibliography, sign_list, signs):
-    allow_signs(signs, sign_list)
+def test_updating_alignment(client, bibliography, sign_repository, signs):
+    allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -86,8 +86,9 @@ def test_updating_alignment(client, bibliography, sign_list, signs):
     assert get_result.json == expected_text
 
 
-def test_updating_invalid_chapter(client, bibliography, sign_list, signs):
-    allow_signs(signs, sign_list)
+def test_updating_invalid_chapter(client, bibliography, sign_repository,
+                                  signs):
+    allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -106,8 +107,8 @@ def test_updating_invalid_chapter(client, bibliography, sign_list, signs):
     ({}, falcon.HTTP_BAD_REQUEST)
 ])
 def test_updating_invalid_alignment(dto, expected_status, client, bibliography,
-                                    sign_list, signs):
-    allow_signs(signs, sign_list)
+                                    sign_repository, signs):
+    allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
