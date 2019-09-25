@@ -21,13 +21,12 @@ from ebl.cors_component import CorsComponent
 from ebl.dictionary.infrastructure.dictionary import MongoDictionary
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.files.infrastructure.file_repository import GridFsFiles
-from ebl.files.web.files import create_files_resource
+from ebl.files.web.bootstrap import create_files_route
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
-from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 
@@ -43,16 +42,11 @@ def create_app(context: Context, issuer: str = '', audience: str = ''):
     api = create_api(context)
     spec = create_spec(api, issuer, audience)
 
-    transliteration_search = AtfConverter(context.sign_repository)
     create_bibliography_routes(api, context, spec)
     create_dictionary_routes(api, context, spec)
-    create_fragmentarium_routes(api, context, transliteration_search, spec)
-    create_corpus_routes(api, context, transliteration_search, spec)
-
-    files = create_files_resource(context.auth_backend)(context.files)
-    api.add_route('/images/{file_name}', files)
-    spec.path(resource=files)
-
+    create_fragmentarium_routes(api, context, spec)
+    create_corpus_routes(api, context, spec)
+    create_files_route(api, context, spec)
     create_open_api_route(api, spec)
 
     return api
