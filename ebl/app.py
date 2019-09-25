@@ -3,11 +3,8 @@ from base64 import b64decode
 
 import falcon
 import sentry_sdk
-from apispec import APISpec
-from apispec.ext.marshmallow import MarshmallowPlugin
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
-from falcon_apispec import FalconPlugin
 from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
@@ -28,61 +25,23 @@ from ebl.files.web.files import create_files_resource
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
+from ebl.openapi.web.bootstrap import create_open_api_route
+from ebl.openapi.web.spec import create_spec
 from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 
-API_VERSION = '0.0.1'
 
-
-def create_app(context: Context):
+def create_api(context: Context) -> falcon.API:
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
+    return api
 
-    spec = APISpec(
-        title="Electronic Babylonian Literature",
-        version=API_VERSION,
-        openapi_version='3.0.0',
-        plugins=[FalconPlugin(api), MarshmallowPlugin()],
-    )
-    authorization_url = (
-        f'{os.environ.get("AUTH0_ISSUER")}authorize'
-        f'?audience={os.environ.get("AUTH0_AUDIENCE")}'
-    )
-    auth0_scheme = {
-        'type': "oauth2",
-        'flows': {
-            'implicit': {
-                'authorizationUrl': authorization_url,
-                'scopes': {
-                    'openid': '',
-                    'profile': '',
-                    'read:words': '',
-                    'write:words': '',
-                    'read:fragments': '',
-                    'transliterate:fragments': '',
-                    'read:MJG-folios': '',
-                    'read:WGL-folios': '',
-                    'read:FWG-folios': '',
-                    'read:EL-folios': '',
-                    'read:AKG-folios': '',
-                    'lemmatize:fragments': '',
-                    'access:beta': '',
-                    'read:bibliography': '',
-                    'write:bibliography': '',
-                    'read:WRM-folios': '',
-                    'read:texts': '',
-                    'write:texts': '',
-                    'create:texts': '',
-                    'read:CB-folios': '',
-                    'read:JS-folios': '',
-                }
-            }
-        }
-    }
 
-    spec.components.security_scheme("auth0", auth0_scheme)
+def create_app(context: Context, issuer: str = '', audience: str = ''):
+    api = create_api(context)
+    spec = create_spec(api, issuer, audience)
 
     transliteration_search = AtfConverter(context.sign_repository)
     create_bibliography_routes(api, context, spec)
@@ -94,19 +53,7 @@ def create_app(context: Context):
     api.add_route('/images/{file_name}', files)
     spec.path(resource=files)
 
-    class OpenApiResource:
-        auth = {'auth_disabled': True}
-
-        def on_get(self, _req, resp):
-            resp.content_type = falcon.MEDIA_YAML
-            resp.body = spec.to_yaml()
-
-    open_api = OpenApiResource()
-    api.add_route(
-        '/ebl.yml',
-        open_api
-    )
-    spec.path(resource=open_api)
+    create_open_api_route(api, spec)
 
     return api
 
@@ -120,7 +67,6 @@ def get_app():
         os.environ['AUTH0_ISSUER']
     )
 
-    bibliography = MongoBibliography(database)
     context = Context(
         auth_backend=auth_backend,
         dictionary=MongoDictionary(database),
@@ -128,11 +74,13 @@ def get_app():
         files=GridFsFiles(database),
         fragment_repository=MongoFragmentRepository(database),
         changelog=Changelog(database),
-        bibliography=bibliography,
+        bibliography=MongoBibliography(database),
         text_repository=MongoTextRepository(database)
     )
 
-    app = create_app(context)
+    app = create_app(context,
+                     os.environ['AUTH0_ISSUER'],
+                     os.environ.get['AUTH0_AUDIENCE'])
 
     sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
     return SentryWsgiMiddleware(app)
