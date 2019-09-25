@@ -12,13 +12,13 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 from ebl.auth0 import Auth0User
-from ebl.bibliography.bibliography import (
+from ebl.bibliography.infrastructure.bibliography import (
     MongoBibliography, create_object_entry
 )
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.dictionary.dictionary import MongoDictionary
+from ebl.dictionary.infrastructure.dictionary import MongoDictionary
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater

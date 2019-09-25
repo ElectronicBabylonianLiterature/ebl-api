@@ -1,8 +1,9 @@
 import pytest
 
-from ebl.atf.atf import Status, Surface
-from ebl.transliteration.labels import (ColumnLabel, Label, LabelVisitor,
-                                        LineNumberLabel, SurfaceLabel)
+from ebl.atf.domain.atf import Status, Surface
+from ebl.transliteration.domain.labels import (ColumnLabel, Label,
+                                               LabelVisitor,
+                                               LineNumberLabel, SurfaceLabel)
 
 LABELS = [
     ('o', '@obverse', SurfaceLabel(tuple(), Surface.OBVERSE)),

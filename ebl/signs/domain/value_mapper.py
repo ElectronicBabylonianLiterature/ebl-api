@@ -1,7 +1,7 @@
 import re
 import unicodedata
 
-from ebl.atf.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
+from ebl.atf.domain.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
     VARIANT_SEPARATOR
 from ebl.signs.domain.sign import SignName
 from ebl.signs.domain.standardization import is_splittable

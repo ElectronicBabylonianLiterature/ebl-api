@@ -7,7 +7,7 @@ from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
-from ebl.transliteration.lemmatization import Lemmatization
+from ebl.transliteration.domain.lemmatization import Lemmatization
 
 
 def test_update_lemmatization(client,

@@ -2,11 +2,12 @@ from typing import Optional
 
 import attr
 
-from ebl.atf.atf import Atf, AtfSyntaxError, validate_atf
-from ebl.atf.clean_atf import CleanAtf
-from ebl.transliteration.atf_parser import parse_atf
-from ebl.transliteration.text import Text
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.atf.domain.atf import Atf, AtfSyntaxError, validate_atf
+from ebl.atf.domain.clean_atf import CleanAtf
+from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 
 @attr.s(auto_attribs=True, frozen=True)

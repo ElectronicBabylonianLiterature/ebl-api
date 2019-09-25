@@ -1,4 +1,4 @@
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
 from ebl.signs.application.atf_converter import \

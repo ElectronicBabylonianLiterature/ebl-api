@@ -3,7 +3,7 @@ from typing import Optional, Sequence, Tuple
 
 import attr
 
-from ebl.atf.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
+from ebl.atf.domain.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
 from ebl.signs.domain.sign import SignName, Value as SignValue
 from ebl.signs.domain.sign_map import SignKey, SignMap
 from ebl.signs.domain.standardization import Standardization

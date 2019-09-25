@@ -3,7 +3,7 @@ from typing import Tuple
 import factory.fuzzy
 import pydash
 
-from ebl.atf.atf import Status, Surface
+from ebl.atf.domain.atf import Status, Surface
 from ebl.corpus.domain.enclosure import Enclosure, EnclosureType, \
     EnclosureVariant
 from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
@@ -16,10 +16,10 @@ from ebl.corpus.domain.text import (Chapter, Line, Manuscript, ManuscriptLine,
                                     Text)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.labels import ColumnLabel, LineNumberLabel, \
+from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
-from ebl.transliteration.line import TextLine
-from ebl.transliteration.token import Word
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.token import Word
 
 
 class ManuscriptFactory(factory.Factory):

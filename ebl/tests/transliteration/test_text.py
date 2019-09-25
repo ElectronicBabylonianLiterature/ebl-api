@@ -2,18 +2,20 @@ from typing import Tuple
 
 import pytest
 
-from ebl.atf.atf import ATF_PARSER_VERSION, Atf
+from ebl.atf.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.language import Language
-from ebl.transliteration.lemmatization import (Lemmatization,
-                                               LemmatizationError,
-                                               LemmatizationToken)
-from ebl.transliteration.line import (ControlLine, EmptyLine, Line, TextLine)
-from ebl.transliteration.text import LanguageShift, LoneDeterminative, \
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.lemmatization import (Lemmatization,
+                                                      LemmatizationError,
+                                                      LemmatizationToken)
+from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
+                                             TextLine)
+from ebl.transliteration.domain.text import LanguageShift, LoneDeterminative, \
     Partial, \
     Text
-from ebl.transliteration.token import BrokenAway, Erasure, LineContinuation, \
+from ebl.transliteration.domain.token import BrokenAway, Erasure, \
+    LineContinuation, \
     PerhapsBrokenAway, Side, Token, Word
 
 LINES: Tuple[Line, ...] = (

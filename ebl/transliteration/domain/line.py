@@ -3,14 +3,14 @@ from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
 import attr
 import pydash
 
-from ebl.atf.atf import Atf, WORD_SEPARATOR
+from ebl.atf.domain.atf import Atf, WORD_SEPARATOR
 from ebl.corpus.domain.alignment import AlignmentError, AlignmentToken
 from ebl.merger import Merger
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.lemmatization import LemmatizationError, \
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.token import Token
-from ebl.transliteration.visitors import AtfVisitor, LanguageVisitor
+from ebl.transliteration.domain.token import Token
+from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
 T = TypeVar('T')
 L = TypeVar('L', 'TextLine', 'Line')

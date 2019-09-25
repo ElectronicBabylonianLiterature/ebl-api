@@ -1,8 +1,8 @@
 import pytest
 
-from ebl.transliteration.lark_parser import parse_word
-from ebl.transliteration.text_parser import LONE_DETERMINATIVE, WORD
-from ebl.transliteration.token import LoneDeterminative, Word
+from ebl.transliteration.domain.lark_parser import parse_word
+from ebl.transliteration.domain.text_parser import LONE_DETERMINATIVE, WORD
+from ebl.transliteration.domain.token import LoneDeterminative, Word
 
 
 @pytest.mark.parametrize('parser', [

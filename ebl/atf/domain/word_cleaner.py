@@ -1,6 +1,6 @@
 import re
 
-from ebl.atf.atf import ATF_EXTENSIONS, FLAGS, LACUNA
+from ebl.atf.domain.atf import ATF_EXTENSIONS, FLAGS, LACUNA
 
 IGNORE = [
         LACUNA['begin'],

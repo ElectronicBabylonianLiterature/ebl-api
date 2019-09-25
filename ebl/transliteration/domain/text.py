@@ -3,18 +3,24 @@ from typing import Callable, Iterable, List, Mapping, Tuple
 import attr
 import pydash
 
-from ebl.atf.atf import ATF_PARSER_VERSION, Atf, DEFAULT_ATF_PARSER_VERSION
+from ebl.atf.domain.atf import ATF_PARSER_VERSION, Atf, \
+    DEFAULT_ATF_PARSER_VERSION
 from ebl.merger import Merger
-from ebl.transliteration.language import Language
-from ebl.transliteration.lemmatization import Lemmatization, LemmatizationError
-from ebl.transliteration.line import ControlLine, EmptyLine, Line, TextLine
-from ebl.transliteration.token import (BrokenAway, DocumentOrientedGloss,
-                                       Erasure,
-                                       ErasureState, LanguageShift,
-                                       LineContinuation,
-                                       LoneDeterminative, OmissionOrRemoval,
-                                       Partial,
-                                       PerhapsBrokenAway, Side, Token, Word)
+from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.lemmatization import Lemmatization, \
+    LemmatizationError
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, \
+    TextLine
+from ebl.transliteration.domain.token import (BrokenAway,
+                                              DocumentOrientedGloss,
+                                              Erasure,
+                                              ErasureState, LanguageShift,
+                                              LineContinuation,
+                                              LoneDeterminative,
+                                              OmissionOrRemoval,
+                                              Partial,
+                                              PerhapsBrokenAway, Side, Token,
+                                              Word)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:

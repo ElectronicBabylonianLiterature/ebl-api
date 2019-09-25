@@ -1,8 +1,8 @@
 import pytest
 
-from ebl.transliteration.lark_parser import parse_erasure
-from ebl.transliteration.text_parser import erasure
-from ebl.transliteration.token import Erasure, ErasureState, Side, Word
+from ebl.transliteration.domain.lark_parser import parse_erasure
+from ebl.transliteration.domain.text_parser import erasure
+from ebl.transliteration.domain.token import Erasure, ErasureState, Side, Word
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)
 ERASURE_CENTER = Erasure('\\', Side.CENTER)

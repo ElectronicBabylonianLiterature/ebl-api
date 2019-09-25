@@ -1,4 +1,4 @@
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.signs.domain.sign import SignName
 from ebl.signs.domain.value import Grapheme, NotReading, Reading, ValueFactory
 

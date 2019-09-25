@@ -1,4 +1,4 @@
-from ebl.transliteration.labels import ColumnLabel, LabelVisitor, \
+from ebl.transliteration.domain.labels import ColumnLabel, LabelVisitor, \
     LineNumberLabel, SurfaceLabel
 
 

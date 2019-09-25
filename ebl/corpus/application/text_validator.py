@@ -5,12 +5,14 @@ from ebl.corpus.domain.alignment import AlignmentError
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
     TextVisitor
 from ebl.errors import DataError
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.token import BrokenAway, DocumentOrientedGloss, \
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.token import BrokenAway, \
+    DocumentOrientedGloss, \
     Erasure, \
     LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
     Word
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 
 def invalid_atf(chapter: Chapter,

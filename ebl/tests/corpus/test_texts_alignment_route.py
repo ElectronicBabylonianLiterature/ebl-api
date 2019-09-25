@@ -7,8 +7,8 @@ import pytest
 from ebl.auth0 import Guest
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
-from ebl.transliteration.line import TextLine
-from ebl.transliteration.token import Word
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.token import Word
 
 ANY_USER = Guest()
 DTO = {

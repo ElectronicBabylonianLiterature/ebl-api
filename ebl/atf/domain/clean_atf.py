@@ -4,7 +4,7 @@ from typing import List
 import attr
 import pydash
 
-from ebl.atf.atf import ATF_EXTENSIONS, Atf, FLAGS, LACUNA, \
+from ebl.atf.domain.atf import ATF_EXTENSIONS, Atf, FLAGS, LACUNA, \
     VARIANT_SEPARATOR, \
     WORD_SEPARATOR
 

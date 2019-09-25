@@ -1,13 +1,14 @@
 from typing import Callable, List, Tuple, Union
 
-from ebl.atf.atf import Atf, WORD_SEPARATOR
-from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.token import (BrokenAway, DEFAULT_NORMALIZED,
-                                       DocumentOrientedGloss, Erasure,
-                                       LanguageShift,
-                                       OmissionOrRemoval, PerhapsBrokenAway,
-                                       Side, Token,
-                                       TokenVisitor, Word)
+from ebl.atf.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
+                                              DocumentOrientedGloss, Erasure,
+                                              LanguageShift,
+                                              OmissionOrRemoval,
+                                              PerhapsBrokenAway,
+                                              Side, Token,
+                                              TokenVisitor, Word)
 
 
 class LanguageVisitor(TokenVisitor):

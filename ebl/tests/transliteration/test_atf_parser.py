@@ -1,20 +1,24 @@
 import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
-from ebl.atf.atf import ATF_PARSER_VERSION
-from ebl.transliteration.atf_parser import parse_atf
-from ebl.transliteration.language import Language
-from ebl.transliteration.lark_parser import parse_atf_lark
-from ebl.transliteration.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.text import Text
-from ebl.transliteration.token import (BrokenAway, DocumentOrientedGloss,
-                                       Erasure,
-                                       ErasureState, LanguageShift,
-                                       LineContinuation,
-                                       LoneDeterminative, OmissionOrRemoval,
-                                       Partial,
-                                       PerhapsBrokenAway, Side, Token, Word)
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.atf.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.token import (BrokenAway,
+                                              DocumentOrientedGloss,
+                                              Erasure,
+                                              ErasureState, LanguageShift,
+                                              LineContinuation,
+                                              LoneDeterminative,
+                                              OmissionOrRemoval,
+                                              Partial,
+                                              PerhapsBrokenAway, Side,
+                                              Token, Word)
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 

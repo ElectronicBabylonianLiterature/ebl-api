@@ -1,17 +1,18 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.lemmatization import (LemmatizationError,
-                                               LemmatizationToken)
-from ebl.transliteration.line import (ControlLine, EmptyLine, Line, TextLine)
-from ebl.transliteration.text_parser import TEXT_LINE
-from ebl.transliteration.token import (BrokenAway, DEFAULT_NORMALIZED,
-                                       DocumentOrientedGloss, Erasure,
-                                       LanguageShift,
-                                       LoneDeterminative, Side, Token,
-                                       Word)
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.lemmatization import (LemmatizationError,
+                                                      LemmatizationToken)
+from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
+                                             TextLine)
+from ebl.transliteration.domain.text_parser import TEXT_LINE
+from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
+                                              DocumentOrientedGloss, Erasure,
+                                              LanguageShift,
+                                              LoneDeterminative, Side, Token,
+                                              Word)
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 

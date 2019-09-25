@@ -1,7 +1,7 @@
 import attr
 import pytest
 
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.fragment import UncuratedReference
@@ -14,11 +14,11 @@ from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.lemmatization import Lemmatization
-from ebl.transliteration.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.text import Text
-from ebl.transliteration.token import Token, Word
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.token import Token, Word
 
 COLLECTION = 'fragments'
 

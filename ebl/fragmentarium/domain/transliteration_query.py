@@ -4,7 +4,7 @@ import attr
 import pydash
 import regex
 
-from ebl.atf.clean_atf import CleanAtf
+from ebl.atf.domain.clean_atf import CleanAtf
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import Lines
 

@@ -6,9 +6,9 @@ from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
-from ebl.transliteration.line import TextLine
-from ebl.transliteration.text import Text
-from ebl.transliteration.token import BrokenAway, Token, Word
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.token import BrokenAway, Token, Word
 
 
 class FragmentFactory(factory.Factory):
