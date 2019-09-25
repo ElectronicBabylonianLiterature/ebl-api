@@ -1,7 +1,6 @@
 import os
 from base64 import b64decode
 
-import attr
 import falcon
 import sentry_sdk
 from apispec import APISpec
@@ -10,176 +9,30 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from falcon_apispec import FalconPlugin
 from falcon_auth import FalconAuthMiddleware
-from falcon_auth.backends import AuthBackend
 from pymongo import MongoClient
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
 from ebl.auth0 import Auth0Backend
 from ebl.bibliography.infrastructure.bibliography import MongoBibliography
-from ebl.bibliography.web.bibliography_entries import (
-    BibliographyEntriesResource,
-    BibliographyResource)
+from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.changelog import Changelog
-from ebl.corpus.application.corpus import Corpus
+from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.corpus.web.alignments import AlignmentResource
-from ebl.corpus.web.lines import LinesResource
-from ebl.corpus.web.manuscripts import ManuscriptsResource
-from ebl.corpus.web.texts import TextResource, TextsResource
+from ebl.corpus.web.bootstrap import create_corpus_routes
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.infrastructure.dictionary import MongoDictionary
-from ebl.dictionary.web.word_search import WordSearch
-from ebl.dictionary.web.words import WordsResource
+from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.files.infrastructure.file_repository import GridFsFiles
 from ebl.files.web.files import create_files_resource
-from ebl.fragmentarium.application.fragment_finder import FragmentFinder
-from ebl.fragmentarium.application.fragment_repository import \
-    FragmentRepository
-from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.application.fragmentarium import Fragmentarium
-from ebl.fragmentarium.application.transliteration_query_factory \
-    import TransliterationQueryFactory
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
-from ebl.fragmentarium.infrastructure.fragment_info_schema import \
-    FragmentInfoSchema
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
-from ebl.fragmentarium.web.folio_pager import FolioPagerResource
-from ebl.fragmentarium.web.fragment_search import FragmentSearch
-from ebl.fragmentarium.web.fragments import FragmentsResource
-from ebl.fragmentarium.web.lemma_search import LemmaSearch
-from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
-from ebl.fragmentarium.web.references import ReferencesResource
-from ebl.fragmentarium.web.statistics import StatisticsResource
-from ebl.fragmentarium.web.transliterations import TransliterationResource
+from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.signs.application.atf_converter import AtfConverter
-from ebl.signs.application.sign_repository import SignRepository
 from ebl.signs.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 
 API_VERSION = '0.0.1'
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Context:
-    auth_backend: AuthBackend
-    dictionary: MongoDictionary
-    sign_repository: SignRepository
-    files: GridFsFiles
-    fragment_repository: FragmentRepository
-    changelog: Changelog
-    bibliography: MongoBibliography
-    text_repository: MongoTextRepository
-
-
-def create_bibliography_routes(api, context: Context, spec):
-    bibliography_resource = BibliographyResource(context.bibliography)
-    bibliography_entries = BibliographyEntriesResource(context.bibliography)
-    api.add_route('/bibliography', bibliography_resource)
-    api.add_route('/bibliography/{id_}', bibliography_entries)
-    spec.path(resource=bibliography_resource)
-    spec.path(resource=bibliography_entries)
-
-
-def create_dictionary_routes(api, context: Context, spec):
-    words = WordsResource(context.dictionary)
-    word_search = WordSearch(context.dictionary)
-    api.add_route('/words', word_search)
-    api.add_route('/words/{object_id}', words)
-    spec.path(resource=words)
-    spec.path(resource=word_search)
-
-
-def create_fragmentarium_routes(api,
-                                context: Context,
-                                transliteration_search,
-                                spec):
-    fragmentarium = Fragmentarium(context.fragment_repository)
-    finder = FragmentFinder(context.fragment_repository,
-                            context.dictionary)
-    updater = FragmentUpdater(context.fragment_repository,
-                              context.changelog,
-                              context.bibliography)
-
-    statistics = StatisticsResource(fragmentarium)
-    fragments = FragmentsResource(finder)
-    fragment_search = \
-        FragmentSearch(fragmentarium,
-                       finder,
-                       TransliterationQueryFactory(transliteration_search))
-    lemmatization = LemmatizationResource(updater)
-    references = ReferencesResource(updater)
-    transliteration = TransliterationResource(
-        updater,
-        TransliterationUpdateFactory(transliteration_search)
-    )
-    folio_pager = FolioPagerResource(finder)
-    lemma_search = LemmaSearch(finder)
-
-    api.add_route('/fragments', fragment_search)
-    api.add_route('/fragments/{number}', fragments)
-    api.add_route('/fragments/{number}/lemmatization', lemmatization)
-    api.add_route('/fragments/{number}/references', references)
-    api.add_route('/fragments/{number}/transliteration', transliteration)
-    api.add_route('/lemmas', lemma_search)
-    api.add_route('/statistics', statistics)
-    api.add_route(
-        '/pager/folios/{folio_name}/{folio_number}/{number}',
-        folio_pager
-    )
-
-    spec.components.schema('FragmentInfo',
-                           schema=FragmentInfoSchema)
-    spec.path(resource=fragment_search)
-    spec.path(resource=fragments)
-    spec.path(resource=lemmatization)
-    spec.path(resource=references)
-    spec.path(resource=transliteration)
-    spec.path(resource=lemma_search)
-    spec.path(resource=statistics)
-    spec.path(resource=folio_pager)
-
-
-def create_corpus_routes(api,
-                         context: Context,
-                         transliteration_search,
-                         spec):
-    corpus = Corpus(
-        context.text_repository,
-        context.bibliography,
-        context.changelog,
-        TransliterationUpdateFactory(transliteration_search)
-    )
-    context.text_repository.create_indexes()
-
-    texts = TextsResource(corpus)
-    text = TextResource(corpus)
-    alignment = AlignmentResource(corpus)
-    manuscript = ManuscriptsResource(corpus)
-    lines = LinesResource(corpus)
-
-    api.add_route('/texts', texts)
-    api.add_route('/texts/{category}/{index}', text)
-    api.add_route(
-        '/texts/{category}/{index}/chapters/{chapter_index}/alignment',
-        alignment
-    )
-    api.add_route(
-        '/texts/{category}/{index}/chapters/{chapter_index}/manuscripts',
-        manuscript
-    )
-
-    api.add_route(
-        '/texts/{category}/{index}/chapters/{chapter_index}/lines',
-        lines)
-
-    spec.path(resource=texts)
-    spec.path(resource=text)
-    spec.path(resource=alignment)
-    spec.path(resource=manuscript)
-    spec.path(resource=lines)
 
 
 def create_app(context: Context):

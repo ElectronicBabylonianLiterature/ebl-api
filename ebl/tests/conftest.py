@@ -11,6 +11,7 @@ from falcon import testing
 from falcon_auth import NoneAuthBackend
 
 import ebl.app
+import ebl.context
 from ebl.auth0 import Auth0User
 from ebl.bibliography.infrastructure.bibliography import (
     MongoBibliography, create_object_entry
@@ -239,7 +240,7 @@ def context(dictionary,
             changelog,
             bibliography,
             user):
-    return ebl.app.Context(
+    return ebl.context.Context(
         auth_backend=NoneAuthBackend(lambda: user),
         dictionary=dictionary,
         sign_repository=sign_repository,
