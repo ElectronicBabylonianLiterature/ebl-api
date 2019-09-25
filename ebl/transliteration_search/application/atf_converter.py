@@ -3,13 +3,8 @@ from typing import List, Sequence, Tuple
 import pydash
 
 from ebl.atf.atf import Atf
-from ebl.fragmentarium.application.fragment_repository import \
-    FragmentRepository
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.transliteration_search.application.sign_repository import \
     SignRepository
-from ebl.transliteration_search.application.transliteration_query import \
-    TransliterationQuery
 from ebl.transliteration_search.domain.clean_atf import CleanAtf
 from ebl.transliteration_search.domain.sign import Sign
 from ebl.transliteration_search.domain.sign_map import SignKey, SignMap
@@ -30,13 +25,10 @@ def sign_to_pair(sign: Sign) -> Sequence[SignMapEntry]:
     return mapping
 
 
-class TransliterationSearch:
+class AtfConverter:
 
-    def __init__(self,
-                 sign_repository: SignRepository,
-                 fragment_repository: FragmentRepository):
+    def __init__(self, sign_repository: SignRepository):
         self._sign_repository = sign_repository
-        self._fragment_repository = fragment_repository
 
     def convert_atf_to_signs(self, atf: Atf) -> str:
         values = CleanAtf(atf).values
@@ -85,10 +77,3 @@ class TransliterationSearch:
                                         standardization.shallow)
         else:
             return pair
-
-    def search(self, query: TransliterationQuery) -> List[FragmentInfo]:
-        return [
-            FragmentInfo.of(fragment, query.get_matching_lines(fragment))
-            for fragment
-            in self._fragment_repository.search_signs(query)
-        ]

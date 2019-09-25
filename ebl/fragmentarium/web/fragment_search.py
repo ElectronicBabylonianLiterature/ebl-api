@@ -8,14 +8,15 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.infrastructure.fragment_info_schema import \
     FragmentInfoSchema
 from ebl.require_scope import require_scope
+from ebl.transliteration_search.application.transliteration_query_factory \
+    import TransliterationQueryFactory
 
 
 class FragmentSearch:
     def __init__(self,
                  fragmentarium: Fragmentarium,
                  finder: FragmentFinder,
-                 transliteration_query_factory,
-                 transliteration_search):
+                 transliteration_query_factory: TransliterationQueryFactory):
         self._dispatch = create_dispatcher({
             'number': finder.search,
             'random': lambda _: finder.find_random(),
@@ -24,7 +25,7 @@ class FragmentSearch:
             'needsRevision': lambda _: fragmentarium.find_needs_revision(),
             'transliteration': pydash.flow(
                 transliteration_query_factory.create,
-                transliteration_search.search
+                finder.search_transliteration
             )
         })
 

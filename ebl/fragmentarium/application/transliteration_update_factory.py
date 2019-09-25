@@ -1,12 +1,12 @@
 from ebl.atf.atf import Atf
 from ebl.fragmentarium.application.transliteration_update import \
     TransliterationUpdate
-from ebl.transliteration_search.application.transliteration_search import \
-    TransliterationSearch
+from ebl.transliteration_search.application.atf_converter import \
+    AtfConverter
 
 
 class TransliterationUpdateFactory:
-    def __init__(self, transliteration_search: TransliterationSearch):
+    def __init__(self, transliteration_search: AtfConverter):
         self._transliteration_search = transliteration_search
 
     def create(self, atf: Atf, notes: str = ''):
