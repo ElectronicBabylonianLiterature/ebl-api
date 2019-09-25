@@ -2,7 +2,9 @@ import pytest
 
 from ebl.atf.atf import Atf
 from ebl.atf.clean_atf import CleanAtf
-from ebl.transliteration_search.value import Grapheme, NotReading, Reading
+from ebl.transliteration_search.domain.sign import SignName
+from ebl.transliteration_search.domain.value import Grapheme, NotReading, \
+    Reading
 
 
 def test_atf():
@@ -32,7 +34,7 @@ def test_values():
     ))
     assert clean_atf.values == [
         [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
-        [Reading('an', 1, '?'), Grapheme('|BI×IS|')],
+        [Reading('an', 1, '?'), Grapheme(SignName('|BI×IS|'))],
         [NotReading('?')]
     ]
 

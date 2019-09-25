@@ -1,8 +1,9 @@
-from ebl.signlist.domain.sign import Sign, SignListRecord, Value
+from ebl.transliteration_search.domain.sign import Sign, SignListRecord, \
+    SignName, Value
 
 
 def test_sign():
-    name = 'KUR'
+    name = SignName('KUR')
     lists = (SignListRecord('FOO', '123'),)
     values = (Value('kur', 8), Value('ruk'))
     sign = Sign(name,
@@ -17,18 +18,18 @@ def test_sign():
 def test_standardization_abz():
     name = 'ABZ'
     number = '123'
-    sign = Sign('KUR', lists=(SignListRecord(name, number), ))
+    sign = Sign(SignName('KUR'), lists=(SignListRecord(name, number), ))
     assert sign.standardization == f'{name}{number}'
 
 
 def test_standardization_multiple_abz():
     name = 'ABZ'
     number = '123'
-    sign = Sign('KUR', lists=(SignListRecord(name, number),
-                              SignListRecord(name, '999')))
+    sign = Sign(SignName('KUR'), lists=(SignListRecord(name, number),
+                                        SignListRecord(name, '999')))
     assert sign.standardization == f'{name}{number}'
 
 
 def test_standardization_no_abz():
-    sign = Sign('KUR')
+    sign = Sign(SignName('KUR'))
     assert sign.standardization == sign.name

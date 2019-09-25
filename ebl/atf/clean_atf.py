@@ -7,8 +7,8 @@ import pydash
 from ebl.atf.atf import ATF_EXTENSIONS, Atf, FLAGS, LACUNA, \
     VARIANT_SEPARATOR, \
     WORD_SEPARATOR
-from ebl.transliteration_search.value import Value
-from ebl.transliteration_search.value_mapper import parse_reading
+from ebl.transliteration_search.domain.value import Value
+from ebl.transliteration_search.domain.value_mapper import parse_reading
 
 CONTROL_LINE = r'^(@|\$(( ?(single|double|triple))| )|#|&)'
 MULTIPLEX_COMMENT = r'=:'

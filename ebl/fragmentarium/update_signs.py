@@ -8,8 +8,13 @@ from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
-from ebl.signlist.application.sign_list import SignList
-from ebl.signlist.infrastructure.sign_repository import MemoizingSignRepository
+from ebl.transliteration_search.application.transliteration_search import \
+    TransliterationSearch
+from ebl.transliteration_search.infrastructure.menoizing_sign_repository \
+    import \
+    MemoizingSignRepository
+from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
+    MongoSignRepository
 
 
 def create_updater(transliteration_factory, fragment_repository):
@@ -45,8 +50,10 @@ def create_updater(transliteration_factory, fragment_repository):
 if __name__ == '__main__':
     CLIENT = MongoClient(os.environ['MONGODB_URI'])
     DATABASE = CLIENT.get_database()
-    SIGN_REPOSITORY = MemoizingSignRepository(DATABASE)
-    SIGN_LIST = SignList(SIGN_REPOSITORY)
+    SIGN_REPOSITORY = MemoizingSignRepository(MongoSignRepository(DATABASE))
     FRAGMENT_REPOSITORY = MongoFragmentRepository(DATABASE)
-    create_updater(TransliterationUpdateFactory(SIGN_LIST),
-                   FRAGMENT_REPOSITORY)()
+    TRANSLITERATION_SEARCH = TransliterationSearch(SIGN_REPOSITORY,
+                                                   FRAGMENT_REPOSITORY)
+    TRANSLITERATION_UPDATE_FACTORY = \
+        TransliterationUpdateFactory(TRANSLITERATION_SEARCH)
+    create_updater(TRANSLITERATION_UPDATE_FACTORY, FRAGMENT_REPOSITORY)()

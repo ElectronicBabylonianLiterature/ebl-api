@@ -1,3 +1,5 @@
+from typing import Any
+
 import inflect
 from pymongo.collection import Collection
 from pymongo.database import Database
@@ -25,7 +27,7 @@ class MongoCollection:
     def find_one_by_id(self, id_):
         return self.find_one({'_id': id_})
 
-    def find_one(self, query):
+    def find_one(self, query) -> Any:
         document = self.__get_collection().find_one(query)
 
         if document is None:

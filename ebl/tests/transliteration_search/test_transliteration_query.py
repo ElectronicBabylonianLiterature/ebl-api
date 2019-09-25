@@ -5,7 +5,7 @@ import pytest
 from ebl.atf.atf import Atf
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.atf_parser import parse_atf
-from ebl.transliteration_search.transliteration_query import \
+from ebl.transliteration_search.application.transliteration_query import \
     TransliterationQuery
 
 ATF = Atf(

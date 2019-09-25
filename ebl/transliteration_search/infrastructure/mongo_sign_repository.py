@@ -1,14 +1,16 @@
 from functools import reduce
 from typing import List, Optional, Sequence, Tuple, cast
 
-import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
-from ebl.signlist.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration_search.value import AnyKey, NameKey, ValueKey
+from ebl.transliteration_search.application.sign_repository import \
+    SignRepository
+from ebl.transliteration_search.domain.sign import Sign, SignListRecord, \
+    SignName, Value
+from ebl.transliteration_search.domain.sign_map import SignKey
 
 COLLECTION = 'signs'
 
@@ -50,14 +52,14 @@ class SignSchema(Schema):
         return Sign(**data)
 
 
-def create_value_query(keys: Sequence[ValueKey]):
+def create_value_query(keys: Sequence[Value]):
     value_queries = [
         {
-            'value': value,
+            'value': value.value,
             'subIndex': {
                 '$exists': False
-            } if sub_index is None else sub_index
-        } for value, sub_index in keys
+            } if value.sub_index is None else value.sub_index
+        } for value in keys
     ]
     return {
         'values': {
@@ -68,7 +70,7 @@ def create_value_query(keys: Sequence[ValueKey]):
     }
 
 
-def creates_name_query(keys: Sequence[NameKey]):
+def creates_name_query(keys: Sequence[SignName]):
     return {
 
         '_id': {
@@ -77,22 +79,22 @@ def creates_name_query(keys: Sequence[NameKey]):
     }
 
 
-def partition_keys(keys: Sequence[AnyKey]) -> Tuple[
-    Sequence[ValueKey],
-    Sequence[NameKey]
+def partition_keys(keys: Sequence[SignKey]) -> Tuple[
+    Sequence[Value],
+    Sequence[SignName]
 ]:
     def partition(acc, key):
         values, names = acc
-        if type(key) == tuple:
-            values.append(cast(ValueKey, key))
+        if type(key) == Value:
+            values.append(key)
         else:
-            names.append(NameKey(key))
+            names.append(SignName(key))
         return values, names
 
     return reduce(partition, keys, ([], []))
 
 
-def create_signs_query(keys: List[AnyKey]):
+def create_signs_query(keys: List[SignKey]):
     values, names = partition_keys(keys)
     sub_queries: list = []
     if values:
@@ -104,7 +106,7 @@ def create_signs_query(keys: List[AnyKey]):
     }
 
 
-class MongoSignRepository:
+class MongoSignRepository(SignRepository):
 
     def __init__(self, database: Database):
         self._collection = MongoCollection(database, COLLECTION)
@@ -112,7 +114,7 @@ class MongoSignRepository:
     def create(self, sign: Sign) -> str:
         return self._collection.insert_one(SignSchema().dump(sign))
 
-    def find(self, name: str) -> Sign:
+    def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
@@ -132,7 +134,7 @@ class MongoSignRepository:
         except NotFoundError:
             return None
 
-    def search_many(self, readings: List[AnyKey]) -> List[Sign]:
+    def search_many(self, readings: List[SignKey]) -> List[Sign]:
         if readings:
             query = create_signs_query(readings)
             return cast(List[Sign],
@@ -141,11 +143,3 @@ class MongoSignRepository:
                         ))
         else:
             return []
-
-
-class MemoizingSignRepository(MongoSignRepository):
-
-    def __init__(self, database):
-        super().__init__(database)
-        self.search = pydash.memoize(super().search)
-        self.search_many = pydash.memoize(super().search_many)

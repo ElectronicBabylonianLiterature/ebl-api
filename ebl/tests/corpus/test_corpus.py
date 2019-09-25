@@ -15,7 +15,7 @@ from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.labels import LineNumberLabel
 from ebl.transliteration.line import TextLine
 from ebl.transliteration.token import Word
-from ebl.transliteration_search.value import INVALID_READING
+from ebl.transliteration_search.domain.value import INVALID_READING
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()
