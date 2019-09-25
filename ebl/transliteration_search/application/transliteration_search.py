@@ -4,29 +4,26 @@ import pydash
 
 from ebl.atf.atf import Atf
 from ebl.atf.clean_atf import CleanAtf
+from ebl.fragmentarium.application.fragment_repository import \
+    FragmentRepository
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.signlist.domain.sign import Sign
-from ebl.transliteration_search.transliteration_query import \
+from ebl.transliteration_search.application.sign_repository import \
+    SignRepository
+from ebl.transliteration_search.application.transliteration_query import \
     TransliterationQuery
-from ebl.transliteration_search.value import AnyKey, SignMap, Value
-from ebl.transliteration_search.value_mapper import is_splittable, \
-    parse_reading
+from ebl.transliteration_search.domain.sign import Sign
+from ebl.transliteration_search.domain.sign_map import SignKey, SignMap
+from ebl.transliteration_search.domain.standardization import Standardization
+from ebl.transliteration_search.domain.value import Value
+from ebl.transliteration_search.domain.value_mapper import parse_reading
 
-SignMapEntry = Tuple[AnyKey, str]
-
-
-def escape_standardization(sign) -> str:
-    return (sign.standardization
-            .replace('/', '\\u002F')
-            .replace(' ', '\\u0020'))
+SignMapEntry = Tuple[SignKey, Standardization]
 
 
 def sign_to_pair(sign: Sign) -> Sequence[SignMapEntry]:
-    standardization = (sign.name
-                       if is_splittable(sign.name)
-                       else escape_standardization(sign))
+    standardization = Standardization.of_sign(sign)
     mapping: List[SignMapEntry] = [
-        ((value.value, value.sub_index), standardization)
+        (value, standardization)
         for value in sign.values
     ]
     mapping.append((sign.name, standardization))
@@ -35,7 +32,9 @@ def sign_to_pair(sign: Sign) -> Sequence[SignMapEntry]:
 
 class TransliterationSearch:
 
-    def __init__(self, sign_repository, fragment_repository):
+    def __init__(self,
+                 sign_repository: SignRepository,
+                 fragment_repository: FragmentRepository):
         self._sign_repository = sign_repository
         self._fragment_repository = fragment_repository
 
@@ -54,7 +53,7 @@ class TransliterationSearch:
             [
                 reading_part
                 for reading in row
-                for reading_part in reading.to_sign(sign_map).split(' ')
+                for reading_part in reading.to_sign(sign_map, True).split(' ')
 
             ]
             for row in values
@@ -74,17 +73,16 @@ class TransliterationSearch:
             .from_pairs()
             .value()
         )
-
         return sign_map
 
-    def _expand_splittable(self,
-                           pair: SignMapEntry) -> SignMapEntry:
+    def _expand_splittable(self, pair: SignMapEntry) -> SignMapEntry:
         key, standardization = pair
 
-        if is_splittable(standardization):
-            value = parse_reading(standardization)
+        if standardization.is_splittable:
+            value = parse_reading(standardization.deep)
             sign_map = self._create_sign_map([[value]])
-            return key, value.to_sign(sign_map)
+            return key, Standardization(value.to_sign(sign_map, True),
+                                        standardization.shallow)
         else:
             return pair
 

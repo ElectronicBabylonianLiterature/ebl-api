@@ -17,7 +17,7 @@ from ebl.transliteration.lemmatization import Lemmatization
 from ebl.transliteration.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.text import Text
 from ebl.transliteration.token import Token, Word
-from ebl.transliteration_search.transliteration_query import \
+from ebl.transliteration_search.application.transliteration_query import \
     TransliterationQuery
 
 COLLECTION = 'fragments'

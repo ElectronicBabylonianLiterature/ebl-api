@@ -3,7 +3,8 @@ import unicodedata
 
 from ebl.atf.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
     VARIANT_SEPARATOR
-from ebl.transliteration_search.value import Value, ValueFactory
+from ebl.transliteration_search.domain.standardization import is_splittable
+from ebl.transliteration_search.domain.value import Value, ValueFactory
 
 EMPTY_PATTERN = '^$'
 UNCLEAR_PATTERN = UNCLEAR_SIGN
@@ -55,10 +56,6 @@ def map_splittable_grapheme_from_group(index: int):
         )
 
     return map_
-
-
-def is_splittable(grapheme):
-    return '.' in grapheme and '(' not in grapheme and ')' not in grapheme
 
 
 def map_grapheme_from_group(index: int):

@@ -29,10 +29,11 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
 from ebl.signlist.application.sign_list import SignList
-from ebl.signlist.domain.sign import Sign, SignListRecord, Value
-from ebl.signlist.infrastructure.sign_repository import MongoSignRepository
-from ebl.transliteration_search.transliteration_search import \
+from ebl.transliteration_search.application.transliteration_search import \
     TransliterationSearch
+from ebl.transliteration_search.domain.sign import Sign, SignListRecord, Value
+from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
+    MongoSignRepository
 
 
 @pytest.fixture

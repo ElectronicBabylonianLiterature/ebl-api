@@ -1,6 +1,8 @@
-from typing import Optional, Tuple
+from typing import NewType, Optional, Tuple
 
 import attr
+
+SignName = NewType('SignName', str)
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -17,7 +19,7 @@ class Value:
 
 @attr.s(frozen=True, auto_attribs=True)
 class Sign:
-    name: str
+    name: SignName
     lists: Tuple[SignListRecord, ...] = tuple()
     values: Tuple[Value, ...] = tuple()
 

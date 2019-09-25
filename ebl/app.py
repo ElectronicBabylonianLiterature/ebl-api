@@ -52,11 +52,15 @@ from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
-from ebl.signlist.infrastructure.sign_repository import MongoSignRepository
-from ebl.transliteration_search.transliteration_query_factory import \
+from ebl.transliteration_search.application.sign_repository import \
+    SignRepository
+from ebl.transliteration_search.application.transliteration_query_factory \
+    import \
     TransliterationQueryFactory
-from ebl.transliteration_search.transliteration_search import \
+from ebl.transliteration_search.application.transliteration_search import \
     TransliterationSearch
+from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
+    MongoSignRepository
 
 API_VERSION = '0.0.1'
 
@@ -65,7 +69,7 @@ API_VERSION = '0.0.1'
 class Context:
     auth_backend: AuthBackend
     dictionary: MongoDictionary
-    sign_repository: MongoSignRepository
+    sign_repository: SignRepository
     files: GridFsFiles
     fragment_repository: FragmentRepository
     changelog: Changelog

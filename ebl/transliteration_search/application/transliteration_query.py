@@ -1,3 +1,5 @@
+from typing import Sequence
+
 import attr
 import pydash
 import regex
@@ -9,7 +11,7 @@ from ebl.fragmentarium.domain.fragment_info import Lines
 
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
-    _signs: list
+    _signs: Sequence[Sequence[str]]
 
     @property
     def regexp(self):

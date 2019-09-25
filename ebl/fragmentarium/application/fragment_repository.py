@@ -3,7 +3,7 @@ from typing import List
 
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.transliteration_search.transliteration_query import \
+from ebl.transliteration_search.application.transliteration_query import \
     TransliterationQuery
 
 
