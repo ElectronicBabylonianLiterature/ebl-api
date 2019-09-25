@@ -1,5 +1,5 @@
 import re
-from typing import List, Sequence
+from typing import List
 
 import attr
 import pydash
@@ -7,8 +7,6 @@ import pydash
 from ebl.atf.atf import ATF_EXTENSIONS, Atf, FLAGS, LACUNA, \
     VARIANT_SEPARATOR, \
     WORD_SEPARATOR
-from ebl.transliteration_search.domain.value import Value
-from ebl.transliteration_search.domain.value_mapper import parse_reading
 
 CONTROL_LINE = r'^(@|\$(( ?(single|double|triple))| )|#|&)'
 MULTIPLEX_COMMENT = r'=:'
@@ -113,12 +111,13 @@ class CleanAtf:
     atf: Atf
 
     @property
-    def cleaned(self) -> List[str]:
+    def cleaned(self) -> List[List[str]]:
         return (
             pydash
             .chain(self.filtered)
             .map(_clean_line)
             .map(_clean_values)
+            .map(lambda row: row.split(WORD_SEPARATOR))
             .value()
         )
 
@@ -129,15 +128,3 @@ class CleanAtf:
             for line in self.atf.split('\n')
             if line and not re.match(IGNORE_LINE_PATTERN, line)
         ]
-
-    @property
-    def values(self) -> Sequence[Sequence[Value]]:
-        return (
-            pydash
-            .chain(self.cleaned)
-            .map(lambda row: [
-                parse_reading(value)
-                for value in row.split(WORD_SEPARATOR)
-            ])
-            .value()
-        )

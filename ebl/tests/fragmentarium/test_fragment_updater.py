@@ -3,7 +3,7 @@ from freezegun import freeze_time
 
 from ebl.atf.atf import Atf
 from ebl.errors import DataError, NotFoundError
-from ebl.fragmentarium.application.transliteration_update import (
+from ebl.fragmentarium.domain.transliteration_update import (
     TransliterationUpdate
 )
 from ebl.tests.factories.bibliography import ReferenceFactory

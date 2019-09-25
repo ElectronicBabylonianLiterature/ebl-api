@@ -3,9 +3,9 @@ import unicodedata
 
 from ebl.atf.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
     VARIANT_SEPARATOR
-from ebl.transliteration_search.domain.sign import SignName
-from ebl.transliteration_search.domain.standardization import is_splittable
-from ebl.transliteration_search.domain.value import Value, ValueFactory
+from ebl.signs.domain.sign import SignName
+from ebl.signs.domain.standardization import is_splittable
+from ebl.signs.domain.value import Value, ValueFactory
 
 EMPTY_PATTERN = '^$'
 UNCLEAR_PATTERN = UNCLEAR_SIGN

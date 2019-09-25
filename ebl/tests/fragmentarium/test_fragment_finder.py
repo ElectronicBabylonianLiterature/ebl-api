@@ -3,11 +3,11 @@ import pytest
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.transliteration_query import \
+    TransliterationQuery
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     TransliteratedFragmentFactory)
-from ebl.transliteration_search.application.transliteration_query import \
-    TransliterationQuery
 
 
 def test_find(fragment_finder, fragment_repository, when):

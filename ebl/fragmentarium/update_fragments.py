@@ -11,15 +11,12 @@ from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
+from ebl.signs.application.atf_converter import AtfConverter
+from ebl.signs.infrastructure.menoizing_sign_repository \
+    import MemoizingSignRepository
+from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.transliteration.lemmatization import LemmatizationError
 from ebl.transliteration.transliteration_error import TransliterationError
-from ebl.transliteration_search.application.atf_converter import \
-    AtfConverter
-from ebl.transliteration_search.infrastructure.menoizing_sign_repository \
-    import \
-    MemoizingSignRepository
-from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
-    MongoSignRepository
 
 
 def update_fragment(transliteration_factory, updater, fragment):

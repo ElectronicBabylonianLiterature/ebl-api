@@ -1,8 +1,8 @@
 from ebl.atf.atf import Atf
-from ebl.transliteration_search.application.transliteration_query \
-    import TransliterationQuery
-from ebl.transliteration_search.application.transliteration_query_factory \
+from ebl.fragmentarium.application.transliteration_query_factory \
     import TransliterationQueryFactory
+from ebl.fragmentarium.domain.transliteration_query \
+    import TransliterationQuery
 
 
 def test_create_query(transliteration_search, sign_repository, signs):

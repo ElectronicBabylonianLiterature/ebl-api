@@ -5,11 +5,11 @@ import pydash
 
 from ebl.auth0 import User
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.application.transliteration_update import (
-    TransliterationUpdate
-)
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.record import Record
+from ebl.fragmentarium.domain.transliteration_update import (
+    TransliterationUpdate
+)
 from ebl.transliteration.lemmatization import Lemmatization
 from ebl.transliteration.text import Text
 

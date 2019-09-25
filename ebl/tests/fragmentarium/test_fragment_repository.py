@@ -4,9 +4,11 @@ import pytest
 from ebl.atf.atf import Atf
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.transliteration_update import \
-    TransliterationUpdate
 from ebl.fragmentarium.domain.fragment import UncuratedReference
+from ebl.fragmentarium.domain.transliteration_query import \
+    TransliterationQuery
+from ebl.fragmentarium.domain.transliteration_update import \
+    TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,
@@ -17,8 +19,6 @@ from ebl.transliteration.lemmatization import Lemmatization
 from ebl.transliteration.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.text import Text
 from ebl.transliteration.token import Token, Word
-from ebl.transliteration_search.application.transliteration_query import \
-    TransliterationQuery
 
 COLLECTION = 'fragments'
 

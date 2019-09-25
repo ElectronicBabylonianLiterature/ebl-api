@@ -2,13 +2,10 @@ from typing import Any
 
 import pytest
 
-from ebl.transliteration_search.domain.sign import SignName
-from ebl.transliteration_search.domain.value import Grapheme, \
-    INVALID_READING, \
-    NotReading, \
-    Reading, \
-    SplittableGrapheme, Variant
-from ebl.transliteration_search.domain.value_mapper import parse_reading
+from ebl.signs.domain.sign import SignName
+from ebl.signs.domain.value import Grapheme, INVALID_READING, NotReading, \
+    Reading, SplittableGrapheme, Variant
+from ebl.signs.domain.value_mapper import parse_reading
 
 
 @pytest.mark.parametrize('value,expected', [

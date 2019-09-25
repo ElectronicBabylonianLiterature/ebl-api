@@ -1,10 +1,8 @@
 import pytest
 
 from ebl.errors import NotFoundError
-from ebl.transliteration_search.domain.sign import Sign, SignListRecord, \
-    SignName, Value
-from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
-    SignSchema
+from ebl.signs.domain.sign import Sign, SignListRecord, SignName, Value
+from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
 
 COLLECTION = 'signs'
 

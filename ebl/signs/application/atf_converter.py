@@ -3,14 +3,13 @@ from typing import List, Sequence, Tuple
 import pydash
 
 from ebl.atf.atf import Atf
-from ebl.transliteration_search.application.sign_repository import \
-    SignRepository
-from ebl.transliteration_search.domain.clean_atf import CleanAtf
-from ebl.transliteration_search.domain.sign import Sign
-from ebl.transliteration_search.domain.sign_map import SignKey, SignMap
-from ebl.transliteration_search.domain.standardization import Standardization
-from ebl.transliteration_search.domain.value import Value
-from ebl.transliteration_search.domain.value_mapper import parse_reading
+from ebl.atf.clean_atf import CleanAtf
+from ebl.signs.application.sign_repository import SignRepository
+from ebl.signs.domain.sign import Sign
+from ebl.signs.domain.sign_map import SignKey, SignMap
+from ebl.signs.domain.standardization import Standardization
+from ebl.signs.domain.value import Value
+from ebl.signs.domain.value_mapper import parse_reading
 
 SignMapEntry = Tuple[SignKey, Standardization]
 
@@ -30,12 +29,20 @@ class AtfConverter:
     def __init__(self, sign_repository: SignRepository):
         self._sign_repository = sign_repository
 
-    def convert_atf_to_signs(self, atf: Atf) -> str:
-        values = CleanAtf(atf).values
-        return '\n'.join([
-            ' '.join(row)
-            for row in self.convert_values_to_signs(values)
-        ])
+    def convert_atf_to_sign_matrix(self, atf: Atf) -> Sequence[Sequence[str]]:
+        values = self.convert_atf_to_values(atf)
+        return self.convert_values_to_signs(values)
+
+    def convert_atf_to_values(self, atf: Atf) -> Sequence[Sequence[Value]]:
+        return (
+            pydash
+            .chain(CleanAtf(atf).cleaned)
+            .map(lambda row: [
+                parse_reading(value)
+                for value in row
+            ])
+            .value()
+        )
 
     def convert_values_to_signs(
         self, values: Sequence[Sequence[Value]]

@@ -1,6 +1,6 @@
 import attr
 
-from ebl.transliteration_search.domain.sign import Sign
+from ebl.signs.domain.sign import Sign
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -1,14 +1,16 @@
 from ebl.atf.atf import Atf
-from ebl.fragmentarium.application.transliteration_update import \
+from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
-from ebl.transliteration_search.application.atf_converter import \
-    AtfConverter
+from ebl.signs.application.atf_converter import AtfConverter
 
 
 class TransliterationUpdateFactory:
-    def __init__(self, transliteration_search: AtfConverter):
-        self._transliteration_search = transliteration_search
+    def __init__(self, atf_converter: AtfConverter):
+        self._atf_converter = atf_converter
 
     def create(self, atf: Atf, notes: str = ''):
-        signs = self._transliteration_search.convert_atf_to_signs(atf)
+        signs = '\n'.join([
+            ' '.join(row)
+            for row in self._atf_converter.convert_atf_to_sign_matrix(atf)
+        ])
         return TransliterationUpdate(atf, notes, signs)

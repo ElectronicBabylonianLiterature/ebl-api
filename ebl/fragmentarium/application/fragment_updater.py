@@ -4,9 +4,9 @@ from ebl.auth0 import User
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
-from ebl.fragmentarium.application.transliteration_update import \
-    TransliterationUpdate
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.transliteration_update import \
+    TransliterationUpdate
 from ebl.transliteration.lemmatization import Lemmatization
 
 COLLECTION = 'fragments'

@@ -3,13 +3,13 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.atf.atf import Atf
-from ebl.fragmentarium.application.transliteration_update import (
-    TransliterationUpdate
-)
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber, \
     Measure, \
     UncuratedReference
+from ebl.fragmentarium.domain.transliteration_update import (
+    TransliterationUpdate
+)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           LemmatizedFragmentFactory,
