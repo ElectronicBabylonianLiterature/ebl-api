@@ -81,12 +81,12 @@ def sign_list(sign_repository):
 
 
 @pytest.fixture
-def transliteration_factory(transliteration_search):
-    return TransliterationUpdateFactory(transliteration_search)
+def transliteration_factory(atf_converter):
+    return TransliterationUpdateFactory(atf_converter)
 
 
 @pytest.fixture
-def transliteration_search(sign_repository):
+def atf_converter(sign_repository):
     return AtfConverter(sign_repository)
 
 

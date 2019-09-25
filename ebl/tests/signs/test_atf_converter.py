@@ -3,17 +3,17 @@ from ebl.signs.domain.sign import SignName
 from ebl.signs.domain.value import Grapheme, NotReading, Reading, ValueFactory
 
 
-def test_convert_atf_to_sign_matrix(transliteration_search, sign_list, signs):
+def test_convert_atf_to_sign_matrix(atf_converter, sign_list, signs):
     for sign in signs:
         sign_list.create(sign)
 
     atf = Atf('1. šu gid₂')
 
-    assert transliteration_search.convert_atf_to_sign_matrix(atf) ==\
-        [['ŠU', 'BU']]
+    assert atf_converter.convert_atf_to_sign_matrix(atf) == \
+           [['ŠU', 'BU']]
 
 
-def test_convert_atf_to_values(transliteration_search):
+def test_convert_atf_to_values(atf_converter):
     atf = Atf(
         '&K11111\n'
         '@reverse\n'
@@ -25,14 +25,14 @@ def test_convert_atf_to_values(transliteration_search):
         '2. $AN |BI×IS|\n'
         '3. nuₓ'
     )
-    assert transliteration_search.convert_atf_to_values(atf) == [
+    assert atf_converter.convert_atf_to_values(atf) == [
         [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
         [Reading('an', 1, '?'), Grapheme(SignName('|BI×IS|'))],
         [NotReading('?')]
     ]
 
 
-def test_convert_values_to_signs(transliteration_search,
+def test_convert_values_to_signs(atf_converter,
                                  sign_repository,
                                  signs):
     for sign in signs:
@@ -69,7 +69,7 @@ def test_convert_values_to_signs(transliteration_search,
          ValueFactory.create_number('30'),
          ValueFactory.create_number('256')]
     ]
-    mapped_signs = transliteration_search.convert_values_to_signs(values)
+    mapped_signs = atf_converter.convert_values_to_signs(values)
 
     assert mapped_signs == [
         ['KU', 'BU', 'ABZ075', 'ABZ207a\\u002F207b\\u0020X'],
