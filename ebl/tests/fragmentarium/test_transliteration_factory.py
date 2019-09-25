@@ -1,4 +1,4 @@
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
 from ebl.fragmentarium.domain.transliteration_update import \

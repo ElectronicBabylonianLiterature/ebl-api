@@ -6,16 +6,18 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
-from ebl.atf.atf import ATF_PARSER_VERSION
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.text import Text
-from ebl.transliteration.token import BrokenAway, DocumentOrientedGloss, \
+from ebl.atf.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.token import BrokenAway, \
+    DocumentOrientedGloss, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, Token as EblToken, \
     Word
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 
 class TreeToWord(Transformer):

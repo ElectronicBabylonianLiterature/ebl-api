@@ -4,7 +4,7 @@ from falcon.media.validators.jsonschema import validate
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.require_scope import require_scope
-from ebl.transliteration.lemmatization import Lemmatization
+from ebl.transliteration.domain.lemmatization import Lemmatization
 
 LEMMATIZATION_DTO_SCHEMA = {
     'type': 'object',

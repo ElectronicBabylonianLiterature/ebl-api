@@ -12,8 +12,8 @@ from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
 from ebl.corpus.domain.reconstructed_text import ReconstructionToken, \
     ReconstructionTokenVisitor
 from ebl.merger import Merger
-from ebl.transliteration.labels import Label, LineNumberLabel
-from ebl.transliteration.line import TextLine
+from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.line import TextLine
 
 TextId = collections.namedtuple('TextId', ['category', 'index'])
 

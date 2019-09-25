@@ -1,6 +1,6 @@
 import re
 
-from ebl.atf.word_cleaner import IGNORE_REGEX, clean_word
+from ebl.atf.domain.word_cleaner import IGNORE_REGEX, clean_word
 from ebl.fragmentarium.domain.record import RecordType
 
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}

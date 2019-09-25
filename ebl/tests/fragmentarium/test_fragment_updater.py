@@ -1,7 +1,7 @@
 import pytest
 from freezegun import freeze_time
 
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.domain.transliteration_update import (
     TransliterationUpdate
@@ -10,7 +10,7 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
-from ebl.transliteration.lemmatization import Lemmatization
+from ebl.transliteration.domain.lemmatization import Lemmatization
 
 
 @freeze_time("2018-09-07 15:41:24.032")

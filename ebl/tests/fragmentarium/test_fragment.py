@@ -2,7 +2,7 @@ import attr
 import pytest
 from freezegun import freeze_time
 
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber, \
     Measure, \
@@ -15,10 +15,12 @@ from ebl.tests.factories.fragment import (FragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
 from ebl.tests.factories.record import RecordFactory
-from ebl.transliteration.atf_parser import parse_atf
-from ebl.transliteration.lemmatization import Lemmatization, LemmatizationError
-from ebl.transliteration.text import Text
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.lemmatization import Lemmatization, \
+    LemmatizationError
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 
 def test_to_dict_for(user):

@@ -7,7 +7,7 @@ from ebl.fragmentarium.domain.fragment import (Fragment, FragmentNumber,
                                                Measure,
                                                UncuratedReference)
 from ebl.fragmentarium.domain.record import (Record, RecordEntry, RecordType)
-from ebl.transliteration.text import Text
+from ebl.transliteration.domain.text import Text
 
 
 class MeasureSchema(Schema):

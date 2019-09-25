@@ -12,9 +12,9 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.signs.domain.value import INVALID_READING
 from ebl.tests.factories.corpus import TextFactory
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.line import TextLine
-from ebl.transliteration.token import Word
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.token import Word
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()

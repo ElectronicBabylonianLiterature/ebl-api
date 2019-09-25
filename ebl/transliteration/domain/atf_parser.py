@@ -3,12 +3,13 @@ import re
 import pydash
 from parsy import ParseError, regex, seq
 
-from ebl.atf.atf import ATF_PARSER_VERSION, Atf
-from ebl.transliteration.line import ControlLine, EmptyLine
-from ebl.transliteration.text import Text
-from ebl.transliteration.text_parser import TEXT_LINE
-from ebl.transliteration.token import Token
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.atf.domain.atf import ATF_PARSER_VERSION, Atf
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_parser import TEXT_LINE
+from ebl.transliteration.domain.token import Token
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 CONTROL_LINE = seq(
     regex(r'^(=:|\$|@|&|#)', re.RegexFlag.MULTILINE),

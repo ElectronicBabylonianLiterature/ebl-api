@@ -4,7 +4,7 @@ import falcon
 import pytest
 from freezegun import freeze_time
 
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto

@@ -5,7 +5,7 @@ import falcon
 from ebl.corpus.domain.alignment import AlignmentError
 from ebl.dispatcher import DispatchError
 from ebl.errors import DataError, DuplicateError, NotFoundError
-from ebl.transliteration.lemmatization import LemmatizationError
+from ebl.transliteration.domain.lemmatization import LemmatizationError
 
 
 def http_error(_req, _resp, ex, _params):

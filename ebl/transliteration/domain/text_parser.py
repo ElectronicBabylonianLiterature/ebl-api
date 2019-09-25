@@ -3,16 +3,20 @@ import re
 import pydash
 from parsy import (char_from, decimal_digit, regex, seq, string, string_from)
 
-import ebl.atf.atf
-from ebl.transliteration.labels import LineNumberLabel
-from ebl.transliteration.line import TextLine
-from ebl.transliteration.token import (BrokenAway, DocumentOrientedGloss,
-                                       Erasure,
-                                       ErasureState, LanguageShift,
-                                       LineContinuation,
-                                       LoneDeterminative, OmissionOrRemoval,
-                                       Partial,
-                                       PerhapsBrokenAway, Side, Token, Word)
+import ebl.atf.domain.atf
+import ebl.atf.domain.atf
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.token import (BrokenAway,
+                                              DocumentOrientedGloss,
+                                              Erasure,
+                                              ErasureState, LanguageShift,
+                                              LineContinuation,
+                                              LoneDeterminative,
+                                              OmissionOrRemoval,
+                                              Partial,
+                                              PerhapsBrokenAway, Side, Token,
+                                              Word)
 
 
 def sequence(prefix, part, joiner, min_=0):
@@ -27,7 +31,7 @@ def sequence(prefix, part, joiner, min_=0):
 
 def variant(parser):
     variant_separator = string(
-        ebl.atf.atf.VARIANT_SEPARATOR
+        ebl.atf.domain.atf.VARIANT_SEPARATOR
     ).desc('variant separator')
     return sequence(parser, parser, variant_separator)
 
@@ -67,7 +71,7 @@ def true_joiner():
     joiners = '|'.join(
         make_expression(joiner)
         for joiner
-        in ebl.atf.atf.JOINERS
+        in ebl.atf.domain.atf.JOINERS
     )
     return regex(joiners)
 
@@ -89,7 +93,7 @@ MODIFIER = (
     string('@') +
     (char_from('cfgstnzkrhv') | decimal_digit.at_least(1).concat())
 ).many().concat()
-WORD_SEPARATOR = string(ebl.atf.atf.WORD_SEPARATOR).desc('word separtor')
+WORD_SEPARATOR = string(ebl.atf.domain.atf.WORD_SEPARATOR).desc('word separtor')
 WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'(?=\n|$)')
 LINE_NUMBER = regex(r'[^\s]+\.').map(
     LineNumberLabel.from_atf
@@ -115,7 +119,8 @@ DIVIDER = (
     FLAG
 ).desc('divider')
 UNKNOWN = (
-        string_from(ebl.atf.atf.UNIDENTIFIED_SIGN, ebl.atf.atf.UNCLEAR_SIGN) +
+        string_from(ebl.atf.domain.atf.UNIDENTIFIED_SIGN,
+                    ebl.atf.domain.atf.UNCLEAR_SIGN) +
         FLAG
 ).desc('unclear or unidentified')
 VALUE_CHAR = char_from('aāâbdeēêghiīîyklmnpqrsṣštṭuūûwzḫʾ')
@@ -196,15 +201,15 @@ def erasure_part(state: ErasureState):
 
 
 def erasure(map_tokens: bool, part_parser=erasure_part):
-    return (seq(string(ebl.atf.atf.ATF_EXTENSIONS['erasure_boundary'])
+    return (seq(string(ebl.atf.domain.atf.ATF_EXTENSIONS['erasure_boundary'])
                 .map(lambda value: Erasure(value, Side.LEFT)
                      if map_tokens else value),
                 part_parser(ErasureState.ERASED),
-                string(ebl.atf.atf.ATF_EXTENSIONS['erasure_delimiter'])
+                string(ebl.atf.domain.atf.ATF_EXTENSIONS['erasure_delimiter'])
                 .map(lambda value: Erasure(value, Side.CENTER)
                      if map_tokens else value),
                 part_parser(ErasureState.OVER_ERASED),
-                string(ebl.atf.atf.ATF_EXTENSIONS['erasure_boundary'])
+                string(ebl.atf.domain.atf.ATF_EXTENSIONS['erasure_boundary'])
                 .map(lambda value: Erasure(value, Side.RIGHT)
                      if map_tokens else value))
             .desc('erasure'))

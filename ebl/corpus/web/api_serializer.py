@@ -8,8 +8,8 @@ from ebl.corpus.domain.reconstructed_text import AkkadianWord, Caesura, \
     Lacuna, MetricalFootSeparator, ReconstructionToken
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.errors import DataError
-from ebl.transliteration.labels import Label, LineNumberLabel
-from ebl.transliteration.text_parser import TEXT_LINE
+from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.text_parser import TEXT_LINE
 
 
 class ApiSerializer(TextSerializer):

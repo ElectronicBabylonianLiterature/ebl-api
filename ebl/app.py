@@ -16,7 +16,7 @@ from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
 from ebl.auth0 import Auth0Backend
-from ebl.bibliography.bibliography import MongoBibliography
+from ebl.bibliography.infrastructure.bibliography import MongoBibliography
 from ebl.bibliography.web.bibliography_entries import (
     BibliographyEntriesResource,
     BibliographyResource)
@@ -28,11 +28,11 @@ from ebl.corpus.web.lines import LinesResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.texts import TextResource, TextsResource
 from ebl.cors_component import CorsComponent
-from ebl.dictionary.dictionary import MongoDictionary
+from ebl.dictionary.infrastructure.dictionary import MongoDictionary
 from ebl.dictionary.web.word_search import WordSearch
 from ebl.dictionary.web.words import WordsResource
-from ebl.files.file_repository import GridFsFiles
-from ebl.files.files import create_files_resource
+from ebl.files.infrastructure.file_repository import GridFsFiles
+from ebl.files.web.files import create_files_resource
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository

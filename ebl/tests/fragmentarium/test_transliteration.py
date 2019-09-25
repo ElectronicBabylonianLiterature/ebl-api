@@ -1,11 +1,12 @@
 import pytest
 
-from ebl.atf.atf import Atf
+from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
-from ebl.transliteration.atf_parser import parse_atf
-from ebl.transliteration.text import Text
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 
 def test_atf():

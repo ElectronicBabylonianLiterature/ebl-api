@@ -2,8 +2,8 @@ from typing import List, Sequence, Tuple
 
 import pydash
 
-from ebl.atf.atf import Atf
-from ebl.atf.clean_atf import CleanAtf
+from ebl.atf.domain.atf import Atf
+from ebl.atf.domain.clean_atf import CleanAtf
 from ebl.signs.application.sign_repository import SignRepository
 from ebl.signs.domain.sign import Sign
 from ebl.signs.domain.sign_map import SignKey, SignMap

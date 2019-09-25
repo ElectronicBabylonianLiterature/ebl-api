@@ -7,7 +7,7 @@ import pytest
 from ebl.auth0 import Guest
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
-from ebl.transliteration.labels import LineNumberLabel
+from ebl.transliteration.domain.labels import LineNumberLabel
 
 ANY_USER = Guest()
 

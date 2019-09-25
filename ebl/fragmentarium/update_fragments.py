@@ -4,7 +4,7 @@ from progress.bar import Bar
 from pymongo import MongoClient
 
 from ebl.auth0 import ApiUser
-from ebl.bibliography.bibliography import MongoBibliography
+from ebl.bibliography.infrastructure.bibliography import MongoBibliography
 from ebl.changelog import Changelog
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import \
@@ -15,8 +15,9 @@ from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.infrastructure.menoizing_sign_repository \
     import MemoizingSignRepository
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
-from ebl.transliteration.lemmatization import LemmatizationError
-from ebl.transliteration.transliteration_error import TransliterationError
+from ebl.transliteration.domain.lemmatization import LemmatizationError
+from ebl.transliteration.domain.transliteration_error import \
+    TransliterationError
 
 
 def update_fragment(transliteration_factory, updater, fragment):

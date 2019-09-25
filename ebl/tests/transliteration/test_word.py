@@ -2,11 +2,12 @@ import pytest
 
 from ebl.corpus.domain.alignment import AlignmentError, AlignmentToken
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.lemmatization import LemmatizationError, \
+from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.token import (DEFAULT_NORMALIZED, ErasureState, Token,
-                                       Word)
+from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED, ErasureState,
+                                              Token,
+                                              Word)
 
 LEMMATIZABLE_TEST_WORDS = [
     (Word('un'), True),

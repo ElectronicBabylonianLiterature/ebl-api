@@ -7,7 +7,7 @@ from ebl.fragmentarium.application.fragment_repository import \
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
-from ebl.transliteration.lemmatization import Lemmatization
+from ebl.transliteration.domain.lemmatization import Lemmatization
 
 COLLECTION = 'fragments'
 

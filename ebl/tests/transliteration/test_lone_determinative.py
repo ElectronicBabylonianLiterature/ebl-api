@@ -1,8 +1,9 @@
 import pytest
 
-from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.token import (DEFAULT_NORMALIZED, ErasureState,
-                                       LoneDeterminative, Partial, Token)
+from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED, ErasureState,
+                                              LoneDeterminative, Partial,
+                                              Token)
 
 
 def test_of_value():

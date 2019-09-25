@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.transliteration.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 
 
 def test_lemmatizable():

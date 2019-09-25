@@ -10,8 +10,8 @@ from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import (
     TransliterationUpdate
 )
-from ebl.transliteration.lemmatization import Lemmatization
-from ebl.transliteration.text import Text
+from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.transliteration.domain.text import Text
 
 FragmentNumber = NewType('FragmentNumber', str)
 

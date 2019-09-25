@@ -6,9 +6,9 @@ from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
     Text, \
     TextVisitor
-from ebl.transliteration.labels import Label, LineNumberLabel
-from ebl.transliteration.line import TextLine
-from ebl.transliteration.text import create_tokens
+from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text import create_tokens
 
 
 class TextSerializer(TextVisitor):
