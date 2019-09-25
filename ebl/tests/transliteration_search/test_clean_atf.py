@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.atf.atf import Atf
-from ebl.atf.clean_atf import CleanAtf
+from ebl.transliteration_search.domain.clean_atf import CleanAtf
 from ebl.transliteration_search.domain.sign import SignName
 from ebl.transliteration_search.domain.value import Grapheme, NotReading, \
     Reading

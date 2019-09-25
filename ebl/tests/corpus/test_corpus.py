@@ -2,7 +2,6 @@ import attr
 import pydash
 import pytest
 
-from ebl.atf.clean_atf import CleanAtf
 from ebl.auth0 import Guest
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.corpus.domain.alignment import Alignment, AlignmentError, \
@@ -15,6 +14,7 @@ from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.labels import LineNumberLabel
 from ebl.transliteration.line import TextLine
 from ebl.transliteration.token import Word
+from ebl.transliteration_search.domain.clean_atf import CleanAtf
 from ebl.transliteration_search.domain.value import INVALID_READING
 
 COLLECTION = 'texts'

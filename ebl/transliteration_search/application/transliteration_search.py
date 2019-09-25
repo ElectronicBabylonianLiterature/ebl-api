@@ -3,7 +3,6 @@ from typing import List, Sequence, Tuple
 import pydash
 
 from ebl.atf.atf import Atf
-from ebl.atf.clean_atf import CleanAtf
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
@@ -11,6 +10,7 @@ from ebl.transliteration_search.application.sign_repository import \
     SignRepository
 from ebl.transliteration_search.application.transliteration_query import \
     TransliterationQuery
+from ebl.transliteration_search.domain.clean_atf import CleanAtf
 from ebl.transliteration_search.domain.sign import Sign
 from ebl.transliteration_search.domain.sign_map import SignKey, SignMap
 from ebl.transliteration_search.domain.standardization import Standardization
