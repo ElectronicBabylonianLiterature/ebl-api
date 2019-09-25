@@ -8,8 +8,8 @@ from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
-from ebl.transliteration_search.application.transliteration_search import \
-    TransliterationSearch
+from ebl.transliteration_search.application.atf_converter import \
+    AtfConverter
 from ebl.transliteration_search.infrastructure.menoizing_sign_repository \
     import \
     MemoizingSignRepository
@@ -52,8 +52,7 @@ if __name__ == '__main__':
     DATABASE = CLIENT.get_database()
     SIGN_REPOSITORY = MemoizingSignRepository(MongoSignRepository(DATABASE))
     FRAGMENT_REPOSITORY = MongoFragmentRepository(DATABASE)
-    TRANSLITERATION_SEARCH = TransliterationSearch(SIGN_REPOSITORY,
-                                                   FRAGMENT_REPOSITORY)
+    TRANSLITERATION_SEARCH = AtfConverter(SIGN_REPOSITORY)
     TRANSLITERATION_UPDATE_FACTORY = \
         TransliterationUpdateFactory(TRANSLITERATION_SEARCH)
     create_updater(TRANSLITERATION_UPDATE_FACTORY, FRAGMENT_REPOSITORY)()

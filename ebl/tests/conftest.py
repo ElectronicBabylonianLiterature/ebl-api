@@ -29,8 +29,8 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
 from ebl.signlist.application.sign_list import SignList
-from ebl.transliteration_search.application.transliteration_search import \
-    TransliterationSearch
+from ebl.transliteration_search.application.atf_converter import \
+    AtfConverter
 from ebl.transliteration_search.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
     MongoSignRepository
@@ -88,8 +88,8 @@ def transliteration_factory(transliteration_search):
 
 
 @pytest.fixture
-def transliteration_search(sign_repository, fragment_repository):
-    return TransliterationSearch(sign_repository, fragment_repository)
+def transliteration_search(sign_repository):
+    return AtfConverter(sign_repository)
 
 
 @pytest.fixture

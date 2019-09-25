@@ -52,13 +52,13 @@ from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
+from ebl.transliteration_search.application.atf_converter import \
+    AtfConverter
 from ebl.transliteration_search.application.sign_repository import \
     SignRepository
 from ebl.transliteration_search.application.transliteration_query_factory \
     import \
     TransliterationQueryFactory
-from ebl.transliteration_search.application.transliteration_search import \
-    TransliterationSearch
 from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 
@@ -111,8 +111,7 @@ def create_fragmentarium_routes(api,
     fragment_search = \
         FragmentSearch(fragmentarium,
                        finder,
-                       TransliterationQueryFactory(transliteration_search),
-                       transliteration_search)
+                       TransliterationQueryFactory(transliteration_search))
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
     transliteration = TransliterationResource(
@@ -235,10 +234,7 @@ def create_app(context: Context):
 
     spec.components.security_scheme("auth0", auth0_scheme)
 
-    transliteration_search = TransliterationSearch(
-        context.sign_repository,
-        context.fragment_repository
-    )
+    transliteration_search = AtfConverter(context.sign_repository)
     create_bibliography_routes(api, context, spec)
     create_dictionary_routes(api, context, spec)
     create_fragmentarium_routes(api, context, transliteration_search, spec)

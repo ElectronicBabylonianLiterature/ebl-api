@@ -13,8 +13,8 @@ from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
 from ebl.transliteration.lemmatization import LemmatizationError
 from ebl.transliteration.transliteration_error import TransliterationError
-from ebl.transliteration_search.application.transliteration_search import \
-    TransliterationSearch
+from ebl.transliteration_search.application.atf_converter import \
+    AtfConverter
 from ebl.transliteration_search.infrastructure.menoizing_sign_repository \
     import \
     MemoizingSignRepository
@@ -107,8 +107,7 @@ if __name__ == '__main__':
         Changelog(DATABASE),
         MongoBibliography(DATABASE)
     )
-    TRANSLITERATION_SEARCH = TransliterationSearch(SIGN_REPOSITORY,
-                                                   FRAGMENT_REPOSITORY)
+    TRANSLITERATION_SEARCH = AtfConverter(SIGN_REPOSITORY)
     TRANSLITERATION_UPDATE_FACTORY = \
         TransliterationUpdateFactory(TRANSLITERATION_SEARCH)
     update_fragments(FRAGMENT_REPOSITORY,

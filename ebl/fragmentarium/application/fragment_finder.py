@@ -4,6 +4,8 @@ from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.transliteration_search.application.transliteration_query import \
+    TransliterationQuery
 
 
 class FragmentFinder:
@@ -20,6 +22,15 @@ class FragmentFinder:
 
     def search(self, number: str) -> List[FragmentInfo]:
         return list(map(FragmentInfo.of, self._repository.search(number)))
+
+    def search_transliteration(
+            self, query: TransliterationQuery
+    ) -> List[FragmentInfo]:
+        return [
+            FragmentInfo.of(fragment, query.get_matching_lines(fragment))
+            for fragment
+            in self._repository.search_signs(query)
+        ]
 
     def find_random(self) -> List[FragmentInfo]:
         return list(map(FragmentInfo.of, self._repository.find_random()))

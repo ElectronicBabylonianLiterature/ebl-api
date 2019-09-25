@@ -4,8 +4,10 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.fragment import (
-    FragmentFactory
-)
+    FragmentFactory,
+    TransliteratedFragmentFactory)
+from ebl.transliteration_search.application.transliteration_query import \
+    TransliterationQuery
 
 
 def test_find(fragment_finder, fragment_repository, when):
@@ -63,6 +65,24 @@ def test_search(fragment_finder, fragment_repository, when):
     when(fragment_repository).search(query).thenReturn([fragment])
 
     assert fragment_finder.search(query) == [FragmentInfo.of(fragment)]
+
+
+def test_search_transliteration(fragment_finder, fragment_repository, when):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    sign_matrix = [['MA', 'UD']]
+    query = TransliterationQuery(sign_matrix)
+    matching_fragments = [transliterated_fragment]
+
+    (when(fragment_repository)
+     .search_signs(query)
+     .thenReturn(matching_fragments))
+
+    expected_lines = (('6\'. [...] x mu ta-ma-tu₂',),)
+    expected = [
+        FragmentInfo.of(fragment, expected_lines)
+        for fragment in matching_fragments
+    ]
+    assert fragment_finder.search_transliteration(query) == expected
 
 
 def test_find_lemmas(fragment_finder,
