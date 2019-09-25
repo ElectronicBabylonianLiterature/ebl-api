@@ -1,9 +1,9 @@
 from ebl.atf.atf import Atf
-from ebl.atf.clean_atf import CleanAtf
 from ebl.transliteration_search.application.transliteration_query import \
     TransliterationQuery
 from ebl.transliteration_search.application.transliteration_search import \
     TransliterationSearch
+from ebl.transliteration_search.domain.clean_atf import CleanAtf
 
 
 class TransliterationQueryFactory:
