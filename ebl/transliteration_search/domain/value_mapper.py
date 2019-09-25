@@ -3,6 +3,7 @@ import unicodedata
 
 from ebl.atf.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
     VARIANT_SEPARATOR
+from ebl.transliteration_search.domain.sign import SignName
 from ebl.transliteration_search.domain.standardization import is_splittable
 from ebl.transliteration_search.domain.value import Value, ValueFactory
 
@@ -48,11 +49,11 @@ def map_variant(match):
 
 def map_splittable_grapheme_from_group(index: int):
     def map_(match):
-        grapheme = match.group(index)
+        name = SignName(match.group(index))
         return (
-            ValueFactory.create_splittable_grapheme(grapheme)
-            if is_splittable(grapheme)
-            else ValueFactory.create_grapheme(grapheme)
+            ValueFactory.create_splittable_grapheme(name)
+            if is_splittable(name)
+            else ValueFactory.create_grapheme(name)
         )
 
     return map_
@@ -60,7 +61,8 @@ def map_splittable_grapheme_from_group(index: int):
 
 def map_grapheme_from_group(index: int):
     def map_(match):
-        return ValueFactory.create_grapheme(match.group(index))
+        name = SignName(match.group(index))
+        return ValueFactory.create_grapheme(name)
 
     return map_
 
