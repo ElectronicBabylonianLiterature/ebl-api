@@ -4,7 +4,6 @@ import pydash
 from parsy import (char_from, decimal_digit, regex, seq, string, string_from)
 
 import ebl.atf.domain.atf
-import ebl.atf.domain.atf
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.token import (BrokenAway,
@@ -93,7 +92,8 @@ MODIFIER = (
     string('@') +
     (char_from('cfgstnzkrhv') | decimal_digit.at_least(1).concat())
 ).many().concat()
-WORD_SEPARATOR = string(ebl.atf.domain.atf.WORD_SEPARATOR).desc('word separtor')
+WORD_SEPARATOR =\
+    string(ebl.atf.domain.atf.WORD_SEPARATOR).desc('word separtor')
 WORD_SEPARATOR_OR_EOL = WORD_SEPARATOR | regex(r'(?=\n|$)')
 LINE_NUMBER = regex(r'[^\s]+\.').map(
     LineNumberLabel.from_atf
