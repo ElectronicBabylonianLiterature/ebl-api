@@ -13,8 +13,8 @@ from ebl.signs.application.atf_converter import AtfConverter
 
 def create_corpus_routes(api: falcon.API,
                          context: Context,
-                         atf_converter: AtfConverter,
                          spec):
+    atf_converter = AtfConverter(context.sign_repository)
     corpus = Corpus(
         context.text_repository,
         context.bibliography,

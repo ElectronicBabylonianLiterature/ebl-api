@@ -18,11 +18,11 @@ from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
+from ebl.signs.application.atf_converter import AtfConverter
 
 
 def create_fragmentarium_routes(api: falcon.API,
                                 context: Context,
-                                transliteration_search,
                                 spec):
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(context.fragment_repository,
@@ -33,15 +33,16 @@ def create_fragmentarium_routes(api: falcon.API,
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
+    atf_converter = AtfConverter(context.sign_repository)
     fragment_search = \
         FragmentSearch(fragmentarium,
                        finder,
-                       TransliterationQueryFactory(transliteration_search))
+                       TransliterationQueryFactory(atf_converter))
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
     transliteration = TransliterationResource(
         updater,
-        TransliterationUpdateFactory(transliteration_search)
+        TransliterationUpdateFactory(atf_converter)
     )
     folio_pager = FolioPagerResource(finder)
     lemma_search = LemmaSearch(finder)
