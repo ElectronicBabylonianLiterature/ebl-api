@@ -59,8 +59,9 @@ def test_to_dto():
     assert serialize(text) == dto
 
 
-def test_created_text_can_be_fetched(client, bibliography, sign_list, signs):
-    allow_signs(signs, sign_list)
+def test_created_text_can_be_fetched(client, bibliography, sign_repository,
+                                     signs):
+    allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -90,8 +91,8 @@ def test_invalid_index(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_listing_texts(client, bibliography, sign_list, signs):
-    allow_signs(signs, sign_list)
+def test_listing_texts(client, bibliography, sign_repository, signs):
+    allow_signs(signs, sign_repository)
     first_text = TextFactory.build()
     second_text = TextFactory.build()
     allow_references(first_text, bibliography)

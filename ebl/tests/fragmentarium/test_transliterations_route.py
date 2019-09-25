@@ -57,12 +57,12 @@ def test_update_transliteration(client,
 def test_update_transliteration_merge_lemmatization(client,
                                                     fragmentarium,
                                                     signs,
-                                                    sign_list,
+                                                    sign_repository,
                                                     transliteration_factory,
                                                     user):
 
     for sign in signs:
-        sign_list.create(sign)
+        sign_repository.create(sign)
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_number = fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split('\n')

@@ -40,8 +40,8 @@ def create_text(client, text):
     assert post_result.json == create_dto(text, True)
 
 
-def test_updating(client, bibliography, sign_list, signs):
-    allow_signs(signs, sign_list)
+def test_updating(client, bibliography, sign_repository, signs):
+    allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
@@ -118,9 +118,9 @@ def test_update_invalid_entity(client,
                                bibliography,
                                lines,
                                expected_status,
-                               sign_list,
+                               sign_repository,
                                signs):
-    allow_signs(signs, sign_list)
+    allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)

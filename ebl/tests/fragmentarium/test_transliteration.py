@@ -44,7 +44,7 @@ def test_parse_invalid():
         transliteration.parse()
 
 
-def test_validate_valid_signs(transliteration_factory, sign_list, signs):
+def test_validate_valid_signs(transliteration_factory):
     TransliterationUpdate(Atf('1. šu gid₂'), signs='ŠU BU')
 
 
@@ -61,7 +61,7 @@ def test_invalid_atf():
     ]
 
 
-def test_validate_invalid_value(sign_list):
+def test_validate_invalid_value():
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
         TransliterationUpdate(Atf('1. invalid values'), signs='? ?')
@@ -74,7 +74,7 @@ def test_validate_invalid_value(sign_list):
     ]
 
 
-def test_validate_multiple_errors(sign_list):
+def test_validate_multiple_errors():
     with pytest.raises(TransliterationError,
                        match='Invalid transliteration') as excinfo:
         TransliterationUpdate(

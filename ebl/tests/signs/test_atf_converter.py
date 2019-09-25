@@ -3,14 +3,14 @@ from ebl.signs.domain.sign import SignName
 from ebl.signs.domain.value import Grapheme, NotReading, Reading, ValueFactory
 
 
-def test_convert_atf_to_sign_matrix(atf_converter, sign_list, signs):
+def test_convert_atf_to_sign_matrix(atf_converter, sign_repository, signs):
     for sign in signs:
-        sign_list.create(sign)
+        sign_repository.create(sign)
 
     atf = Atf('1. šu gid₂')
 
     assert atf_converter.convert_atf_to_sign_matrix(atf) == \
-           [['ŠU', 'BU']]
+        [['ŠU', 'BU']]
 
 
 def test_convert_atf_to_values(atf_converter):

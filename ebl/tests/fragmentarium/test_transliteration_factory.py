@@ -5,9 +5,9 @@ from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
 
 
-def test_create(atf_converter, sign_list, signs):
+def test_create(atf_converter, sign_repository, signs):
     for sign in signs:
-        sign_list.create(sign)
+        sign_repository.create(sign)
 
     factory = TransliterationUpdateFactory(atf_converter)
     atf = Atf('1. šu gid₂')
