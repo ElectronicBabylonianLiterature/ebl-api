@@ -4,7 +4,7 @@ from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.transliteration_search.application.transliteration_query import \
+from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
 
 

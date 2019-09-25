@@ -29,11 +29,9 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
 from ebl.signlist.application.sign_list import SignList
-from ebl.transliteration_search.application.atf_converter import \
-    AtfConverter
-from ebl.transliteration_search.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
-    MongoSignRepository
+from ebl.signs.application.atf_converter import AtfConverter
+from ebl.signs.domain.sign import Sign, SignListRecord, Value
+from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 
 
 @pytest.fixture

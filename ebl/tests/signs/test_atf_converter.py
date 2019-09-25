@@ -1,15 +1,35 @@
 from ebl.atf.atf import Atf
-from ebl.transliteration_search.domain.sign import SignName
-from ebl.transliteration_search.domain.value import ValueFactory
+from ebl.signs.domain.sign import SignName
+from ebl.signs.domain.value import Grapheme, NotReading, Reading, ValueFactory
 
 
-def test_convert_atf_to_signs(transliteration_search, sign_list, signs):
+def test_convert_atf_to_sign_matrix(transliteration_search, sign_list, signs):
     for sign in signs:
         sign_list.create(sign)
 
     atf = Atf('1. šu gid₂')
 
-    assert transliteration_search.convert_atf_to_signs(atf) == 'ŠU BU'
+    assert transliteration_search.convert_atf_to_sign_matrix(atf) ==\
+        [['ŠU', 'BU']]
+
+
+def test_convert_atf_to_values(transliteration_search):
+    atf = Atf(
+        '&K11111\n'
+        '@reverse\n'
+        '\n'
+        '$ end of side\n'
+        '#note\n'
+        '=: foo\n'
+        '1. ku X x\n'
+        '2. $AN |BI×IS|\n'
+        '3. nuₓ'
+    )
+    assert transliteration_search.convert_atf_to_values(atf) == [
+        [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
+        [Reading('an', 1, '?'), Grapheme(SignName('|BI×IS|'))],
+        [NotReading('?')]
+    ]
 
 
 def test_convert_values_to_signs(transliteration_search,

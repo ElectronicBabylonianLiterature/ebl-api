@@ -1,10 +1,7 @@
 import pytest
 
 from ebl.atf.atf import Atf
-from ebl.transliteration_search.domain.clean_atf import CleanAtf
-from ebl.transliteration_search.domain.sign import SignName
-from ebl.transliteration_search.domain.value import Grapheme, NotReading, \
-    Reading
+from ebl.atf.clean_atf import CleanAtf
 
 
 def test_atf():
@@ -18,25 +15,6 @@ def test_filtered():
         Atf('&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku\n2. $AN')
     )
     assert clean_atf.filtered == ['1. ku', '2. $AN']
-
-
-def test_values():
-    clean_atf = CleanAtf(Atf(
-        '&K11111\n'
-        '@reverse\n'
-        '\n'
-        '$ end of side\n'
-        '#note\n'
-        '=: foo\n'
-        '1. ku X x\n'
-        '2. $AN |BI×IS|\n'
-        '3. nuₓ'
-    ))
-    assert clean_atf.values == [
-        [Reading('ku', 1, '?'), NotReading('X'), NotReading('X')],
-        [Reading('an', 1, '?'), Grapheme(SignName('|BI×IS|'))],
-        [NotReading('?')]
-    ]
 
 
 def test_ignored_lines():
@@ -62,11 +40,11 @@ def test_strip_line_numbers():
         '1. mu\n2\'. me\na+1. e\n1.2. a\n3. kur. ra'
     ))
     assert clean_atf.cleaned == [
-        'mu',
-        'me',
-        'e',
-        'a',
-        'kur ra'
+        ['mu'],
+        ['me'],
+        ['e'],
+        ['a'],
+        ['kur', 'ra']
     ]
 
 
@@ -95,26 +73,26 @@ def test_map_spaces():
     ))
 
     assert clean_atf.cleaned == [
-        'šu mu gid₂ ba',
-        'giš bi is',
-        'giš |BI.IS|',
-        'm d',
-        'tu um',
-        'tu na',
-        'nibru ki na',
-        'nibru ki na',
-        'mu giš bi',
-        'mu giš bi',
-        'tu na',
-        'tu na',
-        'e',
-        'e',
-        'e',
-        'e',
-        'mu giš bi',
-        'din d x',
-        'šu mu',
-        'd a'
+        ['šu', 'mu', 'gid₂', 'ba'],
+        ['giš', 'bi', 'is'],
+        ['giš', '|BI.IS|'],
+        ['m', 'd'],
+        ['tu', 'um'],
+        ['tu', 'na'],
+        ['nibru', 'ki', 'na'],
+        ['nibru', 'ki', 'na'],
+        ['mu', 'giš', 'bi'],
+        ['mu', 'giš', 'bi'],
+        ['tu', 'na'],
+        ['tu', 'na'],
+        ['e'],
+        ['e'],
+        ['e'],
+        ['e'],
+        ['mu', 'giš', 'bi'],
+        ['din', 'd', 'x'],
+        ['šu', 'mu'],
+        ['d', 'a']
     ]
 
 
@@ -130,21 +108,21 @@ def test_strip_lacuna():
         '9. ⸢ba⸣'
     ))
     assert clean_atf.cleaned == [
-        'nu ku₃',
-        'a ba an',
-        'ši',
-        'a ba',
-        'x x x',
-        'x x',
-        '',
-        'ba'
+        ['nu', 'ku₃'],
+        ['a', 'ba', 'an'],
+        ['ši'],
+        ['a', 'ba'],
+        ['x', 'x', 'x'],
+        ['x', 'x'],
+        [''],
+        ['ba']
     ]
 
 
 def test_indent():
     clean_atf = CleanAtf(Atf('1. ($___$) ša₂'))
     assert clean_atf.cleaned == [
-        'ša₂'
+        ['ša₂']
     ]
 
 
@@ -152,8 +130,8 @@ def test_strip_flags():
     clean_atf =\
         CleanAtf(Atf('1.  ba! ba? ba# ba*\n2. $KU'))
     assert clean_atf.cleaned == [
-        'ba ba ba ba',
-        'ku'
+        ['ba', 'ba', 'ba', 'ba'],
+        ['ku']
     ]
 
 
@@ -161,8 +139,8 @@ def test_strip_shifts():
     clean_atf =\
         CleanAtf(Atf('1. %es qa\n2. ba %g ba'))
     assert clean_atf.cleaned == [
-        'qa',
-        'ba ba'
+        ['qa'],
+        ['ba', 'ba']
     ]
 
 
@@ -171,9 +149,9 @@ def test_strip_omissions():
         '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
     ))
     assert clean_atf.cleaned == [
-        'ku₃',
-        'an',
-        'ba'
+        ['ku₃'],
+        ['an'],
+        ['ba']
     ]
 
 
@@ -181,7 +159,7 @@ def test_min():
     clean_atf =\
         CleanAtf(Atf('3. MIN<(an)> ši'))
     assert clean_atf.cleaned == [
-        'min ši'
+        ['min', 'ši']
     ]
 
 
@@ -189,9 +167,9 @@ def test_numbers():
     clean_atf =\
         CleanAtf(Atf('1. 1(AŠ)\n2. 1 2 10 20 30\n3. 256'))
     assert clean_atf.cleaned == [
-        '1(AŠ)',
-        '1 2 10 20 30',
-        '256'
+        ['1(AŠ)'],
+        ['1', '2', '10', '20', '30'],
+        ['256']
     ]
 
 
@@ -216,7 +194,7 @@ def test_graphemes():
         for index, grapheme in enumerate(graphemes)
     ])))
 
-    assert clean_atf.cleaned == graphemes
+    assert clean_atf.cleaned == [[grapheme] for grapheme in graphemes]
 
 
 def test_lower_case():
@@ -234,16 +212,16 @@ def test_lower_case():
     ))
 
     assert clean_atf.cleaned == [
-        'gid₂',
-        'ši',
-        'bi',
-        'bi is',
-        'bi is',
-        '|BI.IS|',
-        'diš',
-        'ku₃',
-        'ku(KU₃)',
-        'ku/|BI×IS|'
+        ['gid₂'],
+        ['ši'],
+        ['bi'],
+        ['bi', 'is'],
+        ['bi', 'is'],
+        ['|BI.IS|'],
+        ['diš'],
+        ['ku₃'],
+        ['ku(KU₃)'],
+        ['ku/|BI×IS|']
     ]
 
 
@@ -255,9 +233,9 @@ def test_strip_at():
     ))
 
     assert clean_atf.cleaned == [
-        'lu₂',
-        'lu₂',
-        'ta'
+        ['lu₂'],
+        ['lu₂'],
+        ['ta']
     ]
 
 
@@ -267,19 +245,19 @@ def test_strip_line_continuation():
     ))
 
     assert clean_atf.cleaned == [
-        'ku'
+        ['ku']
     ]
 
 
 @pytest.mark.parametrize('erasure,cleaned', [
-    ('1. °\\° ku', 'ku'),
-    ('°\\°  ku', 'ku'),
-    ('1. °ra (ra) 1(AŠ) <(ra)> [(ra)]\\° ku', 'ku'),
-    ('1. °<(1(AŠ))>\\° 2(DIŠ)', '2(DIŠ)'),
-    ('1. °[(1(AŠ))]\\° 2(DIŠ)', '2(DIŠ)'),
-    ('1. °\\ra° ku', 'ra ku'),
-    ('1. °ra\\ku°', 'ku'),
-    ('1. °\\KU°', 'ku')
+    ('1. °\\° ku', ['ku']),
+    ('°\\°  ku', ['ku']),
+    ('1. °ra (ra) 1(AŠ) <(ra)> [(ra)]\\° ku', ['ku']),
+    ('1. °<(1(AŠ))>\\° 2(DIŠ)', ['2(DIŠ)']),
+    ('1. °[(1(AŠ))]\\° 2(DIŠ)', ['2(DIŠ)']),
+    ('1. °\\ra° ku', ['ra', 'ku']),
+    ('1. °ra\\ku°', ['ku']),
+    ('1. °\\KU°', ['ku'])
 ])
 def test_strip_erasure(erasure, cleaned):
     clean_atf = CleanAtf(Atf(erasure))

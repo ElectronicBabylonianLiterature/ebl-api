@@ -3,10 +3,10 @@ from typing import Optional
 import attr
 
 from ebl.atf.atf import Atf, AtfSyntaxError, validate_atf
+from ebl.atf.clean_atf import CleanAtf
 from ebl.transliteration.atf_parser import parse_atf
 from ebl.transliteration.text import Text
 from ebl.transliteration.transliteration_error import TransliterationError
-from ebl.transliteration_search.domain.clean_atf import CleanAtf
 
 
 @attr.s(auto_attribs=True, frozen=True)

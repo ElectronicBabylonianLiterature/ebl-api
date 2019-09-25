@@ -10,12 +10,11 @@ from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
+from ebl.signs.domain.value import INVALID_READING
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.labels import LineNumberLabel
 from ebl.transliteration.line import TextLine
 from ebl.transliteration.token import Word
-from ebl.transliteration_search.domain.clean_atf import CleanAtf
-from ebl.transliteration_search.domain.value import INVALID_READING
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()
@@ -72,9 +71,8 @@ def expect_signs(transliteration_search, when, sign='X', text=TEXT):
      .flat_map(lambda chapter: chapter.lines)
      .flat_map(lambda line: line.manuscripts)
      .map(lambda manuscript: manuscript.line.atf)
-     .map(lambda atf: CleanAtf(atf).values)
      .for_each(lambda values: when(transliteration_search)
-               .convert_values_to_signs(values)
+               .convert_atf_to_sign_matrix(values)
                .thenReturn([[sign]]))
      .value())
 

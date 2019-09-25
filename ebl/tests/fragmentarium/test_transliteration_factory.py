@@ -1,8 +1,8 @@
 from ebl.atf.atf import Atf
-from ebl.fragmentarium.application.transliteration_update import \
-    TransliterationUpdate
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
+from ebl.fragmentarium.domain.transliteration_update import \
+    TransliterationUpdate
 
 
 def test_create(transliteration_search, sign_list, signs):

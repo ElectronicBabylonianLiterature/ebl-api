@@ -5,11 +5,11 @@ from falcon import Request, Response
 from ebl.dispatcher import create_dispatcher
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.transliteration_query_factory \
+    import TransliterationQueryFactory
 from ebl.fragmentarium.infrastructure.fragment_info_schema import \
     FragmentInfoSchema
 from ebl.require_scope import require_scope
-from ebl.transliteration_search.application.transliteration_query_factory \
-    import TransliterationQueryFactory
 
 
 class FragmentSearch:

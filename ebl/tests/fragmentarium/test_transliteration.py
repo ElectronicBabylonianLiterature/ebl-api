@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.atf.atf import Atf
-from ebl.fragmentarium.application.transliteration_update import \
+from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
 from ebl.transliteration.atf_parser import parse_atf
 from ebl.transliteration.text import Text

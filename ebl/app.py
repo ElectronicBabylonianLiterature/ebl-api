@@ -38,6 +38,8 @@ from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.transliteration_query_factory \
+    import TransliterationQueryFactory
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
 from ebl.fragmentarium.infrastructure.fragment_info_schema import \
@@ -52,14 +54,9 @@ from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
-from ebl.transliteration_search.application.atf_converter import \
-    AtfConverter
-from ebl.transliteration_search.application.sign_repository import \
-    SignRepository
-from ebl.transliteration_search.application.transliteration_query_factory \
-    import \
-    TransliterationQueryFactory
-from ebl.transliteration_search.infrastructure.mongo_sign_repository import \
+from ebl.signs.application.atf_converter import AtfConverter
+from ebl.signs.application.sign_repository import SignRepository
+from ebl.signs.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 
 API_VERSION = '0.0.1'
