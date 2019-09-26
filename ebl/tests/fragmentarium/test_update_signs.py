@@ -16,4 +16,5 @@ def test_update_signs(fragment_repository,
 
     create_updater(transliteration_factory, fragment_repository)()
 
-    assert fragment_repository.find(number) == transliterated_fragment
+    assert fragment_repository.query_by_fragment_number(number) ==\
+        transliterated_fragment

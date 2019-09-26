@@ -21,10 +21,13 @@ class Fragmentarium:
         }
 
     def find_latest(self) -> List[FragmentInfo]:
-        return list(map(FragmentInfo.of, self._repository.find_latest()))
+        return list(map(
+            FragmentInfo.of,
+            self._repository.query_by_transliterated_sorted_by_date()
+        ))
 
     def find_needs_revision(self) -> List[FragmentInfo]:
-        return self._repository.find_needs_revision()
+        return self._repository.query_by_transliterated_not_revised_by_other()
 
     def create(self, fragment: Fragment) -> FragmentNumber:
         return self._repository.create(fragment)

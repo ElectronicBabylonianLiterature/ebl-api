@@ -13,14 +13,18 @@ from ebl.tests.factories.fragment import (
 def test_find(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
     number = fragment.number
-    when(fragment_repository).find(number).thenReturn(fragment)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenReturn(fragment))
 
     assert fragment_finder.find(number) == fragment
 
 
 def test_find_not_found(fragment_finder, fragment_repository, when):
     number = 'unknown id'
-    when(fragment_repository).find(number).thenRaise(NotFoundError)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenRaise(NotFoundError))
 
     with pytest.raises(NotFoundError):
         fragment_finder.find(number)
@@ -28,13 +32,17 @@ def test_find_not_found(fragment_finder, fragment_repository, when):
 
 def test_find_random(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    when(fragment_repository).find_random().thenReturn([fragment])
+    (when(fragment_repository)
+     .query_random_by_transliterated()
+     .thenReturn([fragment]))
     assert fragment_finder.find_random() == [FragmentInfo.of(fragment)]
 
 
 def test_find_interesting(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    when(fragment_repository).find_interesting().thenReturn([fragment])
+    (when(fragment_repository)
+     .query_by_kuyunjik_not_transliterated_joined_or_published()
+     .thenReturn([fragment]))
     assert fragment_finder.find_interesting() == [FragmentInfo.of(fragment)]
 
 
@@ -53,16 +61,18 @@ def test_folio_pager(fragment_finder, fragment_repository, when):
         }
     }
     (when(fragment_repository)
-     .folio_pager(folio_name, folio_number, number)
+     .query_next_and_previous_folio(folio_name, folio_number, number)
      .thenReturn(expected))
-    assert fragment_finder.folio_pager(folio_name, folio_number, number) ==\
+    assert fragment_finder.folio_pager(folio_name, folio_number, number) == \
         expected
 
 
 def test_search(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
     query = fragment.number
-    when(fragment_repository).search(query).thenReturn([fragment])
+    (when(fragment_repository)
+     .query_by_fragment_cdli_or_accession_number(query)
+     .thenReturn([fragment]))
 
     assert fragment_finder.search(query) == [FragmentInfo.of(fragment)]
 
@@ -74,7 +84,7 @@ def test_search_transliteration(fragment_finder, fragment_repository, when):
     matching_fragments = [transliterated_fragment]
 
     (when(fragment_repository)
-     .search_signs(query)
+     .query_by_transliteration(query)
      .thenReturn(matching_fragments))
 
     expected_lines = (('6\'. [...] x mu ta-ma-tu₂',),)
@@ -92,7 +102,7 @@ def test_find_lemmas(fragment_finder,
                      when):
     query = 'GI₆'
     unique_lemma = WordId(word['_id'])
-    when(fragment_repository).find_lemmas(query).thenReturn([[unique_lemma]])
+    when(fragment_repository).query_lemmas(query).thenReturn([[unique_lemma]])
     when(dictionary).find(unique_lemma).thenReturn(word)
 
     assert fragment_finder.find_lemmas(query) == [[word]]

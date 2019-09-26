@@ -36,21 +36,21 @@ class MongoFragmentRepository(FragmentRepository):
     def create(self, fragment):
         return self._collection.insert_one(fragment.to_dict())
 
-    def find(self, number):
+    def query_by_fragment_number(self, number):
         data = self._collection.find_one_by_id(number)
         return FragmentSchema(unknown=EXCLUDE).load(data)
 
-    def search(self, number):
+    def query_by_fragment_cdli_or_accession_number(self, number):
         cursor = self._collection.find_many(number_is(number))
 
         return self._map_fragments(cursor)
 
-    def find_random(self):
+    def query_random_by_transliterated(self):
         cursor = self._collection.aggregate(aggregate_random())
 
         return self._map_fragments(cursor)
 
-    def find_interesting(self):
+    def query_by_kuyunjik_not_transliterated_joined_or_published(self):
         cursor = self._collection.aggregate(aggregate_interesting())
 
         return self._map_fragments(cursor)
@@ -60,15 +60,15 @@ class MongoFragmentRepository(FragmentRepository):
 
         return self._map_fragments(cursor)
 
-    def find_latest(self):
+    def query_by_transliterated_sorted_by_date(self):
         cursor = self._collection.aggregate(aggregate_latest())
         return self._map_fragments(cursor)
 
-    def find_needs_revision(self):
+    def query_by_transliterated_not_revised_by_other(self):
         cursor = self._collection.aggregate(aggregate_needs_revision())
         return FragmentInfoSchema(many=True).load(cursor)
 
-    def search_signs(self, query):
+    def query_by_transliteration(self, query):
         cursor = self._collection.find_many({
             'signs': {'$regex': query.regexp}
         })
@@ -93,7 +93,7 @@ class MongoFragmentRepository(FragmentRepository):
             }}
         )
 
-    def folio_pager(self, folio_name, folio_number, number):
+    def query_next_and_previous_folio(self, folio_name, folio_number, number):
         base_pipeline = [
             {'$match': {'folios.name': folio_name}},
             {'$unwind': '$folios'},
@@ -146,7 +146,7 @@ class MongoFragmentRepository(FragmentRepository):
             'next': get_numbers(next_) or get_numbers(first)
         }
 
-    def find_lemmas(self, word):
+    def query_lemmas(self, word):
         cursor = self._collection.aggregate(aggregate_lemmas(word))
         return [
             [

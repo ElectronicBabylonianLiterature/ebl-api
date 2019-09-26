@@ -13,7 +13,58 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def find(self, number: FragmentNumber) -> Fragment:
+    def count_transliterated_fragments(self) -> int:
+        ...
+
+    @abstractmethod
+    def count_lines(self) -> int:
+        ...
+
+    @abstractmethod
+    def query_by_fragment_number(self, number: FragmentNumber) -> Fragment:
+        ...
+
+    @abstractmethod
+    def query_by_fragment_cdli_or_accession_number(
+            self, number: str
+    ) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def query_random_by_transliterated(self) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def query_by_kuyunjik_not_transliterated_joined_or_published(
+        self
+    ) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def query_by_transliterated_sorted_by_date(self) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def query_by_transliterated_not_revised_by_other(
+        self
+    ) -> List[FragmentInfo]:
+        ...
+
+    @abstractmethod
+    def query_by_transliteration(
+        self, query: TransliterationQuery
+    ) -> List[Fragment]:
+        ...
+
+    @abstractmethod
+    def query_next_and_previous_folio(self,
+                                      folio_name: str,
+                                      folio_number: str,
+                                      number: FragmentNumber) -> dict:
+        ...
+
+    @abstractmethod
+    def query_lemmas(self, word: str) -> List[List[dict]]:
         ...
 
     @abstractmethod
@@ -26,47 +77,4 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def update_references(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def count_transliterated_fragments(self) -> int:
-        ...
-
-    @abstractmethod
-    def count_lines(self) -> int:
-        ...
-
-    @abstractmethod
-    def search(self, number: str) -> List[Fragment]:
-        ...
-
-    @abstractmethod
-    def find_random(self) -> List[Fragment]:
-        ...
-
-    @abstractmethod
-    def find_interesting(self) -> List[Fragment]:
-        ...
-
-    @abstractmethod
-    def find_latest(self) -> List[Fragment]:
-        ...
-
-    @abstractmethod
-    def find_needs_revision(self) -> List[FragmentInfo]:
-        ...
-
-    @abstractmethod
-    def search_signs(self, query: TransliterationQuery) -> List[Fragment]:
-        ...
-
-    @abstractmethod
-    def folio_pager(self,
-                    folio_name: str,
-                    folio_number: str,
-                    number: FragmentNumber) -> dict:
-        ...
-
-    @abstractmethod
-    def find_lemmas(self, word: str) -> List[List[dict]]:
         ...
