@@ -5,10 +5,10 @@ from typing import Tuple
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.application.enclosure_validator import validate
-from ebl.corpus.application.label_validator import LabelValidator
+from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
     PeriodModifier, Provenance, Stage
+from ebl.corpus.domain.label_validator import LabelValidator
 from ebl.corpus.domain.reconstructed_text import ReconstructionToken, \
     ReconstructionTokenVisitor
 from ebl.merger import Merger
