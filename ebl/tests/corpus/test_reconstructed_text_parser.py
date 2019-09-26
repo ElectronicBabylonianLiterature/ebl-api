@@ -1,13 +1,13 @@
 import pytest
 from parsy import ParseError
 
-from ebl.corpus.application.enclosure_validator import validate
 from ebl.corpus.application.reconstructed_text_parser import akkadian_word, \
     caesura, \
     foot_separator, lacuna, reconstructed_line
 from ebl.corpus.domain.enclosure import BROKEN_OFF_CLOSE, BROKEN_OFF_OPEN, \
     EMENDATION_CLOSE, EMENDATION_OPEN, MAYBE_BROKEN_OFF_CLOSE, \
     MAYBE_BROKEN_OFF_OPEN
+from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.reconstructed_text import AkkadianWord, Caesura, \
     EnclosurePart, \
     Lacuna, LacunaPart, MetricalFootSeparator, Modifier, SeparatorPart, \

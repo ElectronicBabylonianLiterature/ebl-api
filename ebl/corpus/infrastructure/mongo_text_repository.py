@@ -3,8 +3,8 @@ from typing import List
 import pymongo
 
 from ebl.corpus.application.corpus import COLLECTION, TextRepository
+from ebl.corpus.application.text_serializer import deserialize, serialize
 from ebl.corpus.domain.text import Text, TextId
-from ebl.corpus.infrastructure.mongo_serializer import deserialize, serialize
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 

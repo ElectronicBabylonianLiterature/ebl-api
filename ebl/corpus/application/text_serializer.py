@@ -154,3 +154,11 @@ class TextDeserializer:
                 create_tokens(manuscript_line['line']['content'])
             )
         )
+
+
+def serialize(text: Text) -> dict:
+    return TextSerializer.serialize(text, False)
+
+
+def deserialize(dictionary: dict) -> Text:
+    return TextDeserializer.deserialize(dictionary)
