@@ -4,14 +4,14 @@ import pytest
 
 from ebl.auth0 import Guest
 from ebl.corpus.application.text_serializer import TextSerializer
-from ebl.corpus.domain.alignment import Alignment, AlignmentError, \
-    AlignmentToken
 from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.signs.domain.value import INVALID_READING
 from ebl.tests.factories.corpus import TextFactory
+from ebl.transliteration.domain.alignment import Alignment, AlignmentError, \
+    AlignmentToken
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.token import Word
