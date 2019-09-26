@@ -16,6 +16,7 @@ from ebl.signs.domain.value_mapper import parse_reading
     ('|BI×IS|', Grapheme(SignName('|BI×IS|'))),
     ('|BI.IS|', SplittableGrapheme.of([SignName('BI'), SignName('IS')])),
     ('|BI.IS+IS|', SplittableGrapheme.of([SignName('BI'), SignName('IS+IS')])),
+    ('|ŠU₂.3×AN|', SplittableGrapheme.of([SignName('ŠU₂'), SignName('3×AN')])),
     ('|BI.(IS+IS)|',  Grapheme(SignName('|BI.(IS+IS)|'))),
     ('|BI+IS|', Grapheme(SignName('|BI+IS|'))),
     ('|BI&IS|', Grapheme(SignName('|BI&IS|'))),
