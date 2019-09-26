@@ -90,24 +90,21 @@ docker-compose up
 ```
 
 
-## Updating signs in fragments
-
-The Fragmentarium uses the transliteration mapped to signs. The signs are calculated when a fragment is saved,
-but if the sign list is updated the fragments are not automatically updated. The `ebl.fragmentarium.update_signs`
-module contains functionality to update the signs in all the fragments. The module can be run from the command line:
-```
-pipenv run python -m ebl.fragmentarium.update_signs
-```
-
-## Updating transliterations in fragments
+## Updating transliterations and signs in fragments
 
 Improving the parser can lead to existing transliterations to have obsolete tokens or becoming invalid.
-The `ebl.fragmentarium.update_fragments` module can be used to reparse all fragments. A list of invalid
+The signs are calculated when a fragment is saved, but if the sign list is updated the fragments are not automatically updated.
+
+The `ebl.fragmentarium.update_fragments` module can be used to recreate transliteratioin and signs in all fragments. A list of invalid
 fragments is saved to `invalid_fragments.tsv`.
 
 ```
 pipenv run  python -m ebl.fragmentarium.update_fragments
 ```
+
+## Updating transliterations in fragments
+
+
 
 ## Type hints
 

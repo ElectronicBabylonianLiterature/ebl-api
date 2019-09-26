@@ -1,20 +1,13 @@
-import os
-
 from progress.bar import Bar
-from pymongo import MongoClient
 
+from ebl.app import create_context
 from ebl.auth0 import ApiUser
-from ebl.bibliography.infrastructure.bibliography import MongoBibliography
-from ebl.changelog import Changelog
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.fragmentarium.infrastructure.fragment_repository import \
-    MongoFragmentRepository
 from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.infrastructure.menoizing_sign_repository \
     import MemoizingSignRepository
-from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
@@ -79,7 +72,7 @@ def update_fragments(fragment_repository,
     with Bar('Updating', max=len(numbers)) as bar:
         for number in numbers:
             try:
-                fragment = fragment_repository.find(number)
+                fragment = fragment_repository.query_by_fragment_number(number)
                 update_fragment(transliteration_factory,
                                 updater,
                                 fragment)
@@ -96,18 +89,16 @@ def update_fragments(fragment_repository,
 
 
 if __name__ == '__main__':
-    CLIENT = MongoClient(os.environ['MONGODB_URI'])
-    DATABASE = CLIENT.get_database()
-    SIGN_REPOSITORY = MemoizingSignRepository(MongoSignRepository(DATABASE))
-    FRAGMENT_REPOSITORY = MongoFragmentRepository(DATABASE)
-    FRAGMENT_UPDATER = FragmentUpdater(
-        FRAGMENT_REPOSITORY,
-        Changelog(DATABASE),
-        MongoBibliography(DATABASE)
-    )
-    TRANSLITERATION_SEARCH = AtfConverter(SIGN_REPOSITORY)
+    context = create_context()
+    SIGN_REPOSITORY = MemoizingSignRepository(context.sign_repository)
+    ATF_CONVERTER = AtfConverter(SIGN_REPOSITORY)
     TRANSLITERATION_UPDATE_FACTORY = \
-        TransliterationUpdateFactory(TRANSLITERATION_SEARCH)
-    update_fragments(FRAGMENT_REPOSITORY,
+        TransliterationUpdateFactory(ATF_CONVERTER)
+    FRAGMENT_UPDATER = FragmentUpdater(
+        context.fragment_repository,
+        context.changelog,
+        context.bibliography
+    )
+    update_fragments(context.fragment_repository,
                      TRANSLITERATION_UPDATE_FACTORY,
                      FRAGMENT_UPDATER)
