@@ -31,6 +31,33 @@ from ebl.signs.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 
 
+def decode_certificate(encoded_certificate):
+    certificate = b64decode(encoded_certificate)
+    cert_obj = load_pem_x509_certificate(certificate, default_backend())
+    return cert_obj.public_key()
+
+
+def create_context():
+    client = MongoClient(os.environ['MONGODB_URI'])
+    database = client.get_database()
+    auth_backend = Auth0Backend(
+        decode_certificate(os.environ['AUTH0_PEM']),
+        os.environ['AUTH0_AUDIENCE'],
+        os.environ['AUTH0_ISSUER']
+    )
+    context = Context(
+        auth_backend=auth_backend,
+        dictionary=MongoDictionary(database),
+        sign_repository=MongoSignRepository(database),
+        files=GridFsFiles(database),
+        fragment_repository=MongoFragmentRepository(database),
+        changelog=Changelog(database),
+        bibliography=MongoBibliography(database),
+        text_repository=MongoTextRepository(database)
+    )
+    return context
+
+
 def create_api(context: Context) -> falcon.API:
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
@@ -53,24 +80,7 @@ def create_app(context: Context, issuer: str = '', audience: str = ''):
 
 
 def get_app():
-    client = MongoClient(os.environ['MONGODB_URI'])
-    database = client.get_database()
-    auth_backend = Auth0Backend(
-        decode_certificate(os.environ['AUTH0_PEM']),
-        os.environ['AUTH0_AUDIENCE'],
-        os.environ['AUTH0_ISSUER']
-    )
-
-    context = Context(
-        auth_backend=auth_backend,
-        dictionary=MongoDictionary(database),
-        sign_repository=MongoSignRepository(database),
-        files=GridFsFiles(database),
-        fragment_repository=MongoFragmentRepository(database),
-        changelog=Changelog(database),
-        bibliography=MongoBibliography(database),
-        text_repository=MongoTextRepository(database)
-    )
+    context = create_context()
 
     app = create_app(context,
                      os.environ['AUTH0_ISSUER'],
@@ -78,9 +88,3 @@ def get_app():
 
     sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
     return SentryWsgiMiddleware(app)
-
-
-def decode_certificate(encoded_certificate):
-    certificate = b64decode(encoded_certificate)
-    cert_obj = load_pem_x509_certificate(certificate, default_backend())
-    return cert_obj.public_key()
