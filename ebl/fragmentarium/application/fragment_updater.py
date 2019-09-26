@@ -27,7 +27,7 @@ class FragmentUpdater:
                                number: FragmentNumber,
                                transliteration: TransliterationUpdate,
                                user: User) -> Fragment:
-        fragment = self._repository.find(number)
+        fragment = self._repository.query_by_fragment_number(number)
 
         updated_fragment = fragment.update_transliteration(
             transliteration,
@@ -43,7 +43,7 @@ class FragmentUpdater:
                              number: FragmentNumber,
                              lemmatization: Lemmatization,
                              user: User) -> Fragment:
-        fragment = self._repository.find(number)
+        fragment = self._repository.query_by_fragment_number(number)
         updated_fragment = fragment.update_lemmatization(
             lemmatization
         )
@@ -57,7 +57,7 @@ class FragmentUpdater:
                           number: FragmentNumber,
                           references: Tuple[Reference, ...],
                           user: User) -> Fragment:
-        fragment = self._repository.find(number)
+        fragment = self._repository.query_by_fragment_number(number)
         self._bibliography.validate_references(references)
 
         updated_fragment = fragment.set_references(references)

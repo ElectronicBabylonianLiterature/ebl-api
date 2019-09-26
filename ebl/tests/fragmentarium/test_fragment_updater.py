@@ -29,7 +29,9 @@ def test_update_transliteration(fragment_updater,
         user
     )
 
-    when(fragment_repository).find(number).thenReturn(transliterated_fragment)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenReturn(transliterated_fragment))
     when(changelog).create(
         'fragments',
         user.profile,
@@ -53,7 +55,10 @@ def test_update_update_transliteration_not_found(fragment_updater,
                                                  fragment_repository,
                                                  when):
     number = 'unknown.number'
-    when(fragment_repository).find(number).thenRaise(NotFoundError)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenRaise(NotFoundError))
+
     with pytest.raises(NotFoundError):
         fragment_updater.update_transliteration(
             number,
@@ -76,7 +81,9 @@ def test_update_lemmatization(fragment_updater,
     expected_fragment = transliterated_fragment.update_lemmatization(
         lemmatization
     )
-    when(fragment_repository).find(number).thenReturn(transliterated_fragment)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenReturn(transliterated_fragment))
     when(changelog).create(
         'fragments',
         user.profile,
@@ -100,7 +107,10 @@ def test_update_update_lemmatization_not_found(fragment_updater,
                                                fragment_repository,
                                                when):
     number = 'K.1'
-    when(fragment_repository).find(number).thenRaise(NotFoundError)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenRaise(NotFoundError))
+
     with pytest.raises(NotFoundError):
         fragment_updater.update_lemmatization(
             number,
@@ -122,7 +132,9 @@ def test_update_references(fragment_updater,
     references = (reference,)
     expected_fragment = fragment.set_references(references)
     when(bibliography).find(reference.id).thenReturn(reference)
-    when(fragment_repository).find(number).thenReturn(fragment)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenReturn(fragment))
     when(fragment_repository).update_references(expected_fragment).thenReturn()
     when(changelog).create(
         'fragments',
@@ -148,7 +160,9 @@ def test_update_references_invalid(fragment_updater,
     number = fragment.number
     reference = ReferenceFactory.build()
     when(bibliography).find(reference.id).thenRaise(NotFoundError)
-    when(fragment_repository).find(number).thenReturn(fragment)
+    (when(fragment_repository)
+     .query_by_fragment_number(number)
+     .thenReturn(fragment))
     references = (reference,)
 
     with pytest.raises(DataError):

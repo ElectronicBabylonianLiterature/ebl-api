@@ -46,11 +46,17 @@ def test_create(database, fragment_repository):
     }) == fragment.to_dict()
 
 
-def test_find(database, fragment_repository):
+def test_query_by_fragment_number(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_one(fragment.to_dict())
 
-    assert fragment_repository.find(fragment.number) == fragment
+    assert fragment_repository.query_by_fragment_number(fragment.number) ==\
+        fragment
+
+
+def test_fragment_not_found(fragment_repository):
+    with pytest.raises(NotFoundError):
+        fragment_repository.query_by_fragment_number('unknown id')
 
 
 def test_find_random(fragment_repository,):
@@ -59,7 +65,7 @@ def test_find_random(fragment_repository,):
     for a_fragment in fragment, transliterated_fragment:
         fragment_repository.create(a_fragment)
 
-    assert fragment_repository.find_random() ==\
+    assert fragment_repository.query_random_by_transliterated() == \
         [transliterated_fragment]
 
 
@@ -86,13 +92,9 @@ def test_find_interesting(fragment_repository):
     ]:
         fragment_repository.create(fragment)
 
-    assert fragment_repository.find_interesting() ==\
+    assert (fragment_repository
+            .query_by_kuyunjik_not_transliterated_joined_or_published()) == \
         [interesting_fragment]
-
-
-def test_fragment_not_found(fragment_repository):
-    with pytest.raises(NotFoundError):
-        fragment_repository.find('unknown id')
 
 
 def test_update_transliteration_with_record(fragment_repository,
@@ -107,7 +109,7 @@ def test_update_transliteration_with_record(fragment_repository,
     fragment_repository.update_transliteration(
         updated_fragment
     )
-    result = fragment_repository.find(fragment_number)
+    result = fragment_repository.query_by_fragment_number(fragment_number)
 
     assert result == updated_fragment
 
@@ -132,7 +134,7 @@ def test_update_lemmatization(fragment_repository):
     fragment_repository.update_lemmatization(
         updated_fragment
     )
-    result = fragment_repository.find(fragment_number)
+    result = fragment_repository.query_by_fragment_number(fragment_number)
 
     assert result == updated_fragment
 
@@ -178,7 +180,9 @@ def test_search_finds_by_id(database, fragment_repository):
         FragmentFactory.build().to_dict()
     ])
 
-    assert fragment_repository.search(fragment.number) == [fragment]
+    assert (fragment_repository
+            .query_by_fragment_cdli_or_accession_number(fragment.number)) == \
+        [fragment]
 
 
 def test_search_finds_by_accession(database, fragment_repository):
@@ -188,9 +192,9 @@ def test_search_finds_by_accession(database, fragment_repository):
         FragmentFactory.build().to_dict()
     ])
 
-    assert fragment_repository.search(
-        fragment.accession
-    ) == [fragment]
+    assert (fragment_repository
+            .query_by_fragment_cdli_or_accession_number(fragment.number)) == \
+        [fragment]
 
 
 def test_search_finds_by_cdli(database, fragment_repository):
@@ -200,13 +204,15 @@ def test_search_finds_by_cdli(database, fragment_repository):
         FragmentFactory.build().to_dict()
     ])
 
-    assert fragment_repository.search(
-        fragment.cdli_number
-    ) == [fragment]
+    assert (fragment_repository
+            .query_by_fragment_cdli_or_accession_number(fragment.number)) == \
+        [fragment]
 
 
 def test_search_not_found(fragment_repository):
-    assert fragment_repository.search('K.1') == []
+    assert (fragment_repository
+            .query_by_fragment_cdli_or_accession_number('K.1')) == \
+        []
 
 
 SEARCH_SIGNS_DATA = [
@@ -229,7 +235,8 @@ def test_search_signs(signs,
     fragment_repository.create(transliterated_fragment)
     fragment_repository.create(FragmentFactory.build())
 
-    result = fragment_repository.search_signs(TransliterationQuery(signs))
+    result = (fragment_repository
+              .query_by_transliteration(TransliterationQuery(signs)))
     expected = [transliterated_fragment] if is_match else []
     assert result == expected
 
@@ -251,7 +258,7 @@ def test_find_lemmas(fragment_repository):
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
-    assert fragment_repository.find_lemmas('GI₆') == [['ginâ I']]
+    assert fragment_repository.query_lemmas('GI₆') == [['ginâ I']]
 
 
 def test_find_lemmas_multiple(fragment_repository):
@@ -259,7 +266,7 @@ def test_find_lemmas_multiple(fragment_repository):
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
-    assert fragment_repository.find_lemmas('ana') ==\
+    assert fragment_repository.query_lemmas('ana') == \
         [['ana II'], ['ana I']]
 
 
@@ -278,7 +285,7 @@ def test_find_lemmas_ignores_in_value(value, fragment_repository):
     )
     fragment_repository.create(fragment)
 
-    assert fragment_repository.find_lemmas('ana') == [['ana I']]
+    assert fragment_repository.query_lemmas('ana') == [['ana I']]
 
 
 @pytest.mark.parametrize('query,expected', [
@@ -293,13 +300,13 @@ def test_find_lemmas_ignores_in_query(query,
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
 
-    assert fragment_repository.find_lemmas(query) == expected
+    assert fragment_repository.query_lemmas(query) == expected
 
 
 def test_find_lemmas_not_found(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
-    assert fragment_repository.find_lemmas('aklu') == []
+    assert fragment_repository.query_lemmas('aklu') == []
 
 
 def test_update_references(fragment_repository):
@@ -310,7 +317,7 @@ def test_update_references(fragment_repository):
     updated_fragment = fragment.set_references(references)
 
     fragment_repository.update_references(updated_fragment)
-    result = fragment_repository.find(fragment_number)
+    result = fragment_repository.query_by_fragment_number(fragment_number)
 
     assert result == updated_fragment
 

@@ -101,14 +101,14 @@ def corpus(text_repository, bibliography, changelog, transliteration_factory):
 class TestFragmentRepository(MongoFragmentRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def find_latest(self):
+    def query_by_transliterated_sorted_by_date(self):
         return self._map_fragments(
             self._collection.find_many({})
         )
 
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def find_needs_revision(self):
+    def query_by_transliterated_not_revised_by_other(self):
         return [FragmentInfo.of(fragment)
                 for fragment
                 in self._map_fragments(
@@ -117,7 +117,10 @@ class TestFragmentRepository(MongoFragmentRepository):
 
     # Mongomock does not support $concat so we need to
     # stub the methods using them.
-    def folio_pager(self, _folio_name, _folio_number, _number):
+    def query_next_and_previous_folio(self,
+                                      _folio_name,
+                                      _folio_number,
+                                      _number):
         return {
             'previous': {
                 'fragmentNumber': _number,
