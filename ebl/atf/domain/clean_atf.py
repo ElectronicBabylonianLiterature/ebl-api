@@ -58,8 +58,8 @@ def _clean_line(line: str) -> str:
     return (
         pydash
         .chain(line)
-        .reg_exp_replace(WHITE_SPACE_PATTERN, ' ')
         .reg_exp_replace(STRIP_PATTERN, '')
+        .reg_exp_replace(WHITE_SPACE_PATTERN, ' ')
         .reg_exp_replace(BRACES_PATTERN, r'\1')
         .clean()
         .value()
