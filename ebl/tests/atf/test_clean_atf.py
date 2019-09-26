@@ -37,7 +37,7 @@ def test_ignored_lines():
 
 def test_strip_line_numbers():
     clean_atf = CleanAtf(Atf(
-        '1. mu\n2\'. me\na+1. e\n1.2. a\n3. kur. ra'
+        '1. mu\n2\'. me\na+1. e\n1.2. a\n11\'-12\'. kur. ra'
     ))
     assert clean_atf.cleaned == [
         ['mu'],
