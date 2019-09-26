@@ -33,7 +33,8 @@ LACUNA: Mapping[str, str] = {
 ATF_SPEC: Mapping[str, str] = {
     'reading': r'([^₀-₉ₓ/]+)([₀-₉]+)?',
     'with_sign': r'[^\(/\|]+\((.+)\)',
-    'grapheme': r'\|(\d*[.x×%&+@]?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|',
+    'grapheme':
+        r'\|([.x×%&+@]?(\d+[.x×%&+@])?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|',
     'number': r'\d+',
     'variant': r'([^/]+)(?:/([^/]+))+',
 }
