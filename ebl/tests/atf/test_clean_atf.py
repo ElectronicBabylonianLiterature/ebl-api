@@ -263,3 +263,23 @@ def test_strip_erasure(erasure, cleaned):
     clean_atf = CleanAtf(Atf(erasure))
 
     assert clean_atf.cleaned == [cleaned]
+
+
+@pytest.mark.parametrize('atf,cleaned', [
+    ('1. & qa\n2. ba &3 ba', [
+        ['qa'],
+        ['ba', 'ba'],
+    ]),
+    ('1. [...] & [...] & x [...]', [['x']]),
+    ('1. [...] & [...] &2 x [...]', [['x']]),
+    ('1. [...] &2 [...] & x [...]', [['x']]),
+    ('1. [...] &2 [...] &3 x [...]', [['x']]),
+    ('1. [...] | [...] | x [...]', [['x']]),
+    ('1. | x [...]', [['x']]),
+    ('1. x |', [['x']]),
+    ('1. x  &  x', [['x', 'x']]),
+])
+def test_strip_dividers(atf, cleaned):
+    clean_atf =\
+        CleanAtf(Atf(atf))
+    assert clean_atf.cleaned == cleaned
