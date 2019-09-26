@@ -8,8 +8,8 @@ import pydash
 
 import ebl.atf.domain.atf
 from ebl.atf.domain.word_cleaner import clean_word
-from ebl.corpus.domain.alignment import AlignmentError, AlignmentToken
 from ebl.dictionary.domain.word import WordId
+from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken

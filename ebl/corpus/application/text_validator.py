@@ -1,10 +1,10 @@
 from collections import Counter
 from typing import Union
 
-from ebl.corpus.domain.alignment import AlignmentError
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
     TextVisitor
 from ebl.errors import DataError
+from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.token import BrokenAway, \
     DocumentOrientedGloss, \

@@ -3,8 +3,8 @@ from typing import List
 import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
-from ebl.corpus.domain.alignment import Alignment, AlignmentError
 from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine
+from ebl.transliteration.domain.alignment import Alignment, AlignmentError
 
 
 class AlignmentUpdater(ChapterUpdater):
