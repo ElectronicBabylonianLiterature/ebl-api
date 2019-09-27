@@ -31,7 +31,9 @@ def test_search_finds_all_homonyms(database, word_repository, word):
     }
     database[COLLECTION].insert_many([word, another_word])
 
-    assert word_repository.query_by_lemma_form_or_meaning(' '.join(word['lemma'])) == [word, another_word]
+    assert word_repository.query_by_lemma_form_or_meaning(
+        ' '.join(word['lemma'])
+    ) == [word, another_word]
 
 
 def test_search_finds_by_meaning(database, word_repository, word):
@@ -43,7 +45,9 @@ def test_search_finds_by_meaning(database, word_repository, word):
     }
     database[COLLECTION].insert_many([word, another_word])
 
-    assert word_repository.query_by_lemma_form_or_meaning(word['meaning'][1:4]) == [word]
+    assert word_repository.query_by_lemma_form_or_meaning(
+        word['meaning'][1:4]
+    ) == [word]
 
 
 def test_search_finds_duplicates(database, word_repository, word):
@@ -54,7 +58,9 @@ def test_search_finds_duplicates(database, word_repository, word):
     }
     database[COLLECTION].insert_many([word, another_word])
 
-    assert word_repository.query_by_lemma_form_or_meaning(word['meaning'][1:4]) == [word, another_word]
+    assert word_repository.query_by_lemma_form_or_meaning(
+        word['meaning'][1:4]
+    ) == [word, another_word]
 
 
 def test_search_not_found(word_repository):

@@ -15,7 +15,8 @@ import ebl.context
 from ebl.auth0 import Auth0User
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
-from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
+from ebl.bibliography.infrastructure.bibliography import \
+    MongoBibliographyRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -65,7 +66,10 @@ def dictionary(word_repository, changelog):
 class TestBibliographyRepository(MongoBibliographyRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def query_by_author_year_and_title(self, _author=None, _year=None, _title=None):
+    def query_by_author_year_and_title(self,
+                                       _author=None,
+                                       _year=None,
+                                       _title=None):
         return [create_object_entry(
             self._collection.find_one({})
         )]

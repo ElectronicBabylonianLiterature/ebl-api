@@ -16,7 +16,10 @@ def mongo_entry(bibliography_entry):
 COLLECTION = 'bibliography'
 
 
-def test_create(database, bibliography_repository, bibliography_entry, mongo_entry):
+def test_create(database,
+                bibliography_repository,
+                bibliography_entry,
+                mongo_entry):
     bibliography_repository.create(bibliography_entry)
 
     assert database[COLLECTION].find_one(
@@ -30,10 +33,14 @@ def test_create_duplicate(bibliography_repository, bibliography_entry):
         bibliography_repository.create(bibliography_entry)
 
 
-def test_find(database, bibliography_repository, bibliography_entry, mongo_entry):
+def test_find(database,
+              bibliography_repository,
+              bibliography_entry,
+              mongo_entry):
     database[COLLECTION].insert_one(mongo_entry)
 
-    assert bibliography_repository.query_by_id(bibliography_entry['id']) == bibliography_entry
+    assert bibliography_repository.query_by_id(bibliography_entry['id']) == \
+        bibliography_entry
 
 
 def test_entry_not_found(bibliography_repository):
@@ -49,7 +56,8 @@ def test_update(bibliography_repository, bibliography_entry):
     bibliography_repository.create(bibliography_entry)
     bibliography_repository.update(updated_entry)
 
-    assert bibliography_repository.query_by_id(bibliography_entry['id']) == updated_entry
+    assert bibliography_repository.query_by_id(bibliography_entry['id']) == \
+        updated_entry
 
 
 def test_update_not_found(bibliography_repository, bibliography_entry):

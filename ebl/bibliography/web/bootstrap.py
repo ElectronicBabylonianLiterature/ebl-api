@@ -7,7 +7,8 @@ from ebl.context import Context
 
 
 def create_bibliography_routes(api: falcon.API, context: Context, spec):
-    bibliography = Bibliography(context.bibliography_repository, context.changelog)
+    bibliography = Bibliography(context.bibliography_repository,
+                                context.changelog)
     bibliography_resource = BibliographyResource(bibliography)
     bibliography_entries = BibliographyEntriesResource(bibliography)
     api.add_route('/bibliography', bibliography_resource)

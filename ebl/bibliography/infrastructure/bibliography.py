@@ -1,7 +1,9 @@
 from typing import Optional, Dict, Any
 
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
-from ebl.bibliography.application.serialization import create_mongo_entry, create_object_entry
+from ebl.bibliography.application.bibliography_repository import \
+    BibliographyRepository
+from ebl.bibliography.application.serialization import create_mongo_entry, \
+    create_object_entry
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = 'bibliography'
@@ -24,7 +26,10 @@ class MongoBibliographyRepository(BibliographyRepository):
         mongo_entry = create_mongo_entry(entry)
         self._collection.replace_one(mongo_entry)
 
-    def query_by_author_year_and_title(self, author: Optional[str], year: Optional[str], title: Optional[str]):
+    def query_by_author_year_and_title(self,
+                                       author: Optional[str],
+                                       year: Optional[str],
+                                       title: Optional[str]):
         match: Dict[str, Any] = {}
         if author:
             match['author.0.family'] = author

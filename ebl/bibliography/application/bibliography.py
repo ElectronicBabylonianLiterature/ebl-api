@@ -1,7 +1,8 @@
 from typing import Optional, Sequence
 
 from ebl.auth0 import User
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.bibliography_repository import \
+    BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
@@ -12,7 +13,9 @@ COLLECTION = 'bibliography'
 
 class Bibliography:
 
-    def __init__(self, repository: BibliographyRepository, changelog: Changelog):
+    def __init__(self,
+                 repository: BibliographyRepository,
+                 changelog: Changelog):
         self._repository = repository
         self._changelog = changelog
 
@@ -38,8 +41,13 @@ class Bibliography:
         )
         self._repository.update(entry)
 
-    def search(self, author: Optional[str] = None, year: Optional[str] = None, title: Optional[str] = None):
-        return self._repository.query_by_author_year_and_title(author, year, title)
+    def search(self,
+               author: Optional[str] = None,
+               year: Optional[str] = None,
+               title: Optional[str] = None):
+        return self._repository.query_by_author_year_and_title(author,
+                                                               year,
+                                                               title)
 
     def validate_references(self, references: Sequence[Reference]):
         def is_invalid(reference):

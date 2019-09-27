@@ -32,7 +32,8 @@ def create_fragmentarium_routes(api: falcon.API,
                                        context.changelog))
     updater = FragmentUpdater(context.fragment_repository,
                               context.changelog,
-                              Bibliography(context.bibliography_repository, context.changelog))
+                              Bibliography(context.bibliography_repository,
+                                           context.changelog))
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)

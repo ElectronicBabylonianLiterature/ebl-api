@@ -11,7 +11,8 @@ from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
 from ebl.auth0 import Auth0Backend
-from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
+from ebl.bibliography.infrastructure.bibliography import \
+    MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
