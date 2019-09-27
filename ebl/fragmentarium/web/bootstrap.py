@@ -2,14 +2,14 @@ import falcon
 
 from ebl.context import Context
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_info_schema import \
+    FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory import \
     TransliterationQueryFactory
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.fragmentarium.infrastructure.fragment_info_schema import \
-    FragmentInfoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsResource

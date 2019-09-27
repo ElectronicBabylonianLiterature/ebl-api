@@ -1,7 +1,7 @@
+from ebl.fragmentarium.application.fragment_info_schema import \
+    FragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.infrastructure.fragment_info_schema import \
-    FragmentInfoSchema
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 

@@ -1,8 +1,8 @@
 import falcon
 
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.infrastructure.fragment_info_schema import \
+from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
+from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.fragment import FragmentFactory, \
     InterestingFragmentFactory, TransliteratedFragmentFactory
 
