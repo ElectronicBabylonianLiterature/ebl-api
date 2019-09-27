@@ -6,7 +6,7 @@ from ebl.bibliography.application.bibliography_repository import \
 from ebl.changelog import Changelog
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
-from ebl.files.infrastructure.file_repository import GridFsFiles
+from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.signs.application.sign_repository import SignRepository
@@ -17,7 +17,7 @@ class Context:
     auth_backend: AuthBackend
     word_repository: WordRepository
     sign_repository: SignRepository
-    files: GridFsFiles
+    file_repository: FileRepository
     fragment_repository: FragmentRepository
     changelog: Changelog
     bibliography_repository: BibliographyRepository

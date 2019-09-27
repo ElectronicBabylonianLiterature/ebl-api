@@ -1,6 +1,7 @@
 import datetime
 import io
 import json
+from typing import Mapping, Any
 
 import attr
 import mongomock
@@ -23,6 +24,7 @@ from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
+from ebl.files.application.file_repository import FileRepository, File
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
@@ -174,37 +176,49 @@ def fragment_updater(fragment_repository,
     return FragmentUpdater(fragment_repository, changelog, bibliography)
 
 
-class FakeFile:
-
-    def __init__(self, filename, data, metadata):
-        self.content_type = 'image/jpeg'
+class FakeFile(File):
+    def __init__(self, filename: str, data: bytes, metadata: dict):
         self.filename = filename
         self.data = data
-        self.length = len(data)
+        self._content_type = 'image/jpeg'
         self._file = io.BytesIO(data)
-        self.metadata = metadata
+        self._metadata = metadata
+
+    @property
+    def length(self) -> int:
+        return len(self.data)
+
+    @property
+    def content_type(self) -> str:
+        return self._content_type
+
+    @property
+    def metadata(self) -> Mapping[str, Any]:
+        return self._metadata
+
+    def close(self) -> None:
+        self._file.close()
 
     def read(self, size=-1):
         return self._file.read(size)
 
 
-class TestFilesRepository:
+class TestFilesRepository(FileRepository):
     def __init__(self, *files):
         self._files = files
 
-    def find(self, filename):
-
+    def query_by_file_name(self, file_name: str) -> File:
         try:
             return next(file
                         for file in self._files
-                        if file.filename == filename)
+                        if file.filename == file_name)
         except StopIteration:
             raise NotFoundError()
 
 
 @pytest.fixture
 def file():
-    return FakeFile('folio1.jpg', b'oyoFLAbXbR', None)
+    return FakeFile('folio1.jpg', b'oyoFLAbXbR', {})
 
 
 @pytest.fixture
@@ -262,7 +276,7 @@ def context(word_repository,
         auth_backend=NoneAuthBackend(lambda: user),
         word_repository=word_repository,
         sign_repository=sign_repository,
-        files=file_repository,
+        file_repository=file_repository,
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,

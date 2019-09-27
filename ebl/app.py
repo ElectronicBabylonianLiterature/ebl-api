@@ -21,7 +21,8 @@ from ebl.corpus.web.bootstrap import create_corpus_routes
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
-from ebl.files.infrastructure.file_repository import GridFsFiles
+from ebl.files.infrastructure.grid_fs_file_repository import \
+    GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
@@ -50,7 +51,7 @@ def create_context():
         auth_backend=auth_backend,
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
-        files=GridFsFiles(database),
+        file_repository=GridFsFileRepository(database, 'fs'),
         fragment_repository=MongoFragmentRepository(database),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),
