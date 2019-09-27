@@ -84,7 +84,7 @@ def get_app():
 
     app = create_app(context,
                      os.environ['AUTH0_ISSUER'],
-                     os.environ.get['AUTH0_AUDIENCE'])
+                     os.environ['AUTH0_AUDIENCE'])
 
     sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
     return SentryWsgiMiddleware(app)
