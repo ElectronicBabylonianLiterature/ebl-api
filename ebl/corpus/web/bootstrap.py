@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
@@ -17,7 +18,7 @@ def create_corpus_routes(api: falcon.API,
     atf_converter = AtfConverter(context.sign_repository)
     corpus = Corpus(
         context.text_repository,
-        context.bibliography,
+        Bibliography(context.bibliography_repository, context.changelog),
         context.changelog,
         TransliterationUpdateFactory(atf_converter)
     )

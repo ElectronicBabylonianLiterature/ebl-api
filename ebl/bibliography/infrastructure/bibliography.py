@@ -1,59 +1,31 @@
-import pydash
+from typing import Optional, Dict, Any
 
-from ebl.changelog import Changelog
-from ebl.errors import DataError, NotFoundError
+from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.serialization import create_mongo_entry, create_object_entry
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = 'bibliography'
 
 
-def create_mongo_entry(entry):
-    return pydash.map_keys(
-        entry,
-        lambda _, key: '_id' if key == 'id' else key
-    )
-
-
-def create_object_entry(entry):
-    return pydash.map_keys(
-        entry,
-        lambda _, key: 'id' if key == '_id' else key
-    )
-
-
-class MongoBibliography:
+class MongoBibliographyRepository(BibliographyRepository):
 
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
-        self._changelog = Changelog(database)
 
-    def create(self, entry, user):
+    def create(self, entry) -> str:
         mongo_entry = create_mongo_entry(entry)
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            {'_id': entry['id']},
-            mongo_entry
-        )
         return self._collection.insert_one(mongo_entry)
 
-    def find(self, id_):
+    def query_by_id(self, id_: str):
         data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
 
-    def update(self, entry, user):
-        old_entry = self._collection.find_one_by_id(entry['id'])
+    def update(self, entry):
         mongo_entry = create_mongo_entry(entry)
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            old_entry,
-            mongo_entry
-        )
         self._collection.replace_one(mongo_entry)
 
-    def search(self, author=None, year=None, title=None):
-        match = {}
+    def query_by_author_year_and_title(self, author: Optional[str], year: Optional[str], title: Optional[str]):
+        match: Dict[str, Any] = {}
         if author:
             match['author.0.family'] = author
         if year:
@@ -90,20 +62,3 @@ class MongoBibliography:
                 }
             )
         ]
-
-    def validate_references(self, references):
-        def is_invalid(reference):
-            try:
-                self.find(reference.id)
-                return False
-            except NotFoundError:
-                return True
-
-        invalid_references = [
-            reference.id
-            for reference in references
-            if is_invalid(reference)
-        ]
-        if invalid_references:
-            raise DataError('Unknown bibliography entries: '
-                            f'{", ".join(invalid_references)}.')

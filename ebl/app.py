@@ -11,14 +11,14 @@ from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
 from ebl.auth0 import Auth0Backend
-from ebl.bibliography.infrastructure.bibliography import MongoBibliography
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.corpus.web.bootstrap import create_corpus_routes
 from ebl.cors_component import CorsComponent
-from ebl.dictionary.infrastructure.dictionary import MongoDictionary
+from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.files.infrastructure.file_repository import GridFsFiles
 from ebl.files.web.bootstrap import create_files_route
@@ -47,12 +47,12 @@ def create_context():
     )
     context = Context(
         auth_backend=auth_backend,
-        dictionary=MongoDictionary(database),
+        word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
         files=GridFsFiles(database),
         fragment_repository=MongoFragmentRepository(database),
         changelog=Changelog(database),
-        bibliography=MongoBibliography(database),
+        bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database)
     )
     return context

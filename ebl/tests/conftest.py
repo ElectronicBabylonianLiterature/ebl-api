@@ -13,9 +13,9 @@ from falcon_auth import NoneAuthBackend
 import ebl.app
 import ebl.context
 from ebl.auth0 import Auth0User
-from ebl.bibliography.infrastructure.bibliography import (
-    MongoBibliography, create_object_entry
-)
+from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.serialization import create_object_entry
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -62,18 +62,23 @@ def dictionary(word_repository, changelog):
     return Dictionary(word_repository, changelog)
 
 
-class TestBibliography(MongoBibliography):
+class TestBibliographyRepository(MongoBibliographyRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def search(self, _author=None, _year=None, _title=None):
+    def query_by_author_year_and_title(self, _author=None, _year=None, _title=None):
         return [create_object_entry(
             self._collection.find_one({})
         )]
 
 
 @pytest.fixture
-def bibliography(database):
-    return TestBibliography(database)
+def bibliography_repository(database):
+    return TestBibliographyRepository(database)
+
+
+@pytest.fixture
+def bibliography(bibliography_repository, changelog):
+    return Bibliography(bibliography_repository, changelog)
 
 
 @pytest.fixture
@@ -247,7 +252,7 @@ def context(word_repository,
             fragment_repository,
             text_repository,
             changelog,
-            bibliography,
+            bibliography_repository,
             user):
     return ebl.context.Context(
         auth_backend=NoneAuthBackend(lambda: user),
@@ -256,7 +261,7 @@ def context(word_repository,
         files=file_repository,
         fragment_repository=fragment_repository,
         changelog=changelog,
-        bibliography=bibliography,
+        bibliography_repository=bibliography_repository,
         text_repository=text_repository
     )
 

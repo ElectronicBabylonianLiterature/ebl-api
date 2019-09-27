@@ -1,7 +1,7 @@
 import attr
 from falcon_auth.backends import AuthBackend
 
-from ebl.bibliography.infrastructure.bibliography import MongoBibliography
+from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.changelog import Changelog
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
@@ -19,5 +19,5 @@ class Context:
     files: GridFsFiles
     fragment_repository: FragmentRepository
     changelog: Changelog
-    bibliography: MongoBibliography
+    bibliography_repository: BibliographyRepository
     text_repository: MongoTextRepository

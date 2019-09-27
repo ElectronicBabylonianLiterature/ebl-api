@@ -18,24 +18,16 @@ def mongo_entry(bibliography_entry):
 COLLECTION = 'bibliography'
 
 
-def test_create(database, bibliography, bibliography_entry, mongo_entry, user):
+def test_create_and_find(bibliography, bibliography_entry, user):
     bibliography.create(bibliography_entry, user)
 
-    assert database[COLLECTION].find_one(
-        {'_id': bibliography_entry['id']}
-    ) == mongo_entry
+    assert bibliography.find(bibliography_entry['id']) == bibliography_entry
 
 
 def test_create_duplicate(bibliography, bibliography_entry, user):
     bibliography.create(bibliography_entry, user)
     with pytest.raises(DuplicateError):
         bibliography.create(bibliography_entry, user)
-
-
-def test_find(database, bibliography, bibliography_entry, mongo_entry):
-    database[COLLECTION].insert_one(mongo_entry)
-
-    assert bibliography.find(bibliography_entry['id']) == bibliography_entry
 
 
 def test_entry_not_found(bibliography):
