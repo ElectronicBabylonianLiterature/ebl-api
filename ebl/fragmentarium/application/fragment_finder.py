@@ -1,5 +1,6 @@
 from typing import List
 
+from ebl.dictionary.application.dictionary import Dictionary
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
@@ -12,7 +13,7 @@ class FragmentFinder:
 
     def __init__(self,
                  repository: FragmentRepository,
-                 dictionary):
+                 dictionary: Dictionary):
 
         self._repository = repository
         self._dictionary = dictionary

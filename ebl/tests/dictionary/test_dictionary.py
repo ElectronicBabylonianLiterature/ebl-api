@@ -7,16 +7,10 @@ from ebl.errors import NotFoundError
 COLLECTION = 'words'
 
 
-def test_create(database, dictionary, word):
+def test_create_and_find(database, dictionary, word):
     word_id = dictionary.create(word)
 
-    assert database[COLLECTION].find_one({'_id': word_id}) == word
-
-
-def test_find(database, dictionary, word):
-    database[COLLECTION].insert_one(word)
-
-    assert dictionary.find(word['_id']) == word
+    assert dictionary.find(word_id) == word
 
 
 def test_word_not_found(dictionary):
@@ -24,36 +18,39 @@ def test_word_not_found(dictionary):
         dictionary.find('not found')
 
 
-def test_search_finds_all_homonyms(database, dictionary, word):
+def test_search_finds_all_homonyms(dictionary, word):
     another_word = {
         **word,
         '_id': 'part1 part2 II',
         'homonym': 'II'
     }
-    database[COLLECTION].insert_many([word, another_word])
+    dictionary.create(word)
+    dictionary.create(another_word)
 
     assert dictionary.search(' '.join(word['lemma'])) == [word, another_word]
 
 
-def test_search_finds_by_meaning(database, dictionary, word):
+def test_search_finds_by_meaning(dictionary, word):
     another_word = {
         **word,
         '_id': 'part1 part2 II',
         'homonym': 'II',
         'meaning': 'not matching'
     }
-    database[COLLECTION].insert_many([word, another_word])
+    dictionary.create(word)
+    dictionary.create(another_word)
 
     assert dictionary.search(word['meaning'][1:4]) == [word]
 
 
-def test_search_finds_duplicates(database, dictionary, word):
+def test_search_finds_duplicates(dictionary, word):
     another_word = {
         **word,
         '_id': 'part1 part2 II',
         'homonym': 'II'
     }
-    database[COLLECTION].insert_many([word, another_word])
+    dictionary.create(word)
+    dictionary.create(another_word)
 
     assert dictionary.search(word['meaning'][1:4]) == [word, another_word]
 

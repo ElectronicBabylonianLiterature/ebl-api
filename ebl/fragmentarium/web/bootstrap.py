@@ -1,6 +1,7 @@
 import falcon
 
 from ebl.context import Context
+from ebl.dictionary.application.dictionary import Dictionary
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
@@ -26,7 +27,8 @@ def create_fragmentarium_routes(api: falcon.API,
                                 spec):
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(context.fragment_repository,
-                            context.dictionary)
+                            Dictionary(context.word_repository,
+                                       context.changelog))
     updater = FragmentUpdater(context.fragment_repository,
                               context.changelog,
                               context.bibliography)

@@ -19,7 +19,8 @@ from ebl.bibliography.infrastructure.bibliography import (
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.dictionary.infrastructure.dictionary import MongoDictionary
+from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
@@ -44,16 +45,21 @@ def changelog(database):
     return Changelog(database)
 
 
-class TestDictionary(MongoDictionary):
+class TestWordRepository(MongoWordRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def search_lemma(self, _):
+    def query_by_lemma_prefix(self, _):
         return [self._collection.find_one({})]
 
 
 @pytest.fixture
-def dictionary(database):
-    return TestDictionary(database)
+def word_repository(database):
+    return TestWordRepository(database)
+
+
+@pytest.fixture
+def dictionary(word_repository, changelog):
+    return Dictionary(word_repository, changelog)
 
 
 class TestBibliography(MongoBibliography):
@@ -235,7 +241,7 @@ def user():
 
 
 @pytest.fixture
-def context(dictionary,
+def context(word_repository,
             sign_repository,
             file_repository,
             fragment_repository,
@@ -245,7 +251,7 @@ def context(dictionary,
             user):
     return ebl.context.Context(
         auth_backend=NoneAuthBackend(lambda: user),
-        dictionary=dictionary,
+        word_repository=word_repository,
         sign_repository=sign_repository,
         files=file_repository,
         fragment_repository=fragment_repository,
