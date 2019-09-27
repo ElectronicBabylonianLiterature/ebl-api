@@ -5,16 +5,12 @@ from falcon import Response, Request
 from falcon_auth import MultiAuthBackend, NoneAuthBackend
 from falcon_auth.backends import AuthBackend
 
-from ebl.auth0 import Guest
+from ebl.auth0 import Guest, User
 from ebl.files.application.file_repository import FileRepository, File
 
 
-def check_scope(user, file: File):
-    file_scope = file.metadata.get('scope')
-    if (
-            file_scope and
-            not user.has_scope(f'read:{file_scope}')
-    ):
+def check_scope(user: User, file: File):
+    if not file.can_be_read_by(user):
         raise falcon.HTTPForbidden()
 
 

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any, Mapping
 
+from ebl.auth0 import User
+
 
 class File(ABC):
     @property
@@ -25,6 +27,10 @@ class File(ABC):
     @abstractmethod
     def close(self) -> None:
         ...
+
+    def can_be_read_by(self, user: User):
+        scope = self.metadata.get('scope')
+        return not scope or user.has_scope(f'read:{scope}')
 
 
 class FileRepository(ABC):
