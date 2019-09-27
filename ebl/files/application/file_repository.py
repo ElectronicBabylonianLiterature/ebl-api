@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Mapping
 
-from ebl.auth0 import User
+from ebl.users.domain.user import User
 
 
 class File(ABC):

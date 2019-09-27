@@ -1,6 +1,5 @@
 from typing import Tuple
 
-from ebl.auth0 import User
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
@@ -8,6 +7,7 @@ from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.users.domain.user import User
 
 COLLECTION = 'fragments'
 

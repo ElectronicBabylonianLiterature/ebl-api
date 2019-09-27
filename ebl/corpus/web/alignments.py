@@ -4,8 +4,8 @@ from falcon.media.validators.jsonschema import validate
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_chapter_index, \
     create_text_id
-from ebl.require_scope import require_scope
 from ebl.transliteration.domain.alignment import Alignment
+from ebl.users.web.require_scope import require_scope
 
 ALIGNMENT_DTO_SCHEMA = {
     'type': 'object',

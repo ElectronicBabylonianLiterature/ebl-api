@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 
 import attr
 
-from ebl.auth0 import User
+from ebl.users.domain.user import User
 
 
 def now() -> str:

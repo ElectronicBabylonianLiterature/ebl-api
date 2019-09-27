@@ -1,17 +1,18 @@
 import pytest
 
-from ebl.auth0 import Auth0User
+from ebl.users.infrastructure.auth0 import Auth0User
 
 PROFILE = {'name': 'john'}
 
 
-def create_profile_factory(profile):
-    def create():
-        create.count += 1
-        return profile
+class ProfileFactory:
+    def __init__(self, profile):
+        self.count = 0
+        self._profile = profile
 
-    create.count = 0
-    return create
+    def create(self):
+        self.count += 1
+        return self._profile
 
 
 def create_default_profile():
@@ -33,8 +34,8 @@ def test_profile():
 
 
 def test_memoize_profile():
-    profile_factory = create_profile_factory(PROFILE)
-    user = Auth0User({}, profile_factory)
+    profile_factory = ProfileFactory(PROFILE)
+    user = Auth0User({}, profile_factory.create)
 
     user.profile
     user.profile
@@ -49,7 +50,7 @@ def test_memoize_profile():
 
 ])
 def test_ebl_name(profile, expected):
-    user = Auth0User({}, create_profile_factory(profile))
+    user = Auth0User({}, ProfileFactory(profile).create)
 
     assert user.ebl_name == expected
 

@@ -2,7 +2,6 @@ import attr
 import pydash
 import pytest
 
-from ebl.auth0 import Guest
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
@@ -15,6 +14,7 @@ from ebl.transliteration.domain.alignment import Alignment, AlignmentError, \
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.token import Word
+from ebl.users.domain.user import Guest
 
 COLLECTION = 'texts'
 TEXT = TextFactory.build()

@@ -5,7 +5,7 @@ from ebl.corpus.web.alignments import create_chapter_index
 from ebl.corpus.web.api_serializer import ApiDeserializer, serialize
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.corpus.web.texts import MANUSCRIPT_DTO_SCHEMA
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 MANUSCRIPTS_DTO_SCHEMA = {
     'type': 'object',

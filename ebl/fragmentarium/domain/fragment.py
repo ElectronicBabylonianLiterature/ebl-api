@@ -3,7 +3,6 @@ from typing import Dict, List, NewType, Optional, Tuple, Union
 import attr
 import pydash
 
-from ebl.auth0 import User
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.record import Record
@@ -12,6 +11,7 @@ from ebl.fragmentarium.domain.transliteration_update import (
 )
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
+from ebl.users.domain.user import User
 
 FragmentNumber = NewType('FragmentNumber', str)
 

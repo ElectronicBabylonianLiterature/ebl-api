@@ -7,7 +7,7 @@ from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.corpus.web.text_utils import create_text_id, \
     serialize_public_text
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 MANUSCRIPT_DTO_SCHEMA = {
     'type': 'object',

@@ -1,11 +1,11 @@
 import copy
-from abc import ABC, abstractmethod
-from typing import Any, Callable
+from typing import Callable, Any
 
 import pydash
 import requests
 from falcon_auth import JWTAuthBackend
-from sentry_sdk import configure_scope
+
+from ebl.users.domain.user import User
 
 
 def fetch_user_profile(issuer: str, authorization: str):
@@ -14,58 +14,6 @@ def fetch_user_profile(issuer: str, authorization: str):
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
-
-
-def set_sentry_user(id_: str) -> None:
-    with configure_scope() as scope:
-        scope.user = {'id': id_}
-
-
-class User(ABC):
-
-    @property
-    @abstractmethod
-    def profile(self) -> dict:
-        ...
-
-    @property
-    @abstractmethod
-    def ebl_name(self) -> str:
-        ...
-
-    def has_scope(self, scope: str) -> bool:
-        return False
-
-    def can_read_folio(self, name: str) -> bool:
-        scope = f'read:{name}-folios'
-        return self.has_scope(scope)
-
-
-class Guest(User):
-
-    @property
-    def profile(self):
-        return {'name': 'Guest'}
-
-    @property
-    def ebl_name(self):
-        return 'Guest'
-
-
-class ApiUser(User):
-
-    def __init__(self, script_name: str):
-        self._script_name = script_name
-
-    @property
-    def profile(self):
-        return {
-            'name': self._script_name
-        }
-
-    @property
-    def ebl_name(self):
-        return 'Script'
 
 
 class Auth0User(User):
@@ -92,7 +40,7 @@ class Auth0User(User):
 
 class Auth0Backend(JWTAuthBackend):
 
-    def __init__(self, public_key, audience, issuer, set_user=set_sentry_user):
+    def __init__(self, public_key, audience, issuer, set_user):
         super().__init__(
             lambda payload: payload,
             public_key,

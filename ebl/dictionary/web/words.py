@@ -1,7 +1,7 @@
 import falcon
 from falcon.media.validators.jsonschema import validate
 
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 LEMMA_DTO_SCHEMA = {
     'type': 'array',

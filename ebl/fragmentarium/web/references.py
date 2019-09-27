@@ -4,7 +4,7 @@ from falcon.media.validators.jsonschema import validate
 from ebl.bibliography.domain.reference import (REFERENCE_DTO_SCHEMA, Reference)
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 REFERENCES_DTO_SCHEMA = {
     'type': 'object',

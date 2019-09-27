@@ -5,8 +5,8 @@ from falcon import Response, Request
 from falcon_auth import MultiAuthBackend, NoneAuthBackend
 from falcon_auth.backends import AuthBackend
 
-from ebl.auth0 import Guest, User
 from ebl.files.application.file_repository import FileRepository, File
+from ebl.users.domain.user import User, Guest
 
 
 def check_scope(user: User, file: File):

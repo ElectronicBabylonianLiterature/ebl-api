@@ -1,12 +1,12 @@
 from typing import Optional, Sequence
 
-from ebl.auth0 import User
 from ebl.bibliography.application.bibliography_repository import \
     BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
+from ebl.users.domain.user import User
 
 COLLECTION = 'bibliography'
 

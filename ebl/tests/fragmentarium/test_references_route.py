@@ -3,10 +3,10 @@ import json
 import falcon
 import pytest
 
-from ebl.auth0 import Guest
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.fragment import FragmentFactory
+from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
 

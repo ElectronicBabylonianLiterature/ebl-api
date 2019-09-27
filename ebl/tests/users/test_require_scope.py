@@ -2,8 +2,8 @@ import falcon
 from falcon import testing
 from falcon_auth import FalconAuthMiddleware, NoneAuthBackend
 
-from ebl.auth0 import Auth0User
-from ebl.require_scope import require_scope
+from ebl.users.infrastructure.auth0 import Auth0User
+from ebl.users.web.require_scope import require_scope
 
 SCOPE = 'write:words'
 

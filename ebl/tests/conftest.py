@@ -13,7 +13,6 @@ from falcon_auth import NoneAuthBackend
 
 import ebl.app
 import ebl.context
-from ebl.auth0 import Auth0User
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import \
@@ -36,6 +35,7 @@ from ebl.fragmentarium.infrastructure.fragment_repository import \
 from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.domain.sign import Sign, SignListRecord, Value
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
+from ebl.users.infrastructure.auth0 import Auth0User
 
 
 @pytest.fixture

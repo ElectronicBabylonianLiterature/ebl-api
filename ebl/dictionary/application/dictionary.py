@@ -1,9 +1,9 @@
 from collections import Sequence
 
-from ebl.auth0 import User
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
+from ebl.users.domain.user import User
 
 COLLECTION = 'words'
 

@@ -1,7 +1,6 @@
 from progress.bar import Bar
 
 from ebl.app import create_context
-from ebl.auth0 import ApiUser
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
@@ -11,6 +10,7 @@ from ebl.signs.infrastructure.menoizing_sign_repository \
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
+from ebl.users.domain.user import ApiUser
 
 
 def update_fragment(transliteration_factory, updater, fragment):

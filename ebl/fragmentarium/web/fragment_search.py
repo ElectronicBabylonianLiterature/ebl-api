@@ -9,7 +9,7 @@ from ebl.fragmentarium.application.fragment_info_schema import \
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory \
     import TransliterationQueryFactory
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 
 class FragmentSearch:

@@ -7,10 +7,10 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
+from sentry_sdk import configure_scope
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
-from ebl.auth0 import Auth0Backend
 from ebl.bibliography.infrastructure.bibliography import \
     MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
@@ -31,6 +31,7 @@ from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
 from ebl.signs.infrastructure.mongo_sign_repository import \
     MongoSignRepository
+from ebl.users.infrastructure.auth0 import Auth0Backend
 
 
 def decode_certificate(encoded_certificate):
@@ -39,13 +40,19 @@ def decode_certificate(encoded_certificate):
     return cert_obj.public_key()
 
 
+def set_sentry_user(id_: str) -> None:
+    with configure_scope() as scope:
+        scope.user = {'id': id_}
+
+
 def create_context():
     client = MongoClient(os.environ['MONGODB_URI'])
     database = client.get_database()
     auth_backend = Auth0Backend(
         decode_certificate(os.environ['AUTH0_PEM']),
         os.environ['AUTH0_AUDIENCE'],
-        os.environ['AUTH0_ISSUER']
+        os.environ['AUTH0_ISSUER'],
+        set_sentry_user
     )
     context = Context(
         auth_backend=auth_backend,

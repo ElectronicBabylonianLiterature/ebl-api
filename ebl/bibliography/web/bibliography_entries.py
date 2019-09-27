@@ -6,7 +6,7 @@ from falcon.media.validators.jsonschema import validate
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.errors import DataError
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 
 class BibliographyResource:

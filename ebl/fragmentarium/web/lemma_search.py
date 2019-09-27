@@ -2,7 +2,7 @@ import falcon
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
-from ebl.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope
 
 
 class LemmaSearch:

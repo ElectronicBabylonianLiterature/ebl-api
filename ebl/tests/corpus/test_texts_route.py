@@ -2,11 +2,11 @@ import json
 
 import falcon
 
-from ebl.auth0 import Guest
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
                                         TextFactory)
+from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
 

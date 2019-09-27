@@ -1,5 +1,4 @@
-from ebl.auth0 import Guest
-
+from ebl.users.domain.user import Guest
 
 USER = Guest()
 
