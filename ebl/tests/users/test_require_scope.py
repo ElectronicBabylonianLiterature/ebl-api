@@ -42,3 +42,15 @@ def test_require_scope_not_present():
     result = do_get([])
 
     assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_require_scope_no_user():
+    auth_backend = NoneAuthBackend(lambda: None)
+    auth_middleware = FalconAuthMiddleware(auth_backend)
+    api = falcon.API(middleware=[auth_middleware])
+    api.add_route('/test', TestResource())
+    client = testing.TestClient(api)
+
+    result = client.simulate_get('/test')
+
+    assert result.status == falcon.HTTP_FORBIDDEN

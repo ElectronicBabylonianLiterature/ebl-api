@@ -18,6 +18,7 @@ class Context:
     word_repository: WordRepository
     sign_repository: SignRepository
     file_repository: FileRepository
+    photo_repository: FileRepository
     fragment_repository: FragmentRepository
     changelog: Changelog
     bibliography_repository: BibliographyRepository

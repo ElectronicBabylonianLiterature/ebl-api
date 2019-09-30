@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Mapping, Any
+from typing import Mapping, Any, Dict
 
 import attr
 import mongomock
@@ -205,14 +205,15 @@ class FakeFile(File):
 
 class TestFilesRepository(FileRepository):
     def __init__(self, *files):
-        self._files = files
+        self._files: Dict[str, File] = {file.filename: file for file in files}
+
+    def create(self, file: FakeFile):
+        self._files[file.filename] = file
 
     def query_by_file_name(self, file_name: str) -> File:
         try:
-            return next(file
-                        for file in self._files
-                        if file.filename == file_name)
-        except StopIteration:
+            return self._files[file_name]
+        except KeyError:
             raise NotFoundError()
 
 
@@ -236,6 +237,16 @@ def file_repository(file, file_with_allowed_scope, file_with_restricted_scope):
     return TestFilesRepository(file,
                                file_with_allowed_scope,
                                file_with_restricted_scope)
+
+
+@pytest.fixture
+def photo():
+    return FakeFile('K.1.jpg', b'yVGSDbnTth', {})
+
+
+@pytest.fixture
+def photo_repository(photo):
+    return TestFilesRepository(photo)
 
 
 @pytest.fixture
@@ -267,6 +278,7 @@ def user():
 def context(word_repository,
             sign_repository,
             file_repository,
+            photo_repository,
             fragment_repository,
             text_repository,
             changelog,
@@ -277,6 +289,7 @@ def context(word_repository,
         word_repository=word_repository,
         sign_repository=sign_repository,
         file_repository=file_repository,
+        photo_repository=photo_repository,
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,

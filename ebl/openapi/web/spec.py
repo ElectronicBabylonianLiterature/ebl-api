@@ -4,7 +4,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from falcon_apispec import FalconPlugin
 
 
-API_VERSION = '0.0.1'
+API_VERSION = '0.0.2'
 
 
 def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:
@@ -13,6 +13,16 @@ def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:
         version=API_VERSION,
         openapi_version='3.0.0',
         plugins=[FalconPlugin(api), MarshmallowPlugin()],
+        servers=[
+            {
+                'url': 'http://localhost:8000',
+                'description': 'Local development server'
+            },
+            {
+                'url': 'https://api.ebabylon.org',
+                'description': 'Production server'
+            }
+        ]
     )
     authorization_url = (
         f'{issuer}authorize'
@@ -51,5 +61,4 @@ def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:
     }
 
     spec.components.security_scheme("auth0", auth0_scheme)
-
     return spec
