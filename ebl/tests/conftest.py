@@ -223,20 +223,21 @@ def file():
 
 
 @pytest.fixture
-def file_with_allowed_scope():
-    return FakeFile('folio2.jpg', b'ZTbvOTqvSW', {'scope': 'WGL-folios'})
+def folio_with_allowed_scope():
+    return FakeFile('WGL_001.jpg', b'ZTbvOTqvSW', {'scope': 'WGL-folios'})
 
 
 @pytest.fixture
-def file_with_restricted_scope():
-    return FakeFile('folio3.jpg', b'klgsFPOutx', {'scope': 'restricted'})
+def folio_with_restricted_scope():
+    return FakeFile('AKG_001.jpg', b'klgsFPOutx', {'scope': 'AKG-folios'})
 
 
 @pytest.fixture
-def file_repository(file, file_with_allowed_scope, file_with_restricted_scope):
+def file_repository(file, folio_with_allowed_scope,
+                    folio_with_restricted_scope):
     return TestFilesRepository(file,
-                               file_with_allowed_scope,
-                               file_with_restricted_scope)
+                               folio_with_allowed_scope,
+                               folio_with_restricted_scope)
 
 
 @pytest.fixture
