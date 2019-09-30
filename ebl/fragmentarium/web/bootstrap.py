@@ -33,7 +33,7 @@ def create_fragmentarium_routes(api: falcon.API,
                             Dictionary(context.word_repository,
                                        context.changelog),
                             context.photo_repository,
-                            context.file_repository)
+                            context.folio_repository)
     updater = FragmentUpdater(context.fragment_repository,
                               context.changelog,
                               Bibliography(context.bibliography_repository,

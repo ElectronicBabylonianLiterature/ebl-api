@@ -19,6 +19,7 @@ class Context:
     sign_repository: SignRepository
     file_repository: FileRepository
     photo_repository: FileRepository
+    folio_repository: FileRepository
     fragment_repository: FragmentRepository
     changelog: Changelog
     bibliography_repository: BibliographyRepository

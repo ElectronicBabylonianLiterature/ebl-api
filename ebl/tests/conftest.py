@@ -224,7 +224,12 @@ class TestFilesRepository(FileRepository):
 
 @pytest.fixture
 def file():
-    return FakeFile('folio1.jpg', b'oyoFLAbXbR', {})
+    return FakeFile('image.jpg', b'oyoFLAbXbR', {})
+
+
+@pytest.fixture
+def file_repository(file):
+    return TestFilesRepository(file)
 
 
 @pytest.fixture
@@ -238,10 +243,8 @@ def folio_with_restricted_scope():
 
 
 @pytest.fixture
-def file_repository(file, folio_with_allowed_scope,
-                    folio_with_restricted_scope):
-    return TestFilesRepository(file,
-                               folio_with_allowed_scope,
+def folio_repository(folio_with_allowed_scope,  folio_with_restricted_scope):
+    return TestFilesRepository(folio_with_allowed_scope,
                                folio_with_restricted_scope)
 
 
@@ -285,6 +288,7 @@ def context(word_repository,
             sign_repository,
             file_repository,
             photo_repository,
+            folio_repository,
             fragment_repository,
             text_repository,
             changelog,
@@ -296,6 +300,7 @@ def context(word_repository,
         sign_repository=sign_repository,
         file_repository=file_repository,
         photo_repository=photo_repository,
+        folio_repository=folio_repository,
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,

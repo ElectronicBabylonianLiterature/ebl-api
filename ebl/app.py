@@ -60,6 +60,7 @@ def create_context():
         sign_repository=MongoSignRepository(database),
         file_repository=GridFsFileRepository(database, 'fs'),
         photo_repository=GridFsFileRepository(database, 'photos'),
+        folio_repository=GridFsFileRepository(database, 'folios'),
         fragment_repository=MongoFragmentRepository(database),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),

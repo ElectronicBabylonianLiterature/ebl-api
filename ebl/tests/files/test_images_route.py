@@ -10,35 +10,13 @@ def test_get_image(client, file):
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 
 
-def test_get_image_access(client, folio_with_allowed_scope):
-    result = \
-        client.simulate_get(f'/images/{folio_with_allowed_scope.filename}')
-
-    assert result.content == folio_with_allowed_scope.data
-
-
-def test_get_image_no_access(client, folio_with_restricted_scope):
-    result =\
-        client.simulate_get(f'/images/{folio_with_restricted_scope.filename}')
-
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
 def test_get_image_not_found(client):
     result = client.simulate_get(f'/images/unknown.jpg')
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_get_guest_no_scope(guest_client, file):
+def test_get_image_as_guest(guest_client, file):
     result = guest_client.simulate_get(f'/images/{file.filename}')
 
     assert result.content == file.data
-
-
-def test_get_guest_scope(guest_client, folio_with_allowed_scope):
-    result = guest_client.simulate_get(
-        f'/images/{folio_with_allowed_scope.filename}'
-    )
-
-    assert result.status == falcon.HTTP_FORBIDDEN
