@@ -1,14 +1,15 @@
 import falcon
 from falcon import Response
 
-from ebl.files.application.file_repository import FileRepository
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.users.web.require_scope import require_scope
 
 
 class PhotoResource:
 
-    def __init__(self, files: FileRepository):
-        self._files = files
+    def __init__(self, finder: FragmentFinder):
+        self._finder = finder
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, _req, resp: Response, number: str):
@@ -35,8 +36,7 @@ class PhotoResource:
           schema:
             type: string
         """
-        file_name = f'{number}.jpg'
-        file = self._files.query_by_file_name(file_name)
+        file = self._finder.find_photo(FragmentNumber(number))
 
         resp.content_type = file.content_type
         resp.content_length = file.length

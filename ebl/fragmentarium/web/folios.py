@@ -1,7 +1,8 @@
 import falcon
 from falcon import Response, Request
 
-from ebl.files.application.file_repository import FileRepository
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.domain.folios import Folio
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
 
@@ -14,8 +15,8 @@ def check_folio_scope(user: User, name: str):
 
 class FoliosResource:
 
-    def __init__(self, files: FileRepository):
-        self._files = files
+    def __init__(self, finder: FragmentFinder):
+        self._finder = finder
 
     @falcon.before(require_scope, 'read:fragments')
     def on_get(self, req: Request, resp: Response, name: str, number: str):
@@ -53,10 +54,8 @@ class FoliosResource:
           schema:
             type: string
         """
-        file_name = f'{name}_{number}.jpg'
-        file = self._files.query_by_file_name(file_name)
-
         check_folio_scope(req.context.user, name)
+        file = self._finder.find_folio(Folio(name, number))
 
         resp.content_type = file.content_type
         resp.content_length = file.length

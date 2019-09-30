@@ -1,8 +1,10 @@
 from typing import List
 
 from ebl.dictionary.application.dictionary import Dictionary
+from ebl.files.application.file_repository import FileRepository, File
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
+from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.transliteration_query import \
@@ -13,10 +15,14 @@ class FragmentFinder:
 
     def __init__(self,
                  repository: FragmentRepository,
-                 dictionary: Dictionary):
+                 dictionary: Dictionary,
+                 photos: FileRepository,
+                 folios: FileRepository):
 
         self._repository = repository
         self._dictionary = dictionary
+        self._photos = photos
+        self._folios = folios
 
     def find(self, number: FragmentNumber) -> Fragment:
         return self._repository.query_by_fragment_number(number)
@@ -69,3 +75,11 @@ class FragmentFinder:
             for result
             in self._repository.query_lemmas(word)
         ]
+
+    def find_folio(self, folio: Folio) -> File:
+        file_name = folio.file_name
+        return self._folios.query_by_file_name(file_name)
+
+    def find_photo(self, number: FragmentNumber) -> File:
+        file_name = f'{number}.jpg'
+        return self._photos.query_by_file_name(file_name)

@@ -164,9 +164,14 @@ def fragmentarium(fragment_repository,
 
 
 @pytest.fixture
-def fragment_finder(fragment_repository, dictionary):
+def fragment_finder(fragment_repository,
+                    dictionary,
+                    photo_repository,
+                    file_repository):
     return FragmentFinder(fragment_repository,
-                          dictionary)
+                          dictionary,
+                          photo_repository,
+                          file_repository)
 
 
 @pytest.fixture

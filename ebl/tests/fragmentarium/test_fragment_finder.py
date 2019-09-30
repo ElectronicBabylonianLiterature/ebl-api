@@ -2,6 +2,8 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.domain.folios import Folio
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
@@ -106,3 +108,26 @@ def test_find_lemmas(fragment_finder,
     when(dictionary).find(unique_lemma).thenReturn(word)
 
     assert fragment_finder.find_lemmas(query) == [[word]]
+
+
+def test_find_photo(fragment_finder,
+                    photo,
+                    photo_repository,
+                    when):
+    number = FragmentNumber('K.1')
+    file_name = f'{number}.jpg'
+    when(photo_repository).query_by_file_name(file_name).thenReturn(photo)
+
+    assert fragment_finder.find_photo(number) == photo
+
+
+def test_find_folio(fragment_finder,
+                    folio_with_allowed_scope,
+                    file_repository,
+                    when):
+    folio = Folio('WGL', '001')
+    (when(file_repository)
+     .query_by_file_name(folio.file_name)
+     .thenReturn(folio_with_allowed_scope))
+
+    assert fragment_finder.find_folio(folio) == folio_with_allowed_scope

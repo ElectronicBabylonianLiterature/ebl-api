@@ -31,7 +31,9 @@ def create_fragmentarium_routes(api: falcon.API,
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(context.fragment_repository,
                             Dictionary(context.word_repository,
-                                       context.changelog))
+                                       context.changelog),
+                            context.photo_repository,
+                            context.file_repository)
     updater = FragmentUpdater(context.fragment_repository,
                               context.changelog,
                               Bibliography(context.bibliography_repository,
@@ -52,8 +54,8 @@ def create_fragmentarium_routes(api: falcon.API,
     )
     folio_pager = FolioPagerResource(finder)
     lemma_search = LemmaSearch(finder)
-    photo = PhotoResource(context.photo_repository)
-    folios = FoliosResource(context.file_repository)
+    photo = PhotoResource(finder)
+    folios = FoliosResource(finder)
 
     api.add_route('/fragments', fragment_search)
     api.add_route('/fragments/{number}', fragments)

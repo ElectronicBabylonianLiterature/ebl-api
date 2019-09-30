@@ -8,6 +8,10 @@ class Folio:
     name: str
     number: str
 
+    @property
+    def file_name(self):
+        return f'{self.name}_{self.number}.jpg'
+
     def to_dict(self) -> Dict[str, str]:
         return attr.asdict(self)
 
