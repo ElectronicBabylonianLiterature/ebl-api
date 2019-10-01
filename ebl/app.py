@@ -58,7 +58,7 @@ def create_context():
         auth_backend=auth_backend,
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
-        file_repository=GridFsFileRepository(database, 'fs'),
+        public_file_repository=GridFsFileRepository(database, 'fs'),
         photo_repository=GridFsFileRepository(database, 'photos'),
         folio_repository=GridFsFileRepository(database, 'folios'),
         fragment_repository=MongoFragmentRepository(database),

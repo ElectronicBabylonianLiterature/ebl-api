@@ -17,7 +17,7 @@ class Context:
     auth_backend: AuthBackend
     word_repository: WordRepository
     sign_repository: SignRepository
-    file_repository: FileRepository
+    public_file_repository: FileRepository
     photo_repository: FileRepository
     folio_repository: FileRepository
     fragment_repository: FragmentRepository
