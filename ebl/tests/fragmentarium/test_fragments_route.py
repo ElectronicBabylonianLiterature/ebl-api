@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
@@ -8,10 +9,10 @@ def test_get_fragment(client, fragmentarium, user):
     fragment_number = fragmentarium.create(transliterated_fragment)
     result = client.simulate_get(f'/fragments/{fragment_number}')
 
-    assert result.json == {
-        **transliterated_fragment.to_dict_for(user),
-        'atf': transliterated_fragment.text.atf
-    }
+    assert result.json == create_response_dto(
+        transliterated_fragment,
+        user
+    )
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'
 

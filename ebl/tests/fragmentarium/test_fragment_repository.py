@@ -9,6 +9,7 @@ from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
+from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,
@@ -37,18 +38,21 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
 )
 
 
+SCHEMA = FragmentSchema()
+
+
 def test_create(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
 
     assert database[COLLECTION].find_one({
         '_id': fragment_number
-    }) == fragment.to_dict()
+    }) == SCHEMA.dump(fragment)
 
 
 def test_query_by_fragment_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    database[COLLECTION].insert_one(fragment.to_dict())
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
 
     assert fragment_repository.query_by_fragment_number(fragment.number) ==\
         fragment
@@ -149,19 +153,19 @@ def test_update_update_lemmatization_not_found(fragment_repository):
 
 def test_statistics(database, fragment_repository):
     database[COLLECTION].insert_many([
-        FragmentFactory.build(text=Text((
+        SCHEMA.dump(FragmentFactory.build(text=Text((
             TextLine('1.', (Word('first'), Word('line'))),
             ControlLine('$', (Token('ignore'), )),
             EmptyLine()
-        ))).to_dict(),
-        FragmentFactory.build(text=Text((
+        )))),
+        SCHEMA.dump(FragmentFactory.build(text=Text((
             ControlLine('$', (Token('ignore'), )),
             TextLine('1.', (Word('second'), )),
             TextLine('1.', (Word('third'), )),
             ControlLine('$', (Token('ignore'), )),
             TextLine('1.', (Word('fourth'), )),
-        ))).to_dict(),
-        FragmentFactory.build(text=Text()).to_dict()
+        )))),
+        SCHEMA.dump(FragmentFactory.build(text=Text()))
     ])
 
     assert fragment_repository.count_transliterated_fragments() == 2
@@ -176,8 +180,8 @@ def test_statistics_no_fragments(fragment_repository):
 def test_search_finds_by_id(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many([
-        fragment.to_dict(),
-        FragmentFactory.build().to_dict()
+        SCHEMA.dump(fragment),
+        SCHEMA.dump(FragmentFactory.build())
     ])
 
     assert (fragment_repository
@@ -188,8 +192,8 @@ def test_search_finds_by_id(database, fragment_repository):
 def test_search_finds_by_accession(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many([
-        fragment.to_dict(),
-        FragmentFactory.build().to_dict()
+        SCHEMA.dump(fragment),
+        SCHEMA.dump(FragmentFactory.build())
     ])
 
     assert (fragment_repository
@@ -200,8 +204,8 @@ def test_search_finds_by_accession(database, fragment_repository):
 def test_search_finds_by_cdli(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many([
-        fragment.to_dict(),
-        FragmentFactory.build().to_dict()
+        SCHEMA.dump(fragment),
+        SCHEMA.dump(FragmentFactory.build())
     ])
 
     assert (fragment_repository
@@ -245,8 +249,8 @@ def test_find_transliterated(database,
                              fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     database[COLLECTION].insert_many([
-        transliterated_fragment.to_dict(),
-        FragmentFactory.build().to_dict()
+        SCHEMA.dump(transliterated_fragment),
+        SCHEMA.dump(FragmentFactory.build())
     ])
 
     assert fragment_repository.find_transliterated() ==\

@@ -15,10 +15,3 @@ def test_number():
 
 def test_file_name():
     assert FOLIO.file_name == f'{NAME}_{NUMBER}.jpg'
-
-
-def test_to_dict():
-    assert FOLIO.to_dict() == {
-        'name': NAME,
-        'number': NUMBER
-    }

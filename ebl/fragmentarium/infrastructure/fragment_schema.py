@@ -1,4 +1,5 @@
-from marshmallow import Schema, fields, post_load
+import pydash
+from marshmallow import Schema, fields, post_load, post_dump
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, \
     ReferenceType
@@ -18,15 +19,21 @@ class MeasureSchema(Schema):
     def make_measure(self, data, **kwargs):
         return Measure(**data)
 
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
 
 class RecordEntrySchema(Schema):
     user = fields.String(required=True)
-    type = fields.String(required=True)
+    type = fields.Function(
+        lambda entry: entry.type.value,
+        lambda value: RecordType(value)
+    )
     date = fields.String(required=True)
 
     @post_load
     def make_record_entry(self, data, **kwargs):
-        data['type'] = RecordType(data['type'])
         return RecordEntry(**data)
 
 
@@ -57,7 +64,10 @@ class FoliosSchema(Schema):
 
 class ReferenceSchema(Schema):
     id = fields.String(required=True)
-    type = fields.String(required=True)
+    type = fields.Function(
+        lambda reference: reference.type.name,
+        lambda type: ReferenceType[type]
+    )
     pages = fields.String(required=True)
     notes = fields.String(required=True)
     lines_cited = fields.List(fields.String(),
@@ -68,7 +78,6 @@ class ReferenceSchema(Schema):
     @post_load
     def make_reference(self, data, **kwargs):
         data['id'] = BibliographyId(data['id'])
-        data['type'] = ReferenceType[data['type']]
         data['lines_cited'] = tuple(data['lines_cited'])
         return Reference(**data)
 
@@ -99,7 +108,10 @@ class FragmentSchema(Schema):
     joins = fields.List(fields.String(), required=True)
     record = fields.Pluck(RecordSchema, 'entries')
     folios = fields.Pluck(FoliosSchema, 'entries')
-    text = fields.Mapping(fields.String(), required=True)
+    text = fields.Function(
+        lambda fragment: fragment.text.to_dict(),
+        lambda text: Text.from_dict(text)
+    )
     signs = fields.String(missing=None)
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)
@@ -114,8 +126,11 @@ class FragmentSchema(Schema):
         data['joins'] = tuple(data['joins'])
         data['record'] = data['record']
         data['folios'] = data['folios']
-        data['text'] = Text.from_dict(data['text'])
         data['references'] = tuple(data['references'])
         if data['uncurated_references'] is not None:
             data['uncurated_references'] = tuple(data['uncurated_references'])
         return Fragment(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)

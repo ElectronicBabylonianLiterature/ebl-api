@@ -1,4 +1,3 @@
-import pydash
 from marshmallow import EXCLUDE
 
 from ebl.dictionary.domain.word import WordId
@@ -34,7 +33,7 @@ class MongoFragmentRepository(FragmentRepository):
         return result.next()['lines']
 
     def create(self, fragment):
-        return self._collection.insert_one(fragment.to_dict())
+        return self._collection.insert_one(FragmentSchema().dump(fragment))
 
     def query_by_fragment_number(self, number):
         data = self._collection.find_one_by_id(number)
@@ -77,20 +76,15 @@ class MongoFragmentRepository(FragmentRepository):
     def update_transliteration(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),
-            {'$set': pydash.omit_by({
-                'text': fragment.text.to_dict(),
-                'notes': fragment.notes,
-                'signs': fragment.signs,
-                'record': fragment.record.to_list()
-            }, lambda value: value is None)}
+            {'$set': FragmentSchema(
+                only=('text', 'notes', 'signs', 'record')
+             ).dump(fragment)}
         )
 
     def update_lemmatization(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),
-            {'$set': {
-                'text': fragment.text.to_dict()
-            }}
+            {'$set': FragmentSchema(only=('text',)).dump(fragment)}
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
@@ -161,12 +155,7 @@ class MongoFragmentRepository(FragmentRepository):
     def update_references(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),
-            {'$set': {
-                'references': [
-                    reference.to_dict()
-                    for reference in fragment.references
-                ]
-            }}
+            {'$set': FragmentSchema(only=('references',)).dump(fragment)}
         )
 
     def _map_fragments(self, cursor):

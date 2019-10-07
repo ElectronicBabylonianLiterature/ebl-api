@@ -6,11 +6,14 @@ from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.domain.transliteration_update import (
     TransliterationUpdate
 )
+from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
 from ebl.transliteration.domain.lemmatization import Lemmatization
+
+SCHEMA = FragmentSchema()
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -35,8 +38,8 @@ def test_update_transliteration(fragment_updater,
     when(changelog).create(
         'fragments',
         user.profile,
-        transliterated_fragment.to_dict(),
-        expected_fragment.to_dict()
+        SCHEMA.dump(transliterated_fragment),
+        SCHEMA.dump(expected_fragment)
     ).thenReturn()
     (when(fragment_repository)
      .update_transliteration(expected_fragment)
@@ -139,8 +142,8 @@ def test_update_references(fragment_updater,
     when(changelog).create(
         'fragments',
         user.profile,
-        fragment.to_dict(),
-        expected_fragment.to_dict()
+        SCHEMA.dump(fragment),
+        SCHEMA.dump(expected_fragment)
     ).thenReturn()
 
     updated_fragment = fragment_updater.update_references(

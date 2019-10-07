@@ -1,6 +1,6 @@
 import datetime
 from enum import Enum
-from typing import Dict, List, Tuple
+from typing import Tuple
 
 import attr
 
@@ -32,13 +32,6 @@ class RecordEntry:
     def revision(user: str) -> 'RecordEntry':
         return RecordEntry(user, RecordType.REVISION)
 
-    def to_dict(self) -> Dict[str, str]:
-        return {
-            'user': self.user,
-            'type': self.type.value,
-            'date': self.date
-        }
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Record:
@@ -55,9 +48,6 @@ class Record:
             ))
         else:
             return self
-
-    def to_list(self) -> List[Dict[str, str]]:
-        return [entry.to_dict() for entry in self.entries]
 
     @staticmethod
     def _create_entry(old_transliteration: str, user: str) -> RecordEntry:

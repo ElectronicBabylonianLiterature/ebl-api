@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Tuple
 
 import attr
 
@@ -12,9 +12,6 @@ class Folio:
     def file_name(self):
         return f'{self.name}_{self.number}.jpg'
 
-    def to_dict(self) -> Dict[str, str]:
-        return attr.asdict(self)
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Folios:
@@ -27,6 +24,3 @@ class Folios:
             if user.can_read_folio(folio.name)
         )
         return Folios(folios)
-
-    def to_list(self) -> List[Dict[str, str]]:
-        return [folio.to_dict() for folio in self.entries]

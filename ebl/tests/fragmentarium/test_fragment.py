@@ -23,14 +23,6 @@ from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
 
-def test_to_dict_for(user):
-    fragment = FragmentFactory.build()
-    assert fragment.to_dict_for(user) == {
-        **fragment.to_dict(),
-        'folios': fragment.folios.filter(user).to_list()
-    }
-
-
 def test_number():
     fragment = FragmentFactory.build(number='1')
     assert fragment.number == '1'

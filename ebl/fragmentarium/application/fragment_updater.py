@@ -1,11 +1,15 @@
 from typing import Tuple
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
+from ebl.changelog import Changelog
+from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
+from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
 
@@ -71,9 +75,10 @@ class FragmentUpdater:
                            user: User,
                            fragment: Fragment,
                            updated_fragment: Fragment) -> None:
+        schema = FragmentSchema()
         self._changelog.create(
             COLLECTION,
             user.profile,
-            fragment.to_dict(),
-            updated_fragment.to_dict()
+            schema.dump(fragment),
+            schema.dump(updated_fragment)
         )
