@@ -30,6 +30,14 @@ class RecordEntrySchema(Schema):
         return RecordEntry(**data)
 
 
+class RecordSchema(Schema):
+    entries = fields.Nested(RecordEntrySchema, many=True, required=True)
+
+    @post_load
+    def make_record(self, data, **kwargs):
+        return Record(tuple(data['entries']))
+
+
 class FolioSchema(Schema):
     name = fields.String(required=True)
     number = fields.String(required=True)
@@ -37,6 +45,14 @@ class FolioSchema(Schema):
     @post_load
     def make_record_entry(self, data, **kwargs):
         return Folio(**data)
+
+
+class FoliosSchema(Schema):
+    entries = fields.Nested(FolioSchema, many=True, required=True)
+
+    @post_load
+    def make_folio(self, data, **kwargs):
+        return Folios(tuple(data['entries']))
 
 
 class ReferenceSchema(Schema):
@@ -81,8 +97,8 @@ class FragmentSchema(Schema):
     length = fields.Nested(MeasureSchema, required=True)
     thickness = fields.Nested(MeasureSchema, required=True)
     joins = fields.List(fields.String(), required=True)
-    record = fields.Nested(RecordEntrySchema, many=True, required=True)
-    folios = fields.Nested(FolioSchema, many=True, required=True)
+    record = fields.Pluck(RecordSchema, 'entries')
+    folios = fields.Pluck(FoliosSchema, 'entries')
     text = fields.Mapping(fields.String(), required=True)
     signs = fields.String(missing=None)
     notes = fields.String(required=True)
@@ -96,8 +112,8 @@ class FragmentSchema(Schema):
     def make_fragment(self, data, **kwargs):
         data['number'] = FragmentNumber(data['number'])
         data['joins'] = tuple(data['joins'])
-        data['record'] = Record(tuple(data['record']))
-        data['folios'] = Folios(tuple(data['folios']))
+        data['record'] = data['record']
+        data['folios'] = data['folios']
         data['text'] = Text.from_dict(data['text'])
         data['references'] = tuple(data['references'])
         if data['uncurated_references'] is not None:

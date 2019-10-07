@@ -38,7 +38,7 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
 
 
 def test_create(database, fragment_repository):
-    fragment = FragmentFactory.build()
+    fragment = LemmatizedFragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
 
     assert database[COLLECTION].find_one({
@@ -47,7 +47,7 @@ def test_create(database, fragment_repository):
 
 
 def test_query_by_fragment_number(database, fragment_repository):
-    fragment = FragmentFactory.build()
+    fragment = LemmatizedFragmentFactory.build()
     database[COLLECTION].insert_one(fragment.to_dict())
 
     assert fragment_repository.query_by_fragment_number(fragment.number) ==\
