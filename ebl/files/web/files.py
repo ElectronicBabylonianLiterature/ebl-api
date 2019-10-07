@@ -16,7 +16,7 @@ class PublicFilesResource:
 
     def on_get(self, _req, resp: Response, file_name: str):
         """---
-        description: Gets an image image.
+        description: Gets an image.
         responses:
           200:
             description: The image
