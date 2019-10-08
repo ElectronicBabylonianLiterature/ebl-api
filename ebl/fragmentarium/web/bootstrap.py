@@ -1,17 +1,11 @@
 import falcon
 
-from ebl.bibliography.application.bibliography import Bibliography
 from ebl.context import Context
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
-from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
-from ebl.fragmentarium.application.transliteration_query_factory import \
-    TransliterationQueryFactory
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
 from ebl.fragmentarium.web.dtos import FragmentDtoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
@@ -23,7 +17,6 @@ from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
-from ebl.signs.application.atf_converter import AtfConverter
 
 
 def create_fragmentarium_routes(api: falcon.API,
@@ -35,24 +28,19 @@ def create_fragmentarium_routes(api: falcon.API,
                                        context.changelog),
                             context.photo_repository,
                             context.folio_repository)
-    updater = FragmentUpdater(context.fragment_repository,
-                              context.changelog,
-                              Bibliography(context.bibliography_repository,
-                                           context.changelog),
-                              context.photo_repository)
+    updater = context.get_fragment_updater()
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
-    atf_converter = AtfConverter(context.sign_repository)
     fragment_search = \
         FragmentSearch(fragmentarium,
                        finder,
-                       TransliterationQueryFactory(atf_converter))
+                       context.get_transliteration_query_factory())
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
     transliteration = TransliterationResource(
         updater,
-        TransliterationUpdateFactory(atf_converter)
+        context.get_transliteration_update_factory()
     )
     folio_pager = FolioPagerResource(finder)
     lemma_search = LemmaSearch(finder)

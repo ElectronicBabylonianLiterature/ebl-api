@@ -1,26 +1,21 @@
 import falcon
 
-from ebl.bibliography.application.bibliography import Bibliography
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
 from ebl.corpus.web.lines import LinesResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.texts import TextResource, TextsResource
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
-from ebl.signs.application.atf_converter import AtfConverter
 
 
 def create_corpus_routes(api: falcon.API,
                          context: Context,
                          spec):
-    atf_converter = AtfConverter(context.sign_repository)
     corpus = Corpus(
         context.text_repository,
-        Bibliography(context.bibliography_repository, context.changelog),
+        context.get_bibliography(),
         context.changelog,
-        TransliterationUpdateFactory(atf_converter)
+        context.get_transliteration_update_factory()
     )
     context.text_repository.create_indexes()
 

@@ -1,10 +1,7 @@
+import attr
 from progress.bar import Bar
 
 from ebl.app import create_context
-from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
-from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.infrastructure.menoizing_sign_repository \
     import MemoizingSignRepository
 from ebl.transliteration.domain.lemmatization import LemmatizationError
@@ -90,15 +87,9 @@ def update_fragments(fragment_repository,
 
 if __name__ == '__main__':
     context = create_context()
-    SIGN_REPOSITORY = MemoizingSignRepository(context.sign_repository)
-    ATF_CONVERTER = AtfConverter(SIGN_REPOSITORY)
-    TRANSLITERATION_UPDATE_FACTORY = \
-        TransliterationUpdateFactory(ATF_CONVERTER)
-    FRAGMENT_UPDATER = FragmentUpdater(
-        context.fragment_repository,
-        context.changelog,
-        context.bibliography
-    )
+    context = attr.evolve(context, sign_repository=MemoizingSignRepository(
+        context.sign_repository
+    ))
     update_fragments(context.fragment_repository,
-                     TRANSLITERATION_UPDATE_FACTORY,
-                     FRAGMENT_UPDATER)
+                     context.get_transliteration_update_factory(),
+                     context.get_fragment_updater())
