@@ -70,7 +70,7 @@ def test_create_response_dto(user):
             else None
         ),
         'atf': lemmatized_fragment.text.atf,
-        'has_photo': has_photo
+        'hasPhoto': has_photo
     }, pydash.is_none)
 
 
