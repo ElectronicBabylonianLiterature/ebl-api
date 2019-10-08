@@ -11,7 +11,8 @@ def test_get_fragment(client, fragmentarium, user):
 
     assert result.json == create_response_dto(
         transliterated_fragment,
-        user
+        user,
+        transliterated_fragment.number == 'K.1'
     )
     assert result.status == falcon.HTTP_OK
     assert result.headers['Access-Control-Allow-Origin'] == '*'

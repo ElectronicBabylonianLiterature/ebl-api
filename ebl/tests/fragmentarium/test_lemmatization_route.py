@@ -26,7 +26,8 @@ def test_update_lemmatization(client,
         transliterated_fragment.update_lemmatization(
             Lemmatization.from_list(tokens)
         ),
-        user
+        user,
+        transliterated_fragment.number == 'K.1'
     )
 
     assert post_result.status == falcon.HTTP_OK

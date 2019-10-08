@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.files.application.file_repository import FileRepository, File
@@ -24,8 +24,9 @@ class FragmentFinder:
         self._photos = photos
         self._folios = folios
 
-    def find(self, number: FragmentNumber) -> Fragment:
-        return self._repository.query_by_fragment_number(number)
+    def find(self, number: FragmentNumber) -> Tuple[Fragment, bool]:
+        return (self._repository.query_by_fragment_number(number),
+                self._photos.query_if_file_exists(f'{number}.jpg'))
 
     def search(self, number: str) -> List[FragmentInfo]:
         return list(map(

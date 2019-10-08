@@ -26,7 +26,8 @@ def test_update_references(client,
 
     expected_json = create_response_dto(
         fragment.set_references((reference,)),
-        user
+        user,
+        fragment.number == 'K.1'
     )
 
     assert post_result.status == falcon.HTTP_OK

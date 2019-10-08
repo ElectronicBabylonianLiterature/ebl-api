@@ -46,9 +46,9 @@ class LemmatizationResource:
     @validate(LEMMATIZATION_DTO_SCHEMA)
     def on_post(self, req, resp, number):
         user = req.context.user
-        updated_fragment = self._updater.update_lemmatization(
+        updated_fragment, has_photo = self._updater.update_lemmatization(
             number,
             Lemmatization.from_list(req.media['lemmatization']),
             user
         )
-        resp.media = create_response_dto(updated_fragment, user)
+        resp.media = create_response_dto(updated_fragment, user, has_photo)

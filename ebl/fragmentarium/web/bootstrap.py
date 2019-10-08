@@ -20,6 +20,7 @@ from ebl.fragmentarium.web.lemma_search import LemmaSearch
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
+from ebl.fragmentarium.web.schema import FragmentSchema
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
 from ebl.signs.application.atf_converter import AtfConverter
@@ -37,7 +38,8 @@ def create_fragmentarium_routes(api: falcon.API,
     updater = FragmentUpdater(context.fragment_repository,
                               context.changelog,
                               Bibliography(context.bibliography_repository,
-                                           context.changelog))
+                                           context.changelog),
+                              context.photo_repository)
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
@@ -71,8 +73,9 @@ def create_fragmentarium_routes(api: falcon.API,
     )
     api.add_route('/folios/{name}/{number}', folios)
 
-    spec.components.schema('FragmentInfo',
-                           schema=FragmentInfoSchema)
+    spec.components.schema('FragmentInfo', schema=FragmentInfoSchema)
+    spec.components.schema('Fragment', schema=FragmentSchema)
+
     spec.path(resource=fragment_search)
     spec.path(resource=fragments)
     spec.path(resource=lemmatization)

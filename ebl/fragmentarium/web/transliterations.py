@@ -36,12 +36,12 @@ class TransliterationResource:
     def on_post(self, req, resp, number):
         try:
             user = req.context.user
-            updated_fragment = self._updater.update_transliteration(
+            updated_fragment, has_photo = self._updater.update_transliteration(
                 number,
                 self._create_transliteration(req.media),
                 user
             )
-            resp.media = create_response_dto(updated_fragment, user)
+            resp.media = create_response_dto(updated_fragment, user, has_photo)
         except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {

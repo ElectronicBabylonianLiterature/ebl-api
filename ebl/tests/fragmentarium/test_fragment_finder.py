@@ -12,14 +12,22 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory)
 
 
-def test_find(fragment_finder, fragment_repository, when):
+@pytest.mark.parametrize('has_photo', [True, False])
+def test_find_with_photo(has_photo,
+                         fragment_finder,
+                         fragment_repository,
+                         photo_repository,
+                         when):
     fragment = FragmentFactory.build()
     number = fragment.number
     (when(fragment_repository)
      .query_by_fragment_number(number)
      .thenReturn(fragment))
+    (when(photo_repository)
+     .query_if_file_exists(f'{number}.jpg')
+     .thenReturn(has_photo))
 
-    assert fragment_finder.find(number) == fragment
+    assert fragment_finder.find(number) == (fragment, has_photo)
 
 
 def test_find_not_found(fragment_finder, fragment_repository, when):

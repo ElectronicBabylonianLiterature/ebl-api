@@ -35,6 +35,7 @@ from ebl.fragmentarium.infrastructure.fragment_repository import \
 from ebl.signs.application.atf_converter import AtfConverter
 from ebl.signs.domain.sign import Sign, SignListRecord, Value
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
+from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
 
@@ -177,8 +178,12 @@ def fragment_finder(fragment_repository,
 @pytest.fixture
 def fragment_updater(fragment_repository,
                      changelog,
-                     bibliography):
-    return FragmentUpdater(fragment_repository, changelog, bibliography)
+                     bibliography,
+                     photo_repository):
+    return FragmentUpdater(fragment_repository,
+                           changelog,
+                           bibliography,
+                           photo_repository)
 
 
 class FakeFile(File):
@@ -259,7 +264,7 @@ def photo_repository(photo):
 
 
 @pytest.fixture
-def user():
+def user() -> User:
     return Auth0User(
         {
             'scope': [

@@ -34,7 +34,8 @@ def test_update_transliteration(client,
                                       updates['notes']),
                 user
             ),
-            user
+            user,
+            fragment.number == 'K.1'
         ),
         'signs': ''
     }
@@ -79,7 +80,8 @@ def test_update_transliteration_merge_lemmatization(client,
             updated_transliteration,
             user
         ),
-        user
+        user,
+        lemmatized_fragment.number == 'K.1'
     )
 
     post_result = client.simulate_post(

@@ -50,7 +50,7 @@ def test_update_transliteration(fragment_updater,
         transliteration,
         user
     )
-    assert updated_fragment == expected_fragment
+    assert updated_fragment == (expected_fragment, False)
 
 
 def test_update_update_transliteration_not_found(fragment_updater,
@@ -90,8 +90,8 @@ def test_update_lemmatization(fragment_updater,
     when(changelog).create(
         'fragments',
         user.profile,
-        transliterated_fragment.to_dict(),
-        expected_fragment.to_dict()
+        SCHEMA.dump(transliterated_fragment),
+        SCHEMA.dump(expected_fragment)
     ).thenReturn()
     (when(fragment_repository)
      .update_lemmatization(expected_fragment)
@@ -102,7 +102,7 @@ def test_update_lemmatization(fragment_updater,
         lemmatization,
         user
     )
-    assert updated_fragment == expected_fragment
+    assert updated_fragment == (expected_fragment, False)
 
 
 def test_update_update_lemmatization_not_found(fragment_updater,
@@ -151,7 +151,7 @@ def test_update_references(fragment_updater,
         references,
         user
     )
-    assert updated_fragment == expected_fragment
+    assert updated_fragment == (expected_fragment, False)
 
 
 def test_update_references_invalid(fragment_updater,

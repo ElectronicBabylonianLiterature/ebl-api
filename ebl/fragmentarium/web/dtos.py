@@ -1,9 +1,14 @@
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.web.schema import FragmentSchema
 from ebl.users.domain.user import User
 
 
-def create_response_dto(fragment: Fragment, user: User):
+def create_response_dto(fragment: Fragment,
+                        user: User,
+                        has_photo):
+    schema = FragmentSchema()
+    schema.context = {'user': user}
     return {
-        **fragment.to_dict_for(user),
-        'atf': fragment.text.atf
+        **schema.dump(fragment),
+        'has_photo': has_photo
     }

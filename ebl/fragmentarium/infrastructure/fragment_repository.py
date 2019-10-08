@@ -77,7 +77,7 @@ class MongoFragmentRepository(FragmentRepository):
         self._collection.update_one(
             fragment_is(fragment),
             {'$set': FragmentSchema(
-                only=('text', 'notes', 'signs', 'record')
+                only=('text', 'notes', 'signs', 'record'),
              ).dump(fragment)}
         )
 

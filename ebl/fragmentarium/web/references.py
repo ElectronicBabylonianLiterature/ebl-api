@@ -27,7 +27,7 @@ class ReferencesResource:
     @validate(REFERENCES_DTO_SCHEMA)
     def on_post(self, req, resp, number):
         user = req.context.user
-        updated_fragment = self._updater.update_references(
+        updated_fragment, has_photo = self._updater.update_references(
             number,
             tuple(
                 Reference.from_dict(reference)
@@ -35,4 +35,4 @@ class ReferencesResource:
             ),
             user
         )
-        resp.media = create_response_dto(updated_fragment, user)
+        resp.media = create_response_dto(updated_fragment, user, has_photo)

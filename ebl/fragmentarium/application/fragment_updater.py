@@ -20,17 +20,19 @@ class FragmentUpdater:
 
     def __init__(self,
                  repository: FragmentRepository,
-                 changelog,
-                 bibliography):
+                 changelog: Changelog,
+                 bibliography: Bibliography,
+                 photos: FileRepository):
 
         self._repository = repository
         self._changelog = changelog
         self._bibliography = bibliography
+        self._photos = photos
 
     def update_transliteration(self,
                                number: FragmentNumber,
                                transliteration: TransliterationUpdate,
-                               user: User) -> Fragment:
+                               user: User) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_fragment_number(number)
 
         updated_fragment = fragment.update_transliteration(
@@ -41,12 +43,13 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
-        return updated_fragment
+        return (updated_fragment,
+                self._photos.query_if_file_exists(f'{number}.jpg'))
 
     def update_lemmatization(self,
                              number: FragmentNumber,
                              lemmatization: Lemmatization,
-                             user: User) -> Fragment:
+                             user: User) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_fragment_number(number)
         updated_fragment = fragment.update_lemmatization(
             lemmatization
@@ -55,12 +58,13 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_lemmatization(updated_fragment)
 
-        return updated_fragment
+        return (updated_fragment,
+                self._photos.query_if_file_exists(f'{number}.jpg'))
 
     def update_references(self,
                           number: FragmentNumber,
                           references: Tuple[Reference, ...],
-                          user: User) -> Fragment:
+                          user: User) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_fragment_number(number)
         self._bibliography.validate_references(references)
 
@@ -69,7 +73,8 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_references(updated_fragment)
 
-        return updated_fragment
+        return (updated_fragment,
+                self._photos.query_if_file_exists(f'{number}.jpg'))
 
     def _create_changlelog(self,
                            user: User,
