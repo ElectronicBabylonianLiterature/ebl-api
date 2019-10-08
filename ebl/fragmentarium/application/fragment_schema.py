@@ -73,7 +73,6 @@ class ReferenceSchema(Schema):
     lines_cited = fields.List(fields.String(),
                               required=True,
                               data_key='linesCited')
-    document = fields.Mapping(missing=None)
 
     @post_load
     def make_reference(self, data, **kwargs):
@@ -107,7 +106,7 @@ class FragmentSchema(Schema):
     thickness = fields.Nested(MeasureSchema, required=True)
     joins = fields.List(fields.String(), required=True)
     record = fields.Pluck(RecordSchema, 'entries')
-    folios = fields.Pluck(FoliosSchema, 'entries')
+    folios: fields.Field = fields.Pluck(FoliosSchema, 'entries')
     text = fields.Function(
         lambda fragment: fragment.text.to_dict(),
         lambda text: Text.from_dict(text)

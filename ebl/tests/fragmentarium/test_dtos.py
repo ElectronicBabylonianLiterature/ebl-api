@@ -1,4 +1,5 @@
 import attr
+import pydash
 
 from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
@@ -11,7 +12,11 @@ from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 def test_create_response_dto(user):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     has_photo = True
-    assert create_response_dto(lemmatized_fragment, user, has_photo) == {
+    assert create_response_dto(
+        lemmatized_fragment,
+        user,
+        has_photo
+    ) == pydash.omit_by({
         '_id': lemmatized_fragment.number,
         'accession': lemmatized_fragment.accession,
         'cdliNumber': lemmatized_fragment.cdli_number,
@@ -19,9 +24,12 @@ def test_create_response_dto(user):
         'publication': lemmatized_fragment.publication,
         'description': lemmatized_fragment.description,
         'joins': list(lemmatized_fragment.joins),
-        'length': attr.asdict(lemmatized_fragment.length),
-        'width': attr.asdict(lemmatized_fragment.width),
-        'thickness': attr.asdict(lemmatized_fragment.thickness),
+        'length': attr.asdict(lemmatized_fragment.length,
+                              filter=lambda _, value: value is not None),
+        'width': attr.asdict(lemmatized_fragment.width,
+                             filter=lambda _, value: value is not None),
+        'thickness': attr.asdict(lemmatized_fragment.thickness,
+                                 filter=lambda _, value: value is not None),
         'collection': lemmatized_fragment.collection,
         'script': lemmatized_fragment.script,
         'notes': lemmatized_fragment.notes,
@@ -63,7 +71,7 @@ def test_create_response_dto(user):
         ),
         'atf': lemmatized_fragment.text.atf,
         'has_photo': has_photo
-    }
+    }, pydash.is_none)
 
 
 def test_create_fragment_info_dto():

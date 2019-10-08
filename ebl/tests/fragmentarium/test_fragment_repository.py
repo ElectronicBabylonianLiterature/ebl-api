@@ -4,12 +4,12 @@ import pytest
 from ebl.atf.domain.atf import Atf
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import UncuratedReference
 from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
-from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,

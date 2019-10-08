@@ -1,4 +1,4 @@
-from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 
 
@@ -7,4 +7,3 @@ def test_serialization_and_deserialization():
     schema = FragmentSchema()
     data = schema.dump(fragment)
     assert schema.load(data) == fragment
-

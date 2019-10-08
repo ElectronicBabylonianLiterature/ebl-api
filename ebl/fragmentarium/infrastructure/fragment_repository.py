@@ -5,7 +5,7 @@ from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
-from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.infrastructure.queries import HAS_TRANSLITERATION, \
     aggregate_interesting, aggregate_latest, aggregate_lemmas, \
     aggregate_needs_revision, aggregate_random, fragment_is, number_is
@@ -33,7 +33,9 @@ class MongoFragmentRepository(FragmentRepository):
         return result.next()['lines']
 
     def create(self, fragment):
-        return self._collection.insert_one(FragmentSchema().dump(fragment))
+        return self._collection.insert_one(
+            FragmentSchema().dump(fragment)
+        )
 
     def query_by_fragment_number(self, number):
         data = self._collection.find_one_by_id(number)
@@ -77,7 +79,7 @@ class MongoFragmentRepository(FragmentRepository):
         self._collection.update_one(
             fragment_is(fragment),
             {'$set': FragmentSchema(
-                only=('text', 'notes', 'signs', 'record'),
+                only=('text', 'notes', 'signs', 'record')
              ).dump(fragment)}
         )
 

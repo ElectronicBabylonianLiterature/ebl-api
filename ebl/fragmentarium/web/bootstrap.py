@@ -6,6 +6,7 @@ from ebl.dictionary.application.dictionary import Dictionary
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory import \
@@ -20,7 +21,6 @@ from ebl.fragmentarium.web.lemma_search import LemmaSearch
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
-from ebl.fragmentarium.web.schema import FragmentSchema
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
 from ebl.signs.application.atf_converter import AtfConverter

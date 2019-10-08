@@ -6,10 +6,10 @@ from ebl.changelog import Changelog
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import \
     FragmentRepository
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
-from ebl.fragmentarium.infrastructure.fragment_schema import FragmentSchema
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
 
