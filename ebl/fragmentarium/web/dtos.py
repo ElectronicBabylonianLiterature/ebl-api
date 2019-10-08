@@ -1,20 +1,20 @@
-from marshmallow import fields, Schema
+import attr
+from marshmallow import fields, pre_dump
 
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema, \
-    FolioSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.users.domain.user import User
 
 
-class TextSchema(Schema):
-    atf = fields.String(required=True)
-
-
 class FragmentDtoSchema(FragmentSchema):
-    folios = fields.Function(lambda fragment, context: FolioSchema(
-        many=True
-    ).dump(fragment.folios.filter(context['user']).entries))
-    atf = fields.Pluck(TextSchema, 'atf', dump_only=True, attribute='text')
+    atf = fields.Function(lambda fragment: fragment.text.atf)
+
+    @pre_dump
+    def filter_folios(self, data, **kwargs):
+        return attr.evolve(
+            data,
+            folios=data.folios.filter(self.context['user'])
+        )
 
 
 def create_response_dto(fragment: Fragment,

@@ -6,13 +6,13 @@ from ebl.dictionary.application.dictionary import Dictionary
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import \
     FragmentInfoSchema
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory import \
     TransliterationQueryFactory
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
+from ebl.fragmentarium.web.dtos import FragmentDtoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
@@ -74,7 +74,7 @@ def create_fragmentarium_routes(api: falcon.API,
     api.add_route('/folios/{name}/{number}', folios)
 
     spec.components.schema('FragmentInfo', schema=FragmentInfoSchema)
-    spec.components.schema('Fragment', schema=FragmentSchema)
+    spec.components.schema('Fragment', schema=FragmentDtoSchema)
 
     spec.path(resource=fragment_search)
     spec.path(resource=fragments)
