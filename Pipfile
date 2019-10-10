@@ -41,6 +41,7 @@ factory-boy = "*"
 rope = "*"
 flake8 = "*"
 pyhamcrest = "*"
+httpretty = "*"
 
 [requires]
 python_version = "3.7"

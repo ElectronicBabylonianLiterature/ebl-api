@@ -4,7 +4,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from falcon_apispec import FalconPlugin
 
 
-API_VERSION = '0.0.4'
+API_VERSION = '0.0.5'
 
 
 def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:

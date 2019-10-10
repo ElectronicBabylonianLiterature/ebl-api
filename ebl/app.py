@@ -14,6 +14,7 @@ import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import \
     MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
+from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -81,10 +82,11 @@ def create_app(context: Context, issuer: str = '', audience: str = ''):
     spec = create_spec(api, issuer, audience)
 
     create_bibliography_routes(api, context, spec)
-    create_dictionary_routes(api, context, spec)
-    create_fragmentarium_routes(api, context, spec)
+    create_cdli_routes(api, spec)
     create_corpus_routes(api, context, spec)
+    create_dictionary_routes(api, context, spec)
     create_files_route(api, context, spec)
+    create_fragmentarium_routes(api, context, spec)
     create_open_api_route(api, spec)
 
     return api
