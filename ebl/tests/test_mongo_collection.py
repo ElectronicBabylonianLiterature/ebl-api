@@ -60,7 +60,7 @@ def test_find_many(collection):
 
 
 def test_find_many_document_not_found(collection):
-    assert collection.find_many({}).count() == 0
+    assert list(collection.find_many({})) == []
 
 
 def test_aggregate(collection):
