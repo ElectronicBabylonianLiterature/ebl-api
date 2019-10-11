@@ -193,9 +193,9 @@ def test_word(text, expected):
     ']ibnû', 'ibnû[',
     ')ibnû', 'ibnû(',
     '>ibnû', 'ibnû<',
-    'ib[]nû'
+    'ib[]nû',
     'ibnû?[#', 'ibnû#)?', 'ibnû#>?',
-    'ibnû]?', 'ibnû)#', 'ibnû)]?', 'ibnû>!'
+    'ibnû]?', 'ibnû)#', 'ibnû)]?', 'ibnû>!',
     'ib.[..nû', '.(..ibnû', 'ibnû.>]..',
     'ib..nû', '..ibnû', 'ibnû..',
     'ib....nû', '....ibnû', 'ibnû....',
