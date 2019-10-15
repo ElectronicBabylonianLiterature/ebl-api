@@ -4,7 +4,7 @@ import requests
 from requests import Timeout
 
 BASE_URL = 'https://cdli.ucla.edu/dl'
-TIMEOUT_SECONDS = 10
+TIMEOUT_SECONDS = 5
 
 
 def get_photo_url(cdli_number):
