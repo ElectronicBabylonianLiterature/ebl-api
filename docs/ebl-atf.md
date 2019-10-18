@@ -58,7 +58,7 @@ Text is a series of tokens separated by a word separator (space). The separator 
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ (token | document-oriented-gloss), { [word-separator], (token | document-oriented-gloss) } ], [ line-continuation ];
+text = [ (token | document-oriented-gloss), { word-separator, (token | document-oriented-gloss) } ], [ line-continuation ];
 
 line-continuation = '→';
 
@@ -195,13 +195,13 @@ A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lon
 - The language is not normalized.
 
 ```ebnf
-word = [ joiner, open-iniline-broken-away | { determinative }- ],
-       ( inline-erasure, { part-joiner, ( inline-erasure | parts ) } | parts )
-       [ { determinative }- | close-inline-broken-away, joiner ];
+word = [ unknown-number-of-signs, ( part-joiner | { determinative }- ) ],
+       ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) }
+       [ ( { determinative }- | part-joiner ), unknown-number-of-signs];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | linguistic-gloss | phonetic-gloss ), { part-joiner, ( variant | linguistic-gloss | phonetic-gloss ) };
+parts = ( variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ), { part-joiner, ( variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) };
 
 linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
