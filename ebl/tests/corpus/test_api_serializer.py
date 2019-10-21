@@ -26,6 +26,7 @@ def create(include_documents):
                 'version': chapter.version,
                 'name': chapter.name,
                 'order': chapter.order,
+                'parserVersion': chapter.parser_version,
                 'manuscripts': [
                     {
                         'id': manuscript.id,

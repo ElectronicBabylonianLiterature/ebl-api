@@ -120,6 +120,9 @@ CHAPTER_DTO_SCHEMA = {
         'lines': {
             'type': 'array',
             'items': LINE_DTO_SCHEMA
+        },
+        'parserVersion': {
+            'type': 'string'
         }
     },
     'required': ['classification', 'stage', 'name', 'order', 'manuscripts',

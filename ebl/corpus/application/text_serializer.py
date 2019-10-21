@@ -45,7 +45,8 @@ class TextSerializer(TextVisitor):
             'name': chapter.name,
             'order': chapter.order,
             'manuscripts': [],
-            'lines': []
+            'lines': [],
+            'parserVersion': chapter.parser_version
         }
         self.text['chapters'].append(self.chapter)
 
@@ -118,7 +119,8 @@ class TextDeserializer:
             tuple(
                 self.deserialize_line(line)
                 for line in chapter.get('lines', [])
-            )
+            ),
+            chapter.get('parserVersion', '')
         )
 
     def deserialize_manuscript(self, manuscript: dict) -> Manuscript:

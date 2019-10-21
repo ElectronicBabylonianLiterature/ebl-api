@@ -149,6 +149,7 @@ class Chapter:
     order: int = 0
     manuscripts: Tuple[Manuscript, ...] = tuple()
     lines: Tuple[Line, ...] = tuple()
+    parser_version: str = ''
 
     def __attrs_post_init__(self) -> None:
         self.accept(ManuscriptIdValidator())

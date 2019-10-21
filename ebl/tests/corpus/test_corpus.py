@@ -2,6 +2,7 @@ import attr
 import pydash
 import pytest
 
+from ebl.atf.domain.atf import ATF_PARSER_VERSION
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
@@ -303,7 +304,7 @@ def test_updating_lines(corpus,
         attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(
             attr.evolve(DEHYDRATED_TEXT.chapters[0].lines[0],
                         number=LineNumberLabel.from_atf("1'.")),
-        )),
+        ), parser_version=ATF_PARSER_VERSION),
     ))
     expect_text_update(bibliography, changelog, DEHYDRATED_TEXT,
                        dehydrated_updated_text, atf_converter,
@@ -349,7 +350,8 @@ def test_merging_lines(corpus,
         attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(line, )),
     ))
     dehydrated_updated_text = attr.evolve(DEHYDRATED_TEXT, chapters=(
-        attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(new_line, )),
+        attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(new_line, ),
+                    parser_version=ATF_PARSER_VERSION),
     ))
     expect_text_update(bibliography, changelog, dehydrated_text,
                        dehydrated_updated_text, atf_converter,

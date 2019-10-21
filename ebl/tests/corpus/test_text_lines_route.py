@@ -4,6 +4,7 @@ import attr
 import falcon
 import pytest
 
+from ebl.atf.domain.atf import ATF_PARSER_VERSION
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.labels import LineNumberLabel
@@ -49,7 +50,7 @@ def test_updating(client, bibliography, sign_repository, signs):
         attr.evolve(text.chapters[0], lines=(
             attr.evolve(text.chapters[0].lines[0],
                         number=LineNumberLabel.from_atf("1'.")),
-        )),
+        ), parser_version=ATF_PARSER_VERSION),
     ))
 
     body = {

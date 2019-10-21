@@ -95,6 +95,7 @@ class ChapterFactory(factory.Factory):
     lines = factory.List([
         factory.SubFactory(LineFactory)
     ], TupleFactory)
+    parser_version = ''
 
 
 class TextFactory(factory.Factory):

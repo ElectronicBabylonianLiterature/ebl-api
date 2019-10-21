@@ -25,6 +25,7 @@ def to_dict(include_documents):
                 'version': CHAPTER.version,
                 'name': CHAPTER.name,
                 'order': CHAPTER.order,
+                'parserVersion': CHAPTER.parser_version,
                 'manuscripts': [
                     {
                         'id': MANUSCRIPT.id,

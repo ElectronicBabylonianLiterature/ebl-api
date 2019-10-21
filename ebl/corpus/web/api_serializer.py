@@ -62,7 +62,6 @@ class ApiSerializer(TextSerializer):
 
 
 class ApiDeserializer(TextDeserializer):
-
     def deserialize_manuscript_line(self,
                                     manuscript_line: dict) -> ManuscriptLine:
         line_number = LineNumberLabel(manuscript_line['number']).to_atf()
