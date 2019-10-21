@@ -6,7 +6,7 @@ from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 ATF = Atf(
     '1\'. [...-ku]-nu-ši [...]\n'
@@ -108,7 +108,7 @@ GET_MATCHING_LINES_DATA = [
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
     transliterated_fragment = FragmentFactory.build(
-        text=parse_atf(ATF),
+        text=parse_atf_lark(ATF),
         signs=SIGNS
     )
 

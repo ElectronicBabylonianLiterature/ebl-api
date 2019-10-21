@@ -4,7 +4,7 @@ import attr
 
 from ebl.atf.domain.atf import Atf, AtfSyntaxError, validate_atf
 from ebl.atf.domain.clean_atf import CleanAtf
-from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
@@ -17,7 +17,7 @@ class TransliterationUpdate:
     signs: Optional[str] = attr.ib(default=None)
 
     def parse(self) -> Text:
-        return parse_atf(self.atf)
+        return parse_atf_lark(self.atf)
 
     @atf.validator
     def _check_atf(self, _attribute, value):

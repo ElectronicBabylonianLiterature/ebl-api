@@ -15,7 +15,7 @@ from ebl.tests.factories.fragment import (FragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
 from ebl.tests.factories.record import RecordFactory
-from ebl.transliteration.domain.atf_parser import parse_atf
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.lemmatization import Lemmatization, \
     LemmatizationError
 from ebl.transliteration.domain.text import Text
@@ -159,7 +159,7 @@ def test_add_transliteration(user):
     fragment = FragmentFactory.build()
     atf = Atf('1. x x')
     transliteration = TransliterationUpdate(atf, fragment.notes)
-    text = parse_atf(atf)
+    text = parse_atf_lark(atf)
     record = fragment.record.add_entry('', atf, user)
 
     updated_fragment = fragment.update_transliteration(
@@ -177,7 +177,7 @@ def test_update_transliteration(user):
     lines = lemmatized_fragment.text.atf.split('\n')
     lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
     atf = Atf('\n'.join(lines))
-    text = parse_atf(atf)
+    text = parse_atf_lark(atf)
     transliteration =\
         TransliterationUpdate(atf, 'updated notes', 'X X\nX')
     updated_fragment = lemmatized_fragment.update_transliteration(
@@ -213,7 +213,8 @@ def test_test_update_transliteration_invalid_atf(user):
 
     assert excinfo.value.errors == [
         {
-            'description': 'Invalid line',
+            'description': ('Invalid line:  {kur}?\n'
+                            '                    ^\n'),
             'lineNumber': 1
         }
     ]

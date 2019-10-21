@@ -3,11 +3,11 @@ import pytest
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.lemmatization import (LemmatizationError,
                                                       LemmatizationToken)
 from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
                                              TextLine)
-from ebl.transliteration.domain.text_parser import TEXT_LINE
 from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,
                                               LanguageShift,
@@ -89,7 +89,7 @@ def test_line_of_iterable(code, language, normalized):
     '11. in]-<(...)>'
 ])
 def test_text_line_atf(atf):
-    line = TEXT_LINE.parse(atf)
+    line = parse_line(atf)
     assert line.atf == atf
 
 

@@ -185,8 +185,11 @@ def parse_atf_lark(atf):
                     if line else
                     (EmptyLine(), None))
         except UnexpectedInput as ex:
+            description = 'Invalid line: '
+            context = ex.get_context(line, 6).split('\n', 1)
             return (None,  {
-                'description': 'Invalid line: ' + ex.get_context(line, 6),
+                'description': (description + context[0] + '\n' +
+                                len(description)*' ' + context[1]),
                 'lineNumber': line_number + 1
             })
 
@@ -208,4 +211,4 @@ def parse_atf_lark(atf):
                   .drop_right_while(lambda line: line.prefix == '')
                   .value())
 
-    return Text(lines, f'{ATF_PARSER_VERSION}-lark')
+    return Text(lines, f'{ATF_PARSER_VERSION}')

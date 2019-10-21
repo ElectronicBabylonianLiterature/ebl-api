@@ -25,7 +25,7 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 
 @pytest.mark.parametrize('parser,version', [
     (parse_atf, ATF_PARSER_VERSION),
-    (parse_atf_lark, f'{ATF_PARSER_VERSION}-lark')
+    (parse_atf_lark, f'{ATF_PARSER_VERSION}')
 ])
 def test_parser_version(parser, version):
     assert parser('1. kur').parser_version == version

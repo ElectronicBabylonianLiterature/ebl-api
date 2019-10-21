@@ -9,7 +9,7 @@ from ebl.corpus.domain.reconstructed_text import AkkadianWord, Caesura, \
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.errors import DataError
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
-from ebl.transliteration.domain.text_parser import TEXT_LINE
+from ebl.transliteration.domain.lark_parser import parse_line
 
 
 class ApiSerializer(TextSerializer):
@@ -67,7 +67,7 @@ class ApiDeserializer(TextDeserializer):
                                     manuscript_line: dict) -> ManuscriptLine:
         line_number = LineNumberLabel(manuscript_line['number']).to_atf()
         atf = manuscript_line['atf']
-        line = TEXT_LINE.parse(f'{line_number} {atf}')
+        line = parse_line(f'{line_number} {atf}')
         return ManuscriptLine(
             manuscript_line['manuscriptId'],
             tuple(Label.parse(label) for label in manuscript_line['labels']),
