@@ -1,12 +1,10 @@
 import pytest
 
 from ebl.transliteration.domain.lark_parser import parse_word
-from ebl.transliteration.domain.text_parser import LONE_DETERMINATIVE, WORD
 from ebl.transliteration.domain.token import LoneDeterminative, Word
 
 
 @pytest.mark.parametrize('parser', [
-    lambda atf: WORD.map(Word).parse(atf),
     parse_word
 ])
 @pytest.mark.parametrize('atf,expected', [
@@ -66,7 +64,6 @@ def test_word(parser, atf, expected):
 
 
 @pytest.mark.parametrize('parser', [
-    lambda atf: LONE_DETERMINATIVE.map(LoneDeterminative).parse(atf),
     parse_word
 ])
 @pytest.mark.parametrize('atf,expected', [
@@ -81,7 +78,6 @@ def test_lone_determinative(parser, atf, expected):
 
 
 @pytest.mark.parametrize('parser', [
-    LONE_DETERMINATIVE.parse,
     parse_word
 ])
 @pytest.mark.parametrize('atf', [
@@ -93,7 +89,6 @@ def test_invalid_lone_determinative(parser, atf):
 
 
 @pytest.mark.parametrize('parser', [
-    WORD.parse,
     parse_word
 ])
 @pytest.mark.parametrize('atf', [

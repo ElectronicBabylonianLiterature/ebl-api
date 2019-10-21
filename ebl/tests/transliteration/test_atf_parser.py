@@ -2,7 +2,6 @@ import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
 from ebl.atf.domain.atf import ATF_PARSER_VERSION
-from ebl.transliteration.domain.atf_parser import parse_atf
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -24,7 +23,6 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
 @pytest.mark.parametrize('parser,version', [
-    (parse_atf, ATF_PARSER_VERSION),
     (parse_atf_lark, f'{ATF_PARSER_VERSION}')
 ])
 def test_parser_version(parser, version):
@@ -32,7 +30,6 @@ def test_parser_version(parser, version):
 
 
 @pytest.mark.parametrize('parser', [
-    parse_atf,
     parse_atf_lark
 ])
 @pytest.mark.parametrize('line,expected_tokens', [
@@ -388,7 +385,6 @@ def test_foo():
 
 
 @pytest.mark.parametrize('parser', [
-    parse_atf,
     parse_atf_lark
 ])
 def test_parse_atf_invalid(parser):
@@ -397,7 +393,6 @@ def test_parse_atf_invalid(parser):
 
 
 @pytest.mark.parametrize('parser', [
-    parse_atf,
     parse_atf_lark
 ])
 @pytest.mark.parametrize('code,expected_language', [
@@ -434,7 +429,6 @@ def test_parse_atf_language_shifts(parser, code, expected_language):
 
 
 @pytest.mark.parametrize('parser', [
-    parse_atf,
     parse_atf_lark
 ])
 @pytest.mark.parametrize('atf,line_numbers', [

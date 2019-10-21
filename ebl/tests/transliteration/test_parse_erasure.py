@@ -1,7 +1,6 @@
 import pytest
 
 from ebl.transliteration.domain.lark_parser import parse_erasure
-from ebl.transliteration.domain.text_parser import erasure
 from ebl.transliteration.domain.token import Erasure, ErasureState, Side, Word
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)
@@ -10,8 +9,7 @@ ERASURE_RIGHT = Erasure('°', Side.RIGHT)
 
 
 @pytest.mark.parametrize('parser', [
-    parse_erasure,
-    erasure(True).parse
+    parse_erasure
 ])
 @pytest.mark.parametrize('atf,erased,over_erased', [
     ('°ku\\ku°', [Word('ku', erasure=ErasureState.ERASED)],
