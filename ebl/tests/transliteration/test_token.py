@@ -8,10 +8,10 @@ from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,
                                               LanguageShift, LineContinuation,
                                               Side,
-                                              Token)
+                                              Token, UnknownNumberOfSigns)
 
 TOKENS = [
-    Token('...'),
+    UnknownNumberOfSigns('...'),
     LanguageShift('%sux'),
     DocumentOrientedGloss('{(')
 ]
@@ -162,4 +162,16 @@ def test_line_continuation():
     assert continuation.to_dict() == {
         'type': 'LineContinuation',
         'value': continuation.value
+    }
+
+
+def test_unknown_number_of_signs():
+    value = '...'
+    continuation = UnknownNumberOfSigns(value)
+
+    assert continuation.value == value
+    assert continuation.lemmatizable is False
+    assert continuation.to_dict() == {
+        'type': 'UnknownNumberOfSigns',
+        'value': value
     }

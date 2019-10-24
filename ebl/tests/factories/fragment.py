@@ -8,7 +8,8 @@ from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import BrokenAway, Token, Word
+from ebl.transliteration.domain.token import BrokenAway, Token, Word, \
+    UnknownNumberOfSigns
 
 
 class FragmentFactory(factory.Factory):
@@ -46,34 +47,34 @@ class TransliteratedFragmentFactory(FragmentFactory):
     text = Text((
         TextLine("1'.", (
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             Word('-ku]-nu-ši'),
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']'),
         )),
         TextLine("2'.", (
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']'),
             Word('GI₆'),
             Word('ana'),
             Word('u₄-š[u'),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']'),
         )),
         TextLine("3'.", (
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             Word('k]i-du'),
             Word('u'),
             Word('ba-ma-t[i'),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']'),
         )),
         TextLine("6'.", (
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']'),
             Word('x'),
             Word('mu'),

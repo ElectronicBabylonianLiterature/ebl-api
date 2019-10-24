@@ -357,3 +357,12 @@ class TokenVisitor(ABC):
     @abstractmethod
     def visit_erasure(self, erasure: Erasure):
         ...
+
+
+@attr.s(frozen=True)
+class UnknownNumberOfSigns(Token):
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'UnknownNumberOfSigns'
+        }

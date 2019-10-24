@@ -7,7 +7,7 @@ from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
 from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED, ErasureState,
                                               Token,
-                                              Word)
+                                              Word, UnknownNumberOfSigns)
 
 LEMMATIZABLE_TEST_WORDS = [
     (Word('un'), True),
@@ -178,8 +178,8 @@ def test_set_alignment_invalid(word, value):
 
 @pytest.mark.parametrize('old,new,expected', [
     (Word('bu', alignment=1),
-     Token('...'),
-     Token('...')),
+     UnknownNumberOfSigns('...'),
+     UnknownNumberOfSigns('...')),
     (Word('bu', alignment=1, unique_lemma=(WordId('nu I'),)),
      Word('bu'),
      Word('bu', alignment=1, unique_lemma=(WordId('nu I'),))),

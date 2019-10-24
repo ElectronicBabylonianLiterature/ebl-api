@@ -15,7 +15,8 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               OmissionOrRemoval,
                                               Partial,
                                               PerhapsBrokenAway, Side,
-                                              Token, Word)
+                                              Token, Word,
+                                              UnknownNumberOfSigns)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -68,11 +69,18 @@ def test_parser_version(parser, version):
     ]),
     ('1. ... [...] (...) [(...)]', [
         TextLine('1.', (
-                Token('...'),
-                BrokenAway('['), Token('...'), BrokenAway(']'),
-                PerhapsBrokenAway('('), Token('...'), PerhapsBrokenAway(')'),
-                BrokenAway('['), PerhapsBrokenAway('('), Token('...'),
-                PerhapsBrokenAway(')'), BrokenAway(']')
+                UnknownNumberOfSigns('...'),
+                BrokenAway('['),
+                UnknownNumberOfSigns('...'),
+                BrokenAway(']'),
+                PerhapsBrokenAway('('),
+                UnknownNumberOfSigns('...'),
+                PerhapsBrokenAway(')'),
+                BrokenAway('['),
+                PerhapsBrokenAway('('),
+                UnknownNumberOfSigns('...'),
+                PerhapsBrokenAway(')'),
+                BrokenAway(']')
         ))
     ]),
     ('1. [(x x x)]', [
@@ -87,7 +95,7 @@ def test_parser_version(parser, version):
     ('1. <en-da-ab-su₈ ... >', [
         TextLine('1.', (
                 Word('<en-da-ab-su₈'),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 OmissionOrRemoval('>')
         ))
     ]),
@@ -141,20 +149,20 @@ def test_parser_version(parser, version):
     ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', [
         TextLine('1.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 Word('r]u?-u₂-qu'),
                 Word('na-a[n-'),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
         )),
         TextLine('2.', (
                 Word('ši-[ku-'),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 Word('-ku]-nu')
         )),
         TextLine('3.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 Word('-ku'),
         ))
@@ -172,21 +180,21 @@ def test_parser_version(parser, version):
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
         TextLine('1.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 Word('-qa-'),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 Word('-ba-'),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
         )),
         TextLine('2.', (
                 Word('pa-'),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
         ))
     ]),
@@ -195,7 +203,7 @@ def test_parser_version(parser, version):
             BrokenAway('['),
             Word('a?-ku'),
             PerhapsBrokenAway('('),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             PerhapsBrokenAway(')'),
             BrokenAway(']')
         )),
@@ -211,14 +219,14 @@ def test_parser_version(parser, version):
     ('1. [...+ku....] [....ku+...]', [
         TextLine('1.', (
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             Word('+ku.'),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']'),
             BrokenAway('['),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             Word('.ku+'),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']')
         ))
     ]),
@@ -230,42 +238,42 @@ def test_parser_version(parser, version):
         [
             TextLine('1.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 LoneDeterminative.of_value('{bu}',
                                            Partial(False, False)),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
             )),
             TextLine('2.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 LoneDeterminative.of_value('{bu}',
                                            Partial(True, False)),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
             )),
             TextLine('3.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 LoneDeterminative.of_value('{bu}',
                                            Partial(False, True)),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
             )),
             TextLine('4.', (
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
                 LoneDeterminative.of_value('{bu}',
                                            Partial(True, True)),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']')
             ))
         ]
@@ -284,7 +292,7 @@ def test_parser_version(parser, version):
                 Word('KIMIN'),
                 LoneDeterminative.of_value('{u₂#}', Partial(False, True)),
                 BrokenAway('['),
-                Token('...'),
+                UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
         ))
     ]),
@@ -353,7 +361,7 @@ def test_parser_version(parser, version):
         TextLine('1.', (
             BrokenAway('['),
             LoneDeterminative('{iti}', partial=Partial(False, True)),
-            Token('...'),
+            UnknownNumberOfSigns('...'),
             BrokenAway(']')))
     ]),
     ('2. RA{k[i]}', [
@@ -362,7 +370,7 @@ def test_parser_version(parser, version):
     ('2. in]-<(...)>', [
         TextLine('2.', (Word('in]-'),
                         OmissionOrRemoval('<('),
-                        Token('...'),
+                        UnknownNumberOfSigns('...'),
                         OmissionOrRemoval(')>')))
 
     ]),

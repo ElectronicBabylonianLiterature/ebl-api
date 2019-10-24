@@ -15,7 +15,7 @@ from ebl.transliteration.domain.token import BrokenAway, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, Token as EblToken, \
-    Word
+    Word, UnknownNumberOfSigns
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -142,7 +142,7 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def unknown_number_of_signs(self, value):
-        return EblToken(str(value))
+        return UnknownNumberOfSigns(str(value))
 
     @v_args(inline=True)
     def lone_determinative_complex(self, prefix, lone_determinative, suffix):
