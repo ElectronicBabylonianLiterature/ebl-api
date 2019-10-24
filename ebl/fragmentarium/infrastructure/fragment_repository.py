@@ -29,8 +29,10 @@ class MongoFragmentRepository(FragmentRepository):
             {'$match': {'type': 'TextLine'}},
             {'$count': 'lines'}
         ])
-
-        return result.next()['lines']
+        try:
+            return result.next()['lines']
+        except StopIteration:
+            return 0
 
     def create(self, fragment):
         return self._collection.insert_one(
