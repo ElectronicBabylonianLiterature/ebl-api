@@ -2,8 +2,6 @@ FROM gitpod/workspace-mongodb
 
 USER root
 
-RUN pip install pipenv
-
 # Install custom tools, runtime, etc. using apt-get
 # For example, the command below would install "bastet" - a command line tetris clone:
 #
