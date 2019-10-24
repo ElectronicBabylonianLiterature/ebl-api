@@ -67,7 +67,7 @@ def test_update_transliteration_merge_lemmatization(client,
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_number = fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split('\n')
-    lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
+    lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
     updates = {
         'transliteration': '\n'.join(lines),
         'notes': lemmatized_fragment.notes

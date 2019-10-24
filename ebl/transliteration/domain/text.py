@@ -21,7 +21,7 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               Partial,
                                               PerhapsBrokenAway, Side, Token,
                                               Word, UnknownNumberOfSigns,
-                                              Tabulation)
+                                              Tabulation, CommentaryProtocol)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
@@ -68,6 +68,9 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             data['value']
         ),
         'Tabulation': lambda data: Tabulation(
+            data['value']
+        ),
+        'CommentaryProtocol': lambda data: CommentaryProtocol(
             data['value']
         )
     }

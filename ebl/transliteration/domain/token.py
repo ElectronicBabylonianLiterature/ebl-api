@@ -6,7 +6,7 @@ from typing import Optional, Tuple, Union
 import attr
 import pydash
 
-import ebl.transliteration.domain.atf
+import ebl.transliteration.domain.atf as atf
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import Language
@@ -88,9 +88,9 @@ class Word(Token):
     @property
     def lemmatizable(self) -> bool:
         non_lemmatizable_chars = [
-            ebl.transliteration.domain.atf.VARIANT_SEPARATOR,
-            ebl.transliteration.domain.atf.UNCLEAR_SIGN,
-            ebl.transliteration.domain.atf.UNIDENTIFIED_SIGN
+            atf.VARIANT_SEPARATOR,
+            atf.UNCLEAR_SIGN,
+            atf.UNIDENTIFIED_SIGN
         ]
         return (
                 self.language.lemmatizable and
@@ -108,12 +108,12 @@ class Word(Token):
             any(
                 self.value.startswith(joiner)
                 for joiner
-                in ebl.transliteration.domain.atf.JOINERS
+                in atf.JOINERS
             ),
             any(
                 self.value.endswith(joiner)
                 for joiner
-                in ebl.transliteration.domain.atf.JOINERS
+                in atf.JOINERS
             )
         )
 
@@ -374,4 +374,17 @@ class Tabulation(Token):
         return {
             **super().to_dict(),
             'type': 'Tabulation'
+        }
+
+
+@attr.s(frozen=True)
+class CommentaryProtocol(Token):
+    @property
+    def protocol(self):
+        return atf.CommentaryProtocol(self.value)
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'CommentaryProtocol'
         }

@@ -24,7 +24,7 @@ LINE_CONTINUATION: "→"
 
 _have_both: tabulation
          | COLUMN
-         | COMMENTARY_PROTOCOL
+         | commentary_protocol
          | language_shift
          | erasure
          | word
@@ -70,7 +70,14 @@ TABULATION: "($___$)"
 
 COLUMN: "&" ("0".."9")*
 
-COMMENTARY_PROTOCOL: "!qt" | "!bs" | "!cm" | "!zz"
+commentary_protocol: PROTOCOL_QUOTATION
+                   | PROTOCOL_BASE_TEXT
+                   | PROTOCOL_COMMENTARY
+                   | PROTOCOL_UNCERTAIN
+PROTOCOL_QUOTATION: "!qt"
+PROTOCOL_BASE_TEXT: "!bs"
+PROTOCOL_COMMENTARY: "!cm"
+PROTOCOL_UNCERTAIN: "!zz"
 
 DOCUMENT_ORIENTED_GLOSS: OPEN_DOCUMENT_ORIENTED_GLOSS
                        | CLOSE_DOCUMENT_ORIENTED_GLOSS

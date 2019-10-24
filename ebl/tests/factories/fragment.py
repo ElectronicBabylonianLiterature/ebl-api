@@ -8,8 +8,8 @@ from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import BrokenAway, Token, Word, \
-    UnknownNumberOfSigns, Tabulation
+from ebl.transliteration.domain.token import BrokenAway, Word, \
+    UnknownNumberOfSigns, Tabulation, CommentaryProtocol
 
 
 class FragmentFactory(factory.Factory):
@@ -53,6 +53,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
+            CommentaryProtocol('!qt')
         )),
         TextLine("2'.", (
             BrokenAway('['),
@@ -103,26 +104,36 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text((
             TextLine("1'.", (
                 Tabulation('($___$)'),
-                Token('[...'),
+                BrokenAway('['),
+                UnknownNumberOfSigns('...'),
                 Word('-ku]-nu-ši'),
-                Token('[...]')
+                BrokenAway('['),
+                UnknownNumberOfSigns('...'),
+                BrokenAway(']'),
+                CommentaryProtocol('!qt')
             )),
             TextLine("2'.", (
-                Token('[...]'),
+                BrokenAway('['),
+                UnknownNumberOfSigns('...'),
                 Word('GI₆', unique_lemma=(WordId('ginâ I'),)),
                 Word('ana', unique_lemma=(WordId('ana I'),)),
                 Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),)),
-                Token('...]')
+                UnknownNumberOfSigns('...'),
+                BrokenAway(']'),
             )),
             TextLine("3'.", (
-                Token('[...'),
+                BrokenAway('['),
+                UnknownNumberOfSigns('...'),
                 Word('k]i-du', unique_lemma=(WordId('kīdu I'),)),
                 Word('u', unique_lemma=(WordId('u I'),)),
                 Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),)),
-                Token('...]')
+                UnknownNumberOfSigns('...'),
+                BrokenAway(']'),
             )),
             TextLine("6'.", (
-                Token('[...]'),
+                BrokenAway('['),
+                UnknownNumberOfSigns('...'),
+                BrokenAway(']'),
                 Word('x'),
                 Word('mu', unique_lemma=(WordId('mu I'),)),
                 Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),))

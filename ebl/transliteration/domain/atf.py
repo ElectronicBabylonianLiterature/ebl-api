@@ -6,7 +6,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
-ATF_PARSER_VERSION = '0.5.0'
+ATF_PARSER_VERSION = '0.6.0'
 DEFAULT_ATF_PARSER_VERSION = '0.1.0'
 
 WORD_SEPARATOR = ' '

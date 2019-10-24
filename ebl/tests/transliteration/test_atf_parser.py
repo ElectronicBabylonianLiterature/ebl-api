@@ -16,7 +16,8 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               Partial,
                                               PerhapsBrokenAway, Side,
                                               Token, Word,
-                                              UnknownNumberOfSigns, Tabulation)
+                                              UnknownNumberOfSigns, Tabulation,
+                                              CommentaryProtocol)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -137,7 +138,10 @@ def test_parser_version(parser, version):
     ]),
     ('1. !qt !bs !cm !zz', [
         TextLine('1.', (
-                Token('!qt'), Token('!bs'), Token('!cm'), Token('!zz')
+                CommentaryProtocol('!qt'),
+                CommentaryProtocol('!bs'),
+                CommentaryProtocol('!cm'),
+                CommentaryProtocol('!zz')
         ))
     ]),
     ('1. x X x# X#', [

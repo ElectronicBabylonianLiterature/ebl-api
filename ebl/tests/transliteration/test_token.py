@@ -1,5 +1,6 @@
 import pytest
 
+import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
@@ -9,7 +10,8 @@ from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
                                               LanguageShift, LineContinuation,
                                               Side,
                                               Token, UnknownNumberOfSigns,
-                                              Tabulation)
+                                              Tabulation,
+                                              CommentaryProtocol)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),
@@ -186,5 +188,19 @@ def test_tabulation():
     assert tabulation.lemmatizable is False
     assert tabulation.to_dict() == {
         'type': 'Tabulation',
+        'value': value
+    }
+
+
+@pytest.mark.parametrize('protocol_enum', atf.CommentaryProtocol)
+def test_commentary_protocol(protocol_enum):
+    value = protocol_enum.value
+    protocol = CommentaryProtocol(value)
+
+    assert protocol.value == value
+    assert protocol.lemmatizable is False
+    assert protocol.protocol == protocol_enum
+    assert protocol.to_dict() == {
+        'type': 'CommentaryProtocol',
         'value': value
     }
