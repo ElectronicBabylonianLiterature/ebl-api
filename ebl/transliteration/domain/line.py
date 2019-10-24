@@ -3,9 +3,9 @@ from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
 import attr
 import pydash
 
-from ebl.atf.domain.atf import Atf, WORD_SEPARATOR
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken

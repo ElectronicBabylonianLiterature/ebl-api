@@ -3,9 +3,9 @@ from typing import Callable, Iterable, List, Mapping, Tuple
 import attr
 import pydash
 
-from ebl.atf.domain.atf import ATF_PARSER_VERSION, Atf, \
-    DEFAULT_ATF_PARSER_VERSION
 from ebl.merger import Merger
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, \
+    DEFAULT_ATF_PARSER_VERSION
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import Lemmatization, \
     LemmatizationError

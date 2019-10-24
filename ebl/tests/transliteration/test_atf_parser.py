@@ -1,7 +1,7 @@
 import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
-from ebl.atf.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine

@@ -2,7 +2,6 @@ import attr
 import pytest
 from freezegun import freeze_time
 
-from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber, \
     Measure, \
@@ -15,6 +14,7 @@ from ebl.tests.factories.fragment import (FragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
 from ebl.tests.factories.record import RecordFactory
+from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.lemmatization import Lemmatization, \
     LemmatizationError

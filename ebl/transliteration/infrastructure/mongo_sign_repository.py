@@ -6,9 +6,10 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
-from ebl.signs.application.sign_repository import SignRepository
-from ebl.signs.domain.sign import Sign, SignListRecord, SignName, Value
-from ebl.signs.domain.sign_map import SignKey
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, \
+    Value
+from ebl.transliteration.domain.sign_map import SignKey
 
 COLLECTION = 'signs'
 

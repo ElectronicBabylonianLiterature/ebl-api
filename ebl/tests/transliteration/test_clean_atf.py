@@ -1,7 +1,7 @@
 import pytest
 
-from ebl.atf.domain.atf import Atf
-from ebl.atf.domain.clean_atf import CleanAtf
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.clean_atf import CleanAtf
 
 
 def test_atf():

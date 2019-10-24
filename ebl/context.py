@@ -15,8 +15,8 @@ from ebl.fragmentarium.application.transliteration_query_factory import \
     TransliterationQueryFactory
 from ebl.fragmentarium.application.transliteration_update_factory import \
     TransliterationUpdateFactory
-from ebl.signs.application.atf_converter import AtfConverter
-from ebl.signs.application.sign_repository import SignRepository
+from ebl.transliteration.application.atf_converter import AtfConverter
+from ebl.transliteration.application.sign_repository import SignRepository
 
 
 @attr.s(auto_attribs=True, frozen=True)

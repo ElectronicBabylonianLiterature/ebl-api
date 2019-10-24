@@ -1,7 +1,6 @@
 import pytest
 from freezegun import freeze_time
 
-from ebl.atf.domain.atf import Atf
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.transliteration_update import (
@@ -11,6 +10,7 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory, TransliteratedFragmentFactory
 )
+from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lemmatization import Lemmatization
 
 SCHEMA = FragmentSchema()

@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.atf.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import (ColumnLabel, Label,
                                                LabelVisitor,
                                                LineNumberLabel, SurfaceLabel)

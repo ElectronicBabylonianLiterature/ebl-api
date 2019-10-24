@@ -6,7 +6,7 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
-from ebl.atf.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text

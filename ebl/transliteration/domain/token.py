@@ -6,13 +6,13 @@ from typing import Optional, Tuple, Union
 import attr
 import pydash
 
-import ebl.atf.domain.atf
-from ebl.atf.domain.word_cleaner import clean_word
+import ebl.transliteration.domain.atf
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
+from ebl.transliteration.domain.word_cleaner import clean_word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
@@ -88,9 +88,9 @@ class Word(Token):
     @property
     def lemmatizable(self) -> bool:
         non_lemmatizable_chars = [
-            ebl.atf.domain.atf.VARIANT_SEPARATOR,
-            ebl.atf.domain.atf.UNCLEAR_SIGN,
-            ebl.atf.domain.atf.UNIDENTIFIED_SIGN
+            ebl.transliteration.domain.atf.VARIANT_SEPARATOR,
+            ebl.transliteration.domain.atf.UNCLEAR_SIGN,
+            ebl.transliteration.domain.atf.UNIDENTIFIED_SIGN
         ]
         return (
                 self.language.lemmatizable and
@@ -108,12 +108,12 @@ class Word(Token):
             any(
                 self.value.startswith(joiner)
                 for joiner
-                in ebl.atf.domain.atf.JOINERS
+                in ebl.transliteration.domain.atf.JOINERS
             ),
             any(
                 self.value.endswith(joiner)
                 for joiner
-                in ebl.atf.domain.atf.JOINERS
+                in ebl.transliteration.domain.atf.JOINERS
             )
         )
 

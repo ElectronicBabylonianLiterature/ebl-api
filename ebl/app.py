@@ -30,7 +30,7 @@ from ebl.fragmentarium.infrastructure.fragment_repository import \
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
-from ebl.signs.infrastructure.mongo_sign_repository import \
+from ebl.transliteration.infrastructure.mongo_sign_repository import \
     MongoSignRepository
 from ebl.users.infrastructure.auth0 import Auth0Backend
 

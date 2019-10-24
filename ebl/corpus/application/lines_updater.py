@@ -2,9 +2,9 @@ from typing import Tuple
 
 import attr
 
-from ebl.atf.domain.atf import ATF_PARSER_VERSION
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.text import Chapter, Line
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
 class LinesUpdater(ChapterUpdater):

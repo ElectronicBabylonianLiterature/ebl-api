@@ -2,8 +2,8 @@ from typing import Optional
 
 import attr
 
-from ebl.atf.domain.atf import Atf, AtfSyntaxError, validate_atf
-from ebl.atf.domain.clean_atf import CleanAtf
+from ebl.transliteration.domain.atf import Atf, AtfSyntaxError, validate_atf
+from ebl.transliteration.domain.clean_atf import CleanAtf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import \

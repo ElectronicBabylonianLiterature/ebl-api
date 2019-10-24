@@ -7,7 +7,7 @@ import attr
 import roman
 from parsy import (char_from, regex, seq, string, string_from)
 
-from ebl.atf.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Status, Surface
 
 
 class LabelVisitor(ABC):

@@ -1,4 +1,5 @@
-from ebl.signs.domain.sign import Sign, SignListRecord, SignName, Value
+from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, \
+    Value
 
 
 def test_sign():

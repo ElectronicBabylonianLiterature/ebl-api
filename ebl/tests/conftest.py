@@ -32,9 +32,10 @@ from ebl.fragmentarium.application.transliteration_update_factory import \
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import \
     MongoFragmentRepository
-from ebl.signs.application.atf_converter import AtfConverter
-from ebl.signs.domain.sign import Sign, SignListRecord, Value
-from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
+from ebl.transliteration.application.atf_converter import AtfConverter
+from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
+from ebl.transliteration.infrastructure.mongo_sign_repository import \
+    MongoSignRepository
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 

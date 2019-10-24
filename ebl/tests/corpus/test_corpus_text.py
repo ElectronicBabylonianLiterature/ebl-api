@@ -2,7 +2,6 @@ from typing import Tuple
 
 import pytest
 
-from ebl.atf.domain.atf import Surface
 from ebl.corpus.domain.enclosure import BROKEN_OFF_OPEN
 from ebl.corpus.domain.enums import Classification, ManuscriptType, Period, \
     PeriodModifier, Provenance, Stage
@@ -13,6 +12,7 @@ from ebl.corpus.domain.text import (Chapter, Line, Manuscript, ManuscriptLine,
                                     Text,
                                     TextId)
 from ebl.tests.factories.bibliography import ReferenceFactory
+from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.labels import ColumnLabel, Label, \
     LineNumberLabel, \
     SurfaceLabel

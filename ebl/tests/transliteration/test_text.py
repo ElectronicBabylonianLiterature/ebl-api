@@ -2,8 +2,8 @@ from typing import Tuple
 
 import pytest
 
-from ebl.atf.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.dictionary.domain.word import WordId
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (Lemmatization,

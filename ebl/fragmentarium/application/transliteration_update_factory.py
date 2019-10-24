@@ -1,7 +1,7 @@
-from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.transliteration_update import \
     TransliterationUpdate
-from ebl.signs.application.atf_converter import AtfConverter
+from ebl.transliteration.application.atf_converter import AtfConverter
+from ebl.transliteration.domain.atf import Atf
 
 
 class TransliterationUpdateFactory:

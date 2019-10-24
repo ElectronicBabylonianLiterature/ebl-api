@@ -1,7 +1,7 @@
 import re
 
-from ebl.atf.domain.word_cleaner import IGNORE_REGEX, clean_word
 from ebl.fragmentarium.domain.record import RecordType
+from ebl.transliteration.domain.word_cleaner import IGNORE_REGEX, clean_word
 
 HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS = 20

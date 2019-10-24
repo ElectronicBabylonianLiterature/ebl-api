@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.atf.domain.atf import AtfSyntaxError, validate_atf
+from ebl.transliteration.domain.atf import AtfSyntaxError, validate_atf
 
 
 def test_valid_atf():

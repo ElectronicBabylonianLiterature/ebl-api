@@ -1,4 +1,4 @@
-from ebl.signs.infrastructure.menoizing_sign_repository import \
+from ebl.transliteration.infrastructure.menoizing_sign_repository import \
     MemoizingSignRepository
 
 

@@ -2,11 +2,11 @@ import attr
 from progress.bar import Bar
 
 from ebl.app import create_context
-from ebl.signs.infrastructure.menoizing_sign_repository \
-    import MemoizingSignRepository
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
+from ebl.transliteration.infrastructure.menoizing_sign_repository \
+    import MemoizingSignRepository
 from ebl.users.domain.user import ApiUser
 
 

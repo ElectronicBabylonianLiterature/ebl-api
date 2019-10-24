@@ -1,7 +1,6 @@
 import attr
 import pytest
 
-from ebl.atf.domain.atf import Atf
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
@@ -15,6 +14,7 @@ from ebl.tests.factories.fragment import (FragmentFactory,
                                           InterestingFragmentFactory,
                                           LemmatizedFragmentFactory,
                                           TransliteratedFragmentFactory)
+from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine

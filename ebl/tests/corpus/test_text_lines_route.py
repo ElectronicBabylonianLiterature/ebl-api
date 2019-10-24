@@ -4,9 +4,9 @@ import attr
 import falcon
 import pytest
 
-from ebl.atf.domain.atf import ATF_PARSER_VERSION
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.users.domain.user import Guest
 

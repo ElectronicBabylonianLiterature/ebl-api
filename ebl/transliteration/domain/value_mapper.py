@@ -1,11 +1,12 @@
 import re
 import unicodedata
 
-from ebl.atf.domain.atf import ATF_SPEC, UNCLEAR_SIGN, UNIDENTIFIED_SIGN, \
+from ebl.transliteration.domain.atf import ATF_SPEC, UNCLEAR_SIGN, \
+    UNIDENTIFIED_SIGN, \
     VARIANT_SEPARATOR
-from ebl.signs.domain.sign import SignName
-from ebl.signs.domain.standardization import is_splittable
-from ebl.signs.domain.value import Value, ValueFactory
+from ebl.transliteration.domain.sign import SignName
+from ebl.transliteration.domain.standardization import is_splittable
+from ebl.transliteration.domain.value import Value, ValueFactory
 
 EMPTY_PATTERN = '^$'
 UNCLEAR_PATTERN = UNCLEAR_SIGN

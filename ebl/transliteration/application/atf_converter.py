@@ -2,14 +2,14 @@ from typing import List, Sequence, Tuple
 
 import pydash
 
-from ebl.atf.domain.atf import Atf
-from ebl.atf.domain.clean_atf import CleanAtf
-from ebl.signs.application.sign_repository import SignRepository
-from ebl.signs.domain.sign import Sign
-from ebl.signs.domain.sign_map import SignKey, SignMap
-from ebl.signs.domain.standardization import Standardization
-from ebl.signs.domain.value import Value
-from ebl.signs.domain.value_mapper import parse_reading
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.clean_atf import CleanAtf
+from ebl.transliteration.domain.sign import Sign
+from ebl.transliteration.domain.sign_map import SignKey, SignMap
+from ebl.transliteration.domain.standardization import Standardization
+from ebl.transliteration.domain.value import Value
+from ebl.transliteration.domain.value_mapper import parse_reading
 
 SignMapEntry = Tuple[SignKey, Standardization]
 

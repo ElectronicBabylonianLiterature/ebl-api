@@ -1,8 +1,8 @@
-from ebl.atf.domain.atf import Atf
 from ebl.fragmentarium.domain.transliteration_query import \
     TransliterationQuery
-from ebl.signs.application.atf_converter import \
+from ebl.transliteration.application.atf_converter import \
     AtfConverter
+from ebl.transliteration.domain.atf import Atf
 
 
 class TransliterationQueryFactory:

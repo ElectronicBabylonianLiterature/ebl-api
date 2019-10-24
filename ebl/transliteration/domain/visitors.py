@@ -1,6 +1,6 @@
 from typing import Callable, List, Tuple, Union
 
-from ebl.atf.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,

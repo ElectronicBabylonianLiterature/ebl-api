@@ -1,6 +1,7 @@
-from ebl.atf.domain.atf import Atf
-from ebl.signs.domain.sign import SignName
-from ebl.signs.domain.value import Grapheme, NotReading, Reading, ValueFactory
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.sign import SignName
+from ebl.transliteration.domain.value import Grapheme, NotReading, Reading, \
+    ValueFactory
 
 
 def test_convert_atf_to_sign_matrix(atf_converter, sign_repository, signs):

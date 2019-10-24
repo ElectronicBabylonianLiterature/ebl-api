@@ -3,10 +3,10 @@ from typing import Optional, Sequence, Tuple
 
 import attr
 
-from ebl.atf.domain.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
-from ebl.signs.domain.sign import SignName, Value as SignValue
-from ebl.signs.domain.sign_map import SignKey, SignMap
-from ebl.signs.domain.standardization import Standardization
+from ebl.transliteration.domain.atf import UNIDENTIFIED_SIGN, VARIANT_SEPARATOR
+from ebl.transliteration.domain.sign import SignName, Value as SignValue
+from ebl.transliteration.domain.sign_map import SignKey, SignMap
+from ebl.transliteration.domain.standardization import Standardization
 
 INVALID_READING = '?'
 

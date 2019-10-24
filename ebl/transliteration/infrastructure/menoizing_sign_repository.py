@@ -2,9 +2,9 @@ from typing import List, Optional
 
 import pydash
 
-from ebl.signs.application.sign_repository import SignRepository
-from ebl.signs.domain.sign import Sign, SignName
-from ebl.signs.domain.sign_map import SignKey
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.sign import Sign, SignName
+from ebl.transliteration.domain.sign_map import SignKey
 
 
 class MemoizingSignRepository(SignRepository):

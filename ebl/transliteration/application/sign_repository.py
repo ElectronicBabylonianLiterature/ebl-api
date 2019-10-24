@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from ebl.signs.domain.sign import Sign, SignName
-from ebl.signs.domain.sign_map import SignKey
+from ebl.transliteration.domain.sign import Sign, SignName
+from ebl.transliteration.domain.sign_map import SignKey
 
 
 class SignRepository(ABC):
