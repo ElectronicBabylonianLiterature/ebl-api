@@ -122,3 +122,14 @@ class Status(Enum):
     UNCERTAIN = '?'
     CORRECTION = '!'
     COLLATION = '*'
+
+
+class CommentaryProtocol(Enum):
+    """ See
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html
+    """
+
+    QUOTATION = '!qt'
+    BASE_TEXT = '!bs'
+    COMMENTARY = '!cm'
+    UNCERTAIN = '!zz'

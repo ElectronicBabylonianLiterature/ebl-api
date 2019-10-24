@@ -5,7 +5,7 @@ import attr
 import pydash
 
 from ebl.transliteration.domain.atf import ATF_EXTENSIONS, Atf, FLAGS, \
-    LACUNA, VARIANT_SEPARATOR, WORD_SEPARATOR
+    LACUNA, VARIANT_SEPARATOR, WORD_SEPARATOR, CommentaryProtocol
 
 CONTROL_LINE = r'^(@|\$(( ?(single|double|triple))| )|#|&)'
 MULTIPLEX_COMMENT = r'=:'
@@ -21,6 +21,7 @@ ALTERNATIVE_DAMAGE = r'[⸢⸣]'
 STRIP_PATTERN = r'|'.join([
     ATF_EXTENSIONS['erasure_illegible'],
     ATF_EXTENSIONS['erasure_boundary'],
+    *[protocol.value for protocol in CommentaryProtocol],
     *FLAGS.values(),
     *LACUNA.values(),
     LINE_NUMBER,

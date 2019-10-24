@@ -144,6 +144,15 @@ def test_strip_shifts():
     ]
 
 
+def test_strip_commentary_protocols():
+    clean_atf =\
+        CleanAtf(Atf('1. !qt qa !zz\n2. ba !cm ba !bs'))
+    assert clean_atf.cleaned == [
+        ['qa'],
+        ['ba', 'ba']
+    ]
+
+
 def test_strip_omissions():
     clean_atf = CleanAtf(Atf(
         '1.  <NU> KU₃\n2. <(ba)> an\n5. <<a>> ba'
