@@ -24,7 +24,7 @@ pip install pipenv
 pipenv install --dev
 ```
 
-## Running tests
+## Running the tests
 
 ```shell script
 pipenv run flake8
@@ -76,9 +76,9 @@ MONGOEXPRESS_LOGIN=<Mongo Express login username>
 MONGOEXPRESS_PASSWORD=<Mongo Express login password>
 ```
 
-### The API image
+### Docker image
 
-Build and run the API image:
+Build and run the docker image:
 
 ```shell script
 docker build -t ebl/api . 
@@ -104,7 +104,6 @@ Run the full backend including the database and admin interface:
 docker-compose up
 ```
 
-
 ## Updating transliterations and signs in fragments
 
 Improving the parser can lead to existing transliterations to have obsolete
@@ -121,8 +120,7 @@ pipenv run  python -m ebl.fragmentarium.update_fragments
 
 ## Type hints
 
-It is not mandatory to use type hints, but try to use them whenever possible,
-especially in the domain model.
+Use type hints in new code and add the to old code when making changes.
 
 Type checks can be run with `mypy`:
 
@@ -130,14 +128,21 @@ Type checks can be run with `mypy`:
 pipenv run mypy -p ebl
 ```
 
-## Dependency graph
+## Package dependencies
+
+- Avoid directed package dependency cycles.
+- Domain packages should depend only on other domain packages.
+- Application packages should depend only on application and domain packages.
+- Wed and infrastructure should depend only on application and domain packges.
+- All packages can depend on common modules in the top-level ebl package.
 
 Dependencies can be analyzed with
-[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph)
+[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
 
 ```shell script
 pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 ```
+
 ## Acknowledgements
 
 CSL-JSON schema is based on
