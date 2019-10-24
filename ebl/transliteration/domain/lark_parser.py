@@ -15,7 +15,7 @@ from ebl.transliteration.domain.token import BrokenAway, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, Token as EblToken, \
-    Word, UnknownNumberOfSigns
+    Word, UnknownNumberOfSigns, Tabulation
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -157,6 +157,10 @@ class TreeToLine(TreeToErasure):
 
     def line_continuation(self, _):
         return LineContinuation('→')
+
+    @v_args(inline=True)
+    def tabulation(self, value):
+        return Tabulation(value)
 
 
 WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')

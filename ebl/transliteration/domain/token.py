@@ -366,3 +366,12 @@ class UnknownNumberOfSigns(Token):
             **super().to_dict(),
             'type': 'UnknownNumberOfSigns'
         }
+
+
+@attr.s(frozen=True)
+class Tabulation(Token):
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Tabulation'
+        }

@@ -8,7 +8,8 @@ from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,
                                               LanguageShift, LineContinuation,
                                               Side,
-                                              Token, UnknownNumberOfSigns)
+                                              Token, UnknownNumberOfSigns,
+                                              Tabulation)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),
@@ -167,11 +168,23 @@ def test_line_continuation():
 
 def test_unknown_number_of_signs():
     value = '...'
-    continuation = UnknownNumberOfSigns(value)
+    unknown_number_of_signs = UnknownNumberOfSigns(value)
 
-    assert continuation.value == value
-    assert continuation.lemmatizable is False
-    assert continuation.to_dict() == {
+    assert unknown_number_of_signs.value == value
+    assert unknown_number_of_signs.lemmatizable is False
+    assert unknown_number_of_signs.to_dict() == {
         'type': 'UnknownNumberOfSigns',
+        'value': value
+    }
+
+
+def test_tabulation():
+    value = '($___$)'
+    tabulation = Tabulation(value)
+
+    assert tabulation.value == value
+    assert tabulation.lemmatizable is False
+    assert tabulation.to_dict() == {
+        'type': 'Tabulation',
         'value': value
     }

@@ -9,7 +9,7 @@ from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.token import BrokenAway, Token, Word, \
-    UnknownNumberOfSigns
+    UnknownNumberOfSigns, Tabulation
 
 
 class FragmentFactory(factory.Factory):
@@ -46,6 +46,7 @@ class InterestingFragmentFactory(FragmentFactory):
 class TransliteratedFragmentFactory(FragmentFactory):
     text = Text((
         TextLine("1'.", (
+            Tabulation('($___$)'),
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             Word('-ku]-nu-ši'),
@@ -101,6 +102,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text((
             TextLine("1'.", (
+                Tabulation('($___$)'),
                 Token('[...'),
                 Word('-ku]-nu-ši'),
                 Token('[...]')

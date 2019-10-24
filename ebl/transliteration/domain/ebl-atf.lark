@@ -22,7 +22,7 @@ _tail: _WORD_SEPARATOR _omit_right* _have_both?
 line_continuation: _WORD_SEPARATOR* LINE_CONTINUATION
 LINE_CONTINUATION: "→"
 
-_have_both: TABULATION
+_have_both: tabulation
          | COLUMN
          | COMMENTARY_PROTOCOL
          | language_shift
@@ -65,6 +65,7 @@ language_shift: SHIFT
 
 _NEW_LINE: /\n/
 
+tabulation: TABULATION
 TABULATION: "($___$)"
 
 COLUMN: "&" ("0".."9")*

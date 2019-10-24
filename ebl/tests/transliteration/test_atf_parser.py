@@ -16,7 +16,7 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               Partial,
                                               PerhapsBrokenAway, Side,
                                               Token, Word,
-                                              UnknownNumberOfSigns)
+                                              UnknownNumberOfSigns, Tabulation)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -65,7 +65,7 @@ def test_parser_version(parser, version):
         TextLine('a+1.a+2.', (Word('šu'),))
     ]),
     ('1. ($___$)', [
-        TextLine('1.', (Token('($___$)'),))
+        TextLine('1.', (Tabulation('($___$)'),))
     ]),
     ('1. ... [...] (...) [(...)]', [
         TextLine('1.', (

@@ -20,7 +20,8 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               OmissionOrRemoval,
                                               Partial,
                                               PerhapsBrokenAway, Side, Token,
-                                              Word, UnknownNumberOfSigns)
+                                              Word, UnknownNumberOfSigns,
+                                              Tabulation)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
@@ -64,6 +65,9 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
         'Erasure': lambda data: Erasure(data['value'],
                                         Side[data['side']]),
         'UnknownNumberOfSigns': lambda data: UnknownNumberOfSigns(
+            data['value']
+        ),
+        'Tabulation': lambda data: Tabulation(
             data['value']
         )
     }
