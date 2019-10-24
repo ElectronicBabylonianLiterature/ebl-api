@@ -19,14 +19,14 @@ Requirements:
 MongoDB `map_reduce`.)
 - Docker (optional for running the application)
 
-```
+```shell script
 pip install pipenv
 pipenv install --dev
 ```
 
 ## Running tests
 
-```
+```shell script
 pipenv run flake8
 pipenv run mypy -p ebl
 pipenv run test
@@ -36,27 +36,24 @@ pipenv run test
 
 The application reads the configuration from following environment variables:
  
- - `AUTH0_AUDIENCE` (the Auth0 API identifier)
- - `AUTH0_ISSUER` (the Auth0 application domain)
- - `AUTH0_PEM` (base64 encoded PEM certificate from the Auth0 application found
- under advanced settings)
- - `MONGODB_URI` MongoDB connection URI with database
- 
-If NewRelic is used:
-
-- `NEW_RELIC_LICENSE_KEY`
-- `NEW_RELIC_CONFIG_FILE`
-
-Sentry:
-- `SENTRY_DSN`
-- `SENTRY_ENVIRONMENT`
+ ```dotenv
+AUTH0_AUDIENCE=<the Auth0 API identifier>
+AUTH0_ISSUER=<the Auth0 application domain>
+AUTH0_PEM=<base64 encoded PEM certificate from the Auth0 application found under advanced settings>
+MONGODB_URI=<MongoDB connection URI with database>
+SENTRY_DSN=<Sentry DSN>
+SENTRY_ENVIRONMENT=<development or production>
+# If NewRelic is used:
+#NEW_RELIC_LICENSE_KEY=<NewRelic license key>
+#NEW_RELIC_CONFIG_FILE=newrelic.ini
+```
 
 For docker compose with DB:
 
 Create a script to create the MongoDB user in
 `./docker-entrypoint-initdb.d/create-users.js`:
 
-```
+```javascript
 db.createUser(
   {
     user: "ebl-api",
@@ -68,17 +65,22 @@ db.createUser(
 )
 ```
 
-- `MONGODB_URI` use `mongodb://ebl-api:<password>@mongo:27017/ebl`
-- `MONGO_INITDB_ROOT_USERNAME`
-- `MONGO_INITDB_ROOT_PASSWORD`
-- `MONGOEXPRESS_LOGIN`
-- `MONGOEXPRESS_PASSWORD`
+In addition to the variables specified above, the following environment 
+variables are needed:
+
+```dotenv
+MONGODB_URI=mongodb://ebl-api:<password>@mongo:27017/ebl`
+MONGO_INITDB_ROOT_USERNAME=<Mongo root user>
+MONGO_INITDB_ROOT_PASSWORD=<Mongo root user password>
+MONGOEXPRESS_LOGIN=<Mongo Express login username>
+MONGOEXPRESS_PASSWORD=<Mongo Express login password>
+```
 
 ### The API image
 
 Build and run the API image:
 
-```
+```shell script
 docker build -t ebl/api . 
 docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
 ```
@@ -87,18 +89,18 @@ docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
 
 Build the images:
 
-```
+```shell script
 docker-compose build
 ```
 
 Run only the API:
-```
-docker-compose -f .\docker-compose-api-only.yml up
+```shell script
+docker-compose -f ./docker-compose-api-only.yml up
 ``` 
 
 Run the full backend including the database and admin interface:
 
-```
+```shell script
 docker-compose up
 ```
 
@@ -113,7 +115,7 @@ The `ebl.fragmentarium.update_fragments` module can be used to recreate
 transliteration and signs in all fragments. A list of invalid fragments is
 saved to `invalid_fragments.tsv`.
 
-```
+```shell script
 pipenv run  python -m ebl.fragmentarium.update_fragments
 ```
 
@@ -124,10 +126,18 @@ especially in the domain model.
 
 Type checks can be run with `mypy`:
 
-```
+```shell script
 pipenv run mypy -p ebl
 ```
 
+## Dependency graph
+
+Dependencies can be analyzed with
+[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph)
+
+```shell script
+pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
+```
 ## Acknowledgements
 
 CSL-JSON schema is based on
