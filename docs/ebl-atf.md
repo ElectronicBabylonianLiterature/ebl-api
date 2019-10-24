@@ -156,6 +156,8 @@ The Commentary protocol is used to change the display color of the text that fol
 | `!cm` | `Commentary` |
 | `!zz` | `Uncertain` |
 
+See: [Base Text and Commentary](http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html)
+
 ### Shifts
 
 Shifts change the language and normalization of the subsequent words until another shift or the end of the line. If no shifts are present *Akkadian* is used as the default language.
