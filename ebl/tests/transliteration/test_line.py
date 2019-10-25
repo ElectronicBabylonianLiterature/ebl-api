@@ -86,7 +86,9 @@ def test_line_of_iterable(code, language, normalized):
     '8. [...]{bu} [...]',
     '9. [...] {bu}[...]',
     '10. [...]{bu}[...]',
-    '11. in]-<(...)>'
+    '11. in]-<(...)>',
+    '12. [ : ]',
+    '13. [ %sux ]'
 ])
 def test_text_line_atf(atf):
     line = parse_line(atf)

@@ -10,7 +10,7 @@ from ebl.transliteration.domain.token import BrokenAway, \
     DocumentOrientedGloss, \
     Erasure, \
     LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
-    Word
+    Word, Divider
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -58,6 +58,9 @@ class AlignmentVisitor(TokenVisitor):
         pass
 
     def visit_erasure(self, erasure: Erasure):
+        pass
+
+    def visit_divider(self, divider: Divider) -> None:
         pass
 
     def validate(self):

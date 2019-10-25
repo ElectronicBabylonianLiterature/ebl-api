@@ -156,7 +156,7 @@ def test_parser_version(parser, version):
                 Word('[...]-ku'),
         ))
     ]),
-    ('1. ša₃] [{d}UTU [:', [
+    ('1. ša₃] [{d}UTU [ :', [
         TextLine('1.', (
                 Word('ša₃]'),
                 Word('[{d}UTU'),

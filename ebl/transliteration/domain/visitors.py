@@ -8,7 +8,7 @@ from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
                                               OmissionOrRemoval,
                                               PerhapsBrokenAway,
                                               Side, Token,
-                                              TokenVisitor, Word)
+                                              TokenVisitor, Word, Divider)
 
 
 class LanguageVisitor(TokenVisitor):
@@ -54,6 +54,9 @@ class LanguageVisitor(TokenVisitor):
     def visit_erasure(self, erasure: Erasure) -> None:
         self.visit_token(erasure)
 
+    def visit_divider(self, divider: Divider) -> None:
+        self.visit_token(divider)
+
 
 class AtfVisitor(TokenVisitor):
     def __init__(self, prefix: str):
@@ -79,7 +82,7 @@ class AtfVisitor(TokenVisitor):
 
     def visit_word(self, word: Word) -> None:
         should_not_omit = not(self._omit_separator or word.partial.start)
-        if (self._force_separator or should_not_omit):
+        if self._force_separator or should_not_omit:
             self._append_separator()
 
         self._parts.append(word.value)
@@ -88,19 +91,7 @@ class AtfVisitor(TokenVisitor):
     def visit_document_oriented_gloss(
             self, gloss: DocumentOrientedGloss
     ) -> None:
-        def left():
-            if not self._omit_separator:
-                self._append_separator()
-            self._parts.append(gloss.value)
-            self._set_omit(True)
-
-        def right():
-            if self._force_separator:
-                self._append_separator()
-            self._parts.append(gloss.value)
-            self._set_force()
-
-        {Side.LEFT: left, Side.RIGHT: right}[gloss.side]()
+        self._side(gloss.side)(gloss)
 
     def visit_broken_away(
             self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
@@ -125,7 +116,10 @@ class AtfVisitor(TokenVisitor):
         self._set_omit(True)
 
     def _right(self, token: Token) -> None:
+        if self._force_separator:
+            self._append_separator()
         self._parts.append(token.value)
+        self._set_omit(False)
 
     def visit_erasure(self, erasure: Erasure):
         def left():
@@ -144,6 +138,11 @@ class AtfVisitor(TokenVisitor):
         {Side.LEFT: left,
          Side.CENTER: center,
          Side.RIGHT: right}[erasure.side]()
+
+    def visit_divider(self, divider: Divider) -> None:
+        self._append_separator()
+        self._parts.append(divider.value)
+        self._set_force()
 
     def _append_separator(self) -> None:
         self._parts.append(WORD_SEPARATOR)

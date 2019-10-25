@@ -328,51 +328,6 @@ class OmissionOrRemoval(ValueToken):
 
 
 @attr.s(frozen=True)
-class LineContinuation(ValueToken):
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            'type': 'LineContinuation'
-        }
-
-
-class TokenVisitor(ABC):
-    @abstractmethod
-    def visit_token(self, token: Token) -> None:
-        ...
-
-    @abstractmethod
-    def visit_language_shift(self, shift: LanguageShift) -> None:
-        ...
-
-    @abstractmethod
-    def visit_word(self, word: Word) -> None:
-        ...
-
-    @abstractmethod
-    def visit_document_oriented_gloss(
-            self, gloss: DocumentOrientedGloss
-    ) -> None:
-        ...
-
-    @abstractmethod
-    def visit_broken_away(
-            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
-    ) -> None:
-        ...
-
-    @abstractmethod
-    def visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
-        ...
-
-    @abstractmethod
-    def visit_erasure(self, erasure: Erasure):
-        ...
-
-
-@attr.s(frozen=True)
 class UnknownNumberOfSigns(ValueToken):
     def to_dict(self) -> dict:
         return {
@@ -419,6 +374,9 @@ class Divider(Token):
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
+    def accept(self, visitor: 'TokenVisitor') -> None:
+        visitor.visit_divider(self)
+
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -427,3 +385,52 @@ class Divider(Token):
             'modifiers': list(self.modifiers),
             'flags': self.string_flags
         }
+
+
+@attr.s(frozen=True)
+class LineContinuation(ValueToken):
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'LineContinuation'
+        }
+
+
+class TokenVisitor(ABC):
+    @abstractmethod
+    def visit_token(self, token: Token) -> None:
+        ...
+
+    @abstractmethod
+    def visit_language_shift(self, shift: LanguageShift) -> None:
+        ...
+
+    @abstractmethod
+    def visit_word(self, word: Word) -> None:
+        ...
+
+    @abstractmethod
+    def visit_document_oriented_gloss(
+            self, gloss: DocumentOrientedGloss
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def visit_broken_away(
+            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def visit_omission_or_removal(
+            self, omission: OmissionOrRemoval
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def visit_erasure(self, erasure: Erasure):
+        ...
+
+    @abstractmethod
+    def visit_divider(self, divider: Divider):
+        ...
