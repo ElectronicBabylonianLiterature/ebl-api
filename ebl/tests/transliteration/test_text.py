@@ -16,11 +16,11 @@ from ebl.transliteration.domain.text import LanguageShift, LoneDeterminative, \
     Text
 from ebl.transliteration.domain.token import BrokenAway, Erasure, \
     LineContinuation, \
-    PerhapsBrokenAway, Side, Token, Word
+    PerhapsBrokenAway, Side, Word, ValueToken
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),
-    ControlLine.of_single('$', Token(' single ruling'))
+    ControlLine.of_single('$', ValueToken(' single ruling'))
 )
 PARSER_VERSION = '1.0.0'
 TEXT: Text = Text(LINES, PARSER_VERSION)
@@ -73,7 +73,7 @@ def test_update_lemmatization():
         TextLine('1.', (
             Word('ha-am', unique_lemma=(WordId('nu I'),)),
         )),
-        ControlLine('$', (Token(' single ruling'), )),
+        ControlLine('$', (ValueToken(' single ruling'), )),
     ), TEXT.parser_version)
 
     assert TEXT.update_lemmatization(lemmatization) == expected
@@ -106,39 +106,39 @@ def test_update_lemmatization_wrong_lines():
     ), (
         Text.of_iterable([EmptyLine()]),
         Text.of_iterable([
-            ControlLine.of_single('$', Token(' single ruling'))
+            ControlLine.of_single('$', ValueToken(' single ruling'))
         ]),
         Text.of_iterable([
-            ControlLine.of_single('$', Token(' single ruling'))
+            ControlLine.of_single('$', ValueToken(' single ruling'))
         ])
     ), (
         Text.of_iterable([
-            ControlLine.of_single('$', Token(' double ruling')),
-            ControlLine.of_single('$', Token(' single ruling')),
+            ControlLine.of_single('$', ValueToken(' double ruling')),
+            ControlLine.of_single('$', ValueToken(' single ruling')),
             EmptyLine()
         ]),
         Text.of_iterable([
-            ControlLine.of_single('$', Token(' double ruling')),
+            ControlLine.of_single('$', ValueToken(' double ruling')),
             EmptyLine()
         ]),
         Text.of_iterable([
-            ControlLine.of_single('$', Token(' double ruling')),
+            ControlLine.of_single('$', ValueToken(' double ruling')),
             EmptyLine()
         ]),
     ), (
         Text.of_iterable([
             EmptyLine(),
-            ControlLine.of_single('$', Token(' double ruling')),
+            ControlLine.of_single('$', ValueToken(' double ruling')),
         ]),
         Text.of_iterable([
             EmptyLine(),
-            ControlLine.of_single('$', Token(' single ruling')),
-            ControlLine.of_single('$', Token(' double ruling')),
+            ControlLine.of_single('$', ValueToken(' single ruling')),
+            ControlLine.of_single('$', ValueToken(' double ruling')),
         ]),
         Text.of_iterable([
             EmptyLine(),
-            ControlLine.of_single('$', Token(' single ruling')),
-            ControlLine.of_single('$', Token(' double ruling')),
+            ControlLine.of_single('$', ValueToken(' single ruling')),
+            ControlLine.of_single('$', ValueToken(' double ruling')),
         ]),
     ), (
         Text.of_iterable([
@@ -195,7 +195,7 @@ def test_merge(old: Text, new: Text, expected: Text) -> None:
 
 @pytest.mark.parametrize('lines', [
     [EmptyLine()],
-    [ControlLine.of_single('$', Token(' single ruling'))],
+    [ControlLine.of_single('$', ValueToken(' single ruling'))],
     [
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('nu', unique_lemma=(WordId('nu I'),)),

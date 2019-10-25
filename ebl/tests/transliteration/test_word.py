@@ -6,8 +6,8 @@ from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
 from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED, ErasureState,
-                                              Token,
-                                              Word, UnknownNumberOfSigns)
+                                              Word, UnknownNumberOfSigns,
+                                              ValueToken)
 
 LEMMATIZABLE_TEST_WORDS = [
     (Word('un'), True),
@@ -90,7 +90,7 @@ def test_word(language, normalized, unique_lemma):
         assert word != not_equal
         assert hash(word) != hash(not_equal)
 
-    assert word != Token(value)
+    assert word != ValueToken(value)
 
 
 @pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)

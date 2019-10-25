@@ -1,7 +1,7 @@
 import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Flag
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -15,9 +15,10 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               OmissionOrRemoval,
                                               Partial,
                                               PerhapsBrokenAway, Side,
-                                              Token, Word,
+                                              Word,
                                               UnknownNumberOfSigns, Tabulation,
-                                              CommentaryProtocol)
+                                              CommentaryProtocol, Divider,
+                                              ValueToken)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -38,29 +39,29 @@ def test_parser_version(parser, version):
     ('', []),
     ('\n', []),
     ('#first\n\n#second', [
-        ControlLine.of_single('#', Token('first')),
+        ControlLine.of_single('#', ValueToken('first')),
         EmptyLine(),
-        ControlLine.of_single('#', Token('second'))
+        ControlLine.of_single('#', ValueToken('second'))
     ]),
     ('#first\n \n#second', [
-        ControlLine.of_single('#', Token('first')),
+        ControlLine.of_single('#', ValueToken('first')),
         EmptyLine(),
-        ControlLine.of_single('#', Token('second'))
+        ControlLine.of_single('#', ValueToken('second'))
     ]),
     ('&K11111', [
-        ControlLine.of_single('&', Token('K11111'))
+        ControlLine.of_single('&', ValueToken('K11111'))
     ]),
     ('@reverse', [
-        ControlLine.of_single('@', Token('reverse'))
+        ControlLine.of_single('@', ValueToken('reverse'))
     ]),
     ('$ (end of side)', [
-        ControlLine.of_single('$', Token(' (end of side)'))
+        ControlLine.of_single('$', ValueToken(' (end of side)'))
     ]),
     ('#some notes', [
-        ControlLine.of_single('#', Token('some notes'))
+        ControlLine.of_single('#', ValueToken('some notes'))
     ]),
     ('=: continuation', [
-        ControlLine.of_single('=:', Token(' continuation'))
+        ControlLine.of_single('=:', ValueToken(' continuation'))
     ]),
     ('a+1.a+2. šu', [
         TextLine('a+1.a+2.', (Word('šu'),))
@@ -101,31 +102,24 @@ def test_parser_version(parser, version):
         ))
     ]),
     ('1. & &12', [
-        TextLine('1.', (Token('&'), Token('&12')))
+        TextLine('1.', (ValueToken('&'), ValueToken('&12')))
     ]),
     ('1. | : :\' :" :. :: ; /', [
         TextLine('1.', (
-                Token('|'),
-                Token(':'),
-                Token(':\''),
-                Token(':"'),
-                Token(':.'),
-                Token('::'),
-                Token(';'),
-                Token('/')
-        ))
-    ]),
-    ('1. :? :# ::?', [
-        TextLine('1.', (
-                Token(':?'),
-                Token(':#'),
-                Token('::?')
+                Divider('|'),
+                Divider(':'),
+                Divider(":'"),
+                Divider(':"'),
+                Divider(':.'),
+                Divider('::'),
+                Divider(';'),
+                Divider('/')
         ))
     ]),
     ('1. me-e-li :\n2. ku', [
         TextLine('1.', (
                 Word('me-e-li'),
-                Token(':')
+                Divider(':')
         )),
         TextLine('2.', (
                 Word('ku'),
@@ -178,7 +172,7 @@ def test_parser_version(parser, version):
                 BrokenAway('['),
                 Word('{d}UTU'),
                 BrokenAway('['),
-                Token(':')
+                Divider(':')
         ))
     ]),
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
@@ -384,12 +378,17 @@ def test_parse_atf(parser, line, expected_tokens):
            Text.of_iterable(expected_tokens).lines
 
 
-def test_foo():
-    line, expected_tokens = ('1. :? :# ::?', [
+def test_parse_dividers():
+    line, expected_tokens = (r'1. :? :#! :# ::? :.@v /@19* :"@20@c |@v@19!', [
         TextLine('1.', (
-                Token(':?'),
-                Token(':#'),
-                Token('::?')
+                Divider(':', tuple(), (Flag.UNCERTAIN,)),
+                Divider(':', tuple(), (Flag.DAMAGE, Flag.CORRECTION)),
+                Divider(':', tuple(), (Flag.DAMAGE, )),
+                Divider('::', tuple(), (Flag.UNCERTAIN, )),
+                Divider(':.', ('@v', ), tuple()),
+                Divider('/', ('@19', ), (Flag.COLLATION,)),
+                Divider(':"', ('@20', '@c'), tuple()),
+                Divider('|', ('@v', '@19'), (Flag.CORRECTION,)),
         ))
     ])
     assert parse_atf_lark(line).lines == \

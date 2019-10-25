@@ -41,7 +41,7 @@ _omit_right: oba
            | oo
            | odog
 
-divider.4: DIVIDER
+divider.4: DIVIDER_SYMBOL modifiers flags
 unknown_number_of_signs.4: UNKNOWN_NUMBER_OF_SIGNS
 lone_determinative_complex.2:  lone_determinative_prefix lone_determinative lone_determinative_suffix
 lone_determinative_prefix: (unknown_number_of_signs _omit_left?)?
@@ -62,6 +62,9 @@ omission_or_removal.-1: OMISSION
 broken_away.-1: BROKEN_AWAY
 perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
 language_shift: SHIFT
+
+flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+modifiers: MODIFIER*
 
 _NEW_LINE: /\n/
 
@@ -105,8 +108,8 @@ _WORD_SEPARATOR: " "
          | left_partial_word
          | partial_word
 
-DIVIDER: DIVIDER_SYMBOL MODIFIER FLAG
-DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":?" | ":" | ";" | "/"
+DIVIDER: DIVIDER_SYMBOL MODIFIER* FLAG
+DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
 
 OMISSION: OPEN_OMISSION
         | CLOSE_OMISSION
@@ -167,7 +170,7 @@ VARIANT_PART: UNKNOWN
  
 VALUE_WITH_SIGN: VALUE "!"? "(" COMPOUND_GRAPHEME ")"
 
-VALUE: VALUE_NAME SUB_INDEX? MODIFIER FLAG
+VALUE: VALUE_NAME SUB_INDEX? MODIFIER* FLAG
 VALUE_NAME:  VALUE_CHARACTER (INLINE_BROKEN_AWAY? VALUE_CHARACTER)*
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h" 
                | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
@@ -179,7 +182,7 @@ COMPOUND_GRAPHEME: "|"? COMPOUND_PART (COMPOUND_OPERATOR COMPOUND_PART)* "|"?
 COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
 COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+" | "(" | ")"
 
-GRAPHEME: "$"?  GRAPHEME_NAME MODIFIER FLAG
+GRAPHEME: "$"?  GRAPHEME_NAME MODIFIER* FLAG
 GRAPHEME_NAME: GRAPHEME_CHARACTER (INLINE_BROKEN_AWAY? GRAPHEME_CHARACTER)*
 GRAPHEME_CHARACTER: "a".."z"
                   | "A".."Z"
@@ -192,6 +195,10 @@ UNKNOWN: ("X" | "x") FLAG
 
 VARIANT_SEPARATOR: "/"
 
-FLAG: ("!" | "?" | "*" | "#")*
-MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))*
+FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+UNCERTAIN: "?"
+CORRECTION: "!"
+COLLATION: "*"
+DAMAGE: "#"
+MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
 MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"

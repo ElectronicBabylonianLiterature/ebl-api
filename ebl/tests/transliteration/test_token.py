@@ -9,9 +9,10 @@ from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,
                                               LanguageShift, LineContinuation,
                                               Side,
-                                              Token, UnknownNumberOfSigns,
+                                              UnknownNumberOfSigns,
                                               Tabulation,
-                                              CommentaryProtocol)
+                                              CommentaryProtocol, Divider,
+                                              ValueToken)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),
@@ -20,11 +21,11 @@ TOKENS = [
 ]
 
 
-def test_token():
+def test_value_token():
     value = 'value'
-    token = Token(value)
-    equal = Token(value)
-    other = Token('anothervalue')
+    token = ValueToken(value)
+    equal = ValueToken(value)
+    other = ValueToken('anothervalue')
 
     assert token.value == value
     assert token.lemmatizable is False
@@ -50,7 +51,7 @@ def test_token():
 def test_language_shift(value, expected_language, normalized):
     shift = LanguageShift(value)
     equal = LanguageShift(value)
-    other = Token(r'%bar')
+    other = ValueToken(r'%bar')
 
     assert shift.value == value
     assert shift.lemmatizable is False
@@ -69,7 +70,7 @@ def test_language_shift(value, expected_language, normalized):
     assert shift != other
     assert hash(shift) != hash(other)
 
-    assert shift != Token(value)
+    assert shift != ValueToken(value)
 
 
 def test_document_oriented_gloss():
@@ -203,4 +204,22 @@ def test_commentary_protocol(protocol_enum):
     assert protocol.to_dict() == {
         'type': 'CommentaryProtocol',
         'value': value
+    }
+
+
+def test_divider():
+    value = ':'
+    modifiers = ('@v', )
+    flags = (atf.Flag.UNCERTAIN,)
+    divider = Divider(value, modifiers, flags)
+
+    expected_value = ':@v?'
+    assert divider.value == expected_value
+    assert divider.lemmatizable is False
+    assert divider.to_dict() == {
+        'type': 'Divider',
+        'value': expected_value,
+        'divider': value,
+        'modifiers': list(modifiers),
+        'flags': ['?']
     }

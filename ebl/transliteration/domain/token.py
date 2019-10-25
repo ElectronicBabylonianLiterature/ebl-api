@@ -1,7 +1,7 @@
 import collections
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, Sequence
 
 import attr
 import pydash
@@ -31,9 +31,17 @@ class ErasureState(Enum):
     OVER_ERASED = auto()
 
 
-@attr.s(auto_attribs=True, frozen=True)
-class Token:
-    value: str
+class Token(ABC):
+    @property
+    @abstractmethod
+    def value(self) -> str:
+        ...
+
+    def to_dict(self) -> dict:
+        return {
+            'type': 'Token',
+            'value': self.value
+        }
 
     @property
     def lemmatizable(self) -> bool:
@@ -70,15 +78,18 @@ class Token:
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_token(self)
 
-    def to_dict(self) -> dict:
-        return {
-            'type': 'Token',
-            'value': self.value
-        }
+
+@attr.s(auto_attribs=True, frozen=True)
+class ValueToken(Token):
+    _value: str
+
+    @property
+    def value(self) -> str:
+        return self._value
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Word(Token):
+class Word(ValueToken):
     language: Language = DEFAULT_LANGUAGE
     normalized: bool = DEFAULT_NORMALIZED
     unique_lemma: Tuple[WordId, ...] = tuple()
@@ -210,7 +221,7 @@ class LoneDeterminative(Word):
 
 
 @attr.s(frozen=True)
-class LanguageShift(Token):
+class LanguageShift(ValueToken):
     _normalization_shift = '%n'
 
     @property
@@ -234,7 +245,7 @@ class LanguageShift(Token):
 
 
 @attr.s(frozen=True)
-class DocumentOrientedGloss(Token):
+class DocumentOrientedGloss(ValueToken):
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_document_oriented_gloss(self)
 
@@ -250,7 +261,7 @@ class DocumentOrientedGloss(Token):
 
 
 @attr.s(frozen=True)
-class BrokenAway(Token):
+class BrokenAway(ValueToken):
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_broken_away(self)
 
@@ -266,7 +277,7 @@ class BrokenAway(Token):
 
 
 @attr.s(frozen=True)
-class PerhapsBrokenAway(Token):
+class PerhapsBrokenAway(ValueToken):
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_broken_away(self)
 
@@ -282,7 +293,7 @@ class PerhapsBrokenAway(Token):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Erasure(Token):
+class Erasure(ValueToken):
     side: Side
 
     def accept(self, visitor: 'TokenVisitor') -> None:
@@ -297,7 +308,7 @@ class Erasure(Token):
 
 
 @attr.s(frozen=True)
-class OmissionOrRemoval(Token):
+class OmissionOrRemoval(ValueToken):
     def accept(self, visitor: 'TokenVisitor') -> None:
         visitor.visit_omission_or_removal(self)
 
@@ -315,7 +326,7 @@ class OmissionOrRemoval(Token):
 
 
 @attr.s(frozen=True)
-class LineContinuation(Token):
+class LineContinuation(ValueToken):
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -360,7 +371,7 @@ class TokenVisitor(ABC):
 
 
 @attr.s(frozen=True)
-class UnknownNumberOfSigns(Token):
+class UnknownNumberOfSigns(ValueToken):
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -369,7 +380,7 @@ class UnknownNumberOfSigns(Token):
 
 
 @attr.s(frozen=True)
-class Tabulation(Token):
+class Tabulation(ValueToken):
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -378,7 +389,7 @@ class Tabulation(Token):
 
 
 @attr.s(frozen=True)
-class CommentaryProtocol(Token):
+class CommentaryProtocol(ValueToken):
     @property
     def protocol(self):
         return atf.CommentaryProtocol(self.value)
@@ -387,4 +398,30 @@ class CommentaryProtocol(Token):
         return {
             **super().to_dict(),
             'type': 'CommentaryProtocol'
+        }
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class Divider(Token):
+    divider: str
+    modifiers: Tuple[str, ...] = tuple()
+    flags: Tuple[atf.Flag, ...] = tuple()
+
+    @property
+    def value(self) -> str:
+        modifiers = ''.join(self.modifiers)
+        flags = ''.join(self.string_flags)
+        return f'{self.divider}{modifiers}{flags}'
+
+    @property
+    def string_flags(self) -> Sequence[str]:
+        return [flag.value for flag in self.flags]
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Divider',
+            'divider': self.divider,
+            'modifiers': list(self.modifiers),
+            'flags': self.string_flags
         }

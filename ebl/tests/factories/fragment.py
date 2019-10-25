@@ -6,10 +6,11 @@ from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.token import BrokenAway, Word, \
-    UnknownNumberOfSigns, Tabulation, CommentaryProtocol
+    UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider
 
 
 class FragmentFactory(factory.Factory):
@@ -53,7 +54,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
-            CommentaryProtocol('!qt')
+            Divider(':', ('@v',), (Flag.DAMAGE,)),
+            CommentaryProtocol('!qt'),
         )),
         TextLine("2'.", (
             BrokenAway('['),
@@ -87,7 +89,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         ))
     ))
     signs = (
-        'KU ABZ075 ABZ207a\\u002F207b\\u0020X\n'
+        'KU ABZ075 ABZ207a\\u002F207b\\u0020X ABZ377n1\n'
         'MI DIŠ UD ŠU\n'
         'KI DU ABZ411 BA MA TI\n'
         'X MU TA MA UD\n'
@@ -110,7 +112,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
-                CommentaryProtocol('!qt')
+                Divider(':', ('@v',), (Flag.DAMAGE,)),
+                CommentaryProtocol('!qt'),
             )),
             TextLine("2'.", (
                 BrokenAway('['),

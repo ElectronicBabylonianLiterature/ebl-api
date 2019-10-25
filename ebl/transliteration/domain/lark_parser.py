@@ -6,7 +6,7 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Flag
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text
@@ -14,8 +14,8 @@ from ebl.transliteration.domain.token import BrokenAway, \
     DocumentOrientedGloss, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
-    OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, Token as EblToken, \
-    Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol
+    OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, ValueToken, \
+    Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -71,7 +71,7 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def control_line(self, prefix, content):
-        return ControlLine.of_single(prefix, EblToken(content))
+        return ControlLine.of_single(prefix, ValueToken(content))
 
     @v_args(inline=True)
     def text_line(self, prefix, content):
@@ -83,7 +83,7 @@ class TreeToLine(TreeToErasure):
                 .flat_map_deep(lambda tree: (tree.children
                                              if isinstance(tree, Tree)
                                              else tree))
-                .map_(lambda token: (EblToken(str(token))
+                .map_(lambda token: (ValueToken(str(token))
                                      if isinstance(token, Token)
                                      else token))
                 .value())
@@ -165,6 +165,12 @@ class TreeToLine(TreeToErasure):
     @v_args(inline=True)
     def commentary_protocol(self, value):
         return CommentaryProtocol(value)
+
+    @v_args(inline=True)
+    def divider(self, value, modifiers, flags):
+        return Divider(str(value),
+                       tuple(map(str, modifiers.children)),
+                       tuple(map(Flag, flags.children)))
 
 
 WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')

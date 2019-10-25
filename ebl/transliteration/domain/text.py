@@ -5,7 +5,7 @@ import pydash
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, \
-    DEFAULT_ATF_PARSER_VERSION
+    DEFAULT_ATF_PARSER_VERSION, Flag
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import Lemmatization, \
     LemmatizationError
@@ -21,12 +21,13 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               Partial,
                                               PerhapsBrokenAway, Side, Token,
                                               Word, UnknownNumberOfSigns,
-                                              Tabulation, CommentaryProtocol)
+                                              Tabulation, CommentaryProtocol,
+                                              ValueToken, Divider)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
     token_factories: Mapping[str, Callable[[dict], Token]] = {
-        'Token': lambda data: Token(
+        'Token': lambda data: ValueToken(
             data['value']
         ),
         'Word': lambda data: Word(
@@ -72,6 +73,11 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
         ),
         'CommentaryProtocol': lambda data: CommentaryProtocol(
             data['value']
+        ),
+        'Divider': lambda data: Divider(
+            data['divider'],
+            tuple(data['modifiers']),
+            tuple(Flag(flag) for flag in data['flags'])
         )
     }
 

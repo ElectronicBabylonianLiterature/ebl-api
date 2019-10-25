@@ -424,6 +424,7 @@ def signs():
              tuple(Value(value_name, sub_index)
                    for value_name, sub_index in values))
         for name, values, lists in [
+            ('P₂', [(':', 1)], [('ABZ', '377n1')]),
             ('KU', [('ku', 1)], [('KWU', '869')]),
             ('NU', [('nu', 1)], [('ABZ', '075')]),
             ('IGI', [('ši', 1)], [('HZL', '288'), ('ABZ', '207a/207b X')]),

@@ -11,15 +11,15 @@ from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
 from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,
                                               LanguageShift,
-                                              LoneDeterminative, Side, Token,
-                                              Word)
+                                              LoneDeterminative, Side,
+                                              ValueToken, Word)
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 
 
 def test_line():
     prefix = '*'
-    token = Token('value')
+    token = ValueToken('value')
     line = Line(prefix, (token, ))
 
     assert line.prefix == prefix
@@ -94,10 +94,10 @@ def test_text_line_atf(atf):
 
 
 @pytest.mark.parametrize("word,token,expected", [
-    (Word('mu-bu'), Token('[...]'), ' mu-bu '),
-    (Word('-mu-bu'), Token('[...]'), '-mu-bu '),
-    (Word('mu-bu-'), Token('[...]'), ' mu-bu-'),
-    (Word('-mu-bu-'), Token('[...]'), '-mu-bu-'),
+    (Word('mu-bu'), ValueToken('[...]'), ' mu-bu '),
+    (Word('-mu-bu'), ValueToken('[...]'), '-mu-bu '),
+    (Word('mu-bu-'), ValueToken('[...]'), ' mu-bu-'),
+    (Word('-mu-bu-'), ValueToken('[...]'), '-mu-bu-'),
     (Word('-mu-bu-'), LanguageShift('%sux'), ' -mu-bu- ')
 ])
 def test_text_line_atf_partials(word, token, expected):
@@ -143,17 +143,17 @@ def test_text_line_atf_erasure(word, erasure, expected):
 
 def test_line_of_single():
     prefix = '$'
-    token = Token('only')
+    token = ValueToken('only')
     line = ControlLine.of_single(prefix, token)
 
     assert line == ControlLine('$', (token, ))
 
 
 @pytest.mark.parametrize("line,expected", [
-    (ControlLine.of_single('@', Token('obverse')), {
+    (ControlLine.of_single('@', ValueToken('obverse')), {
         'type': 'ControlLine',
         'prefix': '@',
-        'content': [Token('obverse').to_dict()]
+        'content': [ValueToken('obverse').to_dict()]
     }),
     (TextLine.of_iterable(
         LineNumberLabel.from_atf('1.'),
@@ -180,7 +180,7 @@ def test_to_dict(line, expected):
 
 
 @pytest.mark.parametrize("line", [
-    ControlLine.of_single('@', Token('obverse')),
+    ControlLine.of_single('@', ValueToken('obverse')),
     EmptyLine()
 ])
 def test_update_lemmatization(line):
@@ -223,8 +223,8 @@ def test_update_lemmatization_wrong_lenght():
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('bu')])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('bu')]),
-        ControlLine.of_single('$', Token(' single ruling')),
-        ControlLine.of_single('$', Token(' single ruling'))
+        ControlLine.of_single('$', ValueToken(' single ruling')),
+        ControlLine.of_single('$', ValueToken(' single ruling'))
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('bu')]),
         TextLine.of_iterable(LineNumberLabel.from_atf('2.'), [Word('bu')]),
@@ -281,7 +281,7 @@ def test_update_lemmatization_wrong_lenght():
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Token('{('),
+            ValueToken('{('),
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             DocumentOrientedGloss('{('),

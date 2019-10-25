@@ -19,7 +19,7 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import Token, Word
+from ebl.transliteration.domain.token import Word, ValueToken
 
 COLLECTION = 'fragments'
 
@@ -155,14 +155,14 @@ def test_statistics(database, fragment_repository):
     database[COLLECTION].insert_many([
         SCHEMA.dump(FragmentFactory.build(text=Text((
             TextLine('1.', (Word('first'), Word('line'))),
-            ControlLine('$', (Token('ignore'), )),
+            ControlLine('$', (ValueToken('ignore'), )),
             EmptyLine()
         )))),
         SCHEMA.dump(FragmentFactory.build(text=Text((
-            ControlLine('$', (Token('ignore'), )),
+            ControlLine('$', (ValueToken('ignore'), )),
             TextLine('1.', (Word('second'), )),
             TextLine('1.', (Word('third'), )),
-            ControlLine('$', (Token('ignore'), )),
+            ControlLine('$', (ValueToken('ignore'), )),
             TextLine('1.', (Word('fourth'), )),
         )))),
         SCHEMA.dump(FragmentFactory.build(text=Text()))

@@ -3,7 +3,7 @@ import pytest
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED, ErasureState,
                                               LoneDeterminative, Partial,
-                                              Token)
+                                              ValueToken)
 
 
 def test_of_value():
@@ -65,7 +65,7 @@ def test_lone_determinative(language, normalized, partial):
         assert lone_determinative != not_equal
         assert hash(lone_determinative) != hash(not_equal)
 
-    assert lone_determinative != Token(value)
+    assert lone_determinative != ValueToken(value)
 
 
 def test_set_language():
