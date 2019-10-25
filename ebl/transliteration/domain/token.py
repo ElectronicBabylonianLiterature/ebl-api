@@ -98,33 +98,35 @@ class Word(ValueToken):
 
     @property
     def lemmatizable(self) -> bool:
-        non_lemmatizable_chars = [
+        non_lemmatizables = [
             atf.VARIANT_SEPARATOR,
             atf.UNCLEAR_SIGN,
-            atf.UNIDENTIFIED_SIGN
+            atf.UNIDENTIFIED_SIGN,
+            atf.UNKNOWN_NUMBER_OF_SIGNS
         ]
         return (
                 self.language.lemmatizable and
                 not self.normalized and
                 self.erasure is not ErasureState.ERASED and
-                all((char not in self.value)
-                    for char
-                    in non_lemmatizable_chars) and
+                all((substring not in self.value)
+                    for substring
+                    in non_lemmatizables) and
                 not any(self.partial)
         )
 
     @property
     def partial(self) -> Partial:
+        partials = [*atf.JOINERS, atf.UNKNOWN_NUMBER_OF_SIGNS]
         return Partial(
             any(
-                self.value.startswith(joiner)
-                for joiner
-                in atf.JOINERS
+                self.value.startswith(partial)
+                for partial
+                in partials
             ),
             any(
-                self.value.endswith(joiner)
-                for joiner
-                in atf.JOINERS
+                self.value.endswith(partial)
+                for partial
+                in partials
             )
         )
 

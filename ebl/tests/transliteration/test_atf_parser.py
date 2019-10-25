@@ -87,11 +87,9 @@ def test_parser_version(parser, version):
     ]),
     ('1. [(x x x)]', [
         TextLine('1.', (
-                BrokenAway('['), PerhapsBrokenAway('('),
+                Word('[(x'),
                 Word('x'),
-                Word('x'),
-                Word('x'),
-                PerhapsBrokenAway(')'), BrokenAway(']')
+                Word('x)]')
         ))
     ]),
     ('1. <en-da-ab-su₈ ... >', [
@@ -149,83 +147,48 @@ def test_parser_version(parser, version):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 Word('r]u?-u₂-qu'),
-                Word('na-a[n-'),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']')
+                Word('na-a[n-...]'),
         )),
         TextLine('2.', (
-                Word('ši-[ku-'),
-                UnknownNumberOfSigns('...'),
-                Word('-ku]-nu')
+                Word('ši-[ku-...-ku]-nu'),
         )),
         TextLine('3.', (
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']'),
-                Word('-ku'),
+                Word('[...]-ku'),
         ))
     ]),
     ('1. ša₃] [{d}UTU [:', [
         TextLine('1.', (
-                Word('ša₃'),
-                BrokenAway(']'),
-                BrokenAway('['),
-                Word('{d}UTU'),
+                Word('ša₃]'),
+                Word('[{d}UTU'),
                 BrokenAway('['),
                 Divider(':')
         ))
     ]),
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
         TextLine('1.', (
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']'),
-                Word('-qa-'),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']'),
-                Word('-ba-'),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']')
+                Word('[...]-qa-[...]-ba-[...]'),
         )),
         TextLine('2.', (
-                Word('pa-'),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']')
+                Word('pa-[...]'),
         ))
     ]),
     ('1. [a?-ku (...)]\n2. [a?-ku (x)]', [
         TextLine('1.', (
-            BrokenAway('['),
-            Word('a?-ku'),
+            Word('[a?-ku'),
             PerhapsBrokenAway('('),
             UnknownNumberOfSigns('...'),
             PerhapsBrokenAway(')'),
             BrokenAway(']')
         )),
         TextLine('2.', (
-            BrokenAway('['),
-            Word('a?-ku'),
-            PerhapsBrokenAway('('),
-            Word('x'),
-            PerhapsBrokenAway(')'),
-            BrokenAway(']')
+            Word('[a?-ku'),
+            Word('(x)]')
         )),
     ]),
     ('1. [...+ku....] [....ku+...]', [
         TextLine('1.', (
-            BrokenAway('['),
-            UnknownNumberOfSigns('...'),
-            Word('+ku.'),
-            UnknownNumberOfSigns('...'),
-            BrokenAway(']'),
-            BrokenAway('['),
-            UnknownNumberOfSigns('...'),
-            Word('.ku+'),
-            UnknownNumberOfSigns('...'),
-            BrokenAway(']')
+            Word('[...+ku....]'),
+            Word('[....ku+...]')
         ))
     ]),
     (
@@ -245,11 +208,7 @@ def test_parser_version(parser, version):
                 BrokenAway(']')
             )),
             TextLine('2.', (
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']'),
-                LoneDeterminative.of_value('{bu}',
-                                           Partial(True, False)),
+                Word('[...]{bu}'),
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']')
@@ -258,21 +217,10 @@ def test_parser_version(parser, version):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
-                LoneDeterminative.of_value('{bu}',
-                                           Partial(False, True)),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']')
+                Word('{bu}[...]')
             )),
             TextLine('4.', (
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']'),
-                LoneDeterminative.of_value('{bu}',
-                                           Partial(True, True)),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']')
+                Word('[...]{bu}[...]'),
             ))
         ]
     ),
@@ -285,13 +233,14 @@ def test_parser_version(parser, version):
                 LoneDeterminative.of_value('{bu-bu}', Partial(False, False)),
         )),
     ]),
-    ('1. KIMIN {u₂#}[...]', [
+    ('1. KIMIN {u₂#}[...] {u₂#} [...]', [
         TextLine('1.', (
                 Word('KIMIN'),
-                LoneDeterminative.of_value('{u₂#}', Partial(False, True)),
+                Word('{u₂#}[...]'),
+                LoneDeterminative.of_value('{u₂#}', Partial(False, False)),
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
-                BrokenAway(']'),
+                BrokenAway(']')
         ))
     ]),
     ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
@@ -357,20 +306,25 @@ def test_parser_version(parser, version):
     ]),
     ('1. [{iti}...]', [
         TextLine('1.', (
-            BrokenAway('['),
-            LoneDeterminative('{iti}', partial=Partial(False, True)),
-            UnknownNumberOfSigns('...'),
-            BrokenAway(']')))
+            Word('[{iti}...]'),
+        ))
     ]),
     ('2. RA{k[i]}', [
         TextLine('2.', (Word('RA{k[i]}'),))
     ]),
     ('2. in]-<(...)>', [
-        TextLine('2.', (Word('in]-'),
-                        OmissionOrRemoval('<('),
-                        UnknownNumberOfSigns('...'),
-                        OmissionOrRemoval(')>')))
+        TextLine('2.', (Word('in]-<(...)>'), ))
 
+    ]),
+    ('2. ...{d}kur ... {d}kur', [
+        TextLine('2.', (Word('...{d}kur'),
+                        UnknownNumberOfSigns('...'),
+                        Word('{d}kur')))
+    ]),
+    ('2. kur{d}... kur{d} ...', [
+        TextLine('2.', (Word('kur{d}...'),
+                        Word('kur{d}'),
+                        UnknownNumberOfSigns('...')))
     ]),
 ])
 def test_parse_atf(parser, line, expected_tokens):

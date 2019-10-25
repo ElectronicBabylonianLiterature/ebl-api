@@ -7,7 +7,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
-ATF_PARSER_VERSION = '0.7.0'
+ATF_PARSER_VERSION = '0.8.0'
 DEFAULT_ATF_PARSER_VERSION = '0.1.0'
 
 
@@ -100,6 +100,7 @@ class Flag(Enum):
     COLLATION = '*'
 
 
+UNKNOWN_NUMBER_OF_SIGNS = '...'
 WORD_SEPARATOR = ' '
 HYPHEN = '-'
 JOINERS = [HYPHEN, '+', '.']
@@ -118,7 +119,7 @@ FLAGS: Mapping[str, str] = {
 LACUNA: Mapping[str, str] = {
     'begin': r'\[',
     'end': r'\]',
-    'undeterminable': r'\.\.\.'
+    'undeterminable': pydash.escape_reg_exp(UNKNOWN_NUMBER_OF_SIGNS)
 }
 
 ATF_SPEC: Mapping[str, str] = {

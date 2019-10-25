@@ -48,9 +48,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
     text = Text((
         TextLine("1'.", (
             Tabulation('($___$)'),
-            BrokenAway('['),
-            UnknownNumberOfSigns('...'),
-            Word('-ku]-nu-ši'),
+            Word('[...-ku]-nu-ši'),
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
@@ -106,9 +104,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text((
             TextLine("1'.", (
                 Tabulation('($___$)'),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                Word('-ku]-nu-ši'),
+                Word('[...-ku]-nu-ši'),
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),

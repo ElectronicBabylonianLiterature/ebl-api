@@ -22,7 +22,10 @@ LEMMATIZABLE_TEST_WORDS = [
     (Word('.un'), False),
     (Word('un+'), False),
     (Word('+un'), False),
-    (Word('un/ia'), False)
+    (Word('un/ia'), False),
+    (Word('...-un'), False),
+    (Word('un-...'), False),
+    (Word('un-...-un'), False),
 ]
 
 
@@ -213,7 +216,10 @@ def test_merge(old, new, expected):
     (Word('+mu+bu+'), (True, True)),
     (Word('.mu.bu'), (True, False)),
     (Word('mu.bu.'), (False, True)),
-    (Word('.mu.bu.'), (True, True))
+    (Word('.mu.bu.'), (True, True)),
+    (Word('...-mu'), (True, False)),
+    (Word('mu-...'), (False, True)),
+    (Word('...-mu-...'), (True, True))
 ])
 def test_partial(word, expected):
     assert word.partial == expected
