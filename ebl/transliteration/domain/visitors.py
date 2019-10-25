@@ -8,7 +8,8 @@ from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
                                               OmissionOrRemoval,
                                               PerhapsBrokenAway,
                                               Side, Token,
-                                              TokenVisitor, Word, Divider)
+                                              TokenVisitor, Word, Divider,
+                                              CommentaryProtocol)
 
 
 class LanguageVisitor(TokenVisitor):
@@ -56,6 +57,9 @@ class LanguageVisitor(TokenVisitor):
 
     def visit_divider(self, divider: Divider) -> None:
         self.visit_token(divider)
+
+    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
+        self.visit_token(protocol)
 
 
 class AtfVisitor(TokenVisitor):
@@ -142,6 +146,11 @@ class AtfVisitor(TokenVisitor):
     def visit_divider(self, divider: Divider) -> None:
         self._append_separator()
         self._parts.append(divider.value)
+        self._set_force()
+
+    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
+        self._append_separator()
+        self._parts.append(protocol.value)
         self._set_force()
 
     def _append_separator(self) -> None:

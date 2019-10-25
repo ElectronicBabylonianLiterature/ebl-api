@@ -351,6 +351,9 @@ class CommentaryProtocol(ValueToken):
     def protocol(self):
         return atf.CommentaryProtocol(self.value)
 
+    def accept(self, visitor: 'TokenVisitor') -> None:
+        visitor.visit_commentary_protocol(self)
+
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -433,4 +436,8 @@ class TokenVisitor(ABC):
 
     @abstractmethod
     def visit_divider(self, divider: Divider):
+        ...
+
+    @abstractmethod
+    def visit_commentary_protocol(self, divider: CommentaryProtocol):
         ...
