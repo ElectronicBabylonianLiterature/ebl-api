@@ -12,7 +12,7 @@ from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
                                               DocumentOrientedGloss, Erasure,
                                               LanguageShift,
                                               LoneDeterminative, Side,
-                                              ValueToken, Word)
+                                              ValueToken, Word, Tabulation)
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 
@@ -89,7 +89,10 @@ def test_line_of_iterable(code, language, normalized):
     '11. in]-<(...)>',
     '12. [ : ]',
     '13. [ %sux ]',
-    '14. [ !cm ]'
+    '14. [ !cm ]',
+    '15. ($___$) -(x)-eš-am₃?#',
+    '16. am₃- ($___$)',
+    '17. pa- {(he-pi₂)}'
 ])
 def test_text_line_atf(atf):
     line = parse_line(atf)
@@ -97,10 +100,10 @@ def test_text_line_atf(atf):
 
 
 @pytest.mark.parametrize("word,token,expected", [
-    (Word('mu-bu'), ValueToken('[...]'), ' mu-bu '),
-    (Word('-mu-bu'), ValueToken('[...]'), '-mu-bu '),
-    (Word('mu-bu-'), ValueToken('[...]'), ' mu-bu-'),
-    (Word('-mu-bu-'), ValueToken('[...]'), '-mu-bu-'),
+    (Word('mu-bu'), Tabulation('($___$)'), ' mu-bu '),
+    (Word('-mu-bu'), Tabulation('($___$)'), ' -mu-bu '),
+    (Word('mu-bu-'), Tabulation('($___$)'), ' mu-bu- '),
+    (Word('-mu-bu-'), Tabulation('($___$)'), ' -mu-bu- '),
     (Word('-mu-bu-'), LanguageShift('%sux'), ' -mu-bu- ')
 ])
 def test_text_line_atf_partials(word, token, expected):

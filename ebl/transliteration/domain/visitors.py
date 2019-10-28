@@ -85,12 +85,11 @@ class AtfVisitor(TokenVisitor):
         self._set_force()
 
     def visit_word(self, word: Word) -> None:
-        should_not_omit = not(self._omit_separator or word.partial.start)
-        if self._force_separator or should_not_omit:
+        if not self._omit_separator:
             self._append_separator()
 
         self._parts.append(word.value)
-        self._set_omit(word.partial.end)
+        self._set_omit(False)
 
     def visit_document_oriented_gloss(
             self, gloss: DocumentOrientedGloss
