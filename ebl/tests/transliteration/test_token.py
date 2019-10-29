@@ -12,7 +12,7 @@ from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
                                               UnknownNumberOfSigns,
                                               Tabulation,
                                               CommentaryProtocol, Divider,
-                                              ValueToken)
+                                              ValueToken, Column)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),
@@ -223,3 +223,34 @@ def test_divider():
         'modifiers': list(modifiers),
         'flags': ['?']
     }
+
+
+def test_column():
+    column = Column()
+
+    expected_value = '&'
+    assert column.value == expected_value
+    assert column.lemmatizable is False
+    assert column.to_dict() == {
+        'type': 'Column',
+        'value': expected_value,
+        'number': None
+    }
+
+
+def test_column_with_number():
+    column = Column(1)
+
+    expected_value = '&1'
+    assert column.value == expected_value
+    assert column.lemmatizable is False
+    assert column.to_dict() == {
+        'type': 'Column',
+        'value': expected_value,
+        'number': 1
+    }
+
+
+def test_invalid_column():
+    with pytest.raises(ValueError):
+        Column(-1)

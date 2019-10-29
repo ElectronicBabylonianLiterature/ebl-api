@@ -27,7 +27,7 @@ LINE_CONTINUATION: "→"
 _require_both: commentary_protocol
              | divider
 _have_both: tabulation
-         | COLUMN
+         | column
          | language_shift
          | erasure
          | word
@@ -65,7 +65,8 @@ _NEW_LINE: /\n/
 tabulation: TABULATION
 TABULATION: "($___$)"
 
-COLUMN: "&" ("0".."9")*
+column: "&" number
+number: ("0".."9")*
 
 commentary_protocol: PROTOCOL_QUOTATION
                    | PROTOCOL_BASE_TEXT

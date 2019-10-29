@@ -22,7 +22,7 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               PerhapsBrokenAway, Side, Token,
                                               Word, UnknownNumberOfSigns,
                                               Tabulation, CommentaryProtocol,
-                                              ValueToken, Divider)
+                                              ValueToken, Divider, Column)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
@@ -78,7 +78,8 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             data['divider'],
             tuple(data['modifiers']),
             tuple(Flag(flag) for flag in data['flags'])
-        )
+        ),
+        'Column': lambda data: Column(data['number'])
     }
 
     return tuple(

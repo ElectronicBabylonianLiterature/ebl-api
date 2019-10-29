@@ -390,6 +390,27 @@ class Divider(Token):
         }
 
 
+@attr.s(frozen=True, auto_attribs=True)
+class Column(Token):
+    number: Optional[int] = attr.ib(default=None)
+
+    @number.validator
+    def _check_number(self, _, value) -> None:
+        if value is not None and value < 0:
+            raise ValueError("number must not be negative")
+
+    @property
+    def value(self) -> str:
+        return '&' if self.number is None else f'&{self.number}'
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Column',
+            'number': self.number
+        }
+
+
 @attr.s(frozen=True)
 class LineContinuation(ValueToken):
     def to_dict(self) -> dict:

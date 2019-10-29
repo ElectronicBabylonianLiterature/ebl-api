@@ -15,7 +15,7 @@ from ebl.transliteration.domain.token import BrokenAway, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, ValueToken, \
-    Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider
+    Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -171,6 +171,11 @@ class TreeToLine(TreeToErasure):
         return Divider(str(value),
                        tuple(map(str, modifiers.children)),
                        tuple(map(Flag, flags.children)))
+
+    @v_args(inline=True)
+    def column(self, number):
+        children = number.children
+        return Column(int(''.join(children)) if children else None)
 
 
 WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')

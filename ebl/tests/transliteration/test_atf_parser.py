@@ -18,7 +18,7 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               Word,
                                               UnknownNumberOfSigns, Tabulation,
                                               CommentaryProtocol, Divider,
-                                              ValueToken)
+                                              ValueToken, Column)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -100,7 +100,7 @@ def test_parser_version(parser, version):
         ))
     ]),
     ('1. & &12', [
-        TextLine('1.', (ValueToken('&'), ValueToken('&12')))
+        TextLine('1.', (Column(), Column(12)))
     ]),
     ('1. | : :\' :" :. :: ; /', [
         TextLine('1.', (
