@@ -59,22 +59,35 @@ Text is a series of tokens separated by a word separator (space). The separator 
 
 ```ebnf
 text = [ (token | document-oriented-gloss), { word-separator, (token | document-oriented-gloss) } ], [ line-continuation ];
+text = text-head, { text-tail }, [ word-separator, line-continuation ];
+text-head = optional-spaces
+          | require-both-spaces
+          | omit-left-space
+          | { omit-right-space }-, [ optional-spaces ];
+text-tail = word-separator { omit-right-space } [ optional-spaces ]
+          | [ word-separator ] { omit-left-space }-
+          | word-separator require-both-spaces;
 
 line-continuation = '→';
 
-token = tabulation
-      | column
-      | divider, ( word-separator | eol ) 
-      | commentary-protocol
-      | shift
-      | erasure, ( word-separator | eol ) 
-      | word
-      | determinative
-      | omission
-      | broken-away
-      | perhaps-broken-away
-      | unknown-number-of-signs;
-
+require-both-spaces = commentary-protocol
+                    | divider;
+optional-spaces = tabulation
+                | column
+                | shift
+                | erasure
+                | word
+                | determinative
+                | unknown-number-of-signs;
+omit-left-space = close-broken-away
+                | close-perhaps-broken-away
+                | close-omission
+                | close-document-orionted-gloss;
+omit-right-space = open-broken-away
+                 | open-perhaps-broken-away
+                 | open-omission
+                 | open-document-oriented-gloss;
+           
 tabulation = '($___$)';
 
 column = '&', { decimal-digit };
@@ -101,7 +114,7 @@ close-broken-away = ']';
 
 perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
 open-perhaps-broken-away = '(';
-open-perhaps-broken-away = ')';
+close-perhaps-broken-away = ')';
 
 inline-broken-away = open-inline-broken-away | close-inline-broken-away;
 open-inline-broken-away = '[('
@@ -197,13 +210,14 @@ A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lon
 - The language is not normalized.
 
 ```ebnf
-word = [ unknown-number-of-signs, ( part-joiner | { determinative }- ) ],
-       ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) }
-       [ ( { determinative }- | part-joiner ), unknown-number-of-signs];
+word = [ part-joiner ], [ open-iniline-broken-away ], [ open-omission ],
+       ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
+       [ close-omission ], [ close-iniline-broken-away ] [ part-joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ), { part-joiner, ( variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) };
+parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ), { [ part-joiner ], ( determinative | variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) }
+      | unknown-number-of-signs, { [ part-joiner ], ( determinative | variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) }-;
 
 linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
@@ -217,7 +231,6 @@ part-joiner = [ close-omission ],
               [ open-omission ];
               
 joiner = '-' | '+' | '.';
-
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown | value-with-sign | value | compound-grapheme | logogram | divider;
