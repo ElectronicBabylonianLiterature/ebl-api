@@ -1,4 +1,9 @@
-eBL-ATF is based on [Oracc-ATF](http://oracc.museum.upenn.edu/doc/help/editinginatf/index.html) but is not fully compatible with other ATF flavours. eBL-ATF uses UTF-8 encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form) ([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)). eBL-ATF can be empty or consist of lines separated by a newline character.
+eBL-ATF is based on [Oracc-ATF](http://oracc.museum.upenn.edu/doc/help/editinginatf/index.html) but is not fully compatible with other ATF flavours. eBL-ATF uses UTF-8 encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form) ([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)). 
+
+The EBNF grammar below is an idealized representation of the eBL-ATF as it does not deal with ambiguities and implentattional details necessary to create the domain model in practice. A fully functional grammar is defined in [ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/text/ebl-atf.lark). The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark). See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/) and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
+
+
+eBL-ATF can be empty or consist of lines separated by a newline character.
 
 ```ebnf
 ebl-atf = [ line, { '\n', line } ];
@@ -39,47 +44,60 @@ Text is a series of tokens separated by a word separator (space). The separator 
 | Tabulation   | `($___$)` | No | No | |
 | Column       | `&` or `&` followed by numbers | No | No | |
 | Divider      | `\|`, `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
-| Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | |
-| Document Oriented Gloss | `{(` or `)}` | No | No | |
+| Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | See  Commentary Protocols below. |
 | Shift | `%` followed by one or more word characters | No | No | See Shifts below for a list of supported codes. |
 | Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
-| Lone Determinative | A word consisting only a determinative part. | No | No | |
-| Omission or Removal | `<<`, `<(`, `<`, `>>`, `)>`, or `>` | No | No | |
-| Broken Away | `[` or `]`| No | No | |
-| Perhaps Broken Away | `(` or `)` | No | No | Should be inside broken away. |
+| Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
 | Unknown Number of Signs | `...` | No | No | |
+| Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
+| Removal | `<<`, `>>` | No | No | See Presence below. |
+| Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
+| Broken Away | `[` or `]`| No | No | See Presence below. |
+| Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ token, { [word-separator], token } ], [ line-continuation ];
+text = [ (token | document-oriented-gloss), { word-separator, (token | document-oriented-gloss) } ], [ line-continuation ];
+text = text-head, { text-tail }, [ word-separator, line-continuation ];
+text-head = optional-spaces
+          | require-both-spaces
+          | omit-left-space
+          | { omit-right-space }-, [ optional-spaces ];
+text-tail = word-separator { omit-right-space } [ optional-spaces ]
+          | [ word-separator ] { omit-left-space }-
+          | word-separator require-both-spaces;
 
 line-continuation = '→';
 
-token = tabulation
-      | column
-      | divider, ( word-separator | eol ) 
-      | commentary-protocol
-      | document-oriented-gloss
-      | shift
-      | erasure, ( word-separator | eol ) 
-      | word
-      | lone-determinative
-      | omission
-      | broken-away
-      | perhaps-broken-away
-      | unknown-number-of-signs;
-
+require-both-spaces = commentary-protocol
+                    | divider;
+optional-spaces = tabulation
+                | column
+                | shift
+                | erasure
+                | word
+                | determinative
+                | unknown-number-of-signs;
+omit-left-space = close-broken-away
+                | close-perhaps-broken-away
+                | close-omission
+                | close-document-orionted-gloss;
+omit-right-space = open-broken-away
+                 | open-perhaps-broken-away
+                 | open-omission
+                 | open-document-oriented-gloss;
+           
 tabulation = '($___$)';
 
 column = '&', { decimal-digit };
 
-divider = [ iniline-broken-away ], divider-symbol, modifier, flag, [ iniline-broken-away ];
+divider = divider-symbol, modifier, flag;
 divider-symbol = '|' | ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
 commentary-protocol = '!qt' | '!bs' | '!cm' | '!zz';
 
-document-oriented-gloss = '{(' | ')}';
+document-oriented-gloss = '{(', token, { [word-separator], token } ,')}';
 
 shift = '%', { word-character }-;
 
@@ -96,7 +114,7 @@ close-broken-away = ']';
 
 perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
 open-perhaps-broken-away = '(';
-open-perhaps-broken-away = ')';
+close-perhaps-broken-away = ')';
 
 inline-broken-away = open-inline-broken-away | close-inline-broken-away;
 open-inline-broken-away = '[('
@@ -113,38 +131,78 @@ word-separator = ' ';
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html) and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
 
+### Presence
+
+A presence cannot be nested within itself.
+
+| Presence Type | Open | Close | Scope | Constraint | Semantics |
+| --------------|------|-------|-------|------------|-----------|
+| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
+| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
+| Removal | `<<` | `>>` | Top-level, Word | | |
+| Broken Away | `[` | `]`| Top-level, Word, Grapheme | |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+
+### Glosses
+
+Glosses cannot be nested within other glosses in the same scope.
+
+| Gloss Type | Open | Close | Scope | Constraints | Semantics | Examples |
+|------------|------|-------|-------|-------------|-----------|----------|
+| Document Oriented Gloss | `{(` | `)}` | Top-level | | | `{(1(u))}` `{(%a he-pi₂ eš-šu₂)}` |
+| Linguistic Gloss | `{{` | `}}` | Word | | | `du₃-am₃{{mu-un-<(du₃)>}}` |
+| Determinative | `{` | `}` | Word | | | `{d}utu` `larsa{ki}` |
+| Phonetic Gloss | `{+` | `}` | Word | Cannot appear alone. | | `{+u₃-mu₂}u₂-mu₁₁` `AN{+e}` |
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+
+### Commentary protocols
+
+The Commentary protocol is used to change the display color of the text that follows it. It has to be declared at the beginning of every line. Once declared, it is valid until another protocol replaces it.
+
+| Protocol | Description |
+|----------|-----------|
+| `!qt` | `Quotation` |
+| `!bs` | `Base Text` |
+| `!cm` | `Commentary` |
+| `!zz` | `Uncertain` |
+
+See: [Base Text and Commentary](http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html)
+
 ### Shifts
 
 Shifts change the language and normalization of the subsequent words until another shift or the end of the line. If no shifts are present *Akkadian* is used as the default language.
 
-| Shift        | Language | Normalized |
-| -------------|----------|------------|
-| `%n` | Akkadian | Yes |
-| `%ma` | Akkadian | No |
-| `%mb` | Akkadian | No |
-| `%na` | Akkadian | No |
-| `%nb` | Akkadian | No |
-| `%lb` | Akkadian | No |
-| `%sb` | Akkadian | No |
-| `%a` | Akkadian | No |
-| `%akk` | Akkadian | No |
-| `%eakk` | Akkadian | No |
-| `%oakk` | Akkadian | No |
-| `%ur3akk` | Akkadian | No |
-| `%oa` | Akkadian | No |
-| `%ob` | Akkadian | No |
-| `%sux` | Sumerian | No |
-| `%es` | Emesal | No |
-| `%e` | Emesal | No |
-| `%n` | Akkadian | No |
+| Shift | Language | Dialect | Normalized |
+| ------|----------|---------|------------|
+| `%n` | Akkadian | | Yes |
+| `%ma` | Akkadian | Middle Assyrian | No |
+| `%mb` | Akkadian | Middle Babylonian | No |
+| `%na` | Akkadian | Neo-Assyrian | No |
+| `%nb` | Akkadian | Neo-Babylonian | No |
+| `%lb` | Akkadian | Late Babylonian | No |
+| `%sb` | Akkadian | Standard Babylonian | No |
+| `%a` | Akkadian | | No |
+| `%akk` | Akkadian | | No |
+| `%eakk` | Akkadian | Early Akkadian | No |
+| `%oakk` | Akkadian | Old Akkadian | No |
+| `%ur3akk` | Akkadian | Ur III Akkadian | No |
+| `%oa` | Akkadian | Old Assyrian | No |
+| `%ob` | Akkadian | Old Babylonian | No |
+| `%sux` | Sumerian | | No |
+| `%es` | Sumerian | Emesal | No |
+| `%e` | Sumerian | Emesal | No |
 
-Any other shifts are considered valid and have language *Unknown*. Akkadian and Unknown are lemmatizable.
+Any other shifts are considered valid and have language *Unknown*. *Akkadian* and *Unknown* are lemmatizable.
 
 ### Word
 
-A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lone determinative* is a special case of a partial word. A word is lemmatizable and alignable if:
+A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lone determinative* is a special case of a word consisting only a single determinative. A word is lemmatizable and alignable if:
 - It is not erased.
 - It is not partial.
+- It is not lone determinative.
 - It does not contain variants.
 - It does not contain unclear signs.
 - It does not contain unidentified signs.
@@ -152,49 +210,38 @@ A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lon
 - The language is not normalized.
 
 ```ebnf
-lone-determinative = [ omission ],
-                     open-determinative,
-                     [ broken-away-open ],
-                     variant, { { joiner }, variant }
-                     [ broken-away-close ],
-                     close-determinative,
-                     [ omission ];
-
-word = [ { joiner }-, open-iniline-broken-away ],
-       [ open-omission ],
-       ( inline-erasure, { part-joiner, inline-erasure | parts } | parts )
-       [ close-omission ],
-       [ close-inline-broken-away, { joiner }- ];
+word = [ part-joiner ], [ open-iniline-broken-away ], [ open-omission ],
+       ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
+       [ close-omission ], [ close-iniline-broken-away ] [ part-joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = variant,  { part-joiner, ( determinative | variant ) }
-      | determinative, { part-joiner,  ( determinative | variant )}-;
+parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ), { [ part-joiner ], ( determinative | variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) }
+      | unknown-number-of-signs, { [ part-joiner ], ( determinative | variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) }-;
 
-determinative = [ omission ],
-                open-determinative,
-                [ open-broken-away ],
-                variant,  { part-joiner, variant },
-                [ close-broken-away ],
-                close-determinative
-                [ omission ];
-open-determinative = '{+' | '{';
-close-determinative = '}';
+linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
+phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
 
-part-joiner = [ close-iniline-broken-away ],
-              [ close-omission ],
-              { joiner },
-              [ open-omission ],
-              [ open-iniline-broken-away ];
+determinative = '{', variant,  { part-joiner, variant }, '}';
 
-joiner = linguistic-gloss | '-' | '+' | '.';
-linguistic-gloss = '{{' | '}}';
+part-joiner = [ close-omission ],
+              [ close-iniline-broken-away ],
+              [ joiner ],
+              [ open-iniline-broken-away ],
+              [ open-omission ];
+              
+joiner = '-' | '+' | '.';
 
 variant = variant-part, { variant-separator , variant-part };
-variant-part = unknown | value-with-sign | value | compound-grapheme | grapheme | divider;
+variant-part = unknown | value-with-sign | value | compound-grapheme | logogram | divider;
 
-value-with-sign = value, [ '!' ], '(', compound-grapheme, ')';
+logogram = logogram-character, { [ iniline-broken-away ], logogram-character }, [ sub-index ], modifier, flag;
+logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' | 'I'
+                   | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' | 'R' | 'S'
+                   | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ'
+                   | decimal-digit;     
 
+value-with-sign = value, '(', ( compound-grapheme | grapheme ), ')';
 value = value-character, { [ iniline-broken-away ], value-character }, [ sub-index ], modifier, flag;
 value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' | 'i'
                 | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q' | 'r' | 's'
@@ -202,9 +249,7 @@ value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' 
                 | decimal-digit;
 sub-index = { sub-index-character }-;
 
-compound-grapheme = [ '|' ],
-                    compound-part, { { compound-operator }, compound-part },
-                    [ '|' ];
+compound-grapheme = '|', compound-part, { { compound-operator }, compound-part }, '|';
 compound-part = grapheme, { variant-separator, grapheme };
 compound-operator = '.' | '×' | '%' | '&' | '+' | '(' | ')';
 
