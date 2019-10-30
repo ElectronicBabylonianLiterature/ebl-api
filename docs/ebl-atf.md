@@ -181,27 +181,27 @@ Shifts change the language and normalization of the subsequent words until
 another shift or the end of the line. If no shifts are present *Akkadian* is
 used as the default language.
 
-| Shift | Language | Variety | Normalized | Parsed to standard signs
+| Shift | Language | Variety | Normalized | Parsed to standard signs |
 | ------|----------|---------|------------|
-| `%n` | Akkadian | | Yes | No
-| `%ma` | Akkadian | Middle Assyrian | No | Yes
-| `%mb` | Akkadian | Middle Babylonian | No | Yes
-| `%na` | Akkadian | Neo-Assyrian | No | Yes
-| `%nb` | Akkadian | Neo-Babylonian | No | Yes
-| `%lb` | Akkadian | Late Babylonian | No | Yes
-| `%sb` | Akkadian | Standard Babylonian | No | Yes
-| `%a` | Akkadian | | No | Yes
-| `%akk` | Akkadian | | No | Yes
-| `%eakk` | Akkadian | Early Akkadian | No | Yes
-| `%oakk` | Akkadian | Old Akkadian | No | Yes
-| `%ur3akk` | Akkadian | Ur III Akkadian | No | Yes
-| `%oa` | Akkadian | Old Assyrian | No | Yes
-| `%ob` | Akkadian | Old Babylonian | No | Yes
-| `%sux` | Sumerian | | No | Yes
-| `%es` | Sumerian | Emesal | No | Yes
-| `%e` | Sumerian | Emesal | No | Yes
-| `%grc` | Greek | | No | No
-| `%akkgrc` | Akkadian | In Greek characters | No | No
+| `%n` | Akkadian | | Yes | No |
+| `%ma` | Akkadian | Middle Assyrian | No | Yes |
+| `%mb` | Akkadian | Middle Babylonian | No | Yes |
+| `%na` | Akkadian | Neo-Assyrian | No | Yes |
+| `%nb` | Akkadian | Neo-Babylonian | No | Yes |
+| `%lb` | Akkadian | Late Babylonian | No | Yes |
+| `%sb` | Akkadian | Standard Babylonian | No | Yes |
+| `%a` | Akkadian | | No | Yes |
+| `%akk` | Akkadian | | No | Yes |
+| `%eakk` | Akkadian | Early Akkadian | No | Yes |
+| `%oakk` | Akkadian | Old Akkadian | No | Yes |
+| `%ur3akk` | Akkadian | Ur III Akkadian | No | Yes |
+| `%oa` | Akkadian | Old Assyrian | No | Yes |
+| `%ob` | Akkadian | Old Babylonian | No | Yes |
+| `%sux` | Sumerian | | No | Yes |
+| `%es` | Sumerian | Emesal | No | Yes |
+| `%e` | Sumerian | Emesal | No | Yes |
+| `%grc` | Greek | | No | No |
+| `%akkgrc` | Akkadian | In Greek characters | No | No |
 
 
 Any other shifts are considered valid and have language *Unknown*. *Akkadian*
