@@ -39,14 +39,17 @@ class FragmentFinder:
     def search_transliteration(
             self, query: TransliterationQuery
     ) -> List[FragmentInfo]:
-            if query.isSequenceEmpty():
-                return []
-            else:
-                return [
-                    FragmentInfo.of(fragment, query.get_matching_lines(fragment))
-                    for fragment
-                    in self._repository.query_by_transliteration(query)
-                ]
+        if query.is_sequence_empty():
+            return []
+        else:
+            return [
+                FragmentInfo.of(
+                    fragment,
+                    query.get_matching_lines(fragment)
+                )
+                for fragment
+                in self._repository.query_by_transliteration(query)
+            ]
 
     def find_random(self) -> List[FragmentInfo]:
         return list(map(

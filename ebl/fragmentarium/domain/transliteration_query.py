@@ -29,7 +29,7 @@ class TransliterationQuery:
         )
         return fr'{lines_regexp}(?![^|\s])'
 
-    def isSequenceEmpty(self) -> bool:
+    def is_sequence_empty(self) -> bool:
         if all(list(map(lambda x: not x, self._signs))):
             return True
         elif all(list(map(lambda x: x == '', self._signs[0]))):
