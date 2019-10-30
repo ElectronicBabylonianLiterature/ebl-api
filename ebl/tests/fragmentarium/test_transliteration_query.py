@@ -105,6 +105,7 @@ GET_MATCHING_LINES_DATA = [
 ]
 
 
+
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
     transliterated_fragment = FragmentFactory.build(
@@ -115,3 +116,16 @@ def test_get_matching_lines(query, expected):
     query = TransliterationQuery(query)
     lines = query.get_matching_lines(transliterated_fragment)
     assert lines == tuple(map(tuple, expected))
+
+GET_IS_SEQUENCE_EMPTY_DATA = [
+    ([[]], True),
+    ([['']], True),
+    ([['MA'], ['TA']], False),
+    ([[''], ['']], True),
+    ([['', '']], True)
+]
+
+@pytest.mark.parametrize("query, expected", GET_IS_SEQUENCE_EMPTY_DATA)
+def test_isSequenceEmpty(query, expected):
+    query = TransliterationQuery(query)
+    assert expected == query.isSequenceEmpty()

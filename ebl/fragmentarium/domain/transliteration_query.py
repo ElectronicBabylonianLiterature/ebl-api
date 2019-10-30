@@ -29,6 +29,14 @@ class TransliterationQuery:
         )
         return fr'{lines_regexp}(?![^|\s])'
 
+    def isSequenceEmpty(self) -> bool:
+        if all(list(map(lambda x: not x, self._signs))):
+            return True
+        elif all(list(map(lambda x: x == '', self._signs[0]))):
+            return True
+        else:
+            return False
+
     def get_matching_lines(self, fragment: Fragment) -> Lines:
         signs = fragment.signs
 

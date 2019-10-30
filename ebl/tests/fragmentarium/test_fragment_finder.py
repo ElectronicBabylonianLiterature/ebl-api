@@ -1,4 +1,6 @@
 import pytest
+from mockito import spy2, verifyZeroInteractions, unstub
+
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -87,6 +89,12 @@ def test_search(fragment_finder, fragment_repository, when):
     assert fragment_finder.search(query) == [FragmentInfo.of(fragment)]
 
 
+GET_SEARCH_TRANSLITERATION_EMPTY_DATA = [
+    ([['']], []),
+    ([[''], ['']], []),
+    ([['', '']], [])
+]
+
 def test_search_transliteration(fragment_finder, fragment_repository, when):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     sign_matrix = [['MA', 'UD']]
@@ -103,6 +111,17 @@ def test_search_transliteration(fragment_finder, fragment_repository, when):
         for fragment in matching_fragments
     ]
     assert fragment_finder.search_transliteration(query) == expected
+
+@pytest.mark.parametrize("query, expected", GET_SEARCH_TRANSLITERATION_EMPTY_DATA)
+def test_search_transliteration_empty(query, expected, fragment_finder, fragment_repository):
+    spy2(fragment_repository.query_by_transliteration)
+    query = TransliterationQuery(query)
+    test_result = fragment_finder.search_transliteration(query)
+    verifyZeroInteractions(fragment_repository)
+    assert test_result == expected
+    unstub()
+
+
 
 
 def test_find_lemmas(fragment_finder,
