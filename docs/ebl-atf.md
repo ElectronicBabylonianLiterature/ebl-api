@@ -71,7 +71,8 @@ text-tail = word-separator { omit-right-space } [ optional-spaces ]
 line-continuation = '→';
 
 require-both-spaces = commentary-protocol
-                    | divider;
+                    | divider
+                    | divider-variant;
 optional-spaces = tabulation
                 | column
                 | shift
@@ -92,6 +93,7 @@ tabulation = '($___$)';
 
 column = '&', { decimal-digit };
 
+divider-variant = ( variant-part | divider ), variant-separator, ( variant-part | divider );
 divider = divider-symbol, modifier, flag;
 divider-symbol = '|' | ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
@@ -245,8 +247,7 @@ variant-part = unknown
              | value-with-sign
              | value
              | compound-grapheme
-             | logogram 
-             | divider;
+             | logogram;
 
 logogram = logogram-character, { [ iniline-broken-away ], logogram-character },
            [ sub-index ], modifier, flag;

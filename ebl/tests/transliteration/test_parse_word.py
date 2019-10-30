@@ -45,7 +45,6 @@ from ebl.transliteration.domain.token import LoneDeterminative, Word
     ('KA₂?].DINGIR.RA[{ki?}', Word('KA₂?].DINGIR.RA[{ki?}')),
     ('{d?}nu?-di]m₂?-mu[d?', Word('{d?}nu?-di]m₂?-mu[d?')),
     ('<GAR?>', Word('<GAR?>')),
-    ('gam/:', Word('gam/:')),
     ('lu₂@v', Word('lu₂@v')),
     ('{lu₂@v}UM.ME.[A', Word('{lu₂@v}UM.ME.[A')),
     ('{lu₂@v}]KAB.SAR-M[EŠ', Word('{lu₂@v}]KAB.SAR-M[EŠ')),
@@ -110,7 +109,10 @@ def test_invalid_lone_determinative(parser, atf):
     '<GAR>?',
     'KA₂]?.DINGIR.RA[{ki?}',
     'KA₂?].DINGIR.RA[{ki}?',
-    'k[a]?'
+    'k[a]?',
+    ':-sal',
+    'gam/:'
+    '//sal'
 ])
 def test_invalid(parser, atf):
     with pytest.raises(Exception):

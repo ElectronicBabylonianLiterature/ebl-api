@@ -7,7 +7,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
-ATF_PARSER_VERSION = '0.12.0'
+ATF_PARSER_VERSION = '0.13.0'
 DEFAULT_ATF_PARSER_VERSION = '0.1.0'
 
 

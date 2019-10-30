@@ -411,6 +411,26 @@ class Column(Token):
         }
 
 
+@attr.s(frozen=True, auto_attribs=True)
+class Variant(Token):
+    tokens: Tuple[Token, ...]
+
+    @staticmethod
+    def of(first: Token, second: Token) -> 'Variant':
+        return Variant((first, second))
+
+    @property
+    def value(self) -> str:
+        return '/'.join(token.value for token in self.tokens)
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Variant',
+            'tokens': [token.to_dict() for token in self.tokens]
+        }
+
+
 @attr.s(frozen=True)
 class LineContinuation(ValueToken):
     def to_dict(self) -> dict:

@@ -12,7 +12,8 @@ from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
                                               UnknownNumberOfSigns,
                                               Tabulation,
                                               CommentaryProtocol, Divider,
-                                              ValueToken, Column)
+                                              ValueToken, Column, Word,
+                                              Variant)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),
@@ -254,3 +255,18 @@ def test_column_with_number():
 def test_invalid_column():
     with pytest.raises(ValueError):
         Column(-1)
+
+
+def test_variant():
+    word = Word('sal')
+    divider = Divider(':')
+    variant = Variant.of(word, divider)
+
+    expected_value = 'sal/:'
+    assert variant.value == expected_value
+    assert variant.lemmatizable is False
+    assert variant.to_dict() == {
+        'type': 'Variant',
+        'value': expected_value,
+        'tokens': [word.to_dict(), divider.to_dict()]
+    }

@@ -18,7 +18,7 @@ from ebl.transliteration.domain.token import (BrokenAway,
                                               Word,
                                               UnknownNumberOfSigns, Tabulation,
                                               CommentaryProtocol, Divider,
-                                              ValueToken, Column)
+                                              ValueToken, Column, Variant)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -112,6 +112,14 @@ def test_parser_version(parser, version):
                 Divider('::'),
                 Divider(';'),
                 Divider('/')
+        ))
+    ]),
+    ("1. |/: :'/sal //: ://", [
+        TextLine('1.', (
+                Variant.of(Divider('|'), Divider(':')),
+                Variant.of(Divider(":'"), Word('sal')),
+                Variant.of(Divider('/'), Divider(':')),
+                Variant.of(Divider(':'), Divider('/'))
         ))
     ]),
     ('1. me-e-li :\n2. ku', [
@@ -262,7 +270,7 @@ def test_parser_version(parser, version):
         ))
     ]),
     ('1.  sal/: šim ', [
-        TextLine('1.', (Word('sal/:'), Word('šim')))
+        TextLine('1.', (Variant.of(Word('sal'), Divider(':')), Word('šim')))
     ]),
     ('1. °me-e-li\\ku°', [
         TextLine('1.', (

@@ -26,6 +26,7 @@ LINE_CONTINUATION: "→"
 
 _require_both: commentary_protocol
              | divider
+             | divider_variant
 _have_both: tabulation
          | column
          | language_shift
@@ -61,6 +62,9 @@ flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
 modifiers: MODIFIER*
 
 _NEW_LINE: /\n/
+
+divider_variant: (variant_part | divider) "/" (variant_part | divider)
+variant_part: VARIANT_PART
 
 tabulation: TABULATION
 TABULATION: "($___$)"
@@ -150,7 +154,6 @@ VARIANT_PART: UNKNOWN
             | VALUE_WITH_SIGN
             | VALUE
             | COMPOUND_GRAPHEME
-            | DIVIDER
  
 VALUE_WITH_SIGN: VALUE "!"? "(" ANY_GRAPHEME ")"
 
