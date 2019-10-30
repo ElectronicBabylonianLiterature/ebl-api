@@ -115,3 +115,19 @@ def test_get_matching_lines(query, expected):
     query = TransliterationQuery(query)
     lines = query.get_matching_lines(transliterated_fragment)
     assert lines == tuple(map(tuple, expected))
+
+
+GET_IS_SEQUENCE_EMPTY_DATA = [
+    ([[]], True),
+    ([['']], True),
+    ([['MA'], ['TA']], False),
+    ([[''], ['']], True),
+    ([['', '']], True),
+    ([[''], ['ABZ001']], False)
+]
+
+
+@pytest.mark.parametrize("query, expected", GET_IS_SEQUENCE_EMPTY_DATA)
+def test_is_sequence_empty(query, expected):
+    query = TransliterationQuery(query)
+    assert expected == query.is_empty()

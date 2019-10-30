@@ -29,6 +29,11 @@ class TransliterationQuery:
         )
         return fr'{lines_regexp}(?![^|\s])'
 
+    def is_empty(self) -> bool:
+        return ''.join(
+            token for row in self._signs for token in row
+        ).strip() == ''
+
     def get_matching_lines(self, fragment: Fragment) -> Lines:
         signs = fragment.signs
 

@@ -1,4 +1,4 @@
-from collections import Sequence
+from typing import Sequence
 
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
