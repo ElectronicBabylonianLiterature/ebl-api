@@ -182,7 +182,7 @@ another shift or the end of the line. If no shifts are present *Akkadian* is
 used as the default language.
 
 | Shift | Language | Variety | Normalized | Parsed to standard signs |
-| ------|----------|---------|------------|
+| ------|----------|---------|------------|--------------------------|
 | `%n` | Akkadian | | Yes | No |
 | `%ma` | Akkadian | Middle Assyrian | No | Yes |
 | `%mb` | Akkadian | Middle Babylonian | No | Yes |
