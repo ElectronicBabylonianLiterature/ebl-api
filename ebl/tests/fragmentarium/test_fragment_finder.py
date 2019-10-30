@@ -1,4 +1,3 @@
-from typing import List, Tuple
 import pytest
 from mockito import spy2, verifyZeroInteractions, unstub
 
@@ -90,13 +89,6 @@ def test_search(fragment_finder, fragment_repository, when):
     assert fragment_finder.search(query) == [FragmentInfo.of(fragment)]
 
 
-GET_SEARCH_TRANSLITERATION_EMPTY_DATA: List[Tuple[List, List]] = [
-    ([['']], []),
-    ([[''], ['']], []),
-    ([['', '']], [])
-]
-
-
 def test_search_transliteration(fragment_finder, fragment_repository, when):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     sign_matrix = [['MA', 'UD']]
@@ -115,8 +107,11 @@ def test_search_transliteration(fragment_finder, fragment_repository, when):
     assert fragment_finder.search_transliteration(query) == expected
 
 
-@pytest.mark.parametrize("query, expected",
-                         GET_SEARCH_TRANSLITERATION_EMPTY_DATA)
+@pytest.mark.parametrize("query, expected", [
+    ([['']], []),
+    ([[''], ['']], []),
+    ([['', '']], [])
+])
 def test_search_transliteration_empty(query, expected, fragment_finder,
                                       fragment_repository):
     spy2(fragment_repository.query_by_transliteration)

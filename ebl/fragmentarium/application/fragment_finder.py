@@ -39,7 +39,7 @@ class FragmentFinder:
     def search_transliteration(
             self, query: TransliterationQuery
     ) -> List[FragmentInfo]:
-        if query.is_sequence_empty():
+        if query.is_empty():
             return []
         else:
             return [

@@ -29,7 +29,7 @@ class TransliterationQuery:
         )
         return fr'{lines_regexp}(?![^|\s])'
 
-    def is_sequence_empty(self) -> bool:
+    def is_empty(self) -> bool:
         return ''.join(
             token for row in self._signs for token in row
         ).strip() == ''
