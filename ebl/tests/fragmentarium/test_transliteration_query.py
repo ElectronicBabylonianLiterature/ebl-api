@@ -122,11 +122,12 @@ GET_IS_SEQUENCE_EMPTY_DATA = [
     ([['']], True),
     ([['MA'], ['TA']], False),
     ([[''], ['']], True),
-    ([['', '']], True)
+    ([['', '']], True),
+    ([[''], ['ABZ001']], False)
 ]
 
 
 @pytest.mark.parametrize("query, expected", GET_IS_SEQUENCE_EMPTY_DATA)
 def test_is_sequence_empty(query, expected):
     query = TransliterationQuery(query)
-    assert expected == query.isSequenceEmpty()
+    assert expected == query.is_sequence_empty()
