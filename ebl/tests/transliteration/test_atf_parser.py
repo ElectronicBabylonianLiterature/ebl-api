@@ -243,9 +243,9 @@ def test_parser_version(parser, version):
                 BrokenAway(']')
         ))
     ]),
-    ('1. šu gid₂\n2. U]₄.14.KAM₂ U₄.15.KAM₂', [
+    ('1. šu gid₂\n2. U₄].14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (Word('šu'), Word('gid₂'))),
-        TextLine('2.', (Word('U]₄.14.KAM₂'), Word('U₄.15.KAM₂')))
+        TextLine('2.', (Word('U₄].14.KAM₂'), Word('U₄.15.KAM₂')))
     ]),
     ('1. {(he-pi₂ eš-šu₂)}\n2. {(NU SUR)}', [
         TextLine('1.', (

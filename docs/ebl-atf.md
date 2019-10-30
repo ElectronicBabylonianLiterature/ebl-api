@@ -160,7 +160,9 @@ See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/p
 
 ### Commentary protocols
 
-The Commentary protocol is used to change the display color of the text that follows it. It has to be declared at the beginning of every line. Once declared, it is valid until another protocol replaces it.
+The Commentary protocol is used to change the display color of the text that
+follows it. It has to be declared at the beginning of every line. Once declared,
+it is valid until another protocol replaces it.
 
 | Protocol | Description |
 |----------|-----------|
@@ -173,7 +175,9 @@ See: [Base Text and Commentary](http://oracc.museum.upenn.edu/doc/help/editingin
 
 ### Shifts
 
-Shifts change the language and normalization of the subsequent words until another shift or the end of the line. If no shifts are present *Akkadian* is used as the default language.
+Shifts change the language and normalization of the subsequent words until
+another shift or the end of the line. If no shifts are present *Akkadian* is
+used as the default language.
 
 | Shift | Language | Dialect | Normalized |
 | ------|----------|---------|------------|
@@ -195,11 +199,15 @@ Shifts change the language and normalization of the subsequent words until anoth
 | `%es` | Sumerian | Emesal | No |
 | `%e` | Sumerian | Emesal | No |
 
-Any other shifts are considered valid and have language *Unknown*. *Akkadian* and *Unknown* are lemmatizable.
+Any other shifts are considered valid and have language *Unknown*. *Akkadian*
+and *Unknown* are lemmatizable.
 
 ### Word
 
-A word is considered partial if starts or end ends with `-`, `.`, or `+`. A *lone determinative* is a special case of a word consisting only a single determinative. A word is lemmatizable and alignable if:
+A word is considered partial if starts or end ends with `-`, `.`, or `+`. 
+A *lone determinative* is a special case of a word consisting only a single
+determinative. A word is lemmatizable and alignable if:
+
 - It is not erased.
 - It is not partial.
 - It is not lone determinative.
@@ -233,27 +241,36 @@ part-joiner = [ close-omission ],
 joiner = '-' | '+' | '.';
 
 variant = variant-part, { variant-separator , variant-part };
-variant-part = unknown | value-with-sign | value | compound-grapheme | logogram | divider;
+variant-part = unknown 
+             | value-with-sign
+             | value
+             | compound-grapheme
+             | logogram 
+             | divider;
 
-logogram = logogram-character, { [ iniline-broken-away ], logogram-character }, [ sub-index ], modifier, flag;
+logogram = logogram-character, { [ iniline-broken-away ], logogram-character },
+           [ sub-index ], modifier, flag;
 logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' | 'I'
                    | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' | 'R' | 'S'
                    | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ'
                    | decimal-digit;     
 
 value-with-sign = value, '(', ( compound-grapheme | grapheme ), ')';
-value = value-character, { [ iniline-broken-away ], value-character }, [ sub-index ], modifier, flag;
+value = value-character, { [ iniline-broken-away ], value-character }, 
+        [ sub-index ], modifier, flag;
 value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' | 'i'
                 | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q' | 'r' | 's'
                 | 'ṣ' | 'š' | 't' | 'ṭ' | 'u' | 'ū' | 'û' | 'w' | 'z' | 'ḫ' | 'ʾ'
                 | decimal-digit;
 sub-index = { sub-index-character }-;
 
-compound-grapheme = '|', compound-part, { { compound-operator }, compound-part }, '|';
+compound-grapheme = '|',
+                    compound-part, { { compound-operator }, compound-part },
+                    '|';
 compound-part = grapheme, { variant-separator, grapheme };
 compound-operator = '.' | '×' | '%' | '&' | '+' | '(' | ')';
 
-grapheme = [ '$' ], grapheme-character, 
+grapheme = grapheme-character, 
            { [ iniline-broken-away ], grapheme-character },
            modifier,
            flag;
@@ -268,14 +285,19 @@ unknown = ('X' | 'x'), flag;
 variant-separator = '/';
 
 flag = { '!' | '?' | '*' | '#' };
-modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n' | 'z'  | 'k' | 'r' | 'h' | 'v' | { decimal-digit }- ) };
+modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n' 
+                  | 'z' | 'k' | 'r' | 'h' | 'v' | { decimal-digit }- ) };
 
-sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅' | '₆' | '₇' | '₈' | '₉' | 'ₓ';
+sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅' 
+                    | '₆' | '₇' | '₈' | '₉' | 'ₓ';
 ```
 
 ## Validation
 
-The ATF should be parseable using the specification above. In addition, it must pass [pyoracc](https://github.com/oracc/pyoracc) validation and not contain unknown readings. To make the ATF valid according to pyoracc a fake header is added to the input:
+The ATF should be parseable using the specification above. In addition, it must
+pass [pyoracc](https://github.com/oracc/pyoracc) validation and not contain
+unknown readings. To make the ATF valid according to pyoracc a fake header is
+added to the input:
 
 ```
 &XXX = XXX
@@ -286,9 +308,15 @@ The ATF should be parseable using the specification above. In addition, it must 
 #atf: use legacy
 ```
 
-The only purpose of the header is to make the pyoracc accept the ATF and it is not saved to the database. To check the readings the ATF is stripped from all other characters except readings and graphemes. Each reading must match a value in the sign list.
+The only purpose of the header is to make the pyoracc accept the ATF and it is
+not saved to the database. To check the readings the ATF is stripped from all
+other characters except readings and graphemes. Each reading must match a value
+in the sign list.
 
-Sometimes when the validation or parsing logic is updated existing transliterations can become invalid. It should still be possible to load these transliterations but saving them results in an error until the syntax has been corrected.
+Sometimes when the validation or parsing logic is updated existing
+transliterations can become invalid. It should still be possible to load these
+transliterations but saving them results in an error until the syntax has been
+corrected.
 
 ## Labels
 
@@ -303,4 +331,5 @@ surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ), { stat
 
 status = "'" | '?' | '!' | '*';
 ```
-See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html) and [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
+See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html)
+and [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
