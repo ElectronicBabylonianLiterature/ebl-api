@@ -12,9 +12,9 @@ def test_atf():
 
 def test_filtered():
     clean_atf = CleanAtf(
-        Atf('&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku\n2. $AN')
+        Atf('&K11111\n@reverse\n\n$ end of side\n#note\n=: foo\n1. ku')
     )
-    assert clean_atf.filtered == ['1. ku', '2. $AN']
+    assert clean_atf.filtered == ['1. ku']
 
 
 def test_ignored_lines():
@@ -128,10 +128,9 @@ def test_indent():
 
 def test_strip_flags():
     clean_atf =\
-        CleanAtf(Atf('1.  ba! ba? ba# ba*\n2. $KU'))
+        CleanAtf(Atf('1.  ba! ba? ba# ba*'))
     assert clean_atf.cleaned == [
-        ['ba', 'ba', 'ba', 'ba'],
-        ['ku']
+        ['ba', 'ba', 'ba', 'ba']
     ]
 
 
