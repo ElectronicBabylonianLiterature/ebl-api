@@ -122,9 +122,10 @@ def test_parser_version(parser, version):
                 Variant.of(Divider(':'), Divider('/'))
         ))
     ]),
-    ('1. me-e-li :\n2. ku', [
+    ('1. me-e+li  me.e:li :\n2. ku', [
         TextLine('1.', (
-                Word('me-e-li'),
+                Word('me-e+li'),
+                Word('me.e:li'),
                 Divider(':')
         )),
         TextLine('2.', (

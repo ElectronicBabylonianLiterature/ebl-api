@@ -240,7 +240,7 @@ part-joiner = [ close-omission ],
               [ open-iniline-broken-away ],
               [ open-omission ];
               
-joiner = '-' | '+' | '.';
+joiner = '-' | '+' | '.' | ':';
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown 
@@ -265,11 +265,11 @@ value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' 
                 | decimal-digit;
 sub-index = { sub-index-character }-;
 
-compound-grapheme = '|',
-                    compound-part, { { compound-operator }, compound-part },
-                    '|';
-compound-part = grapheme, { variant-separator, grapheme };
-compound-operator = '.' | '×' | '%' | '&' | '+' | '(' | ')';
+compound-grapheme = '|', compound-part, { compound-operator, compound-part }, '|';
+compound-part = '(' grapheme-variant { compound-operator, grapheme-variant } ')'
+              | grapheme-variant
+grapheme-variant = grapheme, { variant-separator, grapheme };
+compound-operator = '.' | '×' | '%' | '&' | '+';
 
 grapheme = grapheme-character, 
            { [ iniline-broken-away ], grapheme-character },
