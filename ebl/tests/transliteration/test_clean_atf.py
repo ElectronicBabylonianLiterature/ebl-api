@@ -287,8 +287,9 @@ def test_strip_erasure(erasure, cleaned):
     ('1. | x [...]', [['x']]),
     ('1. x |', [['x']]),
     ('1. x  &  x', [['x', 'x']]),
+    ('1. x:x  :  x', [['x', 'x', ':', 'x']]),
 ])
-def test_strip_dividers(atf, cleaned):
+def test_strip_dividers_and_columns(atf, cleaned):
     clean_atf =\
         CleanAtf(Atf(atf))
     assert clean_atf.cleaned == cleaned
