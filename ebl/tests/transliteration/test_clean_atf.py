@@ -69,7 +69,9 @@ def test_map_spaces():
         '8. mu {{giš}}BI\n'
         '9. din-{d}x\n'
         '10. šu+mu\n'
-        '11. {d}+a'
+        '11. {d}+a\n'
+        '12. mu:un-du₃\n'
+        '13. mu-un;-e₃'
     ))
 
     assert clean_atf.cleaned == [
@@ -92,7 +94,9 @@ def test_map_spaces():
         ['mu', 'giš', 'bi'],
         ['din', 'd', 'x'],
         ['šu', 'mu'],
-        ['d', 'a']
+        ['d', 'a'],
+        ['mu', 'un', 'du₃'],
+        ['mu', 'un', 'e₃']
     ]
 
 
@@ -286,7 +290,7 @@ def test_strip_erasure(erasure, cleaned):
     ('1. | x [...]', [['x']]),
     ('1. x |', [['x']]),
     ('1. x  &  x', [['x', 'x']]),
-    ('1. x:x  :  x', [['x', 'x', ':', 'x']]),
+    ('1. x:x  :  x;x ; x', [['x', 'x', ':', 'x',  'x', ';', 'x']]),
 ])
 def test_strip_dividers_and_columns(atf, cleaned):
     clean_atf =\

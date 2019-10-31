@@ -40,9 +40,11 @@ DETERMINATIVE_OR_GLOSS = {
 }
 DIVIDER = r'(^|\s+)(\||&\d*)(?=$|\s+)'
 JOINER = r'(-|(?<! ):(?!= ))'
+IN_WORD_NEWLINE = r'(?<! );(?!= )'
 WHITE_SPACE_PATTERN = r'|'.join([
     *DETERMINATIVE_OR_GLOSS.values(),
     JOINER,
+    IN_WORD_NEWLINE,
     DIVIDER
 ])
 

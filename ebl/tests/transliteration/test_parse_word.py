@@ -73,7 +73,8 @@ from ebl.transliteration.domain.token import LoneDeterminative, Word
     ('[{d}UTU', Word('[{d}UTU')),
     ('{m#}[{d}AG-sa-lim', Word('{m#}[{d}AG-sa-lim')),
     ('ša#-[<(mu-un-u₅)>]', Word('ša#-[<(mu-un-u₅)>]')),
-    ('|UM×(ME.DA)|-b[i?', Word('|UM×(ME.DA)|-b[i?'))
+    ('|UM×(ME.DA)|-b[i?', Word('|UM×(ME.DA)|-b[i?')),
+    ('mu-un;-e₃', Word('mu-un;-e₃'))
 ])
 def test_word(parser, atf, expected):
     assert parser(atf) == expected

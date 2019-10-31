@@ -335,6 +335,9 @@ def test_parser_version(parser, version):
                         Word('kur{d}'),
                         UnknownNumberOfSigns('...')))
     ]),
+    ('1. mu-un;-e₃ ;', [
+        TextLine('1.', (Word('mu-un;-e₃'), Divider(';')))
+    ])
 ])
 def test_parse_atf(parser, line, expected_tokens):
     assert parser(line).lines == \
