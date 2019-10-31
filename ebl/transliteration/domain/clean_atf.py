@@ -39,7 +39,7 @@ DETERMINATIVE_OR_GLOSS = {
     'end': r'}+({+\+?)?\s*?'
 }
 DIVIDER = r'(^|\s+)(\||&\d*)(?=$|\s+)'
-JOINER = '-'
+JOINER = r'(-|:)'
 WHITE_SPACE_PATTERN = r'|'.join([
     *DETERMINATIVE_OR_GLOSS.values(),
     JOINER,

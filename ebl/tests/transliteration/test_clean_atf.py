@@ -50,7 +50,7 @@ def test_strip_line_numbers():
 
 def test_map_spaces():
     clean_atf = CleanAtf(Atf(
-        '1. šu-mu gid₂-ba\n'
+        '1. šu-mu gid₂+ba šu.mu gid₂:ba\n'
         '2. {giš}BI.IS\n'
         '3. {giš}|BI.IS|\n'
         '4. {m}{d}\n'
@@ -73,7 +73,7 @@ def test_map_spaces():
     ))
 
     assert clean_atf.cleaned == [
-        ['šu', 'mu', 'gid₂', 'ba'],
+        ['šu', 'mu', 'gid₂', 'ba', 'šu', 'mu', 'gid₂', 'ba'],
         ['giš', 'bi', 'is'],
         ['giš', '|BI.IS|'],
         ['m', 'd'],
