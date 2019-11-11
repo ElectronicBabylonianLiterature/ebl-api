@@ -19,7 +19,7 @@ from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token import Word
+from ebl.transliteration.domain.token import Word, ValueToken
 
 
 class ManuscriptFactory(factory.Factory):
@@ -52,7 +52,10 @@ class ManuscriptLineFactory(factory.Factory):
         ColumnLabel.from_label('iii', [Status.COLLATION, Status.CORRECTION])
     )
     line = TextLine('1.', (
-        Word('ku]-nu-ši'),
+        Word('ku]-nu-ši', parts=[
+            ValueToken('ku'), ValueToken(']'), ValueToken('-'),
+            ValueToken('nu'), ValueToken('-'), ValueToken('ši')
+        ]),
     ))
 
 

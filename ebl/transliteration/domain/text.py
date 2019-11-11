@@ -37,7 +37,8 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             data['normalized'],
             tuple(data['uniqueLemma']),
             ErasureState[data.get('erasure', ErasureState.NONE.name)],
-            data.get('alignment')
+            data.get('alignment'),
+            parts=[ValueToken(part['value']) for part in data.get('parts', [])]
         ),
         'LanguageShift': lambda data: LanguageShift(
             data['value']
@@ -49,7 +50,8 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             tuple(data['uniqueLemma']),
             ErasureState[data.get('erasure', ErasureState.NONE.name)],
             data.get('alignment'),
-            Partial(*data['partial'])
+            partial=Partial(*data['partial']),
+            parts=[ValueToken(part['value']) for part in data.get('parts', [])]
         ),
         'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
             data['value']

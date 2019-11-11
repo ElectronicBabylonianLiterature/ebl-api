@@ -7,7 +7,7 @@ import pytest
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token import Word
+from ebl.transliteration.domain.token import Word, ValueToken
 from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
@@ -60,7 +60,10 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
             attr.evolve(text.chapters[0].lines[0], manuscripts=(
                 attr.evolve(
                     text.chapters[0].lines[0].manuscripts[0],
-                    line=TextLine('1.', (Word('ku]-nu-ši', alignment=0),))
+                    line=TextLine('1.', (Word('ku]-nu-ši', alignment=0, parts=[
+                        ValueToken('ku'), ValueToken(']'), ValueToken('-'),
+                        ValueToken('nu'), ValueToken('-'), ValueToken('ši')
+                    ]),))
                 ),
             )),
         )),

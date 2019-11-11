@@ -55,11 +55,13 @@ def test_defaults():
     (Language.AKKADIAN, True, tuple())
 ])
 def test_word(language, normalized, unique_lemma):
-    value = 'value'
+    value = 'ku'
+    parts = [ValueToken('ku')]
     erasure = ErasureState.NONE
-    word = Word(value, language, normalized, unique_lemma, erasure)
+    word = Word(value, language, normalized, unique_lemma, erasure,
+                parts=parts)
 
-    equal = Word(value, language, normalized, unique_lemma)
+    equal = Word(value, language, normalized, unique_lemma, parts=parts)
     other_language = Word(value, Language.UNKNOWN, normalized, unique_lemma)
     other_value = Word('other value', language, normalized, unique_lemma)
     other_unique_lemma =\
@@ -80,7 +82,8 @@ def test_word(language, normalized, unique_lemma):
         'normalized': normalized,
         'language': word.language.name,
         'lemmatizable': word.lemmatizable,
-        'erasure': erasure.name
+        'erasure': erasure.name,
+        'parts': [part.to_dict() for part in parts]
     }
 
     assert word == equal

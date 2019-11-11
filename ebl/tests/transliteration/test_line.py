@@ -165,14 +165,20 @@ def test_line_of_single():
         LineNumberLabel.from_atf('1.'),
         [
             DocumentOrientedGloss('{('),
-            Word('bu')
+            Word('bu', parts=[ValueToken('bu')]),
+            LoneDeterminative('{d}', parts=[
+                ValueToken('{'), ValueToken('d'), ValueToken('}')
+            ])
         ]
     ), {
         'type': 'TextLine',
         'prefix': '1.',
         'content': [
             DocumentOrientedGloss('{(').to_dict(),
-            Word('bu').to_dict()
+            Word('bu', parts=[ValueToken('bu')]).to_dict(),
+            LoneDeterminative('{d}', parts=[
+                ValueToken('{'), ValueToken('d'), ValueToken('}')
+            ]).to_dict()
         ]
     }),
     (EmptyLine(), {

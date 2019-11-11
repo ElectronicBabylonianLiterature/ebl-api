@@ -64,7 +64,7 @@ def test_parser_version(parser, version):
         ControlLine.of_single('=:', ValueToken(' continuation'))
     ]),
     ('a+1.a+2. šu', [
-        TextLine('a+1.a+2.', (Word('šu'),))
+        TextLine('a+1.a+2.', (Word('šu', parts=[ValueToken('šu')]),))
     ]),
     ('1. ($___$)', [
         TextLine('1.', (Tabulation('($___$)'),))
@@ -87,16 +87,24 @@ def test_parser_version(parser, version):
     ]),
     ('1. [(x x x)]', [
         TextLine('1.', (
-                Word('[(x'),
-                Word('x'),
-                Word('x)]')
+            Word('[(x', parts=[
+                ValueToken('['), ValueToken('('), ValueToken('x')
+            ]),
+            Word('x', parts=[ValueToken('x')]),
+            Word('x)]', parts=[
+                ValueToken('x'), ValueToken(')'), ValueToken(']')
+            ])
         ))
     ]),
     ('1. <en-da-ab-su₈ ... >', [
         TextLine('1.', (
-                Word('<en-da-ab-su₈'),
-                UnknownNumberOfSigns('...'),
-                OmissionOrRemoval('>')
+            Word('<en-da-ab-su₈', parts=[
+                ValueToken('<'), ValueToken('en'), ValueToken('-'),
+                ValueToken('da'), ValueToken('-'), ValueToken('ab'),
+                ValueToken('-'), ValueToken('su₈')
+            ]),
+            UnknownNumberOfSigns('...'),
+            OmissionOrRemoval('>')
         ))
     ]),
     ('1. & &12', [
@@ -117,87 +125,148 @@ def test_parser_version(parser, version):
     ("1. |/: :'/sal //: ://", [
         TextLine('1.', (
                 Variant.of(Divider('|'), Divider(':')),
-                Variant.of(Divider(":'"), Word('sal')),
+                Variant.of(Divider(":'"),
+                           Word('sal', parts=[ValueToken('sal')])),
                 Variant.of(Divider('/'), Divider(':')),
                 Variant.of(Divider(':'), Divider('/'))
         ))
     ]),
     ('1. me-e+li  me.e:li :\n2. ku', [
         TextLine('1.', (
-                Word('me-e+li'),
-                Word('me.e:li'),
-                Divider(':')
+            Word('me-e+li', parts=[
+                ValueToken('me'), ValueToken('-'), ValueToken('e'),
+                ValueToken('+'), ValueToken('li')
+            ]),
+            Word('me.e:li', parts=[
+                ValueToken('me'), ValueToken('.'), ValueToken('e'),
+                ValueToken(':'), ValueToken('li')
+            ]),
+            Divider(':')
         )),
         TextLine('2.', (
-                Word('ku'),
+            Word('ku', parts=[ValueToken('ku')]),
         ))
     ]),
     ('1. |GAL|', [
         TextLine('1.', (
-                Word('|GAL|'),
+            Word('|GAL|', parts=[ValueToken('|GAL|')]),
         ))
     ]),
     ('1. !qt !bs !cm !zz', [
         TextLine('1.', (
-                CommentaryProtocol('!qt'),
-                CommentaryProtocol('!bs'),
-                CommentaryProtocol('!cm'),
-                CommentaryProtocol('!zz')
+            CommentaryProtocol('!qt'),
+            CommentaryProtocol('!bs'),
+            CommentaryProtocol('!cm'),
+            CommentaryProtocol('!zz')
         ))
     ]),
     ('1. x X x# X#', [
-        TextLine('1.', (Word('x'), Word('X'), Word('x#'), Word('X#')))
+        TextLine('1.', (
+            Word('x', parts=[ValueToken('x')]),
+            Word('X', parts=[ValueToken('X')]),
+            Word('x#', parts=[ValueToken('x#')]),
+            Word('X#', parts=[ValueToken('X#')])
+        ))
     ]),
     ('1. x-ti ti-X', [
-        TextLine('1.', (Word('x-ti'), Word('ti-X')))
+        TextLine('1.', (
+            Word('x-ti', parts=[
+                ValueToken('x'), ValueToken('-'), ValueToken('ti')
+            ]),
+            Word('ti-X', parts=[
+                ValueToken('ti'), ValueToken('-'), ValueToken('X')
+            ])
+        ))
     ]),
     ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', [
         TextLine('1.', (
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                Word('r]u?-u₂-qu'),
-                Word('na-a[n-...]'),
+            BrokenAway('['),
+            UnknownNumberOfSigns('...'),
+            Word('r]u?-u₂-qu', parts=[
+                ValueToken('r]u?'), ValueToken('-'), ValueToken('u₂'),
+                ValueToken('-'), ValueToken('qu')
+            ]),
+            Word('na-a[n-...]', parts=[
+                ValueToken('na'), ValueToken('-'), ValueToken('a[n'),
+                ValueToken('-'), ValueToken('...'), ValueToken(']')
+            ]),
         )),
         TextLine('2.', (
-                Word('ši-[ku-...-ku]-nu'),
+            Word('ši-[ku-...-ku]-nu', parts=[
+                ValueToken('ši'), ValueToken('-'), ValueToken('['),
+                ValueToken('ku'), ValueToken('-'), ValueToken('...'),
+                ValueToken('-'), ValueToken('ku'), ValueToken(']'),
+                ValueToken('-'), ValueToken('nu')
+            ]),
         )),
         TextLine('3.', (
-                Word('[...]-ku'),
+            Word('[...]-ku', parts=[
+                ValueToken('['), ValueToken('...'), ValueToken(']'),
+                ValueToken('-'), ValueToken('ku')
+            ]),
         ))
     ]),
     ('1. ša₃] [{d}UTU [ :', [
         TextLine('1.', (
-                Word('ša₃]'),
-                Word('[{d}UTU'),
-                BrokenAway('['),
-                Divider(':')
+            Word('ša₃]', parts=[ValueToken('ša₃'), ValueToken(']')]),
+            Word('[{d}UTU', parts=[
+                ValueToken('['), ValueToken('{'), ValueToken('d'),
+                ValueToken('}'), ValueToken('UTU')]),
+            BrokenAway('['),
+            Divider(':')
         ))
     ]),
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
         TextLine('1.', (
-                Word('[...]-qa-[...]-ba-[...]'),
+            Word('[...]-qa-[...]-ba-[...]', parts=[
+                ValueToken('['), ValueToken('...'), ValueToken(']'),
+                ValueToken('-'), ValueToken('qa'), ValueToken('-'),
+                ValueToken('['), ValueToken('...'), ValueToken(']'),
+                ValueToken('-'), ValueToken('ba'), ValueToken('-'),
+                ValueToken('['), ValueToken('...'), ValueToken(']')
+            ]),
         )),
         TextLine('2.', (
-                Word('pa-[...]'),
+            Word('pa-[...]', parts=[
+                ValueToken('pa'), ValueToken('-'), ValueToken('['),
+                ValueToken('...'), ValueToken(']')
+            ]),
         ))
     ]),
     ('1. [a?-ku (...)]\n2. [a?-ku (x)]', [
         TextLine('1.', (
-            Word('[a?-ku'),
+            Word('[a?-ku', parts=[
+                ValueToken('['), ValueToken('a?'), ValueToken('-'),
+                ValueToken('ku')
+            ]),
             PerhapsBrokenAway('('),
             UnknownNumberOfSigns('...'),
             PerhapsBrokenAway(')'),
             BrokenAway(']')
         )),
         TextLine('2.', (
-            Word('[a?-ku'),
-            Word('(x)]')
+            Word('[a?-ku', parts=[
+                ValueToken('['), ValueToken('a?'), ValueToken('-'),
+                ValueToken('ku')
+            ]),
+            Word('(x)]', parts=[
+                ValueToken('('), ValueToken('x'), ValueToken(')'),
+                ValueToken(']')
+            ])
         )),
     ]),
     ('1. [...+ku....] [....ku+...]', [
         TextLine('1.', (
-            Word('[...+ku....]'),
-            Word('[....ku+...]')
+            Word('[...+ku....]', parts=[
+                ValueToken('['), ValueToken('...'), ValueToken('+'),
+                ValueToken('ku'), ValueToken('.'), ValueToken('...'),
+                ValueToken(']')
+            ]),
+            Word('[....ku+...]', parts=[
+                ValueToken('['), ValueToken('...'), ValueToken('.'),
+                ValueToken('ku'), ValueToken('+'), ValueToken('...'),
+                ValueToken(']')
+            ])
         ))
     ]),
     (
@@ -210,14 +279,21 @@ def test_parser_version(parser, version):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
-                LoneDeterminative.of_value('{bu}',
-                                           Partial(False, False)),
+                LoneDeterminative.of_value(
+                    '{bu}',
+                    Partial(False, False),
+                    ErasureState.NONE,
+                    [ValueToken('{'), ValueToken('bu'), ValueToken('}')]
+                ),
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']')
             )),
             TextLine('2.', (
-                Word('[...]{bu}'),
+                Word('[...]{bu}', parts=[
+                    ValueToken('['), ValueToken('...'), ValueToken(']'),
+                    ValueToken('{'), ValueToken('bu'), ValueToken('}')
+                ]),
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']')
@@ -226,117 +302,231 @@ def test_parser_version(parser, version):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
-                Word('{bu}[...]')
+                Word('{bu}[...]', parts=[
+                    ValueToken('{'), ValueToken('bu'), ValueToken('}'),
+                    ValueToken('['), ValueToken('...'), ValueToken(']')
+                ])
             )),
             TextLine('4.', (
-                Word('[...]{bu}[...]'),
+                Word('[...]{bu}[...]', parts=[
+                    ValueToken('['), ValueToken('...'), ValueToken(']'),
+                    ValueToken('{'), ValueToken('bu'), ValueToken('}'),
+                    ValueToken('['), ValueToken('...'), ValueToken(']')
+                ]),
             ))
         ]
     ),
     ('1. {bu}-nu {bu-bu}-nu\n2. {bu-bu}', [
         TextLine('1.', (
-                Word('{bu}-nu'),
-                Word('{bu-bu}-nu')
+            Word('{bu}-nu', parts=[
+                ValueToken('{'), ValueToken('bu'), ValueToken('}'),
+                ValueToken('-'), ValueToken('nu')
+            ]),
+            Word('{bu-bu}-nu', parts=[
+                ValueToken('{'), ValueToken('bu'), ValueToken('-'),
+                ValueToken('bu'), ValueToken('}'), ValueToken('-'),
+                ValueToken('nu')
+            ])
         )),
         TextLine('2.', (
-                LoneDeterminative.of_value('{bu-bu}', Partial(False, False)),
+            LoneDeterminative.of_value(
+                '{bu-bu}',
+                Partial(False, False),
+                ErasureState.NONE,
+                [ValueToken('{'), ValueToken('bu'), ValueToken('-'),
+                 ValueToken('bu'), ValueToken('}')]
+            ),
         )),
     ]),
     ('1. KIMIN {u₂#}[...] {u₂#} [...]', [
         TextLine('1.', (
-                Word('KIMIN'),
-                Word('{u₂#}[...]'),
-                LoneDeterminative.of_value('{u₂#}', Partial(False, False)),
-                BrokenAway('['),
-                UnknownNumberOfSigns('...'),
-                BrokenAway(']')
+            Word('KIMIN', parts=[ValueToken('KIMIN')]),
+            Word('{u₂#}[...]', parts=[
+                ValueToken('{'), ValueToken('u₂#'), ValueToken('}'),
+                ValueToken('['), ValueToken('...'), ValueToken(']')
+            ]),
+            LoneDeterminative.of_value(
+                '{u₂#}',
+                Partial(False, False),
+                ErasureState.NONE,
+                [ValueToken('{'), ValueToken('u₂#'), ValueToken('}')]
+            ),
+            BrokenAway('['),
+            UnknownNumberOfSigns('...'),
+            BrokenAway(']')
         ))
     ]),
     ('1. šu gid₂\n2. U₄].14.KAM₂ U₄.15.KAM₂', [
-        TextLine('1.', (Word('šu'), Word('gid₂'))),
-        TextLine('2.', (Word('U₄].14.KAM₂'), Word('U₄.15.KAM₂')))
+        TextLine('1.', (
+            Word('šu', parts=[ValueToken('šu')]),
+            Word('gid₂', parts=[ValueToken('gid₂')])
+        )),
+        TextLine('2.', (
+            Word('U₄].14.KAM₂', parts=[
+                ValueToken('U₄'), ValueToken(']'), ValueToken('.'),
+                ValueToken('14'), ValueToken('.'), ValueToken('KAM₂')
+            ]),
+            Word('U₄.15.KAM₂', parts=[
+                ValueToken('U₄'), ValueToken('.'), ValueToken('15'),
+                ValueToken('.'), ValueToken('KAM₂')
+            ])
+        ))
     ]),
     ('1. {(he-pi₂ eš-šu₂)}\n2. {(NU SUR)}', [
         TextLine('1.', (
                 DocumentOrientedGloss('{('),
-                Word('he-pi₂'),
-                Word('eš-šu₂'),
+                Word('he-pi₂', parts=[
+                    ValueToken('he'), ValueToken('-'), ValueToken('pi₂')
+                ]),
+                Word('eš-šu₂', parts=[
+                    ValueToken('eš'), ValueToken('-'), ValueToken('šu₂')
+                ]),
                 DocumentOrientedGloss(')}')
         )),
         TextLine('2.', (
                 DocumentOrientedGloss('{('),
-                Word('NU'),
-                Word('SUR'),
+                Word('NU', parts=[ValueToken('NU')]),
+                Word('SUR', parts=[ValueToken('SUR')]),
                 DocumentOrientedGloss(')}')
         ))
     ]),
     ('1.  sal/: šim ', [
-        TextLine('1.', (Variant.of(Word('sal'), Divider(':')), Word('šim')))
+        TextLine('1.', (
+            Variant.of(Word('sal', parts=[ValueToken('sal')]),
+                       Divider(':')),
+            Word('šim', parts=[ValueToken('šim')])))
     ]),
     ('1. °me-e-li\\ku°', [
         TextLine('1.', (
-                Erasure('°', Side.LEFT),
-                Word('me-e-li', erasure=ErasureState.ERASED),
-                Erasure('\\', Side.CENTER),
-                Word('ku', erasure=ErasureState.OVER_ERASED),
-                Erasure('°', Side.RIGHT),
+            Erasure('°', Side.LEFT),
+            Word('me-e-li', erasure=ErasureState.ERASED, parts=[
+                ValueToken('me'), ValueToken('-'), ValueToken('e'),
+                ValueToken('-'), ValueToken('li')
+            ]),
+            Erasure('\\', Side.CENTER),
+            Word('ku', erasure=ErasureState.OVER_ERASED, parts=[
+                ValueToken('ku')
+            ]),
+            Erasure('°', Side.RIGHT),
         )),
     ]),
     ('1. me-e-li-°\\ku°', [
         TextLine('1.', (
-                Word('me-e-li-°\\ku°'),
+            Word('me-e-li-°\\ku°', parts=[
+                ValueToken('me'), ValueToken('-'), ValueToken('e'),
+                ValueToken('-'), ValueToken('li'), ValueToken('-'),
+                ValueToken('°'), ValueToken('\\'), ValueToken('ku'),
+                ValueToken('°')
+            ]),
         )),
     ]),
     ('1. °me-e-li\\°-ku', [
         TextLine('1.', (
-                Word('°me-e-li\\°-ku'),
+            Word('°me-e-li\\°-ku', parts=[
+                ValueToken('°'), ValueToken('me'), ValueToken('-'),
+                ValueToken('e'), ValueToken('-'), ValueToken('li'),
+                ValueToken('\\'), ValueToken('°'), ValueToken('-'),
+                ValueToken('ku')
+            ]),
         )),
     ]),
     ('1. me-°e\\li°-ku', [
         TextLine('1.', (
-                Word('me-°e\\li°-ku'),
+            Word('me-°e\\li°-ku', parts=[
+                ValueToken('me'), ValueToken('-'), ValueToken('°'),
+                ValueToken('e'), ValueToken('\\'), ValueToken('li'),
+                ValueToken('°'), ValueToken('-'), ValueToken('ku')
+            ]),
         )),
     ]),
     ('1. me-°e\\li°-me-°e\\li°-ku', [
         TextLine('1.', (
-                Word('me-°e\\li°-me-°e\\li°-ku'),
+            Word('me-°e\\li°-me-°e\\li°-ku', parts=[
+                ValueToken('me'), ValueToken('-'), ValueToken('°'),
+                ValueToken('e'), ValueToken('\\'), ValueToken('li'),
+                ValueToken('°'), ValueToken('-'), ValueToken('me'),
+                ValueToken('-'), ValueToken('°'), ValueToken('e'),
+                ValueToken('\\'), ValueToken('li'), ValueToken('°'),
+                ValueToken('-'), ValueToken('ku')
+            ]),
         )),
     ]),
     ('1. sal →', [
-        TextLine('1.', (Word('sal'), LineContinuation('→')))
+        TextLine('1.', (Word('sal', parts=[ValueToken('sal')]),
+                        LineContinuation('→')))
     ]),
     ('2. sal →  ', [
-        TextLine('2.', (Word('sal'), LineContinuation('→')))
+        TextLine('2.', (Word('sal', parts=[ValueToken('sal')]),
+                        LineContinuation('→')))
     ]),
     ('1. [{(he-pi₂ e]š-šu₂)}', [
         TextLine('1.', (
-            BrokenAway('['), DocumentOrientedGloss('{('), Word('he-pi₂'),
-            Word('e]š-šu₂'), DocumentOrientedGloss(')}'))),
+            BrokenAway('['),
+            DocumentOrientedGloss('{('),
+            Word('he-pi₂', parts=[
+                ValueToken('he'), ValueToken('-'), ValueToken('pi₂')
+            ]),
+            Word('e]š-šu₂', parts=[
+                ValueToken('e]š'), ValueToken('-'), ValueToken('šu₂')
+            ]),
+            DocumentOrientedGloss(')}')
+        ))
     ]),
     ('1. [{iti}...]', [
         TextLine('1.', (
-            Word('[{iti}...]'),
+            Word('[{iti}...]', parts=[
+                ValueToken('['), ValueToken('{'), ValueToken('iti'),
+                ValueToken('}'), ValueToken('...'), ValueToken(']')
+            ]),
         ))
     ]),
     ('2. RA{k[i]}', [
-        TextLine('2.', (Word('RA{k[i]}'),))
+        TextLine('2.', (Word('RA{k[i]}', parts=[
+            ValueToken('RA'), ValueToken('{'), ValueToken('k[i'),
+            ValueToken(']'), ValueToken('}')
+        ]),))
     ]),
     ('2. in]-<(...)>', [
-        TextLine('2.', (Word('in]-<(...)>'), ))
+        TextLine('2.', (Word('in]-<(...)>', parts=[
+            ValueToken('in'), ValueToken(']'), ValueToken('-'),
+            ValueToken('<('), ValueToken('...'), ValueToken(')>')
+        ]), ))
 
     ]),
     ('2. ...{d}kur ... {d}kur', [
-        TextLine('2.', (Word('...{d}kur'),
-                        UnknownNumberOfSigns('...'),
-                        Word('{d}kur')))
+        TextLine('2.', (
+            Word('...{d}kur', parts=[
+                ValueToken('...'), ValueToken('{'), ValueToken('d'),
+                ValueToken('}'), ValueToken('kur')
+            ]),
+            UnknownNumberOfSigns('...'),
+            Word('{d}kur', parts=[
+                ValueToken('{'), ValueToken('d'), ValueToken('}'),
+                ValueToken('kur')
+            ])
+        ))
     ]),
     ('2. kur{d}... kur{d} ...', [
-        TextLine('2.', (Word('kur{d}...'),
-                        Word('kur{d}'),
-                        UnknownNumberOfSigns('...')))
+        TextLine('2.', (
+            Word('kur{d}...', parts=[
+                ValueToken('kur'), ValueToken('{'), ValueToken('d'),
+                ValueToken('}'), ValueToken('...')
+            ]),
+            Word('kur{d}', parts=[
+                ValueToken('kur'), ValueToken('{'), ValueToken('d'),
+                ValueToken('}'),
+            ]),
+            UnknownNumberOfSigns('...')
+        ))
     ]),
     ('1. mu-un;-e₃ ;', [
-        TextLine('1.', (Word('mu-un;-e₃'), Divider(';')))
+        TextLine('1.', (
+            Word('mu-un;-e₃', parts=[
+                ValueToken('mu'), ValueToken('-'), ValueToken('un'),
+                ValueToken(';'), ValueToken('-'), ValueToken('e₃')
+            ]),
+            Divider(';')
+        ))
     ])
 ])
 def test_parse_atf(parser, line, expected_tokens):
@@ -392,13 +582,14 @@ def test_parse_atf_invalid(parser):
 ])
 def test_parse_atf_language_shifts(parser, code, expected_language):
     word = 'ha-am'
+    parts = [ValueToken('ha'), ValueToken('-'), ValueToken('am')]
     line = f'1. {word} {code} {word} %sb {word}'
 
     expected = Text((
         TextLine('1.', (
-            Word(word, DEFAULT_LANGUAGE),
-            LanguageShift(code), Word(word, expected_language),
-            LanguageShift('%sb'), Word(word, Language.AKKADIAN)
+            Word(word, DEFAULT_LANGUAGE, parts=parts),
+            LanguageShift(code), Word(word, expected_language, parts=parts),
+            LanguageShift('%sb'), Word(word, Language.AKKADIAN, parts=parts)
         )),
     ))
 
@@ -417,10 +608,10 @@ def test_parse_atf_language_shifts(parser, code, expected_language):
     ('this is not valid\nthis is not valid', [1, 2])
 ])
 def test_invalid_atf(parser, atf, line_numbers):
-    with pytest.raises(TransliterationError) as excinfo:
+    with pytest.raises(TransliterationError) as exc_info:
         parser(atf)
 
-    assert_that(excinfo.value.errors, contains(*[has_entries({
+    assert_that(exc_info.value.errors, contains(*[has_entries({
         'description': starts_with('Invalid line'),
         'lineNumber': line_number
     }) for line_number in line_numbers]))

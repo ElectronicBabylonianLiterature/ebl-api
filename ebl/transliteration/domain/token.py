@@ -19,6 +19,12 @@ DEFAULT_NORMALIZED = False
 Partial = collections.namedtuple('Partial', 'start end')
 
 
+def convert_token_sequence(
+        tokens: Sequence['ValueToken']
+) -> Tuple['ValueToken', ...]:
+    return tuple(tokens)
+
+
 class Side(Enum):
     LEFT = auto()
     CENTER = auto()
@@ -95,6 +101,9 @@ class Word(ValueToken):
     unique_lemma: Tuple[WordId, ...] = tuple()
     erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
+    parts: Sequence[ValueToken] = attr.ib(default=tuple(),
+                                          kw_only=True,
+                                          converter=convert_token_sequence)
 
     @property
     def lemmatizable(self) -> bool:
@@ -191,20 +200,24 @@ class Word(ValueToken):
             'language': self.language.name,
             'lemmatizable': self.lemmatizable,
             'erasure': self.erasure.name,
-            'alignment': self.alignment
+            'alignment': self.alignment,
+            'parts': [token.to_dict() for token in self.parts]
         }, lambda value: value is None)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class LoneDeterminative(Word):
-    _partial: Partial = Partial(False, False)
+    _partial: Partial = attr.ib(default=Partial(False, False), kw_only=True)
 
     @staticmethod
     def of_value(value: str,
                  partial: Partial,
-                 erasure: ErasureState = ErasureState.NONE) -> \
-            'LoneDeterminative':
-        return LoneDeterminative(value, erasure=erasure, partial=partial)
+                 erasure: ErasureState = ErasureState.NONE,
+                 parts=tuple()) -> 'LoneDeterminative':
+        return LoneDeterminative(value,
+                                 erasure=erasure,
+                                 partial=partial,
+                                 parts=parts)
 
     @property
     def lemmatizable(self) -> bool:
@@ -428,6 +441,15 @@ class Variant(Token):
             **super().to_dict(),
             'type': 'Variant',
             'tokens': [token.to_dict() for token in self.tokens]
+        }
+
+
+@attr.s(frozen=True)
+class Joiner(ValueToken):
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Joiner'
         }
 
 

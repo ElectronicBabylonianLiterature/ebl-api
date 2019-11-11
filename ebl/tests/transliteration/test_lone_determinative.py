@@ -25,10 +25,18 @@ def test_of_value():
 ])
 def test_lone_determinative(language, normalized, partial):
     value = '{mu}'
+    parts = [ValueToken('{'), ValueToken('mu'), ValueToken('}')]
     lone_determinative =\
-        LoneDeterminative(value, language, normalized, partial=partial)
+        LoneDeterminative(
+            value,
+            language,
+            normalized,
+            partial=partial,
+            parts=parts
+        )
 
-    equal = LoneDeterminative(value, language, normalized, partial=partial)
+    equal = LoneDeterminative(value, language, normalized, partial=partial,
+                              parts=parts)
     other_language = LoneDeterminative(value, Language.UNKNOWN, normalized)
     other_value = LoneDeterminative('{bu}', language, normalized)
     other_normalized =\
@@ -50,7 +58,8 @@ def test_lone_determinative(language, normalized, partial):
         'language': lone_determinative.language.name,
         'lemmatizable': lone_determinative.lemmatizable,
         'partial': list(partial),
-        'erasure': ErasureState.NONE.name
+        'erasure': ErasureState.NONE.name,
+        'parts': [part.to_dict() for part in parts],
     }
 
     assert lone_determinative == equal

@@ -14,7 +14,7 @@ from ebl.transliteration.domain.token import BrokenAway, \
     DocumentOrientedGloss, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
-    OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, ValueToken, \
+    OmissionOrRemoval, PerhapsBrokenAway, Side, ValueToken, \
     Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, \
     Column, Variant
 from ebl.transliteration.domain.transliteration_error import \
@@ -23,14 +23,18 @@ from ebl.transliteration.domain.transliteration_error import \
 
 class TreeToWord(Transformer):
     def lone_determinative(self, tokens):
-        return LoneDeterminative(''.join(
-            token.value for token in tokens
-        ))
+        return self._create_word(LoneDeterminative, tokens)
 
     def word(self, tokens):
-        return Word(''.join(
+        return self._create_word(Word, tokens)
+
+    @staticmethod
+    def _create_word(word_class, tokens):
+        value = ''.join(
             token.value for token in tokens
-        ))
+        )
+        parts = [ValueToken(token.value) for token in tokens]
+        return word_class(value, parts=parts)
 
 
 class TreeToErasure(TreeToWord):
@@ -130,17 +134,6 @@ class TreeToLine(TreeToErasure):
     def unknown_number_of_signs(self, value):
         return UnknownNumberOfSigns(str(value))
 
-    @v_args(inline=True)
-    def lone_determinative_complex(self, prefix, lone_determinative, suffix):
-        return pydash.flatten([
-            prefix.children,
-            LoneDeterminative.of_value(
-                lone_determinative.value,
-                Partial(start=len(prefix.children) > 0,
-                        end=len(suffix.children) > 0)),
-            suffix.children
-        ])
-
     def line_continuation(self, _):
         return LineContinuation('→')
 
@@ -169,7 +162,8 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def variant_part(self, part):
-        return Word(str(part))
+        value = str(part)
+        return Word(value, parts=[ValueToken(value)])
 
 
 WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')
