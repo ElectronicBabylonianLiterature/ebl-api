@@ -32,21 +32,6 @@ class TreeToWord(Transformer):
             token.value for token in tokens
         ))
 
-    def left_partial_word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
-    def right_partial_word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
-    def partial_word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
 
 class TreeToErasure(TreeToWord):
     def erasure(self, tokens):
