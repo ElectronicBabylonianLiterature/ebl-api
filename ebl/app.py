@@ -48,7 +48,7 @@ def set_sentry_user(id_: str) -> None:
 
 def create_context():
     client = MongoClient(os.environ['MONGODB_URI'])
-    database = client.get_database()
+    database = client.get_database(os.environ.get('MONGODB_DB'))
     auth_backend = Auth0Backend(
         decode_certificate(os.environ['AUTH0_PEM']),
         os.environ['AUTH0_AUDIENCE'],

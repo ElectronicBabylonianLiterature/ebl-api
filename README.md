@@ -41,6 +41,7 @@ AUTH0_AUDIENCE=<the Auth0 API identifier>
 AUTH0_ISSUER=<the Auth0 application domain>
 AUTH0_PEM=<base64 encoded PEM certificate from the Auth0 application found under advanced settings>
 MONGODB_URI=<MongoDB connection URI with database>
+MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
 SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
 # If NewRelic is used:
