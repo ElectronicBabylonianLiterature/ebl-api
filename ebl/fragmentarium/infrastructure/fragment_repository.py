@@ -149,9 +149,11 @@ class MongoFragmentRepository(FragmentRepository):
         if not number:
             return None
         else:
-            next = self._collection.find_many({'_id': {'$gt': f'{number}'}})\
+            next = self._collection\
+                .find_many({'_id': {'$gt': f'{number}'}})\
                 .sort('_id', 1).limit(1)
-            previous = self._collection.find_many({'_id': {'$lt': f'{number}'}})\
+            previous = self._collection\
+                .find_many({'_id': {'$lt': f'{number}'}})\
                 .sort('_id', -1).limit(1)
 
             def get_numbers(cursor):

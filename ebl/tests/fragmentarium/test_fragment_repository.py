@@ -346,7 +346,8 @@ def test_update_update_references(fragment_repository):
       'next': {'fragmentNumber': '1841-07-26, 63'}}),
     ('', None)
 ])
-def test_query_next_and_previous_fragment(query, expected,fragment_repository):
+def test_query_next_and_previous_fragment(query, expected,
+                                          fragment_repository):
     fragments = []
     fragments.append(FragmentFactory.build(number='1841-07-26, 57'))
     fragments.append(FragmentFactory.build(number='1841-07-26, 63'))
@@ -359,4 +360,3 @@ def test_query_next_and_previous_fragment(query, expected,fragment_repository):
         query_next_and_previous_fragment(query)
 
     assert results == expected
-
