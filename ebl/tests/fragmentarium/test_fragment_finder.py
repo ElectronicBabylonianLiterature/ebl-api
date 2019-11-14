@@ -79,12 +79,6 @@ def test_folio_pager(fragment_finder, fragment_repository, when):
         expected
 
 
-def test_query_next_and_previous_folio(fragment_finder, fragment_repository):
-    number = '1851-01-01, 132'
-    results = fragment_repository\
-        .query_next_and_previous_fragment(number)
-
-
 def test_search(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
     query = fragment.number
