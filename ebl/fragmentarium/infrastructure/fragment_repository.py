@@ -92,33 +92,25 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
-        base_pipeline = [
-            {'$match': {'folios.name': folio_name}},
-            {'$unwind': '$folios'},
-            {'$project': {
-                'name': '$folios.name',
-                'number': '$folios.number',
-                'key': {'$concat': ['$folios.number', '-', '$_id']}
-            }},
-            {'$match': {'name': folio_name}},
-        ]
-        ascending = [
-            {'$sort': {'key': 1}},
-            {'$limit': 1}
-        ]
-        descending = [
-            {'$sort': {'key': -1}},
-            {'$limit': 1}
-        ]
+        sort_ascending = {'$sort': {'key': 1}}
+        sort_descending = {'$sort': {'key': -1}}
 
-        def create_query(*parts):
+        def create_pipeline(*parts):
             return [
-                *base_pipeline,
-                *parts
+                {'$match': {'folios.name': folio_name}},
+                {'$unwind': '$folios'},
+                {'$project': {
+                    'name': '$folios.name',
+                    'number': '$folios.number',
+                    'key': {'$concat': ['$folios.number', '-', '$_id']}
+                }},
+                {'$match': {'name': folio_name}},
+                *parts,
+                {'$limit': 1}
             ]
 
-        def get_numbers(query):
-            cursor = self._collection.aggregate(query)
+        def get_numbers(pipeline):
+            cursor = self._collection.aggregate(pipeline)
             if cursor.alive:
                 entry = cursor.next()
                 return {
@@ -128,16 +120,16 @@ class MongoFragmentRepository(FragmentRepository):
             else:
                 return None
 
-        first = create_query(*ascending)
-        previous = create_query(
+        first = create_pipeline(sort_ascending)
+        previous = create_pipeline(
             {'$match': {'key': {'$lt': f'{folio_number}-{number}'}}},
-            *descending
+            sort_descending
         )
-        next_ = create_query(
+        next_ = create_pipeline(
             {'$match': {'key': {'$gt': f'{folio_number}-{number}'}}},
-            *ascending
+            sort_ascending
         )
-        last = create_query(*descending)
+        last = create_pipeline(sort_descending)
 
         return {
             'previous': get_numbers(previous) or get_numbers(last),
