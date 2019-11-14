@@ -64,6 +64,11 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def query_next_and_previous_fragment(self,
+                                         number: FragmentNumber) -> dict:
+        ...
+
+    @abstractmethod
     def query_lemmas(self, word: str) -> List[List[dict]]:
         ...
 

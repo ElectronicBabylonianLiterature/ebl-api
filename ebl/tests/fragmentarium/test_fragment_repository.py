@@ -332,3 +332,31 @@ def test_update_update_references(fragment_repository):
         fragment_repository.update_references(
             transliterated_fragment
         )
+
+
+@pytest.mark.parametrize("query, expected", [
+    ('1841-07-26, 63',
+     {'previous': {'fragmentNumber': '1841-07-26, 57'},
+      'next': {'fragmentNumber': '1841-07-26, 64'}}),
+    ('1841-07-26, 64',
+     {'previous': {'fragmentNumber': '1841-07-26, 63'},
+      'next': {'fragmentNumber': '1841-07-26, 57'}}),
+    ('1841-07-26, 57',
+     {'previous': {'fragmentNumber': '1841-07-26, 64'},
+      'next': {'fragmentNumber': '1841-07-26, 63'}}),
+    ('', None)
+])
+def test_query_next_and_previous_fragment(query, expected,fragment_repository):
+    fragments = []
+    fragments.append(FragmentFactory.build(number='1841-07-26, 57'))
+    fragments.append(FragmentFactory.build(number='1841-07-26, 63'))
+    fragments.append(FragmentFactory.build(number='1841-07-26, 64'))
+
+    for fragment in fragments:
+        fragment_repository.create(fragment)
+
+    results = fragment_repository.\
+        query_next_and_previous_fragment(query)
+
+    assert results == expected
+
