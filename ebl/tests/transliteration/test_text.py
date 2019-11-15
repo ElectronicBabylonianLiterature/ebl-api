@@ -19,7 +19,9 @@ from ebl.transliteration.domain.token import BrokenAway, Erasure, \
     PerhapsBrokenAway, Side, Word, ValueToken
 
 LINES: Tuple[Line, ...] = (
-    TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),
+    TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am', parts=[
+        ValueToken('ha'), ValueToken('-'), ValueToken('am')
+    ])]),
     ControlLine.of_single('$', ValueToken(' single ruling'))
 )
 PARSER_VERSION = '1.0.0'
@@ -71,7 +73,9 @@ def test_update_lemmatization():
 
     expected = Text((
         TextLine('1.', (
-            Word('ha-am', unique_lemma=(WordId('nu I'),)),
+            Word('ha-am', unique_lemma=(WordId('nu I'),), parts=[
+                ValueToken('ha'), ValueToken('-'), ValueToken('am')
+            ]),
         )),
         ControlLine('$', (ValueToken(' single ruling'), )),
     ), TEXT.parser_version)
@@ -143,19 +147,43 @@ def test_update_lemmatization_wrong_lines():
     ), (
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('nu', unique_lemma=(WordId('nu I'),)),
-                Word('nu', unique_lemma=(WordId('nu I'),))
+                Word('nu', unique_lemma=(WordId('nu I'),), parts=[]),
+                Word('nu', unique_lemma=(WordId('nu I'),), parts=[])
             ])
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu'), Word('nu')
+                Word('mu', parts=[ValueToken('mu')]),
+                Word('nu', parts=[ValueToken('nu')])
             ])
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu'),
-                Word('nu', unique_lemma=(WordId('nu I'),))
+                Word('mu', parts=[ValueToken('mu')]),
+                Word('nu', unique_lemma=(WordId('nu I'),),
+                     parts=[ValueToken('nu')])
+            ])
+        ])
+    ), (
+        Text.of_iterable([
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                Word('nu', unique_lemma=(WordId('nu I'),),
+                     parts=[ValueToken('nu')]),
+                Word('nu', unique_lemma=(WordId('nu I'),),
+                     parts=[ValueToken('nu')])
+            ])
+        ]),
+        Text.of_iterable([
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                Word('mu', parts=[ValueToken('mu')]),
+                Word('nu', parts=[ValueToken('nu')])
+            ])
+        ]),
+        Text.of_iterable([
+            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
+                Word('mu', parts=[ValueToken('mu')]),
+                Word('nu', unique_lemma=(WordId('nu I'),),
+                     parts=[ValueToken('nu')])
             ])
         ])
     ), (
@@ -163,13 +191,21 @@ def test_update_lemmatization_wrong_lines():
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('[ku-(nu)]',
                      unique_lemma=(WordId('kunu I'),),
-                     alignment=4),
+                     alignment=4,
+                     parts=[
+                        ValueToken('['), ValueToken('ku'), ValueToken('-'),
+                        ValueToken('('), ValueToken('nu'), ValueToken(')'),
+                        ValueToken(']')
+                     ]),
             ]),
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 BrokenAway('['),
-                Word('ku-(nu'),
+                Word('ku-(nu', parts=[
+                    ValueToken('ku'), ValueToken('-'), ValueToken('('),
+                    ValueToken('nu')
+                 ]),
                 PerhapsBrokenAway(')'),
                 BrokenAway(']')
             ]),
@@ -179,7 +215,11 @@ def test_update_lemmatization_wrong_lines():
                 BrokenAway('['),
                 Word('ku-(nu',
                      unique_lemma=(WordId('kunu I'),),
-                     alignment=4),
+                     alignment=4,
+                     parts=[
+                         ValueToken('ku'), ValueToken('-'), ValueToken('('),
+                         ValueToken('nu')
+                     ]),
                 PerhapsBrokenAway(')'),
                 BrokenAway(']')
             ])

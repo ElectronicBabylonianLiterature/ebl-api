@@ -132,6 +132,10 @@ class Word(ValueToken):
         )
 
     @property
+    def parts(self) -> Sequence[Token]:
+        return self._parts
+
+    @property
     def partial(self) -> Partial:
         partials = [*atf.JOINERS, atf.UNKNOWN_NUMBER_OF_SIGNS]
         return Partial(
@@ -181,8 +185,8 @@ class Word(ValueToken):
         return attr.evolve(self, alignment=None)
 
     def merge(self, token: Token) -> Token:
-        is_compatible = type(token) == Word and \
-                        clean_word(self.value) == clean_word(token.value)
+        same_value = clean_word(self.value) == clean_word(token.value)
+        is_compatible = type(token) == Word and same_value
 
         result = token
         if is_compatible and token.lemmatizable:

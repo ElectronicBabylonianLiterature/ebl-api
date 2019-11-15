@@ -98,9 +98,10 @@ LINE = Line(LINE_NUMBER, LINE_RECONSTRUCTION,
                  (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
                   ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE))),
             Line(LINE_NUMBER, LINE_RECONSTRUCTION,
-                 (ManuscriptLine(MANUSCRIPT_ID, LABELS,
+                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
+                  ManuscriptLine(MANUSCRIPT_ID, LABELS,
                                  TEXT_LINE.merge(NEW_TEXT_LINE)),
-                  ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE)))
+                  ))
     )
 ])
 def test_merge_line(old, new, expected):
@@ -124,6 +125,8 @@ NEW_ORDER = 2
 NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator='b')
 NEW_LINE = Line(LINE_NUMBER, LINE_RECONSTRUCTION,
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),))
+OLD_LINE = Line(LineNumberLabel("1'"), tuple(),
+                (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),))
 
 
 @pytest.mark.parametrize('old,new,expected', [
@@ -150,7 +153,8 @@ NEW_LINE = Line(LINE_NUMBER, LINE_RECONSTRUCTION,
             Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
                     (MANUSCRIPT,), (NEW_LINE, NEW_LINE)),
             Chapter(CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER,
-                    (MANUSCRIPT,), (LINE.merge(NEW_LINE), NEW_LINE)),
+                    (MANUSCRIPT,), (OLD_LINE.merge(NEW_LINE),
+                                    LINE.merge(NEW_LINE))),
     )
 ])
 def test_merge_chapter(old, new, expected):

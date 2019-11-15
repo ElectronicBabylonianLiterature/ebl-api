@@ -1,5 +1,6 @@
 import difflib
 from functools import reduce
+from queue import SimpleQueue, Empty
 from typing import (Callable, Generic, Iterator, List, Mapping, Optional,
                     Sequence, TypeVar)
 
@@ -15,7 +16,7 @@ class Merge(Generic[T]):
         self._old: Sequence[T] = old
         self._new: Sequence[T] = new
         self._result: List[T] = []
-        self._old_line: Optional[T] = None
+        self._old_line: SimpleQueue[T] = SimpleQueue()
 
     @property
     def current_new(self) -> T:
@@ -29,17 +30,19 @@ class Merge(Generic[T]):
     def result(self) -> List[T]:
         return self._result
 
-    @property
-    def previous_old(self) -> Optional[T]:
-        return self._old_line
+    def get_previous_old(self) -> Optional[T]:
+        try:
+            return self._old_line.get_nowait()
+        except Empty:
+            return None
 
     def _advance_new(self) -> None:
         self._new = self._new[1:]
-        self._old_line = None
+        # self._old_line = None
 
     def _advance_old(self, save_old_line: bool) -> None:
         if save_old_line:
-            self._old_line = self.current_old
+            self._old_line.put(self.current_old)
         self._old = self._old[1:]
 
     def _append(self, entry: T) -> None:
@@ -78,9 +81,10 @@ class Merger(Generic[T]):
         self._inner_merge: InnerMerge[T] = inner_merge
 
     def _add_entry(self, state: Merge[T]) -> Merge[T]:
+        previous_old = state.get_previous_old()
         new_entry = (
-            self._inner_merge(state.previous_old, state.current_new)
-            if self._inner_merge is not None and state.previous_old is not None
+            self._inner_merge(previous_old, state.current_new)
+            if self._inner_merge is not None and previous_old is not None
             else state.current_new
         )
         return state.add(new_entry)

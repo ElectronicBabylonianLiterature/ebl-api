@@ -188,9 +188,13 @@ def test_set_alignment_invalid(word, value):
 
 
 @pytest.mark.parametrize('old,new,expected', [
-    (Word('bu', alignment=1),
+    (Word('bu', alignment=1, parts=[ValueToken('bu')]),
      UnknownNumberOfSigns('...'),
      UnknownNumberOfSigns('...')),
+    (Word('nu', unique_lemma=(WordId('nu I'),), parts=[]),
+     Word('nu', parts=[ValueToken('nu')]),
+     Word('nu', unique_lemma=(WordId('nu I'),),
+          parts=[ValueToken('nu')])),
     (Word('bu', alignment=1, unique_lemma=(WordId('nu I'),)),
      Word('bu', parts=[ValueToken('bu')]),
      Word('bu', alignment=1, unique_lemma=(WordId('nu I'),),
@@ -204,10 +208,10 @@ def test_set_alignment_invalid(word, value):
     (Word('bu', alignment=1, parts=[ValueToken('bu')]),
      Word('bu#!?*', parts=[ValueToken('bu#!?*')]),
      Word('bu#!?*', alignment=1, parts=[ValueToken('bu#!?*')])),
-    (Word('bu', unique_lemma=(WordId('nu I'),)),
+    (Word('bu', unique_lemma=(WordId('nu I'),), parts=[ValueToken('bu')]),
      Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')]),
      Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')])),
-    (Word('bu', alignment=1),
+    (Word('bu', alignment=1, parts=[ValueToken('bu')]),
      Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')]),
      Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')])),
 ])
