@@ -1,6 +1,6 @@
 # Electronic Babylonian Literature API
 
-[![Codeship Status for ElectronicBabylonianLiterature/dictionary](https://app.codeship.com/projects/6f47f4c0-454f-0136-5732-46084bd8d3ec/status?branch=master)](https://app.codeship.com/projects/291865)
+[![Build Status](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api.svg?branch=master)](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
 
