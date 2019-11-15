@@ -1,4 +1,6 @@
 import pytest
+from lark import ParseError
+from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.token import LoneDeterminative, Word, \
@@ -274,7 +276,7 @@ def test_lone_determinative(parser, atf, expected):
     '{udu}?'
 ])
 def test_invalid_lone_determinative(parser, atf):
-    with pytest.raises(Exception):
+    with pytest.raises(UnexpectedInput):
         parser(atf)
 
 
@@ -289,8 +291,9 @@ def test_invalid_lone_determinative(parser, atf):
     'k[a]?',
     ':-sal',
     'gam/:'
-    '//sal'
+    '//sal',
+    'Š[A₃?...]'
 ])
 def test_invalid(parser, atf):
-    with pytest.raises(Exception):
+    with pytest.raises((UnexpectedInput, ParseError)):
         parser(atf)

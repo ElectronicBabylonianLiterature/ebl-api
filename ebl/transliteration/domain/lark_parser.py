@@ -1,6 +1,6 @@
 import attr
 import pydash
-from lark.exceptions import UnexpectedInput
+from lark.exceptions import UnexpectedInput, ParseError
 from lark.lark import Lark
 from lark.lexer import Token
 from lark.tree import Tree
@@ -197,6 +197,11 @@ def parse_atf_lark(atf):
             return (None,  {
                 'description': (description + context[0] + '\n' +
                                 len(description)*' ' + context[1]),
+                'lineNumber': line_number + 1
+            })
+        except ParseError as ex:
+            return (None,  {
+                'description': f'Invalid line: {ex}',
                 'lineNumber': line_number + 1
             })
 

@@ -49,7 +49,7 @@ class State:
             number = (fragment.number
                       if index == 0 else
                       len(fragment.number) * ' ')
-            self.errors.append(f'{number}\t{atf}')
+            self.errors.append(f'{number}\t{atf}\t{error}')
 
     def to_tsv(self):
         return '\n'.join([
