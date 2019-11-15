@@ -18,7 +18,7 @@ deploy:
   provider: heroku
   edge: true
 after_deploy:
-- wget --no-check-certificate --output-document=/dev/null https://api.ebabylon.org/statistics
+- wget --no-check-certificate --output-document=/dev/null https://api.ebabylon.org/xxx
 notifications:
   slack:
     secure: Uta5GfEtMLHux2hEuLrDFk0FrZdpkO68JplQ20SdnKvLmPs4hjGhDtw89WHGcPVzCK3wolzZyg3vk0YthMQU8naiTxZ3O2pi39ff3jTY7IDx1UzNT7EH2d/72fl8uIGHciGvZteIKmNnyaRdTpl1zFtvUWFLJqZm5cONtJ7rQdsMGGUygcwHVR6GNbKQnZY8oLNHYjV3oe3PfRZnqbzRTIbqXyz9TeW832fi58EyUUl31ERvMOltZTxKOGIazqEmn6Ei1sRygqL0VC2V5sDZDuM1ih+sTxwUL3vUQPEp22lhNigOTCy8ZGALGfXgO/5ziiAmQ4XbIzxsWuLF3x2QqrUKNpiEnbn/6HPJPvfdwiW4SKqYWlHrESyL1UTtzwUBnoIrQpGLKlss4a7ZW43CybBm7VbpSKmRGdcZ9Dw3VoGcJ+gQ4AQ/UEyxg+vQZT2zwVycYNpDulhTAe1omj95K+YulmMQiomsA9w7DADDJ09eOR0sCXCvonYAXKvKmQHXNIL+zTVwdiqs/c61ZXghPAawoW9LlR8O8f6EPRF2v+qE5YrRq4tOaUqcCT3NuUIfkPYxw6W3oN6rYVOwLogyvy7piT2DRyU8IzsuniFRQzec34ij6oHHbjFE/BK+u7woaVU3o2SP0Eq0I242FIzICONN8gnWucPzzBBiRWhRhHQ=
