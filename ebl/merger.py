@@ -8,7 +8,7 @@ import pydash
 
 T = TypeVar('T')
 DiffMapping = Callable[[T], str]
-InnerMerge = Optional[Callable[[T, T], T]]
+InnerMerge = Callable[[T, T], T]
 
 
 class Merge(Generic[T]):
@@ -59,12 +59,16 @@ class Merge(Generic[T]):
         return self
 
 
+def take_new(_: T, new: T) -> T:
+    return new
+
+
 class Merger(Generic[T]):
 
     def __init__(
             self,
             map_: DiffMapping[T],
-            inner_merge: InnerMerge[T] = None
+            inner_merge: Optional[InnerMerge[T]] = None
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             '- ': lambda state: state.delete(),
@@ -73,16 +77,18 @@ class Merger(Generic[T]):
             '? ': pydash.identity
         }
         self._map: DiffMapping[T] = map_
-        self._inner_merge: InnerMerge[T] = inner_merge
+        self._merge_strategy: InnerMerge[T] = inner_merge or take_new
 
     def _add_entry(self, state: Merge[T]) -> Merge[T]:
-        previous_old = state.pop_edited()
-        new_entry = (
-            self._inner_merge(previous_old, state.current_new)
-            if self._inner_merge is not None and previous_old is not None
-            else state.current_new
-        )
+        new_entry = self._inner_merge(state.pop_edited(), state.current_new)
         return state.add(new_entry)
+
+    def _inner_merge(self, old: Optional[T], new: T) -> T:
+        return (
+            self._merge_strategy(old, new)
+            if old is not None
+            else new
+        )
 
     def _diff(self, old: Sequence[T], new: Sequence[T]) -> Iterator[str]:
         return difflib.ndiff(
