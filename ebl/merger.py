@@ -1,8 +1,8 @@
 import difflib
+from collections import deque
 from functools import reduce
-from queue import SimpleQueue, Empty
 from typing import (Callable, Generic, Iterator, List, Mapping, Optional,
-                    Sequence, TypeVar)
+                    Sequence, TypeVar, Deque)
 
 import pydash
 
@@ -13,37 +13,33 @@ InnerMerge = Optional[Callable[[T, T], T]]
 
 class Merge(Generic[T]):
     def __init__(self, old: Sequence[T], new: Sequence[T]) -> None:
-        self._old: Sequence[T] = old
-        self._new: Sequence[T] = new
-        self._result: List[T] = []
-        self._old_line: SimpleQueue[T] = SimpleQueue()
+        self._old: Deque[T] = deque(old)
+        self._new: Deque[T] = deque(new)
+        self._result: Deque[T] = deque()
+        self._edited: Deque[T] = deque()
 
     @property
     def current_new(self) -> T:
         return self._new[0]
 
     @property
-    def current_old(self) -> T:
-        return self._old[0]
-
-    @property
     def result(self) -> List[T]:
-        return self._result
+        return list(self._result)
 
-    def get_previous_old(self) -> Optional[T]:
+    def pop_edited(self) -> Optional[T]:
         try:
-            return self._old_line.get_nowait()
-        except Empty:
+            return self._edited.popleft()
+        except IndexError:
             return None
 
     def _advance_new(self) -> None:
-        self._new = self._new[1:]
-        # self._old_line = None
+        self._new.popleft()
 
-    def _advance_old(self, save_old_line: bool) -> None:
-        if save_old_line:
-            self._old_line.put(self.current_old)
-        self._old = self._old[1:]
+    def _advance_old(self, is_edited: bool) -> T:
+        old = self._old.popleft()
+        if is_edited:
+            self._edited.append(old)
+        return old
 
     def _append(self, entry: T) -> None:
         self._result.append(entry)
@@ -53,8 +49,7 @@ class Merge(Generic[T]):
         return self
 
     def keep(self) -> 'Merge':
-        self._append(self.current_old)
-        self._advance_old(False)
+        self._append(self._advance_old(False))
         self._advance_new()
         return self
 
@@ -81,7 +76,7 @@ class Merger(Generic[T]):
         self._inner_merge: InnerMerge[T] = inner_merge
 
     def _add_entry(self, state: Merge[T]) -> Merge[T]:
-        previous_old = state.get_previous_old()
+        previous_old = state.pop_edited()
         new_entry = (
             self._inner_merge(previous_old, state.current_new)
             if self._inner_merge is not None and previous_old is not None
