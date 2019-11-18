@@ -24,6 +24,7 @@ def test_line():
 
     assert line.prefix == prefix
     assert line.content == (token, )
+    assert line.key == f'{line.atf}⁞{token.get_key()}'
     assert line.atf == '*value'
 
 
@@ -32,6 +33,7 @@ def test_empty_line():
 
     assert line.prefix == ''
     assert line.content == tuple()
+    assert line.key == ''
     assert line.atf == ''
 
 
@@ -70,8 +72,9 @@ def test_line_of_iterable(code, language, normalized):
 
     assert line.prefix == LINE_NUMBER.to_atf()
     assert line.line_number == LINE_NUMBER
-
-    assert line == TextLine(LINE_NUMBER.to_atf(), expected_tokens)
+    assert line.content == expected_tokens
+    assert line.key == '⁞'.join([str(line.atf)] +
+                                [token.get_key() for token in expected_tokens])
     assert line.atf == f'1. first {code} second %sb {{third}}'
 
 

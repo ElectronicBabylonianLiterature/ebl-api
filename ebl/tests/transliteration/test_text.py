@@ -190,7 +190,7 @@ def test_merge(old: Text, new: Text, expected: Text) -> None:
     new_version = f'{old.parser_version}-test'
     assert old.merge(
         new.set_parser_version(new_version)
-    ).to_dict() == expected.set_parser_version(new_version).to_dict()
+    ) == expected.set_parser_version(new_version)
 
 
 @pytest.mark.parametrize('lines', [

@@ -57,6 +57,14 @@ class Token(ABC):
     def alignable(self) -> bool:
         return self.lemmatizable
 
+    @property
+    def parts(self) -> Sequence['Token']:
+        return tuple()
+
+    def get_key(self, delimiter: str = '⁝') -> str:
+        parts = [part.get_key('⁚') for part in self.parts]
+        return delimiter.join([type(self).__name__, self.value] + parts)
+
     def set_unique_lemma(
             self,
             lemma: LemmatizationToken
@@ -101,9 +109,9 @@ class Word(ValueToken):
     unique_lemma: Tuple[WordId, ...] = tuple()
     erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
-    parts: Sequence[ValueToken] = attr.ib(default=tuple(),
-                                          kw_only=True,
-                                          converter=convert_token_sequence)
+    _parts: Sequence[ValueToken] = attr.ib(default=tuple(),
+                                           kw_only=True,
+                                           converter=convert_token_sequence)
 
     @property
     def lemmatizable(self) -> bool:
@@ -173,9 +181,8 @@ class Word(ValueToken):
         return attr.evolve(self, alignment=None)
 
     def merge(self, token: Token) -> Token:
-        clean_values_are_equal =\
-            clean_word(self.value) == clean_word(token.value)
-        is_compatible = type(token) == Word and clean_values_are_equal
+        is_compatible = type(token) == Word and \
+                        clean_word(self.value) == clean_word(token.value)
 
         result = token
         if is_compatible and token.lemmatizable:

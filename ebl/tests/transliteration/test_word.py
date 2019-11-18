@@ -38,6 +38,8 @@ def test_defaults():
     word = Word(value)
 
     assert word.value == value
+    assert word.get_key() == f'Word⁝{value}'
+    assert word.parts == tuple()
     assert word.lemmatizable is True
     assert word.language == DEFAULT_LANGUAGE
     assert word.normalized is DEFAULT_NORMALIZED
@@ -72,6 +74,9 @@ def test_word(language, normalized, unique_lemma):
                          ErasureState.ERASED)
 
     assert word.value == value
+    assert word.get_key() == \
+        f'{"⁝".join(["Word", value] + [part.get_key("⁚") for part in parts])}'
+    assert word.parts == tuple(parts)
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
