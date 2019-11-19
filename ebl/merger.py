@@ -1,46 +1,45 @@
 import difflib
+from collections import deque
 from functools import reduce
 from typing import (Callable, Generic, Iterator, List, Mapping, Optional,
-                    Sequence, TypeVar)
+                    Sequence, TypeVar, Deque)
 
 import pydash
 
 T = TypeVar('T')
 DiffMapping = Callable[[T], str]
-InnerMerge = Optional[Callable[[T, T], T]]
+InnerMerge = Callable[[T, T], T]
 
 
 class Merge(Generic[T]):
     def __init__(self, old: Sequence[T], new: Sequence[T]) -> None:
-        self._old: Sequence[T] = old
-        self._new: Sequence[T] = new
-        self._result: List[T] = []
-        self._old_line: Optional[T] = None
+        self._old: Deque[T] = deque(old)
+        self._new: Deque[T] = deque(new)
+        self._result: Deque[T] = deque()
+        self._edited: Deque[T] = deque()
 
     @property
     def current_new(self) -> T:
         return self._new[0]
 
     @property
-    def current_old(self) -> T:
-        return self._old[0]
-
-    @property
     def result(self) -> List[T]:
-        return self._result
+        return list(self._result)
 
-    @property
-    def previous_old(self) -> Optional[T]:
-        return self._old_line
+    def pop_edited(self) -> Optional[T]:
+        try:
+            return self._edited.popleft()
+        except IndexError:
+            return None
 
     def _advance_new(self) -> None:
-        self._new = self._new[1:]
-        self._old_line = None
+        self._new.popleft()
 
-    def _advance_old(self, save_old_line: bool) -> None:
-        if save_old_line:
-            self._old_line = self.current_old
-        self._old = self._old[1:]
+    def _advance_old(self, is_edited: bool) -> T:
+        old = self._old.popleft()
+        if is_edited:
+            self._edited.append(old)
+        return old
 
     def _append(self, entry: T) -> None:
         self._result.append(entry)
@@ -50,8 +49,7 @@ class Merge(Generic[T]):
         return self
 
     def keep(self) -> 'Merge':
-        self._append(self.current_old)
-        self._advance_old(False)
+        self._append(self._advance_old(False))
         self._advance_new()
         return self
 
@@ -61,12 +59,16 @@ class Merge(Generic[T]):
         return self
 
 
+def take_new(_: T, new: T) -> T:
+    return new
+
+
 class Merger(Generic[T]):
 
     def __init__(
             self,
             map_: DiffMapping[T],
-            inner_merge: InnerMerge[T] = None
+            inner_merge: Optional[InnerMerge[T]] = None
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             '- ': lambda state: state.delete(),
@@ -75,15 +77,18 @@ class Merger(Generic[T]):
             '? ': pydash.identity
         }
         self._map: DiffMapping[T] = map_
-        self._inner_merge: InnerMerge[T] = inner_merge
+        self._merge_strategy: InnerMerge[T] = inner_merge or take_new
 
     def _add_entry(self, state: Merge[T]) -> Merge[T]:
-        new_entry = (
-            self._inner_merge(state.previous_old, state.current_new)
-            if self._inner_merge is not None and state.previous_old is not None
-            else state.current_new
-        )
+        new_entry = self._inner_merge(state.pop_edited(), state.current_new)
         return state.add(new_entry)
+
+    def _inner_merge(self, old: Optional[T], new: T) -> T:
+        return (
+            self._merge_strategy(old, new)
+            if old is not None
+            else new
+        )
 
     def _diff(self, old: Sequence[T], new: Sequence[T]) -> Iterator[str]:
         return difflib.ndiff(

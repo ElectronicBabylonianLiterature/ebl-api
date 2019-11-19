@@ -134,10 +134,10 @@ class Line:
 def map_line(line: Line) -> str:
     number = line.number.to_atf()
     reconstruction = ' '.join(str(token) for token in line.reconstruction)
-    lines = '⋮⋮'.join(
+    lines = '⁞'.join(
         map_manuscript_line(manuscript_line) for manuscript_line in
         line.manuscripts)
-    return f'{number}⋮⋮{reconstruction}⋮⋮{lines}'
+    return f'{number}⁞{reconstruction}⁞{lines}'
 
 
 @attr.s(auto_attribs=True, frozen=True)

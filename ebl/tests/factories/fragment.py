@@ -11,7 +11,7 @@ from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.token import BrokenAway, Word, \
     UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column, \
-    Variant
+    Variant, ValueToken
 
 
 class FragmentFactory(factory.Factory):
@@ -50,8 +50,14 @@ class TransliteratedFragmentFactory(FragmentFactory):
         TextLine("1'.", (
             Column(),
             Tabulation('($___$)'),
-            Word('[...-ku]-nu-ši'),
-            Variant.of(Divider(':'), Word('ku')),
+            Word('[...-ku]-nu-ši', parts=[
+                ValueToken('['), ValueToken('...'),
+                ValueToken('-'), ValueToken('ku'),
+                ValueToken(']'), ValueToken('-'),
+                ValueToken('nu'), ValueToken('-'),
+                ValueToken('ši')
+            ]),
+            Variant.of(Divider(':'), Word('ku', parts=[ValueToken('ku')])),
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
@@ -63,18 +69,22 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
-            Word('GI₆'),
-            Word('ana'),
-            Word('u₄-š[u'),
+            Word('GI₆', parts=[ValueToken('GI₆')]),
+            Word('ana', parts=[ValueToken('ana')]),
+            Word('u₄-š[u', parts=[ValueToken('u₄'), ValueToken('-'),
+                                  ValueToken('š[u')]),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
         )),
         TextLine("3'.", (
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
-            Word('k]i-du'),
-            Word('u'),
-            Word('ba-ma-t[i'),
+            Word('k]i-du', parts=[ValueToken('k]i'), ValueToken('-'),
+                                  ValueToken('du')]),
+            Word('u', parts=[ValueToken('u')]),
+            Word('ba-ma-t[i', parts=[ValueToken('ba'), ValueToken('-'),
+                                     ValueToken('ma'), ValueToken('-'),
+                                     ValueToken('t[i')]),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
         )),
@@ -82,12 +92,14 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
-            Word('x'),
-            Word('mu'),
-            Word('ta-ma-tu₂')
+            Word('x', parts=[ValueToken('x')]),
+            Word('mu', parts=[ValueToken('mu')]),
+            Word('ta-ma-tu₂', parts=[ValueToken('ta'), ValueToken('-'),
+                                     ValueToken('ma'), ValueToken('-'),
+                                     ValueToken('tu₂')])
         )),
         TextLine("7'.", (
-            Word('šu/|BI×IS|'),
+            Word('šu/|BI×IS|', parts=[ValueToken('šu/|BI×IS|')]),
         ))
     ))
     signs = (
@@ -109,8 +121,14 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             TextLine("1'.", (
                 Column(),
                 Tabulation('($___$)'),
-                Word('[...-ku]-nu-ši'),
-                Variant.of(Divider(':'), Word('ku')),
+                Word('[...-ku]-nu-ši', parts=[
+                    ValueToken('['), ValueToken('...'),
+                    ValueToken('-'), ValueToken('ku'),
+                    ValueToken(']'), ValueToken('-'),
+                    ValueToken('nu'), ValueToken('-'),
+                    ValueToken('ši')
+                ]),
+                Variant.of(Divider(':'), Word('ku', parts=[ValueToken('ku')])),
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
@@ -121,18 +139,28 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             TextLine("2'.", (
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
-                Word('GI₆', unique_lemma=(WordId('ginâ I'),)),
-                Word('ana', unique_lemma=(WordId('ana I'),)),
-                Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),)),
+                Word('GI₆', unique_lemma=(WordId('ginâ I'),),
+                     parts=[ValueToken('GI₆')]),
+                Word('ana', unique_lemma=(WordId('ana I'),),
+                     parts=[ValueToken('ana')]),
+                Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),),
+                     parts=[ValueToken('u₄'), ValueToken('-'),
+                            ValueToken('š[u')]),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
             )),
             TextLine("3'.", (
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
-                Word('k]i-du', unique_lemma=(WordId('kīdu I'),)),
-                Word('u', unique_lemma=(WordId('u I'),)),
-                Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),)),
+                Word('k]i-du', unique_lemma=(WordId('kīdu I'),), parts=[
+                    ValueToken('k]i'), ValueToken('-'), ValueToken('du')
+                ]),
+                Word('u', unique_lemma=(WordId('u I'),),
+                     parts=[ValueToken('u')]),
+                Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),), parts=[
+                    ValueToken('ba'), ValueToken('-'), ValueToken('ma'),
+                    ValueToken('-'), ValueToken('t[i')
+                ]),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
             )),
@@ -140,11 +168,15 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
-                Word('x'),
-                Word('mu', unique_lemma=(WordId('mu I'),)),
-                Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),))
+                Word('x', parts=[ValueToken('x')]),
+                Word('mu', unique_lemma=(WordId('mu I'),),
+                     parts=[ValueToken('mu')]),
+                Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),), parts=[
+                    ValueToken('ta'), ValueToken('-'), ValueToken('ma'),
+                    ValueToken('-'), ValueToken('tu₂')
+                ])
             )),
             TextLine("7'.", (
-                Word('šu/|BI×IS|'),
+                Word('šu/|BI×IS|', parts=[ValueToken('šu/|BI×IS|')]),
             ))
         ))

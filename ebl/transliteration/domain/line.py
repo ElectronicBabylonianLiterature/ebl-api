@@ -22,6 +22,11 @@ class Line:
     content: Tuple[Token, ...] = tuple()
 
     @property
+    def key(self) -> str:
+        tokens = [token.get_key() for token in self.content]
+        return '⁞'.join([str(self.atf)] + tokens)
+
+    @property
     def atf(self) -> Atf:
         content = WORD_SEPARATOR.join(
             token.value
@@ -122,7 +127,7 @@ class TextLine(Line):
     def merge(self, other: L) -> L:
         def merge_tokens():
             def map_(token):
-                return f'{type(token)}⋮{token.value}'
+                return token.get_key()
 
             def inner_merge(old: Token, new: Token) -> Token:
                 return old.merge(new)

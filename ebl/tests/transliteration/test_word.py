@@ -38,6 +38,8 @@ def test_defaults():
     word = Word(value)
 
     assert word.value == value
+    assert word.get_key() == f'Word⁝{value}'
+    assert word.parts == tuple()
     assert word.lemmatizable is True
     assert word.language == DEFAULT_LANGUAGE
     assert word.normalized is DEFAULT_NORMALIZED
@@ -55,11 +57,13 @@ def test_defaults():
     (Language.AKKADIAN, True, tuple())
 ])
 def test_word(language, normalized, unique_lemma):
-    value = 'value'
+    value = 'ku'
+    parts = [ValueToken('ku')]
     erasure = ErasureState.NONE
-    word = Word(value, language, normalized, unique_lemma, erasure)
+    word = Word(value, language, normalized, unique_lemma, erasure,
+                parts=parts)
 
-    equal = Word(value, language, normalized, unique_lemma)
+    equal = Word(value, language, normalized, unique_lemma, parts=parts)
     other_language = Word(value, Language.UNKNOWN, normalized, unique_lemma)
     other_value = Word('other value', language, normalized, unique_lemma)
     other_unique_lemma =\
@@ -70,6 +74,9 @@ def test_word(language, normalized, unique_lemma):
                          ErasureState.ERASED)
 
     assert word.value == value
+    assert word.get_key() == \
+        f'{"⁝".join(["Word", value] + [part.get_key("⁚") for part in parts])}'
+    assert word.parts == tuple(parts)
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
@@ -80,7 +87,8 @@ def test_word(language, normalized, unique_lemma):
         'normalized': normalized,
         'language': word.language.name,
         'lemmatizable': word.lemmatizable,
-        'erasure': erasure.name
+        'erasure': erasure.name,
+        'parts': [part.to_dict() for part in parts]
     }
 
     assert word == equal
@@ -180,27 +188,32 @@ def test_set_alignment_invalid(word, value):
 
 
 @pytest.mark.parametrize('old,new,expected', [
-    (Word('bu', alignment=1),
+    (Word('bu', alignment=1, parts=[ValueToken('bu')]),
      UnknownNumberOfSigns('...'),
      UnknownNumberOfSigns('...')),
+    (Word('nu', unique_lemma=(WordId('nu I'),), parts=[]),
+     Word('nu', parts=[ValueToken('nu')]),
+     Word('nu', unique_lemma=(WordId('nu I'),),
+          parts=[ValueToken('nu')])),
     (Word('bu', alignment=1, unique_lemma=(WordId('nu I'),)),
-     Word('bu'),
-     Word('bu', alignment=1, unique_lemma=(WordId('nu I'),))),
+     Word('bu', parts=[ValueToken('bu')]),
+     Word('bu', alignment=1, unique_lemma=(WordId('nu I'),),
+          parts=[ValueToken('bu')])),
     (Word('[(bu)', alignment=1),
-     Word('bu'),
-     Word('bu', alignment=1)),
+     Word('bu', parts=[ValueToken('bu')]),
+     Word('bu', alignment=1, parts=[ValueToken('bu')])),
     (Word('bu#!?*', alignment=1),
-     Word('bu'),
-     Word('bu', alignment=1)),
-    (Word('bu', alignment=1),
-     Word('bu#!?*'),
-     Word('bu#!?*', alignment=1)),
-    (Word('bu', unique_lemma=(WordId('nu I'),)),
-     Word('bu', language=Language.SUMERIAN),
-     Word('bu', language=Language.SUMERIAN)),
-    (Word('bu', alignment=1),
-     Word('bu', language=Language.SUMERIAN),
-     Word('bu', language=Language.SUMERIAN)),
+     Word('bu', parts=[ValueToken('bu')]),
+     Word('bu', alignment=1, parts=[ValueToken('bu')])),
+    (Word('bu', alignment=1, parts=[ValueToken('bu')]),
+     Word('bu#!?*', parts=[ValueToken('bu#!?*')]),
+     Word('bu#!?*', alignment=1, parts=[ValueToken('bu#!?*')])),
+    (Word('bu', unique_lemma=(WordId('nu I'),), parts=[ValueToken('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')])),
+    (Word('bu', alignment=1, parts=[ValueToken('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[ValueToken('bu')])),
 ])
 def test_merge(old, new, expected):
     assert old.merge(new) == expected

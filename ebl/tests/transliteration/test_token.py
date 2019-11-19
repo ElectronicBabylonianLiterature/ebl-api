@@ -29,6 +29,7 @@ def test_value_token():
     other = ValueToken('anothervalue')
 
     assert token.value == value
+    assert token.get_key() == f'ValueToken⁝{value}'
     assert token.lemmatizable is False
     assert token.to_dict() == {
         'type': 'Token',
@@ -55,6 +56,7 @@ def test_language_shift(value, expected_language, normalized):
     other = ValueToken(r'%bar')
 
     assert shift.value == value
+    assert shift.get_key() == f'LanguageShift⁝{value}'
     assert shift.lemmatizable is False
     assert shift.normalized == normalized
     assert shift.language == expected_language
@@ -81,6 +83,7 @@ def test_document_oriented_gloss():
     other = DocumentOrientedGloss(')}')
 
     assert gloss.value == value
+    assert gloss.get_key() == f'DocumentOrientedGloss⁝{value}'
     assert gloss.side == Side.LEFT
     assert gloss.lemmatizable is False
     assert gloss.to_dict() == {
@@ -150,6 +153,7 @@ def test_erasure():
     erasure = Erasure(value, side)
 
     assert erasure.value == value
+    assert erasure.get_key() == f'Erasure⁝{value}'
     assert erasure.lemmatizable is False
     assert erasure.to_dict() == {
         'type': 'Erasure',
@@ -163,6 +167,7 @@ def test_line_continuation():
     continuation = LineContinuation(value)
 
     assert continuation.value == value
+    assert continuation.get_key() == f'LineContinuation⁝{value}'
     assert continuation.lemmatizable is False
     assert continuation.to_dict() == {
         'type': 'LineContinuation',
@@ -175,6 +180,7 @@ def test_unknown_number_of_signs():
     unknown_number_of_signs = UnknownNumberOfSigns(value)
 
     assert unknown_number_of_signs.value == value
+    assert unknown_number_of_signs.get_key() == f'UnknownNumberOfSigns⁝{value}'
     assert unknown_number_of_signs.lemmatizable is False
     assert unknown_number_of_signs.to_dict() == {
         'type': 'UnknownNumberOfSigns',
@@ -187,6 +193,7 @@ def test_tabulation():
     tabulation = Tabulation(value)
 
     assert tabulation.value == value
+    assert tabulation.get_key() == f'Tabulation⁝{value}'
     assert tabulation.lemmatizable is False
     assert tabulation.to_dict() == {
         'type': 'Tabulation',
@@ -200,6 +207,7 @@ def test_commentary_protocol(protocol_enum):
     protocol = CommentaryProtocol(value)
 
     assert protocol.value == value
+    assert protocol.get_key() == f'CommentaryProtocol⁝{value}'
     assert protocol.lemmatizable is False
     assert protocol.protocol == protocol_enum
     assert protocol.to_dict() == {
@@ -216,6 +224,7 @@ def test_divider():
 
     expected_value = ':@v?'
     assert divider.value == expected_value
+    assert divider.get_key() == f'Divider⁝{expected_value}'
     assert divider.lemmatizable is False
     assert divider.to_dict() == {
         'type': 'Divider',
@@ -231,6 +240,7 @@ def test_column():
 
     expected_value = '&'
     assert column.value == expected_value
+    assert column.get_key() == f'Column⁝{expected_value}'
     assert column.lemmatizable is False
     assert column.to_dict() == {
         'type': 'Column',
@@ -244,6 +254,7 @@ def test_column_with_number():
 
     expected_value = '&1'
     assert column.value == expected_value
+    assert column.get_key() == f'Column⁝{expected_value}'
     assert column.lemmatizable is False
     assert column.to_dict() == {
         'type': 'Column',
@@ -264,6 +275,7 @@ def test_variant():
 
     expected_value = 'sal/:'
     assert variant.value == expected_value
+    assert variant.get_key() == f'Variant⁝{expected_value}'
     assert variant.lemmatizable is False
     assert variant.to_dict() == {
         'type': 'Variant',

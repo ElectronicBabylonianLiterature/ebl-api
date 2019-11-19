@@ -37,7 +37,8 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             data['normalized'],
             tuple(data['uniqueLemma']),
             ErasureState[data.get('erasure', ErasureState.NONE.name)],
-            data.get('alignment')
+            data.get('alignment'),
+            parts=[ValueToken(part['value']) for part in data.get('parts', [])]
         ),
         'LanguageShift': lambda data: LanguageShift(
             data['value']
@@ -49,7 +50,8 @@ def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
             tuple(data['uniqueLemma']),
             ErasureState[data.get('erasure', ErasureState.NONE.name)],
             data.get('alignment'),
-            Partial(*data['partial'])
+            partial=Partial(*data['partial']),
+            parts=[ValueToken(part['value']) for part in data.get('parts', [])]
         ),
         'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
             data['value']
@@ -136,8 +138,7 @@ class Text:
 
     def merge(self, other: 'Text') -> 'Text':
         def map_(line: Line) -> str:
-            types = [token.to_dict()['type'] for token in line.content]
-            return '⋮'.join([line.atf] + types)
+            return line.key
 
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
