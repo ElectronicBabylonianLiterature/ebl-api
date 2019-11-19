@@ -5,15 +5,15 @@ from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED,
-                                              DocumentOrientedGloss, Erasure,
-                                              LanguageShift, LineContinuation,
-                                              Side,
-                                              UnknownNumberOfSigns,
-                                              Tabulation,
-                                              CommentaryProtocol, Divider,
-                                              ValueToken, Column, Word,
-                                              Variant)
+from ebl.transliteration.domain.tokens import (DEFAULT_NORMALIZED,
+                                               DocumentOrientedGloss, Erasure,
+                                               LanguageShift, LineContinuation,
+                                               Side,
+                                               UnknownNumberOfSigns,
+                                               Tabulation,
+                                               CommentaryProtocol, Divider,
+                                               ValueToken, Column, Word,
+                                               Variant)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),

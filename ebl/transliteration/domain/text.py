@@ -11,19 +11,19 @@ from ebl.transliteration.domain.lemmatization import Lemmatization, \
     LemmatizationError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, \
     TextLine
-from ebl.transliteration.domain.token import (BrokenAway,
-                                              DocumentOrientedGloss,
-                                              Erasure,
-                                              ErasureState, LanguageShift,
-                                              LineContinuation,
-                                              LoneDeterminative,
-                                              OmissionOrRemoval,
-                                              Partial,
-                                              PerhapsBrokenAway, Side, Token,
-                                              Word, UnknownNumberOfSigns,
-                                              Tabulation, CommentaryProtocol,
-                                              ValueToken, Divider, Column,
-                                              Variant)
+from ebl.transliteration.domain.tokens import (BrokenAway,
+                                               DocumentOrientedGloss,
+                                               Erasure,
+                                               ErasureState, LanguageShift,
+                                               LineContinuation,
+                                               LoneDeterminative,
+                                               OmissionOrRemoval,
+                                               Partial,
+                                               PerhapsBrokenAway, Side, Token,
+                                               Word, UnknownNumberOfSigns,
+                                               Tabulation, CommentaryProtocol,
+                                               ValueToken, Divider, Column,
+                                               Variant)
 
 
 def create_tokens(content: List[dict]) -> Tuple[Token, ...]:

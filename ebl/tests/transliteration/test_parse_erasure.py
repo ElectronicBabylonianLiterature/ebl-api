@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.transliteration.domain.lark_parser import parse_erasure
-from ebl.transliteration.domain.token import Erasure, ErasureState, Side, \
+from ebl.transliteration.domain.tokens import Erasure, ErasureState, Side, \
     Word, ValueToken
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)

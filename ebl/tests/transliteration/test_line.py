@@ -8,11 +8,11 @@ from ebl.transliteration.domain.lemmatization import (LemmatizationError,
                                                       LemmatizationToken)
 from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
                                              TextLine)
-from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
-                                              DocumentOrientedGloss, Erasure,
-                                              LanguageShift,
-                                              LoneDeterminative, Side,
-                                              ValueToken, Word, Tabulation)
+from ebl.transliteration.domain.tokens import (BrokenAway, DEFAULT_NORMALIZED,
+                                               DocumentOrientedGloss, Erasure,
+                                               LanguageShift,
+                                               LoneDeterminative, Side,
+                                               ValueToken, Word, Tabulation)
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 

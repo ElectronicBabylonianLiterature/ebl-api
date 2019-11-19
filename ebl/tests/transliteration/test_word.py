@@ -5,9 +5,10 @@ from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.domain.token import (DEFAULT_NORMALIZED, ErasureState,
-                                              Word, UnknownNumberOfSigns,
-                                              ValueToken)
+from ebl.transliteration.domain.tokens import (DEFAULT_NORMALIZED,
+                                               ErasureState,
+                                               Word, UnknownNumberOfSigns,
+                                               ValueToken)
 
 LEMMATIZABLE_TEST_WORDS = [
     (Word('un'), True),

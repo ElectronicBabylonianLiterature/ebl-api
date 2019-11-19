@@ -17,7 +17,7 @@ from ebl.transliteration.domain.labels import ColumnLabel, Label, \
     LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token import Word
+from ebl.transliteration.domain.tokens import Word
 
 CATEGORY = 1
 INDEX = 2

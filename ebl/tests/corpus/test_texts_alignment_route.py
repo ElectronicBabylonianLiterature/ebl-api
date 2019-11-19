@@ -7,7 +7,7 @@ import pytest
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token import Word, ValueToken
+from ebl.transliteration.domain.tokens import Word, ValueToken
 from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()

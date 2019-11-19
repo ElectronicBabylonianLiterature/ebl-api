@@ -10,7 +10,7 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Flag
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import BrokenAway, \
+from ebl.transliteration.domain.tokens import BrokenAway, \
     DocumentOrientedGloss, \
     Erasure, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \

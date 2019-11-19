@@ -3,7 +3,7 @@ from lark import ParseError
 from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain.lark_parser import parse_word
-from ebl.transliteration.domain.token import LoneDeterminative, Word, \
+from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
     ValueToken
 
 

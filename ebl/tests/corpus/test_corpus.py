@@ -13,7 +13,7 @@ from ebl.transliteration.domain.alignment import Alignment, AlignmentError, \
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token import Word, ValueToken
+from ebl.transliteration.domain.tokens import Word, ValueToken
 from ebl.transliteration.domain.value import INVALID_READING
 from ebl.users.domain.user import Guest
 

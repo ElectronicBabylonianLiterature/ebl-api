@@ -9,7 +9,7 @@ from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.domain.token import Token
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
 T = TypeVar('T')

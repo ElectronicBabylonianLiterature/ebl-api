@@ -9,7 +9,7 @@ from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import BrokenAway, Word, \
+from ebl.transliteration.domain.tokens import BrokenAway, Word, \
     UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column, \
     Variant, ValueToken
 

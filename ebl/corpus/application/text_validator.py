@@ -6,7 +6,7 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
 from ebl.errors import DataError
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.token import Token, TokenVisitor, \
+from ebl.transliteration.domain.tokens import Token, TokenVisitor, \
     Word
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError

@@ -8,7 +8,7 @@ from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token import Word
+from ebl.transliteration.domain.tokens import Word
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)

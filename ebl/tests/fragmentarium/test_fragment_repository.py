@@ -19,7 +19,7 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import Word, ValueToken
+from ebl.transliteration.domain.tokens import Word, ValueToken
 
 COLLECTION = 'fragments'
 

@@ -6,19 +6,20 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import (BrokenAway,
-                                              DocumentOrientedGloss,
-                                              Erasure,
-                                              ErasureState, LanguageShift,
-                                              LineContinuation,
-                                              LoneDeterminative,
-                                              OmissionOrRemoval,
-                                              Partial,
-                                              PerhapsBrokenAway, Side,
-                                              Word,
-                                              UnknownNumberOfSigns, Tabulation,
-                                              CommentaryProtocol, Divider,
-                                              ValueToken, Column, Variant)
+from ebl.transliteration.domain.tokens import (BrokenAway,
+                                               DocumentOrientedGloss,
+                                               Erasure,
+                                               ErasureState, LanguageShift,
+                                               LineContinuation,
+                                               LoneDeterminative,
+                                               OmissionOrRemoval,
+                                               Partial,
+                                               PerhapsBrokenAway, Side,
+                                               Word,
+                                               UnknownNumberOfSigns,
+                                               Tabulation,
+                                               CommentaryProtocol, Divider,
+                                               ValueToken, Column, Variant)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
