@@ -1,7 +1,7 @@
 import collections
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Optional, Tuple, Union, Sequence
+from typing import Optional, Tuple, Sequence
 
 import attr
 import pydash
@@ -90,7 +90,7 @@ class Token(ABC):
         return token
 
     def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_token(self)
+        visitor.visit(self)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -199,9 +199,6 @@ class Word(ValueToken):
             )
         return result
 
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_word(self)
-
     def to_dict(self) -> dict:
         return pydash.omit_by({
             **super().to_dict(),
@@ -258,9 +255,6 @@ class LanguageShift(ValueToken):
     def normalized(self):
         return self.value == LanguageShift._normalization_shift
 
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_language_shift(self)
-
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -272,9 +266,6 @@ class LanguageShift(ValueToken):
 
 @attr.s(frozen=True)
 class DocumentOrientedGloss(ValueToken):
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_document_oriented_gloss(self)
-
     @property
     def side(self) -> Side:
         return Side.LEFT if self.value == '{(' else Side.RIGHT
@@ -288,9 +279,6 @@ class DocumentOrientedGloss(ValueToken):
 
 @attr.s(frozen=True)
 class BrokenAway(ValueToken):
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_broken_away(self)
-
     @property
     def side(self) -> Side:
         return Side.LEFT if self.value == '[' else Side.RIGHT
@@ -304,9 +292,6 @@ class BrokenAway(ValueToken):
 
 @attr.s(frozen=True)
 class PerhapsBrokenAway(ValueToken):
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_broken_away(self)
-
     @property
     def side(self) -> Side:
         return Side.LEFT if self.value == '(' else Side.RIGHT
@@ -322,9 +307,6 @@ class PerhapsBrokenAway(ValueToken):
 class Erasure(ValueToken):
     side: Side
 
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_erasure(self)
-
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -335,9 +317,6 @@ class Erasure(ValueToken):
 
 @attr.s(frozen=True)
 class OmissionOrRemoval(ValueToken):
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_omission_or_removal(self)
-
     @property
     def side(self) -> Side:
         return Side.LEFT if (
@@ -375,9 +354,6 @@ class CommentaryProtocol(ValueToken):
     def protocol(self):
         return atf.CommentaryProtocol(self.value)
 
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_commentary_protocol(self)
-
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -400,9 +376,6 @@ class Divider(Token):
     @property
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
-
-    def accept(self, visitor: 'TokenVisitor') -> None:
-        visitor.visit_divider(self)
 
     def to_dict(self) -> dict:
         return {
@@ -475,43 +448,5 @@ class LineContinuation(ValueToken):
 
 class TokenVisitor(ABC):
     @abstractmethod
-    def visit_token(self, token: Token) -> None:
-        ...
-
-    @abstractmethod
-    def visit_language_shift(self, shift: LanguageShift) -> None:
-        ...
-
-    @abstractmethod
-    def visit_word(self, word: Word) -> None:
-        ...
-
-    @abstractmethod
-    def visit_document_oriented_gloss(
-            self, gloss: DocumentOrientedGloss
-    ) -> None:
-        ...
-
-    @abstractmethod
-    def visit_broken_away(
-            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
-    ) -> None:
-        ...
-
-    @abstractmethod
-    def visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
-        ...
-
-    @abstractmethod
-    def visit_erasure(self, erasure: Erasure):
-        ...
-
-    @abstractmethod
-    def visit_divider(self, divider: Divider):
-        ...
-
-    @abstractmethod
-    def visit_commentary_protocol(self, divider: CommentaryProtocol):
+    def visit(self, token: Token) -> None:
         ...

@@ -1,16 +1,13 @@
 from collections import Counter
-from typing import Union
+from functools import singledispatchmethod  # type: ignore
 
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
     TextVisitor
 from ebl.errors import DataError
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.token import BrokenAway, \
-    DocumentOrientedGloss, \
-    Erasure, \
-    LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
-    Word, Divider, CommentaryProtocol
+from ebl.transliteration.domain.token import Token, TokenVisitor, \
+    Word
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -33,38 +30,14 @@ class AlignmentVisitor(TokenVisitor):
     def __init__(self):
         self.alignments = []
 
-    def visit_token(self, token: Token) -> None:
+    @singledispatchmethod
+    def visit(self, token: Token) -> None:
         pass
 
-    def visit_language_shift(self, shift: LanguageShift) -> None:
-        pass
-
-    def visit_word(self, word: Word) -> None:
+    @visit.register
+    def _visit_word(self, word: Word) -> None:
         if word.alignment is not None:
             self.alignments.append(word.alignment)
-
-    def visit_document_oriented_gloss(self,
-                                      gloss: DocumentOrientedGloss) -> None:
-        pass
-
-    def visit_broken_away(
-            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
-    ) -> None:
-        pass
-
-    def visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
-        pass
-
-    def visit_erasure(self, erasure: Erasure):
-        pass
-
-    def visit_divider(self, divider: Divider) -> None:
-        pass
-
-    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
-        pass
 
     def validate(self):
         if any(count > 1 for _, count in Counter(self.alignments).items()):
