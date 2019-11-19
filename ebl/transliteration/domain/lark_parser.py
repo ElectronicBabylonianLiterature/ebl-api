@@ -16,25 +16,31 @@ from ebl.transliteration.domain.tokens import BrokenAway, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, PerhapsBrokenAway, Side, ValueToken, \
     Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, \
-    Column, Variant
+    Column, Variant, UnidentifiedSign
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
 
 class TreeToWord(Transformer):
-    def lone_determinative(self, tokens):
-        return self._create_word(LoneDeterminative, tokens)
+    def lone_determinative(self, children):
+        return self._create_word(LoneDeterminative, children)
 
-    def word(self, tokens):
-        return self._create_word(Word, tokens)
+    def word(self, children):
+        return self._create_word(Word, children)
 
     @staticmethod
-    def _create_word(word_class, tokens):
-        value = ''.join(
-            token.value for token in tokens
-        )
-        parts = [ValueToken(token.value) for token in tokens]
-        return word_class(value, parts=parts)
+    def _create_word(word_class, children):
+        tokens = tuple(map(lambda token: (ValueToken(str(token))
+                                          if isinstance(token, Token)
+                                          else token),
+                           children))
+
+        value = ''.join(token.value for token in tokens)
+        return word_class(value, parts=tokens)
+
+    @v_args(inline=True)
+    def unidentified_sign(self, flags):
+        return UnidentifiedSign(tuple(map(Flag, flags.children)))
 
 
 class TreeToErasure(TreeToWord):

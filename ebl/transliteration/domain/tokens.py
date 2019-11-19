@@ -1,7 +1,7 @@
 import collections
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Optional, Tuple, Sequence
+from typing import Optional, Tuple, Sequence, Iterable
 
 import attr
 import pydash
@@ -19,10 +19,12 @@ DEFAULT_NORMALIZED = False
 Partial = collections.namedtuple('Partial', 'start end')
 
 
-def convert_token_sequence(
-        tokens: Sequence['Token']
-) -> Tuple['Token', ...]:
+def convert_token_sequence(tokens: Iterable['Token']) -> Tuple['Token', ...]:
     return tuple(tokens)
+
+
+def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
+    return tuple(flags)
 
 
 class Side(Enum):
@@ -443,6 +445,27 @@ class LineContinuation(ValueToken):
         return {
             **super().to_dict(),
             'type': 'LineContinuation'
+        }
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class UnidentifiedSign(Token):
+    flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
+                                        converter=convert_flag_sequence)
+
+    @property
+    def string_flags(self) -> Sequence[str]:
+        return [flag.value for flag in self.flags]
+
+    @property
+    def value(self) -> str:
+        return f'{atf.UNIDENTIFIED_SIGN}{"".join(self.string_flags)}'
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'UnidentifiedSign',
+            'flags': list(self.string_flags)
         }
 
 

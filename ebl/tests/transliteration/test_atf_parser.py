@@ -1,7 +1,7 @@
 import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Flag
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -19,7 +19,8 @@ from ebl.transliteration.domain.tokens import (BrokenAway,
                                                UnknownNumberOfSigns,
                                                Tabulation,
                                                CommentaryProtocol, Divider,
-                                               ValueToken, Column, Variant)
+                                               ValueToken, Column, Variant,
+                                               UnidentifiedSign)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -27,7 +28,7 @@ DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
 @pytest.mark.parametrize('parser,version', [
-    (parse_atf_lark, f'{ATF_PARSER_VERSION}')
+    (parse_atf_lark, f'{atf.ATF_PARSER_VERSION}')
 ])
 def test_parser_version(parser, version):
     assert parser('1. kur').parser_version == version
@@ -164,9 +165,9 @@ def test_parser_version(parser, version):
     ('1. x X x# X#', [
         TextLine('1.', (
             Word('x', parts=[ValueToken('x')]),
-            Word('X', parts=[ValueToken('X')]),
+            Word('X', parts=[UnidentifiedSign()]),
             Word('x#', parts=[ValueToken('x#')]),
-            Word('X#', parts=[ValueToken('X#')])
+            Word('X#', parts=[UnidentifiedSign([atf.Flag.DAMAGE])])
         ))
     ]),
     ('1. x-ti ti-X', [
@@ -175,7 +176,7 @@ def test_parser_version(parser, version):
                 ValueToken('x'), ValueToken('-'), ValueToken('ti')
             ]),
             Word('ti-X', parts=[
-                ValueToken('ti'), ValueToken('-'), ValueToken('X')
+                ValueToken('ti'), ValueToken('-'), UnidentifiedSign()
             ])
         ))
     ]),
@@ -538,14 +539,14 @@ def test_parse_atf(parser, line, expected_tokens):
 def test_parse_dividers():
     line, expected_tokens = (r'1. :? :#! :# ::? :.@v /@19* :"@20@c |@v@19!', [
         TextLine('1.', (
-                Divider(':', tuple(), (Flag.UNCERTAIN,)),
-                Divider(':', tuple(), (Flag.DAMAGE, Flag.CORRECTION)),
-                Divider(':', tuple(), (Flag.DAMAGE, )),
-                Divider('::', tuple(), (Flag.UNCERTAIN, )),
+                Divider(':', tuple(), (atf.Flag.UNCERTAIN,)),
+                Divider(':', tuple(), (atf.Flag.DAMAGE, atf.Flag.CORRECTION)),
+                Divider(':', tuple(), (atf.Flag.DAMAGE, )),
+                Divider('::', tuple(), (atf.Flag.UNCERTAIN, )),
                 Divider(':.', ('@v', ), tuple()),
-                Divider('/', ('@19', ), (Flag.COLLATION,)),
+                Divider('/', ('@19', ), (atf.Flag.COLLATION,)),
                 Divider(':"', ('@20', '@c'), tuple()),
-                Divider('|', ('@v', '@19'), (Flag.CORRECTION,)),
+                Divider('|', ('@v', '@19'), (atf.Flag.CORRECTION,)),
         ))
     ])
     assert parse_atf_lark(line).lines == \

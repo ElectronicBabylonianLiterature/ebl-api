@@ -11,7 +11,7 @@ from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import BrokenAway, Word, \
     UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column, \
-    Variant, ValueToken
+    Variant, ValueToken, UnidentifiedSign
 
 
 class FragmentFactory(factory.Factory):
@@ -48,6 +48,7 @@ class InterestingFragmentFactory(FragmentFactory):
 class TransliteratedFragmentFactory(FragmentFactory):
     text = Text((
         TextLine("1'.", (
+            Word('X', parts=[UnidentifiedSign()]),
             Column(),
             Tabulation('($___$)'),
             Word('[...-ku]-nu-ši', parts=[
@@ -103,7 +104,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         ))
     ))
     signs = (
-        'KU ABZ075 ABZ207a\\u002F207b\\u0020X ABZ377n1/KU ABZ377n1\n'
+        'X KU ABZ075 ABZ207a\\u002F207b\\u0020X ABZ377n1/KU ABZ377n1\n'
         'MI DIŠ UD ŠU\n'
         'KI DU ABZ411 BA MA TI\n'
         'X MU TA MA UD\n'
@@ -119,6 +120,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text((
             TextLine("1'.", (
+                Word('X', parts=[UnidentifiedSign()]),
                 Column(),
                 Tabulation('($___$)'),
                 Word('[...-ku]-nu-ši', parts=[

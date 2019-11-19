@@ -8,7 +8,7 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
     TextVisitor
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.text import create_tokens
+from ebl.transliteration.domain.token_factory import create_tokens
 
 
 class TextSerializer(TextVisitor):

@@ -11,12 +11,11 @@ from ebl.transliteration.domain.lemmatization import (Lemmatization,
                                                       LemmatizationToken)
 from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
                                              TextLine)
-from ebl.transliteration.domain.text import LanguageShift, LoneDeterminative, \
-    Partial, \
-    Text
+from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import BrokenAway, Erasure, \
     LineContinuation, \
-    PerhapsBrokenAway, Side, Word, ValueToken
+    PerhapsBrokenAway, Side, Word, ValueToken, LanguageShift, \
+    LoneDeterminative, Partial
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am', parts=[

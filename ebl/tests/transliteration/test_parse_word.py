@@ -2,9 +2,10 @@ import pytest
 from lark import ParseError
 from lark.exceptions import UnexpectedInput
 
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
-    ValueToken
+    ValueToken, UnidentifiedSign
 
 
 @pytest.mark.parametrize('parser', [
@@ -12,9 +13,9 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
 ])
 @pytest.mark.parametrize('atf,expected', [
     ('x', Word('x', parts=[ValueToken('x')])),
-    ('X', Word('X', parts=[ValueToken('X')])),
+    ('X', Word('X', parts=[UnidentifiedSign()])),
     ('x#', Word('x#', parts=[ValueToken('x#')])),
-    ('X#', Word('X#', parts=[ValueToken('X#')])),
+    ('X#', Word('X#', parts=[UnidentifiedSign([atf.Flag.DAMAGE])])),
     ('12', Word('12', parts=[ValueToken('12')])),
     ('GAL', Word('GAL', parts=[ValueToken('GAL')])),
     ('|GAL|', Word('|GAL|', parts=[ValueToken('|GAL|')])),
@@ -31,7 +32,7 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
         ValueToken('x'), ValueToken(':'), ValueToken('ti')
     ])),
     ('ti-X', Word('ti-X', parts=[
-        ValueToken('ti'), ValueToken('-'), ValueToken('X')
+        ValueToken('ti'), ValueToken('-'), UnidentifiedSign()
     ])),
     ('r]u-u₂-qu', Word('r]u-u₂-qu', parts=[
         ValueToken('r]u'), ValueToken('-'), ValueToken('u₂'), ValueToken('-'),

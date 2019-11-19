@@ -5,95 +5,13 @@ import pydash
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, \
-    DEFAULT_ATF_PARSER_VERSION, Flag
-from ebl.transliteration.domain.language import Language
+    DEFAULT_ATF_PARSER_VERSION
 from ebl.transliteration.domain.lemmatization import Lemmatization, \
     LemmatizationError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, \
     TextLine
-from ebl.transliteration.domain.tokens import (BrokenAway,
-                                               DocumentOrientedGloss,
-                                               Erasure,
-                                               ErasureState, LanguageShift,
-                                               LineContinuation,
-                                               LoneDeterminative,
-                                               OmissionOrRemoval,
-                                               Partial,
-                                               PerhapsBrokenAway, Side, Token,
-                                               Word, UnknownNumberOfSigns,
-                                               Tabulation, CommentaryProtocol,
-                                               ValueToken, Divider, Column,
-                                               Variant)
-
-
-def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
-    token_factories: Mapping[str, Callable[[dict], Token]] = {
-        'Token': lambda data: ValueToken(
-            data['value']
-        ),
-        'Word': lambda data: Word(
-            data['value'],
-            Language[data['language']],
-            data['normalized'],
-            tuple(data['uniqueLemma']),
-            ErasureState[data.get('erasure', ErasureState.NONE.name)],
-            data.get('alignment'),
-            parts=[ValueToken(part['value']) for part in data.get('parts', [])]
-        ),
-        'LanguageShift': lambda data: LanguageShift(
-            data['value']
-        ),
-        'LoneDeterminative': lambda data: LoneDeterminative(
-            data['value'],
-            Language[data['language']],
-            data['normalized'],
-            tuple(data['uniqueLemma']),
-            ErasureState[data.get('erasure', ErasureState.NONE.name)],
-            data.get('alignment'),
-            partial=Partial(*data['partial']),
-            parts=[ValueToken(part['value']) for part in data.get('parts', [])]
-        ),
-        'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
-            data['value']
-        ),
-        'BrokenAway': lambda data: BrokenAway(
-            data['value']
-        ),
-        'PerhapsBrokenAway': lambda data: PerhapsBrokenAway(
-            data['value']
-        ),
-        'OmissionOrRemoval': lambda data: OmissionOrRemoval(
-            data['value']
-        ),
-        'LineContinuation': lambda data: LineContinuation(data['value']),
-        'Erasure': lambda data: Erasure(data['value'],
-                                        Side[data['side']]),
-        'UnknownNumberOfSigns': lambda data: UnknownNumberOfSigns(
-            data['value']
-        ),
-        'Tabulation': lambda data: Tabulation(
-            data['value']
-        ),
-        'CommentaryProtocol': lambda data: CommentaryProtocol(
-            data['value']
-        ),
-        'Divider': lambda data: Divider(
-            data['divider'],
-            tuple(data['modifiers']),
-            tuple(Flag(flag) for flag in data['flags'])
-        ),
-        'Column': lambda data: Column(data['number']),
-        'Variant': lambda data: Variant(tuple(
-            token_factories[inner_token['type']](inner_token)
-            for inner_token in data['tokens']
-        )[:2])
-    }
-
-    return tuple(
-        token_factories[token['type']](token)
-        for token
-        in content
-    )
+from ebl.transliteration.domain.token_factory import create_tokens
+from ebl.transliteration.domain.tokens import (Word)
 
 
 @attr.s(auto_attribs=True, frozen=True)

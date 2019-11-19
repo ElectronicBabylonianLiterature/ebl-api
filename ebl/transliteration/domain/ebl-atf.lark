@@ -44,6 +44,7 @@ _omit_right.-1: oba
            | odog
 
 divider.5: DIVIDER_SYMBOL modifiers flags
+unidentified_sign.5: "X" flags
 cba: CLOSE_BROKEN_AWAY
 cpba: CLOSE_PERHAPS_BROKEN_AWAY
 co: _close_omission
@@ -127,18 +128,18 @@ INLINE_BROKEN_AWAY: OPEN_INLINE_BROKEN_AWAY
 OPEN_INLINE_BROKEN_AWAY: /(\[\(|\[|(?<!{)\()/
 CLOSE_INLINE_BROKEN_AWAY: /(\)\]|\)(?!})|\])/
 
-lone_determinative.4: _d_prefix VARIANT (_joiner* VARIANT)* _d_suffix
+lone_determinative.4: _d_prefix _value (_joiner* _value)* _d_suffix
 
 word.3:  _joiner? _any_open? (_inline_erasure | _parts) (_part_joiner? (_inline_erasure | _parts))* _any_close? _joiner?
 
 !_inline_erasure: "°" _parts? "\\" _parts? "°"
 
-_parts: (VARIANT | (_determinative+ (VARIANT | UNKNOWN_NUMBER_OF_SIGNS)?)) _parts_tail*
+_parts: (_value | (_determinative+ (_value | UNKNOWN_NUMBER_OF_SIGNS)?)) _parts_tail*
       | UNKNOWN_NUMBER_OF_SIGNS _parts_tail+
-_parts_tail: _part_joiner (VARIANT | UNKNOWN_NUMBER_OF_SIGNS)
-           | _part_joiner? _determinative+ (VARIANT | UNKNOWN_NUMBER_OF_SIGNS)?
+_parts_tail: _part_joiner (_value | UNKNOWN_NUMBER_OF_SIGNS)
+           | _part_joiner? _determinative+ (_value | UNKNOWN_NUMBER_OF_SIGNS)?
 
-_determinative: _d_prefix VARIANT (_part_joiner VARIANT)* _d_suffix
+_determinative: _d_prefix _value (_part_joiner _value)* _d_suffix
 _d_prefix: _omission? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
 _d_suffix: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE _omission?
 OPEN_DETERMINATIVE: "{+" | "{"
@@ -154,16 +155,22 @@ _any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
 !_open_linguistic_gloss: "{{"
 !_close_linguistic_gloss: "}}"
 
-VARIANT_OR_UNKNOWN: VARIANT | UNKNOWN_NUMBER_OF_SIGNS
-VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)*
-VARIANT_PART: UNKNOWN
-            | VALUE_WITH_SIGN
-            | VALUE
+_value: unidentified_sign
+      | UNCLEAR_SIGN
+      | READING_WITH_SIGN
+      | READING
+      | COMPOUND_GRAPHEME
+      | VARIANT
+VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)+
+VARIANT_PART: UNIDENTIFIED_SIGN
+            | UNCLEAR_SIGN
+            | READING_WITH_SIGN
+            | READING
             | COMPOUND_GRAPHEME
  
-VALUE_WITH_SIGN: VALUE "!"? "(" ANY_GRAPHEME ")"
+READING_WITH_SIGN: READING "!"? "(" ANY_GRAPHEME ")"
 
-VALUE: VALUE_NAME SUB_INDEX? MODIFIER* FLAG
+READING: VALUE_NAME SUB_INDEX? MODIFIER* FLAG
 VALUE_NAME: VALUE_CHARACTER (INLINE_BROKEN_AWAY? VALUE_CHARACTER)*
           | LOGOGRAM_CHARACTER (INLINE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h" 
@@ -192,7 +199,8 @@ GRAPHEME_CHARACTER: "a".."z"
                   | "0".."9"
                   | "₀".."₉"
 
-UNKNOWN: ("X" | "x") FLAG
+UNIDENTIFIED_SIGN: "X" FLAG
+UNCLEAR_SIGN: "x" FLAG
 
 VARIANT_SEPARATOR: "/"
 
