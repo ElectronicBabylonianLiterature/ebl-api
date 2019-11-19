@@ -20,8 +20,8 @@ Partial = collections.namedtuple('Partial', 'start end')
 
 
 def convert_token_sequence(
-        tokens: Sequence['ValueToken']
-) -> Tuple['ValueToken', ...]:
+        tokens: Sequence['Token']
+) -> Tuple['Token', ...]:
     return tuple(tokens)
 
 
@@ -109,9 +109,9 @@ class Word(ValueToken):
     unique_lemma: Tuple[WordId, ...] = tuple()
     erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
-    _parts: Sequence[ValueToken] = attr.ib(default=tuple(),
-                                           kw_only=True,
-                                           converter=convert_token_sequence)
+    _parts: Sequence[Token] = attr.ib(default=tuple(),
+                                      kw_only=True,
+                                      converter=convert_token_sequence)
 
     @property
     def lemmatizable(self) -> bool:
