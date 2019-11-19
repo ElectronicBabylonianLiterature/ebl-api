@@ -9,7 +9,7 @@ class FragmentPagerResource:
         self._finder = finder
 
     @falcon.before(require_scope, 'read:fragments')
-    def on_get(self, resp, number):
+    def on_get(self, req, resp, number):
 
         resp.media = (self._finder
                       .fragment_pager(number))
