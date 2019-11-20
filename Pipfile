@@ -17,7 +17,7 @@ jsonschema = "*"
 pyoracc = "*"
 parsy = "*"
 attrs = "*"
-sentry-sdk = "*"
+sentry-sdk = {extras = ["falcon"],version = "*"}
 roman = "*"
 waitress = "*"
 falcon-apispec = "*"

@@ -8,6 +8,7 @@ from cryptography.x509 import load_pem_x509_certificate
 from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
+from sentry_sdk.integrations.falcon import FalconIntegration
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
@@ -99,5 +100,6 @@ def get_app():
                      os.environ['AUTH0_ISSUER'],
                      os.environ['AUTH0_AUDIENCE'])
 
-    sentry_sdk.init(dsn=os.environ['SENTRY_DSN'])
+    sentry_sdk.init(dsn=os.environ['SENTRY_DSN'],
+                    integrations=[FalconIntegration()])
     return SentryWsgiMiddleware(app)
