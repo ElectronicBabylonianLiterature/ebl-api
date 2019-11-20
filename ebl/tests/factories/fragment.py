@@ -11,7 +11,7 @@ from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import BrokenAway, Word, \
     UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column, \
-    Variant, ValueToken, UnidentifiedSign
+    Variant, ValueToken, UnidentifiedSign, UnclearSign
 
 
 class FragmentFactory(factory.Factory):
@@ -93,7 +93,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway('['),
             UnknownNumberOfSigns('...'),
             BrokenAway(']'),
-            Word('x', parts=[ValueToken('x')]),
+            Word('x#', parts=[UnclearSign([Flag.DAMAGE])]),
             Word('mu', parts=[ValueToken('mu')]),
             Word('ta-ma-tu₂', parts=[ValueToken('ta'), ValueToken('-'),
                                      ValueToken('ma'), ValueToken('-'),
@@ -170,7 +170,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 BrokenAway('['),
                 UnknownNumberOfSigns('...'),
                 BrokenAway(']'),
-                Word('x', parts=[ValueToken('x')]),
+                Word('x#', parts=[UnclearSign([Flag.DAMAGE])]),
                 Word('mu', unique_lemma=(WordId('mu I'),),
                      parts=[ValueToken('mu')]),
                 Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),), parts=[

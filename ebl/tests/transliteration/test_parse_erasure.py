@@ -2,7 +2,7 @@ import pytest
 
 from ebl.transliteration.domain.lark_parser import parse_erasure
 from ebl.transliteration.domain.tokens import Erasure, ErasureState, Side, \
-    Word, ValueToken, UnidentifiedSign
+    Word, ValueToken, UnidentifiedSign, UnclearSign
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)
 ERASURE_CENTER = Erasure('\\', Side.CENTER)
@@ -28,7 +28,7 @@ ERASURE_RIGHT = Erasure('°', Side.RIGHT)
     ('°\\°', [], []),
     ('°x X\\X x°',
      [Word('x', erasure=ErasureState.ERASED, parts=[
-        ValueToken('x')
+        UnclearSign()
       ]),
       Word('X', erasure=ErasureState.ERASED, parts=[
         UnidentifiedSign()
@@ -37,7 +37,7 @@ ERASURE_RIGHT = Erasure('°', Side.RIGHT)
         UnidentifiedSign()
      ]),
       Word('x', erasure=ErasureState.OVER_ERASED, parts=[
-        ValueToken('x')
+        UnclearSign()
       ])])
 ])
 def test_erasure(parser, atf, erased, over_erased):

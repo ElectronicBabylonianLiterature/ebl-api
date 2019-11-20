@@ -44,7 +44,6 @@ _omit_right.-1: oba
            | odog
 
 divider.5: DIVIDER_SYMBOL modifiers flags
-unidentified_sign.5: "X" flags
 cba: CLOSE_BROKEN_AWAY
 cpba: CLOSE_PERHAPS_BROKEN_AWAY
 co: _close_omission
@@ -156,14 +155,13 @@ _any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
 !_close_linguistic_gloss: "}}"
 
 _value: unidentified_sign
-      | UNCLEAR_SIGN
+      | unclear_sign
       | READING_WITH_SIGN
       | READING
       | COMPOUND_GRAPHEME
       | VARIANT
 VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)+
-VARIANT_PART: UNIDENTIFIED_SIGN
-            | UNCLEAR_SIGN
+VARIANT_PART: UNKNWON
             | READING_WITH_SIGN
             | READING
             | COMPOUND_GRAPHEME
@@ -199,8 +197,9 @@ GRAPHEME_CHARACTER: "a".."z"
                   | "0".."9"
                   | "₀".."₉"
 
-UNIDENTIFIED_SIGN: "X" FLAG
-UNCLEAR_SIGN: "x" FLAG
+unidentified_sign: "X" flags
+unclear_sign: "x" flags
+UNKNWON: ("X" | "x") FLAG
 
 VARIANT_SEPARATOR: "/"
 

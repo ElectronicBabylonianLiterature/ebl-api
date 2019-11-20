@@ -16,7 +16,7 @@ from ebl.transliteration.domain.tokens import BrokenAway, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, PerhapsBrokenAway, Side, ValueToken, \
     Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, \
-    Column, Variant, UnidentifiedSign
+    Column, Variant, UnidentifiedSign, UnclearSign
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -41,6 +41,10 @@ class TreeToWord(Transformer):
     @v_args(inline=True)
     def unidentified_sign(self, flags):
         return UnidentifiedSign(tuple(map(Flag, flags.children)))
+
+    @v_args(inline=True)
+    def unclear_sign(self, flags):
+        return UnclearSign(tuple(map(Flag, flags.children)))
 
 
 class TreeToErasure(TreeToWord):

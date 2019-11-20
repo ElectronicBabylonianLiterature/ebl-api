@@ -6,7 +6,7 @@ from ebl.transliteration.domain.tokens import Token, ValueToken, Word, \
     ErasureState, LanguageShift, LoneDeterminative, Partial, \
     DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, OmissionOrRemoval, \
     LineContinuation, Erasure, Side, UnknownNumberOfSigns, Tabulation, \
-    CommentaryProtocol, Divider, Column, Variant, UnidentifiedSign
+    CommentaryProtocol, Divider, Column, Variant, UnidentifiedSign, UnclearSign
 
 _factories: Mapping[str, Callable[[dict], Token]] = {
     'Token': lambda data: ValueToken(
@@ -69,6 +69,9 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
         for inner_token in data['tokens']
     )[:2]),
     'UnidentifiedSign': lambda data: UnidentifiedSign(
+        tuple(Flag(flag) for flag in data['flags'])
+    ),
+    'UnclearSign': lambda data: UnclearSign(
         tuple(Flag(flag) for flag in data['flags'])
     )
 }

@@ -5,31 +5,31 @@ from lark.exceptions import UnexpectedInput
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
-    ValueToken, UnidentifiedSign
+    ValueToken, UnidentifiedSign, UnclearSign
 
 
 @pytest.mark.parametrize('parser', [
     parse_word
 ])
 @pytest.mark.parametrize('atf,expected', [
-    ('x', Word('x', parts=[ValueToken('x')])),
+    ('x', Word('x', parts=[UnclearSign()])),
     ('X', Word('X', parts=[UnidentifiedSign()])),
-    ('x#', Word('x#', parts=[ValueToken('x#')])),
+    ('x?', Word('x?', parts=[UnclearSign([atf.Flag.UNCERTAIN])])),
     ('X#', Word('X#', parts=[UnidentifiedSign([atf.Flag.DAMAGE])])),
     ('12', Word('12', parts=[ValueToken('12')])),
     ('GAL', Word('GAL', parts=[ValueToken('GAL')])),
     ('|GAL|', Word('|GAL|', parts=[ValueToken('|GAL|')])),
     ('x-ti', Word('x-ti', parts=[
-        ValueToken('x'), ValueToken('-'), ValueToken('ti')
+        UnclearSign(), ValueToken('-'), ValueToken('ti')
     ])),
     ('x.ti', Word('x.ti', parts=[
-        ValueToken('x'), ValueToken('.'), ValueToken('ti')
+        UnclearSign(), ValueToken('.'), ValueToken('ti')
     ])),
     ('x+ti', Word('x+ti', parts=[
-        ValueToken('x'), ValueToken('+'), ValueToken('ti')
+        UnclearSign(), ValueToken('+'), ValueToken('ti')
     ])),
     ('x:ti', Word('x:ti', parts=[
-        ValueToken('x'), ValueToken(':'), ValueToken('ti')
+        UnclearSign(), ValueToken(':'), ValueToken('ti')
     ])),
     ('ti-X', Word('ti-X', parts=[
         ValueToken('ti'), ValueToken('-'), UnidentifiedSign()
@@ -109,7 +109,7 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
         ValueToken('UTU?')
     ])),
     ('.x.KAM', Word('.x.KAM', parts=[
-        ValueToken('.'), ValueToken('x'), ValueToken('.'), ValueToken('KAM')
+        ValueToken('.'), UnclearSign(), ValueToken('.'), ValueToken('KAM')
     ])),
     ('3.AM₃', Word('3.AM₃', parts=[
         ValueToken('3'), ValueToken('.'), ValueToken('AM₃')
@@ -214,7 +214,7 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
         ValueToken('ku'), ValueToken('.'), ValueToken('...')
     ])),
     ('(x)]', Word('(x)]', parts=[
-        ValueToken('('), ValueToken('x'), ValueToken(')'), ValueToken(']')
+        ValueToken('('), UnclearSign(), ValueToken(')'), ValueToken(']')
     ])),
     ('[{d}UTU', Word('[{d}UTU', parts=[
         ValueToken('['), ValueToken('{'), ValueToken('d'), ValueToken('}'),

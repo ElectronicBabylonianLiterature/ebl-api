@@ -20,7 +20,7 @@ from ebl.transliteration.domain.tokens import (BrokenAway,
                                                Tabulation,
                                                CommentaryProtocol, Divider,
                                                ValueToken, Column, Variant,
-                                               UnidentifiedSign)
+                                               UnidentifiedSign, UnclearSign)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -90,11 +90,11 @@ def test_parser_version(parser, version):
     ('1. [(x x x)]', [
         TextLine('1.', (
             Word('[(x', parts=[
-                ValueToken('['), ValueToken('('), ValueToken('x')
+                ValueToken('['), ValueToken('('), UnclearSign()
             ]),
-            Word('x', parts=[ValueToken('x')]),
+            Word('x', parts=[UnclearSign()]),
             Word('x)]', parts=[
-                ValueToken('x'), ValueToken(')'), ValueToken(']')
+                UnclearSign(), ValueToken(')'), ValueToken(']')
             ])
         ))
     ]),
@@ -162,18 +162,20 @@ def test_parser_version(parser, version):
             CommentaryProtocol('!zz')
         ))
     ]),
-    ('1. x X x# X#', [
+    ('1. x X x?# X#!', [
         TextLine('1.', (
-            Word('x', parts=[ValueToken('x')]),
+            Word('x', parts=[UnclearSign()]),
             Word('X', parts=[UnidentifiedSign()]),
-            Word('x#', parts=[ValueToken('x#')]),
-            Word('X#', parts=[UnidentifiedSign([atf.Flag.DAMAGE])])
+            Word('x?#', parts=[UnclearSign([atf.Flag.UNCERTAIN,
+                                           atf.Flag.DAMAGE])]),
+            Word('X#!', parts=[UnidentifiedSign([atf.Flag.DAMAGE,
+                                                atf.Flag.CORRECTION])])
         ))
     ]),
     ('1. x-ti ti-X', [
         TextLine('1.', (
             Word('x-ti', parts=[
-                ValueToken('x'), ValueToken('-'), ValueToken('ti')
+                UnclearSign(), ValueToken('-'), ValueToken('ti')
             ]),
             Word('ti-X', parts=[
                 ValueToken('ti'), ValueToken('-'), UnidentifiedSign()
@@ -252,7 +254,7 @@ def test_parser_version(parser, version):
                 ValueToken('ku')
             ]),
             Word('(x)]', parts=[
-                ValueToken('('), ValueToken('x'), ValueToken(')'),
+                ValueToken('('), UnclearSign(), ValueToken(')'),
                 ValueToken(']')
             ])
         )),

@@ -449,9 +449,19 @@ class LineContinuation(ValueToken):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class UnidentifiedSign(Token):
+class AbstractSign(Token):
     flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
                                         converter=convert_flag_sequence)
+
+    @property
+    @abstractmethod
+    def _sign(self) -> str:
+        ...
+
+    @property
+    @abstractmethod
+    def _type(self) -> str:
+        ...
 
     @property
     def string_flags(self) -> Sequence[str]:
@@ -459,14 +469,36 @@ class UnidentifiedSign(Token):
 
     @property
     def value(self) -> str:
-        return f'{atf.UNIDENTIFIED_SIGN}{"".join(self.string_flags)}'
+        return f'{self._sign}{"".join(self.string_flags)}'
 
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
-            'type': 'UnidentifiedSign',
+            'type': self._type,
             'flags': list(self.string_flags)
         }
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class UnidentifiedSign(AbstractSign):
+    @property
+    def _sign(self) -> str:
+        return atf.UNIDENTIFIED_SIGN
+
+    @property
+    def _type(self) -> str:
+        return 'UnidentifiedSign'
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class UnclearSign(AbstractSign):
+    @property
+    def _sign(self) -> str:
+        return atf.UNCLEAR_SIGN
+
+    @property
+    def _type(self) -> str:
+        return 'UnclearSign'
 
 
 class TokenVisitor(ABC):

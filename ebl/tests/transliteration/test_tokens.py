@@ -13,7 +13,8 @@ from ebl.transliteration.domain.tokens import (DEFAULT_NORMALIZED,
                                                Tabulation,
                                                CommentaryProtocol, Divider,
                                                ValueToken, Column, Word,
-                                               Variant, UnidentifiedSign)
+                                               Variant, UnidentifiedSign,
+                                               UnclearSign)
 
 TOKENS = [
     UnknownNumberOfSigns('...'),
@@ -312,4 +313,35 @@ def test_unidentified_sign_with_flags():
         'type': 'UnidentifiedSign',
         'value': expected_value,
         'flags': ['#']
+    }
+
+
+def test_unclear_sign():
+    sign = UnclearSign()
+
+    expected_value = 'x'
+    assert sign.value == expected_value
+    assert sign.get_key() == f'UnclearSign⁝{expected_value}'
+    assert sign.flags == tuple()
+    assert sign.lemmatizable is False
+    assert sign.to_dict() == {
+        'type': 'UnclearSign',
+        'value': expected_value,
+        'flags': []
+    }
+
+
+def test_unclear_sign_with_flags():
+    flags = [atf.Flag.CORRECTION]
+    sign = UnclearSign(flags)
+
+    expected_value = 'x!'
+    assert sign.value == expected_value
+    assert sign.get_key() == f'UnclearSign⁝{expected_value}'
+    assert sign.flags == tuple(flags)
+    assert sign.lemmatizable is False
+    assert sign.to_dict() == {
+        'type': 'UnclearSign',
+        'value': expected_value,
+        'flags': ['!']
     }
