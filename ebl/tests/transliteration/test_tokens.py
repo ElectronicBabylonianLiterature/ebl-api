@@ -17,7 +17,7 @@ from ebl.transliteration.domain.tokens import (DEFAULT_NORMALIZED,
                                                UnclearSign)
 
 TOKENS = [
-    UnknownNumberOfSigns('...'),
+    UnknownNumberOfSigns(),
     LanguageShift('%sux'),
     DocumentOrientedGloss('{(')
 ]
@@ -163,29 +163,17 @@ def test_erasure():
     }
 
 
-def test_line_continuation():
-    value = '→'
-    continuation = LineContinuation(value)
-
-    assert continuation.value == value
-    assert continuation.get_key() == f'LineContinuation⁝{value}'
-    assert continuation.lemmatizable is False
-    assert continuation.to_dict() == {
-        'type': 'LineContinuation',
-        'value': continuation.value
-    }
-
-
 def test_unknown_number_of_signs():
-    value = '...'
-    unknown_number_of_signs = UnknownNumberOfSigns(value)
+    unknown_number_of_signs = UnknownNumberOfSigns()
 
-    assert unknown_number_of_signs.value == value
-    assert unknown_number_of_signs.get_key() == f'UnknownNumberOfSigns⁝{value}'
+    expected_value = '...'
+    assert unknown_number_of_signs.value == expected_value
+    assert unknown_number_of_signs.get_key() == \
+        f'UnknownNumberOfSigns⁝{expected_value}'
     assert unknown_number_of_signs.lemmatizable is False
     assert unknown_number_of_signs.to_dict() == {
         'type': 'UnknownNumberOfSigns',
-        'value': value
+        'value': expected_value
     }
 
 
@@ -344,4 +332,17 @@ def test_unclear_sign_with_flags():
         'type': 'UnclearSign',
         'value': expected_value,
         'flags': ['!']
+    }
+
+
+def test_line_continuation():
+    value = '→'
+    continuation = LineContinuation(value)
+
+    assert continuation.value == value
+    assert continuation.get_key() == f'LineContinuation⁝{value}'
+    assert continuation.lemmatizable is False
+    assert continuation.to_dict() == {
+        'type': 'LineContinuation',
+        'value': continuation.value
     }

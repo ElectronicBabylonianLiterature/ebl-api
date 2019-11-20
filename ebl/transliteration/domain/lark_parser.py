@@ -46,6 +46,10 @@ class TreeToWord(Transformer):
     def unclear_sign(self, flags):
         return UnclearSign(tuple(map(Flag, flags.children)))
 
+    @v_args(inline=True)
+    def unknown_number_of_signs(self, _):
+        return UnknownNumberOfSigns()
+
 
 class TreeToErasure(TreeToWord):
     def erasure(self, tokens):
@@ -139,10 +143,6 @@ class TreeToLine(TreeToErasure):
     @v_args(inline=True)
     def language_shift(self, value):
         return LanguageShift(str(value))
-
-    @v_args(inline=True)
-    def unknown_number_of_signs(self, value):
-        return UnknownNumberOfSigns(str(value))
 
     def line_continuation(self, _):
         return LineContinuation('→')

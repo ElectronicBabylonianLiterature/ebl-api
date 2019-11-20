@@ -190,8 +190,8 @@ def test_set_alignment_invalid(word, value):
 
 @pytest.mark.parametrize('old,new,expected', [
     (Word('bu', alignment=1, parts=[ValueToken('bu')]),
-     UnknownNumberOfSigns('...'),
-     UnknownNumberOfSigns('...')),
+     UnknownNumberOfSigns(),
+     UnknownNumberOfSigns()),
     (Word('nu', unique_lemma=(WordId('nu I'),), parts=[]),
      Word('nu', parts=[ValueToken('nu')]),
      Word('nu', unique_lemma=(WordId('nu I'),),

@@ -53,7 +53,6 @@ opba: OPEN_PERHAPS_BROKEN_AWAY
 oo: _open_omission
 odog: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
-unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
 omission_or_removal.-1: _omission
 broken_away.-1: BROKEN_AWAY
 perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
@@ -133,10 +132,10 @@ word.3:  _joiner? _any_open? (_inline_erasure | _parts) (_part_joiner? (_inline_
 
 !_inline_erasure: "°" _parts? "\\" _parts? "°"
 
-_parts: (_value | (_determinative+ (_value | UNKNOWN_NUMBER_OF_SIGNS)?)) _parts_tail*
-      | UNKNOWN_NUMBER_OF_SIGNS _parts_tail+
-_parts_tail: _part_joiner (_value | UNKNOWN_NUMBER_OF_SIGNS)
-           | _part_joiner? _determinative+ (_value | UNKNOWN_NUMBER_OF_SIGNS)?
+_parts: (_value | (_determinative+ (_value | unknown_number_of_signs)?)) _parts_tail*
+      | unknown_number_of_signs _parts_tail+
+_parts_tail: _part_joiner (_value | unknown_number_of_signs)
+           | _part_joiner? _determinative+ (_value | unknown_number_of_signs)?
 
 _determinative: _d_prefix _value (_part_joiner _value)* _d_suffix
 _d_prefix: _omission? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
@@ -214,4 +213,5 @@ MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | 
 
 IN_WORD_NEWLINE: ";"
 
+unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
 UNKNOWN_NUMBER_OF_SIGNS: "..."

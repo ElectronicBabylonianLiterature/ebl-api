@@ -333,7 +333,11 @@ class OmissionOrRemoval(ValueToken):
 
 
 @attr.s(frozen=True)
-class UnknownNumberOfSigns(ValueToken):
+class UnknownNumberOfSigns(Token):
+    @property
+    def value(self) -> str:
+        return atf.UNKNOWN_NUMBER_OF_SIGNS
+
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
@@ -439,15 +443,6 @@ class Joiner(ValueToken):
         }
 
 
-@attr.s(frozen=True)
-class LineContinuation(ValueToken):
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            'type': 'LineContinuation'
-        }
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractSign(Token):
     flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
@@ -499,6 +494,15 @@ class UnclearSign(AbstractSign):
     @property
     def _type(self) -> str:
         return 'UnclearSign'
+
+
+@attr.s(frozen=True)
+class LineContinuation(ValueToken):
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'LineContinuation'
+        }
 
 
 class TokenVisitor(ABC):

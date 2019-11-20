@@ -5,7 +5,7 @@ from lark.exceptions import UnexpectedInput
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
-    ValueToken, UnidentifiedSign, UnclearSign
+    ValueToken, UnidentifiedSign, UnclearSign, UnknownNumberOfSigns
 
 
 @pytest.mark.parametrize('parser', [
@@ -185,33 +185,35 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
         ValueToken('ku')
     ])),
     ('...{d}kur', Word('...{d}kur', parts=[
-        ValueToken('...'), ValueToken('{'), ValueToken('d'), ValueToken('}'),
-        ValueToken('kur')
+        UnknownNumberOfSigns(), ValueToken('{'), ValueToken('d'),
+        ValueToken('}'), ValueToken('kur')
     ])),
     ('kur{d}...', Word('kur{d}...', parts=[
         ValueToken('kur'), ValueToken('{'), ValueToken('d'), ValueToken('}'),
-        ValueToken('...')
+        UnknownNumberOfSigns()
     ])),
     ('...-kur-...', Word('...-kur-...', parts=[
-        ValueToken('...'), ValueToken('-'), ValueToken('kur'), ValueToken('-'),
-        ValueToken('...')
+        UnknownNumberOfSigns(), ValueToken('-'), ValueToken('kur'),
+        ValueToken('-'), UnknownNumberOfSigns()
     ])),
     ('kur-...-kur-...-kur', Word('kur-...-kur-...-kur', parts=[
-        ValueToken('kur'), ValueToken('-'), ValueToken('...'), ValueToken('-'),
-        ValueToken('kur'), ValueToken('-'), ValueToken('...'), ValueToken('-'),
-        ValueToken('kur')
+        ValueToken('kur'), ValueToken('-'), UnknownNumberOfSigns(),
+        ValueToken('-'), ValueToken('kur'), ValueToken('-'),
+        UnknownNumberOfSigns(), ValueToken('-'), ValueToken('kur')
     ])),
     ('...]-ku', Word('...]-ku', parts=[
-        ValueToken('...'), ValueToken(']'), ValueToken('-'), ValueToken('ku')
+        UnknownNumberOfSigns(), ValueToken(']'), ValueToken('-'),
+        ValueToken('ku')
     ])),
     ('ku-[...', Word('ku-[...', parts=[
-        ValueToken('ku'), ValueToken('-'), ValueToken('['), ValueToken('...')
+        ValueToken('ku'), ValueToken('-'), ValueToken('['),
+        UnknownNumberOfSigns()
     ])),
     ('....ku', Word('....ku', parts=[
-        ValueToken('...'), ValueToken('.'), ValueToken('ku')
+        UnknownNumberOfSigns(), ValueToken('.'), ValueToken('ku')
     ])),
     ('ku....', Word('ku....', parts=[
-        ValueToken('ku'), ValueToken('.'), ValueToken('...')
+        ValueToken('ku'), ValueToken('.'), UnknownNumberOfSigns()
     ])),
     ('(x)]', Word('(x)]', parts=[
         ValueToken('('), UnclearSign(), ValueToken(')'), ValueToken(']')

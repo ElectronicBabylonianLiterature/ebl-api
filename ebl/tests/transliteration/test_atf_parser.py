@@ -73,16 +73,16 @@ def test_parser_version(parser, version):
     ]),
     ('1. ... [...] (...) [(...)]', [
         TextLine('1.', (
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 BrokenAway('['),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 BrokenAway(']'),
                 PerhapsBrokenAway('('),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 PerhapsBrokenAway(')'),
                 BrokenAway('['),
                 PerhapsBrokenAway('('),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 PerhapsBrokenAway(')'),
                 BrokenAway(']')
         ))
@@ -105,7 +105,7 @@ def test_parser_version(parser, version):
                 ValueToken('da'), ValueToken('-'), ValueToken('ab'),
                 ValueToken('-'), ValueToken('su₈')
             ]),
-            UnknownNumberOfSigns('...'),
+            UnknownNumberOfSigns(),
             OmissionOrRemoval('>')
         ))
     ]),
@@ -185,27 +185,27 @@ def test_parser_version(parser, version):
     ('1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku', [
         TextLine('1.', (
             BrokenAway('['),
-            UnknownNumberOfSigns('...'),
+            UnknownNumberOfSigns(),
             Word('r]u?-u₂-qu', parts=[
                 ValueToken('r]u?'), ValueToken('-'), ValueToken('u₂'),
                 ValueToken('-'), ValueToken('qu')
             ]),
             Word('na-a[n-...]', parts=[
                 ValueToken('na'), ValueToken('-'), ValueToken('a[n'),
-                ValueToken('-'), ValueToken('...'), ValueToken(']')
+                ValueToken('-'), UnknownNumberOfSigns(), ValueToken(']')
             ]),
         )),
         TextLine('2.', (
             Word('ši-[ku-...-ku]-nu', parts=[
                 ValueToken('ši'), ValueToken('-'), ValueToken('['),
-                ValueToken('ku'), ValueToken('-'), ValueToken('...'),
+                ValueToken('ku'), ValueToken('-'), UnknownNumberOfSigns(),
                 ValueToken('-'), ValueToken('ku'), ValueToken(']'),
                 ValueToken('-'), ValueToken('nu')
             ]),
         )),
         TextLine('3.', (
             Word('[...]-ku', parts=[
-                ValueToken('['), ValueToken('...'), ValueToken(']'),
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
                 ValueToken('-'), ValueToken('ku')
             ]),
         ))
@@ -223,17 +223,17 @@ def test_parser_version(parser, version):
     ('1. [...]-qa-[...]-ba-[...]\n2. pa-[...]', [
         TextLine('1.', (
             Word('[...]-qa-[...]-ba-[...]', parts=[
-                ValueToken('['), ValueToken('...'), ValueToken(']'),
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
                 ValueToken('-'), ValueToken('qa'), ValueToken('-'),
-                ValueToken('['), ValueToken('...'), ValueToken(']'),
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
                 ValueToken('-'), ValueToken('ba'), ValueToken('-'),
-                ValueToken('['), ValueToken('...'), ValueToken(']')
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
             ]),
         )),
         TextLine('2.', (
             Word('pa-[...]', parts=[
                 ValueToken('pa'), ValueToken('-'), ValueToken('['),
-                ValueToken('...'), ValueToken(']')
+                UnknownNumberOfSigns(), ValueToken(']')
             ]),
         ))
     ]),
@@ -244,7 +244,7 @@ def test_parser_version(parser, version):
                 ValueToken('ku')
             ]),
             PerhapsBrokenAway('('),
-            UnknownNumberOfSigns('...'),
+            UnknownNumberOfSigns(),
             PerhapsBrokenAway(')'),
             BrokenAway(']')
         )),
@@ -262,13 +262,13 @@ def test_parser_version(parser, version):
     ('1. [...+ku....] [....ku+...]', [
         TextLine('1.', (
             Word('[...+ku....]', parts=[
-                ValueToken('['), ValueToken('...'), ValueToken('+'),
-                ValueToken('ku'), ValueToken('.'), ValueToken('...'),
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken('+'),
+                ValueToken('ku'), ValueToken('.'), UnknownNumberOfSigns(),
                 ValueToken(']')
             ]),
             Word('[....ku+...]', parts=[
-                ValueToken('['), ValueToken('...'), ValueToken('.'),
-                ValueToken('ku'), ValueToken('+'), ValueToken('...'),
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken('.'),
+                ValueToken('ku'), ValueToken('+'), UnknownNumberOfSigns(),
                 ValueToken(']')
             ])
         ))
@@ -281,7 +281,7 @@ def test_parser_version(parser, version):
         [
             TextLine('1.', (
                 BrokenAway('['),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 BrokenAway(']'),
                 LoneDeterminative.of_value(
                     '{bu}',
@@ -290,32 +290,32 @@ def test_parser_version(parser, version):
                     [ValueToken('{'), ValueToken('bu'), ValueToken('}')]
                 ),
                 BrokenAway('['),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 BrokenAway(']')
             )),
             TextLine('2.', (
                 Word('[...]{bu}', parts=[
-                    ValueToken('['), ValueToken('...'), ValueToken(']'),
+                    ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
                     ValueToken('{'), ValueToken('bu'), ValueToken('}')
                 ]),
                 BrokenAway('['),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 BrokenAway(']')
             )),
             TextLine('3.', (
                 BrokenAway('['),
-                UnknownNumberOfSigns('...'),
+                UnknownNumberOfSigns(),
                 BrokenAway(']'),
                 Word('{bu}[...]', parts=[
                     ValueToken('{'), ValueToken('bu'), ValueToken('}'),
-                    ValueToken('['), ValueToken('...'), ValueToken(']')
+                    ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
                 ])
             )),
             TextLine('4.', (
                 Word('[...]{bu}[...]', parts=[
-                    ValueToken('['), ValueToken('...'), ValueToken(']'),
+                    ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
                     ValueToken('{'), ValueToken('bu'), ValueToken('}'),
-                    ValueToken('['), ValueToken('...'), ValueToken(']')
+                    ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
                 ]),
             ))
         ]
@@ -347,7 +347,7 @@ def test_parser_version(parser, version):
             Word('KIMIN', parts=[ValueToken('KIMIN')]),
             Word('{u₂#}[...]', parts=[
                 ValueToken('{'), ValueToken('u₂#'), ValueToken('}'),
-                ValueToken('['), ValueToken('...'), ValueToken(']')
+                ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
             ]),
             LoneDeterminative.of_value(
                 '{u₂#}',
@@ -356,7 +356,7 @@ def test_parser_version(parser, version):
                 [ValueToken('{'), ValueToken('u₂#'), ValueToken('}')]
             ),
             BrokenAway('['),
-            UnknownNumberOfSigns('...'),
+            UnknownNumberOfSigns(),
             BrokenAway(']')
         ))
     ]),
@@ -480,7 +480,7 @@ def test_parser_version(parser, version):
         TextLine('1.', (
             Word('[{iti}...]', parts=[
                 ValueToken('['), ValueToken('{'), ValueToken('iti'),
-                ValueToken('}'), ValueToken('...'), ValueToken(']')
+                ValueToken('}'), UnknownNumberOfSigns(), ValueToken(']')
             ]),
         ))
     ]),
@@ -493,17 +493,17 @@ def test_parser_version(parser, version):
     ('2. in]-<(...)>', [
         TextLine('2.', (Word('in]-<(...)>', parts=[
             ValueToken('in'), ValueToken(']'), ValueToken('-'),
-            ValueToken('<('), ValueToken('...'), ValueToken(')>')
+            ValueToken('<('), UnknownNumberOfSigns(), ValueToken(')>')
         ]), ))
 
     ]),
     ('2. ...{d}kur ... {d}kur', [
         TextLine('2.', (
             Word('...{d}kur', parts=[
-                ValueToken('...'), ValueToken('{'), ValueToken('d'),
+                UnknownNumberOfSigns(), ValueToken('{'), ValueToken('d'),
                 ValueToken('}'), ValueToken('kur')
             ]),
-            UnknownNumberOfSigns('...'),
+            UnknownNumberOfSigns(),
             Word('{d}kur', parts=[
                 ValueToken('{'), ValueToken('d'), ValueToken('}'),
                 ValueToken('kur')
@@ -514,13 +514,13 @@ def test_parser_version(parser, version):
         TextLine('2.', (
             Word('kur{d}...', parts=[
                 ValueToken('kur'), ValueToken('{'), ValueToken('d'),
-                ValueToken('}'), ValueToken('...')
+                ValueToken('}'), UnknownNumberOfSigns()
             ]),
             Word('kur{d}', parts=[
                 ValueToken('kur'), ValueToken('{'), ValueToken('d'),
                 ValueToken('}'),
             ]),
-            UnknownNumberOfSigns('...')
+            UnknownNumberOfSigns()
         ))
     ]),
     ('1. mu-un;-e₃ ;', [

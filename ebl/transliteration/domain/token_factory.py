@@ -49,9 +49,7 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
     'LineContinuation': lambda data: LineContinuation(data['value']),
     'Erasure': lambda data: Erasure(data['value'],
                                     Side[data['side']]),
-    'UnknownNumberOfSigns': lambda data: UnknownNumberOfSigns(
-        data['value']
-    ),
+    'UnknownNumberOfSigns': lambda data: UnknownNumberOfSigns(),
     'Tabulation': lambda data: Tabulation(
         data['value']
     ),
