@@ -100,10 +100,15 @@ class Flag(Enum):
     COLLATION = '*'
 
 
+class Joiner(Enum):
+    HYPHEN = '-'
+    DOT = '.'
+    PLUS = '+'
+    COLON = ':'
+
+
 UNKNOWN_NUMBER_OF_SIGNS = '...'
 WORD_SEPARATOR = ' '
-HYPHEN = '-'
-JOINERS = [HYPHEN, '+', '.']
 VARIANT_SEPARATOR = '/'
 UNCLEAR_SIGN = 'x'
 UNIDENTIFIED_SIGN = 'X'

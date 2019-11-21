@@ -139,7 +139,10 @@ class Word(ValueToken):
 
     @property
     def partial(self) -> Partial:
-        partials = [*atf.JOINERS, atf.UNKNOWN_NUMBER_OF_SIGNS]
+        partials = [
+            *[joiner.value for joiner in atf.Joiner],
+            atf.UNKNOWN_NUMBER_OF_SIGNS
+        ]
         return Partial(
             any(
                 self.value.startswith(partial)
