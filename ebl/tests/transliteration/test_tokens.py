@@ -14,7 +14,7 @@ from ebl.transliteration.domain.tokens import (DEFAULT_NORMALIZED,
                                                CommentaryProtocol, Divider,
                                                ValueToken, Column, Word,
                                                Variant, UnidentifiedSign,
-                                               UnclearSign)
+                                               UnclearSign, Joiner)
 
 TOKENS = [
     UnknownNumberOfSigns(),
@@ -270,6 +270,19 @@ def test_variant():
         'type': 'Variant',
         'value': expected_value,
         'tokens': [word.to_dict(), divider.to_dict()]
+    }
+
+
+def test_joiner():
+    joiner = Joiner(atf.Joiner.DOT)
+
+    expected_value = '.'
+    assert joiner.value == expected_value
+    assert joiner.get_key() == f'Joiner⁝{expected_value}'
+    assert joiner.lemmatizable is False
+    assert joiner.to_dict() == {
+        'type': 'Joiner',
+        'value': expected_value,
     }
 
 

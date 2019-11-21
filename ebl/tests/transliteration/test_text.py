@@ -3,7 +3,7 @@ from typing import Tuple
 import pytest
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (Lemmatization,
@@ -12,14 +12,14 @@ from ebl.transliteration.domain.lemmatization import (Lemmatization,
 from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
                                              TextLine)
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import BrokenAway, Erasure, \
+from ebl.transliteration.domain.tokens import Erasure, \
     LineContinuation, \
-    PerhapsBrokenAway, Side, Word, ValueToken, LanguageShift, \
-    LoneDeterminative, Partial
+    Side, Word, ValueToken, LanguageShift, \
+    LoneDeterminative, Partial, Joiner
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am', parts=[
-        ValueToken('ha'), ValueToken('-'), ValueToken('am')
+        ValueToken('ha'), Joiner(atf.Joiner.HYPHEN), ValueToken('am')
     ])]),
     ControlLine.of_single('$', ValueToken(' single ruling'))
 )
@@ -28,7 +28,7 @@ TEXT: Text = Text(LINES, PARSER_VERSION)
 
 
 def test_of_iterable():
-    assert Text.of_iterable(LINES) == Text(LINES, ATF_PARSER_VERSION)
+    assert Text.of_iterable(LINES) == Text(LINES, atf.ATF_PARSER_VERSION)
 
 
 def test_lines():
@@ -59,7 +59,7 @@ def test_lemmatization():
 
 
 def test_atf():
-    assert TEXT.atf == Atf(
+    assert TEXT.atf == atf.Atf(
         '1. ha-am\n'
         '$ single ruling'
     )
@@ -73,7 +73,7 @@ def test_update_lemmatization():
     expected = Text((
         TextLine('1.', (
             Word('ha-am', unique_lemma=(WordId('nu I'),), parts=[
-                ValueToken('ha'), ValueToken('-'), ValueToken('am')
+                ValueToken('ha'), Joiner(atf.Joiner.HYPHEN), ValueToken('am')
             ]),
         )),
         ControlLine('$', (ValueToken(' single ruling'), )),
@@ -183,44 +183,6 @@ def test_update_lemmatization_wrong_lines():
                 Word('mu', parts=[ValueToken('mu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
                      parts=[ValueToken('nu')])
-            ])
-        ])
-    ), (
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('[ku-(nu)]',
-                     unique_lemma=(WordId('kunu I'),),
-                     alignment=4,
-                     parts=[
-                        ValueToken('['), ValueToken('ku'), ValueToken('-'),
-                        ValueToken('('), ValueToken('nu'), ValueToken(')'),
-                        ValueToken(']')
-                     ]),
-            ]),
-        ]),
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                BrokenAway('['),
-                Word('ku-(nu', parts=[
-                    ValueToken('ku'), ValueToken('-'), ValueToken('('),
-                    ValueToken('nu')
-                 ]),
-                PerhapsBrokenAway(')'),
-                BrokenAway(']')
-            ]),
-        ]),
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                BrokenAway('['),
-                Word('ku-(nu',
-                     unique_lemma=(WordId('kunu I'),),
-                     alignment=4,
-                     parts=[
-                         ValueToken('ku'), ValueToken('-'), ValueToken('('),
-                         ValueToken('nu')
-                     ]),
-                PerhapsBrokenAway(')'),
-                BrokenAway(']')
             ])
         ])
     )

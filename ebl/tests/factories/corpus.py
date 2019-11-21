@@ -15,11 +15,12 @@ from ebl.corpus.domain.text import (Chapter, Line, Manuscript, ManuscriptLine,
                                     Text)
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.tokens import Word, ValueToken
+from ebl.transliteration.domain.tokens import Word, ValueToken, Joiner
 
 
 class ManuscriptFactory(factory.Factory):
@@ -53,8 +54,8 @@ class ManuscriptLineFactory(factory.Factory):
     )
     line = TextLine('1.', (
         Word('ku]-nu-ši', parts=[
-            ValueToken('ku'), ValueToken(']'), ValueToken('-'),
-            ValueToken('nu'), ValueToken('-'), ValueToken('ši')
+            ValueToken('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+            ValueToken('nu'), Joiner(atf.Joiner.HYPHEN), ValueToken('ši')
         ]),
     ))
 

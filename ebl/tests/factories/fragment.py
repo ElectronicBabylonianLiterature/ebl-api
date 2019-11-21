@@ -6,12 +6,13 @@ from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import BrokenAway, Word, \
     UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column, \
-    Variant, ValueToken, UnidentifiedSign, UnclearSign
+    Variant, ValueToken, UnidentifiedSign, UnclearSign, Joiner
 
 
 class FragmentFactory(factory.Factory):
@@ -53,9 +54,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
             Tabulation('($___$)'),
             Word('[...-ku]-nu-ši', parts=[
                 ValueToken('['), UnknownNumberOfSigns(),
-                ValueToken('-'), ValueToken('ku'),
-                ValueToken(']'), ValueToken('-'),
-                ValueToken('nu'), ValueToken('-'),
+                Joiner(atf.Joiner.HYPHEN), ValueToken('ku'),
+                ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('nu'), Joiner(atf.Joiner.HYPHEN),
                 ValueToken('ši')
             ]),
             Variant.of(Divider(':'), Word('ku', parts=[ValueToken('ku')])),
@@ -72,7 +73,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway(']'),
             Word('GI₆', parts=[ValueToken('GI₆')]),
             Word('ana', parts=[ValueToken('ana')]),
-            Word('u₄-š[u', parts=[ValueToken('u₄'), ValueToken('-'),
+            Word('u₄-š[u', parts=[ValueToken('u₄'), Joiner(atf.Joiner.HYPHEN),
                                   ValueToken('š[u')]),
             UnknownNumberOfSigns(),
             BrokenAway(']'),
@@ -80,12 +81,13 @@ class TransliteratedFragmentFactory(FragmentFactory):
         TextLine("3'.", (
             BrokenAway('['),
             UnknownNumberOfSigns(),
-            Word('k]i-du', parts=[ValueToken('k]i'), ValueToken('-'),
+            Word('k]i-du', parts=[ValueToken('k]i'), Joiner(atf.Joiner.HYPHEN),
                                   ValueToken('du')]),
             Word('u', parts=[ValueToken('u')]),
-            Word('ba-ma-t[i', parts=[ValueToken('ba'), ValueToken('-'),
-                                     ValueToken('ma'), ValueToken('-'),
-                                     ValueToken('t[i')]),
+            Word('ba-ma-t[i', parts=[
+                ValueToken('ba'), Joiner(atf.Joiner.HYPHEN), ValueToken('ma'),
+                Joiner(atf.Joiner.HYPHEN), ValueToken('t[i')
+            ]),
             UnknownNumberOfSigns(),
             BrokenAway(']'),
         )),
@@ -95,9 +97,10 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway(']'),
             Word('x#', parts=[UnclearSign([Flag.DAMAGE])]),
             Word('mu', parts=[ValueToken('mu')]),
-            Word('ta-ma-tu₂', parts=[ValueToken('ta'), ValueToken('-'),
-                                     ValueToken('ma'), ValueToken('-'),
-                                     ValueToken('tu₂')])
+            Word('ta-ma-tu₂', parts=[
+                ValueToken('ta'), Joiner(atf.Joiner.HYPHEN), ValueToken('ma'),
+                Joiner(atf.Joiner.HYPHEN), ValueToken('tu₂')
+            ])
         )),
         TextLine("7'.", (
             Word('šu/|BI×IS|', parts=[ValueToken('šu/|BI×IS|')]),
@@ -125,9 +128,9 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 Tabulation('($___$)'),
                 Word('[...-ku]-nu-ši', parts=[
                     ValueToken('['), UnknownNumberOfSigns(),
-                    ValueToken('-'), ValueToken('ku'),
-                    ValueToken(']'), ValueToken('-'),
-                    ValueToken('nu'), ValueToken('-'),
+                    Joiner(atf.Joiner.HYPHEN), ValueToken('ku'),
+                    ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+                    ValueToken('nu'), Joiner(atf.Joiner.HYPHEN),
                     ValueToken('ši')
                 ]),
                 Variant.of(Divider(':'), Word('ku', parts=[ValueToken('ku')])),
@@ -146,7 +149,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 Word('ana', unique_lemma=(WordId('ana I'),),
                      parts=[ValueToken('ana')]),
                 Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),),
-                     parts=[ValueToken('u₄'), ValueToken('-'),
+                     parts=[ValueToken('u₄'), Joiner(atf.Joiner.HYPHEN),
                             ValueToken('š[u')]),
                 UnknownNumberOfSigns(),
                 BrokenAway(']'),
@@ -155,13 +158,15 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 BrokenAway('['),
                 UnknownNumberOfSigns(),
                 Word('k]i-du', unique_lemma=(WordId('kīdu I'),), parts=[
-                    ValueToken('k]i'), ValueToken('-'), ValueToken('du')
+                    ValueToken('k]i'), Joiner(atf.Joiner.HYPHEN),
+                    ValueToken('du')
                 ]),
                 Word('u', unique_lemma=(WordId('u I'),),
                      parts=[ValueToken('u')]),
                 Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),), parts=[
-                    ValueToken('ba'), ValueToken('-'), ValueToken('ma'),
-                    ValueToken('-'), ValueToken('t[i')
+                    ValueToken('ba'), Joiner(atf.Joiner.HYPHEN),
+                    ValueToken('ma'), Joiner(atf.Joiner.HYPHEN),
+                    ValueToken('t[i')
                 ]),
                 UnknownNumberOfSigns(),
                 BrokenAway(']'),
@@ -174,8 +179,9 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 Word('mu', unique_lemma=(WordId('mu I'),),
                      parts=[ValueToken('mu')]),
                 Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),), parts=[
-                    ValueToken('ta'), ValueToken('-'), ValueToken('ma'),
-                    ValueToken('-'), ValueToken('tu₂')
+                    ValueToken('ta'), Joiner(atf.Joiner.HYPHEN),
+                    ValueToken('ma'), Joiner(atf.Joiner.HYPHEN),
+                    ValueToken('tu₂')
                 ])
             )),
             TextLine("7'.", (

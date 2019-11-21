@@ -1,12 +1,14 @@
 from typing import Tuple, Mapping, Callable, Sequence
 
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.tokens import Token, ValueToken, Word, \
     ErasureState, LanguageShift, LoneDeterminative, Partial, \
     DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, OmissionOrRemoval, \
     LineContinuation, Erasure, Side, UnknownNumberOfSigns, Tabulation, \
-    CommentaryProtocol, Divider, Column, Variant, UnidentifiedSign, UnclearSign
+    CommentaryProtocol, Divider, Column, Variant, UnidentifiedSign, \
+    UnclearSign, Joiner
 
 _factories: Mapping[str, Callable[[dict], Token]] = {
     'Token': lambda data: ValueToken(
@@ -71,7 +73,8 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
     ),
     'UnclearSign': lambda data: UnclearSign(
         tuple(Flag(flag) for flag in data['flags'])
-    )
+    ),
+    'Joiner': lambda data: Joiner(atf.Joiner(data['value']))
 }
 
 

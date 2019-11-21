@@ -126,9 +126,9 @@ INLINE_BROKEN_AWAY: OPEN_INLINE_BROKEN_AWAY
 OPEN_INLINE_BROKEN_AWAY: /(\[\(|\[|(?<!{)\()/
 CLOSE_INLINE_BROKEN_AWAY: /(\)\]|\)(?!})|\])/
 
-lone_determinative.4: _d_prefix _value (_joiner* _value)* _d_suffix
+lone_determinative.4: _d_prefix _value (joiner* _value)* _d_suffix
 
-word.3:  _joiner? _any_open? (_inline_erasure | _parts) (_part_joiner? (_inline_erasure | _parts))* _any_close? _joiner?
+word.3:  joiner? _any_open? (_inline_erasure | _parts) (_part_joiner? (_inline_erasure | _parts))* _any_close? joiner?
 
 !_inline_erasure: "°" _parts? "\\" _parts? "°"
 
@@ -143,12 +143,12 @@ _d_suffix: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE _omission?
 OPEN_DETERMINATIVE: "{+" | "{"
 CLOSE_DETERMINATIVE: "}"
 
-_part_joiner: IN_WORD_NEWLINE? _any_close? _joiner _any_open?
-            | IN_WORD_NEWLINE? _any_close _joiner? _any_open?
-            | IN_WORD_NEWLINE? _any_close? _joiner? _any_open
+_part_joiner: IN_WORD_NEWLINE? _any_close? joiner _any_open?
+            | IN_WORD_NEWLINE? _any_close joiner? _any_open?
+            | IN_WORD_NEWLINE? _any_close? joiner? _any_open
 _any_close: (_close_inline_broken_away | _close_omission | _close_linguistic_gloss)+
 _any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
-!_joiner: "-" | "+" | "." | ":"
+!joiner: "-" | "+" | "." | ":"
 
 !_open_linguistic_gloss: "{{"
 !_close_linguistic_gloss: "}}"

@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
@@ -12,7 +13,8 @@ from ebl.transliteration.domain.tokens import (BrokenAway, DEFAULT_NORMALIZED,
                                                DocumentOrientedGloss, Erasure,
                                                LanguageShift,
                                                LoneDeterminative, Side,
-                                               ValueToken, Word, Tabulation)
+                                               ValueToken, Word, Tabulation,
+                                               Joiner)
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 
@@ -358,7 +360,7 @@ def test_update_lemmatization_wrong_lenght():
             ]),
             Word('ku-[nu#?]', unique_lemma=(WordId('kunu I'),), alignment=4,
                  parts=[
-                ValueToken('ku'), ValueToken('-'), ValueToken('['),
+                ValueToken('ku'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
                 ValueToken('nu#?'), ValueToken(']')
             ]),
         ]),
@@ -370,7 +372,8 @@ def test_update_lemmatization_wrong_lenght():
                 ValueToken('['), ValueToken('bu'), ValueToken(']')
             ]),
             Word('[k(u)-nu#?', parts=[
-                ValueToken('k(u)'), ValueToken('-'), ValueToken('nu#?')
+                ValueToken('k(u)'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('nu#?')
             ]),
             BrokenAway(']')
         ]),
@@ -383,7 +386,8 @@ def test_update_lemmatization_wrong_lenght():
             ]),
             Word('[k(u)-nu#?', unique_lemma=(WordId('kunu I'),), alignment=4,
                  parts=[
-                ValueToken('k(u)'), ValueToken('-'), ValueToken('nu#?')
+                ValueToken('k(u)'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('nu#?')
             ]),
             BrokenAway(']')
         ])

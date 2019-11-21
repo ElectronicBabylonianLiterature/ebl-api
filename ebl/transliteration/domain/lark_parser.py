@@ -6,7 +6,7 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Flag
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.text import Text
@@ -16,7 +16,7 @@ from ebl.transliteration.domain.tokens import BrokenAway, \
     ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
     OmissionOrRemoval, PerhapsBrokenAway, Side, ValueToken, \
     Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, \
-    Column, Variant, UnidentifiedSign, UnclearSign
+    Column, Variant, UnidentifiedSign, UnclearSign, Joiner
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 
@@ -40,15 +40,19 @@ class TreeToWord(Transformer):
 
     @v_args(inline=True)
     def unidentified_sign(self, flags):
-        return UnidentifiedSign(tuple(map(Flag, flags.children)))
+        return UnidentifiedSign(tuple(map(atf.Flag, flags.children)))
 
     @v_args(inline=True)
     def unclear_sign(self, flags):
-        return UnclearSign(tuple(map(Flag, flags.children)))
+        return UnclearSign(tuple(map(atf.Flag, flags.children)))
 
     @v_args(inline=True)
     def unknown_number_of_signs(self, _):
         return UnknownNumberOfSigns()
+
+    @v_args(inline=True)
+    def joiner(self, symbol):
+        return Joiner(atf.Joiner(str(symbol)))
 
 
 class TreeToErasure(TreeToWord):
@@ -159,7 +163,7 @@ class TreeToLine(TreeToErasure):
     def divider(self, value, modifiers, flags):
         return Divider(str(value),
                        tuple(map(str, modifiers.children)),
-                       tuple(map(Flag, flags.children)))
+                       tuple(map(atf.Flag, flags.children)))
 
     @v_args(inline=True)
     def column(self, number):
@@ -195,7 +199,7 @@ def parse_line(atf):
     return TreeToLine().transform(tree)
 
 
-def parse_atf_lark(atf):
+def parse_atf_lark(atf_):
     def parse_line_(line: str, line_number: int):
         try:
             return ((parse_line(line), None)
@@ -225,7 +229,7 @@ def parse_atf_lark(atf):
             raise TransliterationError(errors)
 
     lines = tuple(pydash
-                  .chain(atf)
+                  .chain(atf_)
                   .split('\n')
                   .map(parse_line_)
                   .tap(check_errors)
@@ -233,4 +237,4 @@ def parse_atf_lark(atf):
                   .drop_right_while(lambda line: line.prefix == '')
                   .value())
 
-    return Text(lines, f'{ATF_PARSER_VERSION}')
+    return Text(lines, f'{atf.ATF_PARSER_VERSION}')

@@ -437,8 +437,14 @@ class Variant(Token):
         }
 
 
-@attr.s(frozen=True)
-class Joiner(ValueToken):
+@attr.s(auto_attribs=True, frozen=True)
+class Joiner(Token):
+    _value: atf.Joiner
+
+    @property
+    def value(self):
+        return self._value.value
+
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),

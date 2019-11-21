@@ -5,7 +5,7 @@ from lark.exceptions import UnexpectedInput
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
-    ValueToken, UnidentifiedSign, UnclearSign, UnknownNumberOfSigns
+    ValueToken, UnidentifiedSign, UnclearSign, UnknownNumberOfSigns, Joiner
 
 
 @pytest.mark.parametrize('parser', [
@@ -20,41 +20,41 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
     ('GAL', Word('GAL', parts=[ValueToken('GAL')])),
     ('|GAL|', Word('|GAL|', parts=[ValueToken('|GAL|')])),
     ('x-ti', Word('x-ti', parts=[
-        UnclearSign(), ValueToken('-'), ValueToken('ti')
+        UnclearSign(), Joiner(atf.Joiner.HYPHEN), ValueToken('ti')
     ])),
     ('x.ti', Word('x.ti', parts=[
-        UnclearSign(), ValueToken('.'), ValueToken('ti')
+        UnclearSign(), Joiner(atf.Joiner.DOT), ValueToken('ti')
     ])),
     ('x+ti', Word('x+ti', parts=[
-        UnclearSign(), ValueToken('+'), ValueToken('ti')
+        UnclearSign(), Joiner(atf.Joiner.PLUS), ValueToken('ti')
     ])),
     ('x:ti', Word('x:ti', parts=[
-        UnclearSign(), ValueToken(':'), ValueToken('ti')
+        UnclearSign(), Joiner(atf.Joiner.COLON), ValueToken('ti')
     ])),
     ('ti-X', Word('ti-X', parts=[
-        ValueToken('ti'), ValueToken('-'), UnidentifiedSign()
+        ValueToken('ti'), Joiner(atf.Joiner.HYPHEN), UnidentifiedSign()
     ])),
     ('r]u-u₂-qu', Word('r]u-u₂-qu', parts=[
-        ValueToken('r]u'), ValueToken('-'), ValueToken('u₂'), ValueToken('-'),
-        ValueToken('qu')
+        ValueToken('r]u'), Joiner(atf.Joiner.HYPHEN), ValueToken('u₂'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('qu')
     ])),
     ('ru?-u₂-qu', Word('ru?-u₂-qu', parts=[
-        ValueToken('ru?'), ValueToken('-'), ValueToken('u₂'), ValueToken('-'),
-        ValueToken('qu')
+        ValueToken('ru?'), Joiner(atf.Joiner.HYPHEN), ValueToken('u₂'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('qu')
     ])),
     ('na-a[n-', Word('na-a[n-', parts=[
-        ValueToken('na'), ValueToken('-'),
-        ValueToken('a[n'), ValueToken('-')
+        ValueToken('na'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('a[n'), Joiner(atf.Joiner.HYPHEN)
     ])),
     ('-ku]-nu', Word('-ku]-nu', parts=[
-        ValueToken('-'), ValueToken('ku'), ValueToken(']'), ValueToken('-'),
-        ValueToken('nu')
+        Joiner(atf.Joiner.HYPHEN), ValueToken('ku'), ValueToken(']'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('nu')
     ])),
     ('gid₂', Word('gid₂', parts=[ValueToken('gid₂')])),
     ('|U₄&KAM₂|', Word('|U₄&KAM₂|', parts=[ValueToken('|U₄&KAM₂|')])),
     ('U₄].14.KAM₂', Word('U₄].14.KAM₂', parts=[
-        ValueToken('U₄'), ValueToken(']'), ValueToken('.'), ValueToken('14'),
-        ValueToken('.'), ValueToken('KAM₂')
+        ValueToken('U₄'), ValueToken(']'), Joiner(atf.Joiner.DOT),
+        ValueToken('14'), Joiner(atf.Joiner.DOT), ValueToken('KAM₂')
     ])),
     ('{ku}nu', Word('{ku}nu', parts=[
         ValueToken('{'), ValueToken('ku'), ValueToken('}'), ValueToken('nu')
@@ -79,54 +79,56 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
     ('šu/|BI×IS|', Word('šu/|BI×IS|', parts=[ValueToken('šu/|BI×IS|')])),
     ('{kur}aš+šur', Word('{kur}aš+šur', parts=[
         ValueToken('{'), ValueToken('kur'), ValueToken('}'), ValueToken('aš'),
-        ValueToken('+'), ValueToken('šur')
+        Joiner(atf.Joiner.PLUS), ValueToken('šur')
     ])),
     ('i-le-ʾe-[e', Word('i-le-ʾe-[e', parts=[
-        ValueToken('i'), ValueToken('-'), ValueToken('le'), ValueToken('-'),
-        ValueToken('ʾe'), ValueToken('-'), ValueToken('['), ValueToken('e')
+        ValueToken('i'), Joiner(atf.Joiner.HYPHEN), ValueToken('le'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('ʾe'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('['), ValueToken('e')
     ])),
     ('U₄.27/29.KAM', Word('U₄.27/29.KAM', parts=[
-        ValueToken('U₄'), ValueToken('.'), ValueToken('27/29'),
-        ValueToken('.'), ValueToken('KAM')
+        ValueToken('U₄'), Joiner(atf.Joiner.DOT), ValueToken('27/29'),
+        Joiner(atf.Joiner.DOT), ValueToken('KAM')
     ])),
     ('x/m[a', Word('x/m[a', parts=[ValueToken('x/m[a')])),
     ('SAL.{+mu-ru-ub}', Word('SAL.{+mu-ru-ub}', parts=[
-        ValueToken('SAL'), ValueToken('.'), ValueToken('{+'), ValueToken('mu'),
-        ValueToken('-'), ValueToken('ru'), ValueToken('-'), ValueToken('ub'),
-        ValueToken('}')
+        ValueToken('SAL'), Joiner(atf.Joiner.DOT), ValueToken('{+'),
+        ValueToken('mu'), Joiner(atf.Joiner.HYPHEN), ValueToken('ru'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('ub'), ValueToken('}')
     ])),
     ('{+mu-ru-ub}[LA', Word('{+mu-ru-ub}[LA', parts=[
-        ValueToken('{+'), ValueToken('mu'), ValueToken('-'), ValueToken('ru'),
-        ValueToken('-'), ValueToken('ub'), ValueToken('}'), ValueToken('['),
-        ValueToken('LA')
+        ValueToken('{+'), ValueToken('mu'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('ru'), Joiner(atf.Joiner.HYPHEN), ValueToken('ub'),
+        ValueToken('}'), ValueToken('['), ValueToken('LA')
     ])),
     ('I.{d}', Word('I.{d}', parts=[
-        ValueToken('I'), ValueToken('.'), ValueToken('{'), ValueToken('d'),
-        ValueToken('}')
+        ValueToken('I'), Joiner(atf.Joiner.DOT), ValueToken('{'),
+        ValueToken('d'), ValueToken('}')
     ])),
     ('{d}[UTU?', Word('{d}[UTU?', parts=[
         ValueToken('{'), ValueToken('d'), ValueToken('}'), ValueToken('['),
         ValueToken('UTU?')
     ])),
     ('.x.KAM', Word('.x.KAM', parts=[
-        ValueToken('.'), UnclearSign(), ValueToken('.'), ValueToken('KAM')
+        Joiner(atf.Joiner.DOT), UnclearSign(), Joiner(atf.Joiner.DOT),
+        ValueToken('KAM')
     ])),
     ('3.AM₃', Word('3.AM₃', parts=[
-        ValueToken('3'), ValueToken('.'), ValueToken('AM₃')
+        ValueToken('3'), Joiner(atf.Joiner.DOT), ValueToken('AM₃')
     ])),
     ('<{10}>bu', Word('<{10}>bu', parts=[
         ValueToken('<'), ValueToken('{'), ValueToken('10'), ValueToken('}'),
         ValueToken('>'), ValueToken('bu')
     ])),
     ('KA₂?].DINGIR.RA[{ki?}', Word('KA₂?].DINGIR.RA[{ki?}', parts=[
-        ValueToken('KA₂?'), ValueToken(']'), ValueToken('.'),
-        ValueToken('DINGIR'), ValueToken('.'), ValueToken('RA'),
+        ValueToken('KA₂?'), ValueToken(']'), Joiner(atf.Joiner.DOT),
+        ValueToken('DINGIR'), Joiner(atf.Joiner.DOT), ValueToken('RA'),
         ValueToken('['), ValueToken('{'), ValueToken('ki?'), ValueToken('}')
     ])),
     ('{d?}nu?-di]m₂?-mu[d?', Word('{d?}nu?-di]m₂?-mu[d?', parts=[
         ValueToken('{'), ValueToken('d?'), ValueToken('}'), ValueToken('nu?'),
-        ValueToken('-'), ValueToken('di]m₂?'), ValueToken('-'),
-        ValueToken('mu[d?')
+        Joiner(atf.Joiner.HYPHEN), ValueToken('di]m₂?'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('mu[d?')
     ])),
     ('<GAR?>', Word('<GAR?>', parts=[
         ValueToken('<'), ValueToken('GAR?'), ValueToken('>')
@@ -134,21 +136,22 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
     ('lu₂@v', Word('lu₂@v', parts=[ValueToken('lu₂@v')])),
     ('{lu₂@v}UM.ME.[A', Word('{lu₂@v}UM.ME.[A', parts=[
         ValueToken('{'), ValueToken('lu₂@v'), ValueToken('}'),
-        ValueToken('UM'), ValueToken('.'), ValueToken('ME'), ValueToken('.'),
-        ValueToken('['), ValueToken('A')
+        ValueToken('UM'), Joiner(atf.Joiner.DOT), ValueToken('ME'),
+        Joiner(atf.Joiner.DOT), ValueToken('['), ValueToken('A')
     ])),
     ('{lu₂@v}]KAB.SAR-M[EŠ', Word('{lu₂@v}]KAB.SAR-M[EŠ', parts=[
         ValueToken('{'), ValueToken('lu₂@v'), ValueToken('}'), ValueToken(']'),
-        ValueToken('KAB'), ValueToken('.'), ValueToken('SAR'), ValueToken('-'),
-        ValueToken('M[EŠ')
+        ValueToken('KAB'), Joiner(atf.Joiner.DOT), ValueToken('SAR'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('M[EŠ')
     ])),
     ('MIN<(ta-ne₂-hi)>', Word('MIN<(ta-ne₂-hi)>', parts=[
-        ValueToken('MIN'), ValueToken('<('), ValueToken('ta'), ValueToken('-'),
-        ValueToken('ne₂'), ValueToken('-'), ValueToken('hi'), ValueToken(')>')
+        ValueToken('MIN'), ValueToken('<('), ValueToken('ta'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('ne₂'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('hi'), ValueToken(')>')
     ])),
     ('UN#', Word('UN#', parts=[ValueToken('UN#')])),
     ('he₂-<(pa₃)>', Word('he₂-<(pa₃)>', parts=[
-        ValueToken('he₂'), ValueToken('-'), ValueToken('<('),
+        ValueToken('he₂'), Joiner(atf.Joiner.HYPHEN), ValueToken('<('),
         ValueToken('pa₃'), ValueToken(')>')
     ])),
     ('{[i]ti}AB', Word('{[i]ti}AB', parts=[
@@ -156,33 +159,35 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
         ValueToken('}'), ValueToken('AB')
     ])),
     ('in]-', Word('in]-', parts=[
-        ValueToken('in'), ValueToken(']'), ValueToken('-')
+        ValueToken('in'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN)
     ])),
     ('<en-da-ab>', Word('<en-da-ab>', parts=[
-        ValueToken('<'), ValueToken('en'), ValueToken('-'), ValueToken('da'),
-        ValueToken('-'), ValueToken('ab'), ValueToken('>')
+        ValueToken('<'), ValueToken('en'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('da'), Joiner(atf.Joiner.HYPHEN), ValueToken('ab'),
+        ValueToken('>')
     ])),
     ('me-e-li-°\\ku°', Word('me-e-li-°\\ku°', parts=[
-        ValueToken('me'), ValueToken('-'), ValueToken('e'), ValueToken('-'),
-        ValueToken('li'), ValueToken('-'), ValueToken('°'), ValueToken('\\'),
-        ValueToken('ku'), ValueToken('°')
+        ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('e'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('li'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('°'), ValueToken('\\'), ValueToken('ku'), ValueToken('°')
     ])),
     ('°me-e-li\\°-ku', Word('°me-e-li\\°-ku', parts=[
-        ValueToken('°'), ValueToken('me'), ValueToken('-'), ValueToken('e'),
-        ValueToken('-'), ValueToken('li'), ValueToken('\\'), ValueToken('°'),
-        ValueToken('-'), ValueToken('ku')
+        ValueToken('°'), ValueToken('me'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('e'), Joiner(atf.Joiner.HYPHEN), ValueToken('li'),
+        ValueToken('\\'), ValueToken('°'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('ku')
     ])),
     ('me-°e\\li°-ku', Word('me-°e\\li°-ku', parts=[
-        ValueToken('me'), ValueToken('-'), ValueToken('°'), ValueToken('e'),
-        ValueToken('\\'), ValueToken('li'), ValueToken('°'), ValueToken('-'),
-        ValueToken('ku')
+        ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('°'),
+        ValueToken('e'), ValueToken('\\'), ValueToken('li'), ValueToken('°'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('ku')
     ])),
     ('me-°e\\li°-me-°e\\li°-ku', Word('me-°e\\li°-me-°e\\li°-ku', parts=[
-        ValueToken('me'), ValueToken('-'), ValueToken('°'), ValueToken('e'),
-        ValueToken('\\'), ValueToken('li'), ValueToken('°'), ValueToken('-'),
-        ValueToken('me'), ValueToken('-'), ValueToken('°'), ValueToken('e'),
-        ValueToken('\\'), ValueToken('li'), ValueToken('°'), ValueToken('-'),
-        ValueToken('ku')
+        ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('°'),
+        ValueToken('e'), ValueToken('\\'), ValueToken('li'), ValueToken('°'),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('me'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('°'), ValueToken('e'), ValueToken('\\'), ValueToken('li'),
+        ValueToken('°'), Joiner(atf.Joiner.HYPHEN), ValueToken('ku')
     ])),
     ('...{d}kur', Word('...{d}kur', parts=[
         UnknownNumberOfSigns(), ValueToken('{'), ValueToken('d'),
@@ -193,27 +198,28 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
         UnknownNumberOfSigns()
     ])),
     ('...-kur-...', Word('...-kur-...', parts=[
-        UnknownNumberOfSigns(), ValueToken('-'), ValueToken('kur'),
-        ValueToken('-'), UnknownNumberOfSigns()
+        UnknownNumberOfSigns(), Joiner(atf.Joiner.HYPHEN), ValueToken('kur'),
+        Joiner(atf.Joiner.HYPHEN), UnknownNumberOfSigns()
     ])),
     ('kur-...-kur-...-kur', Word('kur-...-kur-...-kur', parts=[
-        ValueToken('kur'), ValueToken('-'), UnknownNumberOfSigns(),
-        ValueToken('-'), ValueToken('kur'), ValueToken('-'),
-        UnknownNumberOfSigns(), ValueToken('-'), ValueToken('kur')
+        ValueToken('kur'), Joiner(atf.Joiner.HYPHEN), UnknownNumberOfSigns(),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('kur'),
+        Joiner(atf.Joiner.HYPHEN), UnknownNumberOfSigns(),
+        Joiner(atf.Joiner.HYPHEN), ValueToken('kur')
     ])),
     ('...]-ku', Word('...]-ku', parts=[
-        UnknownNumberOfSigns(), ValueToken(']'), ValueToken('-'),
+        UnknownNumberOfSigns(), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
         ValueToken('ku')
     ])),
     ('ku-[...', Word('ku-[...', parts=[
-        ValueToken('ku'), ValueToken('-'), ValueToken('['),
+        ValueToken('ku'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
         UnknownNumberOfSigns()
     ])),
     ('....ku', Word('....ku', parts=[
-        UnknownNumberOfSigns(), ValueToken('.'), ValueToken('ku')
+        UnknownNumberOfSigns(), Joiner(atf.Joiner.DOT), ValueToken('ku')
     ])),
     ('ku....', Word('ku....', parts=[
-        ValueToken('ku'), ValueToken('.'), UnknownNumberOfSigns()
+        ValueToken('ku'), Joiner(atf.Joiner.DOT), UnknownNumberOfSigns()
     ])),
     ('(x)]', Word('(x)]', parts=[
         ValueToken('('), UnclearSign(), ValueToken(')'), ValueToken(']')
@@ -225,19 +231,22 @@ from ebl.transliteration.domain.tokens import LoneDeterminative, Word, \
     ('{m#}[{d}AG-sa-lim', Word('{m#}[{d}AG-sa-lim', parts=[
         ValueToken('{'), ValueToken('m#'), ValueToken('}'), ValueToken('['),
         ValueToken('{'), ValueToken('d'), ValueToken('}'), ValueToken('AG'),
-        ValueToken('-'), ValueToken('sa'), ValueToken('-'), ValueToken('lim')
+        Joiner(atf.Joiner.HYPHEN), ValueToken('sa'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('lim')
     ])),
     ('ša#-[<(mu-un-u₅)>]', Word('ša#-[<(mu-un-u₅)>]', parts=[
-        ValueToken('ša#'), ValueToken('-'), ValueToken('['), ValueToken('<('),
-        ValueToken('mu'), ValueToken('-'), ValueToken('un'), ValueToken('-'),
-        ValueToken('u₅'), ValueToken(')>'), ValueToken(']')
+        ValueToken('ša#'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
+        ValueToken('<('), ValueToken('mu'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('un'), Joiner(atf.Joiner.HYPHEN), ValueToken('u₅'),
+        ValueToken(')>'), ValueToken(']')
     ])),
     ('|UM×(ME.DA)|-b[i?', Word('|UM×(ME.DA)|-b[i?', parts=[
-        ValueToken('|UM×(ME.DA)|'), ValueToken('-'), ValueToken('b[i?')
+        ValueToken('|UM×(ME.DA)|'), Joiner(atf.Joiner.HYPHEN),
+        ValueToken('b[i?')
     ])),
     ('mu-un;-e₃', Word('mu-un;-e₃', parts=[
-        ValueToken('mu'), ValueToken('-'), ValueToken('un'), ValueToken(';'),
-        ValueToken('-'), ValueToken('e₃')
+        ValueToken('mu'), Joiner(atf.Joiner.HYPHEN), ValueToken('un'),
+        ValueToken(';'), Joiner(atf.Joiner.HYPHEN), ValueToken('e₃')
     ]))
 ])
 def test_word(parser, atf, expected):
