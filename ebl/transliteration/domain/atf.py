@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Mapping, NewType
+from typing import Mapping, NewType, Optional
 
 import pydash
 from pyoracc.atf.common.atffile import AtfFile
@@ -7,7 +7,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
-ATF_PARSER_VERSION = '0.17.0'
+ATF_PARSER_VERSION = '0.18.0'
 DEFAULT_ATF_PARSER_VERSION = '0.1.0'
 
 
@@ -153,3 +153,24 @@ ATF_HEADING = [
     '#atf: use math',
     '#atf: use legacy'
 ]
+
+
+_SUB_SCRIPT: Mapping[str, str] = {
+    '1': '₁',
+    '2': '₂',
+    '3': '₃',
+    '4': '₄',
+    '5': '₅',
+    '6': '₆',
+    '7': '₇',
+    '8': '₈',
+    '9': '₉',
+    '0': '₀',
+}
+
+
+def to_sub_index_string(number: Optional[int]) -> str:
+    return ''.join(
+        _SUB_SCRIPT[digit]
+        for digit in str(number)
+    ) if number is not None else ''

@@ -1,9 +1,10 @@
 from abc import abstractmethod
-from typing import Iterable, Tuple, Sequence
+from typing import Iterable, Tuple, Sequence, Optional
 
 import attr
 
 from ebl.transliteration.domain import atf as atf
+from ebl.transliteration.domain.atf import to_sub_index_string
 from ebl.transliteration.domain.tokens import Token
 
 
@@ -87,4 +88,45 @@ class Divider(Token):
             'divider': self.divider,
             'modifiers': list(self.modifiers),
             'flags': self.string_flags
+        }
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Reading(Token):
+    name: str
+    sub_index: Optional[int] = attr.ib(default=None)
+    modifiers: Sequence[str] = attr.ib(default=tuple(),
+                                       converter=tuple)
+    flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
+                                        converter=convert_flag_sequence)
+    sign: Optional[str] = None
+
+    @sub_index.validator
+    def _check_sub_index(self, _attribute, value):
+        if value is not None and value < 0:
+            raise ValueError(
+                'Sub-index must be None or >= 0.'
+            )
+
+    @property
+    def string_flags(self) -> Sequence[str]:
+        return [flag.value for flag in self.flags]
+
+    @property
+    def value(self) -> str:
+        sub_index = to_sub_index_string(self.sub_index)
+        modifiers = ''.join(self.modifiers)
+        flags = ''.join(self.string_flags)
+        sign = f'({self.sign})' if self.sign else ''
+        return f'{self.name}{sub_index}{modifiers}{flags}{sign}'
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Reading',
+            'name': self.name,
+            'subIndex': self.sub_index,
+            'modifiers': list(self.modifiers),
+            'flags': list(self.string_flags),
+            'sign': self.sign
         }

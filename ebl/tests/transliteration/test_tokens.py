@@ -7,8 +7,7 @@ from ebl.transliteration.domain.enclosure_tokens import Side, \
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign
+from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.tokens import (LanguageShift, LineContinuation,
                                                UnknownNumberOfSigns,
                                                Tabulation,
@@ -207,25 +206,6 @@ def test_commentary_protocol(protocol_enum):
     }
 
 
-def test_divider():
-    value = ':'
-    modifiers = ('@v', )
-    flags = (atf.Flag.UNCERTAIN,)
-    divider = Divider(value, modifiers, flags)
-
-    expected_value = ':@v?'
-    assert divider.value == expected_value
-    assert divider.get_key() == f'Divider⁝{expected_value}'
-    assert divider.lemmatizable is False
-    assert divider.to_dict() == {
-        'type': 'Divider',
-        'value': expected_value,
-        'divider': value,
-        'modifiers': list(modifiers),
-        'flags': ['?']
-    }
-
-
 def test_column():
     column = Column()
 
@@ -285,68 +265,6 @@ def test_joiner():
     assert joiner.to_dict() == {
         'type': 'Joiner',
         'value': expected_value,
-    }
-
-
-def test_unidentified_sign():
-    sign = UnidentifiedSign()
-
-    expected_value = 'X'
-    assert sign.value == expected_value
-    assert sign.get_key() == f'UnidentifiedSign⁝{expected_value}'
-    assert sign.flags == tuple()
-    assert sign.lemmatizable is False
-    assert sign.to_dict() == {
-        'type': 'UnidentifiedSign',
-        'value': expected_value,
-        'flags': []
-    }
-
-
-def test_unidentified_sign_with_flags():
-    flags = [atf.Flag.DAMAGE]
-    sign = UnidentifiedSign(flags)
-
-    expected_value = 'X#'
-    assert sign.value == expected_value
-    assert sign.get_key() == f'UnidentifiedSign⁝{expected_value}'
-    assert sign.flags == tuple(flags)
-    assert sign.lemmatizable is False
-    assert sign.to_dict() == {
-        'type': 'UnidentifiedSign',
-        'value': expected_value,
-        'flags': ['#']
-    }
-
-
-def test_unclear_sign():
-    sign = UnclearSign()
-
-    expected_value = 'x'
-    assert sign.value == expected_value
-    assert sign.get_key() == f'UnclearSign⁝{expected_value}'
-    assert sign.flags == tuple()
-    assert sign.lemmatizable is False
-    assert sign.to_dict() == {
-        'type': 'UnclearSign',
-        'value': expected_value,
-        'flags': []
-    }
-
-
-def test_unclear_sign_with_flags():
-    flags = [atf.Flag.CORRECTION]
-    sign = UnclearSign(flags)
-
-    expected_value = 'x!'
-    assert sign.value == expected_value
-    assert sign.get_key() == f'UnclearSign⁝{expected_value}'
-    assert sign.flags == tuple(flags)
-    assert sign.lemmatizable is False
-    assert sign.to_dict() == {
-        'type': 'UnclearSign',
-        'value': expected_value,
-        'flags': ['!']
     }
 
 
