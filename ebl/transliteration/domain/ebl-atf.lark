@@ -143,9 +143,9 @@ _d_suffix: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE _omission?
 OPEN_DETERMINATIVE: "{+" | "{"
 CLOSE_DETERMINATIVE: "}"
 
-_part_joiner: IN_WORD_NEWLINE? _any_close? joiner _any_open?
-            | IN_WORD_NEWLINE? _any_close joiner? _any_open?
-            | IN_WORD_NEWLINE? _any_close? joiner? _any_open
+_part_joiner: in_word_newline? _any_close? joiner _any_open?
+            | in_word_newline? _any_close joiner? _any_open?
+            | in_word_newline? _any_close? joiner? _any_open
 _any_close: (_close_inline_broken_away | _close_omission | _close_linguistic_gloss)+
 _any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
 !joiner: "-" | "+" | "." | ":"
@@ -211,6 +211,7 @@ DAMAGE: "#"
 MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
 MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
 
+in_word_newline: IN_WORD_NEWLINE
 IN_WORD_NEWLINE: ";"
 
 unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS

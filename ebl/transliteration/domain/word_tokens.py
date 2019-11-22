@@ -186,3 +186,16 @@ class Joiner(Token):
             **super().to_dict(),
             'type': 'Joiner'
         }
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class InWordNewline(Token):
+    @property
+    def value(self) -> str:
+        return atf.IN_WORD_NEWLINE
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'InWordNewline'
+        }

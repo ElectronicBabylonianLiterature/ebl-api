@@ -16,7 +16,7 @@ from ebl.transliteration.domain.tokens import (LanguageShift, LineContinuation,
                                                Column,
                                                Variant)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word, \
-    Joiner
+    Joiner, InWordNewline
 
 TOKENS = [
     UnknownNumberOfSigns(),
@@ -347,6 +347,19 @@ def test_unclear_sign_with_flags():
         'type': 'UnclearSign',
         'value': expected_value,
         'flags': ['!']
+    }
+
+
+def test_in_word_new_line():
+    newline = InWordNewline()
+
+    expected_value = ';'
+    assert newline.value == expected_value
+    assert newline.get_key() == f'InWordNewline⁝{expected_value}'
+    assert newline.lemmatizable is False
+    assert newline.to_dict() == {
+        'type': 'InWordNewline',
+        'value': expected_value,
     }
 
 

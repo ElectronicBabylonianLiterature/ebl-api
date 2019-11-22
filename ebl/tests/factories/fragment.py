@@ -15,7 +15,7 @@ from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, \
     Tabulation, CommentaryProtocol, Column, Variant, ValueToken
-from ebl.transliteration.domain.word_tokens import Word, Joiner
+from ebl.transliteration.domain.word_tokens import Word, Joiner, InWordNewline
 
 
 class FragmentFactory(factory.Factory):
@@ -100,9 +100,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
             BrokenAway(']'),
             Word('x#', parts=[UnclearSign([Flag.DAMAGE])]),
             Word('mu', parts=[ValueToken('mu')]),
-            Word('ta-ma-tu₂', parts=[
+            Word('ta-ma;-tu₂', parts=[
                 ValueToken('ta'), Joiner(atf.Joiner.HYPHEN), ValueToken('ma'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('tu₂')
+                InWordNewline(), Joiner(atf.Joiner.HYPHEN), ValueToken('tu₂')
             ])
         )),
         TextLine("7'.", (
@@ -125,69 +125,68 @@ class TransliteratedFragmentFactory(FragmentFactory):
 
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text((
-            TextLine("1'.", (
-                Word('X', parts=[UnidentifiedSign()]),
-                Column(),
-                Tabulation('($___$)'),
-                Word('[...-ku]-nu-ši', parts=[
-                    ValueToken('['), UnknownNumberOfSigns(),
-                    Joiner(atf.Joiner.HYPHEN), ValueToken('ku'),
-                    ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('nu'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('ši')
-                ]),
-                Variant.of(Divider(':'), Word('ku', parts=[ValueToken('ku')])),
-                BrokenAway('['),
-                UnknownNumberOfSigns(),
-                BrokenAway(']'),
-                Column(2),
-                Divider(':', ('@v',), (Flag.DAMAGE,)),
-                CommentaryProtocol('!qt'),
-            )),
-            TextLine("2'.", (
-                BrokenAway('['),
-                UnknownNumberOfSigns(),
-                Word('GI₆', unique_lemma=(WordId('ginâ I'),),
-                     parts=[ValueToken('GI₆')]),
-                Word('ana', unique_lemma=(WordId('ana I'),),
-                     parts=[ValueToken('ana')]),
-                Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),),
-                     parts=[ValueToken('u₄'), Joiner(atf.Joiner.HYPHEN),
-                            ValueToken('š[u')]),
-                UnknownNumberOfSigns(),
-                BrokenAway(']'),
-            )),
-            TextLine("3'.", (
-                BrokenAway('['),
-                UnknownNumberOfSigns(),
-                Word('k]i-du', unique_lemma=(WordId('kīdu I'),), parts=[
-                    ValueToken('k]i'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('du')
-                ]),
-                Word('u', unique_lemma=(WordId('u I'),),
-                     parts=[ValueToken('u')]),
-                Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),), parts=[
-                    ValueToken('ba'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('ma'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('t[i')
-                ]),
-                UnknownNumberOfSigns(),
-                BrokenAway(']'),
-            )),
-            TextLine("6'.", (
-                BrokenAway('['),
-                UnknownNumberOfSigns(),
-                BrokenAway(']'),
-                Word('x#', parts=[UnclearSign([Flag.DAMAGE])]),
-                Word('mu', unique_lemma=(WordId('mu I'),),
-                     parts=[ValueToken('mu')]),
-                Word('ta-ma-tu₂', unique_lemma=(WordId('tamalāku I'),), parts=[
-                    ValueToken('ta'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('ma'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('tu₂')
-                ])
-            )),
-            TextLine("7'.", (
-                Word('šu/|BI×IS|', parts=[ValueToken('šu/|BI×IS|')]),
-            ))
+        TextLine("1'.", (
+            Word('X', parts=[UnidentifiedSign()]),
+            Column(),
+            Tabulation('($___$)'),
+            Word('[...-ku]-nu-ši', parts=[
+                ValueToken('['), UnknownNumberOfSigns(),
+                Joiner(atf.Joiner.HYPHEN), ValueToken('ku'),
+                ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('nu'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('ši')
+            ]),
+            Variant.of(Divider(':'), Word('ku', parts=[ValueToken('ku')])),
+            BrokenAway('['),
+            UnknownNumberOfSigns(),
+            BrokenAway(']'),
+            Column(2),
+            Divider(':', ('@v',), (Flag.DAMAGE,)),
+            CommentaryProtocol('!qt'),
+        )),
+        TextLine("2'.", (
+            BrokenAway('['),
+            UnknownNumberOfSigns(),
+            Word('GI₆', unique_lemma=(WordId('ginâ I'),),
+                 parts=[ValueToken('GI₆')]),
+            Word('ana', unique_lemma=(WordId('ana I'),),
+                 parts=[ValueToken('ana')]),
+            Word('u₄-š[u', unique_lemma=(WordId("ūsu I"),),
+                 parts=[ValueToken('u₄'), Joiner(atf.Joiner.HYPHEN),
+                        ValueToken('š[u')]),
+            UnknownNumberOfSigns(),
+            BrokenAway(']'),
+        )),
+        TextLine("3'.", (
+            BrokenAway('['),
+            UnknownNumberOfSigns(),
+            Word('k]i-du', unique_lemma=(WordId('kīdu I'),), parts=[
+                ValueToken('k]i'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('du')
+            ]),
+            Word('u', unique_lemma=(WordId('u I'),),
+                 parts=[ValueToken('u')]),
+            Word('ba-ma-t[i', unique_lemma=(WordId('bamātu I'),), parts=[
+                ValueToken('ba'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('ma'), Joiner(atf.Joiner.HYPHEN),
+                ValueToken('t[i')
+            ]),
+            UnknownNumberOfSigns(),
+            BrokenAway(']'),
+        )),
+        TextLine("6'.", (
+            BrokenAway('['),
+            UnknownNumberOfSigns(),
+            BrokenAway(']'),
+            Word('x#', parts=[UnclearSign([Flag.DAMAGE])]),
+            Word('mu', unique_lemma=(WordId('mu I'),),
+                 parts=[ValueToken('mu')]),
+            Word('ta-ma;-tu₂', unique_lemma=(WordId('tamalāku I'),), parts=[
+                ValueToken('ta'), Joiner(atf.Joiner.HYPHEN), ValueToken('ma'),
+                InWordNewline(), Joiner(atf.Joiner.HYPHEN), ValueToken('tu₂')
+            ])
+        )),
+        TextLine("7'.", (
+            Word('šu/|BI×IS|', parts=[ValueToken('šu/|BI×IS|')]),
         ))
+    ))

@@ -21,7 +21,7 @@ from ebl.transliteration.domain.tokens import LanguageShift, \
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 from ebl.transliteration.domain.word_tokens import ErasureState, Word, \
-    LoneDeterminative, Joiner
+    LoneDeterminative, Joiner, InWordNewline
 
 
 class TreeToWord(Transformer):
@@ -33,10 +33,15 @@ class TreeToWord(Transformer):
 
     @staticmethod
     def _create_word(word_class, children):
-        tokens = tuple(map(lambda token: (ValueToken(str(token))
-                                          if isinstance(token, Token)
-                                          else token),
-                           children))
+        tokens = (pydash
+                  .chain(children)
+                  .flat_map_deep(lambda tree: (tree.children
+                                               if isinstance(tree, Tree)
+                                               else tree))
+                  .map_(lambda token: (ValueToken(str(token))
+                                       if isinstance(token, Token)
+                                       else token))
+                  .value())
 
         value = ''.join(token.value for token in tokens)
         return word_class(value, parts=tokens)
@@ -56,6 +61,10 @@ class TreeToWord(Transformer):
     @v_args(inline=True)
     def joiner(self, symbol):
         return Joiner(atf.Joiner(str(symbol)))
+
+    @v_args(inline=True)
+    def in_word_newline(self, _):
+        return InWordNewline()
 
 
 class TreeToErasure(TreeToWord):

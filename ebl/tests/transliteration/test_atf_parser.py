@@ -20,7 +20,7 @@ from ebl.transliteration.domain.tokens import (LanguageShift,
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
 from ebl.transliteration.domain.word_tokens import Partial, ErasureState, \
-    Word, LoneDeterminative, Joiner
+    Word, LoneDeterminative, Joiner, InWordNewline
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
@@ -532,7 +532,7 @@ def test_parser_version(parser, version):
         TextLine('1.', (
             Word('mu-un;-e₃', parts=[
                 ValueToken('mu'), Joiner(atf.Joiner.HYPHEN), ValueToken('un'),
-                ValueToken(';'), Joiner(atf.Joiner.HYPHEN), ValueToken('e₃')
+                InWordNewline(), Joiner(atf.Joiner.HYPHEN), ValueToken('e₃')
             ]),
             Divider(';')
         ))

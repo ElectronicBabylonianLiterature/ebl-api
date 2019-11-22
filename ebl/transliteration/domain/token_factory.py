@@ -12,7 +12,7 @@ from ebl.transliteration.domain.tokens import Token, ValueToken, \
     LanguageShift, LineContinuation, UnknownNumberOfSigns, \
     Tabulation, CommentaryProtocol, Column, Variant
 from ebl.transliteration.domain.word_tokens import Partial, ErasureState, \
-    Word, LoneDeterminative, Joiner
+    Word, LoneDeterminative, Joiner, InWordNewline
 
 _factories: Mapping[str, Callable[[dict], Token]] = {
     'Token': lambda data: ValueToken(
@@ -78,7 +78,8 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
     'UnclearSign': lambda data: UnclearSign(
         tuple(Flag(flag) for flag in data['flags'])
     ),
-    'Joiner': lambda data: Joiner(atf.Joiner(data['value']))
+    'Joiner': lambda data: Joiner(atf.Joiner(data['value'])),
+    'InWordNewline': lambda data: InWordNewline()
 }
 
 

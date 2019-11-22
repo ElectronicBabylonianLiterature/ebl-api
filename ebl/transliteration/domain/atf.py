@@ -112,6 +112,7 @@ WORD_SEPARATOR = ' '
 VARIANT_SEPARATOR = '/'
 UNCLEAR_SIGN = 'x'
 UNIDENTIFIED_SIGN = 'X'
+IN_WORD_NEWLINE = ';'
 
 FLAGS: Mapping[str, str] = {
     'uncertainty': pydash.escape_reg_exp(Flag.UNCERTAIN.value),

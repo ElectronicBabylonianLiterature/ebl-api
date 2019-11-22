@@ -8,7 +8,7 @@ from ebl.transliteration.domain.sign_tokens import UnidentifiedSign, \
     UnclearSign
 from ebl.transliteration.domain.tokens import ValueToken, UnknownNumberOfSigns
 from ebl.transliteration.domain.word_tokens import Word, LoneDeterminative, \
-    Joiner
+    Joiner, InWordNewline
 
 
 @pytest.mark.parametrize('parser', [
@@ -249,7 +249,7 @@ from ebl.transliteration.domain.word_tokens import Word, LoneDeterminative, \
     ])),
     ('mu-un;-e₃', Word('mu-un;-e₃', parts=[
         ValueToken('mu'), Joiner(atf.Joiner.HYPHEN), ValueToken('un'),
-        ValueToken(';'), Joiner(atf.Joiner.HYPHEN), ValueToken('e₃')
+        InWordNewline(), Joiner(atf.Joiner.HYPHEN), ValueToken('e₃')
     ]))
 ])
 def test_word(parser, atf, expected):
