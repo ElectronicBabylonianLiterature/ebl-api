@@ -20,7 +20,8 @@ from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.tokens import Word, ValueToken, Joiner
+from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.word_tokens import Word, Joiner
 
 
 class ManuscriptFactory(factory.Factory):

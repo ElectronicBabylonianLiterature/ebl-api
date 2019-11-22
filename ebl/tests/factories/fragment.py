@@ -8,11 +8,14 @@ from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
+    UnclearSign
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import BrokenAway, Word, \
-    UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, Column, \
-    Variant, ValueToken, UnidentifiedSign, UnclearSign, Joiner
+from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, \
+    Tabulation, CommentaryProtocol, Column, Variant, ValueToken
+from ebl.transliteration.domain.word_tokens import Word, Joiner
 
 
 class FragmentFactory(factory.Factory):

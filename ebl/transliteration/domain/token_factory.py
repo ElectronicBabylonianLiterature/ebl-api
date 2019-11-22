@@ -2,13 +2,17 @@ from typing import Tuple, Mapping, Callable, Sequence
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
+from ebl.transliteration.domain.enclosure_tokens import Side, \
+    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
+    OmissionOrRemoval
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.tokens import Token, ValueToken, Word, \
-    ErasureState, LanguageShift, LoneDeterminative, Partial, \
-    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, OmissionOrRemoval, \
-    LineContinuation, Erasure, Side, UnknownNumberOfSigns, Tabulation, \
-    CommentaryProtocol, Divider, Column, Variant, UnidentifiedSign, \
-    UnclearSign, Joiner
+from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
+    UnclearSign
+from ebl.transliteration.domain.tokens import Token, ValueToken, \
+    LanguageShift, LineContinuation, UnknownNumberOfSigns, \
+    Tabulation, CommentaryProtocol, Column, Variant
+from ebl.transliteration.domain.word_tokens import Partial, ErasureState, \
+    Word, LoneDeterminative, Joiner
 
 _factories: Mapping[str, Callable[[dict], Token]] = {
     'Token': lambda data: ValueToken(

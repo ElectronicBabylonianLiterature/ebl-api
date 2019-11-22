@@ -6,10 +6,10 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
 from ebl.errors import DataError
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.tokens import Token, TokenVisitor, \
-    Word
+from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
+from ebl.transliteration.domain.word_tokens import Word
 
 
 def invalid_atf(chapter: Chapter,

@@ -2,6 +2,8 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import Side, \
+    DocumentOrientedGloss, BrokenAway, Erasure
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
@@ -9,12 +11,10 @@ from ebl.transliteration.domain.lemmatization import (LemmatizationError,
                                                       LemmatizationToken)
 from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
                                              TextLine)
-from ebl.transliteration.domain.tokens import (BrokenAway, DEFAULT_NORMALIZED,
-                                               DocumentOrientedGloss, Erasure,
-                                               LanguageShift,
-                                               LoneDeterminative, Side,
-                                               ValueToken, Word, Tabulation,
-                                               Joiner)
+from ebl.transliteration.domain.tokens import (LanguageShift,
+                                               ValueToken, Tabulation)
+from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word, \
+    LoneDeterminative, Joiner
 
 LINE_NUMBER = LineNumberLabel.from_atf('1.')
 

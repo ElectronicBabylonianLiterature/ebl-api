@@ -4,6 +4,7 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import Side, Erasure
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (Lemmatization,
@@ -12,10 +13,10 @@ from ebl.transliteration.domain.lemmatization import (Lemmatization,
 from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
                                              TextLine)
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import Erasure, \
-    LineContinuation, \
-    Side, Word, ValueToken, LanguageShift, \
-    LoneDeterminative, Partial, Joiner
+from ebl.transliteration.domain.tokens import LineContinuation, \
+    ValueToken, LanguageShift
+from ebl.transliteration.domain.word_tokens import Partial, Word, \
+    LoneDeterminative, Joiner
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am', parts=[

@@ -2,15 +2,16 @@ from functools import singledispatchmethod  # type: ignore
 from typing import Callable, List, Tuple
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.enclosure_tokens import Side, \
+    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
+    OmissionOrRemoval
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.domain.tokens import (BrokenAway, DEFAULT_NORMALIZED,
-                                               DocumentOrientedGloss, Erasure,
-                                               LanguageShift,
-                                               OmissionOrRemoval,
-                                               PerhapsBrokenAway,
-                                               Side, Token,
-                                               TokenVisitor, Word, Divider,
+from ebl.transliteration.domain.sign_tokens import Divider
+from ebl.transliteration.domain.tokens import (LanguageShift,
+                                               Token,
+                                               TokenVisitor,
                                                CommentaryProtocol)
+from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
 
 class LanguageVisitor(TokenVisitor):

@@ -2,19 +2,21 @@ import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.enclosure_tokens import Side, \
+    DocumentOrientedGloss, Erasure
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import LemmatizationError, \
     LemmatizationToken
-from ebl.transliteration.domain.tokens import (DEFAULT_NORMALIZED,
-                                               DocumentOrientedGloss, Erasure,
-                                               LanguageShift, LineContinuation,
-                                               Side,
+from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
+    UnclearSign
+from ebl.transliteration.domain.tokens import (LanguageShift, LineContinuation,
                                                UnknownNumberOfSigns,
                                                Tabulation,
-                                               CommentaryProtocol, Divider,
-                                               ValueToken, Column, Word,
-                                               Variant, UnidentifiedSign,
-                                               UnclearSign, Joiner)
+                                               CommentaryProtocol, ValueToken,
+                                               Column,
+                                               Variant)
+from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word, \
+    Joiner
 
 TOKENS = [
     UnknownNumberOfSigns(),

@@ -2,28 +2,25 @@ import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import Side, \
+    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
+    OmissionOrRemoval
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
+    UnclearSign
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import (BrokenAway,
-                                               DocumentOrientedGloss,
-                                               Erasure,
-                                               ErasureState, LanguageShift,
+from ebl.transliteration.domain.tokens import (LanguageShift,
                                                LineContinuation,
-                                               LoneDeterminative,
-                                               OmissionOrRemoval,
-                                               Partial,
-                                               PerhapsBrokenAway, Side,
-                                               Word,
                                                UnknownNumberOfSigns,
                                                Tabulation,
-                                               CommentaryProtocol, Divider,
-                                               ValueToken, Column, Variant,
-                                               UnidentifiedSign, UnclearSign,
-                                               Joiner)
+                                               CommentaryProtocol, ValueToken,
+                                               Column, Variant)
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
+from ebl.transliteration.domain.word_tokens import Partial, ErasureState, \
+    Word, LoneDeterminative, Joiner
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 

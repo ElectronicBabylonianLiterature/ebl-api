@@ -11,7 +11,7 @@ from ebl.transliteration.domain.lemmatization import Lemmatization, \
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, \
     TextLine
 from ebl.transliteration.domain.token_factory import create_tokens
-from ebl.transliteration.domain.tokens import (Word)
+from ebl.transliteration.domain.word_tokens import Word
 
 
 @attr.s(auto_attribs=True, frozen=True)

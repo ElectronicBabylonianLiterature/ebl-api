@@ -7,18 +7,21 @@ from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import Side, \
+    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
+    OmissionOrRemoval
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
+    UnclearSign
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import BrokenAway, \
-    DocumentOrientedGloss, \
-    Erasure, \
-    ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
-    OmissionOrRemoval, PerhapsBrokenAway, Side, ValueToken, \
-    Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, \
-    Column, Variant, UnidentifiedSign, UnclearSign, Joiner
+from ebl.transliteration.domain.tokens import LanguageShift, \
+    LineContinuation, ValueToken, UnknownNumberOfSigns, Tabulation, \
+    CommentaryProtocol, Column, Variant
 from ebl.transliteration.domain.transliteration_error import \
     TransliterationError
+from ebl.transliteration.domain.word_tokens import ErasureState, Word, \
+    LoneDeterminative, Joiner
 
 
 class TreeToWord(Transformer):

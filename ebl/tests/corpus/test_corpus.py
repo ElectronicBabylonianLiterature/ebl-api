@@ -14,8 +14,9 @@ from ebl.transliteration.domain.alignment import Alignment, AlignmentError, \
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.tokens import Word, ValueToken, Joiner
+from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.value import INVALID_READING
+from ebl.transliteration.domain.word_tokens import Word, Joiner
 from ebl.users.domain.user import Guest
 
 COLLECTION = 'texts'
