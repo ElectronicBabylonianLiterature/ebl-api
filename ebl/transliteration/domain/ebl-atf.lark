@@ -57,13 +57,14 @@ omission_or_removal.-1: _omission
 broken_away.-1: BROKEN_AWAY
 perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
 
-flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
-modifiers: MODIFIER*
-
 _NEW_LINE: /\n/
 
 divider_variant: (variant_part | divider) "/" (variant_part | divider)
-variant_part: VARIANT_PART
+variant_part: unidentified_sign
+            | unclear_sign
+            | reading
+            | LOGOGRAM
+            | COMPOUND_GRAPHEME
 
 tabulation: TABULATION
 TABULATION: "($___$)"
@@ -128,24 +129,30 @@ CLOSE_INLINE_BROKEN_AWAY: /(\)\]|\)(?!})|\])/
 
 lone_determinative.4: _d_prefix _value (joiner* _value)* _d_suffix
 
-word.3:  joiner? _any_open? (_inline_erasure | _parts) (_part_joiner? (_inline_erasure | _parts))* _any_close? joiner?
+word.3: joiner? _any_open? _word_body _any_close? joiner?
+      | SURROGATE
+_word_body: (_inline_erasure _loose_joiner?)* _parts (_loose_joiner? _inline_erasure (_loose_joiner? _parts)?)*
 
 !_inline_erasure: "°" _parts? "\\" _parts? "°"
 
-_parts: (_value | (_determinative+ (_value | unknown_number_of_signs)?)) _parts_tail*
+_parts: _value _parts_tail*
+      | _determinative (_loose_joiner? _value)? _parts_tail*
+      | _determinative (_loose_joiner? unknown_number_of_signs)? _parts_tail*
       | unknown_number_of_signs _parts_tail+
-_parts_tail: _part_joiner (_value | unknown_number_of_signs)
-           | _part_joiner? _determinative+ (_value | unknown_number_of_signs)?
+_parts_tail: _strict_joiner (_value | unknown_number_of_signs)
+           | _loose_joiner? (_determinative _loose_joiner?)+ (_value | unknown_number_of_signs)?
 
-_determinative: _d_prefix _value (_part_joiner _value)* _d_suffix
+_determinative: _d_prefix _value (_strict_joiner _value)* _d_suffix
 _d_prefix: _omission? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
 _d_suffix: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE _omission?
 OPEN_DETERMINATIVE: "{+" | "{"
 CLOSE_DETERMINATIVE: "}"
 
-_part_joiner: in_word_newline? _any_close? joiner _any_open?
+_loose_joiner: _strict_joiner
             | in_word_newline? _any_close joiner? _any_open?
             | in_word_newline? _any_close? joiner? _any_open
+_strict_joiner: in_word_newline? _any_close? joiner _any_open?
+              | in_word_newline? _any_close? (_close_linguistic_gloss | _open_linguistic_gloss)+ _any_open?
 _any_close: (_close_inline_broken_away | _close_omission | _close_linguistic_gloss)+
 _any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
 !joiner: "-" | "+" | "." | ":"
@@ -155,21 +162,26 @@ _any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
 
 _value: unidentified_sign
       | unclear_sign
-      | READING_WITH_SIGN
-      | READING
+      | reading
+      | LOGOGRAM
       | COMPOUND_GRAPHEME
       | VARIANT
 VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)+
-VARIANT_PART: UNKNWON
+VARIANT_PART: UNKNOWN
             | READING_WITH_SIGN
             | READING
+            | LOGOGRAM
             | COMPOUND_GRAPHEME
- 
-READING_WITH_SIGN: READING "(" ANY_GRAPHEME ")"
 
+reading: VALUE_NAME sub_index modifiers flags ["(" ANY_GRAPHEME ")"]
+!sub_index: ["₀" | "₁".."₉" ("₀".."₉")*]
+READING_WITH_SIGN: (READING | LOGOGRAM) "(" ANY_GRAPHEME ")"
+SURROGATE: LOGOGRAM "<(" READING ("-" READING)* ")>"
+LOGOGRAM: LOGOGRAM_NAME SUB_INDEX? MODIFIER* FLAG
 READING: VALUE_NAME SUB_INDEX? MODIFIER* FLAG
+
 VALUE_NAME: VALUE_CHARACTER (INLINE_BROKEN_AWAY? VALUE_CHARACTER)*
-          | LOGOGRAM_CHARACTER (INLINE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
+LOGOGRAM_NAME: LOGOGRAM_CHARACTER (INLINE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h" 
                | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
                | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
@@ -177,7 +189,6 @@ VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h"
 LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
                    | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
                    | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
-                   | "0".."9"
 SUB_INDEX: ("₀".."₉" | "ₓ")+
 
 ANY_GRAPHEME: COMPOUND_GRAPHEME | GRAPHEME
@@ -198,16 +209,18 @@ GRAPHEME_CHARACTER: "a".."z"
 
 unidentified_sign: "X" flags
 unclear_sign: "x" flags
-UNKNWON: ("X" | "x") FLAG
+UNKNOWN: ("X" | "x") FLAG
 
 VARIANT_SEPARATOR: "/"
 
+flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
 FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
 UNCERTAIN: "?"
 CORRECTION: "!"
 COLLATION: "*"
 DAMAGE: "#"
 
+modifiers: MODIFIER*
 MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
 MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
 

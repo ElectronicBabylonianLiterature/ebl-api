@@ -1,9 +1,8 @@
 import re
-import unicodedata
 
 from ebl.transliteration.domain.atf import ATF_SPEC, UNCLEAR_SIGN, \
     UNIDENTIFIED_SIGN, \
-    VARIANT_SEPARATOR
+    VARIANT_SEPARATOR, sub_index_to_int
 from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.standardization import is_splittable
 from ebl.transliteration.domain.value import Value, ValueFactory
@@ -18,10 +17,6 @@ READING_PATTERN = ATF_SPEC['reading']
 VARIANT_PATTERN = ATF_SPEC['variant']
 
 
-def unicode_to_int(string):
-    return int(unicodedata.normalize('NFKC', string))
-
-
 def get_group(group):
     return lambda match: match.group(group)
 
@@ -33,7 +28,7 @@ def map_number(match):
 
 def map_reading(match):
     sub_index = (
-        unicode_to_int(match.group(2))
+        sub_index_to_int(match.group(2))
         if match.group(2)
         else 1
     )

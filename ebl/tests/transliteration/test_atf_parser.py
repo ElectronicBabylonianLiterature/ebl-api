@@ -9,7 +9,7 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign
+    UnclearSign, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (LanguageShift,
                                                LineContinuation,
@@ -64,7 +64,7 @@ def test_parser_version(parser, version):
         ControlLine.of_single('=:', ValueToken(' continuation'))
     ]),
     ('a+1.a+2. šu', [
-        TextLine('a+1.a+2.', (Word('šu', parts=[ValueToken('šu')]),))
+        TextLine('a+1.a+2.', (Word('šu', parts=[Reading('šu')]),))
     ]),
     ('1. ($___$)', [
         TextLine('1.', (Tabulation('($___$)'),))
@@ -99,9 +99,9 @@ def test_parser_version(parser, version):
     ('1. <en-da-ab-su₈ ... >', [
         TextLine('1.', (
             Word('<en-da-ab-su₈', parts=[
-                ValueToken('<'), ValueToken('en'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('da'), Joiner(atf.Joiner.HYPHEN), ValueToken('ab'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('su₈')
+                ValueToken('<'), Reading('en'), Joiner(atf.Joiner.HYPHEN),
+                Reading('da'), Joiner(atf.Joiner.HYPHEN), Reading('ab'),
+                Joiner(atf.Joiner.HYPHEN), Reading('su', 8)
             ]),
             UnknownNumberOfSigns(),
             OmissionOrRemoval('>')
@@ -126,7 +126,7 @@ def test_parser_version(parser, version):
         TextLine('1.', (
                 Variant.of(Divider('|'), Divider(':')),
                 Variant.of(Divider(":'"),
-                           Word('sal', parts=[ValueToken('sal')])),
+                           Word('sal', parts=[Reading('sal')])),
                 Variant.of(Divider('/'), Divider(':')),
                 Variant.of(Divider(':'), Divider('/'))
         ))
@@ -134,17 +134,17 @@ def test_parser_version(parser, version):
     ('1. me-e+li  me.e:li :\n2. ku', [
         TextLine('1.', (
             Word('me-e+li', parts=[
-                ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('e'),
-                Joiner(atf.Joiner.PLUS), ValueToken('li')
+                Reading('me'), Joiner(atf.Joiner.HYPHEN), Reading('e'),
+                Joiner(atf.Joiner.PLUS), Reading('li')
             ]),
             Word('me.e:li', parts=[
-                ValueToken('me'), Joiner(atf.Joiner.DOT), ValueToken('e'),
-                Joiner(atf.Joiner.COLON), ValueToken('li')
+                Reading('me'), Joiner(atf.Joiner.DOT), Reading('e'),
+                Joiner(atf.Joiner.COLON), Reading('li')
             ]),
             Divider(':')
         )),
         TextLine('2.', (
-            Word('ku', parts=[ValueToken('ku')]),
+            Word('ku', parts=[Reading('ku')]),
         ))
     ]),
     ('1. |GAL|', [
@@ -173,10 +173,10 @@ def test_parser_version(parser, version):
     ('1. x-ti ti-X', [
         TextLine('1.', (
             Word('x-ti', parts=[
-                UnclearSign(), Joiner(atf.Joiner.HYPHEN), ValueToken('ti')
+                UnclearSign(), Joiner(atf.Joiner.HYPHEN), Reading('ti')
             ]),
             Word('ti-X', parts=[
-                ValueToken('ti'), Joiner(atf.Joiner.HYPHEN), UnidentifiedSign()
+                Reading('ti'), Joiner(atf.Joiner.HYPHEN), UnidentifiedSign()
             ])
         ))
     ]),
@@ -185,36 +185,37 @@ def test_parser_version(parser, version):
             BrokenAway('['),
             UnknownNumberOfSigns(),
             Word('r]u?-u₂-qu', parts=[
-                ValueToken('r]u?'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('u₂'), Joiner(atf.Joiner.HYPHEN), ValueToken('qu')
+                Reading('r]u', flags=[atf.Flag.UNCERTAIN]),
+                Joiner(atf.Joiner.HYPHEN), Reading('u', 2),
+                Joiner(atf.Joiner.HYPHEN), Reading('qu')
             ]),
             Word('na-a[n-...]', parts=[
-                ValueToken('na'), Joiner(atf.Joiner.HYPHEN), ValueToken('a[n'),
+                Reading('na'), Joiner(atf.Joiner.HYPHEN), Reading('a[n'),
                 Joiner(atf.Joiner.HYPHEN), UnknownNumberOfSigns(),
                 ValueToken(']')
             ]),
         )),
         TextLine('2.', (
             Word('ši-[ku-...-ku]-nu', parts=[
-                ValueToken('ši'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
-                ValueToken('ku'), Joiner(atf.Joiner.HYPHEN),
+                Reading('ši'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
+                Reading('ku'), Joiner(atf.Joiner.HYPHEN),
                 UnknownNumberOfSigns(), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('nu')
+                Reading('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+                Reading('nu')
             ]),
         )),
         TextLine('3.', (
             Word('[...]-ku', parts=[
                 ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('ku')
+                Joiner(atf.Joiner.HYPHEN), Reading('ku')
             ]),
         ))
     ]),
     ('1. ša₃] [{d}UTU [ :', [
         TextLine('1.', (
-            Word('ša₃]', parts=[ValueToken('ša₃'), ValueToken(']')]),
+            Word('ša₃]', parts=[Reading('ša', 3), ValueToken(']')]),
             Word('[{d}UTU', parts=[
-                ValueToken('['), ValueToken('{'), ValueToken('d'),
+                ValueToken('['), ValueToken('{'), Reading('d'),
                 ValueToken('}'), ValueToken('UTU')]),
             BrokenAway('['),
             Divider(':')
@@ -224,17 +225,17 @@ def test_parser_version(parser, version):
         TextLine('1.', (
             Word('[...]-qa-[...]-ba-[...]', parts=[
                 ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('qa'),
+                Joiner(atf.Joiner.HYPHEN), Reading('qa'),
                 Joiner(atf.Joiner.HYPHEN), ValueToken('['),
                 UnknownNumberOfSigns(), ValueToken(']'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('ba'),
+                Joiner(atf.Joiner.HYPHEN), Reading('ba'),
                 Joiner(atf.Joiner.HYPHEN), ValueToken('['),
                 UnknownNumberOfSigns(), ValueToken(']')
             ]),
         )),
         TextLine('2.', (
             Word('pa-[...]', parts=[
-                ValueToken('pa'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
+                Reading('pa'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
                 UnknownNumberOfSigns(), ValueToken(']')
             ]),
         ))
@@ -242,8 +243,8 @@ def test_parser_version(parser, version):
     ('1. [a?-ku (...)]\n2. [a?-ku (x)]', [
         TextLine('1.', (
             Word('[a?-ku', parts=[
-                ValueToken('['), ValueToken('a?'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('ku')
+                ValueToken('['), Reading('a', flags=[atf.Flag.UNCERTAIN]),
+                Joiner(atf.Joiner.HYPHEN), Reading('ku')
             ]),
             PerhapsBrokenAway('('),
             UnknownNumberOfSigns(),
@@ -252,8 +253,8 @@ def test_parser_version(parser, version):
         )),
         TextLine('2.', (
             Word('[a?-ku', parts=[
-                ValueToken('['), ValueToken('a?'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('ku')
+                ValueToken('['), Reading('a', flags=[atf.Flag.UNCERTAIN]),
+                Joiner(atf.Joiner.HYPHEN), Reading('ku')
             ]),
             Word('(x)]', parts=[
                 ValueToken('('), UnclearSign(), ValueToken(')'),
@@ -265,12 +266,12 @@ def test_parser_version(parser, version):
         TextLine('1.', (
             Word('[...+ku....]', parts=[
                 ValueToken('['), UnknownNumberOfSigns(),
-                Joiner(atf.Joiner.PLUS), ValueToken('ku'),
+                Joiner(atf.Joiner.PLUS), Reading('ku'),
                 Joiner(atf.Joiner.DOT), UnknownNumberOfSigns(), ValueToken(']')
             ]),
             Word('[....ku+...]', parts=[
                 ValueToken('['), UnknownNumberOfSigns(),
-                Joiner(atf.Joiner.DOT), ValueToken('ku'),
+                Joiner(atf.Joiner.DOT), Reading('ku'),
                 Joiner(atf.Joiner.PLUS), UnknownNumberOfSigns(),
                 ValueToken(']')
             ])
@@ -290,7 +291,7 @@ def test_parser_version(parser, version):
                     '{bu}',
                     Partial(False, False),
                     ErasureState.NONE,
-                    [ValueToken('{'), ValueToken('bu'), ValueToken('}')]
+                    [ValueToken('{'), Reading('bu'), ValueToken('}')]
                 ),
                 BrokenAway('['),
                 UnknownNumberOfSigns(),
@@ -299,7 +300,7 @@ def test_parser_version(parser, version):
             TextLine('2.', (
                 Word('[...]{bu}', parts=[
                     ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
-                    ValueToken('{'), ValueToken('bu'), ValueToken('}')
+                    ValueToken('{'), Reading('bu'), ValueToken('}')
                 ]),
                 BrokenAway('['),
                 UnknownNumberOfSigns(),
@@ -310,14 +311,14 @@ def test_parser_version(parser, version):
                 UnknownNumberOfSigns(),
                 BrokenAway(']'),
                 Word('{bu}[...]', parts=[
-                    ValueToken('{'), ValueToken('bu'), ValueToken('}'),
+                    ValueToken('{'), Reading('bu'), ValueToken('}'),
                     ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
                 ])
             )),
             TextLine('4.', (
                 Word('[...]{bu}[...]', parts=[
                     ValueToken('['), UnknownNumberOfSigns(), ValueToken(']'),
-                    ValueToken('{'), ValueToken('bu'), ValueToken('}'),
+                    ValueToken('{'), Reading('bu'), ValueToken('}'),
                     ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
                 ]),
             ))
@@ -326,13 +327,13 @@ def test_parser_version(parser, version):
     ('1. {bu}-nu {bu-bu}-nu\n2. {bu-bu}', [
         TextLine('1.', (
             Word('{bu}-nu', parts=[
-                ValueToken('{'), ValueToken('bu'), ValueToken('}'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('nu')
+                ValueToken('{'), Reading('bu'), ValueToken('}'),
+                Joiner(atf.Joiner.HYPHEN), Reading('nu')
             ]),
             Word('{bu-bu}-nu', parts=[
-                ValueToken('{'), ValueToken('bu'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('bu'), ValueToken('}'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('nu')
+                ValueToken('{'), Reading('bu'), Joiner(atf.Joiner.HYPHEN),
+                Reading('bu'), ValueToken('}'), Joiner(atf.Joiner.HYPHEN),
+                Reading('nu')
             ])
         )),
         TextLine('2.', (
@@ -340,8 +341,8 @@ def test_parser_version(parser, version):
                 '{bu-bu}',
                 Partial(False, False),
                 ErasureState.NONE,
-                [ValueToken('{'), ValueToken('bu'), Joiner(atf.Joiner.HYPHEN),
-                 ValueToken('bu'), ValueToken('}')]
+                [ValueToken('{'), Reading('bu'), Joiner(atf.Joiner.HYPHEN),
+                 Reading('bu'), ValueToken('}')]
             ),
         )),
     ]),
@@ -349,14 +350,16 @@ def test_parser_version(parser, version):
         TextLine('1.', (
             Word('KIMIN', parts=[ValueToken('KIMIN')]),
             Word('{u₂#}[...]', parts=[
-                ValueToken('{'), ValueToken('u₂#'), ValueToken('}'),
-                ValueToken('['), UnknownNumberOfSigns(), ValueToken(']')
+                ValueToken('{'), Reading('u', 2, flags=[atf.Flag.DAMAGE]),
+                ValueToken('}'), ValueToken('['), UnknownNumberOfSigns(),
+                ValueToken(']')
             ]),
             LoneDeterminative.of_value(
                 '{u₂#}',
                 Partial(False, False),
                 ErasureState.NONE,
-                [ValueToken('{'), ValueToken('u₂#'), ValueToken('}')]
+                [ValueToken('{'), Reading('u', 2, flags=[atf.Flag.DAMAGE]),
+                 ValueToken('}')]
             ),
             BrokenAway('['),
             UnknownNumberOfSigns(),
@@ -365,16 +368,16 @@ def test_parser_version(parser, version):
     ]),
     ('1. šu gid₂\n2. U₄].14.KAM₂ U₄.15.KAM₂', [
         TextLine('1.', (
-            Word('šu', parts=[ValueToken('šu')]),
-            Word('gid₂', parts=[ValueToken('gid₂')])
+            Word('šu', parts=[Reading('šu')]),
+            Word('gid₂', parts=[Reading('gid', 2)])
         )),
         TextLine('2.', (
             Word('U₄].14.KAM₂', parts=[
                 ValueToken('U₄'), ValueToken(']'), Joiner(atf.Joiner.DOT),
-                ValueToken('14'), Joiner(atf.Joiner.DOT), ValueToken('KAM₂')
+                Reading('14'), Joiner(atf.Joiner.DOT), ValueToken('KAM₂')
             ]),
             Word('U₄.15.KAM₂', parts=[
-                ValueToken('U₄'), Joiner(atf.Joiner.DOT), ValueToken('15'),
+                ValueToken('U₄'), Joiner(atf.Joiner.DOT), Reading('15'),
                 Joiner(atf.Joiner.DOT), ValueToken('KAM₂')
             ])
         ))
@@ -383,12 +386,12 @@ def test_parser_version(parser, version):
         TextLine('1.', (
                 DocumentOrientedGloss('{('),
                 Word('he-pi₂', parts=[
-                    ValueToken('he'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('pi₂')
+                    Reading('he'), Joiner(atf.Joiner.HYPHEN),
+                    Reading('pi', 2)
                 ]),
                 Word('eš-šu₂', parts=[
-                    ValueToken('eš'), Joiner(atf.Joiner.HYPHEN),
-                    ValueToken('šu₂')
+                    Reading('eš'), Joiner(atf.Joiner.HYPHEN),
+                    Reading('šu', 2)
                 ]),
                 DocumentOrientedGloss(')}')
         )),
@@ -401,20 +404,20 @@ def test_parser_version(parser, version):
     ]),
     ('1.  sal/: šim ', [
         TextLine('1.', (
-            Variant.of(Word('sal', parts=[ValueToken('sal')]),
+            Variant.of(Word('sal', parts=[Reading('sal')]),
                        Divider(':')),
-            Word('šim', parts=[ValueToken('šim')])))
+            Word('šim', parts=[Reading('šim')])))
     ]),
     ('1. °me-e-li\\ku°', [
         TextLine('1.', (
             Erasure('°', Side.LEFT),
             Word('me-e-li', erasure=ErasureState.ERASED, parts=[
-                ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('e'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('li')
+                Reading('me'), Joiner(atf.Joiner.HYPHEN), Reading('e'),
+                Joiner(atf.Joiner.HYPHEN), Reading('li')
             ]),
             Erasure('\\', Side.CENTER),
             Word('ku', erasure=ErasureState.OVER_ERASED, parts=[
-                ValueToken('ku')
+                Reading('ku')
             ]),
             Erasure('°', Side.RIGHT),
         )),
@@ -422,50 +425,50 @@ def test_parser_version(parser, version):
     ('1. me-e-li-°\\ku°', [
         TextLine('1.', (
             Word('me-e-li-°\\ku°', parts=[
-                ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('e'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('li'),
+                Reading('me'), Joiner(atf.Joiner.HYPHEN), Reading('e'),
+                Joiner(atf.Joiner.HYPHEN), Reading('li'),
                 Joiner(atf.Joiner.HYPHEN), ValueToken('°'), ValueToken('\\'),
-                ValueToken('ku'), ValueToken('°')
+                Reading('ku'), ValueToken('°')
             ]),
         )),
     ]),
     ('1. °me-e-li\\°-ku', [
         TextLine('1.', (
             Word('°me-e-li\\°-ku', parts=[
-                ValueToken('°'), ValueToken('me'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('e'), Joiner(atf.Joiner.HYPHEN), ValueToken('li'),
+                ValueToken('°'), Reading('me'), Joiner(atf.Joiner.HYPHEN),
+                Reading('e'), Joiner(atf.Joiner.HYPHEN), Reading('li'),
                 ValueToken('\\'), ValueToken('°'), Joiner(atf.Joiner.HYPHEN),
-                ValueToken('ku')
+                Reading('ku')
             ]),
         )),
     ]),
     ('1. me-°e\\li°-ku', [
         TextLine('1.', (
             Word('me-°e\\li°-ku', parts=[
-                ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('°'),
-                ValueToken('e'), ValueToken('\\'), ValueToken('li'),
-                ValueToken('°'), Joiner(atf.Joiner.HYPHEN), ValueToken('ku')
+                Reading('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('°'),
+                Reading('e'), ValueToken('\\'), Reading('li'),
+                ValueToken('°'), Joiner(atf.Joiner.HYPHEN), Reading('ku')
             ]),
         )),
     ]),
     ('1. me-°e\\li°-me-°e\\li°-ku', [
         TextLine('1.', (
             Word('me-°e\\li°-me-°e\\li°-ku', parts=[
-                ValueToken('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('°'),
-                ValueToken('e'), ValueToken('\\'), ValueToken('li'),
-                ValueToken('°'), Joiner(atf.Joiner.HYPHEN), ValueToken('me'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('°'), ValueToken('e'),
-                ValueToken('\\'), ValueToken('li'), ValueToken('°'),
-                Joiner(atf.Joiner.HYPHEN), ValueToken('ku')
+                Reading('me'), Joiner(atf.Joiner.HYPHEN), ValueToken('°'),
+                Reading('e'), ValueToken('\\'), Reading('li'),
+                ValueToken('°'), Joiner(atf.Joiner.HYPHEN), Reading('me'),
+                Joiner(atf.Joiner.HYPHEN), ValueToken('°'), Reading('e'),
+                ValueToken('\\'), Reading('li'), ValueToken('°'),
+                Joiner(atf.Joiner.HYPHEN), Reading('ku')
             ]),
         )),
     ]),
     ('1. sal →', [
-        TextLine('1.', (Word('sal', parts=[ValueToken('sal')]),
+        TextLine('1.', (Word('sal', parts=[Reading('sal')]),
                         LineContinuation('→')))
     ]),
     ('2. sal →  ', [
-        TextLine('2.', (Word('sal', parts=[ValueToken('sal')]),
+        TextLine('2.', (Word('sal', parts=[Reading('sal')]),
                         LineContinuation('→')))
     ]),
     ('1. [{(he-pi₂ e]š-šu₂)}', [
@@ -473,10 +476,10 @@ def test_parser_version(parser, version):
             BrokenAway('['),
             DocumentOrientedGloss('{('),
             Word('he-pi₂', parts=[
-                ValueToken('he'), Joiner(atf.Joiner.HYPHEN), ValueToken('pi₂')
+                Reading('he'), Joiner(atf.Joiner.HYPHEN), Reading('pi', 2)
             ]),
             Word('e]š-šu₂', parts=[
-                ValueToken('e]š'), Joiner(atf.Joiner.HYPHEN), ValueToken('šu₂')
+                Reading('e]š'), Joiner(atf.Joiner.HYPHEN), Reading('šu', 2)
             ]),
             DocumentOrientedGloss(')}')
         ))
@@ -484,20 +487,20 @@ def test_parser_version(parser, version):
     ('1. [{iti}...]', [
         TextLine('1.', (
             Word('[{iti}...]', parts=[
-                ValueToken('['), ValueToken('{'), ValueToken('iti'),
+                ValueToken('['), ValueToken('{'), Reading('iti'),
                 ValueToken('}'), UnknownNumberOfSigns(), ValueToken(']')
             ]),
         ))
     ]),
     ('2. RA{k[i]}', [
         TextLine('2.', (Word('RA{k[i]}', parts=[
-            ValueToken('RA'), ValueToken('{'), ValueToken('k[i'),
+            ValueToken('RA'), ValueToken('{'), Reading('k[i'),
             ValueToken(']'), ValueToken('}')
         ]),))
     ]),
     ('2. in]-<(...)>', [
         TextLine('2.', (Word('in]-<(...)>', parts=[
-            ValueToken('in'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+            Reading('in'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
             ValueToken('<('), UnknownNumberOfSigns(), ValueToken(')>')
         ]), ))
 
@@ -505,24 +508,24 @@ def test_parser_version(parser, version):
     ('2. ...{d}kur ... {d}kur', [
         TextLine('2.', (
             Word('...{d}kur', parts=[
-                UnknownNumberOfSigns(), ValueToken('{'), ValueToken('d'),
-                ValueToken('}'), ValueToken('kur')
+                UnknownNumberOfSigns(), ValueToken('{'), Reading('d'),
+                ValueToken('}'), Reading('kur')
             ]),
             UnknownNumberOfSigns(),
             Word('{d}kur', parts=[
-                ValueToken('{'), ValueToken('d'), ValueToken('}'),
-                ValueToken('kur')
+                ValueToken('{'), Reading('d'), ValueToken('}'),
+                Reading('kur')
             ])
         ))
     ]),
     ('2. kur{d}... kur{d} ...', [
         TextLine('2.', (
             Word('kur{d}...', parts=[
-                ValueToken('kur'), ValueToken('{'), ValueToken('d'),
+                Reading('kur'), ValueToken('{'), Reading('d'),
                 ValueToken('}'), UnknownNumberOfSigns()
             ]),
             Word('kur{d}', parts=[
-                ValueToken('kur'), ValueToken('{'), ValueToken('d'),
+                Reading('kur'), ValueToken('{'), Reading('d'),
                 ValueToken('}'),
             ]),
             UnknownNumberOfSigns()
@@ -531,8 +534,8 @@ def test_parser_version(parser, version):
     ('1. mu-un;-e₃ ;', [
         TextLine('1.', (
             Word('mu-un;-e₃', parts=[
-                ValueToken('mu'), Joiner(atf.Joiner.HYPHEN), ValueToken('un'),
-                InWordNewline(), Joiner(atf.Joiner.HYPHEN), ValueToken('e₃')
+                Reading('mu'), Joiner(atf.Joiner.HYPHEN), Reading('un'),
+                InWordNewline(), Joiner(atf.Joiner.HYPHEN), Reading('e', 3)
             ]),
             Divider(';')
         ))
@@ -591,7 +594,7 @@ def test_parse_atf_invalid(parser):
 ])
 def test_parse_atf_language_shifts(parser, code, expected_language):
     word = 'ha-am'
-    parts = [ValueToken('ha'), Joiner(atf.Joiner.HYPHEN), ValueToken('am')]
+    parts = [Reading('ha'), Joiner(atf.Joiner.HYPHEN), Reading('am')]
     line = f'1. {word} {code} {word} %sb {word}'
 
     expected = Text((

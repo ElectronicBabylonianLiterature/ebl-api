@@ -1,3 +1,4 @@
+import unicodedata
 from enum import Enum
 from typing import Mapping, NewType, Optional
 
@@ -7,7 +8,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType('Atf', str)
 
 
-ATF_PARSER_VERSION = '0.18.0'
+ATF_PARSER_VERSION = '0.19.0'
 DEFAULT_ATF_PARSER_VERSION = '0.1.0'
 
 
@@ -169,8 +170,12 @@ _SUB_SCRIPT: Mapping[str, str] = {
 }
 
 
-def to_sub_index_string(number: Optional[int]) -> str:
+def int_to_sub_index(number: Optional[int]) -> str:
     return ''.join(
         _SUB_SCRIPT[digit]
         for digit in str(number)
     ) if number is not None else ''
+
+
+def sub_index_to_int(string: str) -> Optional[int]:
+    return int(unicodedata.normalize('NFKC', string)) if string else None

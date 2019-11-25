@@ -4,8 +4,12 @@ from typing import Iterable, Tuple, Sequence, Optional
 import attr
 
 from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.atf import to_sub_index_string
+from ebl.transliteration.domain.atf import int_to_sub_index
 from ebl.transliteration.domain.tokens import Token
+
+
+def convert_string_sequence(strings: Iterable[str]) -> Tuple[str, ...]:
+    return tuple(strings)
 
 
 def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
@@ -96,7 +100,7 @@ class Reading(Token):
     name: str
     sub_index: Optional[int] = attr.ib(default=None)
     modifiers: Sequence[str] = attr.ib(default=tuple(),
-                                       converter=tuple)
+                                       converter=convert_string_sequence)
     flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
                                         converter=convert_flag_sequence)
     sign: Optional[str] = None
@@ -114,7 +118,7 @@ class Reading(Token):
 
     @property
     def value(self) -> str:
-        sub_index = to_sub_index_string(self.sub_index)
+        sub_index = int_to_sub_index(self.sub_index)
         modifiers = ''.join(self.modifiers)
         flags = ''.join(self.string_flags)
         sign = f'({self.sign})' if self.sign else ''

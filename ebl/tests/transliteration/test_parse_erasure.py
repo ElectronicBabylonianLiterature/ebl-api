@@ -3,8 +3,7 @@ import pytest
 from ebl.transliteration.domain.enclosure_tokens import Side, Erasure
 from ebl.transliteration.domain.lark_parser import parse_erasure
 from ebl.transliteration.domain.sign_tokens import UnidentifiedSign, \
-    UnclearSign
-from ebl.transliteration.domain.tokens import ValueToken
+    UnclearSign, Reading
 from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
 ERASURE_LEFT = Erasure('°', Side.LEFT)
@@ -17,16 +16,16 @@ ERASURE_RIGHT = Erasure('°', Side.RIGHT)
 ])
 @pytest.mark.parametrize('atf,erased,over_erased', [
     ('°ku\\ku°', [Word('ku', erasure=ErasureState.ERASED, parts=[
-        ValueToken('ku')
+        Reading('ku')
     ])],
      [Word('ku', erasure=ErasureState.OVER_ERASED, parts=[
-        ValueToken('ku')
+        Reading('ku')
      ])]),
     ('°\\ku°', [], [Word('ku', erasure=ErasureState.OVER_ERASED, parts=[
-        ValueToken('ku')
+        Reading('ku')
     ])]),
     ('°ku\\°', [Word('ku', erasure=ErasureState.ERASED, parts=[
-        ValueToken('ku')
+        Reading('ku')
     ])], []),
     ('°\\°', [], []),
     ('°x X\\X x°',

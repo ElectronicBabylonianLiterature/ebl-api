@@ -14,6 +14,7 @@ from ebl.transliteration.domain.alignment import Alignment, AlignmentError, \
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.value import INVALID_READING
 from ebl.transliteration.domain.word_tokens import Word, Joiner
@@ -180,9 +181,9 @@ def test_updating_alignment(corpus,
                 attr.evolve(
                     DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
                     line=TextLine('1.', (Word('ku]-nu-ši', alignment=0, parts=[
-                        ValueToken('ku'), ValueToken(']'),
-                        Joiner(atf.Joiner.HYPHEN), ValueToken('nu'),
-                        Joiner(atf.Joiner.HYPHEN), ValueToken('ši')
+                        Reading('ku'), ValueToken(']'),
+                        Joiner(atf.Joiner.HYPHEN), Reading('nu'),
+                        Joiner(atf.Joiner.HYPHEN), Reading('ši')
                     ]),))
                 ),
             )),

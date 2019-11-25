@@ -7,13 +7,14 @@ from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import Side, \
     DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
     OmissionOrRemoval
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign
+    UnclearSign, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import LanguageShift, \
     LineContinuation, ValueToken, UnknownNumberOfSigns, Tabulation, \
@@ -48,11 +49,11 @@ class TreeToWord(Transformer):
 
     @v_args(inline=True)
     def unidentified_sign(self, flags):
-        return UnidentifiedSign(tuple(map(atf.Flag, flags.children)))
+        return UnidentifiedSign(flags)
 
     @v_args(inline=True)
     def unclear_sign(self, flags):
-        return UnclearSign(tuple(map(atf.Flag, flags.children)))
+        return UnclearSign(flags)
 
     @v_args(inline=True)
     def unknown_number_of_signs(self, _):
@@ -65,6 +66,24 @@ class TreeToWord(Transformer):
     @v_args(inline=True)
     def in_word_newline(self, _):
         return InWordNewline()
+
+    @v_args(inline=True)
+    def reading(self, name, sub_index, modifiers, flags, sign=None):
+        return Reading(name.value,
+                       sub_index,
+                       modifiers,
+                       flags,
+                       sign)
+
+    @v_args(inline=True)
+    def sub_index(self, sub_index=''):
+        return sub_index_to_int(sub_index)
+
+    def modifiers(self, tokens):
+        return tuple(map(str, tokens))
+
+    def flags(self, tokens):
+        return tuple(map(atf.Flag, tokens))
 
 
 class TreeToErasure(TreeToWord):
@@ -173,9 +192,7 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def divider(self, value, modifiers, flags):
-        return Divider(str(value),
-                       tuple(map(str, modifiers.children)),
-                       tuple(map(atf.Flag, flags.children)))
+        return Divider(str(value), modifiers, flags)
 
     @v_args(inline=True)
     def column(self, number):
@@ -186,10 +203,8 @@ class TreeToLine(TreeToErasure):
     def divider_variant(self, first, second):
         return Variant.of(first, second)
 
-    @v_args(inline=True)
-    def variant_part(self, part):
-        value = str(part)
-        return Word(value, parts=[ValueToken(value)])
+    def variant_part(self, tokens):
+        return self._create_word(Word, tokens)
 
 
 WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')

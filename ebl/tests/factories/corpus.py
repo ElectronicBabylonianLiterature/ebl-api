@@ -20,6 +20,7 @@ from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, \
     SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word, Joiner
 
@@ -55,8 +56,8 @@ class ManuscriptLineFactory(factory.Factory):
     )
     line = TextLine('1.', (
         Word('ku]-nu-ši', parts=[
-            ValueToken('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
-            ValueToken('nu'), Joiner(atf.Joiner.HYPHEN), ValueToken('ši')
+            Reading('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+            Reading('nu'), Joiner(atf.Joiner.HYPHEN), Reading('ši')
         ]),
     ))
 

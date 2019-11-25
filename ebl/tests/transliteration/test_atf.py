@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.transliteration.domain.atf import AtfSyntaxError, validate_atf, \
-    to_sub_index_string
+    int_to_sub_index
 
 
 def test_valid_atf():
@@ -31,4 +31,4 @@ def test_invalid_atf():
     (124, '₁₂₄')
 ])
 def test_to_sub_index_string(number, expected):
-    assert to_sub_index_string(number) == expected
+    assert int_to_sub_index(number) == expected
