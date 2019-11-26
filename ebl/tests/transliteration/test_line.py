@@ -171,9 +171,9 @@ def test_line_of_single():
         LineNumberLabel.from_atf('1.'),
         [
             DocumentOrientedGloss('{('),
-            Word('bu', parts=[Reading('bu')]),
+            Word('bu', parts=[Reading.of('bu')]),
             LoneDeterminative('{d}', parts=[
-                ValueToken('{'), Reading('d'), ValueToken('}')
+                ValueToken('{'), Reading.of('d'), ValueToken('}')
             ])
         ]
     ), {
@@ -181,9 +181,9 @@ def test_line_of_single():
         'prefix': '1.',
         'content': [
             DocumentOrientedGloss('{(').to_dict(),
-            Word('bu', parts=[Reading('bu')]).to_dict(),
+            Word('bu', parts=[Reading.of('bu')]).to_dict(),
             LoneDeterminative('{d}', parts=[
-                ValueToken('{'), Reading('d'), ValueToken('}')
+                ValueToken('{'), Reading.of('d'), ValueToken('}')
             ]).to_dict()
         ]
     }),
@@ -238,53 +238,53 @@ def test_update_lemmatization_wrong_lenght():
     (
         EmptyLine(),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         ControlLine.of_single('$', ValueToken(' single ruling')),
         ControlLine.of_single('$', ValueToken(' single ruling'))
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('2.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('2.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', parts=[])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             LanguageShift('%sux')
@@ -295,51 +295,51 @@ def test_update_lemmatization_wrong_lenght():
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('mu', parts=[Reading('mu')])
+            Word('mu', parts=[Reading.of('mu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('mu', parts=[Reading('mu')])
+            Word('mu', parts=[Reading.of('mu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')]),
+                 parts=[Reading.of('bu')]),
             Word('mu', unique_lemma=(WordId('mu I'),),
-                 parts=[Reading('mu')]),
+                 parts=[Reading.of('mu')]),
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')]),
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')]),
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')]),
+                 parts=[Reading.of('bu')]),
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')]),
+                 parts=[Reading.of('bu')]),
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('bu', parts=[Reading('bu')]),
-            Word('mu', parts=[Reading('mu')]),
-            Word('bu', parts=[Reading('bu')])
+            Word('bu', parts=[Reading.of('bu')]),
+            Word('mu', parts=[Reading.of('mu')]),
+            Word('bu', parts=[Reading.of('bu')])
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')]),
-            Word('mu', parts=[Reading('mu')]),
+                 parts=[Reading.of('bu')]),
+            Word('mu', parts=[Reading.of('mu')]),
             Word('bu', unique_lemma=(WordId('nu I'),),
-                 parts=[Reading('bu')])
+                 parts=[Reading.of('bu')])
         ])
     ), (
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
@@ -355,65 +355,65 @@ def test_update_lemmatization_wrong_lenght():
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('(ku#?)', unique_lemma=(WordId('nu I'),), parts=[
                 ValueToken('('),
-                Reading('ku', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN]),
+                Reading.of('ku', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN]),
                 ValueToken(')')
             ]),
             Word('[bu]', unique_lemma=(WordId('bu I'),), parts=[
-                ValueToken('['), Reading('bu'), ValueToken(']')
+                ValueToken('['), Reading.of('bu'), ValueToken(']')
             ]),
             Word('ku-[nu#?]', unique_lemma=(WordId('kunu I'),), alignment=4,
                  parts=[
-                Reading('ku'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
-                Reading('nu', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN]),
+                Reading.of('ku'), Joiner(atf.Joiner.HYPHEN), ValueToken('['),
+                Reading.of('nu', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN]),
                 ValueToken(']')
             ]),
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('(ku?#)', parts=[
                 ValueToken('('),
-                Reading('ku', flags=[atf.Flag.UNCERTAIN, atf.Flag.DAMAGE]),
+                Reading.of('ku', flags=[atf.Flag.UNCERTAIN, atf.Flag.DAMAGE]),
                 ValueToken(')')
             ]),
             Word('[bu]', parts=[
-                ValueToken('['), Reading('bu'), ValueToken(']')
+                ValueToken('['), Reading.of('bu'), ValueToken(']')
             ]),
             Word('[k(u)-nu#?', parts=[
-                Reading('k(u)'), Joiner(atf.Joiner.HYPHEN),
-                Reading('nu', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN])
+                Reading.of('k(u)'), Joiner(atf.Joiner.HYPHEN),
+                Reading.of('nu', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN])
             ]),
             BrokenAway(']')
         ]),
         TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
             Word('(ku?#)', unique_lemma=(WordId('nu I'),), parts=[
                 ValueToken('('),
-                Reading('ku', flags=[atf.Flag.UNCERTAIN, atf.Flag.DAMAGE]),
+                Reading.of('ku', flags=[atf.Flag.UNCERTAIN, atf.Flag.DAMAGE]),
                 ValueToken(')')
             ]),
             Word('[bu]', unique_lemma=(WordId('bu I'),), parts=[
-                ValueToken('['), Reading('bu'), ValueToken(']')
+                ValueToken('['), Reading.of('bu'), ValueToken(']')
             ]),
             Word('[k(u)-nu#?', unique_lemma=(WordId('kunu I'),), alignment=4,
                  parts=[
-                Reading('k(u)'), Joiner(atf.Joiner.HYPHEN),
-                Reading('nu', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN])
+                Reading.of('k(u)'), Joiner(atf.Joiner.HYPHEN),
+                Reading.of('nu', flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN])
             ]),
             BrokenAway(']')
         ])
     ), (
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')]),
+                     parts=[Reading.of('nu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')])
+                     parts=[Reading.of('nu')])
             ]),
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
-                Word('nu', parts=[Reading('nu')])
+                Word('mu', parts=[Reading.of('mu')]),
+                Word('nu', parts=[Reading.of('nu')])
             ]),
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
+                Word('mu', parts=[Reading.of('mu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')])
+                     parts=[Reading.of('nu')])
             ])
     ), (
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
@@ -421,13 +421,13 @@ def test_update_lemmatization_wrong_lenght():
                 Word('nu', unique_lemma=(WordId('nu I'),), parts=[])
             ]),
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
-                Word('nu', parts=[Reading('nu')])
+                Word('mu', parts=[Reading.of('mu')]),
+                Word('nu', parts=[Reading.of('nu')])
             ]),
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
+                Word('mu', parts=[Reading.of('mu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')])
+                     parts=[Reading.of('nu')])
             ])
     )
 ])

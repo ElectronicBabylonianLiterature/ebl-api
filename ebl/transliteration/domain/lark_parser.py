@@ -14,7 +14,7 @@ from ebl.transliteration.domain.enclosure_tokens import Side, \
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign, Reading
+    UnclearSign, Reading, Number
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import LanguageShift, \
     LineContinuation, ValueToken, UnknownNumberOfSigns, Tabulation, \
@@ -69,11 +69,18 @@ class TreeToWord(Transformer):
 
     @v_args(inline=True)
     def reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading(name.value,
-                       sub_index,
-                       modifiers,
-                       flags,
-                       sign)
+        return Reading.of(name.value,
+                          sub_index,
+                          modifiers,
+                          flags,
+                          sign)
+
+    @v_args(inline=True)
+    def number(self, number, modifiers, flags, sign=None):
+        return Number.of(int(number),
+                         modifiers,
+                         flags,
+                         sign)
 
     @v_args(inline=True)
     def sub_index(self, sub_index=''):

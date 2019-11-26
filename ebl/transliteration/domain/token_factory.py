@@ -7,7 +7,7 @@ from ebl.transliteration.domain.enclosure_tokens import Side, \
     OmissionOrRemoval
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign, Reading
+    UnclearSign, Reading, Number
 from ebl.transliteration.domain.tokens import Token, ValueToken, \
     LanguageShift, LineContinuation, UnknownNumberOfSigns, \
     Tabulation, CommentaryProtocol, Column, Variant
@@ -80,9 +80,15 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
     ),
     'Joiner': lambda data: Joiner(atf.Joiner(data['value'])),
     'InWordNewline': lambda data: InWordNewline(),
-    'Reading': lambda data: Reading(
+    'Reading': lambda data: Reading.of(
         data['name'],
         data['subIndex'],
+        data['modifiers'],
+        tuple(Flag(flag) for flag in data['flags']),
+        data['sign']
+    ),
+    'Number': lambda data: Number.of(
+        data['numeral'],
         data['modifiers'],
         tuple(Flag(flag) for flag in data['flags']),
         data['sign']

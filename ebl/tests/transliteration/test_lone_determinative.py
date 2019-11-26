@@ -26,7 +26,7 @@ def test_of_value():
 ])
 def test_lone_determinative(language, normalized, partial):
     value = '{mu}'
-    parts = [ValueToken('{'), Reading('mu'), ValueToken('}')]
+    parts = [ValueToken('{'), Reading.of('mu'), ValueToken('}')]
     lone_determinative =\
         LoneDeterminative(
             value,

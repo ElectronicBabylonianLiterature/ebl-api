@@ -64,9 +64,9 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                 attr.evolve(
                     text.chapters[0].lines[0].manuscripts[0],
                     line=TextLine('1.', (Word('ku]-nu-ši', alignment=0, parts=[
-                        Reading('ku'), ValueToken(']'),
-                        Joiner(atf.Joiner.HYPHEN), Reading('nu'),
-                        Joiner(atf.Joiner.HYPHEN), Reading('ši')
+                        Reading.of('ku'), ValueToken(']'),
+                        Joiner(atf.Joiner.HYPHEN), Reading.of('nu'),
+                        Joiner(atf.Joiner.HYPHEN), Reading.of('ši')
                     ]),))
                 ),
             )),

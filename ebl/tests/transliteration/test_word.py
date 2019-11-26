@@ -61,7 +61,7 @@ def test_defaults():
 ])
 def test_word(language, normalized, unique_lemma):
     value = 'ku'
-    parts = [Reading('ku')]
+    parts = [Reading.of('ku')]
     erasure = ErasureState.NONE
     word = Word(value, language, normalized, unique_lemma, erasure,
                 parts=parts)
@@ -191,32 +191,32 @@ def test_set_alignment_invalid(word, value):
 
 
 @pytest.mark.parametrize('old,new,expected', [
-    (Word('bu', alignment=1, parts=[Reading('bu')]),
+    (Word('bu', alignment=1, parts=[Reading.of('bu')]),
      UnknownNumberOfSigns(),
      UnknownNumberOfSigns()),
     (Word('nu', unique_lemma=(WordId('nu I'),), parts=[]),
-     Word('nu', parts=[Reading('nu')]),
+     Word('nu', parts=[Reading.of('nu')]),
      Word('nu', unique_lemma=(WordId('nu I'),),
-          parts=[Reading('nu')])),
+          parts=[Reading.of('nu')])),
     (Word('bu', alignment=1, unique_lemma=(WordId('nu I'),)),
-     Word('bu', parts=[Reading('bu')]),
+     Word('bu', parts=[Reading.of('bu')]),
      Word('bu', alignment=1, unique_lemma=(WordId('nu I'),),
-          parts=[Reading('bu')])),
+          parts=[Reading.of('bu')])),
     (Word('[(bu)', alignment=1),
-     Word('bu', parts=[Reading('bu')]),
-     Word('bu', alignment=1, parts=[Reading('bu')])),
+     Word('bu', parts=[Reading.of('bu')]),
+     Word('bu', alignment=1, parts=[Reading.of('bu')])),
     (Word('bu#!?*', alignment=1),
-     Word('bu', parts=[Reading('bu')]),
-     Word('bu', alignment=1, parts=[Reading('bu')])),
-    (Word('bu', alignment=1, parts=[Reading('bu')]),
-     Word('bu#!?*', parts=[Reading('bu', flags=[*atf.Flag])]),
-     Word('bu#!?*', alignment=1, parts=[Reading('bu', flags=[*atf.Flag])])),
-    (Word('bu', unique_lemma=(WordId('nu I'),), parts=[Reading('bu')]),
-     Word('bu', language=Language.SUMERIAN, parts=[Reading('bu')]),
-     Word('bu', language=Language.SUMERIAN, parts=[Reading('bu')])),
-    (Word('bu', alignment=1, parts=[Reading('bu')]),
-     Word('bu', language=Language.SUMERIAN, parts=[Reading('bu')]),
-     Word('bu', language=Language.SUMERIAN, parts=[Reading('bu')])),
+     Word('bu', parts=[Reading.of('bu')]),
+     Word('bu', alignment=1, parts=[Reading.of('bu')])),
+    (Word('bu', alignment=1, parts=[Reading.of('bu')]),
+     Word('bu#!?*', parts=[Reading.of('bu', flags=[*atf.Flag])]),
+     Word('bu#!?*', alignment=1, parts=[Reading.of('bu', flags=[*atf.Flag])])),
+    (Word('bu', unique_lemma=(WordId('nu I'),), parts=[Reading.of('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[Reading.of('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[Reading.of('bu')])),
+    (Word('bu', alignment=1, parts=[Reading.of('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[Reading.of('bu')]),
+     Word('bu', language=Language.SUMERIAN, parts=[Reading.of('bu')])),
 ])
 def test_merge(old, new, expected):
     assert old.merge(new) == expected

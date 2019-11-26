@@ -16,16 +16,16 @@ ERASURE_RIGHT = Erasure('°', Side.RIGHT)
 ])
 @pytest.mark.parametrize('atf,erased,over_erased', [
     ('°ku\\ku°', [Word('ku', erasure=ErasureState.ERASED, parts=[
-        Reading('ku')
+        Reading.of('ku')
     ])],
      [Word('ku', erasure=ErasureState.OVER_ERASED, parts=[
-        Reading('ku')
+        Reading.of('ku')
      ])]),
     ('°\\ku°', [], [Word('ku', erasure=ErasureState.OVER_ERASED, parts=[
-        Reading('ku')
+        Reading.of('ku')
     ])]),
     ('°ku\\°', [Word('ku', erasure=ErasureState.ERASED, parts=[
-        Reading('ku')
+        Reading.of('ku')
     ])], []),
     ('°\\°', [], []),
     ('°x X\\X x°',

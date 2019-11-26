@@ -2,7 +2,7 @@ import pytest
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign, Reading
+    UnclearSign, Reading, Number
 
 
 def test_divider():
@@ -99,13 +99,14 @@ def test_unclear_sign_with_flags():
     ]
 )
 def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
-    reading = Reading(name, sub_index, modifiers, flags, sign)
+    reading = Reading.of(name, sub_index, modifiers, flags, sign)
 
     assert reading.value == expected_value
     assert reading.get_key() == f'Reading⁝{expected_value}'
     assert reading.modifiers == tuple(modifiers)
     assert reading.flags == tuple(flags)
     assert reading.lemmatizable is False
+    assert reading.sign == sign
     assert reading.to_dict() == {
         'type': 'Reading',
         'value': expected_value,
@@ -119,4 +120,40 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
 
 def test_invalid_reading():
     with pytest.raises(ValueError):
-        Reading('kur', -1)
+        Reading.of('kur', -1)
+
+
+@pytest.mark.parametrize(
+    'numeral,modifiers,flags,sign,expected_value',
+    [
+        (1, [], [], None, '1'),
+        (14, [], [], None, '14'),
+        (1, [], [], 'KUR', '1(KUR)'),
+        (1, ['@v', '@180'], [], None, '1@v@180'),
+        (1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, '1#!'),
+        (1, ['@v'], [atf.Flag.CORRECTION], 'KUR', '1@v!(KUR)')
+    ]
+)
+def test_number(numeral, modifiers, flags, sign, expected_value):
+    number = Number.of(numeral, modifiers, flags, sign)
+
+    assert number.value == expected_value
+    assert number.get_key() == f'Number⁝{expected_value}'
+    assert number.modifiers == tuple(modifiers)
+    assert number.flags == tuple(flags)
+    assert number.lemmatizable is False
+    assert number.sign == sign
+    assert number.to_dict() == {
+        'type': 'Number',
+        'value': expected_value,
+        'numeral': numeral,
+        'modifiers': modifiers,
+        'flags': [flag.value for flag in flags],
+        'sign': sign
+    }
+
+
+@pytest.mark.parametrize('numeral', [0, -1])
+def test_invalid_number(numeral):
+    with pytest.raises(ValueError):
+        Number.of(numeral)

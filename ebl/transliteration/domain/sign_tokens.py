@@ -96,14 +96,40 @@ class Divider(Token):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Reading(Token):
-    name: str
-    sub_index: Optional[int] = attr.ib(default=None)
-    modifiers: Sequence[str] = attr.ib(default=tuple(),
-                                       converter=convert_string_sequence)
-    flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
-                                        converter=convert_flag_sequence)
-    sign: Optional[str] = None
+class AbstractReading(Token):
+    modifiers: Sequence[str] = attr.ib(converter=convert_string_sequence)
+    flags: Sequence[atf.Flag] = attr.ib(converter=convert_flag_sequence)
+    sign: Optional[str]
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        ...
+
+    @property
+    def string_flags(self) -> Sequence[str]:
+        return [flag.value for flag in self.flags]
+
+    @property
+    def value(self) -> str:
+        modifiers = ''.join(self.modifiers)
+        flags = ''.join(self.string_flags)
+        sign = f'({self.sign})' if self.sign else ''
+        return f'{self.name}{modifiers}{flags}{sign}'
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'modifiers': list(self.modifiers),
+            'flags': list(self.string_flags),
+            'sign': self.sign
+        }
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Reading(AbstractReading):
+    _name: str
+    sub_index: Optional[int] = attr.ib()
 
     @sub_index.validator
     def _check_sub_index(self, _attribute, value):
@@ -113,24 +139,50 @@ class Reading(Token):
             )
 
     @property
-    def string_flags(self) -> Sequence[str]:
-        return [flag.value for flag in self.flags]
-
-    @property
-    def value(self) -> str:
+    def name(self) -> str:
         sub_index = int_to_sub_index(self.sub_index)
-        modifiers = ''.join(self.modifiers)
-        flags = ''.join(self.string_flags)
-        sign = f'({self.sign})' if self.sign else ''
-        return f'{self.name}{sub_index}{modifiers}{flags}{sign}'
+        return f'{self._name}{sub_index}'
 
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
             'type': 'Reading',
-            'name': self.name,
+            'name': self._name,
             'subIndex': self.sub_index,
-            'modifiers': list(self.modifiers),
-            'flags': list(self.string_flags),
-            'sign': self.sign
         }
+
+    @staticmethod
+    def of(name: str,
+           sub_index: Optional[int] = None,
+           modifiers: Sequence[str] = tuple(),
+           flags: Sequence[atf.Flag] = tuple(),
+           sign: Optional[str] = None) -> 'Reading':
+        return Reading(modifiers, flags, sign, name, sub_index)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Number(AbstractReading):
+    numeral: int = attr.ib()
+
+    @numeral.validator
+    def _check_sub_index(self, _attribute, value):
+        if value < 1:
+            raise ValueError('Number must be > 0.')
+
+    @property
+    def name(self) -> str:
+        return str(self.numeral)
+
+    def to_dict(self) -> dict:
+        return {
+            **super().to_dict(),
+            'type': 'Number',
+            'numeral': self.numeral
+        }
+
+    @staticmethod
+    def of(numeral: int,
+           modifiers: Sequence[str] = tuple(),
+           flags: Sequence[atf.Flag] = tuple(),
+           sign: Optional[str] = None) -> 'Number':
+        return Number(modifiers, flags, sign, numeral)

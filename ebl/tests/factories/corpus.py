@@ -56,8 +56,8 @@ class ManuscriptLineFactory(factory.Factory):
     )
     line = TextLine('1.', (
         Word('ku]-nu-ši', parts=[
-            Reading('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
-            Reading('nu'), Joiner(atf.Joiner.HYPHEN), Reading('ši')
+            Reading.of('ku'), ValueToken(']'), Joiner(atf.Joiner.HYPHEN),
+            Reading.of('nu'), Joiner(atf.Joiner.HYPHEN), Reading.of('ši')
         ]),
     ))
 

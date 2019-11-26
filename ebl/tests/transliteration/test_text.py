@@ -21,7 +21,7 @@ from ebl.transliteration.domain.word_tokens import Partial, Word, \
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am', parts=[
-        Reading('ha'), Joiner(atf.Joiner.HYPHEN), Reading('am')
+        Reading.of('ha'), Joiner(atf.Joiner.HYPHEN), Reading.of('am')
     ])]),
     ControlLine.of_single('$', ValueToken(' single ruling'))
 )
@@ -75,7 +75,7 @@ def test_update_lemmatization():
     expected = Text((
         TextLine('1.', (
             Word('ha-am', unique_lemma=(WordId('nu I'),), parts=[
-                Reading('ha'), Joiner(atf.Joiner.HYPHEN), Reading('am')
+                Reading.of('ha'), Joiner(atf.Joiner.HYPHEN), Reading.of('am')
             ]),
         )),
         ControlLine('$', (ValueToken(' single ruling'), )),
@@ -154,37 +154,37 @@ def test_update_lemmatization_wrong_lines():
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
-                Word('nu', parts=[Reading('nu')])
+                Word('mu', parts=[Reading.of('mu')]),
+                Word('nu', parts=[Reading.of('nu')])
             ])
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
+                Word('mu', parts=[Reading.of('mu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')])
+                     parts=[Reading.of('nu')])
             ])
         ])
     ), (
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')]),
+                     parts=[Reading.of('nu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')])
+                     parts=[Reading.of('nu')])
             ])
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
-                Word('nu', parts=[Reading('nu')])
+                Word('mu', parts=[Reading.of('mu')]),
+                Word('nu', parts=[Reading.of('nu')])
             ])
         ]),
         Text.of_iterable([
             TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu', parts=[Reading('mu')]),
+                Word('mu', parts=[Reading.of('mu')]),
                 Word('nu', unique_lemma=(WordId('nu I'),),
-                     parts=[Reading('nu')])
+                     parts=[Reading.of('nu')])
             ])
         ])
     )
