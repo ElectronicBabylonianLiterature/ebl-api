@@ -44,8 +44,8 @@ from ebl.transliteration.domain.word_tokens import Word, LoneDeterminative, \
         Joiner(atf.Joiner.HYPHEN), Reading.of('qu')
     ])),
     ('ru?-u₂-qu', Word('ru?-u₂-qu', parts=[
-        Reading.of('ru', flags=[atf.Flag.UNCERTAIN]), 
-        Joiner(atf.Joiner.HYPHEN), Reading.of('u', 2), 
+        Reading.of('ru', flags=[atf.Flag.UNCERTAIN]),
+        Joiner(atf.Joiner.HYPHEN), Reading.of('u', 2),
         Joiner(atf.Joiner.HYPHEN), Reading.of('qu')
     ])),
     ('na-a[n-', Word('na-a[n-', parts=[
