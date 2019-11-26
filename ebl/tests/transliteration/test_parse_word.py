@@ -20,6 +20,7 @@ from ebl.transliteration.domain.word_tokens import Word, LoneDeterminative, \
     ('x?', Word('x?', parts=[UnclearSign([atf.Flag.UNCERTAIN])])),
     ('X#', Word('X#', parts=[UnidentifiedSign([atf.Flag.DAMAGE])])),
     ('12', Word('12', parts=[Reading('12')])),
+    ('du₁₁', Word('du₁₁', parts=[Reading('du', 11)])),
     ('GAL', Word('GAL', parts=[ValueToken('GAL')])),
     ('kur(GAL)', Word('kur(GAL)', parts=[Reading('kur', sign='GAL')])),
     ('|GAL|', Word('|GAL|', parts=[ValueToken('|GAL|')])),

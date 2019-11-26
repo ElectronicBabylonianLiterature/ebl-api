@@ -174,7 +174,8 @@ VARIANT_PART: UNKNOWN
             | COMPOUND_GRAPHEME
 
 reading: VALUE_NAME sub_index modifiers flags ["(" ANY_GRAPHEME ")"]
-!sub_index: ["₀" | "₁".."₉" ("₀".."₉")*]
+!sub_index: [SUB_INDEX_NUMBER]
+SUB_INDEX_NUMBER: "₀" | "₁".."₉" ("₀".."₉")*
 READING_WITH_SIGN: (READING | LOGOGRAM) "(" ANY_GRAPHEME ")"
 SURROGATE: LOGOGRAM "<(" READING ("-" READING)* ")>"
 LOGOGRAM: LOGOGRAM_NAME SUB_INDEX? MODIFIER* FLAG
