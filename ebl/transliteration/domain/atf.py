@@ -170,12 +170,12 @@ _SUB_SCRIPT: Mapping[str, str] = {
 }
 
 
-def int_to_sub_index(number: Optional[int]) -> str:
-    return ''.join(
+def int_to_sub_index(number: int) -> str:
+    return '' if number == 1 else ''.join(
         _SUB_SCRIPT[digit]
         for digit in str(number)
-    ) if number is not None else ''
+    )
 
 
-def sub_index_to_int(string: str) -> Optional[int]:
-    return int(unicodedata.normalize('NFKC', string)) if string else None
+def sub_index_to_int(string: Optional[str]) -> int:
+    return int(unicodedata.normalize('NFKC', string)) if string else 1

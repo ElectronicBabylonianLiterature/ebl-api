@@ -89,11 +89,11 @@ def test_unclear_sign_with_flags():
 @pytest.mark.parametrize(
     'name,sub_index,modifiers,flags,sign,expected_value',
     [
-        ('kur', None, [], [], None, 'kur'),
+        ('kur', 1, [], [], None, 'kur'),
         ('kur', 0, [], [], None, 'kur₀'),
-        ('kur', None, [], [], 'KUR', 'kur(KUR)'),
-        ('kur', None, ['@v', '@180'], [], None, 'kur@v@180'),
-        ('kur', None, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None,
+        ('kur', 1, [], [], 'KUR', 'kur(KUR)'),
+        ('kur', 1, ['@v', '@180'], [], None, 'kur@v@180'),
+        ('kur', 1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None,
          'kur#!'),
         ('kur', 10, ['@v'], [atf.Flag.CORRECTION], 'KUR', 'kur₁₀@v!(KUR)')
     ]
@@ -137,8 +137,10 @@ def test_invalid_reading():
 def test_number(numeral, modifiers, flags, sign, expected_value):
     number = Number.of(numeral, modifiers, flags, sign)
 
+    expected_sub_index = 1
     assert number.value == expected_value
     assert number.get_key() == f'Number⁝{expected_value}'
+    assert number.sub_index == expected_sub_index
     assert number.modifiers == tuple(modifiers)
     assert number.flags == tuple(flags)
     assert number.lemmatizable is False
@@ -148,6 +150,7 @@ def test_number(numeral, modifiers, flags, sign, expected_value):
         'value': expected_value,
         'numeral': numeral,
         'modifiers': modifiers,
+        'subIndex': expected_sub_index,
         'flags': [flag.value for flag in flags],
         'sign': sign
     }

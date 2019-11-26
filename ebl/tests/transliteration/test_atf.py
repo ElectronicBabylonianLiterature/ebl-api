@@ -17,8 +17,7 @@ def test_invalid_atf():
 
 
 @pytest.mark.parametrize('number,expected', [
-    (None, ''),
-    (1, '₁'),
+    (1, ''),
     (2, '₂'),
     (3, '₃'),
     (4, '₄'),

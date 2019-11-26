@@ -107,19 +107,26 @@ class AbstractReading(Token):
         ...
 
     @property
+    @abstractmethod
+    def sub_index(self) -> int:
+        ...
+
+    @property
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
     @property
     def value(self) -> str:
+        sub_index = int_to_sub_index(self.sub_index)
         modifiers = ''.join(self.modifiers)
         flags = ''.join(self.string_flags)
         sign = f'({self.sign})' if self.sign else ''
-        return f'{self.name}{modifiers}{flags}{sign}'
+        return f'{self.name}{sub_index}{modifiers}{flags}{sign}'
 
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
+            'subIndex': self.sub_index,
             'modifiers': list(self.modifiers),
             'flags': list(self.string_flags),
             'sign': self.sign
@@ -129,31 +136,33 @@ class AbstractReading(Token):
 @attr.s(auto_attribs=True, frozen=True)
 class Reading(AbstractReading):
     _name: str
-    sub_index: Optional[int] = attr.ib()
+    _sub_index: int = attr.ib()
 
-    @sub_index.validator
+    @_sub_index.validator
     def _check_sub_index(self, _attribute, value):
-        if value is not None and value < 0:
+        if value < 0:
             raise ValueError(
-                'Sub-index must be None or >= 0.'
+                'Sub-index must be >= 0.'
             )
 
     @property
+    def sub_index(self) -> int:
+        return self._sub_index
+
+    @property
     def name(self) -> str:
-        sub_index = int_to_sub_index(self.sub_index)
-        return f'{self._name}{sub_index}'
+        return self._name
 
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
             'type': 'Reading',
-            'name': self._name,
-            'subIndex': self.sub_index,
+            'name': self._name
         }
 
     @staticmethod
     def of(name: str,
-           sub_index: Optional[int] = None,
+           sub_index: int = 1,
            modifiers: Sequence[str] = tuple(),
            flags: Sequence[atf.Flag] = tuple(),
            sign: Optional[str] = None) -> 'Reading':
@@ -165,13 +174,17 @@ class Number(AbstractReading):
     numeral: int = attr.ib()
 
     @numeral.validator
-    def _check_sub_index(self, _attribute, value):
+    def _check_numeral(self, _attribute, value):
         if value < 1:
             raise ValueError('Number must be > 0.')
 
     @property
     def name(self) -> str:
         return str(self.numeral)
+
+    @property
+    def sub_index(self) -> int:
+        return 1
 
     def to_dict(self) -> dict:
         return {
