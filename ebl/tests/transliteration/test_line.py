@@ -22,10 +22,14 @@ from ebl.transliteration.domain.line import (
     TextLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import LanguageShift, Tabulation, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    Tabulation,
+    ValueToken,
+)
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
-    Joiner,
     LoneDeterminative,
     Word,
 )
@@ -472,7 +476,7 @@ def test_update_lemmatization_wrong_lenght():
                         alignment=4,
                         parts=[
                             Reading.of("ku"),
-                            Joiner(atf.Joiner.HYPHEN),
+                            Joiner.hyphen(),
                             ValueToken("["),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
@@ -503,7 +507,7 @@ def test_update_lemmatization_wrong_lenght():
                         "[k(u)-nu#?",
                         parts=[
                             Reading.of("k(u)"),
-                            Joiner(atf.Joiner.HYPHEN),
+                            Joiner.hyphen(),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
                             ),
@@ -537,7 +541,7 @@ def test_update_lemmatization_wrong_lenght():
                         alignment=4,
                         parts=[
                             Reading.of("k(u)"),
-                            Joiner(atf.Joiner.HYPHEN),
+                            Joiner.hyphen(),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
                             ),

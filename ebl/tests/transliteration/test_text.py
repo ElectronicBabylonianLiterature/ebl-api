@@ -21,12 +21,12 @@ from ebl.transliteration.domain.line import (
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
+    Joiner,
     LanguageShift,
     LineContinuation,
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import (
-    Joiner,
     LoneDeterminative,
     Partial,
     Word,
@@ -35,12 +35,7 @@ from ebl.transliteration.domain.word_tokens import (
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(
         LineNumberLabel.from_atf("1."),
-        [
-            Word(
-                "ha-am",
-                parts=[Reading.of("ha"), Joiner(atf.Joiner.HYPHEN), Reading.of("am"),],
-            )
-        ],
+        [Word("ha-am", parts=[Reading.of("ha"), Joiner.hyphen(), Reading.of("am"),],)],
     ),
     ControlLine.of_single("$", ValueToken(" single ruling")),
 )
@@ -98,11 +93,7 @@ def test_update_lemmatization():
                     Word(
                         "ha-am",
                         unique_lemma=(WordId("nu I"),),
-                        parts=[
-                            Reading.of("ha"),
-                            Joiner(atf.Joiner.HYPHEN),
-                            Reading.of("am"),
-                        ],
+                        parts=[Reading.of("ha"), Joiner.hyphen(), Reading.of("am"),],
                     ),
                 ),
             ),

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence, Tuple
+from typing import Iterable, Optional, Sequence, Tuple
 
 import attr
 
@@ -162,3 +162,35 @@ class TokenVisitor(ABC):
     @abstractmethod
     def visit(self, token: Token) -> None:
         ...
+
+
+def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
+    return tuple(tokens)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Joiner(Token):
+    _value: atf.Joiner
+
+    @property
+    def value(self):
+        return self._value.value
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "type": "Joiner"}
+
+    @staticmethod
+    def dot():
+        return Joiner(atf.Joiner.DOT)
+
+    @staticmethod
+    def hyphen():
+        return Joiner(atf.Joiner.HYPHEN)
+
+    @staticmethod
+    def colon():
+        return Joiner(atf.Joiner.COLON)
+
+    @staticmethod
+    def plus():
+        return Joiner(atf.Joiner.PLUS)

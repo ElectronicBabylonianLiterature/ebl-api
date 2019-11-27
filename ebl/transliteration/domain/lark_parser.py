@@ -20,15 +20,16 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
+    Logogram,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    Logogram,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    Joiner,
     LanguageShift,
     LineContinuation,
     Tabulation,
@@ -40,7 +41,6 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
-    Joiner,
     LoneDeterminative,
     Word,
 )
@@ -98,6 +98,12 @@ class TreeToWord(Transformer):
     @v_args(inline=True)
     def logogram(self, name, sub_index, modifiers, flags, sign=None):
         return Logogram.of(name.value, sub_index, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def surrogate(self, name, sub_index, modifiers, flags, surrogate):
+        return Logogram.of(
+            name.value, sub_index, modifiers, flags, None, surrogate.children
+        )
 
     @v_args(inline=True)
     def number(self, number, modifiers, flags, sign=None):

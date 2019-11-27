@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import Optional, Sequence, Tuple
 
 import attr
 import pydash
@@ -13,16 +13,12 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.tokens import Token, ValueToken, convert_token_sequence
 from ebl.transliteration.domain.word_cleaner import clean_word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
 Partial = collections.namedtuple("Partial", "start end")
-
-
-def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
-    return tuple(tokens)
 
 
 class ErasureState(Enum):
@@ -155,18 +151,6 @@ class LoneDeterminative(Word):
             "type": "LoneDeterminative",
             "partial": list(self.partial),
         }
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Joiner(Token):
-    _value: atf.Joiner
-
-    @property
-    def value(self):
-        return self._value.value
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Joiner"}
 
 
 @attr.s(auto_attribs=True, frozen=True)

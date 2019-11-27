@@ -16,6 +16,7 @@ from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    Joiner,
     LanguageShift,
     LineContinuation,
     Tabulation,
@@ -26,7 +27,6 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     InWordNewline,
-    Joiner,
     Word,
 )
 
@@ -261,10 +261,16 @@ def test_variant():
     }
 
 
-def test_joiner():
-    joiner = Joiner(atf.Joiner.DOT)
-
-    expected_value = "."
+@pytest.mark.parametrize(
+    "joiner,expected_value",
+    [
+        (Joiner.dot(), "."),
+        (Joiner.hyphen(), "-"),
+        (Joiner.colon(), ":"),
+        (Joiner.plus(), "+"),
+    ],
+)
+def test_joiner(joiner, expected_value):
     assert joiner.value == expected_value
     assert joiner.get_key() == f"Joiner⁝{expected_value}"
     assert joiner.lemmatizable is False

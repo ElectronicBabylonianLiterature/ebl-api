@@ -8,7 +8,6 @@ from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
-from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.alignment import (
     Alignment,
     AlignmentError,
@@ -18,9 +17,9 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.value import INVALID_READING
-from ebl.transliteration.domain.word_tokens import Joiner, Word
+from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
 COLLECTION = "texts"
@@ -203,9 +202,9 @@ def test_updating_alignment(
                                             parts=[
                                                 Reading.of("ku"),
                                                 ValueToken("]"),
-                                                Joiner(atf.Joiner.HYPHEN),
+                                                Joiner.hyphen(),
                                                 Reading.of("nu"),
-                                                Joiner(atf.Joiner.HYPHEN),
+                                                Joiner.hyphen(),
                                                 Reading.of("ši"),
                                             ],
                                         ),

@@ -13,14 +13,15 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
+    Logogram,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    Logogram,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    Joiner,
     LanguageShift,
     LineContinuation,
     Tabulation,
@@ -32,7 +33,6 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
-    Joiner,
     LoneDeterminative,
     Partial,
     Word,
@@ -102,6 +102,7 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
         data["modifiers"],
         tuple(Flag(flag) for flag in data["flags"]),
         data["sign"],
+        create_tokens(data.get("surrogate", [])),
     ),
     "Number": lambda data: Reading.of(
         str(data["numeral"]),

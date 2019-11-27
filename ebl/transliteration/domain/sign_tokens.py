@@ -1,11 +1,11 @@
 from abc import abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple, Type, TypeVar
+from typing import Iterable, Optional, Sequence, Tuple
 
 import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import int_to_sub_index
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, convert_token_sequence
 
 
 def convert_string_sequence(strings: Iterable[str]) -> Tuple[str, ...]:
@@ -134,9 +134,6 @@ class AbstractReading(Token):
         }
 
 
-ReadingType = TypeVar("ReadingType", bound="NamedReading")
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class NamedReading(AbstractReading):
     _name: str = attr.ib()
@@ -162,17 +159,6 @@ class NamedReading(AbstractReading):
     def to_dict(self) -> dict:
         return {**super().to_dict(), "name": self._name}
 
-    @classmethod
-    def of(
-        cls: Type[ReadingType],
-        name: str,
-        sub_index: int = 1,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
-    ) -> ReadingType:
-        return cls(modifiers, flags, sign, name, sub_index)
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Reading(NamedReading):
@@ -183,12 +169,50 @@ class Reading(NamedReading):
     def to_dict(self) -> dict:
         return {**super().to_dict(), "type": "Reading"}
 
+    @staticmethod
+    def of(
+        name: str,
+        sub_index: int = 1,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[str] = None,
+    ) -> "Reading":
+        return Reading(modifiers, flags, sign, name, sub_index)
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Logogram(NamedReading):
+    surrogate: Sequence[Token] = attr.ib(
+        default=tuple(), converter=convert_token_sequence
+    )
+
+    @property
+    def value(self) -> str:
+        surrogate = (
+            f"<({''.join(token.value for token in self.surrogate)})>"
+            if self.surrogate
+            else ""
+        )
+        return f"{super().value}{surrogate}"
+
     def _check_name(self, _attribute, value):
         if not value.isupper():
             raise ValueError("Logograms must be uppercase.")
 
     def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Logogram"}
+        return {
+            **super().to_dict(),
+            "type": "Logogram",
+            "surrogate": [token.to_dict() for token in self.surrogate],
+        }
+
+    @staticmethod
+    def of(
+        name: str,
+        sub_index: int = 1,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[str] = None,
+        surrogate: Sequence[Token] = tuple(),
+    ) -> "Logogram":
+        return Logogram(modifiers, flags, sign, name, sub_index, surrogate)

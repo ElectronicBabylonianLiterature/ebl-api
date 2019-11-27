@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.transliteration.domain import atf as atf
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Logogram,
@@ -123,18 +124,27 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
 
 
 @pytest.mark.parametrize(
-    "name,sub_index,modifiers,flags,sign,expected_value",
+    "name,sub_index,modifiers,flags,sign,surrogate,expected_value",
     [
-        ("KUR", 1, [], [], None, "KUR"),
-        ("KUR", 0, [], [], None, "KUR₀"),
-        ("KUR", 1, [], [], "KUR", "KUR(KUR)"),
-        ("KUR", 1, ["@v", "@180"], [], None, "KUR@v@180"),
-        ("KUR", 1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "KUR#!"),
-        ("KUR", 10, ["@v"], [atf.Flag.CORRECTION], "KUR", "KUR₁₀@v!(KUR)"),
+        ("KUR", 1, [], [], None, [], "KUR"),
+        ("KUR", 0, [], [], None, [], "KUR₀"),
+        ("KUR", 1, [], [], "KUR", [], "KUR(KUR)"),
+        (
+            "KUR",
+            1,
+            [],
+            [],
+            None,
+            [Reading.of("kur"), Joiner(atf.Joiner.HYPHEN), Reading.of("kur")],
+            "KUR<(kur-kur)>",
+        ),
+        ("KUR", 1, ["@v", "@180"], [], None, [], "KUR@v@180"),
+        ("KUR", 1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, [], "KUR#!"),
+        ("KUR", 10, ["@v"], [atf.Flag.CORRECTION], "KUR", [], "KUR₁₀@v!(KUR)"),
     ],
 )
-def test_logogram(name, sub_index, modifiers, flags, sign, expected_value):
-    logogram = Logogram.of(name, sub_index, modifiers, flags, sign)
+def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_value):
+    logogram = Logogram.of(name, sub_index, modifiers, flags, sign, surrogate)
 
     assert logogram.value == expected_value
     assert logogram.get_key() == f"Logogram⁝{expected_value}"
@@ -142,6 +152,7 @@ def test_logogram(name, sub_index, modifiers, flags, sign, expected_value):
     assert logogram.flags == tuple(flags)
     assert logogram.lemmatizable is False
     assert logogram.sign == sign
+    assert logogram.surrogate == tuple(surrogate)
     assert logogram.to_dict() == {
         "type": "Logogram",
         "value": expected_value,
@@ -149,6 +160,7 @@ def test_logogram(name, sub_index, modifiers, flags, sign, expected_value):
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
+        "surrogate": [token.to_dict() for token in surrogate],
         "sign": sign,
     }
 
