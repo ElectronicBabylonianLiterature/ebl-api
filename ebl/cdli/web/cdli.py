@@ -1,8 +1,11 @@
 import falcon
 from falcon import Request, Response
 
-from ebl.cdli.infrastructure.cdli_client import (get_detail_line_art_url,
-                                                 get_line_art_url, get_photo_url)
+from ebl.cdli.infrastructure.cdli_client import (
+    get_detail_line_art_url,
+    get_line_art_url,
+    get_photo_url,
+)
 from ebl.users.web.require_scope import require_scope
 
 

@@ -3,8 +3,12 @@ import pytest
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
-from ebl.transliteration.domain.word_tokens import (DEFAULT_NORMALIZED, ErasureState,
-                                                    LoneDeterminative, Partial)
+from ebl.transliteration.domain.word_tokens import (
+    DEFAULT_NORMALIZED,
+    ErasureState,
+    LoneDeterminative,
+    Partial,
+)
 
 
 def test_of_value():

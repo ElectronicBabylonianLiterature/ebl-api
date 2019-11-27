@@ -1,8 +1,17 @@
 import difflib
 from collections import deque
 from functools import reduce
-from typing import (Callable, Deque, Generic, Iterator, List, Mapping, Optional,
-                    Sequence, TypeVar)
+from typing import (
+    Callable,
+    Deque,
+    Generic,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    TypeVar,
+)
 
 import pydash
 

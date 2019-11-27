@@ -10,12 +10,22 @@ from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.sign_tokens import (Divider, Number, Reading,
-                                                    UnclearSign, UnidentifiedSign)
+from ebl.transliteration.domain.sign_tokens import (
+    Divider,
+    Number,
+    Reading,
+    UnclearSign,
+    UnidentifiedSign,
+)
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol, Tabulation,
-                                               UnknownNumberOfSigns, ValueToken,
-                                               Variant)
+from ebl.transliteration.domain.tokens import (
+    Column,
+    CommentaryProtocol,
+    Tabulation,
+    UnknownNumberOfSigns,
+    ValueToken,
+    Variant,
+)
 from ebl.transliteration.domain.word_tokens import InWordNewline, Joiner, Word
 
 

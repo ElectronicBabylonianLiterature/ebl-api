@@ -1,7 +1,10 @@
 import pytest
 
-from ebl.transliteration.domain.atf import (AtfSyntaxError, int_to_sub_index,
-                                            validate_atf)
+from ebl.transliteration.domain.atf import (
+    AtfSyntaxError,
+    int_to_sub_index,
+    validate_atf,
+)
 
 
 def test_valid_atf():

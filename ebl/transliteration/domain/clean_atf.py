@@ -4,9 +4,15 @@ from typing import List
 import attr
 import pydash
 
-from ebl.transliteration.domain.atf import (ATF_EXTENSIONS, Atf, CommentaryProtocol,
-                                            FLAGS, LACUNA, VARIANT_SEPARATOR,
-                                            WORD_SEPARATOR)
+from ebl.transliteration.domain.atf import (
+    ATF_EXTENSIONS,
+    Atf,
+    CommentaryProtocol,
+    FLAGS,
+    LACUNA,
+    VARIANT_SEPARATOR,
+    WORD_SEPARATOR,
+)
 
 CONTROL_LINE = r"^(@|\$(( ?(single|double|triple))| )|#|&)"
 MULTIPLEX_COMMENT = r"=:"

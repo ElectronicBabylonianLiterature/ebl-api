@@ -20,10 +20,17 @@ from ebl.transliteration.domain.line import (
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import (LanguageShift, LineContinuation,
-                                               ValueToken)
-from ebl.transliteration.domain.word_tokens import (Joiner, LoneDeterminative, Partial,
-                                                    Word)
+from ebl.transliteration.domain.tokens import (
+    LanguageShift,
+    LineContinuation,
+    ValueToken,
+)
+from ebl.transliteration.domain.word_tokens import (
+    Joiner,
+    LoneDeterminative,
+    Partial,
+    Word,
+)
 
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(

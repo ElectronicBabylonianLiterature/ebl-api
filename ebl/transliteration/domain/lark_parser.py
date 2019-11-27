@@ -8,22 +8,42 @@ from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
-from ebl.transliteration.domain.enclosure_tokens import (BrokenAway,
-                                                         DocumentOrientedGloss, Erasure,
-                                                         OmissionOrRemoval,
-                                                         PerhapsBrokenAway, Side)
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    DocumentOrientedGloss,
+    Erasure,
+    OmissionOrRemoval,
+    PerhapsBrokenAway,
+    Side,
+)
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.domain.sign_tokens import (Divider, Number, Reading,
-                                                    UnclearSign, UnidentifiedSign)
+from ebl.transliteration.domain.sign_tokens import (
+    Divider,
+    Number,
+    Reading,
+    UnclearSign,
+    UnidentifiedSign,
+)
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol,
-                                               LanguageShift, LineContinuation,
-                                               Tabulation, UnknownNumberOfSigns,
-                                               ValueToken, Variant)
+from ebl.transliteration.domain.tokens import (
+    Column,
+    CommentaryProtocol,
+    LanguageShift,
+    LineContinuation,
+    Tabulation,
+    UnknownNumberOfSigns,
+    ValueToken,
+    Variant,
+)
 from ebl.transliteration.domain.transliteration_error import TransliterationError
-from ebl.transliteration.domain.word_tokens import (ErasureState, InWordNewline, Joiner,
-                                                    LoneDeterminative, Word)
+from ebl.transliteration.domain.word_tokens import (
+    ErasureState,
+    InWordNewline,
+    Joiner,
+    LoneDeterminative,
+    Word,
+)
 
 
 class TreeToWord(Transformer):

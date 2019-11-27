@@ -9,8 +9,10 @@ from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import (LemmatizationError,
-                                                      LemmatizationToken)
+from ebl.transliteration.domain.lemmatization import (
+    LemmatizationError,
+    LemmatizationToken,
+)
 from ebl.transliteration.domain.tokens import Token, ValueToken
 from ebl.transliteration.domain.word_cleaner import clean_word
 

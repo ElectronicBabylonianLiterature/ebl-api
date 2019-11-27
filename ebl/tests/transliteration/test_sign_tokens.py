@@ -1,8 +1,13 @@
 import pytest
 
 from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.sign_tokens import (Divider, Number, Reading,
-                                                    UnclearSign, UnidentifiedSign)
+from ebl.transliteration.domain.sign_tokens import (
+    Divider,
+    Number,
+    Reading,
+    UnclearSign,
+    UnidentifiedSign,
+)
 
 
 def test_divider():

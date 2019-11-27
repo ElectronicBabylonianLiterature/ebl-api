@@ -2,19 +2,41 @@ from typing import Callable, Mapping, Sequence, Tuple
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
-from ebl.transliteration.domain.enclosure_tokens import (BrokenAway,
-                                                         DocumentOrientedGloss, Erasure,
-                                                         OmissionOrRemoval,
-                                                         PerhapsBrokenAway, Side)
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    DocumentOrientedGloss,
+    Erasure,
+    OmissionOrRemoval,
+    PerhapsBrokenAway,
+    Side,
+)
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.sign_tokens import (Divider, Number, Reading,
-                                                    UnclearSign, UnidentifiedSign)
-from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol,
-                                               LanguageShift, LineContinuation,
-                                               Tabulation, Token, UnknownNumberOfSigns,
-                                               ValueToken, Variant)
-from ebl.transliteration.domain.word_tokens import (ErasureState, InWordNewline, Joiner,
-                                                    LoneDeterminative, Partial, Word)
+from ebl.transliteration.domain.sign_tokens import (
+    Divider,
+    Number,
+    Reading,
+    UnclearSign,
+    UnidentifiedSign,
+)
+from ebl.transliteration.domain.tokens import (
+    Column,
+    CommentaryProtocol,
+    LanguageShift,
+    LineContinuation,
+    Tabulation,
+    Token,
+    UnknownNumberOfSigns,
+    ValueToken,
+    Variant,
+)
+from ebl.transliteration.domain.word_tokens import (
+    ErasureState,
+    InWordNewline,
+    Joiner,
+    LoneDeterminative,
+    Partial,
+    Word,
+)
 
 _factories: Mapping[str, Callable[[dict], Token]] = {
     "Token": lambda data: ValueToken(data["value"]),

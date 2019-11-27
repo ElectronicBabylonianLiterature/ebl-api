@@ -4,11 +4,19 @@ from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
-from ebl.transliteration.domain.sign_tokens import (Number, Reading, UnclearSign,
-                                                    UnidentifiedSign)
+from ebl.transliteration.domain.sign_tokens import (
+    Number,
+    Reading,
+    UnclearSign,
+    UnidentifiedSign,
+)
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
-from ebl.transliteration.domain.word_tokens import (InWordNewline, Joiner,
-                                                    LoneDeterminative, Word)
+from ebl.transliteration.domain.word_tokens import (
+    InWordNewline,
+    Joiner,
+    LoneDeterminative,
+    Word,
+)
 
 
 @pytest.mark.parametrize("parser", [parse_word])
