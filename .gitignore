@@ -112,3 +112,6 @@ parselog.txt
 
 # Docker
 docker-entrypoint-initdb.d/
+
+# Run backend locally
+.run_backend.sh
