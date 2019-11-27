@@ -2,7 +2,7 @@ from typing import NewType, Optional, Tuple
 
 import attr
 
-SignName = NewType('SignName', str)
+SignName = NewType("SignName", str)
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -25,11 +25,12 @@ class Sign:
 
     @property
     def standardization(self):
-        standardization_list = 'ABZ'
+        standardization_list = "ABZ"
         try:
-            return [f'{record.name}{record.number}'
-                    for record
-                    in self.lists
-                    if record.name == standardization_list][0]
+            return [
+                f"{record.name}{record.number}"
+                for record in self.lists
+                if record.name == standardization_list
+            ][0]
         except IndexError:
             return self.name

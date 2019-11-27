@@ -1,8 +1,10 @@
 from typing import Iterable
 
 from ebl.corpus.domain.enclosure import Enclosure, EnclosureType
-from ebl.corpus.domain.reconstructed_text import ReconstructionToken, \
-    ReconstructionTokenVisitor
+from ebl.corpus.domain.reconstructed_text import (
+    ReconstructionToken,
+    ReconstructionTokenVisitor,
+)
 
 
 class EnclosureError(Exception):
@@ -15,9 +17,7 @@ class ValidationState:
 
     @property
     def open_enclosures(self):
-        return [type_
-                for type_, open_ in self._enclosures.items()
-                if open_]
+        return [type_ for type_, open_ in self._enclosures.items() if open_]
 
     def open(self, type_: EnclosureType) -> None:
         self._enclosures[type_] = True
@@ -34,8 +34,7 @@ class ValidationState:
         is_open = self._enclosures[type_]
         children_are_not_open = not [
             child_type
-            for child_type, open_
-            in self._enclosures.items()
+            for child_type, open_ in self._enclosures.items()
             if open_ and child_type.parent is type_
         ]
         return is_open and children_are_not_open
@@ -51,12 +50,12 @@ class EnclosureValidator(ReconstructionTokenVisitor):
         elif enclosure.is_close and self._state.can_close(enclosure.type):
             self._state.close(enclosure.type)
         else:
-            raise EnclosureError(f'Unexpected enclosure {enclosure}.')
+            raise EnclosureError(f"Unexpected enclosure {enclosure}.")
 
     def validate_end_state(self):
         open_enclosures = self._state.open_enclosures
         if open_enclosures:
-            raise EnclosureError(f'Unclosed enclosure {open_enclosures}.')
+            raise EnclosureError(f"Unclosed enclosure {open_enclosures}.")
 
 
 def validate(line: Iterable[ReconstructionToken]):
@@ -66,5 +65,4 @@ def validate(line: Iterable[ReconstructionToken]):
             token.accept(validator)
         validator.validate_end_state()
     except EnclosureError as error:
-        raise ValueError(f'Invalid line {[str(part) for part in line]}: '
-                         f'{error}')
+        raise ValueError(f"Invalid line {[str(part) for part in line]}: " f"{error}")

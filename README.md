@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api.svg?branch=master)](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
+[![Code style: Black](https://img.shields.io/badge/codestyle-black-black)](https://black.readthedocs.io/en/stable/)
 
 The API requires a MongoDB database. See the 
 [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
@@ -14,7 +15,7 @@ or generating the initial data.
 
 Requirements:
 
-- Python 3.7 & pip
+- Python 3.8 & pip
 - A JavaScript runtime, e.g. Node.js (Only required for running the tests using
 MongoDB `map_reduce`.)
 - Docker (optional for running the application)
@@ -22,7 +23,19 @@ MongoDB `map_reduce`.)
 ```shell script
 pip install pipenv
 pipenv install --dev
+pipenv run pre-commit install
 ```
+
+## Codestyle
+
+Use [Black](https://black.readthedocs.io/en/stable/) code style. Line
+length is 88, and bugbear B950 is used instead of E501. 
+
+PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be 
+disabled. PyCharm should not optimize imports, because the result does not match
+black code style.
+
+All files can be formatted with `pipenv run black ebl`.
 
 ## Running the tests
 

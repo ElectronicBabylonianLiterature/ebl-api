@@ -30,14 +30,10 @@ def allow_signs(signs, sign_list):
 
 
 def create_text(client, text):
-    post_result = client.simulate_post(
-        f'/texts',
-        body=json.dumps(create_dto(text))
-    )
+    post_result = client.simulate_post(f"/texts", body=json.dumps(create_dto(text)))
     assert post_result.status == falcon.HTTP_CREATED
-    assert post_result.headers['Location'] == \
-        f'/texts/{text.category}/{text.index}'
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == create_dto(text, True)
 
 
@@ -46,40 +42,43 @@ def test_updating(client, bibliography, sign_repository, signs):
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
-    updated_text = attr.evolve(text, chapters=(
-        attr.evolve(text.chapters[0], lines=(
-            attr.evolve(text.chapters[0].lines[0],
-                        number=LineNumberLabel.from_atf("1'.")),
-        ), parser_version=ATF_PARSER_VERSION),
-    ))
+    updated_text = attr.evolve(
+        text,
+        chapters=(
+            attr.evolve(
+                text.chapters[0],
+                lines=(
+                    attr.evolve(
+                        text.chapters[0].lines[0],
+                        number=LineNumberLabel.from_atf("1'."),
+                    ),
+                ),
+                parser_version=ATF_PARSER_VERSION,
+            ),
+        ),
+    )
 
-    body = {
-        'lines': create_dto(
-            updated_text
-        )['chapters'][0]['lines']
-    }
+    body = {"lines": create_dto(updated_text)["chapters"][0]["lines"]}
     post_result = client.simulate_post(
-        f'/texts/{text.category}/{text.index}/chapters/0/lines',
-        body=json.dumps(body)
+        f"/texts/{text.category}/{text.index}/chapters/0/lines", body=json.dumps(body),
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == create_dto(updated_text, True)
 
     get_result = client.simulate_get(
-        f'/texts/{updated_text.category}/{updated_text.index}'
+        f"/texts/{updated_text.category}/{updated_text.index}"
     )
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_dto(updated_text, True)
 
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        f'/texts/1/1/chapters/0/lines',
-        body=json.dumps({'lines': []})
+        f"/texts/1/1/chapters/0/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -87,8 +86,7 @@ def test_updating_text_not_found(client, bibliography):
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        f'/texts/invalid/1/chapters/0/lines',
-        body=json.dumps({'lines': []})
+        f"/texts/invalid/1/chapters/0/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -96,8 +94,7 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        f'/texts/1/invalid/chapters/0/lines',
-        body=json.dumps({'lines': []})
+        f"/texts/1/invalid/chapters/0/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -105,30 +102,24 @@ def test_updating_invalid_id(client):
 
 def test_updating_invalid_chapter_index(client):
     post_result = client.simulate_post(
-        f'/texts/1/1/chapters/invalid/lines',
-        body=json.dumps({'lines': []})
+        f"/texts/1/1/chapters/invalid/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-@pytest.mark.parametrize('lines,expected_status', [
-    [[{}], falcon.HTTP_BAD_REQUEST]
-])
-def test_update_invalid_entity(client,
-                               bibliography,
-                               lines,
-                               expected_status,
-                               sign_repository,
-                               signs):
+@pytest.mark.parametrize("lines,expected_status", [[[{}], falcon.HTTP_BAD_REQUEST]])
+def test_update_invalid_entity(
+    client, bibliography, lines, expected_status, sign_repository, signs
+):
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f'/texts/{text.category}/{text.index}/chapters/0/lines',
-        body=json.dumps({'lines': lines})
+        f"/texts/{text.category}/{text.index}/chapters/0/lines",
+        body=json.dumps({"lines": lines}),
     )
 
     assert post_result.status == expected_status

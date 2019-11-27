@@ -1,15 +1,24 @@
-from typing import Callable, List, Tuple, Union
+from functools import singledispatchmethod  # type: ignore
+from typing import Callable, List, Tuple
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    DocumentOrientedGloss,
+    Erasure,
+    OmissionOrRemoval,
+    PerhapsBrokenAway,
+    Side,
+)
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.domain.token import (BrokenAway, DEFAULT_NORMALIZED,
-                                              DocumentOrientedGloss, Erasure,
-                                              LanguageShift,
-                                              OmissionOrRemoval,
-                                              PerhapsBrokenAway,
-                                              Side, Token,
-                                              TokenVisitor, Word, Divider,
-                                              CommentaryProtocol)
+from ebl.transliteration.domain.sign_tokens import Divider
+from ebl.transliteration.domain.tokens import (
+    CommentaryProtocol,
+    LanguageShift,
+    Token,
+    TokenVisitor,
+)
+from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
 
 class LanguageVisitor(TokenVisitor):
@@ -22,44 +31,25 @@ class LanguageVisitor(TokenVisitor):
     def tokens(self) -> Tuple[Token, ...]:
         return tuple(self._tokens)
 
-    def visit_token(self, token: Token) -> None:
-        self._tokens.append(token)
+    @singledispatchmethod
+    def visit(self, token: Token) -> None:
+        self._append(token)
 
-    def visit_language_shift(self, shift: LanguageShift) -> None:
+    @visit.register
+    def _visit_language_shift(self, shift: LanguageShift) -> None:
         if shift.language is not Language.UNKNOWN:
             self._language = shift.language
             self._normalized = shift.normalized
 
-        self.visit_token(shift)
+        self._append(shift)
 
-    def visit_word(self, word: Word) -> None:
-        word_with_language =\
-            word.set_language(self._language, self._normalized)
-        self.visit_token(word_with_language)
+    @visit.register
+    def _visit_word(self, word: Word) -> None:
+        word_with_language = word.set_language(self._language, self._normalized)
+        self._append(word_with_language)
 
-    def visit_document_oriented_gloss(
-            self, gloss: DocumentOrientedGloss
-    ) -> None:
-        self.visit_token(gloss)
-
-    def visit_broken_away(
-            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
-    ) -> None:
-        self.visit_token(broken_away)
-
-    def visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
-        self.visit_token(omission)
-
-    def visit_erasure(self, erasure: Erasure) -> None:
-        self.visit_token(erasure)
-
-    def visit_divider(self, divider: Divider) -> None:
-        self.visit_token(divider)
-
-    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
-        self.visit_token(protocol)
+    def _append(self, token: Token) -> None:
+        self._tokens.append(token)
 
 
 class AtfVisitor(TokenVisitor):
@@ -70,47 +60,48 @@ class AtfVisitor(TokenVisitor):
 
     @property
     def result(self) -> Atf:
-        return Atf(''.join(self._parts))
+        return Atf("".join(self._parts))
 
-    def visit_token(self, token: Token) -> None:
+    @singledispatchmethod
+    def visit(self, token: Token) -> None:
         if self._force_separator or not self._omit_separator:
             self._append_separator()
 
         self._parts.append(token.value)
         self._set_omit(False)
 
-    def visit_language_shift(self, shift: LanguageShift) -> None:
+    @visit.register
+    def _visit_language_shift(self, shift: LanguageShift) -> None:
         self._append_separator()
         self._parts.append(shift.value)
         self._set_force()
 
-    def visit_word(self, word: Word) -> None:
+    @visit.register
+    def _visit_word(self, word: Word) -> None:
         if not self._omit_separator:
             self._append_separator()
 
         self._parts.append(word.value)
         self._set_omit(False)
 
-    def visit_document_oriented_gloss(
-            self, gloss: DocumentOrientedGloss
-    ) -> None:
+    @visit.register
+    def _visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._side(gloss.side)(gloss)
 
-    def visit_broken_away(
-            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
-    ) -> None:
+    @visit.register
+    def _visit_broken_away(self, broken_away: BrokenAway) -> None:
         self._side(broken_away.side)(broken_away)
 
-    def visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
+    @visit.register
+    def _visit_perhaps_broken_away(self, broken_away: PerhapsBrokenAway) -> None:
+        self._side(broken_away.side)(broken_away)
+
+    @visit.register
+    def _visit_omission_or_removal(self, omission: OmissionOrRemoval) -> None:
         self._side(omission.side)(omission)
 
     def _side(self, side: Side) -> Callable[[Token], None]:
-        return {
-            Side.LEFT: self._left,
-            Side.RIGHT: self._right
-        }[side]
+        return {Side.LEFT: self._left, Side.RIGHT: self._right}[side]
 
     def _left(self, token: Token) -> None:
         if not self._omit_separator:
@@ -124,7 +115,8 @@ class AtfVisitor(TokenVisitor):
         self._parts.append(token.value)
         self._set_omit(False)
 
-    def visit_erasure(self, erasure: Erasure):
+    @visit.register
+    def _visit_erasure(self, erasure: Erasure):
         def left():
             self._append_separator()
             self._parts.append(erasure.value)
@@ -138,16 +130,16 @@ class AtfVisitor(TokenVisitor):
             self._parts.append(erasure.value)
             self._set_force()
 
-        {Side.LEFT: left,
-         Side.CENTER: center,
-         Side.RIGHT: right}[erasure.side]()
+        {Side.LEFT: left, Side.CENTER: center, Side.RIGHT: right}[erasure.side]()
 
-    def visit_divider(self, divider: Divider) -> None:
+    @visit.register
+    def _visit_divider(self, divider: Divider) -> None:
         self._append_separator()
         self._parts.append(divider.value)
         self._set_force()
 
-    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
+    @visit.register
+    def _visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
         self._append_separator()
         self._parts.append(protocol.value)
         self._set_force()

@@ -1,14 +1,15 @@
+import unicodedata
 from enum import Enum
-from typing import Mapping, NewType
+from typing import Mapping, NewType, Optional
 
 import pydash
 from pyoracc.atf.common.atffile import AtfFile
 
-Atf = NewType('Atf', str)
+Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = '0.14.2'
-DEFAULT_ATF_PARSER_VERSION = '0.1.0'
+ATF_PARSER_VERSION = "0.20"
+DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
 class AtfError(Exception):
@@ -23,15 +24,13 @@ class AtfSyntaxError(AtfError):
 
 
 def validate_atf(text):
-    prefix = '\n'.join(ATF_HEADING)
+    prefix = "\n".join(ATF_HEADING)
     try:
-        return AtfFile(f'{prefix}\n{text}', atftype='oracc')
+        return AtfFile(f"{prefix}\n{text}", atftype="oracc")
     except SyntaxError as error:
         line_number = error.lineno - len(ATF_HEADING)
         raise AtfSyntaxError(line_number)
-    except (IndexError,
-            AttributeError,
-            UnicodeDecodeError) as error:
+    except (IndexError, AttributeError, UnicodeDecodeError) as error:
         raise AtfError(error)
 
 
@@ -40,31 +39,25 @@ class Surface(Enum):
     http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html
     """
 
-    OBVERSE = ('@obverse', 'o')
-    REVERSE = ('@reverse', 'r')
-    BOTTOM = ('@bottom', 'b.e.')
-    EDGE = ('@edge', 'e.')
-    LEFT = ('@left', 'l.e.')
-    RIGHT = ('@right', 'r.e.')
-    TOP = ('@top', 't.e.')
+    OBVERSE = ("@obverse", "o")
+    REVERSE = ("@reverse", "r")
+    BOTTOM = ("@bottom", "b.e.")
+    EDGE = ("@edge", "e.")
+    LEFT = ("@left", "l.e.")
+    RIGHT = ("@right", "r.e.")
+    TOP = ("@top", "t.e.")
 
     def __init__(self, atf, label):
         self.atf = atf
         self.label = label
 
     @staticmethod
-    def from_label(label: str) -> 'Surface':
-        return [
-            enum for enum in Surface
-            if enum.label == label
-        ][0]
+    def from_label(label: str) -> "Surface":
+        return [enum for enum in Surface if enum.label == label][0]
 
     @staticmethod
-    def from_atf(atf: str) -> 'Surface':
-        return [
-            enum for enum in Surface
-            if enum.atf == atf
-        ][0]
+    def from_atf(atf: str) -> "Surface":
+        return [enum for enum in Surface if enum.atf == atf][0]
 
 
 class Status(Enum):
@@ -73,9 +66,9 @@ class Status(Enum):
     """
 
     PRIME = "'"
-    UNCERTAIN = '?'
-    CORRECTION = '!'
-    COLLATION = '*'
+    UNCERTAIN = "?"
+    CORRECTION = "!"
+    COLLATION = "*"
 
 
 class CommentaryProtocol(Enum):
@@ -83,10 +76,10 @@ class CommentaryProtocol(Enum):
     http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html
     """
 
-    QUOTATION = '!qt'
-    BASE_TEXT = '!bs'
-    COMMENTARY = '!cm'
-    UNCERTAIN = '!zz'
+    QUOTATION = "!qt"
+    BASE_TEXT = "!bs"
+    COMMENTARY = "!cm"
+    UNCERTAIN = "!zz"
 
 
 class Flag(Enum):
@@ -94,56 +87,83 @@ class Flag(Enum):
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html
     """
 
-    DAMAGE = '#'
-    UNCERTAIN = '?'
-    CORRECTION = '!'
-    COLLATION = '*'
+    DAMAGE = "#"
+    UNCERTAIN = "?"
+    CORRECTION = "!"
+    COLLATION = "*"
 
 
-UNKNOWN_NUMBER_OF_SIGNS = '...'
-WORD_SEPARATOR = ' '
-HYPHEN = '-'
-JOINERS = [HYPHEN, '+', '.']
-VARIANT_SEPARATOR = '/'
-UNCLEAR_SIGN = 'x'
-UNIDENTIFIED_SIGN = 'X'
+class Joiner(Enum):
+    HYPHEN = "-"
+    DOT = "."
+    PLUS = "+"
+    COLON = ":"
+
+
+UNKNOWN_NUMBER_OF_SIGNS = "..."
+WORD_SEPARATOR = " "
+VARIANT_SEPARATOR = "/"
+UNCLEAR_SIGN = "x"
+UNIDENTIFIED_SIGN = "X"
+IN_WORD_NEWLINE = ";"
 
 FLAGS: Mapping[str, str] = {
-    'uncertainty': pydash.escape_reg_exp(Flag.UNCERTAIN.value),
-    'collation': pydash.escape_reg_exp(Flag.COLLATION.value),
-    'damage': pydash.escape_reg_exp(Flag.DAMAGE.value),
-    'correction': pydash.escape_reg_exp(Flag.CORRECTION.value),
-    'not_logogram': r'\$',
+    "uncertainty": pydash.escape_reg_exp(Flag.UNCERTAIN.value),
+    "collation": pydash.escape_reg_exp(Flag.COLLATION.value),
+    "damage": pydash.escape_reg_exp(Flag.DAMAGE.value),
+    "correction": pydash.escape_reg_exp(Flag.CORRECTION.value),
+    "not_logogram": r"\$",
 }
 
 LACUNA: Mapping[str, str] = {
-    'begin': r'\[',
-    'end': r'\]',
-    'undeterminable': pydash.escape_reg_exp(UNKNOWN_NUMBER_OF_SIGNS)
+    "begin": r"\[",
+    "end": r"\]",
+    "undeterminable": pydash.escape_reg_exp(UNKNOWN_NUMBER_OF_SIGNS),
 }
 
 ATF_SPEC: Mapping[str, str] = {
-    'reading': r'([^₀-₉ₓ/]+)([₀-₉]+)?',
-    'with_sign': r'[^\(/\|]+\((.+)\)',
-    'grapheme':
-        r'\|([.x×%&+@]?(\d+[.x×%&+@])?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|',
-    'number': r'\d+',
-    'variant': r'([^/]+)(?:/([^/]+))+',
+    "reading": r"([^₀-₉ₓ/]+)([₀-₉]+)?",
+    "with_sign": r"[^\(/\|]+\((.+)\)",
+    "grapheme": r"\|([.x×%&+@]?(\d+[.x×%&+@])?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|",
+    "number": r"\d+",
+    "variant": r"([^/]+)(?:/([^/]+))+",
 }
 
 ATF_EXTENSIONS: Mapping[str, str] = {
-    'erasure_boundary': '°',
-    'erasure_delimiter': '\\',
-    'erasure_illegible': r'°[^\°]*\\',
-    'line_continuation': '→',
+    "erasure_boundary": "°",
+    "erasure_delimiter": "\\",
+    "erasure_illegible": r"°[^\°]*\\",
+    "line_continuation": "→",
 }
 
 
 ATF_HEADING = [
-    '&XXX = XXX',
-    '#project: eblo',
-    '#atf: lang akk-x-stdbab',
-    '#atf: use unicode',
-    '#atf: use math',
-    '#atf: use legacy'
+    "&XXX = XXX",
+    "#project: eblo",
+    "#atf: lang akk-x-stdbab",
+    "#atf: use unicode",
+    "#atf: use math",
+    "#atf: use legacy",
 ]
+
+
+_SUB_SCRIPT: Mapping[str, str] = {
+    "1": "₁",
+    "2": "₂",
+    "3": "₃",
+    "4": "₄",
+    "5": "₅",
+    "6": "₆",
+    "7": "₇",
+    "8": "₈",
+    "9": "₉",
+    "0": "₀",
+}
+
+
+def int_to_sub_index(number: int) -> str:
+    return "" if number == 1 else "".join(_SUB_SCRIPT[digit] for digit in str(number))
+
+
+def sub_index_to_int(string: Optional[str]) -> int:
+    return int(unicodedata.normalize("NFKC", string)) if string else 1

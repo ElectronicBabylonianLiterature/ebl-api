@@ -1,70 +1,48 @@
 from collections import Counter
-from typing import Union
+from functools import singledispatchmethod  # type: ignore
 
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, \
-    TextVisitor
+from ebl.corpus.domain.text import (
+    Chapter,
+    Line,
+    Manuscript,
+    ManuscriptLine,
+    TextVisitor,
+)
 from ebl.errors import DataError
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.token import BrokenAway, \
-    DocumentOrientedGloss, \
-    Erasure, \
-    LanguageShift, OmissionOrRemoval, PerhapsBrokenAway, Token, TokenVisitor, \
-    Word, Divider, CommentaryProtocol
-from ebl.transliteration.domain.transliteration_error import \
-    TransliterationError
+from ebl.transliteration.domain.tokens import Token, TokenVisitor
+from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.word_tokens import Word
 
 
-def invalid_atf(chapter: Chapter,
-                line_number: LineNumberLabel,
-                manuscript_id: int) -> Exception:
-    siglum = [manuscript.siglum
-              for manuscript in chapter.manuscripts
-              if manuscript.id == manuscript_id][0]
+def invalid_atf(
+    chapter: Chapter, line_number: LineNumberLabel, manuscript_id: int
+) -> Exception:
+    siglum = [
+        manuscript.siglum
+        for manuscript in chapter.manuscripts
+        if manuscript.id == manuscript_id
+    ][0]
     return DataError(
-        f'Invalid transliteration on'
-        f' line {line_number.to_value()}'
-        f' manuscript {siglum}.'
+        f"Invalid transliteration on"
+        f" line {line_number.to_value()}"
+        f" manuscript {siglum}."
     )
 
 
 class AlignmentVisitor(TokenVisitor):
-
     def __init__(self):
         self.alignments = []
 
-    def visit_token(self, token: Token) -> None:
+    @singledispatchmethod
+    def visit(self, token: Token) -> None:
         pass
 
-    def visit_language_shift(self, shift: LanguageShift) -> None:
-        pass
-
-    def visit_word(self, word: Word) -> None:
+    @visit.register
+    def _visit_word(self, word: Word) -> None:
         if word.alignment is not None:
             self.alignments.append(word.alignment)
-
-    def visit_document_oriented_gloss(self,
-                                      gloss: DocumentOrientedGloss) -> None:
-        pass
-
-    def visit_broken_away(
-            self, broken_away: Union[BrokenAway, PerhapsBrokenAway]
-    ) -> None:
-        pass
-
-    def visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
-        pass
-
-    def visit_erasure(self, erasure: Erasure):
-        pass
-
-    def visit_divider(self, divider: Divider) -> None:
-        pass
-
-    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
-        pass
 
     def validate(self):
         if any(count > 1 for _, count in Counter(self.alignments).items()):
@@ -72,7 +50,6 @@ class AlignmentVisitor(TokenVisitor):
 
 
 class TextValidator(TextVisitor):
-
     def __init__(self, bibliography, transliteration_factory):
         super().__init__(TextVisitor.Order.PRE)
         self._bibliography = bibliography
@@ -93,9 +70,9 @@ class TextValidator(TextVisitor):
         try:
             self._transliteration_factory.create(manuscript_line.line.atf)
         except TransliterationError:
-            raise invalid_atf(self._chapter,
-                              self._line.number,
-                              manuscript_line.manuscript_id)
+            raise invalid_atf(
+                self._chapter, self._line.number, manuscript_line.manuscript_id
+            )
 
         alignment_validator = AlignmentVisitor()
         for token in manuscript_line.line.content:

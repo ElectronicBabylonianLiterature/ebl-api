@@ -7,9 +7,7 @@ from ebl.corpus.domain.text import Chapter, Manuscript
 
 
 class ManuscriptUpdater(ChapterUpdater):
-
-    def __init__(self, chapter_index: int,
-                 manuscripts: Tuple[Manuscript, ...]):
+    def __init__(self, chapter_index: int, manuscripts: Tuple[Manuscript, ...]):
         super().__init__(chapter_index)
         self._manuscripts = manuscripts
 

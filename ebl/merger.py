@@ -1,12 +1,21 @@
 import difflib
 from collections import deque
 from functools import reduce
-from typing import (Callable, Generic, Iterator, List, Mapping, Optional,
-                    Sequence, TypeVar, Deque)
+from typing import (
+    Callable,
+    Deque,
+    Generic,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    TypeVar,
+)
 
 import pydash
 
-T = TypeVar('T')
+T = TypeVar("T")
 DiffMapping = Callable[[T], str]
 InnerMerge = Callable[[T, T], T]
 
@@ -44,16 +53,16 @@ class Merge(Generic[T]):
     def _append(self, entry: T) -> None:
         self._result.append(entry)
 
-    def delete(self) -> 'Merge':
+    def delete(self) -> "Merge":
         self._advance_old(True)
         return self
 
-    def keep(self) -> 'Merge':
+    def keep(self) -> "Merge":
         self._append(self._advance_old(False))
         self._advance_new()
         return self
 
-    def add(self, entry: T) -> 'Merge':
+    def add(self, entry: T) -> "Merge":
         self._append(entry)
         self._advance_new()
         return self
@@ -64,17 +73,14 @@ def take_new(_: T, new: T) -> T:
 
 
 class Merger(Generic[T]):
-
     def __init__(
-            self,
-            map_: DiffMapping[T],
-            inner_merge: Optional[InnerMerge[T]] = None
+        self, map_: DiffMapping[T], inner_merge: Optional[InnerMerge[T]] = None
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
-            '- ': lambda state: state.delete(),
-            '+ ': self._add_entry,
-            '  ': lambda state: state.keep(),
-            '? ': pydash.identity
+            "- ": lambda state: state.delete(),
+            "+ ": self._add_entry,
+            "  ": lambda state: state.keep(),
+            "? ": pydash.identity,
         }
         self._map: DiffMapping[T] = map_
         self._merge_strategy: InnerMerge[T] = inner_merge or take_new
@@ -84,16 +90,11 @@ class Merger(Generic[T]):
         return state.add(new_entry)
 
     def _inner_merge(self, old: Optional[T], new: T) -> T:
-        return (
-            self._merge_strategy(old, new)
-            if old is not None
-            else new
-        )
+        return self._merge_strategy(old, new) if old is not None else new
 
     def _diff(self, old: Sequence[T], new: Sequence[T]) -> Iterator[str]:
         return difflib.ndiff(
-            [self._map(entry) for entry in old],
-            [self._map(entry) for entry in new]
+            [self._map(entry) for entry in old], [self._map(entry) for entry in new],
         )
 
     def merge(self, old: Sequence[T], new: Sequence[T]) -> List[T]:
@@ -102,5 +103,5 @@ class Merger(Generic[T]):
         return reduce(
             lambda state, entry: self._operations[entry](state),
             [line[:prefix_length] for line in diff],
-            Merge(old, new)
+            Merge(old, new),
         ).result

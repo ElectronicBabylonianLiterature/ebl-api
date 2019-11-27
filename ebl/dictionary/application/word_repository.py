@@ -5,7 +5,6 @@ from ebl.dictionary.domain.word import WordId
 
 
 class WordRepository(ABC):
-
     @abstractmethod
     def create(self, word) -> WordId:
         ...

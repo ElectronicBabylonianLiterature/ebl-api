@@ -2,41 +2,33 @@ import re
 
 import pytest
 
-from ebl.fragmentarium.domain.transliteration_query import \
-    TransliterationQuery
+from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 ATF = Atf(
-    '1\'. [...-ku]-nu-ši [...]\n'
-    '\n'
-    '@obverse\n'
-    '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]\n'
-    '3\'. [... k]i-du u ba-ma-t[a ...]\n'
-    '6\'. [...] x mu ta-ma-tu₂\n'
-    '7\'. šu/gid'
+    "1'. [...-ku]-nu-ši [...]\n"
+    "\n"
+    "@obverse\n"
+    "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n"
+    "3'. [... k]i-du u ba-ma-t[a ...]\n"
+    "6'. [...] x mu ta-ma-tu₂\n"
+    "7'. šu/gid"
 )
 
 SIGNS = (
-    'KU NU IGI\n'
-    'GI₆ DIŠ GI₆ UD MA\n'
-    'KI DU U BA MA TA\n'
-    'X MU TA MA UD\n'
-    'ŠU/BU'
+    "KU NU IGI\n" "GI₆ DIŠ GI₆ UD MA\n" "KI DU U BA MA TA\n" "X MU TA MA UD\n" "ŠU/BU"
 )
 
 REGEXP_DATA = [
-    ([['DU', 'U']], True),
-    ([['KU']], True),
-    ([['UD']], True),
-    ([
-        ['GI₆', 'DIŠ'],
-        ['U', 'BA', 'MA']
-    ], True),
-    ([['ŠU']], True),
-    ([['IGI', 'UD']], False),
-    ([['|U.BA|']], False),
+    ([["DU", "U"]], True),
+    ([["KU"]], True),
+    ([["UD"]], True),
+    ([["GI₆", "DIŠ"], ["U", "BA", "MA"]], True),
+    ([["ŠU"]], True),
+    ([["IGI", "UD"]], False),
+    ([["|U.BA|"]], False),
 ]
 
 
@@ -52,64 +44,40 @@ def test_regexp(signs, is_match):
 
 
 GET_MATCHING_LINES_DATA = [
+    ([["KU", "NU"]], [["1'. [...-ku]-nu-ši [...]"]]),
+    ([["U", "BA", "MA"]], [["3'. [... k]i-du u ba-ma-t[a ...]"]]),
+    ([["GI₆"]], [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]"]]),
     (
-        [['KU', 'NU']],
-        [['1\'. [...-ku]-nu-ši [...]']]
+        [["GI₆", "DIŠ"], ["U", "BA", "MA"]],
+        [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]",]],
     ),
     (
-        [['U', 'BA', 'MA']],
-        [['3\'. [... k]i-du u ba-ma-t[a ...]']]
+        [["NU", "IGI"], ["GI₆", "DIŠ"]],
+        [["1'. [...-ku]-nu-ši [...]", "2'. [...] GI₆ ana GI₆ u₄-m[a ...]"]],
     ),
     (
-        [['GI₆']],
-        [['2\'. [...] GI₆ ana GI₆ u₄-m[a ...]']]
-    ),
-    (
-        [['GI₆', 'DIŠ'], ['U', 'BA', 'MA']],
-        [[
-            '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]',
-            '3\'. [... k]i-du u ba-ma-t[a ...]'
-        ]]
-    ),
-    (
-        [['NU', 'IGI'], ['GI₆', 'DIŠ']],
-        [[
-            '1\'. [...-ku]-nu-ši [...]',
-            '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]'
-        ]]
-    ),
-    (
-        [['MA']],
+        [["MA"]],
         [
-            ['2\'. [...] GI₆ ana GI₆ u₄-m[a ...]'],
-            ['3\'. [... k]i-du u ba-ma-t[a ...]'],
-            ['6\'. [...] x mu ta-ma-tu₂']
-        ]
+            ["2'. [...] GI₆ ana GI₆ u₄-m[a ...]"],
+            ["3'. [... k]i-du u ba-ma-t[a ...]"],
+            ["6'. [...] x mu ta-ma-tu₂"],
+        ],
     ),
     (
-        [['MA'], ['TA']],
+        [["MA"], ["TA"]],
         [
-            [
-                '2\'. [...] GI₆ ana GI₆ u₄-m[a ...]',
-                '3\'. [... k]i-du u ba-ma-t[a ...]'
-            ], [
-                '3\'. [... k]i-du u ba-ma-t[a ...]',
-                '6\'. [...] x mu ta-ma-tu₂'
-            ]
-        ]
+            ["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]",],
+            ["3'. [... k]i-du u ba-ma-t[a ...]", "6'. [...] x mu ta-ma-tu₂"],
+        ],
     ),
-    (
-        [['BU']],
-        [['7\'. šu/gid']]
-    )
+    ([["BU"]], [["7'. šu/gid"]]),
 ]
 
 
 @pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
 def test_get_matching_lines(query, expected):
     transliterated_fragment = FragmentFactory.build(
-        text=parse_atf_lark(ATF),
-        signs=SIGNS
+        text=parse_atf_lark(ATF), signs=SIGNS
     )
 
     query = TransliterationQuery(query)
@@ -119,11 +87,11 @@ def test_get_matching_lines(query, expected):
 
 GET_IS_SEQUENCE_EMPTY_DATA = [
     ([[]], True),
-    ([['']], True),
-    ([['MA'], ['TA']], False),
-    ([[''], ['']], True),
-    ([['', '']], True),
-    ([[''], ['ABZ001']], False)
+    ([[""]], True),
+    ([["MA"], ["TA"]], False),
+    ([[""], [""]], True),
+    ([["", ""]], True),
+    ([[""], ["ABZ001"]], False),
 ]
 
 

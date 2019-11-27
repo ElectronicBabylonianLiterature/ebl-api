@@ -8,12 +8,11 @@ from ebl.transliteration.domain.sign import SignName, Value as SignValue
 from ebl.transliteration.domain.sign_map import SignKey, SignMap
 from ebl.transliteration.domain.standardization import Standardization
 
-INVALID_READING = '?'
+INVALID_READING = "?"
 
 
 @attr.s(frozen=True)
 class Value(ABC):
-
     @abstractmethod
     def to_sign(self, sign_map: SignMap, is_deep: bool) -> str:
         ...
@@ -64,9 +63,9 @@ class Grapheme(Value):
         return [self.key]
 
     def to_sign(self, sign_map: SignMap, is_deep) -> str:
-        return sign_map.get(
-            self.key, Standardization.of_string(self.name)
-        ).get_value(is_deep)
+        return sign_map.get(self.key, Standardization.of_string(self.name)).get_value(
+            is_deep
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -80,18 +79,14 @@ class SplittableGrapheme(Value):
     @values.validator
     def _check_values(self, _attribute, value):
         if any(type(entry) != Grapheme for entry in value):
-            raise ValueError('SplittableGrapheme can only contain Graphemes.')
+            raise ValueError("SplittableGrapheme can only contain Graphemes.")
 
     @property
     def keys(self) -> Sequence[SignKey]:
         return [key for value in self.values for key in value.keys]
 
     def to_sign(self, sign_map: SignMap, is_deep) -> str:
-        return ' '.join([
-            value.to_sign(sign_map, is_deep)
-            for value
-            in self.values
-        ])
+        return " ".join([value.to_sign(sign_map, is_deep) for value in self.values])
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -101,24 +96,22 @@ class Variant(Value):
     @values.validator
     def _check_values(self, _attribute, value):
         if any(type(entry) == Variant for entry in value):
-            raise ValueError('Variants cannot be nested.')
+            raise ValueError("Variants cannot be nested.")
         if any(type(entry) == SplittableGrapheme for entry in value):
-            raise ValueError('Variants cannot contain SplittableGraphemes.')
+            raise ValueError("Variants cannot contain SplittableGraphemes.")
 
     @property
     def keys(self) -> Sequence[SignKey]:
         return [key for value in self.values for key in value.keys]
 
     def to_sign(self, sign_map: SignMap, _) -> str:
-        return VARIANT_SEPARATOR.join([
-            value.to_sign(sign_map, False)
-            for value
-            in self.values
-        ])
+        return VARIANT_SEPARATOR.join(
+            [value.to_sign(sign_map, False) for value in self.values]
+        )
 
 
 class ValueFactory:
-    EMPTY = NotReading('')
+    EMPTY = NotReading("")
     UNIDENTIFIED = NotReading(UNIDENTIFIED_SIGN)
     INVALID = NotReading(INVALID_READING)
 
@@ -140,5 +133,5 @@ class ValueFactory:
 
     @staticmethod
     def create_splittable_grapheme(value: str) -> SplittableGrapheme:
-        graphemes = value.strip('|').split('.')
+        graphemes = value.strip("|").split(".")
         return SplittableGrapheme.of([SignName(name) for name in graphemes])

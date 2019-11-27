@@ -1,64 +1,72 @@
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
-from ebl.tests.factories.corpus import ChapterFactory, LineFactory, \
-    ManuscriptFactory, ManuscriptLineFactory, TextFactory
+from ebl.tests.factories.corpus import (
+    ChapterFactory,
+    LineFactory,
+    ManuscriptFactory,
+    ManuscriptLineFactory,
+    TextFactory,
+)
 
-REFERENCES = (ReferenceWithDocumentFactory.build(), )
+REFERENCES = (ReferenceWithDocumentFactory.build(),)
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
 MANUSCRIPT_LINE = ManuscriptLineFactory.build()
-LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE, ))
-CHAPTER = ChapterFactory.build(manuscripts=(MANUSCRIPT, ), lines=(LINE, ))
-TEXT = TextFactory.build(chapters=(CHAPTER, ))
+LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE,))
+CHAPTER = ChapterFactory.build(manuscripts=(MANUSCRIPT,), lines=(LINE,))
+TEXT = TextFactory.build(chapters=(CHAPTER,))
 
 
 def to_dict(include_documents):
     return {
-        'category': TEXT.category,
-        'index': TEXT.index,
-        'name': TEXT.name,
-        'numberOfVerses': TEXT.number_of_verses,
-        'approximateVerses': TEXT.approximate_verses,
-        'chapters': [
+        "category": TEXT.category,
+        "index": TEXT.index,
+        "name": TEXT.name,
+        "numberOfVerses": TEXT.number_of_verses,
+        "approximateVerses": TEXT.approximate_verses,
+        "chapters": [
             {
-                'classification': CHAPTER.classification.value,
-                'stage': CHAPTER.stage.value,
-                'version': CHAPTER.version,
-                'name': CHAPTER.name,
-                'order': CHAPTER.order,
-                'parserVersion': CHAPTER.parser_version,
-                'manuscripts': [
+                "classification": CHAPTER.classification.value,
+                "stage": CHAPTER.stage.value,
+                "version": CHAPTER.version,
+                "name": CHAPTER.name,
+                "order": CHAPTER.order,
+                "parserVersion": CHAPTER.parser_version,
+                "manuscripts": [
                     {
-                        'id': MANUSCRIPT.id,
-                        'siglumDisambiguator': MANUSCRIPT.siglum_disambiguator,
-                        'museumNumber': MANUSCRIPT.museum_number,
-                        'accession': MANUSCRIPT.accession,
-                        'periodModifier': MANUSCRIPT.period_modifier.value,
-                        'period': MANUSCRIPT.period.long_name,
-                        'provenance': MANUSCRIPT.provenance.long_name,
-                        'type': MANUSCRIPT.type.long_name,
-                        'notes': MANUSCRIPT.notes,
-                        'references': [
+                        "id": MANUSCRIPT.id,
+                        "siglumDisambiguator": MANUSCRIPT.siglum_disambiguator,
+                        "museumNumber": MANUSCRIPT.museum_number,
+                        "accession": MANUSCRIPT.accession,
+                        "periodModifier": MANUSCRIPT.period_modifier.value,
+                        "period": MANUSCRIPT.period.long_name,
+                        "provenance": MANUSCRIPT.provenance.long_name,
+                        "type": MANUSCRIPT.type.long_name,
+                        "notes": MANUSCRIPT.notes,
+                        "references": [
                             reference.to_dict(include_documents)
                             for reference in REFERENCES
-                        ]
+                        ],
                     }
                 ],
-                'lines': [
+                "lines": [
                     {
-                        'number': LINE.number.to_value(),
-                        'reconstruction': ' '.join(str(token)
-                                                   for token
-                                                   in LINE.reconstruction),
-                        'manuscripts': [{
-                            'manuscriptId': MANUSCRIPT_LINE.manuscript_id,
-                            'labels': [label.to_value()
-                                       for label in MANUSCRIPT_LINE.labels],
-                            'line': MANUSCRIPT_LINE.line.to_dict()
-                        }]
+                        "number": LINE.number.to_value(),
+                        "reconstruction": " ".join(
+                            str(token) for token in LINE.reconstruction
+                        ),
+                        "manuscripts": [
+                            {
+                                "manuscriptId": MANUSCRIPT_LINE.manuscript_id,
+                                "labels": [
+                                    label.to_value() for label in MANUSCRIPT_LINE.labels
+                                ],
+                                "line": MANUSCRIPT_LINE.line.to_dict(),
+                            }
+                        ],
                     }
-                ]
+                ],
             }
-        ]
+        ],
     }
 
 

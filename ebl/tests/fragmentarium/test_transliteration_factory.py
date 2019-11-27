@@ -1,7 +1,7 @@
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
-from ebl.fragmentarium.domain.transliteration_update import \
-    TransliterationUpdate
+from ebl.fragmentarium.application.transliteration_update_factory import (
+    TransliterationUpdateFactory,
+)
+from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.atf import Atf
 
 
@@ -10,8 +10,7 @@ def test_create(atf_converter, sign_repository, signs):
         sign_repository.create(sign)
 
     factory = TransliterationUpdateFactory(atf_converter)
-    atf = Atf('1. šu gid₂')
-    notes = 'notes'
+    atf = Atf("1. šu gid₂")
+    notes = "notes"
 
-    assert factory.create(atf, notes) ==\
-        TransliterationUpdate(atf, notes, 'ŠU BU')
+    assert factory.create(atf, notes) == TransliterationUpdate(atf, notes, "ŠU BU")

@@ -5,7 +5,7 @@ class DispatchError(Exception):
     pass
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 Command = Callable[[str], T]
 Dispatcher = Callable[[dict], T]
 
@@ -23,6 +23,6 @@ def create_dispatcher(commands: Mapping[str, Command]) -> Dispatcher:
         try:
             return commands[parameter](value)
         except KeyError:
-            raise DispatchError(f'Invalid parameter {parameter}.')
+            raise DispatchError(f"Invalid parameter {parameter}.")
 
     return dispatch

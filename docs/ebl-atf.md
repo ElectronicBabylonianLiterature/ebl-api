@@ -126,8 +126,6 @@ close-inline-broken-away = ? not . ?, ')]'
                          | ')', ? not } ?
                          | ']';
 
-unknown-number-of-signs = '...';
-
 word-separator = ' ';
 ```
 
@@ -222,7 +220,8 @@ determinative. A word is lemmatizable and alignable if:
 ```ebnf
 word = [ part-joiner ], [ open-iniline-broken-away ], [ open-omission ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-omission ], [ close-iniline-broken-away ] [ part-joiner ];
+       [ close-omission ], [ close-iniline-broken-away ] [ part-joiner ]
+     | surrogate;
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
@@ -249,12 +248,12 @@ variant-part = unknown
              | compound-grapheme
              | logogram;
 
+surrogate = logogram, ['<(', value, { '-', value } ,')>'];
 logogram = logogram-character, { [ iniline-broken-away ], logogram-character },
            [ sub-index ], modifier, flag;
 logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' | 'I'
                    | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' | 'R' | 'S'
-                   | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ'
-                   | decimal-digit;     
+                   | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ';     
 
 value-with-sign = value, '(', ( compound-grapheme | grapheme ), ')';
 value = value-character, { [ iniline-broken-away ], value-character }, 
@@ -281,6 +280,7 @@ grapheme-character = word-character
                    | decimal-digit
                    | sub-index-character - 'ₓ';
 
+unknown-number-of-signs = '...';
 unknown = ('X' | 'x'), flag;
 
 variant-separator = '/';

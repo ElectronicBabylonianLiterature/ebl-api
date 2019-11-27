@@ -7,11 +7,10 @@ from ebl.users.web.require_scope import require_scope
 
 
 class PhotoResource:
-
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 
-    @falcon.before(require_scope, 'read:fragments')
+    @falcon.before(require_scope, "read:fragments")
     def on_get(self, _req, resp: Response, number: str):
         """---
         description: Gets the photo of the fragment.

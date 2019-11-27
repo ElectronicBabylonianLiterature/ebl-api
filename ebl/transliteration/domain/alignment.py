@@ -5,7 +5,7 @@ import attr
 
 class AlignmentError(Exception):
     def __init__(self):
-        super().__init__('Invalid alignment')
+        super().__init__("Invalid alignment")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -15,22 +15,18 @@ class AlignmentToken:
 
     @staticmethod
     def from_dict(data):
-        return AlignmentToken(
-            data['value'],
-            data.get('alignment'),
-        )
+        return AlignmentToken(data["value"], data.get("alignment"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Alignment:
     _lines: Tuple[Tuple[Tuple[AlignmentToken, ...], ...], ...]
 
-    def get_line(self,
-                 line_index: int) -> Tuple[Tuple[AlignmentToken, ...], ...]:
+    def get_line(self, line_index: int) -> Tuple[Tuple[AlignmentToken, ...], ...]:
         return self._lines[line_index]
 
     def get_manuscript_line(
-            self, line_index: int, manuscript_index: int
+        self, line_index: int, manuscript_index: int
     ) -> Tuple[AlignmentToken, ...]:
         return self.get_line(line_index)[manuscript_index]
 
@@ -42,13 +38,12 @@ class Alignment:
 
     @staticmethod
     def from_dict(data):
-        return Alignment(tuple(
+        return Alignment(
             tuple(
                 tuple(
-                    AlignmentToken.from_dict(token)
-                    for token in manuscript
+                    tuple(AlignmentToken.from_dict(token) for token in manuscript)
+                    for manuscript in line
                 )
-                for manuscript in line
+                for line in data
             )
-            for line in data
-        ))
+        )

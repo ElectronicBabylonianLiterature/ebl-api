@@ -1,18 +1,22 @@
 from marshmallow import EXCLUDE
 
 from ebl.dictionary.domain.word import WordId
-from ebl.fragmentarium.application.fragment_info_schema import \
-    FragmentInfoSchema
-from ebl.fragmentarium.application.fragment_repository import \
-    FragmentRepository
+from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import FragmentNumber
-from ebl.fragmentarium.infrastructure.queries import HAS_TRANSLITERATION, \
-    aggregate_interesting, aggregate_latest, aggregate_lemmas, \
-    aggregate_needs_revision, aggregate_random, fragment_is, number_is
+from ebl.fragmentarium.infrastructure.queries import (
+    HAS_TRANSLITERATION,
+    aggregate_interesting,
+    aggregate_latest,
+    aggregate_lemmas,
+    aggregate_needs_revision,
+    aggregate_random,
+    fragment_is,
+    number_is,
+)
 from ebl.mongo_collection import MongoCollection
 
-COLLECTION = 'fragments'
+COLLECTION = "fragments"
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -23,22 +27,22 @@ class MongoFragmentRepository(FragmentRepository):
         return self._collection.count_documents(HAS_TRANSLITERATION)
 
     def count_lines(self):
-        result = self._collection.aggregate([
-            {'$match': {'text.lines.type': 'TextLine'}},
-            {'$unwind': '$text.lines'},
-            {'$replaceRoot': {'newRoot': '$text.lines'}},
-            {'$match': {'type': 'TextLine'}},
-            {'$count': 'lines'}
-        ])
+        result = self._collection.aggregate(
+            [
+                {"$match": {"text.lines.type": "TextLine"}},
+                {"$unwind": "$text.lines"},
+                {"$replaceRoot": {"newRoot": "$text.lines"}},
+                {"$match": {"type": "TextLine"}},
+                {"$count": "lines"},
+            ]
+        )
         try:
-            return result.next()['lines']
+            return next(result)["lines"]
         except StopIteration:
             return 0
 
     def create(self, fragment):
-        return self._collection.insert_one(
-            FragmentSchema().dump(fragment)
-        )
+        return self._collection.insert_one(FragmentSchema().dump(fragment))
 
     def query_by_fragment_number(self, number):
         data = self._collection.find_one_by_id(number)
@@ -73,113 +77,81 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentInfoSchema(many=True).load(cursor)
 
     def query_by_transliteration(self, query):
-        cursor = self._collection.find_many({
-            'signs': {'$regex': query.regexp}
-        })
+        cursor = self._collection.find_many({"signs": {"$regex": query.regexp}})
         return self._map_fragments(cursor)
 
     def update_transliteration(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),
-            {'$set': FragmentSchema(
-                only=('text', 'notes', 'signs', 'record')
-             ).dump(fragment)}
+            {
+                "$set": FragmentSchema(only=("text", "notes", "signs", "record")).dump(
+                    fragment
+                )
+            },
         )
 
     def update_lemmatization(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),
-            {'$set': FragmentSchema(only=('text',)).dump(fragment)}
+            {"$set": FragmentSchema(only=("text",)).dump(fragment)},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
-        sort_ascending = {'$sort': {'key': 1}}
-        sort_descending = {'$sort': {'key': -1}}
+        sort_ascending = {"$sort": {"key": 1}}
+        sort_descending = {"$sort": {"key": -1}}
 
         def create_pipeline(*parts):
             return [
-                {'$match': {'folios.name': folio_name}},
-                {'$unwind': '$folios'},
-                {'$project': {
-                    'name': '$folios.name',
-                    'number': '$folios.number',
-                    'key': {'$concat': ['$folios.number', '-', '$_id']}
-                }},
-                {'$match': {'name': folio_name}},
+                {"$match": {"folios.name": folio_name}},
+                {"$unwind": "$folios"},
+                {
+                    "$project": {
+                        "name": "$folios.name",
+                        "number": "$folios.number",
+                        "key": {"$concat": ["$folios.number", "-", "$_id"]},
+                    }
+                },
+                {"$match": {"name": folio_name}},
                 *parts,
-                {'$limit': 1}
+                {"$limit": 1},
             ]
 
         def get_numbers(pipeline):
             cursor = self._collection.aggregate(pipeline)
             if cursor.alive:
-                entry = cursor.next()
+                entry = next(cursor)
                 return {
-                    'fragmentNumber': entry['_id'],
-                    'folioNumber': entry['number']
+                    "fragmentNumber": entry["_id"],
+                    "folioNumber": entry["number"],
                 }
             else:
                 return None
 
         first = create_pipeline(sort_ascending)
         previous = create_pipeline(
-            {'$match': {'key': {'$lt': f'{folio_number}-{number}'}}},
-            sort_descending
+            {"$match": {"key": {"$lt": f"{folio_number}-{number}"}}}, sort_descending,
         )
         next_ = create_pipeline(
-            {'$match': {'key': {'$gt': f'{folio_number}-{number}'}}},
-            sort_ascending
+            {"$match": {"key": {"$gt": f"{folio_number}-{number}"}}}, sort_ascending,
         )
         last = create_pipeline(sort_descending)
 
         return {
-            'previous': get_numbers(previous) or get_numbers(last),
-            'next': get_numbers(next_) or get_numbers(first)
+            "previous": get_numbers(previous) or get_numbers(last),
+            "next": get_numbers(next_) or get_numbers(first),
         }
-
-    def query_next_and_previous_fragment(self, number: FragmentNumber):
-        if not number:
-            return None
-        else:
-            next = self._collection\
-                .find_many({'_id': {'$gt': f'{number}'}})\
-                .sort('_id', 1).limit(1)
-            previous = self._collection\
-                .find_many({'_id': {'$lt': f'{number}'}})\
-                .sort('_id', -1).limit(1)
-
-            def get_numbers(cursor):
-                if cursor.alive:
-                    entry = cursor.next()
-                    return {
-                        'fragmentNumber': entry['_id'],
-                    }
-                else:
-                    return None
-
-            first = self._collection.find_many({}).sort('_id', 1).limit(1)
-            last = self._collection.find_many({}).sort('_id', -1).limit(1)
-            return {
-                'previous': get_numbers(previous) or get_numbers(last),
-                'next': get_numbers(next) or get_numbers(first)
-            }
 
     def query_lemmas(self, word):
         cursor = self._collection.aggregate(aggregate_lemmas(word))
         return [
-            [
-                WordId(unique_lemma)
-                for unique_lemma
-                in result['_id']
-            ]
-            for result
-            in cursor
+            [WordId(unique_lemma) for unique_lemma in result["_id"]]
+            for result in cursor
         ]
 
     def update_references(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),
-            {'$set': FragmentSchema(only=('references',)).dump(fragment)}
+            {"$set": FragmentSchema(only=("references",)).dump(fragment)},
         )
 
     def _map_fragments(self, cursor):
