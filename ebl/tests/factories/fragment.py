@@ -12,7 +12,6 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
-    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -88,7 +87,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Column(2),
                     Divider(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
-                    Word("10#", parts=[Number.of(10, [], [Flag.DAMAGE])]),
+                    Word("10#", parts=[Reading.of("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
             TextLine(
@@ -204,7 +203,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Column(2),
                     Divider(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
-                    Word("10#", parts=[Number.of(10, [], [Flag.DAMAGE])]),
+                    Word("10#", parts=[Reading.of("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
             TextLine(

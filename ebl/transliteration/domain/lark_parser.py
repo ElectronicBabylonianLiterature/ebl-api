@@ -20,7 +20,6 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
-    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -102,7 +101,7 @@ class TreeToWord(Transformer):
 
     @v_args(inline=True)
     def number(self, number, modifiers, flags, sign=None):
-        return Number.of(int(number), modifiers, flags, sign)
+        return Reading.of(number.value, 1, modifiers, flags, sign)
 
     @v_args(inline=True)
     def sub_index(self, sub_index=""):

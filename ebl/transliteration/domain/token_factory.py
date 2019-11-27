@@ -13,7 +13,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
-    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -104,8 +103,9 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
         tuple(Flag(flag) for flag in data["flags"]),
         data["sign"],
     ),
-    "Number": lambda data: Number.of(
-        data["numeral"],
+    "Number": lambda data: Reading.of(
+        str(data["numeral"]),
+        1,
         data["modifiers"],
         tuple(Flag(flag) for flag in data["flags"]),
         data["sign"],

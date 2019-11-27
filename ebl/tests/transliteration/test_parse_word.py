@@ -5,7 +5,6 @@ from lark.exceptions import UnexpectedInput
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import (
-    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -28,7 +27,9 @@ from ebl.transliteration.domain.word_tokens import (
         ("X", Word("X", parts=[UnidentifiedSign()])),
         ("x?", Word("x?", parts=[UnclearSign([atf.Flag.UNCERTAIN])])),
         ("X#", Word("X#", parts=[UnidentifiedSign([atf.Flag.DAMAGE])])),
-        ("12", Word("12", parts=[Number.of(12)])),
+        ("12", Word("12", parts=[Reading.of("12")])),
+        ("1]2", Word("1]2", parts=[Reading.of("1]2")])),
+        ("1[2", Word("1[2", parts=[Reading.of("1[2")])),
         ("du₁₁", Word("du₁₁", parts=[Reading.of("du", 11)])),
         ("GAL", Word("GAL", parts=[Logogram.of("GAL")])),
         ("kur(GAL)", Word("kur(GAL)", parts=[Reading.of("kur", sign="GAL")])),
@@ -134,7 +135,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Logogram.of("U", 4),
                     ValueToken("]"),
                     Joiner(atf.Joiner.DOT),
-                    Number.of(14),
+                    Reading.of("14"),
                     Joiner(atf.Joiner.DOT),
                     Logogram.of("KAM", 2),
                 ],
@@ -335,7 +336,7 @@ from ebl.transliteration.domain.word_tokens import (
             "3.AM₃",
             Word(
                 "3.AM₃",
-                parts=[Number.of(3), Joiner(atf.Joiner.DOT), Logogram.of("AM", 3),],
+                parts=[Reading.of("3"), Joiner(atf.Joiner.DOT), Logogram.of("AM", 3),],
             ),
         ),
         (
@@ -345,7 +346,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     ValueToken("<"),
                     ValueToken("{"),
-                    Number.of(10),
+                    Reading.of("10"),
                     ValueToken("}"),
                     ValueToken(">"),
                     Reading.of("bu"),
@@ -771,7 +772,7 @@ def test_word(parser, atf, expected):
                 parts=[
                     ValueToken("<"),
                     ValueToken("{"),
-                    Number.of(10),
+                    Reading.of("10"),
                     ValueToken("}"),
                     ValueToken(">"),
                 ],

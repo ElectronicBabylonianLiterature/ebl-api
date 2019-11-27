@@ -15,7 +15,6 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
-    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -690,7 +689,7 @@ def test_parser_version(parser, version):
                                 Logogram.of("U", 4),
                                 ValueToken("]"),
                                 Joiner(atf.Joiner.DOT),
-                                Number.of(14),
+                                Reading.of("14"),
                                 Joiner(atf.Joiner.DOT),
                                 Logogram.of("KAM", 2),
                             ],
@@ -700,7 +699,7 @@ def test_parser_version(parser, version):
                             parts=[
                                 Logogram.of("U", 4),
                                 Joiner(atf.Joiner.DOT),
-                                Number.of(15),
+                                Reading.of("15"),
                                 Joiner(atf.Joiner.DOT),
                                 Logogram.of("KAM", 2),
                             ],

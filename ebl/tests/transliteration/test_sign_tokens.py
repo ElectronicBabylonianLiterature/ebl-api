@@ -4,7 +4,6 @@ from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Logogram,
-    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -123,12 +122,6 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     }
 
 
-@pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
-def test_invalid_reading(name, sub_index):
-    with pytest.raises(ValueError):
-        Reading.of(name, sub_index)
-
-
 @pytest.mark.parametrize(
     "name,sub_index,modifiers,flags,sign,expected_value",
     [
@@ -160,46 +153,34 @@ def test_logogram(name, sub_index, modifiers, flags, sign, expected_value):
     }
 
 
-@pytest.mark.parametrize("name,sub_index", [("KUR", -1), ("kur", 1)])
-def test_invalid_logogram(name, sub_index):
-    with pytest.raises(ValueError):
-        Logogram.of(name, sub_index)
-
-
 @pytest.mark.parametrize(
     "numeral,modifiers,flags,sign,expected_value",
     [
-        (1, [], [], None, "1"),
-        (14, [], [], None, "14"),
-        (1, [], [], "KUR", "1(KUR)"),
-        (1, ["@v", "@180"], [], None, "1@v@180"),
-        (1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "1#!"),
-        (1, ["@v"], [atf.Flag.CORRECTION], "KUR", "1@v!(KUR)"),
+        ("1", [], [], None, "1"),
+        ("1[4", [], [], None, "1[4"),
+        ("1", [], [], "KUR", "1(KUR)"),
+        ("1", ["@v", "@180"], [], None, "1@v@180"),
+        ("1", [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "1#!"),
+        ("1", ["@v"], [atf.Flag.CORRECTION], "KUR", "1@v!(KUR)"),
     ],
 )
 def test_number(numeral, modifiers, flags, sign, expected_value):
-    number = Number.of(numeral, modifiers, flags, sign)
+    number = Reading.of(numeral, 1, modifiers, flags, sign)
 
     expected_sub_index = 1
     assert number.value == expected_value
-    assert number.get_key() == f"Number⁝{expected_value}"
+    assert number.get_key() == f"Reading⁝{expected_value}"
     assert number.sub_index == expected_sub_index
     assert number.modifiers == tuple(modifiers)
     assert number.flags == tuple(flags)
     assert number.lemmatizable is False
     assert number.sign == sign
     assert number.to_dict() == {
-        "type": "Number",
+        "type": "Reading",
         "value": expected_value,
-        "numeral": numeral,
+        "name": numeral,
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
         "sign": sign,
     }
-
-
-@pytest.mark.parametrize("numeral", [0, -1])
-def test_invalid_number(numeral):
-    with pytest.raises(ValueError):
-        Number.of(numeral)

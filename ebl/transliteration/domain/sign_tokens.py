@@ -146,10 +146,6 @@ class NamedReading(AbstractReading):
     def _check_name(self, _attribute, value):
         ...
 
-    @_name.validator
-    def __check_name(self, attribute, value):
-        self._check_name(attribute, value)
-
     @_sub_index.validator
     def _check_sub_index(self, _attribute, value):
         if value < 0:
@@ -196,33 +192,3 @@ class Logogram(NamedReading):
 
     def to_dict(self) -> dict:
         return {**super().to_dict(), "type": "Logogram"}
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Number(AbstractReading):
-    numeral: int = attr.ib()
-
-    @numeral.validator
-    def _check_numeral(self, _attribute, value):
-        if value < 1:
-            raise ValueError("Number must be > 0.")
-
-    @property
-    def name(self) -> str:
-        return str(self.numeral)
-
-    @property
-    def sub_index(self) -> int:
-        return 1
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Number", "numeral": self.numeral}
-
-    @staticmethod
-    def of(
-        numeral: int,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
-    ) -> "Number":
-        return Number(modifiers, flags, sign, numeral)
