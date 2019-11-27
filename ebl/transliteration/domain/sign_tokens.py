@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import Iterable, Optional, Sequence, Tuple, Type, TypeVar
 
 import attr
 
@@ -134,10 +134,21 @@ class AbstractReading(Token):
         }
 
 
+ReadingType = TypeVar("ReadingType", bound="NamedReading")
+
+
 @attr.s(auto_attribs=True, frozen=True)
-class Reading(AbstractReading):
-    _name: str
+class NamedReading(AbstractReading):
+    _name: str = attr.ib()
     _sub_index: int = attr.ib()
+
+    @abstractmethod
+    def _check_name(self, _attribute, value):
+        ...
+
+    @_name.validator
+    def __check_name(self, attribute, value):
+        self._check_name(attribute, value)
 
     @_sub_index.validator
     def _check_sub_index(self, _attribute, value):
@@ -153,17 +164,38 @@ class Reading(AbstractReading):
         return self._name
 
     def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Reading", "name": self._name}
+        return {**super().to_dict(), "name": self._name}
 
-    @staticmethod
+    @classmethod
     def of(
+        cls: Type[ReadingType],
         name: str,
         sub_index: int = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[str] = None,
-    ) -> "Reading":
-        return Reading(modifiers, flags, sign, name, sub_index)
+    ) -> ReadingType:
+        return cls(modifiers, flags, sign, name, sub_index)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Reading(NamedReading):
+    def _check_name(self, _attribute, value):
+        if not value.islower():
+            raise ValueError("Readings must be lowercase.")
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "type": "Reading"}
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Logogram(NamedReading):
+    def _check_name(self, _attribute, value):
+        if not value.isupper():
+            raise ValueError("Logograms must be uppercase.")
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "type": "Logogram"}
 
 
 @attr.s(auto_attribs=True, frozen=True)

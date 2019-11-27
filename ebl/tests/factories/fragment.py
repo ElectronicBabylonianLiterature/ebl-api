@@ -16,6 +16,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Logogram,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -96,7 +97,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway("["),
                     UnknownNumberOfSigns(),
                     BrokenAway("]"),
-                    Word("GI₆", parts=[ValueToken("GI₆")]),
+                    Word("GI₆", parts=[Logogram.of("GI", 6)]),
                     Word("ana", parts=[Reading.of("ana")]),
                     Word(
                         "u₄-š[u",
@@ -214,7 +215,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Word(
                         "GI₆",
                         unique_lemma=(WordId("ginâ I"),),
-                        parts=[ValueToken("GI₆")],
+                        parts=[Logogram.of("GI", 6)],
                     ),
                     Word(
                         "ana",

@@ -19,6 +19,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Logogram,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -368,7 +369,7 @@ def test_parser_version(parser, version):
                                 ValueToken("{"),
                                 Reading.of("d"),
                                 ValueToken("}"),
-                                ValueToken("UTU"),
+                                Logogram.of("UTU"),
                             ],
                         ),
                         BrokenAway("["),
@@ -641,7 +642,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Word("KIMIN", parts=[ValueToken("KIMIN")]),
+                        Word("KIMIN", parts=[Logogram.of("KIMIN")]),
                         Word(
                             "{u₂#}[...]",
                             parts=[
@@ -686,22 +687,22 @@ def test_parser_version(parser, version):
                         Word(
                             "U₄].14.KAM₂",
                             parts=[
-                                ValueToken("U₄"),
+                                Logogram.of("U", 4),
                                 ValueToken("]"),
                                 Joiner(atf.Joiner.DOT),
                                 Number.of(14),
                                 Joiner(atf.Joiner.DOT),
-                                ValueToken("KAM₂"),
+                                Logogram.of("KAM", 2),
                             ],
                         ),
                         Word(
                             "U₄.15.KAM₂",
                             parts=[
-                                ValueToken("U₄"),
+                                Logogram.of("U", 4),
                                 Joiner(atf.Joiner.DOT),
                                 Number.of(15),
                                 Joiner(atf.Joiner.DOT),
-                                ValueToken("KAM₂"),
+                                Logogram.of("KAM", 2),
                             ],
                         ),
                     ),
@@ -738,8 +739,8 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         DocumentOrientedGloss("{("),
-                        Word("NU", parts=[ValueToken("NU")]),
-                        Word("SUR", parts=[ValueToken("SUR")]),
+                        Word("NU", parts=[Logogram.of("NU")]),
+                        Word("SUR", parts=[Logogram.of("SUR")]),
                         DocumentOrientedGloss(")}"),
                     ),
                 ),
@@ -971,7 +972,7 @@ def test_parser_version(parser, version):
                         Word(
                             "RA{k[i]}",
                             parts=[
-                                ValueToken("RA"),
+                                Logogram.of("RA"),
                                 ValueToken("{"),
                                 Reading.of("k[i"),
                                 ValueToken("]"),

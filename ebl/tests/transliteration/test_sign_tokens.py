@@ -3,6 +3,7 @@ import pytest
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
+    Logogram,
     Number,
     Reading,
     UnclearSign,
@@ -122,9 +123,47 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     }
 
 
-def test_invalid_reading():
+@pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
+def test_invalid_reading(name, sub_index):
     with pytest.raises(ValueError):
-        Reading.of("kur", -1)
+        Reading.of(name, sub_index)
+
+
+@pytest.mark.parametrize(
+    "name,sub_index,modifiers,flags,sign,expected_value",
+    [
+        ("KUR", 1, [], [], None, "KUR"),
+        ("KUR", 0, [], [], None, "KUR₀"),
+        ("KUR", 1, [], [], "KUR", "KUR(KUR)"),
+        ("KUR", 1, ["@v", "@180"], [], None, "KUR@v@180"),
+        ("KUR", 1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "KUR#!"),
+        ("KUR", 10, ["@v"], [atf.Flag.CORRECTION], "KUR", "KUR₁₀@v!(KUR)"),
+    ],
+)
+def test_logogram(name, sub_index, modifiers, flags, sign, expected_value):
+    logogram = Logogram.of(name, sub_index, modifiers, flags, sign)
+
+    assert logogram.value == expected_value
+    assert logogram.get_key() == f"Logogram⁝{expected_value}"
+    assert logogram.modifiers == tuple(modifiers)
+    assert logogram.flags == tuple(flags)
+    assert logogram.lemmatizable is False
+    assert logogram.sign == sign
+    assert logogram.to_dict() == {
+        "type": "Logogram",
+        "value": expected_value,
+        "name": name,
+        "subIndex": sub_index,
+        "modifiers": modifiers,
+        "flags": [flag.value for flag in flags],
+        "sign": sign,
+    }
+
+
+@pytest.mark.parametrize("name,sub_index", [("KUR", -1), ("kur", 1)])
+def test_invalid_logogram(name, sub_index):
+    with pytest.raises(ValueError):
+        Logogram.of(name, sub_index)
 
 
 @pytest.mark.parametrize(

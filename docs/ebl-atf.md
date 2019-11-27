@@ -218,9 +218,9 @@ determinative. A word is lemmatizable and alignable if:
 - The language is not normalized.
 
 ```ebnf
-word = [ part-joiner ], [ open-iniline-broken-away ], [ open-omission ],
+word = [ part-joiner ], [ open-inline-broken-away ], [ open-omission ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-omission ], [ close-iniline-broken-away ] [ part-joiner ]
+       [ close-omission ], [ close-inline-broken-away ] [ part-joiner ]
      | surrogate;
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
@@ -234,9 +234,9 @@ phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
 determinative = '{', variant,  { part-joiner, variant }, '}';
 
 part-joiner = [ close-omission ],
-              [ close-iniline-broken-away ],
+              [ close-inline-broken-away ],
               [ joiner ],
-              [ open-iniline-broken-away ],
+              [ open-inline-broken-away ],
               [ open-omission ];
               
 joiner = '-' | '+' | '.' | ':';
@@ -249,14 +249,14 @@ variant-part = unknown
              | logogram;
 
 surrogate = logogram, ['<(', value, { '-', value } ,')>'];
-logogram = logogram-character, { [ iniline-broken-away ], logogram-character },
+logogram = logogram-character, { [ invalue-broken-away ], logogram-character },
            [ sub-index ], modifier, flag;
 logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' | 'I'
                    | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' | 'R' | 'S'
                    | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ';     
 
-value-with-sign = value, '(', ( compound-grapheme | grapheme ), ')';
-value = value-character, { [ iniline-broken-away ], value-character }, 
+value-with-sign = ( value | logogram ), '(', ( compound-grapheme | grapheme ), ')';
+value = value-character, { [ invalue-broken-away ], value-character }, 
         [ sub-index ], modifier, flag;
 value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' | 'i'
                 | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q' | 'r' | 's'
@@ -271,7 +271,7 @@ grapheme-variant = grapheme, { variant-separator, grapheme };
 compound-operator = '.' | '×' | '%' | '&' | '+';
 
 grapheme = grapheme-character, 
-           { [ iniline-broken-away ], grapheme-character },
+           { [ invalue-broken-away ], grapheme-character },
            modifier,
            flag;
 grapheme-character = word-character
@@ -282,6 +282,8 @@ grapheme-character = word-character
 
 unknown-number-of-signs = '...';
 unknown = ('X' | 'x'), flag;
+
+invalue-broken-away: '[' | ']';
 
 variant-separator = '/';
 

@@ -63,7 +63,7 @@ divider_variant: (variant_part | divider) "/" (variant_part | divider)
 variant_part: unidentified_sign
             | unclear_sign
             | reading
-            | LOGOGRAM
+            | logogram
             | COMPOUND_GRAPHEME
 
 tabulation: TABULATION
@@ -122,10 +122,6 @@ _inline_broken_away: _open_inline_broken_away
                    | _close_inline_broken_away
 _open_inline_broken_away: OPEN_BROKEN_AWAY | OPEN_PERHAPS_BROKEN_AWAY
 _close_inline_broken_away: CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY
-INLINE_BROKEN_AWAY: OPEN_INLINE_BROKEN_AWAY
-                  | CLOSE_INLINE_BROKEN_AWAY
-OPEN_INLINE_BROKEN_AWAY: /(\[\(|\[|(?<!{)\()/
-CLOSE_INLINE_BROKEN_AWAY: /(\)\]|\)(?!})|\])/
 
 lone_determinative.4: _d_prefix _value (joiner* _value)* _d_suffix
 
@@ -164,7 +160,7 @@ _value: unidentified_sign
       | unclear_sign
       | reading
       | number
-      | LOGOGRAM
+      | logogram
       | COMPOUND_GRAPHEME
       | VARIANT
 VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)+
@@ -177,6 +173,7 @@ VARIANT_PART: UNKNOWN
 
 number: NUMBER _reading_extras
 reading: VALUE_NAME sub_index _reading_extras
+logogram: LOGOGRAM_NAME sub_index _reading_extras
 _reading_extras: modifiers flags ["(" ANY_GRAPHEME ")"]
 !sub_index: [SUB_INDEX_NUMBER]
 SUB_INDEX_NUMBER: "₀" | "₁".."₉" ("₀".."₉")*
@@ -186,8 +183,8 @@ LOGOGRAM: LOGOGRAM_NAME SUB_INDEX? MODIFIER* FLAG
 READING: VALUE_NAME SUB_INDEX? MODIFIER* FLAG
 
 NUMBER: "1".."9" "0".."9"*
-VALUE_NAME: VALUE_CHARACTER (INLINE_BROKEN_AWAY? VALUE_CHARACTER)*
-LOGOGRAM_NAME: LOGOGRAM_CHARACTER (INLINE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
+VALUE_NAME: VALUE_CHARACTER (IN_VALUE_BROKEN_AWAY? VALUE_CHARACTER)*
+LOGOGRAM_NAME: LOGOGRAM_CHARACTER (IN_VALUE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h" 
                | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
                | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
@@ -205,7 +202,7 @@ COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
 COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+"
 
 GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
-GRAPHEME_NAME: GRAPHEME_CHARACTER (INLINE_BROKEN_AWAY? GRAPHEME_CHARACTER)*
+GRAPHEME_NAME: GRAPHEME_CHARACTER (IN_VALUE_BROKEN_AWAY? GRAPHEME_CHARACTER)*
 GRAPHEME_CHARACTER: "a".."z"
                   | "A".."Z"
                   | "Ṣ" | "Š" | "Ṭ"
@@ -216,6 +213,8 @@ GRAPHEME_CHARACTER: "a".."z"
 unidentified_sign: "X" flags
 unclear_sign: "x" flags
 UNKNOWN: ("X" | "x") FLAG
+
+IN_VALUE_BROKEN_AWAY: "[" | "]"
 
 VARIANT_SEPARATOR: "/"
 

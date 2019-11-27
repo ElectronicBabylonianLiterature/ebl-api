@@ -17,6 +17,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Logogram,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -90,6 +91,13 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
     "Joiner": lambda data: Joiner(atf.Joiner(data["value"])),
     "InWordNewline": lambda data: InWordNewline(),
     "Reading": lambda data: Reading.of(
+        data["name"],
+        1 if data["subIndex"] is None else data["subIndex"],
+        data["modifiers"],
+        tuple(Flag(flag) for flag in data["flags"]),
+        data["sign"],
+    ),
+    "Logogram": lambda data: Logogram.of(
         data["name"],
         1 if data["subIndex"] is None else data["subIndex"],
         data["modifiers"],
