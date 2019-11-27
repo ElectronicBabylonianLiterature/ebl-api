@@ -28,8 +28,11 @@ pipenv install --dev
 ## Codestyle
 
 Use [Black](https://black.readthedocs.io/en/stable/) code style. Line
-length is 88, and bugbear B950 is used instead of E501. PEP8 checks should be
-enabled in PyCharm, but E501, E203, and E231 should be disabled. 
+length is 88, and bugbear B950 is used instead of E501. 
+
+PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be 
+disabled. PyCharm should not optimize imports, because the result does not match
+black code style.
 
 All files can be formatted with `pipenv run black ebl`.
 
