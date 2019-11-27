@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Mapping, Any, Dict
+from typing import Any, Dict, Mapping
 
 import attr
 import mongomock
@@ -15,27 +15,25 @@ import ebl.app
 import ebl.context
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
-from ebl.bibliography.infrastructure.bibliography import \
-    MongoBibliographyRepository
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
-from ebl.files.application.file_repository import FileRepository, File
+from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
+from ebl.fragmentarium.application.transliteration_update_factory import (
+    TransliterationUpdateFactory,
+)
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.infrastructure.fragment_repository import \
-    MongoFragmentRepository
+from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import \
-    MongoSignRepository
+from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -70,13 +68,8 @@ def dictionary(word_repository, changelog):
 class TestBibliographyRepository(MongoBibliographyRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def query_by_author_year_and_title(self,
-                                       _author=None,
-                                       _year=None,
-                                       _title=None):
-        return [create_object_entry(
-            self._collection.find_one({})
-        )]
+    def query_by_author_year_and_title(self, _author=None, _year=None, _title=None):
+        return [create_object_entry(self._collection.find_one({}))]
 
 
 @pytest.fixture
@@ -111,44 +104,29 @@ def text_repository(database):
 
 @pytest.fixture
 def corpus(text_repository, bibliography, changelog, transliteration_factory):
-    return Corpus(text_repository,
-                  bibliography,
-                  changelog,
-                  transliteration_factory)
+    return Corpus(text_repository, bibliography, changelog, transliteration_factory)
 
 
 class TestFragmentRepository(MongoFragmentRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
     def query_by_transliterated_sorted_by_date(self):
-        return self._map_fragments(
-            self._collection.find_many({})
-        )
+        return self._map_fragments(self._collection.find_many({}))
 
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
     def query_by_transliterated_not_revised_by_other(self):
-        return [FragmentInfo.of(fragment)
-                for fragment
-                in self._map_fragments(
-                    self._collection.find_many({})
-                )]
+        return [
+            FragmentInfo.of(fragment)
+            for fragment in self._map_fragments(self._collection.find_many({}))
+        ]
 
     # Mongomock does not support $concat so we need to
     # stub the methods using them.
-    def query_next_and_previous_folio(self,
-                                      _folio_name,
-                                      _folio_number,
-                                      _number):
+    def query_next_and_previous_folio(self, _folio_name, _folio_number, _number):
         return {
-            'previous': {
-                'fragmentNumber': _number,
-                'folioNumber': _folio_number
-            },
-            'next': {
-                'fragmentNumber': _number,
-                'folioNumber': _folio_number
-            }
+            "previous": {"fragmentNumber": _number, "folioNumber": _folio_number,},
+            "next": {"fragmentNumber": _number, "folioNumber": _folio_number},
         }
 
 
@@ -158,40 +136,29 @@ def fragment_repository(database):
 
 
 @pytest.fixture
-def fragmentarium(fragment_repository,
-                  changelog,
-                  dictionary,
-                  bibliography):
+def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
     return Fragmentarium(fragment_repository)
 
 
 @pytest.fixture
-def fragment_finder(fragment_repository,
-                    dictionary,
-                    photo_repository,
-                    file_repository):
-    return FragmentFinder(fragment_repository,
-                          dictionary,
-                          photo_repository,
-                          file_repository)
+def fragment_finder(fragment_repository, dictionary, photo_repository, file_repository):
+    return FragmentFinder(
+        fragment_repository, dictionary, photo_repository, file_repository
+    )
 
 
 @pytest.fixture
-def fragment_updater(fragment_repository,
-                     changelog,
-                     bibliography,
-                     photo_repository):
-    return FragmentUpdater(fragment_repository,
-                           changelog,
-                           bibliography,
-                           photo_repository)
+def fragment_updater(fragment_repository, changelog, bibliography, photo_repository):
+    return FragmentUpdater(
+        fragment_repository, changelog, bibliography, photo_repository
+    )
 
 
 class FakeFile(File):
     def __init__(self, filename: str, data: bytes, metadata: dict):
         self.filename = filename
         self.data = data
-        self._content_type = 'image/jpeg'
+        self._content_type = "image/jpeg"
         self._file = io.BytesIO(data)
         self._metadata = metadata
 
@@ -230,7 +197,7 @@ class TestFilesRepository(FileRepository):
 
 @pytest.fixture
 def file():
-    return FakeFile('image.jpg', b'oyoFLAbXbR', {})
+    return FakeFile("image.jpg", b"oyoFLAbXbR", {})
 
 
 @pytest.fixture
@@ -240,23 +207,22 @@ def file_repository(file):
 
 @pytest.fixture
 def folio_with_allowed_scope():
-    return FakeFile('WGL_001.jpg', b'ZTbvOTqvSW', {'scope': 'WGL-folios'})
+    return FakeFile("WGL_001.jpg", b"ZTbvOTqvSW", {"scope": "WGL-folios"})
 
 
 @pytest.fixture
 def folio_with_restricted_scope():
-    return FakeFile('AKG_001.jpg', b'klgsFPOutx', {'scope': 'AKG-folios'})
+    return FakeFile("AKG_001.jpg", b"klgsFPOutx", {"scope": "AKG-folios"})
 
 
 @pytest.fixture
-def folio_repository(folio_with_allowed_scope,  folio_with_restricted_scope):
-    return TestFilesRepository(folio_with_allowed_scope,
-                               folio_with_restricted_scope)
+def folio_repository(folio_with_allowed_scope, folio_with_restricted_scope):
+    return TestFilesRepository(folio_with_allowed_scope, folio_with_restricted_scope)
 
 
 @pytest.fixture
 def photo():
-    return FakeFile('K.1.jpg', b'yVGSDbnTth', {})
+    return FakeFile("K.1.jpg", b"yVGSDbnTth", {})
 
 
 @pytest.fixture
@@ -268,38 +234,40 @@ def photo_repository(photo):
 def user() -> User:
     return Auth0User(
         {
-            'scope': [
-                'read:words',
-                'write:words',
-                'transliterate:fragments',
-                'lemmatize:fragments',
-                'read:fragments',
-                'read:WGL-folios',
-                'read:bibliography',
-                'write:bibliography',
-                'read:texts',
-                'write:texts',
-                'create:texts'
+            "scope": [
+                "read:words",
+                "write:words",
+                "transliterate:fragments",
+                "lemmatize:fragments",
+                "read:fragments",
+                "read:WGL-folios",
+                "read:bibliography",
+                "write:bibliography",
+                "read:texts",
+                "write:texts",
+                "create:texts",
             ]
         },
         lambda: {
-            'name': 'test.user@example.com',
-            'https://ebabylon.org/eblName': 'User'
-        }
+            "name": "test.user@example.com",
+            "https://ebabylon.org/eblName": "User",
+        },
     )
 
 
 @pytest.fixture
-def context(word_repository,
-            sign_repository,
-            file_repository,
-            photo_repository,
-            folio_repository,
-            fragment_repository,
-            text_repository,
-            changelog,
-            bibliography_repository,
-            user):
+def context(
+    word_repository,
+    sign_repository,
+    file_repository,
+    photo_repository,
+    folio_repository,
+    fragment_repository,
+    text_repository,
+    changelog,
+    bibliography_repository,
+    user,
+):
     return ebl.context.Context(
         auth_backend=NoneAuthBackend(lambda: user),
         word_repository=word_repository,
@@ -310,7 +278,7 @@ def context(word_repository,
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,
-        text_repository=text_repository
+        text_repository=text_repository,
     )
 
 
@@ -322,78 +290,39 @@ def client(context):
 
 @pytest.fixture
 def guest_client(context):
-    api = ebl.app.create_app(attr.evolve(
-        context,
-        auth_backend=NoneAuthBackend(lambda: None)
-    ))
+    api = ebl.app.create_app(
+        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
+    )
     return testing.TestClient(api)
 
 
 @pytest.fixture
 def word():
     return {
-        "lemma": [
-            'part1',
-            'part2'
-        ],
+        "lemma": ["part1", "part2"],
         "attested": True,
         "legacyLemma": "part1 part2",
         "homonym": "I",
         "_id": "part1 part2 I",
         "forms": [
-            {
-                "lemma": [
-                    "form1"
-                ],
-                "notes": [],
-                "attested": True
-            },
-            {
-                "lemma": [
-                    "form2", "part2"
-                ],
-                "notes": [
-                    'a note'
-                ],
-                "attested": False
-            },
+            {"lemma": ["form1"], "notes": [], "attested": True},
+            {"lemma": ["form2", "part2"], "notes": ["a note"], "attested": False,},
         ],
         "meaning": "a meaning",
         "amplifiedMeanings": [
             {
                 "meaning": "(*i/i*) meaning",
-                "vowels": [
-                    {
-                        "value": [
-                            "i",
-                            "i"
-                        ],
-                        "notes": []
-                    }
-                ],
+                "vowels": [{"value": ["i", "i"], "notes": []}],
                 "key": "G",
-                "entries": []
+                "entries": [],
             }
         ],
         "logograms": [],
-        "derived": [
-            [
-                {
-                    "lemma": [
-                        "derived"
-                    ],
-                    "homonym": "I",
-                    "notes": []
-                }
-            ]
-        ],
+        "derived": [[{"lemma": ["derived"], "homonym": "I", "notes": []}]],
         "derivedFrom": None,
         "source": "**part1 part2** source",
-        "roots": [
-            "wb'",
-            "'b'"
-        ],
-        "pos": ["V"]
+        "roots": ["wb'", "'b'"],
+        "pos": ["V"],
     }
 
 
@@ -401,54 +330,52 @@ def word():
 def make_changelog_entry(user):
     def _make_changelog_entry(resource_type, resource_id, old, new):
         return {
-            'user_profile': pydash.map_keys(
-                user.profile,
-                lambda _, key: key.replace('.', '_')
+            "user_profile": pydash.map_keys(
+                user.profile, lambda _, key: key.replace(".", "_")
             ),
-            'resource_type': resource_type,
-            'resource_id': resource_id,
-            'date': datetime.datetime.utcnow().isoformat(),
-            'diff': json.loads(json.dumps(
-                list(diff(old, new))
-            ))
+            "resource_type": resource_type,
+            "resource_id": resource_id,
+            "date": datetime.datetime.utcnow().isoformat(),
+            "diff": json.loads(json.dumps(list(diff(old, new)))),
         }
+
     return _make_changelog_entry
 
 
 @pytest.fixture
 def signs():
     return [
-        Sign(name,
-             tuple(SignListRecord(list_name, number)
-                   for list_name, number in lists),
-             tuple(Value(value_name, sub_index)
-                   for value_name, sub_index in values))
+        Sign(
+            name,
+            tuple(SignListRecord(list_name, number) for list_name, number in lists),
+            tuple(Value(value_name, sub_index) for value_name, sub_index in values),
+        )
         for name, values, lists in [
-            ('P₂', [(':', 1)], [('ABZ', '377n1')]),
-            ('KU', [('ku', 1)], [('KWU', '869')]),
-            ('NU', [('nu', 1)], [('ABZ', '075')]),
-            ('IGI', [('ši', 1)], [('HZL', '288'), ('ABZ', '207a/207b X')]),
-            ('DIŠ', [('ana', 1), ('1', 1)], []),
-            ('UD', [('u', 4), ('tu', 2)], []),
-            ('MI', [('mi', 1), ('gi', 6)], []),
-            ('KI', [('ki', 1)], []),
-            ('DU', [('du', 1)], []),
-            ('U', [('u', 1), ('10', 1)], [('ABZ', '411')]),
-            ('|U.U|', [('20', 1)], [('ABZ', '471')]),
-            ('BA', [('ba', 1)], []),
-            ('MA', [('ma', 1)], []),
-            ('TI', [('ti', 1)], []),
-            ('MU', [('mu', 1)], []),
-            ('TA', [('ta', 1)], []),
-            ('ŠU', [('šu', 1)], []),
-            ('BU', [('gid', 2)], []),
-            ('|(4×ZA)×KUR|', [('geštae', 1)], [('ABZ', '531+588')]),
-            ('|(AŠ&AŠ@180)×U|', [], []),
-            ('|A.EDIN.LAL|', [('ummu', 3)], []),
-            ('|HU.HI|', [('mat', 3)], [('ABZ', '081')]),
-            ('AŠ', [('ana', 3)], [('ABZ', '001')]),
-            ('EDIN', [('bil', None), ('bir', 4)], [('ABZ', '168')]),
-            ('|ŠU₂.3×AN|', [('kunga', 1)], [])
+            ("P₂", [(":", 1)], [("ABZ", "377n1")]),
+            ("KU", [("ku", 1)], [("KWU", "869")]),
+            ("NU", [("nu", 1)], [("ABZ", "075")]),
+            ("IGI", [("ši", 1)], [("HZL", "288"), ("ABZ", "207a/207b X")]),
+            ("DIŠ", [("ana", 1), ("1", 1)], []),
+            ("UD", [("u", 4), ("tu", 2)], []),
+            ("MI", [("mi", 1), ("gi", 6)], []),
+            ("KI", [("ki", 1)], []),
+            ("DU", [("du", 1)], []),
+            ("U", [("u", 1), ("10", 1)], [("ABZ", "411")]),
+            ("|U.U|", [("20", 1)], [("ABZ", "471")]),
+            ("BA", [("ba", 1)], []),
+            ("MA", [("ma", 1)], []),
+            ("TI", [("ti", 1)], []),
+            ("MU", [("mu", 1)], []),
+            ("TA", [("ta", 1)], []),
+            ("ŠU", [("šu", 1)], []),
+            ("BU", [("gid", 2)], []),
+            ("|(4×ZA)×KUR|", [("geštae", 1)], [("ABZ", "531+588")]),
+            ("|(AŠ&AŠ@180)×U|", [], []),
+            ("|A.EDIN.LAL|", [("ummu", 3)], []),
+            ("|HU.HI|", [("mat", 3)], [("ABZ", "081")]),
+            ("AŠ", [("ana", 3)], [("ABZ", "001")]),
+            ("EDIN", [("bil", None), ("bir", 4)], [("ABZ", "168")]),
+            ("|ŠU₂.3×AN|", [("kunga", 1)], []),
         ]
     ]
 
@@ -457,44 +384,23 @@ def signs():
 def bibliography_entry():
     return {
         "id": "Q30000000",
-        "title": ("The Synergistic Activity of Thyroid Transcription Factor 1 "
-                  "and Pax 8 Relies on the Promoter/Enhancer Interplay"),
+        "title": (
+            "The Synergistic Activity of Thyroid Transcription Factor 1 "
+            "and Pax 8 Relies on the Promoter/Enhancer Interplay"
+        ),
         "type": "article-journal",
         "DOI": "10.1210/MEND.16.4.0808",
-        "issued": {
-            "date-parts": [
-                [
-                    2002,
-                    1,
-                    1
-                ]
-            ]
-        },
+        "issued": {"date-parts": [[2002, 1, 1]]},
         "PMID": "11923479",
         "volume": "16",
         "page": "837-846",
         "issue": "4",
         "container-title": "Molecular Endocrinology",
         "author": [
-            {
-                "given": "Stefania",
-                "family": "Miccadei"
-            },
-            {
-                "given": "Rossana",
-                "family": "De Leo"
-            },
-            {
-                "given": "Enrico",
-                "family": "Zammarchi"
-            },
-            {
-                "given": "Pier Giorgio",
-                "family": "Natali"
-            },
-            {
-                "given": "Donato",
-                "family": "Civitareale"
-            }
-        ]
+            {"given": "Stefania", "family": "Miccadei"},
+            {"given": "Rossana", "family": "De Leo"},
+            {"given": "Enrico", "family": "Zammarchi"},
+            {"given": "Pier Giorgio", "family": "Natali"},
+            {"given": "Donato", "family": "Civitareale"},
+        ],
     }

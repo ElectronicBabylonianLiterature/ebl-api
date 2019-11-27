@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Iterable, Tuple, Sequence, Optional
+from typing import Iterable, Optional, Sequence, Tuple
 
 import attr
 
@@ -18,8 +18,9 @@ def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
 
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractSign(Token):
-    flags: Sequence[atf.Flag] = attr.ib(default=tuple(),
-                                        converter=convert_flag_sequence)
+    flags: Sequence[atf.Flag] = attr.ib(
+        default=tuple(), converter=convert_flag_sequence
+    )
 
     @property
     @abstractmethod
@@ -42,8 +43,8 @@ class AbstractSign(Token):
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
-            'type': self._type,
-            'flags': list(self.string_flags)
+            "type": self._type,
+            "flags": list(self.string_flags),
         }
 
 
@@ -55,7 +56,7 @@ class UnidentifiedSign(AbstractSign):
 
     @property
     def _type(self) -> str:
-        return 'UnidentifiedSign'
+        return "UnidentifiedSign"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -66,7 +67,7 @@ class UnclearSign(AbstractSign):
 
     @property
     def _type(self) -> str:
-        return 'UnclearSign'
+        return "UnclearSign"
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -77,9 +78,9 @@ class Divider(Token):
 
     @property
     def value(self) -> str:
-        modifiers = ''.join(self.modifiers)
-        flags = ''.join(self.string_flags)
-        return f'{self.divider}{modifiers}{flags}'
+        modifiers = "".join(self.modifiers)
+        flags = "".join(self.string_flags)
+        return f"{self.divider}{modifiers}{flags}"
 
     @property
     def string_flags(self) -> Sequence[str]:
@@ -88,10 +89,10 @@ class Divider(Token):
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
-            'type': 'Divider',
-            'divider': self.divider,
-            'modifiers': list(self.modifiers),
-            'flags': self.string_flags
+            "type": "Divider",
+            "divider": self.divider,
+            "modifiers": list(self.modifiers),
+            "flags": self.string_flags,
         }
 
 
@@ -118,18 +119,18 @@ class AbstractReading(Token):
     @property
     def value(self) -> str:
         sub_index = int_to_sub_index(self.sub_index)
-        modifiers = ''.join(self.modifiers)
-        flags = ''.join(self.string_flags)
-        sign = f'({self.sign})' if self.sign else ''
-        return f'{self.name}{sub_index}{modifiers}{flags}{sign}'
+        modifiers = "".join(self.modifiers)
+        flags = "".join(self.string_flags)
+        sign = f"({self.sign})" if self.sign else ""
+        return f"{self.name}{sub_index}{modifiers}{flags}{sign}"
 
     def to_dict(self) -> dict:
         return {
             **super().to_dict(),
-            'subIndex': self.sub_index,
-            'modifiers': list(self.modifiers),
-            'flags': list(self.string_flags),
-            'sign': self.sign
+            "subIndex": self.sub_index,
+            "modifiers": list(self.modifiers),
+            "flags": list(self.string_flags),
+            "sign": self.sign,
         }
 
 
@@ -141,9 +142,7 @@ class Reading(AbstractReading):
     @_sub_index.validator
     def _check_sub_index(self, _attribute, value):
         if value < 0:
-            raise ValueError(
-                'Sub-index must be >= 0.'
-            )
+            raise ValueError("Sub-index must be >= 0.")
 
     @property
     def sub_index(self) -> int:
@@ -154,18 +153,16 @@ class Reading(AbstractReading):
         return self._name
 
     def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            'type': 'Reading',
-            'name': self._name
-        }
+        return {**super().to_dict(), "type": "Reading", "name": self._name}
 
     @staticmethod
-    def of(name: str,
-           sub_index: int = 1,
-           modifiers: Sequence[str] = tuple(),
-           flags: Sequence[atf.Flag] = tuple(),
-           sign: Optional[str] = None) -> 'Reading':
+    def of(
+        name: str,
+        sub_index: int = 1,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[str] = None,
+    ) -> "Reading":
         return Reading(modifiers, flags, sign, name, sub_index)
 
 
@@ -176,7 +173,7 @@ class Number(AbstractReading):
     @numeral.validator
     def _check_numeral(self, _attribute, value):
         if value < 1:
-            raise ValueError('Number must be > 0.')
+            raise ValueError("Number must be > 0.")
 
     @property
     def name(self) -> str:
@@ -187,15 +184,13 @@ class Number(AbstractReading):
         return 1
 
     def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            'type': 'Number',
-            'numeral': self.numeral
-        }
+        return {**super().to_dict(), "type": "Number", "numeral": self.numeral}
 
     @staticmethod
-    def of(numeral: int,
-           modifiers: Sequence[str] = tuple(),
-           flags: Sequence[atf.Flag] = tuple(),
-           sign: Optional[str] = None) -> 'Number':
+    def of(
+        numeral: int,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[str] = None,
+    ) -> "Number":
         return Number(modifiers, flags, sign, numeral)

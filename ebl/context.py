@@ -2,19 +2,19 @@ import attr
 from falcon_auth.backends import AuthBackend
 
 from ebl.bibliography.application.bibliography import Bibliography
-from ebl.bibliography.application.bibliography_repository import \
-    BibliographyRepository
+from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.changelog import Changelog
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.files.application.file_repository import FileRepository
-from ebl.fragmentarium.application.fragment_repository import \
-    FragmentRepository
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.application.transliteration_query_factory import \
-    TransliterationQueryFactory
-from ebl.fragmentarium.application.transliteration_update_factory import \
-    TransliterationUpdateFactory
+from ebl.fragmentarium.application.transliteration_query_factory import (
+    TransliterationQueryFactory,
+)
+from ebl.fragmentarium.application.transliteration_update_factory import (
+    TransliterationUpdateFactory,
+)
 from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.application.sign_repository import SignRepository
 
@@ -40,7 +40,7 @@ class Context:
             self.fragment_repository,
             self.changelog,
             self.get_bibliography(),
-            self.photo_repository
+            self.photo_repository,
         )
 
     def get_transliteration_update_factory(self):

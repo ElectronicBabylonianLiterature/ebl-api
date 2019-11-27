@@ -1,7 +1,5 @@
-from ebl.fragmentarium.domain.transliteration_query import \
-    TransliterationQuery
-from ebl.transliteration.application.atf_converter import \
-    AtfConverter
+from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.domain.atf import Atf
 
 

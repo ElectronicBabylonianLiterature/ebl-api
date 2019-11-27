@@ -2,15 +2,14 @@ from functools import singledispatchmethod  # type: ignore
 from typing import Callable, List, Tuple
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
-from ebl.transliteration.domain.enclosure_tokens import Side, \
-    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
-    OmissionOrRemoval
+from ebl.transliteration.domain.enclosure_tokens import (BrokenAway,
+                                                         DocumentOrientedGloss, Erasure,
+                                                         OmissionOrRemoval,
+                                                         PerhapsBrokenAway, Side)
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Divider
-from ebl.transliteration.domain.tokens import (LanguageShift,
-                                               Token,
-                                               TokenVisitor,
-                                               CommentaryProtocol)
+from ebl.transliteration.domain.tokens import (CommentaryProtocol, LanguageShift, Token,
+                                               TokenVisitor)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
 
@@ -38,8 +37,7 @@ class LanguageVisitor(TokenVisitor):
 
     @visit.register
     def _visit_word(self, word: Word) -> None:
-        word_with_language =\
-            word.set_language(self._language, self._normalized)
+        word_with_language = word.set_language(self._language, self._normalized)
         self._append(word_with_language)
 
     def _append(self, token: Token) -> None:
@@ -54,7 +52,7 @@ class AtfVisitor(TokenVisitor):
 
     @property
     def result(self) -> Atf:
-        return Atf(''.join(self._parts))
+        return Atf("".join(self._parts))
 
     @singledispatchmethod
     def visit(self, token: Token) -> None:
@@ -79,9 +77,7 @@ class AtfVisitor(TokenVisitor):
         self._set_omit(False)
 
     @visit.register
-    def _visit_document_oriented_gloss(
-            self, gloss: DocumentOrientedGloss
-    ) -> None:
+    def _visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._side(gloss.side)(gloss)
 
     @visit.register
@@ -89,21 +85,15 @@ class AtfVisitor(TokenVisitor):
         self._side(broken_away.side)(broken_away)
 
     @visit.register
-    def _visit_perhaps_broken_away(self,
-                                   broken_away: PerhapsBrokenAway) -> None:
+    def _visit_perhaps_broken_away(self, broken_away: PerhapsBrokenAway) -> None:
         self._side(broken_away.side)(broken_away)
 
     @visit.register
-    def _visit_omission_or_removal(
-            self, omission: OmissionOrRemoval
-    ) -> None:
+    def _visit_omission_or_removal(self, omission: OmissionOrRemoval) -> None:
         self._side(omission.side)(omission)
 
     def _side(self, side: Side) -> Callable[[Token], None]:
-        return {
-            Side.LEFT: self._left,
-            Side.RIGHT: self._right
-        }[side]
+        return {Side.LEFT: self._left, Side.RIGHT: self._right}[side]
 
     def _left(self, token: Token) -> None:
         if not self._omit_separator:
@@ -132,9 +122,7 @@ class AtfVisitor(TokenVisitor):
             self._parts.append(erasure.value)
             self._set_force()
 
-        {Side.LEFT: left,
-         Side.CENTER: center,
-         Side.RIGHT: right}[erasure.side]()
+        {Side.LEFT: left, Side.CENTER: center, Side.RIGHT: right}[erasure.side]()
 
     @visit.register
     def _visit_divider(self, divider: Divider) -> None:

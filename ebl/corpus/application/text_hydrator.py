@@ -12,7 +12,6 @@ def invalid_reference(error: Exception) -> Exception:
 
 
 class TextHydrator(TextVisitor):
-
     def __init__(self, bibliography):
         super().__init__(TextVisitor.Order.POST)
         self._bibliography = bibliography
@@ -32,13 +31,12 @@ class TextHydrator(TextVisitor):
 
     def visit_manuscript(self, manuscript: Manuscript) -> None:
         references = self._hydrate_references(manuscript.references)
-        self._manuscripts.append(attr.evolve(manuscript,
-                                             references=references))
+        self._manuscripts.append(attr.evolve(manuscript, references=references))
 
-    def _hydrate_references(self, references: Iterable[Reference])\
-            -> Tuple[Reference, ...]:
-        return tuple(self._hydrate_reference(reference)
-                     for reference in references)
+    def _hydrate_references(
+        self, references: Iterable[Reference]
+    ) -> Tuple[Reference, ...]:
+        return tuple(self._hydrate_reference(reference) for reference in references)
 
     def _hydrate_reference(self, reference: Reference) -> Reference:
         try:

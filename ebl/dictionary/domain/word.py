@@ -1,3 +1,3 @@
 from typing import NewType
 
-WordId = NewType('WordId', str)
+WordId = NewType("WordId", str)

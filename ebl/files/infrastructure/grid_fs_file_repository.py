@@ -32,7 +32,6 @@ class GridFsFile(File):
 
 
 class GridFsFileRepository(FileRepository):
-
     def __init__(self, database: Database, collection: str):
         self._fs = GridFS(database, collection)
 
@@ -40,6 +39,6 @@ class GridFsFileRepository(FileRepository):
         grid_out = self._fs.find_one({"filename": file_name})
 
         if grid_out is None:
-            raise NotFoundError(f'File {file_name} not found.')
+            raise NotFoundError(f"File {file_name} not found.")
         else:
             return GridFsFile(grid_out)

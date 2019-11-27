@@ -1,6 +1,6 @@
 import attr
 import pydash
-from lark.exceptions import UnexpectedInput, ParseError
+from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
 from lark.tree import Tree
@@ -8,21 +8,22 @@ from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
-from ebl.transliteration.domain.enclosure_tokens import Side, \
-    DocumentOrientedGloss, BrokenAway, PerhapsBrokenAway, Erasure, \
-    OmissionOrRemoval
+from ebl.transliteration.domain.enclosure_tokens import (BrokenAway,
+                                                         DocumentOrientedGloss, Erasure,
+                                                         OmissionOrRemoval,
+                                                         PerhapsBrokenAway, Side)
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.domain.sign_tokens import Divider, UnidentifiedSign, \
-    UnclearSign, Reading, Number
+from ebl.transliteration.domain.sign_tokens import (Divider, Number, Reading,
+                                                    UnclearSign, UnidentifiedSign)
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import LanguageShift, \
-    LineContinuation, ValueToken, UnknownNumberOfSigns, Tabulation, \
-    CommentaryProtocol, Column, Variant
-from ebl.transliteration.domain.transliteration_error import \
-    TransliterationError
-from ebl.transliteration.domain.word_tokens import ErasureState, Word, \
-    LoneDeterminative, Joiner, InWordNewline
+from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol,
+                                               LanguageShift, LineContinuation,
+                                               Tabulation, UnknownNumberOfSigns,
+                                               ValueToken, Variant)
+from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.word_tokens import (ErasureState, InWordNewline, Joiner,
+                                                    LoneDeterminative, Word)
 
 
 class TreeToWord(Transformer):
@@ -34,17 +35,20 @@ class TreeToWord(Transformer):
 
     @staticmethod
     def _create_word(word_class, children):
-        tokens = (pydash
-                  .chain(children)
-                  .flat_map_deep(lambda tree: (tree.children
-                                               if isinstance(tree, Tree)
-                                               else tree))
-                  .map_(lambda token: (ValueToken(str(token))
-                                       if isinstance(token, Token)
-                                       else token))
-                  .value())
+        tokens = (
+            pydash.chain(children)
+            .flat_map_deep(
+                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
+            )
+            .map_(
+                lambda token: (
+                    ValueToken(str(token)) if isinstance(token, Token) else token
+                )
+            )
+            .value()
+        )
 
-        value = ''.join(token.value for token in tokens)
+        value = "".join(token.value for token in tokens)
         return word_class(value, parts=tokens)
 
     @v_args(inline=True)
@@ -69,21 +73,14 @@ class TreeToWord(Transformer):
 
     @v_args(inline=True)
     def reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(name.value,
-                          sub_index,
-                          modifiers,
-                          flags,
-                          sign)
+        return Reading.of(name.value, sub_index, modifiers, flags, sign)
 
     @v_args(inline=True)
     def number(self, number, modifiers, flags, sign=None):
-        return Number.of(int(number),
-                         modifiers,
-                         flags,
-                         sign)
+        return Number.of(int(number), modifiers, flags, sign)
 
     @v_args(inline=True)
-    def sub_index(self, sub_index=''):
+    def sub_index(self, sub_index=""):
         return sub_index_to_int(sub_index)
 
     def modifiers(self, tokens):
@@ -98,17 +95,22 @@ class TreeToErasure(TreeToWord):
         def set_state(children, state):
             # TODO: Move to Token
             return [
-                (attr.evolve(child, erasure=state)
-                 if isinstance(child, Word)
-                 else child)
+                (
+                    attr.evolve(child, erasure=state)
+                    if isinstance(child, Word)
+                    else child
+                )
                 for child in children
             ]
+
         [erased, over_erased] = tokens
-        return [Erasure('°', Side.LEFT),
-                set_state(erased.children, ErasureState.ERASED),
-                Erasure('\\', Side.CENTER),
-                set_state(over_erased.children, ErasureState.OVER_ERASED),
-                Erasure('°', Side.RIGHT)]
+        return [
+            Erasure("°", Side.LEFT),
+            set_state(erased.children, ErasureState.ERASED),
+            Erasure("\\", Side.CENTER),
+            set_state(over_erased.children, ErasureState.OVER_ERASED),
+            Erasure("°", Side.RIGHT),
+        ]
 
 
 class TreeToLine(TreeToErasure):
@@ -124,15 +126,18 @@ class TreeToLine(TreeToErasure):
         return TextLine.of_iterable(LineNumberLabel.from_atf(prefix), content)
 
     def text(self, children):
-        return (pydash
-                .chain(children)
-                .flat_map_deep(lambda tree: (tree.children
-                                             if isinstance(tree, Tree)
-                                             else tree))
-                .map_(lambda token: (ValueToken(str(token))
-                                     if isinstance(token, Token)
-                                     else token))
-                .value())
+        return (
+            pydash.chain(children)
+            .flat_map_deep(
+                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
+            )
+            .map_(
+                lambda token: (
+                    ValueToken(str(token)) if isinstance(token, Token) else token
+                )
+            )
+            .value()
+        )
 
     @v_args(inline=True)
     def broken_away(self, value):
@@ -187,7 +192,7 @@ class TreeToLine(TreeToErasure):
         return LanguageShift(str(value))
 
     def line_continuation(self, _):
-        return LineContinuation('→')
+        return LineContinuation("→")
 
     @v_args(inline=True)
     def tabulation(self, value):
@@ -204,7 +209,7 @@ class TreeToLine(TreeToErasure):
     @v_args(inline=True)
     def column(self, number):
         children = number.children
-        return Column(int(''.join(children)) if children else None)
+        return Column(int("".join(children)) if children else None)
 
     @v_args(inline=True)
     def divider_variant(self, first, second):
@@ -214,8 +219,8 @@ class TreeToLine(TreeToErasure):
         return self._create_word(Word, tokens)
 
 
-WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')
-LINE_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__)
+WORD_PARSER = Lark.open("ebl-atf.lark", rel_to=__file__, start="any_word")
+LINE_PARSER = Lark.open("ebl-atf.lark", rel_to=__file__)
 
 
 def parse_word(atf):
@@ -224,7 +229,7 @@ def parse_word(atf):
 
 
 def parse_erasure(atf):
-    tree = LINE_PARSER.parse(atf, start='erasure')
+    tree = LINE_PARSER.parse(atf, start="erasure")
     return TreeToErasure().transform(tree)
 
 
@@ -236,39 +241,42 @@ def parse_line(atf):
 def parse_atf_lark(atf_):
     def parse_line_(line: str, line_number: int):
         try:
-            return ((parse_line(line), None)
-                    if line else
-                    (EmptyLine(), None))
+            return (parse_line(line), None) if line else (EmptyLine(), None)
         except UnexpectedInput as ex:
-            description = 'Invalid line: '
-            context = ex.get_context(line, 6).split('\n', 1)
-            return (None,  {
-                'description': (description + context[0] + '\n' +
-                                len(description)*' ' + context[1]),
-                'lineNumber': line_number + 1
-            })
+            description = "Invalid line: "
+            context = ex.get_context(line, 6).split("\n", 1)
+            return (
+                None,
+                {
+                    "description": (
+                        description
+                        + context[0]
+                        + "\n"
+                        + len(description) * " "
+                        + context[1]
+                    ),
+                    "lineNumber": line_number + 1,
+                },
+            )
         except ParseError as ex:
-            return (None,  {
-                'description': f'Invalid line: {ex}',
-                'lineNumber': line_number + 1
-            })
+            return (
+                None,
+                {"description": f"Invalid line: {ex}", "lineNumber": line_number + 1,},
+            )
 
     def check_errors(pairs):
-        errors = [
-            error
-            for line, error in pairs
-            if error is not None
-        ]
+        errors = [error for line, error in pairs if error is not None]
         if any(errors):
             raise TransliterationError(errors)
 
-    lines = tuple(pydash
-                  .chain(atf_)
-                  .split('\n')
-                  .map(parse_line_)
-                  .tap(check_errors)
-                  .map(lambda pair: pair[0])
-                  .drop_right_while(lambda line: line.prefix == '')
-                  .value())
+    lines = tuple(
+        pydash.chain(atf_)
+        .split("\n")
+        .map(parse_line_)
+        .tap(check_errors)
+        .map(lambda pair: pair[0])
+        .drop_right_while(lambda line: line.prefix == "")
+        .value()
+    )
 
-    return Text(lines, f'{atf.ATF_PARSER_VERSION}')
+    return Text(lines, f"{atf.ATF_PARSER_VERSION}")

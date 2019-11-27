@@ -16,21 +16,19 @@ class Standardization:
         return self.deep if is_deep else self.shallow
 
     @classmethod
-    def of_sign(cls, sign: Sign) -> 'Standardization':
+    def of_sign(cls, sign: Sign) -> "Standardization":
         shallow = cls.escape_standardization(sign)
         deep = sign.name if is_splittable(sign.name) else shallow
         return cls(deep, shallow)
 
     @classmethod
-    def of_string(cls, value: str) -> 'Standardization':
+    def of_string(cls, value: str) -> "Standardization":
         return cls(value, value)
 
     @staticmethod
     def escape_standardization(sign: Sign) -> str:
-        return (sign.standardization
-                .replace('/', '\\u002F')
-                .replace(' ', '\\u0020'))
+        return sign.standardization.replace("/", "\\u002F").replace(" ", "\\u0020")
 
 
 def is_splittable(grapheme):
-    return '.' in grapheme and '(' not in grapheme and ')' not in grapheme
+    return "." in grapheme and "(" not in grapheme and ")" not in grapheme

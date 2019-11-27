@@ -9,12 +9,12 @@ from ebl.errors import DuplicateError, NotFoundError
 
 
 class MongoCollection:
-
     def __init__(self, database: Database, collection: str):
         self.__database = database
         self.__collection = collection
-        self.__resource_noun = (inflect.engine().singular_noun(collection) or
-                                collection).title()
+        self.__resource_noun = (
+            inflect.engine().singular_noun(collection) or collection
+        ).title()
 
     def insert_one(self, document):
         try:
@@ -25,7 +25,7 @@ class MongoCollection:
             )
 
     def find_one_by_id(self, id_):
-        return self.find_one({'_id': id_})
+        return self.find_one({"_id": id_})
 
     def find_one(self, query) -> Any:
         document = self.__get_collection().find_one(query)
@@ -42,12 +42,9 @@ class MongoCollection:
         return self.__get_collection().aggregate(pipeline, **kwargs)
 
     def replace_one(self, document):
-        result = self.__get_collection().replace_one(
-            {'_id': document['_id']},
-            document
-        )
+        result = self.__get_collection().replace_one({"_id": document["_id"]}, document)
         if result.matched_count == 0:
-            raise self.__not_found_error(document['_id'])
+            raise self.__not_found_error(document["_id"])
         else:
             return result
 
@@ -65,9 +62,7 @@ class MongoCollection:
         return self.__get_collection().create_index(index, **kwargs)
 
     def __not_found_error(self, query):
-        return NotFoundError(
-            f'{self.__resource_noun} {query} not found.'
-        )
+        return NotFoundError(f"{self.__resource_noun} {query} not found.")
 
     def __get_collection(self) -> Collection:
         return self.__database[self.__collection]

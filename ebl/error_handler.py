@@ -13,7 +13,7 @@ def http_error(_req, _resp, ex, _params):
 
 
 def unexpected_error(_req, _resp, _ex, _params):
-    logging.exception('Unexpected Exception')
+    logging.exception("Unexpected Exception")
     raise falcon.HTTPInternalServerError()
 
 

@@ -6,7 +6,6 @@ from ebl.transliteration.domain.sign_map import SignKey
 
 
 class SignRepository(ABC):
-
     @abstractmethod
     def create(self, sign: Sign) -> str:
         ...

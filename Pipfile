@@ -42,6 +42,8 @@ rope = "*"
 flake8 = "*"
 pyhamcrest = "*"
 httpretty = "*"
+black = "*"
+flake8-bugbear = "*"
 
 [requires]
 python_version = "3.8"
@@ -51,3 +53,6 @@ lint = "pylint ebl"
 test = "pytest --cov=ebl --cov-report term --cov-report xml"
 ptw = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
 test-ci = "./run_tests.sh"
+
+[pipenv]
+allow_prereleases = true

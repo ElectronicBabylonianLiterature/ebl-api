@@ -16,16 +16,12 @@ SignMapEntry = Tuple[SignKey, Standardization]
 
 def sign_to_pair(sign: Sign) -> Sequence[SignMapEntry]:
     standardization = Standardization.of_sign(sign)
-    mapping: List[SignMapEntry] = [
-        (value, standardization)
-        for value in sign.values
-    ]
+    mapping: List[SignMapEntry] = [(value, standardization) for value in sign.values]
     mapping.append((sign.name, standardization))
     return mapping
 
 
 class AtfConverter:
-
     def __init__(self, sign_repository: SignRepository):
         self._sign_repository = sign_repository
 
@@ -35,12 +31,8 @@ class AtfConverter:
 
     def convert_atf_to_values(self, atf: Atf) -> Sequence[Sequence[Value]]:
         return (
-            pydash
-            .chain(CleanAtf(atf).cleaned)
-            .map(lambda row: [
-                parse_reading(value)
-                for value in row
-            ])
+            pydash.chain(CleanAtf(atf).cleaned)
+            .map(lambda row: [parse_reading(value) for value in row])
             .value()
         )
 
@@ -52,18 +44,14 @@ class AtfConverter:
             [
                 reading_part
                 for reading in row
-                for reading_part in reading.to_sign(sign_map, True).split(' ')
-
+                for reading_part in reading.to_sign(sign_map, True).split(" ")
             ]
             for row in values
         ]
 
-    def _create_sign_map(
-            self, values: Sequence[Sequence[Value]]
-    ) -> SignMap:
+    def _create_sign_map(self, values: Sequence[Sequence[Value]]) -> SignMap:
         sign_map: SignMap = (
-            pydash
-            .chain(values)
+            pydash.chain(values)
             .flatten()
             .flat_map(lambda value: value.keys)
             .thru(self._sign_repository.search_many)
@@ -80,7 +68,9 @@ class AtfConverter:
         if standardization.is_splittable:
             value = parse_reading(standardization.deep)
             sign_map = self._create_sign_map([[value]])
-            return key, Standardization(value.to_sign(sign_map, True),
-                                        standardization.shallow)
+            return (
+                key,
+                Standardization(value.to_sign(sign_map, True), standardization.shallow),
+            )
         else:
             return pair

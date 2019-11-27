@@ -8,7 +8,6 @@ from ebl.transliteration.domain.sign_map import SignKey
 
 
 class MemoizingSignRepository(SignRepository):
-
     def __init__(self, delegate: SignRepository):
         self._create = delegate.create
         self._find = pydash.memoize(delegate.find)

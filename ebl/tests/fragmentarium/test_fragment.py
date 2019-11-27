@@ -3,69 +3,73 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber, \
-    Measure, \
-    UncuratedReference
-from ebl.fragmentarium.domain.transliteration_update import (
-    TransliterationUpdate
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    FragmentNumber,
+    Measure,
+    UncuratedReference,
 )
+from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.fragment import (FragmentFactory,
-                                          LemmatizedFragmentFactory,
-                                          TransliteratedFragmentFactory)
+from ebl.tests.factories.fragment import (
+    FragmentFactory,
+    LemmatizedFragmentFactory,
+    TransliteratedFragmentFactory,
+)
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.lemmatization import Lemmatization, \
-    LemmatizationError
+from ebl.transliteration.domain.lemmatization import (
+    Lemmatization,
+    LemmatizationError,
+)
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.transliteration_error import \
-    TransliterationError
+from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
 def test_number():
-    fragment = FragmentFactory.build(number='1')
-    assert fragment.number == '1'
+    fragment = FragmentFactory.build(number="1")
+    assert fragment.number == "1"
 
 
 def test_accession():
-    fragment = FragmentFactory.build(accession='accession-3')
-    assert fragment.accession == 'accession-3'
+    fragment = FragmentFactory.build(accession="accession-3")
+    assert fragment.accession == "accession-3"
 
 
 def test_cdli_number():
-    fragment = FragmentFactory.build(cdli_number='cdli-4')
-    assert fragment.cdli_number == 'cdli-4'
+    fragment = FragmentFactory.build(cdli_number="cdli-4")
+    assert fragment.cdli_number == "cdli-4"
 
 
 def test_bm_id_number():
-    fragment = FragmentFactory.build(bm_id_number='bmId-2')
-    assert fragment.bm_id_number == 'bmId-2'
+    fragment = FragmentFactory.build(bm_id_number="bmId-2")
+    assert fragment.bm_id_number == "bmId-2"
 
 
 def test_publication():
-    fragment = FragmentFactory.build(publication='publication')
-    assert fragment.publication == 'publication'
+    fragment = FragmentFactory.build(publication="publication")
+    assert fragment.publication == "publication"
 
 
 def test_description():
-    fragment = FragmentFactory.build(description='description')
-    assert fragment.description == 'description'
+    fragment = FragmentFactory.build(description="description")
+    assert fragment.description == "description"
 
 
 def test_collection():
-    fragment = FragmentFactory.build(collection='Collection')
-    assert fragment.collection == 'Collection'
+    fragment = FragmentFactory.build(collection="Collection")
+    assert fragment.collection == "Collection"
 
 
 def test_script():
-    fragment = FragmentFactory.build(script='NA')
-    assert fragment.script == 'NA'
+    fragment = FragmentFactory.build(script="NA")
+    assert fragment.script == "NA"
 
 
 def test_museum():
-    fragment = FragmentFactory.build(museum='Museum')
-    assert fragment.museum == 'Museum'
+    fragment = FragmentFactory.build(museum="Museum")
+    assert fragment.museum == "Museum"
 
 
 def test_length():
@@ -90,7 +94,7 @@ def test_joins():
 
 def test_notes():
     fragment = FragmentFactory.build()
-    assert fragment.notes == ''
+    assert fragment.notes == ""
 
 
 def test_signs():
@@ -105,16 +109,13 @@ def test_signs_none():
 
 def test_record():
     record = RecordFactory.build()
-    fragment = Fragment(FragmentNumber('X.1'), record=record)
+    fragment = Fragment(FragmentNumber("X.1"), record=record)
     assert fragment.record == record
 
 
 def test_folios():
     fragment = FragmentFactory.build()
-    assert fragment.folios == Folios((
-        Folio('WGL', '1'),
-        Folio('XXX', '1')
-    ))
+    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("XXX", "1")))
 
 
 def test_text():
@@ -124,9 +125,9 @@ def test_text():
 
 def test_uncurated_references():
     uncurated_references = (
-        UncuratedReference('7(0)'),
-        UncuratedReference('CAD 51', (34, 56)),
-        UncuratedReference('7(1)')
+        UncuratedReference("7(0)"),
+        UncuratedReference("CAD 51", (34, 56)),
+        UncuratedReference("7(1)"),
     )
     fragment = FragmentFactory.build(uncurated_references=uncurated_references)
     assert fragment.uncurated_references == uncurated_references
@@ -151,15 +152,12 @@ def test_references_default():
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()
-    atf = Atf('1. x x')
+    atf = Atf("1. x x")
     transliteration = TransliterationUpdate(atf, fragment.notes)
     text = parse_atf_lark(atf)
-    record = fragment.record.add_entry('', atf, user)
+    record = fragment.record.add_entry("", atf, user)
 
-    updated_fragment = fragment.update_transliteration(
-        transliteration,
-        user
-    )
+    updated_fragment = fragment.update_transliteration(transliteration, user)
     expected_fragment = attr.evolve(fragment, text=text, record=record)
 
     assert updated_fragment == expected_fragment
@@ -168,16 +166,12 @@ def test_add_transliteration(user):
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(user):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    lines = lemmatized_fragment.text.atf.split('\n')
-    lines[1] = '2\'. [...] GI₆ mu u₄-š[u ...]'
-    atf = Atf('\n'.join(lines))
+    lines = lemmatized_fragment.text.atf.split("\n")
+    lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
+    atf = Atf("\n".join(lines))
     text = parse_atf_lark(atf)
-    transliteration =\
-        TransliterationUpdate(atf, 'updated notes', 'X X\nX')
-    updated_fragment = lemmatized_fragment.update_transliteration(
-        transliteration,
-        user
-    )
+    transliteration = TransliterationUpdate(atf, "updated notes", "X X\nX")
+    updated_fragment = lemmatized_fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(
         lemmatized_fragment,
@@ -185,10 +179,8 @@ def test_update_transliteration(user):
         notes=transliteration.notes,
         signs=transliteration.signs,
         record=lemmatized_fragment.record.add_entry(
-            lemmatized_fragment.text.atf,
-            transliteration.atf,
-            user
-        )
+            lemmatized_fragment.text.atf, transliteration.atf, user
+        ),
     )
 
     assert updated_fragment == expected_fragment
@@ -196,37 +188,27 @@ def test_update_transliteration(user):
 
 def test_test_update_transliteration_invalid_atf(user):
     fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(Atf('1. {kur}?'), fragment.notes)
+    transliteration = TransliterationUpdate(Atf("1. {kur}?"), fragment.notes)
 
-    with pytest.raises(TransliterationError,
-                       match='Invalid transliteration') as excinfo:
-        fragment.update_transliteration(
-            transliteration,
-            user
-        )
+    with pytest.raises(
+        TransliterationError, match="Invalid transliteration"
+    ) as excinfo:
+        fragment.update_transliteration(transliteration, user)
 
     assert excinfo.value.errors == [
         {
-            'description': ('Invalid line:  {kur}?\n'
-                            '                    ^\n'),
-            'lineNumber': 1
+            "description": ("Invalid line:  {kur}?\n" "                    ^\n"),
+            "lineNumber": 1,
         }
     ]
 
 
 def test_update_notes(user):
     fragment = FragmentFactory.build()
-    transliteration =\
-        TransliterationUpdate(fragment.text.atf, 'new notes')
-    updated_fragment = fragment.update_transliteration(
-        transliteration,
-        user
-    )
+    transliteration = TransliterationUpdate(fragment.text.atf, "new notes")
+    updated_fragment = fragment.update_transliteration(transliteration, user)
 
-    expected_fragment = attr.evolve(
-        fragment,
-        notes=transliteration.notes
-    )
+    expected_fragment = attr.evolve(fragment, notes=transliteration.notes)
 
     assert updated_fragment == expected_fragment
 
@@ -234,22 +216,19 @@ def test_update_notes(user):
 def test_update_lemmatization():
     transliterated_fragment = TransliteratedFragmentFactory.build()
     tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][3]['uniqueLemma'] = ['nu I']
+    tokens[1][3]["uniqueLemma"] = ["nu I"]
     lemmatization = Lemmatization.from_list(tokens)
     expected = attr.evolve(
         transliterated_fragment,
-        text=transliterated_fragment.text.update_lemmatization(lemmatization)
+        text=transliterated_fragment.text.update_lemmatization(lemmatization),
     )
 
-    assert transliterated_fragment.update_lemmatization(lemmatization) ==\
-        expected
+    assert transliterated_fragment.update_lemmatization(lemmatization) == expected
 
 
 def test_update_lemmatization_incompatible():
     fragment = FragmentFactory.build()
-    lemmatization = Lemmatization.from_list(
-        [[{'value': 'mu', 'uniqueLemma': []}]]
-    )
+    lemmatization = Lemmatization.from_list([[{"value": "mu", "uniqueLemma": []}]])
     with pytest.raises(LemmatizationError):
         fragment.update_lemmatization(lemmatization)
 

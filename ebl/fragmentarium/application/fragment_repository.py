@@ -3,8 +3,7 @@ from typing import List
 
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.domain.transliteration_query import \
-    TransliterationQuery
+from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentRepository(ABC):
@@ -25,9 +24,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_fragment_cdli_or_accession_number(
-            self, number: str
-    ) -> List[Fragment]:
+    def query_by_fragment_cdli_or_accession_number(self, number: str) -> List[Fragment]:
         ...
 
     @abstractmethod
@@ -36,7 +33,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_by_kuyunjik_not_transliterated_joined_or_published(
-        self
+        self,
     ) -> List[Fragment]:
         ...
 
@@ -45,22 +42,17 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_transliterated_not_revised_by_other(
-        self
-    ) -> List[FragmentInfo]:
+    def query_by_transliterated_not_revised_by_other(self,) -> List[FragmentInfo]:
         ...
 
     @abstractmethod
-    def query_by_transliteration(
-        self, query: TransliterationQuery
-    ) -> List[Fragment]:
+    def query_by_transliteration(self, query: TransliterationQuery) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_next_and_previous_folio(self,
-                                      folio_name: str,
-                                      folio_number: str,
-                                      number: FragmentNumber) -> dict:
+    def query_next_and_previous_folio(
+        self, folio_name: str, folio_number: str, number: FragmentNumber
+    ) -> dict:
         ...
 
     @abstractmethod

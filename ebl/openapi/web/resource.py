@@ -3,7 +3,7 @@ from apispec import APISpec
 
 
 class OpenApiResource:
-    auth = {'auth_disabled': True}
+    auth = {"auth_disabled": True}
 
     def __init__(self, spec: APISpec):
         self._spec = spec

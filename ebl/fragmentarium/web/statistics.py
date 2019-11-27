@@ -3,9 +3,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 
 class StatisticsResource:
 
-    auth = {
-        'auth_disabled': True
-    }
+    auth = {"auth_disabled": True}
 
     def __init__(self, fragmentarium: Fragmentarium):
         self._fragmentarium = fragmentarium
