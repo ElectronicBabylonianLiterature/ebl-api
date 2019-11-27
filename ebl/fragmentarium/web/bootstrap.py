@@ -8,6 +8,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.dtos import FragmentDtoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
+from ebl.fragmentarium.web.fragment_pager import FragmentPagerResource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsResource
 from ebl.fragmentarium.web.lemma_search import LemmaSearch
@@ -38,6 +39,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     transliteration = TransliterationResource(
         updater, context.get_transliteration_update_factory()
     )
+    fragment_pager = FragmentPagerResource(finder)
     folio_pager = FolioPagerResource(finder)
     lemma_search = LemmaSearch(finder)
     photo = PhotoResource(finder)
@@ -45,6 +47,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
 
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}", fragments)
+    api.add_route("/fragments/{number}/pager", fragment_pager)
     api.add_route("/fragments/{number}/lemmatization", lemmatization)
     api.add_route("/fragments/{number}/references", references)
     api.add_route("/fragments/{number}/transliteration", transliteration)

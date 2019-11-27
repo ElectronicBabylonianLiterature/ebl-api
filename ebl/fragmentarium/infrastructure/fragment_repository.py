@@ -1,9 +1,11 @@
 from marshmallow import EXCLUDE
 
 from ebl.dictionary.domain.word import WordId
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_interesting,
@@ -136,10 +138,45 @@ class MongoFragmentRepository(FragmentRepository):
         )
         last = create_pipeline(sort_descending)
 
-        return {
+        result = {
             "previous": get_numbers(previous) or get_numbers(last),
             "next": get_numbers(next_) or get_numbers(first),
         }
+
+        if not all(list(result.values())):
+            raise NotFoundError("Could not retrieve any fragments")
+        else:
+            return result
+
+    def query_next_and_previous_fragment(self, number: FragmentNumber):
+        next = (
+            self._collection.find_many({"_id": {"$gt": f"{number}"}})
+            .sort("_id", 1)
+            .limit(1)
+        )
+        previous = (
+            self._collection.find_many({"_id": {"$lt": f"{number}"}})
+            .sort("_id", -1)
+            .limit(1)
+        )
+
+        def get_numbers(cursor):
+            if cursor.alive:
+                entry = cursor.next()
+                return entry["_id"]
+            else:
+                return None
+
+        first = self._collection.find_many({}).sort("_id", 1).limit(1)
+        last = self._collection.find_many({}).sort("_id", -1).limit(1)
+        result = {
+            "previous": get_numbers(previous) or get_numbers(last),
+            "next": get_numbers(next) or get_numbers(first),
+        }
+        if not all(list(result.values())):
+            raise NotFoundError("Could not retrieve any fragments")
+        else:
+            return result
 
     def query_lemmas(self, word):
         cursor = self._collection.aggregate(aggregate_lemmas(word))
