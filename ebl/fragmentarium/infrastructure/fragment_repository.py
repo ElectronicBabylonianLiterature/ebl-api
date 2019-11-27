@@ -149,7 +149,7 @@ class MongoFragmentRepository(FragmentRepository):
             return result
 
     def query_next_and_previous_fragment(self, number: FragmentNumber):
-        next = (
+        next_ = (
             self._collection.find_many({"_id": {"$gt": f"{number}"}})
             .sort("_id", 1)
             .limit(1)
@@ -162,7 +162,7 @@ class MongoFragmentRepository(FragmentRepository):
 
         def get_numbers(cursor):
             if cursor.alive:
-                entry = cursor.next()
+                entry = next(cursor)
                 return entry["_id"]
             else:
                 return None
@@ -171,7 +171,7 @@ class MongoFragmentRepository(FragmentRepository):
         last = self._collection.find_many({}).sort("_id", -1).limit(1)
         result = {
             "previous": get_numbers(previous) or get_numbers(last),
-            "next": get_numbers(next) or get_numbers(first),
+            "next": get_numbers(next_) or get_numbers(first),
         }
         if not all(list(result.values())):
             raise NotFoundError("Could not retrieve any fragments")
