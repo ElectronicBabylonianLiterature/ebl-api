@@ -1,5 +1,5 @@
 from marshmallow import EXCLUDE
-
+from typing import Dict
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
@@ -19,6 +19,13 @@ from ebl.fragmentarium.infrastructure.queries import (
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "fragments"
+
+
+def helper_validate_query(my_dict: Dict) -> bool:
+    if not all(my_dict.values()):
+        return False
+    else:
+        return True
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -143,10 +150,10 @@ class MongoFragmentRepository(FragmentRepository):
             "next": get_numbers(next_) or get_numbers(first),
         }
 
-        if not all(list(result.values())):
-            raise NotFoundError("Could not retrieve any fragments")
-        else:
+        if helper_validate_query(result):
             return result
+        else:
+            raise NotFoundError("Could not retrieve any fragments")
 
     def query_next_and_previous_fragment(self, number: FragmentNumber):
         next_ = (
@@ -162,8 +169,7 @@ class MongoFragmentRepository(FragmentRepository):
 
         def get_numbers(cursor):
             if cursor.alive:
-                entry = next(cursor)
-                return entry["_id"]
+                return next(cursor)["_id"]
             else:
                 return None
 
@@ -173,10 +179,10 @@ class MongoFragmentRepository(FragmentRepository):
             "previous": get_numbers(previous) or get_numbers(last),
             "next": get_numbers(next_) or get_numbers(first),
         }
-        if not all(list(result.values())):
-            raise NotFoundError("Could not retrieve any fragments")
-        else:
+        if helper_validate_query(result):
             return result
+        else:
+            raise NotFoundError("Could not retrieve any fragments")
 
     def query_lemmas(self, word):
         cursor = self._collection.aggregate(aggregate_lemmas(word))

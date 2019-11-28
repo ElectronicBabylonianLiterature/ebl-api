@@ -54,6 +54,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     api.add_route("/fragments/{number}/photo", photo)
     api.add_route("/lemmas", lemma_search)
     api.add_route("/statistics", statistics)
+    api.add_route("/pager/folios/{folio_name}/{folio_number}/{number}", folio_pager)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
     api.add_route("/folios/{name}/{number}", folios)
 

@@ -108,7 +108,7 @@ def test_find_interesting(fragment_repository):
 def test_folio_pager_exception(fragment_repository):
     query = "1841-07-26, 57"
     with pytest.raises(NotFoundError):
-        list(fragment_repository.query_next_and_previous_fragment(query).values())
+        fragment_repository.query_next_and_previous_fragment(query)
 
 
 FRAGMENTS = ["1841-07-26, 54", "1841-07-26, 57", "1841-07-26, 63"]

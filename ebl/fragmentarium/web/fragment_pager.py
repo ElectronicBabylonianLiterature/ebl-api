@@ -18,7 +18,7 @@ class FragmentPagerResource:
                     content:
                       application/json:
                         schema:
-                          type: string
+                           $ref: '#/components/schemas/FragmentPagerInfo'
                   404:
                     description: Could not retrieve any fragments
                 security:
