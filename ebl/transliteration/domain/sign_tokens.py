@@ -1,3 +1,4 @@
+import re
 from abc import abstractmethod
 from typing import Iterable, Optional, Sequence, Tuple
 
@@ -143,6 +144,10 @@ class NamedReading(AbstractReading):
     def _check_name(self, _attribute, value):
         ...
 
+    @_name.validator
+    def __check_name(self, attribute, value):
+        self._check_name(attribute, value)
+
     @_sub_index.validator
     def _check_sub_index(self, _attribute, value):
         if value < 0:
@@ -163,7 +168,7 @@ class NamedReading(AbstractReading):
 @attr.s(auto_attribs=True, frozen=True)
 class Reading(NamedReading):
     def _check_name(self, _attribute, value):
-        if not value.islower():
+        if not value.islower() and value != "ʾ":
             raise ValueError("Readings must be lowercase.")
 
     def to_dict(self) -> dict:
@@ -196,7 +201,7 @@ class Logogram(NamedReading):
         return f"{super().value}{surrogate}"
 
     def _check_name(self, _attribute, value):
-        if not value.isupper():
+        if not value.isupper() and value != "ʾ":
             raise ValueError("Logograms must be uppercase.")
 
     def to_dict(self) -> dict:
@@ -216,3 +221,22 @@ class Logogram(NamedReading):
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
         return Logogram(modifiers, flags, sign, name, sub_index, surrogate)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Number(NamedReading):
+    def _check_name(self, _attribute, value):
+        if not re.fullmatch(r"[0-9\[\]]+", value):
+            raise ValueError("Numbers can only contain decimal digits, [, and ].")
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "type": "Number"}
+
+    @staticmethod
+    def of(
+        name: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[str] = None,
+    ) -> "Number":
+        return Number(modifiers, flags, sign, name, 1)

@@ -17,6 +17,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Number,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -104,9 +105,8 @@ _factories: Mapping[str, Callable[[dict], Token]] = {
         data["sign"],
         create_tokens(data.get("surrogate", [])),
     ),
-    "Number": lambda data: Reading.of(
-        str(data["numeral"]),
-        1,
+    "Number": lambda data: Number.of(
+        data.get("name") or str(data["numeral"]),
         data["modifiers"],
         tuple(Flag(flag) for flag in data["flags"]),
         data["sign"],

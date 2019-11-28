@@ -19,6 +19,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Number,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -685,7 +686,7 @@ def test_parser_version(parser, version):
                                 Logogram.of("U", 4),
                                 ValueToken("]"),
                                 Joiner.dot(),
-                                Reading.of("14"),
+                                Number.of("14"),
                                 Joiner.dot(),
                                 Logogram.of("KAM", 2),
                             ],
@@ -695,7 +696,7 @@ def test_parser_version(parser, version):
                             parts=[
                                 Logogram.of("U", 4),
                                 Joiner.dot(),
-                                Reading.of("15"),
+                                Number.of("15"),
                                 Joiner.dot(),
                                 Logogram.of("KAM", 2),
                             ],

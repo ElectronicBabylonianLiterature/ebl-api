@@ -5,6 +5,7 @@ from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Logogram,
+    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
@@ -96,6 +97,10 @@ def test_unclear_sign_with_flags():
     "name,sub_index,modifiers,flags,sign,expected_value",
     [
         ("kur", 1, [], [], None, "kur"),
+        ("kurʾ", 1, [], [], None, "kurʾ"),
+        ("ʾ", 1, [], [], None, "ʾ"),
+        ("k[ur", 1, [], [], None, "k[ur"),
+        ("ku]r", 1, [], [], None, "ku]r"),
         ("kur", 0, [], [], None, "kur₀"),
         ("kur", 1, [], [], "KUR", "kur(KUR)"),
         ("kur", 1, ["@v", "@180"], [], None, "kur@v@180"),
@@ -123,10 +128,20 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     }
 
 
+@pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
+def test_invalid_reading(name, sub_index):
+    with pytest.raises(ValueError):
+        Reading.of(name, sub_index)
+
+
 @pytest.mark.parametrize(
     "name,sub_index,modifiers,flags,sign,surrogate,expected_value",
     [
         ("KUR", 1, [], [], None, [], "KUR"),
+        ("KURʾ", 1, [], [], None, [], "KURʾ"),
+        ("ʾ", 1, [], [], None, [], "ʾ"),
+        ("KU[R", 1, [], [], None, [], "KU[R"),
+        ("K]UR", 1, [], [], None, [], "K]UR"),
         ("KUR", 0, [], [], None, [], "KUR₀"),
         ("KUR", 1, [], [], "KUR", [], "KUR(KUR)"),
         (
@@ -165,34 +180,47 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
     }
 
 
+@pytest.mark.parametrize("name,sub_index", [("KUR", -1), ("kur", 1)])
+def test_invalid_logogram(name, sub_index):
+    with pytest.raises(ValueError):
+        Logogram.of(name, sub_index)
+
+
 @pytest.mark.parametrize(
-    "numeral,modifiers,flags,sign,expected_value",
+    "name,modifiers,flags,sign,expected_value",
     [
         ("1", [], [], None, "1"),
         ("1[4", [], [], None, "1[4"),
+        ("1]0", [], [], None, "1]0"),
         ("1", [], [], "KUR", "1(KUR)"),
         ("1", ["@v", "@180"], [], None, "1@v@180"),
         ("1", [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "1#!"),
         ("1", ["@v"], [atf.Flag.CORRECTION], "KUR", "1@v!(KUR)"),
     ],
 )
-def test_number(numeral, modifiers, flags, sign, expected_value):
-    number = Reading.of(numeral, 1, modifiers, flags, sign)
+def test_number(name, modifiers, flags, sign, expected_value):
+    number = Number.of(name, modifiers, flags, sign)
 
     expected_sub_index = 1
     assert number.value == expected_value
-    assert number.get_key() == f"Reading⁝{expected_value}"
+    assert number.get_key() == f"Number⁝{expected_value}"
     assert number.sub_index == expected_sub_index
     assert number.modifiers == tuple(modifiers)
     assert number.flags == tuple(flags)
     assert number.lemmatizable is False
     assert number.sign == sign
     assert number.to_dict() == {
-        "type": "Reading",
+        "type": "Number",
         "value": expected_value,
-        "name": numeral,
+        "name": name,
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
         "sign": sign,
     }
+
+
+@pytest.mark.parametrize("name", ["-1", "kur", "KUR"])
+def test_invalid_number(name):
+    with pytest.raises(ValueError):
+        Number.of(name)

@@ -70,7 +70,8 @@ tabulation: TABULATION
 TABULATION: "($___$)"
 
 column: "&" column_number
-column_number: [NUMBER]
+column_number: [COLUMN_NUMBER]
+COLUMN_NUMBER: "1".."9" ("0".."9")*
 
 commentary_protocol: PROTOCOL_QUOTATION
                    | PROTOCOL_BASE_TEXT

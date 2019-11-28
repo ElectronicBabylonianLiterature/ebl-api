@@ -15,6 +15,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Number,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -100,7 +101,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Column(2),
                     Divider(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
-                    Word("10#", parts=[Reading.of("10", flags=[Flag.DAMAGE])]),
+                    Word("10#", parts=[Number.of("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
             TextLine(
@@ -221,7 +222,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Column(2),
                     Divider(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
-                    Word("10#", parts=[Reading.of("10", flags=[Flag.DAMAGE])]),
+                    Word("10#", parts=[Number.of("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
             TextLine(

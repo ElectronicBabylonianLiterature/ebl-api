@@ -9,6 +9,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Number,
 )
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.word_tokens import (
@@ -26,9 +27,10 @@ from ebl.transliteration.domain.word_tokens import (
         ("X", Word("X", parts=[UnidentifiedSign()])),
         ("x?", Word("x?", parts=[UnclearSign([atf.Flag.UNCERTAIN])])),
         ("X#", Word("X#", parts=[UnidentifiedSign([atf.Flag.DAMAGE])])),
-        ("12", Word("12", parts=[Reading.of("12")])),
-        ("1]2", Word("1]2", parts=[Reading.of("1]2")])),
-        ("1[2", Word("1[2", parts=[Reading.of("1[2")])),
+        ("12", Word("12", parts=[Number.of("12")])),
+        ("1]2", Word("1]2", parts=[Number.of("1]2")])),
+        ("1[2", Word("1[2", parts=[Number.of("1[2")])),
+        ("ʾ", Word("ʾ", parts=[Reading.of("ʾ")])),
         ("du₁₁", Word("du₁₁", parts=[Reading.of("du", 11)])),
         ("GAL", Word("GAL", parts=[Logogram.of("GAL")])),
         ("kur(GAL)", Word("kur(GAL)", parts=[Reading.of("kur", sign="GAL")])),
@@ -117,7 +119,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Logogram.of("U", 4),
                     ValueToken("]"),
                     Joiner.dot(),
-                    Reading.of("14"),
+                    Number.of("14"),
                     Joiner.dot(),
                     Logogram.of("KAM", 2),
                 ],
@@ -311,9 +313,7 @@ from ebl.transliteration.domain.word_tokens import (
         ),
         (
             "3.AM₃",
-            Word(
-                "3.AM₃", parts=[Reading.of("3"), Joiner.dot(), Logogram.of("AM", 3),],
-            ),
+            Word("3.AM₃", parts=[Number.of("3"), Joiner.dot(), Logogram.of("AM", 3),],),
         ),
         (
             "<{10}>bu",
@@ -322,7 +322,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     ValueToken("<"),
                     ValueToken("{"),
-                    Reading.of("10"),
+                    Number.of("10"),
                     ValueToken("}"),
                     ValueToken(">"),
                     Reading.of("bu"),
@@ -783,7 +783,7 @@ def test_word(parser, atf, expected):
                 parts=[
                     ValueToken("<"),
                     ValueToken("{"),
-                    Reading.of("10"),
+                    Number.of("10"),
                     ValueToken("}"),
                     ValueToken(">"),
                 ],
