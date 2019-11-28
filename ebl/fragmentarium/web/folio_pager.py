@@ -14,14 +14,13 @@ class FolioPagerResource:
                 description: Gets the next & previous folio in Database.
                 responses:
                   200:
-                    description: The number & name of Folio & number of fragment of
-                    next & previous Folio
+                    description: The fragmentnumber,name,folionumber of next & previous folio
                     content:
                       application/json:
                         schema:
-                           $ref: '#/components/schemas/FragmentPagerFolioInfo'
+                           $ref: '#/components/schemas/FolioPagerInfo'
                   404:
-                    description: Could not retrieve any fragments
+                    description: Could not retrieve any folios
                 security:
                 - auth0:
                   - read:fragments
@@ -30,11 +29,11 @@ class FolioPagerResource:
                   name: folio_name
                   description: Folio name
                   required: true
-                  - in: path
+                - in: path
                   name: folio_number
                   description: Folio number
                   required: true
-                  - in: path
+                - in: path
                   name: number
                   description: Fragment number
                   required: true

@@ -5,6 +5,6 @@ class FragmentNumberInfo(Schema):
     fragmentNumber: fields.String(required=True)
 
 
-class FragmentPagerFolioInfo(Schema):
-    previous: fields.NestedDict(FragmentNumberInfo, key="fragmentNumber")
-    next: fields.NestedDict(FragmentNumberInfo, key="fragmentNumber")
+class FolioPagerInfo(Schema):
+    previous: fields.Nested(FragmentNumberInfo, key="fragmentNumber")
+    next: fields.Nested(FragmentNumberInfo, key="fragmentNumber")
