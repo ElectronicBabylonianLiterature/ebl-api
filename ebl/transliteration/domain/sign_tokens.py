@@ -144,10 +144,6 @@ class NamedReading(AbstractReading):
     def _check_name(self, _attribute, value):
         ...
 
-    @_name.validator
-    def __check_name(self, attribute, value):
-        self._check_name(attribute, value)
-
     @_sub_index.validator
     def _check_sub_index(self, _attribute, value):
         if value < 0:
