@@ -19,7 +19,7 @@ from ebl.transliteration.domain.line import (
     Line,
     TextLine,
 )
-from ebl.transliteration.domain.token_factory import create_tokens
+from ebl.transliteration.domain.token_schemas import load_tokens
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -83,11 +83,9 @@ class Text:
     def from_dict(data: dict) -> "Text":
         line_factories: Mapping[str, Callable[[str, List[dict]], Line]] = {
             "ControlLine": lambda prefix, content: ControlLine(
-                prefix, create_tokens(content)
+                prefix, load_tokens(content)
             ),
-            "TextLine": lambda prefix, content: TextLine(
-                prefix, create_tokens(content)
-            ),
+            "TextLine": lambda prefix, content: TextLine(prefix, load_tokens(content)),
             "EmptyLine": lambda _prefix, _content: EmptyLine(),
         }
         lines = tuple(

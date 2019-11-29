@@ -234,5 +234,6 @@ class Number(NamedReading):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[str] = None,
+        sub_index: int = 1,
     ) -> "Number":
-        return Number(modifiers, flags, sign, name, 1)
+        return Number(modifiers, flags, sign, name, sub_index)

@@ -244,7 +244,10 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def divider_variant(self, first, second):
-        return Variant.of(first, second)
+        return Variant.of(
+            ValueToken(str(first)) if isinstance(first, Token) else first,
+            ValueToken(str(second)) if isinstance(second, Token) else second,
+        )
 
     def variant_part(self, tokens):
         return self._create_word(Word, tokens)

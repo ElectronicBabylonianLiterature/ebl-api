@@ -1,7 +1,6 @@
 import pytest
 
 from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Logogram,
@@ -10,6 +9,8 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
 )
+from ebl.transliteration.domain.token_schemas import dump_token, load_token
+from ebl.transliteration.domain.tokens import Joiner
 
 
 def test_divider():
@@ -22,13 +23,17 @@ def test_divider():
     assert divider.value == expected_value
     assert divider.get_key() == f"Divider⁝{expected_value}"
     assert divider.lemmatizable is False
-    assert divider.to_dict() == {
+
+    serialized = {
         "type": "Divider",
         "value": expected_value,
         "divider": value,
         "modifiers": list(modifiers),
         "flags": ["?"],
     }
+    assert divider.to_dict() == serialized
+    assert dump_token(divider) == serialized
+    assert load_token(serialized) == divider
 
 
 def test_unidentified_sign():
@@ -39,11 +44,15 @@ def test_unidentified_sign():
     assert sign.get_key() == f"UnidentifiedSign⁝{expected_value}"
     assert sign.flags == tuple()
     assert sign.lemmatizable is False
-    assert sign.to_dict() == {
+
+    serialized = {
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": [],
     }
+    assert sign.to_dict() == serialized
+    assert dump_token(sign) == serialized
+    assert load_token(serialized) == sign
 
 
 def test_unidentified_sign_with_flags():
@@ -55,11 +64,15 @@ def test_unidentified_sign_with_flags():
     assert sign.get_key() == f"UnidentifiedSign⁝{expected_value}"
     assert sign.flags == tuple(flags)
     assert sign.lemmatizable is False
-    assert sign.to_dict() == {
+
+    serialized = {
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": ["#"],
     }
+    assert sign.to_dict() == serialized
+    assert dump_token(sign) == serialized
+    assert load_token(serialized) == sign
 
 
 def test_unclear_sign():
@@ -70,11 +83,15 @@ def test_unclear_sign():
     assert sign.get_key() == f"UnclearSign⁝{expected_value}"
     assert sign.flags == tuple()
     assert sign.lemmatizable is False
-    assert sign.to_dict() == {
+
+    serialized = {
         "type": "UnclearSign",
         "value": expected_value,
         "flags": [],
     }
+    assert sign.to_dict() == serialized
+    assert dump_token(sign) == serialized
+    assert load_token(serialized) == sign
 
 
 def test_unclear_sign_with_flags():
@@ -86,11 +103,15 @@ def test_unclear_sign_with_flags():
     assert sign.get_key() == f"UnclearSign⁝{expected_value}"
     assert sign.flags == tuple(flags)
     assert sign.lemmatizable is False
-    assert sign.to_dict() == {
+
+    serialized = {
         "type": "UnclearSign",
         "value": expected_value,
         "flags": ["!"],
     }
+    assert sign.to_dict() == serialized
+    assert dump_token(sign) == serialized
+    assert load_token(serialized) == sign
 
 
 @pytest.mark.parametrize(
@@ -117,7 +138,8 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     assert reading.flags == tuple(flags)
     assert reading.lemmatizable is False
     assert reading.sign == sign
-    assert reading.to_dict() == {
+
+    serialized = {
         "type": "Reading",
         "value": expected_value,
         "name": name,
@@ -126,6 +148,9 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
         "flags": [flag.value for flag in flags],
         "sign": sign,
     }
+    assert reading.to_dict() == serialized
+    assert dump_token(reading) == serialized
+    assert load_token(serialized) == reading
 
 
 @pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
@@ -169,7 +194,8 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
     assert logogram.lemmatizable is False
     assert logogram.sign == sign
     assert logogram.surrogate == tuple(surrogate)
-    assert logogram.to_dict() == {
+
+    serialized = {
         "type": "Logogram",
         "value": expected_value,
         "name": name,
@@ -179,6 +205,9 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
         "surrogate": [token.to_dict() for token in surrogate],
         "sign": sign,
     }
+    assert logogram.to_dict() == serialized
+    assert dump_token(logogram) == serialized
+    assert load_token(serialized) == logogram
 
 
 @pytest.mark.parametrize("name,sub_index", [("KUR", -1), ("kur", 1)])
@@ -211,7 +240,8 @@ def test_number(name, modifiers, flags, sign, expected_value):
     assert number.flags == tuple(flags)
     assert number.lemmatizable is False
     assert number.sign == sign
-    assert number.to_dict() == {
+
+    serialized = {
         "type": "Number",
         "value": expected_value,
         "name": name,
@@ -220,6 +250,9 @@ def test_number(name, modifiers, flags, sign, expected_value):
         "flags": [flag.value for flag in flags],
         "sign": sign,
     }
+    assert number.to_dict() == serialized
+    assert dump_token(number) == serialized
+    assert load_token(serialized) == number
 
 
 @pytest.mark.parametrize("name", ["-1", "kur", "KUR"])

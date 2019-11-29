@@ -18,7 +18,7 @@ from ebl.corpus.domain.text import (
 )
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token_factory import create_tokens
+from ebl.transliteration.domain.token_schemas import load_tokens
 
 
 class TextSerializer(TextVisitor):
@@ -157,7 +157,7 @@ class TextDeserializer:
             tuple(Label.parse(label) for label in manuscript_line["labels"]),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf(manuscript_line["line"]["prefix"]),
-                create_tokens(manuscript_line["line"]["content"]),
+                load_tokens(manuscript_line["line"]["content"]),
             ),
         )
 

@@ -2,6 +2,7 @@ import pytest
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
@@ -51,7 +52,8 @@ def test_lone_determinative(language, normalized, partial):
     assert lone_determinative.language == language
     assert lone_determinative.normalized is normalized
     assert lone_determinative.unique_lemma == tuple()
-    assert lone_determinative.to_dict() == {
+
+    serialized = {
         "type": "LoneDeterminative",
         "value": lone_determinative.value,
         "uniqueLemma": [],
@@ -60,8 +62,10 @@ def test_lone_determinative(language, normalized, partial):
         "lemmatizable": lone_determinative.lemmatizable,
         "partial": list(partial),
         "erasure": ErasureState.NONE.name,
-        "parts": [part.to_dict() for part in parts],
+        "parts": dump_tokens(parts),
     }
+    assert dump_token(lone_determinative) == serialized
+    assert load_token(serialized) == lone_determinative
 
     assert lone_determinative == equal
     assert hash(lone_determinative) == hash(equal)

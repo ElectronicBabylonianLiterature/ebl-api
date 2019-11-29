@@ -64,6 +64,7 @@ variant_part: unidentified_sign
             | unclear_sign
             | reading
             | logogram
+            | number
             | COMPOUND_GRAPHEME
 
 tabulation: TABULATION
