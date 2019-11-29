@@ -41,13 +41,6 @@ class AbstractSign(Token):
     def value(self) -> str:
         return f'{self._sign}{"".join(self.string_flags)}'
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": self._type,
-            "flags": list(self.string_flags),
-        }
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class UnidentifiedSign(AbstractSign):
@@ -87,15 +80,6 @@ class Divider(Token):
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "Divider",
-            "divider": self.divider,
-            "modifiers": list(self.modifiers),
-            "flags": self.string_flags,
-        }
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractReading(Token):
@@ -125,15 +109,6 @@ class AbstractReading(Token):
         sign = f"({self.sign})" if self.sign else ""
         return f"{self.name}{sub_index}{modifiers}{flags}{sign}"
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "subIndex": self.sub_index,
-            "modifiers": list(self.modifiers),
-            "flags": list(self.string_flags),
-            "sign": self.sign,
-        }
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class NamedReading(AbstractReading):
@@ -157,18 +132,12 @@ class NamedReading(AbstractReading):
     def name(self) -> str:
         return self._name
 
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "name": self._name}
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Reading(NamedReading):
     def _check_name(self, _attribute, value):
         if not value.islower() and value != "ʾ":
             raise ValueError("Readings must be lowercase.")
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Reading"}
 
     @staticmethod
     def of(
@@ -200,13 +169,6 @@ class Logogram(NamedReading):
         if not value.isupper() and value != "ʾ":
             raise ValueError("Logograms must be uppercase.")
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "Logogram",
-            "surrogate": [token.to_dict() for token in self.surrogate],
-        }
-
     @staticmethod
     def of(
         name: str,
@@ -224,9 +186,6 @@ class Number(NamedReading):
     def _check_name(self, _attribute, value):
         if not re.fullmatch(r"[0-9\[\]]+", value):
             raise ValueError("Numbers can only contain decimal digits, [, and ].")
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Number"}
 
     @staticmethod
     def of(

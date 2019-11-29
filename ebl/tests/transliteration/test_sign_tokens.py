@@ -9,7 +9,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
 )
-from ebl.transliteration.domain.token_schemas import dump_token, load_token
+from ebl.transliteration.domain.token_schemas import dump_token, dump_tokens, load_token
 from ebl.transliteration.domain.tokens import Joiner
 
 
@@ -31,7 +31,6 @@ def test_divider():
         "modifiers": list(modifiers),
         "flags": ["?"],
     }
-    assert divider.to_dict() == serialized
     assert dump_token(divider) == serialized
     assert load_token(serialized) == divider
 
@@ -50,7 +49,6 @@ def test_unidentified_sign():
         "value": expected_value,
         "flags": [],
     }
-    assert sign.to_dict() == serialized
     assert dump_token(sign) == serialized
     assert load_token(serialized) == sign
 
@@ -70,7 +68,6 @@ def test_unidentified_sign_with_flags():
         "value": expected_value,
         "flags": ["#"],
     }
-    assert sign.to_dict() == serialized
     assert dump_token(sign) == serialized
     assert load_token(serialized) == sign
 
@@ -89,7 +86,6 @@ def test_unclear_sign():
         "value": expected_value,
         "flags": [],
     }
-    assert sign.to_dict() == serialized
     assert dump_token(sign) == serialized
     assert load_token(serialized) == sign
 
@@ -109,7 +105,6 @@ def test_unclear_sign_with_flags():
         "value": expected_value,
         "flags": ["!"],
     }
-    assert sign.to_dict() == serialized
     assert dump_token(sign) == serialized
     assert load_token(serialized) == sign
 
@@ -148,7 +143,6 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
         "flags": [flag.value for flag in flags],
         "sign": sign,
     }
-    assert reading.to_dict() == serialized
     assert dump_token(reading) == serialized
     assert load_token(serialized) == reading
 
@@ -202,10 +196,9 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
-        "surrogate": [token.to_dict() for token in surrogate],
+        "surrogate": dump_tokens(surrogate),
         "sign": sign,
     }
-    assert logogram.to_dict() == serialized
     assert dump_token(logogram) == serialized
     assert load_token(serialized) == logogram
 
@@ -250,7 +243,6 @@ def test_number(name, modifiers, flags, sign, expected_value):
         "flags": [flag.value for flag in flags],
         "sign": sign,
     }
-    assert number.to_dict() == serialized
     assert dump_token(number) == serialized
     assert load_token(serialized) == number
 

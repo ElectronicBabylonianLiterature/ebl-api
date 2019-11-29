@@ -3,7 +3,6 @@ from enum import Enum, auto
 from typing import Optional, Sequence, Tuple
 
 import attr
-import pydash
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf as atf
@@ -107,22 +106,6 @@ class Word(ValueToken):
             result = result.set_alignment(AlignmentToken(token.value, self.alignment))
         return result
 
-    def to_dict(self) -> dict:
-        return pydash.omit_by(
-            {
-                **super().to_dict(),
-                "type": "Word",
-                "uniqueLemma": [*self.unique_lemma],
-                "normalized": self.normalized,
-                "language": self.language.name,
-                "lemmatizable": self.lemmatizable,
-                "erasure": self.erasure.name,
-                "alignment": self.alignment,
-                "parts": [token.to_dict() for token in self.parts],
-            },
-            lambda value: value is None,
-        )
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class LoneDeterminative(Word):
@@ -145,19 +128,9 @@ class LoneDeterminative(Word):
     def partial(self) -> Partial:
         return self._partial
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "LoneDeterminative",
-            "partial": list(self.partial),
-        }
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class InWordNewline(Token):
     @property
     def value(self) -> str:
         return atf.IN_WORD_NEWLINE
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "InWordNewline"}

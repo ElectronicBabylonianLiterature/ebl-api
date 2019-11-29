@@ -22,6 +22,7 @@ from ebl.transliteration.domain.line import (
     TextLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,
@@ -229,7 +230,7 @@ def test_line_of_single():
             {
                 "type": "ControlLine",
                 "prefix": "@",
-                "content": [ValueToken("obverse").to_dict()],
+                "content": dump_tokens([ValueToken("obverse")]),
             },
         ),
         (
@@ -247,14 +248,16 @@ def test_line_of_single():
             {
                 "type": "TextLine",
                 "prefix": "1.",
-                "content": [
-                    DocumentOrientedGloss("{(").to_dict(),
-                    Word("bu", parts=[Reading.of("bu")]).to_dict(),
-                    LoneDeterminative(
-                        "{d}",
-                        parts=[ValueToken("{"), Reading.of("d"), ValueToken("}"),],
-                    ).to_dict(),
-                ],
+                "content": dump_tokens(
+                    [
+                        DocumentOrientedGloss("{("),
+                        Word("bu", parts=[Reading.of("bu")]),
+                        LoneDeterminative(
+                            "{d}",
+                            parts=[ValueToken("{"), Reading.of("d"), ValueToken("}"),],
+                        ),
+                    ]
+                ),
             },
         ),
         (EmptyLine(), {"type": "EmptyLine", "prefix": "", "content": []}),

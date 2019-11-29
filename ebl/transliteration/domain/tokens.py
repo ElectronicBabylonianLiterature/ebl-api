@@ -18,9 +18,6 @@ class Token(ABC):
     def value(self) -> str:
         ...
 
-    def to_dict(self) -> dict:
-        return {"type": "Token", "value": self.value}
-
     @property
     def lemmatizable(self) -> bool:
         return False
@@ -80,14 +77,6 @@ class LanguageShift(ValueToken):
     def normalized(self):
         return self.value == LanguageShift._normalization_shift
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "LanguageShift",
-            "normalized": self.normalized,
-            "language": self.language.name,
-        }
-
 
 @attr.s(frozen=True)
 class UnknownNumberOfSigns(Token):
@@ -95,14 +84,10 @@ class UnknownNumberOfSigns(Token):
     def value(self) -> str:
         return atf.UNKNOWN_NUMBER_OF_SIGNS
 
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "UnknownNumberOfSigns"}
-
 
 @attr.s(frozen=True)
 class Tabulation(ValueToken):
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Tabulation"}
+    pass
 
 
 @attr.s(frozen=True)
@@ -110,9 +95,6 @@ class CommentaryProtocol(ValueToken):
     @property
     def protocol(self):
         return atf.CommentaryProtocol(self.value)
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "CommentaryProtocol"}
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -128,9 +110,6 @@ class Column(Token):
     def value(self) -> str:
         return "&" if self.number is None else f"&{self.number}"
 
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Column", "number": self.number}
-
 
 @attr.s(frozen=True, auto_attribs=True)
 class Variant(Token):
@@ -144,18 +123,10 @@ class Variant(Token):
     def value(self) -> str:
         return "/".join(token.value for token in self.tokens)
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "Variant",
-            "tokens": [token.to_dict() for token in self.tokens],
-        }
-
 
 @attr.s(frozen=True)
 class LineContinuation(ValueToken):
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "LineContinuation"}
+    pass
 
 
 class TokenVisitor(ABC):
@@ -175,9 +146,6 @@ class Joiner(Token):
     @property
     def value(self):
         return self._value.value
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Joiner"}
 
     @staticmethod
     def dot():

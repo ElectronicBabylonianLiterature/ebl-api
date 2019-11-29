@@ -9,7 +9,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.token_schemas import dump_token, load_token
+from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
@@ -98,9 +98,8 @@ def test_word(language, normalized, unique_lemma):
         "language": word.language.name,
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
-        "parts": [part.to_dict() for part in parts],
+        "parts": dump_tokens(parts),
     }
-    assert word.to_dict() == serialized
     assert dump_token(word) == serialized
     assert load_token(serialized) == word
 

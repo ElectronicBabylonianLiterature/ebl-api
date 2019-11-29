@@ -13,7 +13,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
-from ebl.transliteration.domain.token_schemas import dump_token, load_token
+from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
@@ -48,7 +48,6 @@ def test_value_token():
     assert token.lemmatizable is False
 
     serialized = {"type": "Token", "value": token.value}
-    assert token.to_dict() == serialized
     assert dump_token(token) == serialized
     assert load_token(serialized) == token
 
@@ -86,7 +85,6 @@ def test_language_shift(value, expected_language, normalized):
         "normalized": normalized,
         "language": shift.language.name,
     }
-    assert shift.to_dict() == serialized
     assert dump_token(shift) == serialized
     assert load_token(serialized) == shift
 
@@ -114,7 +112,6 @@ def test_document_oriented_gloss():
         "type": "DocumentOrientedGloss",
         "value": gloss.value,
     }
-    assert gloss.to_dict() == serialized
     assert dump_token(gloss) == serialized
     assert load_token(serialized) == gloss
 
@@ -188,7 +185,6 @@ def test_erasure():
         "value": erasure.value,
         "side": side.name,
     }
-    assert erasure.to_dict() == serialized
     assert dump_token(erasure) == serialized
     assert load_token(serialized) == erasure
 
@@ -205,7 +201,6 @@ def test_unknown_number_of_signs():
         "type": "UnknownNumberOfSigns",
         "value": expected_value,
     }
-    assert unknown_number_of_signs.to_dict() == serialized
     assert dump_token(unknown_number_of_signs) == serialized
     assert load_token(serialized) == unknown_number_of_signs
 
@@ -219,7 +214,6 @@ def test_tabulation():
     assert tabulation.lemmatizable is False
 
     serialized = {"type": "Tabulation", "value": value}
-    assert tabulation.to_dict() == serialized
     assert dump_token(tabulation) == serialized
     assert load_token(serialized) == tabulation
 
@@ -235,7 +229,6 @@ def test_commentary_protocol(protocol_enum):
     assert protocol.protocol == protocol_enum
 
     serialized = {"type": "CommentaryProtocol", "value": value}
-    assert protocol.to_dict() == serialized
     assert dump_token(protocol) == serialized
     assert load_token(serialized) == protocol
 
@@ -253,7 +246,6 @@ def test_column():
         "value": expected_value,
         "number": None,
     }
-    assert column.to_dict() == serialized
     assert dump_token(column) == serialized
     assert load_token(serialized) == column
 
@@ -271,7 +263,6 @@ def test_column_with_number():
         "value": expected_value,
         "number": 1,
     }
-    assert column.to_dict() == serialized
     assert dump_token(column) == serialized
     assert load_token(serialized) == column
 
@@ -294,9 +285,8 @@ def test_variant():
     serialized = {
         "type": "Variant",
         "value": expected_value,
-        "tokens": [reading.to_dict(), divider.to_dict()],
+        "tokens": dump_tokens([reading, divider]),
     }
-    assert variant.to_dict() == serialized
     assert dump_token(variant) == serialized
     assert load_token(serialized) == variant
 
@@ -319,7 +309,6 @@ def test_joiner(joiner, expected_value):
         "type": "Joiner",
         "value": expected_value,
     }
-    assert joiner.to_dict() == serialized
     assert dump_token(joiner) == serialized
     assert load_token(serialized) == joiner
 
@@ -336,7 +325,6 @@ def test_in_word_new_line():
         "type": "InWordNewline",
         "value": expected_value,
     }
-    assert newline.to_dict() == serialized
     assert dump_token(newline) == serialized
     assert load_token(serialized) == newline
 
@@ -353,6 +341,5 @@ def test_line_continuation():
         "type": "LineContinuation",
         "value": continuation.value,
     }
-    assert continuation.to_dict() == serialized
     assert dump_token(continuation) == serialized
     assert load_token(serialized) == continuation
