@@ -285,7 +285,7 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def divider(self, value, modifiers, flags):
-        return Divider(str(value), modifiers, flags)
+        return Divider.of(str(value), modifiers, flags)
 
     @v_args(inline=True)
     def column(self, number):

@@ -225,7 +225,7 @@ def test_invalid_column():
 
 def test_variant():
     reading = Reading.of("sal")
-    divider = Divider(":")
+    divider = Divider.of(":")
     variant = Variant.of(reading, divider)
 
     expected_value = "sal/:"

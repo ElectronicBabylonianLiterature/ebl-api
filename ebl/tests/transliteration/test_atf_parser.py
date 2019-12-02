@@ -163,14 +163,14 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Divider("|"),
-                        Divider(":"),
-                        Divider(":'"),
-                        Divider(':"'),
-                        Divider(":."),
-                        Divider("::"),
-                        Divider(";"),
-                        Divider("/"),
+                        Divider.of("|"),
+                        Divider.of(":"),
+                        Divider.of(":'"),
+                        Divider.of(':"'),
+                        Divider.of(":."),
+                        Divider.of("::"),
+                        Divider.of(";"),
+                        Divider.of("/"),
                     ),
                 )
             ],
@@ -181,12 +181,12 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Variant.of(Divider("|"), Divider(":")),
+                        Variant.of(Divider.of("|"), Divider.of(":")),
                         Variant.of(
-                            Divider(":'"), Word("sal", parts=[Reading.of("sal")]),
+                            Divider.of(":'"), Word("sal", parts=[Reading.of("sal")]),
                         ),
-                        Variant.of(Divider("/"), Divider(":")),
-                        Variant.of(Divider(":"), Divider("/")),
+                        Variant.of(Divider.of("/"), Divider.of(":")),
+                        Variant.of(Divider.of(":"), Divider.of("/")),
                     ),
                 )
             ],
@@ -217,7 +217,7 @@ def test_parser_version(parser, version):
                                 Reading.of("li"),
                             ],
                         ),
-                        Divider(":"),
+                        Divider.of(":"),
                     ),
                 ),
                 TextLine("2.", (Word("ku", parts=[Reading.of("ku")]),)),
@@ -369,7 +369,7 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         BrokenAway("["),
-                        Divider(":"),
+                        Divider.of(":"),
                     ),
                 )
             ],
@@ -749,7 +749,7 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Variant.of(
-                            Word("sal", parts=[Reading.of("sal")]), Divider(":"),
+                            Word("sal", parts=[Reading.of("sal")]), Divider.of(":"),
                         ),
                         Word("šim", parts=[Reading.of("šim")]),
                     ),
@@ -1077,7 +1077,7 @@ def test_parser_version(parser, version):
                                 Reading.of("e", 3),
                             ],
                         ),
-                        Divider(";"),
+                        Divider.of(";"),
                     ),
                 )
             ],
@@ -1095,14 +1095,14 @@ def test_parse_dividers():
             TextLine(
                 "1.",
                 (
-                    Divider(":", tuple(), (atf.Flag.UNCERTAIN,)),
-                    Divider(":", tuple(), (atf.Flag.DAMAGE, atf.Flag.CORRECTION)),
-                    Divider(":", tuple(), (atf.Flag.DAMAGE,)),
-                    Divider("::", tuple(), (atf.Flag.UNCERTAIN,)),
-                    Divider(":.", ("@v",), tuple()),
-                    Divider("/", ("@19",), (atf.Flag.COLLATION,)),
-                    Divider(':"', ("@20", "@c"), tuple()),
-                    Divider("|", ("@v", "@19"), (atf.Flag.CORRECTION,)),
+                    Divider.of(":", tuple(), (atf.Flag.UNCERTAIN,)),
+                    Divider.of(":", tuple(), (atf.Flag.DAMAGE, atf.Flag.CORRECTION)),
+                    Divider.of(":", tuple(), (atf.Flag.DAMAGE,)),
+                    Divider.of("::", tuple(), (atf.Flag.UNCERTAIN,)),
+                    Divider.of(":.", ("@v",), tuple()),
+                    Divider.of("/", ("@19",), (atf.Flag.COLLATION,)),
+                    Divider.of(':"', ("@20", "@c"), tuple()),
+                    Divider.of("|", ("@v", "@19"), (atf.Flag.CORRECTION,)),
                 ),
             )
         ],

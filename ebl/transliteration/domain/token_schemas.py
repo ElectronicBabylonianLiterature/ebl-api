@@ -155,7 +155,9 @@ class DividerSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Divider(data["divider"], tuple(data["modifiers"]), tuple(data["flags"]),)
+        return Divider.of(
+            data["divider"], tuple(data["modifiers"]), tuple(data["flags"]),
+        )
 
 
 class ColumnSchema(Schema):

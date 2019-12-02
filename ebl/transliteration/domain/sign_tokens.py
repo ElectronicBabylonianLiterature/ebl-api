@@ -18,7 +18,7 @@ def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class AbstractSign(Token):
+class UnknownSign(Token):
     flags: Sequence[atf.Flag] = attr.ib(
         default=tuple(), converter=convert_flag_sequence
     )
@@ -43,7 +43,7 @@ class AbstractSign(Token):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class UnidentifiedSign(AbstractSign):
+class UnidentifiedSign(UnknownSign):
     @property
     def _sign(self) -> str:
         return atf.UNIDENTIFIED_SIGN
@@ -54,7 +54,7 @@ class UnidentifiedSign(AbstractSign):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class UnclearSign(AbstractSign):
+class UnclearSign(UnknownSign):
     @property
     def _sign(self) -> str:
         return atf.UNCLEAR_SIGN
@@ -64,11 +64,19 @@ class UnclearSign(AbstractSign):
         return "UnclearSign"
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class AbstractSign(Token):
+    modifiers: Sequence[str] = attr.ib(converter=convert_string_sequence)
+    flags: Sequence[atf.Flag] = attr.ib(converter=convert_flag_sequence)
+
+    @property
+    def string_flags(self) -> Sequence[str]:
+        return [flag.value for flag in self.flags]
+
+
 @attr.s(frozen=True, auto_attribs=True)
-class Divider(Token):
+class Divider(AbstractSign):
     divider: str
-    modifiers: Tuple[str, ...] = tuple()
-    flags: Tuple[atf.Flag, ...] = tuple()
 
     @property
     def value(self) -> str:
@@ -80,26 +88,29 @@ class Divider(Token):
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
+    @staticmethod
+    def of(
+        divider: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+    ):
+        return Divider(modifiers, flags, divider)
+
 
 @attr.s(auto_attribs=True, frozen=True)
-class AbstractReading(Token):
-    modifiers: Sequence[str] = attr.ib(converter=convert_string_sequence)
-    flags: Sequence[atf.Flag] = attr.ib(converter=convert_flag_sequence)
+class NamedSign(AbstractSign):
+    name: str = attr.ib()
+    sub_index: int = attr.ib()
     sign: Optional[str]
 
-    @property
     @abstractmethod
-    def name(self) -> str:
+    def _check_name(self, _attribute, value):
         ...
 
-    @property
-    @abstractmethod
-    def sub_index(self) -> int:
-        ...
-
-    @property
-    def string_flags(self) -> Sequence[str]:
-        return [flag.value for flag in self.flags]
+    @sub_index.validator
+    def _check_sub_index(self, _attribute, value):
+        if value < 0:
+            raise ValueError("Sub-index must be >= 0.")
 
     @property
     def value(self) -> str:
@@ -111,30 +122,7 @@ class AbstractReading(Token):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class NamedReading(AbstractReading):
-    _name: str = attr.ib()
-    _sub_index: int = attr.ib()
-
-    @abstractmethod
-    def _check_name(self, _attribute, value):
-        ...
-
-    @_sub_index.validator
-    def _check_sub_index(self, _attribute, value):
-        if value < 0:
-            raise ValueError("Sub-index must be >= 0.")
-
-    @property
-    def sub_index(self) -> int:
-        return self._sub_index
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Reading(NamedReading):
+class Reading(NamedSign):
     def _check_name(self, _attribute, value):
         if not value.islower() and value != "ʾ":
             raise ValueError("Readings must be lowercase.")
@@ -147,11 +135,11 @@ class Reading(NamedReading):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[str] = None,
     ) -> "Reading":
-        return Reading(modifiers, flags, sign, name, sub_index)
+        return Reading(modifiers, flags, name, sub_index, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Logogram(NamedReading):
+class Logogram(NamedSign):
     surrogate: Sequence[Token] = attr.ib(
         default=tuple(), converter=convert_token_sequence
     )
@@ -178,11 +166,11 @@ class Logogram(NamedReading):
         sign: Optional[str] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
-        return Logogram(modifiers, flags, sign, name, sub_index, surrogate)
+        return Logogram(modifiers, flags, name, sub_index, sign, surrogate)
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Number(NamedReading):
+class Number(NamedSign):
     def _check_name(self, _attribute, value):
         if not re.fullmatch(r"[0-9\[\]]+", value):
             raise ValueError("Numbers can only contain decimal digits, [, and ].")
@@ -195,4 +183,4 @@ class Number(NamedReading):
         sign: Optional[str] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(modifiers, flags, sign, name, sub_index)
+        return Number(modifiers, flags, name, sub_index, sign)

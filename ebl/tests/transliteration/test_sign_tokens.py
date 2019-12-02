@@ -17,7 +17,7 @@ def test_divider():
     value = ":"
     modifiers = ("@v",)
     flags = (atf.Flag.UNCERTAIN,)
-    divider = Divider(value, modifiers, flags)
+    divider = Divider.of(value, modifiers, flags)
 
     expected_value = ":@v?"
     assert divider.value == expected_value
