@@ -8,7 +8,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "0.22.1"
+ATF_PARSER_VERSION = "0.23.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -109,6 +109,8 @@ IN_WORD_NEWLINE = ";"
 
 ERASURE_BOUNDARY = "°"
 ERASURE_DELIMITER = "\\"
+
+COMPOUND_GRAPHEME_DELIMITER = "|"
 
 FLAGS: Mapping[str, str] = {
     "uncertainty": pydash.escape_reg_exp(Flag.UNCERTAIN.value),

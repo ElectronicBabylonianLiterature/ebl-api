@@ -2,7 +2,9 @@ import pytest
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme,
     Divider,
+    Grapheme,
     Logogram,
     Number,
     Reading,
@@ -10,7 +12,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnidentifiedSign,
 )
 from ebl.transliteration.domain.token_schemas import dump_token, dump_tokens, load_token
-from ebl.transliteration.domain.tokens import Joiner
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 
 
 def test_divider():
@@ -118,17 +120,18 @@ def test_unclear_sign_with_flags():
         ("k[ur", 1, [], [], None, "k[ur"),
         ("ku]r", 1, [], [], None, "ku]r"),
         ("kur", 0, [], [], None, "kur₀"),
-        ("kur", 1, [], [], "KUR", "kur(KUR)"),
+        ("kur", 1, [], [], Grapheme.of("KUR"), "kur(KUR)"),
         ("kur", 1, ["@v", "@180"], [], None, "kur@v@180"),
         ("kur", 1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "kur#!"),
-        ("kur", 10, ["@v"], [atf.Flag.CORRECTION], "KUR", "kur₁₀@v!(KUR)"),
+        ("kur", 10, ["@v"], [atf.Flag.CORRECTION], Grapheme.of("KUR"), "kur₁₀@v!(KUR)"),
     ],
 )
 def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     reading = Reading.of(name, sub_index, modifiers, flags, sign)
 
+    expected_parts = f"⁝{sign.get_key('⁚')}" if sign else ""
     assert reading.value == expected_value
-    assert reading.get_key() == f"Reading⁝{expected_value}"
+    assert reading.get_key() == f"Reading⁝{expected_value}{expected_parts}"
     assert reading.modifiers == tuple(modifiers)
     assert reading.flags == tuple(flags)
     assert reading.lemmatizable is False
@@ -141,9 +144,29 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
-        "sign": sign,
+        "sign": sign and dump_token(sign),
     }
     assert dump_token(reading) == serialized
+    assert load_token(serialized) == reading
+
+
+def test_load_old_style_reading():
+    name = "kur"
+    sub_index = 1
+    flags = []
+    modifiers = []
+    sign = "KUR"
+    reading = Reading.of(name, sub_index, modifiers, flags, ValueToken(sign))
+
+    serialized = {
+        "type": "Reading",
+        "value": "kur(KUR)",
+        "name": name,
+        "subIndex": sub_index,
+        "modifiers": modifiers,
+        "flags": flags,
+        "sign": sign,
+    }
     assert load_token(serialized) == reading
 
 
@@ -163,7 +186,7 @@ def test_invalid_reading(name, sub_index):
         ("KU[R", 1, [], [], None, [], "KU[R"),
         ("K]UR", 1, [], [], None, [], "K]UR"),
         ("KUR", 0, [], [], None, [], "KUR₀"),
-        ("KUR", 1, [], [], "KUR", [], "KUR(KUR)"),
+        ("KUR", 1, [], [], Grapheme.of("KUR"), [], "KUR(KUR)"),
         (
             "KUR",
             1,
@@ -175,14 +198,23 @@ def test_invalid_reading(name, sub_index):
         ),
         ("KUR", 1, ["@v", "@180"], [], None, [], "KUR@v@180"),
         ("KUR", 1, [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, [], "KUR#!"),
-        ("KUR", 10, ["@v"], [atf.Flag.CORRECTION], "KUR", [], "KUR₁₀@v!(KUR)"),
+        (
+            "KUR",
+            10,
+            ["@v"],
+            [atf.Flag.CORRECTION],
+            Grapheme.of("KUR"),
+            [],
+            "KUR₁₀@v!(KUR)",
+        ),
     ],
 )
 def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_value):
     logogram = Logogram.of(name, sub_index, modifiers, flags, sign, surrogate)
 
+    expected_parts = f"⁝{sign.get_key('⁚')}" if sign else ""
     assert logogram.value == expected_value
-    assert logogram.get_key() == f"Logogram⁝{expected_value}"
+    assert logogram.get_key() == f"Logogram⁝{expected_value}{expected_parts}"
     assert logogram.modifiers == tuple(modifiers)
     assert logogram.flags == tuple(flags)
     assert logogram.lemmatizable is False
@@ -197,7 +229,7 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
         "surrogate": dump_tokens(surrogate),
-        "sign": sign,
+        "sign": sign and dump_token(sign),
     }
     assert dump_token(logogram) == serialized
     assert load_token(serialized) == logogram
@@ -216,18 +248,19 @@ def test_invalid_logogram(name, sub_index):
         ("1", [], [], None, "1"),
         ("1[4", [], [], None, "1[4"),
         ("1]0", [], [], None, "1]0"),
-        ("1", [], [], "KUR", "1(KUR)"),
+        ("1", [], [], Grapheme.of("KUR"), "1(KUR)"),
         ("1", ["@v", "@180"], [], None, "1@v@180"),
         ("1", [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "1#!"),
-        ("1", ["@v"], [atf.Flag.CORRECTION], "KUR", "1@v!(KUR)"),
+        ("1", ["@v"], [atf.Flag.CORRECTION], Grapheme.of("KUR"), "1@v!(KUR)"),
     ],
 )
 def test_number(name, modifiers, flags, sign, expected_value):
     number = Number.of(name, modifiers, flags, sign)
 
     expected_sub_index = 1
+    expected_parts = f"⁝{sign.get_key('⁚')}" if sign else ""
     assert number.value == expected_value
-    assert number.get_key() == f"Number⁝{expected_value}"
+    assert number.get_key() == f"Number⁝{expected_value}{expected_parts}"
     assert number.sub_index == expected_sub_index
     assert number.modifiers == tuple(modifiers)
     assert number.flags == tuple(flags)
@@ -241,7 +274,7 @@ def test_number(name, modifiers, flags, sign, expected_value):
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
-        "sign": sign,
+        "sign": sign and dump_token(sign),
     }
     assert dump_token(number) == serialized
     assert load_token(serialized) == number
@@ -252,3 +285,50 @@ def test_number(name, modifiers, flags, sign, expected_value):
 def test_invalid_number(name):
     with pytest.raises(ValueError):
         Number.of(name)
+
+
+def test_compound_grapheme():
+    value = "|BI.IS|"
+    compound = CompoundGrapheme(value)
+
+    assert compound.value == value
+    assert compound.get_key() == f"CompoundGrapheme⁝{value}"
+
+    serialized = {
+        "type": "CompoundGrapheme",
+        "value": value,
+    }
+    assert dump_token(compound) == serialized
+    assert load_token(serialized) == compound
+
+
+@pytest.mark.parametrize(
+    "name,modifiers,flags,expected_value",
+    [
+        ("KUR12₁", [], [], "KUR12₁"),
+        ("KU]R", [], [], "KU]R"),
+        ("K[UR", [], [], "K[UR"),
+        ("KUR", ["@v", "@180"], [], "KUR@v@180"),
+        ("KUR", [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], "KUR#!"),
+        ("KUR", ["@v"], [atf.Flag.CORRECTION], "KUR@v!"),
+    ],
+)
+def test_grapheme(name, modifiers, flags, expected_value):
+    grapheme = Grapheme.of(name, modifiers, flags)
+
+    assert grapheme.name == name
+    assert grapheme.value == expected_value
+    assert grapheme.get_key() == f"Grapheme⁝{expected_value}"
+    assert grapheme.modifiers == tuple(modifiers)
+    assert grapheme.flags == tuple(flags)
+    assert grapheme.lemmatizable is False
+
+    serialized = {
+        "type": "Grapheme",
+        "value": expected_value,
+        "name": name,
+        "modifiers": modifiers,
+        "flags": [flag.value for flag in flags],
+    }
+    assert dump_token(grapheme) == serialized
+    assert load_token(serialized) == grapheme

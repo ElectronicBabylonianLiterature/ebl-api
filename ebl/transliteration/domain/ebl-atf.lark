@@ -163,7 +163,7 @@ _value: unidentified_sign
       | number
       | logogram
       | surrogate
-      | COMPOUND_GRAPHEME
+      | compound_grapheme
       | VARIANT
 VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)+
 VARIANT_PART: UNKNOWN
@@ -174,9 +174,9 @@ VARIANT_PART: UNKNOWN
             | COMPOUND_GRAPHEME
             | NUMBER
 
-number: NUMBER modifiers flags ["(" ANY_GRAPHEME ")"]
-reading: VALUE_NAME sub_index modifiers flags ["(" ANY_GRAPHEME ")"]
-logogram: LOGOGRAM_NAME sub_index modifiers flags ["(" ANY_GRAPHEME ")"]
+number: NUMBER modifiers flags ["(" any_grapheme ")"]
+reading: VALUE_NAME sub_index modifiers flags ["(" any_grapheme ")"]
+logogram: LOGOGRAM_NAME sub_index modifiers flags ["(" any_grapheme ")"]
 surrogate: LOGOGRAM_NAME sub_index modifiers flags "<(" surrogate_text ")>"
 surrogate_text: reading (joiner reading)*
 sub_index: [SUB_INDEX_NUMBER]
@@ -196,23 +196,26 @@ VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h"
 LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
                    | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
                    | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
-SUB_INDEX: ("₀".."₉" | "ₓ")+
 
+?any_grapheme: compound_grapheme | grapheme
 ANY_GRAPHEME: COMPOUND_GRAPHEME | GRAPHEME
+compound_grapheme: COMPOUND_GRAPHEME
 COMPOUND_GRAPHEME: "|" SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)* "|"
 SUB_COMPOUND: "(" COMPOUND_PART (COMPOUND_OPERATOR COMPOUND_PART)* ")"
             | COMPOUND_PART
 COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
 COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+"
 
+grapheme: GRAPHEME_NAME modifiers flags
 GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
-GRAPHEME_NAME: GRAPHEME_CHARACTER (IN_VALUE_BROKEN_AWAY? GRAPHEME_CHARACTER)*
+GRAPHEME_NAME: GRAPHEME_CHARACTER (IN_VALUE_BROKEN_AWAY? GRAPHEME_CHARACTER)* SUB_INDEX?
 GRAPHEME_CHARACTER: "a".."z"
                   | "A".."Z"
                   | "Ṣ" | "Š" | "Ṭ"
                   | "ṣ" | "š" | "ṭ"
                   | "0".."9"
-                  | "₀".."₉"
+
+SUB_INDEX: ("₀".."₉" | "ₓ")+
 
 unidentified_sign: "X" flags
 unclear_sign: "x" flags

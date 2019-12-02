@@ -1,4 +1,4 @@
-from typing import Mapping, Sequence, Tuple, Type, List
+from typing import Mapping, Sequence, Tuple, Type, List, Optional, Union
 
 import pydash
 from marshmallow import Schema, fields, post_load, post_dump
@@ -22,6 +22,8 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
     Number,
+    CompoundGrapheme,
+    Grapheme,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -209,6 +211,15 @@ class InWordNewlineSchema(Schema):
         return InWordNewline()
 
 
+def _load_sign(sign: Optional[Union[str, dict]]) -> Optional[Token]:
+    if sign is None:
+        return sign
+    elif isinstance(sign, str):
+        return ValueToken(sign)
+    else:
+        return load_token(sign)
+
+
 class ReadingSchema(Schema):
     type = fields.Constant("Reading", required=True)
     value = fields.String(required=True)
@@ -216,7 +227,7 @@ class ReadingSchema(Schema):
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.String(missing=None)
+    sign = fields.Raw(missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -225,8 +236,15 @@ class ReadingSchema(Schema):
             1 if data["sub_index"] is None else data["sub_index"],
             data["modifiers"],
             data["flags"],
-            data["sign"],
+            _load_sign(data["sign"]),
         )
+
+    @post_dump
+    def dump_token(self, data, **kwargs):
+        return {
+            **data,
+            "sign": data["sign"] and dump_token(data["sign"]),
+        }
 
 
 class LogogramSchema(Schema):
@@ -236,7 +254,7 @@ class LogogramSchema(Schema):
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.String(missing=None)
+    sign = fields.Raw(missing=None)
     surrogate = fields.List(fields.Dict(), missing=[])
 
     @post_load
@@ -246,7 +264,7 @@ class LogogramSchema(Schema):
             1 if data["sub_index"] is None else data["sub_index"],
             data["modifiers"],
             data["flags"],
-            data["sign"],
+            _load_sign(data["sign"]),
             load_tokens(data["surrogate"]),
         )
 
@@ -255,6 +273,7 @@ class LogogramSchema(Schema):
         return {
             **data,
             "surrogate": dump_tokens(data["surrogate"]),
+            "sign": data["sign"] and dump_token(data["sign"]),
         }
 
 
@@ -266,7 +285,7 @@ class NumberSchema(Schema):
     sub_index = fields.Integer(data_key="subIndex", missing=1)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.String(missing=None)
+    sign = fields.Raw(missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -274,9 +293,16 @@ class NumberSchema(Schema):
             data["name"] or str(data["numeral"]),
             data["modifiers"],
             data["flags"],
-            data["sign"],
+            _load_sign(data["sign"]),
             data["sub_index"],
         )
+
+    @post_dump
+    def dump_token(self, data, **kwargs):
+        return {
+            **data,
+            "sign": data["sign"] and dump_token(data["sign"]),
+        }
 
 
 class WordSchema(Schema):
@@ -368,6 +394,27 @@ class VariantSchema(Schema):
         }
 
 
+class GraphemeSchema(Schema):
+    type = fields.Constant("Grapheme", required=True)
+    value = fields.String(required=True)
+    name = fields.String(required=True)
+    modifiers = fields.List(fields.String(), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Grapheme.of(data["name"], data["modifiers"], data["flags"])
+
+
+class CompoundGraphemeSchema(Schema):
+    type = fields.Constant("CompoundGrapheme", required=True)
+    value = fields.String(required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return CompoundGrapheme(data["value"])
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "Token": ValueTokenSchema,
     "ValueToken": ValueTokenSchema,
@@ -393,6 +440,8 @@ _schemas: Mapping[str, Type[Schema]] = {
     "Reading": ReadingSchema,
     "Logogram": LogogramSchema,
     "Number": NumberSchema,
+    "CompoundGrapheme": CompoundGraphemeSchema,
+    "Grapheme": GraphemeSchema,
 }
 
 

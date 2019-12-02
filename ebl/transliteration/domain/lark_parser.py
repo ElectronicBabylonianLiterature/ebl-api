@@ -25,6 +25,8 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
     Number,
+    CompoundGrapheme,
+    Grapheme,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -159,6 +161,14 @@ class TreeToWord(Transformer):
     @v_args(inline=True)
     def number(self, number, modifiers, flags, sign=None):
         return Number.of(number.value, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def grapheme(self, name, modifiers, flags):
+        return Grapheme.of(name.value, modifiers, flags)
+
+    @v_args(inline=True)
+    def compound_grapheme(self, name):
+        return CompoundGrapheme(name.value)
 
     @v_args(inline=True)
     def sub_index(self, sub_index=""):

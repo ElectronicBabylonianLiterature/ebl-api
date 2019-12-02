@@ -10,6 +10,8 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
     Number,
+    Grapheme,
+    CompoundGrapheme,
 )
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.word_tokens import (
@@ -33,9 +35,27 @@ from ebl.transliteration.domain.word_tokens import (
         ("ʾ", Word("ʾ", parts=[Reading.of("ʾ")])),
         ("du₁₁", Word("du₁₁", parts=[Reading.of("du", 11)])),
         ("GAL", Word("GAL", parts=[Logogram.of("GAL")])),
-        ("kur(GAL)", Word("kur(GAL)", parts=[Reading.of("kur", sign="GAL")])),
-        ("KUR(GAL)", Word("KUR(GAL)", parts=[Logogram.of("KUR", sign="GAL")])),
-        ("|GAL|", Word("|GAL|", parts=[ValueToken("|GAL|")])),
+        (
+            "kur(GAL)",
+            Word("kur(GAL)", parts=[Reading.of("kur", sign=Grapheme.of("GAL"))]),
+        ),
+        (
+            "KUR(GAL)",
+            Word("KUR(GAL)", parts=[Logogram.of("KUR", sign=Grapheme.of("GAL"))]),
+        ),
+        (
+            "kur(|GAL|)",
+            Word(
+                "kur(|GAL|)", parts=[Reading.of("kur", sign=CompoundGrapheme("|GAL|"))]
+            ),
+        ),
+        (
+            "KUR(|GAL|)",
+            Word(
+                "KUR(|GAL|)", parts=[Logogram.of("KUR", sign=CompoundGrapheme("|GAL|"))]
+            ),
+        ),
+        ("|GAL|", Word("|GAL|", parts=[CompoundGrapheme("|GAL|")])),
         (
             "x-ti",
             Word("x-ti", parts=[UnclearSign(), Joiner.hyphen(), Reading.of("ti"),],),
@@ -110,7 +130,7 @@ from ebl.transliteration.domain.word_tokens import (
             ),
         ),
         ("gid₂", Word("gid₂", parts=[Reading.of("gid", 2)])),
-        ("|U₄&KAM₂|", Word("|U₄&KAM₂|", parts=[ValueToken("|U₄&KAM₂|")])),
+        ("|U₄&KAM₂|", Word("|U₄&KAM₂|", parts=[CompoundGrapheme("|U₄&KAM₂|")])),
         (
             "U₄].14.KAM₂",
             Word(
@@ -746,7 +766,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "|UM×(ME.DA)|-b[i?",
                 parts=[
-                    ValueToken("|UM×(ME.DA)|"),
+                    CompoundGrapheme("|UM×(ME.DA)|"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("b[i", flags=[atf.Flag.UNCERTAIN]),
                 ],

@@ -6,7 +6,7 @@ import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import int_to_sub_index
-from ebl.transliteration.domain.tokens import Token, convert_token_sequence
+from ebl.transliteration.domain.tokens import Token, convert_token_sequence, ValueToken
 
 
 def convert_string_sequence(strings: Iterable[str]) -> Tuple[str, ...]:
@@ -101,7 +101,7 @@ class Divider(AbstractSign):
 class NamedSign(AbstractSign):
     name: str = attr.ib()
     sub_index: int = attr.ib()
-    sign: Optional[str]
+    sign: Optional[Token]
 
     @abstractmethod
     def _check_name(self, _attribute, value):
@@ -113,11 +113,18 @@ class NamedSign(AbstractSign):
             raise ValueError("Sub-index must be >= 0.")
 
     @property
+    def parts(self) -> Sequence[Token]:
+        if self.sign:
+            return (self.sign,)
+        else:
+            return tuple()
+
+    @property
     def value(self) -> str:
         sub_index = int_to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
-        sign = f"({self.sign})" if self.sign else ""
+        sign = f"({self.sign.value})" if self.sign else ""
         return f"{self.name}{sub_index}{modifiers}{flags}{sign}"
 
 
@@ -133,7 +140,7 @@ class Reading(NamedSign):
         sub_index: int = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
+        sign: Optional[Token] = None,
     ) -> "Reading":
         return Reading(modifiers, flags, name, sub_index, sign)
 
@@ -163,7 +170,7 @@ class Logogram(NamedSign):
         sub_index: int = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
+        sign: Optional[Token] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
         return Logogram(modifiers, flags, name, sub_index, sign, surrogate)
@@ -180,7 +187,31 @@ class Number(NamedSign):
         name: str,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
+        sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
         return Number(modifiers, flags, name, sub_index, sign)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Grapheme(AbstractSign):
+    name: str
+
+    @property
+    def value(self) -> str:
+        modifiers = "".join(self.modifiers)
+        flags = "".join(self.string_flags)
+        return f"{self.name}{modifiers}{flags}"
+
+    @staticmethod
+    def of(
+        name: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+    ) -> "Grapheme":
+        return Grapheme(modifiers, flags, name)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class CompoundGrapheme(ValueToken):
+    pass

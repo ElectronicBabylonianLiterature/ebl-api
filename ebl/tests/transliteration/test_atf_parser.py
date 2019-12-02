@@ -20,6 +20,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
     Number,
+    CompoundGrapheme,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -223,7 +224,10 @@ def test_parser_version(parser, version):
                 TextLine("2.", (Word("ku", parts=[Reading.of("ku")]),)),
             ],
         ),
-        ("1. |GAL|", [TextLine("1.", (Word("|GAL|", parts=[ValueToken("|GAL|")]),))],),
+        (
+            "1. |GAL|",
+            [TextLine("1.", (Word("|GAL|", parts=[CompoundGrapheme("|GAL|")]),))],
+        ),
         (
             "1. !qt !bs !cm !zz",
             [
