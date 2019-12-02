@@ -2,11 +2,7 @@ import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
-from ebl.transliteration.domain.enclosure_tokens import (
-    DocumentOrientedGloss,
-    Erasure,
-    Side,
-)
+from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
@@ -97,33 +93,6 @@ def test_language_shift(value, expected_language, normalized):
     assert shift != ValueToken(value)
 
 
-def test_document_oriented_gloss():
-    value = "{("
-    gloss = DocumentOrientedGloss(value)
-    equal = DocumentOrientedGloss(value)
-    other = DocumentOrientedGloss(")}")
-
-    assert gloss.value == value
-    assert gloss.get_key() == f"DocumentOrientedGloss⁝{value}"
-    assert gloss.side == Side.LEFT
-    assert gloss.lemmatizable is False
-
-    serialized = {
-        "type": "DocumentOrientedGloss",
-        "value": gloss.value,
-    }
-    assert dump_token(gloss) == serialized
-    assert load_token(serialized) == gloss
-
-    assert other.side == Side.RIGHT
-
-    assert gloss == equal
-    assert hash(gloss) == hash(equal)
-
-    assert gloss != other
-    assert hash(gloss) != hash(other)
-
-
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_unique_lemma_incompatible(token):
     lemma = LemmatizationToken("other-value")
@@ -169,24 +138,6 @@ def test_set_alignment_no_alignment(token):
 def test_merge(old, new):
     merged = old.merge(new)
     assert merged == new
-
-
-def test_erasure():
-    value = "°"
-    side = Side.LEFT
-    erasure = Erasure(value, side)
-
-    assert erasure.value == value
-    assert erasure.get_key() == f"Erasure⁝{value}"
-    assert erasure.lemmatizable is False
-
-    serialized = {
-        "type": "Erasure",
-        "value": erasure.value,
-        "side": side.name,
-    }
-    assert dump_token(erasure) == serialized
-    assert load_token(serialized) == erasure
 
 
 def test_unknown_number_of_signs():

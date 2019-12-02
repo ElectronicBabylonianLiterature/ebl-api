@@ -278,9 +278,9 @@ def test_merge(old: Text, new: Text, expected: Text) -> None:
                         language=Language.SUMERIAN,
                         partial=Partial(False, True),
                     ),
-                    Erasure("°", Side.LEFT),
-                    Erasure("\\", Side.CENTER),
-                    Erasure("°", Side.RIGHT),
+                    Erasure(Side.LEFT),
+                    Erasure(Side.CENTER),
+                    Erasure(Side.RIGHT),
                     LineContinuation("→"),
                 ],
             )

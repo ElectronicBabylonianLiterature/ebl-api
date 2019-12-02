@@ -136,11 +136,11 @@ class TreeToErasure(TreeToWord):
 
         [erased, over_erased] = tokens
         return [
-            Erasure("°", Side.LEFT),
+            Erasure(Side.LEFT),
             set_state(erased.children, ErasureState.ERASED),
-            Erasure("\\", Side.CENTER),
+            Erasure(Side.CENTER),
             set_state(over_erased.children, ErasureState.OVER_ERASED),
-            Erasure("°", Side.RIGHT),
+            Erasure(Side.RIGHT),
         ]
 
 

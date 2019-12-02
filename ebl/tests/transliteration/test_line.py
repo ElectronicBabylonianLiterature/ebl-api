@@ -170,39 +170,32 @@ def test_text_line_atf_gloss():
 @pytest.mark.parametrize(
     "erasure,expected",
     [
+        ([Erasure(Side.LEFT), Erasure(Side.CENTER), Erasure(Side.RIGHT),], "°\\°",),
         (
             [
-                Erasure("°", Side.LEFT),
-                Erasure("\\", Side.CENTER),
-                Erasure("°", Side.RIGHT),
-            ],
-            "°\\°",
-        ),
-        (
-            [
-                Erasure("°", Side.LEFT),
+                Erasure(Side.LEFT),
                 Word("mu-bu"),
-                Erasure("\\", Side.CENTER),
-                Erasure("°", Side.RIGHT),
+                Erasure(Side.CENTER),
+                Erasure(Side.RIGHT),
             ],
             "°mu-bu\\°",
         ),
         (
             [
-                Erasure("°", Side.LEFT),
-                Erasure("\\", Side.CENTER),
+                Erasure(Side.LEFT),
+                Erasure(Side.CENTER),
                 Word("mu-bu"),
-                Erasure("°", Side.RIGHT),
+                Erasure(Side.RIGHT),
             ],
             "°\\mu-bu°",
         ),
         (
             [
-                Erasure("°", Side.LEFT),
+                Erasure(Side.LEFT),
                 Word("mu-bu"),
-                Erasure("\\", Side.CENTER),
+                Erasure(Side.CENTER),
                 Word("mu-bu"),
-                Erasure("°", Side.RIGHT),
+                Erasure(Side.RIGHT),
             ],
             "°mu-bu\\mu-bu°",
         ),

@@ -2,7 +2,8 @@ from enum import Enum, auto
 
 import attr
 
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.tokens import ValueToken, Token
 
 
 class Side(Enum):
@@ -33,8 +34,16 @@ class PerhapsBrokenAway(ValueToken):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Erasure(ValueToken):
+class Erasure(Token):
     side: Side
+
+    @property
+    def value(self):
+        return {
+            Side.LEFT: atf.ERASURE_BOUNDARY,
+            Side.CENTER: atf.ERASURE_DELIMITER,
+            Side.RIGHT: atf.ERASURE_BOUNDARY,
+        }[self.side]
 
 
 @attr.s(frozen=True)

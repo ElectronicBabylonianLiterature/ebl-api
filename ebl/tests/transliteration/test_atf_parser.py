@@ -762,7 +762,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Erasure("°", Side.LEFT),
+                        Erasure(Side.LEFT),
                         Word(
                             "me-e-li",
                             erasure=ErasureState.ERASED,
@@ -774,13 +774,13 @@ def test_parser_version(parser, version):
                                 Reading.of("li"),
                             ],
                         ),
-                        Erasure("\\", Side.CENTER),
+                        Erasure(Side.CENTER),
                         Word(
                             "ku",
                             erasure=ErasureState.OVER_ERASED,
                             parts=[Reading.of("ku")],
                         ),
-                        Erasure("°", Side.RIGHT),
+                        Erasure(Side.RIGHT),
                     ),
                 ),
             ],

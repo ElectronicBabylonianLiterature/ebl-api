@@ -116,7 +116,7 @@ class ErasureSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Erasure(data["value"], data["side"])
+        return Erasure(data["side"])
 
 
 class UnknownNumberOfSignsSchema(Schema):
