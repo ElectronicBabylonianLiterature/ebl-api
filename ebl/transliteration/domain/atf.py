@@ -115,7 +115,6 @@ FLAGS: Mapping[str, str] = {
     "collation": pydash.escape_reg_exp(Flag.COLLATION.value),
     "damage": pydash.escape_reg_exp(Flag.DAMAGE.value),
     "correction": pydash.escape_reg_exp(Flag.CORRECTION.value),
-    "not_logogram": r"\$",
 }
 
 LACUNA: Mapping[str, str] = {
