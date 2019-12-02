@@ -47,6 +47,56 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
+class TreeToSign(Transformer):
+    @v_args(inline=True)
+    def unidentified_sign(self, flags):
+        return UnidentifiedSign(flags)
+
+    @v_args(inline=True)
+    def unclear_sign(self, flags):
+        return UnclearSign(flags)
+
+    @v_args(inline=True)
+    def unknown_number_of_signs(self, _):
+        return UnknownNumberOfSigns()
+
+    @v_args(inline=True)
+    def joiner(self, symbol):
+        return Joiner(atf.Joiner(str(symbol)))
+
+    @v_args(inline=True)
+    def in_word_newline(self, _):
+        return InWordNewline()
+
+    @v_args(inline=True)
+    def reading(self, name, sub_index, modifiers, flags, sign=None):
+        return Reading.of(name.value, sub_index, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def logogram(self, name, sub_index, modifiers, flags, sign=None):
+        return Logogram.of(name.value, sub_index, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def surrogate(self, name, sub_index, modifiers, flags, surrogate):
+        return Logogram.of(
+            name.value, sub_index, modifiers, flags, None, surrogate.children
+        )
+
+    @v_args(inline=True)
+    def number(self, number, modifiers, flags, sign=None):
+        return Number.of(number.value, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def sub_index(self, sub_index=""):
+        return sub_index_to_int(sub_index)
+
+    def modifiers(self, tokens):
+        return tuple(map(str, tokens))
+
+    def flags(self, tokens):
+        return tuple(map(atf.Flag, tokens))
+
+
 class TreeToWord(Transformer):
     def lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
