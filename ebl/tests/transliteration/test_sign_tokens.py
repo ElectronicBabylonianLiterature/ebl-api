@@ -129,7 +129,7 @@ def test_unclear_sign_with_flags():
 def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     reading = Reading.of(name, sub_index, modifiers, flags, sign)
 
-    expected_parts = f"⁝{sign.get_key('⁚')}" if sign else ""
+    expected_parts = f"⟨{sign.get_key()}⟩" if sign else ""
     assert reading.value == expected_value
     assert reading.get_key() == f"Reading⁝{expected_value}{expected_parts}"
     assert reading.modifiers == tuple(modifiers)
@@ -212,7 +212,7 @@ def test_invalid_reading(name, sub_index):
 def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_value):
     logogram = Logogram.of(name, sub_index, modifiers, flags, sign, surrogate)
 
-    expected_parts = f"⁝{sign.get_key('⁚')}" if sign else ""
+    expected_parts = f"⟨{sign.get_key()}⟩" if sign else ""
     assert logogram.value == expected_value
     assert logogram.get_key() == f"Logogram⁝{expected_value}{expected_parts}"
     assert logogram.modifiers == tuple(modifiers)
@@ -258,7 +258,7 @@ def test_number(name, modifiers, flags, sign, expected_value):
     number = Number.of(name, modifiers, flags, sign)
 
     expected_sub_index = 1
-    expected_parts = f"⁝{sign.get_key('⁚')}" if sign else ""
+    expected_parts = f"⟨{sign.get_key()}⟩" if sign else ""
     assert number.value == expected_value
     assert number.get_key() == f"Number⁝{expected_value}{expected_parts}"
     assert number.sub_index == expected_sub_index

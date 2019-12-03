@@ -79,12 +79,9 @@ def test_word(language, normalized, unique_lemma):
     other_unique_lemma = Word(value, language, normalized, tuple(WordId("waklu I")))
     other_normalized = Word("other value", language, not normalized, unique_lemma)
     other_erasure = Word(value, language, normalized, unique_lemma, ErasureState.ERASED)
-
+    expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
-    assert (
-        word.get_key()
-        == f'{"⁝".join(["Word", value] + [part.get_key("⁚") for part in parts])}'
-    )
+    assert word.get_key() == f"Word⁝{value}{expected_parts}"
     assert word.parts == tuple(parts)
     assert word.language == language
     assert word.normalized is normalized

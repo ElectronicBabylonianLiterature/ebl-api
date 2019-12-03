@@ -30,9 +30,11 @@ class Token(ABC):
     def parts(self) -> Sequence["Token"]:
         return tuple()
 
-    def get_key(self, delimiter: str = "⁝") -> str:
-        parts = [part.get_key("⁚") for part in self.parts]
-        return delimiter.join([type(self).__name__, self.value] + parts)
+    def get_key(self) -> str:
+        parts = (
+            f"⟨{'⁚'.join(part.get_key() for part in self.parts)}⟩" if self.parts else ""
+        )
+        return f"{type(self).__name__}⁝{self.value}{parts}"
 
     def set_unique_lemma(self, lemma: LemmatizationToken) -> "Token":
         if lemma.unique_lemma is None and lemma.value == self.value:
