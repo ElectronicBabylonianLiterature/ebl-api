@@ -13,7 +13,12 @@ from ebl.transliteration.domain.sign_tokens import (
     Grapheme,
     CompoundGrapheme,
 )
-from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    UnknownNumberOfSigns,
+    ValueToken,
+    Variant,
+)
 from ebl.transliteration.domain.word_tokens import (
     InWordNewline,
     LoneDeterminative,
@@ -219,7 +224,21 @@ from ebl.transliteration.domain.word_tokens import (
                 ],
             ),
         ),
-        ("šu/|BI×IS|", Word("šu/|BI×IS|", parts=[ValueToken("šu/|BI×IS|")])),
+        (
+            "šu/|BI×IS|/BI",
+            Word(
+                "šu/|BI×IS|/BI",
+                parts=[
+                    Variant(
+                        (
+                            Reading.of("šu"),
+                            CompoundGrapheme("|BI×IS|"),
+                            Logogram.of("BI"),
+                        )
+                    )
+                ],
+            ),
+        ),
         (
             "{kur}aš+šur",
             Word(
@@ -257,13 +276,13 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Logogram.of("U", 4),
                     Joiner.dot(),
-                    ValueToken("27/29"),
+                    Variant((Number.of("27"), Number.of("29"))),
                     Joiner.dot(),
                     Logogram.of("KAM"),
                 ],
             ),
         ),
-        ("x/m[a", Word("x/m[a", parts=[ValueToken("x/m[a")])),
+        ("x/m[a", Word("x/m[a", parts=[Variant((UnclearSign(), Reading.of("m[a")))])),
         (
             "SAL.{+mu-ru-ub}",
             Word(

@@ -59,13 +59,13 @@ perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
 
 _NEW_LINE: /\n/
 
-divider_variant: (variant_part | divider) "/" (variant_part | divider)
-variant_part: unidentified_sign
-            | unclear_sign
-            | reading
-            | logogram
-            | number
-            | COMPOUND_GRAPHEME
+divider_variant: (divider_variant_part | divider) _VARIANT_SEPARATOR (divider_variant_part | divider)
+divider_variant_part: unidentified_sign
+                    | unclear_sign
+                    | reading
+                    | logogram
+                    | number
+                    | compound_grapheme
 
 tabulation: TABULATION
 TABULATION: "($___$)"
@@ -164,15 +164,16 @@ _value: unidentified_sign
       | logogram
       | surrogate
       | compound_grapheme
-      | VARIANT
-VARIANT: VARIANT_PART (VARIANT_SEPARATOR VARIANT_PART)+
-VARIANT_PART: UNKNOWN
-            | READING_WITH_SIGN
-            | READING
-            | LOGOGRAM
-            | SURROGATE
-            | COMPOUND_GRAPHEME
-            | NUMBER
+      | variant
+variant: variant_part (_VARIANT_SEPARATOR variant_part)+
+?variant_part: unidentified_sign
+             | unclear_sign
+             | reading
+             | logogram
+             | surrogate
+             | number
+             | compound_grapheme
+
 
 number: NUMBER modifiers flags ["(" any_grapheme ")"]
 reading: VALUE_NAME sub_index modifiers flags ["(" any_grapheme ")"]
@@ -223,6 +224,7 @@ UNKNOWN: ("X" | "x") FLAG
 
 IN_VALUE_BROKEN_AWAY: "[" | "]"
 
+_VARIANT_SEPARATOR: VARIANT_SEPARATOR
 VARIANT_SEPARATOR: "/"
 
 flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*

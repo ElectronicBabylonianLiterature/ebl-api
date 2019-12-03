@@ -98,8 +98,16 @@ class TreeToSign(Transformer):
     def flags(self, tokens):
         return tuple(map(atf.Flag, tokens))
 
+    @v_args(inline=True)
+    def grapheme(self, name, modifiers, flags):
+        return Grapheme.of(name.value, modifiers, flags)
 
-class TreeToWord(Transformer):
+    @v_args(inline=True)
+    def compound_grapheme(self, name):
+        return CompoundGrapheme(name.value)
+
+
+class TreeToWord(TreeToSign):
     def lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
 
@@ -144,41 +152,20 @@ class TreeToWord(Transformer):
     def in_word_newline(self, _):
         return InWordNewline()
 
-    @v_args(inline=True)
-    def reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(name.value, sub_index, modifiers, flags, sign)
-
-    @v_args(inline=True)
-    def logogram(self, name, sub_index, modifiers, flags, sign=None):
-        return Logogram.of(name.value, sub_index, modifiers, flags, sign)
-
-    @v_args(inline=True)
-    def surrogate(self, name, sub_index, modifiers, flags, surrogate):
-        return Logogram.of(
-            name.value, sub_index, modifiers, flags, None, surrogate.children
+    def variant(self, children):
+        tokens = (
+            pydash.chain(children)
+            .flat_map_deep(
+                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
+            )
+            .map_(
+                lambda token: (
+                    ValueToken(str(token)) if isinstance(token, Token) else token
+                )
+            )
+            .value()
         )
-
-    @v_args(inline=True)
-    def number(self, number, modifiers, flags, sign=None):
-        return Number.of(number.value, modifiers, flags, sign)
-
-    @v_args(inline=True)
-    def grapheme(self, name, modifiers, flags):
-        return Grapheme.of(name.value, modifiers, flags)
-
-    @v_args(inline=True)
-    def compound_grapheme(self, name):
-        return CompoundGrapheme(name.value)
-
-    @v_args(inline=True)
-    def sub_index(self, sub_index=""):
-        return sub_index_to_int(sub_index)
-
-    def modifiers(self, tokens):
-        return tuple(map(str, tokens))
-
-    def flags(self, tokens):
-        return tuple(map(atf.Flag, tokens))
+        return Variant(tuple(tokens))
 
 
 class TreeToErasure(TreeToWord):
@@ -309,7 +296,7 @@ class TreeToLine(TreeToErasure):
             ValueToken(str(second)) if isinstance(second, Token) else second,
         )
 
-    def variant_part(self, tokens):
+    def divider_variant_part(self, tokens):
         return self._create_word(Word, tokens)
 
 

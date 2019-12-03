@@ -16,6 +16,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
     Number,
+    CompoundGrapheme,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -165,7 +166,17 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 ),
             ),
-            TextLine("7'.", (Word("šu/|BI×IS|", parts=[ValueToken("šu/|BI×IS|")]),)),
+            TextLine(
+                "7'.",
+                (
+                    Word(
+                        "šu/|BI×IS|",
+                        parts=[
+                            Variant((Reading.of("šu"), CompoundGrapheme("|BI×IS|")))
+                        ],
+                    ),
+                ),
+            ),
         )
     )
     signs = (
@@ -299,6 +310,16 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     ),
                 ),
             ),
-            TextLine("7'.", (Word("šu/|BI×IS|", parts=[ValueToken("šu/|BI×IS|")]),)),
+            TextLine(
+                "7'.",
+                (
+                    Word(
+                        "šu/|BI×IS|",
+                        parts=[
+                            Variant((Reading.of("šu"), CompoundGrapheme("|BI×IS|")))
+                        ],
+                    ),
+                ),
+            ),
         )
     )
