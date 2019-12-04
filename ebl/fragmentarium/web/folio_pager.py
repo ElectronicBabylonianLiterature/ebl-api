@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.fragmentarium.application.folio_pager_schema import FolioPagerInfoSchema
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.users.web.require_scope import require_scope
 
@@ -42,6 +43,7 @@ class FolioPagerResource:
                 """
 
         if req.context.user.can_read_folio(folio_name):
-            resp.media = self._finder.folio_pager(folio_name, folio_number, number)
+            folio = self._finder.folio_pager(folio_name, folio_number, number)
+            resp.media = FolioPagerInfoSchema().dump(folio)
         else:
             raise falcon.HTTPForbidden()
