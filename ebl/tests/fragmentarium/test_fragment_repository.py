@@ -126,10 +126,8 @@ FRAGMENTS = ["1841-07-26, 54", "1841-07-26, 57", "1841-07-26, 63"]
 def test_query_next_and_previous_fragment(
     query, existing, expected, fragment_repository
 ):
-    fragments = [FragmentFactory.build(number=x) for x in existing]
-
-    for fragment in fragments:
-        fragment_repository.create(fragment)
+    for fragmentNumber in existing:
+        fragment_repository.create(FragmentFactory.build(number=fragmentNumber))
 
     results = list(fragment_repository.query_next_and_previous_fragment(query).values())
     assert results == expected
@@ -138,7 +136,7 @@ def test_query_next_and_previous_fragment(
 def test_query_next_and_previous_fragment_exception(fragment_repository):
     query = "1841-07-26, 57"
     with pytest.raises(NotFoundError):
-        list(fragment_repository.query_next_and_previous_fragment(query).values())
+        fragment_repository.query_next_and_previous_fragment(query)
 
 
 def test_update_transliteration_with_record(fragment_repository, user):

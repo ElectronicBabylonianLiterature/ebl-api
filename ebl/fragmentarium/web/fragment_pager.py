@@ -1,4 +1,4 @@
-import falcon
+import falcon, json
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.users.web.require_scope import require_scope
@@ -33,4 +33,4 @@ class FragmentPagerResource:
                     type: string
                 """
 
-        resp.media = self._finder.fragment_pager(number)
+        resp.media = json.dump(self._finder.fragment_pager(number))

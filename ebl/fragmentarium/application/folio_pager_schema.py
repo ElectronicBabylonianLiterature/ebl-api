@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
 
-class FolioPagerInfo(Schema):
+class FolioPagerInfoSchema(Schema):
     previous = fields.String(required=True)
     next = fields.String(required=True)

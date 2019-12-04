@@ -21,11 +21,8 @@ from ebl.mongo_collection import MongoCollection
 COLLECTION = "fragments"
 
 
-def helper_validate_query(my_dict: Dict) -> bool:
-    if not all(my_dict.values()):
-        return False
-    else:
-        return True
+def has_none_values(dictionary: dict) -> bool:
+    return not all(dictionary.values())
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -150,10 +147,10 @@ class MongoFragmentRepository(FragmentRepository):
             "next": get_numbers(next_) or get_numbers(first),
         }
 
-        if helper_validate_query(result):
-            return result
-        else:
+        if has_none_values(result):
             raise NotFoundError("Could not retrieve any fragments")
+        else:
+            return result
 
     def query_next_and_previous_fragment(self, number: FragmentNumber):
         next_ = (
@@ -176,10 +173,10 @@ class MongoFragmentRepository(FragmentRepository):
             "previous": get_numbers(previous) or get_numbers(last),
             "next": get_numbers(next_) or get_numbers(first),
         }
-        if helper_validate_query(result):
-            return result
-        else:
+        if has_none_values(result):
             raise NotFoundError("Could not retrieve any fragments")
+        else:
+            return result
 
     def query_lemmas(self, word):
         cursor = self._collection.aggregate(aggregate_lemmas(word))
