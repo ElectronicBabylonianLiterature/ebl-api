@@ -69,6 +69,17 @@ def test_folio_pager(fragment_finder, fragment_repository, when):
     assert fragment_finder.folio_pager(folio_name, folio_number, number) == expected
 
 
+def test_fragment_finder(fragment_finder, fragment_repository, when):
+    fragment_number = "1"
+    expected = {"previous": "0", "next": "2"}
+    (
+        when(fragment_repository)
+        .query_next_and_previous_fragment(fragment_number)
+        .thenReturn(expected)
+    )
+    assert fragment_finder.fragment_pager(fragment_number) == expected
+
+
 def test_search(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
     query = fragment.number

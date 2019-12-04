@@ -68,6 +68,9 @@ class FragmentFinder:
             folio_name, folio_number, number
         )
 
+    def fragment_pager(self, number: FragmentNumber) -> dict:
+        return self._repository.query_next_and_previous_fragment(number)
+
     def find_lemmas(self, word: str) -> List[List[dict]]:
         return [
             [self._dictionary.find(unique_lemma) for unique_lemma in result]

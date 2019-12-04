@@ -105,6 +105,40 @@ def test_find_interesting(fragment_repository):
     ) == [interesting_fragment]
 
 
+def test_folio_pager_exception(fragment_repository):
+    query = "1841-07-26, 57"
+    with pytest.raises(NotFoundError):
+        fragment_repository.query_next_and_previous_fragment(query)
+
+
+FRAGMENTS = ["1841-07-26, 54", "1841-07-26, 57", "1841-07-26, 63"]
+
+
+@pytest.mark.parametrize(
+    "query,  existing,expected",
+    [
+        ("1841-07-26, 57", FRAGMENTS, ["1841-07-26, 54", "1841-07-26, 63"]),
+        ("1841-07-26, 63", FRAGMENTS, ["1841-07-26, 57", "1841-07-26, 54"]),
+        ("1841-07-26, 54", FRAGMENTS, ["1841-07-26, 63", "1841-07-26, 57"]),
+        ("1841-07-26, 54", FRAGMENTS[:2], ["1841-07-26, 57", "1841-07-26, 57"]),
+    ],
+)
+def test_query_next_and_previous_fragment(
+    query, existing, expected, fragment_repository
+):
+    for fragmentNumber in existing:
+        fragment_repository.create(FragmentFactory.build(number=fragmentNumber))
+
+    results = list(fragment_repository.query_next_and_previous_fragment(query).values())
+    assert results == expected
+
+
+def test_query_next_and_previous_fragment_exception(fragment_repository):
+    query = "1841-07-26, 57"
+    with pytest.raises(NotFoundError):
+        fragment_repository.query_next_and_previous_fragment(query)
+
+
 def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)

@@ -1,9 +1,10 @@
 from marshmallow import EXCLUDE
-
 from ebl.dictionary.domain.word import WordId
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_interesting,
@@ -17,6 +18,10 @@ from ebl.fragmentarium.infrastructure.queries import (
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "fragments"
+
+
+def has_none_values(dictionary: dict) -> bool:
+    return not all(dictionary.values())
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -136,10 +141,41 @@ class MongoFragmentRepository(FragmentRepository):
         )
         last = create_pipeline(sort_descending)
 
-        return {
+        result = {
             "previous": get_numbers(previous) or get_numbers(last),
             "next": get_numbers(next_) or get_numbers(first),
         }
+
+        if has_none_values(result):
+            raise NotFoundError("Could not retrieve any fragments")
+        else:
+            return result
+
+    def query_next_and_previous_fragment(self, number: FragmentNumber):
+        next_ = (
+            self._collection.find_many({"_id": {"$gt": f"{number}"}})
+            .sort("_id", 1)
+            .limit(1)
+        )
+        previous = (
+            self._collection.find_many({"_id": {"$lt": f"{number}"}})
+            .sort("_id", -1)
+            .limit(1)
+        )
+
+        def get_numbers(cursor):
+            return next(cursor)["_id"] if cursor.alive else None
+
+        first = self._collection.find_many({}).sort("_id", 1).limit(1)
+        last = self._collection.find_many({}).sort("_id", -1).limit(1)
+        result = {
+            "previous": get_numbers(previous) or get_numbers(last),
+            "next": get_numbers(next_) or get_numbers(first),
+        }
+        if has_none_values(result):
+            raise NotFoundError("Could not retrieve any fragments")
+        else:
+            return result
 
     def query_lemmas(self, word):
         cursor = self._collection.aggregate(aggregate_lemmas(word))
