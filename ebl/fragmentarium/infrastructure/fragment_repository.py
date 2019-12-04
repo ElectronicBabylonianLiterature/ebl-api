@@ -168,10 +168,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
         def get_numbers(cursor):
-            if cursor.alive:
-                return next(cursor)["_id"]
-            else:
-                return None
+            return next(cursor)["_id"] if cursor.alive else None
 
         first = self._collection.find_many({}).sort("_id", 1).limit(1)
         last = self._collection.find_many({}).sort("_id", -1).limit(1)
