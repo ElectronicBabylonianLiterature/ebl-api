@@ -6,6 +6,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     DocumentOrientedGloss,
     Determinative,
+    PhoneticGloss,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.token_schemas import dump_tokens
@@ -75,3 +76,22 @@ def test_determinative():
         "parts": dump_tokens(parts),
     }
     assert_token_serialization(determinative, serialized)
+
+
+def test_phonetic_gloss():
+    parts = [Reading.of("kur"), Joiner.hyphen(), Reading.of("kur")]
+    gloss = PhoneticGloss(parts)
+
+    expected_value = f"{{+{''.join(part.value for part in parts)}}}"
+    expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
+    assert gloss.value == expected_value
+    assert gloss.get_key() == f"PhoneticGloss⁝{expected_value}{expected_parts}"
+    assert gloss.parts == tuple(parts)
+    assert gloss.lemmatizable is False
+
+    serialized = {
+        "type": "PhoneticGloss",
+        "value": gloss.value,
+        "parts": dump_tokens(parts),
+    }
+    assert_token_serialization(gloss, serialized)

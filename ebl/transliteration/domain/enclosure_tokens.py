@@ -66,3 +66,17 @@ class Determinative(Token):
     def value(self) -> str:
         parts = "".join(token.value for token in self.parts)
         return f"{{{parts}}}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class PhoneticGloss(Token):
+    _parts: Sequence[Token] = attr.ib(converter=convert_token_sequence)
+
+    @property
+    def parts(self) -> Sequence["Token"]:
+        return self._parts
+
+    @property
+    def value(self) -> str:
+        parts = "".join(token.value for token in self.parts)
+        return f"{{+{parts}}}"

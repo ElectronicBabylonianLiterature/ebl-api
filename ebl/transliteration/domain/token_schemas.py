@@ -14,6 +14,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
     Side,
     Determinative,
+    PhoneticGloss,
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
@@ -433,6 +434,23 @@ class DeterminativeSchema(Schema):
         }
 
 
+class PhoneticGlossSchema(Schema):
+    type = fields.Constant("PhoneticGloss", required=True)
+    value = fields.String()
+    parts = fields.List(fields.Dict(), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return PhoneticGloss(load_tokens(data["parts"]))
+
+    @post_dump
+    def dump_token(self, data, **kwargs):
+        return {
+            **data,
+            "parts": dump_tokens(data["parts"]),
+        }
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "Token": ValueTokenSchema,
     "ValueToken": ValueTokenSchema,
@@ -461,6 +479,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "CompoundGrapheme": CompoundGraphemeSchema,
     "Grapheme": GraphemeSchema,
     "Determinative": DeterminativeSchema,
+    "PhoneticGloss": PhoneticGlossSchema,
 }
 
 
