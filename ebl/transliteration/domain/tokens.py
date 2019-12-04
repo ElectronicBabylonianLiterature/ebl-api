@@ -12,6 +12,16 @@ from ebl.transliteration.domain.lemmatization import (
 )
 
 
+class TokenVisitor(ABC):
+    @abstractmethod
+    def visit(self, token: "Token") -> None:
+        ...
+
+
+def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
+    return tuple(tokens)
+
+
 class Token(ABC):
     @property
     @abstractmethod
@@ -129,16 +139,6 @@ class Variant(Token):
 @attr.s(frozen=True)
 class LineContinuation(ValueToken):
     pass
-
-
-class TokenVisitor(ABC):
-    @abstractmethod
-    def visit(self, token: Token) -> None:
-        ...
-
-
-def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
-    return tuple(tokens)
 
 
 @attr.s(auto_attribs=True, frozen=True)

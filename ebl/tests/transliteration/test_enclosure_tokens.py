@@ -4,8 +4,11 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Side,
     Erasure,
     DocumentOrientedGloss,
+    Determinative,
 )
-from ebl.transliteration.domain.token_schemas import dump_token, load_token
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
+from ebl.transliteration.domain.tokens import Joiner
 
 
 @pytest.mark.parametrize(
@@ -54,3 +57,23 @@ def test_document_oriented_gloss(side):
 
     assert gloss != other
     assert hash(gloss) != hash(other)
+
+
+def test_determinative():
+    parts = [Reading.of("kur"), Joiner.hyphen(), Reading.of("kur")]
+    determinative = Determinative(parts)
+
+    expected_value = f"{{{''.join(part.value for part in parts)}}}"
+    expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
+    assert determinative.value == expected_value
+    assert determinative.get_key() == f"Determinative⁝{expected_value}{expected_parts}"
+    assert determinative.parts == tuple(parts)
+    assert determinative.lemmatizable is False
+
+    serialized = {
+        "type": "Determinative",
+        "value": determinative.value,
+        "parts": dump_tokens(parts),
+    }
+    assert dump_token(determinative) == serialized
+    assert load_token(serialized) == determinative

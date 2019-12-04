@@ -13,6 +13,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     OmissionOrRemoval,
     PerhapsBrokenAway,
     Side,
+    Determinative,
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
@@ -415,6 +416,23 @@ class CompoundGraphemeSchema(Schema):
         return CompoundGrapheme(data["value"])
 
 
+class DeterminativeSchema(Schema):
+    type = fields.Constant("Determinative", required=True)
+    value = fields.String()
+    parts = fields.List(fields.Dict(), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Determinative(load_tokens(data["parts"]))
+
+    @post_dump
+    def dump_token(self, data, **kwargs):
+        return {
+            **data,
+            "parts": dump_tokens(data["parts"]),
+        }
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "Token": ValueTokenSchema,
     "ValueToken": ValueTokenSchema,
@@ -442,6 +460,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "Number": NumberSchema,
     "CompoundGrapheme": CompoundGraphemeSchema,
     "Grapheme": GraphemeSchema,
+    "Determinative": DeterminativeSchema,
 }
 
 
