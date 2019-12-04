@@ -1,5 +1,6 @@
 import pytest
 
+from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.domain.enclosure_tokens import (
     Side,
     Erasure,
@@ -7,7 +8,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
+from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import Joiner
 
 
@@ -26,8 +27,7 @@ def test_erasure(side, value):
         "value": erasure.value,
         "side": side.name,
     }
-    assert dump_token(erasure) == serialized
-    assert load_token(serialized) == erasure
+    assert_token_serialization(erasure, serialized)
 
 
 @pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT])
@@ -49,8 +49,7 @@ def test_document_oriented_gloss(side):
         "type": "DocumentOrientedGloss",
         "value": gloss.value,
     }
-    assert dump_token(gloss) == serialized
-    assert load_token(serialized) == gloss
+    assert_token_serialization(gloss, serialized)
 
     assert gloss == equal
     assert hash(gloss) == hash(equal)
@@ -75,5 +74,4 @@ def test_determinative():
         "value": determinative.value,
         "parts": dump_tokens(parts),
     }
-    assert dump_token(determinative) == serialized
-    assert load_token(serialized) == determinative
+    assert_token_serialization(determinative, serialized)

@@ -1,8 +1,9 @@
 import pytest
 
+from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
+from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
@@ -64,8 +65,7 @@ def test_lone_determinative(language, normalized, partial):
         "erasure": ErasureState.NONE.name,
         "parts": dump_tokens(parts),
     }
-    assert dump_token(lone_determinative) == serialized
-    assert load_token(serialized) == lone_determinative
+    assert_token_serialization(lone_determinative, serialized)
 
     assert lone_determinative == equal
     assert hash(lone_determinative) == hash(equal)

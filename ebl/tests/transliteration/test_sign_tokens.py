@@ -13,6 +13,7 @@ from ebl.transliteration.domain.sign_tokens import (
 )
 from ebl.transliteration.domain.token_schemas import dump_token, dump_tokens, load_token
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.tests.asserts import assert_token_serialization
 
 
 def test_divider():
@@ -33,8 +34,7 @@ def test_divider():
         "modifiers": list(modifiers),
         "flags": ["?"],
     }
-    assert dump_token(divider) == serialized
-    assert load_token(serialized) == divider
+    assert_token_serialization(divider, serialized)
 
 
 def test_unidentified_sign():
@@ -51,8 +51,7 @@ def test_unidentified_sign():
         "value": expected_value,
         "flags": [],
     }
-    assert dump_token(sign) == serialized
-    assert load_token(serialized) == sign
+    assert_token_serialization(sign, serialized)
 
 
 def test_unidentified_sign_with_flags():
@@ -70,8 +69,7 @@ def test_unidentified_sign_with_flags():
         "value": expected_value,
         "flags": ["#"],
     }
-    assert dump_token(sign) == serialized
-    assert load_token(serialized) == sign
+    assert_token_serialization(sign, serialized)
 
 
 def test_unclear_sign():
@@ -88,8 +86,7 @@ def test_unclear_sign():
         "value": expected_value,
         "flags": [],
     }
-    assert dump_token(sign) == serialized
-    assert load_token(serialized) == sign
+    assert_token_serialization(sign, serialized)
 
 
 def test_unclear_sign_with_flags():
@@ -107,8 +104,7 @@ def test_unclear_sign_with_flags():
         "value": expected_value,
         "flags": ["!"],
     }
-    assert dump_token(sign) == serialized
-    assert load_token(serialized) == sign
+    assert_token_serialization(sign, serialized)
 
 
 @pytest.mark.parametrize(
@@ -146,8 +142,7 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
         "flags": [flag.value for flag in flags],
         "sign": sign and dump_token(sign),
     }
-    assert dump_token(reading) == serialized
-    assert load_token(serialized) == reading
+    assert_token_serialization(reading, serialized)
 
 
 def test_load_old_style_reading():
@@ -231,8 +226,7 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
         "surrogate": dump_tokens(surrogate),
         "sign": sign and dump_token(sign),
     }
-    assert dump_token(logogram) == serialized
-    assert load_token(serialized) == logogram
+    assert_token_serialization(logogram, serialized)
 
 
 @pytest.mark.parametrize("name,sub_index", [("KUR", -1), ("kur", 1)])
@@ -276,8 +270,7 @@ def test_number(name, modifiers, flags, sign, expected_value):
         "flags": [flag.value for flag in flags],
         "sign": sign and dump_token(sign),
     }
-    assert dump_token(number) == serialized
-    assert load_token(serialized) == number
+    assert_token_serialization(number, serialized)
 
 
 @pytest.mark.parametrize("name", ["-1", "kur", "KUR"])
@@ -298,8 +291,7 @@ def test_compound_grapheme():
         "type": "CompoundGrapheme",
         "value": value,
     }
-    assert dump_token(compound) == serialized
-    assert load_token(serialized) == compound
+    assert_token_serialization(compound, serialized)
 
 
 @pytest.mark.parametrize(
@@ -330,5 +322,4 @@ def test_grapheme(name, modifiers, flags, expected_value):
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
     }
-    assert dump_token(grapheme) == serialized
-    assert load_token(serialized) == grapheme
+    assert_token_serialization(grapheme, serialized)

@@ -1,6 +1,7 @@
 import pytest
 
 import ebl.transliteration.domain.atf as atf
+from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
 from ebl.transliteration.domain.language import Language
@@ -9,7 +10,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
-from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
+from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
@@ -44,8 +45,7 @@ def test_value_token():
     assert token.lemmatizable is False
 
     serialized = {"type": "Token", "value": token.value}
-    assert dump_token(token) == serialized
-    assert load_token(serialized) == token
+    assert_token_serialization(token, serialized)
 
     assert token == equal
     assert hash(token) == hash(equal)
@@ -81,8 +81,7 @@ def test_language_shift(value, expected_language, normalized):
         "normalized": normalized,
         "language": shift.language.name,
     }
-    assert dump_token(shift) == serialized
-    assert load_token(serialized) == shift
+    assert_token_serialization(shift, serialized)
 
     assert shift == equal
     assert hash(shift) == hash(equal)
@@ -152,8 +151,7 @@ def test_unknown_number_of_signs():
         "type": "UnknownNumberOfSigns",
         "value": expected_value,
     }
-    assert dump_token(unknown_number_of_signs) == serialized
-    assert load_token(serialized) == unknown_number_of_signs
+    assert_token_serialization(unknown_number_of_signs, serialized)
 
 
 def test_tabulation():
@@ -165,8 +163,7 @@ def test_tabulation():
     assert tabulation.lemmatizable is False
 
     serialized = {"type": "Tabulation", "value": value}
-    assert dump_token(tabulation) == serialized
-    assert load_token(serialized) == tabulation
+    assert_token_serialization(tabulation, serialized)
 
 
 @pytest.mark.parametrize("protocol_enum", atf.CommentaryProtocol)
@@ -180,8 +177,7 @@ def test_commentary_protocol(protocol_enum):
     assert protocol.protocol == protocol_enum
 
     serialized = {"type": "CommentaryProtocol", "value": value}
-    assert dump_token(protocol) == serialized
-    assert load_token(serialized) == protocol
+    assert_token_serialization(protocol, serialized)
 
 
 def test_column():
@@ -197,8 +193,7 @@ def test_column():
         "value": expected_value,
         "number": None,
     }
-    assert dump_token(column) == serialized
-    assert load_token(serialized) == column
+    assert_token_serialization(column, serialized)
 
 
 def test_column_with_number():
@@ -214,8 +209,7 @@ def test_column_with_number():
         "value": expected_value,
         "number": 1,
     }
-    assert dump_token(column) == serialized
-    assert load_token(serialized) == column
+    assert_token_serialization(column, serialized)
 
 
 def test_invalid_column():
@@ -238,8 +232,7 @@ def test_variant():
         "value": expected_value,
         "tokens": dump_tokens([reading, divider]),
     }
-    assert dump_token(variant) == serialized
-    assert load_token(serialized) == variant
+    assert_token_serialization(variant, serialized)
 
 
 @pytest.mark.parametrize(
@@ -260,8 +253,7 @@ def test_joiner(joiner, expected_value):
         "type": "Joiner",
         "value": expected_value,
     }
-    assert dump_token(joiner) == serialized
-    assert load_token(serialized) == joiner
+    assert_token_serialization(joiner, serialized)
 
 
 def test_in_word_new_line():
@@ -276,8 +268,7 @@ def test_in_word_new_line():
         "type": "InWordNewline",
         "value": expected_value,
     }
-    assert dump_token(newline) == serialized
-    assert load_token(serialized) == newline
+    assert_token_serialization(newline, serialized)
 
 
 def test_line_continuation():
@@ -292,5 +283,4 @@ def test_line_continuation():
         "type": "LineContinuation",
         "value": continuation.value,
     }
-    assert dump_token(continuation) == serialized
-    assert load_token(serialized) == continuation
+    assert_token_serialization(continuation, serialized)
