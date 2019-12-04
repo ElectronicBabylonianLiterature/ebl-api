@@ -33,4 +33,4 @@ class FragmentPagerResource:
                     type: string
                 """
 
-        resp.media = json.dump(self._finder.fragment_pager(number))
+        resp.media = self._finder.fragment_pager(number)
