@@ -9,6 +9,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
@@ -78,17 +79,15 @@ def test_word(language, normalized, unique_lemma):
     other_unique_lemma = Word(value, language, normalized, tuple(WordId("waklu I")))
     other_normalized = Word("other value", language, not normalized, unique_lemma)
     other_erasure = Word(value, language, normalized, unique_lemma, ErasureState.ERASED)
-
+    expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
-    assert (
-        word.get_key()
-        == f'{"⁝".join(["Word", value] + [part.get_key("⁚") for part in parts])}'
-    )
+    assert word.get_key() == f"Word⁝{value}{expected_parts}"
     assert word.parts == tuple(parts)
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
-    assert word.to_dict() == {
+
+    serialized = {
         "type": "Word",
         "value": word.value,
         "uniqueLemma": [*unique_lemma],
@@ -96,8 +95,10 @@ def test_word(language, normalized, unique_lemma):
         "language": word.language.name,
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
-        "parts": [part.to_dict() for part in parts],
+        "parts": dump_tokens(parts),
     }
+    assert dump_token(word) == serialized
+    assert load_token(serialized) == word
 
     assert word == equal
     assert hash(word) == hash(equal)

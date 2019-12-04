@@ -11,6 +11,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
@@ -63,7 +64,7 @@ class Line:
     def to_dict(self) -> dict:
         return {
             "prefix": self.prefix,
-            "content": [token.to_dict() for token in self.content],
+            "content": dump_tokens(self.content),
         }
 
     def merge(self, other: "Line") -> "Line":

@@ -5,15 +5,22 @@ from lark.exceptions import UnexpectedInput
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import (
-    Number,
+    Logogram,
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Number,
+    Grapheme,
+    CompoundGrapheme,
 )
-from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    UnknownNumberOfSigns,
+    ValueToken,
+    Variant,
+)
 from ebl.transliteration.domain.word_tokens import (
     InWordNewline,
-    Joiner,
     LoneDeterminative,
     Word,
 )
@@ -27,48 +34,53 @@ from ebl.transliteration.domain.word_tokens import (
         ("X", Word("X", parts=[UnidentifiedSign()])),
         ("x?", Word("x?", parts=[UnclearSign([atf.Flag.UNCERTAIN])])),
         ("X#", Word("X#", parts=[UnidentifiedSign([atf.Flag.DAMAGE])])),
-        ("12", Word("12", parts=[Number.of(12)])),
+        ("12", Word("12", parts=[Number.of("12")])),
+        ("1]2", Word("1]2", parts=[Number.of("1]2")])),
+        ("1[2", Word("1[2", parts=[Number.of("1[2")])),
+        ("ʾ", Word("ʾ", parts=[Reading.of("ʾ")])),
         ("du₁₁", Word("du₁₁", parts=[Reading.of("du", 11)])),
-        ("GAL", Word("GAL", parts=[ValueToken("GAL")])),
-        ("kur(GAL)", Word("kur(GAL)", parts=[Reading.of("kur", sign="GAL")])),
-        ("|GAL|", Word("|GAL|", parts=[ValueToken("|GAL|")])),
+        ("GAL", Word("GAL", parts=[Logogram.of("GAL")])),
+        (
+            "kur(GAL)",
+            Word("kur(GAL)", parts=[Reading.of("kur", sign=Grapheme.of("GAL"))]),
+        ),
+        (
+            "KUR(GAL)",
+            Word("KUR(GAL)", parts=[Logogram.of("KUR", sign=Grapheme.of("GAL"))]),
+        ),
+        (
+            "kur(|GAL|)",
+            Word(
+                "kur(|GAL|)", parts=[Reading.of("kur", sign=CompoundGrapheme("|GAL|"))]
+            ),
+        ),
+        (
+            "KUR(|GAL|)",
+            Word(
+                "KUR(|GAL|)", parts=[Logogram.of("KUR", sign=CompoundGrapheme("|GAL|"))]
+            ),
+        ),
+        ("|GAL|", Word("|GAL|", parts=[CompoundGrapheme("|GAL|")])),
         (
             "x-ti",
-            Word(
-                "x-ti",
-                parts=[UnclearSign(), Joiner(atf.Joiner.HYPHEN), Reading.of("ti"),],
-            ),
+            Word("x-ti", parts=[UnclearSign(), Joiner.hyphen(), Reading.of("ti"),],),
         ),
         (
             "x.ti",
-            Word(
-                "x.ti",
-                parts=[UnclearSign(), Joiner(atf.Joiner.DOT), Reading.of("ti"),],
-            ),
+            Word("x.ti", parts=[UnclearSign(), Joiner.dot(), Reading.of("ti"),],),
         ),
         (
             "x+ti",
-            Word(
-                "x+ti",
-                parts=[UnclearSign(), Joiner(atf.Joiner.PLUS), Reading.of("ti"),],
-            ),
+            Word("x+ti", parts=[UnclearSign(), Joiner.plus(), Reading.of("ti"),],),
         ),
         (
             "x:ti",
-            Word(
-                "x:ti",
-                parts=[UnclearSign(), Joiner(atf.Joiner.COLON), Reading.of("ti"),],
-            ),
+            Word("x:ti", parts=[UnclearSign(), Joiner.colon(), Reading.of("ti"),],),
         ),
         (
             "ti-X",
             Word(
-                "ti-X",
-                parts=[
-                    Reading.of("ti"),
-                    Joiner(atf.Joiner.HYPHEN),
-                    UnidentifiedSign(),
-                ],
+                "ti-X", parts=[Reading.of("ti"), Joiner.hyphen(), UnidentifiedSign(),],
             ),
         ),
         (
@@ -77,9 +89,9 @@ from ebl.transliteration.domain.word_tokens import (
                 "r]u-u₂-qu",
                 parts=[
                     Reading.of("r]u"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("u", 2),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("qu"),
                 ],
             ),
@@ -90,9 +102,9 @@ from ebl.transliteration.domain.word_tokens import (
                 "ru?-u₂-qu",
                 parts=[
                     Reading.of("ru", flags=[atf.Flag.UNCERTAIN]),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("u", 2),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("qu"),
                 ],
             ),
@@ -103,9 +115,9 @@ from ebl.transliteration.domain.word_tokens import (
                 "na-a[n-",
                 parts=[
                     Reading.of("na"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("a[n"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                 ],
             ),
         ),
@@ -114,27 +126,27 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "-ku]-nu",
                 parts=[
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ku"),
                     ValueToken("]"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("nu"),
                 ],
             ),
         ),
         ("gid₂", Word("gid₂", parts=[Reading.of("gid", 2)])),
-        ("|U₄&KAM₂|", Word("|U₄&KAM₂|", parts=[ValueToken("|U₄&KAM₂|")])),
+        ("|U₄&KAM₂|", Word("|U₄&KAM₂|", parts=[CompoundGrapheme("|U₄&KAM₂|")])),
         (
             "U₄].14.KAM₂",
             Word(
                 "U₄].14.KAM₂",
                 parts=[
-                    ValueToken("U₄"),
+                    Logogram.of("U", 4),
                     ValueToken("]"),
-                    Joiner(atf.Joiner.DOT),
-                    Number.of(14),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("KAM₂"),
+                    Joiner.dot(),
+                    Number.of("14"),
+                    Joiner.dot(),
+                    Logogram.of("KAM", 2),
                 ],
             ),
         ),
@@ -208,11 +220,25 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("iti"),
                     ValueToken("}"),
                     ValueToken("]"),
-                    ValueToken("ŠE"),
+                    Logogram.of("ŠE"),
                 ],
             ),
         ),
-        ("šu/|BI×IS|", Word("šu/|BI×IS|", parts=[ValueToken("šu/|BI×IS|")])),
+        (
+            "šu/|BI×IS|/BI",
+            Word(
+                "šu/|BI×IS|/BI",
+                parts=[
+                    Variant(
+                        (
+                            Reading.of("šu"),
+                            CompoundGrapheme("|BI×IS|"),
+                            Logogram.of("BI"),
+                        )
+                    )
+                ],
+            ),
+        ),
         (
             "{kur}aš+šur",
             Word(
@@ -222,7 +248,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("kur"),
                     ValueToken("}"),
                     Reading.of("aš"),
-                    Joiner(atf.Joiner.PLUS),
+                    Joiner.plus(),
                     Reading.of("šur"),
                 ],
             ),
@@ -233,11 +259,11 @@ from ebl.transliteration.domain.word_tokens import (
                 "i-le-ʾe-[e",
                 parts=[
                     Reading.of("i"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("le"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ʾe"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     ValueToken("["),
                     Reading.of("e"),
                 ],
@@ -248,27 +274,27 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "U₄.27/29.KAM",
                 parts=[
-                    ValueToken("U₄"),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("27/29"),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("KAM"),
+                    Logogram.of("U", 4),
+                    Joiner.dot(),
+                    Variant((Number.of("27"), Number.of("29"))),
+                    Joiner.dot(),
+                    Logogram.of("KAM"),
                 ],
             ),
         ),
-        ("x/m[a", Word("x/m[a", parts=[ValueToken("x/m[a")])),
+        ("x/m[a", Word("x/m[a", parts=[Variant((UnclearSign(), Reading.of("m[a")))])),
         (
             "SAL.{+mu-ru-ub}",
             Word(
                 "SAL.{+mu-ru-ub}",
                 parts=[
-                    ValueToken("SAL"),
-                    Joiner(atf.Joiner.DOT),
+                    Logogram.of("SAL"),
+                    Joiner.dot(),
                     ValueToken("{+"),
                     Reading.of("mu"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ru"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ub"),
                     ValueToken("}"),
                 ],
@@ -281,13 +307,13 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     ValueToken("{+"),
                     Reading.of("mu"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ru"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ub"),
                     ValueToken("}"),
                     ValueToken("["),
-                    ValueToken("LA"),
+                    Logogram.of("LA"),
                 ],
             ),
         ),
@@ -296,8 +322,8 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "I.{d}",
                 parts=[
-                    ValueToken("I"),
-                    Joiner(atf.Joiner.DOT),
+                    Logogram.of("I"),
+                    Joiner.dot(),
                     ValueToken("{"),
                     Reading.of("d"),
                     ValueToken("}"),
@@ -313,7 +339,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("d"),
                     ValueToken("}"),
                     ValueToken("["),
-                    ValueToken("UTU?"),
+                    Logogram.of("UTU", flags=[atf.Flag.UNCERTAIN]),
                 ],
             ),
         ),
@@ -321,20 +347,12 @@ from ebl.transliteration.domain.word_tokens import (
             ".x.KAM",
             Word(
                 ".x.KAM",
-                parts=[
-                    Joiner(atf.Joiner.DOT),
-                    UnclearSign(),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("KAM"),
-                ],
+                parts=[Joiner.dot(), UnclearSign(), Joiner.dot(), Logogram.of("KAM"),],
             ),
         ),
         (
             "3.AM₃",
-            Word(
-                "3.AM₃",
-                parts=[Number.of(3), Joiner(atf.Joiner.DOT), ValueToken("AM₃"),],
-            ),
+            Word("3.AM₃", parts=[Number.of("3"), Joiner.dot(), Logogram.of("AM", 3),],),
         ),
         (
             "<{10}>bu",
@@ -343,7 +361,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     ValueToken("<"),
                     ValueToken("{"),
-                    Number.of(10),
+                    Number.of("10"),
                     ValueToken("}"),
                     ValueToken(">"),
                     Reading.of("bu"),
@@ -355,12 +373,12 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "KA₂?].DINGIR.RA[{ki?}",
                 parts=[
-                    ValueToken("KA₂?"),
+                    Logogram.of("KA", 2, flags=[atf.Flag.UNCERTAIN]),
                     ValueToken("]"),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("DINGIR"),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("RA"),
+                    Joiner.dot(),
+                    Logogram.of("DINGIR"),
+                    Joiner.dot(),
+                    Logogram.of("RA"),
                     ValueToken("["),
                     ValueToken("{"),
                     Reading.of("ki", flags=[atf.Flag.UNCERTAIN]),
@@ -377,9 +395,9 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("d", flags=[atf.Flag.UNCERTAIN]),
                     ValueToken("}"),
                     Reading.of("nu", flags=[atf.Flag.UNCERTAIN]),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("di]m", 2, flags=[atf.Flag.UNCERTAIN]),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("mu[d", flags=[atf.Flag.UNCERTAIN]),
                 ],
             ),
@@ -387,7 +405,12 @@ from ebl.transliteration.domain.word_tokens import (
         (
             "<GAR?>",
             Word(
-                "<GAR?>", parts=[ValueToken("<"), ValueToken("GAR?"), ValueToken(">")],
+                "<GAR?>",
+                parts=[
+                    ValueToken("<"),
+                    Logogram.of("GAR", flags=[atf.Flag.UNCERTAIN]),
+                    ValueToken(">"),
+                ],
             ),
         ),
         ("lu₂@v", Word("lu₂@v", parts=[Reading.of("lu", 2, modifiers=["@v"])]),),
@@ -399,12 +422,12 @@ from ebl.transliteration.domain.word_tokens import (
                     ValueToken("{"),
                     Reading.of("lu", 2, modifiers=["@v"]),
                     ValueToken("}"),
-                    ValueToken("UM"),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("ME"),
-                    Joiner(atf.Joiner.DOT),
+                    Logogram.of("UM"),
+                    Joiner.dot(),
+                    Logogram.of("ME"),
+                    Joiner.dot(),
                     ValueToken("["),
-                    ValueToken("A"),
+                    Logogram.of("A"),
                 ],
             ),
         ),
@@ -417,26 +440,72 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("lu", 2, modifiers=["@v"]),
                     ValueToken("}"),
                     ValueToken("]"),
-                    ValueToken("KAB"),
-                    Joiner(atf.Joiner.DOT),
-                    ValueToken("SAR"),
-                    Joiner(atf.Joiner.HYPHEN),
-                    ValueToken("M[EŠ"),
+                    Logogram.of("KAB"),
+                    Joiner.dot(),
+                    Logogram.of("SAR"),
+                    Joiner.hyphen(),
+                    Logogram.of("M[EŠ"),
                 ],
             ),
         ),
         (
             "MIN<(ta-ne₂-hi)>",
-            Word("MIN<(ta-ne₂-hi)>", parts=[ValueToken("MIN<(ta-ne₂-hi)>")]),
+            Word(
+                "MIN<(ta-ne₂-hi)>",
+                parts=[
+                    Logogram.of(
+                        "MIN",
+                        surrogate=[
+                            Reading.of("ta"),
+                            Joiner.hyphen(),
+                            Reading.of("ne", 2),
+                            Joiner.hyphen(),
+                            Reading.of("hi"),
+                        ],
+                    )
+                ],
+            ),
         ),
-        ("UN#", Word("UN#", parts=[ValueToken("UN#")])),
+        (
+            "MIN<(mu-u₂)>",
+            Word(
+                "MIN<(mu-u₂)>",
+                parts=[
+                    Logogram.of(
+                        "MIN",
+                        surrogate=[
+                            Reading.of("mu"),
+                            Joiner.hyphen(),
+                            Reading.of("u", 2),
+                        ],
+                    )
+                ],
+            ),
+        ),
+        (
+            "KIMIN<(mu-u₂)>",
+            Word(
+                "KIMIN<(mu-u₂)>",
+                parts=[
+                    Logogram.of(
+                        "KIMIN",
+                        surrogate=[
+                            Reading.of("mu"),
+                            Joiner.hyphen(),
+                            Reading.of("u", 2),
+                        ],
+                    )
+                ],
+            ),
+        ),
+        ("UN#", Word("UN#", parts=[Logogram.of("UN", flags=[atf.Flag.DAMAGE])])),
         (
             "he₂-<(pa₃)>",
             Word(
                 "he₂-<(pa₃)>",
                 parts=[
                     Reading.of("he", 2),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     ValueToken("<("),
                     Reading.of("pa", 3),
                     ValueToken(")>"),
@@ -452,16 +521,13 @@ from ebl.transliteration.domain.word_tokens import (
                     ValueToken("["),
                     Reading.of("i]ti"),
                     ValueToken("}"),
-                    ValueToken("AB"),
+                    Logogram.of("AB"),
                 ],
             ),
         ),
         (
             "in]-",
-            Word(
-                "in]-",
-                parts=[Reading.of("in"), ValueToken("]"), Joiner(atf.Joiner.HYPHEN),],
-            ),
+            Word("in]-", parts=[Reading.of("in"), ValueToken("]"), Joiner.hyphen(),],),
         ),
         (
             "<en-da-ab>",
@@ -470,9 +536,9 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     ValueToken("<"),
                     Reading.of("en"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("da"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ab"),
                     ValueToken(">"),
                 ],
@@ -484,11 +550,11 @@ from ebl.transliteration.domain.word_tokens import (
                 "me-e-li-°\\ku°",
                 parts=[
                     Reading.of("me"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("e"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("li"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     ValueToken("°"),
                     ValueToken("\\"),
                     Reading.of("ku"),
@@ -503,13 +569,13 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     ValueToken("°"),
                     Reading.of("me"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("e"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("li"),
                     ValueToken("\\"),
                     ValueToken("°"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ku"),
                 ],
             ),
@@ -640,22 +706,14 @@ from ebl.transliteration.domain.word_tokens import (
             "....ku",
             Word(
                 "....ku",
-                parts=[
-                    UnknownNumberOfSigns(),
-                    Joiner(atf.Joiner.DOT),
-                    Reading.of("ku"),
-                ],
+                parts=[UnknownNumberOfSigns(), Joiner.dot(), Reading.of("ku"),],
             ),
         ),
         (
             "ku....",
             Word(
                 "ku....",
-                parts=[
-                    Reading.of("ku"),
-                    Joiner(atf.Joiner.DOT),
-                    UnknownNumberOfSigns(),
-                ],
+                parts=[Reading.of("ku"), Joiner.dot(), UnknownNumberOfSigns(),],
             ),
         ),
         (
@@ -679,7 +737,7 @@ from ebl.transliteration.domain.word_tokens import (
                     ValueToken("{"),
                     Reading.of("d"),
                     ValueToken("}"),
-                    ValueToken("UTU"),
+                    Logogram.of("UTU"),
                 ],
             ),
         ),
@@ -695,7 +753,7 @@ from ebl.transliteration.domain.word_tokens import (
                     ValueToken("{"),
                     Reading.of("d"),
                     ValueToken("}"),
-                    ValueToken("AG"),
+                    Logogram.of("AG"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("sa"),
                     Joiner(atf.Joiner.HYPHEN),
@@ -727,7 +785,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "|UM×(ME.DA)|-b[i?",
                 parts=[
-                    ValueToken("|UM×(ME.DA)|"),
+                    CompoundGrapheme("|UM×(ME.DA)|"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("b[i", flags=[atf.Flag.UNCERTAIN]),
                 ],
@@ -764,7 +822,7 @@ def test_word(parser, atf, expected):
                 parts=[
                     ValueToken("<"),
                     ValueToken("{"),
-                    Number.of(10),
+                    Number.of("10"),
                     ValueToken("}"),
                     ValueToken(">"),
                 ],
@@ -842,8 +900,12 @@ def test_invalid_lone_determinative(parser, atf):
 
 @pytest.mark.parametrize("parser", [parse_word])
 @pytest.mark.parametrize(
-    "atf",
+    "invalid_atf",
     [
+        "Kur" "ku(r",
+        "K)UR",
+        "K[(UR",
+        "ku)]r",
         "sal/: šim",
         "<GAR>?",
         "KA₂]?.DINGIR.RA[{ki?}",
@@ -851,10 +913,11 @@ def test_invalid_lone_determinative(parser, atf):
         "k[a]?",
         ":-sal",
         "gam/:" "//sal",
-        "Š[A₃?...]" "0",
+        "Š[A₃?...]",
+        "0",
         "01",
     ],
 )
-def test_invalid(parser, atf):
+def test_invalid(parser, invalid_atf):
     with pytest.raises((UnexpectedInput, ParseError)):
-        parser(atf)
+        parser(invalid_atf)

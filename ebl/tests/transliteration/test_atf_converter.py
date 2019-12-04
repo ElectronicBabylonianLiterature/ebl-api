@@ -26,7 +26,7 @@ def test_convert_atf_to_values(atf_converter):
         "#note\n"
         "=: foo\n"
         "1. ku X x\n"
-        "2. $AN |BI×IS|\n"
+        "2. AN |BI×IS|\n"
         "3. nuₓ"
     )
     assert atf_converter.convert_atf_to_values(atf) == [

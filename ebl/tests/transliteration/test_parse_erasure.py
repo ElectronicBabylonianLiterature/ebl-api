@@ -9,9 +9,9 @@ from ebl.transliteration.domain.sign_tokens import (
 )
 from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
-ERASURE_LEFT = Erasure("°", Side.LEFT)
-ERASURE_CENTER = Erasure("\\", Side.CENTER)
-ERASURE_RIGHT = Erasure("°", Side.RIGHT)
+ERASURE_LEFT = Erasure(Side.LEFT)
+ERASURE_CENTER = Erasure(Side.CENTER)
+ERASURE_RIGHT = Erasure(Side.RIGHT)
 
 
 @pytest.mark.parametrize("parser", [parse_erasure])

@@ -2,20 +2,18 @@ import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
-from ebl.transliteration.domain.enclosure_tokens import (
-    DocumentOrientedGloss,
-    Erasure,
-    Side,
-)
+from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.sign_tokens import Divider
+from ebl.transliteration.domain.sign_tokens import Divider, Reading
+from ebl.transliteration.domain.token_schemas import dump_token, load_token, dump_tokens
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    Joiner,
     LanguageShift,
     LineContinuation,
     Tabulation,
@@ -26,8 +24,6 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     InWordNewline,
-    Joiner,
-    Word,
 )
 
 TOKENS = [
@@ -46,7 +42,10 @@ def test_value_token():
     assert token.value == value
     assert token.get_key() == f"ValueToken⁝{value}"
     assert token.lemmatizable is False
-    assert token.to_dict() == {"type": "Token", "value": token.value}
+
+    serialized = {"type": "Token", "value": token.value}
+    assert dump_token(token) == serialized
+    assert load_token(serialized) == token
 
     assert token == equal
     assert hash(token) == hash(equal)
@@ -75,12 +74,15 @@ def test_language_shift(value, expected_language, normalized):
     assert shift.lemmatizable is False
     assert shift.normalized == normalized
     assert shift.language == expected_language
-    assert shift.to_dict() == {
+
+    serialized = {
         "type": "LanguageShift",
         "value": shift.value,
         "normalized": normalized,
         "language": shift.language.name,
     }
+    assert dump_token(shift) == serialized
+    assert load_token(serialized) == shift
 
     assert shift == equal
     assert hash(shift) == hash(equal)
@@ -89,30 +91,6 @@ def test_language_shift(value, expected_language, normalized):
     assert hash(shift) != hash(other)
 
     assert shift != ValueToken(value)
-
-
-def test_document_oriented_gloss():
-    value = "{("
-    gloss = DocumentOrientedGloss(value)
-    equal = DocumentOrientedGloss(value)
-    other = DocumentOrientedGloss(")}")
-
-    assert gloss.value == value
-    assert gloss.get_key() == f"DocumentOrientedGloss⁝{value}"
-    assert gloss.side == Side.LEFT
-    assert gloss.lemmatizable is False
-    assert gloss.to_dict() == {
-        "type": "DocumentOrientedGloss",
-        "value": gloss.value,
-    }
-
-    assert other.side == Side.RIGHT
-
-    assert gloss == equal
-    assert hash(gloss) == hash(equal)
-
-    assert gloss != other
-    assert hash(gloss) != hash(other)
 
 
 @pytest.mark.parametrize("token", TOKENS)
@@ -162,21 +140,6 @@ def test_merge(old, new):
     assert merged == new
 
 
-def test_erasure():
-    value = "°"
-    side = Side.LEFT
-    erasure = Erasure(value, side)
-
-    assert erasure.value == value
-    assert erasure.get_key() == f"Erasure⁝{value}"
-    assert erasure.lemmatizable is False
-    assert erasure.to_dict() == {
-        "type": "Erasure",
-        "value": erasure.value,
-        "side": side.name,
-    }
-
-
 def test_unknown_number_of_signs():
     unknown_number_of_signs = UnknownNumberOfSigns()
 
@@ -184,10 +147,13 @@ def test_unknown_number_of_signs():
     assert unknown_number_of_signs.value == expected_value
     assert unknown_number_of_signs.get_key() == f"UnknownNumberOfSigns⁝{expected_value}"
     assert unknown_number_of_signs.lemmatizable is False
-    assert unknown_number_of_signs.to_dict() == {
+
+    serialized = {
         "type": "UnknownNumberOfSigns",
         "value": expected_value,
     }
+    assert dump_token(unknown_number_of_signs) == serialized
+    assert load_token(serialized) == unknown_number_of_signs
 
 
 def test_tabulation():
@@ -197,7 +163,10 @@ def test_tabulation():
     assert tabulation.value == value
     assert tabulation.get_key() == f"Tabulation⁝{value}"
     assert tabulation.lemmatizable is False
-    assert tabulation.to_dict() == {"type": "Tabulation", "value": value}
+
+    serialized = {"type": "Tabulation", "value": value}
+    assert dump_token(tabulation) == serialized
+    assert load_token(serialized) == tabulation
 
 
 @pytest.mark.parametrize("protocol_enum", atf.CommentaryProtocol)
@@ -209,7 +178,10 @@ def test_commentary_protocol(protocol_enum):
     assert protocol.get_key() == f"CommentaryProtocol⁝{value}"
     assert protocol.lemmatizable is False
     assert protocol.protocol == protocol_enum
-    assert protocol.to_dict() == {"type": "CommentaryProtocol", "value": value}
+
+    serialized = {"type": "CommentaryProtocol", "value": value}
+    assert dump_token(protocol) == serialized
+    assert load_token(serialized) == protocol
 
 
 def test_column():
@@ -219,11 +191,14 @@ def test_column():
     assert column.value == expected_value
     assert column.get_key() == f"Column⁝{expected_value}"
     assert column.lemmatizable is False
-    assert column.to_dict() == {
+
+    serialized = {
         "type": "Column",
         "value": expected_value,
         "number": None,
     }
+    assert dump_token(column) == serialized
+    assert load_token(serialized) == column
 
 
 def test_column_with_number():
@@ -233,11 +208,14 @@ def test_column_with_number():
     assert column.value == expected_value
     assert column.get_key() == f"Column⁝{expected_value}"
     assert column.lemmatizable is False
-    assert column.to_dict() == {
+
+    serialized = {
         "type": "Column",
         "value": expected_value,
         "number": 1,
     }
+    assert dump_token(column) == serialized
+    assert load_token(serialized) == column
 
 
 def test_invalid_column():
@@ -246,32 +224,44 @@ def test_invalid_column():
 
 
 def test_variant():
-    word = Word("sal")
-    divider = Divider(":")
-    variant = Variant.of(word, divider)
+    reading = Reading.of("sal")
+    divider = Divider.of(":")
+    variant = Variant.of(reading, divider)
 
     expected_value = "sal/:"
     assert variant.value == expected_value
     assert variant.get_key() == f"Variant⁝{expected_value}"
     assert variant.lemmatizable is False
-    assert variant.to_dict() == {
+
+    serialized = {
         "type": "Variant",
         "value": expected_value,
-        "tokens": [word.to_dict(), divider.to_dict()],
+        "tokens": dump_tokens([reading, divider]),
     }
+    assert dump_token(variant) == serialized
+    assert load_token(serialized) == variant
 
 
-def test_joiner():
-    joiner = Joiner(atf.Joiner.DOT)
-
-    expected_value = "."
+@pytest.mark.parametrize(
+    "joiner,expected_value",
+    [
+        (Joiner.dot(), "."),
+        (Joiner.hyphen(), "-"),
+        (Joiner.colon(), ":"),
+        (Joiner.plus(), "+"),
+    ],
+)
+def test_joiner(joiner, expected_value):
     assert joiner.value == expected_value
     assert joiner.get_key() == f"Joiner⁝{expected_value}"
     assert joiner.lemmatizable is False
-    assert joiner.to_dict() == {
+
+    serialized = {
         "type": "Joiner",
         "value": expected_value,
     }
+    assert dump_token(joiner) == serialized
+    assert load_token(serialized) == joiner
 
 
 def test_in_word_new_line():
@@ -281,10 +271,13 @@ def test_in_word_new_line():
     assert newline.value == expected_value
     assert newline.get_key() == f"InWordNewline⁝{expected_value}"
     assert newline.lemmatizable is False
-    assert newline.to_dict() == {
+
+    serialized = {
         "type": "InWordNewline",
         "value": expected_value,
     }
+    assert dump_token(newline) == serialized
+    assert load_token(serialized) == newline
 
 
 def test_line_continuation():
@@ -294,7 +287,10 @@ def test_line_continuation():
     assert continuation.value == value
     assert continuation.get_key() == f"LineContinuation⁝{value}"
     assert continuation.lemmatizable is False
-    assert continuation.to_dict() == {
+
+    serialized = {
         "type": "LineContinuation",
         "value": continuation.value,
     }
+    assert dump_token(continuation) == serialized
+    assert load_token(serialized) == continuation

@@ -1,3 +1,4 @@
+import re
 from abc import abstractmethod
 from typing import Iterable, Optional, Sequence, Tuple
 
@@ -5,7 +6,7 @@ import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import int_to_sub_index
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, convert_token_sequence, ValueToken
 
 
 def convert_string_sequence(strings: Iterable[str]) -> Tuple[str, ...]:
@@ -17,7 +18,7 @@ def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class AbstractSign(Token):
+class UnknownSign(Token):
     flags: Sequence[atf.Flag] = attr.ib(
         default=tuple(), converter=convert_flag_sequence
     )
@@ -40,16 +41,9 @@ class AbstractSign(Token):
     def value(self) -> str:
         return f'{self._sign}{"".join(self.string_flags)}'
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": self._type,
-            "flags": list(self.string_flags),
-        }
-
 
 @attr.s(auto_attribs=True, frozen=True)
-class UnidentifiedSign(AbstractSign):
+class UnidentifiedSign(UnknownSign):
     @property
     def _sign(self) -> str:
         return atf.UNIDENTIFIED_SIGN
@@ -60,7 +54,7 @@ class UnidentifiedSign(AbstractSign):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class UnclearSign(AbstractSign):
+class UnclearSign(UnknownSign):
     @property
     def _sign(self) -> str:
         return atf.UNCLEAR_SIGN
@@ -70,11 +64,19 @@ class UnclearSign(AbstractSign):
         return "UnclearSign"
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class AbstractSign(Token):
+    modifiers: Sequence[str] = attr.ib(converter=convert_string_sequence)
+    flags: Sequence[atf.Flag] = attr.ib(converter=convert_flag_sequence)
+
+    @property
+    def string_flags(self) -> Sequence[str]:
+        return [flag.value for flag in self.flags]
+
+
 @attr.s(frozen=True, auto_attribs=True)
-class Divider(Token):
+class Divider(AbstractSign):
     divider: str
-    modifiers: Tuple[str, ...] = tuple()
-    flags: Tuple[atf.Flag, ...] = tuple()
 
     @property
     def value(self) -> str:
@@ -86,74 +88,51 @@ class Divider(Token):
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "Divider",
-            "divider": self.divider,
-            "modifiers": list(self.modifiers),
-            "flags": self.string_flags,
-        }
+    @staticmethod
+    def of(
+        divider: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+    ):
+        return Divider(modifiers, flags, divider)
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class AbstractReading(Token):
-    modifiers: Sequence[str] = attr.ib(converter=convert_string_sequence)
-    flags: Sequence[atf.Flag] = attr.ib(converter=convert_flag_sequence)
-    sign: Optional[str]
+class NamedSign(AbstractSign):
+    name: str = attr.ib()
+    sub_index: int = attr.ib()
+    sign: Optional[Token]
 
-    @property
     @abstractmethod
-    def name(self) -> str:
+    def _check_name(self, _attribute, value):
         ...
 
-    @property
-    @abstractmethod
-    def sub_index(self) -> int:
-        ...
+    @sub_index.validator
+    def _check_sub_index(self, _attribute, value):
+        if value < 0:
+            raise ValueError("Sub-index must be >= 0.")
 
     @property
-    def string_flags(self) -> Sequence[str]:
-        return [flag.value for flag in self.flags]
+    def parts(self) -> Sequence[Token]:
+        if self.sign:
+            return (self.sign,)
+        else:
+            return tuple()
 
     @property
     def value(self) -> str:
         sub_index = int_to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
-        sign = f"({self.sign})" if self.sign else ""
+        sign = f"({self.sign.value})" if self.sign else ""
         return f"{self.name}{sub_index}{modifiers}{flags}{sign}"
-
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "subIndex": self.sub_index,
-            "modifiers": list(self.modifiers),
-            "flags": list(self.string_flags),
-            "sign": self.sign,
-        }
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Reading(AbstractReading):
-    _name: str
-    _sub_index: int = attr.ib()
-
-    @_sub_index.validator
-    def _check_sub_index(self, _attribute, value):
-        if value < 0:
-            raise ValueError("Sub-index must be >= 0.")
-
-    @property
-    def sub_index(self) -> int:
-        return self._sub_index
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Reading", "name": self._name}
+class Reading(NamedSign):
+    def _check_name(self, _attribute, value):
+        if not value.islower() and value != "ʾ":
+            raise ValueError("Readings must be lowercase.")
 
     @staticmethod
     def of(
@@ -161,36 +140,78 @@ class Reading(AbstractReading):
         sub_index: int = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
+        sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(modifiers, flags, sign, name, sub_index)
+        return Reading(modifiers, flags, name, sub_index, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Number(AbstractReading):
-    numeral: int = attr.ib()
-
-    @numeral.validator
-    def _check_numeral(self, _attribute, value):
-        if value < 1:
-            raise ValueError("Number must be > 0.")
+class Logogram(NamedSign):
+    surrogate: Sequence[Token] = attr.ib(
+        default=tuple(), converter=convert_token_sequence
+    )
 
     @property
-    def name(self) -> str:
-        return str(self.numeral)
+    def value(self) -> str:
+        surrogate = (
+            f"<({''.join(token.value for token in self.surrogate)})>"
+            if self.surrogate
+            else ""
+        )
+        return f"{super().value}{surrogate}"
 
-    @property
-    def sub_index(self) -> int:
-        return 1
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Number", "numeral": self.numeral}
+    def _check_name(self, _attribute, value):
+        if not value.isupper() and value != "ʾ":
+            raise ValueError("Logograms must be uppercase.")
 
     @staticmethod
     def of(
-        numeral: int,
+        name: str,
+        sub_index: int = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
-        sign: Optional[str] = None,
+        sign: Optional[Token] = None,
+        surrogate: Sequence[Token] = tuple(),
+    ) -> "Logogram":
+        return Logogram(modifiers, flags, name, sub_index, sign, surrogate)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Number(NamedSign):
+    def _check_name(self, _attribute, value):
+        if not re.fullmatch(r"[0-9\[\]]+", value):
+            raise ValueError("Numbers can only contain decimal digits, [, and ].")
+
+    @staticmethod
+    def of(
+        name: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[Token] = None,
+        sub_index: int = 1,
     ) -> "Number":
-        return Number(modifiers, flags, sign, numeral)
+        return Number(modifiers, flags, name, sub_index, sign)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Grapheme(AbstractSign):
+    name: str
+
+    @property
+    def value(self) -> str:
+        modifiers = "".join(self.modifiers)
+        flags = "".join(self.string_flags)
+        return f"{self.name}{modifiers}{flags}"
+
+    @staticmethod
+    def of(
+        name: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+    ) -> "Grapheme":
+        return Grapheme(modifiers, flags, name)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class CompoundGrapheme(ValueToken):
+    pass

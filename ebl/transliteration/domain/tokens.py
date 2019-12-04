@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence, Tuple
+from typing import Iterable, Optional, Sequence, Tuple
 
 import attr
 
@@ -18,9 +18,6 @@ class Token(ABC):
     def value(self) -> str:
         ...
 
-    def to_dict(self) -> dict:
-        return {"type": "Token", "value": self.value}
-
     @property
     def lemmatizable(self) -> bool:
         return False
@@ -33,9 +30,11 @@ class Token(ABC):
     def parts(self) -> Sequence["Token"]:
         return tuple()
 
-    def get_key(self, delimiter: str = "⁝") -> str:
-        parts = [part.get_key("⁚") for part in self.parts]
-        return delimiter.join([type(self).__name__, self.value] + parts)
+    def get_key(self) -> str:
+        parts = (
+            f"⟨{'⁚'.join(part.get_key() for part in self.parts)}⟩" if self.parts else ""
+        )
+        return f"{type(self).__name__}⁝{self.value}{parts}"
 
     def set_unique_lemma(self, lemma: LemmatizationToken) -> "Token":
         if lemma.unique_lemma is None and lemma.value == self.value:
@@ -80,14 +79,6 @@ class LanguageShift(ValueToken):
     def normalized(self):
         return self.value == LanguageShift._normalization_shift
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "LanguageShift",
-            "normalized": self.normalized,
-            "language": self.language.name,
-        }
-
 
 @attr.s(frozen=True)
 class UnknownNumberOfSigns(Token):
@@ -95,14 +86,10 @@ class UnknownNumberOfSigns(Token):
     def value(self) -> str:
         return atf.UNKNOWN_NUMBER_OF_SIGNS
 
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "UnknownNumberOfSigns"}
-
 
 @attr.s(frozen=True)
 class Tabulation(ValueToken):
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Tabulation"}
+    pass
 
 
 @attr.s(frozen=True)
@@ -110,9 +97,6 @@ class CommentaryProtocol(ValueToken):
     @property
     def protocol(self):
         return atf.CommentaryProtocol(self.value)
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "CommentaryProtocol"}
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -128,9 +112,6 @@ class Column(Token):
     def value(self) -> str:
         return "&" if self.number is None else f"&{self.number}"
 
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "Column", "number": self.number}
-
 
 @attr.s(frozen=True, auto_attribs=True)
 class Variant(Token):
@@ -144,21 +125,42 @@ class Variant(Token):
     def value(self) -> str:
         return "/".join(token.value for token in self.tokens)
 
-    def to_dict(self) -> dict:
-        return {
-            **super().to_dict(),
-            "type": "Variant",
-            "tokens": [token.to_dict() for token in self.tokens],
-        }
-
 
 @attr.s(frozen=True)
 class LineContinuation(ValueToken):
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "LineContinuation"}
+    pass
 
 
 class TokenVisitor(ABC):
     @abstractmethod
     def visit(self, token: Token) -> None:
         ...
+
+
+def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
+    return tuple(tokens)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Joiner(Token):
+    _value: atf.Joiner
+
+    @property
+    def value(self):
+        return self._value.value
+
+    @staticmethod
+    def dot():
+        return Joiner(atf.Joiner.DOT)
+
+    @staticmethod
+    def hyphen():
+        return Joiner(atf.Joiner.HYPHEN)
+
+    @staticmethod
+    def colon():
+        return Joiner(atf.Joiner.COLON)
+
+    @staticmethod
+    def plus():
+        return Joiner(atf.Joiner.PLUS)

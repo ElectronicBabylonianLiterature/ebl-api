@@ -36,7 +36,6 @@ from ebl.corpus.domain.text import (
 )
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
@@ -45,8 +44,8 @@ from ebl.transliteration.domain.labels import (
 )
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import ValueToken
-from ebl.transliteration.domain.word_tokens import Joiner, Word
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.word_tokens import Word
 
 
 class ManuscriptFactory(factory.Factory):
@@ -84,9 +83,9 @@ class ManuscriptLineFactory(factory.Factory):
                 parts=[
                     Reading.of("ku"),
                     ValueToken("]"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("nu"),
-                    Joiner(atf.Joiner.HYPHEN),
+                    Joiner.hyphen(),
                     Reading.of("ši"),
                 ],
             ),

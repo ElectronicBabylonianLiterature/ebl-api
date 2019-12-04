@@ -22,10 +22,15 @@ from ebl.transliteration.domain.line import (
     TextLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import LanguageShift, Tabulation, ValueToken
+from ebl.transliteration.domain.token_schemas import dump_tokens
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    Tabulation,
+    ValueToken,
+)
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
-    Joiner,
     LoneDeterminative,
     Word,
 )
@@ -165,39 +170,32 @@ def test_text_line_atf_gloss():
 @pytest.mark.parametrize(
     "erasure,expected",
     [
+        ([Erasure(Side.LEFT), Erasure(Side.CENTER), Erasure(Side.RIGHT),], "°\\°",),
         (
             [
-                Erasure("°", Side.LEFT),
-                Erasure("\\", Side.CENTER),
-                Erasure("°", Side.RIGHT),
-            ],
-            "°\\°",
-        ),
-        (
-            [
-                Erasure("°", Side.LEFT),
+                Erasure(Side.LEFT),
                 Word("mu-bu"),
-                Erasure("\\", Side.CENTER),
-                Erasure("°", Side.RIGHT),
+                Erasure(Side.CENTER),
+                Erasure(Side.RIGHT),
             ],
             "°mu-bu\\°",
         ),
         (
             [
-                Erasure("°", Side.LEFT),
-                Erasure("\\", Side.CENTER),
+                Erasure(Side.LEFT),
+                Erasure(Side.CENTER),
                 Word("mu-bu"),
-                Erasure("°", Side.RIGHT),
+                Erasure(Side.RIGHT),
             ],
             "°\\mu-bu°",
         ),
         (
             [
-                Erasure("°", Side.LEFT),
+                Erasure(Side.LEFT),
                 Word("mu-bu"),
-                Erasure("\\", Side.CENTER),
+                Erasure(Side.CENTER),
                 Word("mu-bu"),
-                Erasure("°", Side.RIGHT),
+                Erasure(Side.RIGHT),
             ],
             "°mu-bu\\mu-bu°",
         ),
@@ -225,7 +223,7 @@ def test_line_of_single():
             {
                 "type": "ControlLine",
                 "prefix": "@",
-                "content": [ValueToken("obverse").to_dict()],
+                "content": dump_tokens([ValueToken("obverse")]),
             },
         ),
         (
@@ -243,14 +241,16 @@ def test_line_of_single():
             {
                 "type": "TextLine",
                 "prefix": "1.",
-                "content": [
-                    DocumentOrientedGloss("{(").to_dict(),
-                    Word("bu", parts=[Reading.of("bu")]).to_dict(),
-                    LoneDeterminative(
-                        "{d}",
-                        parts=[ValueToken("{"), Reading.of("d"), ValueToken("}"),],
-                    ).to_dict(),
-                ],
+                "content": dump_tokens(
+                    [
+                        DocumentOrientedGloss("{("),
+                        Word("bu", parts=[Reading.of("bu")]),
+                        LoneDeterminative(
+                            "{d}",
+                            parts=[ValueToken("{"), Reading.of("d"), ValueToken("}"),],
+                        ),
+                    ]
+                ),
             },
         ),
         (EmptyLine(), {"type": "EmptyLine", "prefix": "", "content": []}),
@@ -472,7 +472,7 @@ def test_update_lemmatization_wrong_lenght():
                         alignment=4,
                         parts=[
                             Reading.of("ku"),
-                            Joiner(atf.Joiner.HYPHEN),
+                            Joiner.hyphen(),
                             ValueToken("["),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
@@ -503,7 +503,7 @@ def test_update_lemmatization_wrong_lenght():
                         "[k(u)-nu#?",
                         parts=[
                             Reading.of("k(u)"),
-                            Joiner(atf.Joiner.HYPHEN),
+                            Joiner.hyphen(),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
                             ),
@@ -537,7 +537,7 @@ def test_update_lemmatization_wrong_lenght():
                         alignment=4,
                         parts=[
                             Reading.of("k(u)"),
-                            Joiner(atf.Joiner.HYPHEN),
+                            Joiner.hyphen(),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
                             ),

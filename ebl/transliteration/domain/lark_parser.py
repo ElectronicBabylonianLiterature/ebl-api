@@ -20,15 +20,19 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
     Divider,
-    Number,
+    Logogram,
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Number,
+    CompoundGrapheme,
+    Grapheme,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    Joiner,
     LanguageShift,
     LineContinuation,
     Tabulation,
@@ -40,13 +44,70 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
-    Joiner,
     LoneDeterminative,
     Word,
 )
 
 
-class TreeToWord(Transformer):
+class TreeToSign(Transformer):
+    @v_args(inline=True)
+    def unidentified_sign(self, flags):
+        return UnidentifiedSign(flags)
+
+    @v_args(inline=True)
+    def unclear_sign(self, flags):
+        return UnclearSign(flags)
+
+    @v_args(inline=True)
+    def unknown_number_of_signs(self, _):
+        return UnknownNumberOfSigns()
+
+    @v_args(inline=True)
+    def joiner(self, symbol):
+        return Joiner(atf.Joiner(str(symbol)))
+
+    @v_args(inline=True)
+    def in_word_newline(self, _):
+        return InWordNewline()
+
+    @v_args(inline=True)
+    def reading(self, name, sub_index, modifiers, flags, sign=None):
+        return Reading.of(name.value, sub_index, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def logogram(self, name, sub_index, modifiers, flags, sign=None):
+        return Logogram.of(name.value, sub_index, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def surrogate(self, name, sub_index, modifiers, flags, surrogate):
+        return Logogram.of(
+            name.value, sub_index, modifiers, flags, None, surrogate.children
+        )
+
+    @v_args(inline=True)
+    def number(self, number, modifiers, flags, sign=None):
+        return Number.of(number.value, modifiers, flags, sign)
+
+    @v_args(inline=True)
+    def sub_index(self, sub_index=""):
+        return sub_index_to_int(sub_index)
+
+    def modifiers(self, tokens):
+        return tuple(map(str, tokens))
+
+    def flags(self, tokens):
+        return tuple(map(atf.Flag, tokens))
+
+    @v_args(inline=True)
+    def grapheme(self, name, modifiers, flags):
+        return Grapheme.of(name.value, modifiers, flags)
+
+    @v_args(inline=True)
+    def compound_grapheme(self, name):
+        return CompoundGrapheme(name.value)
+
+
+class TreeToWord(TreeToSign):
     def lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
 
@@ -91,23 +152,20 @@ class TreeToWord(Transformer):
     def in_word_newline(self, _):
         return InWordNewline()
 
-    @v_args(inline=True)
-    def reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(name.value, sub_index, modifiers, flags, sign)
-
-    @v_args(inline=True)
-    def number(self, number, modifiers, flags, sign=None):
-        return Number.of(int(number), modifiers, flags, sign)
-
-    @v_args(inline=True)
-    def sub_index(self, sub_index=""):
-        return sub_index_to_int(sub_index)
-
-    def modifiers(self, tokens):
-        return tuple(map(str, tokens))
-
-    def flags(self, tokens):
-        return tuple(map(atf.Flag, tokens))
+    def variant(self, children):
+        tokens = (
+            pydash.chain(children)
+            .flat_map_deep(
+                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
+            )
+            .map_(
+                lambda token: (
+                    ValueToken(str(token)) if isinstance(token, Token) else token
+                )
+            )
+            .value()
+        )
+        return Variant(tuple(tokens))
 
 
 class TreeToErasure(TreeToWord):
@@ -125,11 +183,11 @@ class TreeToErasure(TreeToWord):
 
         [erased, over_erased] = tokens
         return [
-            Erasure("°", Side.LEFT),
+            Erasure(Side.LEFT),
             set_state(erased.children, ErasureState.ERASED),
-            Erasure("\\", Side.CENTER),
+            Erasure(Side.CENTER),
             set_state(over_erased.children, ErasureState.OVER_ERASED),
-            Erasure("°", Side.RIGHT),
+            Erasure(Side.RIGHT),
         ]
 
 
@@ -224,7 +282,7 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def divider(self, value, modifiers, flags):
-        return Divider(str(value), modifiers, flags)
+        return Divider.of(str(value), modifiers, flags)
 
     @v_args(inline=True)
     def column(self, number):
@@ -233,9 +291,12 @@ class TreeToLine(TreeToErasure):
 
     @v_args(inline=True)
     def divider_variant(self, first, second):
-        return Variant.of(first, second)
+        return Variant.of(
+            ValueToken(str(first)) if isinstance(first, Token) else first,
+            ValueToken(str(second)) if isinstance(second, Token) else second,
+        )
 
-    def variant_part(self, tokens):
+    def divider_variant_part(self, tokens):
         return self._create_word(Word, tokens)
 
 

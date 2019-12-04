@@ -8,7 +8,7 @@ from pyoracc.atf.common.atffile import AtfFile
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "0.20"
+ATF_PARSER_VERSION = "0.23.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -107,12 +107,16 @@ UNCLEAR_SIGN = "x"
 UNIDENTIFIED_SIGN = "X"
 IN_WORD_NEWLINE = ";"
 
+ERASURE_BOUNDARY = "°"
+ERASURE_DELIMITER = "\\"
+
+COMPOUND_GRAPHEME_DELIMITER = "|"
+
 FLAGS: Mapping[str, str] = {
     "uncertainty": pydash.escape_reg_exp(Flag.UNCERTAIN.value),
     "collation": pydash.escape_reg_exp(Flag.COLLATION.value),
     "damage": pydash.escape_reg_exp(Flag.DAMAGE.value),
     "correction": pydash.escape_reg_exp(Flag.CORRECTION.value),
-    "not_logogram": r"\$",
 }
 
 LACUNA: Mapping[str, str] = {
@@ -130,8 +134,8 @@ ATF_SPEC: Mapping[str, str] = {
 }
 
 ATF_EXTENSIONS: Mapping[str, str] = {
-    "erasure_boundary": "°",
-    "erasure_delimiter": "\\",
+    "erasure_boundary": ERASURE_BOUNDARY,
+    "erasure_delimiter": ERASURE_DELIMITER,
     "erasure_illegible": r"°[^\°]*\\",
     "line_continuation": "→",
 }
