@@ -1,5 +1,4 @@
 from marshmallow import EXCLUDE
-from typing import Dict
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
