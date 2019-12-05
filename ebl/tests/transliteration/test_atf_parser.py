@@ -9,6 +9,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     OmissionOrRemoval,
     PerhapsBrokenAway,
     Side,
+    Determinative,
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -366,9 +367,7 @@ def test_parser_version(parser, version):
                             "[{d}UTU",
                             parts=[
                                 ValueToken("["),
-                                ValueToken("{"),
-                                Reading.of("d"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("d")]),
                                 Logogram.of("UTU"),
                             ],
                         ),
@@ -521,7 +520,7 @@ def test_parser_version(parser, version):
                             "{bu}",
                             Partial(False, False),
                             ErasureState.NONE,
-                            [ValueToken("{"), Reading.of("bu"), ValueToken("}"),],
+                            [Determinative([Reading.of("bu")]),],
                         ),
                         BrokenAway("["),
                         UnknownNumberOfSigns(),
@@ -537,9 +536,7 @@ def test_parser_version(parser, version):
                                 ValueToken("["),
                                 UnknownNumberOfSigns(),
                                 ValueToken("]"),
-                                ValueToken("{"),
-                                Reading.of("bu"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("bu")]),
                             ],
                         ),
                         BrokenAway("["),
@@ -556,9 +553,7 @@ def test_parser_version(parser, version):
                         Word(
                             "{bu}[...]",
                             parts=[
-                                ValueToken("{"),
-                                Reading.of("bu"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("bu")]),
                                 ValueToken("["),
                                 UnknownNumberOfSigns(),
                                 ValueToken("]"),
@@ -575,9 +570,7 @@ def test_parser_version(parser, version):
                                 ValueToken("["),
                                 UnknownNumberOfSigns(),
                                 ValueToken("]"),
-                                ValueToken("{"),
-                                Reading.of("bu"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("bu")]),
                                 ValueToken("["),
                                 UnknownNumberOfSigns(),
                                 ValueToken("]"),
@@ -596,9 +589,7 @@ def test_parser_version(parser, version):
                         Word(
                             "{bu}-nu",
                             parts=[
-                                ValueToken("{"),
-                                Reading.of("bu"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("bu")]),
                                 Joiner.hyphen(),
                                 Reading.of("nu"),
                             ],
@@ -606,11 +597,13 @@ def test_parser_version(parser, version):
                         Word(
                             "{bu-bu}-nu",
                             parts=[
-                                ValueToken("{"),
-                                Reading.of("bu"),
-                                Joiner.hyphen(),
-                                Reading.of("bu"),
-                                ValueToken("}"),
+                                Determinative(
+                                    [
+                                        Reading.of("bu"),
+                                        Joiner.hyphen(),
+                                        Reading.of("bu"),
+                                    ]
+                                ),
                                 Joiner.hyphen(),
                                 Reading.of("nu"),
                             ],
@@ -625,11 +618,13 @@ def test_parser_version(parser, version):
                             Partial(False, False),
                             ErasureState.NONE,
                             [
-                                ValueToken("{"),
-                                Reading.of("bu"),
-                                Joiner.hyphen(),
-                                Reading.of("bu"),
-                                ValueToken("}"),
+                                Determinative(
+                                    [
+                                        Reading.of("bu"),
+                                        Joiner.hyphen(),
+                                        Reading.of("bu"),
+                                    ]
+                                ),
                             ],
                         ),
                     ),
@@ -646,9 +641,9 @@ def test_parser_version(parser, version):
                         Word(
                             "{u₂#}[...]",
                             parts=[
-                                ValueToken("{"),
-                                Reading.of("u", 2, flags=[atf.Flag.DAMAGE]),
-                                ValueToken("}"),
+                                Determinative(
+                                    [Reading.of("u", 2, flags=[atf.Flag.DAMAGE])]
+                                ),
                                 ValueToken("["),
                                 UnknownNumberOfSigns(),
                                 ValueToken("]"),
@@ -659,9 +654,9 @@ def test_parser_version(parser, version):
                             Partial(False, False),
                             ErasureState.NONE,
                             [
-                                ValueToken("{"),
-                                Reading.of("u", 2, flags=[atf.Flag.DAMAGE]),
-                                ValueToken("}"),
+                                Determinative(
+                                    [Reading.of("u", 2, flags=[atf.Flag.DAMAGE])]
+                                ),
                             ],
                         ),
                         BrokenAway("["),
@@ -952,9 +947,7 @@ def test_parser_version(parser, version):
                             "[{iti}...]",
                             parts=[
                                 ValueToken("["),
-                                ValueToken("{"),
-                                Reading.of("iti"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("iti")]),
                                 UnknownNumberOfSigns(),
                                 ValueToken("]"),
                             ],
@@ -973,10 +966,7 @@ def test_parser_version(parser, version):
                             "RA{k[i]}",
                             parts=[
                                 Logogram.of("RA"),
-                                ValueToken("{"),
-                                Reading.of("k[i"),
-                                ValueToken("]"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("k[i"), BrokenAway("]")]),
                             ],
                         ),
                     ),
@@ -1014,9 +1004,7 @@ def test_parser_version(parser, version):
                             "...{d}kur",
                             parts=[
                                 UnknownNumberOfSigns(),
-                                ValueToken("{"),
-                                Reading.of("d"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("d")]),
                                 Reading.of("kur"),
                             ],
                         ),
@@ -1024,9 +1012,7 @@ def test_parser_version(parser, version):
                         Word(
                             "{d}kur",
                             parts=[
-                                ValueToken("{"),
-                                Reading.of("d"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("d")]),
                                 Reading.of("kur"),
                             ],
                         ),
@@ -1044,9 +1030,7 @@ def test_parser_version(parser, version):
                             "kur{d}...",
                             parts=[
                                 Reading.of("kur"),
-                                ValueToken("{"),
-                                Reading.of("d"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("d")]),
                                 UnknownNumberOfSigns(),
                             ],
                         ),
@@ -1054,9 +1038,7 @@ def test_parser_version(parser, version):
                             "kur{d}",
                             parts=[
                                 Reading.of("kur"),
-                                ValueToken("{"),
-                                Reading.of("d"),
-                                ValueToken("}"),
+                                Determinative([Reading.of("d")]),
                             ],
                         ),
                         UnknownNumberOfSigns(),

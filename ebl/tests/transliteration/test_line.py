@@ -7,6 +7,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
     Side,
+    Determinative,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
@@ -233,8 +234,7 @@ def test_line_of_single():
                     DocumentOrientedGloss("{("),
                     Word("bu", parts=[Reading.of("bu")]),
                     LoneDeterminative(
-                        "{d}",
-                        parts=[ValueToken("{"), Reading.of("d"), ValueToken("}"),],
+                        "{d}", parts=[Determinative([Reading.of("d")]),],
                     ),
                 ],
             ),
@@ -246,8 +246,7 @@ def test_line_of_single():
                         DocumentOrientedGloss("{("),
                         Word("bu", parts=[Reading.of("bu")]),
                         LoneDeterminative(
-                            "{d}",
-                            parts=[ValueToken("{"), Reading.of("d"), ValueToken("}"),],
+                            "{d}", parts=[Determinative([Reading.of("d")]),],
                         ),
                     ]
                 ),

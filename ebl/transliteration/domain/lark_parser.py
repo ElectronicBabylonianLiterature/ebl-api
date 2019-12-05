@@ -1,3 +1,5 @@
+from typing import Sequence, Type
+
 import attr
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput
@@ -15,6 +17,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     OmissionOrRemoval,
     PerhapsBrokenAway,
     Side,
+    Determinative,
+    PhoneticGloss,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -115,19 +119,8 @@ class TreeToWord(TreeToSign):
         return self._create_word(Word, children)
 
     @staticmethod
-    def _create_word(word_class, children):
-        tokens = (
-            pydash.chain(children)
-            .flat_map_deep(
-                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
-            )
-            .map_(
-                lambda token: (
-                    ValueToken(str(token)) if isinstance(token, Token) else token
-                )
-            )
-            .value()
-        )
+    def _create_word(word_class: Type, children: Sequence):
+        tokens = TreeToWord._children_to_tokens(children)
 
         value = "".join(token.value for token in tokens)
         return word_class(value, parts=tokens)
@@ -153,19 +146,33 @@ class TreeToWord(TreeToSign):
         return InWordNewline()
 
     def variant(self, children):
-        tokens = (
+        tokens = self._children_to_tokens(children)
+        return Variant(tuple(tokens))
+
+    @v_args(inline=True)
+    def determinative(self, tree):
+        tokens = self._children_to_tokens(tree.children)
+        return Determinative(tokens)
+
+    @v_args(inline=True)
+    def phonetic_gloss(self, tree):
+        tokens = self._children_to_tokens(tree.children)
+        return PhoneticGloss(tokens)
+
+    @staticmethod
+    def _children_to_tokens(children: Sequence) -> Sequence[Token]:
+        return (
             pydash.chain(children)
             .flat_map_deep(
                 lambda tree: (tree.children if isinstance(tree, Tree) else tree)
             )
             .map_(
                 lambda token: (
-                    ValueToken(str(token)) if isinstance(token, Token) else token
+                    ValueToken(token.value) if isinstance(token, Token) else token
                 )
             )
             .value()
         )
-        return Variant(tuple(tokens))
 
 
 class TreeToErasure(TreeToWord):

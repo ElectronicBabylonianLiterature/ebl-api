@@ -3,6 +3,7 @@ from lark import ParseError
 from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import Determinative, PhoneticGloss
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import (
     Logogram,
@@ -153,13 +154,7 @@ from ebl.transliteration.domain.word_tokens import (
         (
             "{ku}nu",
             Word(
-                "{ku}nu",
-                parts=[
-                    ValueToken("{"),
-                    Reading.of("ku"),
-                    ValueToken("}"),
-                    Reading.of("nu"),
-                ],
+                "{ku}nu", parts=[Determinative([Reading.of("ku")]), Reading.of("nu"),],
             ),
         ),
         (
@@ -189,13 +184,7 @@ from ebl.transliteration.domain.word_tokens import (
         (
             "ku{nu}",
             Word(
-                "ku{nu}",
-                parts=[
-                    Reading.of("ku"),
-                    ValueToken("{"),
-                    Reading.of("nu"),
-                    ValueToken("}"),
-                ],
+                "ku{nu}", parts=[Reading.of("ku"), Determinative([Reading.of("nu")]),],
             ),
         ),
         (
@@ -216,9 +205,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{iti}]ŠE",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("iti"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("iti")]),
                     ValueToken("]"),
                     Logogram.of("ŠE"),
                 ],
@@ -244,9 +231,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{kur}aš+šur",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("kur"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("kur")]),
                     Reading.of("aš"),
                     Joiner.plus(),
                     Reading.of("šur"),
@@ -290,13 +275,15 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Logogram.of("SAL"),
                     Joiner.dot(),
-                    ValueToken("{+"),
-                    Reading.of("mu"),
-                    Joiner.hyphen(),
-                    Reading.of("ru"),
-                    Joiner.hyphen(),
-                    Reading.of("ub"),
-                    ValueToken("}"),
+                    PhoneticGloss(
+                        [
+                            Reading.of("mu"),
+                            Joiner.hyphen(),
+                            Reading.of("ru"),
+                            Joiner.hyphen(),
+                            Reading.of("ub"),
+                        ]
+                    ),
                 ],
             ),
         ),
@@ -305,13 +292,15 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{+mu-ru-ub}[LA",
                 parts=[
-                    ValueToken("{+"),
-                    Reading.of("mu"),
-                    Joiner.hyphen(),
-                    Reading.of("ru"),
-                    Joiner.hyphen(),
-                    Reading.of("ub"),
-                    ValueToken("}"),
+                    PhoneticGloss(
+                        [
+                            Reading.of("mu"),
+                            Joiner.hyphen(),
+                            Reading.of("ru"),
+                            Joiner.hyphen(),
+                            Reading.of("ub"),
+                        ]
+                    ),
                     ValueToken("["),
                     Logogram.of("LA"),
                 ],
@@ -324,9 +313,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Logogram.of("I"),
                     Joiner.dot(),
-                    ValueToken("{"),
-                    Reading.of("d"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d")]),
                 ],
             ),
         ),
@@ -335,9 +322,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{d}[UTU?",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("d"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d")]),
                     ValueToken("["),
                     Logogram.of("UTU", flags=[atf.Flag.UNCERTAIN]),
                 ],
@@ -360,9 +345,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "<{10}>bu",
                 parts=[
                     ValueToken("<"),
-                    ValueToken("{"),
-                    Number.of("10"),
-                    ValueToken("}"),
+                    Determinative([Number.of("10")]),
                     ValueToken(">"),
                     Reading.of("bu"),
                 ],
@@ -380,9 +363,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.dot(),
                     Logogram.of("RA"),
                     ValueToken("["),
-                    ValueToken("{"),
-                    Reading.of("ki", flags=[atf.Flag.UNCERTAIN]),
-                    ValueToken("}"),
+                    Determinative([Reading.of("ki", flags=[atf.Flag.UNCERTAIN])]),
                 ],
             ),
         ),
@@ -391,9 +372,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{d?}nu?-di]m₂?-mu[d?",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("d", flags=[atf.Flag.UNCERTAIN]),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d", flags=[atf.Flag.UNCERTAIN])]),
                     Reading.of("nu", flags=[atf.Flag.UNCERTAIN]),
                     Joiner.hyphen(),
                     Reading.of("di]m", 2, flags=[atf.Flag.UNCERTAIN]),
@@ -419,9 +398,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{lu₂@v}UM.ME.[A",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("lu", 2, modifiers=["@v"]),
-                    ValueToken("}"),
+                    Determinative([Reading.of("lu", 2, modifiers=["@v"])]),
                     Logogram.of("UM"),
                     Joiner.dot(),
                     Logogram.of("ME"),
@@ -436,9 +413,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{lu₂@v}]KAB.SAR-M[EŠ",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("lu", 2, modifiers=["@v"]),
-                    ValueToken("}"),
+                    Determinative([Reading.of("lu", 2, modifiers=["@v"])]),
                     ValueToken("]"),
                     Logogram.of("KAB"),
                     Joiner.dot(),
@@ -517,10 +492,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{[i]ti}AB",
                 parts=[
-                    ValueToken("{"),
-                    ValueToken("["),
-                    Reading.of("i]ti"),
-                    ValueToken("}"),
+                    Determinative([ValueToken("["), Reading.of("i]ti")]),
                     Logogram.of("AB"),
                 ],
             ),
@@ -628,9 +600,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "...{d}kur",
                 parts=[
                     UnknownNumberOfSigns(),
-                    ValueToken("{"),
-                    Reading.of("d"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d")]),
                     Reading.of("kur"),
                 ],
             ),
@@ -641,9 +611,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "kur{d}...",
                 parts=[
                     Reading.of("kur"),
-                    ValueToken("{"),
-                    Reading.of("d"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d")]),
                     UnknownNumberOfSigns(),
                 ],
             ),
@@ -734,9 +702,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "[{d}UTU",
                 parts=[
                     ValueToken("["),
-                    ValueToken("{"),
-                    Reading.of("d"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d")]),
                     Logogram.of("UTU"),
                 ],
             ),
@@ -746,13 +712,9 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{m#}[{d}AG-sa-lim",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("m", flags=[atf.Flag.DAMAGE]),
-                    ValueToken("}"),
+                    Determinative([Reading.of("m", flags=[atf.Flag.DAMAGE])]),
                     ValueToken("["),
-                    ValueToken("{"),
-                    Reading.of("d"),
-                    ValueToken("}"),
+                    Determinative([Reading.of("d")]),
                     Logogram.of("AG"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("sa"),
@@ -821,9 +783,7 @@ def test_word(parser, atf, expected):
                 "<{10}>",
                 parts=[
                     ValueToken("<"),
-                    ValueToken("{"),
-                    Number.of("10"),
-                    ValueToken("}"),
+                    Determinative([Number.of("10")]),
                     ValueToken(">"),
                 ],
             ),
@@ -833,9 +793,7 @@ def test_word(parser, atf, expected):
             LoneDeterminative(
                 "{ud]u?}",
                 parts=[
-                    ValueToken("{"),
-                    Reading.of("ud]u", flags=[atf.Flag.UNCERTAIN]),
-                    ValueToken("}"),
+                    Determinative([Reading.of("ud]u", flags=[atf.Flag.UNCERTAIN])]),
                 ],
             ),
         ),
@@ -843,46 +801,26 @@ def test_word(parser, atf, expected):
             "{u₂#}",
             LoneDeterminative(
                 "{u₂#}",
-                parts=[
-                    ValueToken("{"),
-                    Reading.of("u", 2, flags=[atf.Flag.DAMAGE]),
-                    ValueToken("}"),
-                ],
+                parts=[Determinative([Reading.of("u", 2, flags=[atf.Flag.DAMAGE])]),],
             ),
         ),
         (
             "{lu₂@v}",
             LoneDeterminative(
                 "{lu₂@v}",
-                parts=[
-                    ValueToken("{"),
-                    Reading.of("lu", 2, modifiers=["@v"]),
-                    ValueToken("}"),
-                ],
+                parts=[Determinative([Reading.of("lu", 2, modifiers=["@v"])]),],
             ),
         ),
         (
             "{k[i]}",
             LoneDeterminative(
-                "{k[i]}",
-                parts=[
-                    ValueToken("{"),
-                    Reading.of("k[i"),
-                    ValueToken("]"),
-                    ValueToken("}"),
-                ],
+                "{k[i]}", parts=[Determinative([Reading.of("k[i"), ValueToken("]")]),],
             ),
         ),
         (
             "{[k]i}",
             LoneDeterminative(
-                "{[k]i}",
-                parts=[
-                    ValueToken("{"),
-                    ValueToken("["),
-                    Reading.of("k]i"),
-                    ValueToken("}"),
-                ],
+                "{[k]i}", parts=[Determinative([ValueToken("["), Reading.of("k]i")]),],
             ),
         ),
     ],

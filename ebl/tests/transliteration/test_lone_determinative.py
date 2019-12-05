@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.domain.enclosure_tokens import Determinative
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.token_schemas import dump_tokens
@@ -35,7 +36,7 @@ def test_of_value():
 )
 def test_lone_determinative(language, normalized, partial):
     value = "{mu}"
-    parts = [ValueToken("{"), Reading.of("mu"), ValueToken("}")]
+    parts = [Determinative([Reading.of("mu")])]
     lone_determinative = LoneDeterminative(
         value, language, normalized, partial=partial, parts=parts
     )
