@@ -31,7 +31,15 @@ line-number = { not-space }-, '.';
 not-space = any-character - ' ';
 
 any-character = ? any UTF-8 character ?;
-```
+````
+## $-sign
+
+$-lines are used to indicate information about the state of the text or object, or to describe features on the object which are not part of the transliteration proper.
+
+
+```ebnf
+line = empty-line
+     | 
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
 
