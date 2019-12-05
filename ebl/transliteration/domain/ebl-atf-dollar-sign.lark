@@ -1,0 +1,245 @@
+?start: line
+
+?line: empty_line
+     | control_line
+     | text_line
+
+empty_line: /\s+/?
+
+!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
+
+text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR*
+LINE_NUMBER: /[^ ]+/ "."
+
+
+text: _head _tail* line_continuation?
+_head: _have_both
+     | _require_both
+     | _omit_left
+     | _omit_right+ _have_both?
+_tail: _WORD_SEPARATOR _omit_right* _have_both?
+     | _WORD_SEPARATOR? _omit_left+
+     | _WORD_SEPARATOR _require_both
+
+line_continuation: _WORD_SEPARATOR* LINE_CONTINUATION
+LINE_CONTINUATION: "→"
+
+_require_both: commentary_protocol
+             | divider
+             | divider_variant
+_have_both: tabulation
+         | column
+         | language_shift
+         | erasure
+         | word
+         | lone_determinative
+         | unknown_number_of_signs
+_omit_left.-1: cba
+          | cpba
+          | co
+          | cdog
+_omit_right.-1: oba
+           | opba
+           | oo
+           | odog
+
+divider.5: DIVIDER_SYMBOL modifiers flags
+cba: CLOSE_BROKEN_AWAY
+cpba: CLOSE_PERHAPS_BROKEN_AWAY
+co: _close_omission
+cdog: CLOSE_DOCUMENT_ORIENTED_GLOSS
+oba: OPEN_BROKEN_AWAY
+opba: OPEN_PERHAPS_BROKEN_AWAY
+oo: _open_omission
+odog: OPEN_DOCUMENT_ORIENTED_GLOSS
+language_shift: SHIFT
+omission_or_removal.-1: _omission
+broken_away.-1: BROKEN_AWAY
+perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
+
+_NEW_LINE: /\n/
+
+divider_variant: (divider_variant_part | divider) _VARIANT_SEPARATOR (divider_variant_part | divider)
+divider_variant_part: unidentified_sign
+                    | unclear_sign
+                    | reading
+                    | logogram
+                    | number
+                    | compound_grapheme
+
+tabulation: TABULATION
+TABULATION: "($___$)"
+
+column: "&" column_number
+column_number: [COLUMN_NUMBER]
+COLUMN_NUMBER: "1".."9" ("0".."9")*
+
+commentary_protocol: PROTOCOL_QUOTATION
+                   | PROTOCOL_BASE_TEXT
+                   | PROTOCOL_COMMENTARY
+                   | PROTOCOL_UNCERTAIN
+PROTOCOL_QUOTATION: "!qt"
+PROTOCOL_BASE_TEXT: "!bs"
+PROTOCOL_COMMENTARY: "!cm"
+PROTOCOL_UNCERTAIN: "!zz"
+
+DOCUMENT_ORIENTED_GLOSS: OPEN_DOCUMENT_ORIENTED_GLOSS
+                       | CLOSE_DOCUMENT_ORIENTED_GLOSS
+OPEN_DOCUMENT_ORIENTED_GLOSS: "{("
+CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
+
+SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
+
+erasure.-1: "°" erasure_part "\\" erasure_part "°"
+erasure_part: ((DIVIDER | word | lone_determinative) (_WORD_SEPARATOR (DIVIDER | word | lone_determinative))*)?
+
+PERHAPS_BROKEN_AWAY: OPEN_PERHAPS_BROKEN_AWAY
+                   | CLOSE_PERHAPS_BROKEN_AWAY
+OPEN_PERHAPS_BROKEN_AWAY: "("
+CLOSE_PERHAPS_BROKEN_AWAY: ")"
+
+_WORD_SEPARATOR: " "
+
+
+?any_word: lone_determinative
+         | word
+
+DIVIDER: DIVIDER_SYMBOL MODIFIER* FLAG
+DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
+
+_omission: _open_omission | _close_omission
+_open_omission: OPEN_OMISSION
+_close_omission: CLOSE_OMISSION
+OMISSION: OPEN_OMISSION
+        | CLOSE_OMISSION
+OPEN_OMISSION: "<<" | "<(" | "<"
+CLOSE_OMISSION:  ">>" | ")>" | ">"
+
+BROKEN_AWAY: OPEN_BROKEN_AWAY
+           | CLOSE_BROKEN_AWAY
+OPEN_BROKEN_AWAY: "["
+CLOSE_BROKEN_AWAY: "]"
+
+_inline_broken_away: _open_inline_broken_away
+                   | _close_inline_broken_away
+_open_inline_broken_away: OPEN_BROKEN_AWAY | OPEN_PERHAPS_BROKEN_AWAY
+_close_inline_broken_away: CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY
+
+lone_determinative.4: _d_prefix _value (joiner* _value)* _d_suffix
+
+word.3: joiner? _any_open? _word_body _any_close? joiner?
+_word_body: (_inline_erasure _loose_joiner?)* _parts (_loose_joiner? _inline_erasure (_loose_joiner? _parts)?)*
+
+!_inline_erasure: "°" _parts? "\\" _parts? "°"
+
+_parts: _value _parts_tail*
+      | _determinative (_loose_joiner? _value)? _parts_tail*
+      | _determinative (_loose_joiner? unknown_number_of_signs)? _parts_tail*
+      | unknown_number_of_signs _parts_tail+
+_parts_tail: _strict_joiner (_value | unknown_number_of_signs)
+           | _loose_joiner? (_determinative _loose_joiner?)+ (_value | unknown_number_of_signs)?
+
+_determinative: _d_prefix _value (_strict_joiner _value)* _d_suffix
+_d_prefix: _omission? OPEN_DETERMINATIVE OPEN_BROKEN_AWAY?
+_d_suffix: CLOSE_BROKEN_AWAY? CLOSE_DETERMINATIVE _omission?
+OPEN_DETERMINATIVE: "{+" | "{"
+CLOSE_DETERMINATIVE: "}"
+
+_loose_joiner: _strict_joiner
+            | in_word_newline? _any_close joiner? _any_open?
+            | in_word_newline? _any_close? joiner? _any_open
+_strict_joiner: in_word_newline? _any_close? joiner _any_open?
+              | in_word_newline? _any_close? (_close_linguistic_gloss | _open_linguistic_gloss)+ _any_open?
+_any_close: (_close_inline_broken_away | _close_omission | _close_linguistic_gloss)+
+_any_open: (_open_linguistic_gloss | _open_omission | _open_inline_broken_away)+
+!joiner: "-" | "+" | "." | ":"
+
+!_open_linguistic_gloss: "{{"
+!_close_linguistic_gloss: "}}"
+
+_value: unidentified_sign
+      | unclear_sign
+      | reading
+      | number
+      | logogram
+      | surrogate
+      | compound_grapheme
+      | variant
+variant: variant_part (_VARIANT_SEPARATOR variant_part)+
+?variant_part: unidentified_sign
+             | unclear_sign
+             | reading
+             | logogram
+             | surrogate
+             | number
+             | compound_grapheme
+
+
+number: NUMBER modifiers flags ["(" any_grapheme ")"]
+reading: VALUE_NAME sub_index modifiers flags ["(" any_grapheme ")"]
+logogram: LOGOGRAM_NAME sub_index modifiers flags ["(" any_grapheme ")"]
+surrogate: LOGOGRAM_NAME sub_index modifiers flags "<(" surrogate_text ")>"
+surrogate_text: reading (joiner reading)*
+sub_index: [SUB_INDEX_NUMBER]
+SUB_INDEX_NUMBER: "₀" | "₁".."₉" ("₀".."₉")*
+READING_WITH_SIGN: (READING | LOGOGRAM) "(" ANY_GRAPHEME ")"
+SURROGATE: LOGOGRAM "<(" READING ("-" READING)* ")>"
+LOGOGRAM: LOGOGRAM_NAME SUB_INDEX? MODIFIER* FLAG
+READING: VALUE_NAME SUB_INDEX? MODIFIER* FLAG
+
+NUMBER: "1".."9" (IN_VALUE_BROKEN_AWAY? "0".."9")*
+VALUE_NAME: VALUE_CHARACTER (IN_VALUE_BROKEN_AWAY? VALUE_CHARACTER)*
+LOGOGRAM_NAME: LOGOGRAM_CHARACTER (IN_VALUE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
+VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h" 
+               | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
+               | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
+               | "z" | "ḫ" | "ʾ"
+LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
+                   | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
+                   | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
+
+?any_grapheme: compound_grapheme | grapheme
+ANY_GRAPHEME: COMPOUND_GRAPHEME | GRAPHEME
+compound_grapheme: COMPOUND_GRAPHEME
+COMPOUND_GRAPHEME: "|" SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)* "|"
+SUB_COMPOUND: "(" COMPOUND_PART (COMPOUND_OPERATOR COMPOUND_PART)* ")"
+            | COMPOUND_PART
+COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
+COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+"
+
+grapheme: GRAPHEME_NAME modifiers flags
+GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
+GRAPHEME_NAME: GRAPHEME_CHARACTER (IN_VALUE_BROKEN_AWAY? GRAPHEME_CHARACTER)* SUB_INDEX?
+GRAPHEME_CHARACTER: "a".."z"
+                  | "A".."Z"
+                  | "Ṣ" | "Š" | "Ṭ"
+                  | "ṣ" | "š" | "ṭ"
+                  | "0".."9"
+
+SUB_INDEX: ("₀".."₉" | "ₓ")+
+
+unidentified_sign: "X" flags
+unclear_sign: "x" flags
+UNKNOWN: ("X" | "x") FLAG
+
+IN_VALUE_BROKEN_AWAY: "[" | "]"
+
+_VARIANT_SEPARATOR: VARIANT_SEPARATOR
+VARIANT_SEPARATOR: "/"
+
+flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+UNCERTAIN: "?"
+CORRECTION: "!"
+COLLATION: "*"
+DAMAGE: "#"
+
+modifiers: MODIFIER*
+MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
+MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
+
+in_word_newline: IN_WORD_NEWLINE
+IN_WORD_NEWLINE: ";"
+
+unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
+UNKNOWN_NUMBER_OF_SIGNS: "..."
