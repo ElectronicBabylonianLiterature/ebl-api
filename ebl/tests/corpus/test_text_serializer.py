@@ -7,6 +7,7 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
+from ebl.transliteration.domain.line_schemas import dump_line
 
 REFERENCES = (ReferenceWithDocumentFactory.build(),)
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
@@ -60,7 +61,7 @@ def to_dict(include_documents):
                                 "labels": [
                                     label.to_value() for label in MANUSCRIPT_LINE.labels
                                 ],
-                                "line": MANUSCRIPT_LINE.line.to_dict(),
+                                "line": dump_line(MANUSCRIPT_LINE.line),
                             }
                         ],
                     }

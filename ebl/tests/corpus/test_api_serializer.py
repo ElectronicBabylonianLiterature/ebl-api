@@ -10,6 +10,7 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
+from ebl.transliteration.domain.line_schemas import dump_line
 
 
 def create(include_documents):
@@ -80,7 +81,7 @@ def create(include_documents):
                                     ]
                                 ),
                                 "atfTokens": (
-                                    manuscript_line.line.to_dict()["content"]
+                                    dump_line(manuscript_line.line)["content"]
                                 ),
                             }
                         ],

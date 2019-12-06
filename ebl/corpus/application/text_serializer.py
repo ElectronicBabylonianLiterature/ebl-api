@@ -17,8 +17,7 @@ from ebl.corpus.domain.text import (
     TextVisitor,
 )
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
-from ebl.transliteration.domain.line import TextLine
-from ebl.transliteration.domain.token_schemas import load_tokens
+from ebl.transliteration.domain.line_schemas import TextLineSchema, dump_line
 
 
 class TextSerializer(TextVisitor):
@@ -91,7 +90,7 @@ class TextSerializer(TextVisitor):
             {
                 "manuscriptId": manuscript_line.manuscript_id,
                 "labels": [label.to_value() for label in manuscript_line.labels],
-                "line": manuscript_line.line.to_dict(),
+                "line": dump_line(manuscript_line.line),
             }
         )
 
@@ -155,10 +154,7 @@ class TextDeserializer:
         return ManuscriptLine(
             manuscript_line["manuscriptId"],
             tuple(Label.parse(label) for label in manuscript_line["labels"]),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf(manuscript_line["line"]["prefix"]),
-                load_tokens(manuscript_line["line"]["content"]),
-            ),
+            TextLineSchema().load(manuscript_line["line"]),
         )
 
 

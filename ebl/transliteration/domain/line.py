@@ -11,7 +11,6 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
@@ -61,12 +60,6 @@ class Line:
         else:
             raise error_class()
 
-    def to_dict(self) -> dict:
-        return {
-            "prefix": self.prefix,
-            "content": dump_tokens(self.content),
-        }
-
     def merge(self, other: "Line") -> "Line":
         return other
 
@@ -79,9 +72,6 @@ class ControlLine(Line):
     @classmethod
     def of_single(cls, prefix: str, content: Token):
         return cls(prefix, (content,))
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "ControlLine"}
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -103,9 +93,6 @@ class TextLine(Line):
         for token in self.content:
             token.accept(visitor)
         return visitor.result
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "type": "TextLine"}
 
     def merge(self, other: L) -> L:
         def merge_tokens():
@@ -130,5 +117,4 @@ class TextLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    def to_dict(self) -> dict:
-        return {"type": "EmptyLine", "prefix": "", "content": []}
+    pass

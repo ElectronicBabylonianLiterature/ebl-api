@@ -18,6 +18,7 @@ from ebl.transliteration.domain.line import (
     Line,
     TextLine,
 )
+from ebl.transliteration.domain.line_schemas import dump_lines
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -62,7 +63,7 @@ def test_set_version():
 
 def test_to_dict():
     assert TEXT.to_dict() == {
-        "lines": [line.to_dict() for line in LINES],
+        "lines": dump_lines(LINES),
         "parser_version": TEXT.parser_version,
     }
 
@@ -290,5 +291,5 @@ def test_merge(old: Text, new: Text, expected: Text) -> None:
 def test_from_dict(lines):
     parser_version = "2.3.1"
     assert Text.from_dict(
-        {"lines": [line.to_dict() for line in lines], "parser_version": "2.3.1",}
+        {"lines": dump_lines(lines), "parser_version": "2.3.1",}
     ) == Text.of_iterable(lines).set_parser_version(parser_version)

@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, List, Mapping, Tuple
+from typing import Iterable, Tuple
 
 import attr
 import pydash
@@ -13,13 +13,8 @@ from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
 )
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-    Line,
-    TextLine,
-)
-from ebl.transliteration.domain.token_schemas import load_tokens
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_schemas import dump_lines, load_lines
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -75,23 +70,13 @@ class Text:
 
     def to_dict(self) -> dict:
         return {
-            "lines": [line.to_dict() for line in self.lines],
+            "lines": dump_lines(self.lines),
             "parser_version": self.parser_version,
         }
 
     @staticmethod
     def from_dict(data: dict) -> "Text":
-        line_factories: Mapping[str, Callable[[str, List[dict]], Line]] = {
-            "ControlLine": lambda prefix, content: ControlLine(
-                prefix, load_tokens(content)
-            ),
-            "TextLine": lambda prefix, content: TextLine(prefix, load_tokens(content)),
-            "EmptyLine": lambda _prefix, _content: EmptyLine(),
-        }
-        lines = tuple(
-            line_factories[line["type"]](line["prefix"], line["content"])
-            for line in data["lines"]
-        )
+        lines = load_lines(data["lines"])
         return Text(lines, data.get("parser_version", DEFAULT_ATF_PARSER_VERSION))
 
     @staticmethod
