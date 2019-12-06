@@ -117,9 +117,10 @@ _close_inline_broken_away: CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY
 lone_determinative.4: _omission? determinative_like _omission?
 
 word.3: joiner? _any_open? _word_body _any_close? joiner?
-_word_body: (_inline_erasure _loose_joiner?)* _parts (_loose_joiner? _inline_erasure (_loose_joiner? _parts)?)*
+_word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasure (_loose_joiner? _parts)?)*
 
-!_inline_erasure: "°" _parts? "\\" _parts? "°"
+inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"
+inline_erasure_part: _parts?
 
 _parts: _value _parts_tail*
       | determinative_like (_loose_joiner? _value)? _parts_tail*

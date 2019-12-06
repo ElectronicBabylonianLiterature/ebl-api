@@ -3,7 +3,12 @@ from lark import ParseError
 from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.enclosure_tokens import Determinative, PhoneticGloss
+from ebl.transliteration.domain.enclosure_tokens import (
+    Determinative,
+    PhoneticGloss,
+    Erasure,
+    Side,
+)
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import (
     Logogram,
@@ -527,10 +532,10 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.hyphen(),
                     Reading.of("li"),
                     Joiner.hyphen(),
-                    ValueToken("°"),
-                    ValueToken("\\"),
+                    Erasure(Side.LEFT),
+                    Erasure(Side.CENTER),
                     Reading.of("ku"),
-                    ValueToken("°"),
+                    Erasure(Side.RIGHT),
                 ],
             ),
         ),
@@ -539,14 +544,14 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "°me-e-li\\°-ku",
                 parts=[
-                    ValueToken("°"),
+                    Erasure(Side.LEFT),
                     Reading.of("me"),
                     Joiner.hyphen(),
                     Reading.of("e"),
                     Joiner.hyphen(),
                     Reading.of("li"),
-                    ValueToken("\\"),
-                    ValueToken("°"),
+                    Erasure(Side.CENTER),
+                    Erasure(Side.RIGHT),
                     Joiner.hyphen(),
                     Reading.of("ku"),
                 ],
@@ -559,11 +564,11 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Reading.of("me"),
                     Joiner(atf.Joiner.HYPHEN),
-                    ValueToken("°"),
+                    Erasure(Side.LEFT),
                     Reading.of("e"),
-                    ValueToken("\\"),
+                    Erasure(Side.CENTER),
                     Reading.of("li"),
-                    ValueToken("°"),
+                    Erasure(Side.RIGHT),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("ku"),
                 ],
@@ -576,19 +581,19 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Reading.of("me"),
                     Joiner(atf.Joiner.HYPHEN),
-                    ValueToken("°"),
+                    Erasure(Side.LEFT),
                     Reading.of("e"),
-                    ValueToken("\\"),
+                    Erasure(Side.CENTER),
                     Reading.of("li"),
-                    ValueToken("°"),
+                    Erasure(Side.RIGHT),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("me"),
                     Joiner(atf.Joiner.HYPHEN),
-                    ValueToken("°"),
+                    Erasure(Side.LEFT),
                     Reading.of("e"),
-                    ValueToken("\\"),
+                    Erasure(Side.CENTER),
                     Reading.of("li"),
-                    ValueToken("°"),
+                    Erasure(Side.RIGHT),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("ku"),
                 ],

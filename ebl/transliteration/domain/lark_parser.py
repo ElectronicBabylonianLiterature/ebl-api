@@ -161,6 +161,16 @@ class TreeToWord(TreeToSign):
         tokens = self._children_to_tokens(tree.children)
         return PhoneticGloss(tokens)
 
+    @v_args(inline=True)
+    def ebl_atf_text_line__inline_erasure(self, erased, over_erased):
+        return [
+            Erasure(Side.LEFT),
+            *erased.children,
+            Erasure(Side.CENTER),
+            *over_erased.children,
+            Erasure(Side.RIGHT),
+        ]
+
     @staticmethod
     def _children_to_tokens(children: Sequence) -> Sequence[Token]:
         return (
@@ -177,30 +187,7 @@ class TreeToWord(TreeToSign):
         )
 
 
-class TreeToErasure(TreeToWord):
-    def ebl_atf_text_line__erasure(self, tokens):
-        def set_state(children, state):
-            # TODO: Move to Token
-            return [
-                (
-                    attr.evolve(child, erasure=state)
-                    if isinstance(child, Word)
-                    else child
-                )
-                for child in children
-            ]
-
-        [erased, over_erased] = tokens
-        return [
-            Erasure(Side.LEFT),
-            set_state(erased.children, ErasureState.ERASED),
-            Erasure(Side.CENTER),
-            set_state(over_erased.children, ErasureState.OVER_ERASED),
-            Erasure(Side.RIGHT),
-        ]
-
-
-class TreeToLine(TreeToErasure):
+class TreeToLine(TreeToWord):
     def empty_line(self, _):
         return EmptyLine()
 
@@ -307,6 +294,27 @@ class TreeToLine(TreeToErasure):
     def ebl_atf_text_line__divider_variant_part(self, tokens):
         return self._create_word(Word, tokens)
 
+    def ebl_atf_text_line__erasure(self, tokens):
+        def set_state(children, state):
+            # TODO: Move to Token
+            return [
+                (
+                    attr.evolve(child, erasure=state)
+                    if isinstance(child, Word)
+                    else child
+                )
+                for child in children
+            ]
+
+        [erased, over_erased] = tokens
+        return [
+            Erasure(Side.LEFT),
+            set_state(erased.children, ErasureState.ERASED),
+            Erasure(Side.CENTER),
+            set_state(over_erased.children, ErasureState.OVER_ERASED),
+            Erasure(Side.RIGHT),
+        ]
+
 
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")
 LINE_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__)
@@ -319,7 +327,7 @@ def parse_word(atf):
 
 def parse_erasure(atf):
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__erasure")
-    return TreeToErasure().transform(tree)
+    return TreeToLine().transform(tree)
 
 
 def parse_line(atf):
