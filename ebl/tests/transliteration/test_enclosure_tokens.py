@@ -1,15 +1,15 @@
 import pytest
 
 from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain.enclosure_tokens import (
-    Side,
-    Erasure,
-    DocumentOrientedGloss,
     Determinative,
+    DocumentOrientedGloss,
+    Erasure,
     PhoneticGloss,
+    Side,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import Joiner
 
 

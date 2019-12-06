@@ -2,9 +2,9 @@ from typing import List, Mapping, Sequence, Tuple, Type
 
 from marshmallow import Schema, fields, post_load
 
+from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, TextLine
-from ebl.transliteration.domain.token_schemas import dump_tokens, load_tokens
 
 
 class LineSchema(Schema):

@@ -2,6 +2,7 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
@@ -10,7 +11,6 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,

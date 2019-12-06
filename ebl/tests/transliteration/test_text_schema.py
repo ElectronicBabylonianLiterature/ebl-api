@@ -1,14 +1,14 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
+from ebl.transliteration.application.line_schemas import dump_lines
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.enclosure_tokens import Erasure, Side
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.domain.line_schemas import dump_lines
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.text_schema import TextSchema
 from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,

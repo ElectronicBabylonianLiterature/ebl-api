@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load
 
+from ebl.transliteration.application.line_schemas import dump_lines, load_lines
 from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
-from ebl.transliteration.domain.line_schemas import dump_lines, load_lines
 from ebl.transliteration.domain.text import Text
 
 

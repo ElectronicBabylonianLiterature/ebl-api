@@ -1,14 +1,14 @@
 import pytest
 
+from ebl.transliteration.application.line_schemas import dump_line, load_line
+from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
-from ebl.transliteration.domain.line_schemas import dump_line, load_line
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 

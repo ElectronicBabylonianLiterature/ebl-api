@@ -1,4 +1,4 @@
-from ebl.transliteration.domain.token_schemas import dump_token, load_token
+from ebl.transliteration.application.token_schemas import dump_token, load_token
 from ebl.transliteration.domain.tokens import Token
 
 

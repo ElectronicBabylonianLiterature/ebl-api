@@ -1,5 +1,11 @@
 import pytest
 
+from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import (
+    dump_token,
+    dump_tokens,
+    load_token,
+)
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -11,9 +17,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnclearSign,
     UnidentifiedSign,
 )
-from ebl.transliteration.domain.token_schemas import dump_token, dump_tokens, load_token
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
-from ebl.tests.asserts import assert_token_serialization
 
 
 def test_divider():

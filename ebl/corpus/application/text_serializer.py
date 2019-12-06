@@ -16,8 +16,8 @@ from ebl.corpus.domain.text import (
     Text,
     TextVisitor,
 )
+from ebl.transliteration.application.line_schemas import TextLineSchema, dump_line
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
-from ebl.transliteration.domain.line_schemas import TextLineSchema, dump_line
 
 
 class TextSerializer(TextVisitor):

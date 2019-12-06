@@ -15,9 +15,9 @@ from ebl.corpus.domain.reconstructed_text import (
 )
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.errors import DataError
+from ebl.transliteration.application.line_schemas import dump_line
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line
-from ebl.transliteration.domain.line_schemas import dump_line
 
 
 class ApiSerializer(TextSerializer):

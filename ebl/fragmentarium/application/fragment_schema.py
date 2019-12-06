@@ -15,7 +15,7 @@ from ebl.fragmentarium.domain.fragment import (
 )
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import NameEnum, ValueEnum
-from ebl.transliteration.domain.text_schema import TextSchema
+from ebl.transliteration.application.text_schema import TextSchema
 
 
 class MeasureSchema(Schema):

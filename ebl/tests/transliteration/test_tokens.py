@@ -2,6 +2,7 @@ import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
 from ebl.transliteration.domain.language import Language
@@ -10,7 +11,6 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
-from ebl.transliteration.domain.token_schemas import dump_tokens
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,

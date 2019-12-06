@@ -1,31 +1,31 @@
-from typing import Mapping, Sequence, Tuple, Type, List, Optional, Union
+from typing import List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import pydash
-from marshmallow import Schema, fields, post_load, post_dump
+from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
+    Determinative,
     DocumentOrientedGloss,
     Erasure,
     OmissionOrRemoval,
     PerhapsBrokenAway,
-    Side,
-    Determinative,
     PhoneticGloss,
+    Side,
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme,
     Divider,
+    Grapheme,
     Logogram,
+    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    Number,
-    CompoundGrapheme,
-    Grapheme,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -34,10 +34,10 @@ from ebl.transliteration.domain.tokens import (
     LanguageShift,
     LineContinuation,
     Tabulation,
+    Token,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
-    Token,
 )
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
