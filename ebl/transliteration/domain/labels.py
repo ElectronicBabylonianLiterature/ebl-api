@@ -5,7 +5,7 @@ from typing import Iterable, Tuple
 
 import attr
 import roman
-from parsy import char_from, regex, seq, string, string_from
+from parsy import char_from, regex, seq, string_from
 
 from ebl.transliteration.domain.atf import Status, Surface
 
@@ -60,10 +60,6 @@ class Label(ABC):
     @staticmethod
     def parse(label: str) -> "Label":
         return LABEL.parse(label)
-
-    @staticmethod
-    def parse_atf(atf: str) -> "Label":
-        return LABEL_ATF.parse(atf)
 
     def to_value(self) -> str:
         return f"{self._label}{self._status_string}"
@@ -173,19 +169,3 @@ LINE_NUMBER_LABEL = (
     regex(LINE_NUMBER_EXPRESSION).map(LineNumberLabel).desc("line number label")
 )
 LABEL = SURFACE_LABEL | COLUMN_LABEL | LINE_NUMBER_LABEL
-
-SURFACE_ATF = seq(
-    string_from(*[surface.atf for surface in Surface])
-    .map(Surface.from_atf)
-    .desc("surface atf"),
-    STATUS.many(),
-).combine(SurfaceLabel.from_label)
-COLUMN_ATF = seq(
-    (string(r"@column ") >> regex(r"\d+").map(int)).desc("column atf"), STATUS.many(),
-).combine(ColumnLabel.from_int)
-LINE_NUMBER_ATF = (
-    regex(LINE_NUMBER_EXPRESSION + r"\.")
-    .map(LineNumberLabel.from_atf)
-    .desc("line number atf")
-)
-LABEL_ATF = SURFACE_ATF | COLUMN_ATF | LINE_NUMBER_ATF

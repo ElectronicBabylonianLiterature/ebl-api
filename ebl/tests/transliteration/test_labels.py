@@ -57,11 +57,6 @@ def test_label_to_value(label, _, model):
     assert model.to_value() == label
 
 
-@pytest.mark.parametrize("_,atf,expected", LABELS)
-def test_parse_atf(_, atf, expected):
-    assert Label.parse_atf(atf) == expected
-
-
 @pytest.mark.parametrize("_,atf,model", LABELS)
 def test_label_to_atf(_, atf, model):
     assert model.to_atf() == atf
