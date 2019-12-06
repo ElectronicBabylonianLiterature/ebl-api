@@ -14,8 +14,8 @@ from ebl.fragmentarium.domain.fragment import (
     UncuratedReference,
 )
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ValueEnum, NameEnum
-from ebl.transliteration.domain.text import Text
+from ebl.schemas import NameEnum, ValueEnum
+from ebl.transliteration.domain.text_schema import TextSchema
 
 
 class MeasureSchema(Schema):
@@ -107,9 +107,7 @@ class FragmentSchema(Schema):
     joins = fields.List(fields.String(), required=True)
     record = fields.Pluck(RecordSchema, "entries")
     folios: fields.Field = fields.Pluck(FoliosSchema, "entries")
-    text = fields.Function(
-        lambda fragment: fragment.text.to_dict(), lambda text: Text.from_dict(text),
-    )
+    text = fields.Nested(TextSchema)
     signs = fields.String(missing=None)
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)

@@ -7,14 +7,12 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.atf import (
     ATF_PARSER_VERSION,
     Atf,
-    DEFAULT_ATF_PARSER_VERSION,
 )
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
 )
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.line_schemas import dump_lines, load_lines
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -67,17 +65,6 @@ class Text:
 
     def set_parser_version(self, parser_version: str) -> "Text":
         return attr.evolve(self, parser_version=parser_version)
-
-    def to_dict(self) -> dict:
-        return {
-            "lines": dump_lines(self.lines),
-            "parser_version": self.parser_version,
-        }
-
-    @staticmethod
-    def from_dict(data: dict) -> "Text":
-        lines = load_lines(data["lines"])
-        return Text(lines, data.get("parser_version", DEFAULT_ATF_PARSER_VERSION))
 
     @staticmethod
     def of_iterable(

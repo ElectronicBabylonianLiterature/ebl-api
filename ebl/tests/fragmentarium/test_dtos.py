@@ -6,6 +6,7 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
+from ebl.transliteration.domain.text_schema import TextSchema
 
 
 def test_create_response_dto(user):
@@ -43,7 +44,7 @@ def test_create_response_dto(user):
                 attr.asdict(folio)
                 for folio in lemmatized_fragment.folios.filter(user).entries
             ],
-            "text": lemmatized_fragment.text.to_dict(),
+            "text": TextSchema().dump(lemmatized_fragment.text),
             "references": [
                 {
                     "id": reference.id,
