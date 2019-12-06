@@ -1,6 +1,6 @@
-from typing import Sequence, Type
+from functools import singledispatchmethod  # type: ignore
+from typing import MutableSequence, Sequence, Type
 
-import attr
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
@@ -12,25 +12,25 @@ from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
+    Determinative,
     DocumentOrientedGloss,
     Erasure,
     OmissionOrRemoval,
     PerhapsBrokenAway,
-    Side,
-    Determinative,
     PhoneticGloss,
+    Side,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme,
     Divider,
+    Grapheme,
     Logogram,
+    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    Number,
-    CompoundGrapheme,
-    Grapheme,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -40,6 +40,8 @@ from ebl.transliteration.domain.tokens import (
     LanguageShift,
     LineContinuation,
     Tabulation,
+    Token as EblToken,
+    TokenVisitor,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
@@ -51,6 +53,24 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+
+
+class ErasureVisitor(TokenVisitor):
+    def __init__(self, state: ErasureState):
+        self._tokens: MutableSequence[EblToken] = []
+        self._state: ErasureState = state
+
+    @property
+    def tokens(self) -> Sequence[EblToken]:
+        return tuple(self._tokens)
+
+    @singledispatchmethod
+    def visit(self, token: EblToken) -> None:
+        self._tokens.append(token)
+
+    @visit.register
+    def _visit_word(self, word: Word) -> None:
+        self._tokens.append(word.set_erasure(self._state))
 
 
 class TreeToSign(Transformer):
@@ -294,24 +314,19 @@ class TreeToLine(TreeToWord):
     def ebl_atf_text_line__divider_variant_part(self, tokens):
         return self._create_word(Word, tokens)
 
-    def ebl_atf_text_line__erasure(self, tokens):
-        def set_state(children, state):
-            # TODO: Move to Token
-            return [
-                (
-                    attr.evolve(child, erasure=state)
-                    if isinstance(child, Word)
-                    else child
-                )
-                for child in children
-            ]
+    @v_args(inline=True)
+    def ebl_atf_text_line__erasure(self, erased, over_erased):
+        def set_erasure_state(tree: Tree, state: ErasureState):
+            visitor = ErasureVisitor(state)
+            for child in tree.children:
+                visitor.visit(child)
+            return visitor.tokens
 
-        [erased, over_erased] = tokens
         return [
             Erasure(Side.LEFT),
-            set_state(erased.children, ErasureState.ERASED),
+            set_erasure_state(erased, ErasureState.ERASED),
             Erasure(Side.CENTER),
-            set_state(over_erased.children, ErasureState.OVER_ERASED),
+            set_erasure_state(over_erased, ErasureState.OVER_ERASED),
             Erasure(Side.RIGHT),
         ]
 

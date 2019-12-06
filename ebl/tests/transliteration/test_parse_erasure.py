@@ -20,32 +20,32 @@ ERASURE_RIGHT = Erasure(Side.RIGHT)
     [
         (
             "°ku\\ku°",
-            [Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")])],
-            [Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],)],
+            (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")]),),
+            (Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],),),
         ),
         (
             "°\\ku°",
-            [],
-            [Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],)],
+            tuple(),
+            (Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],),),
         ),
         (
             "°ku\\°",
-            [Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")])],
-            [],
+            (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")]),),
+            tuple(),
         ),
-        ("°\\°", [], []),
+        ("°\\°", tuple(), tuple()),
         (
             "°x X\\X x°",
-            [
+            (
                 Word("x", erasure=ErasureState.ERASED, parts=[UnclearSign()]),
                 Word("X", erasure=ErasureState.ERASED, parts=[UnidentifiedSign()],),
-            ],
-            [
+            ),
+            (
                 Word(
                     "X", erasure=ErasureState.OVER_ERASED, parts=[UnidentifiedSign()],
                 ),
                 Word("x", erasure=ErasureState.OVER_ERASED, parts=[UnclearSign()],),
-            ],
+            ),
         ),
     ],
 )
