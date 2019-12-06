@@ -1,0 +1,11 @@
+?start: line
+
+?line: empty_line
+     | control_line
+     | text_line
+
+empty_line: /\s+/?
+
+!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
+
+%import .ebl_atf_text_line (text_line, any_word)

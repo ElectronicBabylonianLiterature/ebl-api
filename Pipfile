@@ -22,7 +22,7 @@ roman = "*"
 waitress = "*"
 falcon-apispec = "*"
 progress = "*"
-lark-parser = "*"
+lark-parser = {git="https://github.com/ElectronicBabylonianLiterature/lark.git", editable = true, ref = "fix-utf8-import"}
 marshmallow = "*"
 inflect = "*"
 
