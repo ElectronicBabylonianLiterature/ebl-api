@@ -109,24 +109,15 @@ class Word(ValueToken):
 
 @attr.s(auto_attribs=True, frozen=True)
 class LoneDeterminative(Word):
-    _partial: Partial = attr.ib(default=Partial(False, False), kw_only=True)
-
     @staticmethod
     def of_value(
-        value: str,
-        partial: Partial,
-        erasure: ErasureState = ErasureState.NONE,
-        parts=tuple(),
+        value: str, erasure: ErasureState = ErasureState.NONE, parts=tuple(),
     ) -> "LoneDeterminative":
-        return LoneDeterminative(value, erasure=erasure, partial=partial, parts=parts)
+        return LoneDeterminative(value, erasure=erasure, parts=parts)
 
     @property
     def lemmatizable(self) -> bool:
         return False
-
-    @property
-    def partial(self) -> Partial:
-        return self._partial
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -15,7 +15,7 @@ from ebl.transliteration.domain.tokens import (
     LineContinuation,
     ValueToken,
 )
-from ebl.transliteration.domain.word_tokens import LoneDeterminative, Partial, Word
+from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 
 def test_dump_line():
@@ -54,11 +54,7 @@ def test_dump_line():
                     Word("nu", unique_lemma=(WordId("nu I"),)),
                     Word("nu", alignment=1),
                     LanguageShift("%sux"),
-                    LoneDeterminative(
-                        "{nu}",
-                        language=Language.SUMERIAN,
-                        partial=Partial(False, True),
-                    ),
+                    LoneDeterminative("{nu}", language=Language.SUMERIAN,),
                     Erasure(Side.LEFT),
                     Erasure(Side.CENTER),
                     Erasure(Side.RIGHT),

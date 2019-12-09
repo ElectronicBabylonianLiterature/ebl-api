@@ -1,7 +1,7 @@
 from typing import List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import pydash
-from marshmallow import Schema, fields, post_dump, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
@@ -43,7 +43,6 @@ from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
     LoneDeterminative,
-    Partial,
     Word,
 )
 
@@ -338,6 +337,9 @@ class WordSchema(Schema):
 
 
 class LoneDeterminativeSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     type = fields.Constant("LoneDeterminative", required=True)
     value = fields.String(required=True)
     language = NameEnum(Language, required=True)
@@ -347,12 +349,6 @@ class LoneDeterminativeSchema(Schema):
     erasure = NameEnum(ErasureState, missing=ErasureState.NONE)
     alignment = fields.Integer(allow_none=True, missing=None)
     parts = fields.List(fields.Dict(), missing=[])
-    partial_ = fields.Tuple(
-        [fields.Boolean(), fields.Boolean()],
-        required=True,
-        attribute="partial",
-        data_key="partial",
-    )
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -363,19 +359,13 @@ class LoneDeterminativeSchema(Schema):
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
-            partial=Partial(*data["partial"]),
             parts=load_tokens(data["parts"]),
         )
 
     @post_dump
     def dump_token(self, data, **kwargs):
         return pydash.omit_by(
-            {
-                **data,
-                "parts": dump_tokens(data["parts"]),
-                "partial": list(data["partial"]),
-            },
-            lambda value: value is None,
+            {**data, "parts": dump_tokens(data["parts"]),}, lambda value: value is None,
         )
 
 

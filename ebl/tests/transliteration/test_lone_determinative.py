@@ -10,14 +10,12 @@ from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     ErasureState,
     LoneDeterminative,
-    Partial,
 )
 
 
 def test_of_value():
     value = "{bu}"
-    partial = Partial(True, False)
-    lone_determinative = LoneDeterminative.of_value(value, partial)
+    lone_determinative = LoneDeterminative.of_value(value)
     assert lone_determinative.value == value
     assert lone_determinative.lemmatizable is False
     assert lone_determinative.language == DEFAULT_LANGUAGE
@@ -28,26 +26,17 @@ def test_of_value():
 
 
 @pytest.mark.parametrize(
-    "language,normalized,partial",
-    [
-        (Language.SUMERIAN, False, Partial(False, True)),
-        (Language.AKKADIAN, True, Partial(True, False)),
-    ],
+    "language,normalized", [(Language.SUMERIAN, False), (Language.AKKADIAN, True),],
 )
-def test_lone_determinative(language, normalized, partial):
+def test_lone_determinative(language, normalized):
     value = "{mu}"
     parts = [Determinative([Reading.of("mu")])]
-    lone_determinative = LoneDeterminative(
-        value, language, normalized, partial=partial, parts=parts
-    )
+    lone_determinative = LoneDeterminative(value, language, normalized, parts=parts)
 
-    equal = LoneDeterminative(value, language, normalized, partial=partial, parts=parts)
+    equal = LoneDeterminative(value, language, normalized, parts=parts)
     other_language = LoneDeterminative(value, Language.UNKNOWN, normalized)
     other_value = LoneDeterminative("{bu}", language, normalized)
     other_normalized = LoneDeterminative("{mu}", language, not normalized)
-    other_partial = LoneDeterminative(
-        value, language, normalized, partial=Partial(True, True)
-    )
 
     assert lone_determinative.value == value
     assert lone_determinative.lemmatizable is False
@@ -62,7 +51,6 @@ def test_lone_determinative(language, normalized, partial):
         "normalized": normalized,
         "language": lone_determinative.language.name,
         "lemmatizable": lone_determinative.lemmatizable,
-        "partial": list(partial),
         "erasure": ErasureState.NONE.name,
         "parts": dump_tokens(parts),
     }
@@ -75,7 +63,6 @@ def test_lone_determinative(language, normalized, partial):
         other_language,
         other_value,
         other_normalized,
-        other_partial,
     ]:
         assert lone_determinative != not_equal
         assert hash(lone_determinative) != hash(not_equal)

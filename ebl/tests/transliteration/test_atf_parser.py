@@ -4,24 +4,24 @@ from hamcrest import assert_that, contains, has_entries, starts_with
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
+    Determinative,
     DocumentOrientedGloss,
     Erasure,
     OmissionOrRemoval,
     PerhapsBrokenAway,
     Side,
-    Determinative,
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme,
     Divider,
     Logogram,
+    Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    Number,
-    CompoundGrapheme,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -40,7 +40,6 @@ from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
     LoneDeterminative,
-    Partial,
     Word,
 )
 
@@ -518,7 +517,6 @@ def test_parser_version(parser, version):
                         BrokenAway("]"),
                         LoneDeterminative.of_value(
                             "{bu}",
-                            Partial(False, False),
                             ErasureState.NONE,
                             [Determinative([Reading.of("bu")]),],
                         ),
@@ -615,7 +613,6 @@ def test_parser_version(parser, version):
                     (
                         LoneDeterminative.of_value(
                             "{bu-bu}",
-                            Partial(False, False),
                             ErasureState.NONE,
                             [
                                 Determinative(
@@ -651,7 +648,6 @@ def test_parser_version(parser, version):
                         ),
                         LoneDeterminative.of_value(
                             "{u₂#}",
-                            Partial(False, False),
                             ErasureState.NONE,
                             [
                                 Determinative(
