@@ -3,14 +3,15 @@ from hamcrest import assert_that, contains, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
+    AccidentalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
-    OmissionOrRemoval,
+    Omission,
     PerhapsBrokenAway,
+    Removal,
 )
-from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -141,7 +142,7 @@ def test_parser_version(parser, version):
                         Word(
                             "<en-da-ab-su₈",
                             parts=[
-                                OmissionOrRemoval("<"),
+                                Omission.open(),
                                 Reading.of("en"),
                                 Joiner.hyphen(),
                                 Reading.of("da"),
@@ -152,7 +153,20 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         UnknownNumberOfSigns(),
-                        OmissionOrRemoval(">"),
+                        Omission.close(),
+                    ),
+                )
+            ],
+        ),
+        (
+            "1. <<en ...>>",
+            [
+                TextLine(
+                    "1.",
+                    (
+                        Word("<<en", parts=[Removal.open(), Reading.of("en"),],),
+                        UnknownNumberOfSigns(),
+                        Removal.close(),
                     ),
                 )
             ],
@@ -757,7 +771,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Erasure(Side.LEFT),
+                        Erasure.open(),
                         Word(
                             "me-e-li",
                             erasure=ErasureState.ERASED,
@@ -769,13 +783,13 @@ def test_parser_version(parser, version):
                                 Reading.of("li"),
                             ],
                         ),
-                        Erasure(Side.CENTER),
+                        Erasure.center(),
                         Word(
                             "ku",
                             erasure=ErasureState.OVER_ERASED,
                             parts=[Reading.of("ku")],
                         ),
-                        Erasure(Side.RIGHT),
+                        Erasure.close(),
                     ),
                 ),
             ],
@@ -795,10 +809,10 @@ def test_parser_version(parser, version):
                                 Joiner.hyphen(),
                                 Reading.of("li"),
                                 Joiner.hyphen(),
-                                Erasure(Side.LEFT),
-                                Erasure(Side.CENTER),
+                                Erasure.open(),
+                                Erasure.center(),
                                 Reading.of("ku"),
-                                Erasure(Side.RIGHT),
+                                Erasure.close(),
                             ],
                         ),
                     ),
@@ -814,14 +828,14 @@ def test_parser_version(parser, version):
                         Word(
                             "°me-e-li\\°-ku",
                             parts=[
-                                Erasure(Side.LEFT),
+                                Erasure.open(),
                                 Reading.of("me"),
                                 Joiner.hyphen(),
                                 Reading.of("e"),
                                 Joiner.hyphen(),
                                 Reading.of("li"),
-                                Erasure(Side.CENTER),
-                                Erasure(Side.RIGHT),
+                                Erasure.center(),
+                                Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
                             ],
@@ -841,11 +855,11 @@ def test_parser_version(parser, version):
                             parts=[
                                 Reading.of("me"),
                                 Joiner.hyphen(),
-                                Erasure(Side.LEFT),
+                                Erasure.open(),
                                 Reading.of("e"),
-                                Erasure(Side.CENTER),
+                                Erasure.center(),
                                 Reading.of("li"),
-                                Erasure(Side.RIGHT),
+                                Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
                             ],
@@ -865,19 +879,19 @@ def test_parser_version(parser, version):
                             parts=[
                                 Reading.of("me"),
                                 Joiner.hyphen(),
-                                Erasure(Side.LEFT),
+                                Erasure.open(),
                                 Reading.of("e"),
-                                Erasure(Side.CENTER),
+                                Erasure.center(),
                                 Reading.of("li"),
-                                Erasure(Side.RIGHT),
+                                Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of("me"),
                                 Joiner.hyphen(),
-                                Erasure(Side.LEFT),
+                                Erasure.open(),
                                 Reading.of("e"),
-                                Erasure(Side.CENTER),
+                                Erasure.center(),
                                 Reading.of("li"),
-                                Erasure(Side.RIGHT),
+                                Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
                             ],
@@ -981,9 +995,9 @@ def test_parser_version(parser, version):
                                 Reading.of("in"),
                                 ValueToken("]"),
                                 Joiner.hyphen(),
-                                OmissionOrRemoval("<("),
+                                AccidentalOmission.open(),
                                 UnknownNumberOfSigns(),
-                                OmissionOrRemoval(")>"),
+                                AccidentalOmission.close(),
                             ],
                         ),
                     ),

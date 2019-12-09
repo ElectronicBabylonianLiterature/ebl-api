@@ -11,16 +11,17 @@ from lark.visitors import Transformer, v_args
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
+    AccidentalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
-    OmissionOrRemoval,
+    LinguisticGloss,
+    Omission,
     PerhapsBrokenAway,
     PhoneticGloss,
-    LinguisticGloss,
+    Removal,
 )
-from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (
@@ -135,13 +136,23 @@ class TreeToSign(Transformer):
 
 
 class TreeToWord(TreeToSign):
-    @v_args(inline=True)
-    def ebl_atf_text_line__open_omission(self, value):
-        return OmissionOrRemoval(str(value))
+    def ebl_atf_text_line__open_omission(self, _):
+        return Omission.open()
 
-    @v_args(inline=True)
-    def ebl_atf_text_line__close_omission(self, value):
-        return OmissionOrRemoval(str(value))
+    def ebl_atf_text_line__close_omission(self, _):
+        return Omission.close()
+
+    def ebl_atf_text_line__open_accidental_omission(self, _):
+        return AccidentalOmission.open()
+
+    def ebl_atf_text_line__close_accidental_omission(self, _):
+        return AccidentalOmission.close()
+
+    def ebl_atf_text_line__open_removal(self, _):
+        return Removal.open()
+
+    def ebl_atf_text_line__close_removal(self, _):
+        return Removal.close()
 
     def ebl_atf_text_line__lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
@@ -198,11 +209,11 @@ class TreeToWord(TreeToSign):
     @v_args(inline=True)
     def ebl_atf_text_line__inline_erasure(self, erased, over_erased):
         return [
-            Erasure(Side.LEFT),
+            Erasure.open(),
             *erased.children,
-            Erasure(Side.CENTER),
+            Erasure.center(),
             *over_erased.children,
-            Erasure(Side.RIGHT),
+            Erasure.close(),
         ]
 
     @staticmethod
@@ -325,11 +336,11 @@ class TreeToLine(TreeToWord):
             return visitor.tokens
 
         return [
-            Erasure(Side.LEFT),
+            Erasure.open(),
             set_erasure_state(erased, ErasureState.ERASED),
-            Erasure(Side.CENTER),
+            Erasure.center(),
             set_erasure_state(over_erased, ErasureState.OVER_ERASED),
-            Erasure(Side.RIGHT),
+            Erasure.close(),
         ]
 
 

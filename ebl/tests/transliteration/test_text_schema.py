@@ -3,8 +3,7 @@ import pytest
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.application.line_schemas import dump_lines
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.transliteration.domain.enclosure_tokens import Erasure, Determinative
-from ebl.transliteration.domain.side import Side
+from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -62,9 +61,9 @@ def test_dump_line():
                         language=Language.SUMERIAN,
                         parts=[Determinative([Reading.of("nu")])],
                     ),
-                    Erasure(Side.LEFT),
-                    Erasure(Side.CENTER),
-                    Erasure(Side.RIGHT),
+                    Erasure.open(),
+                    Erasure.center(),
+                    Erasure.close(),
                     LineContinuation("→"),
                 ],
             )

@@ -26,11 +26,11 @@ _have_both: tabulation
          | unknown_number_of_signs
 _omit_left.-1: cba
           | cpba
-          | close_omission
+          | close_omission_or_removal
           | cdog
 _omit_right.-1: oba
            | opba
-           | open_omission
+           | open_omission_or_removal
            | odog
 
 divider.5: DIVIDER_SYMBOL modifiers flags
@@ -93,10 +93,15 @@ _WORD_SEPARATOR: " "
 DIVIDER: DIVIDER_SYMBOL MODIFIER* FLAG
 DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
 
-open_omission: OPEN_OMISSION
-close_omission: CLOSE_OMISSION
-OPEN_OMISSION: "<<" | "<(" | "<"
-CLOSE_OMISSION:  ">>" | ")>" | ">"
+?open_omission_or_removal: open_omission | open_accidental_omission | open_removal
+?close_omission_or_removal: close_omission | close_accidental_omission | close_removal
+open_omission: "<"
+close_omission: ">"
+open_accidental_omission: "<("
+close_accidental_omission: ")>"
+open_removal: "<<"
+close_removal: ">>"
+
 
 BROKEN_AWAY: OPEN_BROKEN_AWAY
            | CLOSE_BROKEN_AWAY
@@ -108,7 +113,7 @@ _inline_broken_away: _open_inline_broken_away
 _open_inline_broken_away: OPEN_BROKEN_AWAY | OPEN_PERHAPS_BROKEN_AWAY
 _close_inline_broken_away: CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY
 
-lone_determinative.4: open_omission? (phonetic_gloss | determinative) close_omission?
+lone_determinative.4: open_omission_or_removal? (phonetic_gloss | determinative) close_omission_or_removal?
 
 word.3: joiner? _any_open? _word_body _any_close? joiner?
 _word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasure (_loose_joiner? _parts)?)*
@@ -128,7 +133,7 @@ linguistic_gloss: _OPEN_LINGUISTIC_GLOSS gloss_body _CLOSE_LINGUISTIC_GLOSS
 phonetic_gloss: _OPEN_PHONETIC_GLOSS determinative_body _CLOSE_PHONETIC_GLOSS
 determinative: _OPEN_DETERMINATIVE determinative_body _CLOSE_DETERMINATIVE
 determinative_body: oba? _value (_strict_joiner _value)* cba?
-gloss_body: _value open_omission? (_strict_joiner _value)* close_omission?
+gloss_body: _value open_omission_or_removal? (_strict_joiner _value)* close_omission_or_removal?
 _OPEN_DETERMINATIVE: "{"
 _CLOSE_DETERMINATIVE: "}"
 _OPEN_PHONETIC_GLOSS: "{+"
@@ -140,8 +145,8 @@ _loose_joiner: _strict_joiner
             | in_word_newline? _any_close joiner? _any_open?
             | in_word_newline? _any_close? joiner? _any_open
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
-_any_close: (_close_inline_broken_away | close_omission)+
-_any_open: (open_omission | _open_inline_broken_away)+
+_any_close: (_close_inline_broken_away | close_omission_or_removal)+
+_any_open: (open_omission_or_removal | _open_inline_broken_away)+
 !joiner: "-" | "+" | "." | ":"
 
 _value: unidentified_sign

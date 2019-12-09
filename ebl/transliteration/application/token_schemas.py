@@ -8,21 +8,21 @@ from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
+    AccidentalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
+    Gloss,
+    LinguisticGloss,
+    Omission,
     OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
-    LinguisticGloss,
-    Gloss,
-    Omission,
     Removal,
-    AccidentalOmission,
 )
-from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -101,6 +101,9 @@ class PerhapsBrokenAwaySchema(Schema):
 
 
 class OmissionOrRemovalSchema(Schema):
+    """This class is deprecated and kept only for backwards compatibility.
+    Omission, AccidentalOmission, or Removal should be used instead."""
+
     type = fields.Constant("OmissionOrRemoval", required=True)
     value = fields.String(required=True)
 

@@ -5,7 +5,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
 )
-from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
@@ -166,32 +165,22 @@ def test_text_line_atf_gloss():
 @pytest.mark.parametrize(
     "erasure,expected",
     [
-        ([Erasure(Side.LEFT), Erasure(Side.CENTER), Erasure(Side.RIGHT),], "°\\°",),
+        ([Erasure.open(), Erasure.center(), Erasure.close(),], "°\\°",),
         (
-            [
-                Erasure(Side.LEFT),
-                Word("mu-bu"),
-                Erasure(Side.CENTER),
-                Erasure(Side.RIGHT),
-            ],
+            [Erasure.open(), Word("mu-bu"), Erasure.center(), Erasure.close(),],
             "°mu-bu\\°",
         ),
         (
-            [
-                Erasure(Side.LEFT),
-                Erasure(Side.CENTER),
-                Word("mu-bu"),
-                Erasure(Side.RIGHT),
-            ],
+            [Erasure.open(), Erasure.center(), Word("mu-bu"), Erasure.close(),],
             "°\\mu-bu°",
         ),
         (
             [
-                Erasure(Side.LEFT),
+                Erasure.open(),
                 Word("mu-bu"),
-                Erasure(Side.CENTER),
+                Erasure.center(),
                 Word("mu-bu"),
-                Erasure(Side.RIGHT),
+                Erasure.close(),
             ],
             "°mu-bu\\mu-bu°",
         ),
