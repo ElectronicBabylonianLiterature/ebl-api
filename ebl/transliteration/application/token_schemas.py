@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import pydash
@@ -15,6 +16,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
     PhoneticGloss,
     Side,
+    LinguisticGloss,
+    Gloss,
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
@@ -407,38 +410,45 @@ class CompoundGraphemeSchema(Schema):
         return CompoundGrapheme(data["value"])
 
 
-class DeterminativeSchema(Schema):
-    type = fields.Constant("Determinative", required=True)
+class GlossSchema(Schema):
     value = fields.String()
     parts = fields.List(fields.Dict(), required=True)
+
+    @abstractmethod
+    @post_load
+    def make_token(self, data, **kwargs) -> Gloss:
+        ...
+
+    @post_dump
+    def dump_token(self, data, **kwargs):
+        return {
+            **data,
+            "parts": dump_tokens(data["parts"]),
+        }
+
+
+class DeterminativeSchema(GlossSchema):
+    type = fields.Constant("Determinative", required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
         return Determinative(load_tokens(data["parts"]))
 
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "parts": dump_tokens(data["parts"]),
-        }
 
-
-class PhoneticGlossSchema(Schema):
+class PhoneticGlossSchema(GlossSchema):
     type = fields.Constant("PhoneticGloss", required=True)
-    value = fields.String()
-    parts = fields.List(fields.Dict(), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
         return PhoneticGloss(load_tokens(data["parts"]))
 
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "parts": dump_tokens(data["parts"]),
-        }
+
+class LinguisticGlossSchema(GlossSchema):
+    type = fields.Constant("LinguisticGloss", required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return LinguisticGloss(load_tokens(data["parts"]))
 
 
 _schemas: Mapping[str, Type[Schema]] = {
@@ -470,6 +480,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "Grapheme": GraphemeSchema,
     "Determinative": DeterminativeSchema,
     "PhoneticGloss": PhoneticGlossSchema,
+    "LinguisticGloss": LinguisticGlossSchema,
 }
 
 

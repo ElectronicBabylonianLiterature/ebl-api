@@ -8,6 +8,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     PhoneticGloss,
     Side,
+    LinguisticGloss,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
@@ -91,6 +92,25 @@ def test_phonetic_gloss():
 
     serialized = {
         "type": "PhoneticGloss",
+        "value": gloss.value,
+        "parts": dump_tokens(parts),
+    }
+    assert_token_serialization(gloss, serialized)
+
+
+def test_linguistic_gloss():
+    parts = [Reading.of("kur"), Joiner.hyphen(), Reading.of("kur")]
+    gloss = LinguisticGloss(parts)
+
+    expected_value = f"{{{{{''.join(part.value for part in parts)}}}}}"
+    expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
+    assert gloss.value == expected_value
+    assert gloss.get_key() == f"LinguisticGloss⁝{expected_value}{expected_parts}"
+    assert gloss.parts == tuple(parts)
+    assert gloss.lemmatizable is False
+
+    serialized = {
+        "type": "LinguisticGloss",
         "value": gloss.value,
         "parts": dump_tokens(parts),
     }

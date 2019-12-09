@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from enum import Enum, auto
 from typing import Sequence
 
@@ -55,28 +56,57 @@ class OmissionOrRemoval(ValueToken):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Determinative(Token):
+class Gloss(Token):
     _parts: Sequence[Token] = attr.ib(converter=convert_token_sequence)
 
     @property
-    def parts(self) -> Sequence["Token"]:
+    @abstractmethod
+    def open(self) -> str:
+        ...
+
+    @property
+    @abstractmethod
+    def close(self) -> str:
+        ...
+
+    @property
+    def parts(self) -> Sequence[Token]:
         return self._parts
 
     @property
     def value(self) -> str:
         parts = "".join(token.value for token in self.parts)
-        return f"{{{parts}}}"
+        return f"{self.open}{parts}{self.close}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class PhoneticGloss(Token):
-    _parts: Sequence[Token] = attr.ib(converter=convert_token_sequence)
+class Determinative(Gloss):
+    @property
+    def open(self) -> str:
+        return "{"
 
     @property
-    def parts(self) -> Sequence["Token"]:
-        return self._parts
+    def close(self) -> str:
+        return "}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class PhoneticGloss(Gloss):
+    @property
+    def open(self) -> str:
+        return "{+"
 
     @property
-    def value(self) -> str:
-        parts = "".join(token.value for token in self.parts)
-        return f"{{+{parts}}}"
+    def close(self) -> str:
+        return "}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class LinguisticGloss(Gloss):
+    @property
+    def open(self) -> str:
+        return "{{"
+
+    @property
+    def close(self) -> str:
+        return "}}"
