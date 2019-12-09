@@ -19,6 +19,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
     PhoneticGloss,
     Side,
+    LinguisticGloss,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
@@ -134,6 +135,14 @@ class TreeToSign(Transformer):
 
 
 class TreeToWord(TreeToSign):
+    @v_args(inline=True)
+    def ebl_atf_text_line__open_omission(self, value):
+        return OmissionOrRemoval(str(value))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__close_omission(self, value):
+        return OmissionOrRemoval(str(value))
+
     def ebl_atf_text_line__lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
 
@@ -180,6 +189,11 @@ class TreeToWord(TreeToSign):
     def ebl_atf_text_line__phonetic_gloss(self, tree):
         tokens = self._children_to_tokens(tree.children)
         return PhoneticGloss(tokens)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__linguistic_gloss(self, tree):
+        tokens = self._children_to_tokens(tree.children)
+        return LinguisticGloss(tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__inline_erasure(self, erased, over_erased):
@@ -256,18 +270,6 @@ class TreeToLine(TreeToWord):
     @v_args(inline=True)
     def ebl_atf_text_line__opba(self, value):
         return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__omission_or_removal(self, value):
-        return OmissionOrRemoval(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__oo(self, value):
-        return OmissionOrRemoval(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__co(self, value):
-        return OmissionOrRemoval(str(value))
 
     @v_args(inline=True)
     def ebl_atf_text_line__document_oriented_gloss(self, value):

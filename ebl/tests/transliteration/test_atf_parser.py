@@ -141,7 +141,7 @@ def test_parser_version(parser, version):
                         Word(
                             "<en-da-ab-su₈",
                             parts=[
-                                ValueToken("<"),
+                                OmissionOrRemoval("<"),
                                 Reading.of("en"),
                                 Joiner.hyphen(),
                                 Reading.of("da"),
@@ -981,9 +981,9 @@ def test_parser_version(parser, version):
                                 Reading.of("in"),
                                 ValueToken("]"),
                                 Joiner.hyphen(),
-                                ValueToken("<("),
+                                OmissionOrRemoval("<("),
                                 UnknownNumberOfSigns(),
-                                ValueToken(")>"),
+                                OmissionOrRemoval(")>"),
                             ],
                         ),
                     ),

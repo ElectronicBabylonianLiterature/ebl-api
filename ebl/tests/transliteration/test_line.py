@@ -121,6 +121,7 @@ def test_line_of_iterable(code, language, normalized):
         "15. ($___$) -(x)-eš-am₃?#",
         "16. am₃- ($___$)",
         "17. pa- {(he-pi₂)}",
+        "18. du₃-am₃{{mu-un-<(du₃)>}}",
     ],
 )
 def test_text_line_atf(atf):

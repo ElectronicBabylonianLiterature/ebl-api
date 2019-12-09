@@ -8,6 +8,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Erasure,
     Side,
+    LinguisticGloss,
+    OmissionOrRemoval,
 )
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import (
@@ -166,24 +168,14 @@ from ebl.transliteration.domain.word_tokens import (
             "{{ku}}nu",
             Word(
                 "{{ku}}nu",
-                parts=[
-                    ValueToken("{{"),
-                    Reading.of("ku"),
-                    ValueToken("}}"),
-                    Reading.of("nu"),
-                ],
+                parts=[LinguisticGloss([Reading.of("ku"),]), Reading.of("nu"),],
             ),
         ),
         (
             "ku{{nu}}",
             Word(
                 "ku{{nu}}",
-                parts=[
-                    Reading.of("ku"),
-                    ValueToken("{{"),
-                    Reading.of("nu"),
-                    ValueToken("}}"),
-                ],
+                parts=[Reading.of("ku"), LinguisticGloss([Reading.of("nu"),]),],
             ),
         ),
         (
@@ -198,9 +190,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "ku{{nu}}si",
                 parts=[
                     Reading.of("ku"),
-                    ValueToken("{{"),
-                    Reading.of("nu"),
-                    ValueToken("}}"),
+                    LinguisticGloss([Reading.of("nu"),]),
                     Reading.of("si"),
                 ],
             ),
@@ -349,9 +339,9 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "<{10}>bu",
                 parts=[
-                    ValueToken("<"),
+                    OmissionOrRemoval("<"),
                     Determinative([Number.of("10")]),
-                    ValueToken(">"),
+                    OmissionOrRemoval(">"),
                     Reading.of("bu"),
                 ],
             ),
@@ -391,9 +381,9 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "<GAR?>",
                 parts=[
-                    ValueToken("<"),
+                    OmissionOrRemoval("<"),
                     Logogram.of("GAR", flags=[atf.Flag.UNCERTAIN]),
-                    ValueToken(">"),
+                    OmissionOrRemoval(">"),
                 ],
             ),
         ),
@@ -486,9 +476,9 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Reading.of("he", 2),
                     Joiner.hyphen(),
-                    ValueToken("<("),
+                    OmissionOrRemoval("<("),
                     Reading.of("pa", 3),
-                    ValueToken(")>"),
+                    OmissionOrRemoval(")>"),
                 ],
             ),
         ),
@@ -511,13 +501,13 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "<en-da-ab>",
                 parts=[
-                    ValueToken("<"),
+                    OmissionOrRemoval("<"),
                     Reading.of("en"),
                     Joiner.hyphen(),
                     Reading.of("da"),
                     Joiner.hyphen(),
                     Reading.of("ab"),
-                    ValueToken(">"),
+                    OmissionOrRemoval(">"),
                 ],
             ),
         ),
@@ -736,13 +726,13 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("ša", flags=[atf.Flag.DAMAGE]),
                     Joiner(atf.Joiner.HYPHEN),
                     ValueToken("["),
-                    ValueToken("<("),
+                    OmissionOrRemoval("<("),
                     Reading.of("mu"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("un"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("u", 5),
-                    ValueToken(")>"),
+                    OmissionOrRemoval(")>"),
                     ValueToken("]"),
                 ],
             ),
@@ -772,6 +762,28 @@ from ebl.transliteration.domain.word_tokens import (
                 ],
             ),
         ),
+        (
+            "du₃-am₃{{mu-un-<(du₃)>}}",
+            Word(
+                "du₃-am₃{{mu-un-<(du₃)>}}",
+                parts=[
+                    Reading.of("du", 3),
+                    Joiner(atf.Joiner.HYPHEN),
+                    Reading.of("am", 3),
+                    LinguisticGloss(
+                        [
+                            Reading.of("mu"),
+                            Joiner(atf.Joiner.HYPHEN),
+                            Reading.of("un"),
+                            Joiner(atf.Joiner.HYPHEN),
+                            OmissionOrRemoval("<("),
+                            Reading.of("du", 3),
+                            OmissionOrRemoval(")>"),
+                        ]
+                    ),
+                ],
+            ),
+        ),
     ],
 )
 def test_word(parser, atf, expected):
@@ -787,9 +799,9 @@ def test_word(parser, atf, expected):
             LoneDeterminative(
                 "<{10}>",
                 parts=[
-                    ValueToken("<"),
+                    OmissionOrRemoval("<"),
                     Determinative([Number.of("10")]),
-                    ValueToken(">"),
+                    OmissionOrRemoval(">"),
                 ],
             ),
         ),
