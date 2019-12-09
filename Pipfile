@@ -22,7 +22,7 @@ roman = "*"
 waitress = "*"
 falcon-apispec = "*"
 progress = "*"
-lark-parser = {git="https://github.com/ElectronicBabylonianLiterature/lark.git", editable = true, ref = "8792c99f39f6e4c09274da3652f6477cba686c70"}
+lark-parser = {git = "https://github.com/ElectronicBabylonianLiterature/lark.git",editable = true,ref = "8792c99f39f6e4c09274da3652f6477cba686c70"}
 marshmallow = "*"
 inflect = "*"
 
@@ -31,12 +31,10 @@ pytest = "*"
 pytest-cov = "*"
 mongomock = "*"
 freezegun = "*"
-pyexecjs = "*"
 mypy = "*"
 mypy-extensions = "*"
 pytest-watch = "*"
 pytest-mockito = "*"
-v = {editable = true,version = "*"}
 factory-boy = "*"
 rope = "*"
 flake8 = "*"

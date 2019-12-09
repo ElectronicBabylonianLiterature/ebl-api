@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9d43b37a123f9dfeae9573bea76d64fb2d23e68f8c5cac1b9d8aa53397aadbb1"
+            "sha256": "1f4ba9f3e00334075c95a6af6037c02c6f1d6c866e7da0aabc75dcaf86a0fecf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -718,13 +718,6 @@
             ],
             "version": "==2.5.0"
         },
-        "pyexecjs": {
-            "hashes": [
-                "sha256:34cc1d070976918183ff7bdc0ad71f8157a891c92708c00c5fbbff7a769f505c"
-            ],
-            "index": "pypi",
-            "version": "==1.5.1"
-        },
         "pyflakes": {
             "hashes": [
                 "sha256:17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0",
@@ -887,14 +880,6 @@
                 "sha256:cf8b63fedea4d89bab840ecbb93e75578af28f76f66c35889bd7065f5af88575"
             ],
             "version": "==3.7.4.1"
-        },
-        "v": {
-            "hashes": [
-                "sha256:2d5a8f79a36aaebe62ef2c7068e3ec7f86656078202edabfdbf74715dc822d36",
-                "sha256:cd6b6b20b4a611f209c88bcdfb7211321f85662efb2bdd53a7b40314d0a84618"
-            ],
-            "index": "pypi",
-            "version": "==0.0.0"
         },
         "virtualenv": {
             "hashes": [

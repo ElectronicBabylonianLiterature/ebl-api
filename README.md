@@ -16,8 +16,6 @@ or generating the initial data.
 Requirements:
 
 - Python 3.8 & pip
-- A JavaScript runtime, e.g. Node.js (Only required for running the tests using
-MongoDB `map_reduce`.)
 - Docker (optional for running the application)
 
 ```shell script
