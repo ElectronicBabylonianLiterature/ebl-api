@@ -4,8 +4,8 @@ from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
-    Side,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line

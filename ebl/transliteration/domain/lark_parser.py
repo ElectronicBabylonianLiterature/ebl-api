@@ -18,9 +18,9 @@ from ebl.transliteration.domain.enclosure_tokens import (
     OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
-    Side,
     LinguisticGloss,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
 from ebl.transliteration.domain.sign_tokens import (

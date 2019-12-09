@@ -5,6 +5,8 @@ from typing import Mapping, NewType, Optional
 import pydash
 from pyoracc.atf.common.atffile import AtfFile
 
+from ebl.transliteration.domain.side import Side
+
 Atf = NewType("Atf", str)
 
 
@@ -108,7 +110,24 @@ UNIDENTIFIED_SIGN = "X"
 IN_WORD_NEWLINE = ";"
 
 ERASURE_BOUNDARY = "°"
-ERASURE_DELIMITER = "\\"
+ERASURE: Mapping[Side, str] = {
+    Side.LEFT: ERASURE_BOUNDARY,
+    Side.CENTER: "\\",
+    Side.RIGHT: ERASURE_BOUNDARY,
+}
+
+OMISSION: Mapping[Side, str] = {
+    Side.LEFT: "<",
+    Side.RIGHT: ">",
+}
+ACCIDENTAL_OMISSION: Mapping[Side, str] = {
+    Side.LEFT: "<(",
+    Side.RIGHT: ")>",
+}
+REMOVAL: Mapping[Side, str] = {
+    Side.LEFT: "<<",
+    Side.RIGHT: ">>",
+}
 
 COMPOUND_GRAPHEME_DELIMITER = "|"
 
@@ -135,7 +154,7 @@ ATF_SPEC: Mapping[str, str] = {
 
 ATF_EXTENSIONS: Mapping[str, str] = {
     "erasure_boundary": ERASURE_BOUNDARY,
-    "erasure_delimiter": ERASURE_DELIMITER,
+    "erasure_delimiter": ERASURE[Side.CENTER],
     "erasure_illegible": r"°[^\°]*\\",
     "line_continuation": "→",
 }

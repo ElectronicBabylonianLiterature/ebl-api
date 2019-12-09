@@ -8,8 +8,11 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     OmissionOrRemoval,
     PerhapsBrokenAway,
-    Side,
+    Omission,
+    AccidentalOmission,
+    Removal,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.tokens import (
@@ -98,6 +101,18 @@ class AtfVisitor(TokenVisitor):
 
     @visit.register
     def _visit_omission_or_removal(self, omission: OmissionOrRemoval) -> None:
+        self._side(omission.side)(omission)
+
+    @visit.register
+    def _visit_omission(self, omission: Omission) -> None:
+        self._side(omission.side)(omission)
+
+    @visit.register
+    def _visit_accidental_omission(self, omission: AccidentalOmission) -> None:
+        self._side(omission.side)(omission)
+
+    @visit.register
+    def _visit_removal(self, omission: Removal) -> None:
         self._side(omission.side)(omission)
 
     def _side(self, side: Side) -> Callable[[Token], None]:

@@ -7,10 +7,10 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     PhoneticGloss,
     Erasure,
-    Side,
     LinguisticGloss,
     OmissionOrRemoval,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import (
     Logogram,

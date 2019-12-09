@@ -1,17 +1,11 @@
 from abc import abstractmethod
-from enum import Enum, auto
-from typing import Sequence
+from typing import Sequence, Mapping, TypeVar
 
 import attr
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.tokens import ValueToken, Token, convert_token_sequence
-
-
-class Side(Enum):
-    LEFT = auto()
-    CENTER = auto()
-    RIGHT = auto()
 
 
 @attr.s(frozen=True)
@@ -35,24 +29,68 @@ class PerhapsBrokenAway(ValueToken):
         return Side.LEFT if self.value == "(" else Side.RIGHT
 
 
-@attr.s(auto_attribs=True, frozen=True)
-class Erasure(Token):
-    side: Side
-
-    @property
-    def value(self):
-        return {
-            Side.LEFT: atf.ERASURE_BOUNDARY,
-            Side.CENTER: atf.ERASURE_DELIMITER,
-            Side.RIGHT: atf.ERASURE_BOUNDARY,
-        }[self.side]
-
-
 @attr.s(frozen=True)
 class OmissionOrRemoval(ValueToken):
     @property
     def side(self) -> Side:
         return Side.LEFT if (self.value in ["<(", "<", "<<"]) else Side.RIGHT
+
+
+T = TypeVar("T")
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Enclosure(Token):
+    side: Side
+
+    @staticmethod
+    @abstractmethod
+    def get_sides() -> Mapping[Side, str]:
+        ...
+
+    @property
+    def value(self):
+        return self.get_sides()[self.side]
+
+    @classmethod
+    def open(cls):
+        return cls(Side.LEFT)
+
+    @classmethod
+    def close(cls):
+        return cls(Side.RIGHT)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Omission(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.OMISSION
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class AccidentalOmission(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.ACCIDENTAL_OMISSION
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Removal(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.REMOVAL
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Erasure(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.ERASURE
+
+    @classmethod
+    def center(cls):
+        return cls(Side.CENTER)
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -7,9 +7,12 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
     PhoneticGloss,
-    Side,
     LinguisticGloss,
+    Omission,
+    AccidentalOmission,
+    Removal,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
 
@@ -30,6 +33,31 @@ def test_erasure(side, value):
         "side": side.name,
     }
     assert_token_serialization(erasure, serialized)
+
+
+@pytest.mark.parametrize(
+    "enclosure_class, type_, sides",
+    [
+        (Omission, "Omission", {Side.LEFT: "<", Side.RIGHT: ">"}),
+        (AccidentalOmission, "AccidentalOmission", {Side.LEFT: "<(", Side.RIGHT: ")>"}),
+        (Removal, "Removal", {Side.LEFT: "<<", Side.RIGHT: ">>"}),
+    ],
+)
+@pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT,])
+def test_enclosure(enclosure_class, type_, sides, side):
+    value = sides[side]
+    enclosure = enclosure_class(side)
+
+    assert enclosure.value == value
+    assert enclosure.get_key() == f"{type_}⁝{value}"
+    assert enclosure.lemmatizable is False
+
+    serialized = {
+        "type": type_,
+        "value": enclosure.value,
+        "side": side.name,
+    }
+    assert_token_serialization(enclosure, serialized)
 
 
 @pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT])

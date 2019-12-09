@@ -15,10 +15,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
     OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
-    Side,
     LinguisticGloss,
     Gloss,
+    Omission,
+    Removal,
+    AccidentalOmission,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -106,6 +109,48 @@ class OmissionOrRemovalSchema(Schema):
         return OmissionOrRemoval(data["value"])
 
 
+class EnclosureSchema(Schema):
+    value = fields.String(required=True)
+    side = NameEnum(Side, required=True)
+
+    @abstractmethod
+    @post_load
+    def make_token(self, data, **kwargs) -> Gloss:
+        ...
+
+
+class OmissionSchema(EnclosureSchema):
+    type = fields.Constant("Omission", required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Omission(data["side"])
+
+
+class AccidentalOmissionSchema(EnclosureSchema):
+    type = fields.Constant("AccidentalOmission", required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return AccidentalOmission(data["side"])
+
+
+class RemovalSchema(EnclosureSchema):
+    type = fields.Constant("Removal", required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Removal(data["side"])
+
+
+class ErasureSchema(EnclosureSchema):
+    type = fields.Constant("Erasure", required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Erasure(data["side"])
+
+
 class LineContinuationSchema(Schema):
     type = fields.Constant("LineContinuation", required=True)
     value = fields.String(required=True)
@@ -113,16 +158,6 @@ class LineContinuationSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return LineContinuation(data["value"])
-
-
-class ErasureSchema(Schema):
-    type = fields.Constant("Erasure", required=True)
-    value = fields.String(required=True)
-    side = NameEnum(Side, required=True)
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return Erasure(data["side"])
 
 
 class UnknownNumberOfSignsSchema(Schema):
@@ -461,6 +496,9 @@ _schemas: Mapping[str, Type[Schema]] = {
     "BrokenAway": BrokenAwaySchema,
     "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
     "OmissionOrRemoval": OmissionOrRemovalSchema,
+    "Omission": OmissionSchema,
+    "AccidentalOmission": AccidentalOmissionSchema,
+    "Removal": RemovalSchema,
     "LineContinuation": LineContinuationSchema,
     "Erasure": ErasureSchema,
     "UnknownNumberOfSigns": UnknownNumberOfSignsSchema,

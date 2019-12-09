@@ -9,8 +9,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     OmissionOrRemoval,
     PerhapsBrokenAway,
-    Side,
 )
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
