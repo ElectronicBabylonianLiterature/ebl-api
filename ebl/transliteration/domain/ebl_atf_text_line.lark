@@ -129,17 +129,11 @@ _parts_tail: _strict_joiner (_value | unknown_number_of_signs)
            | _loose_joiner? (gloss _loose_joiner?)+ (_value | unknown_number_of_signs)?
 
 ?gloss: linguistic_gloss | phonetic_gloss | determinative
-linguistic_gloss: _OPEN_LINGUISTIC_GLOSS gloss_body _CLOSE_LINGUISTIC_GLOSS
-phonetic_gloss: _OPEN_PHONETIC_GLOSS determinative_body _CLOSE_PHONETIC_GLOSS
-determinative: _OPEN_DETERMINATIVE determinative_body _CLOSE_DETERMINATIVE
+linguistic_gloss: "{{" gloss_body "}}"
+phonetic_gloss: "{+" determinative_body "}"
+determinative: "{" determinative_body "}"
 determinative_body: oba? _value (_strict_joiner _value)* cba?
 gloss_body: _value open_omission_or_removal? (_strict_joiner _value)* close_omission_or_removal?
-_OPEN_DETERMINATIVE: "{"
-_CLOSE_DETERMINATIVE: "}"
-_OPEN_PHONETIC_GLOSS: "{+"
-_CLOSE_PHONETIC_GLOSS: "}"
-_OPEN_LINGUISTIC_GLOSS: "{{"
-_CLOSE_LINGUISTIC_GLOSS: "}}"
 
 _loose_joiner: _strict_joiner
             | in_word_newline? _any_close joiner? _any_open?
