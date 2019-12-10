@@ -116,11 +116,11 @@ ERASURE: Mapping[Side, str] = {
     Side.RIGHT: ERASURE_BOUNDARY,
 }
 
-OMISSION: Mapping[Side, str] = {
+ACCIDENTAL_OMISSION: Mapping[Side, str] = {
     Side.LEFT: "<",
     Side.RIGHT: ">",
 }
-ACCIDENTAL_OMISSION: Mapping[Side, str] = {
+INTENTIONAL_OMISSION: Mapping[Side, str] = {
     Side.LEFT: "<(",
     Side.RIGHT: ")>",
 }

@@ -8,8 +8,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     PhoneticGloss,
     LinguisticGloss,
-    Omission,
     AccidentalOmission,
+    IntentionalOmission,
     Removal,
 )
 from ebl.transliteration.domain.side import Side
@@ -38,8 +38,12 @@ def test_erasure(side, value):
 @pytest.mark.parametrize(
     "enclosure_class, type_, sides",
     [
-        (Omission, "Omission", {Side.LEFT: "<", Side.RIGHT: ">"}),
-        (AccidentalOmission, "AccidentalOmission", {Side.LEFT: "<(", Side.RIGHT: ")>"}),
+        (AccidentalOmission, "AccidentalOmission", {Side.LEFT: "<", Side.RIGHT: ">"}),
+        (
+            IntentionalOmission,
+            "IntentionalOmission",
+            {Side.LEFT: "<(", Side.RIGHT: ")>"},
+        ),
         (Removal, "Removal", {Side.LEFT: "<<", Side.RIGHT: ">>"}),
     ],
 )

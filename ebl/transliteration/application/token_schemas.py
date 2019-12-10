@@ -8,14 +8,14 @@ from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
-    AccidentalOmission,
+    IntentionalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
     Gloss,
     LinguisticGloss,
-    Omission,
+    AccidentalOmission,
     OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
@@ -122,20 +122,20 @@ class EnclosureSchema(Schema):
         ...
 
 
-class OmissionSchema(EnclosureSchema):
-    type = fields.Constant("Omission", required=True)
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return Omission(data["side"])
-
-
-class AccidentalOmissionSchema(EnclosureSchema):
+class AccidentlOmissionSchema(EnclosureSchema):
     type = fields.Constant("AccidentalOmission", required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
         return AccidentalOmission(data["side"])
+
+
+class IntentionalOmissionSchema(EnclosureSchema):
+    type = fields.Constant("IntentionalOmission", required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return IntentionalOmission(data["side"])
 
 
 class RemovalSchema(EnclosureSchema):
@@ -499,8 +499,8 @@ _schemas: Mapping[str, Type[Schema]] = {
     "BrokenAway": BrokenAwaySchema,
     "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
     "OmissionOrRemoval": OmissionOrRemovalSchema,
-    "Omission": OmissionSchema,
-    "AccidentalOmission": AccidentalOmissionSchema,
+    "AccidentalOmission": AccidentlOmissionSchema,
+    "IntentionalOmission": IntentionalOmissionSchema,
     "Removal": RemovalSchema,
     "LineContinuation": LineContinuationSchema,
     "Erasure": ErasureSchema,

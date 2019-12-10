@@ -3,12 +3,12 @@ from hamcrest import assert_that, contains, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
-    AccidentalOmission,
+    IntentionalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
-    Omission,
+    AccidentalOmission,
     PerhapsBrokenAway,
     Removal,
 )
@@ -142,7 +142,7 @@ def test_parser_version(parser, version):
                         Word(
                             "<en-da-ab-su₈",
                             parts=[
-                                Omission.open(),
+                                AccidentalOmission.open(),
                                 Reading.of("en"),
                                 Joiner.hyphen(),
                                 Reading.of("da"),
@@ -153,7 +153,7 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         UnknownNumberOfSigns(),
-                        Omission.close(),
+                        AccidentalOmission.close(),
                     ),
                 )
             ],
@@ -995,9 +995,9 @@ def test_parser_version(parser, version):
                                 Reading.of("in"),
                                 ValueToken("]"),
                                 Joiner.hyphen(),
-                                AccidentalOmission.open(),
+                                IntentionalOmission.open(),
                                 UnknownNumberOfSigns(),
-                                AccidentalOmission.close(),
+                                IntentionalOmission.close(),
                             ],
                         ),
                     ),

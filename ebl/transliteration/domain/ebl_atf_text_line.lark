@@ -93,12 +93,12 @@ _WORD_SEPARATOR: " "
 DIVIDER: DIVIDER_SYMBOL MODIFIER* FLAG
 DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
 
-?open_omission_or_removal: open_omission | open_accidental_omission | open_removal
-?close_omission_or_removal: close_omission | close_accidental_omission | close_removal
-open_omission: "<"
-close_omission: ">"
-open_accidental_omission: "<("
-close_accidental_omission: ")>"
+?open_omission_or_removal: open_accidental_omission | open_intentional_omission | open_removal
+?close_omission_or_removal: close_accidental_omission | close_intentional_omission | close_removal
+open_accidental_omission: "<"
+close_accidental_omission: ">"
+open_intentional_omission: "<("
+close_intentional_omission: ")>"
 open_removal: "<<"
 close_removal: ">>"
 

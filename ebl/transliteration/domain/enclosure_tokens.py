@@ -62,17 +62,17 @@ class Enclosure(Token):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Omission(Enclosure):
-    @staticmethod
-    def get_sides() -> Mapping[Side, str]:
-        return atf.OMISSION
-
-
-@attr.s(auto_attribs=True, frozen=True)
 class AccidentalOmission(Enclosure):
     @staticmethod
     def get_sides() -> Mapping[Side, str]:
         return atf.ACCIDENTAL_OMISSION
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class IntentionalOmission(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.INTENTIONAL_OMISSION
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -11,13 +11,13 @@ from lark.visitors import Transformer, v_args
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
-    AccidentalOmission,
+    IntentionalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
     LinguisticGloss,
-    Omission,
+    AccidentalOmission,
     PerhapsBrokenAway,
     PhoneticGloss,
     Removal,
@@ -136,17 +136,17 @@ class TreeToSign(Transformer):
 
 
 class TreeToWord(TreeToSign):
-    def ebl_atf_text_line__open_omission(self, _):
-        return Omission.open()
-
-    def ebl_atf_text_line__close_omission(self, _):
-        return Omission.close()
-
     def ebl_atf_text_line__open_accidental_omission(self, _):
         return AccidentalOmission.open()
 
     def ebl_atf_text_line__close_accidental_omission(self, _):
         return AccidentalOmission.close()
+
+    def ebl_atf_text_line__open_intentional_omission(self, _):
+        return IntentionalOmission.open()
+
+    def ebl_atf_text_line__close_intentional_omission(self, _):
+        return IntentionalOmission.close()
 
     def ebl_atf_text_line__open_removal(self, _):
         return Removal.open()

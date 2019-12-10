@@ -4,11 +4,11 @@ from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
-    AccidentalOmission,
+    IntentionalOmission,
     Determinative,
     Erasure,
     LinguisticGloss,
-    Omission,
+    AccidentalOmission,
     PhoneticGloss,
     Removal,
 )
@@ -340,9 +340,9 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "<{10}>bu",
                 parts=[
-                    Omission.open(),
+                    AccidentalOmission.open(),
                     Determinative([Number.of("10")]),
-                    Omission.close(),
+                    AccidentalOmission.close(),
                     Reading.of("bu"),
                 ],
             ),
@@ -382,9 +382,9 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "<GAR?>",
                 parts=[
-                    Omission.open(),
+                    AccidentalOmission.open(),
                     Logogram.of("GAR", flags=[atf.Flag.UNCERTAIN]),
-                    Omission.close(),
+                    AccidentalOmission.close(),
                 ],
             ),
         ),
@@ -483,9 +483,9 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Reading.of("he", 2),
                     Joiner.hyphen(),
-                    AccidentalOmission.open(),
+                    IntentionalOmission.open(),
                     Reading.of("pa", 3),
-                    AccidentalOmission.close(),
+                    IntentionalOmission.close(),
                 ],
             ),
         ),
@@ -508,13 +508,13 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "<en-da-ab>",
                 parts=[
-                    Omission.open(),
+                    AccidentalOmission.open(),
                     Reading.of("en"),
                     Joiner.hyphen(),
                     Reading.of("da"),
                     Joiner.hyphen(),
                     Reading.of("ab"),
-                    Omission.close(),
+                    AccidentalOmission.close(),
                 ],
             ),
         ),
@@ -733,13 +733,13 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of("ša", flags=[atf.Flag.DAMAGE]),
                     Joiner(atf.Joiner.HYPHEN),
                     ValueToken("["),
-                    AccidentalOmission.open(),
+                    IntentionalOmission.open(),
                     Reading.of("mu"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("un"),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("u", 5),
-                    AccidentalOmission.close(),
+                    IntentionalOmission.close(),
                     ValueToken("]"),
                 ],
             ),
@@ -783,9 +783,9 @@ from ebl.transliteration.domain.word_tokens import (
                             Joiner(atf.Joiner.HYPHEN),
                             Reading.of("un"),
                             Joiner(atf.Joiner.HYPHEN),
-                            AccidentalOmission.open(),
+                            IntentionalOmission.open(),
                             Reading.of("du", 3),
-                            AccidentalOmission.close(),
+                            IntentionalOmission.close(),
                         ]
                     ),
                 ],
@@ -806,9 +806,9 @@ def test_word(parser, atf, expected):
             LoneDeterminative(
                 "<{10}>",
                 parts=[
-                    Omission.open(),
+                    AccidentalOmission.open(),
                     Determinative([Number.of("10")]),
-                    Omission.close(),
+                    AccidentalOmission.close(),
                 ],
             ),
         ),
