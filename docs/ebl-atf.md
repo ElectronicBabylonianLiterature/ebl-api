@@ -32,14 +32,58 @@ not-space = any-character - ' ';
 
 any-character = ? any UTF-8 character ?;
 ````
-## $-sign
+## $-lines
 
-$-lines are used to indicate information about the state of the text or object, or to describe features on the object which are not part of the transliteration proper.
-
+$-lines are used to indicate information about the state of the text or object, or to describe features on the object which are not part of the transliteration proper. <br>
+Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)><br>
+Loose rule: Just text<br>
+Rulings: (single | double | triple)   ruling<br>
+Image: (image N = <text>)<br>
 
 ```ebnf
-line = empty-line
-     | 
+
+line = "$", value;
+
+value = strict | loose | rulings | images;
+    
+strict = [qualification], extend, scope, [state], [status];
+
+qualification = "at least" | "at most" | "about";
+
+extent= "n" | "serveral" | "some" | number | range | "rest of" | "start of" | beginning of
+    |"middle of" | "end of";
+      
+scope = object | surface | "column" | "columns" | "line" | "lines" | "case" | "cases" 
+    | "side" | "excerpt";
+
+state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces ";
+    | "omitted" | "continues";
+
+status = "*" | "?" | "!" | "!?" ;
+
+range = NUMBER, "-", NUMBER;
+
+object = "tablet" | "envelope" | "prism" | "bulla" | "fragment" | generic-object
+
+generic-object = "object", text
+
+surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | generic-surface
+    | "edge" 
+    
+generic-surface = "surface", text
+
+text = { any-character }-
+
+number = { decimal-digit }-
+
+loose = text
+
+rulings = ("single" | "double" | "triple"), "ruling"
+
+images = "(image" NUMBER, lower-case-letter, "=", text
+
+lower-case-letter = ? a-z ?
+```   
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
 
