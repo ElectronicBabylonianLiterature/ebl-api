@@ -1,0 +1,9 @@
+%import common.SIGNED_NUMBER
+%import common.LCASE_LETTER
+%import common.WS
+%ignore WS
+
+start : /.+/
+
+
+

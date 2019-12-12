@@ -1,23 +1,35 @@
-from lark import Lark, Transformer
+from lark import Lark, Transformer, v_args
 import attr
 from typing import AnyStr
 from ebl.transliteration.domain import atf
-
-LINE_PARSER = Lark.open("ebl-atf-dollar-sign.lark", rel_to=__file__)
-text = "$ at least hey"
-tree = LINE_PARSER.parse(text)
-print(tree.pretty())
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.tokens import Token
 
 
-class TreeToTokens(Transformer):
-    def dollar_sign(self, dollar_sign):
-        return DollarSign(dollar_sign)
+class TreeDollarSignToTokens(Transformer):
+    @v_args(inline=True)
+    def dollar_sign(self, prefix, content):
+        return DollarLine(prefix, content)
+
+    def loose(self, text):
+        return Loose(text)
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class DollarSign:
+class DollarLine(Line):
+    @classmethod
+    def of(cls, prefix: str, content: Token):
+        return cls(prefix, content)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Loose(DollarLine):
     dollar_sign: AnyStr = attr.ib()
 
-    @property
-    def _sign(self) -> str:
-        return atf.UNIDENTIFIED_SIGN
+
+DOLLAR_SIGN_PARSER = Lark.open("ebl-atf-dollar-sign.lark", rel_to=__file__)
+text = "$ wtf bro"
+tree = DOLLAR_SIGN_PARSER.parse(text)
+print(tree.pretty())
+tokens = TreeDollarSignToTokens().transform(tree)
+print(tokens)
