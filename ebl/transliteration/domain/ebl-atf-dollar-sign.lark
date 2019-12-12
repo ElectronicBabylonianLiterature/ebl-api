@@ -45,7 +45,3 @@ images : "(image" number lower_case_letter "=" text ")"
 text : /.+/
 number : SIGNED_NUMBER
 lower_case_letter : LCASE_LETTER
-
-
-
-
