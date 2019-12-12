@@ -1,5 +1,10 @@
+import math
+from functools import reduce
+
 import attr
-from progress.bar import Bar
+import pydash
+from joblib import Parallel, delayed
+from tqdm import tqdm
 
 from ebl.app import create_context
 from ebl.transliteration.domain.lemmatization import LemmatizationError
@@ -51,35 +56,52 @@ class State:
             ]
         )
 
+    def merge(self, other):
+        result = State()
+        result.invalid_atf = self.invalid_atf + other.invalid_atf
+        result.invalid_lemmas = self.invalid_lemmas + other.invalid_lemmas
+        result.updated = self.updated + other.updated
+        result.errors = self.errors + other.errors
+        return result
 
-def update_fragments(fragment_repository, transliteration_factory, updater):
+
+def update_fragments(numbers, id_, context_factory):
+    context = context_factory()
+    fragment_repository = context.fragment_repository
+    transliteration_factory = context.get_transliteration_update_factory()
+    updater = context.get_fragment_updater()
     state = State()
-    numbers = find_transliterated(fragment_repository)
 
-    with Bar("Updating", max=len(numbers)) as bar:
-        for number in numbers:
-            try:
-                fragment = fragment_repository.query_by_fragment_number(number)
-                update_fragment(transliteration_factory, updater, fragment)
-                state.add_updated()
-            except TransliterationError as error:
-                state.add_transliteration_error(error, fragment)
-            except LemmatizationError as error:
-                state.add_lemmatization_error(error, fragment)
+    for number in tqdm(numbers, desc=f"Chuck #{id_}", position=id_):
+        fragment = fragment_repository.query_by_fragment_number(number)
+        try:
+            update_fragment(transliteration_factory, updater, fragment)
+            state.add_updated()
+        except TransliterationError as error:
+            state.add_transliteration_error(error, fragment)
+        except LemmatizationError as error:
+            state.add_lemmatization_error(error, fragment)
 
-            bar.next()  # noqa: B305
-
-    with open("invalid_fragments.tsv", "w", encoding="utf-8") as file:
-        file.write(state.to_tsv())
+    return state
 
 
-if __name__ == "__main__":
+def create_context_():
     context = create_context()
     context = attr.evolve(
         context, sign_repository=MemoizingSignRepository(context.sign_repository),
     )
-    update_fragments(
-        context.fragment_repository,
-        context.get_transliteration_update_factory(),
-        context.get_fragment_updater(),
+    return context
+
+
+if __name__ == "__main__":
+    n_jobs = 4
+    numbers = find_transliterated(create_context_().fragment_repository)
+    chunks = math.ceil(len(numbers) / n_jobs)
+    states = Parallel(n_jobs=n_jobs)(
+        delayed(update_fragments)(subset, index, create_context_)
+        for index, subset in enumerate(pydash.chunk(numbers, chunks))
     )
+    state = reduce(lambda accumulator, state: accumulator.merge(state), states, State())
+
+    with open(f"invalid_fragments.tsv", "w", encoding="utf-8") as file:
+        file.write(state.to_tsv())
