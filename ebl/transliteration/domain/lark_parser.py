@@ -360,6 +360,8 @@ def parse_erasure(atf):
 
 def parse_line(atf):
     tree = LINE_PARSER.parse(atf)
+    print(tree.pretty())
+
     return TreeToLine().transform(tree)
 
 
