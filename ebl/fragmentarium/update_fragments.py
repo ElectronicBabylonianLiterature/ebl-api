@@ -72,7 +72,7 @@ def update_fragments(numbers, id_, context_factory):
     updater = context.get_fragment_updater()
     state = State()
 
-    for number in tqdm(numbers, desc=f"Chuck #{id_}", position=id_):
+    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         fragment = fragment_repository.query_by_fragment_number(number)
         try:
             update_fragment(transliteration_factory, updater, fragment)
