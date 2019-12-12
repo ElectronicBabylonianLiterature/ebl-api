@@ -50,6 +50,10 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def query_transliterated(self) -> List[Fragment]:
+        ...
+
+    @abstractmethod
     def query_next_and_previous_folio(
         self, folio_name: str, folio_number: str, number: FragmentNumber
     ) -> dict:
