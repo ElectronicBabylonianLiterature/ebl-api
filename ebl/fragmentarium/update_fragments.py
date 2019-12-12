@@ -47,11 +47,15 @@ class State:
     def add_updated(self) -> None:
         self.updated += 1
 
-    def add_lemmatization_error(self, error: Exception, fragment: Fragment) -> None:
+    def add_lemmatization_error(
+        self, error: LemmatizationError, fragment: Fragment
+    ) -> None:
         self.invalid_lemmas += 1
         self.errors.append(f"{fragment.number}\t{error}")
 
-    def add_transliteration_error(self, transliteration_error, fragment) -> None:
+    def add_transliteration_error(
+        self, transliteration_error: TransliterationError, fragment: Fragment
+    ) -> None:
         self.invalid_atf += 1
         for index, error in enumerate(transliteration_error.errors):
             atf = fragment.text.lines[error["lineNumber"] - 1].atf
