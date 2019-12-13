@@ -1,5 +1,11 @@
-from ebl.fragmentarium.application.annotation_schema import AnnotationSchema
-from ebl.fragmentarium.domain.annotation import Annotation, Geometry, AnnotationData
+from ebl.fragmentarium.application.annotation_schema import AnnotationsSchema
+from ebl.fragmentarium.domain.annotation import (
+    Annotation,
+    Geometry,
+    AnnotationData,
+    Annotations,
+)
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 
 HEIGHT = 34.5
 WIDTH = 100.0
@@ -12,15 +18,23 @@ ID = "abc123"
 
 ANNOTATION = Annotation(Geometry(X, Y, WIDTH, HEIGHT), AnnotationData(ID, VALUE, PATH))
 
+FRAGMENT_NUMBER = FragmentNumber("K.1")
+ANNOTATIONS = Annotations(FRAGMENT_NUMBER, [ANNOTATION])
+
 SERIALIZED = {
-    "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
-    "data": {"id": ID, "value": VALUE, "path": PATH},
+    "fragmentNumber": str(FRAGMENT_NUMBER),
+    "annotations": [
+        {
+            "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
+            "data": {"id": ID, "value": VALUE, "path": PATH},
+        }
+    ],
 }
 
 
 def test_load():
-    assert AnnotationSchema().load(SERIALIZED) == ANNOTATION
+    assert AnnotationsSchema().load(SERIALIZED) == ANNOTATIONS
 
 
 def test_dump():
-    assert AnnotationSchema().dump(ANNOTATION) == SERIALIZED
+    assert AnnotationsSchema().dump(ANNOTATIONS) == SERIALIZED

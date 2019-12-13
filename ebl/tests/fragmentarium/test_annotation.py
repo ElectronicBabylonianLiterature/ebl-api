@@ -1,5 +1,10 @@
-from ebl.fragmentarium.domain.annotation import Geometry, AnnotationData, Annotation
-
+from ebl.fragmentarium.domain.annotation import (
+    Geometry,
+    AnnotationData,
+    Annotation,
+    Annotations,
+)
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 
 HEIGHT = 3.5
 WIDTH = 0.32
@@ -13,6 +18,9 @@ ID = "1234"
 DATA = AnnotationData(ID, VALUE, PATH)
 
 ANNOTATION = Annotation(GEOMETRY, DATA)
+
+FRAGMENT_NUMBER = FragmentNumber("K.1")
+ANNOTATIONS = Annotations(FRAGMENT_NUMBER, [ANNOTATION])
 
 
 def test_geometry():
@@ -31,3 +39,8 @@ def test_data():
 def test_annotation():
     assert ANNOTATION.geometry == GEOMETRY
     assert ANNOTATION.data == DATA
+
+
+def test_annotations():
+    assert ANNOTATIONS.fragment_number == FRAGMENT_NUMBER
+    assert ANNOTATIONS.annotations == [ANNOTATION]

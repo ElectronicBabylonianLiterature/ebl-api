@@ -1,6 +1,11 @@
 from marshmallow import Schema, fields, post_load
 
-from ebl.fragmentarium.domain.annotation import Geometry, AnnotationData, Annotation
+from ebl.fragmentarium.domain.annotation import (
+    Geometry,
+    AnnotationData,
+    Annotation,
+    Annotations,
+)
 
 
 class GeometrySchema(Schema):
@@ -31,3 +36,12 @@ class AnnotationSchema(Schema):
     @post_load
     def make_annotation(self, data, **kwargs):
         return Annotation(**data)
+
+
+class AnnotationsSchema(Schema):
+    fragment_number = fields.String(requred=True, data_key="fragmentNumber")
+    annotations = fields.Nested(AnnotationSchema, many=True, required=True)
+
+    @post_load
+    def make_annotation(self, data, **kwargs):
+        return Annotations(**data)
