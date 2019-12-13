@@ -5,6 +5,7 @@ import falcon
 from ebl.dispatcher import DispatchError
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.transliteration.domain.alignment import AlignmentError
+from ebl.transliteration.domain.atf import AtfError
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 
 
@@ -37,5 +38,6 @@ def set_up(api):
     api.add_error_handler(NotFoundError, not_found_error)
     api.add_error_handler(DuplicateError, duplicate_error)
     api.add_error_handler(DataError, unprocessable_entity)
+    api.add_error_handler(AtfError, unprocessable_entity)
     api.add_error_handler(falcon.HTTPError, http_error)
     api.add_error_handler(falcon.HTTPStatus, http_error)

@@ -4,6 +4,7 @@ from ebl.transliteration.domain.atf import (
     AtfSyntaxError,
     int_to_sub_index,
     validate_atf,
+    AtfError,
 )
 
 
@@ -16,6 +17,11 @@ def test_invalid_atf():
         validate_atf("$ this is not valid")
 
     assert excinfo.value.line_number == 1
+
+
+def test_pyoracc_error():
+    with pytest.raises(AtfError, match="Pyoracc validation failed: 'Single'."):
+        validate_atf("$ Single ruling")
 
 
 @pytest.mark.parametrize(
