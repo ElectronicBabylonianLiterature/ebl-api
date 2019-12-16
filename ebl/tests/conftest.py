@@ -31,6 +31,9 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
+    MongoAnnotationsRepository,
+)
 from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
@@ -231,6 +234,11 @@ def photo_repository(photo):
 
 
 @pytest.fixture
+def annotations_repository(database):
+    return MongoAnnotationsRepository(database)
+
+
+@pytest.fixture
 def user() -> User:
     return Auth0User(
         {
@@ -239,6 +247,7 @@ def user() -> User:
                 "write:words",
                 "transliterate:fragments",
                 "lemmatize:fragments",
+                "annotate:fragments",
                 "read:fragments",
                 "read:WGL-folios",
                 "read:bibliography",
