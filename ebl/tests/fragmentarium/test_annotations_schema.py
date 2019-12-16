@@ -1,4 +1,4 @@
-from ebl.fragmentarium.application.annotation_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Geometry,

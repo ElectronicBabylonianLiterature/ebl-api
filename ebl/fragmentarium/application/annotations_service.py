@@ -1,10 +1,10 @@
-from ebl.fragmentarium.application.annotation_repository import AnnotationRepository
+from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.fragment import FragmentNumber
 
 
-class AnnotationService:
-    def __init__(self, repository: AnnotationRepository):
+class AnnotationsService:
+    def __init__(self, repository: AnnotationsRepository):
         self._repository = repository
 
     def find(self, fragment_number: FragmentNumber) -> Annotations:

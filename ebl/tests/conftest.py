@@ -275,6 +275,7 @@ def context(
     text_repository,
     changelog,
     bibliography_repository,
+    annotations_repository,
     user,
 ):
     return ebl.context.Context(
@@ -288,6 +289,7 @@ def context(
         changelog=changelog,
         bibliography_repository=bibliography_repository,
         text_repository=text_repository,
+        annotations_repository=annotations_repository,
     )
 
 

@@ -34,6 +34,7 @@ def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:
                     "write:words": "",
                     "read:fragments": "",
                     "transliterate:fragments": "",
+                    "annotate:fragments": "",
                     "read:MJG-folios": "",
                     "read:WGL-folios": "",
                     "read:FWG-folios": "",

@@ -25,6 +25,9 @@ from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
+    MongoAnnotationsRepository,
+)
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
@@ -63,6 +66,7 @@ def create_context():
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database),
+        annotations_repository=MongoAnnotationsRepository(database),
     )
     return context
 
