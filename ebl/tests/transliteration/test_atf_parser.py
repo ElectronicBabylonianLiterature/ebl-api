@@ -2,6 +2,7 @@ import pytest
 from hamcrest import assert_that, contains, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.dollar_sign_parser import Loose
 from ebl.transliteration.domain.enclosure_tokens import (
     IntentionalOmission,
     BrokenAway,
@@ -78,10 +79,7 @@ def test_parser_version(parser, version):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        (
-            "$ (end of side)",
-            [ControlLine.of_single("$", ValueToken(" (end of side)"))],
-        ),
+        ("$ (end of side)", [Loose("$", ValueToken(" (end of side)"))],),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",
