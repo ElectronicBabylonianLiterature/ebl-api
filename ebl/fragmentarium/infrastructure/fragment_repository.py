@@ -1,4 +1,5 @@
 from marshmallow import EXCLUDE
+
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
@@ -68,7 +69,7 @@ class MongoFragmentRepository(FragmentRepository):
 
         return self._map_fragments(cursor)
 
-    def find_transliterated(self):
+    def query_transliterated(self):
         cursor = self._collection.find_many(HAS_TRANSLITERATION)
 
         return self._map_fragments(cursor)

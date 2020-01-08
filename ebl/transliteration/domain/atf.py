@@ -32,8 +32,8 @@ def validate_atf(text):
     except SyntaxError as error:
         line_number = error.lineno - len(ATF_HEADING)
         raise AtfSyntaxError(line_number)
-    except (IndexError, AttributeError, UnicodeDecodeError) as error:
-        raise AtfError(error)
+    except Exception as error:
+        raise AtfError(f"Pyoracc validation failed: {error}.")
 
 
 class Surface(Enum):

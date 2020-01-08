@@ -41,9 +41,11 @@ class MongoCollection:
     def aggregate(self, pipeline, **kwargs):
         return self.__get_collection().aggregate(pipeline, **kwargs)
 
-    def replace_one(self, document):
-        result = self.__get_collection().replace_one({"_id": document["_id"]}, document)
-        if result.matched_count == 0:
+    def replace_one(self, document, filter_=None, upsert=False):
+        result = self.__get_collection().replace_one(
+            filter_ or {"_id": document["_id"]}, document, upsert
+        )
+        if result.matched_count == 0 and not upsert:
             raise self.__not_found_error(document["_id"])
         else:
             return result

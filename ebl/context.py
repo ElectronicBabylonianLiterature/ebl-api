@@ -7,6 +7,7 @@ from ebl.changelog import Changelog
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.files.application.file_repository import FileRepository
+from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_query_factory import (
@@ -31,6 +32,7 @@ class Context:
     changelog: Changelog
     bibliography_repository: BibliographyRepository
     text_repository: MongoTextRepository
+    annotations_repository: AnnotationsRepository
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

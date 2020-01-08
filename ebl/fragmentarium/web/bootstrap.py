@@ -2,11 +2,14 @@ import falcon
 
 from ebl.context import Context
 from ebl.dictionary.application.dictionary import Dictionary
+from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.folio_pager_schema import FolioPagerInfoSchema
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_pager_schema import FragmentPagerInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.web.annotations import AnnotationResource
 from ebl.fragmentarium.web.dtos import FragmentDtoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
@@ -30,6 +33,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
         context.folio_repository,
     )
     updater = context.get_fragment_updater()
+    annotations_service = AnnotationsService(context.annotations_repository)
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
@@ -41,6 +45,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     transliteration = TransliterationResource(
         updater, context.get_transliteration_update_factory()
     )
+    annotations = AnnotationResource(annotations_service)
     fragment_pager = FragmentPagerResource(finder)
     folio_pager = FolioPagerResource(finder)
     lemma_search = LemmaSearch(finder)
@@ -53,6 +58,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     api.add_route("/fragments/{number}/lemmatization", lemmatization)
     api.add_route("/fragments/{number}/references", references)
     api.add_route("/fragments/{number}/transliteration", transliteration)
+    api.add_route("/fragments/{number}/annotations", annotations)
     api.add_route("/fragments/{number}/photo", photo)
     api.add_route("/lemmas", lemma_search)
     api.add_route("/statistics", statistics)
@@ -63,12 +69,14 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     spec.components.schema("Fragment", schema=FragmentDtoSchema)
     spec.components.schema("FolioPagerInfo", schema=FolioPagerInfoSchema)
     spec.components.schema("FragmentPagerInfo", schema=FragmentPagerInfoSchema)
+    spec.components.schema("Annotations", schema=AnnotationsSchema)
 
     spec.path(resource=fragment_search)
     spec.path(resource=fragments)
     spec.path(resource=lemmatization)
     spec.path(resource=references)
     spec.path(resource=transliteration)
+    spec.path(resource=annotations)
     spec.path(resource=photo)
     spec.path(resource=lemma_search)
     spec.path(resource=statistics)
