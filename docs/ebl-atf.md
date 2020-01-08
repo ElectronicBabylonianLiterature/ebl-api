@@ -50,7 +50,7 @@ strict = [qualification], extend, scope, [state], [status];
 
 qualification = "at least" | "at most" | "about";
 
-extent= "n" | "serveral" | "some" | number | range | "rest of" | "start of" | beginning of
+extent= "serveral" | "some" | number | range | "rest of" | "start of" | beginning of
     |"middle of" | "end of";
       
 scope = object | surface | "column" | "columns" | "line" | "lines" | "case" | "cases" 
