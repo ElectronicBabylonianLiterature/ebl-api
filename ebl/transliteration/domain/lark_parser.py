@@ -55,6 +55,7 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.dollar_sign_parser import Strict, Loose
 
 
 class ErasureVisitor(TokenVisitor):
@@ -344,6 +345,28 @@ class TreeToLine(TreeToWord):
         ]
 
 
+class TreeDollarSignToTokens(TreeToLine):
+    @v_args(inline=True)
+    def ebl_atf_dollar_sign__old(self, prefix, content):
+        return ControlLine.of_single(prefix, ValueToken(content))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_sign__loose(self, content):
+        return Loose("$", (ValueToken(str(content)),), content.value[1:-1])
+
+    """
+    @v_args(inline=True)
+    def images(self, number, lower_case_letter, text):
+        return Image(number, lower_case_letter, text)
+
+    def strict(self, content):
+        return Strict(content=content)
+
+    def rulings(self, ruling):
+        return Ruling(number=ruling)
+    """
+
+
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")
 LINE_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__)
 
@@ -360,9 +383,7 @@ def parse_erasure(atf):
 
 def parse_line(atf):
     tree = LINE_PARSER.parse(atf)
-    print(tree.pretty())
-
-    return TreeToLine().transform(tree)
+    return TreeDollarSignToTokens().transform(tree)
 
 
 def parse_atf_lark(atf_):
