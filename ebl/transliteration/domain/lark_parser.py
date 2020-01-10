@@ -29,6 +29,7 @@ from ebl.transliteration.domain.line import (
     TextLine,
     Loose,
     Ruling,
+    Image,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -357,11 +358,15 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_sign__loose(self, content):
-        return Loose.of_single(content)
+        return Loose.of_single(content[1:-1])
 
     @v_args(inline=True)
     def ebl_atf_dollar_sign__ruling(self, number, ruling):
         return Ruling.of_single(number, ruling)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_sign__image(self, number, letter, text):
+        return Image.of_single(number, letter, text[0:-1])
 
     """
     @v_args(inline=True)

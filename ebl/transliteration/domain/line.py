@@ -86,13 +86,28 @@ class Loose(DollarLine):
 
     @classmethod
     def of_single(cls, content):
-        return cls("$", (ValueToken(str(content)),), content[1:-1])
+        return cls("$", (ValueToken(str(content)),), content)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Image(DollarLine):
     number: str = ""
+    letter: str = ""
     text: str = ""
+
+    @classmethod
+    def of_single(cls, number, letter, text):
+        return cls(
+            "$",
+            (
+                ValueToken(str(number)),
+                ValueToken(str(letter)),
+                (ValueToken(str(text))),
+                number,
+                letter,
+                text,
+            ),
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
