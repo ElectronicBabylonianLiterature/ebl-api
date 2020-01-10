@@ -20,6 +20,7 @@ from ebl.transliteration.domain.line import (
     TextLine,
     Loose,
     Ruling,
+    Image,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -1091,10 +1092,14 @@ def test_parse_atf(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        (
+            "$ (image 1 = numbered diagram of triangle)",
+            [Image.of_single("1", None, "numbered diagram of triangle")],
+        ),
         ("$ single ruling", [Ruling.of_single("single", "ruling")]),
         ("$ double ruling", [Ruling.of_single("double", "ruling")]),
         ("$ triple ruling", [Ruling.of_single("triple", "ruling")]),
-        ("$ (end of side)", [Loose.of_single("(end of side)")]),
+        ("$ (end of side)", [Loose.of_single("end of side")]),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
     ],
