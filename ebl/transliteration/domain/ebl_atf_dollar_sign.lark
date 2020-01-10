@@ -4,16 +4,17 @@
 %import common.WS
 %ignore WS
 
+_WORD_SEPARATOR: " "
+
 ?start : dollar_line
 
-?dollar_line : loose
-             | old
+?dollar_line : "$" _WORD_SEPARATOR value
 
-?value : loose
+?value : strict | loose | rulings | images | old
 
 strict : [qualification] extent scope [state] [STATUS]
 
-!old.-1: "$s" /.+/?
+!old.-1: /.+/?
 
 !qualification : "at least" | "at most" | "about"
 
@@ -41,7 +42,7 @@ range : number "-" number
 
 !generic_surface : "surface" TEXT
 
-loose : "$" / \(.+\)/
+!loose : /\(.+\)/
 
 !rulings : ("single" | "double" | "triple") "ruling"
 

@@ -5,13 +5,14 @@ import pydash
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, ValueToken
 from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
 T = TypeVar("T")
@@ -72,6 +73,31 @@ class ControlLine(Line):
     @classmethod
     def of_single(cls, prefix: str, content: Token):
         return cls(prefix, (content,))
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class DollarLine(Line):
+    pass
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Loose(DollarLine):
+    text: str = ""
+
+    @classmethod
+    def create(cls, content):
+        return cls("$", (ValueToken(str(content)),), content[1:-1])
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Image(DollarLine):
+    number: str = ""
+    text: str = ""
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Ruling(DollarLine):
+    number: atf.Ruling = atf.Ruling.SINGLE  # Non-default argument follows default argument in Line Error
 
 
 @attr.s(auto_attribs=True, frozen=True)
