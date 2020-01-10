@@ -13,8 +13,8 @@ def test_update_fragments(
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_without_signs = attr.evolve(transliterated_fragment, signs=None)
     for sign in signs:
-        sign_repository.create(sign)
-    number = fragment_repository.create(fragment_without_signs)
+        sign_repository.of_single(sign)
+    number = fragment_repository.of_single(fragment_without_signs)
 
     update_fragments([number], 0, lambda: context)
 

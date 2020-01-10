@@ -10,7 +10,7 @@ _WORD_SEPARATOR: " "
 
 ?dollar_line : "$" _WORD_SEPARATOR value
 
-?value : strict | loose | rulings | images | old
+?value : strict | loose | ruling | images | old
 
 strict : [qualification] extent scope [state] [STATUS]
 
@@ -44,7 +44,12 @@ range : number "-" number
 
 !loose : /\(.+\)/
 
-!rulings : ("single" | "double" | "triple") "ruling"
+
+
+ruling : NUMBER _WORD_SEPARATOR RULING
+
+NUMBER : ("single" | "double" | "triple")
+RULING : "ruling"
 
 images : "(image" number lower_case_letter "=" TEXT ")"
 

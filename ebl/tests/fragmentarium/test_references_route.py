@@ -13,9 +13,9 @@ ANY_USER = Guest()
 
 def test_update_references(client, fragmentarium, bibliography, user):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
+    fragment_number = fragmentarium.of_single(fragment)
     reference = ReferenceWithDocumentFactory.build()
-    bibliography.create(reference.document, ANY_USER)
+    bibliography.of_single(reference.document, ANY_USER)
     references = [reference.to_dict()]
     body = json.dumps({"references": references})
     url = f"/fragments/{fragment_number}/references"
@@ -70,7 +70,7 @@ def test_update_references_not_found(client):
 )
 def test_update_references_invalid_reference(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
+    fragment_number = fragmentarium.of_single(fragment)
     url = f"/fragments/{fragment_number}/references"
 
     post_result = client.simulate_post(url, body=body)
@@ -81,7 +81,7 @@ def test_update_references_invalid_reference(client, fragmentarium, body):
 def test_update_references_invalid_id(client, fragmentarium):
     reference = ReferenceWithDocumentFactory.build()
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
+    fragment_number = fragmentarium.of_single(fragment)
     body = json.dumps({"references": [reference.to_dict()]})
     url = f"/fragments/{fragment_number}/references"
     post_result = client.simulate_post(url, body=body)

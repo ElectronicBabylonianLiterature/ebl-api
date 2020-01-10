@@ -12,7 +12,7 @@ INVALID_ENTRIES = [
 
 @pytest.fixture
 def saved_entry(bibliography, bibliography_entry, user):
-    bibliography.create(bibliography_entry, user)
+    bibliography.of_single(bibliography_entry, user)
     return bibliography_entry
 
 

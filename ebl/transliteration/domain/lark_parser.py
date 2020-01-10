@@ -23,7 +23,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine, Loose
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    TextLine,
+    Loose,
+    Ruling,
+)
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -351,7 +357,11 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_sign__loose(self, content):
-        return Loose.create(content)
+        return Loose.of_single(content)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_sign__ruling(self, number, ruling):
+        return Ruling.of_single(number, ruling)
 
     """
     @v_args(inline=True)

@@ -33,7 +33,7 @@ def test_update_transliteration(
         .query_by_fragment_number(number)
         .thenReturn(transliterated_fragment)
     )
-    when(changelog).create(
+    when(changelog).of_single(
         "fragments",
         user.profile,
         SCHEMA.dump(transliterated_fragment),
@@ -80,7 +80,7 @@ def test_update_lemmatization(
         .query_by_fragment_number(number)
         .thenReturn(transliterated_fragment)
     )
-    when(changelog).create(
+    when(changelog).of_single(
         "fragments",
         user.profile,
         SCHEMA.dump(transliterated_fragment),
@@ -124,7 +124,7 @@ def test_update_references(
     when(bibliography).find(reference.id).thenReturn(reference)
     (when(fragment_repository).query_by_fragment_number(number).thenReturn(fragment))
     when(fragment_repository).update_references(expected_fragment).thenReturn()
-    when(changelog).create(
+    when(changelog).of_single(
         "fragments",
         user.profile,
         SCHEMA.dump(fragment),
