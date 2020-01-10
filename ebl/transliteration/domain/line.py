@@ -85,7 +85,7 @@ class Loose(DollarLine):
     text: str = ""
 
     @classmethod
-    def create(cls, content):
+    def of_single(cls, content):
         return cls("$", (ValueToken(str(content)),), content[1:-1])
 
 
@@ -98,6 +98,12 @@ class Image(DollarLine):
 @attr.s(auto_attribs=True, frozen=True)
 class Ruling(DollarLine):
     number: atf.Ruling = atf.Ruling.SINGLE  # Non-default argument follows default argument in Line Error
+
+    @classmethod
+    def of_single(cls, ruling, content):
+        return cls(
+            "$", (ValueToken(str(ruling)), ValueToken(str(content))), atf.Ruling(ruling)
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

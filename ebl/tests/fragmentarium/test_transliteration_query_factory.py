@@ -7,7 +7,7 @@ from ebl.transliteration.domain.atf import Atf
 
 def test_create_query(atf_converter, sign_repository, signs):
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.of_single(sign)
 
     factory = TransliterationQueryFactory(atf_converter)
     atf = Atf("1. šu\n2. gid₂")

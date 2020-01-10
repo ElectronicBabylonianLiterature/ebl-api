@@ -49,7 +49,7 @@ SCHEMA = FragmentSchema()
 
 def test_create(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_number = fragment_repository.of_single(fragment)
 
     assert database[COLLECTION].find_one({"_id": fragment_number}) == SCHEMA.dump(
         fragment
@@ -72,7 +72,7 @@ def test_find_random(fragment_repository,):
     fragment = FragmentFactory.build()
     transliterated_fragment = TransliteratedFragmentFactory.build()
     for a_fragment in fragment, transliterated_fragment:
-        fragment_repository.create(a_fragment)
+        fragment_repository.of_single(a_fragment)
 
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
@@ -98,7 +98,7 @@ def test_find_interesting(fragment_repository):
         too_many_references,
         not_kuyunjik,
     ]:
-        fragment_repository.create(fragment)
+        fragment_repository.of_single(fragment)
 
     assert (
         fragment_repository.query_by_kuyunjik_not_transliterated_joined_or_published()
@@ -127,7 +127,7 @@ def test_query_next_and_previous_fragment(
     query, existing, expected, fragment_repository
 ):
     for fragmentNumber in existing:
-        fragment_repository.create(FragmentFactory.build(number=fragmentNumber))
+        fragment_repository.of_single(FragmentFactory.build(number=fragmentNumber))
 
     results = list(fragment_repository.query_next_and_previous_fragment(query).values())
     assert results == expected
@@ -141,7 +141,7 @@ def test_query_next_and_previous_fragment_exception(fragment_repository):
 
 def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_number = fragment_repository.of_single(fragment)
     updated_fragment = fragment.update_transliteration(
         TransliterationUpdate(Atf("$ (the transliteration)"), "notes"), user
     )
@@ -160,7 +160,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
 
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragment_repository.create(transliterated_fragment)
+    fragment_number = fragment_repository.of_single(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][3]["uniqueLemma"] = ["aklu I"]
     updated_fragment = transliterated_fragment.update_lemmatization(
@@ -268,8 +268,8 @@ SEARCH_SIGNS_DATA = [
 @pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
 def test_search_signs(signs, is_match, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
+    fragment_repository.of_single(transliterated_fragment)
+    fragment_repository.of_single(FragmentFactory.build())
 
     result = fragment_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
@@ -287,16 +287,16 @@ def test_find_transliterated(database, fragment_repository):
 
 def test_find_lemmas(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.of_single(lemmatized_fragment)
+    fragment_repository.of_single(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert fragment_repository.query_lemmas("GI₆") == [["ginâ I"]]
 
 
 def test_find_lemmas_multiple(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.of_single(lemmatized_fragment)
+    fragment_repository.of_single(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert fragment_repository.query_lemmas("ana") == [["ana II"], ["ana I"]]
 
@@ -314,7 +314,7 @@ def test_find_lemmas_ignores_in_value(value, fragment_repository):
         ),
         signs="DIŠ",
     )
-    fragment_repository.create(fragment)
+    fragment_repository.of_single(fragment)
 
     assert fragment_repository.query_lemmas("ana") == [["ana I"]]
 
@@ -330,21 +330,21 @@ def test_find_lemmas_ignores_in_value(value, fragment_repository):
 )
 def test_find_lemmas_ignores_in_query(query, expected, fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.of_single(lemmatized_fragment)
 
     assert fragment_repository.query_lemmas(query) == expected
 
 
 def test_find_lemmas_not_found(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.of_single(lemmatized_fragment)
     assert fragment_repository.query_lemmas("aklu") == []
 
 
 def test_update_references(fragment_repository):
     reference = ReferenceFactory.build()
     fragment = FragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_number = fragment_repository.of_single(fragment)
     references = (reference,)
     updated_fragment = fragment.set_references(references)
 

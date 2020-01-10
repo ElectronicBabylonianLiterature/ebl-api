@@ -32,7 +32,7 @@ def when_text_in_collection(database, text=TEXT):
 
 
 def test_creating_text(database, text_repository):
-    text_repository.create(TEXT)
+    text_repository.of_single(TEXT)
 
     inserted_text = database[COLLECTION].find_one(
         {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False},
@@ -42,10 +42,10 @@ def test_creating_text(database, text_repository):
 
 def test_it_is_not_possible_to_create_duplicates(text_repository):
     text_repository.create_indexes()
-    text_repository.create(TEXT)
+    text_repository.of_single(TEXT)
 
     with pytest.raises(DuplicateError):
-        text_repository.create(TEXT)
+        text_repository.of_single(TEXT)
 
 
 def test_finding_text(database, text_repository):

@@ -68,7 +68,7 @@ class TextValidator(TextVisitor):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         try:
-            self._transliteration_factory.create(manuscript_line.line.atf)
+            self._transliteration_factory.of_single(manuscript_line.line.atf)
         except TransliterationError:
             raise invalid_atf(
                 self._chapter, self._line.number, manuscript_line.manuscript_id

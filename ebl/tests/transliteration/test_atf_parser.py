@@ -14,7 +14,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine, Loose
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    TextLine,
+    Loose,
+    Ruling,
+)
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -78,7 +84,7 @@ def test_parser_version(parser, version):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        ("$ (end of side)", [Loose.create("(end of side)")]),
+        ("$ (end of side)", [Loose.of_single("(end of side)")]),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",
@@ -1078,6 +1084,22 @@ def test_parser_version(parser, version):
     ],
 )
 def test_parse_atf(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        ("$ single ruling", [Ruling.of_single("single", "ruling")]),
+        ("$ double ruling", [Ruling.of_single("double", "ruling")]),
+        ("$ triple ruling", [Ruling.of_single("triple", "ruling")]),
+        ("$ (end of side)", [Loose.of_single("(end of side)")]),
+        ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
+        ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
+    ],
+)
+def test_parse_atf_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 

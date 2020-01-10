@@ -15,7 +15,7 @@ def expected_fragment_info_dto(fragment, lines=tuple()):
 
 def test_search_fragment(client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
+    fragment_number = fragmentarium.of_single(fragment)
     result = client.simulate_get(f"/fragments", params={"number": fragment_number})
 
     assert result.status == falcon.HTTP_OK
@@ -31,9 +31,9 @@ def test_search_fragment_not_found(client):
 
 def test_search_signs(client, fragmentarium, sign_repository, signs):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    fragmentarium.of_single(transliterated_fragment)
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.of_single(sign)
 
     result = client.simulate_get(f"/fragments", params={"transliteration": "ma-tu₂"})
 
@@ -48,7 +48,7 @@ def test_search_signs(client, fragmentarium, sign_repository, signs):
 
 def test_random(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    fragmentarium.of_single(transliterated_fragment)
 
     result = client.simulate_get(f"/fragments", params={"random": True})
 
@@ -59,7 +59,7 @@ def test_random(client, fragmentarium):
 
 def test_interesting(client, fragmentarium):
     interesting_fragment = InterestingFragmentFactory.build()
-    fragmentarium.create(interesting_fragment)
+    fragmentarium.of_single(interesting_fragment)
 
     result = client.simulate_get(f"/fragments", params={"interesting": True})
 
@@ -70,7 +70,7 @@ def test_interesting(client, fragmentarium):
 
 def test_latest(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    fragmentarium.of_single(transliterated_fragment)
 
     result = client.simulate_get(f"/fragments", params={"latest": True})
 
@@ -81,7 +81,7 @@ def test_latest(client, fragmentarium):
 
 def test_needs_revision(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    fragmentarium.of_single(transliterated_fragment)
 
     result = client.simulate_get(f"/fragments", params={"needsRevision": True})
 

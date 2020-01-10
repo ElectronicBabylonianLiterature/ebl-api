@@ -37,6 +37,6 @@ class TransliterationResource:
             }
 
     def _create_transliteration(self, media):
-        return self._transliteration_factory.create(
+        return self._transliteration_factory.of_single(
             Atf(media["transliteration"]), media["notes"]
         )
