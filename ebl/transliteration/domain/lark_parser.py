@@ -23,7 +23,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine, Loose
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -55,7 +55,6 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
-from ebl.transliteration.domain.dollar_sign_parser import Strict, Loose
 
 
 class ErasureVisitor(TokenVisitor):
@@ -347,12 +346,12 @@ class TreeToLine(TreeToWord):
 
 class TreeDollarSignToTokens(TreeToLine):
     @v_args(inline=True)
-    def ebl_atf_dollar_sign__old(self, prefix, content):
-        return ControlLine.of_single(prefix, ValueToken(content))
+    def ebl_atf_dollar_sign__old(self, content):
+        return ControlLine.of_single("$", ValueToken(content))
 
     @v_args(inline=True)
     def ebl_atf_dollar_sign__loose(self, content):
-        return Loose("$", (ValueToken(str(content)),), content.value[1:-1])
+        return Loose.create(content)
 
     """
     @v_args(inline=True)

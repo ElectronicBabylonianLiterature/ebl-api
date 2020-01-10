@@ -102,6 +102,12 @@ class Joiner(Enum):
     COLON = ":"
 
 
+class Ruling(Enum):
+    SINGLE = "single"
+    DOUBLE = "double"
+    TRIPLE = "triple"
+
+
 UNKNOWN_NUMBER_OF_SIGNS = "..."
 WORD_SEPARATOR = " "
 VARIANT_SEPARATOR = "/"
