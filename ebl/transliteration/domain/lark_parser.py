@@ -27,9 +27,9 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-    Loose,
-    Ruling,
-    Image,
+    LooseDollarLine,
+    RulingDollarLine,
+    ImageDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -353,32 +353,20 @@ class TreeToLine(TreeToWord):
 
 class TreeDollarSignToTokens(TreeToLine):
     @v_args(inline=True)
-    def ebl_atf_dollar_sign__old(self, content):
+    def ebl_atf_dollar_line__old(self, content):
         return ControlLine.of_single("$", ValueToken(content))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_sign__loose(self, content):
-        return Loose.of_single(content[1:-1])
+    def ebl_atf_dollar_line__loose(self, content):
+        return LooseDollarLine.of_single(content[1:-1])
 
     @v_args(inline=True)
-    def ebl_atf_dollar_sign__ruling(self, number, ruling):
-        return Ruling.of_single(number, ruling)
+    def ebl_atf_dollar_line__ruling(self, number, ruling):
+        return RulingDollarLine.of_single(number, ruling)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_sign__image(self, number, letter, text):
-        return Image.of_single(number, letter, text[0:-1])
-
-    """
-    @v_args(inline=True)
-    def images(self, number, lower_case_letter, text):
-        return Image(number, lower_case_letter, text)
-
-    def strict(self, content):
-        return Strict(content=content)
-
-    def rulings(self, ruling):
-        return Ruling(number=ruling)
-    """
+    def ebl_atf_dollar_line__image(self, number, letter, text):
+        return ImageDollarLine.of_single(number, letter, text[0:-1])
 
 
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")
