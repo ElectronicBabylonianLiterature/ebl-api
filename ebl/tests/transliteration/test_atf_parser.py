@@ -18,9 +18,9 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-    Loose,
-    Ruling,
-    Image,
+    LooseDollarLine,
+    RulingDollarLine,
+    ImageDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -85,7 +85,7 @@ def test_parser_version(parser, version):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        ("$ (end of side)", [Loose.of_single("(end of side)")]),
+        ("$ (end of side)", [LooseDollarLine.of_single("end of side")]),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",
@@ -1094,12 +1094,12 @@ def test_parse_atf(parser, line, expected_tokens):
     [
         (
             "$ (image 1 = numbered diagram of triangle)",
-            [Image.of_single("1", None, "numbered diagram of triangle")],
+            [ImageDollarLine.of_single("1", None, "numbered diagram of triangle")],
         ),
-        ("$ single ruling", [Ruling.of_single("single", "ruling")]),
-        ("$ double ruling", [Ruling.of_single("double", "ruling")]),
-        ("$ triple ruling", [Ruling.of_single("triple", "ruling")]),
-        ("$ (end of side)", [Loose.of_single("end of side")]),
+        ("$ single ruling", [RulingDollarLine.of_single("single", "ruling")]),
+        ("$ double ruling", [RulingDollarLine.of_single("double", "ruling")]),
+        ("$ triple ruling", [RulingDollarLine.of_single("triple", "ruling")]),
+        ("$ (end of side)", [LooseDollarLine.of_single("end of side")]),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
     ],

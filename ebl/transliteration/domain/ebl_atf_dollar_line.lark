@@ -1,8 +1,7 @@
 %import common.ESCAPED_STRING
 %import common.SIGNED_NUMBER
 %import common.LCASE_LETTER
-%import common.WS
-%ignore WS
+
 
 _WORD_SEPARATOR: " "
 
@@ -51,7 +50,7 @@ RULING : "ruling"
 
 
 image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR TEXT
-//image : IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR  _WORD_SEPARATOR
+
 _IMAGE : "(image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/

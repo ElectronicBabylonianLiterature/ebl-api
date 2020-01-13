@@ -81,7 +81,7 @@ class DollarLine(Line):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Loose(DollarLine):
+class LooseDollarLine(DollarLine):
     text: str = ""
 
     @classmethod
@@ -90,7 +90,7 @@ class Loose(DollarLine):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Image(DollarLine):
+class ImageDollarLine(DollarLine):
     number: str = ""
     letter: str = ""
     text: str = ""
@@ -111,7 +111,7 @@ class Image(DollarLine):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Ruling(DollarLine):
+class RulingDollarLine(DollarLine):
     number: atf.Ruling = atf.Ruling.SINGLE  # Non-default argument follows default argument in Line Error
 
     @classmethod
