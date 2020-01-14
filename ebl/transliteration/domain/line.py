@@ -94,7 +94,7 @@ class LooseDollarLine(DollarLine):
 @attr.s(auto_attribs=True, frozen=True)
 class ImageDollarLine(DollarLine):
     number: str = ""
-    letter: str = ""
+    letter: Optional[str] = ""
     text: str = ""
 
     @classmethod
@@ -114,10 +114,8 @@ class RulingDollarLine(DollarLine):
     # Non-default argument follows default argument in Line Error
 
     @classmethod
-    def of_single(cls, ruling, content):
-        return cls(
-            "$", (ValueToken(str(ruling)), ValueToken(str(content))), atf.Ruling(ruling)
-        )
+    def of_single(cls, ruling):
+        return cls("$", ((ValueToken(f"{ruling} ruling")),), atf.Ruling(ruling))
 
 
 @attr.s(auto_attribs=True, frozen=True)
