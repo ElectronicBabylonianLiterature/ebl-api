@@ -12,8 +12,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     IntentionalOmission,
     Removal,
 )
-from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
