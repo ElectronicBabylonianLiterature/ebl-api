@@ -16,7 +16,7 @@ from ebl.transliteration.domain.atf import Atf
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.of_single(fragment)
+    fragment_number = fragmentarium.create(fragment)
     updates = {
         "transliteration": "$ (the transliteration)",
         "notes": "some notes",
@@ -61,16 +61,16 @@ def test_update_transliteration_merge_lemmatization(
 ):
 
     for sign in signs:
-        sign_repository.of_single(sign)
+        sign_repository.create(sign)
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_number = fragmentarium.of_single(lemmatized_fragment)
+    fragment_number = fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
     updates = {
         "transliteration": "\n".join(lines),
         "notes": lemmatized_fragment.notes,
     }
-    updated_transliteration = transliteration_factory.of_single(
+    updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
     expected_json = create_response_dto(
@@ -92,7 +92,7 @@ def test_update_transliteration_merge_lemmatization(
 
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.of_single(fragment)
+    fragment_number = fragmentarium.create(fragment)
     updates = {"transliteration": "$ this is not valid", "notes": ""}
     body = json.dumps(updates)
     url = f"/fragments/{fragment_number}/transliteration"
@@ -129,7 +129,7 @@ def test_update_transliteration_not_found(client):
 )
 def test_update_transliteration_invalid_entity(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.of_single(fragment)
+    fragment_number = fragmentarium.create(fragment)
     url = f"/fragments/{fragment_number}/transliteration"
 
     post_result = client.simulate_post(url, body=body)

@@ -49,7 +49,7 @@ class Corpus:
         self._validate_text(text)
         self._repository.create(text)
         new_dict: dict = {**serialize(text), "_id": text.id}
-        self._changelog.of_single(COLLECTION, user.profile, {"_id": text.id}, new_dict)
+        self._changelog.create(COLLECTION, user.profile, {"_id": text.id}, new_dict)
 
     def find(self, id_: TextId) -> Text:
         text = self._repository.find(id_)
@@ -95,4 +95,4 @@ class Corpus:
     def _create_changelog(self, old_text, new_text, user):
         old_dict: dict = {**serialize(old_text), "_id": old_text.id}
         new_dict: dict = {**serialize(new_text), "_id": new_text.id}
-        self._changelog.of_single(COLLECTION, user.profile, old_dict, new_dict)
+        self._changelog.create(COLLECTION, user.profile, old_dict, new_dict)

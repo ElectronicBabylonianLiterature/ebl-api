@@ -8,7 +8,7 @@ import pytest
 @pytest.fixture
 def saved_word(dictionary, word):
     word = {**word}
-    dictionary.of_single(word)
+    dictionary.create(word)
     return word
 
 
