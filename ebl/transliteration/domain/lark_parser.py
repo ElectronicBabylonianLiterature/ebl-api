@@ -362,7 +362,7 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__ruling(self, number, ruling):
-        return RulingDollarLine.of_single(number, ruling)
+        return RulingDollarLine.of_single(number)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__image(self, number, letter, text):
