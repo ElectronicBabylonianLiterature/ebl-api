@@ -101,7 +101,7 @@ class ImageDollarLine(DollarLine):
     def of_single(cls, number: str, letter: Optional[str], text: str):
         return cls(
             "$",
-            (ValueToken(number), ValueToken(letter), ValueToken(text),),
+            ((ValueToken(f'( image {number}{letter if letter else ""} = {text})')),),
             number,
             letter,
             text,
