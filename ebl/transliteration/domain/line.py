@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
+from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional
 
 import attr
 import pydash
@@ -98,7 +98,7 @@ class ImageDollarLine(DollarLine):
     text: str = ""
 
     @classmethod
-    def of_single(cls, number: str, letter: str, text: str):
+    def of_single(cls, number: str, letter: Optional[str], text: str):
         return cls(
             "$",
             (ValueToken(number), ValueToken(letter), ValueToken(text),),
