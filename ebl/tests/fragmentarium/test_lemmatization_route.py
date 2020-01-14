@@ -13,7 +13,7 @@ from ebl.transliteration.domain.lemmatization import Lemmatization
 
 def test_update_lemmatization(client, fragmentarium, user, database):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragmentarium.of_single(transliterated_fragment)
+    fragment_number = fragmentarium.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][3]["uniqueLemma"] = ["aklu I"]
     body = json.dumps({"lemmatization": tokens})
@@ -66,7 +66,7 @@ def test_update_lemmatization_not_found(client):
 )
 def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.of_single(fragment)
+    fragment_number = fragmentarium.create(fragment)
     url = f"/fragments/{fragment_number}/lemmatization"
 
     post_result = client.simulate_post(url, body=body)
@@ -76,7 +76,7 @@ def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
 
 def test_update_lemmatization_atf_change(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragmentarium.of_single(transliterated_fragment)
+    fragment_number = fragmentarium.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[0][0]["value"] = "ana"
     body = json.dumps({"lemmatization": tokens})

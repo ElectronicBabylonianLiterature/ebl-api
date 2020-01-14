@@ -118,7 +118,7 @@ def expect_text_update(
         .update(TEXT.id, dehydrated_updated_text)
         .thenReturn(dehydrated_updated_text)
     )
-    when(changelog).of_single(
+    when(changelog).create(
         COLLECTION,
         user.profile,
         {**to_dict(dehydrated_text), "_id": dehydrated_text.id},
@@ -131,12 +131,12 @@ def test_creating_text(
 ):
     expect_signs(atf_converter, when)
     expect_validate_references(bibliography, when)
-    when(changelog).of_single(
+    when(changelog).create(
         COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id},
     ).thenReturn()
-    when(text_repository).of_single(TEXT).thenReturn()
+    when(text_repository).create(TEXT).thenReturn()
 
-    corpus.of_single(TEXT, user)
+    corpus.create(TEXT, user)
 
 
 def test_create_raises_exception_if_invalid_signs(
@@ -146,14 +146,14 @@ def test_create_raises_exception_if_invalid_signs(
     expect_invalid_signs(atf_converter, when)
 
     with pytest.raises(DataError):
-        corpus.of_single(TEXT, ANY_USER)
+        corpus.create(TEXT, ANY_USER)
 
 
 def test_create_raises_exception_if_invalid_references(corpus, bibliography, when):
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
-        corpus.of_single(TEXT, ANY_USER)
+        corpus.create(TEXT, ANY_USER)
 
 
 def test_finding_text(corpus, text_repository, bibliography, when):

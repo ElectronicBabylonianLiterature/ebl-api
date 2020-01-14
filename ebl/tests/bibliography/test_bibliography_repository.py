@@ -15,7 +15,7 @@ COLLECTION = "bibliography"
 
 
 def test_create(database, bibliography_repository, bibliography_entry, mongo_entry):
-    bibliography_repository.of_single(bibliography_entry)
+    bibliography_repository.create(bibliography_entry)
 
     assert (
         database[COLLECTION].find_one({"_id": bibliography_entry["id"]}) == mongo_entry
@@ -23,9 +23,9 @@ def test_create(database, bibliography_repository, bibliography_entry, mongo_ent
 
 
 def test_create_duplicate(bibliography_repository, bibliography_entry):
-    bibliography_repository.of_single(bibliography_entry)
+    bibliography_repository.create(bibliography_entry)
     with pytest.raises(DuplicateError):
-        bibliography_repository.of_single(bibliography_entry)
+        bibliography_repository.create(bibliography_entry)
 
 
 def test_find(database, bibliography_repository, bibliography_entry, mongo_entry):
@@ -44,7 +44,7 @@ def test_entry_not_found(bibliography_repository):
 
 def test_update(bibliography_repository, bibliography_entry):
     updated_entry = pydash.omit({**bibliography_entry, "title": "New Title"}, "PMID")
-    bibliography_repository.of_single(bibliography_entry)
+    bibliography_repository.create(bibliography_entry)
     bibliography_repository.update(updated_entry)
 
     assert (

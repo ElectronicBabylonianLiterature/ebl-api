@@ -10,7 +10,7 @@ from ebl.transliteration.domain.value import (
 
 def test_convert_atf_to_sign_matrix(atf_converter, sign_repository, signs):
     for sign in signs:
-        sign_repository.of_single(sign)
+        sign_repository.create(sign)
 
     atf = Atf("1. šu gid₂")
 
@@ -38,7 +38,7 @@ def test_convert_atf_to_values(atf_converter):
 
 def test_convert_values_to_signs(atf_converter, sign_repository, signs):
     for sign in signs:
-        sign_repository.of_single(sign)
+        sign_repository.create(sign)
 
     values = [
         [

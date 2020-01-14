@@ -6,9 +6,9 @@ from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 def test_search_fragment(client, fragmentarium, dictionary, word):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     matching_word = {**word, "_id": "ginâ I"}
-    dictionary.of_single(word)
-    dictionary.of_single(matching_word)
-    fragmentarium.of_single(lemmatized_fragment)
+    dictionary.create(word)
+    dictionary.create(matching_word)
+    fragmentarium.create(lemmatized_fragment)
 
     result = client.simulate_get(f"/lemmas", params={"word": "GI₆"})
 

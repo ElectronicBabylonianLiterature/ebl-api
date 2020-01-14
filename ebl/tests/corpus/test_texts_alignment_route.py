@@ -24,12 +24,12 @@ def allow_references(text, bibliography):
     for chapter in text.chapters:
         for manuscript in chapter.manuscripts:
             for reference in manuscript.references:
-                bibliography.of_single(reference.document, ANY_USER)
+                bibliography.create(reference.document, ANY_USER)
 
 
 def allow_signs(signs, sign_list):
     for sign in signs:
-        sign_list.of_single(sign)
+        sign_list.create(sign)
 
 
 def create_text(client, text):

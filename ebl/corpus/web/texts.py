@@ -125,7 +125,7 @@ class TextsResource:
     @validate(TEXT_DTO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         text = deserialize(req.media)
-        self._corpus.of_single(text, req.context.user)
+        self._corpus.create(text, req.context.user)
         resp.status = falcon.HTTP_CREATED
         resp.location = f"/texts/{text.category}/{text.index}"
         resp.media = serialize(self._corpus.find(text.id))

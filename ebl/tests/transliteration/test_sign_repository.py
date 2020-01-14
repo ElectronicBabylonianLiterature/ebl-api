@@ -131,7 +131,7 @@ def test_dump():
 
 
 def test_create(database, sign_repository, sign_igi):
-    sign_name = sign_repository.of_single(sign_igi)
+    sign_name = sign_repository.create(sign_igi)
 
     assert database[COLLECTION].find_one({"_id": sign_name}) == SignSchema().dump(
         sign_igi
@@ -163,16 +163,16 @@ def test_search_not_found(sign_repository):
 
 
 def test_search_many_one_reading(sign_repository, sign_igi, sign_si):
-    sign_repository.of_single(sign_igi)
-    sign_repository.of_single(sign_si)
+    sign_repository.create(sign_igi)
+    sign_repository.create(sign_si)
     value = sign_igi.values[0]
 
     assert sign_repository.search_many([value]) == [sign_igi]
 
 
 def test_search_many_multiple_readings(sign_repository, sign_igi, sign_si):
-    sign_repository.of_single(sign_igi)
-    sign_repository.of_single(sign_si)
+    sign_repository.create(sign_igi)
+    sign_repository.create(sign_si)
     first_value = sign_igi.values[0]
     second_value = sign_si.values[0]
     assert sign_repository.search_many([first_value, second_value]) == [
@@ -182,7 +182,7 @@ def test_search_many_multiple_readings(sign_repository, sign_igi, sign_si):
 
 
 def test_search_many_no_readings(sign_repository, mongo_sign_igi, mongo_sign_si):
-    sign_repository.of_single(mongo_sign_igi)
-    sign_repository.of_single(mongo_sign_si)
+    sign_repository.create(mongo_sign_igi)
+    sign_repository.create(mongo_sign_si)
 
     assert sign_repository.search_many([]) == []
