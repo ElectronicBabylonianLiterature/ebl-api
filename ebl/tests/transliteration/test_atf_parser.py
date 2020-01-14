@@ -85,7 +85,7 @@ def test_parser_version(parser, version):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        ("$ (end of side)", [LooseDollarLine.of_single("end of side")]),
+        ("$ (end of side)", [LooseDollarLine.of_single(ValueToken("(end of side)"))]),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",
@@ -1099,7 +1099,7 @@ def test_parse_atf(parser, line, expected_tokens):
         ("$ single ruling", [RulingDollarLine.of_single("single", "ruling")]),
         ("$ double ruling", [RulingDollarLine.of_single("double", "ruling")]),
         ("$ triple ruling", [RulingDollarLine.of_single("triple", "ruling")]),
-        ("$ (end of side)", [LooseDollarLine.of_single("end of side")]),
+        ("$ (end of side)", [LooseDollarLine.of_single(ValueToken("(end of side)"))]),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
     ],

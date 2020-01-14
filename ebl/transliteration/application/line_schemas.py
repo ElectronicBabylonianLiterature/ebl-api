@@ -4,7 +4,13 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, TextLine
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    Line,
+    TextLine,
+    LooseDollarLine,
+)
 
 
 class LineSchema(Schema):
@@ -40,10 +46,19 @@ class EmptyLineSchema(LineSchema):
         return EmptyLine()
 
 
+class LooseDollarLineSchema(LineSchema):
+    type = fields.Constant("LooseDollarLine", required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return LooseDollarLine.of_single(data["content"][0])
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "TextLine": TextLineSchema,
     "ControlLine": ControlLineSchema,
     "EmptyLine": EmptyLineSchema,
+    "LooseDollarLine": LooseDollarLineSchema,
 }
 
 
