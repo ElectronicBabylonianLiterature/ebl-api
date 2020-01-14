@@ -1,20 +1,38 @@
+from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
+from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 
-def test_find(annotations_repository, when):
+SCHEMA = AnnotationsSchema()
+
+
+def test_find(annotations_repository, changelog, when):
     annotations = AnnotationsFactory.build()
     when(annotations_repository).query_by_fragment_number(
         annotations.fragment_number
     ).thenReturn(annotations)
-    service = AnnotationsService(annotations_repository)
+    service = AnnotationsService(annotations_repository, changelog)
 
     assert service.find(annotations.fragment_number) == annotations
 
 
-def test_update(annotations_repository, when):
-    annotations = AnnotationsFactory.build()
-    when(annotations_repository).create_or_update(annotations).thenReturn()
-    service = AnnotationsService(annotations_repository)
+def test_update(annotations_repository, when, user, changelog):
+    fragment_number = FragmentNumber("K.1")
+    annotations = AnnotationsFactory.build(fragment_number=fragment_number)
+    updated_annotations = AnnotationsFactory.build(fragment_number=fragment_number)
 
-    assert service.update(annotations) == annotations
+    when(annotations_repository).query_by_fragment_number(fragment_number).thenReturn(
+        annotations
+    )
+    when(annotations_repository).create_or_update(updated_annotations).thenReturn()
+    when(changelog).create(
+        "annotations",
+        user.profile,
+        {"_id": fragment_number, **SCHEMA.dump(annotations)},
+        {"_id": fragment_number, **SCHEMA.dump(updated_annotations)},
+    ).thenReturn()
+
+    service = AnnotationsService(annotations_repository, changelog)
+
+    assert service.update(updated_annotations, user) == updated_annotations

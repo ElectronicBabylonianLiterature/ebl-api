@@ -45,7 +45,7 @@ class AnnotationResource:
         """
         if number == req.media.get("fragmentNumber"):
             annotations = self._annotation_service.update(
-                AnnotationsSchema().load(req.media)
+                AnnotationsSchema().load(req.media), req.context.user
             )
             resp.media = AnnotationsSchema().dump(annotations)
         else:

@@ -33,7 +33,9 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
         context.folio_repository,
     )
     updater = context.get_fragment_updater()
-    annotations_service = AnnotationsService(context.annotations_repository)
+    annotations_service = AnnotationsService(
+        context.annotations_repository, context.changelog
+    )
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
