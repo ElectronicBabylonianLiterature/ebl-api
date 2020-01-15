@@ -64,6 +64,15 @@ def test_parser_version(parser, version):
 @pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
     "line,expected_tokens",
+    [("$ (end of side)", [LooseDollarLine.of_single("(end of side)")])],
+)
+def test_parse_atf_dollar_line_2(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
     [
         ("", []),
         ("\n", []),
@@ -1092,6 +1101,7 @@ def test_parse_atf(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("$ (end of side)", [LooseDollarLine.of_single("(end of side)")]),
         (
             "$ (image 1 = numbered diagram of triangle)",
             [ImageDollarLine.of_single("1", None, "numbered diagram of triangle")],
@@ -1103,7 +1113,6 @@ def test_parse_atf(parser, line, expected_tokens):
         ("$ single ruling", [RulingDollarLine.of_single("single")]),
         ("$ double ruling", [RulingDollarLine.of_single("double")]),
         ("$ triple ruling", [RulingDollarLine.of_single("triple")]),
-        ("$ (end of side)", [LooseDollarLine.of_single("(end of side)")]),
     ],
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):
