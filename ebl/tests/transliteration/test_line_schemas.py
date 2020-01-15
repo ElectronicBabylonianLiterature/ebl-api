@@ -2,7 +2,6 @@ import pytest
 
 from ebl.transliteration.application.line_schemas import dump_line, load_line
 from ebl.transliteration.application.token_schemas import dump_tokens
-from ebl.transliteration.domain.atf import Ruling
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
