@@ -205,8 +205,8 @@ def test_control_line_of_single():
 
 
 def test_loose_dollar_line_of_single():
-    token = ValueToken("( end of side")
-    expected = LooseDollarLine("$", (token,))
+    token = "( end of side )"
+    expected = LooseDollarLine("$", (ValueToken(token),), token[1:-1])
     actual = LooseDollarLine.of_single(token)
 
     assert expected == actual

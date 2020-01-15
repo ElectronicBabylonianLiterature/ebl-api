@@ -85,7 +85,7 @@ def test_parser_version(parser, version):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        ("$ (end of side)", [LooseDollarLine.of_single(ValueToken("(end of side)"))]),
+        ("$ (end of side)", [LooseDollarLine.of_single("(end of side)")]),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",
@@ -1096,12 +1096,14 @@ def test_parse_atf(parser, line, expected_tokens):
             "$ (image 1 = numbered diagram of triangle)",
             [ImageDollarLine.of_single("1", None, "numbered diagram of triangle")],
         ),
+        (
+            "$ (image 1a = numbered diagram of triangle)",
+            [ImageDollarLine.of_single("1", "a", "numbered diagram of triangle")],
+        ),
         ("$ single ruling", [RulingDollarLine.of_single("single")]),
         ("$ double ruling", [RulingDollarLine.of_single("double")]),
         ("$ triple ruling", [RulingDollarLine.of_single("triple")]),
-        ("$ (end of side)", [LooseDollarLine.of_single(ValueToken("(end of side)"))]),
-        ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
-        ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
+        ("$ (end of side)", [LooseDollarLine.of_single("(end of side)")]),
     ],
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):

@@ -82,13 +82,11 @@ class DollarLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
-    @property
-    def text(self):
-        return self.content[0].value[1:-1]
+    text: str = ""
 
     @classmethod
-    def of_single(cls, content: Token):
-        return cls("$", (content,))
+    def of_single(cls, content: str):
+        return cls("$", (ValueToken(content),), content[1:-1])
 
 
 @attr.s(auto_attribs=True, frozen=True)
