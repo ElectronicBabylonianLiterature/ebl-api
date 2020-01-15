@@ -2,7 +2,9 @@ from typing import List, Mapping, Sequence, Tuple, Type
 
 from marshmallow import Schema, fields, post_load
 
+from ebl.schemas import ValueEnum
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
+from ebl.transliteration.domain.atf import Ruling
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -10,6 +12,8 @@ from ebl.transliteration.domain.line import (
     Line,
     TextLine,
     LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
 )
 
 
@@ -48,10 +52,31 @@ class EmptyLineSchema(LineSchema):
 
 class LooseDollarLineSchema(LineSchema):
     type = fields.Constant("LooseDollarLine", required=True)
+    text = fields.String(required=True)
 
     @post_load
     def make_line(self, data, **kwargs):
-        return LooseDollarLine.of_single(data["content"][0].value)
+        return LooseDollarLine.of_single("(" + data["text"] + ")")
+
+
+class ImageDollarLineSchema(LineSchema):
+    type = fields.Constant("ImageDollarLine", required=True)
+    number = fields.String(required=True)
+    letter = fields.String(required=False, allow_none=True)
+    text = fields.String(required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return ImageDollarLine.of_single(data["number"], data["letter"], data["text"])
+
+
+class RulingDollarLineSchema(LineSchema):
+    type = fields.Constant("RulingDollarLine", required=True)
+    number = ValueEnum(Ruling, required=True, by_value=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return RulingDollarLine.of_single(data["number"].value)
 
 
 _schemas: Mapping[str, Type[Schema]] = {
@@ -59,11 +84,14 @@ _schemas: Mapping[str, Type[Schema]] = {
     "ControlLine": ControlLineSchema,
     "EmptyLine": EmptyLineSchema,
     "LooseDollarLine": LooseDollarLineSchema,
+    "ImageDollarLine": ImageDollarLineSchema,
+    "RulingDollarLine": RulingDollarLineSchema,
 }
 
 
 def dump_line(line: Line) -> dict:
-    return _schemas[type(line).__name__]().dump(line)
+    x = _schemas[type(line).__name__]().dump(line)
+    return x
 
 
 def dump_lines(lines: Sequence[Line]) -> List[dict]:
