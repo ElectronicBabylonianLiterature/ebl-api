@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional
 
 import attr
@@ -20,9 +21,17 @@ L = TypeVar("L", "TextLine", "Line")
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Line:
-    prefix: str = ""
-    content: Tuple[Token, ...] = tuple()
+class Line(ABC):
+    # prefix: str = ""
+    # content: Tuple[Token, ...] = tuple()
+
+    @abstractmethod
+    def prefix(self) -> str:
+        ...
+
+    @abstractmethod
+    def content(self) -> Tuple[Token, ...]:
+        ...
 
     @property
     def key(self) -> str:
@@ -77,32 +86,40 @@ class ControlLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class DollarLine(Line):
-    pass
+    @property
+    def prefix(self):
+        return "$"
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
-    text: str = ""
+    _text: str = ""
 
-    @classmethod
-    def of_single(cls, content: str):
-        return cls("$", (ValueToken(content),), content[1:-1])
+    @property
+    def text(self):
+        return self._text[1:-1]
+
+    @property
+    def content(self):
+        return (ValueToken(self._text),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ImageDollarLine(DollarLine):
     number: str = ""
     letter: Optional[str] = ""
-    text: str = ""
+    _text: str = ""
 
-    @classmethod
-    def of_single(cls, number: str, letter: Optional[str], text: str):
-        return cls(
-            "$",
-            ((ValueToken(f'( image {number}{letter if letter else ""} = {text})')),),
-            number,
-            letter,
-            text,
+    @property
+    def text(self):
+        return self._text[0:-1]
+
+    @property
+    def content(self):
+        return (
+            ValueToken(
+                f'( image {self.number}{self.letter if self.letter else ""} = {self.text})'
+            ),
         )
 
 

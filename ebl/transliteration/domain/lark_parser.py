@@ -358,15 +358,15 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__loose(self, content):
-        return LooseDollarLine.of_single(content)
+        return LooseDollarLine(str(content))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__ruling(self, number, ruling):
-        return RulingDollarLine.of_single(number)
+        return RulingDollarLine(number)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__image(self, number, letter, text):
-        return ImageDollarLine.of_single(number, letter, text[0:-1])
+        return ImageDollarLine(str(number), str(letter), str(text))
 
 
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")
