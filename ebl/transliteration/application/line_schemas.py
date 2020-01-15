@@ -51,7 +51,7 @@ class LooseDollarLineSchema(LineSchema):
 
     @post_load
     def make_line(self, data, **kwargs):
-        return LooseDollarLine.of_single(data["content"][0])
+        return LooseDollarLine.of_single(data["content"][0].value)
 
 
 _schemas: Mapping[str, Type[Schema]] = {
