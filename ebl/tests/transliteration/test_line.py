@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
@@ -17,6 +18,9 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     Line,
     TextLine,
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
 )
 from ebl.transliteration.domain.tokens import (
     LanguageShift,
@@ -192,12 +196,43 @@ def test_text_line_atf_erasure(word, erasure, expected):
     assert line.atf == f"{line.prefix} {word.value} {expected} {word.value}"
 
 
-def test_line_of_single():
+def test_control_line_of_single():
     prefix = "$"
     token = ValueToken("only")
     line = ControlLine.of_single(prefix, token)
 
     assert line == ControlLine("$", (token,))
+
+
+def test_loose_dollar_line_of_single():
+    token = ValueToken("( end of side")
+    expected = LooseDollarLine("$", (token,))
+    actual = LooseDollarLine.of_single(token)
+
+    assert expected == actual
+    assert expected.text == actual.text
+
+
+def test_image_dollar_line_of_single():
+    token = ValueToken("( image 1a = great)")
+    expected = ImageDollarLine("$", (token,), "1", "a", "great")
+    actual = ImageDollarLine.of_single("1", "a", "great")
+
+    assert expected == actual
+
+    token = ValueToken("( image 1 = great)")
+    expected = ImageDollarLine("$", (token,), "1", None, "great")
+    actual = ImageDollarLine.of_single("1", None, "great")
+
+    assert expected == actual
+
+
+def test_ruling_dollar_line_of_single():
+    token = ValueToken("double ruling")
+    expected = RulingDollarLine("$", (token,), atf.Ruling("double"))
+    actual = RulingDollarLine.of_single("double")
+
+    assert expected == actual
 
 
 @pytest.mark.parametrize(

@@ -111,11 +111,12 @@ class ImageDollarLine(DollarLine):
 @attr.s(auto_attribs=True, frozen=True)
 class RulingDollarLine(DollarLine):
     number: atf.Ruling = atf.Ruling.SINGLE
-    # Non-default argument follows default argument in Line Error
+    # Non-default argument follows default argument in Line Error when number is left
+    # non defined
 
     @classmethod
-    def of_single(cls, ruling):
-        return cls("$", ((ValueToken(f"{ruling} ruling")),), atf.Ruling(ruling))
+    def of_single(cls, number):
+        return cls("$", ((ValueToken(f"{number} ruling")),), atf.Ruling(number))
 
 
 @attr.s(auto_attribs=True, frozen=True)
