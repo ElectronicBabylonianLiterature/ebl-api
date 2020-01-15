@@ -2,12 +2,20 @@ import pytest
 
 from ebl.transliteration.application.line_schemas import dump_line, load_line
 from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.domain.atf import Ruling
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    TextLine,
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
+)
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
@@ -45,6 +53,46 @@ LINES = [
         },
     ),
     (EmptyLine(), {"type": "EmptyLine", "prefix": "", "content": []}),
+    (
+        LooseDollarLine.of_single("(end of side)"),
+        {
+            "type": "LooseDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken("(end of side)")]),
+            "text": "end of side",
+        },
+    ),
+    (
+        ImageDollarLine.of_single("1", "a", "great"),
+        {
+            "type": "ImageDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken("( image 1a = great)")]),
+            "number": "1",
+            "letter": "a",
+            "text": "great",
+        },
+    ),
+    (
+        ImageDollarLine.of_single("1", None, "great"),
+        {
+            "type": "ImageDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken("( image 1 = great)")]),
+            "number": "1",
+            "letter": None,
+            "text": "great",
+        },
+    ),
+    (
+        RulingDollarLine.of_single("double"),
+        {
+            "type": "RulingDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken("double ruling")]),
+            "number": "double",
+        },
+    ),
 ]
 
 
