@@ -2,6 +2,7 @@ import pytest
 
 from ebl.transliteration.application.line_schemas import dump_line, load_line
 from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
@@ -53,7 +54,7 @@ LINES = [
     ),
     (EmptyLine(), {"type": "EmptyLine", "prefix": "", "content": []}),
     (
-        LooseDollarLine.of_single("(end of side)"),
+        LooseDollarLine("end of side"),
         {
             "type": "LooseDollarLine",
             "prefix": "$",
@@ -62,34 +63,34 @@ LINES = [
         },
     ),
     (
-        ImageDollarLine.of_single("1", "a", "great"),
+        ImageDollarLine("1", "a", "great"),
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken("( image 1a = great)")]),
+            "content": dump_tokens([ValueToken("(image 1a = great)")]),
             "number": "1",
             "letter": "a",
             "text": "great",
         },
     ),
     (
-        ImageDollarLine.of_single("1", None, "great"),
+        ImageDollarLine("1", None, "great"),
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken("( image 1 = great)")]),
+            "content": dump_tokens([ValueToken("(image 1 = great)")]),
             "number": "1",
             "letter": None,
             "text": "great",
         },
     ),
     (
-        RulingDollarLine.of_single("double"),
+        RulingDollarLine(atf.Ruling("double")),
         {
             "type": "RulingDollarLine",
             "prefix": "$",
             "content": dump_tokens([ValueToken("double ruling")]),
-            "number": "double",
+            "number": atf.Ruling.DOUBLE.value,
         },
     ),
 ]

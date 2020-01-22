@@ -63,8 +63,7 @@ def test_parser_version(parser, version):
 
 @pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
-    "line,expected_tokens",
-    [("$ (end of side)", [LooseDollarLine.of_single("(end of side)")])],
+    "line,expected_tokens", [("$ (end of side)", [LooseDollarLine("end of side")])],
 )
 def test_parse_atf_dollar_line_2(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
@@ -94,7 +93,7 @@ def test_parse_atf_dollar_line_2(parser, line, expected_tokens):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        ("$ (end of side)", [LooseDollarLine.of_single("(end of side)")]),
+        ("$ (end of side)", [LooseDollarLine("end of side")]),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",
@@ -1101,18 +1100,15 @@ def test_parse_atf(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
-        ("$ (end of side)", [LooseDollarLine.of_single("(end of side)")]),
+        ("$ (end of side)", [LooseDollarLine("end of side")]),
+        ("$ (image 1a = great)", [ImageDollarLine("1", "a", "great")]),
         (
             "$ (image 1 = numbered diagram of triangle)",
-            [ImageDollarLine.of_single("1", None, "numbered diagram of triangle")],
+            [ImageDollarLine("1", None, "numbered diagram of triangle")],
         ),
-        (
-            "$ (image 1a = numbered diagram of triangle)",
-            [ImageDollarLine.of_single("1", "a", "numbered diagram of triangle")],
-        ),
-        ("$ single ruling", [RulingDollarLine.of_single("single")]),
-        ("$ double ruling", [RulingDollarLine.of_single("double")]),
-        ("$ triple ruling", [RulingDollarLine.of_single("triple")]),
+        ("$ single ruling", [RulingDollarLine(atf.Ruling("single"))]),
+        ("$ double ruling", [RulingDollarLine(atf.Ruling("double"))]),
+        ("$ triple ruling", [RulingDollarLine(atf.Ruling("triple"))]),
     ],
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):

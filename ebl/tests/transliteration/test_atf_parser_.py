@@ -53,3 +53,7 @@ def test_ruling_dollar_line_of_single():
     assert expected.prefix == "$"
     assert expected.content == (ValueToken("double ruling"),)
     assert expected.number == atf.Ruling("double")
+
+
+def test_text_line():
+    expected = TextLine()
