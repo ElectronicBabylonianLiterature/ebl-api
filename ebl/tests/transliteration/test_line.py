@@ -192,7 +192,7 @@ def test_control_line_of_single():
     assert line == ControlLine("$", (token,))
 
 
-def test_loose_dollar_line_of_single():
+def test_loose_dollar_line():
     expected = LooseDollarLine("end of side")
 
     assert expected.prefix == "$"
@@ -200,7 +200,7 @@ def test_loose_dollar_line_of_single():
     assert expected.text == "end of side"
 
 
-def test_image_dollar_line_of_single():
+def test_image_dollar_line():
     expected = ImageDollarLine("1", "a", "great")
 
     assert expected.prefix == "$"
@@ -210,7 +210,7 @@ def test_image_dollar_line_of_single():
     assert expected.text == "great"
 
 
-def test_ruling_dollar_line_of_single():
+def test_ruling_dollar_line():
     expected = RulingDollarLine(atf.Ruling("double"))
 
     assert expected.prefix == "$"
