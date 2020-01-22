@@ -334,6 +334,8 @@ def word():
         "source": "**part1 part2** source",
         "roots": ["wb'", "'b'"],
         "pos": ["V"],
+        "guideWord": "meaning",
+        "oraccWords": [{"lemma": "oracc lemma", "guideWord": "oracc meaning"}],
     }
 
 

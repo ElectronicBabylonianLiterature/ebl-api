@@ -11,7 +11,7 @@ class AnnotationResource:
         self._annotation_service = annotation_service
 
     @falcon.before(require_scope, "annotate:fragments")
-    @validate(AnnotationsSchema, AnnotationsSchema)
+    @validate(AnnotationsSchema(), AnnotationsSchema())
     def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):
         """---
         description: >-
@@ -52,7 +52,7 @@ class AnnotationResource:
             raise falcon.HTTPUnprocessableEntity("Fragment numbers do not match.")
 
     @falcon.before(require_scope, "read:fragments")
-    @validate(None, AnnotationsSchema)
+    @validate(None, AnnotationsSchema())
     def on_get(self, _, resp: falcon.Response, number: str):
         """---
         description: >-
