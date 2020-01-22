@@ -65,14 +65,6 @@ def test_parser_version(parser, version):
 
 @pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
-    "line,expected_tokens", [("$ (end of side)", [LooseDollarLine("end of side")])],
-)
-def test_parse_atf_dollar_line_2(parser, line, expected_tokens):
-    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
-
-
-@pytest.mark.parametrize("parser", [parse_atf_lark])
-@pytest.mark.parametrize(
     "line,expected_tokens",
     [
         ("", []),
@@ -1128,8 +1120,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
     ],
 )
 def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
-    x = parser(line).lines
-    assert x == Text.of_iterable(expected_tokens).lines
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 
 def test_parse_dividers():
