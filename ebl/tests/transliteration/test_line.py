@@ -16,7 +16,6 @@ from ebl.transliteration.domain.lemmatization import (
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
-    Line,
     TextLine,
     LooseDollarLine,
     ImageDollarLine,
