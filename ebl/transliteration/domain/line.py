@@ -23,7 +23,7 @@ L = TypeVar("L", "TextLine", "Line")
 @attr.s(auto_attribs=True, frozen=True)
 class Line(ABC):
     # prefix: str = ""
-    # content: Tuple[Token, ...] = tuple()
+    # content: Sequence[Token, ...] = tuple()
 
     @abstractmethod
     def prefix(self) -> str:
@@ -93,45 +93,35 @@ class DollarLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
-    _text: str = ""
-
-    @property
-    def text(self):
-        return self._text[1:-1]
+    text: str = ""
 
     @property
     def content(self):
-        return (ValueToken(self._text),)
+        return (ValueToken(f"({self.text})"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ImageDollarLine(DollarLine):
     number: str = ""
     letter: Optional[str] = ""
-    _text: str = ""
-
-    @property
-    def text(self):
-        return self._text[0:-1]
+    text: str = ""
 
     @property
     def content(self):
         return (
             ValueToken(
-                f'( image {self.number}{self.letter if self.letter else ""} = {self.text})'
+                f'(image {self.number}{self.letter if self.letter else ""} = {self.text})'
             ),
         )
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class RulingDollarLine(DollarLine):
-    number: atf.Ruling = atf.Ruling.SINGLE
-    # Non-default argument follows default argument in Line Error when number is left
-    # non defined
+    number: atf.Ruling
 
-    @classmethod
-    def of_single(cls, number):
-        return cls("$", ((ValueToken(f"{number} ruling")),), atf.Ruling(number))
+    @property
+    def content(self):
+        return (ValueToken(f"{self.number.value} ruling"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
