@@ -1127,7 +1127,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         ),
     ],
 )
-def test_parse_atf_dollar_line(parser, line, expected_tokens):
+def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
     x = parser(line).lines
     assert x == Text.of_iterable(expected_tokens).lines
 
