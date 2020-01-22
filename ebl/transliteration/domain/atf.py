@@ -108,6 +108,36 @@ class Ruling(Enum):
     TRIPLE = "triple"
 
 
+class SurfaceScope(Enum):
+    OBVERSE = "obverse"
+    REVERSE = "reverse"
+    BOTTOM = "bottom"
+    EDGE = "edge"
+    LEFT = "left"
+    RIGHT = "right"
+    TOP = "top"
+
+
+class ObjectScope(Enum):
+    TABLET = "tablet"
+    ENVELOPE = "envelope"
+    PRISM = "prism"
+    BULLA = "bulla"
+    FRAGMENT = "fragment"
+    OBJECT = "object"
+
+
+class ScopeScope(Enum):
+    COLUMN = "column"
+    COLUMNS = "columns"
+    LINE = "line"
+    LINES = "lines"
+    CASE = "case"
+    CASES = "cases"
+    SIDE = "side"
+    EXCERPT = "excerpt"
+
+
 UNKNOWN_NUMBER_OF_SIGNS = "..."
 WORD_SEPARATOR = " "
 VARIANT_SEPARATOR = "/"
