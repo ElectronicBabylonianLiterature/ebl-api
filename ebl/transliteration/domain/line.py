@@ -25,13 +25,13 @@ class Line(ABC):
     # prefix: str = ""
     # content: Sequence[Token, ...] = tuple()
 
-    @abstractmethod
     @property
+    @abstractmethod
     def prefix(self) -> str:
         ...
 
-    @abstractmethod
     @property
+    @abstractmethod
     def content(self) -> Tuple[Token, ...]:
         ...
 
