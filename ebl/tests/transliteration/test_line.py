@@ -36,17 +36,6 @@ from ebl.transliteration.domain.word_tokens import (
 LINE_NUMBER = LineNumberLabel.from_atf("1.")
 
 
-def test_line():
-    prefix = "*"
-    token = ValueToken("value")
-    line = Line(prefix, (token,))
-
-    assert line.prefix == prefix
-    assert line.content == (token,)
-    assert line.key == f"{line.atf}⁞{token.get_key()}"
-    assert line.atf == "*value"
-
-
 def test_empty_line():
     line = EmptyLine()
 
@@ -205,36 +194,29 @@ def test_control_line_of_single():
 
 
 def test_loose_dollar_line_of_single():
-    token = "(end of side)"
-    expected = LooseDollarLine(token[1:-1])
-    actual = LooseDollarLine.of_single(token)
+    expected = LooseDollarLine("end of side")
 
-    assert expected == actual
     assert expected.prefix == "$"
-    assert expected.content == ValueToken("(end of side")
-    assert expected.text == actual.text
+    assert expected.content == (ValueToken("(end of side)"),)
+    assert expected.text == "end of side"
 
 
 def test_image_dollar_line_of_single():
-    token = ValueToken("( image 1a = great)")
-    expected = ImageDollarLine("$", (token,), "1", "a", "great")
-    actual = ImageDollarLine.of_single("1", "a", "great")
+    expected = ImageDollarLine("1", "a", "great")
 
-    assert expected == actual
-
-    token = ValueToken("( image 1 = great)")
-    expected = ImageDollarLine("$", (token,), "1", None, "great")
-    actual = ImageDollarLine.of_single("1", None, "great")
-
-    assert expected == actual
+    assert expected.prefix == "$"
+    assert expected.content == (ValueToken("(image 1a = great)"),)
+    assert expected.number == "1"
+    assert expected.letter == "a"
+    assert expected.text == "great"
 
 
 def test_ruling_dollar_line_of_single():
-    token = ValueToken("double ruling")
-    expected = RulingDollarLine("$", (token,), atf.Ruling("double"))
-    actual = RulingDollarLine.of_single("double")
+    expected = RulingDollarLine(atf.Ruling("double"))
 
-    assert expected == actual
+    assert expected.prefix == "$"
+    assert expected.content == (ValueToken("double ruling"),)
+    assert expected.number == atf.Ruling("double")
 
 
 @pytest.mark.parametrize(

@@ -79,9 +79,20 @@ class Line(ABC):
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
+    _prefix: str = ""
+    _content: Sequence[Token] = tuple()
+
     @classmethod
     def of_single(cls, prefix: str, content: Token):
         return cls(prefix, (content,))
+
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @property
+    def content(self):
+        return self._content
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -126,6 +137,17 @@ class RulingDollarLine(DollarLine):
 
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
+    _prefix: str = ""
+    _content: Sequence[Token] = tuple()
+
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @property
+    def content(self):
+        return self._content
+
     @classmethod
     def of_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
         visitor = LanguageVisitor()
@@ -167,4 +189,13 @@ class TextLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    pass
+    _prefix: str = ""
+    _content: Sequence[Token] = tuple()
+
+    @property
+    def prefix(self):
+        return ""
+
+    @property
+    def content(self):
+        return tuple()

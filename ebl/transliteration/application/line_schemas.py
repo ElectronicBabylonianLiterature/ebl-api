@@ -56,7 +56,7 @@ class LooseDollarLineSchema(LineSchema):
 
     @post_load
     def make_line(self, data, **kwargs):
-        return LooseDollarLine.of_single("(" + data["text"] + ")")
+        return LooseDollarLine(data["text"])
 
 
 class ImageDollarLineSchema(LineSchema):
@@ -67,7 +67,7 @@ class ImageDollarLineSchema(LineSchema):
 
     @post_load
     def make_line(self, data, **kwargs):
-        return ImageDollarLine.of_single(data["number"], data["letter"], data["text"])
+        return ImageDollarLine(data["number"], data["letter"], data["text"])
 
 
 class RulingDollarLineSchema(LineSchema):
@@ -76,7 +76,7 @@ class RulingDollarLineSchema(LineSchema):
 
     @post_load
     def make_line(self, data, **kwargs):
-        return RulingDollarLine.of_single(data["number"].value)
+        return RulingDollarLine(data["number"])
 
 
 _schemas: Mapping[str, Type[Schema]] = {
