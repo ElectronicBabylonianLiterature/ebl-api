@@ -20,6 +20,8 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
+    StrictDollarLine,
+    Scope,
 )
 from ebl.transliteration.domain.tokens import (
     LanguageShift,
@@ -216,6 +218,16 @@ def test_ruling_dollar_line():
     assert expected.prefix == "$"
     assert expected.content == (ValueToken("double ruling"),)
     assert expected.number == atf.Ruling("double")
+
+
+def test_strict_dollar_line_scope():
+    scope = Scope(atf.ObjectScope("object"), "what")
+    expected = StrictDollarLine(scope)
+
+    assert expected.prefix == "$"
+    assert expected.scope.type == atf.ObjectScope("object")
+    assert expected.scope.text == "what"
+    assert expected.content == (ValueToken("object what"),)
 
 
 @pytest.mark.parametrize(

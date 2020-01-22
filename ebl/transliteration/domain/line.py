@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional
+from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
 import attr
 import pydash
@@ -135,6 +135,21 @@ class RulingDollarLine(DollarLine):
     @property
     def content(self):
         return (ValueToken(f"{self.number.value} ruling"),)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Scope:
+    type: Union[atf.SurfaceScope, atf.ScopeScope, atf.ObjectScope]
+    text: str = ""
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class StrictDollarLine(DollarLine):
+    scope: Scope
+
+    @property
+    def content(self):
+        return (ValueToken(f"{self.scope.type.value} {self.scope.text}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)

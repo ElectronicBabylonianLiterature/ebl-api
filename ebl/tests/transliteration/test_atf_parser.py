@@ -21,6 +21,8 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     RulingDollarLine,
     ImageDollarLine,
+    StrictDollarLine,
+    Scope,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -1113,6 +1115,21 @@ def test_parse_atf(parser, line, expected_tokens):
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ at least several object what blank *",
+            [StrictDollarLine(Scope(atf.ObjectScope("object"), "what"))],
+        ),
+    ],
+)
+def test_parse_atf_dollar_line(parser, line, expected_tokens):
+    x = parser(line).lines
+    assert x == Text.of_iterable(expected_tokens).lines
 
 
 def test_parse_dividers():

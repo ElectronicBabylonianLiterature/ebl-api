@@ -9,15 +9,15 @@ _WORD_SEPARATOR: " "
 
 ?dollar_line : "$" _WORD_SEPARATOR value
 
-?value : strict | loose | ruling | image | old
+?value : strict | loose | ruling | image
 
-strict : [qualification] extent scope [state] [STATUS]
+strict : [qualification] _WORD_SEPARATOR extent _WORD_SEPARATOR scope [state] _WORD_SEPARATOR [STATUS]
 
 !old.-2: /.+/?
 
-!qualification : "at least" | "at most" | "about"
+!qualification.2 : "at least" | "at most" | "about"
 
-!extent : "serveral" | "some" | number | range | "rest of" | "start of"
+!extent.2 : "several" | "some" | number | range | "rest of" | "start of"
     | "beginning of" |"middle of" | "end of"
 
 
@@ -39,7 +39,7 @@ range : number "-" number
     | generic_surface | "edge"
 
 
-!generic_surface : "surface" TEXT
+!generic_surface : "surface" TEXTS
 
 !loose.-1 : /\(.+\)/
 
@@ -49,12 +49,13 @@ NUMBER : ("single" | "double" | "triple")
 RULING : "ruling"
 
 
-image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR TEXT
+image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR TEXTS
 
 _IMAGE : "(image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
 
-TEXT : /.+\)/
+TEXT : /.+?\s/
+TEXTS : /.+\)/
 number : SIGNED_NUMBER
 lower_case_letter : LCASE_LETTER
