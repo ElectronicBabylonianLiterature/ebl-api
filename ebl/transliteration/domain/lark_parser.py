@@ -344,8 +344,10 @@ class TreeToLine(TreeToWord):
         ]
 
 
-WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")
-LINE_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__)
+WORD_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
+)
+LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
 
 def parse_word(atf):
