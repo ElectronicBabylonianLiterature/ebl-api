@@ -37,10 +37,11 @@ def validate_atf(text):
 
 
 class Surface(Enum):
-    """ See "Surface" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
-    and "Surfaces" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
+    """
+See "Surface" in
+http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
+and "Surfaces" in
+http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
     """
 
     OBVERSE = ("obverse", "o")
