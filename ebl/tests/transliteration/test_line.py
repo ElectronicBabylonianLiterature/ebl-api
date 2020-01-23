@@ -250,6 +250,9 @@ def test_strict_dollar_line():
     assert expected.content == (ValueToken("at least several columns blank ?"),)
 
 
+@pytest.mark.parametrize(
+    "line", [ControlLine.of_single("@", ValueToken("obverse")), EmptyLine()]
+)
 def test_update_lemmatization(line):
     lemmatization = tuple(LemmatizationToken(token.value) for token in line.content)
     assert line.update_lemmatization(lemmatization) == line

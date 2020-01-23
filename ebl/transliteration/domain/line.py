@@ -164,9 +164,9 @@ class StrictDollarLine(DollarLine):
     def content(self):
         return (
             ValueToken(
-                f"{helper_str(self.qualification)}{helper_str(self.extent)} \
-                {helper_str(self.scope.content)}{self.scope.text} \
-                {helper_str(self.state)}{handle_str(self.status)}"
+                f"{helper_str(self.qualification)}{helper_str(self.extent)}"
+                f"{helper_str(self.scope.content)}{self.scope.text}"
+                f"{helper_str(self.state)}{handle_str(self.status)}"
             ),
         )
 
