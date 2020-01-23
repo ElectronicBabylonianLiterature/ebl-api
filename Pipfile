@@ -21,7 +21,7 @@ sentry-sdk = {extras = ["falcon"],version = "*"}
 roman = "*"
 waitress = "*"
 falcon-apispec = "*"
-lark-parser = "*"
+lark-parser = {git = "https://github.com/ElectronicBabylonianLiterature/lark.git",editable = true,ref = "8792c99f39f6e4c09274da3652f6477cba686c70"}
 marshmallow = "*"
 inflect = "*"
 joblib = "*"
