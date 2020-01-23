@@ -371,6 +371,51 @@ class TreeDollarSignToTokens(TreeToLine):
         return ImageDollarLine(str(number), letter, str(text)[0:-1])
 
     @v_args(inline=True)
+    def ebl_atf_dollar_line__STATUS(self, status):
+        return atf.Status(str(status))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__STATE(self, state):
+        return atf.State(str(state))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__OBJECT(self, object):
+        return Scope(atf.Object(object))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__generic_object(self, object, text):
+        return Scope(atf.Object(str(object)), str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__SURFACE(self, surface):
+        return Scope(atf.Surface.from_atf(str(surface)))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__generic_surface(self, surface, text):
+        return Scope(atf.Surface.from_atf(str(surface)), str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__EXTENT(self, extent):
+        return atf.Extent(str(extent))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__NUMBER(self, number):
+        return int(number)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__range(self, number1, number2):
+        return (number1, number2)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__QUALIFICATION(self, qualification):
+        return atf.Qualification(str(qualification))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__strict(self, qualification, extent, scope, state, status):
+        return StrictDollarLine(qualification, extent, scope, state, status)
+
+    """
+    @v_args(inline=True)
     def ebl_atf_dollar_line__generic_object(self, object, text):
         return Scope(atf.Object(str(object)), str(text[0:-1]))
 
@@ -382,6 +427,7 @@ class TreeDollarSignToTokens(TreeToLine):
     def ebl_atf_dollar_line__strict(self, qualification, extent, scope, state, status):
         x = scope.children[0].children[0]
         return StrictDollarLine(None, extent, x, None, None)
+    """
 
 
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")

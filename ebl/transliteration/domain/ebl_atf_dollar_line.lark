@@ -13,39 +13,43 @@ _WORD_SEPARATOR: " "
 
 !old.-2: /.+/?
 
-strict : [qualification] [_WORD_SEPARATOR] extent _WORD_SEPARATOR scope [state] [_WORD_SEPARATOR] [STATUS]
+strict : [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scope [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
 
-!qualification : "at least" | "at most" | "about"
 
-!extent : "several" | "some" | number | range | "rest of" | "start of"
-    | "beginning of" |"middle of" | "end of"
+QUALIFICATION : "at least" | "at most" | "about"
+_extent : NUMBER | range | EXTENT
+EXTENT : "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
 
-range : number "-" number
+range.2 : NUMBER _WORD_SEPARATOR? "-" _WORD_SEPARATOR? NUMBER
+NUMBER : SIGNED_NUMBER
 
-!scope : object | surface | "column" | "columns" | "line" | "lines" | "case" | "cases"
-    | "side" | "excerpt"
 
-!object : "tablet" | "envelope" | "prism" | "bulla" | "fragment" | generic_object
+_scope : _object | _surface
 
-generic_object : OBJECT _WORD_SEPARATOR TEXT
+TEXT : /([^\s]+)/
 
-OBJECT : "object"
 
-!surface : "observe" | "reverse" | "left" | "right" | "top" | "bottom" | "face"
-    | generic_surface | "edge"
+_object : OBJECT | generic_object
+OBJECT: "tablet" | "envelope" | "prism" | "bulla" | "fragment"
+generic_object : OBJECT_GENERIC _WORD_SEPARATOR TEXT
+OBJECT_GENERIC : "object"
 
-!generic_surface : "surface" TEXTS
+_surface : SURFACE | generic_surface
+SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
+generic_surface : SURFACE_GENERIC _WORD_SEPARATOR TEXT
+SURFACE_GENERIC : "surface"
 
-!state : "blank" | "broken" | "effaced" | "illegible" | "missing " | "traces "
+
+STATE : "blank" | "broken" | "effaced" | "illegible" | "missing " | "traces "
     | "omitted" | "continues"
 
 STATUS : "*" | "?" | "!" | "!?"
 
 !loose.-1 : /\(.+\)/
 
-ruling : NUMBER _WORD_SEPARATOR RULING
+ruling : RULING_NUMBER _WORD_SEPARATOR RULING
 
-NUMBER : ("single" | "double" | "triple")
+RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
 image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR TEXTS
@@ -53,8 +57,5 @@ image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WO
 _IMAGE : "(image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
-
-TEXT : /.+?\s/
 TEXTS : /.+\)/
-number : SIGNED_NUMBER
-lower_case_letter : LCASE_LETTER
+

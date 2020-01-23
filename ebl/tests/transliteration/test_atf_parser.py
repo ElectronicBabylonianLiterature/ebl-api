@@ -1114,14 +1114,134 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
     "line,expected_tokens",
     [
         (
-            "$ at least several object what blank *",
+            "$ at most 1-3 object stone blank ?",
+            [
+                StrictDollarLine(
+                    atf.Qualification("at most"),
+                    (1, 3),
+                    Scope(atf.Object("object"), "stone"),
+                    atf.State("blank"),
+                    atf.Status("?"),
+                )
+            ],
+        ),
+        (
+            "$ at most 1-3 obverse",
+            [
+                StrictDollarLine(
+                    atf.Qualification("at most"),
+                    (1, 3),
+                    Scope(atf.Surface.from_atf("obverse")),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ 1-3 obverse",
+            [
+                StrictDollarLine(
+                    None, (1, 3), Scope(atf.Surface.from_atf("obverse")), None, None,
+                )
+            ],
+        ),
+        (
+            "$ 1 - 3 obverse",
+            [
+                StrictDollarLine(
+                    None, (1, 3), Scope(atf.Surface.from_atf("obverse")), None, None,
+                )
+            ],
+        ),
+        (
+            "$ 1 obverse",
+            [
+                StrictDollarLine(
+                    None, 1, Scope(atf.Surface.from_atf("obverse")), None, None,
+                )
+            ],
+        ),
+        (
+            "$ several obverse",
             [
                 StrictDollarLine(
                     None,
                     atf.Extent("several"),
-                    Scope(atf.Object("object"), "what"),
+                    Scope(atf.Surface.from_atf("obverse")),
                     None,
                     None,
+                )
+            ],
+        ),
+        (
+            "$ several obverse",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Surface.from_atf("obverse")),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ several obverse",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Surface.from_atf("obverse")),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ several obverse blank *",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Surface.from_atf("obverse")),
+                    atf.State("blank"),
+                    atf.Status("*"),
+                )
+            ],
+        ),
+        (
+            "$ several surface stone blank *",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Surface.from_atf("surface"), "stone"),
+                    atf.State("blank"),
+                    atf.Status("*"),
+                )
+            ],
+        ),
+        (
+            "$ several object stone blank *",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Object("object"), "stone"),
+                    atf.State("blank"),
+                    atf.Status("*"),
+                )
+            ],
+        ),
+        (
+            "$ several tablet blank *",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Object("tablet")),
+                    atf.State("blank"),
+                    atf.Status("*"),
                 )
             ],
         ),
