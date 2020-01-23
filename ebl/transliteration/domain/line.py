@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
 import attr
@@ -121,11 +122,7 @@ class ImageDollarLine(DollarLine):
 
     @property
     def content(self):
-        return (
-            ValueToken(
-                f'(image {self.number}{self.letter if self.letter else ""} = {self.text})'
-            ),
-        )
+        return (ValueToken(f'(image {self.number}{self.letter or ""} = {self.text})'),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -137,19 +134,58 @@ class RulingDollarLine(DollarLine):
         return (ValueToken(f"{self.number.value} ruling"),)
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class Scope:
-    type: Union[atf.SurfaceScope, atf.ScopeScope, atf.ObjectScope]
-    text: str = ""
+    content: Union[atf.Surface, atf.Scope, atf.Object] = attr.ib()
+    text: str = attr.ib(default="")
+
+    @text.validator
+    def _check_text(self, attribute, value):
+        if not value:
+            if not (
+                self.content.name != atf.Object.OBJECT
+                or self.content.name != atf.Surface.SURFACE
+            ):
+                raise ValueError(
+                    "text can only be initialized if the content is 'object' or 'surface'"
+                )
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class StrictDollarLine(DollarLine):
+    qualification: Optional[atf.Qualification]
+    extent: Union[
+        atf.Extent, int, Tuple[int, int]
+    ]  # (int, int) resembles range e.g 3 - 5
     scope: Scope
+    state: Optional[atf.State]
+    status: Optional[atf.Status]
 
     @property
     def content(self):
-        return (ValueToken(f"{self.scope.type.value} {self.scope.text}"),)
+        return (
+            ValueToken(
+                f"{helper_str(self.qualification)}{helper_str(self.extent)}{helper_str(self.scope.content)}{self.scope.text}{helper_str(self.state)}{handle_str(self.status)}"
+            ),
+        )
+
+
+def handle_str(x) -> str:
+    if x is None:
+        return ""
+    else:
+        return x.value
+
+
+def wrap_str(x: str) -> str:
+    if not x:
+        return x
+    else:
+        return x + " "
+
+
+def helper_str(x) -> str:
+    return wrap_str(handle_str(x))
 
 
 @attr.s(auto_attribs=True, frozen=True)

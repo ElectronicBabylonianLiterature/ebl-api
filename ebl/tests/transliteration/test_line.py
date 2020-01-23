@@ -220,19 +220,36 @@ def test_ruling_dollar_line():
     assert expected.number == atf.Ruling("double")
 
 
-def test_strict_dollar_line_scope():
-    scope = Scope(atf.ObjectScope("object"), "what")
-    expected = StrictDollarLine(scope)
+def test_strict_dollar_line_with_none():
+    scope = Scope(atf.Object("object"), "what")
+    expected = StrictDollarLine(None, atf.Extent("several"), scope, None, None)
 
     assert expected.prefix == "$"
-    assert expected.scope.type == atf.ObjectScope("object")
+    assert expected.scope.content == atf.Object("object")
     assert expected.scope.text == "what"
-    assert expected.content == (ValueToken("object what"),)
+    assert expected.content == (ValueToken("several object what"),)
 
 
-@pytest.mark.parametrize(
-    "line", [ControlLine.of_single("@", ValueToken("obverse")), EmptyLine()]
-)
+def test_strict_dollar_line():
+    scope = Scope(atf.Scope("columns"))
+    expected = StrictDollarLine(
+        atf.Qualification("at least"),
+        atf.Extent("several"),
+        scope,
+        atf.State("blank"),
+        atf.Status("?"),
+    )
+
+    assert expected.prefix == "$"
+    assert expected.qualification == atf.Qualification("at least")
+    assert expected.scope.content == atf.Scope("columns")
+    assert expected.scope.text == ""
+    assert expected.extent == atf.Extent("several")
+    assert expected.state == atf.State("blank")
+    assert expected.status == atf.Status("?")
+    assert expected.content == (ValueToken("at least several columns blank ?"),)
+
+
 def test_update_lemmatization(line):
     lemmatization = tuple(LemmatizationToken(token.value) for token in line.content)
     assert line.update_lemmatization(lemmatization) == line
