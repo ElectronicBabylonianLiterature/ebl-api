@@ -106,11 +106,11 @@ class SurfaceLabel(Label):
 
     @property
     def _label(self) -> str:
-        return self.surface.label
+        return self.surface.label or ""
 
     @property
     def _atf(self) -> str:
-        return self.surface.atf
+        return f"@{self.surface.atf}"
 
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         return visitor.visit_surface_label(self)
@@ -157,7 +157,7 @@ STATUS = (
 )
 
 SURFACE_LABEL = seq(
-    string_from(*[surface.label for surface in Surface])
+    string_from(*[surface.label for surface in Surface if surface.label])
     .map(Surface.from_label)
     .desc("surface label"),
     STATUS.many(),

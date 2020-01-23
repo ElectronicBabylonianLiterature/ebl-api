@@ -37,19 +37,22 @@ def validate_atf(text):
 
 
 class Surface(Enum):
-    """ See "Surface" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html
+    """
+See "Surface" in
+http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
+and "Surfaces" in
+http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
     """
 
-    OBVERSE = ("@obverse", "o")
-    REVERSE = ("@reverse", "r")
-    BOTTOM = ("@bottom", "b.e.")
-    EDGE = ("@edge", "e.")
-    LEFT = ("@left", "l.e.")
-    RIGHT = ("@right", "r.e.")
-    TOP = ("@top", "t.e.")
+    OBVERSE = ("obverse", "o")
+    REVERSE = ("reverse", "r")
+    BOTTOM = ("bottom", "b.e.")
+    EDGE = ("edge", "e.")
+    LEFT = ("left", "l.e.")
+    RIGHT = ("right", "r.e.")
+    TOP = ("top", "t.e.")
 
-    def __init__(self, atf, label):
+    def __init__(self, atf: str, label: Optional[str]):
         self.atf = atf
         self.label = label
 
