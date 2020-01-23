@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from enum import Enum
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
 import attr
@@ -165,7 +164,9 @@ class StrictDollarLine(DollarLine):
     def content(self):
         return (
             ValueToken(
-                f"{helper_str(self.qualification)}{helper_str(self.extent)}{helper_str(self.scope.content)}{self.scope.text}{helper_str(self.state)}{handle_str(self.status)}"
+                f"{helper_str(self.qualification)}{helper_str(self.extent)} \
+                {helper_str(self.scope.content)}{self.scope.text} \
+                {helper_str(self.state)}{handle_str(self.status)}"
             ),
         )
 

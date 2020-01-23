@@ -11,7 +11,7 @@ _WORD_SEPARATOR: " "
 
 ?value : strict | loose | ruling | image
 
-strict : [qualification] _WORD_SEPARATOR extent _WORD_SEPARATOR scope [state] _WORD_SEPARATOR [STATUS]
+strict : [qualification] [_WORD_SEPARATOR] extent _WORD_SEPARATOR scope [state] [_WORD_SEPARATOR] [STATUS]
 
 !old.-2: /.+/?
 
@@ -33,7 +33,8 @@ range : number "-" number
 
 !object : "tablet" | "envelope" | "prism" | "bulla" | "fragment" | generic_object
 
-!generic_object : "object" TEXT
+generic_object : OBJECT _WORD_SEPARATOR TEXT
+OBJECT : "object"
 
 !surface : "observe" | "reverse" | "left" | "right" | "top" | "bottom" | "face"
     | generic_surface | "edge"

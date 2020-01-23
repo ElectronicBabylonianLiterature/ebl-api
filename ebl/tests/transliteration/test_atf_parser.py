@@ -1115,7 +1115,15 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
     [
         (
             "$ at least several object what blank *",
-            [StrictDollarLine(Scope(atf.ObjectScope("object"), "what"))],
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    Scope(atf.Object("object"), "what"),
+                    None,
+                    None,
+                )
+            ],
         ),
     ],
 )

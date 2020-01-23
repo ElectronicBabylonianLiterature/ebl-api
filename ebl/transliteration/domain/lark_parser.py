@@ -372,12 +372,16 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__generic_object(self, object, text):
-        return Scope(atf.ObjectScope(str(object)), str(text)[1:-1])
+        return Scope(atf.Object(str(object)), str(text[0:-1]))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__extent(self, content):
+        return atf.Extent(str(content))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__strict(self, qualification, extent, scope, state, status):
         x = scope.children[0].children[0]
-        return StrictDollarLine(x)
+        return StrictDollarLine(None, extent, x, None, None)
 
 
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")
