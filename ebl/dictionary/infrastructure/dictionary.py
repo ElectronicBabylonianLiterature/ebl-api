@@ -69,16 +69,6 @@ def _create_lemma_search_pipeline(query):
         {"$sort": {"lemmaLength": 1, "_id": 1}},
         {"$limit": LEMMA_SEARCH_LIMIT},
         {"$project": {"lemmaLength": 0}},
-        {
-            "$lookup": {
-                "from": "words",
-                "localField": "lemma",
-                "foreignField": "lemma",
-                "as": "homonyms",
-            }
-        },
-        {"$addFields": {"homonymCount": {"$size": "$homonyms"}}},
-        {"$project": {"homonyms": 0}},
     ]
 
 
