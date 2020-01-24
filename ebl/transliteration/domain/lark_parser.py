@@ -259,14 +259,6 @@ class TreeToLine(TreeToWord):
         )
 
     @v_args(inline=True)
-    def ebl_atf_text_line__broken_away(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__perhaps_broken_away(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
     def ebl_atf_text_line__cba(self, value):
         return BrokenAway(str(value))
 

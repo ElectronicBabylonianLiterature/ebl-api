@@ -41,8 +41,6 @@ oba: OPEN_BROKEN_AWAY
 opba: OPEN_PERHAPS_BROKEN_AWAY
 odog: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
-broken_away.-1: BROKEN_AWAY
-perhaps_broken_away.-2: PERHAPS_BROKEN_AWAY
 
 _NEW_LINE: /\n/
 
