@@ -32,9 +32,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_kuyunjik_not_transliterated_joined_or_published(
-        self,
-    ) -> List[Fragment]:
+    def query_path_of_the_pioneers(self,) -> List[Fragment]:
         ...
 
     @abstractmethod

@@ -157,19 +157,29 @@ def aggregate_needs_revision():
     ]
 
 
-def aggregate_interesting():
+def aggregate_path_of_the_pioneers():
     return [
         {
             "$match": {
                 "$and": [
                     {"text.lines": []},
-                    {"joins": []},
-                    {"publication": ""},
-                    {"collection": "Kuyunjik"},
+                    {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
                     {"uncuratedReferences": {"$exists": True}},
-                    {"uncuratedReferences.3": {"$exists": False}},
+                    {"uncuratedReferences.4": {"$exists": False}},
+                    {"references.type": {"$ne": "EDITION"}},
                 ]
             }
         },
+        {"$addFields": {"filename": {"$concat": ["$_id", ".jpg"]}}},
+        {
+            "$lookup": {
+                "from": "photos.files",
+                "localField": "filename",
+                "foreignField": "filename",
+                "as": "photos",
+            }
+        },
+        {"$match": {"photos.0": {"$exists": True}}},
+        {"$project": {"photos": 0, "filename": 0}},
         sample_size_one(),
     ]
