@@ -2,9 +2,10 @@ import pytest
 
 from ebl.transliteration.domain.atf import (
     AtfSyntaxError,
-    int_to_sub_index,
+    to_sub_index,
     validate_atf,
     AtfError,
+    sub_index_to_int,
 )
 
 
@@ -24,21 +25,31 @@ def test_pyoracc_error():
         validate_atf("$ Single ruling")
 
 
+SUB_INDICES = [
+    (None, "ₓ"),
+    (1, ""),
+    (2, "₂"),
+    (3, "₃"),
+    (4, "₄"),
+    (5, "₅"),
+    (6, "₆"),
+    (7, "₇"),
+    (8, "₈"),
+    (9, "₉"),
+    (0, "₀"),
+    (1024, "₁₀₂₄"),
+]
+
+
 @pytest.mark.parametrize(
-    "number,expected",
-    [
-        (1, ""),
-        (2, "₂"),
-        (3, "₃"),
-        (4, "₄"),
-        (5, "₅"),
-        (6, "₆"),
-        (7, "₇"),
-        (8, "₈"),
-        (9, "₉"),
-        (0, "₀"),
-        (124, "₁₂₄"),
-    ],
+    "number,expected", SUB_INDICES,
 )
-def test_to_sub_index_string(number, expected):
-    assert int_to_sub_index(number) == expected
+def test_to_sub_index(number, expected):
+    assert to_sub_index(number) == expected
+
+
+@pytest.mark.parametrize(
+    "expected,sub_index,", [*SUB_INDICES, (1, "₁")],
+)
+def test_sub_index_to_int(sub_index, expected):
+    assert sub_index_to_int(sub_index) == expected
