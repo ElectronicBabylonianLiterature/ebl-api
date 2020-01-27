@@ -259,19 +259,19 @@ class TreeToLine(TreeToWord):
         )
 
     @v_args(inline=True)
-    def ebl_atf_text_line__cba(self, value):
+    def ebl_atf_text_line__close_broken_away(self, value):
         return BrokenAway(str(value))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__cpba(self, value):
+    def ebl_atf_text_line__close_perhaps_broken_away(self, value):
         return PerhapsBrokenAway(str(value))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__oba(self, value):
+    def ebl_atf_text_line__open_broken_away(self, value):
         return BrokenAway(str(value))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__opba(self, value):
+    def ebl_atf_text_line__open_pehaps_broken_away(self, value):
         return PerhapsBrokenAway(str(value))
 
     @v_args(inline=True)
@@ -279,11 +279,11 @@ class TreeToLine(TreeToWord):
         return DocumentOrientedGloss(str(value))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__odog(self, value):
+    def ebl_atf_text_line__open_document_oriented_gloss(self, value):
         return DocumentOrientedGloss(str(value))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__cdog(self, value):
+    def ebl_atf_text_line__close_document_oriented_gloss(self, value):
         return DocumentOrientedGloss(str(value))
 
     @v_args(inline=True)
