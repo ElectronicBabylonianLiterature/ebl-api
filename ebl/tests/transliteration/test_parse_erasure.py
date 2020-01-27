@@ -7,6 +7,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    Divider,
 )
 from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
@@ -24,6 +25,7 @@ ERASURE_RIGHT = Erasure(Side.RIGHT)
             (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")]),),
             (Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],),),
         ),
+        ("°::\\:.°", (Divider.of("::"),), (Divider.of(":."),),),
         (
             "°\\ku°",
             tuple(),

@@ -75,7 +75,7 @@ CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
 SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
 
 erasure.-1: "°" erasure_part "\\" erasure_part "°"
-erasure_part: ((DIVIDER | word | lone_determinative) (_WORD_SEPARATOR (DIVIDER | word | lone_determinative))*)?
+erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
 
 PERHAPS_BROKEN_AWAY: OPEN_PERHAPS_BROKEN_AWAY
                    | CLOSE_PERHAPS_BROKEN_AWAY
@@ -88,7 +88,6 @@ _WORD_SEPARATOR: " "
 ?any_word: lone_determinative
          | word
 
-DIVIDER: DIVIDER_SYMBOL MODIFIER* FLAG
 DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
 
 ?open_omission_or_removal: open_accidental_omission | open_intentional_omission | open_removal
