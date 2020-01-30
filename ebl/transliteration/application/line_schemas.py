@@ -4,7 +4,7 @@ from typing import List, Mapping, Sequence, Tuple, Type, Union
 
 from marshmallow import Schema, fields, post_load
 
-from ebl.schemas import ValueEnum
+from ebl.schemas import NameEnum
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.labels import LineNumberLabel
@@ -76,7 +76,7 @@ class ImageDollarLineSchema(LineSchema):
 
 class RulingDollarLineSchema(LineSchema):
     type = fields.Constant("RulingDollarLine", required=True)
-    number = ValueEnum(atf.Ruling, required=True)
+    number = NameEnum(atf.Ruling, required=True)
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -99,13 +99,10 @@ class ScopeContainerSchema(Schema):
     @post_load
     def make_line(self, data, **kwargs):
         return ScopeContainer(
-            ScopeContainerSchema.dump_scope(data["type"], data["content"]), data["text"]
+            self.load_scope(data["type"], data["content"]), data["text"]
         )
 
-    @staticmethod
-    def dump_scope(
-        type: str, content: str
-    ) -> Union[atf.Surface, atf.Scope, atf.Object]:
+    def load_scope(self, type: str, content: str):
         _scope: Mapping[
             str, Union[Type[atf.Surface], Type[atf.Scope], Type[atf.Object]]
         ] = {"Surface": atf.Surface, "Scope": atf.Scope, "Object": atf.Object}
@@ -119,12 +116,17 @@ def value_serialize(val):
 
 @value_serialize.register
 def vs_enum(val: Enum):
-    return val.value
+    return val.name
+
+
+def tuple_to_string(str_tuple: str):
+    list_ = str_tuple[1:-1].split(",")
+    return (int(list_[0]), int(list_[int(1)]))
 
 
 class StrictDollarLineSchema(LineSchema):
     type = fields.Constant("StrictDollarLine", required=True)
-    qualification = ValueEnum(atf.Qualification, allow_none=True)
+    qualification = NameEnum(atf.Qualification, allow_none=True)
     extent = fields.Function(
         lambda obj: {
             "value": value_serialize(obj.extent),
@@ -133,27 +135,27 @@ class StrictDollarLineSchema(LineSchema):
         lambda obj: obj,
         required=True,
     )
-    scope_container = fields.Nested(ScopeContainerSchema, required=True)
-    state = ValueEnum(atf.State, required=False, allow_none=True)
-    status = ValueEnum(atf.Status, required=False, allow_none=True)
-    _extent: Mapping[str, Union[Type[int], Type[Tuple], Type[atf.Extent]]] = {
-        "Extent": atf.Extent,
-        "int": int,
-        "tuple": tuple,
-    }
+    scope = fields.Nested(ScopeContainerSchema, required=True)
+    state = NameEnum(atf.State, required=False, allow_none=True)
+    status = NameEnum(atf.Status, required=False, allow_none=True)
 
     @post_load
     def make_line(self, data, **kwargs):
         return StrictDollarLine(
             data["qualification"],
-            self.dump_extent(data["extent"]["type"], data["extent"]["value"]),
-            data["scope_container"],
+            self.load_extent(data["extent"]["type"], data["extent"]["value"]),
+            data["scope"],
             data["state"],
             data["status"],
         )
 
-    def dump_extent(self, type: str, extent: str) -> Union[atf.Extent, int, Tuple]:
-        return self._extent[type](extent)
+    def load_extent(self, type: str, extent: str):
+        _extent: Mapping = {
+            "Extent": lambda z: atf.Extent[z],
+            "int": lambda z: int(z),
+            "tuple": tuple_to_string,
+        }
+        return _extent[type](extent)
 
 
 _schemas: Mapping[str, Type[Schema]] = {

@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-
 from functools import singledispatch
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
@@ -187,6 +186,11 @@ def to_serialize(val):
 @to_serialize.register
 def ts_enum(val: Enum):
     return val.value
+
+
+@to_serialize.register
+def ts_tuple(val: tuple):
+    return f"{val[0]}-{val[1]}"
 
 
 @attr.s(auto_attribs=True, frozen=True)

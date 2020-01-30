@@ -25,40 +25,57 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 LINES = [
     (
         StrictDollarLine(
-            atf.Qualification("at least"),
+            atf.Qualification.AT_LEAST,
+            (1, 2),
+            ScopeContainer(atf.Surface.SURFACE, "thing"),
+            atf.State.BLANK,
+            atf.Status.UNCERTAIN,
+        ),
+        {
+            "prefix": "$",
+            "content": dump_tokens([ValueToken("at least 1-2 surface thing blank ?")]),
+            "type": "StrictDollarLine",
+            "qualification": "AT_LEAST",
+            "extent": {"type": "tuple", "value": "(1, 2)"},
+            "scope": {"type": "Surface", "content": "SURFACE", "text": "thing"},
+            "state": "BLANK",
+            "status": "UNCERTAIN",
+        },
+    ),
+    (
+        StrictDollarLine(
+            atf.Qualification.AT_LEAST,
             1,
-            ScopeContainer(atf.Surface.from_atf("obverse")),
-            atf.State("blank"),
-            atf.Status("?"),
+            ScopeContainer(atf.Surface.OBVERSE),
+            atf.State.BLANK,
+            atf.Status.UNCERTAIN,
         ),
         {
             "prefix": "$",
             "content": dump_tokens([ValueToken("at least 1 obverse blank ?")]),
             "type": "StrictDollarLine",
-            "qualification": "at least",
+            "qualification": "AT_LEAST",
             "extent": {"type": "int", "value": "1"},
-            "scope_container": {"type": "Surface", "content": "OBVERSE", "text": ""},
-            "state": "blank",
-            "status": "?",
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "BLANK",
+            "status": "UNCERTAIN",
         },
     ),
     (
         StrictDollarLine(
             None,
-            atf.Extent("beginning of"),
-            ScopeContainer(atf.Surface.from_atf("obverse")),
+            atf.Extent.BEGINNING_OF,
+            ScopeContainer(atf.Surface.OBVERSE),
             None,
             None,
         ),
         {
             "prefix": "$",
-            "content": dump_tokens(
-                [ValueToken("at least beginning of obverse blank ?")]
-            ),
+            "content": dump_tokens([ValueToken("beginning of obverse")]),
             "type": "StrictDollarLine",
             "qualification": None,
-            "extent": {"type": "atf.Extent", "value": "Extent.BEGINNING_OF"},
-            "scope_container": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "extent": {"type": "Extent", "value": "BEGINNING_OF"},
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": None,
             "status": None,
         },
@@ -127,12 +144,12 @@ LINES = [
         },
     ),
     (
-        RulingDollarLine(atf.Ruling("double")),
+        RulingDollarLine(atf.Ruling.DOUBLE),
         {
             "type": "RulingDollarLine",
             "prefix": "$",
             "content": dump_tokens([ValueToken("double ruling")]),
-            "number": atf.Ruling.DOUBLE.value,
+            "number": "DOUBLE",
         },
     ),
 ]
@@ -140,8 +157,7 @@ LINES = [
 
 @pytest.mark.parametrize("line,expected", LINES)
 def test_dump_line(line, expected):
-    x = dump_line(line)
-    assert x == expected
+    assert dump_line(line) == expected
 
 
 @pytest.mark.parametrize("expected,data", LINES)

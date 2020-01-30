@@ -1,5 +1,7 @@
 from enum import Enum
+
 from marshmallow import Schema
+
 from ebl.schemas import ValueEnum, NameEnum
 
 
