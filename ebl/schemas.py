@@ -16,15 +16,13 @@ class EnumField(fields.String, ABC):
         super().__init__(enum=self._values(), **kwargs)
 
     def _serialize(self, value, attr, obj, **kwargs) -> Optional[str]:
-        if isinstance(value, Enum):
+        if isinstance(value, Enum) or value is None:
             return super()._serialize(
                 (self._serialize_enum(value) if value is not None else None),
                 attr,
                 obj,
                 **kwargs
             )
-        else:
-            raise self.make_error("not_enum")
 
     def _deserialize(self, value, attr, data, **kwargs) -> Any:
         try:

@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from enum import Enum
+
+from functools import singledispatch
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
 import attr
@@ -134,20 +137,27 @@ class RulingDollarLine(DollarLine):
 
 
 @attr.s(frozen=True)
-class Scope:
+class ScopeContainer:
     content: Union[atf.Surface, atf.Scope, atf.Object] = attr.ib()
     text: str = attr.ib(default="")
 
     @text.validator
     def _check_text(self, attribute, value):
-        if not value:
+        if value:
             if not (
-                self.content.name != atf.Object.OBJECT
-                or self.content.name != atf.Surface.SURFACE
+                self.content == atf.Object.OBJECT or self.content == atf.Surface.SURFACE
             ):
                 raise ValueError(
                     "text can only be initialized if the content is 'object' or 'surface'"
                 )
+
+    def __str__(self):
+        if self.text:
+            return f"{self.content.name.lower()} {self.text}"
+        else:
+            return f"{self.content.name.lower()}"
+
+    # use the enum.name and lower() it instead of value because atf.Surface.value is a tuple and atf.Object.value a string
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -156,7 +166,7 @@ class StrictDollarLine(DollarLine):
     extent: Union[
         atf.Extent, int, Tuple[int, int]
     ]  # (int, int) resembles range e.g 3 - 5
-    scope: Scope
+    scope: ScopeContainer
     state: Optional[atf.State]
     status: Optional[atf.Status]
 
@@ -164,29 +174,19 @@ class StrictDollarLine(DollarLine):
     def content(self):
         return (
             ValueToken(
-                f"{helper_str(self.qualification)}{helper_str(self.extent)}"
-                f"{helper_str(self.scope.content)}{self.scope.text}"
-                f"{helper_str(self.state)}{handle_str(self.status)}"
+                " ".join([to_serialize(x) for x in self.__dict__.values() if x])
             ),
         )
 
 
-def handle_str(x) -> str:
-    if x is None:
-        return ""
-    else:
-        return x.value
+@singledispatch
+def to_serialize(val):
+    return str(val)
 
 
-def wrap_str(x: str) -> str:
-    if not x:
-        return x
-    else:
-        return x + " "
-
-
-def helper_str(x) -> str:
-    return wrap_str(handle_str(x))
+@to_serialize.register
+def ts_enum(val: Enum):
+    return val.value
 
 
 @attr.s(auto_attribs=True, frozen=True)

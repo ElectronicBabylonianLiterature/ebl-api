@@ -15,12 +15,54 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
+    StrictDollarLine,
+    ScopeContainer,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+    (
+        StrictDollarLine(
+            atf.Qualification("at least"),
+            1,
+            ScopeContainer(atf.Surface.from_atf("obverse")),
+            atf.State("blank"),
+            atf.Status("?"),
+        ),
+        {
+            "prefix": "$",
+            "content": dump_tokens([ValueToken("at least 1 obverse blank ?")]),
+            "type": "StrictDollarLine",
+            "qualification": "at least",
+            "extent": {"type": "int", "value": "1"},
+            "scope_container": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "blank",
+            "status": "?",
+        },
+    ),
+    (
+        StrictDollarLine(
+            None,
+            atf.Extent("beginning of"),
+            ScopeContainer(atf.Surface.from_atf("obverse")),
+            None,
+            None,
+        ),
+        {
+            "prefix": "$",
+            "content": dump_tokens(
+                [ValueToken("at least beginning of obverse blank ?")]
+            ),
+            "type": "StrictDollarLine",
+            "qualification": None,
+            "extent": {"type": "atf.Extent", "value": "Extent.BEGINNING_OF"},
+            "scope_container": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": None,
+            "status": None,
+        },
+    ),
     (
         ControlLine.of_single("@", ValueToken("obverse")),
         {
@@ -98,7 +140,8 @@ LINES = [
 
 @pytest.mark.parametrize("line,expected", LINES)
 def test_dump_line(line, expected):
-    assert dump_line(line) == expected
+    x = dump_line(line)
+    assert x == expected
 
 
 @pytest.mark.parametrize("expected,data", LINES)

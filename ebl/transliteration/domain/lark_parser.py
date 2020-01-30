@@ -31,7 +31,7 @@ from ebl.transliteration.domain.line import (
     RulingDollarLine,
     ImageDollarLine,
     StrictDollarLine,
-    Scope,
+    ScopeContainer,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -380,19 +380,19 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__OBJECT(self, object):
-        return Scope(atf.Object(object))
+        return ScopeContainer(atf.Object(object))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__generic_object(self, object, text):
-        return Scope(atf.Object(str(object)), str(text))
+        return ScopeContainer(atf.Object(str(object)), str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__SURFACE(self, surface):
-        return Scope(atf.Surface.from_atf(str(surface)))
+        return ScopeContainer(atf.Surface.from_atf(str(surface)))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__generic_surface(self, surface, text):
-        return Scope(atf.Surface.from_atf(str(surface)), str(text))
+        return ScopeContainer(atf.Surface.from_atf(str(surface)), str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__EXTENT(self, extent):
@@ -411,8 +411,10 @@ class TreeDollarSignToTokens(TreeToLine):
         return atf.Qualification(str(qualification))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__strict(self, qualification, extent, scope, state, status):
-        return StrictDollarLine(qualification, extent, scope, state, status)
+    def ebl_atf_dollar_line__strict(
+        self, qualification, extent, scope_container, state, status
+    ):
+        return StrictDollarLine(qualification, extent, scope_container, state, status)
 
 
 WORD_PARSER = Lark.open("ebl_atf.lark", rel_to=__file__, start="any_word")

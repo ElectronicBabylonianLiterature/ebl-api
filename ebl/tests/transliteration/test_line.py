@@ -21,7 +21,7 @@ from ebl.transliteration.domain.line import (
     ImageDollarLine,
     RulingDollarLine,
     StrictDollarLine,
-    Scope,
+    ScopeContainer,
 )
 from ebl.transliteration.domain.tokens import (
     LanguageShift,
@@ -213,41 +213,48 @@ def test_image_dollar_line():
 
 
 def test_ruling_dollar_line():
-    expected = RulingDollarLine(atf.Ruling("double"))
+    expected = RulingDollarLine(atf.Ruling.DOUBLE)
 
     assert expected.prefix == "$"
     assert expected.content == (ValueToken("double ruling"),)
-    assert expected.number == atf.Ruling("double")
+    assert expected.number == atf.Ruling.DOUBLE
 
 
 def test_strict_dollar_line_with_none():
-    scope = Scope(atf.Object("object"), "what")
-    expected = StrictDollarLine(None, atf.Extent("several"), scope, None, None)
-
+    scope = ScopeContainer(atf.Object.OBJECT, "what")
+    expected = StrictDollarLine(None, atf.Extent.SEVERAL, scope, None, None)
     assert expected.prefix == "$"
-    assert expected.scope.content == atf.Object("object")
+    assert expected.scope.content == atf.Object.OBJECT
     assert expected.scope.text == "what"
     assert expected.content == (ValueToken("several object what"),)
 
 
 def test_strict_dollar_line():
-    scope = Scope(atf.Scope("columns"))
     expected = StrictDollarLine(
-        atf.Qualification("at least"),
-        atf.Extent("several"),
-        scope,
-        atf.State("blank"),
-        atf.Status("?"),
+        atf.Qualification.AT_LEAST,
+        atf.Extent.SEVERAL,
+        ScopeContainer(atf.Scope.COLUMNS, ""),
+        atf.State.BLANK,
+        atf.Status.UNCERTAIN,
     )
 
     assert expected.prefix == "$"
-    assert expected.qualification == atf.Qualification("at least")
-    assert expected.scope.content == atf.Scope("columns")
+    assert expected.qualification == atf.Qualification.AT_LEAST
+    assert expected.scope.content == atf.Scope.COLUMNS
     assert expected.scope.text == ""
-    assert expected.extent == atf.Extent("several")
-    assert expected.state == atf.State("blank")
-    assert expected.status == atf.Status("?")
+    assert expected.extent == atf.Extent.SEVERAL
+    assert expected.state == atf.State.BLANK
+    assert expected.status == atf.Status.UNCERTAIN
     assert expected.content == (ValueToken("at least several columns blank ?"),)
+
+
+def test_strict_dollar_line_content():
+    scope = ScopeContainer(atf.Surface.from_atf("obverse"))
+    expected = StrictDollarLine(
+        atf.Qualification("at least"), 1, scope, atf.State("blank"), atf.Status("?"),
+    )
+
+    assert expected.content == (ValueToken("at least 1 obverse blank ?"),)
 
 
 @pytest.mark.parametrize(

@@ -22,7 +22,7 @@ from ebl.transliteration.domain.line import (
     RulingDollarLine,
     ImageDollarLine,
     StrictDollarLine,
-    Scope,
+    ScopeContainer,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -1117,9 +1117,9 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             "$ at most 1-3 object stone blank ?",
             [
                 StrictDollarLine(
-                    atf.Qualification("at most"),
+                    atf.Qualification.AT_MOST,
                     (1, 3),
-                    Scope(atf.Object("object"), "stone"),
+                    ScopeContainer(atf.Object.OBJECT, "stone"),
                     atf.State("blank"),
                     atf.Status("?"),
                 )
@@ -1129,9 +1129,9 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             "$ at most 1-3 obverse",
             [
                 StrictDollarLine(
-                    atf.Qualification("at most"),
+                    atf.Qualification.AT_MOST,
                     (1, 3),
-                    Scope(atf.Surface.from_atf("obverse")),
+                    ScopeContainer(atf.Surface.OBVERSE),
                     None,
                     None,
                 )
@@ -1141,7 +1141,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             "$ 1-3 obverse",
             [
                 StrictDollarLine(
-                    None, (1, 3), Scope(atf.Surface.from_atf("obverse")), None, None,
+                    None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None,
                 )
             ],
         ),
@@ -1149,7 +1149,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             "$ 1 - 3 obverse",
             [
                 StrictDollarLine(
-                    None, (1, 3), Scope(atf.Surface.from_atf("obverse")), None, None,
+                    None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None,
                 )
             ],
         ),
@@ -1157,7 +1157,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             "$ 1 obverse",
             [
                 StrictDollarLine(
-                    None, 1, Scope(atf.Surface.from_atf("obverse")), None, None,
+                    None, 1, ScopeContainer(atf.Surface.OBVERSE), None, None,
                 )
             ],
         ),
@@ -1167,19 +1167,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                 StrictDollarLine(
                     None,
                     atf.Extent("several"),
-                    Scope(atf.Surface.from_atf("obverse")),
-                    None,
-                    None,
-                )
-            ],
-        ),
-        (
-            "$ several obverse",
-            [
-                StrictDollarLine(
-                    None,
-                    atf.Extent("several"),
-                    Scope(atf.Surface.from_atf("obverse")),
+                    ScopeContainer(atf.Surface.OBVERSE),
                     None,
                     None,
                 )
@@ -1191,7 +1179,19 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                 StrictDollarLine(
                     None,
                     atf.Extent("several"),
-                    Scope(atf.Surface.from_atf("obverse")),
+                    ScopeContainer(atf.Surface.OBVERSE),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ several obverse",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent("several"),
+                    ScopeContainer(atf.Surface.OBVERSE),
                     None,
                     None,
                 )
@@ -1202,10 +1202,10 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
-                    Scope(atf.Surface.from_atf("obverse")),
-                    atf.State("blank"),
-                    atf.Status("*"),
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Surface.OBVERSE),
+                    atf.State.BLANK,
+                    atf.Status.COLLATION,
                 )
             ],
         ),
@@ -1214,10 +1214,10 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
-                    Scope(atf.Surface.from_atf("surface"), "stone"),
-                    atf.State("blank"),
-                    atf.Status("*"),
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Surface.SURFACE, "stone"),
+                    atf.State.BLANK,
+                    atf.Status.COLLATION,
                 )
             ],
         ),
@@ -1226,10 +1226,10 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
-                    Scope(atf.Object("object"), "stone"),
-                    atf.State("blank"),
-                    atf.Status("*"),
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.OBJECT, "stone"),
+                    atf.State.BLANK,
+                    atf.Status.COLLATION,
                 )
             ],
         ),
@@ -1238,10 +1238,10 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
-                    Scope(atf.Object("tablet")),
-                    atf.State("blank"),
-                    atf.Status("*"),
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.TABLET),
+                    atf.State.BLANK,
+                    atf.Status.COLLATION,
                 )
             ],
         ),
