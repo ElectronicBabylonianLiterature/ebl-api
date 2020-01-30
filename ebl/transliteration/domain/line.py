@@ -156,7 +156,8 @@ class ScopeContainer:
         else:
             return f"{self.content.name.lower()}"
 
-    # use the enum.name and lower() it instead of value because atf.Surface.value is a tuple and atf.Object.value a string
+    # use enum.name.lower() instead of enum.value because atf.Surface.value is a tuple and
+    # atf.Object.value a string
 
 
 @attr.s(auto_attribs=True, frozen=True)
