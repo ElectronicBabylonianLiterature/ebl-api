@@ -53,12 +53,7 @@ class FragmentFinder:
 
     def find_interesting(self) -> List[FragmentInfo]:
         return list(
-            map(
-                FragmentInfo.of,
-                (
-                    self._repository.query_by_kuyunjik_not_transliterated_joined_or_published()
-                ),
-            )
+            map(FragmentInfo.of, (self._repository.query_path_of_the_pioneers()),)
         )
 
     def folio_pager(

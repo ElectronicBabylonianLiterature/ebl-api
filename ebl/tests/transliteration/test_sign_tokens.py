@@ -119,6 +119,7 @@ def test_unclear_sign_with_flags():
         ("ʾ", 1, [], [], None, "ʾ"),
         ("k[ur", 1, [], [], None, "k[ur"),
         ("ku]r", 1, [], [], None, "ku]r"),
+        ("kur", None, [], [], None, "kurₓ"),
         ("kur", 0, [], [], None, "kur₀"),
         ("kur", 1, [], [], Grapheme.of("KUR"), "kur(KUR)"),
         ("kur", 1, ["@v", "@180"], [], None, "kur@v@180"),
@@ -184,6 +185,7 @@ def test_invalid_reading(name, sub_index):
         ("ʾ", 1, [], [], None, [], "ʾ"),
         ("KU[R", 1, [], [], None, [], "KU[R"),
         ("K]UR", 1, [], [], None, [], "K]UR"),
+        ("KUR", None, [], [], None, [], "KURₓ"),
         ("KUR", 0, [], [], None, [], "KUR₀"),
         ("KUR", 1, [], [], Grapheme.of("KUR"), [], "KUR(KUR)"),
         (
@@ -302,6 +304,7 @@ def test_compound_grapheme():
     "name,modifiers,flags,expected_value",
     [
         ("KUR12₁", [], [], "KUR12₁"),
+        ("KURₓ", [], [], "KURₓ"),
         ("KU]R", [], [], "KU]R"),
         ("K[UR", [], [], "K[UR"),
         ("KUR", ["@v", "@180"], [], "KUR@v@180"),

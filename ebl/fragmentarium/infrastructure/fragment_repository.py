@@ -8,7 +8,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
-    aggregate_interesting,
+    aggregate_path_of_the_pioneers,
     aggregate_latest,
     aggregate_lemmas,
     aggregate_needs_revision,
@@ -64,8 +64,8 @@ class MongoFragmentRepository(FragmentRepository):
 
         return self._map_fragments(cursor)
 
-    def query_by_kuyunjik_not_transliterated_joined_or_published(self):
-        cursor = self._collection.aggregate(aggregate_interesting())
+    def query_path_of_the_pioneers(self):
+        cursor = self._collection.aggregate(aggregate_path_of_the_pioneers())
 
         return self._map_fragments(cursor)
 

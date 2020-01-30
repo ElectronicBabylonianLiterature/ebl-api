@@ -4,13 +4,11 @@ import pytest
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import UncuratedReference
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
-    InterestingFragmentFactory,
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
@@ -77,32 +75,6 @@ def test_find_random(fragment_repository,):
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
     ]
-
-
-def test_find_interesting(fragment_repository):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    interesting_fragment = InterestingFragmentFactory.build()
-    too_many_references = InterestingFragmentFactory.build(
-        uncurated_references=(
-            UncuratedReference("7(0)"),
-            UncuratedReference("CAD 51", (34, 56)),
-            UncuratedReference("7(1)"),
-            UncuratedReference("CAD 53", (1,)),
-        )
-    )
-    not_kuyunjik = InterestingFragmentFactory.build(collection="Not Kuyunjik")
-
-    for fragment in [
-        transliterated_fragment,
-        interesting_fragment,
-        too_many_references,
-        not_kuyunjik,
-    ]:
-        fragment_repository.create(fragment)
-
-    assert (
-        fragment_repository.query_by_kuyunjik_not_transliterated_joined_or_published()
-    ) == [interesting_fragment]
 
 
 def test_folio_pager_exception(fragment_repository):

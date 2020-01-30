@@ -45,11 +45,7 @@ def test_find_random(fragment_finder, fragment_repository, when):
 
 def test_find_interesting(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    (
-        when(fragment_repository)
-        .query_by_kuyunjik_not_transliterated_joined_or_published()
-        .thenReturn([fragment])
-    )
+    (when(fragment_repository).query_path_of_the_pioneers().thenReturn([fragment]))
     assert fragment_finder.find_interesting() == [FragmentInfo.of(fragment)]
 
 

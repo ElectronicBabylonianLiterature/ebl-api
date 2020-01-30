@@ -791,6 +791,14 @@ from ebl.transliteration.domain.word_tokens import (
                 ],
             ),
         ),
+        ("kurₓ", Word("kurₓ", parts=[Reading.of("kur", None),]),),
+        ("KURₓ", Word("KURₓ", parts=[Logogram.of("KUR", None),]),),
+        (
+            "kurₓ(KUR)",
+            Word(
+                "kurₓ(KUR)", parts=[Reading.of("kur", None, sign=Grapheme.of("KUR")),]
+            ),
+        ),
     ],
 )
 def test_word(parser, atf, expected):

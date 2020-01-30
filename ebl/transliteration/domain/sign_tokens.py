@@ -5,7 +5,7 @@ from typing import Iterable, Optional, Sequence, Tuple
 import attr
 
 from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.atf import int_to_sub_index
+from ebl.transliteration.domain.atf import to_sub_index
 from ebl.transliteration.domain.tokens import Token, convert_token_sequence, ValueToken
 
 
@@ -100,7 +100,7 @@ class Divider(AbstractSign):
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
     name: str = attr.ib()
-    sub_index: int = attr.ib()
+    sub_index: Optional[int] = attr.ib()
     sign: Optional[Token]
 
     @abstractmethod
@@ -109,7 +109,7 @@ class NamedSign(AbstractSign):
 
     @sub_index.validator
     def _check_sub_index(self, _attribute, value):
-        if value < 0:
+        if value is not None and value < 0:
             raise ValueError("Sub-index must be >= 0.")
 
     @property
@@ -121,7 +121,7 @@ class NamedSign(AbstractSign):
 
     @property
     def value(self) -> str:
-        sub_index = int_to_sub_index(self.sub_index)
+        sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
         sign = f"({self.sign.value})" if self.sign else ""
@@ -137,7 +137,7 @@ class Reading(NamedSign):
     @staticmethod
     def of(
         name: str,
-        sub_index: int = 1,
+        sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
@@ -167,7 +167,7 @@ class Logogram(NamedSign):
     @staticmethod
     def of(
         name: str,
-        sub_index: int = 1,
+        sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,

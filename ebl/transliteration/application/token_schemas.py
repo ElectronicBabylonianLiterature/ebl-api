@@ -275,7 +275,7 @@ class ReadingSchema(Schema):
     def make_token(self, data, **kwargs):
         return Reading.of(
             data["name"],
-            1 if data["sub_index"] is None else data["sub_index"],
+            data["sub_index"],
             data["modifiers"],
             data["flags"],
             _load_sign(data["sign"]),
@@ -303,7 +303,7 @@ class LogogramSchema(Schema):
     def make_token(self, data, **kwargs):
         return Logogram.of(
             data["name"],
-            1 if data["sub_index"] is None else data["sub_index"],
+            data["sub_index"],
             data["modifiers"],
             data["flags"],
             _load_sign(data["sign"]),

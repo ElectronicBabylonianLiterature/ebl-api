@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d98cc2dd9e8fa7def23bd3d7f62bae1a6827b1a7fae6c83ab61ce031ca9b077a"
+            "sha256": "8be72f6592bd0b662ef5518700f579782dcb4cb20b5e66ffba151f345a32ca33"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -192,9 +192,11 @@
             "version": "==3.2.0"
         },
         "lark-parser": {
-            "editable": true,
-            "git": "https://github.com/ElectronicBabylonianLiterature/lark.git",
-            "ref": "8792c99f39f6e4c09274da3652f6477cba686c70"
+            "hashes": [
+                "sha256:b9f4e4711b0837d682051009d232e6df6b37a1278db4568a8221124bb8c1dc8a"
+            ],
+            "index": "pypi",
+            "version": "==0.8.1"
         },
         "mako": {
             "hashes": [
