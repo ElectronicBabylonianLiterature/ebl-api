@@ -85,6 +85,7 @@ class DocumentOrientedGlossSchema(Schema):
 class BrokenAwaySchema(Schema):
     type = fields.Constant("BrokenAway", required=True)
     value = fields.String(required=True)
+    side = NameEnum(Side)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -94,6 +95,7 @@ class BrokenAwaySchema(Schema):
 class PerhapsBrokenAwaySchema(Schema):
     type = fields.Constant("PerhapsBrokenAway", required=True)
     value = fields.String(required=True)
+    side = NameEnum(Side)
 
     @post_load
     def make_token(self, data, **kwargs):
