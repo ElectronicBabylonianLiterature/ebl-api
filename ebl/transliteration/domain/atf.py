@@ -119,6 +119,16 @@ ERASURE: Mapping[Side, str] = {
     Side.RIGHT: ERASURE_BOUNDARY,
 }
 
+BROKEN_AWAY: Mapping[Side, str] = {
+    Side.LEFT: "[",
+    Side.RIGHT: "]",
+}
+
+PERHAPS_BROKEN_AWAY: Mapping[Side, str] = {
+    Side.LEFT: "(",
+    Side.RIGHT: ")",
+}
+
 ACCIDENTAL_OMISSION: Mapping[Side, str] = {
     Side.LEFT: "<",
     Side.RIGHT: ">",

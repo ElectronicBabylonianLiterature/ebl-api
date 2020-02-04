@@ -76,6 +76,7 @@ class LanguageShiftSchema(Schema):
 class DocumentOrientedGlossSchema(Schema):
     type = fields.Constant("DocumentOrientedGloss", required=True)
     value = fields.String(required=True)
+    side = NameEnum(Side)
 
     @post_load
     def make_token(self, data, **kwargs):

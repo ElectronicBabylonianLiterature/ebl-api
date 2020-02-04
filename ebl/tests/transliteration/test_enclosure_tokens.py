@@ -82,6 +82,7 @@ def test_document_oriented_gloss(side):
     serialized = {
         "type": "DocumentOrientedGloss",
         "value": gloss.value,
+        "side": side.name,
     }
     assert_token_serialization(gloss, serialized)
 
