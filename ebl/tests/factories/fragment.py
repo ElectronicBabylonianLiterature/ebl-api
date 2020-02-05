@@ -25,7 +25,6 @@ from ebl.transliteration.domain.tokens import (
     Joiner,
     Tabulation,
     UnknownNumberOfSigns,
-    ValueToken,
     Variant,
 )
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
@@ -84,11 +83,11 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Word(
                         "[...-ku]-nu-ši",
                         parts=[
-                            ValueToken("["),
+                            BrokenAway("["),
                             UnknownNumberOfSigns(),
                             Joiner.hyphen(),
                             Reading.of("ku"),
-                            ValueToken("]"),
+                            BrokenAway("]"),
                             Joiner.hyphen(),
                             Reading.of("nu"),
                             Joiner.hyphen(),
@@ -215,11 +214,11 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Word(
                         "[...-ku]-nu-ši",
                         parts=[
-                            ValueToken("["),
+                            BrokenAway("["),
                             UnknownNumberOfSigns(),
                             Joiner.hyphen(),
                             Reading.of("ku"),
-                            ValueToken("]"),
+                            BrokenAway("]"),
                             Joiner.hyphen(),
                             Reading.of("nu"),
                             Joiner.hyphen(),

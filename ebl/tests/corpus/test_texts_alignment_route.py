@@ -6,9 +6,10 @@ import pytest
 
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
@@ -64,7 +65,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                             alignment=0,
                                             parts=[
                                                 Reading.of("ku"),
-                                                ValueToken("]"),
+                                                BrokenAway("]"),
                                                 Joiner.hyphen(),
                                                 Reading.of("nu"),
                                                 Joiner.hyphen(),

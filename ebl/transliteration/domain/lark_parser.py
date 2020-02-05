@@ -134,6 +134,14 @@ class TreeToSign(Transformer):
     def ebl_atf_text_line__compound_grapheme(self, name):
         return CompoundGrapheme(name.value)
 
+    @v_args(inline=True)
+    def ebl_atf_text_line__close_broken_away(self, value):
+        return BrokenAway(str(value))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__open_broken_away(self, value):
+        return BrokenAway(str(value))
+
 
 class TreeToWord(TreeToSign):
     def ebl_atf_text_line__open_accidental_omission(self, _):
@@ -216,6 +224,14 @@ class TreeToWord(TreeToSign):
             Erasure.close(),
         ]
 
+    @v_args(inline=True)
+    def ebl_atf_text_line__close_perhaps_broken_away(self, value):
+        return PerhapsBrokenAway(str(value))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__open_perhaps_broken_away(self, value):
+        return PerhapsBrokenAway(str(value))
+
     @staticmethod
     def _children_to_tokens(children: Sequence) -> Sequence[Token]:
         return (
@@ -257,22 +273,6 @@ class TreeToLine(TreeToWord):
             )
             .value()
         )
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__close_broken_away(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__close_perhaps_broken_away(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__open_broken_away(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__open_pehaps_broken_away(self, value):
-        return PerhapsBrokenAway(str(value))
 
     @v_args(inline=True)
     def ebl_atf_text_line__document_oriented_gloss(self, value):

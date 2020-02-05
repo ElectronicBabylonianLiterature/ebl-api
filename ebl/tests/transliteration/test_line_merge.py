@@ -5,6 +5,7 @@ from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     DocumentOrientedGloss,
+    PerhapsBrokenAway,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, TextLine
@@ -175,17 +176,17 @@ from ebl.transliteration.domain.word_tokens import Word
                         "(ku#?)",
                         unique_lemma=(WordId("nu I"),),
                         parts=[
-                            ValueToken("("),
+                            PerhapsBrokenAway("("),
                             Reading.of(
                                 "ku", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
                             ),
-                            ValueToken(")"),
+                            PerhapsBrokenAway(")"),
                         ],
                     ),
                     Word(
                         "[bu]",
                         unique_lemma=(WordId("bu I"),),
-                        parts=[ValueToken("["), Reading.of("bu"), ValueToken("]"),],
+                        parts=[BrokenAway("["), Reading.of("bu"), BrokenAway("]"),],
                     ),
                     Word(
                         "ku-[nu#?]",
@@ -194,11 +195,11 @@ from ebl.transliteration.domain.word_tokens import Word
                         parts=[
                             Reading.of("ku"),
                             Joiner.hyphen(),
-                            ValueToken("["),
+                            BrokenAway("["),
                             Reading.of(
                                 "nu", flags=[atf.Flag.DAMAGE, atf.Flag.UNCERTAIN],
                             ),
-                            ValueToken("]"),
+                            BrokenAway("]"),
                         ],
                     ),
                 ],
@@ -209,16 +210,16 @@ from ebl.transliteration.domain.word_tokens import Word
                     Word(
                         "(ku?#)",
                         parts=[
-                            ValueToken("("),
+                            PerhapsBrokenAway("("),
                             Reading.of(
                                 "ku", flags=[atf.Flag.UNCERTAIN, atf.Flag.DAMAGE],
                             ),
-                            ValueToken(")"),
+                            PerhapsBrokenAway(")"),
                         ],
                     ),
                     Word(
                         "[bu]",
-                        parts=[ValueToken("["), Reading.of("bu"), ValueToken("]"),],
+                        parts=[BrokenAway("["), Reading.of("bu"), BrokenAway("]"),],
                     ),
                     Word(
                         "[k(u)-nu#?",
@@ -240,17 +241,17 @@ from ebl.transliteration.domain.word_tokens import Word
                         "(ku?#)",
                         unique_lemma=(WordId("nu I"),),
                         parts=[
-                            ValueToken("("),
+                            PerhapsBrokenAway("("),
                             Reading.of(
                                 "ku", flags=[atf.Flag.UNCERTAIN, atf.Flag.DAMAGE],
                             ),
-                            ValueToken(")"),
+                            PerhapsBrokenAway(")"),
                         ],
                     ),
                     Word(
                         "[bu]",
                         unique_lemma=(WordId("bu I"),),
-                        parts=[ValueToken("["), Reading.of("bu"), ValueToken("]"),],
+                        parts=[BrokenAway("["), Reading.of("bu"), BrokenAway("]"),],
                     ),
                     Word(
                         "[k(u)-nu#?",

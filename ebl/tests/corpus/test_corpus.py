@@ -14,10 +14,11 @@ from ebl.transliteration.domain.alignment import (
     AlignmentToken,
 )
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.value import INVALID_READING
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
@@ -201,7 +202,7 @@ def test_updating_alignment(
                                             alignment=0,
                                             parts=[
                                                 Reading.of("ku"),
-                                                ValueToken("]"),
+                                                BrokenAway("]"),
                                                 Joiner.hyphen(),
                                                 Reading.of("nu"),
                                                 Joiner.hyphen(),
