@@ -137,7 +137,7 @@ class EnclosureSchema(Schema):
         ...
 
 
-class AccidentlOmissionSchema(EnclosureSchema):
+class AccidentalOmissionSchema(EnclosureSchema):
     type = fields.Constant("AccidentalOmission", required=True)
 
     @post_load
@@ -514,7 +514,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "BrokenAway": BrokenAwaySchema,
     "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
     "OmissionOrRemoval": OmissionOrRemovalSchema,
-    "AccidentalOmission": AccidentlOmissionSchema,
+    "AccidentalOmission": AccidentalOmissionSchema,
     "IntentionalOmission": IntentionalOmissionSchema,
     "Removal": RemovalSchema,
     "LineContinuation": LineContinuationSchema,
