@@ -887,6 +887,8 @@ def test_invalid_lone_determinative(parser, atf):
         "Š[A₃?...]",
         "0",
         "01",
+        "|KU]R|",
+        "|KUR.[KUR|",
     ],
 )
 def test_invalid(parser, invalid_atf):
