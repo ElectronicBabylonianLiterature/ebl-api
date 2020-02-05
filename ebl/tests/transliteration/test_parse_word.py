@@ -138,7 +138,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Joiner.hyphen(),
                     Reading.of("ku"),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Joiner.hyphen(),
                     Reading.of("nu"),
                 ],
@@ -152,7 +152,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "U₄].14.KAM₂",
                 parts=[
                     Logogram.of("U", 4),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Joiner.dot(),
                     Number.of("14"),
                     Joiner.dot(),
@@ -203,7 +203,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "{iti}]ŠE",
                 parts=[
                     Determinative([Reading.of("iti")]),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Logogram.of("ŠE"),
                 ],
             ),
@@ -246,7 +246,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.hyphen(),
                     Reading.of("ʾe"),
                     Joiner.hyphen(),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Reading.of("e"),
                 ],
             ),
@@ -298,7 +298,7 @@ from ebl.transliteration.domain.word_tokens import (
                             Reading.of("ub"),
                         ]
                     ),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Logogram.of("LA"),
                 ],
             ),
@@ -320,7 +320,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "{d}[UTU?",
                 parts=[
                     Determinative([Reading.of("d")]),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Logogram.of("UTU", flags=[atf.Flag.UNCERTAIN]),
                 ],
             ),
@@ -354,12 +354,12 @@ from ebl.transliteration.domain.word_tokens import (
                 "KA₂?].DINGIR.RA[{ki?}",
                 parts=[
                     Logogram.of("KA", 2, flags=[atf.Flag.UNCERTAIN]),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Joiner.dot(),
                     Logogram.of("DINGIR"),
                     Joiner.dot(),
                     Logogram.of("RA"),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Determinative([Reading.of("ki", flags=[atf.Flag.UNCERTAIN])]),
                 ],
             ),
@@ -406,7 +406,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.dot(),
                     Logogram.of("ME"),
                     Joiner.dot(),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Logogram.of("A"),
                 ],
             ),
@@ -417,7 +417,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "{lu₂@v}]KAB.SAR-M[EŠ",
                 parts=[
                     Determinative([Reading.of("lu", 2, modifiers=["@v"])]),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Logogram.of("KAB"),
                     Joiner.dot(),
                     Logogram.of("SAR"),
@@ -495,14 +495,16 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "{[i]ti}AB",
                 parts=[
-                    Determinative([BrokenAway("["), Reading.of("i]ti")]),
+                    Determinative([BrokenAway.open(), Reading.of("i]ti")]),
                     Logogram.of("AB"),
                 ],
             ),
         ),
         (
             "in]-",
-            Word("in]-", parts=[Reading.of("in"), BrokenAway("]"), Joiner.hyphen(),],),
+            Word(
+                "in]-", parts=[Reading.of("in"), BrokenAway.close(), Joiner.hyphen(),],
+            ),
         ),
         (
             "<en-da-ab>",
@@ -655,7 +657,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "...]-ku",
                 parts=[
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("ku"),
                 ],
@@ -668,7 +670,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Reading.of("ku"),
                     Joiner(atf.Joiner.HYPHEN),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
                 ],
             ),
@@ -692,10 +694,10 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "(x)]",
                 parts=[
-                    PerhapsBrokenAway("("),
+                    PerhapsBrokenAway.open(),
                     UnclearSign(),
-                    PerhapsBrokenAway(")"),
-                    BrokenAway("]"),
+                    PerhapsBrokenAway.close(),
+                    BrokenAway.close(),
                 ],
             ),
         ),
@@ -704,7 +706,7 @@ from ebl.transliteration.domain.word_tokens import (
             Word(
                 "[{d}UTU",
                 parts=[
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Determinative([Reading.of("d")]),
                     Logogram.of("UTU"),
                 ],
@@ -716,7 +718,7 @@ from ebl.transliteration.domain.word_tokens import (
                 "{m#}[{d}AG-sa-lim",
                 parts=[
                     Determinative([Reading.of("m", flags=[atf.Flag.DAMAGE])]),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     Determinative([Reading.of("d")]),
                     Logogram.of("AG"),
                     Joiner(atf.Joiner.HYPHEN),
@@ -733,7 +735,7 @@ from ebl.transliteration.domain.word_tokens import (
                 parts=[
                     Reading.of("ša", flags=[atf.Flag.DAMAGE]),
                     Joiner(atf.Joiner.HYPHEN),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     IntentionalOmission.open(),
                     Reading.of("mu"),
                     Joiner(atf.Joiner.HYPHEN),
@@ -741,7 +743,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner(atf.Joiner.HYPHEN),
                     Reading.of("u", 5),
                     IntentionalOmission.close(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                 ],
             ),
         ),
@@ -847,13 +849,15 @@ def test_word(parser, atf, expected):
         (
             "{k[i]}",
             LoneDeterminative(
-                "{k[i]}", parts=[Determinative([Reading.of("k[i"), BrokenAway("]")]),],
+                "{k[i]}",
+                parts=[Determinative([Reading.of("k[i"), BrokenAway.close()]),],
             ),
         ),
         (
             "{[k]i}",
             LoneDeterminative(
-                "{[k]i}", parts=[Determinative([BrokenAway("["), Reading.of("k]i")]),],
+                "{[k]i}",
+                parts=[Determinative([BrokenAway.open(), Reading.of("k]i")]),],
             ),
         ),
     ],

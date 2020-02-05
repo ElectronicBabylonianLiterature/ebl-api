@@ -83,7 +83,7 @@ class ManuscriptLineFactory(factory.Factory):
                 "ku]-nu-ši",
                 parts=[
                     Reading.of("ku"),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Joiner.hyphen(),
                     Reading.of("nu"),
                     Joiner.hyphen(),

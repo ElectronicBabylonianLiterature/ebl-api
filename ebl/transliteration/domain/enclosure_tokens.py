@@ -1,32 +1,11 @@
 from abc import abstractmethod
-from typing import Sequence, Mapping, TypeVar
+from typing import Sequence, Mapping
 
 import attr
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.tokens import ValueToken, Token, convert_token_sequence
-
-
-@attr.s(frozen=True)
-class DocumentOrientedGloss(ValueToken):
-    @property
-    def side(self) -> Side:
-        return Side.LEFT if self.value == "{(" else Side.RIGHT
-
-
-@attr.s(frozen=True)
-class BrokenAway(ValueToken):
-    @property
-    def side(self) -> Side:
-        return Side.LEFT if self.value == "[" else Side.RIGHT
-
-
-@attr.s(frozen=True)
-class PerhapsBrokenAway(ValueToken):
-    @property
-    def side(self) -> Side:
-        return Side.LEFT if self.value == "(" else Side.RIGHT
 
 
 @attr.s(frozen=True)
@@ -37,9 +16,6 @@ class OmissionOrRemoval(ValueToken):
     @property
     def side(self) -> Side:
         return Side.LEFT if (self.value in ["<(", "<", "<<"]) else Side.RIGHT
-
-
-T = TypeVar("T")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -63,29 +39,56 @@ class Enclosure(Token):
     def close(cls):
         return cls(Side.RIGHT)
 
+    @classmethod
+    def of_value(cls, value: str):
+        sides = cls.get_sides()
+        side = {v: k for k, v in sides.items()}[value]
+        return cls(side)
 
-@attr.s(auto_attribs=True, frozen=True)
+
+@attr.s(frozen=True)
+class DocumentOrientedGloss(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.DOCUMENT_ORIENTED_GLOSS
+
+
+@attr.s(frozen=True)
+class BrokenAway(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.BROKEN_AWAY
+
+
+@attr.s(frozen=True)
+class PerhapsBrokenAway(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.PERHAPS_BROKEN_AWAY
+
+
+@attr.s(frozen=True)
 class AccidentalOmission(Enclosure):
     @staticmethod
     def get_sides() -> Mapping[Side, str]:
         return atf.ACCIDENTAL_OMISSION
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class IntentionalOmission(Enclosure):
     @staticmethod
     def get_sides() -> Mapping[Side, str]:
         return atf.INTENTIONAL_OMISSION
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class Removal(Enclosure):
     @staticmethod
     def get_sides() -> Mapping[Side, str]:
         return atf.REMOVAL
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class Erasure(Enclosure):
     @staticmethod
     def get_sides() -> Mapping[Side, str]:

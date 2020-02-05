@@ -68,11 +68,9 @@ def test_enclosure(enclosure_class, type_, sides, side):
 def test_document_oriented_gloss(side):
     values = {Side.LEFT: "{(", Side.RIGHT: ")}"}
     value = values[side]
-    gloss = DocumentOrientedGloss(value)
-    equal = DocumentOrientedGloss(value)
-    other = DocumentOrientedGloss(
-        values[Side.LEFT if side == Side.RIGHT else Side.RIGHT]
-    )
+    gloss = DocumentOrientedGloss(side)
+    equal = DocumentOrientedGloss.of_value(value)
+    other = DocumentOrientedGloss(Side.LEFT if side == Side.RIGHT else Side.RIGHT)
 
     assert gloss.value == value
     assert gloss.get_key() == f"DocumentOrientedGloss⁝{value}"

@@ -65,7 +65,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                             alignment=0,
                                             parts=[
                                                 Reading.of("ku"),
-                                                BrokenAway("]"),
+                                                BrokenAway.close(),
                                                 Joiner.hyphen(),
                                                 Reading.of("nu"),
                                                 Joiner.hyphen(),

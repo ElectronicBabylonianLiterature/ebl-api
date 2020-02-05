@@ -76,31 +76,43 @@ class LanguageShiftSchema(Schema):
 class DocumentOrientedGlossSchema(Schema):
     type = fields.Constant("DocumentOrientedGloss", required=True)
     value = fields.String(required=True)
-    side = NameEnum(Side)
+    side = NameEnum(Side, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return DocumentOrientedGloss(data["value"])
+        return (
+            DocumentOrientedGloss(data["side"])
+            if data["side"]
+            else DocumentOrientedGloss.of_value(data["value"])
+        )
 
 
 class BrokenAwaySchema(Schema):
     type = fields.Constant("BrokenAway", required=True)
     value = fields.String(required=True)
-    side = NameEnum(Side)
+    side = NameEnum(Side, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return BrokenAway(data["value"])
+        return (
+            BrokenAway(data["side"])
+            if data["side"]
+            else BrokenAway.of_value(data["value"])
+        )
 
 
 class PerhapsBrokenAwaySchema(Schema):
     type = fields.Constant("PerhapsBrokenAway", required=True)
     value = fields.String(required=True)
-    side = NameEnum(Side)
+    side = NameEnum(Side, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return PerhapsBrokenAway(data["value"])
+        return (
+            PerhapsBrokenAway(data["side"])
+            if data["side"]
+            else PerhapsBrokenAway.of_value(data["value"])
+        )
 
 
 class OmissionOrRemovalSchema(Schema):
