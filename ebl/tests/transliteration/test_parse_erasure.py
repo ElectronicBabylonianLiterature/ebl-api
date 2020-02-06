@@ -1,13 +1,13 @@
 import pytest
 
 from ebl.transliteration.domain.enclosure_tokens import Erasure
-from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.lark_parser import parse_erasure
+from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import (
+    Divider,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    Divider,
 )
 from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
@@ -22,18 +22,30 @@ ERASURE_RIGHT = Erasure(Side.RIGHT)
     [
         (
             "°ku\\ku°",
-            (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")]),),
-            (Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],),),
+            (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of_name("ku")]),),
+            (
+                Word(
+                    "ku",
+                    erasure=ErasureState.OVER_ERASED,
+                    parts=[Reading.of_name("ku")],
+                ),
+            ),
         ),
         ("°::\\:.°", (Divider.of("::"),), (Divider.of(":."),),),
         (
             "°\\ku°",
             tuple(),
-            (Word("ku", erasure=ErasureState.OVER_ERASED, parts=[Reading.of("ku")],),),
+            (
+                Word(
+                    "ku",
+                    erasure=ErasureState.OVER_ERASED,
+                    parts=[Reading.of_name("ku")],
+                ),
+            ),
         ),
         (
             "°ku\\°",
-            (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of("ku")]),),
+            (Word("ku", erasure=ErasureState.ERASED, parts=[Reading.of_name("ku")]),),
             tuple(),
         ),
         ("°\\°", tuple(), tuple()),

@@ -280,7 +280,17 @@ def _load_sign(sign: Optional[Union[str, dict]]) -> Optional[Token]:
 class ReadingSchema(Schema):
     type = fields.Constant("Reading", required=True)
     value = fields.String(required=True)
-    name = fields.String(required=True)
+    name = fields.Function(
+        lambda reading: "".join(token.value for token in reading.name),
+        lambda name: name,
+        required=True,
+    )
+    name_parts = fields.Function(
+        lambda reading: dump_tokens(reading.name),
+        lambda data: load_tokens(data),
+        missing=None,
+        data_key="nameParts",
+    )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
@@ -289,7 +299,7 @@ class ReadingSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return Reading.of(
-            data["name"],
+            data["name_parts"] or (ValueToken(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -307,7 +317,17 @@ class ReadingSchema(Schema):
 class LogogramSchema(Schema):
     type = fields.Constant("Logogram", required=True)
     value = fields.String(required=True)
-    name = fields.String(required=True)
+    name = fields.Function(
+        lambda reading: "".join(token.value for token in reading.name),
+        lambda name: name,
+        required=True,
+    )
+    name_parts = fields.Function(
+        lambda reading: dump_tokens(reading.name),
+        lambda data: load_tokens(data),
+        missing=None,
+        data_key="nameParts",
+    )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
@@ -317,7 +337,7 @@ class LogogramSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return Logogram.of(
-            data["name"],
+            data["name_parts"] or (ValueToken(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -338,7 +358,17 @@ class NumberSchema(Schema):
     type = fields.Constant("Number", required=True)
     value = fields.String(required=True)
     numeral = fields.Integer(load_only=True)
-    name = fields.String(missing=None)
+    name = fields.Function(
+        lambda reading: "".join(token.value for token in reading.name),
+        lambda name: name,
+        required=True,
+    )
+    name_parts = fields.Function(
+        lambda reading: dump_tokens(reading.name),
+        lambda data: load_tokens(data),
+        missing=None,
+        data_key="nameParts",
+    )
     sub_index = fields.Integer(data_key="subIndex", missing=1)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
@@ -347,7 +377,7 @@ class NumberSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
-            data["name"] or str(data["numeral"]),
+            data["name_parts"] or (ValueToken(data["name"]),),
             data["modifiers"],
             data["flags"],
             _load_sign(data["sign"]),

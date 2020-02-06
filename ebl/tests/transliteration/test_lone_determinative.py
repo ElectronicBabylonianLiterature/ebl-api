@@ -30,7 +30,7 @@ def test_of_value():
 )
 def test_lone_determinative(language, normalized):
     value = "{mu}"
-    parts = [Determinative([Reading.of("mu")])]
+    parts = [Determinative([Reading.of_name("mu")])]
     lone_determinative = LoneDeterminative(value, language, normalized, parts=parts)
 
     equal = LoneDeterminative(value, language, normalized, parts=parts)

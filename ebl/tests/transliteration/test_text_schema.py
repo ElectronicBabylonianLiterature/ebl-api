@@ -26,7 +26,11 @@ def test_dump_line():
                 [
                     Word(
                         "ha-am",
-                        parts=[Reading.of("ha"), Joiner.hyphen(), Reading.of("am"),],
+                        parts=[
+                            Reading.of_name("ha"),
+                            Joiner.hyphen(),
+                            Reading.of_name("am"),
+                        ],
                     )
                 ],
             ),
@@ -52,14 +56,16 @@ def test_dump_line():
                 LineNumberLabel.from_atf("1."),
                 [
                     Word(
-                        "nu", unique_lemma=(WordId("nu I"),), parts=[Reading.of("nu")]
+                        "nu",
+                        unique_lemma=(WordId("nu I"),),
+                        parts=[Reading.of_name("nu")],
                     ),
-                    Word("nu", alignment=1, parts=[Reading.of("nu")]),
+                    Word("nu", alignment=1, parts=[Reading.of_name("nu")]),
                     LanguageShift("%sux"),
                     LoneDeterminative(
                         "{nu}",
                         language=Language.SUMERIAN,
-                        parts=[Determinative([Reading.of("nu")])],
+                        parts=[Determinative([Reading.of_name("nu")])],
                     ),
                     Erasure.open(),
                     Erasure.center(),

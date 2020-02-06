@@ -3,13 +3,13 @@ import pytest
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain.enclosure_tokens import (
+    AccidentalOmission,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
-    PhoneticGloss,
-    LinguisticGloss,
-    AccidentalOmission,
     IntentionalOmission,
+    LinguisticGloss,
+    PhoneticGloss,
     Removal,
 )
 from ebl.transliteration.domain.side import Side
@@ -92,7 +92,7 @@ def test_document_oriented_gloss(side):
 
 
 def test_determinative():
-    parts = [Reading.of("kur"), Joiner.hyphen(), Reading.of("kur")]
+    parts = [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")]
     determinative = Determinative(parts)
 
     expected_value = f"{{{''.join(part.value for part in parts)}}}"
@@ -111,7 +111,7 @@ def test_determinative():
 
 
 def test_phonetic_gloss():
-    parts = [Reading.of("kur"), Joiner.hyphen(), Reading.of("kur")]
+    parts = [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")]
     gloss = PhoneticGloss(parts)
 
     expected_value = f"{{+{''.join(part.value for part in parts)}}}"
@@ -130,7 +130,7 @@ def test_phonetic_gloss():
 
 
 def test_linguistic_gloss():
-    parts = [Reading.of("kur"), Joiner.hyphen(), Reading.of("kur")]
+    parts = [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")]
     gloss = LinguisticGloss(parts)
 
     expected_value = f"{{{{{''.join(part.value for part in parts)}}}}}"

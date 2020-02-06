@@ -70,7 +70,7 @@ def test_defaults():
 )
 def test_word(language, normalized, unique_lemma):
     value = "ku"
-    parts = [Reading.of("ku")]
+    parts = [Reading.of_name("ku")]
     erasure = ErasureState.NONE
     word = Word(value, language, normalized, unique_lemma, erasure, parts=parts)
 
@@ -209,49 +209,51 @@ def test_set_alignment_invalid(word, value):
     "old,new,expected",
     [
         (
-            Word("bu", alignment=1, parts=[Reading.of("bu")]),
+            Word("bu", alignment=1, parts=[Reading.of_name("bu")]),
             UnknownNumberOfSigns(),
             UnknownNumberOfSigns(),
         ),
         (
             Word("nu", unique_lemma=(WordId("nu I"),), parts=[]),
-            Word("nu", parts=[Reading.of("nu")]),
-            Word("nu", unique_lemma=(WordId("nu I"),), parts=[Reading.of("nu")]),
+            Word("nu", parts=[Reading.of_name("nu")]),
+            Word("nu", unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")]),
         ),
         (
             Word("bu", alignment=1, unique_lemma=(WordId("nu I"),)),
-            Word("bu", parts=[Reading.of("bu")]),
+            Word("bu", parts=[Reading.of_name("bu")]),
             Word(
                 "bu",
                 alignment=1,
                 unique_lemma=(WordId("nu I"),),
-                parts=[Reading.of("bu")],
+                parts=[Reading.of_name("bu")],
             ),
         ),
         (
             Word("[(bu)", alignment=1),
-            Word("bu", parts=[Reading.of("bu")]),
-            Word("bu", alignment=1, parts=[Reading.of("bu")]),
+            Word("bu", parts=[Reading.of_name("bu")]),
+            Word("bu", alignment=1, parts=[Reading.of_name("bu")]),
         ),
         (
             Word("bu#!?*", alignment=1),
-            Word("bu", parts=[Reading.of("bu")]),
-            Word("bu", alignment=1, parts=[Reading.of("bu")]),
+            Word("bu", parts=[Reading.of_name("bu")]),
+            Word("bu", alignment=1, parts=[Reading.of_name("bu")]),
         ),
         (
-            Word("bu", alignment=1, parts=[Reading.of("bu")]),
-            Word("bu#!?*", parts=[Reading.of("bu", flags=[*atf.Flag])]),
-            Word("bu#!?*", alignment=1, parts=[Reading.of("bu", flags=[*atf.Flag])],),
+            Word("bu", alignment=1, parts=[Reading.of_name("bu")]),
+            Word("bu#!?*", parts=[Reading.of_name("bu", flags=[*atf.Flag])]),
+            Word(
+                "bu#!?*", alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])],
+            ),
         ),
         (
-            Word("bu", unique_lemma=(WordId("nu I"),), parts=[Reading.of("bu")]),
-            Word("bu", language=Language.SUMERIAN, parts=[Reading.of("bu")]),
-            Word("bu", language=Language.SUMERIAN, parts=[Reading.of("bu")]),
+            Word("bu", unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")]),
+            Word("bu", language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word("bu", language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         ),
         (
-            Word("bu", alignment=1, parts=[Reading.of("bu")]),
-            Word("bu", language=Language.SUMERIAN, parts=[Reading.of("bu")]),
-            Word("bu", language=Language.SUMERIAN, parts=[Reading.of("bu")]),
+            Word("bu", alignment=1, parts=[Reading.of_name("bu")]),
+            Word("bu", language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word("bu", language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         ),
     ],
 )

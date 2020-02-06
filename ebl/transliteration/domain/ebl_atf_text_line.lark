@@ -37,8 +37,6 @@ divider.5: DIVIDER_SYMBOL modifiers flags
 close_broken_away: CLOSE_BROKEN_AWAY
 close_perhaps_broken_away: CLOSE_PERHAPS_BROKEN_AWAY
 close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
-open_broken_away: OPEN_BROKEN_AWAY
-open_perhaps_broken_away: OPEN_PERHAPS_BROKEN_AWAY
 open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
 
@@ -76,6 +74,10 @@ SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
 
 erasure.-1: "°" erasure_part "\\" erasure_part "°"
 erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
+
+?broken_away: open_broken_away | close_broken_away
+open_broken_away: OPEN_BROKEN_AWAY
+open_perhaps_broken_away: OPEN_PERHAPS_BROKEN_AWAY
 
 OPEN_BROKEN_AWAY: "["
 CLOSE_BROKEN_AWAY: "]"
@@ -147,16 +149,20 @@ variant: variant_part (_VARIANT_SEPARATOR variant_part)+
              | compound_grapheme
 
 
-number: NUMBER modifiers flags ["(" any_grapheme ")"]
-reading: VALUE_NAME sub_index modifiers flags ["(" any_grapheme ")"]
-logogram: LOGOGRAM_NAME sub_index modifiers flags ["(" any_grapheme ")"]
-surrogate: LOGOGRAM_NAME sub_index modifiers flags "<(" surrogate_text ")>"
+number: number_name modifiers flags ["(" any_grapheme ")"]
+reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]
+logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"]
+surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>"
 surrogate_text: reading (joiner reading)*
 sub_index: [SUB_INDEX]
 
-NUMBER: "1".."9" (IN_VALUE_BROKEN_AWAY? "0".."9")*
-VALUE_NAME: VALUE_CHARACTER (IN_VALUE_BROKEN_AWAY? VALUE_CHARACTER)*
-LOGOGRAM_NAME: LOGOGRAM_CHARACTER (IN_VALUE_BROKEN_AWAY? LOGOGRAM_CHARACTER)*
+number_name: number_name_head (broken_away number_name_part)*
+value_name: value_name_part (broken_away value_name_part)*
+logogram_name: logogram_name_part (broken_away logogram_name_part)*
+!number_name_head:  "1".."9" "0".."9"*
+!number_name_part:  "0".."9"+
+value_name_part: VALUE_CHARACTER+
+logogram_name_part: LOGOGRAM_CHARACTER+
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h"
                | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
                | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
@@ -187,8 +193,6 @@ NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")*
 
 unidentified_sign: "X" flags
 unclear_sign: "x" flags
-
-IN_VALUE_BROKEN_AWAY: "[" | "]"
 
 _VARIANT_SEPARATOR: VARIANT_SEPARATOR
 VARIANT_SEPARATOR: "/"
