@@ -114,9 +114,9 @@ class NamedSign(AbstractSign):
     @property
     def parts(self) -> Sequence[Token]:
         if self.sign:
-            return (self.sign,)
+            return (*self.name, self.sign)
         else:
-            return tuple()
+            return self.name
 
     @property
     def value(self) -> str:
