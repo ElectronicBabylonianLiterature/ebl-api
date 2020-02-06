@@ -177,7 +177,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                             Reading.of_name("ma"),
                             InWordNewline(),
                             Joiner.hyphen(),
-                            Reading.of_name("tu₂"),
+                            Reading.of_name("tu", 2),
                         ],
                     ),
                 ),
