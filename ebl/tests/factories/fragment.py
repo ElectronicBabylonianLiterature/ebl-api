@@ -25,7 +25,6 @@ from ebl.transliteration.domain.tokens import (
     Joiner,
     Tabulation,
     UnknownNumberOfSigns,
-    ValueToken,
     Variant,
 )
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
@@ -84,11 +83,11 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Word(
                         "[...-ku]-nu-ši",
                         parts=[
-                            ValueToken("["),
+                            BrokenAway.open(),
                             UnknownNumberOfSigns(),
                             Joiner.hyphen(),
                             Reading.of("ku"),
-                            ValueToken("]"),
+                            BrokenAway.close(),
                             Joiner.hyphen(),
                             Reading.of("nu"),
                             Joiner.hyphen(),
@@ -96,9 +95,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
                         ],
                     ),
                     Variant.of(Divider.of(":"), Word("ku", parts=[Reading.of("ku")])),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Column(2),
                     Divider.of(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
@@ -108,9 +107,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
             TextLine(
                 "2'.",
                 (
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Word("GI₆", parts=[Logogram.of("GI", 6)]),
                     Word("ana", parts=[Reading.of("ana")]),
                     Word(
@@ -118,13 +117,13 @@ class TransliteratedFragmentFactory(FragmentFactory):
                         parts=[Reading.of("u₄"), Joiner.hyphen(), Reading.of("š[u"),],
                     ),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                 ),
             ),
             TextLine(
                 "3'.",
                 (
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     Word(
                         "k]i-du",
@@ -142,15 +141,15 @@ class TransliteratedFragmentFactory(FragmentFactory):
                         ],
                     ),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                 ),
             ),
             TextLine(
                 "6'.",
                 (
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Word("x#", parts=[UnclearSign([Flag.DAMAGE])]),
                     Word("mu", parts=[Reading.of("mu")]),
                     Word(
@@ -215,11 +214,11 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Word(
                         "[...-ku]-nu-ši",
                         parts=[
-                            ValueToken("["),
+                            BrokenAway.open(),
                             UnknownNumberOfSigns(),
                             Joiner.hyphen(),
                             Reading.of("ku"),
-                            ValueToken("]"),
+                            BrokenAway.close(),
                             Joiner.hyphen(),
                             Reading.of("nu"),
                             Joiner.hyphen(),
@@ -227,9 +226,9 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                         ],
                     ),
                     Variant.of(Divider.of(":"), Word("ku", parts=[Reading.of("ku")])),
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Column(2),
                     Divider.of(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
@@ -239,7 +238,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             TextLine(
                 "2'.",
                 (
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     Word(
                         "GI₆",
@@ -257,13 +256,13 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                         parts=[Reading.of("u₄"), Joiner.hyphen(), Reading.of("š[u"),],
                     ),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                 ),
             ),
             TextLine(
                 "3'.",
                 (
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     Word(
                         "k]i-du",
@@ -283,15 +282,15 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                         ],
                     ),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                 ),
             ),
             TextLine(
                 "6'.",
                 (
-                    BrokenAway("["),
+                    BrokenAway.open(),
                     UnknownNumberOfSigns(),
-                    BrokenAway("]"),
+                    BrokenAway.close(),
                     Word("x#", parts=[UnclearSign([Flag.DAMAGE])]),
                     Word(
                         "mu", unique_lemma=(WordId("mu I"),), parts=[Reading.of("mu")],

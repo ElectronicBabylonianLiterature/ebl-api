@@ -1,5 +1,5 @@
 import pytest
-from hamcrest import assert_that, contains, has_entries, starts_with
+from hamcrest import assert_that, has_entries, starts_with, contains_exactly
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -105,17 +105,17 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         UnknownNumberOfSigns(),
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        BrokenAway("]"),
-                        PerhapsBrokenAway("("),
+                        BrokenAway.close(),
+                        PerhapsBrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        PerhapsBrokenAway(")"),
-                        BrokenAway("["),
-                        PerhapsBrokenAway("("),
+                        PerhapsBrokenAway.close(),
+                        BrokenAway.open(),
+                        PerhapsBrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        PerhapsBrokenAway(")"),
-                        BrokenAway("]"),
+                        PerhapsBrokenAway.close(),
+                        BrokenAway.close(),
                     ),
                 )
             ],
@@ -128,12 +128,20 @@ def test_parser_version(parser, version):
                     (
                         Word(
                             "[(x",
-                            parts=[ValueToken("["), ValueToken("("), UnclearSign(),],
+                            parts=[
+                                BrokenAway.open(),
+                                PerhapsBrokenAway.open(),
+                                UnclearSign(),
+                            ],
                         ),
                         Word("x", parts=[UnclearSign()]),
                         Word(
                             "x)]",
-                            parts=[UnclearSign(), ValueToken(")"), ValueToken("]"),],
+                            parts=[
+                                UnclearSign(),
+                                PerhapsBrokenAway.close(),
+                                BrokenAway.close(),
+                            ],
                         ),
                     ),
                 )
@@ -312,7 +320,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
                         Word(
                             "r]u?-u₂-qu",
@@ -332,7 +340,7 @@ def test_parser_version(parser, version):
                                 Reading.of("a[n"),
                                 Joiner.hyphen(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -345,13 +353,13 @@ def test_parser_version(parser, version):
                             parts=[
                                 Reading.of("ši"),
                                 Joiner.hyphen(),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 Reading.of("ku"),
                                 Joiner.hyphen(),
                                 UnknownNumberOfSigns(),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of("nu"),
                             ],
@@ -364,9 +372,9 @@ def test_parser_version(parser, version):
                         Word(
                             "[...]-ku",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
                             ],
@@ -381,16 +389,16 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Word("ša₃]", parts=[Reading.of("ša", 3), ValueToken("]")],),
+                        Word("ša₃]", parts=[Reading.of("ša", 3), BrokenAway.close()],),
                         Word(
                             "[{d}UTU",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 Determinative([Reading.of("d")]),
                                 Logogram.of("UTU"),
                             ],
                         ),
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         Divider.of(":"),
                     ),
                 )
@@ -405,21 +413,21 @@ def test_parser_version(parser, version):
                         Word(
                             "[...]-qa-[...]-ba-[...]",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of("qa"),
                                 Joiner.hyphen(),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of("ba"),
                                 Joiner.hyphen(),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -432,9 +440,9 @@ def test_parser_version(parser, version):
                             parts=[
                                 Reading.of("pa"),
                                 Joiner.hyphen(),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -450,16 +458,16 @@ def test_parser_version(parser, version):
                         Word(
                             "[a?-ku",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 Reading.of("a", flags=[atf.Flag.UNCERTAIN]),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
                             ],
                         ),
-                        PerhapsBrokenAway("("),
+                        PerhapsBrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        PerhapsBrokenAway(")"),
-                        BrokenAway("]"),
+                        PerhapsBrokenAway.close(),
+                        BrokenAway.close(),
                     ),
                 ),
                 TextLine(
@@ -468,7 +476,7 @@ def test_parser_version(parser, version):
                         Word(
                             "[a?-ku",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 Reading.of("a", flags=[atf.Flag.UNCERTAIN]),
                                 Joiner.hyphen(),
                                 Reading.of("ku"),
@@ -477,10 +485,10 @@ def test_parser_version(parser, version):
                         Word(
                             "(x)]",
                             parts=[
-                                ValueToken("("),
+                                PerhapsBrokenAway.open(),
                                 UnclearSign(),
-                                ValueToken(")"),
-                                ValueToken("]"),
+                                PerhapsBrokenAway.close(),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -496,25 +504,25 @@ def test_parser_version(parser, version):
                         Word(
                             "[...+ku....]",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
                                 Joiner.plus(),
                                 Reading.of("ku"),
                                 Joiner.dot(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                         Word(
                             "[....ku+...]",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
                                 Joiner.dot(),
                                 Reading.of("ku"),
                                 Joiner.plus(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -532,17 +540,17 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        BrokenAway("]"),
+                        BrokenAway.close(),
                         LoneDeterminative.of_value(
                             "{bu}",
                             ErasureState.NONE,
                             [Determinative([Reading.of("bu")]),],
                         ),
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        BrokenAway("]"),
+                        BrokenAway.close(),
                     ),
                 ),
                 TextLine(
@@ -551,30 +559,30 @@ def test_parser_version(parser, version):
                         Word(
                             "[...]{bu}",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Determinative([Reading.of("bu")]),
                             ],
                         ),
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        BrokenAway("]"),
+                        BrokenAway.close(),
                     ),
                 ),
                 TextLine(
                     "3.",
                     (
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        BrokenAway("]"),
+                        BrokenAway.close(),
                         Word(
                             "{bu}[...]",
                             parts=[
                                 Determinative([Reading.of("bu")]),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -585,13 +593,13 @@ def test_parser_version(parser, version):
                         Word(
                             "[...]{bu}[...]",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Determinative([Reading.of("bu")]),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -661,9 +669,9 @@ def test_parser_version(parser, version):
                                 Determinative(
                                     [Reading.of("u", 2, flags=[atf.Flag.DAMAGE])]
                                 ),
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                         LoneDeterminative.of_value(
@@ -675,9 +683,9 @@ def test_parser_version(parser, version):
                                 ),
                             ],
                         ),
-                        BrokenAway("["),
+                        BrokenAway.open(),
                         UnknownNumberOfSigns(),
-                        BrokenAway("]"),
+                        BrokenAway.close(),
                     ),
                 )
             ],
@@ -699,7 +707,7 @@ def test_parser_version(parser, version):
                             "U₄].14.KAM₂",
                             parts=[
                                 Logogram.of("U", 4),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Joiner.dot(),
                                 Number.of("14"),
                                 Joiner.dot(),
@@ -726,7 +734,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        DocumentOrientedGloss("{("),
+                        DocumentOrientedGloss.open(),
                         Word(
                             "he-pi₂",
                             parts=[
@@ -743,16 +751,16 @@ def test_parser_version(parser, version):
                                 Reading.of("šu", 2),
                             ],
                         ),
-                        DocumentOrientedGloss(")}"),
+                        DocumentOrientedGloss.close(),
                     ),
                 ),
                 TextLine(
                     "2.",
                     (
-                        DocumentOrientedGloss("{("),
+                        DocumentOrientedGloss.open(),
                         Word("NU", parts=[Logogram.of("NU")]),
                         Word("SUR", parts=[Logogram.of("SUR")]),
-                        DocumentOrientedGloss(")}"),
+                        DocumentOrientedGloss.close(),
                     ),
                 ),
             ],
@@ -930,8 +938,8 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        BrokenAway("["),
-                        DocumentOrientedGloss("{("),
+                        BrokenAway.open(),
+                        DocumentOrientedGloss.open(),
                         Word(
                             "he-pi₂",
                             parts=[
@@ -948,7 +956,7 @@ def test_parser_version(parser, version):
                                 Reading.of("šu", 2),
                             ],
                         ),
-                        DocumentOrientedGloss(")}"),
+                        DocumentOrientedGloss.close(),
                     ),
                 )
             ],
@@ -962,10 +970,10 @@ def test_parser_version(parser, version):
                         Word(
                             "[{iti}...]",
                             parts=[
-                                ValueToken("["),
+                                BrokenAway.open(),
                                 Determinative([Reading.of("iti")]),
                                 UnknownNumberOfSigns(),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -982,7 +990,7 @@ def test_parser_version(parser, version):
                             "RA{k[i]}",
                             parts=[
                                 Logogram.of("RA"),
-                                Determinative([Reading.of("k[i"), BrokenAway("]")]),
+                                Determinative([Reading.of("k[i"), BrokenAway.close()]),
                             ],
                         ),
                     ),
@@ -999,7 +1007,7 @@ def test_parser_version(parser, version):
                             "in]-<(...)>",
                             parts=[
                                 Reading.of("in"),
-                                ValueToken("]"),
+                                BrokenAway.close(),
                                 Joiner.hyphen(),
                                 IntentionalOmission.open(),
                                 UnknownNumberOfSigns(),
@@ -1342,7 +1350,7 @@ def test_invalid_atf(parser, atf, line_numbers):
 
     assert_that(
         exc_info.value.errors,
-        contains(
+        contains_exactly(
             *[
                 has_entries(
                     {

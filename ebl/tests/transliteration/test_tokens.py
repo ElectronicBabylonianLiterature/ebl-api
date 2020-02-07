@@ -30,7 +30,7 @@ from ebl.transliteration.domain.word_tokens import (
 TOKENS = [
     UnknownNumberOfSigns(),
     LanguageShift("%sux"),
-    DocumentOrientedGloss("{("),
+    DocumentOrientedGloss.open(),
 ]
 
 

@@ -29,7 +29,7 @@ _omit_left.-1: close_broken_away
           | close_omission_or_removal
           | close_document_oriented_gloss
 _omit_right.-1: open_broken_away
-           | open_pehaps_broken_away
+           | open_perhaps_broken_away
            | open_omission_or_removal
            | open_document_oriented_gloss
 
@@ -38,7 +38,7 @@ close_broken_away: CLOSE_BROKEN_AWAY
 close_perhaps_broken_away: CLOSE_PERHAPS_BROKEN_AWAY
 close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
 open_broken_away: OPEN_BROKEN_AWAY
-open_pehaps_broken_away: OPEN_PERHAPS_BROKEN_AWAY
+open_perhaps_broken_away: OPEN_PERHAPS_BROKEN_AWAY
 open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
 
@@ -77,8 +77,8 @@ SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
 erasure.-1: "°" erasure_part "\\" erasure_part "°"
 erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
 
-PERHAPS_BROKEN_AWAY: OPEN_PERHAPS_BROKEN_AWAY
-                   | CLOSE_PERHAPS_BROKEN_AWAY
+OPEN_BROKEN_AWAY: "["
+CLOSE_BROKEN_AWAY: "]"
 OPEN_PERHAPS_BROKEN_AWAY: "("
 CLOSE_PERHAPS_BROKEN_AWAY: ")"
 
@@ -98,17 +98,6 @@ open_intentional_omission: "<("
 close_intentional_omission: ")>"
 open_removal: "<<"
 close_removal: ">>"
-
-
-BROKEN_AWAY: OPEN_BROKEN_AWAY
-           | CLOSE_BROKEN_AWAY
-OPEN_BROKEN_AWAY: "["
-CLOSE_BROKEN_AWAY: "]"
-
-_inline_broken_away: _open_inline_broken_away
-                   | _close_inline_broken_away
-_open_inline_broken_away: OPEN_BROKEN_AWAY | OPEN_PERHAPS_BROKEN_AWAY
-_close_inline_broken_away: CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY
 
 lone_determinative.4: open_omission_or_removal? (phonetic_gloss | determinative) close_omission_or_removal?
 
@@ -136,8 +125,8 @@ _loose_joiner: _strict_joiner
             | in_word_newline? _any_close joiner? _any_open?
             | in_word_newline? _any_close? joiner? _any_open
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
-_any_close: (_close_inline_broken_away | close_omission_or_removal)+
-_any_open: (open_omission_or_removal | _open_inline_broken_away)+
+_any_close: (close_broken_away | close_perhaps_broken_away | close_omission_or_removal)+
+_any_open: (open_omission_or_removal | open_broken_away | open_perhaps_broken_away)+
 !joiner: "-" | "+" | "." | ":"
 
 _value: unidentified_sign
@@ -186,7 +175,7 @@ COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+"
 
 grapheme: GRAPHEME_NAME modifiers flags
 GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
-GRAPHEME_NAME: GRAPHEME_CHARACTER (IN_VALUE_BROKEN_AWAY? GRAPHEME_CHARACTER)* SUB_INDEX?
+GRAPHEME_NAME: GRAPHEME_CHARACTER (GRAPHEME_CHARACTER)* SUB_INDEX?
 GRAPHEME_CHARACTER: "a".."z"
                   | "A".."Z"
                   | "Ṣ" | "Š" | "Ṭ"

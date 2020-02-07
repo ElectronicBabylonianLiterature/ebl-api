@@ -143,6 +143,14 @@ class TreeToSign(Transformer):
     def ebl_atf_text_line__compound_grapheme(self, name):
         return CompoundGrapheme(name.value)
 
+    @v_args(inline=True)
+    def ebl_atf_text_line__close_broken_away(self, _):
+        return BrokenAway.close()
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__open_broken_away(self, _):
+        return BrokenAway.open()
+
 
 class TreeToWord(TreeToSign):
     def ebl_atf_text_line__open_accidental_omission(self, _):
@@ -225,6 +233,14 @@ class TreeToWord(TreeToSign):
             Erasure.close(),
         ]
 
+    @v_args(inline=True)
+    def ebl_atf_text_line__close_perhaps_broken_away(self, _):
+        return PerhapsBrokenAway.close()
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__open_perhaps_broken_away(self, _):
+        return PerhapsBrokenAway.open()
+
     @staticmethod
     def _children_to_tokens(children: Sequence) -> Sequence[Token]:
         return (
@@ -268,32 +284,12 @@ class TreeToLine(TreeToWord):
         )
 
     @v_args(inline=True)
-    def ebl_atf_text_line__close_broken_away(self, value):
-        return BrokenAway(str(value))
+    def ebl_atf_text_line__open_document_oriented_gloss(self, _):
+        return DocumentOrientedGloss.open()
 
     @v_args(inline=True)
-    def ebl_atf_text_line__close_perhaps_broken_away(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__open_broken_away(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__open_pehaps_broken_away(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__document_oriented_gloss(self, value):
-        return DocumentOrientedGloss(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__open_document_oriented_gloss(self, value):
-        return DocumentOrientedGloss(str(value))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__close_document_oriented_gloss(self, value):
-        return DocumentOrientedGloss(str(value))
+    def ebl_atf_text_line__close_document_oriented_gloss(self, _):
+        return DocumentOrientedGloss.close()
 
     @v_args(inline=True)
     def ebl_atf_text_line__language_shift(self, value):

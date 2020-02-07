@@ -92,7 +92,7 @@ LINES = [
         TextLine.of_iterable(
             LineNumberLabel.from_atf("1."),
             [
-                DocumentOrientedGloss("{("),
+                DocumentOrientedGloss.open(),
                 Word("bu", parts=[Reading.of("bu")]),
                 LoneDeterminative("{d}", parts=[Determinative([Reading.of("d")]),],),
             ],
@@ -102,7 +102,7 @@ LINES = [
             "prefix": "1.",
             "content": dump_tokens(
                 [
-                    DocumentOrientedGloss("{("),
+                    DocumentOrientedGloss.open(),
                     Word("bu", parts=[Reading.of("bu")]),
                     LoneDeterminative(
                         "{d}", parts=[Determinative([Reading.of("d")]),],

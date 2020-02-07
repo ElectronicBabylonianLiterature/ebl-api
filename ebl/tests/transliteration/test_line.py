@@ -147,10 +147,10 @@ def test_text_line_atf_gloss():
     line = TextLine.of_iterable(
         LINE_NUMBER,
         [
-            DocumentOrientedGloss("{("),
+            DocumentOrientedGloss.open(),
             Word("mu"),
             Word("bu"),
-            DocumentOrientedGloss(")}"),
+            DocumentOrientedGloss.close(),
         ],
     )
     assert line.atf == f"{line.prefix} {{(mu bu)}}"

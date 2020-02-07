@@ -37,6 +37,7 @@ from ebl.corpus.domain.text import (
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
     LineNumberLabel,
@@ -44,7 +45,7 @@ from ebl.transliteration.domain.labels import (
 )
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -82,7 +83,7 @@ class ManuscriptLineFactory(factory.Factory):
                 "ku]-nu-ši",
                 parts=[
                     Reading.of("ku"),
-                    ValueToken("]"),
+                    BrokenAway.close(),
                     Joiner.hyphen(),
                     Reading.of("nu"),
                     Joiner.hyphen(),
