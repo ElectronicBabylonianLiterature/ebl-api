@@ -9,12 +9,9 @@ _WORD_SEPARATOR: " "
 
 ?dollar_line : "$" _WORD_SEPARATOR value
 
-?value : strict | loose | ruling | image
-
-!old.-2: /.+/?
+?value : strict | _looses | ruling | image
 
 strict : [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
-
 
 QUALIFICATION : "at least" | "at most" | "about"
 _extent : NUMBER | range | EXTENT
@@ -47,7 +44,17 @@ STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces "
 
 STATUS : "*" | "?" | "!" | "!?"
 
-!loose.-1 : /\(.+\)/
+
+
+_looses.-1: "(" (strict | loose) ")"
+
+
+
+//!loose.-1 : /\(.+\)/
+
+!loose.-1 : /[^)]+/
+
+
 
 ruling : RULING_NUMBER _WORD_SEPARATOR RULING
 

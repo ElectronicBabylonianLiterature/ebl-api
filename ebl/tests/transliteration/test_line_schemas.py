@@ -33,7 +33,7 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken("at least 1-2 surface thing blank ?")]),
+            "content": dump_tokens([ValueToken(" at least 1-2 surface thing blank ?")]),
             "type": "StrictDollarLine",
             "qualification": "AT_LEAST",
             "extent": {"type": "tuple", "value": "(1, 2)"},
@@ -52,7 +52,7 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken("at least 1 obverse blank ?")]),
+            "content": dump_tokens([ValueToken(" at least 1 obverse blank ?")]),
             "type": "StrictDollarLine",
             "qualification": "AT_LEAST",
             "extent": {"type": "int", "value": "1"},
@@ -71,7 +71,7 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken("beginning of obverse")]),
+            "content": dump_tokens([ValueToken(" beginning of obverse")]),
             "type": "StrictDollarLine",
             "qualification": None,
             "extent": {"type": "Extent", "value": "BEGINNING_OF"},
@@ -117,7 +117,7 @@ LINES = [
         {
             "type": "LooseDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken("(end of side)")]),
+            "content": dump_tokens([ValueToken(" (end of side)")]),
             "text": "end of side",
         },
     ),
@@ -126,7 +126,7 @@ LINES = [
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken("(image 1a = great)")]),
+            "content": dump_tokens([ValueToken(" (image 1a = great)")]),
             "number": "1",
             "letter": "a",
             "text": "great",
@@ -137,7 +137,7 @@ LINES = [
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken("(image 1 = great)")]),
+            "content": dump_tokens([ValueToken(" (image 1 = great)")]),
             "number": "1",
             "letter": None,
             "text": "great",
@@ -148,7 +148,7 @@ LINES = [
         {
             "type": "RulingDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken("double ruling")]),
+            "content": dump_tokens([ValueToken(" double ruling")]),
             "number": "DOUBLE",
         },
     ),

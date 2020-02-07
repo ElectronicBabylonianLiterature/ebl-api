@@ -1,5 +1,5 @@
 import pytest
-from hamcrest import assert_that, contains, has_entries, starts_with
+from hamcrest import assert_that, contains_exactly, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -1108,9 +1108,9 @@ def test_parse_atf(parser, line, expected_tokens):
             "$ (image 1 = numbered diagram of triangle)",
             [ImageDollarLine("1", None, "numbered diagram of triangle")],
         ),
-        ("$ single ruling", [RulingDollarLine(atf.Ruling("single"))]),
-        ("$ double ruling", [RulingDollarLine(atf.Ruling("double"))]),
-        ("$ triple ruling", [RulingDollarLine(atf.Ruling("triple"))]),
+        ("$ single ruling", [RulingDollarLine(atf.Ruling.SINGLE)]),
+        ("$ double ruling", [RulingDollarLine(atf.Ruling.DOUBLE)]),
+        ("$ triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
     ],
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):
@@ -1272,6 +1272,32 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
     ],
 )
 def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ (at least 1 obverse missing)",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.OBVERSE, ""),
+                    atf.State.MISSING,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ (at least 1 obverse issing)",
+            [LooseDollarLine("at least 1 obverse issing")],
+        ),
+    ],
+)
+def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 

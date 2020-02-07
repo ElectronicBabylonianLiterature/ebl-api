@@ -30,7 +30,7 @@ def test_strict_dollar_line_schema():
     )
     expected = {
         "prefix": "$",
-        "content": dump_tokens([ValueToken("at least beginning of obverse blank ?")]),
+        "content": dump_tokens([ValueToken(" at least beginning of obverse blank ?")]),
         "type": "StrictDollarLine",
         "qualification": "AT_LEAST",
         "extent": {"type": "Extent", "value": "BEGINNING_OF"},

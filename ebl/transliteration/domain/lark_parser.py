@@ -343,12 +343,8 @@ class TreeToLine(TreeToWord):
 
 class TreeDollarSignToTokens(TreeToLine):
     @v_args(inline=True)
-    def ebl_atf_dollar_line__old(self, content):
-        return ControlLine.of_single("$", ValueToken(content))
-
-    @v_args(inline=True)
     def ebl_atf_dollar_line__loose(self, content):
-        return LooseDollarLine(str(content)[1:-1])
+        return LooseDollarLine(str(content))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__ruling(self, number, ruling):

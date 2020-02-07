@@ -56,10 +56,7 @@ class Line(ABC):
         return self._update_tokens(lemmatization, updater, LemmatizationError)
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
-        def updater(token, alignment_token):
-            return token.set_alignment(alignment_token)
-
-        return self._update_tokens(alignment, updater, AlignmentError)
+        return self
 
     def _update_tokens(
         self,
@@ -67,12 +64,7 @@ class Line(ABC):
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
     ) -> "Line":
-        if len(self.content) == len(updates):
-            zipped = pydash.zip_(list(self.content), list(updates))
-            content = tuple(updater(pair[0], pair[1]) for pair in zipped)
-            return attr.evolve(self, content=content)
-        else:
-            raise error_class()
+        return self
 
     def merge(self, other: "Line") -> "Line":
         return other
@@ -105,6 +97,9 @@ class DollarLine(Line):
     def prefix(self):
         return "$"
 
+    # content = ValueToken(" " + ...) # Contents ValueToken has to start with empty
+    # space, so Line.atf() works
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
@@ -112,7 +107,7 @@ class LooseDollarLine(DollarLine):
 
     @property
     def content(self):
-        return (ValueToken(f"({self.text})"),)
+        return (ValueToken(f" ({self.text})"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -123,7 +118,7 @@ class ImageDollarLine(DollarLine):
 
     @property
     def content(self):
-        return (ValueToken(f'(image {self.number}{self.letter or ""} = {self.text})'),)
+        return (ValueToken(f' (image {self.number}{self.letter or ""} = {self.text})'),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -132,7 +127,7 @@ class RulingDollarLine(DollarLine):
 
     @property
     def content(self):
-        return (ValueToken(f"{self.number.value} ruling"),)
+        return (ValueToken(f" {self.number.value} ruling"),)
 
 
 @attr.s(frozen=True)
@@ -174,7 +169,7 @@ class StrictDollarLine(DollarLine):
     def content(self):
         return (
             ValueToken(
-                " ".join([to_serialize(x) for x in self.__dict__.values() if x])
+                " " + " ".join([to_serialize(x) for x in self.__dict__.values() if x])
             ),
         )
 
@@ -224,6 +219,25 @@ class TextLine(Line):
         for token in self.content:
             token.accept(visitor)
         return visitor.result
+
+    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
+        def updater(token, alignment_token):
+            return token.set_alignment(alignment_token)
+
+        return self._update_tokens(alignment, updater, AlignmentError)
+
+    def _update_tokens(
+        self,
+        updates: Sequence[T],
+        updater: Callable[[Token, T], Token],
+        error_class: Type[Exception],
+    ) -> "Line":
+        if len(self.content) == len(updates):
+            zipped = pydash.zip_(list(self.content), list(updates))
+            content = tuple(updater(pair[0], pair[1]) for pair in zipped)
+            return attr.evolve(self, content=content)
+        else:
+            raise error_class()
 
     def merge(self, other: L) -> L:
         def merge_tokens():
