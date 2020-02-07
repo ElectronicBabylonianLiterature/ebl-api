@@ -24,7 +24,7 @@ class EnumField(fields.String, ABC):
                 **kwargs
             )
         else:
-            raise self.make_error("not enum")
+            raise self.make_error("not_enum")
 
     def _deserialize(self, value, attr, data, **kwargs) -> Any:
         try:

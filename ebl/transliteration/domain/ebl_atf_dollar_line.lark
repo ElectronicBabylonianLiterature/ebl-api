@@ -14,24 +14,20 @@ _WORD_SEPARATOR: " "
 strict : [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
 
 QUALIFICATION : "at least" | "at most" | "about"
+
 _extent : NUMBER | range | EXTENT
 EXTENT : "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
-
 range.2 : NUMBER _WORD_SEPARATOR? "-" _WORD_SEPARATOR? NUMBER
 NUMBER : SIGNED_NUMBER
 
-
-_scopes : SCOPE | _object | _surface |
+_scopes : SCOPE | _object | _surface
 SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface"
-
-
-TEXT : /([^\s]+)/
-
 
 _object : OBJECT | generic_object
 OBJECT: "tablet" | "envelope" | "prism" | "bulla" | "fragment"
 generic_object : OBJECT_GENERIC _WORD_SEPARATOR TEXT
 OBJECT_GENERIC : "object"
+TEXT : /([^\s]+)/
 
 _surface : SURFACE | generic_surface
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
@@ -44,25 +40,14 @@ STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces "
 
 STATUS : "*" | "?" | "!" | "!?"
 
-
-
 _looses.-1: "(" (strict | loose) ")"
-
-
-
-//!loose.-1 : /\(.+\)/
-
 !loose.-1 : /[^)]+/
 
-
-
 ruling : RULING_NUMBER _WORD_SEPARATOR RULING
-
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
 image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR TEXTS
-
 _IMAGE : "(image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/

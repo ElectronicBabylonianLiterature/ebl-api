@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from functools import singledispatch
+from functools import singledispatch, singledispatchmethod
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
 import attr
@@ -155,12 +155,13 @@ class ScopeContainer:
     # atf.Object.value a string
 
 
+Range = Tuple[int, int]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class StrictDollarLine(DollarLine):
     qualification: Optional[atf.Qualification]
-    extent: Union[
-        atf.Extent, int, Tuple[int, int]
-    ]  # (int, int) resembles range e.g 3 - 5
+    extent: Union[atf.Extent, int, Range]  # (int, int) resembles range e.g 3 - 5
     scope: ScopeContainer
     state: Optional[atf.State]
     status: Optional[atf.Status]
@@ -169,24 +170,37 @@ class StrictDollarLine(DollarLine):
     def content(self):
         return (
             ValueToken(
-                " " + " ".join([to_serialize(x) for x in self.__dict__.values() if x])
+                " "
+                + " ".join(
+                    [
+                        StrictDollarLine.to_atf(x)
+                        for x in [
+                            self.qualification,
+                            self.extent,
+                            self.scope,
+                            self.state,
+                            self.status,
+                        ]
+                        if x
+                    ]
+                )
             ),
         )
 
+    @singledispatchmethod
+    @staticmethod
+    def to_atf(val):
+        return str(val)
 
-@singledispatch
-def to_serialize(val):
-    return str(val)
+    @to_atf.register(tuple)
+    @staticmethod
+    def tuple_to_atf(val: tuple):
+        return f"{val[0]}-{val[1]}"
 
-
-@to_serialize.register
-def ts_enum(val: Enum):
-    return val.value
-
-
-@to_serialize.register
-def ts_tuple(val: tuple):
-    return f"{val[0]}-{val[1]}"
+    @to_atf.register(Enum)
+    @staticmethod
+    def enum_to_atf(val: Enum):
+        return val.value
 
 
 @attr.s(auto_attribs=True, frozen=True)

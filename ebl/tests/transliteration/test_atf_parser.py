@@ -1190,7 +1190,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
+                    atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
                     None,
                     None,
@@ -1202,7 +1202,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
+                    atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
                     None,
                     None,
@@ -1214,7 +1214,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             [
                 StrictDollarLine(
                     None,
-                    atf.Extent("several"),
+                    atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
                     None,
                     None,
