@@ -113,7 +113,7 @@ def test_unclear_sign_with_flags():
 
 
 @pytest.mark.parametrize(
-    "name,sub_index,modifiers,flags,sign,expected_value",
+    "name_parts,sub_index,modifiers,flags,sign,expected_value",
     [
         ((ValueToken("kur"),), 1, [], [], None, "kur"),
         ((ValueToken("kurʾ"),), 1, [], [], None, "kurʾ"),
@@ -156,15 +156,16 @@ def test_unclear_sign_with_flags():
         ),
     ],
 )
-def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
-    reading = Reading.of(name, sub_index, modifiers, flags, sign)
+def test_reading(name_parts, sub_index, modifiers, flags, sign, expected_value):
+    reading = Reading.of(name_parts, sub_index, modifiers, flags, sign)
 
-    expected_parts = (*name, sign) if sign else name
+    expected_parts = (*name_parts, sign) if sign else name_parts
     assert reading.value == expected_value
     assert (
         reading.get_key()
         == f"Reading⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in expected_parts)}⟩"
     )
+    assert reading.name_parts == name_parts
     assert reading.modifiers == tuple(modifiers)
     assert reading.flags == tuple(flags)
     assert reading.lemmatizable is False
@@ -173,8 +174,8 @@ def test_reading(name, sub_index, modifiers, flags, sign, expected_value):
     serialized = {
         "type": "Reading",
         "value": expected_value,
-        "name": "".join(token.value for token in name),
-        "nameParts": [dump_token(token) for token in name],
+        "name": "".join(token.value for token in name_parts),
+        "nameParts": [dump_token(token) for token in name_parts],
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
@@ -211,7 +212,7 @@ def test_invalid_reading(name, sub_index):
 
 
 @pytest.mark.parametrize(
-    "name,sub_index,modifiers,flags,sign,surrogate,expected_value",
+    "name_parts,sub_index,modifiers,flags,sign,surrogate,expected_value",
     [
         ((ValueToken("KUR"),), 1, [], [], None, [], "KUR"),
         ((ValueToken("KURʾ"),), 1, [], [], None, [], "KURʾ"),
@@ -267,15 +268,18 @@ def test_invalid_reading(name, sub_index):
         ),
     ],
 )
-def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_value):
-    logogram = Logogram.of(name, sub_index, modifiers, flags, sign, surrogate)
+def test_logogram(
+    name_parts, sub_index, modifiers, flags, sign, surrogate, expected_value
+):
+    logogram = Logogram.of(name_parts, sub_index, modifiers, flags, sign, surrogate)
 
-    expected_parts = (*name, sign) if sign else name
+    expected_parts = (*name_parts, sign) if sign else name_parts
     assert logogram.value == expected_value
     assert (
         logogram.get_key()
         == f"Logogram⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in expected_parts)}⟩"
     )
+    assert logogram.name_parts == name_parts
     assert logogram.modifiers == tuple(modifiers)
     assert logogram.flags == tuple(flags)
     assert logogram.lemmatizable is False
@@ -285,8 +289,8 @@ def test_logogram(name, sub_index, modifiers, flags, sign, surrogate, expected_v
     serialized = {
         "type": "Logogram",
         "value": expected_value,
-        "name": "".join(token.value for token in name),
-        "nameParts": [dump_token(token) for token in name],
+        "name": "".join(token.value for token in name_parts),
+        "nameParts": [dump_token(token) for token in name_parts],
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
@@ -304,7 +308,7 @@ def test_invalid_logogram(name, sub_index):
 
 
 @pytest.mark.parametrize(
-    "name,modifiers,flags,sign,expected_value",
+    "name_parts,modifiers,flags,sign,expected_value",
     [
         ((ValueToken("1"),), [], [], None, "1"),
         ((ValueToken("1"), BrokenAway.open(), ValueToken("4")), [], [], None, "1[4"),
@@ -321,16 +325,17 @@ def test_invalid_logogram(name, sub_index):
         ),
     ],
 )
-def test_number(name, modifiers, flags, sign, expected_value):
-    number = Number.of(name, modifiers, flags, sign)
+def test_number(name_parts, modifiers, flags, sign, expected_value):
+    number = Number.of(name_parts, modifiers, flags, sign)
 
     expected_sub_index = 1
-    expected_parts = (*name, sign) if sign else name
+    expected_parts = (*name_parts, sign) if sign else name_parts
     assert number.value == expected_value
     assert (
         number.get_key()
         == f"Number⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in expected_parts)}⟩"
     )
+    assert number.name_parts == name_parts
     assert number.sub_index == expected_sub_index
     assert number.modifiers == tuple(modifiers)
     assert number.flags == tuple(flags)
@@ -340,8 +345,8 @@ def test_number(name, modifiers, flags, sign, expected_value):
     serialized = {
         "type": "Number",
         "value": expected_value,
-        "name": "".join(token.value for token in name),
-        "nameParts": [dump_token(token) for token in name],
+        "name": "".join(token.value for token in name_parts),
+        "nameParts": [dump_token(token) for token in name_parts],
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],

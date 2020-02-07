@@ -102,7 +102,7 @@ SignName = Sequence[Union[ValueToken, BrokenAway]]
 
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
-    name: SignName
+    name_parts: SignName
     sub_index: Optional[int] = attr.ib(default=1)
     sign: Optional[Token] = None
 
@@ -114,13 +114,13 @@ class NamedSign(AbstractSign):
     @property
     def parts(self) -> Sequence[Token]:
         if self.sign:
-            return (*self.name, self.sign)
+            return (*self.name_parts, self.sign)
         else:
-            return self.name
+            return self.name_parts
 
     @property
     def value(self) -> str:
-        name = "".join(token.value for token in self.name)
+        name = "".join(token.value for token in self.name_parts)
         sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
