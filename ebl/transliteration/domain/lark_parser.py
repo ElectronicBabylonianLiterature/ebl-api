@@ -383,6 +383,10 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Surface.from_atf(str(surface)), str(text))
 
     @v_args(inline=True)
+    def ebl_atf_dollar_line__SCOPE(self, scope):
+        return ScopeContainer(atf.Scope(str(scope)))
+
+    @v_args(inline=True)
     def ebl_atf_dollar_line__EXTENT(self, extent):
         return atf.Extent(str(extent))
 

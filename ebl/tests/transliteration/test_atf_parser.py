@@ -1,5 +1,5 @@
 import pytest
-from hamcrest import assert_that, has_entries, starts_with, contains_exactly
+from hamcrest import assert_that, contains, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -1121,6 +1121,10 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        (
+            "$ 2 lines",
+            [StrictDollarLine(None, 2, ScopeContainer(atf.Scope.LINES), None, None,)],
+        ),
         (
             "$ at most 1-3 object stone blank ?",
             [

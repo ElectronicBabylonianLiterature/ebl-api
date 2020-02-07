@@ -13,7 +13,7 @@ _WORD_SEPARATOR: " "
 
 !old.-2: /.+/?
 
-strict : [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scope [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
+strict : [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
 
 
 QUALIFICATION : "at least" | "at most" | "about"
@@ -24,7 +24,9 @@ range.2 : NUMBER _WORD_SEPARATOR? "-" _WORD_SEPARATOR? NUMBER
 NUMBER : SIGNED_NUMBER
 
 
-_scope : _object | _surface
+_scopes : SCOPE | _object | _surface |
+SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface"
+
 
 TEXT : /([^\s]+)/
 

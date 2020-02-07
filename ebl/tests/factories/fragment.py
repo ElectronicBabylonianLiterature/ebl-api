@@ -176,6 +176,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 ),
             ),
+            TextL,
         )
     )
     signs = (
