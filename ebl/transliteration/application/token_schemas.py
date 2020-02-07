@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import List, Mapping, Optional, Sequence, Tuple, Type, Union
+from functools import singledispatch
+from typing import List, Mapping, Optional, Sequence, Tuple, Type
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
@@ -273,13 +274,19 @@ def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
     return None if named_sign.sign is None else dump_token(named_sign.sign)
 
 
-def _load_sign(sign: Optional[Union[str, dict]]) -> Optional[Token]:
-    if sign is None:
-        return sign
-    elif isinstance(sign, str):
-        return ValueToken(sign)
-    else:
-        return load_token(sign)
+@singledispatch
+def _load_sign(sign) -> Optional[Token]:
+    return load_token(sign)
+
+
+@_load_sign.register
+def _load_sign_none(sign: None) -> None:
+    return sign
+
+
+@_load_sign.register
+def _load_sign_str(sign: str) -> Token:
+    return ValueToken(sign)
 
 
 class NamedSignSchema(Schema):
