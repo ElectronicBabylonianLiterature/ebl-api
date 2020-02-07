@@ -317,7 +317,11 @@ class ReadingSchema(NamedSignSchema):
 
 class LogogramSchema(NamedSignSchema):
     type = fields.Constant("Logogram", required=True)
-    surrogate = fields.List(fields.Dict(), missing=[])
+    surrogate = fields.Function(
+        lambda logogram: dump_tokens(logogram.surrogate),
+        lambda value: load_tokens(value),
+        missing=tuple(),
+    )
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -327,12 +331,8 @@ class LogogramSchema(NamedSignSchema):
             data["modifiers"],
             data["flags"],
             data["sign"],
-            load_tokens(data["surrogate"]),
+            data["surrogate"],
         )
-
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {**data, "surrogate": dump_tokens(data["surrogate"])}
 
 
 class NumberSchema(NamedSignSchema):
