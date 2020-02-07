@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import List, Mapping, Optional, Sequence, Tuple, Type, Union
+from functools import singledispatch
+from typing import List, Mapping, Optional, Sequence, Tuple, Type
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
@@ -32,6 +33,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    NamedSign,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -268,98 +270,91 @@ class InWordNewlineSchema(Schema):
         return InWordNewline()
 
 
-def _load_sign(sign: Optional[Union[str, dict]]) -> Optional[Token]:
-    if sign is None:
-        return sign
-    elif isinstance(sign, str):
-        return ValueToken(sign)
-    else:
-        return load_token(sign)
+def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
+    return None if named_sign.sign is None else dump_token(named_sign.sign)
 
 
-class ReadingSchema(Schema):
-    type = fields.Constant("Reading", required=True)
+@singledispatch
+def _load_sign(sign) -> Optional[Token]:
+    return load_token(sign)
+
+
+@_load_sign.register
+def _load_sign_none(sign: None) -> None:
+    return sign
+
+
+@_load_sign.register
+def _load_sign_str(sign: str) -> Token:
+    return ValueToken(sign)
+
+
+class NamedSignSchema(Schema):
     value = fields.String(required=True)
-    name = fields.String(required=True)
+    name = fields.Function(
+        lambda reading: "".join(token.value for token in reading.name),
+        lambda name: name,
+        required=True,
+    )
+    name_parts = fields.Function(
+        lambda reading: dump_tokens(reading.name),
+        lambda data: load_tokens(data),
+        missing=None,
+        data_key="nameParts",
+    )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Raw(missing=None)
+    sign = fields.Function(_dump_sign, _load_sign, missing=None)
+
+
+class ReadingSchema(NamedSignSchema):
+    type = fields.Constant("Reading", required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
         return Reading.of(
-            data["name"],
+            data["name_parts"] or (ValueToken(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
-            _load_sign(data["sign"]),
+            data["sign"],
         )
 
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "sign": data["sign"] and dump_token(data["sign"]),
-        }
 
-
-class LogogramSchema(Schema):
+class LogogramSchema(NamedSignSchema):
     type = fields.Constant("Logogram", required=True)
-    value = fields.String(required=True)
-    name = fields.String(required=True)
-    sub_index = fields.Integer(data_key="subIndex", allow_none=True)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Raw(missing=None)
-    surrogate = fields.List(fields.Dict(), missing=[])
+    surrogate = fields.Function(
+        lambda logogram: dump_tokens(logogram.surrogate),
+        lambda value: load_tokens(value),
+        missing=tuple(),
+    )
 
     @post_load
     def make_token(self, data, **kwargs):
         return Logogram.of(
-            data["name"],
+            data["name_parts"] or (ValueToken(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
-            _load_sign(data["sign"]),
-            load_tokens(data["surrogate"]),
+            data["sign"],
+            data["surrogate"],
         )
 
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "surrogate": dump_tokens(data["surrogate"]),
-            "sign": data["sign"] and dump_token(data["sign"]),
-        }
 
-
-class NumberSchema(Schema):
+class NumberSchema(NamedSignSchema):
     type = fields.Constant("Number", required=True)
-    value = fields.String(required=True)
     numeral = fields.Integer(load_only=True)
-    name = fields.String(missing=None)
-    sub_index = fields.Integer(data_key="subIndex", missing=1)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Raw(missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
-            data["name"] or str(data["numeral"]),
+            data["name_parts"] or (ValueToken(data["name"]),),
             data["modifiers"],
             data["flags"],
-            _load_sign(data["sign"]),
+            data["sign"],
             data["sub_index"],
         )
-
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "sign": data["sign"] and dump_token(data["sign"]),
-        }
 
 
 class WordSchema(Schema):

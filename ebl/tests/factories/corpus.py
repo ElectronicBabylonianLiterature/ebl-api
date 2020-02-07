@@ -82,12 +82,12 @@ class ManuscriptLineFactory(factory.Factory):
             Word(
                 "ku]-nu-ši",
                 parts=[
-                    Reading.of("ku"),
+                    Reading.of_name("ku"),
                     BrokenAway.close(),
                     Joiner.hyphen(),
-                    Reading.of("nu"),
+                    Reading.of_name("nu"),
                     Joiner.hyphen(),
-                    Reading.of("ši"),
+                    Reading.of_name("ši"),
                 ],
             ),
         ),

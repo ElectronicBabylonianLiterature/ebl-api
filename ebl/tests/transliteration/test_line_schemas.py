@@ -26,8 +26,10 @@ LINES = [
             LineNumberLabel.from_atf("1."),
             [
                 DocumentOrientedGloss.open(),
-                Word("bu", parts=[Reading.of("bu")]),
-                LoneDeterminative("{d}", parts=[Determinative([Reading.of("d")]),],),
+                Word("bu", parts=[Reading.of_name("bu")]),
+                LoneDeterminative(
+                    "{d}", parts=[Determinative([Reading.of_name("d")]),],
+                ),
             ],
         ),
         {
@@ -36,9 +38,9 @@ LINES = [
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
-                    Word("bu", parts=[Reading.of("bu")]),
+                    Word("bu", parts=[Reading.of_name("bu")]),
                     LoneDeterminative(
-                        "{d}", parts=[Determinative([Reading.of("d")]),],
+                        "{d}", parts=[Determinative([Reading.of_name("d")]),],
                     ),
                 ]
             ),
