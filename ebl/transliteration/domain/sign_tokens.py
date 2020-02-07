@@ -148,7 +148,7 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(modifiers, flags, (ValueToken(name),), sub_index, sign)
+        return Reading.of((ValueToken(name),), sub_index, modifiers, flags, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -186,8 +186,8 @@ class Logogram(NamedSign):
         sign: Optional[Token] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
-        return Logogram(
-            modifiers, flags, (ValueToken(name),), sub_index, sign, surrogate
+        return Logogram.of(
+            (ValueToken(name),), sub_index, modifiers, flags, sign, surrogate
         )
 
 
@@ -211,7 +211,7 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(modifiers, flags, (ValueToken(name),), sub_index, sign)
+        return Number.of((ValueToken(name),), modifiers, flags, sign, sub_index)
 
 
 @attr.s(auto_attribs=True, frozen=True)
