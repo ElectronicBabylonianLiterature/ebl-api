@@ -32,6 +32,7 @@ from ebl.transliteration.domain.sign_tokens import (
     Reading,
     UnclearSign,
     UnidentifiedSign,
+    NamedSign,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -268,6 +269,10 @@ class InWordNewlineSchema(Schema):
         return InWordNewline()
 
 
+def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
+    return None if named_sign.sign is None else dump_token(named_sign.sign)
+
+
 def _load_sign(sign: Optional[Union[str, dict]]) -> Optional[Token]:
     if sign is None:
         return sign
@@ -294,7 +299,7 @@ class ReadingSchema(Schema):
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Raw(missing=None)
+    sign = fields.Function(_dump_sign, _load_sign, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -303,15 +308,8 @@ class ReadingSchema(Schema):
             data["sub_index"],
             data["modifiers"],
             data["flags"],
-            _load_sign(data["sign"]),
+            data["sign"],
         )
-
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "sign": data["sign"] and dump_token(data["sign"]),
-        }
 
 
 class LogogramSchema(Schema):
@@ -331,7 +329,7 @@ class LogogramSchema(Schema):
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Raw(missing=None)
+    sign = fields.Function(_dump_sign, _load_sign, missing=None)
     surrogate = fields.List(fields.Dict(), missing=[])
 
     @post_load
@@ -341,17 +339,13 @@ class LogogramSchema(Schema):
             data["sub_index"],
             data["modifiers"],
             data["flags"],
-            _load_sign(data["sign"]),
+            data["sign"],
             load_tokens(data["surrogate"]),
         )
 
     @post_dump
     def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "surrogate": dump_tokens(data["surrogate"]),
-            "sign": data["sign"] and dump_token(data["sign"]),
-        }
+        return {**data, "surrogate": dump_tokens(data["surrogate"])}
 
 
 class NumberSchema(Schema):
@@ -372,7 +366,7 @@ class NumberSchema(Schema):
     sub_index = fields.Integer(data_key="subIndex", missing=1)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Raw(missing=None)
+    sign = fields.Function(_dump_sign, _load_sign, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -380,16 +374,9 @@ class NumberSchema(Schema):
             data["name_parts"] or (ValueToken(data["name"]),),
             data["modifiers"],
             data["flags"],
-            _load_sign(data["sign"]),
+            data["sign"],
             data["sub_index"],
         )
-
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return {
-            **data,
-            "sign": data["sign"] and dump_token(data["sign"]),
-        }
 
 
 class WordSchema(Schema):
