@@ -282,8 +282,7 @@ def _load_sign(sign: Optional[Union[str, dict]]) -> Optional[Token]:
         return load_token(sign)
 
 
-class ReadingSchema(Schema):
-    type = fields.Constant("Reading", required=True)
+class NamedSignSchema(Schema):
     value = fields.String(required=True)
     name = fields.Function(
         lambda reading: "".join(token.value for token in reading.name),
@@ -300,6 +299,10 @@ class ReadingSchema(Schema):
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
     sign = fields.Function(_dump_sign, _load_sign, missing=None)
+
+
+class ReadingSchema(NamedSignSchema):
+    type = fields.Constant("Reading", required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -312,24 +315,8 @@ class ReadingSchema(Schema):
         )
 
 
-class LogogramSchema(Schema):
+class LogogramSchema(NamedSignSchema):
     type = fields.Constant("Logogram", required=True)
-    value = fields.String(required=True)
-    name = fields.Function(
-        lambda reading: "".join(token.value for token in reading.name),
-        lambda name: name,
-        required=True,
-    )
-    name_parts = fields.Function(
-        lambda reading: dump_tokens(reading.name),
-        lambda data: load_tokens(data),
-        missing=None,
-        data_key="nameParts",
-    )
-    sub_index = fields.Integer(data_key="subIndex", allow_none=True)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Function(_dump_sign, _load_sign, missing=None)
     surrogate = fields.List(fields.Dict(), missing=[])
 
     @post_load
@@ -348,25 +335,9 @@ class LogogramSchema(Schema):
         return {**data, "surrogate": dump_tokens(data["surrogate"])}
 
 
-class NumberSchema(Schema):
+class NumberSchema(NamedSignSchema):
     type = fields.Constant("Number", required=True)
-    value = fields.String(required=True)
     numeral = fields.Integer(load_only=True)
-    name = fields.Function(
-        lambda reading: "".join(token.value for token in reading.name),
-        lambda name: name,
-        required=True,
-    )
-    name_parts = fields.Function(
-        lambda reading: dump_tokens(reading.name),
-        lambda data: load_tokens(data),
-        missing=None,
-        data_key="nameParts",
-    )
-    sub_index = fields.Integer(data_key="subIndex", missing=1)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Function(_dump_sign, _load_sign, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
