@@ -42,7 +42,7 @@ generic_surface : SURFACE_GENERIC _WORD_SEPARATOR TEXT
 SURFACE_GENERIC : "surface"
 
 
-STATE : "blank" | "broken" | "effaced" | "illegible" | "missing " | "traces "
+STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces "
     | "omitted" | "continues"
 
 STATUS : "*" | "?" | "!" | "!?"

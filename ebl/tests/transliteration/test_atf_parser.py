@@ -1122,6 +1122,18 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
     "line,expected_tokens",
     [
         (
+            "$ at least 1 obverse missing",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.OBVERSE, ""),
+                    atf.State.MISSING,
+                    None,
+                )
+            ],
+        ),
+        (
             "$ 2 lines",
             [StrictDollarLine(None, 2, ScopeContainer(atf.Scope.LINES), None, None,)],
         ),
@@ -1132,8 +1144,8 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Qualification.AT_MOST,
                     (1, 3),
                     ScopeContainer(atf.Object.OBJECT, "stone"),
-                    atf.State("blank"),
-                    atf.Status("?"),
+                    atf.State.BLANK,
+                    atf.Status.UNCERTAIN,
                 )
             ],
         ),
