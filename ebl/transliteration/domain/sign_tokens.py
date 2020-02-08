@@ -1,12 +1,12 @@
-import re
 from abc import abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import Iterable, Optional, Sequence, Tuple, Union
 
 import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import to_sub_index
-from ebl.transliteration.domain.tokens import Token, convert_token_sequence, ValueToken
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.tokens import Token, ValueToken, convert_token_sequence
 
 
 def convert_string_sequence(strings: Iterable[str]) -> Tuple[str, ...]:
@@ -97,15 +97,14 @@ class Divider(AbstractSign):
         return Divider(modifiers, flags, divider)
 
 
+SignName = Sequence[Union[ValueToken, BrokenAway]]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
-    name: str = attr.ib()
-    sub_index: Optional[int] = attr.ib()
-    sign: Optional[Token]
-
-    @abstractmethod
-    def _check_name(self, _attribute, value):
-        ...
+    name_parts: SignName
+    sub_index: Optional[int] = attr.ib(default=1)
+    sign: Optional[Token] = None
 
     @sub_index.validator
     def _check_sub_index(self, _attribute, value):
@@ -115,34 +114,41 @@ class NamedSign(AbstractSign):
     @property
     def parts(self) -> Sequence[Token]:
         if self.sign:
-            return (self.sign,)
+            return (*self.name_parts, self.sign)
         else:
-            return tuple()
+            return self.name_parts
 
     @property
     def value(self) -> str:
+        name = "".join(token.value for token in self.name_parts)
         sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
         sign = f"({self.sign.value})" if self.sign else ""
-        return f"{self.name}{sub_index}{modifiers}{flags}{sign}"
+        return f"{name}{sub_index}{modifiers}{flags}{sign}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Reading(NamedSign):
-    def _check_name(self, _attribute, value):
-        if not value.islower() and value != "ʾ":
-            raise ValueError("Readings must be lowercase.")
-
     @staticmethod
     def of(
-        name: str,
+        name: SignName,
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
         return Reading(modifiers, flags, name, sub_index, sign)
+
+    @staticmethod
+    def of_name(
+        name: str,
+        sub_index: Optional[int] = 1,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[Token] = None,
+    ) -> "Reading":
+        return Reading.of((ValueToken(name),), sub_index, modifiers, flags, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -160,13 +166,9 @@ class Logogram(NamedSign):
         )
         return f"{super().value}{surrogate}"
 
-    def _check_name(self, _attribute, value):
-        if not value.isupper() and value != "ʾ":
-            raise ValueError("Logograms must be uppercase.")
-
     @staticmethod
     def of(
-        name: str,
+        name: SignName,
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
@@ -175,22 +177,41 @@ class Logogram(NamedSign):
     ) -> "Logogram":
         return Logogram(modifiers, flags, name, sub_index, sign, surrogate)
 
+    @staticmethod
+    def of_name(
+        name: str,
+        sub_index: Optional[int] = 1,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[Token] = None,
+        surrogate: Sequence[Token] = tuple(),
+    ) -> "Logogram":
+        return Logogram.of(
+            (ValueToken(name),), sub_index, modifiers, flags, sign, surrogate
+        )
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Number(NamedSign):
-    def _check_name(self, _attribute, value):
-        if not re.fullmatch(r"[0-9\[\]]+", value):
-            raise ValueError("Numbers can only contain decimal digits, [, and ].")
-
     @staticmethod
     def of(
-        name: str,
+        name: SignName,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
         return Number(modifiers, flags, name, sub_index, sign)
+
+    @staticmethod
+    def of_name(
+        name: str,
+        modifiers: Sequence[str] = tuple(),
+        flags: Sequence[atf.Flag] = tuple(),
+        sign: Optional[Token] = None,
+        sub_index: int = 1,
+    ) -> "Number":
+        return Number.of((ValueToken(name),), modifiers, flags, sign, sub_index)
 
 
 @attr.s(auto_attribs=True, frozen=True)

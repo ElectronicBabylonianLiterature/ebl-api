@@ -27,7 +27,12 @@ from ebl.transliteration.domain.word_tokens import Word
 LINES: Tuple[Line, ...] = (
     TextLine.of_iterable(
         LineNumberLabel.from_atf("1."),
-        [Word("ha-am", parts=[Reading.of("ha"), Joiner.hyphen(), Reading.of("am"),],)],
+        [
+            Word(
+                "ha-am",
+                parts=[Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],
+            )
+        ],
     ),
     ControlLine.of_single("$", ValueToken(" single ruling")),
 )
@@ -78,7 +83,11 @@ def test_update_lemmatization():
                     Word(
                         "ha-am",
                         unique_lemma=(WordId("nu I"),),
-                        parts=[Reading.of("ha"), Joiner.hyphen(), Reading.of("am"),],
+                        parts=[
+                            Reading.of_name("ha"),
+                            Joiner.hyphen(),
+                            Reading.of_name("am"),
+                        ],
                     ),
                 ),
             ),
@@ -168,8 +177,8 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("mu", parts=[Reading.of("mu")]),
-                            Word("nu", parts=[Reading.of("nu")]),
+                            Word("mu", parts=[Reading.of_name("mu")]),
+                            Word("nu", parts=[Reading.of_name("nu")]),
                         ],
                     )
                 ]
@@ -179,11 +188,11 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("mu", parts=[Reading.of("mu")]),
+                            Word("mu", parts=[Reading.of_name("mu")]),
                             Word(
                                 "nu",
                                 unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of("nu")],
+                                parts=[Reading.of_name("nu")],
                             ),
                         ],
                     )
@@ -199,12 +208,12 @@ def test_update_lemmatization_wrong_lines():
                             Word(
                                 "nu",
                                 unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of("nu")],
+                                parts=[Reading.of_name("nu")],
                             ),
                             Word(
                                 "nu",
                                 unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of("nu")],
+                                parts=[Reading.of_name("nu")],
                             ),
                         ],
                     )
@@ -215,8 +224,8 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("mu", parts=[Reading.of("mu")]),
-                            Word("nu", parts=[Reading.of("nu")]),
+                            Word("mu", parts=[Reading.of_name("mu")]),
+                            Word("nu", parts=[Reading.of_name("nu")]),
                         ],
                     )
                 ]
@@ -226,11 +235,11 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("mu", parts=[Reading.of("mu")]),
+                            Word("mu", parts=[Reading.of_name("mu")]),
                             Word(
                                 "nu",
                                 unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of("nu")],
+                                parts=[Reading.of_name("nu")],
                             ),
                         ],
                     )

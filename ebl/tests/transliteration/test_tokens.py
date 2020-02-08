@@ -218,7 +218,7 @@ def test_invalid_column():
 
 
 def test_variant():
-    reading = Reading.of("sal")
+    reading = Reading.of_name("sal")
     divider = Divider.of(":")
     variant = Variant.of(reading, divider)
 

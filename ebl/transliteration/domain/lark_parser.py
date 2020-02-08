@@ -11,13 +11,13 @@ from lark.visitors import Transformer, v_args
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
-    IntentionalOmission,
+    AccidentalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
+    IntentionalOmission,
     LinguisticGloss,
-    AccidentalOmission,
     PerhapsBrokenAway,
     PhoneticGloss,
     Removal,
@@ -107,23 +107,39 @@ class TreeToSign(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(name.value, sub_index, modifiers, flags, sign)
+        return Reading.of(tuple(name.children), sub_index, modifiers, flags, sign)
+
+    @v_args()
+    def ebl_atf_text_line__value_name_part(self, children):
+        return ValueToken("".join(children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__logogram(self, name, sub_index, modifiers, flags, sign=None):
-        return Logogram.of(name.value, sub_index, modifiers, flags, sign)
+        return Logogram.of(tuple(name.children), sub_index, modifiers, flags, sign)
 
     @v_args(inline=True)
     def ebl_atf_text_line__surrogate(
         self, name, sub_index, modifiers, flags, surrogate
     ):
         return Logogram.of(
-            name.value, sub_index, modifiers, flags, None, surrogate.children
+            tuple(name.children), sub_index, modifiers, flags, None, surrogate.children
         )
+
+    @v_args()
+    def ebl_atf_text_line__logogram_name_part(self, children):
+        return ValueToken("".join(children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__number(self, number, modifiers, flags, sign=None):
-        return Number.of(number.value, modifiers, flags, sign)
+        return Number.of(tuple(number.children), modifiers, flags, sign)
+
+    @v_args()
+    def ebl_atf_text_line__number_name_head(self, children):
+        return ValueToken("".join(children))
+
+    @v_args()
+    def ebl_atf_text_line__number_name_part(self, children):
+        return ValueToken("".join(children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__sub_index(self, sub_index=""):
