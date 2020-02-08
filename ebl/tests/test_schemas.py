@@ -38,8 +38,8 @@ def test_value_enum_none():
 def test_value_enum_exception():
     with pytest.raises(ValidationError):
         obj = {"value": "not an enum", "name": TestEnum.TWO}
-        obj_deserialized = TestSchema().dump(obj)
+        TestSchema().dump(obj)
 
     with pytest.raises(ValidationError):
         obj_dict = {"value": "invalid value", "name": "TWO"}
-        obj = TestSchema().load(obj)
+        TestSchema().load(obj)
