@@ -387,12 +387,24 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Object(str(object)), str(text))
 
     @v_args(inline=True)
+    def ebl_atf_dollar_line__fragment(self, text):
+        return ScopeContainer(atf.Object.FRAGMENT, str(text))
+
+    @v_args(inline=True)
     def ebl_atf_dollar_line__SURFACE(self, surface):
         return ScopeContainer(atf.Surface.from_atf(str(surface)))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__generic_surface(self, surface, text):
         return ScopeContainer(atf.Surface.from_atf(str(surface)), str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__face(self, text):
+        return ScopeContainer(atf.Surface.FACE, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__edge(self, text):
+        return ScopeContainer(atf.Surface.EDGE, str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__SCOPE(self, scope):

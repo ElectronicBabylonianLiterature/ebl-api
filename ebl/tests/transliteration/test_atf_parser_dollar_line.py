@@ -213,3 +213,139 @@ def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
 )
 def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ (at least 1 surface thing)",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "thing"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ at least 1 surface",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Scope.SURFACE, ""),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ at least 1 surface missing",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Scope.SURFACE, ""),
+                    atf.State.MISSING,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ at least 1 surface wall missing",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "wall"),
+                    atf.State.MISSING,
+                    None,
+                )
+            ],
+        ),
+    ],
+)
+def test_parse_atf_surface_ambiguity_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ at least 1 fragment a",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Object.FRAGMENT, "a"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+    ],
+)
+def test_parse_atf_fragment_object_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ at least 1 face a",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.FACE, "a"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+    ],
+)
+def test_parse_atf_face_surface_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ at least 1 edge",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.EDGE, ""),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ at least 1 edge a",
+            [
+                StrictDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.EDGE, "a"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+    ],
+)
+def test_parse_atf_edge_surface_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines

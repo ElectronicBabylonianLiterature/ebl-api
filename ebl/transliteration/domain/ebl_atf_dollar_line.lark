@@ -23,14 +23,20 @@ NUMBER : SIGNED_NUMBER
 _scopes : SCOPE | _object | _surface
 SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface"
 
-_object : OBJECT | generic_object
-OBJECT: "tablet" | "envelope" | "prism" | "bulla" | "fragment"
+_object : OBJECT | generic_object | fragment
+OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+fragment: "fragment" _WORD_SEPARATOR TEXT
 generic_object : OBJECT_GENERIC _WORD_SEPARATOR TEXT
 OBJECT_GENERIC : "object"
-TEXT : /([^\s]+)/
+TEXT : /([^\s)]+)/
 
-_surface : SURFACE | generic_surface
+//have to copy all strict rules and just change TEXT to /[^)]+/ so in a loose line the TEXT of a strict rule doesn't match the closing bracket
+// currently no closing brackets in strict (generally) isn't allowed in e.g. TEXT to solve this issue
+
+_surface : SURFACE | generic_surface | face | edge
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
+face: "face" _WORD_SEPARATOR LOWER_CASE_LETTER
+edge: "edge" _WORD_SEPARATOR LOWER_CASE_LETTER
 generic_surface : SURFACE_GENERIC _WORD_SEPARATOR TEXT
 SURFACE_GENERIC : "surface"
 
@@ -40,8 +46,10 @@ STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces "
 
 STATUS : "*" | "?" | "!" | "!?"
 
-_looses.-1: "(" (strict | loose) ")"
-!loose.-1 : /[^)]+/
+_looses: "(" (strict | loose) ")"
+!loose.-2 : /[^)]+/
+
+
 
 ruling : RULING_NUMBER _WORD_SEPARATOR RULING
 RULING_NUMBER : "single" | "double" | "triple"

@@ -52,6 +52,7 @@ http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/ind
     RIGHT = ("right", "r.e.")
     TOP = ("top", "t.e.")
     SURFACE = ("surface", None)
+    FACE = ("face", None)
 
     def __init__(self, atf: str, label: Optional[str]):
         self.atf = atf
@@ -130,6 +131,7 @@ class Scope(Enum):
     CASES = "cases"
     SIDE = "side"
     EXCERPT = "excerpt"
+    SURFACE = "surface"
 
 
 class Qualification(Enum):

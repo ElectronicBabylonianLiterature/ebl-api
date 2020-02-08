@@ -60,7 +60,7 @@ extent= "serveral" | "some" | number | range | "rest of"
     | "start of" | beginning of |"middle of" | "end of";
       
 scope = object | surface | "column" | "columns" | "line" 
-    | "lines" | "case" | "cases" | "side" | "excerpt";
+    | "lines" | "case" | "cases" | "side" | "excerpt" | "surface";
 
 state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces ";
     | "omitted" | "continues";
@@ -69,12 +69,18 @@ status = "*" | "?" | "!" | "!?" ;
 
 range = NUMBER, "-", NUMBER;
 
-object = "tablet" | "envelope" | "prism" | "bulla" | "fragment" | generic-object
+object = "tablet" | "envelope" | "prism" | "bulla" | fragment | generic-object
+
+fragment = "fragment", text
 
 generic-object = "object", text
 
 surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom" 
-    | "face" | generic-surface | "edge" 
+    | face | generic-surface | edge
+
+face = "face", lower-case-letter
+
+edge = "edge", lower-case-letter
     
 generic-surface = "surface", text
 

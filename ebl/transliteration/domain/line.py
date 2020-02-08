@@ -139,7 +139,11 @@ class ScopeContainer:
     def _check_text(self, attribute, value):
         if value:
             if not (
-                self.content == atf.Object.OBJECT or self.content == atf.Surface.SURFACE
+                self.content == atf.Object.OBJECT
+                or self.content == atf.Surface.SURFACE
+                or self.content == atf.Object.FRAGMENT
+                or self.content == atf.Surface.FACE
+                or self.content == atf.Surface.EDGE
             ):
                 raise ValueError(
                     "text can only be initialized if the content is 'object' or 'surface'"
