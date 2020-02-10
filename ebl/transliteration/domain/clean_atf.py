@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Mapping
 
 import attr
 import pydash
@@ -9,15 +9,23 @@ from ebl.transliteration.domain.atf import (
     Atf,
     CommentaryProtocol,
     FLAGS,
-    LACUNA,
     VARIANT_SEPARATOR,
     WORD_SEPARATOR,
+    UNKNOWN_NUMBER_OF_SIGNS,
+    BROKEN_AWAY,
 )
+from ebl.transliteration.domain.side import Side
 
 CONTROL_LINE = r"^(@|\$(( ?(single|double|triple))| )|#|&)"
 MULTIPLEX_COMMENT = r"=:"
 IGNORE_LINE_PATTERN = r"|".join([CONTROL_LINE, MULTIPLEX_COMMENT])
 
+
+LACUNA: Mapping[str, str] = {
+    "begin": re.escape(BROKEN_AWAY[Side.LEFT]),
+    "end": re.escape(BROKEN_AWAY[Side.RIGHT]),
+    "undeterminable": re.escape(UNKNOWN_NUMBER_OF_SIGNS),
+}
 
 LINE_NUMBER = r"^[^ ]+\.\s+"
 OMISSION = r"<\(?[^>]+\)?>"
