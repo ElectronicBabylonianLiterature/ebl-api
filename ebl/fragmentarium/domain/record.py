@@ -1,6 +1,6 @@
 import datetime
 from enum import Enum
-from typing import Tuple
+from typing import Sequence
 
 import attr
 
@@ -35,7 +35,7 @@ class RecordEntry:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Record:
-    entries: Tuple[RecordEntry, ...] = tuple()
+    entries: Sequence[RecordEntry] = tuple()
 
     def add_entry(
         self, old_transliteration: str, new_transliteration: str, user: User

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import factory
 
@@ -50,7 +50,7 @@ class FragmentFactory(factory.Factory):
 class InterestingFragmentFactory(FragmentFactory):
     collection = "Kuyunjik"
     publication = ""
-    joins: Tuple[str, ...] = tuple()
+    joins: Sequence[str] = tuple()
     text = Text()
     uncurated_references = (
         UncuratedReference("7(0)"),

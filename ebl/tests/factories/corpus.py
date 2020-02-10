@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import factory.fuzzy
 import pydash
@@ -116,7 +116,7 @@ class LineFactory(factory.Factory):
             (Modifier.DAMAGED,),
         ),
     )
-    manuscripts: Tuple[ManuscriptLine, ...] = factory.List(
+    manuscripts: Sequence[ManuscriptLine] = factory.List(
         [factory.SubFactory(ManuscriptLineFactory)], TupleFactory
     )
 

@@ -1,4 +1,4 @@
-from typing import NewType, Optional, Tuple
+from typing import NewType, Optional, Sequence
 
 import attr
 
@@ -16,7 +16,7 @@ FragmentNumber = NewType("FragmentNumber", str)
 @attr.s(auto_attribs=True, frozen=True)
 class UncuratedReference:
     document: str
-    pages: Tuple[int, ...] = tuple()
+    pages: Sequence[int] = tuple()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -39,16 +39,16 @@ class Fragment:
     width: Measure = Measure()
     length: Measure = Measure()
     thickness: Measure = Measure()
-    joins: Tuple[str, ...] = tuple()
+    joins: Sequence[str] = tuple()
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()
     signs: Optional[str] = None
     notes: str = ""
-    references: Tuple[Reference, ...] = tuple()
-    uncurated_references: Optional[Tuple[UncuratedReference, ...]] = None
+    references: Sequence[Reference] = tuple()
+    uncurated_references: Optional[Sequence[UncuratedReference]] = None
 
-    def set_references(self, references: Tuple[Reference, ...]) -> "Fragment":
+    def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
     def update_transliteration(

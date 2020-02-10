@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import List, Optional, Sequence
 
 import attr
 import pydash
@@ -14,7 +14,7 @@ class LemmatizationError(Exception):
 @attr.s(auto_attribs=True, frozen=True)
 class LemmatizationToken:
     value: str
-    unique_lemma: Optional[Tuple[WordId, ...]] = None
+    unique_lemma: Optional[Sequence[WordId]] = None
 
     def to_dict(self) -> dict:
         return pydash.map_keys(
@@ -33,7 +33,7 @@ class LemmatizationToken:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Lemmatization:
-    tokens: Tuple[Tuple[LemmatizationToken, ...], ...] = tuple()
+    tokens: Sequence[Sequence[LemmatizationToken]] = tuple()
 
     def to_list(self) -> List[List[dict]]:
         return [[token.to_dict() for token in line] for line in self.tokens]

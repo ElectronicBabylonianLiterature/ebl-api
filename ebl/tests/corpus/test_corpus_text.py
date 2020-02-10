@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import pytest
 
@@ -201,7 +201,7 @@ def test_missing_manuscripts_are_invalid():
         (LineNumberLabel("1"),),
     ],
 )
-def test_invalid_labels(labels: Tuple[Label, ...]):
+def test_invalid_labels(labels: Sequence[Label]):
     with pytest.raises(ValueError):
         ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine())
 

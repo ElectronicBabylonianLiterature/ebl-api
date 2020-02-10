@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import attr
 import pydash
@@ -6,7 +6,7 @@ import pydash
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 
-Lines = Tuple[Tuple[str, ...], ...]
+Lines = Sequence[Sequence[str]]
 
 
 @attr.s(frozen=True, auto_attribs=True)

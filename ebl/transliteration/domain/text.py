@@ -1,4 +1,4 @@
-from typing import Iterable, Tuple
+from typing import Iterable, Sequence
 
 import attr
 import pydash
@@ -18,7 +18,7 @@ from ebl.transliteration.domain.word_tokens import Word
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
-    lines: Tuple[Line, ...] = tuple()
+    lines: Sequence[Line] = tuple()
     parser_version: str = ATF_PARSER_VERSION
 
     @property

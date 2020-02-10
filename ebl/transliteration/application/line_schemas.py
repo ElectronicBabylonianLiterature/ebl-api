@@ -1,4 +1,4 @@
-from typing import List, Mapping, Sequence, Tuple, Type
+from typing import List, Mapping, Sequence, Type
 
 from marshmallow import Schema, fields, post_load
 
@@ -59,5 +59,5 @@ def load_line(data: dict) -> Line:
     return _schemas[data["type"]]().load(data)
 
 
-def load_lines(lines: Sequence[dict]) -> Tuple[Line, ...]:
+def load_lines(lines: Sequence[dict]) -> Sequence[Line]:
     return tuple(map(load_line, lines))

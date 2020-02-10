@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import pytest
 
@@ -24,7 +24,7 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.word_tokens import Word
 
-LINES: Tuple[Line, ...] = (
+LINES: Sequence[Line] = (
     TextLine.of_iterable(
         LineNumberLabel.from_atf("1."),
         [
