@@ -1,5 +1,5 @@
 from functools import singledispatchmethod  # type: ignore
-from typing import List, Tuple
+from typing import List, Sequence
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.tokens import (
@@ -17,7 +17,7 @@ class LanguageVisitor(TokenVisitor):
         self._normalized: bool = DEFAULT_NORMALIZED
 
     @property
-    def tokens(self) -> Tuple[Token, ...]:
+    def tokens(self) -> Sequence[Token]:
         return tuple(self._tokens)
 
     @singledispatchmethod

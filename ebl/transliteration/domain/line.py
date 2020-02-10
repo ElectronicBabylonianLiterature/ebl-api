@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
+from typing import Callable, Iterable, Sequence, Type, TypeVar
 
 import attr
 import pydash
@@ -22,7 +22,7 @@ L = TypeVar("L", "TextLine", "Line")
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     prefix: str = ""
-    content: Tuple[Token, ...] = tuple()
+    content: Sequence[Token] = tuple()
 
     @property
     def key(self) -> str:
