@@ -112,6 +112,12 @@ class NamedSign(AbstractSign):
             raise ValueError("Sub-index must be >= 0.")
 
     @property
+    def name(self) -> str:
+        return "".join(
+            token.value for token in self.name_parts if type(token) == ValueToken
+        )
+
+    @property
     def parts(self) -> Sequence[Token]:
         if self.sign:
             return (*self.name_parts, self.sign)

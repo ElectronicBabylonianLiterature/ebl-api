@@ -291,11 +291,7 @@ def _load_sign_str(sign: str) -> Token:
 
 class NamedSignSchema(Schema):
     value = fields.String(required=True)
-    name = fields.Function(
-        lambda reading: "".join(token.value for token in reading.name_parts),
-        lambda name: name,
-        required=True,
-    )
+    name = fields.String(required=True)
     name_parts = fields.Function(
         lambda reading: dump_tokens(reading.name_parts),
         lambda data: load_tokens(data),
