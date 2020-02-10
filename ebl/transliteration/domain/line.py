@@ -6,13 +6,14 @@ import pydash
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.atf_visitor import AtfVisitor
 from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.language_visitor import LanguageVisitor
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
 T = TypeVar("T")
 L = TypeVar("L", "TextLine", "Line")
