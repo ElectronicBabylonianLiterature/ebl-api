@@ -113,11 +113,11 @@ def test_unclear_sign_with_flags():
 
 
 @pytest.mark.parametrize(
-    "name_parts,sub_index,modifiers,flags,sign,expected_value",
+    "name_parts,sub_index,modifiers,flags,sign,expected_value,expected_name",
     [
-        ((ValueToken("kur"),), 1, [], [], None, "kur"),
-        ((ValueToken("kurʾ"),), 1, [], [], None, "kurʾ"),
-        ((ValueToken("ʾ"),), 1, [], [], None, "ʾ"),
+        ((ValueToken("kur"),), 1, [], [], None, "kur", "kur"),
+        ((ValueToken("kurʾ"),), 1, [], [], None, "kurʾ", "kurʾ"),
+        ((ValueToken("ʾ"),), 1, [], [], None, "ʾ", "ʾ"),
         (
             (ValueToken("k"), BrokenAway.open(), ValueToken("ur")),
             1,
@@ -125,6 +125,7 @@ def test_unclear_sign_with_flags():
             [],
             None,
             "k[ur",
+            "kur",
         ),
         (
             (ValueToken("ku"), BrokenAway.close(), ValueToken("r")),
@@ -133,11 +134,12 @@ def test_unclear_sign_with_flags():
             [],
             None,
             "ku]r",
+            "kur",
         ),
-        ((ValueToken("kur"),), None, [], [], None, "kurₓ"),
-        ((ValueToken("kur"),), 0, [], [], None, "kur₀"),
-        ((ValueToken("kur"),), 1, [], [], Grapheme.of("KUR"), "kur(KUR)"),
-        ((ValueToken("kur"),), 1, ["@v", "@180"], [], None, "kur@v@180"),
+        ((ValueToken("kur"),), None, [], [], None, "kurₓ", "kur"),
+        ((ValueToken("kur"),), 0, [], [], None, "kur₀", "kur"),
+        ((ValueToken("kur"),), 1, [], [], Grapheme.of("KUR"), "kur(KUR)", "kur"),
+        ((ValueToken("kur"),), 1, ["@v", "@180"], [], None, "kur@v@180", "kur"),
         (
             (ValueToken("kur"),),
             1,
@@ -145,6 +147,7 @@ def test_unclear_sign_with_flags():
             [atf.Flag.DAMAGE, atf.Flag.CORRECTION],
             None,
             "kur#!",
+            "kur",
         ),
         (
             (ValueToken("kur"),),
@@ -153,10 +156,13 @@ def test_unclear_sign_with_flags():
             [atf.Flag.CORRECTION],
             Grapheme.of("KUR"),
             "kur₁₀@v!(KUR)",
+            "kur",
         ),
     ],
 )
-def test_reading(name_parts, sub_index, modifiers, flags, sign, expected_value):
+def test_reading(
+    name_parts, sub_index, modifiers, flags, sign, expected_value, expected_name
+):
     reading = Reading.of(name_parts, sub_index, modifiers, flags, sign)
 
     expected_parts = (*name_parts, sign) if sign else name_parts
@@ -166,6 +172,7 @@ def test_reading(name_parts, sub_index, modifiers, flags, sign, expected_value):
         == f"Reading⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in expected_parts)}⟩"
     )
     assert reading.name_parts == name_parts
+    assert reading.name == expected_name
     assert reading.modifiers == tuple(modifiers)
     assert reading.flags == tuple(flags)
     assert reading.lemmatizable is False
@@ -174,7 +181,7 @@ def test_reading(name_parts, sub_index, modifiers, flags, sign, expected_value):
     serialized = {
         "type": "Reading",
         "value": expected_value,
-        "name": "".join(token.value for token in name_parts),
+        "name": expected_name,
         "nameParts": [dump_token(token) for token in name_parts],
         "subIndex": sub_index,
         "modifiers": modifiers,
@@ -212,11 +219,11 @@ def test_invalid_reading(name, sub_index):
 
 
 @pytest.mark.parametrize(
-    "name_parts,sub_index,modifiers,flags,sign,surrogate,expected_value",
+    "name_parts,sub_index,modifiers,flags,sign,surrogate,expected_value,expected_name",
     [
-        ((ValueToken("KUR"),), 1, [], [], None, [], "KUR"),
-        ((ValueToken("KURʾ"),), 1, [], [], None, [], "KURʾ"),
-        ((ValueToken("ʾ"),), 1, [], [], None, [], "ʾ"),
+        ((ValueToken("KUR"),), 1, [], [], None, [], "KUR", "KUR"),
+        ((ValueToken("KURʾ"),), 1, [], [], None, [], "KURʾ", "KURʾ"),
+        ((ValueToken("ʾ"),), 1, [], [], None, [], "ʾ", "ʾ"),
         (
             (ValueToken("KU"), BrokenAway.open(), ValueToken("R")),
             1,
@@ -225,6 +232,7 @@ def test_invalid_reading(name, sub_index):
             None,
             [],
             "KU[R",
+            "KUR",
         ),
         (
             (ValueToken("K"), BrokenAway.close(), ValueToken("UR")),
@@ -234,10 +242,11 @@ def test_invalid_reading(name, sub_index):
             None,
             [],
             "K]UR",
+            "KUR",
         ),
-        ((ValueToken("KUR"),), None, [], [], None, [], "KURₓ"),
-        ((ValueToken("KUR"),), 0, [], [], None, [], "KUR₀"),
-        ((ValueToken("KUR"),), 1, [], [], Grapheme.of("KUR"), [], "KUR(KUR)"),
+        ((ValueToken("KUR"),), None, [], [], None, [], "KURₓ", "KUR"),
+        ((ValueToken("KUR"),), 0, [], [], None, [], "KUR₀", "KUR"),
+        ((ValueToken("KUR"),), 1, [], [], Grapheme.of("KUR"), [], "KUR(KUR)", "KUR"),
         (
             (ValueToken("KUR"),),
             1,
@@ -246,8 +255,9 @@ def test_invalid_reading(name, sub_index):
             None,
             [Reading.of_name("kur"), Joiner(atf.Joiner.HYPHEN), Reading.of_name("kur")],
             "KUR<(kur-kur)>",
+            "KUR",
         ),
-        ((ValueToken("KUR"),), 1, ["@v", "@180"], [], None, [], "KUR@v@180"),
+        ((ValueToken("KUR"),), 1, ["@v", "@180"], [], None, [], "KUR@v@180", "KUR"),
         (
             (ValueToken("KUR"),),
             1,
@@ -256,6 +266,7 @@ def test_invalid_reading(name, sub_index):
             None,
             [],
             "KUR#!",
+            "KUR",
         ),
         (
             (ValueToken("KUR"),),
@@ -265,11 +276,19 @@ def test_invalid_reading(name, sub_index):
             Grapheme.of("KUR"),
             [],
             "KUR₁₀@v!(KUR)",
+            "KUR",
         ),
     ],
 )
 def test_logogram(
-    name_parts, sub_index, modifiers, flags, sign, surrogate, expected_value
+    name_parts,
+    sub_index,
+    modifiers,
+    flags,
+    sign,
+    surrogate,
+    expected_value,
+    expected_name,
 ):
     logogram = Logogram.of(name_parts, sub_index, modifiers, flags, sign, surrogate)
 
@@ -280,6 +299,7 @@ def test_logogram(
         == f"Logogram⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in expected_parts)}⟩"
     )
     assert logogram.name_parts == name_parts
+    assert logogram.name == expected_name
     assert logogram.modifiers == tuple(modifiers)
     assert logogram.flags == tuple(flags)
     assert logogram.lemmatizable is False
@@ -289,7 +309,7 @@ def test_logogram(
     serialized = {
         "type": "Logogram",
         "value": expected_value,
-        "name": "".join(token.value for token in name_parts),
+        "name": expected_name,
         "nameParts": [dump_token(token) for token in name_parts],
         "subIndex": sub_index,
         "modifiers": modifiers,
@@ -308,24 +328,46 @@ def test_invalid_logogram(name, sub_index):
 
 
 @pytest.mark.parametrize(
-    "name_parts,modifiers,flags,sign,expected_value",
+    "name_parts,modifiers,flags,sign,expected_value, expected_name",
     [
-        ((ValueToken("1"),), [], [], None, "1"),
-        ((ValueToken("1"), BrokenAway.open(), ValueToken("4")), [], [], None, "1[4"),
-        ((ValueToken("1"), BrokenAway.close(), ValueToken("0")), [], [], None, "1]0"),
-        ((ValueToken("1"),), [], [], Grapheme.of("KUR"), "1(KUR)"),
-        ((ValueToken("1"),), ["@v", "@180"], [], None, "1@v@180"),
-        ((ValueToken("1"),), [], [atf.Flag.DAMAGE, atf.Flag.CORRECTION], None, "1#!"),
+        ((ValueToken("1"),), [], [], None, "1", "1"),
+        (
+            (ValueToken("1"), BrokenAway.open(), ValueToken("4")),
+            [],
+            [],
+            None,
+            "1[4",
+            "14",
+        ),
+        (
+            (ValueToken("1"), BrokenAway.close(), ValueToken("0")),
+            [],
+            [],
+            None,
+            "1]0",
+            "10",
+        ),
+        ((ValueToken("1"),), [], [], Grapheme.of("KUR"), "1(KUR)", "1"),
+        ((ValueToken("1"),), ["@v", "@180"], [], None, "1@v@180", "1"),
+        (
+            (ValueToken("1"),),
+            [],
+            [atf.Flag.DAMAGE, atf.Flag.CORRECTION],
+            None,
+            "1#!",
+            "1",
+        ),
         (
             (ValueToken("1"),),
             ["@v"],
             [atf.Flag.CORRECTION],
             Grapheme.of("KUR"),
             "1@v!(KUR)",
+            "1",
         ),
     ],
 )
-def test_number(name_parts, modifiers, flags, sign, expected_value):
+def test_number(name_parts, modifiers, flags, sign, expected_value, expected_name):
     number = Number.of(name_parts, modifiers, flags, sign)
 
     expected_sub_index = 1
@@ -336,6 +378,7 @@ def test_number(name_parts, modifiers, flags, sign, expected_value):
         == f"Number⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in expected_parts)}⟩"
     )
     assert number.name_parts == name_parts
+    assert number.name == expected_name
     assert number.sub_index == expected_sub_index
     assert number.modifiers == tuple(modifiers)
     assert number.flags == tuple(flags)
@@ -345,7 +388,7 @@ def test_number(name_parts, modifiers, flags, sign, expected_value):
     serialized = {
         "type": "Number",
         "value": expected_value,
-        "name": "".join(token.value for token in name_parts),
+        "name": expected_name,
         "nameParts": [dump_token(token) for token in name_parts],
         "modifiers": modifiers,
         "subIndex": expected_sub_index,

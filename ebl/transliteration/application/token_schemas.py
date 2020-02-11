@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from functools import singledispatch
-from typing import List, Mapping, Optional, Sequence, Tuple, Type
+from typing import List, Mapping, Optional, Sequence, Type
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
@@ -9,14 +9,14 @@ from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
-    IntentionalOmission,
+    AccidentalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
     Erasure,
     Gloss,
+    IntentionalOmission,
     LinguisticGloss,
-    AccidentalOmission,
     OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
@@ -29,11 +29,11 @@ from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Grapheme,
     Logogram,
+    NamedSign,
     Number,
     Reading,
     UnclearSign,
     UnidentifiedSign,
-    NamedSign,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -291,11 +291,7 @@ def _load_sign_str(sign: str) -> Token:
 
 class NamedSignSchema(Schema):
     value = fields.String(required=True)
-    name = fields.Function(
-        lambda reading: "".join(token.value for token in reading.name_parts),
-        lambda name: name,
-        required=True,
-    )
+    name = fields.String(required=True)
     name_parts = fields.Function(
         lambda reading: dump_tokens(reading.name_parts),
         lambda data: load_tokens(data),
@@ -547,5 +543,5 @@ def load_token(data: dict) -> Token:
     return _schemas[data["type"]]().load(data)
 
 
-def load_tokens(tokens: Sequence[dict]) -> Tuple[Token, ...]:
+def load_tokens(tokens: Sequence[dict]) -> Sequence[Token]:
     return tuple(map(load_token, tokens))

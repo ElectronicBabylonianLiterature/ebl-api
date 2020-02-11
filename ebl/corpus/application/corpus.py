@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Sequence
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
@@ -64,16 +64,12 @@ class Corpus:
         self._update_chapter(id_, AlignmentUpdater(chapter_index, alignment), user)
 
     def update_manuscripts(
-        self,
-        id_: TextId,
-        chapter_index: int,
-        manuscripts: Tuple[Manuscript, ...],
-        user,
+        self, id_: TextId, chapter_index: int, manuscripts: Sequence[Manuscript], user,
     ):
         self._update_chapter(id_, ManuscriptUpdater(chapter_index, manuscripts), user)
 
     def update_lines(
-        self, id_: TextId, chapter_index: int, lines: Tuple[Line, ...], user
+        self, id_: TextId, chapter_index: int, lines: Sequence[Line], user
     ):
         self._update_chapter(id_, LinesUpdater(chapter_index, lines), user)
 

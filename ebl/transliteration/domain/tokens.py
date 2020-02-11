@@ -125,7 +125,7 @@ class Column(Token):
 
 @attr.s(frozen=True, auto_attribs=True)
 class Variant(Token):
-    tokens: Tuple[Token, ...]
+    tokens: Sequence[Token]
 
     @staticmethod
     def of(first: Token, second: Token) -> "Variant":

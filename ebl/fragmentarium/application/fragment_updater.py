@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
@@ -61,7 +61,7 @@ class FragmentUpdater:
         )
 
     def update_references(
-        self, number: FragmentNumber, references: Tuple[Reference, ...], user: User,
+        self, number: FragmentNumber, references: Sequence[Reference], user: User,
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_fragment_number(number)
         self._bibliography.validate_references(references)

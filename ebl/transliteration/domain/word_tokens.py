@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 import attr
 
@@ -30,7 +30,7 @@ class ErasureState(Enum):
 class Word(ValueToken):
     language: Language = DEFAULT_LANGUAGE
     normalized: bool = DEFAULT_NORMALIZED
-    unique_lemma: Tuple[WordId, ...] = tuple()
+    unique_lemma: Sequence[WordId] = tuple()
     erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(

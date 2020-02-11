@@ -209,12 +209,6 @@ FLAGS: Mapping[str, str] = {
     "correction": pydash.escape_reg_exp(Flag.CORRECTION.value),
 }
 
-LACUNA: Mapping[str, str] = {
-    "begin": r"\[",
-    "end": r"\]",
-    "undeterminable": pydash.escape_reg_exp(UNKNOWN_NUMBER_OF_SIGNS),
-}
-
 ATF_SPEC: Mapping[str, str] = {
     "reading": r"([^₀-₉ₓ/]+)([₀-₉]+)?",
     "with_sign": r"[^\(/\|]+\((.+)\)",

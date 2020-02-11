@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 from parsy import ParseError
 
@@ -87,7 +87,7 @@ def deserialize(dto: dict) -> Text:
         raise DataError(error)
 
 
-def deserialize_lines(lines: list) -> Tuple[Line, ...]:
+def deserialize_lines(lines: list) -> Sequence[Line]:
     deserializer = ApiDeserializer()
     try:
         return tuple(deserializer.deserialize_line(line) for line in lines)

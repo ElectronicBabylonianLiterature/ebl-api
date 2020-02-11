@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Tuple
+from typing import Sequence
 
 import attr
 
@@ -37,7 +37,7 @@ class Manuscript:
     provenance: Provenance = Provenance.NINEVEH
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
-    references: Tuple[Reference, ...] = tuple()
+    references: Sequence[Reference] = tuple()
 
     @accession.validator
     def validate_accession(self, _, value):
@@ -57,7 +57,7 @@ class Manuscript:
         visitor.visit_manuscript(self)
 
 
-def validate_labels(_instance, _attribute, value: Tuple[Label, ...]) -> None:
+def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
     validator = LabelValidator()
     for label in value:
         label.accept(validator)
@@ -69,7 +69,7 @@ def validate_labels(_instance, _attribute, value: Tuple[Label, ...]) -> None:
 @attr.s(auto_attribs=True, frozen=True)
 class ManuscriptLine:
     manuscript_id: int
-    labels: Tuple[Label, ...] = attr.ib(validator=validate_labels)
+    labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: TextLine
 
     def accept(self, visitor: "TextVisitor") -> None:
@@ -92,8 +92,8 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: LineNumberLabel
-    reconstruction: Tuple[ReconstructionToken, ...] = attr.ib(default=tuple())
-    manuscripts: Tuple[ManuscriptLine, ...] = tuple()
+    reconstruction: Sequence[ReconstructionToken] = attr.ib(default=tuple())
+    manuscripts: Sequence[ManuscriptLine] = tuple()
 
     @reconstruction.validator
     def validate_reconstruction(self, _, value):
@@ -151,8 +151,8 @@ class Chapter:
     version: str = ""
     name: str = ""
     order: int = 0
-    manuscripts: Tuple[Manuscript, ...] = tuple()
-    lines: Tuple[Line, ...] = tuple()
+    manuscripts: Sequence[Manuscript] = tuple()
+    lines: Sequence[Line] = tuple()
     parser_version: str = ""
 
     def __attrs_post_init__(self) -> None:
@@ -186,7 +186,7 @@ class Text:
     name: str
     number_of_verses: int
     approximate_verses: bool
-    chapters: Tuple[Chapter, ...] = tuple()
+    chapters: Sequence[Chapter] = tuple()
 
     @property
     def id(self) -> TextId:

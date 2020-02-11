@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 import attr
 
@@ -70,7 +70,7 @@ class Grapheme(Value):
 
 @attr.s(auto_attribs=True, frozen=True)
 class SplittableGrapheme(Value):
-    values: Tuple[Grapheme, ...] = attr.ib()
+    values: Sequence[Grapheme] = attr.ib()
 
     @classmethod
     def of(cls, names: Sequence[SignName]):
@@ -91,7 +91,7 @@ class SplittableGrapheme(Value):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Variant(Value):
-    values: Tuple[Value, ...] = attr.ib()
+    values: Sequence[Value] = attr.ib()
 
     @values.validator
     def _check_values(self, _attribute, value):
@@ -124,7 +124,7 @@ class ValueFactory:
         return Reading(value, 1, value)
 
     @staticmethod
-    def create_variant(values: Tuple[Value, ...]) -> Variant:
+    def create_variant(values: Sequence[Value]) -> Variant:
         return Variant(values)
 
     @staticmethod

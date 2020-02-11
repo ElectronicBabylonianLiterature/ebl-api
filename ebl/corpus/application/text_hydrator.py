@@ -1,4 +1,4 @@
-from typing import Iterable, Tuple
+from typing import Iterable, Sequence
 
 import attr
 
@@ -35,7 +35,7 @@ class TextHydrator(TextVisitor):
 
     def _hydrate_references(
         self, references: Iterable[Reference]
-    ) -> Tuple[Reference, ...]:
+    ) -> Sequence[Reference]:
         return tuple(self._hydrate_reference(reference) for reference in references)
 
     def _hydrate_reference(self, reference: Reference) -> Reference:

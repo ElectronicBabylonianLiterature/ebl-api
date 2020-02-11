@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Sequence
 
 import attr
 
@@ -20,14 +20,14 @@ class AlignmentToken:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Alignment:
-    _lines: Tuple[Tuple[Tuple[AlignmentToken, ...], ...], ...]
+    _lines: Sequence[Sequence[Sequence[AlignmentToken]]]
 
-    def get_line(self, line_index: int) -> Tuple[Tuple[AlignmentToken, ...], ...]:
+    def get_line(self, line_index: int) -> Sequence[Sequence[AlignmentToken]]:
         return self._lines[line_index]
 
     def get_manuscript_line(
         self, line_index: int, manuscript_index: int
-    ) -> Tuple[AlignmentToken, ...]:
+    ) -> Sequence[AlignmentToken]:
         return self.get_line(line_index)[manuscript_index]
 
     def get_number_of_lines(self) -> int:

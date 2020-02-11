@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import attr
 
@@ -8,7 +8,7 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
 class LinesUpdater(ChapterUpdater):
-    def __init__(self, chapter_index: int, lines: Tuple[Line, ...]):
+    def __init__(self, chapter_index: int, lines: Sequence[Line]):
         super().__init__(chapter_index)
         self._lines = lines
 

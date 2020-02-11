@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import NewType, Optional, Tuple
+from typing import NewType, Optional, Sequence
 
 import attr
 
@@ -19,7 +19,7 @@ class Reference:
     type: ReferenceType
     pages: str = ""
     notes: str = ""
-    lines_cited: Tuple[str, ...] = tuple()
+    lines_cited: Sequence[str] = tuple()
     document: Optional[dict] = None
 
     def to_dict(self, include_document=False) -> dict:

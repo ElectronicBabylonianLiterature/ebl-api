@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from collections import Counter
-from typing import Iterable, Tuple
+from typing import Iterable, Sequence
 
 import attr
 import roman
@@ -37,7 +37,7 @@ class Label(ABC):
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
     """
 
-    status: Tuple[Status, ...] = attr.ib(validator=no_duplicate_status)
+    status: Sequence[Status] = attr.ib(validator=no_duplicate_status)
 
     @property
     @abstractmethod

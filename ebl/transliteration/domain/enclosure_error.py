@@ -1,0 +1,2 @@
+class EnclosureError(Exception):
+    pass

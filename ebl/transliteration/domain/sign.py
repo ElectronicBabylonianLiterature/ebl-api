@@ -1,4 +1,4 @@
-from typing import NewType, Optional, Tuple
+from typing import NewType, Optional, Sequence
 
 import attr
 
@@ -20,8 +20,8 @@ class Value:
 @attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
-    lists: Tuple[SignListRecord, ...] = tuple()
-    values: Tuple[Value, ...] = tuple()
+    lists: Sequence[SignListRecord] = tuple()
+    values: Sequence[Value] = tuple()
 
     @property
     def standardization(self):

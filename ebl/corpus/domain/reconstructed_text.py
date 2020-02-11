@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum, unique
-from typing import Tuple
+from typing import Sequence
 
 import attr
 import pydash
@@ -96,8 +96,8 @@ class SeparatorPart(Part):
 @attr.s(auto_attribs=True, frozen=True)
 class AkkadianWord(ReconstructionToken):
 
-    parts: Tuple[Part, ...]
-    modifiers: Tuple[Modifier, ...] = tuple()
+    parts: Sequence[Part]
+    modifiers: Sequence[Modifier] = tuple()
 
     def accept(self, visitor: ReconstructionTokenVisitor) -> None:
         visitor.visit_akkadian_word(self)
@@ -118,12 +118,12 @@ class AkkadianWord(ReconstructionToken):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Lacuna(ReconstructionToken):
-    _before: Tuple[Enclosure, ...]
-    _after: Tuple[Enclosure, ...]
+    _before: Sequence[Enclosure]
+    _after: Sequence[Enclosure]
 
     def accept(self, visitor: ReconstructionTokenVisitor) -> None:
         visitor.visit_lacuna(self)
-        for enclosure in self._before + self._after:
+        for enclosure in [*self._before, *self._after]:
             enclosure.accept(visitor)
 
     def __str__(self):

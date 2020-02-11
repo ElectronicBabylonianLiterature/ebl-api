@@ -1,20 +1,19 @@
-from abc import ABC, abstractmethod
-from enum import Enum
-from functools import singledispatchmethod  # type: ignore
-from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
+from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
 
 import attr
 import pydash
 
-import ebl.transliteration.domain.atf as atf
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.atf_visitor import AtfVisitor
 from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.language_visitor import LanguageVisitor
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.tokens import Token, ValueToken
 from ebl.transliteration.domain.visitors import AtfVisitor, LanguageVisitor
 
