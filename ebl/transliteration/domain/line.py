@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from functools import singledispatchmethod
+from functools import singledispatchmethod  # type: ignore
 from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar, Optional, Union
 
 import attr
