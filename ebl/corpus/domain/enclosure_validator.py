@@ -5,10 +5,7 @@ from ebl.corpus.domain.reconstructed_text import (
     ReconstructionToken,
     ReconstructionTokenVisitor,
 )
-
-
-class EnclosureError(Exception):
-    pass
+from ebl.transliteration.domain.enclosure_error import EnclosureError
 
 
 class ValidationState:
