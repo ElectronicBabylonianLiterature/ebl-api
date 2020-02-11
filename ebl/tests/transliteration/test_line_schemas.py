@@ -1,6 +1,11 @@
 import pytest
+from marshmallow import INCLUDE
 
-from ebl.transliteration.application.line_schemas import dump_line, load_line
+from ebl.transliteration.application.line_schemas import (
+    dump_line,
+    load_line,
+    StrictDollarLineSchema,
+)
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -36,7 +41,7 @@ LINES = [
             "content": dump_tokens([ValueToken(" at least 1-2 surface thing blank ?")]),
             "type": "StrictDollarLine",
             "qualification": "AT_LEAST",
-            "extent": {"type": "tuple", "value": "(1, 2)"},
+            "extent": (1, 2),
             "scope": {"type": "Surface", "content": "SURFACE", "text": "thing"},
             "state": "BLANK",
             "status": "UNCERTAIN",
@@ -55,7 +60,7 @@ LINES = [
             "content": dump_tokens([ValueToken(" at least 1 obverse blank ?")]),
             "type": "StrictDollarLine",
             "qualification": "AT_LEAST",
-            "extent": {"type": "int", "value": "1"},
+            "extent": 1,
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": "BLANK",
             "status": "UNCERTAIN",
@@ -74,7 +79,7 @@ LINES = [
             "content": dump_tokens([ValueToken(" beginning of obverse")]),
             "type": "StrictDollarLine",
             "qualification": None,
-            "extent": {"type": "Extent", "value": "BEGINNING_OF"},
+            "extent": "BEGINNING_OF",
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": None,
             "status": None,

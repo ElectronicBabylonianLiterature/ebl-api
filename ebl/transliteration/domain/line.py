@@ -31,7 +31,7 @@ class Line(ABC):
 
     @property
     @abstractmethod
-    def content(self) -> Sequence[Token, ...]:
+    def content(self) -> Sequence[Token]:
         ...
 
     @property

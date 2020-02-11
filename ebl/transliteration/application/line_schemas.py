@@ -1,5 +1,4 @@
-from enum import Enum
-from functools import singledispatch
+from functools import singledispatchmethod  # ignore
 from typing import List, Mapping, Sequence, Tuple, Type, Union
 
 from marshmallow import Schema, fields, post_load
@@ -109,30 +108,12 @@ class ScopeContainerSchema(Schema):
         return scope_types[type][content]
 
 
-@singledispatch
-def value_serialize(val):
-    return str(val)
-
-
-@value_serialize.register
-def vs_enum(val: Enum):
-    return val.name
-
-
-def tuple_to_string(str_tuple: str):
-    list_ = str_tuple[1:-1].split(",")
-    return (int(list_[0]), int(list_[int(1)]))
-
-
 class StrictDollarLineSchema(LineSchema):
     type = fields.Constant("StrictDollarLine", required=True)
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
-        lambda obj: {
-            "value": value_serialize(obj.extent),
-            "type": type(obj.extent).__name__,
-        },
-        lambda obj: obj,
+        lambda strict: StrictDollarLineSchema.dump_extent(strict.extent),
+        lambda value: value,
         required=True,
     )
     scope = fields.Nested(ScopeContainerSchema, required=True)
@@ -143,19 +124,31 @@ class StrictDollarLineSchema(LineSchema):
     def make_line(self, data, **kwargs):
         return StrictDollarLine(
             data["qualification"],
-            self.load_extent(data["extent"]["type"], data["extent"]["value"]),
+            StrictDollarLineSchema.load_extent(data["extent"]),
             data["scope"],
             data["state"],
             data["status"],
         )
 
-    def load_extent(self, type: str, extent: str):
-        _extent: Mapping = {
-            "Extent": lambda z: atf.Extent[z],
-            "int": lambda z: int(z),
-            "tuple": tuple_to_string,
-        }
-        return _extent[type](extent)
+    @singledispatchmethod
+    @staticmethod
+    def load_extent(extent):
+        return extent
+
+    @load_extent.register(str)
+    @staticmethod
+    def load_extent_to_enum(extent: str):
+        return atf.Extent[extent]
+
+    @singledispatchmethod
+    @staticmethod
+    def dump_extent(extent):
+        return extent
+
+    @dump_extent.register(atf.Extent)
+    @staticmethod
+    def dump_extent_to_str(extent: atf.Extent):
+        return extent.name
 
 
 _schemas: Mapping[str, Type[Schema]] = {

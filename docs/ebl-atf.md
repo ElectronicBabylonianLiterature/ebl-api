@@ -35,30 +35,25 @@ any-character = ? any UTF-8 character ?;
 ## $-lines
 
 $-lines are used to indicate information about the state of the text or object, or to 
-describe features on the object which are not part of the transliteration proper. 
-<br>
-Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
-<br>
-Loose rule: Just text
-<br>
-Rulings: (single | double | triple) ruling
-<br>
-Image: (image N = <text>)
-<br>
+describe features on the object which are not part of the transliteration proper. <br>
+Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)><br>
+Loose rule: Just text<br>
+Rulings: (single | double | triple) ruling<br>
+Image: (image N = <text>)<br>
 
 ```ebnf
 
 line = "$", value;
 
 value = strict | loose | rulings | images;
-    
+
 strict = [qualification], extend, scope, [state], [status];
 
 qualification = "at least" | "at most" | "about";
 
 extent= "serveral" | "some" | number | range | "rest of" 
     | "start of" | beginning of |"middle of" | "end of";
-      
+    
 scope = object | surface | "column" | "columns" | "line" 
     | "lines" | "case" | "cases" | "side" | "excerpt" | "surface";
 
@@ -75,13 +70,13 @@ fragment = "fragment", text
 
 generic-object = "object", text
 
-surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom" 
+surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
     | face | generic-surface | edge
 
 face = "face", lower-case-letter
 
 edge = "edge", lower-case-letter
-    
+
 generic-surface = "surface", text
 
 text = { any-character }-
