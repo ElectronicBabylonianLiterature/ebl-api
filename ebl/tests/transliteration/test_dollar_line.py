@@ -39,7 +39,6 @@ def test_strict_dollar_line_with_none():
     scope = ScopeContainer(atf.Object.OBJECT, "what")
     actual = StrictDollarLine(None, atf.Extent.SEVERAL, scope, None, None)
 
-    this = str(scope)
     assert actual.prefix == "$"
     assert actual.scope.content == atf.Object.OBJECT
     assert actual.scope.text == "what"

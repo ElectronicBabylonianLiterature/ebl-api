@@ -33,7 +33,7 @@ def test_strict_dollar_line_schema():
         "content": dump_tokens([ValueToken(" at least beginning of obverse blank ?")]),
         "type": "StrictDollarLine",
         "qualification": "AT_LEAST",
-        "extent": {"type": "Extent", "value": "BEGINNING_OF"},
+        "extent": "BEGINNING_OF",
         "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
         "state": "BLANK",
         "status": "UNCERTAIN",

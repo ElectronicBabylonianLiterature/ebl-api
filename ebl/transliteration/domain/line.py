@@ -145,7 +145,7 @@ class ScopeContainer:
                 "text can only be initialized if the content is 'object' or 'surface'"
             )
 
-    def __str__(self):
+    def to_value_token(self):
         if self.text:
             return f"{self.content.name.lower()} {self.text}"
         else:
@@ -198,6 +198,11 @@ class StrictDollarLine(DollarLine):
     @staticmethod
     def enum_to_atf(val: Enum):
         return val.value
+
+    @to_atf.register(ScopeContainer)
+    @staticmethod
+    def scope_container_to_atf(val: ScopeContainer):
+        return val.to_value_token()
 
 
 @attr.s(auto_attribs=True, frozen=True)

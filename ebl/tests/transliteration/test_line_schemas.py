@@ -1,10 +1,8 @@
 import pytest
-from marshmallow import INCLUDE
 
 from ebl.transliteration.application.line_schemas import (
     dump_line,
     load_line,
-    StrictDollarLineSchema,
 )
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
