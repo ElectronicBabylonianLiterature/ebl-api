@@ -35,8 +35,7 @@ any-character = ? any UTF-8 character ?;
 
 ## $-lines
 
-$-lines are used to indicate information about the state of the text or object, or to 
-describe features on the object which are not part of the transliteration proper.
+$-lines are used to indicate information about the state of the text or object, or to describe features on the object which are not part of the transliteration proper.
 
 Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
 
@@ -55,14 +54,11 @@ strict = [qualification], extend, scope, [state], [status];
 
 qualification = "at least" | "at most" | "about";
 
-extent= "serveral" | "some" | number | range | "rest of" 
-    | "start of" | beginning of |"middle of" | "end of";
+extent= "serveral" | "some" | number | range | "rest of" | "start of" | beginning of |"middle of" | "end of";
     
-scope = object | surface | "column" | "columns" | "line" 
-    | "lines" | "case" | "cases" | "side" | "excerpt" | "surface";
+scope = object | surface | "column" | "columns" | "line" | "lines" | "case" | "cases" | "side" | "excerpt" | "surface";
 
-state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces ";
-    | "omitted" | "continues";
+state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces " | "omitted" | "continues";
 
 status = "*" | "?" | "!" | "!?" ;
 
