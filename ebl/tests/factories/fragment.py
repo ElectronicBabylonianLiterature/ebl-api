@@ -212,7 +212,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ),
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
-            LooseDollarLine("end of side"),
+            LooseDollarLine("this is a loose line"),
         )
     )
     signs = (
@@ -388,6 +388,6 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ),
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
-            LooseDollarLine("end of side"),
+            LooseDollarLine("this is a loose line"),
         )
     )
