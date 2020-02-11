@@ -19,7 +19,6 @@ from ebl.transliteration.domain.lemmatization import (
 )
 from ebl.transliteration.domain.tokens import Token, ValueToken
 
-
 T = TypeVar("T")
 L = TypeVar("L", "TextLine", "Line")
 
