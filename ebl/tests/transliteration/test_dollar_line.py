@@ -20,7 +20,7 @@ def test_loose_dollar_line():
 def test_image_dollar_line():
     actual = ImageDollarLine("1", "a", "great")
 
-    assert acutal.prefix == "$"
+    assert actual.prefix == "$"
     assert actual.content == (ValueToken(" (image 1a = great)"),)
     assert actual.number == "1"
     assert actual.letter == "a"

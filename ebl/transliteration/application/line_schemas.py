@@ -103,10 +103,10 @@ class ScopeContainerSchema(Schema):
         )
 
     def load_scope(self, type: str, content: str):
-        _scope: Mapping[
+        scope_types: Mapping[
             str, Union[Type[atf.Surface], Type[atf.Scope], Type[atf.Object]]
         ] = {"Surface": atf.Surface, "Scope": atf.Scope, "Object": atf.Object}
-        return _scope[type][content]
+        return scope_types[type][content]
 
 
 @singledispatch
