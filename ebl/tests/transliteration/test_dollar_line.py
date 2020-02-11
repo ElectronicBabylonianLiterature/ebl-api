@@ -18,13 +18,13 @@ def test_loose_dollar_line():
 
 
 def test_image_dollar_line():
-    expected = ImageDollarLine("1", "a", "great")
+    actual = ImageDollarLine("1", "a", "great")
 
-    assert expected.prefix == "$"
-    assert expected.content == (ValueToken(" (image 1a = great)"),)
-    assert expected.number == "1"
-    assert expected.letter == "a"
-    assert expected.text == "great"
+    assert acutal.prefix == "$"
+    assert actual.content == (ValueToken(" (image 1a = great)"),)
+    assert actual.number == "1"
+    assert actual.letter == "a"
+    assert actual.text == "great"
 
 
 def test_ruling_dollar_line():
@@ -37,15 +37,15 @@ def test_ruling_dollar_line():
 
 def test_strict_dollar_line_with_none():
     scope = ScopeContainer(atf.Object.OBJECT, "what")
-    expected = StrictDollarLine(None, atf.Extent.SEVERAL, scope, None, None)
-    assert expected.prefix == "$"
-    assert expected.scope.content == atf.Object.OBJECT
-    assert expected.scope.text == "what"
-    assert expected.content == (ValueToken(" several object what"),)
+    actual = StrictDollarLine(None, atf.Extent.SEVERAL, scope, None, None)
+    assert actual.prefix == "$"
+    assert actual.scope.content == atf.Object.OBJECT
+    assert actual.scope.text == "what"
+    assert actual.content == (ValueToken(" several object what"),)
 
 
 def test_strict_dollar_line():
-    expected = StrictDollarLine(
+    actual = StrictDollarLine(
         atf.Qualification.AT_LEAST,
         atf.Extent.SEVERAL,
         ScopeContainer(atf.Scope.COLUMNS, ""),
@@ -53,20 +53,20 @@ def test_strict_dollar_line():
         atf.Status.UNCERTAIN,
     )
 
-    assert expected.prefix == "$"
-    assert expected.qualification == atf.Qualification.AT_LEAST
-    assert expected.scope.content == atf.Scope.COLUMNS
-    assert expected.scope.text == ""
-    assert expected.extent == atf.Extent.SEVERAL
-    assert expected.state == atf.State.BLANK
-    assert expected.status == atf.Status.UNCERTAIN
-    assert expected.content == (ValueToken(" at least several columns blank ?"),)
+    assert actual.prefix == "$"
+    assert actual.qualification == atf.Qualification.AT_LEAST
+    assert actual.scope.content == atf.Scope.COLUMNS
+    assert actual.scope.text == ""
+    assert actual.extent == atf.Extent.SEVERAL
+    assert actual.state == atf.State.BLANK
+    assert actual.status == atf.Status.UNCERTAIN
+    assert actual.content == (ValueToken(" at least several columns blank ?"),)
 
 
 def test_strict_dollar_line_content():
     scope = ScopeContainer(atf.Surface.OBVERSE)
-    expected = StrictDollarLine(
+    actual = StrictDollarLine(
         atf.Qualification.AT_LEAST, 1, scope, atf.State.BLANK, atf.Status.UNCERTAIN,
     )
 
-    assert expected.content == (ValueToken(" at least 1 obverse blank ?"),)
+    assert actual.content == (ValueToken(" at least 1 obverse blank ?"),)
