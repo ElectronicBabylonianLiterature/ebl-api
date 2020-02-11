@@ -16,7 +16,18 @@ from ebl.transliteration.domain.text import Text
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
-        ("$ (end of side)", [LooseDollarLine("end of side")]),
+        (
+            "$ (end of side)",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent.END_OF,
+                    ScopeContainer(atf.Scope.SIDE, ""),
+                    None,
+                    None,
+                )
+            ],
+        ),
         ("$ (image 1a = great)", [ImageDollarLine("1", "a", "great")]),
         (
             "$ (image 1 = numbered diagram of triangle)",

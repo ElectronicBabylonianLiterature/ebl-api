@@ -21,7 +21,7 @@ range.2 : NUMBER _WORD_SEPARATOR? "-" _WORD_SEPARATOR? NUMBER
 NUMBER : SIGNED_NUMBER
 
 _scopes : SCOPE | _object | _surface
-SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface"
+SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
 
 _object : OBJECT | generic_object | fragment
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"

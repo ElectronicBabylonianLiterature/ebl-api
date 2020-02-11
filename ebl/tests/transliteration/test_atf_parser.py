@@ -87,7 +87,18 @@ def test_parser_version(parser, version):
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
-        ("$ (end of side)", [LooseDollarLine("end of side")]),
+        (
+            "$ (end of side)",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent.END_OF,
+                    ScopeContainer(atf.Scope.SIDE, ""),
+                    None,
+                    None,
+                )
+            ],
+        ),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (
             "=: continuation",

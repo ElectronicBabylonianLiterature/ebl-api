@@ -10,11 +10,11 @@ from ebl.transliteration.domain.tokens import ValueToken
 
 
 def test_loose_dollar_line():
-    expected = LooseDollarLine("end of side")
+    expected = LooseDollarLine("this is a loose line")
 
     assert expected.prefix == "$"
-    assert expected.content == (ValueToken(" (end of side)"),)
-    assert expected.text == "end of side"
+    assert expected.content == (ValueToken(" (this is a loose line)"),)
+    assert expected.text == "this is a loose line"
 
 
 def test_image_dollar_line():
