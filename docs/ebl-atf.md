@@ -32,17 +32,21 @@ not-space = any-character - ' ';
 
 any-character = ? any UTF-8 character ?;
 ```
+
 ## $-lines
 
 $-lines are used to indicate information about the state of the text or object, or to 
-describe features on the object which are not part of the transliteration proper. <br>
-Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)><br>
-Loose rule: Just text<br>
-Rulings: (single | double | triple) ruling<br>
-Image: (image N = <text>)<br>
+describe features on the object which are not part of the transliteration proper.
+
+Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
+
+Loose rule: Just text in brackets
+
+Rulings: (single | double | triple) ruling
+
+Image: (image N = <text>)
 
 ```ebnf
-
 line = "$", value;
 
 value = strict | loose | rulings | images;

@@ -56,8 +56,8 @@ RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
 image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR TEXTS
-_IMAGE : "(image"
+_IMAGE : "(" [_WORD_SEPARATOR] "image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
-TEXTS : /.+\)/
+TEXTS : /./+ ")"
 
