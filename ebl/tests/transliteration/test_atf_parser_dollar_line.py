@@ -194,6 +194,30 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                 )
             ],
         ),
+        (
+            "$ several tablet blank !",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.TABLET),
+                    atf.State.BLANK,
+                    atf.Status.CORRECTION,
+                )
+            ],
+        ),
+        (
+            "$ several tablet blank ?",
+            [
+                StrictDollarLine(
+                    None,
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.TABLET),
+                    atf.State.BLANK,
+                    atf.Status.UNCERTAIN,
+                )
+            ],
+        ),
     ],
 )
 def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):

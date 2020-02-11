@@ -10,11 +10,11 @@ from ebl.transliteration.domain.tokens import ValueToken
 
 
 def test_loose_dollar_line():
-    expected = LooseDollarLine("this is a loose line")
+    loose_line = LooseDollarLine("this is a loose line")
 
-    assert expected.prefix == "$"
-    assert expected.content == (ValueToken(" (this is a loose line)"),)
-    assert expected.text == "this is a loose line"
+    assert loose_line.prefix == "$"
+    assert loose_line.content == (ValueToken(" (this is a loose line)"),)
+    assert loose_line.text == "this is a loose line"
 
 
 def test_image_dollar_line():
@@ -28,11 +28,11 @@ def test_image_dollar_line():
 
 
 def test_ruling_dollar_line():
-    expected = RulingDollarLine(atf.Ruling.DOUBLE)
+    ruling_line = RulingDollarLine(atf.Ruling.DOUBLE)
 
-    assert expected.prefix == "$"
-    assert expected.content == (ValueToken(" double ruling"),)
-    assert expected.number == atf.Ruling.DOUBLE
+    assert ruling_line.prefix == "$"
+    assert ruling_line.content == (ValueToken(" double ruling"),)
+    assert ruling_line.number == atf.Ruling.DOUBLE
 
 
 def test_strict_dollar_line_with_none():
