@@ -24,9 +24,6 @@ L = TypeVar("L", "TextLine", "Line")
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line(ABC):
-    # prefix: str = ""
-    # content: Sequence[Token, ...] = tuple()
-
     @property
     @abstractmethod
     def prefix(self) -> str:
@@ -34,7 +31,7 @@ class Line(ABC):
 
     @property
     @abstractmethod
-    def content(self) -> Tuple[Token, ...]:
+    def content(self) -> Sequence[Token, ...]:
         ...
 
     @property
@@ -137,26 +134,22 @@ class ScopeContainer:
 
     @text.validator
     def _check_text(self, attribute, value):
-        if value:
-            if not (
-                self.content == atf.Object.OBJECT
-                or self.content == atf.Surface.SURFACE
-                or self.content == atf.Object.FRAGMENT
-                or self.content == atf.Surface.FACE
-                or self.content == atf.Surface.EDGE
-            ):
-                raise ValueError(
-                    "text can only be initialized if the content is 'object' or 'surface'"
-                )
+        if value and self.content not in [
+            atf.Object.OBJECT,
+            atf.Surface.SURFACE,
+            atf.Object.FRAGMENT,
+            atf.Surface.FACE,
+            atf.Surface.EDGE,
+        ]:
+            raise ValueError(
+                "text can only be initialized if the content is 'object' or 'surface'"
+            )
 
     def __str__(self):
         if self.text:
             return f"{self.content.name.lower()} {self.text}"
         else:
             return f"{self.content.name.lower()}"
-
-    # use enum.name.lower() instead of enum.value because atf.Surface.value is a tuple and
-    # atf.Object.value a string
 
 
 Range = Tuple[int, int]
@@ -165,7 +158,7 @@ Range = Tuple[int, int]
 @attr.s(auto_attribs=True, frozen=True)
 class StrictDollarLine(DollarLine):
     qualification: Optional[atf.Qualification]
-    extent: Union[atf.Extent, int, Range]  # (int, int) resembles range e.g 3 - 5
+    extent: Union[atf.Extent, int, Range]
     scope: ScopeContainer
     state: Optional[atf.State]
     status: Optional[atf.Status]
@@ -280,9 +273,6 @@ class TextLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    _prefix: str = ""
-    _content: Sequence[Token] = tuple()
-
     @property
     def prefix(self):
         return ""

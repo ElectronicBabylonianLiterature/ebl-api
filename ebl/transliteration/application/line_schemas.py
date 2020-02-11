@@ -66,7 +66,7 @@ class LooseDollarLineSchema(LineSchema):
 class ImageDollarLineSchema(LineSchema):
     type = fields.Constant("ImageDollarLine", required=True)
     number = fields.String(required=True)
-    letter = fields.String(required=False, allow_none=True)
+    letter = fields.String(required=True, allow_none=True)
     text = fields.String(required=True)
 
     @post_load
@@ -126,7 +126,7 @@ def tuple_to_string(str_tuple: str):
 
 class StrictDollarLineSchema(LineSchema):
     type = fields.Constant("StrictDollarLine", required=True)
-    qualification = NameEnum(atf.Qualification, allow_none=True)
+    qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda obj: {
             "value": value_serialize(obj.extent),
@@ -136,8 +136,8 @@ class StrictDollarLineSchema(LineSchema):
         required=True,
     )
     scope = fields.Nested(ScopeContainerSchema, required=True)
-    state = NameEnum(atf.State, required=False, allow_none=True)
-    status = NameEnum(atf.Status, required=False, allow_none=True)
+    state = NameEnum(atf.State, required=True, allow_none=True)
+    status = NameEnum(atf.Status, required=True, allow_none=True)
 
     @post_load
     def make_line(self, data, **kwargs):
