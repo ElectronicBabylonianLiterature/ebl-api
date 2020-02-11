@@ -70,7 +70,7 @@ class Line(ABC):
         return other
 
     def strip_alignments(self):
-        return selfthaila
+        return self
 
 
 @attr.s(auto_attribs=True, frozen=True)

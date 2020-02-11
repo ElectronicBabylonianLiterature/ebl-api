@@ -42,4 +42,4 @@ def test_value_enum_exception():
 
     with pytest.raises(ValidationError):
         obj_dict = {"value": "invalid value", "name": "TWO"}
-        TestSchema().load(obj)
+        TestSchema().load(obj_dict)

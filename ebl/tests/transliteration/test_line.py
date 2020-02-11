@@ -1,7 +1,6 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
@@ -17,11 +16,6 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    StrictDollarLine,
-    ScopeContainer,
 )
 from ebl.transliteration.domain.tokens import (
     LanguageShift,

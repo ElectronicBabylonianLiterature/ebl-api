@@ -18,9 +18,6 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-    LooseDollarLine,
-    RulingDollarLine,
-    ImageDollarLine,
     StrictDollarLine,
     ScopeContainer,
 )
