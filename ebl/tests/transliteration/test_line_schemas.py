@@ -18,7 +18,7 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
@@ -27,7 +27,7 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
     (
-        StrictDollarLine(
+        StateDollarLine(
             atf.Qualification.AT_LEAST,
             (1, 2),
             ScopeContainer(atf.Surface.SURFACE, "thing"),
@@ -37,7 +37,7 @@ LINES = [
         {
             "prefix": "$",
             "content": dump_tokens([ValueToken(" at least 1-2 surface thing blank ?")]),
-            "type": "StrictDollarLine",
+            "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": (1, 2),
             "scope": {"type": "Surface", "content": "SURFACE", "text": "thing"},
@@ -46,7 +46,7 @@ LINES = [
         },
     ),
     (
-        StrictDollarLine(
+        StateDollarLine(
             atf.Qualification.AT_LEAST,
             1,
             ScopeContainer(atf.Surface.OBVERSE),
@@ -56,7 +56,7 @@ LINES = [
         {
             "prefix": "$",
             "content": dump_tokens([ValueToken(" at least 1 obverse blank ?")]),
-            "type": "StrictDollarLine",
+            "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": 1,
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
@@ -65,7 +65,7 @@ LINES = [
         },
     ),
     (
-        StrictDollarLine(
+        StateDollarLine(
             None,
             atf.Extent.BEGINNING_OF,
             ScopeContainer(atf.Surface.OBVERSE),
@@ -75,7 +75,7 @@ LINES = [
         {
             "prefix": "$",
             "content": dump_tokens([ValueToken(" beginning of obverse")]),
-            "type": "StrictDollarLine",
+            "type": "StateDollarLine",
             "qualification": None,
             "extent": "BEGINNING_OF",
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},

@@ -1,10 +1,10 @@
 from ebl.transliteration.application.line_schemas import (
     ScopeContainerSchema,
-    StrictDollarLineSchema,
+    StateDollarLineSchema,
 )
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.line import ScopeContainer, StrictDollarLine
+from ebl.transliteration.domain.line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.tokens import ValueToken
 
 
@@ -21,7 +21,7 @@ def test_load_scope_schema():
 
 
 def test_strict_dollar_line_schema():
-    line = StrictDollarLine(
+    line = StateDollarLine(
         atf.Qualification.AT_LEAST,
         atf.Extent.BEGINNING_OF,
         ScopeContainer(atf.Surface.OBVERSE),
@@ -31,7 +31,7 @@ def test_strict_dollar_line_schema():
     expected = {
         "prefix": "$",
         "content": dump_tokens([ValueToken(" at least beginning of obverse blank ?")]),
-        "type": "StrictDollarLine",
+        "type": "StateDollarLine",
         "qualification": "AT_LEAST",
         "extent": "BEGINNING_OF",
         "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
@@ -39,5 +39,5 @@ def test_strict_dollar_line_schema():
         "status": "UNCERTAIN",
     }
 
-    assert StrictDollarLineSchema().dump(line) == expected
-    assert StrictDollarLineSchema().load(expected) == line
+    assert StateDollarLineSchema().dump(line) == expected
+    assert StateDollarLineSchema().load(expected) == line

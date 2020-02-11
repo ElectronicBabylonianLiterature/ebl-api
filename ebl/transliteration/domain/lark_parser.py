@@ -30,7 +30,7 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     RulingDollarLine,
     ImageDollarLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
 )
 from ebl.transliteration.domain.sign_tokens import (
@@ -430,7 +430,7 @@ class TreeDollarSignToTokens(TreeToLine):
     def ebl_atf_dollar_line__strict(
         self, qualification, extent, scope_container, state, status
     ):
-        return StrictDollarLine(qualification, extent, scope_container, state, status)
+        return StateDollarLine(qualification, extent, scope_container, state, status)
 
 
 WORD_PARSER = Lark.open(

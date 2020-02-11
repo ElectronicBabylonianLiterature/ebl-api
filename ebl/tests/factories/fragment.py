@@ -11,7 +11,7 @@ from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line import (
     TextLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
     ImageDollarLine,
     RulingDollarLine,
@@ -203,7 +203,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 ),
             ),
-            StrictDollarLine(
+            StateDollarLine(
                 atf.Qualification.AT_LEAST,
                 1,
                 ScopeContainer(atf.Surface.OBVERSE, ""),
@@ -379,7 +379,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     ),
                 ),
             ),
-            StrictDollarLine(
+            StateDollarLine(
                 atf.Qualification.AT_LEAST,
                 1,
                 ScopeContainer(atf.Surface.OBVERSE, ""),

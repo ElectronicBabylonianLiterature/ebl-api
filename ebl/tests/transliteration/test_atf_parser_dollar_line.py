@@ -6,7 +6,7 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
 )
 from ebl.transliteration.domain.text import Text
@@ -19,7 +19,7 @@ from ebl.transliteration.domain.text import Text
         (
             "$ (end of side)",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.END_OF,
                     ScopeContainer(atf.Scope.SIDE, ""),
@@ -49,7 +49,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 obverse missing",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.OBVERSE, ""),
@@ -60,12 +60,12 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         ),
         (
             "$ 2 lines",
-            [StrictDollarLine(None, 2, ScopeContainer(atf.Scope.LINES), None, None,)],
+            [StateDollarLine(None, 2, ScopeContainer(atf.Scope.LINES), None, None,)],
         ),
         (
             "$ at most 1-3 object stone blank ?",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_MOST,
                     (1, 3),
                     ScopeContainer(atf.Object.OBJECT, "stone"),
@@ -77,7 +77,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ at most 1-3 obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_MOST,
                     (1, 3),
                     ScopeContainer(atf.Surface.OBVERSE),
@@ -89,7 +89,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ 1-3 obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None,
                 )
             ],
@@ -97,7 +97,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ 1 - 3 obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None,
                 )
             ],
@@ -105,7 +105,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ 1 obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None, 1, ScopeContainer(atf.Surface.OBVERSE), None, None,
                 )
             ],
@@ -113,7 +113,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
@@ -125,7 +125,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
@@ -137,7 +137,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several obverse",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
@@ -149,7 +149,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several obverse blank *",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
@@ -161,7 +161,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several surface stone blank *",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.SURFACE, "stone"),
@@ -173,7 +173,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several object stone blank *",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.OBJECT, "stone"),
@@ -185,7 +185,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several tablet blank *",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
@@ -197,7 +197,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several tablet blank !",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
@@ -209,7 +209,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         (
             "$ several tablet blank ?",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
@@ -231,7 +231,7 @@ def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
         (
             "$ (at least 1 obverse missing)",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.OBVERSE, ""),
@@ -257,7 +257,7 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
         (
             "$ (at least 1 surface thing)",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.SURFACE, "thing"),
@@ -269,7 +269,7 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 surface",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Scope.SURFACE, ""),
@@ -281,7 +281,7 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 surface missing",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Scope.SURFACE, ""),
@@ -293,7 +293,7 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 surface wall missing",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.SURFACE, "wall"),
@@ -315,7 +315,7 @@ def test_parse_atf_surface_ambiguity_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 fragment a",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Object.FRAGMENT, "a"),
@@ -337,7 +337,7 @@ def test_parse_atf_fragment_object_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 face a",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.FACE, "a"),
@@ -359,7 +359,7 @@ def test_parse_atf_face_surface_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 edge",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.EDGE, ""),
@@ -371,7 +371,7 @@ def test_parse_atf_face_surface_dollar_line(parser, line, expected_tokens):
         (
             "$ at least 1 edge a",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     atf.Qualification.AT_LEAST,
                     1,
                     ScopeContainer(atf.Surface.EDGE, "a"),

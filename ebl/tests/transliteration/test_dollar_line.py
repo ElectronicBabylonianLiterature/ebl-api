@@ -3,7 +3,7 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
 )
 from ebl.transliteration.domain.tokens import ValueToken
@@ -37,7 +37,7 @@ def test_ruling_dollar_line():
 
 def test_strict_dollar_line_with_none():
     scope = ScopeContainer(atf.Object.OBJECT, "what")
-    actual = StrictDollarLine(None, atf.Extent.SEVERAL, scope, None, None)
+    actual = StateDollarLine(None, atf.Extent.SEVERAL, scope, None, None)
 
     assert actual.prefix == "$"
     assert actual.scope.content == atf.Object.OBJECT
@@ -46,7 +46,7 @@ def test_strict_dollar_line_with_none():
 
 
 def test_strict_dollar_line():
-    actual = StrictDollarLine(
+    actual = StateDollarLine(
         atf.Qualification.AT_LEAST,
         atf.Extent.SEVERAL,
         ScopeContainer(atf.Scope.COLUMNS, ""),
@@ -66,7 +66,7 @@ def test_strict_dollar_line():
 
 def test_strict_dollar_line_content():
     scope = ScopeContainer(atf.Surface.OBVERSE)
-    actual = StrictDollarLine(
+    actual = StateDollarLine(
         atf.Qualification.AT_LEAST, 1, scope, atf.State.BLANK, atf.Status.UNCERTAIN,
     )
 

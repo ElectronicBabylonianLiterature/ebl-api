@@ -18,7 +18,7 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
 )
 from ebl.transliteration.domain.sign_tokens import (
@@ -87,7 +87,7 @@ def test_parser_version(parser, version):
         (
             "$ (end of side)",
             [
-                StrictDollarLine(
+                StateDollarLine(
                     None,
                     atf.Extent.END_OF,
                     ScopeContainer(atf.Scope.SIDE, ""),

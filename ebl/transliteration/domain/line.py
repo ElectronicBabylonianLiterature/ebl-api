@@ -156,7 +156,7 @@ Range = Tuple[int, int]
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class StrictDollarLine(DollarLine):
+class StateDollarLine(DollarLine):
     qualification: Optional[atf.Qualification]
     extent: Union[atf.Extent, int, Range]
     scope: ScopeContainer
@@ -170,7 +170,7 @@ class StrictDollarLine(DollarLine):
                 " "
                 + " ".join(
                     [
-                        StrictDollarLine.to_atf(x)
+                        StateDollarLine.to_atf(x)
                         for x in [
                             self.qualification,
                             self.extent,

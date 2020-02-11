@@ -15,7 +15,7 @@ from ebl.transliteration.domain.line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StrictDollarLine,
+    StateDollarLine,
     ScopeContainer,
 )
 
@@ -108,11 +108,11 @@ class ScopeContainerSchema(Schema):
         return scope_types[type][content]
 
 
-class StrictDollarLineSchema(LineSchema):
-    type = fields.Constant("StrictDollarLine", required=True)
+class StateDollarLineSchema(LineSchema):
+    type = fields.Constant("StateDollarLine", required=True)
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
-        lambda strict: StrictDollarLineSchema.dump_extent(strict.extent),
+        lambda strict: StateDollarLineSchema.dump_extent(strict.extent),
         lambda value: value,
         required=True,
     )
@@ -122,9 +122,9 @@ class StrictDollarLineSchema(LineSchema):
 
     @post_load
     def make_line(self, data, **kwargs):
-        return StrictDollarLine(
+        return StateDollarLine(
             data["qualification"],
-            StrictDollarLineSchema.load_extent(data["extent"]),
+            StateDollarLineSchema.load_extent(data["extent"]),
             data["scope"],
             data["state"],
             data["status"],
@@ -158,7 +158,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "LooseDollarLine": LooseDollarLineSchema,
     "ImageDollarLine": ImageDollarLineSchema,
     "RulingDollarLine": RulingDollarLineSchema,
-    "StrictDollarLine": StrictDollarLineSchema,
+    "StateDollarLine": StateDollarLineSchema,
 }
 
 
