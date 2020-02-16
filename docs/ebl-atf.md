@@ -35,7 +35,7 @@ any-character = ? any UTF-8 character ?;
 
 ## $-lines
 
-$-lines are used to indicate information about the state of the text or object, or to 
+$-lines are used to indicate information about the state of the text or object, or to
 describe features on the object which are not part of the transliteration proper.
 
 Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
