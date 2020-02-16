@@ -4,7 +4,7 @@ from ebl.transliteration.application.line_schemas import (
 )
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.line import ScopeContainer, StateDollarLine
+from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.tokens import ValueToken
 
 

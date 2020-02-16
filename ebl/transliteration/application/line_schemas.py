@@ -12,11 +12,13 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     Line,
     TextLine,
+)
+from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StateDollarLine,
     ScopeContainer,
+    StateDollarLine,
 )
 
 

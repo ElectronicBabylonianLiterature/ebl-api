@@ -18,9 +18,8 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-    StateDollarLine,
-    ScopeContainer,
 )
+from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,

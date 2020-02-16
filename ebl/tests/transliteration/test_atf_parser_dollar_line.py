@@ -2,12 +2,12 @@ import pytest
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.line import (
+from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StateDollarLine,
     ScopeContainer,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.text import Text
 

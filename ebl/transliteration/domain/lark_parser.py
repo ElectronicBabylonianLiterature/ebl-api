@@ -27,11 +27,13 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
+)
+from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
-    RulingDollarLine,
     ImageDollarLine,
-    StateDollarLine,
+    RulingDollarLine,
     ScopeContainer,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,

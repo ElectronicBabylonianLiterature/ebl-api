@@ -1,10 +1,10 @@
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.line import (
+from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StateDollarLine,
     ScopeContainer,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.tokens import ValueToken
 

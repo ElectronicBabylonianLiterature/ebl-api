@@ -9,13 +9,13 @@ from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.line import (
-    TextLine,
-    StateDollarLine,
-    ScopeContainer,
+from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.dollar_line import (
+    LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    LooseDollarLine,
+    ScopeContainer,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,

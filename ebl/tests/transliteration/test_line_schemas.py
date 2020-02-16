@@ -15,11 +15,13 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
+)
+from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
-    StateDollarLine,
     ScopeContainer,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
