@@ -28,10 +28,7 @@ OBJECT: "tablet" | "envelope" | "prism" | "bulla"
 fragment: "fragment" _WORD_SEPARATOR text
 generic_object : OBJECT_GENERIC _WORD_SEPARATOR text
 OBJECT_GENERIC : "object"
-text : /./+
-
-//have to copy all strict rules and just change TEXT to /[^)]+/ so in a loose line the TEXT of a strict rule doesn't match the closing bracket
-// currently no closing brackets in strict (generally) isn't allowed in e.g. TEXT to solve this issue
+text.-2 : /./+
 
 _surface : SURFACE | generic_surface | face | edge
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
@@ -40,31 +37,19 @@ edge: "edge" _WORD_SEPARATOR LOWER_CASE_LETTER
 generic_surface : SURFACE_GENERIC _WORD_SEPARATOR text
 SURFACE_GENERIC : "surface"
 
-
-STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces "
+STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
     | "omitted" | "continues"
 
 STATUS : "*" | "?" | "!" | "!?"
 
-_looses: "(" (state_line | loose) _WORD_SEPARATOR* ")"
+_looses: "(" (state_line | loose) _WORD_SEPARATOR? ")"
 loose.-2 : text
-
-
 
 ruling : RULING_NUMBER _WORD_SEPARATOR RULING
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
-image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR text _WORD_SEPARATOR* ")"
+image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR text _WORD_SEPARATOR? ")"
 _IMAGE : "(" [_WORD_SEPARATOR] "image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
-
-
-// example : text _WORD_SEPERATOR* ")" causes undetermined behaviour
-// if you parse: " thing  ")"  then text == "thing " or "thing" !
-
-
-
-
-

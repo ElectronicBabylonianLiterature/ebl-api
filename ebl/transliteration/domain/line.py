@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Iterable, Sequence, Tuple, Type, TypeVar
+from typing import Callable, Iterable, Sequence, Type, TypeVar
 
 import attr
 import pydash

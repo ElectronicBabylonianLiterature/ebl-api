@@ -28,7 +28,7 @@ from ebl.transliteration.domain.text import Text
                 )
             ],
         ),
-        ("$ (image 1a = great  )", [ImageDollarLine("1", "a", "great")]),
+        ("$ (image 1a = great )", [ImageDollarLine("1", "a", "great")]),
         (
             "$ (image 1 = numbered diagram of triangle)",
             [ImageDollarLine("1", None, "numbered diagram of triangle")],
@@ -251,6 +251,42 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        (
+            "$ (at least 1 surface thing right missing )",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "thing right"),
+                    atf.State.MISSING,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ (at least 1 surface thing right  )",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "thing right"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ (at least 1 surface th(in)g  )",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "th(in)g"),
+                    None,
+                    None,
+                )
+            ],
+        ),
         (
             "$ (at least 1 surface thing  )",
             [
