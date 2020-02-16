@@ -115,3 +115,6 @@ docker-entrypoint-initdb.d/
 
 # Run backend locally
 run_backend.sh
+
+#Pytest Configuration File
+pytest.ini
