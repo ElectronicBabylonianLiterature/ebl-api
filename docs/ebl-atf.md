@@ -43,7 +43,7 @@ Loose rule: Just text in brackets
 
 Rulings: (single | double | triple) ruling
 
-Image: (image N = <text>)
+Image: (image N = \<text>)
 
 ```ebnf
 line = "$", value;

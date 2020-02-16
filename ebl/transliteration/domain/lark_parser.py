@@ -358,6 +358,12 @@ class TreeToLine(TreeToWord):
 
 
 class TreeDollarSignToTokens(TreeToLine):
+    def ebl_atf_dollar_line__text(self, content):
+        return "".join([x for x in content]).rstrip(" ")
+
+    def ebl_atf_dollar_line__image_text(self, content):
+        return "".join([x for x in content])
+
     @v_args(inline=True)
     def ebl_atf_dollar_line__loose(self, content):
         return LooseDollarLine(str(content))
@@ -367,8 +373,12 @@ class TreeDollarSignToTokens(TreeToLine):
         return RulingDollarLine(atf.Ruling(str(number)))
 
     @v_args(inline=True)
+    def ebl_atf_dollar_line__LOWER_CASE_LETTER(self, letter):
+        return str(letter)
+
+    @v_args(inline=True)
     def ebl_atf_dollar_line__image(self, number, letter, text):
-        return ImageDollarLine(str(number), letter, str(text)[0:-1])
+        return ImageDollarLine(str(number), letter, text)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__STATUS(self, status):
@@ -427,7 +437,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return atf.Qualification(str(qualification))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__strict(
+    def ebl_atf_dollar_line__state_line(
         self, qualification, extent, scope_container, state, status
     ):
         return StateDollarLine(qualification, extent, scope_container, state, status)

@@ -9,9 +9,9 @@ _WORD_SEPARATOR: " "
 
 ?dollar_line : "$" _WORD_SEPARATOR value
 
-?value : strict | _looses | ruling | image
+?value : state_line | _looses | ruling | image
 
-strict : [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
+state_line: [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
 
 QUALIFICATION : "at least" | "at most" | "about"
 
@@ -25,10 +25,10 @@ SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | 
 
 _object : OBJECT | generic_object | fragment
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"
-fragment: "fragment" _WORD_SEPARATOR TEXT
-generic_object : OBJECT_GENERIC _WORD_SEPARATOR TEXT
+fragment: "fragment" _WORD_SEPARATOR text
+generic_object : OBJECT_GENERIC _WORD_SEPARATOR text
 OBJECT_GENERIC : "object"
-TEXT : /([^\s)]+)/
+text : /./+
 
 //have to copy all strict rules and just change TEXT to /[^)]+/ so in a loose line the TEXT of a strict rule doesn't match the closing bracket
 // currently no closing brackets in strict (generally) isn't allowed in e.g. TEXT to solve this issue
@@ -37,7 +37,7 @@ _surface : SURFACE | generic_surface | face | edge
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
 face: "face" _WORD_SEPARATOR LOWER_CASE_LETTER
 edge: "edge" _WORD_SEPARATOR LOWER_CASE_LETTER
-generic_surface : SURFACE_GENERIC _WORD_SEPARATOR TEXT
+generic_surface : SURFACE_GENERIC _WORD_SEPARATOR text
 SURFACE_GENERIC : "surface"
 
 
@@ -46,8 +46,8 @@ STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces "
 
 STATUS : "*" | "?" | "!" | "!?"
 
-_looses: "(" (strict | loose) ")"
-!loose.-2 : /[^)]+/
+_looses: "(" (state_line | loose) _WORD_SEPARATOR* ")"
+loose.-2 : text
 
 
 
@@ -55,9 +55,16 @@ ruling : RULING_NUMBER _WORD_SEPARATOR RULING
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
-image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR IMAGE_TEXT
+image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR text _WORD_SEPARATOR* ")"
 _IMAGE : "(" [_WORD_SEPARATOR] "image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
-IMAGE_TEXT : /./+ ")"
+
+
+// example : text _WORD_SEPERATOR* ")" causes undetermined behaviour
+// if you parse: " thing  ")"  then text == "thing " or "thing" !
+
+
+
+
 
