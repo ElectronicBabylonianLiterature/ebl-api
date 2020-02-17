@@ -1,6 +1,15 @@
-eBL-ATF is based on [Oracc-ATF](http://oracc.museum.upenn.edu/doc/help/editinginatf/index.html) but is not fully compatible with other ATF flavours. eBL-ATF uses UTF-8 encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form) ([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)). 
+eBL-ATF is based on [Oracc-ATF](http://oracc.museum.upenn.edu/doc/help/editinginatf/index.html)
+but is not fully compatible with other ATF flavours. eBL-ATF uses UTF-8
+encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form)
+([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)).
 
-The EBNF grammar below is an idealized representation of the eBL-ATF as it does not deal with ambiguities and implentattional details necessary to create the domain model in practice. A fully functional grammar is defined in [ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/text/ebl-atf.lark). The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark). See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/) and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
+The EBNF grammar below is an idealized representation of the eBL-ATF as it does
+not deal with ambiguities and implentattional details necessary to create the
+domain model in practice. A fully functional grammar is defined in
+[ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/text/ebl-atf.lark).
+The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark).
+See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/)
+and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
 
 
 eBL-ATF can be empty or consist of lines separated by a newline character.
@@ -15,7 +24,9 @@ eol = ? end of line ?;
 
 ## Lines
 
-A line can be either *empty*, *control* or *text line*. Text lines contain transliterated text. Other lines do not currently have special semantics.  Continuation lines (starting with space) are not supported. 
+A line can be either *empty*, *control* or *text line*. Text lines contain
+transliterated text. Other lines do not currently have special semantics. 
+Continuation lines (starting with space) are not supported. 
 
 ```ebnf
 line = empty-line
@@ -35,8 +46,9 @@ any-character = ? any UTF-8 character ?;
 
 ## $-lines
 
-$-lines are used to indicate information about the state of the text or object, or to
-describe features on the object which are not part of the transliteration proper.
+$-lines are used to indicate information about the state of the text or object,
+or to describe features on the object which are not part of the transliteration
+proper.
 
 Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
 
@@ -55,14 +67,14 @@ strict = [qualification], extend, scope, [state], [status];
 
 qualification = "at least" | "at most" | "about";
 
-extent= "serveral" | "some" | number | range | "rest of" | "start of" | beginning of |
-    "middle of" | "end of";
+extent = "serveral" | "some" | number | range | "rest of" | "start of" 
+       | beginning of | "middle of" | "end of";
     
-scope = object | surface | "column" | "columns" | "line" | "lines" | "case" | "cases" |
-    "side" | "excerpt" | "surface";
+scope = object | surface | "column" | "columns" | "line" | "lines" | "case"
+      | "cases" | "side" | "excerpt" | "surface";
 
-state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces " |
-    "omitted" | "continues";
+state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces " 
+      | "omitted" | "continues";
 
 status = "*" | "?" | "!" | "!?" ;
 
@@ -74,8 +86,8 @@ fragment = "fragment", text
 
 generic-object = "object", text
 
-surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom" |
-    face | generic-surface | edge
+surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
+        | face | generic-surface | edge
 
 face = "face", lower-case-letter
 
@@ -100,7 +112,8 @@ See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginat
 
 ## Text
 
-Text is a series of tokens separated by a word separator (space). The separator can sometimes be omitted.
+Text is a series of tokens separated by a word separator (space). The separator
+can sometimes be omitted.
 
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
 | -------------|------------|--------------|-----------|-------|
@@ -121,7 +134,9 @@ Text is a series of tokens separated by a word separator (space). The separator 
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ (token | document-oriented-gloss), { word-separator, (token | document-oriented-gloss) } ], [ line-continuation ];
+text = [ (token | document-oriented-gloss), 
+         { word-separator, (token | document-oriented-gloss) } ],
+       [ line-continuation ];
 text = text-head, { text-tail }, [ word-separator, line-continuation ];
 text-head = optional-spaces
           | require-both-spaces
@@ -156,7 +171,8 @@ tabulation = '($___$)';
 
 column = '&', { decimal-digit };
 
-divider-variant = ( variant-part | divider ), variant-separator, ( variant-part | divider );
+divider-variant = ( variant-part | divider ), variant-separator,
+                  ( variant-part | divider );
 divider = divider-symbol, modifier, flag;
 divider-symbol = '|' | ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
@@ -167,7 +183,8 @@ document-oriented-gloss = '{(', token, { [word-separator], token } ,')}';
 shift = '%', { word-character }-;
 
 erasure = '°', [ erasure-part ] '\', [ erasure-part ], '°';
-erasure-part = ( divider | word | lone-determinative ), { word-separator, ( divider | word | lone-determinative ) };
+erasure-part = ( divider | word | lone-determinative ),
+               { word-separator, ( divider | word | lone-determinative ) };
 
 omission = open-omission | close-omission;
 open-omission = '<<' | '<(' | '<';
@@ -192,7 +209,8 @@ close-inline-broken-away = ? not . ?, ')]'
 word-separator = ' ';
 ```
 
-See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html) and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
 
 ### Presence
 
@@ -288,8 +306,12 @@ word = [ part-joiner ], [ open-inline-broken-away ], [ open-omission ],
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ), { [ part-joiner ], ( determinative | variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) }
-      | unknown-number-of-signs, { [ part-joiner ], ( determinative | variant | linguistic-gloss | phonetic-gloss | unknown-number-of-signs ) }-;
+parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ), 
+        { [ part-joiner ], ( determinative | variant | linguistic-gloss 
+                           | phonetic-gloss | unknown-number-of-signs ) }
+      | unknown-number-of-signs, { [ part-joiner ], 
+        ( determinative | variant | linguistic-gloss | phonetic-gloss 
+        | unknown-number-of-signs ) }-;
 
 linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
@@ -314,20 +336,23 @@ variant-part = unknown
 surrogate = logogram, ['<(', value, { '-', value } ,')>'];
 logogram = logogram-character, { [ invalue-broken-away ], logogram-character },
            [ sub-index ], modifier, flag;
-logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' | 'I'
-                   | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' | 'R' | 'S'
-                   | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W' | 'Z' | 'Ḫ' | 'ʾ';     
+logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' 
+                   | 'I' | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' 
+                   | 'R' | 'S' | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W'
+                   | 'Z' | 'Ḫ' | 'ʾ';     
 
-value-with-sign = ( value | logogram ), '(', ( compound-grapheme | grapheme ), ')';
+value-with-sign = ( value | logogram ), '(', ( compound-grapheme | grapheme ), 
+                  ')';
 value = value-character, { [ invalue-broken-away ], value-character }, 
         [ sub-index ], modifier, flag;
-value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h' | 'i'
-                | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q' | 'r' | 's'
-                | 'ṣ' | 'š' | 't' | 'ṭ' | 'u' | 'ū' | 'û' | 'w' | 'z' | 'ḫ' | 'ʾ'
-                | decimal-digit;
+value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h'
+                | 'i' | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q'
+                | 'r' | 's' | 'ṣ' | 'š' | 't' | 'ṭ' | 'u' | 'ū' | 'û' | 'w' 
+                | 'z' | 'ḫ' | 'ʾ' | decimal-digit;
 sub-index = { sub-index-character }-;
 
-compound-grapheme = '|', compound-part, { compound-operator, compound-part }, '|';
+compound-grapheme = '|', compound-part, { compound-operator, compound-part },
+                    '|';
 compound-part = '(' grapheme-variant { compound-operator, grapheme-variant } ')'
               | grapheme-variant
 grapheme-variant = grapheme, { variant-separator, grapheme };
@@ -391,11 +416,14 @@ corrected.
 line-number-label = { not-space }-;
 
 column-label = roman-numeral, { status };
-roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-; (* Must be a valid numeral. *)
+roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
+                (* Must be a valid numeral. *)
 
-surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ), { status };
+surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ),
+                { status };
 
 status = "'" | '?' | '!' | '*';
 ```
+
 See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html)
 and [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
