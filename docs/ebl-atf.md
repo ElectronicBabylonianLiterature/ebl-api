@@ -25,8 +25,8 @@ eol = ? end of line ?;
 ## Lines
 
 A line can be either *empty*, *control* or *text line*. Text lines contain
-transliterated text. Other lines do not currently have special semantics. 
-Continuation lines (starting with space) are not supported. 
+transliterated text. Other lines do not currently have special semantics.
+Continuation lines (starting with space) are not supported.
 
 ```ebnf
 line = empty-line
@@ -67,13 +67,13 @@ strict = [qualification], extend, scope, [state], [status];
 
 qualification = "at least" | "at most" | "about";
 
-extent = "serveral" | "some" | number | range | "rest of" | "start of" 
+extent = "serveral" | "some" | number | range | "rest of" | "start of"
        | beginning of | "middle of" | "end of";
     
 scope = object | surface | "column" | "columns" | "line" | "lines" | "case"
       | "cases" | "side" | "excerpt" | "surface";
 
-state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces " 
+state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces "
       | "omitted" | "continues";
 
 status = "*" | "?" | "!" | "!?" ;
@@ -134,7 +134,7 @@ can sometimes be omitted.
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ (token | document-oriented-gloss), 
+text = [ (token | document-oriented-gloss),
          { word-separator, (token | document-oriented-gloss) } ],
        [ line-continuation ];
 text = text-head, { text-tail }, [ word-separator, line-continuation ];
@@ -306,11 +306,11 @@ word = [ part-joiner ], [ open-inline-broken-away ], [ open-omission ],
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ), 
-        { [ part-joiner ], ( determinative | variant | linguistic-gloss 
+parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ),
+        { [ part-joiner ], ( determinative | variant | linguistic-gloss
                            | phonetic-gloss | unknown-number-of-signs ) }
-      | unknown-number-of-signs, { [ part-joiner ], 
-        ( determinative | variant | linguistic-gloss | phonetic-gloss 
+      | unknown-number-of-signs, { [ part-joiner ],
+        ( determinative | variant | linguistic-gloss | phonetic-gloss
         | unknown-number-of-signs ) }-;
 
 linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
@@ -336,18 +336,18 @@ variant-part = unknown
 surrogate = logogram, ['<(', value, { '-', value } ,')>'];
 logogram = logogram-character, { [ invalue-broken-away ], logogram-character },
            [ sub-index ], modifier, flag;
-logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H' 
-                   | 'I' | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q' 
+logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | 'H'
+                   | 'I' | 'Ī' | 'Î' | 'Y' | 'K' | 'L' | 'M' | 'N' | 'P' | 'Q'
                    | 'R' | 'S' | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W'
-                   | 'Z' | 'Ḫ' | 'ʾ';     
+                   | 'Z' | 'Ḫ' | 'ʾ';
 
-value-with-sign = ( value | logogram ), '(', ( compound-grapheme | grapheme ), 
+value-with-sign = ( value | logogram ), '(', ( compound-grapheme | grapheme ),
                   ')';
 value = value-character, { [ invalue-broken-away ], value-character }, 
         [ sub-index ], modifier, flag;
 value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h'
                 | 'i' | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q'
-                | 'r' | 's' | 'ṣ' | 'š' | 't' | 'ṭ' | 'u' | 'ū' | 'û' | 'w' 
+                | 'r' | 's' | 'ṣ' | 'š' | 't' | 'ṭ' | 'u' | 'ū' | 'û' | 'w'
                 | 'z' | 'ḫ' | 'ʾ' | decimal-digit;
 sub-index = { sub-index-character }-;
 
