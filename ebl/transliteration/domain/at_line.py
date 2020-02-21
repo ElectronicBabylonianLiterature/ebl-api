@@ -9,7 +9,7 @@ from ebl.transliteration.domain.tokens import ValueToken, Token
 
 @attr.s(auto_attribs=True, frozen=True)
 class AtLine(Line):
-    structural_tag: Union[atf.Surface, atf.Object] = attr.ib()
+    structural_tag: Union[atf.Surface, atf.Object]
     status: Optional[atf.Status]
     text: str = ""
 

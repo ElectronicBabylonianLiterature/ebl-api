@@ -2,6 +2,7 @@ from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
 import pydash
+import attr
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
@@ -447,21 +448,47 @@ class TreeDollarSignToTokens(TreeToLine):
 
 
 class TreeAtSignToTokens(TreeDollarSignToTokens):
-    def ebl_atf_at_line__fragment(self, content):
-        return content
-
-    def ebl_atf_at_line__object(self, content):
-        return content
+    def ebl_atf_at_line__text(self, content):
+        return "".join([x for x in content]).rstrip(" ")
 
     @v_args(inline=True)
-    def ebl_atf_at_line__structural_tag(self, content):
-        return content
+    def ebl_atf_at_line__LOWER_CASE_LETTER(self, letter):
+        return str(letter)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__OBJECT(self, content):
+        return AtLine(atf.Object(str(content)), None, "")
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__generic_object(self, object, content):
+        return AtLine(atf.Object.OBJECT, None, content)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__fragment(self, text):
+        return AtLine(atf.Object.FRAGMENT, None, text)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__SURFACE(self, content):
+        return AtLine(atf.Surface.from_atf(str(content)), None, "")
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__generic_surface(self, surface, content):
+        return AtLine(atf.Surface.SURFACE, None, content)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__face(self, letter):
+        return AtLine(atf.Surface.FACE, None, letter)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__edge(self, content):
+        return AtLine(atf.Surface.EDGE, None, letter)
 
     def ebl_atf_at_line__STATUS(self, content):
-        pass
+        return atf.Status(str(content))
 
-    def ebl_atf_at_line__value(self, content):
-        return AtLine(atf.Object.TABLET, None, "")
+    @v_args(inline=True)
+    def ebl_atf_at_line__value(self, content, status):
+        return attr.evolve(content, status=status)
 
 
 WORD_PARSER = Lark.open(
