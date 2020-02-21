@@ -11,10 +11,21 @@ from ebl.transliteration.domain.at_line import AtLine
     "line,expected_tokens",
     [
         ("@fragment a !", [AtLine(atf.Object.FRAGMENT, atf.Status.CORRECTION, "a")]),
+        ("@fragment a!", [AtLine(atf.Object.FRAGMENT, atf.Status.CORRECTION, "a")]),
+        ("@object Stone wig", [AtLine(atf.Object.OBJECT, None, "Stone wig")]),
+        (
+            "@object Stone wig!",
+            [AtLine(atf.Object.OBJECT, atf.Status.CORRECTION, "Stone wig")],
+        ),
         ("@reverse !", [AtLine(atf.Surface.REVERSE, atf.Status.CORRECTION)]),
         ("@surface a !", [AtLine(atf.Surface.SURFACE, atf.Status.CORRECTION, "a")]),
         ("@object what !", [AtLine(atf.Object.OBJECT, atf.Status.CORRECTION, "what")]),
+        ("@tablet !", [AtLine(atf.Object.TABLET, atf.Status.CORRECTION)]),
+        ("@face a !", [AtLine(atf.Surface.FACE, atf.Status.CORRECTION, "a")]),
+        ("@edge c !", [AtLine(atf.Surface.EDGE, atf.Status.CORRECTION, "c")]),
+        ("@prism !", [AtLine(atf.Object.PRISM, atf.Status.CORRECTION, "")]),
+        ("@object seal!", [AtLine(atf.Object.OBJECT, atf.Status.CORRECTION, "seal")]),
     ],
 )
-def test_parse_atf_dollar_line(parser, line, expected_tokens):
+def test_parse_atf_at_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines

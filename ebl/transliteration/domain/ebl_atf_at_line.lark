@@ -2,7 +2,8 @@ _WORD_SEPARATOR: " "
 
 ?at_line : "@" value
 
-value :  (_object | _surface ) [_WORD_SEPARATOR STATUS]
+value :  (_object | _surface ) [status]
+status: [_WORD_SEPARATOR] STATUS
 
 %import .ebl_atf_dollar_line (text, LOWER_CASE_LETTER)
 %import .ebl_atf_dollar_line (_object, OBJECT, generic_object, fragment, _surface, STATUS)

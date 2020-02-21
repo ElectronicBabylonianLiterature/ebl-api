@@ -385,8 +385,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return ImageDollarLine(str(number), letter, text)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__STATUS(self, status):
-        return atf.Status(str(status))
+    def ebl_atf_dollar_line__status(self, content):
+        return atf.Status(str(content))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__STATE(self, state):
@@ -480,10 +480,11 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
         return AtLine(atf.Surface.FACE, None, letter)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__edge(self, content):
+    def ebl_atf_at_line__edge(self, letter):
         return AtLine(atf.Surface.EDGE, None, letter)
 
-    def ebl_atf_at_line__STATUS(self, content):
+    @v_args(inline=True)
+    def ebl_atf_at_line__status(self, content):
         return atf.Status(str(content))
 
     @v_args(inline=True)

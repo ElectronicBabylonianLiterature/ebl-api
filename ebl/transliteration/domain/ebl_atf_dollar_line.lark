@@ -6,7 +6,9 @@ _WORD_SEPARATOR: " "
 
 ?value : state_line | _looses | ruling | image
 
-state_line: [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
+state_line: [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [status]
+
+status: [_WORD_SEPARATOR] STATUS
 
 QUALIFICATION : "at least" | "at most" | "about"
 

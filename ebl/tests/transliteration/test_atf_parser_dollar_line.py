@@ -218,6 +218,18 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                 )
             ],
         ),
+        (
+            "$ several tablet blank?",
+            [
+                StateDollarLine(
+                    None,
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.TABLET),
+                    atf.State.BLANK,
+                    atf.Status.UNCERTAIN,
+                )
+            ],
+        ),
     ],
 )
 def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
@@ -260,6 +272,18 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
                     ScopeContainer(atf.Surface.SURFACE, "thing right"),
                     atf.State.MISSING,
                     None,
+                )
+            ],
+        ),
+        (
+            "$ (at least 1 surface thing right missing!)",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "thing right"),
+                    atf.State.MISSING,
+                    atf.Status.CORRECTION,
                 )
             ],
         ),
@@ -416,4 +440,38 @@ def test_parse_atf_face_surface_dollar_line(parser, line, expected_tokens):
     ],
 )
 def test_parse_atf_edge_surface_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$ at least 1 edge",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.EDGE, ""),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        (
+            "$ at least 1 edge a!",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.EDGE, "a"),
+                    None,
+                    atf.Status.CORRECTION,
+                )
+            ],
+        ),
+    ],
+)
+def test_parse_atf_dollar_line_status(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
