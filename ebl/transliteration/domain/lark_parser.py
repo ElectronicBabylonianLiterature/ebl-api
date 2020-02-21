@@ -9,6 +9,7 @@ from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import AtLine
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -445,6 +446,24 @@ class TreeDollarSignToTokens(TreeToLine):
         return StateDollarLine(qualification, extent, scope_container, state, status)
 
 
+class TreeAtSignToTokens(TreeDollarSignToTokens):
+    def ebl_atf_at_line__fragment(self, content):
+        return content
+
+    def ebl_atf_at_line__object(self, content):
+        return content
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__structural_tag(self, content):
+        return content
+
+    def ebl_atf_at_line__STATUS(self, content):
+        pass
+
+    def ebl_atf_at_line__value(self, content):
+        return AtLine(atf.Object.TABLET, None, "")
+
+
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
@@ -463,7 +482,7 @@ def parse_erasure(atf):
 
 def parse_line(atf):
     tree = LINE_PARSER.parse(atf)
-    return TreeDollarSignToTokens().transform(tree)
+    return TreeAtSignToTokens().transform(tree)
 
 
 def parse_atf_lark(atf_):

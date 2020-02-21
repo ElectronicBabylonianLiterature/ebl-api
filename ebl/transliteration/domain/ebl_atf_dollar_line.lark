@@ -1,11 +1,6 @@
-%import common.ESCAPED_STRING
 %import common.SIGNED_NUMBER
-%import common.LCASE_LETTER
-
 
 _WORD_SEPARATOR: " "
-
-?start : dollar_line
 
 ?dollar_line : "$" _WORD_SEPARATOR value
 

@@ -1,0 +1,14 @@
+_WORD_SEPARATOR: " "
+
+?at_line : "@" value
+
+value :  structural_tag [_WORD_SEPARATOR STATUS]
+
+structural_tag : (_object | _surface )
+
+%import .ebl_atf_dollar_line (_object, fragment, _surface, STATUS)
+
+
+
+
+

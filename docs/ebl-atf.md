@@ -43,6 +43,23 @@ not-space = any-character - ' ';
 
 any-character = ? any UTF-8 character ?;
 ```
+## @-lines
+@-lines are used for structural tags. Several kinds of structure may be indicated using
+this mechanism: physical structure, e.g., objects, surfaces; manuscript structure, i.e.,
+columns; and document structure, e.g., divisions and colophons. For clarity, we describe
+here only the structural features which are permitted in object transliterations, i.e.,
+texts with an ID beginning with P.
+
+```ebnf
+
+line = "@", value
+
+value = (objects | seals | surfaces | sealing | columns) STATUS?
+
+objects = 
+surfaces = 
+sealing =  
+```
 
 ## $-lines
 
