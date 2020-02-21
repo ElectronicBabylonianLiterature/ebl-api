@@ -2,12 +2,19 @@ _WORD_SEPARATOR: " "
 
 ?at_line : "@" value
 
-value :  (_object | _surface ) [status]
+value :  (_object | _surface | seal | column | heading) [status]
+
 status: [_WORD_SEPARATOR] STATUS
+
+column : "column" _WORD_SEPARATOR+ DIGIT
+heading: "h" _WORD_SEPARATOR* DIGIT
+
+
 
 %import .ebl_atf_dollar_line (text, LOWER_CASE_LETTER)
 %import .ebl_atf_dollar_line (_object, OBJECT, generic_object, fragment, _surface, STATUS)
 %import .ebl_atf_dollar_line (_surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_dollar_line (seal, DIGIT)
 %import .ebl_atf_dollar_line (STATUS)
 
 

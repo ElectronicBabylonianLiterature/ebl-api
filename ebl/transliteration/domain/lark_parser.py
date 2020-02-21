@@ -10,7 +10,7 @@ from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.at_line import AtLine
+from ebl.transliteration.domain.at_line import AtLine, Seal, Column, Heading
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -36,6 +36,7 @@ from ebl.transliteration.domain.dollar_line import (
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+    SealDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -365,6 +366,10 @@ class TreeDollarSignToTokens(TreeToLine):
     def ebl_atf_dollar_line__text(self, content):
         return "".join([x for x in content]).rstrip(" ")
 
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__seal(self, number):
+        return SealDollarLine(int(number))
+
     def ebl_atf_dollar_line__image_text(self, content):
         return "".join([x for x in content])
 
@@ -452,6 +457,10 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
         return "".join([x for x in content]).rstrip(" ")
 
     @v_args(inline=True)
+    def ebl_atf_at_line__DIGIT(self, number):
+        return int(number)
+
+    @v_args(inline=True)
     def ebl_atf_at_line__LOWER_CASE_LETTER(self, letter):
         return str(letter)
 
@@ -482,6 +491,18 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
     @v_args(inline=True)
     def ebl_atf_at_line__edge(self, letter):
         return AtLine(atf.Surface.EDGE, None, letter)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__seal(self, number):
+        return AtLine(Seal(number), None, "")
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__column(self, number):
+        return AtLine(Column(number), None, "")
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__heading(self, number):
+        return AtLine(Heading(number), None, "")
 
     @v_args(inline=True)
     def ebl_atf_at_line__status(self, content):

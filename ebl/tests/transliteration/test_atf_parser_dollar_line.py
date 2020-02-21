@@ -8,6 +8,7 @@ from ebl.transliteration.domain.dollar_line import (
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+    SealDollarLine,
 )
 from ebl.transliteration.domain.text import Text
 
@@ -474,4 +475,13 @@ def test_parse_atf_edge_surface_dollar_line(parser, line, expected_tokens):
     ],
 )
 def test_parse_atf_dollar_line_status(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [("$ seal 1", [SealDollarLine(1)],), ("$ seal 101", [SealDollarLine(101)],),],
+)
+def test_parse_atf_seal_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines

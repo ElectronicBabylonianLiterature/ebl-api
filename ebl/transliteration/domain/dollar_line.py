@@ -27,6 +27,15 @@ class DollarLine(Line):
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class SealDollarLine(DollarLine):
+    number: int
+
+    @property
+    def _content_as_is(self):
+        return (ValueToken(f"(seal {self.number})"),)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
     text: str = ""
 
