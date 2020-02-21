@@ -161,6 +161,16 @@ class State(Enum):
     CONTINUES = "continues"
 
 
+class Discourse(Enum):
+    CATCHLINE = "catchline"
+    COLOPHON = "colophon"
+    DATE = "date"
+    SIGNATURE = "signature"
+    SIGNATURES = "signatures"
+    SUMMARY = "summary"
+    WITNESS = "witness"
+
+
 UNKNOWN_NUMBER_OF_SIGNS = "..."
 WORD_SEPARATOR = " "
 VARIANT_SEPARATOR = "/"

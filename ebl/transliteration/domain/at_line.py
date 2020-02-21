@@ -13,7 +13,7 @@ Heading = NewType("Heading", int)
 
 @attr.s(auto_attribs=True, frozen=True)
 class AtLine(Line):
-    structural_tag: Union[atf.Surface, atf.Object, Seal, Column, Heading]
+    structural_tag: Union[atf.Surface, atf.Object, Seal, Column, Heading, atf.Discourse]
     status: Optional[atf.Status]
     text: str = ""
 

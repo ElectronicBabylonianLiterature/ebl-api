@@ -2,6 +2,7 @@ import pytest
 from hamcrest import assert_that, contains_exactly, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import AtLine
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -82,7 +83,7 @@ def test_parser_version(parser, version):
             ],
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
-        ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
+        ("@reverse", [AtLine(atf.Surface.REVERSE, None, "")]),
         (
             "$ (end of side)",
             [
