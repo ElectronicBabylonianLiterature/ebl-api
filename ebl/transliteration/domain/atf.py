@@ -168,7 +168,7 @@ class Discourse(Enum):
     SIGNATURE = "signature"
     SIGNATURES = "signatures"
     SUMMARY = "summary"
-    WITNESS = "witness"
+    WITNESSES = "witnesses"
 
 
 UNKNOWN_NUMBER_OF_SIGNS = "..."

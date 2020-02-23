@@ -1,3 +1,4 @@
+from enum import Enum
 from functools import singledispatchmethod  # type: ignore
 from typing import List, Mapping, Sequence, Tuple, Type, Union
 
@@ -6,6 +7,7 @@ from marshmallow import Schema, fields, post_load
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import Seal, Column, Heading, AtLine
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -153,6 +155,70 @@ class StateDollarLineSchema(LineSchema):
         return extent.name
 
 
+class AtLineSchema(LineSchema):
+    type = fields.Constant("AtLine", required=True)
+    structural_tag_type = fields.Function(
+        lambda at_line: type(at_line.structural_tag).__name__, lambda at_line: at_line
+    )
+    structural_tag = fields.Function(
+        lambda at_line: AtLineSchema.dump_extent(at_line.structural_tag),
+        lambda at_line: at_line,
+    )
+    status = NameEnum(atf.Status, required=False, allow_none=True)
+    text = fields.String(required=False)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return AtLine(
+            self.load_extent(data["structural_tag_type"], data["structural_tag"]),
+            data["status"],
+            data["text"],
+        )
+
+    @singledispatchmethod
+    @staticmethod
+    def dump_extent(number: Union[Type[Seal], Type[Heading], Type[Column]]):
+        return number.number
+
+    @dump_extent.register(Enum)
+    @staticmethod
+    def dump_extent_to_enum(enum: Enum):
+        return enum.name
+
+    def load_extent(self, structural_tag_type: str, structural_tag: str):
+        structural_tag_types: Mapping[
+            str,
+            Union[
+                Type[atf.Surface],
+                Type[atf.Object],
+                Seal,
+                Column,
+                Heading,
+                atf.Discourse,
+            ],
+        ] = {
+            "Surface": atf.Surface,
+            "Object": atf.Object,
+            "Seal": Seal,
+            "Column": Column,
+            "Heading": Heading,
+            "Discourse": atf.Discourse,
+        }
+        return AtLineSchema.load_object(
+            structural_tag, structural_tag_types[structural_tag_type]
+        )
+
+    @singledispatchmethod
+    @staticmethod
+    def load_object(structural_tag: int, structural_tag_type):
+        return structural_tag_type(structural_tag)
+
+    @load_object.register(str)
+    @staticmethod
+    def load_object_to_enum(structural_tag: str, structural_tag_type):
+        return structural_tag_type[structural_tag]
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "TextLine": TextLineSchema,
     "ControlLine": ControlLineSchema,
@@ -161,6 +227,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "ImageDollarLine": ImageDollarLineSchema,
     "RulingDollarLine": RulingDollarLineSchema,
     "StateDollarLine": StateDollarLineSchema,
+    "AtLine": AtLineSchema,
 }
 
 

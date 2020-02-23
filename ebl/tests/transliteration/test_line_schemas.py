@@ -6,6 +6,7 @@ from ebl.transliteration.application.line_schemas import (
 )
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import AtLine, Seal
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
@@ -28,6 +29,42 @@ from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+    (
+        AtLine(Seal(1), None, ""),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("TODO")]),
+            "type": "AtLine",
+            "structural_tag_type": "Seal",
+            "structural_tag": 1,
+            "status": None,
+            "text": "",
+        },
+    ),
+    (
+        AtLine(atf.Surface.SURFACE, atf.Status.COLLATION, ""),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("TODO")]),
+            "type": "AtLine",
+            "structural_tag_type": "Surface",
+            "structural_tag": "SURFACE",
+            "status": "COLLATION",
+            "text": "",
+        },
+    ),
+    (
+        AtLine(atf.Object.OBJECT, atf.Status.COLLATION, "stone Wig"),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("TODO")]),
+            "type": "AtLine",
+            "structural_tag_type": "Object",
+            "structural_tag": "OBJECT",
+            "status": "COLLATION",
+            "text": "stone Wig",
+        },
+    ),
     (
         StateDollarLine(
             atf.Qualification.AT_LEAST,

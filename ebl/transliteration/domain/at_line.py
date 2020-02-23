@@ -6,9 +6,20 @@ from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import ValueToken, Token
 
-Seal = NewType("Seal", int)
-Column = NewType("Column", int)
-Heading = NewType("Heading", int)
+
+@attr.s(auto_attribs=True, frozen=True)
+class Seal:
+    number: int
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Heading:
+    number: int
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Column:
+    number: int
 
 
 @attr.s(auto_attribs=True, frozen=True)

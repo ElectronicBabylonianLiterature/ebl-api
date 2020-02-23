@@ -10,7 +10,12 @@ from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.at_line import AtLine, Seal, Column, Heading
+from ebl.transliteration.domain.at_line import (
+    AtLine,
+    Seal,
+    Heading,
+    Column as AtLineColumn,
+)
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -498,7 +503,7 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
 
     @v_args(inline=True)
     def ebl_atf_at_line__column(self, number):
-        return AtLine(Column(number), None, "")
+        return AtLine(AtLineColumn(1), None, "")
 
     @v_args(inline=True)
     def ebl_atf_at_line__heading(self, number):
@@ -507,6 +512,10 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
     @v_args(inline=True)
     def ebl_atf_at_line__status(self, content):
         return atf.Status(str(content))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__discourse(self, content):
+        return AtLine(atf.Discourse(str(content)), None, "")
 
     @v_args(inline=True)
     def ebl_atf_at_line__value(self, content, status):

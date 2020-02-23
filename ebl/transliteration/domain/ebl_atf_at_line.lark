@@ -9,7 +9,7 @@ status: [_WORD_SEPARATOR] STATUS
 column : "column" _WORD_SEPARATOR+ DIGIT
 heading: "h" _WORD_SEPARATOR* DIGIT
 //milestones what is this
-discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witness"
+!discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
 //divisions: "m" _WORD_SEPARATOR? "=" _WORD_SEPARATOR? milestone DIGIT
 
 

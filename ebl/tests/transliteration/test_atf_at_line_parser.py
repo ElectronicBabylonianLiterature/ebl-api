@@ -10,6 +10,9 @@ from ebl.transliteration.domain.at_line import AtLine, Seal, Column, Heading
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("@signatures", [AtLine(atf.Discourse.SIGNATURES, None, "")]),
+        ("@witnesses", [AtLine(atf.Discourse.WITNESSES, None, "")]),
+        ("@catchline", [AtLine(atf.Discourse.CATCHLINE, None, "")]),
         ("@h1!", [AtLine(Heading(1), atf.Status.CORRECTION, "")]),
         ("@h 1!", [AtLine(Heading(1), atf.Status.CORRECTION, "")]),
         ("@h1", [AtLine(Heading(1), None, "")]),
