@@ -9,7 +9,7 @@ def test_at_line_signatures():
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken(" signatures"),)
     assert at_line.structural_tag == atf.Discourse.SIGNATURES
-    assert at_line.status == None
+    assert at_line.status is None
     assert at_line.text == ""
 
 
