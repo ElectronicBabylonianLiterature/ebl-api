@@ -8,8 +8,6 @@ from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
@@ -17,6 +15,8 @@ from ebl.transliteration.domain.dollar_line import (
     ScopeContainer,
     StateDollarLine,
 )
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,

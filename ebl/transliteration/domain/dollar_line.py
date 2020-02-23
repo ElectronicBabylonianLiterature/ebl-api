@@ -120,13 +120,13 @@ class StateDollarLine(DollarLine):
 
     @singledispatchmethod
     @staticmethod
-    def to_atf(val):
-        return str(val)
+    def to_atf(text):
+        return str(text)
 
     @to_atf.register(tuple)
     @staticmethod
-    def tuple_to_atf(val: tuple):
-        return f"{val[0]}-{val[1]}"
+    def tuple_to_atf(range: tuple):
+        return f"{range[0]}-{range[1]}"
 
     @to_atf.register(Enum)
     @staticmethod
@@ -135,5 +135,5 @@ class StateDollarLine(DollarLine):
 
     @to_atf.register(ScopeContainer)
     @staticmethod
-    def scope_container_to_atf(val: ScopeContainer):
-        return val.to_value_token()
+    def scope_container_to_atf(scope_container: ScopeContainer):
+        return scope_container.to_value_token()

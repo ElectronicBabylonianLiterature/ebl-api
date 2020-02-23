@@ -1,8 +1,8 @@
 from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
-import pydash
 import attr
+import pydash
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
@@ -17,6 +17,14 @@ from ebl.transliteration.domain.at_line import (
     Column as AtLineColumn,
 )
 from ebl.transliteration.domain.atf import sub_index_to_int
+from ebl.transliteration.domain.dollar_line import (
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+    SealDollarLine,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -34,14 +42,6 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-)
-from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    ScopeContainer,
-    StateDollarLine,
-    SealDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,

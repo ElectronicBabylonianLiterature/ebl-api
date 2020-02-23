@@ -8,19 +8,19 @@ from ebl.schemas import NameEnum
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import Seal, Column, Heading, AtLine
-from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-    Line,
-    TextLine,
-)
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+)
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    Line,
+    TextLine,
 )
 
 
@@ -177,7 +177,7 @@ class AtLineSchema(LineSchema):
 
     @singledispatchmethod
     @staticmethod
-    def dump_extent(number: Union[Type[Seal], Type[Heading], Type[Column]]):
+    def dump_extent(number: Union[Type[Seal], Type[Heading], Type[Column]]) -> int:
         return number.number
 
     @dump_extent.register(Enum)
@@ -191,10 +191,10 @@ class AtLineSchema(LineSchema):
             Union[
                 Type[atf.Surface],
                 Type[atf.Object],
-                Seal,
-                Column,
-                Heading,
-                atf.Discourse,
+                Type[Seal],
+                Type[Column],
+                Type[Heading],
+                Type[atf.Discourse],
             ],
         ] = {
             "Surface": atf.Surface,
