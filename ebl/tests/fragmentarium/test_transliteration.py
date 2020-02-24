@@ -49,15 +49,6 @@ def test_validate_valid_signs(transliteration_factory):
     TransliterationUpdate(Atf("1. šu gid₂"), signs="ŠU BU")
 
 
-def test_invalid_atf():
-    with pytest.raises(
-        TransliterationError, match="Invalid transliteration"
-    ) as excinfo:
-        TransliterationUpdate(Atf("$ this is not valid"))
-
-    assert excinfo.value.errors == [{"description": "Invalid line", "lineNumber": 1}]
-
-
 def test_validate_invalid_value():
     with pytest.raises(
         TransliterationError, match="Invalid transliteration"
