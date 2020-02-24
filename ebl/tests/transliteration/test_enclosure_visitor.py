@@ -10,12 +10,24 @@ def validate_line(atf):
     line: Line = parse_line(f"1. {atf}")
     visitor = EnclosureVisitor()
     for token in line.content:
-        visitor.visit(token)
+        token.accept(visitor)
     visitor.done()
 
 
 @pytest.mark.parametrize(
-    "atf", ["...", "[...]", "[(...)]", "<(...)>", "<...>", "<<...>>", "{(...)}",],
+    "atf",
+    [
+        "...",
+        "[...]",
+        "[(...)]",
+        "<(...)>",
+        "<...>",
+        "<<...>>",
+        "{(...)}",
+        "kur-[kur ...]",
+        "[... kur]-kur",
+        "kur-[kur]-kur",
+    ],
 )
 def test_valid(atf):
     validate_line(atf)
@@ -25,6 +37,21 @@ def test_valid(atf):
     "atf",
     [
         "[...",
+        "[(...",
+        "<(...",
+        "<...",
+        "<<...",
+        "{(...",
+        "...]",
+        "...)]",
+        "...)>",
+        "...>",
+        "...>>",
+        "...)}",
+        "kur-[kur",
+        "kur]-kur",
+        "[kur-(kur]",
+        "[kur)-kur]",
         "[(...",
         "<(...",
         "<...",
