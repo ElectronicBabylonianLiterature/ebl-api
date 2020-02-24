@@ -11,13 +11,12 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
     DocumentOrientedGloss,
 )
+from ebl.transliteration.domain.sign_tokens import NamedSign
 from ebl.transliteration.domain.tokens import (
     Token,
     TokenVisitor,
 )
-from ebl.transliteration.domain.word_tokens import (
-    Word,
-)
+from ebl.transliteration.domain.word_tokens import Word
 
 
 @unique
@@ -68,6 +67,11 @@ class EnclosureVisitor(TokenVisitor):
     @visit.register
     def _visit_word(self, token: Word) -> None:
         for part in token.parts:
+            part.accept(self)
+
+    @visit.register
+    def _visit_reading(self, token: NamedSign) -> None:
+        for part in token.name_parts:
             part.accept(self)
 
     @visit.register
