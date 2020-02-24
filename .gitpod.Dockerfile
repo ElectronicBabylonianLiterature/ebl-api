@@ -8,4 +8,4 @@ FROM gitpod/workspace-mongodb
 #         ... \
 #     && rm -rf /var/lib/apt/lists/*
 # More information: https://www.gitpod.io/docs/42_config_docker/
-RUN brew install python@3.8
+RUN pyenv install 3.8.1
