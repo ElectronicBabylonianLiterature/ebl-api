@@ -1,6 +1,6 @@
 from enum import Enum, unique
 from functools import singledispatchmethod  # type: ignore
-from typing import FrozenSet, Set
+from typing import AbstractSet, FrozenSet, Set
 
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -13,6 +13,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.sign_tokens import NamedSign
 from ebl.transliteration.domain.tokens import (
+    Variant,
     Token,
     TokenVisitor,
 )
@@ -53,8 +54,12 @@ class EnclosureType(Enum):
 
 
 class EnclosureVisitor(TokenVisitor):
-    def __init__(self):
-        self._enclosures: Set[str] = set()
+    def __init__(self, initial: AbstractSet[str] = frozenset()):
+        self._enclosures: Set[str] = set(initial)
+
+    @property
+    def enclosures(self) -> AbstractSet[str]:
+        return frozenset(self._enclosures)
 
     def done(self):
         if len(self._enclosures) > 0:
@@ -65,12 +70,26 @@ class EnclosureVisitor(TokenVisitor):
         pass
 
     @visit.register
+    def _visit_variant(self, token: Variant) -> None:
+        def sub_visit(token: Token) -> AbstractSet[str]:
+            sub_visitor = EnclosureVisitor(self._enclosures)
+            token.accept(sub_visitor)
+            return sub_visitor.enclosures
+
+        results = set(map(sub_visit, token.tokens))
+
+        if len(results) == 1:
+            self._enclosures = set(results.pop())
+        else:
+            raise EnclosureError()
+
+    @visit.register
     def _visit_word(self, token: Word) -> None:
         for part in token.parts:
             part.accept(self)
 
     @visit.register
-    def _visit_reading(self, token: NamedSign) -> None:
+    def _visit_named_sign(self, token: NamedSign) -> None:
         for part in token.name_parts:
             part.accept(self)
 
