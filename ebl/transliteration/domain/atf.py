@@ -3,7 +3,6 @@ from enum import Enum
 from typing import Mapping, NewType, Optional
 
 import pydash
-from pyoracc.atf.common.atffile import AtfFile
 
 from ebl.transliteration.domain.side import Side
 
@@ -23,17 +22,6 @@ class AtfSyntaxError(AtfError):
         self.line_number = line_number
         message = f"Line {self.line_number} is invalid."
         super().__init__(message)
-
-
-def validate_atf(text):
-    prefix = "\n".join(ATF_HEADING)
-    try:
-        return AtfFile(f"{prefix}\n{text}", atftype="oracc")
-    except SyntaxError as error:
-        line_number = error.lineno - len(ATF_HEADING)
-        raise AtfSyntaxError(line_number)
-    except Exception as error:
-        raise AtfError(f"Pyoracc validation failed: {error}.")
 
 
 class Surface(Enum):
@@ -167,16 +155,6 @@ ATF_EXTENSIONS: Mapping[str, str] = {
     "erasure_illegible": r"°[^\°]*\\",
     "line_continuation": "→",
 }
-
-
-ATF_HEADING = [
-    "&XXX = XXX",
-    "#project: eblo",
-    "#atf: lang akk-x-stdbab",
-    "#atf: use unicode",
-    "#atf: use math",
-    "#atf: use legacy",
-]
 
 
 _SUB_SCRIPT: Mapping[str, str] = {

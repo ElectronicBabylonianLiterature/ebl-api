@@ -93,7 +93,7 @@ def test_update_transliteration_merge_lemmatization(
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
-    updates = {"transliteration": "$ this is not valid", "notes": ""}
+    updates = {"transliteration": "this is not valid", "notes": ""}
     body = json.dumps(updates)
     url = f"/fragments/{fragment_number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -102,7 +102,7 @@ def test_update_transliteration_invalid_atf(client, fragmentarium):
     assert post_result.json == {
         "title": "422 Unprocessable Entity",
         "description": "Invalid transliteration",
-        "errors": [{"description": "Invalid line", "lineNumber": 1,}],
+        "errors": [{"description": "Invalid value", "lineNumber": 1,}],
     }
 
 

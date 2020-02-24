@@ -2,7 +2,7 @@ from typing import Optional
 
 import attr
 
-from ebl.transliteration.domain.atf import Atf, AtfSyntaxError, validate_atf
+from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.clean_atf import CleanAtf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
@@ -17,15 +17,6 @@ class TransliterationUpdate:
 
     def parse(self) -> Text:
         return parse_atf_lark(self.atf)
-
-    @atf.validator
-    def _check_atf(self, _attribute, value):
-        try:
-            validate_atf(value)
-        except AtfSyntaxError as error:
-            raise TransliterationError(
-                [{"description": "Invalid line", "lineNumber": error.line_number,}]
-            )
 
     @signs.validator
     def _check_signs(self, _attribute, value):

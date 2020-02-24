@@ -1,28 +1,9 @@
 import pytest
 
 from ebl.transliteration.domain.atf import (
-    AtfSyntaxError,
     to_sub_index,
-    validate_atf,
-    AtfError,
     sub_index_to_int,
 )
-
-
-def test_valid_atf():
-    validate_atf("1. foo")
-
-
-def test_invalid_atf():
-    with pytest.raises(AtfSyntaxError, match="Line 1 is invalid.") as excinfo:
-        validate_atf("$ this is not valid")
-
-    assert excinfo.value.line_number == 1
-
-
-def test_pyoracc_error():
-    with pytest.raises(AtfError, match="Pyoracc validation failed: 'Single'."):
-        validate_atf("$ Single ruling")
 
 
 SUB_INDICES = [

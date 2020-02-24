@@ -10,3 +10,7 @@ tasks:
 - init: pipenv --python python3.8 && pipenv install --dev
 - init: mkdir -p /workspace/data
   command: mongod --dbpath /workspace/data
+
+vscode:
+  extensions:
+    - almenon.arepl@1.0.20:Uu7lIOwyLgmNWpTwCl/iqQ==
