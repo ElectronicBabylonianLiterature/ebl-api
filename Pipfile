@@ -52,6 +52,7 @@ lint = "pylint ebl"
 test = "pytest --cov=ebl --cov-report term --cov-report xml"
 ptw = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
 test-ci = "./run_tests.sh"
+start = "waitress-serve --port=8000 --call ebl.app:get_app"
 
 [pipenv]
 allow_prereleases = true
