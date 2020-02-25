@@ -9,7 +9,7 @@ ports:
 tasks:
 - init: pipenv --python python3.8 && pipenv install --dev
 - init: mkdir -p /workspace/data
-  command: mongod --dbpath /workspace/data
+  command: mongod --dbpath /workspace/data --bind_ip 127.0.0.1
 
 vscode:
   extensions:
