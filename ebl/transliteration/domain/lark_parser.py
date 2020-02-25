@@ -26,6 +26,7 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
+    Line,
     TextLine,
 )
 from ebl.transliteration.domain.dollar_line import (
@@ -35,6 +36,8 @@ from ebl.transliteration.domain.dollar_line import (
     ScopeContainer,
     StateDollarLine,
 )
+from ebl.transliteration.domain.enclosure_error import EnclosureError
+from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -451,25 +454,34 @@ WORD_PARSER = Lark.open(
 LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
 
-def parse_word(atf):
+def parse_word(atf: str) -> Word:
     tree = WORD_PARSER.parse(atf)
     return TreeToWord().transform(tree)
 
 
-def parse_erasure(atf):
+def parse_erasure(atf: str) -> Sequence[EblToken]:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__erasure")
     return TreeToLine().transform(tree)
 
 
-def parse_line(atf):
+def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
     return TreeDollarSignToTokens().transform(tree)
+
+
+def validate_line(line: Line) -> None:
+    visitor = EnclosureVisitor()
+    for token in line.content:
+        token.accept(visitor)
+    visitor.done()
 
 
 def parse_atf_lark(atf_):
     def parse_line_(line: str, line_number: int):
         try:
-            return (parse_line(line), None) if line else (EmptyLine(), None)
+            parsed_line = parse_line(line) if line else EmptyLine()
+            validate_line(parsed_line)
+            return parsed_line, None
         except UnexpectedInput as ex:
             description = "Invalid line: "
             context = ex.get_context(line, 6).split("\n", 1)
@@ -490,6 +502,11 @@ def parse_atf_lark(atf_):
             return (
                 None,
                 {"description": f"Invalid line: {ex}", "lineNumber": line_number + 1,},
+            )
+        except EnclosureError:
+            return (
+                None,
+                {"description": f"Invalid brackets.", "lineNumber": line_number + 1,},
             )
 
     def check_errors(pairs):

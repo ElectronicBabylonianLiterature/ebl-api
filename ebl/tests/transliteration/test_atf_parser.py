@@ -106,7 +106,7 @@ def test_parser_version(parser, version):
         ),
         ("1. ($___$)", [TextLine("1.", (Tabulation("($___$)"),))]),
         (
-            "1. ... [...] (...) [(...)]",
+            "1. ... [...] [(...)]",
             [
                 TextLine(
                     "1.",
@@ -115,9 +115,6 @@ def test_parser_version(parser, version):
                         BrokenAway.open(),
                         UnknownNumberOfSigns(),
                         BrokenAway.close(),
-                        PerhapsBrokenAway.open(),
-                        UnknownNumberOfSigns(),
-                        PerhapsBrokenAway.close(),
                         BrokenAway.open(),
                         PerhapsBrokenAway.open(),
                         UnknownNumberOfSigns(),
@@ -409,30 +406,6 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "1. ša₃] [{d}UTU [ :",
-            [
-                TextLine(
-                    "1.",
-                    (
-                        Word(
-                            "ša₃]",
-                            parts=[Reading.of_name("ša", 3), BrokenAway.close()],
-                        ),
-                        Word(
-                            "[{d}UTU",
-                            parts=[
-                                BrokenAway.open(),
-                                Determinative([Reading.of_name("d")]),
-                                Logogram.of_name("UTU"),
-                            ],
-                        ),
-                        BrokenAway.open(),
-                        Divider.of(":"),
-                    ),
-                )
-            ],
-        ),
-        (
             "1. [...]-qa-[...]-ba-[...]\n2. pa-[...]",
             [
                 TextLine(
@@ -719,7 +692,7 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "1. šu gid₂\n2. U₄].14.KAM₂ U₄.15.KAM₂",
+            "1. šu gid₂\n2. [U₄].14.KAM₂ U₄.15.KAM₂",
             [
                 TextLine(
                     "1.",
@@ -732,8 +705,9 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "U₄].14.KAM₂",
+                            "[U₄].14.KAM₂",
                             parts=[
+                                BrokenAway.open(),
                                 Logogram.of_name("U", 4),
                                 BrokenAway.close(),
                                 Joiner.dot(),
@@ -1050,14 +1024,15 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "2. in]-<(...)>",
+            "2. [in]-<(...)>",
             [
                 TextLine(
                     "2.",
                     (
                         Word(
-                            "in]-<(...)>",
+                            "[in]-<(...)>",
                             parts=[
+                                BrokenAway.open(),
                                 Reading.of_name("in"),
                                 BrokenAway.close(),
                                 Joiner.hyphen(),
@@ -1223,6 +1198,18 @@ def test_parse_atf_language_shifts(parser, code, expected_language):
     assert parser(line).lines == expected.lines
 
 
+def assert_exception_has_errors(exc_info, line_numbers, description):
+    assert_that(
+        exc_info.value.errors,
+        contains_exactly(
+            *[
+                has_entries({"description": description, "lineNumber": line_number,})
+                for line_number in line_numbers
+            ]
+        ),
+    )
+
+
 @pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
     "atf,line_numbers",
@@ -1239,17 +1226,15 @@ def test_invalid_atf(parser, atf, line_numbers):
     with pytest.raises(TransliterationError) as exc_info:
         parser(atf)
 
-    assert_that(
-        exc_info.value.errors,
-        contains_exactly(
-            *[
-                has_entries(
-                    {
-                        "description": starts_with("Invalid line"),
-                        "lineNumber": line_number,
-                    }
-                )
-                for line_number in line_numbers
-            ]
-        ),
-    )
+    assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2]),],
+)
+def test_invalid_brackets(parser, atf, line_numbers):
+    with pytest.raises(TransliterationError) as exc_info:
+        parser(atf)
+
+    assert_exception_has_errors(exc_info, line_numbers, "Invalid brackets.")
