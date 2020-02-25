@@ -3,9 +3,11 @@
 ?line: empty_line
      | control_line
      | text_line
+     | dollar_line
 
 empty_line: /\s+/?
 
-!control_line: ("=:" | "$" | "@" | "&" | "#") /.+/?
+!control_line: ("=:" | "@" | "&" | "#") /.+/?
 
 %import .ebl_atf_text_line (text_line, any_word)
+%import .ebl_atf_dollar_line (dollar_line)

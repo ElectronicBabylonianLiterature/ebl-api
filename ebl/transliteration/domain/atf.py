@@ -9,7 +9,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "0.27.0"
+ATF_PARSER_VERSION = "0.28.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -39,6 +39,8 @@ http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/ind
     LEFT = ("left", "l.e.")
     RIGHT = ("right", "r.e.")
     TOP = ("top", "t.e.")
+    SURFACE = ("surface", None)
+    FACE = ("face", None)
 
     def __init__(self, atf: str, label: Optional[str]):
         self.atf = atf
@@ -91,6 +93,60 @@ class Joiner(Enum):
     DOT = "."
     PLUS = "+"
     COLON = ":"
+
+
+class Ruling(Enum):
+    SINGLE = "single"
+    DOUBLE = "double"
+    TRIPLE = "triple"
+
+
+class Object(Enum):
+    TABLET = "tablet"
+    ENVELOPE = "envelope"
+    PRISM = "prism"
+    BULLA = "bulla"
+    FRAGMENT = "fragment"
+    OBJECT = "object"
+
+
+class Scope(Enum):
+    COLUMN = "column"
+    COLUMNS = "columns"
+    LINE = "line"
+    LINES = "lines"
+    CASE = "case"
+    CASES = "cases"
+    SIDE = "side"
+    EXCERPT = "excerpt"
+    SURFACE = "surface"
+
+
+class Qualification(Enum):
+    AT_LEAST = "at least"
+    AT_MOST = "at most"
+    ABOUT = "about"
+
+
+class Extent(Enum):
+    N = "n"
+    SEVERAL = "several"
+    SOME = "some"
+    REST_OF = "rest of"
+    START_OF = "start of"
+    BEGINNING_OF = "beginning of"
+    MIDDLE_OF = "middle of"
+    END_OF = "end of"
+
+
+class State(Enum):
+    BLANK = "blank"
+    BROKEN = "broken"
+    ILLEGIBLE = "illegible"
+    MISSING = "missing"
+    TRACES = "traces"
+    OMITTED = "omitted"
+    CONTINUES = "continues"
 
 
 UNKNOWN_NUMBER_OF_SIGNS = "..."

@@ -15,7 +15,6 @@ from ebl.transliteration.domain.lemmatization import (
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
-    Line,
     TextLine,
 )
 from ebl.transliteration.domain.tokens import (
@@ -30,17 +29,6 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 LINE_NUMBER = LineNumberLabel.from_atf("1.")
-
-
-def test_line():
-    prefix = "*"
-    token = ValueToken("value")
-    line = Line(prefix, (token,))
-
-    assert line.prefix == prefix
-    assert line.content == (token,)
-    assert line.key == f"{line.atf}⁞{token.get_key()}"
-    assert line.atf == "*value"
 
 
 def test_empty_line():
@@ -192,7 +180,7 @@ def test_text_line_atf_erasure(word, erasure, expected):
     assert line.atf == f"{line.prefix} {word.value} {expected} {word.value}"
 
 
-def test_line_of_single():
+def test_control_line_of_single():
     prefix = "$"
     token = ValueToken("only")
     line = ControlLine.of_single(prefix, token)

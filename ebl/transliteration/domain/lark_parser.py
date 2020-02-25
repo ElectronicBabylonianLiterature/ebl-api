@@ -23,7 +23,18 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    TextLine,
+)
+from ebl.transliteration.domain.dollar_line import (
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+)
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -348,6 +359,92 @@ class TreeToLine(TreeToWord):
         ]
 
 
+class TreeDollarSignToTokens(TreeToLine):
+    def ebl_atf_dollar_line__text(self, content):
+        return "".join([x for x in content]).rstrip(" ")
+
+    def ebl_atf_dollar_line__image_text(self, content):
+        return "".join([x for x in content])
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__loose(self, content):
+        return LooseDollarLine(str(content))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__ruling(self, number, ruling):
+        return RulingDollarLine(atf.Ruling(str(number)))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__LOWER_CASE_LETTER(self, letter):
+        return str(letter)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__image(self, number, letter, text):
+        return ImageDollarLine(str(number), letter, text)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__STATUS(self, status):
+        return atf.Status(str(status))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__STATE(self, state):
+        return atf.State(str(state))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__OBJECT(self, object):
+        return ScopeContainer(atf.Object(object))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__generic_object(self, object, text):
+        return ScopeContainer(atf.Object(str(object)), str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__fragment(self, text):
+        return ScopeContainer(atf.Object.FRAGMENT, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__SURFACE(self, surface):
+        return ScopeContainer(atf.Surface.from_atf(str(surface)))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__generic_surface(self, surface, text):
+        return ScopeContainer(atf.Surface.from_atf(str(surface)), str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__face(self, text):
+        return ScopeContainer(atf.Surface.FACE, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__edge(self, text):
+        return ScopeContainer(atf.Surface.EDGE, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__SCOPE(self, scope):
+        return ScopeContainer(atf.Scope(str(scope)))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__EXTENT(self, extent):
+        return atf.Extent(str(extent))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__NUMBER(self, number):
+        return int(number)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__range(self, number1, number2):
+        return (number1, number2)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__QUALIFICATION(self, qualification):
+        return atf.Qualification(str(qualification))
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_line(
+        self, qualification, extent, scope_container, state, status
+    ):
+        return StateDollarLine(qualification, extent, scope_container, state, status)
+
+
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
@@ -366,7 +463,7 @@ def parse_erasure(atf):
 
 def parse_line(atf):
     tree = LINE_PARSER.parse(atf)
-    return TreeToLine().transform(tree)
+    return TreeDollarSignToTokens().transform(tree)
 
 
 def parse_atf_lark(atf_):

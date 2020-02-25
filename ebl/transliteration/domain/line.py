@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Callable, Iterable, Sequence, Type, TypeVar
 
 import attr
@@ -20,9 +21,16 @@ L = TypeVar("L", "TextLine", "Line")
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Line:
-    prefix: str = ""
-    content: Sequence[Token] = tuple()
+class Line(ABC):
+    @property
+    @abstractmethod
+    def prefix(self) -> str:
+        ...
+
+    @property
+    @abstractmethod
+    def content(self) -> Sequence[Token]:
+        ...
 
     @property
     def key(self) -> str:
@@ -43,10 +51,7 @@ class Line:
         return self._update_tokens(lemmatization, updater, LemmatizationError)
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
-        def updater(token, alignment_token):
-            return token.set_alignment(alignment_token)
-
-        return self._update_tokens(alignment, updater, AlignmentError)
+        return self
 
     def _update_tokens(
         self,
@@ -54,12 +59,7 @@ class Line:
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
     ) -> "Line":
-        if len(self.content) == len(updates):
-            zipped = pydash.zip_(list(self.content), list(updates))
-            content = tuple(updater(pair[0], pair[1]) for pair in zipped)
-            return attr.evolve(self, content=content)
-        else:
-            raise error_class()
+        return self
 
     def merge(self, other: "Line") -> "Line":
         return other
@@ -70,13 +70,35 @@ class Line:
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
+    _prefix: str = ""
+    _content: Sequence[Token] = tuple()
+
     @classmethod
     def of_single(cls, prefix: str, content: Token):
         return cls(prefix, (content,))
 
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @property
+    def content(self):
+        return self._content
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
+    _prefix: str = ""
+    _content: Sequence[Token] = tuple()
+
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @property
+    def content(self):
+        return self._content
+
     @classmethod
     def of_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
         visitor = LanguageVisitor()
@@ -94,6 +116,25 @@ class TextLine(Line):
         for token in self.content:
             token.accept(visitor)
         return visitor.result
+
+    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
+        def updater(token, alignment_token):
+            return token.set_alignment(alignment_token)
+
+        return self._update_tokens(alignment, updater, AlignmentError)
+
+    def _update_tokens(
+        self,
+        updates: Sequence[T],
+        updater: Callable[[Token, T], Token],
+        error_class: Type[Exception],
+    ) -> "Line":
+        if len(self.content) == len(updates):
+            zipped = pydash.zip_(list(self.content), list(updates))
+            content = tuple(updater(pair[0], pair[1]) for pair in zipped)
+            return attr.evolve(self, content=content)
+        else:
+            raise error_class()
 
     def merge(self, other: L) -> L:
         def merge_tokens():
@@ -118,4 +159,10 @@ class TextLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    pass
+    @property
+    def prefix(self):
+        return ""
+
+    @property
+    def content(self):
+        return tuple()

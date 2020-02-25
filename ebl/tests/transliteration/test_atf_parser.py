@@ -14,7 +14,12 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    TextLine,
+)
+from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -80,7 +85,15 @@ def test_parser_version(parser, version):
         ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
         (
             "$ (end of side)",
-            [ControlLine.of_single("$", ValueToken(" (end of side)"))],
+            [
+                StateDollarLine(
+                    None,
+                    atf.Extent.END_OF,
+                    ScopeContainer(atf.Scope.SIDE, ""),
+                    None,
+                    None,
+                )
+            ],
         ),
         ("#some notes", [ControlLine.of_single("#", ValueToken("some notes"))],),
         (

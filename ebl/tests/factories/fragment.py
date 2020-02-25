@@ -6,9 +6,17 @@ from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
+from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.dollar_line import (
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+)
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -195,6 +203,16 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 ),
             ),
+            StateDollarLine(
+                atf.Qualification.AT_LEAST,
+                1,
+                ScopeContainer(atf.Surface.OBVERSE, ""),
+                atf.State.MISSING,
+                None,
+            ),
+            ImageDollarLine("1", None, "numbered diagram of triangle"),
+            RulingDollarLine(atf.Ruling.SINGLE),
+            LooseDollarLine("this is a loose line"),
         )
     )
     signs = (
@@ -361,5 +379,15 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     ),
                 ),
             ),
+            StateDollarLine(
+                atf.Qualification.AT_LEAST,
+                1,
+                ScopeContainer(atf.Surface.OBVERSE, ""),
+                atf.State.MISSING,
+                None,
+            ),
+            ImageDollarLine("1", None, "numbered diagram of triangle"),
+            RulingDollarLine(atf.Ruling.SINGLE),
+            LooseDollarLine("this is a loose line"),
         )
     )

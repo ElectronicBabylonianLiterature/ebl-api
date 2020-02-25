@@ -1,0 +1,55 @@
+%import common.ESCAPED_STRING
+%import common.SIGNED_NUMBER
+%import common.LCASE_LETTER
+
+
+_WORD_SEPARATOR: " "
+
+?start : dollar_line
+
+?dollar_line : "$" _WORD_SEPARATOR value
+
+?value : state_line | _looses | ruling | image
+
+state_line: [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
+
+QUALIFICATION : "at least" | "at most" | "about"
+
+_extent : NUMBER | range | EXTENT
+EXTENT : "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
+range.2 : NUMBER _WORD_SEPARATOR? "-" _WORD_SEPARATOR? NUMBER
+NUMBER : SIGNED_NUMBER
+
+_scopes : SCOPE | _object | _surface
+SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
+
+_object : OBJECT | generic_object | fragment
+OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+fragment: "fragment" _WORD_SEPARATOR text
+generic_object : OBJECT_GENERIC _WORD_SEPARATOR text
+OBJECT_GENERIC : "object"
+text.-2 : /./+
+
+_surface : SURFACE | generic_surface | face | edge
+SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
+face: "face" _WORD_SEPARATOR LOWER_CASE_LETTER
+edge: "edge" _WORD_SEPARATOR LOWER_CASE_LETTER
+generic_surface : SURFACE_GENERIC _WORD_SEPARATOR text
+SURFACE_GENERIC : "surface"
+
+STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
+    | "omitted" | "continues"
+
+STATUS : "*" | "?" | "!" | "!?"
+
+_looses: "(" (state_line | loose) _WORD_SEPARATOR? ")"
+loose.-2 : text
+
+ruling : RULING_NUMBER _WORD_SEPARATOR RULING
+RULING_NUMBER : "single" | "double" | "triple"
+RULING : "ruling"
+
+image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR text _WORD_SEPARATOR? ")"
+_IMAGE : "(" [_WORD_SEPARATOR] "image"
+DIGIT : /[0-9]+/
+LOWER_CASE_LETTER : /[a-z]/
