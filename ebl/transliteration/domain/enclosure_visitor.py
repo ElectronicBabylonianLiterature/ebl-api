@@ -5,11 +5,12 @@ from typing import AbstractSet, FrozenSet, Set
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
-    IntentionalOmission,
-    Removal,
     BrokenAway,
-    PerhapsBrokenAway,
     DocumentOrientedGloss,
+    Gloss,
+    IntentionalOmission,
+    PerhapsBrokenAway,
+    Removal,
 )
 from ebl.transliteration.domain.sign_tokens import NamedSign
 from ebl.transliteration.domain.tokens import (
@@ -85,6 +86,11 @@ class EnclosureVisitor(TokenVisitor):
 
     @visit.register
     def _visit_word(self, token: Word) -> None:
+        for part in token.parts:
+            part.accept(self)
+
+    @visit.register
+    def _visit_gloss(self, token: Gloss) -> None:
         for part in token.parts:
             part.accept(self)
 

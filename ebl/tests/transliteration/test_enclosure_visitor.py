@@ -46,6 +46,12 @@ def validate_line(atf):
         "[... K]UR/1]23",
         "k[u]r/K[U]R",
         "[... k]u[r/1 ...]",
+        "{k[ur} ...]",
+        "{+k[ur} ...]",
+        "{{k[ur}} ...]",
+        "[... {k]ur}-kur",
+        "[... {+k]ur}-kur",
+        "[... {{k]ur}}-kur",
     ],
 )
 def test_valid(atf):
@@ -120,6 +126,9 @@ def test_valid(atf):
         "{(... {(...)} ...)}",
         "<(... <...> ...)>",
         "<... <(...)> ...>",
+        "{ku[r}",
+        "{+ku[r}",
+        "{{ku[r}}",
     ],
 )
 def test_invalid(atf):
