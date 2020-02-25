@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import cast, Sequence
 
 from parsy import ParseError
 
@@ -13,7 +13,7 @@ from ebl.corpus.domain.reconstructed_text import (
     MetricalFootSeparator,
     ReconstructionToken,
 )
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.corpus.domain.text import Line, ManuscriptLine, Text, TextLine
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import dump_line
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
@@ -68,7 +68,7 @@ class ApiDeserializer(TextDeserializer):
     def deserialize_manuscript_line(self, manuscript_line: dict) -> ManuscriptLine:
         line_number = LineNumberLabel(manuscript_line["number"]).to_atf()
         atf = manuscript_line["atf"]
-        line = parse_line(f"{line_number} {atf}")
+        line = cast(TextLine, parse_line(f"{line_number} {atf}"))
         return ManuscriptLine(
             manuscript_line["manuscriptId"],
             tuple(Label.parse(label) for label in manuscript_line["labels"]),
