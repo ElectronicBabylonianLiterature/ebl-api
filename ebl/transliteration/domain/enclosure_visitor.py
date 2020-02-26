@@ -32,13 +32,33 @@ class EnclosureType(Enum):
         frozenset(["INTENTIONAL_OMISSION", "ACCIDENTAL_OMISSION"]),
     )
     REMOVAL = ("REMOVAL", frozenset(["REMOVAL"]))
-    BROKEN_AWAY = ("BROKEN_AWAY", frozenset(["BROKEN_AWAY", "PERHAPS_BROKEN_AWAY"]))
+    BROKEN_AWAY = (
+        "BROKEN_AWAY",
+        frozenset(["BROKEN_AWAY", "PERHAPS_BROKEN_AWAY", "PERHAPS"]),
+    )
     PERHAPS_BROKEN_AWAY = (
         "PERHAPS_BROKEN_AWAY",
         frozenset(
-            ["PERHAPS_BROKEN_AWAY", "ACCIDENTAL_OMISSION", "INTENTIONAL_OMISSION"]
+            [
+                "PERHAPS_BROKEN_AWAY",
+                "PERHAPS",
+                "ACCIDENTAL_OMISSION",
+                "INTENTIONAL_OMISSION",
+            ]
         ),
         frozenset(["BROKEN_AWAY"]),
+    )
+    PERHAPS = (
+        "PERHAPS",
+        frozenset(
+            [
+                "PERHAPS",
+                "PERHAPS_BROKEN_AWAY",
+                "BROKEN_AWAY",
+                "ACCIDENTAL_OMISSION",
+                "INTENTIONAL_OMISSION",
+            ]
+        ),
     )
     DOCUMENT_ORIENTED_GLOSS = (
         "DOCUMENT_ORIENTED_GLOSS",
@@ -131,10 +151,15 @@ class EnclosureVisitor(TokenVisitor):
 
     @visit.register
     def _visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> None:
+        perhaps_type = (
+            EnclosureType.PERHAPS_BROKEN_AWAY
+            if self._is_open(EnclosureType.BROKEN_AWAY)
+            else EnclosureType.PERHAPS
+        )
         if token == PerhapsBrokenAway.open():
-            self._open(EnclosureType.PERHAPS_BROKEN_AWAY)
+            self._open(perhaps_type)
         else:
-            self._close(EnclosureType.PERHAPS_BROKEN_AWAY)
+            self._close(perhaps_type)
 
     @visit.register
     def _visit_document_oriented_gloss(self, token: DocumentOrientedGloss) -> None:
@@ -161,9 +186,15 @@ class EnclosureVisitor(TokenVisitor):
         ) and enclosure.required.issubset(self._enclosures)
 
     def _is_allowed_to_close(self, enclosure: EnclosureType) -> bool:
+        return self._is_open(enclosure) and not self._is_required(enclosure)
+
+    def _is_open(self, enclosure: EnclosureType) -> bool:
+        return enclosure.name in self._enclosures
+
+    def _is_required(self, enclosure: EnclosureType) -> bool:
         required = {
             required_name
             for name in self._enclosures
             for required_name in EnclosureType[name].required
         }
-        return enclosure.name in self._enclosures and enclosure.name not in required
+        return enclosure.name in required
