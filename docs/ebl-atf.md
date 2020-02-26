@@ -198,14 +198,6 @@ perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
 open-perhaps-broken-away = '(';
 close-perhaps-broken-away = ')';
 
-inline-broken-away = open-inline-broken-away | close-inline-broken-away;
-open-inline-broken-away = '[('
-                        | '['
-                        | ? not { ?, '(', ? not . ?;
-close-inline-broken-away = ? not . ?, ')]' 
-                         | ')', ? not } ?
-                         | ']';
-
 word-separator = ' ';
 ```
 
@@ -299,10 +291,11 @@ determinative. A word is lemmatizable and alignable if:
 - The language is not normalized.
 
 ```ebnf
-word = [ part-joiner ], [ open-inline-broken-away ], [ open-omission ],
+word = [ part-joiner ], [ open-broken-away ], [ open-perhaps-broken-away ],
+       [ open-omission ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-omission ], [ close-inline-broken-away ] [ part-joiner ]
-     | surrogate;
+       [ close-omission ], [ close-perhaps-broken-away ]
+       [ close-broken-away ], [ part-joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
@@ -313,25 +306,33 @@ parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ),
         ( determinative | variant | linguistic-gloss | phonetic-gloss
         | unknown-number-of-signs ) }-;
 
-linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
+linguistic-gloss = '{{', variant,  { part-joiner, variant }, '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
-
 determinative = '{', variant,  { part-joiner, variant }, '}';
 
-part-joiner = [ close-omission ],
-              [ close-inline-broken-away ],
+part-joiner = [ inword-newline ],
+              [ close-omission ],
+              [ close-perhaps-away ],
+              [ close-broken-away ],
               [ joiner ],
-              [ open-inline-broken-away ],
+              [ open-broken-away ],
+              [ open-perhaps-broken-away ],
               [ open-omission ];
               
 joiner = '-' | '+' | '.' | ':';
+inword-newline = ';';
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown 
              | value-with-sign
              | value
              | compound-grapheme
-             | logogram;
+             | logogram
+             | surrogate
+             | number;
+
+number = decimal-digit, { [ invalue-broken-away ], decimal-digit },
+         modifier, flag;
 
 surrogate = logogram, ['<(', value, { '-', value } ,')>'];
 logogram = logogram-character, { [ invalue-broken-away ], logogram-character },
@@ -371,7 +372,7 @@ grapheme-character = word-character
 unknown-number-of-signs = '...';
 unknown = ('X' | 'x'), flag;
 
-invalue-broken-away: '[' | ']';
+invalue-broken-away: open-broken-away | close-broken-away;
 
 variant-separator = '/';
 
