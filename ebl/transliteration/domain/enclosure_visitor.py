@@ -161,4 +161,9 @@ class EnclosureVisitor(TokenVisitor):
         ) and enclosure.required.issubset(self._enclosures)
 
     def _is_allowed_to_close(self, enclosure: EnclosureType) -> bool:
-        return enclosure.name in self._enclosures
+        required = {
+            required_name
+            for name in self._enclosures
+            for required_name in EnclosureType[name].required
+        }
+        return enclosure.name in self._enclosures and enclosure.name not in required
