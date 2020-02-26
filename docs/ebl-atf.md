@@ -134,38 +134,31 @@ can sometimes be omitted.
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ (token | document-oriented-gloss),
-         { word-separator, (token | document-oriented-gloss) } ],
-       [ line-continuation ];
-text = text-head, { text-tail }, [ word-separator, line-continuation ];
-text-head = optional-spaces
-          | require-both-spaces
-          | omit-left-space
-          | { omit-right-space }-, [ optional-spaces ];
-text-tail = word-separator { omit-right-space } [ optional-spaces ]
-          | [ word-separator ] { omit-left-space }-
-          | word-separator require-both-spaces;
+text = token, { [ word-separator ], token }, [ word-separator, line-continuation ];
+       (* Word seprator can be ommitted after an opening bracket or before 
+          a closing bracket. Commentary protocols and dividers must be
+          surrounded by word separators. *)
 
 line-continuation = '→';
 
-require-both-spaces = commentary-protocol
-                    | divider
-                    | divider-variant;
-optional-spaces = tabulation
-                | column
-                | shift
-                | erasure
-                | word
-                | determinative
-                | unknown-number-of-signs;
-omit-left-space = close-broken-away
-                | close-perhaps-broken-away
-                | close-omission
-                | close-document-orionted-gloss;
-omit-right-space = open-broken-away
-                 | open-perhaps-broken-away
-                 | open-omission
-                 | open-document-oriented-gloss;
+token = commentary-protocol
+      | divider
+      | divider-variant;
+      | tabulation
+      | column
+      | shift
+      | erasure
+      | word
+      | determinative
+      | unknown-number-of-signs
+      | close-broken-away
+      | close-perhaps-broken-away
+      | close-omission
+      | close-document-orionted-gloss
+      | open-broken-away
+      | open-perhaps-broken-away
+      | open-omission
+      | open-document-oriented-gloss;
            
 tabulation = '($___$)';
 
