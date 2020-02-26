@@ -42,7 +42,7 @@ STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 
 STATUS : "*" | "?" | "!" | "!?"
 
-_looses: "(" (state_line | loose) _WORD_SEPARATOR? ")"
+_looses: "(" (state_line | ruling | loose) _WORD_SEPARATOR? ")"
 loose.-2 : text
 
 ruling : RULING_NUMBER _WORD_SEPARATOR RULING

@@ -38,7 +38,7 @@ from ebl.transliteration.domain.text import Text
         ("$ triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
     ],
 )
-def test_parse_atf_dollar_line(parser, line, expected_tokens):
+def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 
@@ -220,7 +220,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
         ),
     ],
 )
-def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
+def test_parse_atf_state_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 
@@ -228,6 +228,7 @@ def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("$ (single ruling)", [RulingDollarLine(atf.Ruling.SINGLE)],),
         ("$ (aa dd )", [LooseDollarLine("aa dd")],),
         (
             "$ (at least 1 obverse missing)",
