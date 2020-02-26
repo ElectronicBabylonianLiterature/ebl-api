@@ -36,8 +36,6 @@ from ebl.transliteration.domain.dollar_line import (
     ScopeContainer,
     StateDollarLine,
 )
-from ebl.transliteration.domain.enclosure_error import EnclosureError
-from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -469,18 +467,10 @@ def parse_line(atf: str) -> Line:
     return TreeDollarSignToTokens().transform(tree)
 
 
-def validate_line(line: Line) -> None:
-    visitor = EnclosureVisitor()
-    for token in line.content:
-        token.accept(visitor)
-    visitor.done()
-
-
 def parse_atf_lark(atf_):
     def parse_line_(line: str, line_number: int):
         try:
             parsed_line = parse_line(line) if line else EmptyLine()
-            validate_line(parsed_line)
             return parsed_line, None
         except UnexpectedInput as ex:
             description = "Invalid line: "
@@ -502,11 +492,6 @@ def parse_atf_lark(atf_):
             return (
                 None,
                 {"description": f"Invalid line: {ex}", "lineNumber": line_number + 1,},
-            )
-        except EnclosureError:
-            return (
-                None,
-                {"description": f"Invalid brackets.", "lineNumber": line_number + 1,},
             )
 
     def check_errors(pairs):
