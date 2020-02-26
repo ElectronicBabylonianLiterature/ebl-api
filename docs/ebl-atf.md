@@ -144,7 +144,7 @@ line-continuation = '→';
 
 token = commentary-protocol
       | divider
-      | divider-variant;
+      | divider-variant
       | tabulation
       | column
       | shift
