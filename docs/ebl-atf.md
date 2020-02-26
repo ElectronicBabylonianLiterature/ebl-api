@@ -221,7 +221,7 @@ A presence cannot be nested within itself.
 | Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
 | Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
 | Removal | `<<` | `>>` | Top-level, Word | | |
-| Broken Away | `[` | `]`| Top-level, Word, Grapheme | |
+| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
 | Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
