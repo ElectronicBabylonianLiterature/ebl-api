@@ -134,7 +134,8 @@ can sometimes be omitted.
 | Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = token, { [ word-separator ], token }, [ word-separator, line-continuation ];
+text = token, { [ word-separator ], token },
+       [ word-separator, line-continuation ];
        (* Word seprator can be ommitted after an opening bracket or before 
           a closing bracket. Commentary protocols and dividers must be
           surrounded by word separators. *)
