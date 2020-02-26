@@ -25,34 +25,26 @@ from ebl.transliteration.domain.word_tokens import Word
 class EnclosureType(Enum):
     ACCIDENTAL_OMISSION = (
         "ACCIDENTAL_OMISSION",
-        frozenset(["ACCIDENTAL_OMISSION", "INTENTIONAL_OMISSION"]),
+        frozenset(["INTENTIONAL_OMISSION"]),
     )
     INTENTIONAL_OMISSION = (
         "INTENTIONAL_OMISSION",
-        frozenset(["INTENTIONAL_OMISSION", "ACCIDENTAL_OMISSION"]),
+        frozenset(["ACCIDENTAL_OMISSION"]),
     )
-    REMOVAL = ("REMOVAL", frozenset(["REMOVAL"]))
+    REMOVAL = ("REMOVAL",)
     BROKEN_AWAY = (
         "BROKEN_AWAY",
-        frozenset(["BROKEN_AWAY", "PERHAPS_BROKEN_AWAY", "PERHAPS"]),
+        frozenset(["PERHAPS_BROKEN_AWAY", "PERHAPS"]),
     )
     PERHAPS_BROKEN_AWAY = (
         "PERHAPS_BROKEN_AWAY",
-        frozenset(
-            [
-                "PERHAPS_BROKEN_AWAY",
-                "PERHAPS",
-                "ACCIDENTAL_OMISSION",
-                "INTENTIONAL_OMISSION",
-            ]
-        ),
+        frozenset(["PERHAPS", "ACCIDENTAL_OMISSION", "INTENTIONAL_OMISSION",]),
         frozenset(["BROKEN_AWAY"]),
     )
     PERHAPS = (
         "PERHAPS",
         frozenset(
             [
-                "PERHAPS",
                 "PERHAPS_BROKEN_AWAY",
                 "BROKEN_AWAY",
                 "ACCIDENTAL_OMISSION",
@@ -60,10 +52,7 @@ class EnclosureType(Enum):
             ]
         ),
     )
-    DOCUMENT_ORIENTED_GLOSS = (
-        "DOCUMENT_ORIENTED_GLOSS",
-        frozenset(["DOCUMENT_ORIENTED_GLOSS"]),
-    )
+    DOCUMENT_ORIENTED_GLOSS = ("DOCUMENT_ORIENTED_GLOSS",)
 
     def __init__(
         self,
@@ -72,8 +61,14 @@ class EnclosureType(Enum):
         required: FrozenSet[str] = frozenset(),
     ):
         self._id = id_
-        self.forbidden = forbidden
+        self.forbidden = forbidden.union(id_)
         self.required = required
+
+    def does_not_forbid(self, enclosures: AbstractSet[str]):
+        return self.forbidden.isdisjoint(enclosures)
+
+    def are_requirements_satisfied_by(self, enclosures: AbstractSet[str]):
+        return self.required.issubset(enclosures)
 
 
 class EnclosureVisitor(TokenVisitor):
@@ -94,9 +89,9 @@ class EnclosureVisitor(TokenVisitor):
 
     @visit.register
     def _visit_variant(self, token: Variant) -> None:
-        def sub_visit(token: Token) -> AbstractSet[str]:
+        def sub_visit(sub_token: Token) -> AbstractSet[str]:
             sub_visitor = EnclosureVisitor(self._enclosures)
-            token.accept(sub_visitor)
+            sub_token.accept(sub_visitor)
             return sub_visitor.enclosures
 
         results = set(map(sub_visit, token.tokens))
@@ -181,9 +176,9 @@ class EnclosureVisitor(TokenVisitor):
             raise EnclosureError()
 
     def _is_allowed_to_open(self, enclosure: EnclosureType) -> bool:
-        return enclosure.forbidden.isdisjoint(
+        return enclosure.does_not_forbid(
             self._enclosures
-        ) and enclosure.required.issubset(self._enclosures)
+        ) and enclosure.are_requirements_satisfied_by(self._enclosures)
 
     def _is_allowed_to_close(self, enclosure: EnclosureType) -> bool:
         return self._is_open(enclosure) and not self._is_required(enclosure)
