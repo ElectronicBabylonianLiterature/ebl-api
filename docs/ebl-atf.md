@@ -62,7 +62,8 @@ Image: (image N = \<text>)
 ```ebnf
 dollar-line = '$', [ ' ' ], ( state | loose | ruling | image );
 
-state = [ qualification ], extend, scope, [ state-nanme ], [ status ];
+state = [ qualification, ' ' ], extend, ' ', scope, [ ' ', state-name ],
+        [ ' ', status ];
 
 qualification = 'at least' | 'at most' | 'about';
 
@@ -72,7 +73,7 @@ extent = 'serveral' | 'some' | number | range | 'rest of' | 'start of'
 scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
       | 'cases' | 'side' | 'excerpt' | 'surface';
 
-state-nanme = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
+state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
             | 'traces ' | 'omitted' | 'continues';
 
 status = '*' | '?' | '!' | '!?';
@@ -102,7 +103,7 @@ loose = '(', text, ')';
 
 ruling = ('single' | 'double' | 'triple'), ' ', 'ruling';
 
-image = '(image' number, [ lower-case-letter ], '=', text, ')';
+image = '(image ' number, [ lower-case-letter ], ' = ', text, ')';
 
 lower-case-letter = ? a-z ?;
 ```
