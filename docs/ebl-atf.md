@@ -30,6 +30,7 @@ Continuation lines (starting with space) are not supported.
 
 ```ebnf
 line = empty-line
+     | dollar-line
      | control-line
      | text-line;
 
@@ -59,53 +60,51 @@ Rulings: (single | double | triple) ruling
 Image: (image N = \<text>)
 
 ```ebnf
-line = "$", value;
+dollar-line = '$', [ ' ' ], ( state | loose | ruling | image );
 
-value = strict | loose | rulings | images;
+state = [ qualification ], extend, scope, [ state-nanme ], [ status ];
 
-strict = [qualification], extend, scope, [state], [status];
+qualification = 'at least' | 'at most' | 'about';
 
-qualification = "at least" | "at most" | "about";
-
-extent = "serveral" | "some" | number | range | "rest of" | "start of"
-       | beginning of | "middle of" | "end of";
+extent = 'serveral' | 'some' | number | range | 'rest of' | 'start of'
+       | beginning of | 'middle of' | 'end of';
     
-scope = object | surface | "column" | "columns" | "line" | "lines" | "case"
-      | "cases" | "side" | "excerpt" | "surface";
+scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
+      | 'cases' | 'side' | 'excerpt' | 'surface';
 
-state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces "
-      | "omitted" | "continues";
+state-nanme = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
+            | 'traces ' | 'omitted' | 'continues';
 
-status = "*" | "?" | "!" | "!?" ;
+status = '*' | '?' | '!' | '!?';
 
-range = NUMBER, "-", NUMBER;
+range = number, '-', number;
 
-object = "tablet" | "envelope" | "prism" | "bulla" | fragment | generic-object
+object = 'tablet' | 'envelope' | 'prism' | 'bulla' | fragment | generic-object;
 
-fragment = "fragment", text
+fragment = 'fragment', ' ', text;
 
-generic-object = "object", text
+generic-object = 'object', ' ', text;
 
-surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
-        | face | generic-surface | edge
+surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
+        | face | generic-surface | edge;
 
-face = "face", lower-case-letter
+face = 'face', ' ', lower-case-letter;
 
-edge = "edge", lower-case-letter
+edge = 'edge', ' ', lower-case-letter;
 
-generic-surface = "surface", text
+generic-surface = 'surface', ' ', text
 
-text = { any-character }-
+text = { any-character }-;
 
-number = { decimal-digit }-
+number = { decimal-digit }-;
 
-loose = text
+loose = '(', text, ')';
 
-rulings = ("single" | "double" | "triple"), "ruling"
+ruling = ('single' | 'double' | 'triple'), ' ', 'ruling';
 
-images = "(image" NUMBER, lower-case-letter, "=", text
+image = '(image' number, [ lower-case-letter ], '=', text, ')';
 
-lower-case-letter = ? a-z ?
+lower-case-letter = ? a-z ?;
 ```
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
