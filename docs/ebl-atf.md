@@ -385,29 +385,11 @@ sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
 
 ## Validation
 
-The ATF should be parseable using the specification above. In addition, it must
-pass [pyoracc](https://github.com/oracc/pyoracc) validation and not contain
-unknown readings. To make the ATF valid according to pyoracc a fake header is
-added to the input:
-
-```
-&XXX = XXX
-#project: eblo
-#atf: lang akk-x-stdbab
-#atf: use unicode
-#atf: use math
-#atf: use legacy
-```
-
-The only purpose of the header is to make the pyoracc accept the ATF and it is
-not saved to the database. To check the readings the ATF is stripped from all
-other characters except readings and graphemes. Each reading must match a value
-in the sign list.
-
-Sometimes when the validation or parsing logic is updated existing
-transliterations can become invalid. It should still be possible to load these
-transliterations but saving them results in an error until the syntax has been
-corrected.
+The ATF should be parseable using the specification above. In addition,
+all readings and signs must be correct according to our sign list. Sometimes
+when the validation or parsing logic is updated existing transliterations can
+become invalid. It should still be possible to load these transliterations, but
+saving them results in an error until the syntax is corrected.
 
 ## Labels
 
