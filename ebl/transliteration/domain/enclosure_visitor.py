@@ -35,7 +35,9 @@ class EnclosureType(Enum):
     BROKEN_AWAY = ("BROKEN_AWAY", frozenset(["BROKEN_AWAY", "PERHAPS_BROKEN_AWAY"]))
     PERHAPS_BROKEN_AWAY = (
         "PERHAPS_BROKEN_AWAY",
-        frozenset(["PERHAPS_BROKEN_AWAY"]),
+        frozenset(
+            ["PERHAPS_BROKEN_AWAY", "ACCIDENTAL_OMISSION", "INTENTIONAL_OMISSION"]
+        ),
         frozenset(["BROKEN_AWAY"]),
     )
     DOCUMENT_ORIENTED_GLOSS = (
