@@ -291,20 +291,19 @@ determinative. A word is lemmatizable and alignable if:
 - The language is not normalized.
 
 ```ebnf
-word = [ part-joiner ], [ open-broken-away ], [ open-perhaps-broken-away ],
+word = [ joiner ], [ open-broken-away ], [ open-perhaps-broken-away ],
        [ open-omission ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
        [ close-omission ], [ close-perhaps-broken-away ]
-       [ close-broken-away ], [ part-joiner ];
+       [ close-broken-away ], [ joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ),
-        { [ part-joiner ], ( determinative | variant | linguistic-gloss
-                           | phonetic-gloss | unknown-number-of-signs ) }
-      | unknown-number-of-signs, { [ part-joiner ],
-        ( determinative | variant | linguistic-gloss | phonetic-gloss
-        | unknown-number-of-signs ) }-;
+parts = ( variant | determinative | linguistic-gloss | phonetic-gloss | 
+          unknown-number-of-signs ),
+        { [ part-joiner ], ( variant | determinative | linguistic-gloss | 
+                             phonetic-gloss | unknown-number-of-signs ) };
+        (* Word cannot consist of only unknown-number-of-signs. *)
 
 linguistic-gloss = '{{', variant,  { part-joiner, variant }, '}}';
 phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
