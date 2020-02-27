@@ -49,7 +49,7 @@ ruling : RULING_NUMBER _SPACE RULING
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
-image : _IMAGE _SPACE DIGIT [LOWER_CASE_LETTER] _SPACE "=" _SPACE text _SPACE? ")"
+image : _IMAGE _SPACE DIGIT [LOWER_CASE_LETTER] _SPACE "=" _SPACE text ")"
 _IMAGE : "(" [_SPACE] "image"
 DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
