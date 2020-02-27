@@ -120,9 +120,9 @@ class EnclosureVisitorState:
         return enclosure in required
 
 
+@attr.s(auto_attribs=True)
 class EnclosureVisitor(TokenVisitor):
-    def __init__(self, initial=EnclosureVisitorState()):
-        self._state = initial
+    _state: EnclosureVisitorState = EnclosureVisitorState()
 
     @property
     def enclosures(self) -> AbstractSet[EnclosureType]:
