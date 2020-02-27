@@ -365,12 +365,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return RulingDollarLine(atf.Ruling(str(number)))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__LOWER_CASE_LETTER(self, letter):
-        return str(letter)
-
-    @v_args(inline=True)
     def ebl_atf_dollar_line__image(self, number, letter, text):
-        return ImageDollarLine(str(number), letter, text)
+        return ImageDollarLine(str(number), letter and str(letter), text)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__STATUS(self, status):
