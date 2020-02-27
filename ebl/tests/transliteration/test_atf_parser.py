@@ -2,6 +2,7 @@ import pytest
 from hamcrest import assert_that, contains_exactly, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -19,7 +20,6 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     TextLine,
 )
-from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -215,10 +215,7 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Variant.of(Divider.of("|"), Divider.of(":")),
-                        Variant.of(
-                            Divider.of(":'"),
-                            Word("sal", parts=[Reading.of_name("sal")]),
-                        ),
+                        Variant.of(Divider.of(":'"), Reading.of_name("sal"),),
                         Variant.of(Divider.of("/"), Divider.of(":")),
                         Variant.of(Divider.of(":"), Divider.of("/")),
                     ),
@@ -773,10 +770,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Variant.of(
-                            Word("sal", parts=[Reading.of_name("sal")]),
-                            Divider.of(":"),
-                        ),
+                        Variant.of(Reading.of_name("sal"), Divider.of(":"),),
                         Word("šim", parts=[Reading.of_name("šim")]),
                     ),
                 )

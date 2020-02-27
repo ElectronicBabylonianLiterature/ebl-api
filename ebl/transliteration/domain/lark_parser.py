@@ -333,13 +333,7 @@ class TreeToLine(TreeToWord):
 
     @v_args(inline=True)
     def ebl_atf_text_line__divider_variant(self, first, second):
-        return Variant.of(
-            ValueToken(str(first)) if isinstance(first, Token) else first,
-            ValueToken(str(second)) if isinstance(second, Token) else second,
-        )
-
-    def ebl_atf_text_line__divider_variant_part(self, tokens):
-        return self._create_word(Word, tokens)
+        return Variant.of(first, second)
 
     @v_args(inline=True)
     def ebl_atf_text_line__erasure(self, erased, over_erased):

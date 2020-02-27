@@ -15,8 +15,8 @@ line_continuation: _WORD_SEPARATOR* LINE_CONTINUATION
 LINE_CONTINUATION: "→"
 
 _require_both: commentary_protocol
-             | divider
              | divider_variant
+             | divider
 _have_both: tabulation
          | column
          | language_shift
@@ -44,13 +44,9 @@ language_shift: SHIFT
 
 _NEW_LINE: /\n/
 
-divider_variant: (divider_variant_part | divider) _VARIANT_SEPARATOR (divider_variant_part | divider)
-divider_variant_part: unidentified_sign
-                    | unclear_sign
-                    | reading
-                    | logogram
-                    | number
-                    | compound_grapheme
+divider_variant: divider _VARIANT_SEPARATOR divider
+               | divider _VARIANT_SEPARATOR variant_part
+               | variant_part _VARIANT_SEPARATOR divider
 
 tabulation: TABULATION
 TABULATION: "($___$)"
