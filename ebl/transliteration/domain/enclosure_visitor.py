@@ -2,6 +2,8 @@ from enum import Enum, unique
 from functools import singledispatchmethod  # type: ignore
 from typing import AbstractSet, FrozenSet, Set
 
+import attr
+
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -13,11 +15,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.sign_tokens import NamedSign
-from ebl.transliteration.domain.tokens import (
-    Variant,
-    Token,
-    TokenVisitor,
-)
+from ebl.transliteration.domain.tokens import Token, TokenVisitor, Variant
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -81,37 +79,33 @@ class EnclosureType(Enum):
         return self.required.issubset(enclosures)
 
 
+@attr.s(auto_attribs=True, frozen=True)
 class EnclosureVisitorState:
-    def __init__(self, initial: AbstractSet[EnclosureType] = frozenset()):
-        self._enclosures: Set[EnclosureType] = set(initial)
-
-    @property
-    def enclosures(self) -> FrozenSet[EnclosureType]:
-        return frozenset(self._enclosures)
+    enclosures: FrozenSet[EnclosureType] = frozenset()
 
     @property
     def has_enclosures(self) -> int:
-        return len(self._enclosures) > 0
+        return len(self.enclosures) > 0
 
     def is_open(self, enclosure: EnclosureType) -> bool:
-        return enclosure in self._enclosures
+        return enclosure in self.enclosures
 
-    def open(self, enclosure: EnclosureType) -> None:
+    def open(self, enclosure: EnclosureType) -> "EnclosureVisitorState":
         if self._is_allowed_to_open(enclosure):
-            self._enclosures.add(enclosure)
+            return EnclosureVisitorState(self.enclosures.union({enclosure}))
         else:
             raise EnclosureError()
 
-    def close(self, enclosure: EnclosureType) -> None:
+    def close(self, enclosure: EnclosureType) -> "EnclosureVisitorState":
         if self._is_allowed_to_close(enclosure):
-            self._enclosures.remove(enclosure)
+            return EnclosureVisitorState(self.enclosures.difference({enclosure}))
         else:
             raise EnclosureError()
 
     def _is_allowed_to_open(self, enclosure: EnclosureType) -> bool:
         return enclosure.does_not_forbid(
-            self._enclosures
-        ) and enclosure.are_requirements_satisfied_by(self._enclosures)
+            self.enclosures
+        ) and enclosure.are_requirements_satisfied_by(self.enclosures)
 
     def _is_allowed_to_close(self, enclosure: EnclosureType) -> bool:
         return self.is_open(enclosure) and not self._is_required(enclosure)
@@ -119,22 +113,22 @@ class EnclosureVisitorState:
     def _is_required(self, enclosure: EnclosureType) -> bool:
         required = {
             required_type
-            for open_ in self._enclosures
+            for open_ in self.enclosures
             for required_type in open_.required
         }
         return enclosure in required
 
 
 class EnclosureVisitor(TokenVisitor):
-    def __init__(self, initial: AbstractSet[EnclosureType] = frozenset()):
-        self._enclosures = EnclosureVisitorState(initial)
+    def __init__(self, initial=EnclosureVisitorState()):
+        self._state = initial
 
     @property
     def enclosures(self) -> AbstractSet[EnclosureType]:
-        return self._enclosures.enclosures
+        return self._state.enclosures
 
     def done(self):
-        if self._enclosures.has_enclosures:
+        if self._state.has_enclosures:
             raise EnclosureError()
 
     @singledispatchmethod
@@ -144,14 +138,14 @@ class EnclosureVisitor(TokenVisitor):
     @visit.register
     def _visit_variant(self, token: Variant) -> None:
         def sub_visit(sub_token: Token) -> AbstractSet[EnclosureType]:
-            sub_visitor = EnclosureVisitor(self._enclosures.enclosures)
+            sub_visitor = EnclosureVisitor(self._state)
             sub_token.accept(sub_visitor)
             return sub_visitor.enclosures
 
         results = set(map(sub_visit, token.tokens))
 
         if len(results) == 1:
-            self._enclosures = EnclosureVisitorState(results.pop())
+            self._state = EnclosureVisitorState(frozenset(results.pop()))
         else:
             raise EnclosureError()
 
@@ -173,46 +167,46 @@ class EnclosureVisitor(TokenVisitor):
     @visit.register
     def _visit_accidental_omission(self, token: AccidentalOmission) -> None:
         if token == AccidentalOmission.open():
-            self._enclosures.open(EnclosureType.ACCIDENTAL_OMISSION)
+            self._state = self._state.open(EnclosureType.ACCIDENTAL_OMISSION)
         else:
-            self._enclosures.close(EnclosureType.ACCIDENTAL_OMISSION)
+            self._state = self._state.close(EnclosureType.ACCIDENTAL_OMISSION)
 
     @visit.register
     def _visit_intentional_omission(self, token: IntentionalOmission) -> None:
         if token == IntentionalOmission.open():
-            self._enclosures.open(EnclosureType.INTENTIONAL_OMISSION)
+            self._state = self._state.open(EnclosureType.INTENTIONAL_OMISSION)
         else:
-            self._enclosures.close(EnclosureType.INTENTIONAL_OMISSION)
+            self._state = self._state.close(EnclosureType.INTENTIONAL_OMISSION)
 
     @visit.register
     def _visit_removal(self, token: Removal) -> None:
         if token == Removal.open():
-            self._enclosures.open(EnclosureType.REMOVAL)
+            self._state = self._state.open(EnclosureType.REMOVAL)
         else:
-            self._enclosures.close(EnclosureType.REMOVAL)
+            self._state = self._state.close(EnclosureType.REMOVAL)
 
     @visit.register
     def _visit_broken_away(self, token: BrokenAway) -> None:
         if token == BrokenAway.open():
-            self._enclosures.open(EnclosureType.BROKEN_AWAY)
+            self._state = self._state.open(EnclosureType.BROKEN_AWAY)
         else:
-            self._enclosures.close(EnclosureType.BROKEN_AWAY)
+            self._state = self._state.close(EnclosureType.BROKEN_AWAY)
 
     @visit.register
     def _visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> None:
         perhaps_type = (
             EnclosureType.PERHAPS_BROKEN_AWAY
-            if self._enclosures.is_open(EnclosureType.BROKEN_AWAY)
+            if self._state.is_open(EnclosureType.BROKEN_AWAY)
             else EnclosureType.PERHAPS
         )
         if token == PerhapsBrokenAway.open():
-            self._enclosures.open(perhaps_type)
+            self._state = self._state.open(perhaps_type)
         else:
-            self._enclosures.close(perhaps_type)
+            self._state = self._state.close(perhaps_type)
 
     @visit.register
     def _visit_document_oriented_gloss(self, token: DocumentOrientedGloss) -> None:
         if token == DocumentOrientedGloss.open():
-            self._enclosures.open(EnclosureType.DOCUMENT_ORIENTED_GLOSS)
+            self._state = self._state.open(EnclosureType.DOCUMENT_ORIENTED_GLOSS)
         else:
-            self._enclosures.close(EnclosureType.DOCUMENT_ORIENTED_GLOSS)
+            self._state = self._state.close(EnclosureType.DOCUMENT_ORIENTED_GLOSS)
