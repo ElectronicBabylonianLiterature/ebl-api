@@ -10,6 +10,14 @@ from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
+from ebl.transliteration.domain.dollar_line import (
+    ImageDollarLine,
+    LooseDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+)
+from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -22,6 +30,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
+from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -29,15 +38,6 @@ from ebl.transliteration.domain.line import (
     Line,
     TextLine,
 )
-from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    ScopeContainer,
-    StateDollarLine,
-)
-from ebl.transliteration.domain.enclosure_error import EnclosureError
-from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -164,11 +164,9 @@ class TreeToSign(Transformer):
     def ebl_atf_text_line__compound_grapheme(self, name):
         return CompoundGrapheme(name.value)
 
-    @v_args(inline=True)
     def ebl_atf_text_line__close_broken_away(self, _):
         return BrokenAway.close()
 
-    @v_args(inline=True)
     def ebl_atf_text_line__open_broken_away(self, _):
         return BrokenAway.open()
 
@@ -254,11 +252,9 @@ class TreeToWord(TreeToSign):
             Erasure.close(),
         ]
 
-    @v_args(inline=True)
     def ebl_atf_text_line__close_perhaps_broken_away(self, _):
         return PerhapsBrokenAway.close()
 
-    @v_args(inline=True)
     def ebl_atf_text_line__open_perhaps_broken_away(self, _):
         return PerhapsBrokenAway.open()
 

@@ -154,11 +154,15 @@ token = commentary-protocol
       | unknown-number-of-signs
       | close-broken-away
       | close-perhaps-broken-away
-      | close-omission
+      | close-intentional-omission
+      | close-accidental-omission
+      | close-removal
       | close-document-orionted-gloss
       | open-broken-away
       | open-perhaps-broken-away
-      | open-omission
+      | open-intentional-omission
+      | open-accidental-omission
+      | open-removal
       | open-document-oriented-gloss;
            
 tabulation = '($___$)';
@@ -180,9 +184,12 @@ erasure = '°', [ erasure-part ] '\', [ erasure-part ], '°';
 erasure-part = ( divider | word | lone-determinative ),
                { word-separator, ( divider | word | lone-determinative ) };
 
-omission = open-omission | close-omission;
-open-omission = '<<' | '<(' | '<';
-close-omission = '>>' | ')>' | '>';
+open-intentional-omission = '<(';
+close-intentional-omission = ')>';
+open-accidental-omission = '<';
+close-accidental-omission = '>';
+open-removal = '<<';
+close-removal = '>>';
 
 broken-away = open-broken-away-open | close-broken-away;
 open-broken-away = '[';
@@ -285,11 +292,9 @@ determinative. A word is lemmatizable and alignable if:
 - The language is not normalized.
 
 ```ebnf
-word = [ joiner ], [ open-broken-away ], [ open-perhaps-broken-away ],
-       [ open-omission ],
+word = [ joiner ], [ open-any ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-omission ], [ close-perhaps-broken-away ]
-       [ close-broken-away ], [ joiner ];
+       [ close-any ], [ joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
@@ -299,19 +304,23 @@ parts = ( variant | determinative | linguistic-gloss | phonetic-gloss |
                              phonetic-gloss | unknown-number-of-signs ) };
         (* Word cannot consist of only unknown-number-of-signs. *)
 
-linguistic-gloss = '{{', variant,  { part-joiner, variant }, '}}';
-phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
-determinative = '{', variant,  { part-joiner, variant }, '}';
+linguistic-gloss = '{{', gloss-body, '}}';
+phonetic-gloss = '{+', gloss-body, '}';
+determinative = '{', gloss-body, '}';
+gloss-body = [ open_any ] variant,  { part-joiner, variant }, [ close_any ]
 
-part-joiner = [ inword-newline ],
-              [ close-omission ],
-              [ close-perhaps-away ],
-              [ close-broken-away ],
-              [ joiner ],
-              [ open-broken-away ],
-              [ open-perhaps-broken-away ],
-              [ open-omission ];
-              
+part-joiner = [ inword-newline ], [ close_any ], [ joiner ], [ open_any ];
+ 
+open_any = { open-broken-away
+             | open-perhaps-away     
+             | open-intentional-omission
+             | open-accidental-omission
+             | open-removal }+; 
+close_any = { close-broken-away
+             | close-perhaps-away     
+             | close-intentional-omission
+             | close-accidental-omission
+             | close-removal }+;         
 joiner = '-' | '+' | '.' | ':';
 inword-newline = ';';
 
