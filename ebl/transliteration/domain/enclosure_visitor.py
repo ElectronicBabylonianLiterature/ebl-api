@@ -61,22 +61,32 @@ class EnclosureType(Enum):
         required: FrozenSet[str] = frozenset(),
     ):
         self._id = id_
-        self.forbidden = forbidden.union(id_)
-        self.required = required
+        self._forbidden = forbidden.union({id_})
+        self._required = required
 
-    def does_not_forbid(self, enclosures: AbstractSet[str]):
+    @property
+    def required(self) -> Set["EnclosureType"]:
+        return {EnclosureType[name] for name in self._required}
+
+    @property
+    def forbidden(self) -> Set["EnclosureType"]:
+        return {EnclosureType[name] for name in self._forbidden}
+
+    def does_not_forbid(self, enclosures: AbstractSet["EnclosureType"]) -> bool:
         return self.forbidden.isdisjoint(enclosures)
 
-    def are_requirements_satisfied_by(self, enclosures: AbstractSet[str]):
+    def are_requirements_satisfied_by(
+        self, enclosures: AbstractSet["EnclosureType"]
+    ) -> bool:
         return self.required.issubset(enclosures)
 
 
 class EnclosureVisitor(TokenVisitor):
-    def __init__(self, initial: AbstractSet[str] = frozenset()):
-        self._enclosures: Set[str] = set(initial)
+    def __init__(self, initial: AbstractSet[EnclosureType] = frozenset()):
+        self._enclosures: Set[EnclosureType] = set(initial)
 
     @property
-    def enclosures(self) -> AbstractSet[str]:
+    def enclosures(self) -> AbstractSet[EnclosureType]:
         return frozenset(self._enclosures)
 
     def done(self):
@@ -89,7 +99,7 @@ class EnclosureVisitor(TokenVisitor):
 
     @visit.register
     def _visit_variant(self, token: Variant) -> None:
-        def sub_visit(sub_token: Token) -> AbstractSet[str]:
+        def sub_visit(sub_token: Token) -> AbstractSet[EnclosureType]:
             sub_visitor = EnclosureVisitor(self._enclosures)
             sub_token.accept(sub_visitor)
             return sub_visitor.enclosures
@@ -165,13 +175,13 @@ class EnclosureVisitor(TokenVisitor):
 
     def _open(self, enclosure: EnclosureType):
         if self._is_allowed_to_open(enclosure):
-            self._enclosures.add(enclosure.name)
+            self._enclosures.add(enclosure)
         else:
             raise EnclosureError()
 
     def _close(self, enclosure: EnclosureType):
         if self._is_allowed_to_close(enclosure):
-            self._enclosures.remove(enclosure.name)
+            self._enclosures.remove(enclosure)
         else:
             raise EnclosureError()
 
@@ -184,12 +194,12 @@ class EnclosureVisitor(TokenVisitor):
         return self._is_open(enclosure) and not self._is_required(enclosure)
 
     def _is_open(self, enclosure: EnclosureType) -> bool:
-        return enclosure.name in self._enclosures
+        return enclosure in self._enclosures
 
     def _is_required(self, enclosure: EnclosureType) -> bool:
         required = {
-            required_name
-            for name in self._enclosures
-            for required_name in EnclosureType[name].required
+            required_type
+            for open_ in self._enclosures
+            for required_type in open_.required
         }
-        return enclosure.name in required
+        return enclosure in required
