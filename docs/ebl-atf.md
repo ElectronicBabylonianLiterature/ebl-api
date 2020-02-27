@@ -67,14 +67,14 @@ state = [ qualification, ' ' ], extend, ' ', scope, [ ' ', state-name ],
 
 qualification = 'at least' | 'at most' | 'about';
 
-extent = 'serveral' | 'some' | number | range | 'rest of' | 'start of'
+extent = 'several' | 'some' | number | range | 'rest of' | 'start of'
        | beginning of | 'middle of' | 'end of';
     
 scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
       | 'cases' | 'side' | 'excerpt' | 'surface';
 
 state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
-            | 'traces ' | 'omitted' | 'continues';
+            | 'traces' | 'omitted' | 'continues';
 
 status = '*' | '?' | '!' | '!?';
 
