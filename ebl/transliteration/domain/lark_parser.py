@@ -356,9 +356,6 @@ class TreeDollarSignToTokens(TreeToLine):
     def ebl_atf_dollar_line__text(self, content):
         return "".join([x for x in content]).rstrip(" ")
 
-    def ebl_atf_dollar_line__image_text(self, content):
-        return "".join([x for x in content])
-
     @v_args(inline=True)
     def ebl_atf_dollar_line__loose(self, content):
         return LooseDollarLine(str(content))
