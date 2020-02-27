@@ -1227,3 +1227,14 @@ def test_invalid_atf(parser, atf, line_numbers):
         parser(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2]),],
+)
+def test_invalid_brackets(parser, atf, line_numbers):
+    with pytest.raises(TransliterationError) as exc_info:
+        parser(atf)
+
+    assert_exception_has_errors(exc_info, line_numbers, "Invalid brackets.")
