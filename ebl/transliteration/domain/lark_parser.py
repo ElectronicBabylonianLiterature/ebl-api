@@ -354,7 +354,7 @@ class TreeToLine(TreeToWord):
 
 class TreeDollarSignToTokens(TreeToLine):
     def ebl_atf_dollar_line__text(self, content):
-        return "".join([x for x in content]).rstrip(" ")
+        return "".join(content).rstrip(" ")
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__loose(self, content):
