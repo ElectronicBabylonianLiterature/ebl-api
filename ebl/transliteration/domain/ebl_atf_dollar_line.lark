@@ -1,4 +1,3 @@
-%import common.ESCAPED_STRING
 %import common.SIGNED_NUMBER
 %import common.DIGIT
 %import common.LCASE_LETTER
