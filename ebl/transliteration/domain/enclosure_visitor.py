@@ -9,6 +9,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
     DocumentOrientedGloss,
+    Enclosure,
     Gloss,
     IntentionalOmission,
     PerhapsBrokenAway,
@@ -166,31 +167,19 @@ class EnclosureVisitor(TokenVisitor):
 
     @visit.register
     def _visit_accidental_omission(self, token: AccidentalOmission) -> None:
-        if token == AccidentalOmission.open():
-            self._state = self._state.open(EnclosureType.ACCIDENTAL_OMISSION)
-        else:
-            self._state = self._state.close(EnclosureType.ACCIDENTAL_OMISSION)
+        self._update_state(token, EnclosureType.ACCIDENTAL_OMISSION)
 
     @visit.register
     def _visit_intentional_omission(self, token: IntentionalOmission) -> None:
-        if token == IntentionalOmission.open():
-            self._state = self._state.open(EnclosureType.INTENTIONAL_OMISSION)
-        else:
-            self._state = self._state.close(EnclosureType.INTENTIONAL_OMISSION)
+        self._update_state(token, EnclosureType.INTENTIONAL_OMISSION)
 
     @visit.register
     def _visit_removal(self, token: Removal) -> None:
-        if token == Removal.open():
-            self._state = self._state.open(EnclosureType.REMOVAL)
-        else:
-            self._state = self._state.close(EnclosureType.REMOVAL)
+        self._update_state(token, EnclosureType.REMOVAL)
 
     @visit.register
     def _visit_broken_away(self, token: BrokenAway) -> None:
-        if token == BrokenAway.open():
-            self._state = self._state.open(EnclosureType.BROKEN_AWAY)
-        else:
-            self._state = self._state.close(EnclosureType.BROKEN_AWAY)
+        self._update_state(token, EnclosureType.BROKEN_AWAY)
 
     @visit.register
     def _visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> None:
@@ -199,14 +188,15 @@ class EnclosureVisitor(TokenVisitor):
             if self._state.is_open(EnclosureType.BROKEN_AWAY)
             else EnclosureType.PERHAPS
         )
-        if token == PerhapsBrokenAway.open():
-            self._state = self._state.open(perhaps_type)
-        else:
-            self._state = self._state.close(perhaps_type)
+        self._update_state(token, perhaps_type)
 
     @visit.register
     def _visit_document_oriented_gloss(self, token: DocumentOrientedGloss) -> None:
-        if token == DocumentOrientedGloss.open():
-            self._state = self._state.open(EnclosureType.DOCUMENT_ORIENTED_GLOSS)
-        else:
-            self._state = self._state.close(EnclosureType.DOCUMENT_ORIENTED_GLOSS)
+        self._update_state(token, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
+
+    def _update_state(self, token: Enclosure, enclosure: EnclosureType):
+        self._state = (
+            self._state.open(enclosure)
+            if token.is_open
+            else self._state.close(enclosure)
+        )

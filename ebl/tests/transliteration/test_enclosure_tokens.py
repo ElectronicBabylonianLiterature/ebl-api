@@ -18,26 +18,9 @@ from ebl.transliteration.domain.tokens import Joiner
 
 
 @pytest.mark.parametrize(
-    "side, value", [(Side.LEFT, "°"), (Side.CENTER, "\\"), (Side.RIGHT, "°")]
-)
-def test_erasure(side, value):
-    erasure = Erasure(side)
-
-    assert erasure.value == value
-    assert erasure.get_key() == f"Erasure⁝{value}"
-    assert erasure.lemmatizable is False
-
-    serialized = {
-        "type": "Erasure",
-        "value": erasure.value,
-        "side": side.name,
-    }
-    assert_token_serialization(erasure, serialized)
-
-
-@pytest.mark.parametrize(
     "enclosure_class, type_, sides",
     [
+        (Erasure, "Erasure", {Side.LEFT: "°", Side.CENTER: "\\", Side.RIGHT: "°"}),
         (AccidentalOmission, "AccidentalOmission", {Side.LEFT: "<", Side.RIGHT: ">"}),
         (
             IntentionalOmission,
@@ -45,6 +28,11 @@ def test_erasure(side, value):
             {Side.LEFT: "<(", Side.RIGHT: ")>"},
         ),
         (Removal, "Removal", {Side.LEFT: "<<", Side.RIGHT: ">>"}),
+        (
+            DocumentOrientedGloss,
+            "DocumentOrientedGloss",
+            {Side.LEFT: "{(", Side.RIGHT: ")}"},
+        ),
     ],
 )
 @pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT,])
@@ -54,6 +42,9 @@ def test_enclosure(enclosure_class, type_, sides, side):
 
     assert enclosure.value == value
     assert enclosure.get_key() == f"{type_}⁝{value}"
+    assert enclosure.side == side
+    assert enclosure.is_open == (side == Side.LEFT)
+    assert enclosure.is_close == (side == Side.RIGHT)
     assert enclosure.lemmatizable is False
 
     serialized = {
@@ -62,33 +53,6 @@ def test_enclosure(enclosure_class, type_, sides, side):
         "side": side.name,
     }
     assert_token_serialization(enclosure, serialized)
-
-
-@pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT])
-def test_document_oriented_gloss(side):
-    values = {Side.LEFT: "{(", Side.RIGHT: ")}"}
-    value = values[side]
-    gloss = DocumentOrientedGloss(side)
-    equal = DocumentOrientedGloss.of_value(value)
-    other = DocumentOrientedGloss(Side.LEFT if side == Side.RIGHT else Side.RIGHT)
-
-    assert gloss.value == value
-    assert gloss.get_key() == f"DocumentOrientedGloss⁝{value}"
-    assert gloss.side == side
-    assert gloss.lemmatizable is False
-
-    serialized = {
-        "type": "DocumentOrientedGloss",
-        "value": gloss.value,
-        "side": side.name,
-    }
-    assert_token_serialization(gloss, serialized)
-
-    assert gloss == equal
-    assert hash(gloss) == hash(equal)
-
-    assert gloss != other
-    assert hash(gloss) != hash(other)
 
 
 def test_determinative():
