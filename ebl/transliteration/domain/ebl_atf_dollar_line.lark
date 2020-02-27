@@ -1,5 +1,6 @@
 %import common.ESCAPED_STRING
 %import common.SIGNED_NUMBER
+%import common.DIGIT
 %import common.LCASE_LETTER
 
 
@@ -32,8 +33,8 @@ text.-2 : /./+
 
 _surface : SURFACE | generic_surface | face | edge
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
-face: "face" _SPACE LOWER_CASE_LETTER
-edge: "edge" _SPACE LOWER_CASE_LETTER
+face: "face" _SPACE LCASE_LETTER
+edge: "edge" _SPACE LCASE_LETTER
 generic_surface : SURFACE_GENERIC _SPACE text
 SURFACE_GENERIC : "surface"
 
@@ -49,7 +50,5 @@ ruling : RULING_NUMBER _SPACE RULING
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
-image : _IMAGE _SPACE DIGIT [LOWER_CASE_LETTER] _SPACE "=" _SPACE text ")"
+image : _IMAGE _SPACE DIGIT [LCASE_LETTER] _SPACE "=" _SPACE text ")"
 _IMAGE : "(" [_SPACE] "image"
-DIGIT : /[0-9]+/
-LOWER_CASE_LETTER : /[a-z]/
