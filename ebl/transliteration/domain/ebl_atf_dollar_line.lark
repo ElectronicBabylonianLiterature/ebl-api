@@ -1,8 +1,8 @@
-%import common.INT
 %import common.DIGIT
+%import common.INT
 %import common.LCASE_LETTER
 
-free_text.-2 : /./+
+free_text.-2 : /./+ " "*
 
 ?dollar_line: "$ " value
 ?value: strict
