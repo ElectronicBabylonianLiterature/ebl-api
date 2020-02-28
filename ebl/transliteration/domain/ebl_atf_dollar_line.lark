@@ -4,9 +4,9 @@
 
 free_text.-2 : /./+ " "*
 
-?dollar_line: "$ " value
+?dollar_line: "$" " "* value
 ?value: strict
-      | "(" strict " "* ")"
+      | "(" " "* strict " "* ")"
       | loose
 ?strict: state | ruling | image
 loose: "(" free_text ")"

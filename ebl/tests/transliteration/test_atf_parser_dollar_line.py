@@ -29,6 +29,7 @@ from ebl.transliteration.domain.text import Text
             ],
         ),
         ("$ (image 1a = great )", [ImageDollarLine("1", "a", "great")]),
+        ("$(image 1a = great )", [ImageDollarLine("1", "a", "great")]),
         (
             "$ (image 1 = numbered diagram of triangle)",
             [ImageDollarLine("1", None, "numbered diagram of triangle")],
@@ -36,6 +37,7 @@ from ebl.transliteration.domain.text import Text
         ("$ single ruling", [RulingDollarLine(atf.Ruling.SINGLE)]),
         ("$ double ruling", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         ("$ triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
+        ("$triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
     ],
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):
@@ -219,6 +221,18 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             ],
         ),
         (
+            "$several tablet blank ?",
+            [
+                StateDollarLine(
+                    None,
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.TABLET),
+                    atf.State.BLANK,
+                    atf.Status.UNCERTAIN,
+                )
+            ],
+        ),
+        (
             "$ at least",
             [StateDollarLine(atf.Qualification.AT_LEAST, None, None, None, None,)],
         ),
@@ -360,6 +374,7 @@ def test_parse_atf_surface_ambiguity_dollar_line(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("$(double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         ("$ (double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         (
             "$ (at least 1 surface th(in)g)",
