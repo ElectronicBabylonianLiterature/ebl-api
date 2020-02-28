@@ -1,4 +1,4 @@
-%import common.SIGNED_NUMBER
+%import common.INT
 %import common.DIGIT
 %import common.LCASE_LETTER
 
@@ -15,10 +15,9 @@ state_line: [QUALIFICATION _SPACE] _extent _SPACE _scopes [_SPACE STATE] [_SPACE
 
 QUALIFICATION : "at least" | "at most" | "about"
 
-_extent : NUMBER | range | EXTENT
+_extent : INT | range | EXTENT
 EXTENT : "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
-range.2 : NUMBER _SPACE? "-" _SPACE? NUMBER
-NUMBER : SIGNED_NUMBER
+range.2 : INT _SPACE? "-" _SPACE? INT
 
 _scopes : SCOPE | _object | _surface
 SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"

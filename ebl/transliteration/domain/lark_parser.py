@@ -413,7 +413,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return atf.Extent(str(extent))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__NUMBER(self, number):
+    def ebl_atf_dollar_line__INT(self, number):
         return int(number)
 
     @v_args(inline=True)
