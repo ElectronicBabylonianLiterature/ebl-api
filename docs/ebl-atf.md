@@ -60,7 +60,8 @@ proper.
   `$ (image 1 = numbered diagram of triangle)`
 
 ```ebnf
-dollar-line = '$', [ ' ' ], ( state | loose | ruling | image );
+dollar-line = '$', [ ' ' ], ( strict | '(', strict, ')' | loose );
+strict = state | ruling | image
 
 state = [ qualification ], [' ', extend ], [' ', scope ], [ ' ', state-name ],
         [ ' ', dollar-status ]; (* At least one column is required. *)
