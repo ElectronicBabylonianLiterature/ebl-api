@@ -15,9 +15,12 @@ and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsh
 eBL-ATF can be empty or consist of lines separated by a newline character.
 
 ```ebnf
-ebl-atf = [ line, { '\n', line } ];
+ebl-atf = [ line, { eol, line } ];
 
+free-text = { any-character }+;
 word-character = ? A-Za-z ?;
+lower-case-letter = ? a-z ?;
+any-character = ? any UTF-8 character ?;
 decimal-digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 eol = ? end of line ?;
 ```
@@ -41,8 +44,6 @@ control-line = '=:' | '$' | '@' | '&' | '#', { any-character };
 text-line = line-number, ' ', text;
 line-number = { not-space }-, '.';
 not-space = any-character - ' ';
-
-any-character = ? any UTF-8 character ?;
 ```
 
 ## $-lines
@@ -55,7 +56,7 @@ proper.
   `$ 3 lines blank` or `$ rest of obverse missing`.
 - Loose: `$ (<free text>)`, e.g.: `$ (head of statue broken)`
 - Ruling: `$ (single | double | triple) ruling`, e.g.: `$ double ruling`.
-- Image: `$ (image N = <text>)`, e.g.:
+- Image: `$ (image N = <free text>)`, e.g.:
   `$ (image 1 = numbered diagram of triangle)`
 
 ```ebnf
@@ -81,9 +82,9 @@ range = number, '-', number;
 
 object = 'tablet' | 'envelope' | 'prism' | 'bulla' | fragment | generic-object;
 
-fragment = 'fragment', ' ', text;
+fragment = 'fragment', ' ', free-text;
 
-generic-object = 'object', ' ', text;
+generic-object = 'object', ' ', free-text;
 
 surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
         | face | generic-surface | edge;
@@ -92,19 +93,15 @@ face = 'face', ' ', lower-case-letter;
 
 edge = 'edge', ' ', lower-case-letter;
 
-generic-surface = 'surface', ' ', text
-
-text = { any-character }-;
+generic-surface = 'surface', ' ', free-text;
 
 number = { decimal-digit }-;
 
-loose = '(', text, ')';
+loose = '(', free-text, ')';
 
 ruling = ('single' | 'double' | 'triple'), ' ', 'ruling';
 
-image = '(image ' number, [ lower-case-letter ], ' = ', text, ')';
-
-lower-case-letter = ? a-z ?;
+image = '(image ' number, [ lower-case-letter ], ' = ', free-text, ')';
 ```
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
