@@ -370,7 +370,7 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__DOLLAR_STATUS(self, status):
-        return atf.Status(str(status))
+        return atf.DollarStatus(str(status))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__STATE(self, state):

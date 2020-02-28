@@ -121,7 +121,7 @@ class StateDollarLineSchema(LineSchema):
     )
     scope = fields.Nested(ScopeContainerSchema, required=True, allow_none=True)
     state = NameEnum(atf.State, required=True, allow_none=True)
-    status = NameEnum(atf.Status, required=True, allow_none=True)
+    status = NameEnum(atf.DollarStatus, required=True, allow_none=True)
 
     @post_load
     def make_line(self, data, **kwargs):

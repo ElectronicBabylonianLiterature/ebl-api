@@ -41,7 +41,7 @@ generic_surface : "surface " free_text
 STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
      | "omitted" | "continues"
 
-DOLLAR_STATUS: "*" | "?" | "!" | "!?"
+DOLLAR_STATUS: "!?" | "*" | "?" | "!"
 
 
 ruling : RULING_NUMBER " ruling"

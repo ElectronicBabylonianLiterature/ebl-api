@@ -87,7 +87,7 @@ class StateDollarLine(DollarLine):
     extent: Optional[Union[atf.Extent, int, Range]]
     scope: Optional[ScopeContainer]
     state: Optional[atf.State]
-    status: Optional[atf.Status]
+    status: Optional[atf.DollarStatus]
 
     @property
     def _content_as_is(self):

@@ -72,7 +72,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     (1, 3),
                     ScopeContainer(atf.Object.OBJECT, "stone"),
                     atf.State.BLANK,
-                    atf.Status.UNCERTAIN,
+                    atf.DollarStatus.UNCERTAIN,
                 )
             ],
         ),
@@ -156,7 +156,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -168,7 +168,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.SURFACE, "stone"),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -180,7 +180,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.OBJECT, "stone"),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -192,7 +192,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -204,7 +204,7 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.CORRECTION,
+                    atf.DollarStatus.EMENDED_NOT_COLLATED,
                 )
             ],
         ),
@@ -216,19 +216,19 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.UNCERTAIN,
+                    atf.DollarStatus.UNCERTAIN,
                 )
             ],
         ),
         (
-            "$several tablet blank ?",
+            "$several tablet blank !?",
             [
                 StateDollarLine(
                     None,
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.UNCERTAIN,
+                    atf.DollarStatus.NEEDS_COLLATION,
                 )
             ],
         ),
@@ -246,7 +246,10 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             ],
         ),
         ("$ blank", [StateDollarLine(None, None, None, atf.State.BLANK, None,)],),
-        ("$ ?", [StateDollarLine(None, None, None, None, atf.Status.UNCERTAIN,)],),
+        (
+            "$ ?",
+            [StateDollarLine(None, None, None, None, atf.DollarStatus.UNCERTAIN,)],
+        ),
     ],
 )
 def test_parse_atf_state_dollar_line(parser, line, expected_tokens):

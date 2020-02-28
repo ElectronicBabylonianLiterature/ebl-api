@@ -66,6 +66,20 @@ class Status(Enum):
     COLLATION = "*"
 
 
+class DollarStatus(Enum):
+    """
+    Aliases CORRECTION and COLLATION are needed to load old format data from the DB.
+    """
+
+    COLLATED = "*"
+    UNCERTAIN = "?"
+    EMENDED_NOT_COLLATED = "!"
+    NEEDS_COLLATION = "!?"
+
+    CORRECTION = "!"
+    COLLATION = "*"
+
+
 class CommentaryProtocol(Enum):
     """ See
     http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html
