@@ -2,43 +2,42 @@
 %import common.DIGIT
 %import common.LCASE_LETTER
 
-
 _SPACE: " "
 
-?start: dollar_line
-
 ?dollar_line: "$" _SPACE value
+?value: strict
+      | "(" (strict | loose) _SPACE? ")"
+?strict: state_line | ruling | image
+loose.-2: free_text
 
-?value: state_line | _looses | ruling | image
 
-state_line: QUALIFICATION [_SPACE _extent] [_SPACE _scopes] [_SPACE STATE] [_SPACE DOLLAR_STATUS]
-          | _extent [_SPACE _scopes] [_SPACE STATE] [_SPACE DOLLAR_STATUS] -> state_line_extent
-          | _scopes [_SPACE STATE] [_SPACE DOLLAR_STATUS] -> state_line_scope
+state_line: QUALIFICATION [_SPACE extent] [_SPACE scope] [_SPACE STATE] [_SPACE DOLLAR_STATUS]
+          | extent [_SPACE scope] [_SPACE STATE] [_SPACE DOLLAR_STATUS] -> state_line_extent
+          | scope [_SPACE STATE] [_SPACE DOLLAR_STATUS] -> state_line_scope
           | STATE [_SPACE DOLLAR_STATUS] -> state_line_state
           | DOLLAR_STATUS -> state_line_status
 
-
 QUALIFICATION : "at least" | "at most" | "about"
 
-_extent: INT | range | EXTENT
+?extent: INT | range | EXTENT
 EXTENT: "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
 range.2: INT _SPACE? "-" _SPACE? INT
 
-_scopes: SCOPE | _object | _surface
+?scope: SCOPE | object | surface
 SCOPE:  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
 
-_object: OBJECT | generic_object | fragment
+?object: OBJECT | generic_object | fragment
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"
-fragment: "fragment" _SPACE text
-generic_object : OBJECT_GENERIC _SPACE text
+fragment: "fragment" _SPACE free_text
+generic_object : OBJECT_GENERIC _SPACE free_text
 OBJECT_GENERIC : "object"
-text.-2 : /./+
+free_text.-2 : /./+
 
-_surface: SURFACE | generic_surface | face | edge
+?surface: SURFACE | generic_surface | face | edge
 SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
 face: "face" _SPACE LCASE_LETTER
 edge: "edge" _SPACE LCASE_LETTER
-generic_surface : SURFACE_GENERIC _SPACE text
+generic_surface : SURFACE_GENERIC _SPACE free_text
 SURFACE_GENERIC : "surface"
 
 STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
@@ -46,12 +45,10 @@ STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 
 DOLLAR_STATUS: "*" | "?" | "!" | "!?"
 
-_looses: "(" (state_line | loose) _SPACE? ")"
-loose.-2: text
 
 ruling : RULING_NUMBER _SPACE RULING
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
-image : _IMAGE _SPACE DIGIT [LCASE_LETTER] _SPACE "=" _SPACE text ")"
-_IMAGE : "(" [_SPACE] "image"
+
+image : "(" [_SPACE] "image " DIGIT [LCASE_LETTER] " = " free_text ")"

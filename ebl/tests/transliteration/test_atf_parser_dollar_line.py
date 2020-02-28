@@ -360,6 +360,30 @@ def test_parse_atf_surface_ambiguity_dollar_line(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("$ (double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
+        (
+            "$ (at least 1 surface th(in)g)",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "th(in)g"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        ("$ ((image 1a = great))", [ImageDollarLine("1", "a", "great")]),
+    ],
+)
+def test_strip_parenthesis(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
         (
             "$ at least 1 fragment a",
             [
