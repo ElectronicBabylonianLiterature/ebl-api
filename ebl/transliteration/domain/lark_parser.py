@@ -361,7 +361,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return LooseDollarLine(str(content))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__ruling(self, number, ruling):
+    def ebl_atf_dollar_line__ruling(self, number):
         return RulingDollarLine(atf.Ruling(str(number)))
 
     @v_args(inline=True)
@@ -381,8 +381,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Object(object))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__generic_object(self, object, text):
-        return ScopeContainer(atf.Object(str(object)), str(text))
+    def ebl_atf_dollar_line__generic_object(self, text):
+        return ScopeContainer(atf.Object.OBJECT, str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__fragment(self, text):
@@ -393,8 +393,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Surface.from_atf(str(surface)))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__generic_surface(self, surface, text):
-        return ScopeContainer(atf.Surface.from_atf(str(surface)), str(text))
+    def ebl_atf_dollar_line__generic_surface(self, text):
+        return ScopeContainer(atf.Surface.SURFACE, str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__face(self, text):
@@ -425,29 +425,29 @@ class TreeDollarSignToTokens(TreeToLine):
         return atf.Qualification(str(qualification))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__state_line(
+    def ebl_atf_dollar_line__state(
         self, qualification, extent=None, scope_container=None, state=None, status=None
     ):
         return StateDollarLine(qualification, extent, scope_container, state, status)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__state_line_extent(
+    def ebl_atf_dollar_line__state_extent(
         self, extent, scope_container=None, state=None, status=None
     ):
         return StateDollarLine(None, extent, scope_container, state, status)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__state_line_scope(
+    def ebl_atf_dollar_line__state_scope(
         self, scope_container, state=None, status=None
     ):
         return StateDollarLine(None, None, scope_container, state, status)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__state_line_state(self, state, status):
+    def ebl_atf_dollar_line__state_state(self, state, status):
         return StateDollarLine(None, None, None, state, status)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__state_line_status(self, status):
+    def ebl_atf_dollar_line__state_status(self, status):
         return StateDollarLine(None, None, None, None, status)
 
 
