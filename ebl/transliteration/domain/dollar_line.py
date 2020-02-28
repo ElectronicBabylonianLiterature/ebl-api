@@ -1,13 +1,13 @@
 from abc import abstractmethod
 from enum import Enum
 from functools import singledispatchmethod  # type: ignore
-from typing import Optional, Union, Tuple, Sequence
+from typing import Optional, Sequence, Tuple, Union
 
 import attr
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.tokens import ValueToken, Token
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -84,8 +84,8 @@ class ScopeContainer:
 class StateDollarLine(DollarLine):
     Range = Tuple[int, int]
     qualification: Optional[atf.Qualification]
-    extent: Union[atf.Extent, int, Range]
-    scope: ScopeContainer
+    extent: Optional[Union[atf.Extent, int, Range]]
+    scope: Optional[ScopeContainer]
     state: Optional[atf.State]
     status: Optional[atf.Status]
 
@@ -111,20 +111,20 @@ class StateDollarLine(DollarLine):
 
     @singledispatchmethod
     @staticmethod
-    def to_atf(val):
-        return str(val)
+    def to_atf(column) -> str:
+        return str(column)
 
-    @to_atf.register(tuple)
     @staticmethod
-    def tuple_to_atf(val: tuple):
-        return f"{val[0]}-{val[1]}"
+    @to_atf.register
+    def tuple_to_atf(column: tuple) -> str:
+        return f"{column[0]}-{column[1]}"
 
-    @to_atf.register(Enum)
     @staticmethod
-    def enum_to_atf(val: Enum):
-        return val.value
+    @to_atf.register
+    def enum_to_atf(column: Enum) -> str:
+        return column.value
 
-    @to_atf.register(ScopeContainer)
     @staticmethod
-    def scope_container_to_atf(val: ScopeContainer):
-        return val.to_value_token()
+    @to_atf.register
+    def scope_container_to_atf(column: ScopeContainer) -> str:
+        return column.to_value_token()

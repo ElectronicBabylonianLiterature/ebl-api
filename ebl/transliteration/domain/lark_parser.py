@@ -369,7 +369,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return ImageDollarLine(str(number), letter and str(letter), text)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__STATUS(self, status):
+    def ebl_atf_dollar_line__DOLLAR_STATUS(self, status):
         return atf.Status(str(status))
 
     @v_args(inline=True)
@@ -426,9 +426,29 @@ class TreeDollarSignToTokens(TreeToLine):
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__state_line(
-        self, qualification, extent, scope_container, state, status
+        self, qualification, extent=None, scope_container=None, state=None, status=None
     ):
         return StateDollarLine(qualification, extent, scope_container, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_line_extent(
+        self, extent, scope_container=None, state=None, status=None
+    ):
+        return StateDollarLine(None, extent, scope_container, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_line_scope(
+        self, scope_container, state=None, status=None
+    ):
+        return StateDollarLine(None, None, scope_container, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_line_state(self, state, status):
+        return StateDollarLine(None, None, None, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_line_status(self, status):
+        return StateDollarLine(None, None, None, None, status)
 
 
 WORD_PARSER = Lark.open(

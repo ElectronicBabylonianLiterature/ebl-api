@@ -51,19 +51,18 @@ $-lines are used to indicate information about the state of the text or object,
 or to describe features on the object which are not part of the transliteration
 proper.
 
-Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
-
-Loose rule: Just text in brackets
-
-Rulings: (single | double | triple) ruling
-
-Image: (image N = \<text>)
+- State: `$ <qualification> <extent> <scope> <state> <status>`, e.g.: 
+  `$ 3 lines blank` or `$ rest of obverse missing`.
+- Loose: `$ (<free text>)`, e.g.: `$ (head of statue broken)`
+- Ruling: `$ (single | double | triple) ruling`, e.g.: `$ double ruling`.
+- Image: `$ (image N = <text>)`, e.g.:
+  `$ (image 1 = numbered diagram of triangle)`
 
 ```ebnf
 dollar-line = '$', [ ' ' ], ( state | loose | ruling | image );
 
-state = [ qualification, ' ' ], extend, ' ', scope, [ ' ', state-name ],
-        [ ' ', status ];
+state = [ qualification ], [' ', extend ], [' ', scope ], [ ' ', state-name ],
+        [ ' ', dollar-status ]; (* At least one column is required. *)
 
 qualification = 'at least' | 'at most' | 'about';
 
@@ -76,7 +75,7 @@ scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
 state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
             | 'traces' | 'omitted' | 'continues';
 
-status = '*' | '?' | '!' | '!?';
+dollar-status = '*' | '?' | '!' | '!?';
 
 range = number, '-', number;
 
@@ -131,7 +130,7 @@ can sometimes be omitted.
 | Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
 | Broken Away | `[` or `]`| No | No | See Presence below. |
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
-| Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
+| ~~Line Continuation~~ | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
 text = token, { [ word-separator ], token },

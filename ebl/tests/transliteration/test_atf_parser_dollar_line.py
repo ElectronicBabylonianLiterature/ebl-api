@@ -1,14 +1,14 @@
 import pytest
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
     ImageDollarLine,
+    LooseDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
 )
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 
 
@@ -218,9 +218,24 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
                 )
             ],
         ),
+        (
+            "$ at least",
+            [StateDollarLine(atf.Qualification.AT_LEAST, None, None, None, None,)],
+        ),
+        ("$ several", [StateDollarLine(None, atf.Extent.SEVERAL, None, None, None,)],),
+        (
+            "$ tablet",
+            [
+                StateDollarLine(
+                    None, None, ScopeContainer(atf.Object.TABLET), None, None,
+                )
+            ],
+        ),
+        ("$ blank", [StateDollarLine(None, None, None, atf.State.BLANK, None,)],),
+        ("$ ?", [StateDollarLine(None, None, None, None, atf.Status.UNCERTAIN,)],),
     ],
 )
-def test_parse_atf_strict_dollar_line(parser, line, expected_tokens):
+def test_parse_atf_state_dollar_line(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 

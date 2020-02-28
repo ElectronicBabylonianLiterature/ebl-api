@@ -1214,6 +1214,7 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
         ("1. me-°e\\li-°ku", [1]),
         ("1'. → x\n$ (line continuation in the middle)", [1]),
         ("this is not valid\nthis is not valid", [1, 2]),
+        ("$ ", [1]),
     ],
 )
 def test_invalid_atf(parser, atf, line_numbers):

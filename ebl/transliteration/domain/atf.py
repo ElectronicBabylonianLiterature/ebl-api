@@ -9,7 +9,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "0.30.0"
+ATF_PARSER_VERSION = "0.30.1"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
