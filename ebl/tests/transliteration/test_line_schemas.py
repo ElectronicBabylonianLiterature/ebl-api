@@ -3,14 +3,21 @@ import pytest
 from ebl.transliteration.application.line_schemas import (
     dump_line,
     load_line,
+    SealAtLine,
 )
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import (
+    HeadingAtLine,
+    ColumnAtLine,
+    SurfaceAtLine,
+    ObjectAtLine,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
@@ -28,6 +35,76 @@ from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+    (
+        ObjectAtLine(
+            [atf.Status.CORRECTION, atf.Status.COLLATION],
+            atf.Object.OBJECT,
+            "stone wig",
+        ),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken(" object stone wig!*")]),
+            "type": "ObjectAtLine",
+            "status": ["CORRECTION", "COLLATION"],
+            "object_label": "OBJECT",
+            "text": "stone wig",
+        },
+    ),
+    (
+        SurfaceAtLine(
+            SurfaceLabel(
+                [atf.Status.CORRECTION, atf.Status.COLLATION],
+                atf.Surface.SURFACE,
+                "stone wig",
+            )
+        ),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken(" surface stone wig!*")]),
+            "type": "SurfaceAtLine",
+            "surface_label": {
+                "status": ["CORRECTION", "COLLATION"],
+                "surface": "SURFACE",
+                "text": "stone wig",
+            },
+        },
+    ),
+    (
+        ColumnAtLine(ColumnLabel([atf.Status.CORRECTION, atf.Status.COLLATION], 1)),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken(" column 1!*")]),
+            "type": "ColumnAtLine",
+            "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
+        },
+    ),
+    (
+        ColumnAtLine(ColumnLabel([], 1)),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken(" column 1")]),
+            "type": "ColumnAtLine",
+            "column_label": {"status": [], "column": 1},
+        },
+    ),
+    (
+        SealAtLine(1),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken(" seal 1")]),
+            "type": "SealAtLine",
+            "number": 1,
+        },
+    ),
+    (
+        HeadingAtLine(1),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken(" h1")]),
+            "type": "HeadingAtLine",
+            "number": 1,
+        },
+    ),
     (
         StateDollarLine(
             atf.Qualification.AT_LEAST,

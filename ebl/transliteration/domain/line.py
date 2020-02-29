@@ -20,7 +20,7 @@ T = TypeVar("T")
 L = TypeVar("L", "TextLine", "Line")
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class Line(ABC):
     @property
     @abstractmethod

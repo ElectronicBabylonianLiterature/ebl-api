@@ -1,0 +1,45 @@
+%import .ebl_atf_common (OBJECT, SURFACE, any_str, DIGIT, _WORD_SEPERATOR, LOWER_CASE_LETTER)
+
+?at_line : "@" value
+
+?value :  (seal | column | heading | discourse | object_with_status | surface_with_status)
+
+test: "test"
+
+STATUS:  "*" | "?" | "!" | "!?" | "'"
+
+surface_with_status : _surface _WORD_SEPERATOR? STATUS*
+
+_surface : SURFACE | generic_surface | face | edge
+face: "face" _WORD_SEPERATOR LOWER_CASE_LETTER
+edge: "edge" _WORD_SEPERATOR LOWER_CASE_LETTER
+generic_surface : SURFACE_GENERIC _WORD_SEPERATOR any_str
+SURFACE_GENERIC : "surface"
+
+object_with_status : _object _WORD_SEPERATOR? STATUS*
+_object : OBJECT | generic_object | fragment
+fragment: "fragment" _WORD_SEPERATOR any_str
+generic_object : OBJECT_GENERIC _WORD_SEPERATOR any_str
+OBJECT_GENERIC : "object"
+
+seal : "seal" _WORD_SEPERATOR DIGIT
+
+column : "column" _WORD_SEPERATOR DIGIT _WORD_SEPERATOR? STATUS*
+
+heading: "h"DIGIT
+
+!discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
+
+//milestones
+
+//divisions: "m" _WORD_SEPERATOR? "=" _WORD_SEPERATOR? milestone DIGIT
+
+
+
+
+
+
+
+
+
+

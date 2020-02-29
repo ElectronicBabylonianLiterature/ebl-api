@@ -6,7 +6,14 @@ from marshmallow import Schema, fields, post_load
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.at_line import (
+    SealAtLine,
+    HeadingAtLine,
+    ColumnAtLine,
+    SurfaceAtLine,
+    ObjectAtLine,
+)
+from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
@@ -153,6 +160,74 @@ class StateDollarLineSchema(LineSchema):
         return extent.name
 
 
+class SealAtLineSchema(LineSchema):
+    type = fields.Constant("SealAtLine", required=True)
+    number = fields.Int(required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return SealAtLine(data["number"])
+
+
+class HeadingAtLineSchema(LineSchema):
+    type = fields.Constant("HeadingAtLine", required=True)
+    number = fields.Int(required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return HeadingAtLine(data["number"])
+
+
+class LabelSchema(Schema):
+    status = fields.List(NameEnum(atf.Status), required=True)
+
+
+class ColumnLabelSchema(LabelSchema):
+    column = fields.Int(required=True)
+
+    @post_load
+    def make_label(self, data, **kwargs):
+        return ColumnLabel(data["status"], data["column"])
+
+
+class SurfaceLabelSchema(LabelSchema):
+    surface = NameEnum(atf.Surface, required=True)
+    text = fields.String(default="")
+
+    @post_load
+    def make_label(self, data, **kwargs):
+        return SurfaceLabel(data["status"], data["surface"], data["text"])
+
+
+class ColumnAtLineSchema(LineSchema):
+    type = fields.Constant("ColumnAtLine", required=True)
+    column_label = fields.Nested(ColumnLabelSchema, required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return ColumnAtLine(data["column_label"])
+
+
+class SurfaceAtLineSchema(LineSchema):
+    type = fields.Constant("SurfaceAtLine", required=True)
+    surface_label = fields.Nested(SurfaceLabelSchema, required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return SurfaceAtLine(data["surface_label"])
+
+
+class ObjectAtLineSchema(LineSchema):
+    type = fields.Constant("ObjectAtLine", required=True)
+    status = fields.List(NameEnum(atf.Status), required=True)
+    object_label = NameEnum(atf.Object, required=True)
+    text = fields.String(default="", required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return ObjectAtLine(data["status"], data["object_label"], data["text"])
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "TextLine": TextLineSchema,
     "ControlLine": ControlLineSchema,
@@ -161,6 +236,11 @@ _schemas: Mapping[str, Type[Schema]] = {
     "ImageDollarLine": ImageDollarLineSchema,
     "RulingDollarLine": RulingDollarLineSchema,
     "StateDollarLine": StateDollarLineSchema,
+    "SealAtLine": SealAtLineSchema,
+    "HeadingAtLine": HeadingAtLineSchema,
+    "ColumnAtLine": ColumnAtLineSchema,
+    "SurfaceAtLine": SurfaceAtLineSchema,
+    "ObjectAtLine": ObjectAtLineSchema,
 }
 
 

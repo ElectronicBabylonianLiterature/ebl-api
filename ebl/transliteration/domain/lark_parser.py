@@ -2,6 +2,7 @@ from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
 import pydash
+import attr
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
@@ -9,6 +10,14 @@ from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import (
+    SealAtLine,
+    ColumnAtLine,
+    HeadingAtLine,
+    DiscourseAtLine,
+    SurfaceAtLine,
+    ObjectAtLine,
+)
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -22,7 +31,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
@@ -363,8 +372,12 @@ class TreeToLine(TreeToWord):
 
 
 class TreeDollarSignToTokens(TreeToLine):
-    def ebl_atf_dollar_line__text(self, content):
+    def ebl_atf_dollar_line__any_str(self, content):
         return "".join([x for x in content]).rstrip(" ")
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__seal(self, number):
+        return SealDollarLine(int(number))
 
     def ebl_atf_dollar_line__image_text(self, content):
         return "".join([x for x in content])
@@ -448,6 +461,76 @@ class TreeDollarSignToTokens(TreeToLine):
         return StateDollarLine(qualification, extent, scope_container, state, status)
 
 
+class TreeAtSignToTokens(TreeDollarSignToTokens):
+    def ebl_atf_at_line__any_str(self, content):
+        return "".join([x for x in content]).rstrip(" ")
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__DIGIT(self, number):
+        return int(number)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__LOWER_CASE_LETTER(self, letter):
+        return str(letter)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__STATUS(self, status):
+        return atf.Status(status)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__seal(self, number):
+        return SealAtLine(number)
+
+    def ebl_atf_at_line__column(self, column):
+        return ColumnAtLine(ColumnLabel.from_int(column[0], tuple(column[1:])))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__heading(self, number):
+        return HeadingAtLine(number)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__discourse(self, discourse):
+        return DiscourseAtLine(atf.Discourse(discourse))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__heading(self, number):
+        return HeadingAtLine(number)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__OBJECT(self, object):
+        return ObjectAtLine([], atf.Object(object))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__generic_object(self, object, text):
+        return ObjectAtLine([], atf.Object.OBJECT, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__fragment(self, text):
+        return ObjectAtLine([], atf.Object.FRAGMENT)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__SURFACE(self, surface):
+        return SurfaceLabel([], atf.Surface.from_atf(str(surface)))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__generic_surface(self, surface, text):
+        return SurfaceLabel([], atf.Surface.SURFACE, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__face(self, text):
+        return SurfaceLabel([], atf.Surface.FACE, str(text))
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__edge(self, text):
+        return SurfaceLabel([], atf.Surface.EDGE, str(text))
+
+    def ebl_atf_at_line__surface_with_status(self, surface_label):
+        return SurfaceAtLine(attr.evolve(surface_label[0], status=surface_label[1:]))
+
+    def ebl_atf_at_line__object_with_status(self, object):
+        return attr.evolve(object[0], status=object[1:])
+
+
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
@@ -466,7 +549,7 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
-    return TreeDollarSignToTokens().transform(tree)
+    return TreeAtSignToTokens().transform(tree)
 
 
 def validate_line(line: Line) -> None:

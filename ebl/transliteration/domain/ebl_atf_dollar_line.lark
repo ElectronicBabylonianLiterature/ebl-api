@@ -1,40 +1,34 @@
-%import common.ESCAPED_STRING
-%import common.SIGNED_NUMBER
-%import common.LCASE_LETTER
-
-
-_WORD_SEPARATOR: " "
-
+%import .ebl_atf_common (_WORD_SEPERATOR)
 ?start : dollar_line
 
-?dollar_line : "$" _WORD_SEPARATOR value
+?dollar_line : "$" _WORD_SEPERATOR value
 
 ?value : state_line | _looses | ruling | image
 
-state_line: [QUALIFICATION _WORD_SEPARATOR] _extent _WORD_SEPARATOR _scopes [_WORD_SEPARATOR STATE] [_WORD_SEPARATOR STATUS]
+state_line: [QUALIFICATION _WORD_SEPERATOR] _extent _WORD_SEPERATOR _scopes [_WORD_SEPERATOR STATE] [_WORD_SEPERATOR STATUS]
 
 QUALIFICATION : "at least" | "at most" | "about"
 
 _extent : NUMBER | range | EXTENT
 EXTENT : "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
-range.2 : NUMBER _WORD_SEPARATOR? "-" _WORD_SEPARATOR? NUMBER
-NUMBER : SIGNED_NUMBER
+range.2 : NUMBER _WORD_SEPERATOR? "-" _WORD_SEPERATOR? NUMBER
+NUMBER : DIGIT
 
 _scopes : SCOPE | _object | _surface
 SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
 
 _object : OBJECT | generic_object | fragment
-OBJECT: "tablet" | "envelope" | "prism" | "bulla"
-fragment: "fragment" _WORD_SEPARATOR text
-generic_object : OBJECT_GENERIC _WORD_SEPARATOR text
+%import .ebl_atf_common (OBJECT)
+fragment: "fragment" _WORD_SEPERATOR any_str
+generic_object : OBJECT_GENERIC _WORD_SEPERATOR any_str
 OBJECT_GENERIC : "object"
-text.-2 : /./+
+any_str.-2 : /./+
 
 _surface : SURFACE | generic_surface | face | edge
-SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
-face: "face" _WORD_SEPARATOR LOWER_CASE_LETTER
-edge: "edge" _WORD_SEPARATOR LOWER_CASE_LETTER
-generic_surface : SURFACE_GENERIC _WORD_SEPARATOR text
+%import .ebl_atf_common (SURFACE)
+face: "face" _WORD_SEPERATOR LOWER_CASE_LETTER
+edge: "edge" _WORD_SEPERATOR LOWER_CASE_LETTER
+generic_surface : SURFACE_GENERIC _WORD_SEPERATOR any_str
 SURFACE_GENERIC : "surface"
 
 STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
@@ -42,14 +36,16 @@ STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 
 STATUS : "*" | "?" | "!" | "!?"
 
-_looses: "(" (state_line | ruling | loose) _WORD_SEPARATOR? ")"
-loose.-2 : text
+_looses: "(" (state_line | ruling | loose) _WORD_SEPERATOR? ")"
+loose.-2 : any_str
 
-ruling : RULING_NUMBER _WORD_SEPARATOR RULING
+ruling : RULING_NUMBER _WORD_SEPERATOR RULING
 RULING_NUMBER : "single" | "double" | "triple"
 RULING : "ruling"
 
-image : _IMAGE _WORD_SEPARATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPARATOR "=" _WORD_SEPARATOR text _WORD_SEPARATOR? ")"
-_IMAGE : "(" [_WORD_SEPARATOR] "image"
-DIGIT : /[0-9]+/
-LOWER_CASE_LETTER : /[a-z]/
+image : _IMAGE _WORD_SEPERATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPERATOR "=" _WORD_SEPERATOR any_str _WORD_SEPERATOR? ")"
+_IMAGE : "(" [_WORD_SEPERATOR] "image"
+%import .ebl_atf_common (LOWER_CASE_LETTER)
+%import .ebl_atf_common (DIGIT)
+
+seal : "seal" DIGIT

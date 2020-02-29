@@ -97,6 +97,18 @@ class ColumnLabel(Label):
 class SurfaceLabel(Label):
 
     surface: Surface
+    text: str = attr.ib(default="")
+
+    @text.validator
+    def _check_text(self, attribute, value):
+        if value and self.surface not in [
+            Surface.SURFACE,
+            Surface.FACE,
+            Surface.EDGE,
+        ]:
+            raise ValueError(
+                "text can only be initialized if atf.surface is 'SURFACE' or 'EDGE' or 'FACE'"
+            )
 
     @staticmethod
     def from_label(
@@ -114,6 +126,9 @@ class SurfaceLabel(Label):
 
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         return visitor.visit_surface_label(self)
+
+    def to_atf(self) -> str:
+        return f"{self._atf}{' ' + self.text if self.text else ''}"
 
 
 LINE_NUMBER_EXPRESSION = r"[^\s]+"

@@ -2,6 +2,8 @@ import pytest
 from hamcrest import assert_that, contains_exactly, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import SurfaceAtLine
+from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -12,6 +14,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
     Removal,
 )
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import (
@@ -82,7 +85,7 @@ def test_parser_version(parser, version):
             ],
         ),
         ("&K11111", [ControlLine.of_single("&", ValueToken("K11111"))]),
-        ("@reverse", [ControlLine.of_single("@", ValueToken("reverse"))]),
+        ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
         (
             "$ (end of side)",
             [

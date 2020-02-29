@@ -27,6 +27,15 @@ class DollarLine(Line):
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class SealDollarLine(DollarLine):
+    number: int
+
+    @property
+    def _content_as_is(self):
+        return (ValueToken(f"(seal {self.number})"),)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
     text: str = ""
 
@@ -111,8 +120,8 @@ class StateDollarLine(DollarLine):
 
     @singledispatchmethod
     @staticmethod
-    def to_atf(val):
-        return str(val)
+    def to_atf(text):
+        return str(text)
 
     @to_atf.register(tuple)
     @staticmethod
@@ -126,5 +135,5 @@ class StateDollarLine(DollarLine):
 
     @to_atf.register(ScopeContainer)
     @staticmethod
-    def scope_container_to_atf(val: ScopeContainer):
-        return val.to_value_token()
+    def scope_container_to_atf(scope_container: ScopeContainer):
+        return scope_container.to_value_token()
