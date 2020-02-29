@@ -43,7 +43,7 @@ LINES = [
         ),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken(" object stone wig!*")]),
+            "content": dump_tokens([ValueToken("object stone wig!*")]),
             "type": "ObjectAtLine",
             "status": ["CORRECTION", "COLLATION"],
             "object_label": "OBJECT",
@@ -60,7 +60,7 @@ LINES = [
         ),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken(" surface stone wig!*")]),
+            "content": dump_tokens([ValueToken("surface stone wig!*")]),
             "type": "SurfaceAtLine",
             "surface_label": {
                 "status": ["CORRECTION", "COLLATION"],
@@ -73,7 +73,7 @@ LINES = [
         ColumnAtLine(ColumnLabel([atf.Status.CORRECTION, atf.Status.COLLATION], 1)),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken(" column 1!*")]),
+            "content": dump_tokens([ValueToken("column 1!*")]),
             "type": "ColumnAtLine",
             "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
         },
@@ -82,7 +82,7 @@ LINES = [
         ColumnAtLine(ColumnLabel([], 1)),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken(" column 1")]),
+            "content": dump_tokens([ValueToken("column 1")]),
             "type": "ColumnAtLine",
             "column_label": {"status": [], "column": 1},
         },
@@ -91,7 +91,7 @@ LINES = [
         SealAtLine(1),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken(" seal 1")]),
+            "content": dump_tokens([ValueToken("seal 1")]),
             "type": "SealAtLine",
             "number": 1,
         },
@@ -100,7 +100,7 @@ LINES = [
         HeadingAtLine(1),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken(" h1")]),
+            "content": dump_tokens([ValueToken("h1")]),
             "type": "HeadingAtLine",
             "number": 1,
         },

@@ -83,10 +83,7 @@ class ScopeContainer:
             )
 
     def to_value_token(self):
-        if self.text:
-            return f"{self.content.name.lower()} {self.text}"
-        else:
-            return f"{self.content.name.lower()}"
+        return f"{self.content.name.lower()}{' ' + self.text if self.text else ''}"
 
 
 @attr.s(auto_attribs=True, frozen=True)

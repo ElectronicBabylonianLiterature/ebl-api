@@ -29,7 +29,7 @@ class AtLine(Line):
 
     @property
     def content(self) -> Sequence[Token]:
-        return (ValueToken(" " + self._content_as_is[0].value),)
+        return (ValueToken(self._content_as_is[0].value),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -80,7 +80,7 @@ class SurfaceAtLine(AtLine):
     def _content_as_is(self):
         return (
             ValueToken(
-                f"{self.surface_label.surface.value[0]}{' '+self.surface_label.text if self.surface_label.text else '' }{''.join([status.value for status in self.surface_label.status])}"
+                f"{self.surface_label.surface.value[0]}{' '+self.surface_label.text if self.surface_label.text else '' }{self.surface_label._status_string}"
             ),
         )
 
@@ -92,9 +92,13 @@ class ObjectAtLine(AtLine):
     text: str = ""
 
     @property
+    def _status_string(self):
+        return "".join([status.value for status in self.status])
+
+    @property
     def _content_as_is(self):
         return (
             ValueToken(
-                f"{self.object_label.value}{' ' + self.text if self.text else ''}{''.join([status.value for status in self.status])}"
+                f"{self.object_label.value}{' ' + self.text if self.text else ''}{self._status_string}"
             ),
         )

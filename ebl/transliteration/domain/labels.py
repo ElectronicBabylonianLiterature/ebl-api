@@ -128,7 +128,7 @@ class SurfaceLabel(Label):
         return visitor.visit_surface_label(self)
 
     def to_atf(self) -> str:
-        return f"{self._atf}{' ' + self.text if self.text else ''}"
+        return f"{self._atf}{self._status_string}{' ' + self.text if self.text else ''}"
 
 
 LINE_NUMBER_EXPRESSION = r"[^\s]+"

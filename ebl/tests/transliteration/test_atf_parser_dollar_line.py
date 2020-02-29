@@ -391,18 +391,6 @@ def test_parse_atf_face_surface_dollar_line(parser, line, expected_tokens):
     "line,expected_tokens",
     [
         (
-            "$ at least 1 edge b",
-            [
-                StateDollarLine(
-                    atf.Qualification.AT_LEAST,
-                    1,
-                    ScopeContainer(atf.Surface.EDGE, "b"),
-                    None,
-                    None,
-                )
-            ],
-        ),
-        (
             "$ at least 1 edge a",
             [
                 StateDollarLine(

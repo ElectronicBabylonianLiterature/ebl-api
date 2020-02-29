@@ -7,8 +7,16 @@ from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import (
+    SealAtLine,
+    HeadingAtLine,
+    ColumnAtLine,
+    SurfaceAtLine,
+    ObjectAtLine,
+)
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
@@ -213,6 +221,13 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            SealAtLine(1),
+            HeadingAtLine(1),
+            ColumnAtLine(ColumnLabel([atf.Status.COLLATION], 1)),
+            SurfaceAtLine(
+                SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
+            ),
+            ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
         )
     )
     signs = (
@@ -389,5 +404,12 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            SealAtLine(1),
+            HeadingAtLine(1),
+            ColumnAtLine(ColumnLabel([atf.Status.COLLATION], 1)),
+            SurfaceAtLine(
+                SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
+            ),
+            ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
         )
     )
