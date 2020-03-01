@@ -379,6 +379,10 @@ class TreeDollarSignToTokens(TreeToLine):
         return ImageDollarLine(str(number), letter and str(letter), text)
 
     @v_args(inline=True)
+    def ebl_atf_dollar_line__seal(self, number):
+        return SealDollarLine(number)
+
+    @v_args(inline=True)
     def ebl_atf_dollar_line__DOLLAR_STATUS(self, status):
         return atf.DollarStatus(str(status))
 

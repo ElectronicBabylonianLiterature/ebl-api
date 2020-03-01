@@ -8,8 +8,10 @@ free_text.-2 : /./+ " "*
 ?value: strict
       | "(" " "* strict " "* ")"
       | loose
-?strict: state | ruling | image
+?strict: state | ruling | image | seal
 loose: "(" free_text ")"
+
+seal : "seal " INT
 
 
 state: QUALIFICATION [" " extent] [" " scope] [" " STATE] [" " DOLLAR_STATUS]
