@@ -78,10 +78,11 @@ class ImageDollarLineSchema(LineSchema):
 class RulingDollarLineSchema(LineSchema):
     type = fields.Constant("RulingDollarLine", required=True)
     number = NameEnum(atf.Ruling, required=True)
+    status = NameEnum(atf.DollarStatus, required=False, default=None, allow_none=True)
 
     @post_load
     def make_line(self, data, **kwargs):
-        return RulingDollarLine(data["number"])
+        return RulingDollarLine(data["number"], data["status"])
 
 
 class ScopeContainerSchema(Schema):

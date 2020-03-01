@@ -361,8 +361,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return LooseDollarLine(str(content))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__ruling(self, number):
-        return RulingDollarLine(atf.Ruling(str(number)))
+    def ebl_atf_dollar_line__ruling(self, number, status=None):
+        return RulingDollarLine(atf.Ruling(str(number)), status)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__image(self, number, letter, text):
