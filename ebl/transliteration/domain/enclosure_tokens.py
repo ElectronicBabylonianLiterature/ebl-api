@@ -1,11 +1,11 @@
 from abc import abstractmethod
-from typing import Sequence, Mapping
+from typing import Mapping, Sequence
 
 import attr
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.side import Side
-from ebl.transliteration.domain.tokens import ValueToken, Token, convert_token_sequence
+from ebl.transliteration.domain.tokens import Token, ValueToken, convert_token_sequence
 
 
 @attr.s(frozen=True)
@@ -30,6 +30,14 @@ class Enclosure(Token):
     @property
     def value(self):
         return self.get_sides()[self.side]
+
+    @property
+    def is_open(self) -> bool:
+        return self.side == Side.LEFT
+
+    @property
+    def is_close(self) -> bool:
+        return self.side == Side.RIGHT
 
     @classmethod
     def open(cls):

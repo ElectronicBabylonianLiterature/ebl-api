@@ -9,7 +9,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "0.29.0"
+ATF_PARSER_VERSION = "0.30.1"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -62,6 +62,20 @@ class Status(Enum):
 
     PRIME = "'"
     UNCERTAIN = "?"
+    CORRECTION = "!"
+    COLLATION = "*"
+
+
+class DollarStatus(Enum):
+    """
+    Aliases CORRECTION and COLLATION are needed to load old format data from the DB.
+    """
+
+    COLLATED = "*"
+    UNCERTAIN = "?"
+    EMENDED_NOT_COLLATED = "!"
+    NEEDS_COLLATION = "!?"
+
     CORRECTION = "!"
     COLLATION = "*"
 

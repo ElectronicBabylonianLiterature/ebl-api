@@ -12,7 +12,9 @@ RUN pipenv install --dev
 COPY run_tests.sh ./
 RUN chmod +x ./run_tests.sh
 COPY .coveragerc ./
+COPY .flake8 ./
 COPY mypy.ini ./
+COPY pytest.ini ./
 COPY ./ebl ./ebl
 
 COPY ./docs ./docs

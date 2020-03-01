@@ -26,7 +26,7 @@ def test_strict_dollar_line_schema():
         atf.Extent.BEGINNING_OF,
         ScopeContainer(atf.Surface.OBVERSE),
         atf.State.BLANK,
-        atf.Status.UNCERTAIN,
+        atf.DollarStatus.UNCERTAIN,
     )
     expected = {
         "prefix": "$",

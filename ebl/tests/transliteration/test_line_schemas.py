@@ -122,7 +122,7 @@ LINES = [
             (1, 2),
             ScopeContainer(atf.Surface.SURFACE, "thing"),
             atf.State.BLANK,
-            atf.Status.UNCERTAIN,
+            atf.DollarStatus.UNCERTAIN,
         ),
         {
             "prefix": "$",
@@ -141,7 +141,7 @@ LINES = [
             1,
             ScopeContainer(atf.Surface.OBVERSE),
             atf.State.BLANK,
-            atf.Status.UNCERTAIN,
+            atf.DollarStatus.UNCERTAIN,
         ),
         {
             "prefix": "$",
@@ -245,6 +245,17 @@ LINES = [
             "prefix": "$",
             "content": dump_tokens([ValueToken(" double ruling")]),
             "number": "DOUBLE",
+            "status": None,
+        },
+    ),
+    (
+        RulingDollarLine(atf.Ruling.DOUBLE, atf.DollarStatus.COLLATED),
+        {
+            "type": "RulingDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken(" double ruling *")]),
+            "number": "DOUBLE",
+            "status": "COLLATED",
         },
     ),
     (
@@ -264,6 +275,49 @@ def test_dump_line(line, expected):
     assert dump_line(line) == expected
 
 
-@pytest.mark.parametrize("expected,data", LINES)
+@pytest.mark.parametrize(
+    "expected,data",
+    [
+        *LINES,
+        (
+            StateDollarLine(
+                atf.Qualification.AT_LEAST,
+                1,
+                ScopeContainer(atf.Surface.OBVERSE),
+                atf.State.BLANK,
+                atf.DollarStatus.COLLATED,
+            ),
+            {
+                "prefix": "$",
+                "content": dump_tokens([ValueToken(" at least 1 obverse blank ?")]),
+                "type": "StateDollarLine",
+                "qualification": "AT_LEAST",
+                "extent": 1,
+                "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+                "state": "BLANK",
+                "status": atf.Status.COLLATION.name,
+            },
+        ),
+        (
+            StateDollarLine(
+                atf.Qualification.AT_LEAST,
+                1,
+                ScopeContainer(atf.Surface.OBVERSE),
+                atf.State.BLANK,
+                atf.DollarStatus.EMENDED_NOT_COLLATED,
+            ),
+            {
+                "prefix": "$",
+                "content": dump_tokens([ValueToken(" at least 1 obverse blank *")]),
+                "type": "StateDollarLine",
+                "qualification": "AT_LEAST",
+                "extent": 1,
+                "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+                "state": "BLANK",
+                "status": atf.Status.CORRECTION.name,
+            },
+        ),
+    ],
+)
 def test_load_line(expected, data):
     assert load_line(data) == expected

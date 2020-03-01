@@ -1,51 +1,51 @@
-%import .ebl_atf_common (_WORD_SEPERATOR)
-?start : dollar_line
+%import common.DIGIT
+%import common.INT
+%import common.LCASE_LETTER
 
-?dollar_line : "$" _WORD_SEPERATOR value
+free_text.-2 : /./+ " "*
 
-?value : state_line | _looses | ruling | image | seal
+?dollar_line: "$" " "* value
+?value: strict
+      | "(" " "* strict " "* ")"
+      | loose
+?strict: state | ruling | image
+loose: "(" free_text ")"
 
-state_line: [QUALIFICATION _WORD_SEPERATOR] _extent _WORD_SEPERATOR _scopes [_WORD_SEPERATOR STATE] [_WORD_SEPERATOR STATUS]
+
+state: QUALIFICATION [" " extent] [" " scope] [" " STATE] [" " DOLLAR_STATUS]
+     | extent [" " scope] [" " STATE] [" " DOLLAR_STATUS] -> state_extent
+     | scope [" " STATE] [" " DOLLAR_STATUS] -> state_scope
+     | STATE [" " DOLLAR_STATUS] -> state_state
+     | DOLLAR_STATUS -> state_status
 
 QUALIFICATION : "at least" | "at most" | "about"
 
-_extent : NUMBER | range | EXTENT
-EXTENT : "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
-range.2 : NUMBER _WORD_SEPERATOR? "-" _WORD_SEPERATOR? NUMBER
-NUMBER : DIGIT
+?extent: INT | range | EXTENT
+EXTENT: "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
+range.2: INT " "? "-" " "? INT
 
-_scopes : SCOPE | _object | _surface
-SCOPE :  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
+?scope: SCOPE | object | surface
+SCOPE:  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
 
-_object : OBJECT | generic_object | fragment
-%import .ebl_atf_common (OBJECT)
-fragment: "fragment" _WORD_SEPERATOR any_str
-generic_object : OBJECT_GENERIC _WORD_SEPERATOR any_str
-OBJECT_GENERIC : "object"
-any_str.-2 : /./+
+?object: OBJECT | generic_object | fragment
+OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+fragment: "fragment " free_text
+generic_object : "object " free_text
 
-_surface : SURFACE | generic_surface | face | edge
-%import .ebl_atf_common (SURFACE)
-face: "face" _WORD_SEPERATOR LOWER_CASE_LETTER
-edge: "edge" _WORD_SEPERATOR LOWER_CASE_LETTER
-generic_surface : SURFACE_GENERIC _WORD_SEPERATOR any_str
-SURFACE_GENERIC : "surface"
+?surface: SURFACE | generic_surface | face | edge
+SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
+face: "face " LCASE_LETTER
+edge: "edge " LCASE_LETTER
+generic_surface : "surface " free_text
 
-STATE : "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
-    | "omitted" | "continues"
+STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
+     | "omitted" | "continues"
 
-STATUS : "*" | "?" | "!" | "!?"
+DOLLAR_STATUS: "!?" | "*" | "?" | "!"
 
-_looses: "(" (state_line | ruling | loose) _WORD_SEPERATOR? ")"
-loose.-2 : any_str
 
-ruling : RULING_NUMBER _WORD_SEPERATOR RULING
+ruling : RULING_NUMBER " ruling" [" " DOLLAR_STATUS]
 RULING_NUMBER : "single" | "double" | "triple"
-RULING : "ruling"
 
-image : _IMAGE _WORD_SEPERATOR DIGIT [LOWER_CASE_LETTER] _WORD_SEPERATOR "=" _WORD_SEPERATOR any_str _WORD_SEPERATOR? ")"
-_IMAGE : "(" [_WORD_SEPERATOR] "image"
-%import .ebl_atf_common (LOWER_CASE_LETTER)
-%import .ebl_atf_common (DIGIT)
 
-%import .ebl_atf_common (seal)
+image.1 : "(" " "? "image " DIGIT [LCASE_LETTER] " = " free_text ")"

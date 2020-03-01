@@ -174,11 +174,9 @@ class TreeToSign(Transformer):
     def ebl_atf_text_line__compound_grapheme(self, name):
         return CompoundGrapheme(name.value)
 
-    @v_args(inline=True)
     def ebl_atf_text_line__close_broken_away(self, _):
         return BrokenAway.close()
 
-    @v_args(inline=True)
     def ebl_atf_text_line__open_broken_away(self, _):
         return BrokenAway.open()
 
@@ -264,11 +262,9 @@ class TreeToWord(TreeToSign):
             Erasure.close(),
         ]
 
-    @v_args(inline=True)
     def ebl_atf_text_line__close_perhaps_broken_away(self, _):
         return PerhapsBrokenAway.close()
 
-    @v_args(inline=True)
     def ebl_atf_text_line__open_perhaps_broken_away(self, _):
         return PerhapsBrokenAway.open()
 
@@ -347,13 +343,7 @@ class TreeToLine(TreeToWord):
 
     @v_args(inline=True)
     def ebl_atf_text_line__divider_variant(self, first, second):
-        return Variant.of(
-            ValueToken(str(first)) if isinstance(first, Token) else first,
-            ValueToken(str(second)) if isinstance(second, Token) else second,
-        )
-
-    def ebl_atf_text_line__divider_variant_part(self, tokens):
-        return self._create_word(Word, tokens)
+        return Variant.of(first, second)
 
     @v_args(inline=True)
     def ebl_atf_text_line__erasure(self, erased, over_erased):
@@ -373,35 +363,24 @@ class TreeToLine(TreeToWord):
 
 
 class TreeDollarSignToTokens(TreeToLine):
-    def ebl_atf_dollar_line__any_str(self, content):
-        return "".join([x for x in content]).rstrip(" ")
-
-    @v_args(inline=True)
-    def ebl_atf_dollar_line__seal(self, number):
-        return SealDollarLine(int(number))
-
-    def ebl_atf_dollar_line__image_text(self, content):
-        return "".join([x for x in content])
+    def ebl_atf_dollar_line__free_text(self, content):
+        return "".join(content)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__loose(self, content):
         return LooseDollarLine(str(content))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__ruling(self, number, ruling):
-        return RulingDollarLine(atf.Ruling(str(number)))
-
-    @v_args(inline=True)
-    def ebl_atf_dollar_line__LOWER_CASE_LETTER(self, letter):
-        return str(letter)
+    def ebl_atf_dollar_line__ruling(self, number, status=None):
+        return RulingDollarLine(atf.Ruling(str(number)), status)
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__image(self, number, letter, text):
-        return ImageDollarLine(str(number), letter, text)
+        return ImageDollarLine(str(number), letter and str(letter), text)
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__STATUS(self, status):
-        return atf.Status(str(status))
+    def ebl_atf_dollar_line__DOLLAR_STATUS(self, status):
+        return atf.DollarStatus(str(status))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__STATE(self, state):
@@ -412,8 +391,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Object(object))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__generic_object(self, object, text):
-        return ScopeContainer(atf.Object(str(object)), str(text))
+    def ebl_atf_dollar_line__generic_object(self, text):
+        return ScopeContainer(atf.Object.OBJECT, str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__fragment(self, text):
@@ -424,8 +403,8 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Surface.from_atf(str(surface)))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__generic_surface(self, surface, text):
-        return ScopeContainer(atf.Surface.from_atf(str(surface)), str(text))
+    def ebl_atf_dollar_line__generic_surface(self, text):
+        return ScopeContainer(atf.Surface.SURFACE, str(text))
 
     @v_args(inline=True)
     def ebl_atf_dollar_line__face(self, text):
@@ -444,7 +423,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return atf.Extent(str(extent))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__NUMBER(self, number):
+    def ebl_atf_dollar_line__INT(self, number):
         return int(number)
 
     @v_args(inline=True)
@@ -456,10 +435,30 @@ class TreeDollarSignToTokens(TreeToLine):
         return atf.Qualification(str(qualification))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__state_line(
-        self, qualification, extent, scope_container, state, status
+    def ebl_atf_dollar_line__state(
+        self, qualification, extent=None, scope_container=None, state=None, status=None
     ):
         return StateDollarLine(qualification, extent, scope_container, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_extent(
+        self, extent, scope_container=None, state=None, status=None
+    ):
+        return StateDollarLine(None, extent, scope_container, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_scope(
+        self, scope_container, state=None, status=None
+    ):
+        return StateDollarLine(None, None, scope_container, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_state(self, state, status):
+        return StateDollarLine(None, None, None, state, status)
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__state_status(self, status):
+        return StateDollarLine(None, None, None, None, status)
 
 
 class TreeAtSignToTokens(TreeDollarSignToTokens):

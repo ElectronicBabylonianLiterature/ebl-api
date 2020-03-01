@@ -16,7 +16,7 @@ from ebl.transliteration.domain.atf import (
 )
 from ebl.transliteration.domain.side import Side
 
-CONTROL_LINE = r"^(@|\$(( ?(single|double|triple))| )|#|&)"
+CONTROL_LINE = r"^(@|\$|#|&)"
 MULTIPLEX_COMMENT = r"=:"
 IGNORE_LINE_PATTERN = r"|".join([CONTROL_LINE, MULTIPLEX_COMMENT])
 

@@ -15,9 +15,12 @@ and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsh
 eBL-ATF can be empty or consist of lines separated by a newline character.
 
 ```ebnf
-ebl-atf = [ line, { '\n', line } ];
+ebl-atf = [ line, { eol, line } ];
 
+free-text = { any-character }+;
 word-character = ? A-Za-z ?;
+lower-case-letter = ? a-z ?;
+any-character = ? any UTF-8 character ?;
 decimal-digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 eol = ? end of line ?;
 ```
@@ -30,6 +33,7 @@ Continuation lines (starting with space) are not supported.
 
 ```ebnf
 line = empty-line
+     | dollar-line
      | control-line
      | text-line;
 
@@ -40,8 +44,6 @@ control-line = '=:' | '$' | '@' | '&' | '#', { any-character };
 text-line = line-number, ' ', text;
 line-number = { not-space }-, '.';
 not-space = any-character - ' ';
-
-any-character = ? any UTF-8 character ?;
 ```
 
 ## $-lines
@@ -50,62 +52,57 @@ $-lines are used to indicate information about the state of the text or object,
 or to describe features on the object which are not part of the transliteration
 proper.
 
-Strict rule: \<qualification(optional)>\<extent>\<scope><state(optional)><status(optional)>
-
-Loose rule: Just text in brackets
-
-Rulings: (single | double | triple) ruling
-
-Image: (image N = \<text>)
+- State: `$ <qualification> <extent> <scope> <state> <status>`, e.g.: 
+  `$ 3 lines blank` or `$ rest of obverse missing`.
+- Loose: `$ (<free text>)`, e.g.: `$ (head of statue broken)`
+- Ruling: `$ (single | double | triple) ruling`, e.g.: `$ double ruling`.
+- Image: `$ (image N = <free text>)`, e.g.:
+  `$ (image 1 = numbered diagram of triangle)`
 
 ```ebnf
-line = "$", value;
+dollar-line = '$', [ ' ' ], ( strict | '(', strict, ')' | loose );
+strict = state | ruling | image
 
-value = strict | loose | rulings | images;
+state = [ qualification ], [' ', extend ], [' ', scope ], [ ' ', state-name ],
+        [ ' ', dollar-status ]; (* At least one column is required. *)
 
-strict = [qualification], extend, scope, [state], [status];
+qualification = 'at least' | 'at most' | 'about';
 
-qualification = "at least" | "at most" | "about";
-
-extent = "serveral" | "some" | number | range | "rest of" | "start of"
-       | beginning of | "middle of" | "end of";
+extent = 'several' | 'some' | number | range | 'rest of' | 'start of'
+       | beginning of | 'middle of' | 'end of';
     
-scope = object | surface | "column" | "columns" | "line" | "lines" | "case"
-      | "cases" | "side" | "excerpt" | "surface";
+scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
+      | 'cases' | 'side' | 'excerpt' | 'surface';
 
-state = "blank" | "broken" | "effaced" | illegible" | "missing " | "traces "
-      | "omitted" | "continues";
+state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
+            | 'traces' | 'omitted' | 'continues';
 
-status = "*" | "?" | "!" | "!?" ;
+dollar-status = '*' | '?' | '!' | '!?';
 
-range = NUMBER, "-", NUMBER;
+range = number, '-', number;
 
-object = "tablet" | "envelope" | "prism" | "bulla" | fragment | generic-object
+object = 'tablet' | 'envelope' | 'prism' | 'bulla' | fragment | generic-object;
 
-fragment = "fragment", text
+fragment = 'fragment', ' ', free-text;
 
-generic-object = "object", text
+generic-object = 'object', ' ', free-text;
 
-surface = "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
-        | face | generic-surface | edge
+surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
+        | face | generic-surface | edge;
 
-face = "face", lower-case-letter
+face = 'face', ' ', lower-case-letter;
 
-edge = "edge", lower-case-letter
+edge = 'edge', ' ', lower-case-letter;
 
-generic-surface = "surface", text
+generic-surface = 'surface', ' ', free-text;
 
-text = { any-character }-
+number = { decimal-digit }-;
 
-number = { decimal-digit }-
+loose = '(', free-text, ')';
 
-loose = text
+ruling = ('single' | 'double' | 'triple'), ' ', 'ruling';
 
-rulings = ("single" | "double" | "triple"), "ruling"
-
-images = "(image" NUMBER, lower-case-letter, "=", text
-
-lower-case-letter = ? a-z ?
+image = '(image ' number, [ lower-case-letter ], ' = ', free-text, ')';
 ```
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
@@ -131,41 +128,39 @@ can sometimes be omitted.
 | Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
 | Broken Away | `[` or `]`| No | No | See Presence below. |
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
-| Line Continuation | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
+| ~~Line Continuation~~ | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
-text = [ (token | document-oriented-gloss),
-         { word-separator, (token | document-oriented-gloss) } ],
-       [ line-continuation ];
-text = text-head, { text-tail }, [ word-separator, line-continuation ];
-text-head = optional-spaces
-          | require-both-spaces
-          | omit-left-space
-          | { omit-right-space }-, [ optional-spaces ];
-text-tail = word-separator { omit-right-space } [ optional-spaces ]
-          | [ word-separator ] { omit-left-space }-
-          | word-separator require-both-spaces;
+text = token, { [ word-separator ], token },
+       [ word-separator, line-continuation ];
+       (* Word seprator can be ommitted after an opening bracket or before 
+          a closing bracket. Commentary protocols and dividers must be
+          surrounded by word separators. *)
 
 line-continuation = '→';
 
-require-both-spaces = commentary-protocol
-                    | divider
-                    | divider-variant;
-optional-spaces = tabulation
-                | column
-                | shift
-                | erasure
-                | word
-                | determinative
-                | unknown-number-of-signs;
-omit-left-space = close-broken-away
-                | close-perhaps-broken-away
-                | close-omission
-                | close-document-orionted-gloss;
-omit-right-space = open-broken-away
-                 | open-perhaps-broken-away
-                 | open-omission
-                 | open-document-oriented-gloss;
+token = commentary-protocol
+      | divider
+      | divider-variant
+      | tabulation
+      | column
+      | shift
+      | erasure
+      | word
+      | determinative
+      | unknown-number-of-signs
+      | close-broken-away
+      | close-perhaps-broken-away
+      | close-intentional-omission
+      | close-accidental-omission
+      | close-removal
+      | close-document-orionted-gloss
+      | open-broken-away
+      | open-perhaps-broken-away
+      | open-intentional-omission
+      | open-accidental-omission
+      | open-removal
+      | open-document-oriented-gloss;
            
 tabulation = '($___$)';
 
@@ -186,9 +181,12 @@ erasure = '°', [ erasure-part ] '\', [ erasure-part ], '°';
 erasure-part = ( divider | word | lone-determinative ),
                { word-separator, ( divider | word | lone-determinative ) };
 
-omission = open-omission | close-omission;
-open-omission = '<<' | '<(' | '<';
-close-omission = '>>' | ')>' | '>';
+open-intentional-omission = '<(';
+close-intentional-omission = ')>';
+open-accidental-omission = '<';
+close-accidental-omission = '>';
+open-removal = '<<';
+close-removal = '>>';
 
 broken-away = open-broken-away-open | close-broken-away;
 open-broken-away = '[';
@@ -197,14 +195,6 @@ close-broken-away = ']';
 perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
 open-perhaps-broken-away = '(';
 close-perhaps-broken-away = ')';
-
-inline-broken-away = open-inline-broken-away | close-inline-broken-away;
-open-inline-broken-away = '[('
-                        | '['
-                        | ? not { ?, '(', ? not . ?;
-close-inline-broken-away = ? not . ?, ')]' 
-                         | ')', ? not } ?
-                         | ']';
 
 word-separator = ' ';
 ```
@@ -221,8 +211,8 @@ A presence cannot be nested within itself.
 | Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
 | Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
 | Removal | `<<` | `>>` | Top-level, Word | | |
-| Broken Away | `[` | `]`| Top-level, Word, Grapheme | |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word, Grapheme | Should be inside *Broken Away*. Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
+| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
@@ -299,39 +289,49 @@ determinative. A word is lemmatizable and alignable if:
 - The language is not normalized.
 
 ```ebnf
-word = [ part-joiner ], [ open-inline-broken-away ], [ open-omission ],
+word = [ joiner ], [ open-any ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-omission ], [ close-inline-broken-away ] [ part-joiner ]
-     | surrogate;
+       [ close-any ], [ joiner ];
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | determinative | linguistic-gloss | phonetic-gloss ),
-        { [ part-joiner ], ( determinative | variant | linguistic-gloss
-                           | phonetic-gloss | unknown-number-of-signs ) }
-      | unknown-number-of-signs, { [ part-joiner ],
-        ( determinative | variant | linguistic-gloss | phonetic-gloss
-        | unknown-number-of-signs ) }-;
+parts = ( variant | determinative | linguistic-gloss | phonetic-gloss | 
+          unknown-number-of-signs ),
+        { [ part-joiner ], ( variant | determinative | linguistic-gloss | 
+                             phonetic-gloss | unknown-number-of-signs ) };
+        (* Word cannot consist of only unknown-number-of-signs. *)
 
-linguistic-gloss = '{{', word, { [ word-separator ], word }, '}}';
-phonetic-gloss = '{+', variant,  { part-joiner, variant }, '}';
+linguistic-gloss = '{{', gloss-body, '}}';
+phonetic-gloss = '{+', gloss-body, '}';
+determinative = '{', gloss-body, '}';
+gloss-body = [ open_any ] variant,  { part-joiner, variant }, [ close_any ]
 
-determinative = '{', variant,  { part-joiner, variant }, '}';
-
-part-joiner = [ close-omission ],
-              [ close-inline-broken-away ],
-              [ joiner ],
-              [ open-inline-broken-away ],
-              [ open-omission ];
-              
+part-joiner = [ inword-newline ], [ close_any ], [ joiner ], [ open_any ];
+ 
+open_any = { open-broken-away
+             | open-perhaps-away     
+             | open-intentional-omission
+             | open-accidental-omission
+             | open-removal }+; 
+close_any = { close-broken-away
+             | close-perhaps-away     
+             | close-intentional-omission
+             | close-accidental-omission
+             | close-removal }+;         
 joiner = '-' | '+' | '.' | ':';
+inword-newline = ';';
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown 
              | value-with-sign
              | value
              | compound-grapheme
-             | logogram;
+             | logogram
+             | surrogate
+             | number;
+
+number = decimal-digit, { [ invalue-broken-away ], decimal-digit },
+         modifier, flag;
 
 surrogate = logogram, ['<(', value, { '-', value } ,')>'];
 logogram = logogram-character, { [ invalue-broken-away ], logogram-character },
@@ -371,7 +371,7 @@ grapheme-character = word-character
 unknown-number-of-signs = '...';
 unknown = ('X' | 'x'), flag;
 
-invalue-broken-away: '[' | ']';
+invalue-broken-away: open-broken-away | close-broken-away;
 
 variant-separator = '/';
 
@@ -385,29 +385,11 @@ sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
 
 ## Validation
 
-The ATF should be parseable using the specification above. In addition, it must
-pass [pyoracc](https://github.com/oracc/pyoracc) validation and not contain
-unknown readings. To make the ATF valid according to pyoracc a fake header is
-added to the input:
-
-```
-&XXX = XXX
-#project: eblo
-#atf: lang akk-x-stdbab
-#atf: use unicode
-#atf: use math
-#atf: use legacy
-```
-
-The only purpose of the header is to make the pyoracc accept the ATF and it is
-not saved to the database. To check the readings the ATF is stripped from all
-other characters except readings and graphemes. Each reading must match a value
-in the sign list.
-
-Sometimes when the validation or parsing logic is updated existing
-transliterations can become invalid. It should still be possible to load these
-transliterations but saving them results in an error until the syntax has been
-corrected.
+The ATF should be parseable using the specification above. In addition,
+all readings and signs must be correct according to our sign list. Sometimes
+when the validation or parsing logic is updated existing transliterations can
+become invalid. It should still be possible to load these transliterations, but
+saving them results in an error until the syntax is corrected.
 
 ## Labels
 

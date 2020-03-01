@@ -2,8 +2,8 @@ import pytest
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
     ImageDollarLine,
+    LooseDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
@@ -30,6 +30,7 @@ from ebl.transliteration.domain.text import Text
             ],
         ),
         ("$ (image 1a = great )", [ImageDollarLine("1", "a", "great")]),
+        ("$(image 1a = great )", [ImageDollarLine("1", "a", "great")]),
         (
             "$ (image 1 = numbered diagram of triangle)",
             [ImageDollarLine("1", None, "numbered diagram of triangle")],
@@ -37,6 +38,19 @@ from ebl.transliteration.domain.text import Text
         ("$ single ruling", [RulingDollarLine(atf.Ruling.SINGLE)]),
         ("$ double ruling", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         ("$ triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
+        ("$triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
+        (
+            "$triple ruling *",
+            [RulingDollarLine(atf.Ruling.TRIPLE, atf.DollarStatus.COLLATION)],
+        ),
+        (
+            "$triple ruling !",
+            [
+                RulingDollarLine(
+                    atf.Ruling.TRIPLE, atf.DollarStatus.EMENDED_NOT_COLLATED
+                )
+            ],
+        ),
     ],
 )
 def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
@@ -71,7 +85,7 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     (1, 3),
                     ScopeContainer(atf.Object.OBJECT, "stone"),
                     atf.State.BLANK,
-                    atf.Status.UNCERTAIN,
+                    atf.DollarStatus.UNCERTAIN,
                 )
             ],
         ),
@@ -155,7 +169,7 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.OBVERSE),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -167,7 +181,7 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Surface.SURFACE, "stone"),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -179,7 +193,7 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.OBJECT, "stone"),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -191,7 +205,7 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.COLLATION,
+                    atf.DollarStatus.COLLATED,
                 )
             ],
         ),
@@ -203,7 +217,7 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.CORRECTION,
+                    atf.DollarStatus.EMENDED_NOT_COLLATED,
                 )
             ],
         ),
@@ -215,9 +229,39 @@ def test_parse_atf_dollar_ruling_and_image(parser, line, expected_tokens):
                     atf.Extent.SEVERAL,
                     ScopeContainer(atf.Object.TABLET),
                     atf.State.BLANK,
-                    atf.Status.UNCERTAIN,
+                    atf.DollarStatus.UNCERTAIN,
                 )
             ],
+        ),
+        (
+            "$several tablet blank !?",
+            [
+                StateDollarLine(
+                    None,
+                    atf.Extent.SEVERAL,
+                    ScopeContainer(atf.Object.TABLET),
+                    atf.State.BLANK,
+                    atf.DollarStatus.NEEDS_COLLATION,
+                )
+            ],
+        ),
+        (
+            "$ at least",
+            [StateDollarLine(atf.Qualification.AT_LEAST, None, None, None, None,)],
+        ),
+        ("$ several", [StateDollarLine(None, atf.Extent.SEVERAL, None, None, None,)],),
+        (
+            "$ tablet",
+            [
+                StateDollarLine(
+                    None, None, ScopeContainer(atf.Object.TABLET), None, None,
+                )
+            ],
+        ),
+        ("$ blank", [StateDollarLine(None, None, None, atf.State.BLANK, None,)],),
+        (
+            "$ ?",
+            [StateDollarLine(None, None, None, None, atf.DollarStatus.UNCERTAIN,)],
         ),
     ],
 )
@@ -340,6 +384,39 @@ def test_parse_atf_loose_to_strict_dollar_line(parser, line, expected_tokens):
     ],
 )
 def test_parse_atf_surface_ambiguity_dollar_line(parser, line, expected_tokens):
+    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+@pytest.mark.parametrize("parser", [parse_atf_lark])
+@pytest.mark.parametrize(
+    "line,expected_tokens",
+    [
+        (
+            "$(double ruling !)",
+            [
+                RulingDollarLine(
+                    atf.Ruling.DOUBLE, atf.DollarStatus.EMENDED_NOT_COLLATED
+                )
+            ],
+        ),
+        ("$(double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
+        ("$ (double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
+        (
+            "$ (at least 1 surface th(in)g)",
+            [
+                StateDollarLine(
+                    atf.Qualification.AT_LEAST,
+                    1,
+                    ScopeContainer(atf.Surface.SURFACE, "th(in)g"),
+                    None,
+                    None,
+                )
+            ],
+        ),
+        ("$ ((image 1a = great))", [ImageDollarLine("1", "a", "great")]),
+    ],
+)
+def test_strip_parenthesis(parser, line, expected_tokens):
     assert parser(line).lines == Text.of_iterable(expected_tokens).lines
 
 

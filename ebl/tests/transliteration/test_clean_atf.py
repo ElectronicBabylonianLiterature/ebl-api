@@ -24,6 +24,7 @@ def test_ignored_lines():
             "@reverse\n"
             "\n"
             "$ end of side\n"
+            "$end of side\n"
             "$single ruling\n"
             "$ single ruling\n"
             "$double ruling\n"
@@ -31,6 +32,9 @@ def test_ignored_lines():
             "$triple ruling\n"
             "$ triple ruling\n"
             "$ (random text)\n"
+            "$(random text)\n"
+            "$ (image 1 = text)\n"
+            "$(image 1 = text)\n"
             "#note\n=: foo"
         )
     )

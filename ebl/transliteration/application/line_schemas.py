@@ -87,10 +87,11 @@ class ImageDollarLineSchema(LineSchema):
 class RulingDollarLineSchema(LineSchema):
     type = fields.Constant("RulingDollarLine", required=True)
     number = NameEnum(atf.Ruling, required=True)
+    status = NameEnum(atf.DollarStatus, required=False, default=None, allow_none=True)
 
     @post_load
     def make_line(self, data, **kwargs):
-        return RulingDollarLine(data["number"])
+        return RulingDollarLine(data["number"], data["status"])
 
 
 class SealDollarLineSchema(LineSchema):
@@ -129,16 +130,17 @@ class ScopeContainerSchema(Schema):
 
 
 class StateDollarLineSchema(LineSchema):
-    type = fields.Constant("StateDollarLine", required=True)
+    type = fields.Constant("StateDollarLine", required=True, allow_none=True)
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),
         lambda value: value,
         required=True,
+        allow_none=True,
     )
-    scope = fields.Nested(ScopeContainerSchema, required=True)
+    scope = fields.Nested(ScopeContainerSchema, required=True, allow_none=True)
     state = NameEnum(atf.State, required=True, allow_none=True)
-    status = NameEnum(atf.Status, required=True, allow_none=True)
+    status = NameEnum(atf.DollarStatus, required=True, allow_none=True)
 
     @post_load
     def make_line(self, data, **kwargs):
