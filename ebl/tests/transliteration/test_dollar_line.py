@@ -36,7 +36,20 @@ def test_ruling_dollar_line():
     assert ruling_line.prefix == "$"
     assert ruling_line.content == (ValueToken(" double ruling"),)
     assert ruling_line.number == atf.Ruling.DOUBLE
+    assert ruling_line.status is None
     assert ruling_line.atf == "$ double ruling"
+
+
+def test_ruling_dollar_line_status():
+    ruling_line = RulingDollarLine(
+        atf.Ruling.DOUBLE, atf.DollarStatus.EMENDED_NOT_COLLATED
+    )
+
+    assert ruling_line.prefix == "$"
+    assert ruling_line.content == (ValueToken(" double ruling !"),)
+    assert ruling_line.number == atf.Ruling.DOUBLE
+    assert ruling_line.status == atf.DollarStatus.EMENDED_NOT_COLLATED
+    assert ruling_line.atf == "$ double ruling !"
 
 
 def test_strict_dollar_line_with_none():

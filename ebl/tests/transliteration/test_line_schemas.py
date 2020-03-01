@@ -157,6 +157,17 @@ LINES = [
             "prefix": "$",
             "content": dump_tokens([ValueToken(" double ruling")]),
             "number": "DOUBLE",
+            "status": None,
+        },
+    ),
+    (
+        RulingDollarLine(atf.Ruling.DOUBLE, atf.DollarStatus.COLLATED),
+        {
+            "type": "RulingDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken(" double ruling *")]),
+            "number": "DOUBLE",
+            "status": "COLLATED",
         },
     ),
 ]

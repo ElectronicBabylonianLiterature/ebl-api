@@ -49,10 +49,16 @@ class ImageDollarLine(DollarLine):
 @attr.s(auto_attribs=True, frozen=True)
 class RulingDollarLine(DollarLine):
     number: atf.Ruling
+    status: Optional[atf.DollarStatus] = None
 
     @property
     def _content_as_is(self):
-        return (ValueToken(f"{self.number.value} ruling"),)
+        return (
+            ValueToken(
+                f"{self.number.value} ruling"
+                f"{' ' + self.status.value if self.status else ''}"
+            ),
+        )
 
 
 @attr.s(frozen=True)

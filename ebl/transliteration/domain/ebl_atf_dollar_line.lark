@@ -44,7 +44,7 @@ STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 DOLLAR_STATUS: "!?" | "*" | "?" | "!"
 
 
-ruling : RULING_NUMBER " ruling"
+ruling : RULING_NUMBER " ruling" [" " DOLLAR_STATUS]
 RULING_NUMBER : "single" | "double" | "triple"
 
 

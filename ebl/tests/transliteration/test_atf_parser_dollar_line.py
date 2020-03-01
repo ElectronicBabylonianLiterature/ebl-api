@@ -38,6 +38,18 @@ from ebl.transliteration.domain.text import Text
         ("$ double ruling", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         ("$ triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
         ("$triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
+        (
+            "$triple ruling *",
+            [RulingDollarLine(atf.Ruling.TRIPLE, atf.DollarStatus.COLLATION)],
+        ),
+        (
+            "$triple ruling !",
+            [
+                RulingDollarLine(
+                    atf.Ruling.TRIPLE, atf.DollarStatus.EMENDED_NOT_COLLATED
+                )
+            ],
+        ),
     ],
 )
 def test_parse_atf_dollar_line(parser, line, expected_tokens):
@@ -377,6 +389,14 @@ def test_parse_atf_surface_ambiguity_dollar_line(parser, line, expected_tokens):
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        (
+            "$(double ruling !)",
+            [
+                RulingDollarLine(
+                    atf.Ruling.DOUBLE, atf.DollarStatus.EMENDED_NOT_COLLATED
+                )
+            ],
+        ),
         ("$(double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         ("$ (double ruling)", [RulingDollarLine(atf.Ruling.DOUBLE)]),
         (
