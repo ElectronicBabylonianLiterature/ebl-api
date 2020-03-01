@@ -3,7 +3,7 @@ from hamcrest import assert_that, contains_exactly, has_entries, starts_with
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import SurfaceAtLine
-from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -22,7 +22,6 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     TextLine,
 )
-from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,

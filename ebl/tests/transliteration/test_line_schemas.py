@@ -12,6 +12,15 @@ from ebl.transliteration.domain.at_line import (
     ColumnAtLine,
     SurfaceAtLine,
     ObjectAtLine,
+    DiscourseAtLine,
+)
+from ebl.transliteration.domain.dollar_line import (
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+    SealDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
@@ -23,18 +32,20 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     TextLine,
 )
-from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    ScopeContainer,
-    StateDollarLine,
-)
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+    (
+        DiscourseAtLine(atf.Discourse.DATE),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("date")]),
+            "type": "DiscourseAtLine",
+            "discourse_label": "DATE",
+        },
+    ),
     (
         ObjectAtLine(
             [atf.Status.CORRECTION, atf.Status.COLLATION],
@@ -234,6 +245,15 @@ LINES = [
             "prefix": "$",
             "content": dump_tokens([ValueToken(" double ruling")]),
             "number": "DOUBLE",
+        },
+    ),
+    (
+        SealDollarLine(1),
+        {
+            "type": "SealDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken(" seal 1")]),
+            "number": 1,
         },
     ),
 ]

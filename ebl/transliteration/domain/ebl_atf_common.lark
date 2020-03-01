@@ -2,6 +2,8 @@ OBJECT: "tablet" | "envelope" | "prism" | "bulla"
 
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
 
+seal : "seal" _WORD_SEPERATOR DIGIT
+
 any_str.-2 : /./+
 
 _WORD_SEPERATOR: " "

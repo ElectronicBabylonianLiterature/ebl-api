@@ -116,3 +116,5 @@ docker-entrypoint-initdb.d/
 # Run backend locally
 run_backend.sh
 
+# Travis commands
+travis.txt

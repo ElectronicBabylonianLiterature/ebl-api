@@ -17,6 +17,7 @@ from ebl.transliteration.domain.text import Text
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("@date", [DiscourseAtLine(atf.Discourse.DATE)]),
         (
             "@reverse!*",
             [

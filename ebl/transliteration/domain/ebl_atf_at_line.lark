@@ -1,4 +1,4 @@
-%import .ebl_atf_common (OBJECT, SURFACE, any_str, DIGIT, _WORD_SEPERATOR, LOWER_CASE_LETTER)
+%import .ebl_atf_common (seal, OBJECT, SURFACE, any_str, DIGIT, _WORD_SEPERATOR, LOWER_CASE_LETTER)
 
 ?at_line : "@" value
 
@@ -22,7 +22,7 @@ fragment: "fragment" _WORD_SEPERATOR any_str
 generic_object : OBJECT_GENERIC _WORD_SEPERATOR any_str
 OBJECT_GENERIC : "object"
 
-seal : "seal" _WORD_SEPERATOR DIGIT
+
 
 column : "column" _WORD_SEPERATOR DIGIT _WORD_SEPERATOR? STATUS*
 

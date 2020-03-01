@@ -3,7 +3,7 @@
 
 ?dollar_line : "$" _WORD_SEPERATOR value
 
-?value : state_line | _looses | ruling | image
+?value : state_line | _looses | ruling | image | seal
 
 state_line: [QUALIFICATION _WORD_SEPERATOR] _extent _WORD_SEPERATOR _scopes [_WORD_SEPERATOR STATE] [_WORD_SEPERATOR STATUS]
 
@@ -48,4 +48,4 @@ _IMAGE : "(" [_WORD_SEPERATOR] "image"
 %import .ebl_atf_common (LOWER_CASE_LETTER)
 %import .ebl_atf_common (DIGIT)
 
-seal : "seal" DIGIT
+%import .ebl_atf_common (seal)

@@ -1,14 +1,9 @@
 from ebl.transliteration.application.line_schemas import (
-    ScopeContainerSchema,
-    StateDollarLineSchema,
     ColumnLabelSchema,
     SurfaceLabelSchema,
 )
-from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
-from ebl.transliteration.domain.tokens import ValueToken
 
 
 def test_load_and_dump_column_label_schema():

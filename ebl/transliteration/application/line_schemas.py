@@ -12,13 +12,7 @@ from ebl.transliteration.domain.at_line import (
     ColumnAtLine,
     SurfaceAtLine,
     ObjectAtLine,
-)
-from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-    Line,
-    TextLine,
+    DiscourseAtLine,
 )
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
@@ -26,6 +20,14 @@ from ebl.transliteration.domain.dollar_line import (
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+    SealDollarLine,
+)
+from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.line import (
+    ControlLine,
+    EmptyLine,
+    Line,
+    TextLine,
 )
 
 
@@ -89,6 +91,15 @@ class RulingDollarLineSchema(LineSchema):
     @post_load
     def make_line(self, data, **kwargs):
         return RulingDollarLine(data["number"])
+
+
+class SealDollarLineSchema(LineSchema):
+    type = fields.Constant("SealDollarLine", required=True)
+    number = fields.Int(required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return SealDollarLine(data["number"])
 
 
 class ScopeContainerSchema(Schema):
@@ -208,6 +219,15 @@ class ColumnAtLineSchema(LineSchema):
         return ColumnAtLine(data["column_label"])
 
 
+class DiscourseAtLineSchema(LineSchema):
+    type = fields.Constant("DiscourseAtLine", required=True)
+    discourse_label = NameEnum(atf.Discourse, required=True)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return DiscourseAtLine(data["discourse_label"])
+
+
 class SurfaceAtLineSchema(LineSchema):
     type = fields.Constant("SurfaceAtLine", required=True)
     surface_label = fields.Nested(SurfaceLabelSchema, required=True)
@@ -235,12 +255,14 @@ _schemas: Mapping[str, Type[Schema]] = {
     "LooseDollarLine": LooseDollarLineSchema,
     "ImageDollarLine": ImageDollarLineSchema,
     "RulingDollarLine": RulingDollarLineSchema,
+    "SealDollarLine": SealDollarLineSchema,
     "StateDollarLine": StateDollarLineSchema,
     "SealAtLine": SealAtLineSchema,
     "HeadingAtLine": HeadingAtLineSchema,
     "ColumnAtLine": ColumnAtLineSchema,
     "SurfaceAtLine": SurfaceAtLineSchema,
     "ObjectAtLine": ObjectAtLineSchema,
+    "DiscourseAtLine": DiscourseAtLineSchema,
 }
 
 

@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from enum import Enum
-from functools import singledispatchmethod  # type: ignore
-from typing import Optional, Union, Sequence
+from typing import Sequence
 
 import attr
 
@@ -58,7 +56,8 @@ class ColumnAtLine(AtLine):
     def _content_as_is(self):
         return (
             ValueToken(
-                f"column {self.column_label.column}{''.join([status.value for status in self.column_label.status])}"
+                f"column {self.column_label.column}"
+                f"{''.join([status.value for status in self.column_label.status])}"
             ),
         )
 
@@ -80,7 +79,9 @@ class SurfaceAtLine(AtLine):
     def _content_as_is(self):
         return (
             ValueToken(
-                f"{self.surface_label.surface.value[0]}{' '+self.surface_label.text if self.surface_label.text else '' }{self.surface_label._status_string}"
+                f"{self.surface_label.surface.value[0]}"
+                f"{' '+self.surface_label.text if self.surface_label.text else '' }"
+                f"{self.surface_label._status_string}"
             ),
         )
 
@@ -99,6 +100,8 @@ class ObjectAtLine(AtLine):
     def _content_as_is(self):
         return (
             ValueToken(
-                f"{self.object_label.value}{' ' + self.text if self.text else ''}{self._status_string}"
+                f"{self.object_label.value}"
+                f"{' ' + self.text if self.text else ''}"
+                f"{self._status_string}"
             ),
         )

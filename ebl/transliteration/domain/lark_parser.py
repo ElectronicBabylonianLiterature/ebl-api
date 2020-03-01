@@ -1,8 +1,8 @@
 from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
-import pydash
 import attr
+import pydash
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
 from lark.lexer import Token
@@ -19,6 +19,15 @@ from ebl.transliteration.domain.at_line import (
     ObjectAtLine,
 )
 from ebl.transliteration.domain.atf import sub_index_to_int
+from ebl.transliteration.domain.dollar_line import (
+    LooseDollarLine,
+    ImageDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+    SealDollarLine,
+)
+from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -31,6 +40,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
+from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
 from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -38,15 +48,6 @@ from ebl.transliteration.domain.line import (
     Line,
     TextLine,
 )
-from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    ScopeContainer,
-    StateDollarLine,
-)
-from ebl.transliteration.domain.enclosure_error import EnclosureError
-from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -483,10 +484,6 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
 
     def ebl_atf_at_line__column(self, column):
         return ColumnAtLine(ColumnLabel.from_int(column[0], tuple(column[1:])))
-
-    @v_args(inline=True)
-    def ebl_atf_at_line__heading(self, number):
-        return HeadingAtLine(number)
 
     @v_args(inline=True)
     def ebl_atf_at_line__discourse(self, discourse):

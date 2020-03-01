@@ -32,7 +32,7 @@ class SealDollarLine(DollarLine):
 
     @property
     def _content_as_is(self):
-        return (ValueToken(f"(seal {self.number})"),)
+        return (ValueToken(f"seal {self.number}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)

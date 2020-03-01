@@ -13,18 +13,20 @@ from ebl.transliteration.domain.at_line import (
     ColumnAtLine,
     SurfaceAtLine,
     ObjectAtLine,
+    DiscourseAtLine,
 )
 from ebl.transliteration.domain.atf import Flag
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
-from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+    SealDollarLine,
 )
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -221,6 +223,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            SealDollarLine(1),
             SealAtLine(1),
             HeadingAtLine(1),
             ColumnAtLine(ColumnLabel([atf.Status.COLLATION], 1)),
@@ -228,6 +231,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
             ),
             ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
+            DiscourseAtLine(atf.Discourse.DATE),
         )
     )
     signs = (
@@ -404,6 +408,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            SealDollarLine(1),
             SealAtLine(1),
             HeadingAtLine(1),
             ColumnAtLine(ColumnLabel([atf.Status.COLLATION], 1)),
@@ -411,5 +416,6 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
             ),
             ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
+            DiscourseAtLine(atf.Discourse.DATE),
         )
     )

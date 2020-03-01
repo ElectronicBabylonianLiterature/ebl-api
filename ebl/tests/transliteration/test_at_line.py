@@ -3,7 +3,6 @@ import pytest
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     DiscourseAtLine,
-    HeadingAtLine,
     SurfaceAtLine,
     ColumnAtLine,
     ObjectAtLine,

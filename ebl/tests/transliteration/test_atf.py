@@ -5,7 +5,6 @@ from ebl.transliteration.domain.atf import (
     sub_index_to_int,
 )
 
-
 SUB_INDICES = [
     (None, "ₓ"),
     (1, ""),
