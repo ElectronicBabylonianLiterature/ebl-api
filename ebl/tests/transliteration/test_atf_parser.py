@@ -990,13 +990,13 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "2. RA{k[i]}",
+            "2. RA{k[i}]",
             [
                 TextLine(
                     "2.",
                     (
                         Word(
-                            "RA{k[i]}",
+                            "RA{k[i}]",
                             parts=[
                                 Logogram.of_name("RA"),
                                 Determinative(
@@ -1008,9 +1008,9 @@ def test_parser_version(parser, version):
                                                 ValueToken("i"),
                                             )
                                         ),
-                                        BrokenAway.close(),
                                     ]
                                 ),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -1109,6 +1109,35 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Divider.of(";"),
+                    ),
+                )
+            ],
+        ),
+        (
+            "1. [... {(he-p]i₂)}",
+            [
+                TextLine(
+                    "1.",
+                    (
+                        BrokenAway.open(),
+                        UnknownNumberOfSigns(),
+                        DocumentOrientedGloss.open(),
+                        Word(
+                            "he-p]i₂",
+                            parts=[
+                                Reading.of_name("he"),
+                                Joiner.hyphen(),
+                                Reading.of(
+                                    (
+                                        ValueToken("p"),
+                                        BrokenAway.close(),
+                                        ValueToken("i"),
+                                    ),
+                                    2,
+                                ),
+                            ],
+                        ),
+                        DocumentOrientedGloss.close(),
                     ),
                 )
             ],
@@ -1215,6 +1244,7 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
         ("1'. → x\n$ (line continuation in the middle)", [1]),
         ("this is not valid\nthis is not valid", [1, 2]),
         ("$ ", [1]),
+        ("1. {[me}]\n2. [{me]}\n3. {[me]}", [1, 2, 3]),
     ],
 )
 def test_invalid_atf(parser, atf, line_numbers):

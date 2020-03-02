@@ -554,13 +554,13 @@ from ebl.transliteration.domain.word_tokens import (
             ),
         ),
         (
-            "{[i]ti}AB",
+            "[{i]ti}AB",
             Word(
-                "{[i]ti}AB",
+                "[{i]ti}AB",
                 parts=[
+                    BrokenAway.open(),
                     Determinative(
                         [
-                            BrokenAway.open(),
                             Reading.of(
                                 (ValueToken("i"), BrokenAway.close(), ValueToken("ti"))
                             ),
@@ -931,29 +931,29 @@ def test_word(parser, atf, expected):
             ),
         ),
         (
-            "{k[i]}",
+            "{k[i}]",
             LoneDeterminative(
-                "{k[i]}",
+                "{k[i}]",
                 parts=[
                     Determinative(
                         [
                             Reading.of(
                                 (ValueToken("k"), BrokenAway.open(), ValueToken("i"))
                             ),
-                            BrokenAway.close(),
                         ]
                     ),
+                    BrokenAway.close(),
                 ],
             ),
         ),
         (
-            "{[k]i}",
+            "[{k]i}",
             LoneDeterminative(
-                "{[k]i}",
+                "[{k]i}",
                 parts=[
+                    BrokenAway.open(),
                     Determinative(
                         [
-                            BrokenAway.open(),
                             Reading.of(
                                 (ValueToken("k"), BrokenAway.close(), ValueToken("i"))
                             ),
