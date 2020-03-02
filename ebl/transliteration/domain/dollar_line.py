@@ -55,8 +55,9 @@ class RulingDollarLine(DollarLine):
     def _content_as_is(self):
         return (
             ValueToken(
-                f"{self.number.value} ruling"
-                f"{' ' + self.status.value if self.status else ''}"
+                f"{self.number.value} ruling" f" {self.status.value}"
+                if self.status
+                else ""
             ),
         )
 

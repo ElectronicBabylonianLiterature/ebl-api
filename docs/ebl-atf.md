@@ -77,8 +77,6 @@ scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
 state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
             | 'traces' | 'omitted' | 'continues';
 
-dollar-status = '*' | '?' | '!' | '!?';
-
 range = number, '-', number;
 
 object = 'tablet' | 'envelope' | 'prism' | 'bulla' | fragment | generic-object;
@@ -100,9 +98,12 @@ number = { decimal-digit }-;
 
 loose = '(', free-text, ')';
 
-ruling = ('single' | 'double' | 'triple'), ' ', 'ruling';
+ruling = ('single' | 'double' | 'triple'), ' ', 'ruling', 
+         [ [ ' ' ], dollar-status];
 
 image = '(image ' number, [ lower-case-letter ], ' = ', free-text, ')';
+
+dollar-status = '*' | '?' | '!' | '!?';
 ```
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)

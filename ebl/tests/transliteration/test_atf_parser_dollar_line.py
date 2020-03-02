@@ -39,8 +39,12 @@ from ebl.transliteration.domain.text import Text
         ("$ triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
         ("$triple ruling", [RulingDollarLine(atf.Ruling.TRIPLE)]),
         (
+            "$single ruling ?",
+            [RulingDollarLine(atf.Ruling.SINGLE, atf.DollarStatus.UNCERTAIN)],
+        ),
+        (
             "$triple ruling *",
-            [RulingDollarLine(atf.Ruling.TRIPLE, atf.DollarStatus.COLLATION)],
+            [RulingDollarLine(atf.Ruling.TRIPLE, atf.DollarStatus.COLLATED)],
         ),
         (
             "$triple ruling !",
@@ -49,6 +53,30 @@ from ebl.transliteration.domain.text import Text
                     atf.Ruling.TRIPLE, atf.DollarStatus.EMENDED_NOT_COLLATED
                 )
             ],
+        ),
+        (
+            "$double ruling !?",
+            [RulingDollarLine(atf.Ruling.DOUBLE, atf.DollarStatus.NEEDS_COLLATION)],
+        ),
+        (
+            "$single ruling?",
+            [RulingDollarLine(atf.Ruling.SINGLE, atf.DollarStatus.UNCERTAIN)],
+        ),
+        (
+            "$triple ruling*",
+            [RulingDollarLine(atf.Ruling.TRIPLE, atf.DollarStatus.COLLATED)],
+        ),
+        (
+            "$triple ruling!",
+            [
+                RulingDollarLine(
+                    atf.Ruling.TRIPLE, atf.DollarStatus.EMENDED_NOT_COLLATED
+                )
+            ],
+        ),
+        (
+            "$double ruling!?",
+            [RulingDollarLine(atf.Ruling.DOUBLE, atf.DollarStatus.NEEDS_COLLATION)],
         ),
     ],
 )

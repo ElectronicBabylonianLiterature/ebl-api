@@ -220,6 +220,15 @@ def test_dump_line(line, expected):
                 "status": atf.Status.CORRECTION.name,
             },
         ),
+        (
+            RulingDollarLine(atf.Ruling.SINGLE),
+            {
+                "type": "RulingDollarLine",
+                "prefix": "$",
+                "content": dump_tokens([ValueToken(" double ruling")]),
+                "number": "SINGLE",
+            },
+        ),
     ],
 )
 def test_load_line(expected, data):
