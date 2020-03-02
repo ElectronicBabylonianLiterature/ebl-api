@@ -53,13 +53,8 @@ class RulingDollarLine(DollarLine):
 
     @property
     def _content_as_is(self):
-        return (
-            ValueToken(
-                f"{self.number.value} ruling" f" {self.status.value}"
-                if self.status
-                else ""
-            ),
-        )
+        status = f" {self.status.value}" if self.status else ""
+        return (ValueToken(f"{self.number.value} ruling{status}"),)
 
 
 @attr.s(frozen=True)
