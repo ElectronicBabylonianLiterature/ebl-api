@@ -48,8 +48,8 @@ not-space = any-character - ' ';
 ## @-lines
 
 
-@-lines are used for structural tags. Several kinds of structure may be indicated using
-this mechanism: physical structure, e.g., objects, surfaces; manuscript structure,
+@-lines are used for structural tags. Several kinds of structure may be indicated 
+using this mechanism: physical structure, e.g., objects, surfaces; manuscript structure,
 i.e., columns; and document structure, e.g., divisions and colophons.
 
 ```ebnf
@@ -68,9 +68,9 @@ column = "column ", number, " "?, status*
 
 heading: "h",number
 
-discourse = "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" 
-            | "witnesses"
-    
+discourse = "catchline" | "colophon" | "date" | "signature" | "signatures" 
+            | "summary"  | "witnesses"
+
 divisions = "m=division ", free-text, [" ", number]
 
 composite = composite_start | composite_end
