@@ -7,6 +7,8 @@ from ebl.transliteration.domain.at_line import (
     DiscourseAtLine,
     SurfaceAtLine,
     ObjectAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
 )
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -17,6 +19,10 @@ from ebl.transliteration.domain.text import Text
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("@div part 1", [CompositeAtLine(atf.Composite.DIV, "part", 1)]),
+        ("@end part", [CompositeAtLine(atf.Composite.END, "part")]),
+        ("@m=division paragraph ", [DivisionAtLine("paragraph")]),
+        ("@m=division paragraph 1", [DivisionAtLine("paragraph", 1)]),
         ("@date", [DiscourseAtLine(atf.Discourse.DATE)]),
         (
             "@reverse!*",

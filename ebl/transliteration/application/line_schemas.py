@@ -13,6 +13,8 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     ObjectAtLine,
     DiscourseAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
 )
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
@@ -250,6 +252,27 @@ class ObjectAtLineSchema(LineSchema):
         return ObjectAtLine(data["status"], data["object_label"], data["text"])
 
 
+class DivisionAtLineSchema(LineSchema):
+    type = fields.Constant("DivisionAtLine", required=True)
+    text = fields.String(required=True)
+    number = fields.Int(required=False, allow_none=True, default=None)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return DivisionAtLine(data["text"], data["number"])
+
+
+class CompositeAtLineSchema(LineSchema):
+    type = fields.Constant("CompositeAtLine", required=True)
+    composite = NameEnum(atf.Composite, required=True)
+    text = fields.String(required=True)
+    number = fields.Int(required=False, allow_none=True, default=None)
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return CompositeAtLine(data["composite"], data["text"], data["number"])
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "TextLine": TextLineSchema,
     "ControlLine": ControlLineSchema,
@@ -265,6 +288,8 @@ _schemas: Mapping[str, Type[Schema]] = {
     "SurfaceAtLine": SurfaceAtLineSchema,
     "ObjectAtLine": ObjectAtLineSchema,
     "DiscourseAtLine": DiscourseAtLineSchema,
+    "DivisionAtLine": DivisionAtLineSchema,
+    "CompositeAtLine": CompositeAtLineSchema,
 }
 
 

@@ -13,6 +13,8 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     ObjectAtLine,
     DiscourseAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
 )
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
@@ -37,6 +39,48 @@ from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+    (
+        CompositeAtLine(atf.Composite.END, "part"),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("end part")]),
+            "type": "CompositeAtLine",
+            "composite": "END",
+            "text": "part",
+            "number": None,
+        },
+    ),
+    (
+        CompositeAtLine(atf.Composite.DIV, "part", 5),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("div part 5")]),
+            "type": "CompositeAtLine",
+            "composite": "DIV",
+            "text": "part",
+            "number": 5,
+        },
+    ),
+    (
+        DivisionAtLine("paragraph", 5),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("m=division paragraph 5")]),
+            "type": "DivisionAtLine",
+            "text": "paragraph",
+            "number": 5,
+        },
+    ),
+    (
+        DivisionAtLine("paragraph"),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken("m=division paragraph")]),
+            "type": "DivisionAtLine",
+            "text": "paragraph",
+            "number": None,
+        },
+    ),
     (
         DiscourseAtLine(atf.Discourse.DATE),
         {

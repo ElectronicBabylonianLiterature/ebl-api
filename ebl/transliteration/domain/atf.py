@@ -173,6 +173,11 @@ class Discourse(Enum):
     WITNESSES = "witnesses"
 
 
+class Composite(Enum):
+    DIV = "div"
+    END = "end"
+
+
 UNKNOWN_NUMBER_OF_SIGNS = "..."
 WORD_SEPARATOR = " "
 VARIANT_SEPARATOR = "/"

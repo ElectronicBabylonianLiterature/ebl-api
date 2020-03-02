@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Sequence
+from typing import Sequence, Optional
 
 import attr
 
@@ -22,12 +22,8 @@ class AtLine(Line):
 
     @property
     @abstractmethod
-    def _content_as_is(self) -> Sequence[Token]:
-        ...
-
-    @property
     def content(self) -> Sequence[Token]:
-        return (ValueToken(self._content_as_is[0].value),)
+        ...
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -35,7 +31,7 @@ class SealAtLine(AtLine):
     number: int
 
     @property
-    def _content_as_is(self):
+    def content(self):
         return (ValueToken(f"seal {self.number}"),)
 
 
@@ -44,7 +40,7 @@ class HeadingAtLine(AtLine):
     number: int
 
     @property
-    def _content_as_is(self):
+    def content(self):
         return (ValueToken(f"h{self.number}"),)
 
 
@@ -53,7 +49,7 @@ class ColumnAtLine(AtLine):
     column_label: ColumnLabel
 
     @property
-    def _content_as_is(self):
+    def content(self):
         return (
             ValueToken(
                 f"column {self.column_label.column}"
@@ -67,7 +63,7 @@ class DiscourseAtLine(AtLine):
     discourse_label: atf.Discourse
 
     @property
-    def _content_as_is(self):
+    def content(self):
         return (ValueToken(f"{self.discourse_label.value}"),)
 
 
@@ -76,7 +72,7 @@ class SurfaceAtLine(AtLine):
     surface_label: SurfaceLabel
 
     @property
-    def _content_as_is(self):
+    def content(self):
         return (
             ValueToken(
                 f"{self.surface_label.surface.value[0]}"
@@ -97,11 +93,46 @@ class ObjectAtLine(AtLine):
         return "".join([status.value for status in self.status])
 
     @property
-    def _content_as_is(self):
+    def content(self):
         return (
             ValueToken(
                 f"{self.object_label.value}"
                 f"{' ' + self.text if self.text else ''}"
                 f"{self._status_string}"
+            ),
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class DivisionAtLine(AtLine):
+    text: str
+    number: Optional[int] = None
+
+    @property
+    def content(self):
+        return (
+            ValueToken(
+                f"m=division {self.text}{' ' + str(self.number) if self.number else ''}"
+            ),
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class CompositeAtLine(AtLine):
+    composite: atf.Composite
+    text: str
+    number: Optional[int] = attr.ib(default=None)
+
+    @number.validator
+    def _check_text(self, attribute, value):
+        if value is not None and self.composite == atf.Composite.END:
+            raise ValueError("number only allowed with '@end' composite")
+
+    @property
+    def content(self):
+        return (
+            ValueToken(
+                f"{self.composite.value} "
+                f"{self.text}{' ' + str(self.number) if self.number else ''}"
             ),
         )

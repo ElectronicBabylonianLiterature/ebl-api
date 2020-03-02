@@ -1,8 +1,9 @@
-%import .ebl_atf_common (seal, OBJECT, SURFACE, any_str, DIGIT, _WORD_SEPERATOR, LOWER_CASE_LETTER)
+%import .ebl_atf_common (seal, OBJECT, SURFACE, any_str, _WORD_SEPERATOR, LOWER_CASE_LETTER)
+%import common.INT
 
 ?at_line : "@" value
 
-?value :  (seal | column | heading | discourse | object_with_status | surface_with_status)
+?value :  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | _composite
 
 test: "test"
 
@@ -24,15 +25,17 @@ OBJECT_GENERIC : "object"
 
 
 
-column : "column" _WORD_SEPERATOR DIGIT _WORD_SEPERATOR? STATUS*
+column : "column" _WORD_SEPERATOR INT _WORD_SEPERATOR? STATUS*
 
-heading: "h"DIGIT
+heading: "h"INT
 
 !discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
 
-//milestones
+divisions: "m=division " any_str [_WORD_SEPERATOR INT]
 
-//divisions: "m" _WORD_SEPERATOR? "=" _WORD_SEPERATOR? milestone DIGIT
+_composite: composite_start | composite_end
+composite_start: "div " any_str [_WORD_SEPERATOR INT]
+composite_end: "end " any_str
 
 
 

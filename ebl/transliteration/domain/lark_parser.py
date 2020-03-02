@@ -17,6 +17,8 @@ from ebl.transliteration.domain.at_line import (
     DiscourseAtLine,
     SurfaceAtLine,
     ObjectAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
 )
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.dollar_line import (
@@ -467,10 +469,10 @@ class TreeDollarSignToTokens(TreeToLine):
 
 class TreeAtSignToTokens(TreeDollarSignToTokens):
     def ebl_atf_at_line__any_str(self, content):
-        return "".join([x for x in content]).rstrip(" ")
+        return "".join(content).rstrip(" ")
 
     @v_args(inline=True)
-    def ebl_atf_at_line__DIGIT(self, number):
+    def ebl_atf_at_line__INT(self, number):
         return int(number)
 
     @v_args(inline=True)
@@ -529,6 +531,18 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
 
     def ebl_atf_at_line__object_with_status(self, object):
         return attr.evolve(object[0], status=object[1:])
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__divisions(self, text, digit):
+        return DivisionAtLine(text, digit)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__composite_start(self, text, number):
+        return CompositeAtLine(atf.Composite.DIV, text, number)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__composite_end(self, text):
+        return CompositeAtLine(atf.Composite.END, text)
 
 
 WORD_PARSER = Lark.open(

@@ -6,6 +6,7 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     ColumnAtLine,
     ObjectAtLine,
+    CompositeAtLine,
 )
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel
 from ebl.transliteration.domain.tokens import ValueToken
@@ -93,3 +94,18 @@ def test_at_line_object():
     assert at_line.object_label == atf.Object.OBJECT
     assert at_line.status == [atf.Status.CORRECTION]
     assert at_line.text == "Stone wig"
+
+
+def test_at_line_composite():
+    at_line = CompositeAtLine(atf.Composite.DIV, "paragraph", 1)
+
+    assert at_line.prefix == "@"
+    assert at_line.content == (ValueToken("div paragraph 1"),)
+    assert at_line.composite == atf.Composite.DIV
+    assert at_line.text == "paragraph"
+    assert at_line.number == 1
+
+
+def test_at_line_composite_raise_error():
+    with pytest.raises(ValueError):
+        CompositeAtLine(atf.Composite.END, "paragraph", 1)

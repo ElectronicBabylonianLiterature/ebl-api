@@ -1,14 +1,15 @@
+%import common.INT
+
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"
 
 SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
 
-seal : "seal" _WORD_SEPERATOR DIGIT
+seal : "seal" _WORD_SEPERATOR INT
 
 any_str.-2 : /./+
 
 _WORD_SEPERATOR: " "
 
-DIGIT : /[0-9]+/
 LOWER_CASE_LETTER : /[a-z]/
 
 

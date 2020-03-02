@@ -14,6 +14,8 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     ObjectAtLine,
     DiscourseAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
 )
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.dollar_line import (
@@ -232,6 +234,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ),
             ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
             DiscourseAtLine(atf.Discourse.DATE),
+            DivisionAtLine("paragraph", 5),
+            CompositeAtLine(atf.Composite.DIV, "part", 1),
         )
     )
     signs = (
@@ -417,5 +421,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ),
             ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
             DiscourseAtLine(atf.Discourse.DATE),
+            DivisionAtLine("paragraph", 5),
+            CompositeAtLine(atf.Composite.DIV, "part", 1),
         )
     )
