@@ -39,12 +39,46 @@ line = empty-line
 
 empty-line = '';
 
-control-line = '=:' | '$' | '@' | '&' | '#', { any-character };
+control-line = '=:' | '&' | '#', { any-character };
 
 text-line = line-number, ' ', text;
 line-number = { not-space }-, '.';
 not-space = any-character - ' ';
 ```
+## @-lines
+
+
+@-lines are used for structural tags. Several kinds of structure may be indicated using
+this mechanism: physical structure, e.g., objects, surfaces; manuscript structure,
+i.e., columns; and document structure, e.g., divisions and colophons.
+
+```ebnf
+
+at-line = seal | column | heading | discourse | objct_with_status | surface_with_status
+          | divisions | composite
+    
+surface_with_status = _surface, " "?, status*
+//_surface same as surface in $-line
+//status same as status from Labels
+
+object_with_status = _object, " "?, status*
+//_object same as surface in $-line
+    
+column = "column ", number, " "?, status*
+
+heading: "h",number
+
+discourse = "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" 
+            | "witnesses"
+    
+divisions = "m=division ", free-text, [" ", number]
+
+composite = composite_start | composite_end
+composite_start = "div ", free-text, [" ", number]
+composite_end = "end ", free-text
+
+number = { decimal-digit }-;
+
 
 ## $-lines
 

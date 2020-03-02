@@ -3,7 +3,7 @@
 
 ?at_line : "@" value
 
-?value :  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | _composite
+?value :  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
 
 test: "test"
 
@@ -25,7 +25,7 @@ OBJECT_GENERIC : "object"
 
 
 
-column : "column" _WORD_SEPERATOR INT _WORD_SEPERATOR? STATUS*
+column : "column " INT _WORD_SEPERATOR? STATUS*
 
 heading: "h"INT
 
@@ -33,7 +33,7 @@ heading: "h"INT
 
 divisions: "m=division " any_str [_WORD_SEPERATOR INT]
 
-_composite: composite_start | composite_end
+?composite: composite_start | composite_end
 composite_start: "div " any_str [_WORD_SEPERATOR INT]
 composite_end: "end " any_str
 
