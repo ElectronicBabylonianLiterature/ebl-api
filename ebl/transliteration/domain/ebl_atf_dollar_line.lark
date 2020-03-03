@@ -1,4 +1,3 @@
-%import common.DIGIT
 %import common.INT
 %import common.LCASE_LETTER
 
@@ -25,7 +24,7 @@ EXTENT: "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle 
 range.2: INT " "? "-" " "? INT
 
 ?scope: SCOPE | object | surface
-SCOPE:  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
+SCOPE: "columns" | "column" | "lines" | "line" | "cases" | "case" | "surface" | "side" | "excerpt"
 
 ?object: OBJECT | generic_object | fragment
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"
@@ -33,9 +32,9 @@ fragment: "fragment " free_text
 generic_object : "object " free_text
 
 ?surface: SURFACE | generic_surface | face | edge
-SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
+SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
 face: "face " LCASE_LETTER
-edge: "edge " LCASE_LETTER
+edge: "edge" (" " LCASE_LETTER)?
 generic_surface : "surface " free_text
 
 STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
@@ -48,4 +47,4 @@ ruling : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
 RULING_NUMBER : "single" | "double" | "triple"
 
 
-image.1 : "(" " "? "image " DIGIT [LCASE_LETTER] " = " free_text ")"
+image.1 : "(" " "? "image " INT [LCASE_LETTER] " = " free_text ")"

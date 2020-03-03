@@ -401,7 +401,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Surface.FACE, str(text))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__edge(self, text):
+    def ebl_atf_dollar_line__edge(self, text=""):
         return ScopeContainer(atf.Surface.EDGE, str(text))
 
     @v_args(inline=True)

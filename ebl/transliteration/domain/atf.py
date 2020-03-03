@@ -143,7 +143,6 @@ class Qualification(Enum):
 
 
 class Extent(Enum):
-    N = "n"
     SEVERAL = "several"
     SOME = "some"
     REST_OF = "rest of"
