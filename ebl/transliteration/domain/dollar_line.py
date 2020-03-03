@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from enum import Enum
 from functools import singledispatchmethod  # type: ignore
-from typing import Optional, Union, Tuple, Sequence
+from typing import Optional, Union, Tuple
 
 import attr
 
@@ -18,12 +18,12 @@ class DollarLine(Line):
 
     @property
     @abstractmethod
-    def _content_as_is(self) -> Sequence[Token]:
+    def _content_value(self) -> str:
         ...
 
     @property
-    def content(self) -> Sequence[Token]:
-        return (ValueToken(" " + self._content_as_is[0].value),)
+    def content(self) -> Tuple[Token]:
+        return (ValueToken(f" {self._content_value}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -31,8 +31,8 @@ class LooseDollarLine(DollarLine):
     text: str = ""
 
     @property
-    def _content_as_is(self):
-        return (ValueToken(f"({self.text})"),)
+    def _content_value(self) -> str:
+        return f"({self.text})"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -42,8 +42,9 @@ class ImageDollarLine(DollarLine):
     text: str = ""
 
     @property
-    def _content_as_is(self):
-        return (ValueToken(f'(image {self.number}{self.letter or ""} = {self.text})'),)
+    def _content_value(self) -> str:
+        letter = self.letter or ""
+        return f"(image {self.number}{letter} = {self.text})"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -52,9 +53,9 @@ class RulingDollarLine(DollarLine):
     status: Optional[atf.DollarStatus] = None
 
     @property
-    def _content_as_is(self):
+    def _content_value(self) -> str:
         status = f" {self.status.value}" if self.status else ""
-        return (ValueToken(f"{self.number.value} ruling{status}"),)
+        return f"{self.number.value} ruling{status}"
 
 
 @attr.s(frozen=True)
@@ -75,7 +76,8 @@ class ScopeContainer:
                 "text can only be initialized if the content is 'object' or 'surface'"
             )
 
-    def to_value_token(self):
+    @property
+    def value(self):
         if self.text:
             return f"{self.content.name.lower()} {self.text}"
         else:
@@ -92,23 +94,19 @@ class StateDollarLine(DollarLine):
     status: Optional[atf.DollarStatus]
 
     @property
-    def _content_as_is(self):
-        return (
-            ValueToken(
-                " ".join(
-                    [
-                        StateDollarLine.to_atf(x)
-                        for x in [
-                            self.qualification,
-                            self.extent,
-                            self.scope,
-                            self.state,
-                            self.status,
-                        ]
-                        if x
-                    ]
-                )
-            ),
+    def _content_value(self) -> str:
+        return " ".join(
+            [
+                StateDollarLine.to_atf(x)
+                for x in [
+                    self.qualification,
+                    self.extent,
+                    self.scope,
+                    self.state,
+                    self.status,
+                ]
+                if x
+            ]
         )
 
     @singledispatchmethod
@@ -129,4 +127,4 @@ class StateDollarLine(DollarLine):
     @staticmethod
     @to_atf.register
     def scope_container_to_atf(column: ScopeContainer) -> str:
-        return column.to_value_token()
+        return column.value
