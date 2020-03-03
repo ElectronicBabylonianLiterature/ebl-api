@@ -273,6 +273,14 @@ def test_parse_atf_dollar_line(parser, line, expected_tokens):
             ],
         ),
         (
+            "$ 1 line effaced",
+            [
+                StateDollarLine(
+                    None, 1, ScopeContainer(atf.Scope.LINE), atf.State.EFFACED, None,
+                )
+            ],
+        ),
+        (
             "$ at least",
             [StateDollarLine(atf.Qualification.AT_LEAST, None, None, None, None,)],
         ),

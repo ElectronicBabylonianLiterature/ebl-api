@@ -161,6 +161,7 @@ class State(Enum):
     TRACES = "traces"
     OMITTED = "omitted"
     CONTINUES = "continues"
+    EFFACED = "effaced"
 
 
 UNKNOWN_NUMBER_OF_SIGNS = "..."
