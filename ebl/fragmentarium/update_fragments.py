@@ -52,6 +52,7 @@ class State:
     ) -> None:
         self.invalid_lemmas += 1
         self.errors.append(f"{fragment.number}\t{error}")
+        print(f"{fragment.number}\t{error}")
 
     def add_transliteration_error(
         self, transliteration_error: TransliterationError, fragment: Fragment
@@ -61,6 +62,7 @@ class State:
             atf = fragment.text.lines[error["lineNumber"] - 1].atf
             number = fragment.number if index == 0 else len(fragment.number) * " "
             self.errors.append(f"{number}\t{atf}\t{error}")
+            print(f"{number}\t{atf}\t{error}")
 
     def to_tsv(self) -> str:
         return "\n".join(
@@ -118,7 +120,7 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 4
+    number_of_jobs = 2
     chunks = create_chunks(number_of_jobs)
     states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
         delayed(update_fragments)(subset, index, create_context_)
@@ -128,5 +130,6 @@ if __name__ == "__main__":
         lambda accumulator, state: accumulator.merge(state), states, State()
     )
 
-    with open(f"invalid_fragments.tsv", "w", encoding="utf-8") as file:
-        file.write(final_state.to_tsv())
+    print(f"# Updated fragments: {final_state.updated}")
+    print(f"# Invalid ATF: {final_state.invalid_atf}")
+    print(f"# Invalid lemmas: {final_state.invalid_lemmas}")
