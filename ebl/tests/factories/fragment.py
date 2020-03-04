@@ -8,15 +8,15 @@ from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
     ImageDollarLine,
+    LooseDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
 )
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -73,9 +73,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
             TextLine(
                 "1'.",
                 (
-                    Word("X", parts=[UnidentifiedSign()]),
+                    Word(parts=[UnidentifiedSign()]),
                     Word(
-                        "BA<(ku-u₄)>",
                         parts=[
                             Logogram.of_name(
                                 "BA",
@@ -90,7 +89,6 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Column(),
                     Tabulation("($___$)"),
                     Word(
-                        "[...-ku]-nu-ši",
                         parts=[
                             BrokenAway.open(),
                             UnknownNumberOfSigns(),
@@ -103,16 +101,14 @@ class TransliteratedFragmentFactory(FragmentFactory):
                             Reading.of_name("ši"),
                         ],
                     ),
-                    Variant.of(
-                        Divider.of(":"), Word("ku", parts=[Reading.of_name("ku")])
-                    ),
+                    Variant.of(Divider.of(":"), Word(parts=[Reading.of_name("ku")])),
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     BrokenAway.close(),
                     Column(2),
                     Divider.of(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
-                    Word("10#", parts=[Number.of_name("10", flags=[Flag.DAMAGE])]),
+                    Word(parts=[Number.of_name("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
             TextLine(
@@ -121,10 +117,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     BrokenAway.close(),
-                    Word("GI₆", parts=[Logogram.of_name("GI", 6)]),
-                    Word("ana", parts=[Reading.of_name("ana")]),
+                    Word(parts=[Logogram.of_name("GI", 6)]),
+                    Word(parts=[Reading.of_name("ana")]),
                     Word(
-                        "u₄-š[u",
                         parts=[
                             Reading.of_name("u", 4),
                             Joiner.hyphen(),
@@ -143,7 +138,6 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     Word(
-                        "k]i-du",
                         parts=[
                             Reading.of(
                                 (ValueToken("k"), BrokenAway.close(), ValueToken("i"))
@@ -152,9 +146,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
                             Reading.of_name("du"),
                         ],
                     ),
-                    Word("u", parts=[Reading.of_name("u")]),
+                    Word(parts=[Reading.of_name("u")]),
                     Word(
-                        "ba-ma-t[i",
                         parts=[
                             Reading.of_name("ba"),
                             Joiner.hyphen(),
@@ -175,10 +168,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     BrokenAway.close(),
-                    Word("x#", parts=[UnclearSign([Flag.DAMAGE])]),
-                    Word("mu", parts=[Reading.of_name("mu")]),
+                    Word(parts=[UnclearSign([Flag.DAMAGE])]),
+                    Word(parts=[Reading.of_name("mu")]),
                     Word(
-                        "ta-ma;-tu₂",
                         parts=[
                             Reading.of_name("ta"),
                             Joiner.hyphen(),
@@ -194,7 +186,6 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 "7'.",
                 (
                     Word(
-                        "šu/|BI×IS|",
                         parts=[
                             Variant(
                                 (Reading.of_name("šu"), CompoundGrapheme("|BI×IS|"))
@@ -232,9 +223,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             TextLine(
                 "1'.",
                 (
-                    Word("X", parts=[UnidentifiedSign()]),
+                    Word(parts=[UnidentifiedSign()]),
                     Word(
-                        "BA<(ku-u₄)>",
                         parts=[
                             Logogram.of_name(
                                 "BA",
@@ -249,7 +239,6 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Column(),
                     Tabulation("($___$)"),
                     Word(
-                        "[...-ku]-nu-ši",
                         parts=[
                             BrokenAway.open(),
                             UnknownNumberOfSigns(),
@@ -262,16 +251,14 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                             Reading.of_name("ši"),
                         ],
                     ),
-                    Variant.of(
-                        Divider.of(":"), Word("ku", parts=[Reading.of_name("ku")])
-                    ),
+                    Variant.of(Divider.of(":"), Word(parts=[Reading.of_name("ku")])),
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     BrokenAway.close(),
                     Column(2),
                     Divider.of(":", ("@v",), (Flag.DAMAGE,)),
                     CommentaryProtocol("!qt"),
-                    Word("10#", parts=[Number.of_name("10", flags=[Flag.DAMAGE])]),
+                    Word(parts=[Number.of_name("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
             TextLine(
@@ -280,17 +267,13 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     Word(
-                        "GI₆",
                         unique_lemma=(WordId("ginâ I"),),
                         parts=[Logogram.of_name("GI", 6)],
                     ),
                     Word(
-                        "ana",
-                        unique_lemma=(WordId("ana I"),),
-                        parts=[Reading.of_name("ana")],
+                        unique_lemma=(WordId("ana I"),), parts=[Reading.of_name("ana")],
                     ),
                     Word(
-                        "u₄-š[u",
                         unique_lemma=(WordId("ūsu I"),),
                         parts=[
                             Reading.of_name("u₄"),
@@ -308,7 +291,6 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     Word(
-                        "k]i-du",
                         unique_lemma=(WordId("kīdu I"),),
                         parts=[
                             Reading.of(
@@ -318,13 +300,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                             Reading.of_name("du"),
                         ],
                     ),
+                    Word(unique_lemma=(WordId("u I"),), parts=[Reading.of_name("u")],),
                     Word(
-                        "u",
-                        unique_lemma=(WordId("u I"),),
-                        parts=[Reading.of_name("u")],
-                    ),
-                    Word(
-                        "ba-ma-t[i",
                         unique_lemma=(WordId("bamātu I"),),
                         parts=[
                             Reading.of_name("ba"),
@@ -346,14 +323,11 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.open(),
                     UnknownNumberOfSigns(),
                     BrokenAway.close(),
-                    Word("x#", parts=[UnclearSign([Flag.DAMAGE])]),
+                    Word(parts=[UnclearSign([Flag.DAMAGE])]),
                     Word(
-                        "mu",
-                        unique_lemma=(WordId("mu I"),),
-                        parts=[Reading.of_name("mu")],
+                        unique_lemma=(WordId("mu I"),), parts=[Reading.of_name("mu")],
                     ),
                     Word(
-                        "ta-ma;-tu₂",
                         unique_lemma=(WordId("tamalāku I"),),
                         parts=[
                             Reading.of_name("ta"),
@@ -370,7 +344,6 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 "7'.",
                 (
                     Word(
-                        "šu/|BI×IS|",
                         parts=[
                             Variant(
                                 (Reading.of_name("šu"), CompoundGrapheme("|BI×IS|"))

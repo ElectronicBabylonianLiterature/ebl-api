@@ -15,7 +15,8 @@ from ebl.transliteration.domain.word_tokens import (
 
 def test_of_value():
     value = "{bu}"
-    lone_determinative = LoneDeterminative.of_value(value)
+    parts = [Determinative([Reading.of_name("bu")])]
+    lone_determinative = LoneDeterminative.of_value(parts)
     assert lone_determinative.value == value
     assert lone_determinative.lemmatizable is False
     assert lone_determinative.language == DEFAULT_LANGUAGE
@@ -31,12 +32,14 @@ def test_of_value():
 def test_lone_determinative(language, normalized):
     value = "{mu}"
     parts = [Determinative([Reading.of_name("mu")])]
-    lone_determinative = LoneDeterminative(value, language, normalized, parts=parts)
+    lone_determinative = LoneDeterminative(language, normalized, parts=parts)
 
-    equal = LoneDeterminative(value, language, normalized, parts=parts)
-    other_language = LoneDeterminative(value, Language.UNKNOWN, normalized)
-    other_value = LoneDeterminative("{bu}", language, normalized)
-    other_normalized = LoneDeterminative("{mu}", language, not normalized)
+    equal = LoneDeterminative(language, normalized, parts=parts)
+    other_language = LoneDeterminative(Language.UNKNOWN, normalized, parts=parts)
+    other_parts = LoneDeterminative(
+        language, normalized, parts=[Determinative([Reading.of_name("bu")])]
+    )
+    other_normalized = LoneDeterminative(language, not normalized, parts=parts)
 
     assert lone_determinative.value == value
     assert lone_determinative.lemmatizable is False
@@ -61,7 +64,7 @@ def test_lone_determinative(language, normalized):
 
     for not_equal in [
         other_language,
-        other_value,
+        other_parts,
         other_normalized,
     ]:
         assert lone_determinative != not_equal
@@ -71,10 +74,12 @@ def test_lone_determinative(language, normalized):
 
 
 def test_set_language():
-    value = "{bu}"
+    parts = [Determinative([Reading.of_name("bu")])]
     language = Language.SUMERIAN
     normalized = False
-    lone_determinative = LoneDeterminative(value, Language.AKKADIAN, not normalized)
-    expected = LoneDeterminative(value, language, normalized)
+    lone_determinative = LoneDeterminative(
+        Language.AKKADIAN, not normalized, parts=parts
+    )
+    expected = LoneDeterminative(language, normalized, parts=parts)
 
     assert lone_determinative.set_language(language, normalized) == expected

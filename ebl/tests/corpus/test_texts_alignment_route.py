@@ -61,7 +61,6 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                     "1.",
                                     (
                                         Word(
-                                            "ku]-nu-ši",
                                             alignment=0,
                                             parts=[
                                                 Reading.of_name("ku"),

@@ -198,7 +198,6 @@ def test_updating_alignment(
                                     "1.",
                                     (
                                         Word(
-                                            "ku]-nu-ši",
                                             alignment=0,
                                             parts=[
                                                 Reading.of_name("ku"),
@@ -360,15 +359,26 @@ def test_merging_lines(
     text_line = TextLine(
         "1.",
         (
-            Word("kur", unique_lemma=(WordId("word1"),), alignment=0),
-            Word("ra", unique_lemma=(WordId("word2"),), alignment=1),
+            Word(
+                parts=[Reading.of_name("kur")],
+                unique_lemma=(WordId("word1"),),
+                alignment=0,
+            ),
+            Word(
+                parts=[Reading.of_name("ra")],
+                unique_lemma=(WordId("word2"),),
+                alignment=1,
+            ),
         ),
     )
     manuscript_id = DEHYDRATED_TEXT.chapters[0].manuscripts[0].id
     line = Line(
         number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),),
     )
-    new_text_line = TextLine("1.", (Word("kur"), Word("pa")))
+    new_text_line = TextLine(
+        "1.",
+        (Word(parts=[Reading.of_name("kur")]), Word(parts=[Reading.of_name("pa")])),
+    )
     new_line = Line(
         number,
         reconstruction,

@@ -26,6 +26,7 @@ from ebl.corpus.domain.text import (
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
     Label,
@@ -33,6 +34,8 @@ from ebl.transliteration.domain.labels import (
     SurfaceLabel,
 )
 from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
 CATEGORY = 1
@@ -58,7 +61,20 @@ REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumberLabel("1")
 LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
-MANUSCRIPT_TEXT = TextLine("1.", (Word("ku]-nu-ši"),))
+MANUSCRIPT_TEXT = TextLine(
+    "1.",
+    (
+        Word(
+            parts=[
+                Reading.of([ValueToken("ku"), BrokenAway.close()]),
+                Joiner.hyphen(),
+                Reading.of_name("nu"),
+                Joiner.hyphen(),
+                Reading.of_name("si"),
+            ],
+        ),
+    ),
+)
 
 LINE = Line(
     LINE_NUMBER,

@@ -12,7 +12,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token, ValueToken, convert_token_sequence
+from ebl.transliteration.domain.tokens import Token, convert_token_sequence
 from ebl.transliteration.domain.word_cleaner import clean_word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
@@ -27,7 +27,7 @@ class ErasureState(Enum):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Word(ValueToken):
+class Word(Token):
     language: Language = DEFAULT_LANGUAGE
     normalized: bool = DEFAULT_NORMALIZED
     unique_lemma: Sequence[WordId] = tuple()
@@ -36,6 +36,10 @@ class Word(ValueToken):
     _parts: Sequence[Token] = attr.ib(
         default=tuple(), kw_only=True, converter=convert_token_sequence
     )
+
+    @property
+    def value(self) -> str:
+        return "".join(part.value for part in self.parts)
 
     @property
     def lemmatizable(self) -> bool:
@@ -111,9 +115,9 @@ class Word(ValueToken):
 class LoneDeterminative(Word):
     @staticmethod
     def of_value(
-        value: str, erasure: ErasureState = ErasureState.NONE, parts=tuple(),
+        parts, erasure: ErasureState = ErasureState.NONE
     ) -> "LoneDeterminative":
-        return LoneDeterminative(value, erasure=erasure, parts=parts)
+        return LoneDeterminative(erasure=erasure, parts=parts)
 
     @property
     def lemmatizable(self) -> bool:

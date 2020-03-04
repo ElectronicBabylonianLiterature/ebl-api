@@ -2,6 +2,7 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.enclosure_tokens import (
+    Determinative,
     DocumentOrientedGloss,
     Erasure,
 )
@@ -17,11 +18,8 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     TextLine,
 )
-from ebl.transliteration.domain.tokens import (
-    LanguageShift,
-    Tabulation,
-    ValueToken,
-)
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     LoneDeterminative,
@@ -64,18 +62,20 @@ def test_empty_line():
 )
 def test_line_of_iterable(code, language, normalized):
     tokens = [
-        Word("first"),
+        Word(parts=[Reading.of_name("first")]),
         LanguageShift(code),
-        Word("second"),
+        Word(parts=[Reading.of_name("second")]),
         LanguageShift("%sb"),
-        LoneDeterminative("{third}"),
+        LoneDeterminative(parts=[Determinative([Reading.of_name("third")])]),
     ]
     expected_tokens = (
-        Word("first", DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
+        Word(DEFAULT_LANGUAGE, DEFAULT_NORMALIZED, parts=[Reading.of_name("first")]),
         LanguageShift(code),
-        Word("second", language, normalized),
+        Word(language, normalized, parts=[Reading.of_name("second")]),
         LanguageShift("%sb"),
-        LoneDeterminative("{third}", Language.AKKADIAN, False),
+        LoneDeterminative(
+            Language.AKKADIAN, False, parts=[Determinative([Reading.of_name("third")])]
+        ),
     )
     line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
@@ -116,34 +116,13 @@ def test_text_line_atf(atf):
     assert line.atf == atf
 
 
-@pytest.mark.parametrize(
-    "word,token,expected",
-    [
-        (Word("mu-bu"), Tabulation("($___$)"), " mu-bu "),
-        (Word("-mu-bu"), Tabulation("($___$)"), " -mu-bu "),
-        (Word("mu-bu-"), Tabulation("($___$)"), " mu-bu- "),
-        (Word("-mu-bu-"), Tabulation("($___$)"), " -mu-bu- "),
-        (Word("-mu-bu-"), LanguageShift("%sux"), " -mu-bu- "),
-    ],
-)
-def test_text_line_atf_partials(word, token, expected):
-    line = TextLine.of_iterable(LINE_NUMBER, [token, word, token,])
-    assert line.atf == f"{line.prefix} {token.value}{expected}{token.value}"
-
-
-def test_text_line_atf_partial_start():
-    word = Word("-mu")
-    line = TextLine.of_iterable(LINE_NUMBER, [word])
-    assert line.atf == f"{line.prefix} {word.value}"
-
-
 def test_text_line_atf_gloss():
     line = TextLine.of_iterable(
         LINE_NUMBER,
         [
             DocumentOrientedGloss.open(),
-            Word("mu"),
-            Word("bu"),
+            Word(parts=[Reading.of_name("mu")]),
+            Word(parts=[Reading.of_name("bu")]),
             DocumentOrientedGloss.close(),
         ],
     )
@@ -155,19 +134,53 @@ def test_text_line_atf_gloss():
     [
         ([Erasure.open(), Erasure.center(), Erasure.close(),], "°\\°",),
         (
-            [Erasure.open(), Word("mu-bu"), Erasure.center(), Erasure.close(),],
+            [
+                Erasure.open(),
+                Word(
+                    parts=[
+                        Reading.of_name("mu"),
+                        Joiner.hyphen(),
+                        Reading.of_name("bu"),
+                    ]
+                ),
+                Erasure.center(),
+                Erasure.close(),
+            ],
             "°mu-bu\\°",
         ),
         (
-            [Erasure.open(), Erasure.center(), Word("mu-bu"), Erasure.close(),],
+            [
+                Erasure.open(),
+                Erasure.center(),
+                Word(
+                    parts=[
+                        Reading.of_name("mu"),
+                        Joiner.hyphen(),
+                        Reading.of_name("bu"),
+                    ]
+                ),
+                Erasure.close(),
+            ],
             "°\\mu-bu°",
         ),
         (
             [
                 Erasure.open(),
-                Word("mu-bu"),
+                Word(
+                    parts=[
+                        Reading.of_name("mu"),
+                        Joiner.hyphen(),
+                        Reading.of_name("bu"),
+                    ]
+                ),
                 Erasure.center(),
-                Word("mu-bu"),
+                Word(
+                    parts=[
+                        Reading.of_name("mu"),
+                        Joiner.hyphen(),
+                        Reading.of_name("bu"),
+                    ]
+                ),
                 Erasure.close(),
             ],
             "°mu-bu\\mu-bu°",
@@ -175,7 +188,7 @@ def test_text_line_atf_gloss():
     ],
 )
 def test_text_line_atf_erasure(word, erasure, expected):
-    word = Word("mu-bu")
+    word = Word(parts=[Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("mu")])
     line = TextLine.of_iterable(LINE_NUMBER, [word, *erasure, word])
     assert line.atf == f"{line.prefix} {word.value} {expected} {word.value}"
 
@@ -197,24 +210,28 @@ def test_update_lemmatization(line):
 
 
 def test_update_lemmatization_text_line():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word("bu")])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word(parts=[Reading.of_name("bu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     expected = TextLine.of_iterable(
-        LINE_NUMBER, [Word("bu", unique_lemma=(WordId("nu I"),))]
+        LINE_NUMBER,
+        [Word(parts=[Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))],
     )
 
     assert line.update_lemmatization(lemmatization) == expected
 
 
 def test_update_lemmatization_incompatible():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word("mu")])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word(parts=[Reading.of_name("mu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lenght():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word("bu"), Word("bu")])
+    line = TextLine.of_iterable(
+        LINE_NUMBER,
+        [Word(parts=[Reading.of_name("bu")]), Word(parts=[Reading.of_name("bu")])],
+    )
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)

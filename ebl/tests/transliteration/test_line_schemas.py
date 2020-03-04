@@ -6,6 +6,13 @@ from ebl.transliteration.application.line_schemas import (
 )
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.dollar_line import (
+    ImageDollarLine,
+    LooseDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
@@ -15,13 +22,6 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     TextLine,
-)
-from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    ScopeContainer,
-    StateDollarLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
@@ -98,10 +98,8 @@ LINES = [
             LineNumberLabel.from_atf("1."),
             [
                 DocumentOrientedGloss.open(),
-                Word("bu", parts=[Reading.of_name("bu")]),
-                LoneDeterminative(
-                    "{d}", parts=[Determinative([Reading.of_name("d")]),],
-                ),
+                Word(parts=[Reading.of_name("bu")]),
+                LoneDeterminative(parts=[Determinative([Reading.of_name("d")]),],),
             ],
         ),
         {
@@ -110,10 +108,8 @@ LINES = [
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
-                    Word("bu", parts=[Reading.of_name("bu")]),
-                    LoneDeterminative(
-                        "{d}", parts=[Determinative([Reading.of_name("d")]),],
-                    ),
+                    Word(parts=[Reading.of_name("bu")]),
+                    LoneDeterminative(parts=[Determinative([Reading.of_name("d")]),],),
                 ]
             ),
         },
