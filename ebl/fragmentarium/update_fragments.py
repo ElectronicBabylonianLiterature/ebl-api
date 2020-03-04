@@ -5,7 +5,6 @@ from typing import Callable, Iterable, List, Sequence
 import attr
 import pydash
 from joblib import Parallel, delayed
-from tqdm import tqdm
 
 from ebl.app import create_context
 from ebl.context import Context
@@ -14,7 +13,7 @@ from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.infrastructure.menoizing_sign_repository import (
@@ -92,8 +91,8 @@ def update_fragments(
     updater = context.get_fragment_updater()
     state = State()
 
-    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        fragment = fragment_repository.query_by_fragment_number(number)
+    for number in numbers:
+        fragment = fragment_repository.query_by_fragment_number(FragmentNumber(number))
         try:
             update_fragment(transliteration_factory, updater, fragment)
             state.add_updated()
@@ -120,8 +119,11 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 2
+    number_of_jobs = 1
     chunks = create_chunks(number_of_jobs)
+
+    print(f"# Updating: {sum(len(chunk) for chunk in chunks)} fragments")
+
     states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
         delayed(update_fragments)(subset, index, create_context_)
         for index, subset in enumerate(chunks)
