@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  updater:
+    image: jlaasonen/ebl-test
+    command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]
+    restart: "no"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+      restart_policy:
+        condition: none
+    logging:
+      driver: "local"
+      options:
+        max-size: "512M"
+        max-file: "2"
