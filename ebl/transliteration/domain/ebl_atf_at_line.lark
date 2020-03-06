@@ -36,13 +36,3 @@ divisions: "m=division " any_str [_WORD_SEPERATOR INT]
 ?composite: composite_start | composite_end
 composite_start: "div " any_str [_WORD_SEPERATOR INT]
 composite_end: "end " any_str
-
-
-
-
-
-
-
-
-
-
