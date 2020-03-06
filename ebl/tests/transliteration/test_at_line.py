@@ -7,16 +7,17 @@ from ebl.transliteration.domain.at_line import (
     ColumnAtLine,
     ObjectAtLine,
     CompositeAtLine,
+    HeadingAtLine,
 )
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel
 from ebl.transliteration.domain.tokens import ValueToken
 
 
-def test_at_line_headings():
-    at_line = ColumnAtLine(ColumnLabel.from_int(1))
+def test_at_line_heading():
+    at_line = HeadingAtLine(1)
 
     assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken("column 1"),)
+    assert at_line.content == (ValueToken("h1"),)
 
 
 def test_at_line_column():
@@ -63,7 +64,7 @@ def test_at_line_surface_no_status():
     assert at_line.surface_label == SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")
 
 
-def test_at_line_surface_raise_error():
+def test_at_line_surface_instantiate_text_with_wrong_surface():
 
     with pytest.raises(ValueError):
         at_line = SurfaceAtLine(
