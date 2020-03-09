@@ -61,7 +61,7 @@ class ValueTokenSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return ValueToken(data["value"])
+        return ValueToken.of(data["value"])
 
 
 class LanguageShiftSchema(Schema):
@@ -72,7 +72,7 @@ class LanguageShiftSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LanguageShift(data["value"])
+        return LanguageShift.of(data["value"])
 
 
 class DocumentOrientedGlossSchema(Schema):
@@ -83,7 +83,7 @@ class DocumentOrientedGlossSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            DocumentOrientedGloss(data["side"])
+            DocumentOrientedGloss.of(data["side"])
             if data["side"]
             else DocumentOrientedGloss.of_value(data["value"])
         )
@@ -97,7 +97,7 @@ class BrokenAwaySchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            BrokenAway(data["side"])
+            BrokenAway.of(data["side"])
             if data["side"]
             else BrokenAway.of_value(data["value"])
         )
@@ -111,7 +111,7 @@ class PerhapsBrokenAwaySchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            PerhapsBrokenAway(data["side"])
+            PerhapsBrokenAway.of(data["side"])
             if data["side"]
             else PerhapsBrokenAway.of_value(data["value"])
         )
@@ -126,7 +126,7 @@ class OmissionOrRemovalSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return OmissionOrRemoval(data["value"])
+        return OmissionOrRemoval(frozenset(), data["value"])
 
 
 class EnclosureSchema(Schema):
@@ -144,7 +144,7 @@ class AccidentalOmissionSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return AccidentalOmission(data["side"])
+        return AccidentalOmission.of(data["side"])
 
 
 class IntentionalOmissionSchema(EnclosureSchema):
@@ -152,7 +152,7 @@ class IntentionalOmissionSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return IntentionalOmission(data["side"])
+        return IntentionalOmission.of(data["side"])
 
 
 class RemovalSchema(EnclosureSchema):
@@ -160,7 +160,7 @@ class RemovalSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Removal(data["side"])
+        return Removal.of(data["side"])
 
 
 class ErasureSchema(EnclosureSchema):
@@ -168,7 +168,7 @@ class ErasureSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Erasure(data["side"])
+        return Erasure.of(data["side"])
 
 
 class LineContinuationSchema(Schema):
@@ -177,7 +177,7 @@ class LineContinuationSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LineContinuation(data["value"])
+        return LineContinuation(frozenset(), data["value"])
 
 
 class UnknownNumberOfSignsSchema(Schema):
@@ -186,7 +186,7 @@ class UnknownNumberOfSignsSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnknownNumberOfSigns()
+        return UnknownNumberOfSigns(frozenset())
 
 
 class TabulationSchema(Schema):
@@ -195,7 +195,7 @@ class TabulationSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Tabulation(data["value"])
+        return Tabulation.of(data["value"])
 
 
 class CommentaryProtocolSchema(Schema):
@@ -204,7 +204,7 @@ class CommentaryProtocolSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return CommentaryProtocol(data["value"])
+        return CommentaryProtocol.of(data["value"])
 
 
 class DividerSchema(Schema):
@@ -228,7 +228,7 @@ class ColumnSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Column(data["number"])
+        return Column.of(data["number"])
 
 
 class UnidentifiedSignSchema(Schema):
@@ -238,7 +238,7 @@ class UnidentifiedSignSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnidentifiedSign(tuple(data["flags"]))
+        return UnidentifiedSign.of(tuple(data["flags"]))
 
 
 class UnclearSignSchema(Schema):
@@ -248,7 +248,7 @@ class UnclearSignSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnclearSign(tuple(data["flags"]))
+        return UnclearSign.of(tuple(data["flags"]))
 
 
 class JoinerSchema(Schema):
@@ -258,7 +258,7 @@ class JoinerSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Joiner(data["enum_value"])
+        return Joiner(frozenset(), data["enum_value"])
 
 
 class InWordNewlineSchema(Schema):
@@ -267,7 +267,7 @@ class InWordNewlineSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return InWordNewline()
+        return InWordNewline(frozenset())
 
 
 def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
@@ -286,7 +286,7 @@ def _load_sign_none(sign: None) -> None:
 
 @_load_sign.register
 def _load_sign_str(sign: str) -> Token:
-    return ValueToken(sign)
+    return ValueToken.of(sign)
 
 
 class NamedSignSchema(Schema):
@@ -310,7 +310,7 @@ class ReadingSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Reading.of(
-            data["name_parts"] or (ValueToken(data["name"]),),
+            data["name_parts"] or (ValueToken.of(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -329,7 +329,7 @@ class LogogramSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Logogram.of(
-            data["name_parts"] or (ValueToken(data["name"]),),
+            data["name_parts"] or (ValueToken.of(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -345,7 +345,7 @@ class NumberSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
-            data["name_parts"] or (ValueToken(data["name"]),),
+            data["name_parts"] or (ValueToken.of(data["name"]),),
             data["modifiers"],
             data["flags"],
             data["sign"],
@@ -366,13 +366,13 @@ class WordSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Word(
+        return Word.of(
+            load_tokens(data["parts"]),
             data["language"],
             data["normalized"],
             tuple(data["unique_lemma"]),
             data.get("erasure"),
             data.get("alignment"),
-            parts=load_tokens(data["parts"]),
         )
 
     @post_dump
@@ -398,13 +398,13 @@ class LoneDeterminativeSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LoneDeterminative(
+        return LoneDeterminative.of(
+            load_tokens(data["parts"]),
             data["language"],
             data["normalized"],
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
-            parts=load_tokens(data["parts"]),
         )
 
     @post_dump
@@ -421,7 +421,7 @@ class VariantSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Variant(load_tokens(data["tokens"]))
+        return Variant.of(*load_tokens(data["tokens"]))
 
     @post_dump
     def dump_token(self, data, **kwargs):
@@ -449,7 +449,7 @@ class CompoundGraphemeSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return CompoundGrapheme(data["value"])
+        return CompoundGrapheme.of(data["value"])
 
 
 class GlossSchema(Schema):
@@ -474,7 +474,7 @@ class DeterminativeSchema(GlossSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Determinative(load_tokens(data["parts"]))
+        return Determinative.of(load_tokens(data["parts"]))
 
 
 class PhoneticGlossSchema(GlossSchema):
@@ -482,7 +482,7 @@ class PhoneticGlossSchema(GlossSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return PhoneticGloss(load_tokens(data["parts"]))
+        return PhoneticGloss.of(load_tokens(data["parts"]))
 
 
 class LinguisticGlossSchema(GlossSchema):
@@ -490,7 +490,7 @@ class LinguisticGlossSchema(GlossSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LinguisticGloss(load_tokens(data["parts"]))
+        return LinguisticGloss.of(load_tokens(data["parts"]))
 
 
 _schemas: Mapping[str, Type[Schema]] = {

@@ -197,9 +197,8 @@ def test_updating_alignment(
                                 line=TextLine(
                                     "1.",
                                     (
-                                        Word(
-                                            alignment=0,
-                                            parts=[
+                                        Word.of(
+                                            [
                                                 Reading.of_name("ku"),
                                                 BrokenAway.close(),
                                                 Joiner.hyphen(),
@@ -207,6 +206,7 @@ def test_updating_alignment(
                                                 Joiner.hyphen(),
                                                 Reading.of_name("ši"),
                                             ],
+                                            alignment=0,
                                         ),
                                     ),
                                 ),
@@ -359,15 +359,11 @@ def test_merging_lines(
     text_line = TextLine(
         "1.",
         (
-            Word(
-                parts=[Reading.of_name("kur")],
-                unique_lemma=(WordId("word1"),),
-                alignment=0,
+            Word.of(
+                [Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0,
             ),
-            Word(
-                parts=[Reading.of_name("ra")],
-                unique_lemma=(WordId("word2"),),
-                alignment=1,
+            Word.of(
+                [Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1,
             ),
         ),
     )
@@ -376,8 +372,7 @@ def test_merging_lines(
         number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),),
     )
     new_text_line = TextLine(
-        "1.",
-        (Word(parts=[Reading.of_name("kur")]), Word(parts=[Reading.of_name("pa")])),
+        "1.", (Word.of([Reading.of_name("kur")]), Word.of([Reading.of_name("pa")])),
     )
     new_line = Line(
         number,

@@ -92,15 +92,15 @@ class ErasureVisitor(TokenVisitor):
 class TreeToSign(Transformer):
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
-        return UnidentifiedSign(flags)
+        return UnidentifiedSign.of(flags)
 
     @v_args(inline=True)
     def ebl_atf_text_line__unclear_sign(self, flags):
-        return UnclearSign(flags)
+        return UnclearSign.of(flags)
 
     @v_args(inline=True)
     def ebl_atf_text_line__unknown_number_of_signs(self, _):
-        return UnknownNumberOfSigns()
+        return UnknownNumberOfSigns(frozenset())
 
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, symbol):
@@ -116,7 +116,7 @@ class TreeToSign(Transformer):
 
     @v_args()
     def ebl_atf_text_line__value_name_part(self, children):
-        return ValueToken("".join(children))
+        return ValueToken.of("".join(children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__logogram(self, name, sub_index, modifiers, flags, sign=None):
@@ -132,7 +132,7 @@ class TreeToSign(Transformer):
 
     @v_args()
     def ebl_atf_text_line__logogram_name_part(self, children):
-        return ValueToken("".join(children))
+        return ValueToken.of("".join(children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__number(self, number, modifiers, flags, sign=None):
@@ -140,11 +140,11 @@ class TreeToSign(Transformer):
 
     @v_args()
     def ebl_atf_text_line__number_name_head(self, children):
-        return ValueToken("".join(children))
+        return ValueToken.of("".join(children))
 
     @v_args()
     def ebl_atf_text_line__number_name_part(self, children):
-        return ValueToken("".join(children))
+        return ValueToken.of("".join(children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__sub_index(self, sub_index=""):
@@ -162,7 +162,7 @@ class TreeToSign(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__compound_grapheme(self, name):
-        return CompoundGrapheme(name.value)
+        return CompoundGrapheme.of(name.value)
 
     def ebl_atf_text_line__close_broken_away(self, _):
         return BrokenAway.close()
@@ -199,46 +199,34 @@ class TreeToWord(TreeToSign):
     @staticmethod
     def _create_word(word_class: Type, children: Sequence):
         tokens = TreeToWord._children_to_tokens(children)
-        return word_class(parts=tokens)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__unidentified_sign(self, flags):
-        return UnidentifiedSign(flags)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__unclear_sign(self, flags):
-        return UnclearSign(flags)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__unknown_number_of_signs(self, _):
-        return UnknownNumberOfSigns()
+        return word_class.of(tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, symbol):
-        return Joiner(atf.Joiner(str(symbol)))
+        return Joiner(frozenset(), atf.Joiner(str(symbol)))
 
     @v_args(inline=True)
     def ebl_atf_text_line__in_word_newline(self, _):
-        return InWordNewline()
+        return InWordNewline(frozenset())
 
     def ebl_atf_text_line__variant(self, children):
         tokens = self._children_to_tokens(children)
-        return Variant(tuple(tokens))
+        return Variant.of(*tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__determinative(self, tree):
         tokens = self._children_to_tokens(tree.children)
-        return Determinative(tokens)
+        return Determinative.of(tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__phonetic_gloss(self, tree):
         tokens = self._children_to_tokens(tree.children)
-        return PhoneticGloss(tokens)
+        return PhoneticGloss.of(tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__linguistic_gloss(self, tree):
         tokens = self._children_to_tokens(tree.children)
-        return LinguisticGloss(tokens)
+        return LinguisticGloss.of(tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__inline_erasure(self, erased, over_erased):
@@ -265,7 +253,7 @@ class TreeToWord(TreeToSign):
             )
             .map_(
                 lambda token: (
-                    ValueToken(token.value) if isinstance(token, Token) else token
+                    ValueToken.of(token.value) if isinstance(token, Token) else token
                 )
             )
             .value()
@@ -278,7 +266,7 @@ class TreeToLine(TreeToWord):
 
     @v_args(inline=True)
     def control_line(self, prefix, content):
-        return ControlLine.of_single(prefix, ValueToken(content))
+        return ControlLine.of_single(prefix, ValueToken.of(content))
 
     @v_args(inline=True)
     def text_line(self, prefix, content):
@@ -292,7 +280,7 @@ class TreeToLine(TreeToWord):
             )
             .map_(
                 lambda token: (
-                    ValueToken(str(token)) if isinstance(token, Token) else token
+                    ValueToken.of(str(token)) if isinstance(token, Token) else token
                 )
             )
             .value()
@@ -308,18 +296,18 @@ class TreeToLine(TreeToWord):
 
     @v_args(inline=True)
     def ebl_atf_text_line__language_shift(self, value):
-        return LanguageShift(str(value))
+        return LanguageShift.of(str(value))
 
     def ebl_atf_text_line__line_continuation(self, _):
-        return LineContinuation("→")
+        return LineContinuation.of("→")
 
     @v_args(inline=True)
     def ebl_atf_text_line__tabulation(self, value):
-        return Tabulation(value)
+        return Tabulation.of(value)
 
     @v_args(inline=True)
     def ebl_atf_text_line__commentary_protocol(self, value):
-        return CommentaryProtocol(value)
+        return CommentaryProtocol.of(value)
 
     @v_args(inline=True)
     def ebl_atf_text_line__divider(self, value, modifiers, flags):
@@ -327,7 +315,7 @@ class TreeToLine(TreeToWord):
 
     @v_args(inline=True)
     def ebl_atf_text_line__column(self, number):
-        return Column(number and int(number))
+        return Column.of(number and int(number))
 
     @v_args(inline=True)
     def ebl_atf_text_line__divider_variant(self, first, second):

@@ -38,7 +38,7 @@ from ebl.transliteration.domain.tokens import Joiner
 @pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT,])
 def test_enclosure(enclosure_class, type_, sides, side):
     value = sides[side]
-    enclosure = enclosure_class(side)
+    enclosure = enclosure_class.of(side)
 
     assert enclosure.value == value
     assert enclosure.get_key() == f"{type_}⁝{value}"
@@ -57,7 +57,7 @@ def test_enclosure(enclosure_class, type_, sides, side):
 
 def test_determinative():
     parts = [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")]
-    determinative = Determinative(parts)
+    determinative = Determinative.of(parts)
 
     expected_value = f"{{{''.join(part.value for part in parts)}}}"
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
@@ -76,7 +76,7 @@ def test_determinative():
 
 def test_phonetic_gloss():
     parts = [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")]
-    gloss = PhoneticGloss(parts)
+    gloss = PhoneticGloss.of(parts)
 
     expected_value = f"{{+{''.join(part.value for part in parts)}}}"
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
@@ -95,7 +95,7 @@ def test_phonetic_gloss():
 
 def test_linguistic_gloss():
     parts = [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")]
-    gloss = LinguisticGloss(parts)
+    gloss = LinguisticGloss.of(parts)
 
     expected_value = f"{{{{{''.join(part.value for part in parts)}}}}}"
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"

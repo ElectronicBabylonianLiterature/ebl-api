@@ -20,105 +20,118 @@ from ebl.transliteration.domain.word_tokens import Word
         (
             EmptyLine(),
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-        ),
-        (
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-            ControlLine.of_single("$", ValueToken(" single ruling")),
-            ControlLine.of_single("$", ValueToken(" single ruling")),
-        ),
-        (
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("2."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("2."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-        ),
-        (
-            TextLine.of_iterable(LineNumberLabel.from_atf("1."), [Word(parts=[])]),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
         ),
         (
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."),
-                [Word(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],)],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("bu")])],
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."),
-                [Word(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],)],
-            ),
+            ControlLine.of_single("$", ValueToken.of(" single ruling")),
+            ControlLine.of_single("$", ValueToken.of(" single ruling")),
         ),
         (
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."),
-                [Word(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],)],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [LanguageShift("%sux")]
+                LineNumberLabel.from_atf("2."), [Word.of([Reading.of_name("bu")])],
             ),
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [LanguageShift("%sux")]
+                LineNumberLabel.from_atf("2."), [Word.of([Reading.of_name("bu")])],
             ),
         ),
         (
+            TextLine.of_iterable(LineNumberLabel.from_atf("1."), [Word.of([])]),
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."),
-                [Word(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],)],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
             TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("mu")])],
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [Word(parts=[Reading.of_name("mu")])],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
         ),
         (
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
+                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
+                    )
+                ],
+            ),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
+            ),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."),
+                [
+                    Word.of(
+                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
+                    )
+                ],
+            ),
+        ),
+        (
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."),
+                [
+                    Word.of(
+                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
+                    )
+                ],
+            ),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."), [LanguageShift.of("%sux")]
+            ),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."), [LanguageShift.of("%sux")]
+            ),
+        ),
+        (
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."),
+                [
+                    Word.of(
+                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
+                    )
+                ],
+            ),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("mu")])],
+            ),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("mu")])],
+            ),
+        ),
+        (
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."),
+                [
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("mu I"),), parts=[Reading.of_name("mu")],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
                 ],
             ),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
-                [
-                    Word(parts=[Reading.of_name("bu")]),
-                    Word(parts=[Reading.of_name("bu")]),
-                ],
+                [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")]),],
             ),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
                 ],
@@ -128,10 +141,10 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
                 ],
@@ -139,26 +152,28 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(parts=[Reading.of_name("bu")]),
-                    Word(parts=[Reading.of_name("mu")]),
-                    Word(parts=[Reading.of_name("bu")]),
+                    Word.of([Reading.of_name("bu")]),
+                    Word.of([Reading.of_name("mu")]),
+                    Word.of([Reading.of_name("bu")]),
                 ],
             ),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
-                    Word(parts=[Reading.of_name("mu")]),
-                    Word(
+                    Word.of([Reading.of_name("mu")]),
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
                 ],
             ),
         ),
         (
-            TextLine.of_iterable(LineNumberLabel.from_atf("1."), [ValueToken("{("),]),
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1."), [ValueToken.of("{("),]
+            ),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."), [DocumentOrientedGloss.open(),]
             ),
@@ -170,7 +185,7 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),),
                         parts=[
                             PerhapsBrokenAway.open(),
@@ -180,7 +195,7 @@ from ebl.transliteration.domain.word_tokens import Word
                             PerhapsBrokenAway.close(),
                         ],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("bu I"),),
                         parts=[
                             BrokenAway.open(),
@@ -188,7 +203,7 @@ from ebl.transliteration.domain.word_tokens import Word
                             BrokenAway.close(),
                         ],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("kunu I"),),
                         alignment=4,
                         parts=[
@@ -206,7 +221,7 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         parts=[
                             PerhapsBrokenAway.open(),
                             Reading.of_name(
@@ -215,14 +230,14 @@ from ebl.transliteration.domain.word_tokens import Word
                             PerhapsBrokenAway.close(),
                         ],
                     ),
-                    Word(
+                    Word.of(
                         parts=[
                             BrokenAway.open(),
                             Reading.of_name("bu"),
                             BrokenAway.close(),
                         ],
                     ),
-                    Word(
+                    Word.of(
                         parts=[
                             BrokenAway.open(),
                             PerhapsBrokenAway.open(),
@@ -240,7 +255,7 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),),
                         parts=[
                             PerhapsBrokenAway.open(),
@@ -250,7 +265,7 @@ from ebl.transliteration.domain.word_tokens import Word
                             PerhapsBrokenAway.close(),
                         ],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("bu I"),),
                         parts=[
                             BrokenAway.open(),
@@ -258,7 +273,7 @@ from ebl.transliteration.domain.word_tokens import Word
                             BrokenAway.close(),
                         ],
                     ),
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("kunu I"),),
                         alignment=4,
                         parts=[
@@ -280,28 +295,19 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
-                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")],
-                    ),
-                    Word(
-                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")],
-                    ),
+                    Word.of([Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)),
+                    Word.of([Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)),
                 ],
             ),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
-                [
-                    Word(parts=[Reading.of_name("mu")]),
-                    Word(parts=[Reading.of_name("nu")]),
-                ],
+                [Word.of([Reading.of_name("mu")]), Word.of([Reading.of_name("nu")]),],
             ),
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(parts=[Reading.of_name("mu")]),
-                    Word(
-                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")],
-                    ),
+                    Word.of([Reading.of_name("mu")]),
+                    Word.of([Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)),
                 ],
             ),
         ),

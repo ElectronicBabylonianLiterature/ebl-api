@@ -1,7 +1,7 @@
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
     ImageDollarLine,
+    LooseDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
@@ -14,7 +14,7 @@ def test_loose_dollar_line():
     loose_line = LooseDollarLine(text)
 
     assert loose_line.prefix == "$"
-    assert loose_line.content == (ValueToken(f" ({text})"),)
+    assert loose_line.content == (ValueToken.of(f" ({text})"),)
     assert loose_line.text == text
     assert loose_line.atf == f"$ ({text})"
 
@@ -23,7 +23,7 @@ def test_image_dollar_line():
     image = ImageDollarLine("1", "a", "great")
 
     assert image.prefix == "$"
-    assert image.content == (ValueToken(" (image 1a = great)"),)
+    assert image.content == (ValueToken.of(" (image 1a = great)"),)
     assert image.number == "1"
     assert image.letter == "a"
     assert image.text == "great"
@@ -34,7 +34,7 @@ def test_ruling_dollar_line():
     ruling_line = RulingDollarLine(atf.Ruling.DOUBLE)
 
     assert ruling_line.prefix == "$"
-    assert ruling_line.content == (ValueToken(" double ruling"),)
+    assert ruling_line.content == (ValueToken.of(" double ruling"),)
     assert ruling_line.number == atf.Ruling.DOUBLE
     assert ruling_line.status is None
     assert ruling_line.atf == "$ double ruling"
@@ -46,7 +46,7 @@ def test_ruling_dollar_line_status():
     )
 
     assert ruling_line.prefix == "$"
-    assert ruling_line.content == (ValueToken(" double ruling !"),)
+    assert ruling_line.content == (ValueToken.of(" double ruling !"),)
     assert ruling_line.number == atf.Ruling.DOUBLE
     assert ruling_line.status == atf.DollarStatus.EMENDED_NOT_COLLATED
     assert ruling_line.atf == "$ double ruling !"
@@ -59,7 +59,7 @@ def test_strict_dollar_line_with_none():
     assert actual.prefix == "$"
     assert actual.scope.content == atf.Object.OBJECT
     assert actual.scope.text == "what"
-    assert actual.content == (ValueToken(" several object what"),)
+    assert actual.content == (ValueToken.of(" several object what"),)
     assert actual.atf == "$ several object what"
 
 
@@ -69,7 +69,7 @@ def test_state_dollar_line():
         atf.Extent.SEVERAL,
         ScopeContainer(atf.Scope.COLUMNS, ""),
         atf.State.BLANK,
-        atf.Status.UNCERTAIN,
+        atf.DollarStatus.UNCERTAIN,
     )
 
     assert actual.prefix == "$"
@@ -78,15 +78,19 @@ def test_state_dollar_line():
     assert actual.scope.text == ""
     assert actual.extent == atf.Extent.SEVERAL
     assert actual.state == atf.State.BLANK
-    assert actual.status == atf.Status.UNCERTAIN
-    assert actual.content == (ValueToken(" at least several columns blank ?"),)
+    assert actual.status == atf.DollarStatus.UNCERTAIN
+    assert actual.content == (ValueToken.of(" at least several columns blank ?"),)
     assert actual.atf == "$ at least several columns blank ?"
 
 
 def test_state_dollar_line_content():
     scope = ScopeContainer(atf.Surface.OBVERSE)
     actual = StateDollarLine(
-        atf.Qualification.AT_LEAST, 1, scope, atf.State.BLANK, atf.Status.UNCERTAIN,
+        atf.Qualification.AT_LEAST,
+        1,
+        scope,
+        atf.State.BLANK,
+        atf.DollarStatus.UNCERTAIN,
     )
 
-    assert actual.content == (ValueToken(" at least 1 obverse blank ?"),)
+    assert actual.content == (ValueToken.of(" at least 1 obverse blank ?"),)

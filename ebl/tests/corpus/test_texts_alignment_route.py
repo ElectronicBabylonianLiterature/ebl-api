@@ -60,9 +60,8 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                 line=TextLine(
                                     "1.",
                                     (
-                                        Word(
-                                            alignment=0,
-                                            parts=[
+                                        Word.of(
+                                            [
                                                 Reading.of_name("ku"),
                                                 BrokenAway.close(),
                                                 Joiner.hyphen(),
@@ -70,6 +69,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                                 Joiner.hyphen(),
                                                 Reading.of_name("ši"),
                                             ],
+                                            alignment=0,
                                         ),
                                     ),
                                 ),

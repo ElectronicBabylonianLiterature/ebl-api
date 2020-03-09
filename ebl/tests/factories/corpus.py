@@ -79,8 +79,8 @@ class ManuscriptLineFactory(factory.Factory):
     line = TextLine(
         "1.",
         (
-            Word(
-                parts=[
+            Word.of(
+                [
                     Reading.of_name("ku"),
                     BrokenAway.close(),
                     Joiner.hyphen(),

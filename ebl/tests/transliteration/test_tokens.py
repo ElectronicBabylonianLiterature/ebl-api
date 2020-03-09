@@ -28,17 +28,17 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 TOKENS = [
-    UnknownNumberOfSigns(),
-    LanguageShift("%sux"),
+    UnknownNumberOfSigns(frozenset()),
+    LanguageShift.of("%sux"),
     DocumentOrientedGloss.open(),
 ]
 
 
 def test_value_token():
     value = "value"
-    token = ValueToken(value)
-    equal = ValueToken(value)
-    other = ValueToken("anothervalue")
+    token = ValueToken.of(value)
+    equal = ValueToken.of(value)
+    other = ValueToken.of("anothervalue")
 
     assert token.value == value
     assert token.get_key() == f"ValueToken⁝{value}"
@@ -65,9 +65,9 @@ def test_value_token():
     ],
 )
 def test_language_shift(value, expected_language, normalized):
-    shift = LanguageShift(value)
-    equal = LanguageShift(value)
-    other = ValueToken(r"%bar")
+    shift = LanguageShift.of(value)
+    equal = LanguageShift.of(value)
+    other = ValueToken.of(r"%bar")
 
     assert shift.value == value
     assert shift.get_key() == f"LanguageShift⁝{value}"
@@ -89,7 +89,7 @@ def test_language_shift(value, expected_language, normalized):
     assert shift != other
     assert hash(shift) != hash(other)
 
-    assert shift != ValueToken(value)
+    assert shift != ValueToken.of(value)
 
 
 @pytest.mark.parametrize("token", TOKENS)
@@ -140,7 +140,7 @@ def test_merge(old, new):
 
 
 def test_unknown_number_of_signs():
-    unknown_number_of_signs = UnknownNumberOfSigns()
+    unknown_number_of_signs = UnknownNumberOfSigns(frozenset())
 
     expected_value = "..."
     assert unknown_number_of_signs.value == expected_value
@@ -156,7 +156,7 @@ def test_unknown_number_of_signs():
 
 def test_tabulation():
     value = "($___$)"
-    tabulation = Tabulation(value)
+    tabulation = Tabulation.of(value)
 
     assert tabulation.value == value
     assert tabulation.get_key() == f"Tabulation⁝{value}"
@@ -169,7 +169,7 @@ def test_tabulation():
 @pytest.mark.parametrize("protocol_enum", atf.CommentaryProtocol)
 def test_commentary_protocol(protocol_enum):
     value = protocol_enum.value
-    protocol = CommentaryProtocol(value)
+    protocol = CommentaryProtocol.of(value)
 
     assert protocol.value == value
     assert protocol.get_key() == f"CommentaryProtocol⁝{value}"
@@ -181,7 +181,7 @@ def test_commentary_protocol(protocol_enum):
 
 
 def test_column():
-    column = Column()
+    column = Column.of()
 
     expected_value = "&"
     assert column.value == expected_value
@@ -197,7 +197,7 @@ def test_column():
 
 
 def test_column_with_number():
-    column = Column(1)
+    column = Column.of(1)
 
     expected_value = "&1"
     assert column.value == expected_value
@@ -214,7 +214,7 @@ def test_column_with_number():
 
 def test_invalid_column():
     with pytest.raises(ValueError):
-        Column(-1)
+        Column.of(-1)
 
 
 def test_variant():
@@ -257,7 +257,7 @@ def test_joiner(joiner, expected_value):
 
 
 def test_in_word_new_line():
-    newline = InWordNewline()
+    newline = InWordNewline(frozenset())
 
     expected_value = ";"
     assert newline.value == expected_value
@@ -273,7 +273,7 @@ def test_in_word_new_line():
 
 def test_line_continuation():
     value = "→"
-    continuation = LineContinuation(value)
+    continuation = LineContinuation(frozenset(), value)
 
     assert continuation.value == value
     assert continuation.get_key() == f"LineContinuation⁝{value}"
