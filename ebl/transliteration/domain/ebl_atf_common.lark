@@ -1,16 +1,23 @@
+%import common.DIGIT
 %import common.INT
+%import common.LCASE_LETTER
 
-OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+seal : "seal "  INT
 
-SURFACE : "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
-
-seal : "seal" _WORD_SEPERATOR INT
-
-any_str.-2 : /./+
+free_text.-2 : /./+ " "*
 
 _WORD_SEPERATOR: " "
 
-LOWER_CASE_LETTER : /[a-z]/
+?object: OBJECT | generic_object | fragment
+OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+fragment: "fragment " free_text
+generic_object : "object " free_text
+
+?surface: SURFACE | generic_surface | face | edge
+SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom" | "face" | "edge"
+face: "face " LCASE_LETTER
+edge: "edge " LCASE_LETTER
+generic_surface : "surface " free_text
 
 
 

@@ -1,31 +1,20 @@
-%import .ebl_atf_common (seal, OBJECT, SURFACE, any_str, _WORD_SEPERATOR, LOWER_CASE_LETTER)
-%import common.INT
+%import .ebl_atf_common (INT, LCASE_LETTER)
+%import .ebl_atf_common (free_text)
+%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
+%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (seal, OBJECT, SURFACE, free_text, _WORD_SEPERATOR)
 
 ?at_line : "@" value
 
 ?value :  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
 
-test: "test"
-
 STATUS:  "'" | "?" | "!" | "*"
 
 statuses: STATUS*
 
-surface_with_status : _surface _WORD_SEPERATOR? statuses
+surface_with_status : surface _WORD_SEPERATOR? statuses
 
-_surface : SURFACE | generic_surface | face | edge
-face: "face" _WORD_SEPERATOR LOWER_CASE_LETTER
-edge: "edge" _WORD_SEPERATOR LOWER_CASE_LETTER
-generic_surface : SURFACE_GENERIC _WORD_SEPERATOR any_str
-SURFACE_GENERIC : "surface"
-
-object_with_status : _object _WORD_SEPERATOR? statuses
-_object : OBJECT | generic_object | fragment
-fragment: "fragment" _WORD_SEPERATOR any_str
-generic_object : OBJECT_GENERIC _WORD_SEPERATOR any_str
-OBJECT_GENERIC : "object"
-
-
+object_with_status : object _WORD_SEPERATOR? statuses
 
 column : "column " INT _WORD_SEPERATOR? statuses
 
@@ -33,8 +22,8 @@ heading: "h"INT
 
 !discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
 
-divisions: "m=division " any_str [_WORD_SEPERATOR INT]
+divisions: "m=division " free_text [_WORD_SEPERATOR INT]
 
 ?composite: composite_start | composite_end
-composite_start: "div " any_str [_WORD_SEPERATOR INT]
-composite_end: "end " any_str
+composite_start: "div " free_text [_WORD_SEPERATOR INT]
+composite_end: "end " free_text

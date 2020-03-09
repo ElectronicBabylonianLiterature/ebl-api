@@ -468,7 +468,7 @@ class TreeDollarSignToTokens(TreeToLine):
 
 
 class TreeAtSignToTokens(TreeDollarSignToTokens):
-    def ebl_atf_at_line__any_str(self, content):
+    def ebl_atf_at_line__free_text(self, content):
         return "".join(content).rstrip(" ")
 
     @v_args(inline=True)
@@ -476,7 +476,7 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
         return int(number)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__LOWER_CASE_LETTER(self, letter):
+    def ebl_atf_at_line__LCASE_LETTER(self, letter):
         return str(letter)
 
     @v_args(inline=True)
@@ -504,7 +504,7 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
         return (atf.Object(object),)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__generic_object(self, object, text):
+    def ebl_atf_at_line__generic_object(self, text):
         return (
             atf.Object.OBJECT,
             str(text),
@@ -519,7 +519,7 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
         return (atf.Surface.from_atf(str(surface)),)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__generic_surface(self, surface, text):
+    def ebl_atf_at_line__generic_surface(self, text):
         return atf.Surface.SURFACE, str(text)
 
     @v_args(inline=True)
