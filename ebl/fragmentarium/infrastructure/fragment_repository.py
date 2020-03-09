@@ -69,10 +69,10 @@ class MongoFragmentRepository(FragmentRepository):
 
         return self._map_fragments(cursor)
 
-    def query_transliterated(self):
-        cursor = self._collection.find_many(HAS_TRANSLITERATION)
+    def query_transliterated_numbers(self):
+        cursor = self._collection.find_many(HAS_TRANSLITERATION, projection=["_id"])
 
-        return self._map_fragments(cursor)
+        return [fragment["_id"] for fragment in cursor]
 
     def query_by_transliterated_sorted_by_date(self):
         cursor = self._collection.aggregate(aggregate_latest())

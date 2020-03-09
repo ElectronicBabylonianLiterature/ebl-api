@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  updater:
+    image: jlaasonen/ebl-test
+    environment:
+      - AUTH0_AUDIENCE
+      - AUTH0_ISSUER
+      - AUTH0_PEM
+      - MONGODB_URI
+      - NEW_RELIC_LICENSE_KEY
+      - NEW_RELIC_CONFIG_FILE=newrelic.ini
+      - SENTRY_DSN
+      - SENTRY_ENVIRONMENT=production
+    command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]
+    restart: "no"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+      restart_policy:
+        condition: none
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "512M"
+        max-file: "2"

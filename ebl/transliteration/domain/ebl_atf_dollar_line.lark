@@ -24,7 +24,7 @@ EXTENT: "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle 
 range.2: INT " "? "-" " "? INT
 
 ?scope: SCOPE | object | surface
-SCOPE:  "column" | "columns" | "lines" | "line" | "lines" | "case" | "cases" | "surface" | "side" | "excerpt"
+SCOPE: "columns" | "column" | "lines" | "line" | "cases" | "case" | "surface" | "side" | "excerpt"
 
 
 STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
@@ -32,9 +32,8 @@ STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 
 DOLLAR_STATUS: "!?" | "*" | "?" | "!"
 
-
-ruling : RULING_NUMBER " ruling" [" " DOLLAR_STATUS]
+ruling : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
 RULING_NUMBER : "single" | "double" | "triple"
 
 
-image.1 : "(" " "? "image " DIGIT [LCASE_LETTER] " = " free_text ")"
+image.1 : "(" " "? "image " INT [LCASE_LETTER] " = " free_text ")"

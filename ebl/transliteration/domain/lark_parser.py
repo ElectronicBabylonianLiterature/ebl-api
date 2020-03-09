@@ -210,9 +210,7 @@ class TreeToWord(TreeToSign):
     @staticmethod
     def _create_word(word_class: Type, children: Sequence):
         tokens = TreeToWord._children_to_tokens(children)
-
-        value = "".join(token.value for token in tokens)
-        return word_class(value, parts=tokens)
+        return word_class(parts=tokens)
 
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
@@ -416,7 +414,7 @@ class TreeDollarSignToTokens(TreeToLine):
         return ScopeContainer(atf.Surface.FACE, str(text))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__edge(self, text):
+    def ebl_atf_dollar_line__edge(self, text=""):
         return ScopeContainer(atf.Surface.EDGE, str(text))
 
     @v_args(inline=True)

@@ -9,7 +9,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "0.30.1"
+ATF_PARSER_VERSION = "0.32.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -143,7 +143,6 @@ class Qualification(Enum):
 
 
 class Extent(Enum):
-    N = "n"
     SEVERAL = "several"
     SOME = "some"
     REST_OF = "rest of"
@@ -161,6 +160,7 @@ class State(Enum):
     TRACES = "traces"
     OMITTED = "omitted"
     CONTINUES = "continues"
+    EFFACED = "effaced"
 
 
 class Discourse(Enum):

@@ -12,12 +12,18 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.atf import Atf, Flag
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    Erasure,
+    PerhapsBrokenAway,
+)
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
 COLLECTION = "fragments"
@@ -30,10 +36,24 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
             TextLine(
                 "1'.",
                 (
-                    Word("GI₆", unique_lemma=(WordId("ginâ I"),)),
-                    Word("ana", unique_lemma=(WordId("ana II"),)),
-                    Word("ana", unique_lemma=(WordId("ana II"),)),
-                    Word("u₄-šu", unique_lemma=(WordId("ūsu I"),)),
+                    Word(
+                        parts=[Logogram.of_name("GI", 6)],
+                        unique_lemma=(WordId("ginâ I"),),
+                    ),
+                    Word(
+                        parts=[Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)
+                    ),
+                    Word(
+                        parts=[Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)
+                    ),
+                    Word(
+                        parts=[
+                            Reading.of_name("u", 4),
+                            Joiner.hyphen(),
+                            Reading.of_name("šu"),
+                        ],
+                        unique_lemma=(WordId("ūsu I"),),
+                    ),
                 ),
             ),
         )
@@ -158,7 +178,13 @@ def test_statistics(database, fragment_repository):
                 FragmentFactory.build(
                     text=Text(
                         (
-                            TextLine("1.", (Word("first"), Word("line"))),
+                            TextLine(
+                                "1.",
+                                (
+                                    Word(parts=[Reading.of_name("first")]),
+                                    Word(parts=[Reading.of_name("line")]),
+                                ),
+                            ),
                             ControlLine("$", (ValueToken("ignore"),)),
                             EmptyLine(),
                         )
@@ -170,10 +196,10 @@ def test_statistics(database, fragment_repository):
                     text=Text(
                         (
                             ControlLine("$", (ValueToken("ignore"),)),
-                            TextLine("1.", (Word("second"),)),
-                            TextLine("1.", (Word("third"),)),
+                            TextLine("1.", (Word(parts=[Reading.of_name("second")]),)),
+                            TextLine("1.", (Word(parts=[Reading.of_name("third")]),)),
                             ControlLine("$", (ValueToken("ignore"),)),
-                            TextLine("1.", (Word("fourth"),)),
+                            TextLine("1.", (Word(parts=[Reading.of_name("fourth")]),)),
                         )
                     )
                 )
@@ -254,7 +280,9 @@ def test_find_transliterated(database, fragment_repository):
         [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build()),]
     )
 
-    assert fragment_repository.query_transliterated() == [transliterated_fragment]
+    assert fragment_repository.query_transliterated_numbers() == [
+        transliterated_fragment.number
+    ]
 
 
 def test_find_lemmas(fragment_repository):
@@ -273,14 +301,29 @@ def test_find_lemmas_multiple(fragment_repository):
     assert fragment_repository.query_lemmas("ana") == [["ana II"], ["ana I"]]
 
 
-@pytest.mark.parametrize("value", ["[(a[(n)]a#*?!)]", "°\\ana°"])
-def test_find_lemmas_ignores_in_value(value, fragment_repository):
+@pytest.mark.parametrize(
+    "parts",
+    [
+        [
+            BrokenAway.open(),
+            PerhapsBrokenAway.open(),
+            Reading.of(
+                [ValueToken("a"), ValueToken("n"), ValueToken("a")],
+                flags=[Flag.DAMAGE, Flag.COLLATION, Flag.UNCERTAIN, Flag.CORRECTION],
+            ),
+            PerhapsBrokenAway.close(),
+            BrokenAway.close(),
+        ],
+        [Erasure.open(), Erasure.center(), Reading.of_name("ana"), Erasure.close()],
+    ],
+)
+def test_find_lemmas_ignores_in_value(parts, fragment_repository):
     fragment = FragmentFactory.build(
         text=Text.of_iterable(
             [
                 TextLine.of_iterable(
                     LineNumberLabel.from_atf("1'."),
-                    [Word(value, unique_lemma=(WordId("ana I"),))],
+                    [Word(parts=parts, unique_lemma=(WordId("ana I"),))],
                 )
             ]
         ),

@@ -5,12 +5,15 @@ from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
     LineNumberLabel,
     SurfaceLabel,
 )
 from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
 MANUSCRIPT_ID = 1
@@ -18,14 +21,20 @@ LABELS = (ColumnLabel.from_int(1),)
 TEXT_LINE = TextLine(
     "1.",
     (
-        Word("kur", unique_lemma=(WordId("word1"),), alignment=0),
-        Word("ra", unique_lemma=(WordId("word2"),), alignment=1),
+        Word(
+            parts=[Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0
+        ),
+        Word(
+            parts=[Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1
+        ),
     ),
 )
 
 NEW_MANUSCRIPT_ID = 2
 NEW_LABELS = (SurfaceLabel.from_label(Surface.REVERSE),)
-NEW_TEXT_LINE = TextLine("1.", (Word("kur"), Word("pa")))
+NEW_TEXT_LINE = TextLine(
+    "1.", (Word(parts=[Reading.of_name("kur")]), Word(parts=[Reading.of_name("pa")]))
+)
 
 
 @pytest.mark.parametrize(
@@ -74,21 +83,20 @@ LINE = Line(
                             "1.",
                             (
                                 Word(
-                                    "ku]-nu-ši",
+                                    parts=[
+                                        Reading.of(
+                                            [ValueToken("ku"), BrokenAway.close()]
+                                        ),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("nu"),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("si"),
+                                    ],
                                     unique_lemma=(WordId("word"),),
                                     alignment=0,
                                 ),
                             ),
                         ),
-                    ),
-                ),
-            ),
-            Line(
-                LineNumberLabel("2"),
-                (AkkadianWord((StringPart("kur"),)),),
-                (
-                    ManuscriptLine(
-                        MANUSCRIPT_ID, LABELS, TextLine("1.", (Word("ku]-nu-ši"),)),
                     ),
                 ),
             ),
@@ -103,7 +111,41 @@ LINE = Line(
                             "1.",
                             (
                                 Word(
-                                    "ku]-nu-ši",
+                                    parts=[
+                                        Reading.of(
+                                            [ValueToken("ku"), BrokenAway.close()]
+                                        ),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("nu"),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("si"),
+                                    ],
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            Line(
+                LineNumberLabel("2"),
+                (AkkadianWord((StringPart("kur"),)),),
+                (
+                    ManuscriptLine(
+                        MANUSCRIPT_ID,
+                        LABELS,
+                        TextLine(
+                            "1.",
+                            (
+                                Word(
+                                    parts=[
+                                        Reading.of(
+                                            [ValueToken("ku"), BrokenAway.close()]
+                                        ),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("nu"),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("si"),
+                                    ],
                                     unique_lemma=(WordId("word"),),
                                     alignment=None,
                                 ),
@@ -146,7 +188,15 @@ LINE = Line(
                             "1.",
                             (
                                 Word(
-                                    "ku]-nu-ši",
+                                    parts=[
+                                        Reading.of(
+                                            [ValueToken("ku"), BrokenAway.close()]
+                                        ),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("nu"),
+                                        Joiner.hyphen(),
+                                        Reading.of_name("si"),
+                                    ],
                                     unique_lemma=(WordId("word"),),
                                     alignment=0,
                                 ),

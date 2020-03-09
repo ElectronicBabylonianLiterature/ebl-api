@@ -48,7 +48,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_transliterated(self) -> List[Fragment]:
+    def query_transliterated_numbers(self) -> List[str]:
         ...
 
     @abstractmethod

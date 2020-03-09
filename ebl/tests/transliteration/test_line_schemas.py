@@ -230,10 +230,8 @@ LINES = [
             LineNumberLabel.from_atf("1."),
             [
                 DocumentOrientedGloss.open(),
-                Word("bu", parts=[Reading.of_name("bu")]),
-                LoneDeterminative(
-                    "{d}", parts=[Determinative([Reading.of_name("d")]),],
-                ),
+                Word(parts=[Reading.of_name("bu")]),
+                LoneDeterminative(parts=[Determinative([Reading.of_name("d")]),],),
             ],
         ),
         {
@@ -242,10 +240,8 @@ LINES = [
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
-                    Word("bu", parts=[Reading.of_name("bu")]),
-                    LoneDeterminative(
-                        "{d}", parts=[Determinative([Reading.of_name("d")]),],
-                    ),
+                    Word(parts=[Reading.of_name("bu")]),
+                    LoneDeterminative(parts=[Determinative([Reading.of_name("d")]),],),
                 ]
             ),
         },
@@ -359,6 +355,15 @@ def test_dump_line(line, expected):
                 "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
                 "state": "BLANK",
                 "status": atf.Status.CORRECTION.name,
+            },
+        ),
+        (
+            RulingDollarLine(atf.Ruling.SINGLE),
+            {
+                "type": "RulingDollarLine",
+                "prefix": "$",
+                "content": dump_tokens([ValueToken(" double ruling")]),
+                "number": "SINGLE",
             },
         ),
     ],

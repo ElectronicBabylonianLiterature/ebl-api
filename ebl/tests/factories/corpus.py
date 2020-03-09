@@ -80,7 +80,6 @@ class ManuscriptLineFactory(factory.Factory):
         "1.",
         (
             Word(
-                "ku]-nu-ši",
                 parts=[
                     Reading.of_name("ku"),
                     BrokenAway.close(),

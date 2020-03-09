@@ -127,15 +127,16 @@ scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
 state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
             | 'traces' | 'omitted' | 'continues';
 
-dollar-status = '*' | '?' | '!' | '!?';
-
 range = number, '-', number;
 
 loose = '(', free-text, ')';
 
-ruling = ('single' | 'double' | 'triple'), ' ', 'ruling', [status];
+ruling = ('single' | 'double' | 'triple'), ' ', 'ruling', 
+         [ [ ' ' ], dollar-status];
 
 image = '(image ' number, [ lower-case-letter ], ' = ', free-text, ')';
+
+dollar-status = '*' | '?' | '!' | '!?';
 ```
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
@@ -328,18 +329,24 @@ word = [ joiner ], [ open-any ],
  
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( variant | determinative | linguistic-gloss | phonetic-gloss | 
+parts = ( value | determinative | linguistic-gloss | phonetic-gloss | 
           unknown-number-of-signs ),
-        { [ part-joiner ], ( variant | determinative | linguistic-gloss | 
+        { [ part-joiner ], ( value | determinative | linguistic-gloss | 
                              phonetic-gloss | unknown-number-of-signs ) };
         (* Word cannot consist of only unknown-number-of-signs. *)
 
 linguistic-gloss = '{{', gloss-body, '}}';
 phonetic-gloss = '{+', gloss-body, '}';
 determinative = '{', gloss-body, '}';
-gloss-body = [ open_any ] variant,  { part-joiner, variant }, [ close_any ]
+gloss-body = { open-intentional-omission | open-accidental-omission 
+             | open-removal },  
+             value, { part-joiner, value },
+             { close-intentional-omission | close-accidental-omission 
+             | close-removal };
 
 part-joiner = [ inword-newline ], [ close_any ], [ joiner ], [ open_any ];
+              (* The joiner can be omitted next to determinative, 
+                 phonetic-gloss, or linguistic gloss. *)
  
 open_any = { open-broken-away
              | open-perhaps-away     
@@ -354,10 +361,19 @@ close_any = { close-broken-away
 joiner = '-' | '+' | '.' | ':';
 inword-newline = ';';
 
+value = unknown 
+      | value-with-sign
+      | reading
+      | compound-grapheme
+      | logogram
+      | surrogate
+      | number
+      | variant;
+
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown 
              | value-with-sign
-             | value
+             | reading
              | compound-grapheme
              | logogram
              | surrogate
@@ -374,11 +390,11 @@ logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | '
                    | 'R' | 'S' | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W'
                    | 'Z' | 'Ḫ' | 'ʾ';
 
-value-with-sign = ( value | logogram ), '(', ( compound-grapheme | grapheme ),
-                  ')';
-value = value-character, { [ invalue-broken-away ], value-character }, 
+value-with-sign = ( reading | logogram | number ), 
+                 '(', ( compound-grapheme | grapheme ), ')';
+reading = reading-character, { [ invalue-broken-away ], reading-character }, 
         [ sub-index ], modifier, flag;
-value-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h'
+reading-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h'
                 | 'i' | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q'
                 | 'r' | 's' | 'ṣ' | 'š' | 't' | 'ṭ' | 'u' | 'ū' | 'û' | 'w'
                 | 'z' | 'ḫ' | 'ʾ' | decimal-digit;

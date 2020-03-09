@@ -367,7 +367,6 @@ class WordSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return Word(
-            data["value"],
             data["language"],
             data["normalized"],
             tuple(data["unique_lemma"]),
@@ -400,7 +399,6 @@ class LoneDeterminativeSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return LoneDeterminative(
-            data["value"],
             data["language"],
             data["normalized"],
             tuple(data["unique_lemma"]),

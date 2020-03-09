@@ -98,28 +98,32 @@ _word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasu
 inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"
 inline_erasure_part: _parts?
 
-_parts: _value _parts_tail*
-      | gloss (_loose_joiner? _value)? _parts_tail*
+_parts: value _parts_tail*
+      | gloss (_loose_joiner? value)? _parts_tail*
       | gloss (_loose_joiner? unknown_number_of_signs)? _parts_tail*
       | unknown_number_of_signs _parts_tail+
-_parts_tail: _strict_joiner (_value | unknown_number_of_signs)
-           | _loose_joiner? (gloss _loose_joiner?)+ (_value | unknown_number_of_signs)?
+_parts_tail: _strict_joiner (value | unknown_number_of_signs)
+           | _loose_joiner? (gloss _loose_joiner?)+ (value | unknown_number_of_signs)?
 
 ?gloss: linguistic_gloss | phonetic_gloss | determinative
 linguistic_gloss: "{{" gloss_body "}}"
 phonetic_gloss: "{+" gloss_body "}"
 determinative: "{" gloss_body "}"
-gloss_body: _any_open? _value (_strict_joiner _value)* _any_close?
+gloss_body: open_omission_or_removal* value (_strict_joiner value)* close_omission_or_removal*
+?open_omission_or_removal: open_accidental_omission | open_intentional_omission | open_removal
+?close_omission_or_removal: close_accidental_omission | close_intentional_omission | close_removal
+
+
 
 _loose_joiner: _strict_joiner
-            | in_word_newline? _any_close joiner? _any_open?
-            | in_word_newline? _any_close? joiner? _any_open
+             | in_word_newline? _any_close joiner? _any_open?
+             | in_word_newline? _any_close? joiner? _any_open
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
 _any_close: (close_broken_away | close_perhaps_broken_away | close_accidental_omission | close_intentional_omission | close_removal)+
 _any_open: (open_accidental_omission | open_intentional_omission | open_removal | open_broken_away | open_perhaps_broken_away)+
 !joiner: "-" | "+" | "." | ":"
 
-_value: unidentified_sign
+?value: unidentified_sign
       | unclear_sign
       | reading
       | number

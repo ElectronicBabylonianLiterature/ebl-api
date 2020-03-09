@@ -27,12 +27,7 @@ from ebl.transliteration.domain.word_tokens import Word
 LINES: Sequence[Line] = (
     TextLine.of_iterable(
         LineNumberLabel.from_atf("1."),
-        [
-            Word(
-                "ha-am",
-                parts=[Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],
-            )
-        ],
+        [Word(parts=[Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],)],
     ),
     ControlLine.of_single("$", ValueToken(" single ruling")),
 )
@@ -81,7 +76,6 @@ def test_update_lemmatization():
                 "1.",
                 (
                     Word(
-                        "ha-am",
                         unique_lemma=(WordId("nu I"),),
                         parts=[
                             Reading.of_name("ha"),
@@ -166,52 +160,11 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("nu", unique_lemma=(WordId("nu I"),), parts=[]),
-                            Word("nu", unique_lemma=(WordId("nu I"),), parts=[]),
-                        ],
-                    )
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    TextLine.of_iterable(
-                        LineNumberLabel.from_atf("1."),
-                        [
-                            Word("mu", parts=[Reading.of_name("mu")]),
-                            Word("nu", parts=[Reading.of_name("nu")]),
-                        ],
-                    )
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    TextLine.of_iterable(
-                        LineNumberLabel.from_atf("1."),
-                        [
-                            Word("mu", parts=[Reading.of_name("mu")]),
                             Word(
-                                "nu",
-                                unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of_name("nu")],
-                            ),
-                        ],
-                    )
-                ]
-            ),
-        ),
-        (
-            Text.of_iterable(
-                [
-                    TextLine.of_iterable(
-                        LineNumberLabel.from_atf("1."),
-                        [
-                            Word(
-                                "nu",
                                 unique_lemma=(WordId("nu I"),),
                                 parts=[Reading.of_name("nu")],
                             ),
                             Word(
-                                "nu",
                                 unique_lemma=(WordId("nu I"),),
                                 parts=[Reading.of_name("nu")],
                             ),
@@ -224,8 +177,8 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("mu", parts=[Reading.of_name("mu")]),
-                            Word("nu", parts=[Reading.of_name("nu")]),
+                            Word(parts=[Reading.of_name("mu")]),
+                            Word(parts=[Reading.of_name("nu")]),
                         ],
                     )
                 ]
@@ -235,9 +188,8 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word("mu", parts=[Reading.of_name("mu")]),
+                            Word(parts=[Reading.of_name("mu")]),
                             Word(
-                                "nu",
                                 unique_lemma=(WordId("nu I"),),
                                 parts=[Reading.of_name("nu")],
                             ),

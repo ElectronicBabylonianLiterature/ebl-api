@@ -104,7 +104,7 @@ def test_parser_version(parser, version):
         ),
         (
             "a+1.a+2. šu",
-            [TextLine("a+1.a+2.", (Word("šu", parts=[Reading.of_name("šu")]),))],
+            [TextLine("a+1.a+2.", (Word(parts=[Reading.of_name("šu")]),))],
         ),
         ("1. ($___$)", [TextLine("1.", (Tabulation("($___$)"),))]),
         (
@@ -133,16 +133,14 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "[(x",
                             parts=[
                                 BrokenAway.open(),
                                 PerhapsBrokenAway.open(),
                                 UnclearSign(),
                             ],
                         ),
-                        Word("x", parts=[UnclearSign()]),
+                        Word(parts=[UnclearSign()]),
                         Word(
-                            "x)]",
                             parts=[
                                 UnclearSign(),
                                 PerhapsBrokenAway.close(),
@@ -160,7 +158,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "<en-da-ab-su₈",
                             parts=[
                                 AccidentalOmission.open(),
                                 Reading.of_name("en"),
@@ -184,7 +181,7 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Word("<<en", parts=[Removal.open(), Reading.of_name("en"),],),
+                        Word(parts=[Removal.open(), Reading.of_name("en"),],),
                         UnknownNumberOfSigns(),
                         Removal.close(),
                     ),
@@ -231,7 +228,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "me-e+li",
                             parts=[
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
@@ -241,7 +237,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "me.e:li",
                             parts=[
                                 Reading.of_name("me"),
                                 Joiner.dot(),
@@ -253,13 +248,10 @@ def test_parser_version(parser, version):
                         Divider.of(":"),
                     ),
                 ),
-                TextLine("2.", (Word("ku", parts=[Reading.of_name("ku")]),)),
+                TextLine("2.", (Word(parts=[Reading.of_name("ku")]),)),
             ],
         ),
-        (
-            "1. |GAL|",
-            [TextLine("1.", (Word("|GAL|", parts=[CompoundGrapheme("|GAL|")]),))],
-        ),
+        ("1. |GAL|", [TextLine("1.", (Word(parts=[CompoundGrapheme("|GAL|")]),))],),
         (
             "1. !qt !bs !cm !zz",
             [
@@ -280,14 +272,12 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Word("x", parts=[UnclearSign()]),
-                        Word("X", parts=[UnidentifiedSign()]),
+                        Word(parts=[UnclearSign()]),
+                        Word(parts=[UnidentifiedSign()]),
                         Word(
-                            "x?#",
                             parts=[UnclearSign([atf.Flag.UNCERTAIN, atf.Flag.DAMAGE])],
                         ),
                         Word(
-                            "X#!",
                             parts=[
                                 UnidentifiedSign([atf.Flag.DAMAGE, atf.Flag.CORRECTION])
                             ],
@@ -303,7 +293,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "x-ti",
                             parts=[
                                 UnclearSign(),
                                 Joiner.hyphen(),
@@ -311,7 +300,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "ti-X",
                             parts=[
                                 Reading.of_name("ti"),
                                 Joiner.hyphen(),
@@ -331,7 +319,6 @@ def test_parser_version(parser, version):
                         BrokenAway.open(),
                         UnknownNumberOfSigns(),
                         Word(
-                            "r]u?-u₂-qu",
                             parts=[
                                 Reading.of(
                                     (
@@ -348,7 +335,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "na-a[n-...]",
                             parts=[
                                 Reading.of_name("na"),
                                 Joiner.hyphen(),
@@ -370,7 +356,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "ši-[ku-...-ku]-nu",
                             parts=[
                                 Reading.of_name("ši"),
                                 Joiner.hyphen(),
@@ -391,7 +376,6 @@ def test_parser_version(parser, version):
                     "3.",
                     (
                         Word(
-                            "[...]-ku",
                             parts=[
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns(),
@@ -411,7 +395,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "[...]-qa-[...]-ba-[...]",
                             parts=[
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns(),
@@ -436,7 +419,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "pa-[...]",
                             parts=[
                                 Reading.of_name("pa"),
                                 Joiner.hyphen(),
@@ -456,7 +438,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "[a?-ku",
                             parts=[
                                 BrokenAway.open(),
                                 Reading.of_name("a", flags=[atf.Flag.UNCERTAIN]),
@@ -474,7 +455,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "[a?-ku",
                             parts=[
                                 BrokenAway.open(),
                                 Reading.of_name("a", flags=[atf.Flag.UNCERTAIN]),
@@ -483,7 +463,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "(x)]",
                             parts=[
                                 PerhapsBrokenAway.open(),
                                 UnclearSign(),
@@ -502,7 +481,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "[...+ku....]",
                             parts=[
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns(),
@@ -514,7 +492,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "[....ku+...]",
                             parts=[
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns(),
@@ -544,9 +521,8 @@ def test_parser_version(parser, version):
                         UnknownNumberOfSigns(),
                         BrokenAway.close(),
                         LoneDeterminative.of_value(
-                            "{bu}",
-                            ErasureState.NONE,
                             [Determinative([Reading.of_name("bu")]),],
+                            ErasureState.NONE,
                         ),
                         BrokenAway.open(),
                         UnknownNumberOfSigns(),
@@ -557,7 +533,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "[...]{bu}",
                             parts=[
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns(),
@@ -577,7 +552,6 @@ def test_parser_version(parser, version):
                         UnknownNumberOfSigns(),
                         BrokenAway.close(),
                         Word(
-                            "{bu}[...]",
                             parts=[
                                 Determinative([Reading.of_name("bu")]),
                                 BrokenAway.open(),
@@ -591,7 +565,6 @@ def test_parser_version(parser, version):
                     "4.",
                     (
                         Word(
-                            "[...]{bu}[...]",
                             parts=[
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns(),
@@ -613,7 +586,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "{bu}-nu",
                             parts=[
                                 Determinative([Reading.of_name("bu")]),
                                 Joiner.hyphen(),
@@ -621,7 +593,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "{bu-bu}-nu",
                             parts=[
                                 Determinative(
                                     [
@@ -640,8 +611,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         LoneDeterminative.of_value(
-                            "{bu-bu}",
-                            ErasureState.NONE,
                             [
                                 Determinative(
                                     [
@@ -651,6 +620,7 @@ def test_parser_version(parser, version):
                                     ]
                                 ),
                             ],
+                            ErasureState.NONE,
                         ),
                     ),
                 ),
@@ -662,9 +632,8 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Word("KIMIN", parts=[Logogram.of_name("KIMIN")]),
+                        Word(parts=[Logogram.of_name("KIMIN")]),
                         Word(
-                            "{u₂#}[...]",
                             parts=[
                                 Determinative(
                                     [Reading.of_name("u", 2, flags=[atf.Flag.DAMAGE])]
@@ -675,13 +644,12 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         LoneDeterminative.of_value(
-                            "{u₂#}",
-                            ErasureState.NONE,
                             [
                                 Determinative(
                                     [Reading.of_name("u", 2, flags=[atf.Flag.DAMAGE])]
                                 ),
                             ],
+                            ErasureState.NONE,
                         ),
                         BrokenAway.open(),
                         UnknownNumberOfSigns(),
@@ -696,15 +664,14 @@ def test_parser_version(parser, version):
                 TextLine(
                     "1.",
                     (
-                        Word("šu", parts=[Reading.of_name("šu")]),
-                        Word("gid₂", parts=[Reading.of_name("gid", 2)]),
+                        Word(parts=[Reading.of_name("šu")]),
+                        Word(parts=[Reading.of_name("gid", 2)]),
                     ),
                 ),
                 TextLine(
                     "2.",
                     (
                         Word(
-                            "[U₄].14.KAM₂",
                             parts=[
                                 BrokenAway.open(),
                                 Logogram.of_name("U", 4),
@@ -716,7 +683,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "U₄.15.KAM₂",
                             parts=[
                                 Logogram.of_name("U", 4),
                                 Joiner.dot(),
@@ -737,7 +703,6 @@ def test_parser_version(parser, version):
                     (
                         DocumentOrientedGloss.open(),
                         Word(
-                            "he-pi₂",
                             parts=[
                                 Reading.of_name("he"),
                                 Joiner.hyphen(),
@@ -745,7 +710,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "eš-šu₂",
                             parts=[
                                 Reading.of_name("eš"),
                                 Joiner.hyphen(),
@@ -759,8 +723,8 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         DocumentOrientedGloss.open(),
-                        Word("NU", parts=[Logogram.of_name("NU")]),
-                        Word("SUR", parts=[Logogram.of_name("SUR")]),
+                        Word(parts=[Logogram.of_name("NU")]),
+                        Word(parts=[Logogram.of_name("SUR")]),
                         DocumentOrientedGloss.close(),
                     ),
                 ),
@@ -773,7 +737,7 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Variant.of(Reading.of_name("sal"), Divider.of(":"),),
-                        Word("šim", parts=[Reading.of_name("šim")]),
+                        Word(parts=[Reading.of_name("šim")]),
                     ),
                 )
             ],
@@ -786,7 +750,6 @@ def test_parser_version(parser, version):
                     (
                         Erasure.open(),
                         Word(
-                            "me-e-li",
                             erasure=ErasureState.ERASED,
                             parts=[
                                 Reading.of_name("me"),
@@ -798,7 +761,6 @@ def test_parser_version(parser, version):
                         ),
                         Erasure.center(),
                         Word(
-                            "ku",
                             erasure=ErasureState.OVER_ERASED,
                             parts=[Reading.of_name("ku")],
                         ),
@@ -814,7 +776,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "me-e-li-°\\ku°",
                             parts=[
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
@@ -839,7 +800,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "°me-e-li\\°-ku",
                             parts=[
                                 Erasure.open(),
                                 Reading.of_name("me"),
@@ -864,7 +824,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "me-°e\\li°-ku",
                             parts=[
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
@@ -888,7 +847,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "me-°e\\li°-me-°e\\li°-ku",
                             parts=[
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
@@ -918,10 +876,7 @@ def test_parser_version(parser, version):
             [
                 TextLine(
                     "1.",
-                    (
-                        Word("sal", parts=[Reading.of_name("sal")]),
-                        LineContinuation("→"),
-                    ),
+                    (Word(parts=[Reading.of_name("sal")]), LineContinuation("→"),),
                 )
             ],
         ),
@@ -930,10 +885,7 @@ def test_parser_version(parser, version):
             [
                 TextLine(
                     "2.",
-                    (
-                        Word("sal", parts=[Reading.of_name("sal")]),
-                        LineContinuation("→"),
-                    ),
+                    (Word(parts=[Reading.of_name("sal")]), LineContinuation("→"),),
                 )
             ],
         ),
@@ -946,7 +898,6 @@ def test_parser_version(parser, version):
                         BrokenAway.open(),
                         DocumentOrientedGloss.open(),
                         Word(
-                            "he-pi₂",
                             parts=[
                                 Reading.of_name("he"),
                                 Joiner.hyphen(),
@@ -954,7 +905,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "e]š-šu₂",
                             parts=[
                                 Reading.of(
                                     (
@@ -979,7 +929,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "[{iti}...]",
                             parts=[
                                 BrokenAway.open(),
                                 Determinative([Reading.of_name("iti")]),
@@ -992,13 +941,12 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "2. RA{k[i]}",
+            "2. RA{k[i}]",
             [
                 TextLine(
                     "2.",
                     (
                         Word(
-                            "RA{k[i]}",
                             parts=[
                                 Logogram.of_name("RA"),
                                 Determinative(
@@ -1010,9 +958,9 @@ def test_parser_version(parser, version):
                                                 ValueToken("i"),
                                             )
                                         ),
-                                        BrokenAway.close(),
                                     ]
                                 ),
+                                BrokenAway.close(),
                             ],
                         ),
                     ),
@@ -1026,7 +974,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "[in]-<(...)>",
                             parts=[
                                 BrokenAway.open(),
                                 Reading.of_name("in"),
@@ -1048,7 +995,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "...{d}kur",
                             parts=[
                                 UnknownNumberOfSigns(),
                                 Determinative([Reading.of_name("d")]),
@@ -1057,7 +1003,6 @@ def test_parser_version(parser, version):
                         ),
                         UnknownNumberOfSigns(),
                         Word(
-                            "{d}kur",
                             parts=[
                                 Determinative([Reading.of_name("d")]),
                                 Reading.of_name("kur"),
@@ -1074,7 +1019,6 @@ def test_parser_version(parser, version):
                     "2.",
                     (
                         Word(
-                            "kur{d}...",
                             parts=[
                                 Reading.of_name("kur"),
                                 Determinative([Reading.of_name("d")]),
@@ -1082,7 +1026,6 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Word(
-                            "kur{d}",
                             parts=[
                                 Reading.of_name("kur"),
                                 Determinative([Reading.of_name("d")]),
@@ -1100,7 +1043,6 @@ def test_parser_version(parser, version):
                     "1.",
                     (
                         Word(
-                            "mu-un;-e₃",
                             parts=[
                                 Reading.of_name("mu"),
                                 Joiner.hyphen(),
@@ -1111,6 +1053,34 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         Divider.of(";"),
+                    ),
+                )
+            ],
+        ),
+        (
+            "1. [... {(he-p]i₂)}",
+            [
+                TextLine(
+                    "1.",
+                    (
+                        BrokenAway.open(),
+                        UnknownNumberOfSigns(),
+                        DocumentOrientedGloss.open(),
+                        Word(
+                            parts=[
+                                Reading.of_name("he"),
+                                Joiner.hyphen(),
+                                Reading.of(
+                                    (
+                                        ValueToken("p"),
+                                        BrokenAway.close(),
+                                        ValueToken("i"),
+                                    ),
+                                    2,
+                                ),
+                            ],
+                        ),
+                        DocumentOrientedGloss.close(),
                     ),
                 )
             ],
@@ -1181,11 +1151,11 @@ def test_parse_atf_language_shifts(parser, code, expected_language):
             TextLine(
                 "1.",
                 (
-                    Word(word, DEFAULT_LANGUAGE, parts=parts),
+                    Word(DEFAULT_LANGUAGE, parts=parts),
                     LanguageShift(code),
-                    Word(word, expected_language, parts=parts),
+                    Word(expected_language, parts=parts),
                     LanguageShift("%sb"),
-                    Word(word, Language.AKKADIAN, parts=parts),
+                    Word(Language.AKKADIAN, parts=parts),
                 ),
             ),
         )
@@ -1217,6 +1187,7 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
         ("1'. → x\n$ (line continuation in the middle)", [1]),
         ("this is not valid\nthis is not valid", [1, 2]),
         ("$ ", [1]),
+        ("1. {[me}]\n2. [{me]}\n3. {[me]}", [1, 2, 3]),
     ],
 )
 def test_invalid_atf(parser, atf, line_numbers):
