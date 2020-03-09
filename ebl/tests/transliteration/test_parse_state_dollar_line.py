@@ -267,5 +267,4 @@ def test_parse_state_dollar_line_surface_ambiguity(line, expected_line):
 @pytest.mark.parametrize("line", ["$ face", "$ object",])
 def test_parse_state_dollar_line_invalid(line):
     with (pytest.raises(TransliterationError)):
-        x = parse_atf_lark(line)
-        pass
+        parse_atf_lark(line)
