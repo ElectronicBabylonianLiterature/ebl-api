@@ -33,7 +33,7 @@ def update_fragment(
 
 
 def find_transliterated(fragment_repository: FragmentRepository) -> List[str]:
-    return [fragment.number for fragment in fragment_repository.query_transliterated()]
+    return fragment_repository.query_transliterated_numbers()
 
 
 @attr.s(auto_attribs=True)

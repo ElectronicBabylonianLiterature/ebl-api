@@ -280,7 +280,9 @@ def test_find_transliterated(database, fragment_repository):
         [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build()),]
     )
 
-    assert fragment_repository.query_transliterated() == [transliterated_fragment]
+    assert fragment_repository.query_transliterated_numbers() == [
+        transliterated_fragment.number
+    ]
 
 
 def test_find_lemmas(fragment_repository):

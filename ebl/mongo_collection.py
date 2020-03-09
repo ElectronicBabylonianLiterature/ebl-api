@@ -35,8 +35,8 @@ class MongoCollection:
         else:
             return document
 
-    def find_many(self, query):
-        return self.__get_collection().find(query)
+    def find_many(self, query, *args, **kwargs):
+        return self.__get_collection().find(query, *args, **kwargs)
 
     def aggregate(self, pipeline, **kwargs):
         return self.__get_collection().aggregate(pipeline, **kwargs)
