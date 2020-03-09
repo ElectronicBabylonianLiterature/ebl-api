@@ -1,7 +1,6 @@
 from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
-import attr
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
