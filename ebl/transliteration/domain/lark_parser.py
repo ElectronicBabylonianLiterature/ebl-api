@@ -487,8 +487,9 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
     def ebl_atf_at_line__seal(self, number):
         return SealAtLine(number)
 
-    def ebl_atf_at_line__column(self, column):
-        return ColumnAtLine(ColumnLabel.from_int(column[0], tuple(column[1:])))
+    @v_args(inline=True)
+    def ebl_atf_at_line__column(self, number, statuses):
+        return ColumnAtLine(ColumnLabel.from_int(number, statuses.children))
 
     @v_args(inline=True)
     def ebl_atf_at_line__discourse(self, discourse):
@@ -500,37 +501,50 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
 
     @v_args(inline=True)
     def ebl_atf_at_line__OBJECT(self, object):
-        return ObjectAtLine([], atf.Object(object))
+        return (atf.Object(object),)
 
     @v_args(inline=True)
     def ebl_atf_at_line__generic_object(self, object, text):
-        return ObjectAtLine([], atf.Object.OBJECT, str(text))
+        return (
+            atf.Object.OBJECT,
+            str(text),
+        )
 
     @v_args(inline=True)
     def ebl_atf_at_line__fragment(self, text):
-        return ObjectAtLine([], atf.Object.FRAGMENT)
+        return (atf.Object.FRAGMENT,)
 
     @v_args(inline=True)
     def ebl_atf_at_line__SURFACE(self, surface):
-        return SurfaceLabel([], atf.Surface.from_atf(str(surface)))
+        return (atf.Surface.from_atf(str(surface)),)
 
     @v_args(inline=True)
     def ebl_atf_at_line__generic_surface(self, surface, text):
-        return SurfaceLabel([], atf.Surface.SURFACE, str(text))
+        return atf.Surface.SURFACE, str(text)
 
     @v_args(inline=True)
     def ebl_atf_at_line__face(self, text):
-        return SurfaceLabel([], atf.Surface.FACE, str(text))
+        return atf.Surface.FACE, str(text)
 
     @v_args(inline=True)
     def ebl_atf_at_line__edge(self, text):
-        return SurfaceLabel([], atf.Surface.EDGE, str(text))
+        return atf.Surface.EDGE, str(text)
 
-    def ebl_atf_at_line__surface_with_status(self, surface_label):
-        return SurfaceAtLine(attr.evolve(surface_label[0], status=surface_label[1:]))
+    @v_args(inline=True)
+    def ebl_atf_at_line__surface_with_status(self, surface, statuses):
+        if len(surface) == 2:
+            return SurfaceAtLine(
+                SurfaceLabel(statuses.children, surface[0], surface[1])
+            )
+        else:
+            return SurfaceAtLine(SurfaceLabel(statuses.children, surface[0]))
 
-    def ebl_atf_at_line__object_with_status(self, object):
-        return attr.evolve(object[0], status=object[1:])
+    @v_args(inline=True)
+    def ebl_atf_at_line__object_with_status(self, object, statuses):
+        if len(object) == 2:
+            return ObjectAtLine(statuses.children, object[0], object[1],)
+        else:
+            return ObjectAtLine(statuses.children, object[0])
 
     @v_args(inline=True)
     def ebl_atf_at_line__divisions(self, text, digit):

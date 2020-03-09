@@ -9,7 +9,9 @@ test: "test"
 
 STATUS:  "'" | "?" | "!" | "*"
 
-surface_with_status : _surface _WORD_SEPERATOR? STATUS*
+statuses: STATUS*
+
+surface_with_status : _surface _WORD_SEPERATOR? statuses
 
 _surface : SURFACE | generic_surface | face | edge
 face: "face" _WORD_SEPERATOR LOWER_CASE_LETTER
@@ -17,7 +19,7 @@ edge: "edge" _WORD_SEPERATOR LOWER_CASE_LETTER
 generic_surface : SURFACE_GENERIC _WORD_SEPERATOR any_str
 SURFACE_GENERIC : "surface"
 
-object_with_status : _object _WORD_SEPERATOR? STATUS*
+object_with_status : _object _WORD_SEPERATOR? statuses
 _object : OBJECT | generic_object | fragment
 fragment: "fragment" _WORD_SEPERATOR any_str
 generic_object : OBJECT_GENERIC _WORD_SEPERATOR any_str
@@ -25,7 +27,7 @@ OBJECT_GENERIC : "object"
 
 
 
-column : "column " INT _WORD_SEPERATOR? STATUS*
+column : "column " INT _WORD_SEPERATOR? statuses
 
 heading: "h"INT
 
