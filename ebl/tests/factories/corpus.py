@@ -82,11 +82,12 @@ class ManuscriptLineFactory(factory.Factory):
             Word.of(
                 [
                     Reading.of_name("ku"),
-                    BrokenAway.close(),
                     Joiner.hyphen(),
+                    BrokenAway.open(),
                     Reading.of_name("nu"),
                     Joiner.hyphen(),
                     Reading.of_name("ši"),
+                    BrokenAway.close(),
                 ],
             ),
         ),

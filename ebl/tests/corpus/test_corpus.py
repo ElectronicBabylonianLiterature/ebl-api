@@ -200,11 +200,12 @@ def test_updating_alignment(
                                         Word.of(
                                             [
                                                 Reading.of_name("ku"),
-                                                BrokenAway.close(),
                                                 Joiner.hyphen(),
+                                                BrokenAway.open(),
                                                 Reading.of_name("nu"),
                                                 Joiner.hyphen(),
                                                 Reading.of_name("ši"),
+                                                BrokenAway.close(),
                                             ],
                                             alignment=0,
                                         ),
@@ -228,7 +229,7 @@ def test_updating_alignment(
         when,
     )
 
-    alignment = Alignment((((AlignmentToken("ku]-nu-ši", 0),),),))
+    alignment = Alignment((((AlignmentToken("ku-[nu-ši]", 0),),),))
     corpus.update_alignment(TEXT.id, 0, alignment, user)
 
 
@@ -236,17 +237,17 @@ def test_updating_alignment(
     "alignment",
     [
         Alignment(
-            (((AlignmentToken("ku]-nu-ši", 0), AlignmentToken("ku]-nu-ši", 0),),),)
+            (((AlignmentToken("ku-[nu-ši]", 0), AlignmentToken("ku-[nu-ši]", 0),),),)
         ),
         Alignment(((tuple(),),)),
         Alignment(
-            (((AlignmentToken("ku]-nu-ši", 0),), (AlignmentToken("ku]-nu-ši", 0),),),)
+            (((AlignmentToken("ku-[nu-ši]", 0),), (AlignmentToken("ku-[nu-ši]", 0),),),)
         ),
         Alignment((tuple())),
         Alignment(
             (
-                ((AlignmentToken("ku]-nu-ši", 0),),),
-                ((AlignmentToken("ku]-nu-ši", 0),),),
+                ((AlignmentToken("ku-[nu-ši]", 0),),),
+                ((AlignmentToken("ku-[nu-ši]", 0),),),
             )
         ),
         Alignment(tuple()),

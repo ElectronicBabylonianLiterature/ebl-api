@@ -102,6 +102,7 @@ LINES = [
                 DocumentOrientedGloss.open(),
                 Word.of([Reading.of_name("bu")]),
                 LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                DocumentOrientedGloss.close(),
             ],
         ),
         {
@@ -112,6 +113,7 @@ LINES = [
                     DocumentOrientedGloss.open(),
                     Word.of([Reading.of_name("bu")]),
                     LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                    DocumentOrientedGloss.close(),
                 ]
             ),
         },

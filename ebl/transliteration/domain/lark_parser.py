@@ -30,7 +30,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
-from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
+from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -104,11 +104,11 @@ class TreeToSign(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, symbol):
-        return Joiner(atf.Joiner(str(symbol)))
+        return Joiner.of(atf.Joiner(str(symbol)))
 
     @v_args(inline=True)
     def ebl_atf_text_line__in_word_newline(self, _):
-        return InWordNewline()
+        return InWordNewline(frozenset())
 
     @v_args(inline=True)
     def ebl_atf_text_line__reading(self, name, sub_index, modifiers, flags, sign=None):
@@ -197,7 +197,7 @@ class TreeToWord(TreeToSign):
         return self._create_word(Word, children)
 
     @staticmethod
-    def _create_word(word_class: Type, children: Sequence):
+    def _create_word(word_class: Type[Word], children: Sequence):
         tokens = TreeToWord._children_to_tokens(children)
         return word_class.of(tokens)
 
@@ -459,7 +459,7 @@ def parse_line(atf: str) -> Line:
 
 
 def validate_line(line: Line) -> None:
-    visitor = EnclosureVisitor()
+    visitor = EnclosureValidator()
     for token in line.content:
         token.accept(visitor)
     visitor.done()

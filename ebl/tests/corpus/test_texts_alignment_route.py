@@ -14,7 +14,7 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
-DTO = {"alignment": [[[{"value": "ku]-nu-ši", "alignment": 0}]]]}
+DTO = {"alignment": [[[{"value": "ku-[nu-ši]", "alignment": 0}]]]}
 
 
 def create_text_dto(text, include_documents=False):
@@ -63,11 +63,12 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                         Word.of(
                                             [
                                                 Reading.of_name("ku"),
-                                                BrokenAway.close(),
                                                 Joiner.hyphen(),
+                                                BrokenAway.open(),
                                                 Reading.of_name("nu"),
                                                 Joiner.hyphen(),
                                                 Reading.of_name("ši"),
+                                                BrokenAway.close(),
                                             ],
                                             alignment=0,
                                         ),

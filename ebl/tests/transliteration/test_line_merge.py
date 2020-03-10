@@ -4,7 +4,6 @@ from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
-    DocumentOrientedGloss,
     PerhapsBrokenAway,
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
@@ -168,17 +167,6 @@ from ebl.transliteration.domain.word_tokens import Word
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")],
                     ),
                 ],
-            ),
-        ),
-        (
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [ValueToken.of("{("),]
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [DocumentOrientedGloss.open(),]
-            ),
-            TextLine.of_iterable(
-                LineNumberLabel.from_atf("1."), [DocumentOrientedGloss.open(),]
             ),
         ),
         (

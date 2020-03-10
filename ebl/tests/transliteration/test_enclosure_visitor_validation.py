@@ -1,14 +1,14 @@
 import pytest
 
 from ebl.transliteration.domain.enclosure_error import EnclosureError
-from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor
+from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.line import Line
 
 
 def validate_line(atf):
     line: Line = parse_line(f"1. {atf}")
-    visitor = EnclosureVisitor()
+    visitor = EnclosureValidator()
     for token in line.content:
         token.accept(visitor)
     visitor.done()

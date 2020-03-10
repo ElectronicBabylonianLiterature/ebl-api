@@ -101,10 +101,11 @@ class TextLine(Line):
 
     @classmethod
     def of_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
-        visitor = LanguageVisitor()
+        language_visitor = LanguageVisitor()
         for token in content:
-            token.accept(visitor)
-        return cls(line_number.to_atf(), visitor.tokens)
+            token.accept(language_visitor)
+
+        return cls(line_number.to_atf(), language_visitor.tokens)
 
     @property
     def line_number(self) -> LineNumberLabel:

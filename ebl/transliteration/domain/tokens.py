@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple, AbstractSet, TypeVar, Type
+from typing import AbstractSet, Iterable, Optional, Sequence, Tuple, Type, TypeVar
 
 import attr
 
 import ebl.transliteration.domain.atf as atf
-from ebl.corpus.domain.enclosure import EnclosureType
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
@@ -25,6 +25,7 @@ def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
 
 @attr.s(frozen=True, auto_attribs=True)
 class Token(ABC):
+    T = TypeVar("T", bound="Token")
     enclosure_type: AbstractSet[EnclosureType]
 
     @property
@@ -182,3 +183,7 @@ class Joiner(Token):
     @staticmethod
     def plus():
         return Joiner(frozenset(), atf.Joiner.PLUS)
+
+    @staticmethod
+    def of(joiner: atf.Joiner):
+        return Joiner(frozenset(), joiner)
