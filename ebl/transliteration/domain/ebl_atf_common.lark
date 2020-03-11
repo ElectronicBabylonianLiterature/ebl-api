@@ -6,8 +6,6 @@ seal : "seal "  INT
 
 free_text.-2 : /./+ " "*
 
-_WORD_SEPERATOR: " "
-
 ?object: OBJECT | generic_object | fragment
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"
 fragment: "fragment " free_text

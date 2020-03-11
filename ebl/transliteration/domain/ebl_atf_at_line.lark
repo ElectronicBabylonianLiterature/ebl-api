@@ -2,7 +2,7 @@
 %import .ebl_atf_common (free_text)
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
-%import .ebl_atf_common (seal, OBJECT, SURFACE, free_text, _WORD_SEPERATOR)
+%import .ebl_atf_common (seal, OBJECT, SURFACE, free_text)
 
 ?at_line : "@" value
 
@@ -10,20 +10,22 @@
 
 STATUS:  "'" | "?" | "!" | "*"
 
+_WHITESPACE: " "
+
 statuses: STATUS*
 
-surface_with_status : surface _WORD_SEPERATOR? statuses
+surface_with_status : surface _WHITESPACE? statuses
 
-object_with_status : object _WORD_SEPERATOR? statuses
+object_with_status : object _WHITESPACE? statuses
 
-column : "column " INT _WORD_SEPERATOR? statuses
+column : "column " INT _WHITESPACE? statuses
 
 heading: "h"INT
 
 !discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
 
-divisions: "m=division " free_text [_WORD_SEPERATOR INT]
+divisions: "m=division " free_text [_WHITESPACE INT]
 
 ?composite: composite_start | composite_end
-composite_start: "div " free_text [_WORD_SEPERATOR INT]
+composite_start: "div " free_text [_WHITESPACE INT]
 composite_end: "end " free_text

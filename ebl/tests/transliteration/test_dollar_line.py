@@ -1,3 +1,5 @@
+import pytest
+
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
@@ -90,3 +92,10 @@ def test_state_dollar_line_content():
     )
 
     assert actual.content == (ValueToken(" at least 1 obverse blank ?"),)
+
+
+def test_state_dollar_line_non_empty_string_error():
+    with pytest.raises(ValueError):
+        StateDollarLine(
+            None, None, ScopeContainer(atf.Surface.REVERSE, "test"), None, None
+        )
