@@ -80,7 +80,17 @@ class SurfaceAtLine(AtLine):
 class ObjectAtLine(AtLine):
     status: Sequence[Status] = attr.ib(validator=no_duplicate_status)
     object_label: atf.Object
-    text: str = ""
+    text: str = attr.ib(default="")
+
+    @text.validator
+    def _check_text(self, attribute, value):
+        if value and self.object_label not in [
+            atf.Object.OBJECT,
+            atf.Object.FRAGMENT,
+        ]:
+            raise ValueError(
+                "non-empty string only allowed if the content is 'atf.OBJECT.OBJECT'"
+            )
 
     @property
     def _status_string(self):
