@@ -82,7 +82,8 @@ class ScopeContainer:
             atf.Surface.EDGE,
         ]:
             raise ValueError(
-                "non-empty string only allowed if the content is 'atf.OBJECT.OBJECT' or 'atf.SURFACE.SURACE'"
+                "non-empty string only allowed if the content is "
+                "'atf.OBJECT.OBJECT' or 'atf.SURFACE.SURACE'"
             )
 
     @property
