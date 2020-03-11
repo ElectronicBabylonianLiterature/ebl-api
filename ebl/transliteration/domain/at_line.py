@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Sequence, Optional
+from typing import Sequence, Optional, Tuple
 
 import attr
 
@@ -22,8 +22,12 @@ class AtLine(Line):
 
     @property
     @abstractmethod
-    def content(self) -> Sequence[Token]:
+    def _content_value(self) -> str:
         ...
+
+    @property
+    def content(self) -> Tuple[Token]:
+        return (ValueToken(f"{self._content_value}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -31,8 +35,8 @@ class SealAtLine(AtLine):
     number: int
 
     @property
-    def content(self):
-        return (ValueToken(f"seal {self.number}"),)
+    def _content_value(self):
+        return f"seal {self.number}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -40,8 +44,8 @@ class HeadingAtLine(AtLine):
     number: int
 
     @property
-    def content(self):
-        return (ValueToken(f"h{self.number}"),)
+    def _content_value(self):
+        return f"h{self.number}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -49,13 +53,8 @@ class ColumnAtLine(AtLine):
     column_label: ColumnLabel
 
     @property
-    def content(self):
-        return (
-            ValueToken(
-                f"column {self.column_label.column}"
-                f"{''.join([status.value for status in self.column_label.status])}"
-            ),
-        )
+    def _content_value(self):
+        return f"column {self.column_label.column}{self.column_label._status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -63,8 +62,8 @@ class DiscourseAtLine(AtLine):
     discourse_label: atf.Discourse
 
     @property
-    def content(self):
-        return (ValueToken(f"{self.discourse_label.value}"),)
+    def _content_value(self):
+        return f"{self.discourse_label.value}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -72,14 +71,9 @@ class SurfaceAtLine(AtLine):
     surface_label: SurfaceLabel
 
     @property
-    def content(self):
-        return (
-            ValueToken(
-                f"{self.surface_label.surface.value[0]}"
-                f"{' '+self.surface_label.text if self.surface_label.text else '' }"
-                f"{self.surface_label._status_string}"
-            ),
-        )
+    def _content_value(self):
+        text = f" {self.surface_label.text}" if self.surface_label.text else ""
+        return f"{self.surface_label.surface.value[0]}{text}{self.surface_label._status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -93,14 +87,9 @@ class ObjectAtLine(AtLine):
         return "".join([status.value for status in self.status])
 
     @property
-    def content(self):
-        return (
-            ValueToken(
-                f"{self.object_label.value}"
-                f"{' ' + self.text if self.text else ''}"
-                f"{self._status_string}"
-            ),
-        )
+    def _content_value(self):
+        text = f" {self.text}" if self.text else ""
+        return f"{self.object_label.value}{text}{self._status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -109,12 +98,9 @@ class DivisionAtLine(AtLine):
     number: Optional[int] = None
 
     @property
-    def content(self):
-        return (
-            ValueToken(
-                f"m=division {self.text}{' ' + str(self.number) if self.number else ''}"
-            ),
-        )
+    def _content_value(self):
+        number = f" {str(self.number)}" if self.number else ""
+        return f"m=division {self.text}{number}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -129,10 +115,6 @@ class CompositeAtLine(AtLine):
             raise ValueError("number only allowed with '@end' composite")
 
     @property
-    def content(self):
-        return (
-            ValueToken(
-                f"{self.composite.value} "
-                f"{self.text}{' ' + str(self.number) if self.number else ''}"
-            ),
-        )
+    def _content_value(self):
+        number = f" {str(self.number)}" if self.number else ""
+        return f"{self.composite.value} {self.text}{number}"
