@@ -16,6 +16,7 @@ from ebl.transliteration.domain.dollar_line import (
     StateDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -70,8 +71,8 @@ class InterestingFragmentFactory(FragmentFactory):
 class TransliteratedFragmentFactory(FragmentFactory):
     text = Text(
         (
-            TextLine(
-                "1'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1'."),
                 (
                     Word.of([UnidentifiedSign(frozenset())]),
                     Word.of(
@@ -111,8 +112,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Word.of([Number.of_name("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
-            TextLine(
-                "2'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("2'."),
                 (
                     BrokenAway.open(),
                     UnknownNumberOfSigns(frozenset()),
@@ -136,8 +137,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine(
-                "3'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("3'."),
                 (
                     BrokenAway.open(),
                     UnknownNumberOfSigns(frozenset()),
@@ -174,8 +175,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine(
-                "6'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("6'."),
                 (
                     BrokenAway.open(),
                     UnknownNumberOfSigns(frozenset()),
@@ -194,8 +195,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 ),
             ),
-            TextLine(
-                "7'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("7'."),
                 (
                     Word.of(
                         [
@@ -232,8 +233,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text(
         (
-            TextLine(
-                "1'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("1'."),
                 (
                     Word.of([UnidentifiedSign.of()]),
                     Word.of(
@@ -273,8 +274,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Word.of([Number.of_name("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
-            TextLine(
-                "2'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("2'."),
                 (
                     BrokenAway.open(),
                     UnknownNumberOfSigns(frozenset()),
@@ -294,8 +295,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine(
-                "3'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("3'."),
                 (
                     BrokenAway.open(),
                     UnknownNumberOfSigns(frozenset()),
@@ -336,8 +337,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine(
-                "6'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("6'."),
                 (
                     BrokenAway.open(),
                     UnknownNumberOfSigns(frozenset()),
@@ -359,8 +360,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     ),
                 ),
             ),
-            TextLine(
-                "7'.",
+            TextLine.of_iterable(
+                LineNumberLabel.from_atf("7'."),
                 (
                     Word.of(
                         [

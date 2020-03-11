@@ -5,7 +5,9 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
     Erasure,
+    BrokenAway,
 )
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
@@ -19,7 +21,12 @@ from ebl.transliteration.domain.line import (
     TextLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    ValueToken,
+    UnknownNumberOfSigns,
+)
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     LoneDeterminative,
@@ -67,6 +74,9 @@ def test_line_of_iterable(code: str, language: Language, normalized: bool):
         Word.of([Reading.of_name("second")]),
         LanguageShift.of("%sb"),
         LoneDeterminative.of([Determinative.of([Reading.of_name("third")])]),
+        Word.of([BrokenAway.open(), Reading.of_name("fourth")]),
+        UnknownNumberOfSigns(frozenset()),
+        BrokenAway.close(),
     ]
     expected_tokens = (
         Word.of([Reading.of_name("first")], DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
@@ -76,6 +86,18 @@ def test_line_of_iterable(code: str, language: Language, normalized: bool):
         LoneDeterminative.of(
             [Determinative.of([Reading.of_name("third")])], Language.AKKADIAN, False
         ),
+        Word.of(
+            [
+                BrokenAway.open(),
+                Reading.of(
+                    (ValueToken(frozenset({EnclosureType.BROKEN_AWAY}), "fourth"),)
+                ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
+            ],
+            DEFAULT_LANGUAGE,
+            DEFAULT_NORMALIZED,
+        ),
+        UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+        BrokenAway.close().set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
     )
     line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
@@ -85,7 +107,7 @@ def test_line_of_iterable(code: str, language: Language, normalized: bool):
     assert line.key == "⁞".join(
         [str(line.atf)] + [token.get_key() for token in expected_tokens]
     )
-    assert line.atf == f"1. first {code} second %sb {{third}}"
+    assert line.atf == f"1. first {code} second %sb {{third}} [fourth ...]"
 
 
 @pytest.mark.parametrize(
