@@ -133,6 +133,7 @@ def test_word(language, normalized, unique_lemma):
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
         "parts": dump_tokens(parts),
+        "enclosureType": [type.name for type in word.enclosure_type],
     }
     assert_token_serialization(word, serialized)
 

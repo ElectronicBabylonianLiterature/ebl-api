@@ -17,6 +17,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -111,9 +112,55 @@ LINES = [
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
-                    Word.of([Reading.of_name("bu")]),
-                    LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
-                    DocumentOrientedGloss.close(),
+                    Word.of(
+                        [
+                            Reading.of(
+                                (
+                                    ValueToken(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        ),
+                                        "bu",
+                                    ),
+                                )
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ]
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    LoneDeterminative.of(
+                        [
+                            Determinative.of(
+                                [
+                                    Reading.of(
+                                        (
+                                            ValueToken(
+                                                frozenset(
+                                                    {
+                                                        EnclosureType.DOCUMENT_ORIENTED_GLOSS
+                                                    }
+                                                ),
+                                                "d",
+                                            ),
+                                        )
+                                    ).set_enclosure_type(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        )
+                                    ),
+                                ]
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ],
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    DocumentOrientedGloss.close().set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
                 ]
             ),
         },

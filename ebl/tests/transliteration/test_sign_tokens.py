@@ -38,6 +38,7 @@ def test_divider():
         "divider": value,
         "modifiers": list(modifiers),
         "flags": ["?"],
+        "enclosureType": [type.name for type in divider.enclosure_type],
     }
     assert_token_serialization(divider, serialized)
 
@@ -55,6 +56,7 @@ def test_unidentified_sign():
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": [],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -73,6 +75,7 @@ def test_unidentified_sign_with_flags():
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": ["#"],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -90,6 +93,7 @@ def test_unclear_sign():
         "type": "UnclearSign",
         "value": expected_value,
         "flags": [],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -108,6 +112,7 @@ def test_unclear_sign_with_flags():
         "type": "UnclearSign",
         "value": expected_value,
         "flags": ["!"],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -187,6 +192,7 @@ def test_reading(
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
         "sign": sign and dump_token(sign),
+        "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
 
@@ -316,6 +322,7 @@ def test_logogram(
         "flags": [flag.value for flag in flags],
         "surrogate": dump_tokens(surrogate),
         "sign": sign and dump_token(sign),
+        "enclosureType": [type.name for type in logogram.enclosure_type],
     }
     assert_token_serialization(logogram, serialized)
 
@@ -394,6 +401,7 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_nam
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
         "sign": sign and dump_token(sign),
+        "enclosureType": [type.name for type in number.enclosure_type],
     }
     assert_token_serialization(number, serialized)
 
@@ -415,6 +423,7 @@ def test_compound_grapheme():
     serialized = {
         "type": "CompoundGrapheme",
         "value": value,
+        "enclosureType": [type.name for type in compound.enclosure_type],
     }
     assert_token_serialization(compound, serialized)
 
@@ -447,5 +456,6 @@ def test_grapheme(name, modifiers, flags, expected_value):
         "name": name,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
+        "enclosureType": [type.name for type in grapheme.enclosure_type],
     }
     assert_token_serialization(grapheme, serialized)

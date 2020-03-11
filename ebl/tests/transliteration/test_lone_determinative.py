@@ -56,6 +56,7 @@ def test_lone_determinative(language, normalized):
         "lemmatizable": lone_determinative.lemmatizable,
         "erasure": ErasureState.NONE.name,
         "parts": dump_tokens(parts),
+        "enclosureType": [type.name for type in lone_determinative.enclosure_type],
     }
     assert_token_serialization(lone_determinative, serialized)
 
