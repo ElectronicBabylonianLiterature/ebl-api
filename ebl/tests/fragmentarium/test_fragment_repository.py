@@ -20,9 +20,10 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 

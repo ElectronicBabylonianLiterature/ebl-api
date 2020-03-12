@@ -43,7 +43,7 @@ from ebl.transliteration.domain.labels import (
     LineNumberLabel,
     SurfaceLabel,
 )
-from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word

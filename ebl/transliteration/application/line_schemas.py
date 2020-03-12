@@ -11,8 +11,8 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     Line,
-    TextLine,
 )
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
     ImageDollarLine,

@@ -22,8 +22,8 @@ from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
-    TextLine,
 )
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
