@@ -5,7 +5,9 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
     Erasure,
+    BrokenAway,
 )
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
@@ -19,7 +21,12 @@ from ebl.transliteration.domain.line import (
     TextLine,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    ValueToken,
+    UnknownNumberOfSigns,
+)
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     LoneDeterminative,
@@ -60,22 +67,37 @@ def test_empty_line():
         ("%foo", DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
     ],
 )
-def test_line_of_iterable(code, language, normalized):
+def test_line_of_iterable(code: str, language: Language, normalized: bool):
     tokens = [
-        Word(parts=[Reading.of_name("first")]),
-        LanguageShift(code),
-        Word(parts=[Reading.of_name("second")]),
-        LanguageShift("%sb"),
-        LoneDeterminative(parts=[Determinative([Reading.of_name("third")])]),
+        Word.of([Reading.of_name("first")]),
+        LanguageShift.of(code),
+        Word.of([Reading.of_name("second")]),
+        LanguageShift.of("%sb"),
+        LoneDeterminative.of([Determinative.of([Reading.of_name("third")])]),
+        Word.of([BrokenAway.open(), Reading.of_name("fourth")]),
+        UnknownNumberOfSigns(frozenset()),
+        BrokenAway.close(),
     ]
     expected_tokens = (
-        Word(DEFAULT_LANGUAGE, DEFAULT_NORMALIZED, parts=[Reading.of_name("first")]),
-        LanguageShift(code),
-        Word(language, normalized, parts=[Reading.of_name("second")]),
-        LanguageShift("%sb"),
-        LoneDeterminative(
-            Language.AKKADIAN, False, parts=[Determinative([Reading.of_name("third")])]
+        Word.of([Reading.of_name("first")], DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
+        LanguageShift.of(code),
+        Word.of([Reading.of_name("second")], language, normalized),
+        LanguageShift.of("%sb"),
+        LoneDeterminative.of(
+            [Determinative.of([Reading.of_name("third")])], Language.AKKADIAN, False
         ),
+        Word.of(
+            [
+                BrokenAway.open(),
+                Reading.of(
+                    (ValueToken(frozenset({EnclosureType.BROKEN_AWAY}), "fourth"),)
+                ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
+            ],
+            DEFAULT_LANGUAGE,
+            DEFAULT_NORMALIZED,
+        ),
+        UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+        BrokenAway.close().set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
     )
     line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
@@ -85,7 +107,7 @@ def test_line_of_iterable(code, language, normalized):
     assert line.key == "⁞".join(
         [str(line.atf)] + [token.get_key() for token in expected_tokens]
     )
-    assert line.atf == f"1. first {code} second %sb {{third}}"
+    assert line.atf == f"1. first {code} second %sb {{third}} [fourth ...]"
 
 
 @pytest.mark.parametrize(
@@ -111,7 +133,7 @@ def test_line_of_iterable(code, language, normalized):
         "18. du₃-am₃{{mu-un-<(du₃)>}}",
     ],
 )
-def test_text_line_atf(atf):
+def test_text_line_atf(atf: str):
     line = parse_line(atf)
     assert line.atf == atf
 
@@ -121,8 +143,8 @@ def test_text_line_atf_gloss():
         LINE_NUMBER,
         [
             DocumentOrientedGloss.open(),
-            Word(parts=[Reading.of_name("mu")]),
-            Word(parts=[Reading.of_name("bu")]),
+            Word.of([Reading.of_name("mu")]),
+            Word.of([Reading.of_name("bu")]),
             DocumentOrientedGloss.close(),
         ],
     )
@@ -136,12 +158,8 @@ def test_text_line_atf_gloss():
         (
             [
                 Erasure.open(),
-                Word(
-                    parts=[
-                        Reading.of_name("mu"),
-                        Joiner.hyphen(),
-                        Reading.of_name("bu"),
-                    ]
+                Word.of(
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
                 ),
                 Erasure.center(),
                 Erasure.close(),
@@ -152,12 +170,8 @@ def test_text_line_atf_gloss():
             [
                 Erasure.open(),
                 Erasure.center(),
-                Word(
-                    parts=[
-                        Reading.of_name("mu"),
-                        Joiner.hyphen(),
-                        Reading.of_name("bu"),
-                    ]
+                Word.of(
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
                 ),
                 Erasure.close(),
             ],
@@ -166,20 +180,12 @@ def test_text_line_atf_gloss():
         (
             [
                 Erasure.open(),
-                Word(
-                    parts=[
-                        Reading.of_name("mu"),
-                        Joiner.hyphen(),
-                        Reading.of_name("bu"),
-                    ]
+                Word.of(
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
                 ),
                 Erasure.center(),
-                Word(
-                    parts=[
-                        Reading.of_name("mu"),
-                        Joiner.hyphen(),
-                        Reading.of_name("bu"),
-                    ]
+                Word.of(
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
                 ),
                 Erasure.close(),
             ],
@@ -187,22 +193,22 @@ def test_text_line_atf_gloss():
         ),
     ],
 )
-def test_text_line_atf_erasure(word, erasure, expected):
-    word = Word(parts=[Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("mu")])
+def test_text_line_atf_erasure(erasure, expected: str):
+    word = Word.of([Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("mu")])
     line = TextLine.of_iterable(LINE_NUMBER, [word, *erasure, word])
     assert line.atf == f"{line.prefix} {word.value} {expected} {word.value}"
 
 
 def test_control_line_of_single():
     prefix = "$"
-    token = ValueToken("only")
+    token = ValueToken.of("only")
     line = ControlLine.of_single(prefix, token)
 
     assert line == ControlLine("$", (token,))
 
 
 @pytest.mark.parametrize(
-    "line", [ControlLine.of_single("@", ValueToken("obverse")), EmptyLine()]
+    "line", [ControlLine.of_single("@", ValueToken.of("obverse")), EmptyLine()]
 )
 def test_update_lemmatization(line):
     lemmatization = tuple(LemmatizationToken(token.value) for token in line.content)
@@ -210,18 +216,17 @@ def test_update_lemmatization(line):
 
 
 def test_update_lemmatization_text_line():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word(parts=[Reading.of_name("bu")])])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("bu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     expected = TextLine.of_iterable(
-        LINE_NUMBER,
-        [Word(parts=[Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))],
+        LINE_NUMBER, [Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))],
     )
 
     assert line.update_lemmatization(lemmatization) == expected
 
 
 def test_update_lemmatization_incompatible():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word(parts=[Reading.of_name("mu")])])
+    line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("mu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
@@ -230,7 +235,7 @@ def test_update_lemmatization_incompatible():
 def test_update_lemmatization_wrong_lenght():
     line = TextLine.of_iterable(
         LINE_NUMBER,
-        [Word(parts=[Reading.of_name("bu")]), Word(parts=[Reading.of_name("bu")])],
+        [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")])],
     )
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):

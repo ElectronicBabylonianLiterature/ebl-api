@@ -38,12 +38,13 @@ def test_divider():
         "divider": value,
         "modifiers": list(modifiers),
         "flags": ["?"],
+        "enclosureType": [type.name for type in divider.enclosure_type],
     }
     assert_token_serialization(divider, serialized)
 
 
 def test_unidentified_sign():
-    sign = UnidentifiedSign()
+    sign = UnidentifiedSign.of()
 
     expected_value = "X"
     assert sign.value == expected_value
@@ -55,13 +56,14 @@ def test_unidentified_sign():
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": [],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
 
 def test_unidentified_sign_with_flags():
     flags = [atf.Flag.DAMAGE]
-    sign = UnidentifiedSign(flags)
+    sign = UnidentifiedSign.of(flags)
 
     expected_value = "X#"
     assert sign.value == expected_value
@@ -73,12 +75,13 @@ def test_unidentified_sign_with_flags():
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": ["#"],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
 
 def test_unclear_sign():
-    sign = UnclearSign()
+    sign = UnclearSign.of()
 
     expected_value = "x"
     assert sign.value == expected_value
@@ -90,13 +93,14 @@ def test_unclear_sign():
         "type": "UnclearSign",
         "value": expected_value,
         "flags": [],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
 
 def test_unclear_sign_with_flags():
     flags = [atf.Flag.CORRECTION]
-    sign = UnclearSign(flags)
+    sign = UnclearSign.of(flags)
 
     expected_value = "x!"
     assert sign.value == expected_value
@@ -108,6 +112,7 @@ def test_unclear_sign_with_flags():
         "type": "UnclearSign",
         "value": expected_value,
         "flags": ["!"],
+        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -115,11 +120,11 @@ def test_unclear_sign_with_flags():
 @pytest.mark.parametrize(
     "name_parts,sub_index,modifiers,flags,sign,expected_value,expected_name",
     [
-        ((ValueToken("kur"),), 1, [], [], None, "kur", "kur"),
-        ((ValueToken("kurʾ"),), 1, [], [], None, "kurʾ", "kurʾ"),
-        ((ValueToken("ʾ"),), 1, [], [], None, "ʾ", "ʾ"),
+        ((ValueToken.of("kur"),), 1, [], [], None, "kur", "kur"),
+        ((ValueToken.of("kurʾ"),), 1, [], [], None, "kurʾ", "kurʾ"),
+        ((ValueToken.of("ʾ"),), 1, [], [], None, "ʾ", "ʾ"),
         (
-            (ValueToken("k"), BrokenAway.open(), ValueToken("ur")),
+            (ValueToken.of("k"), BrokenAway.open(), ValueToken.of("ur")),
             1,
             [],
             [],
@@ -128,7 +133,7 @@ def test_unclear_sign_with_flags():
             "kur",
         ),
         (
-            (ValueToken("ku"), BrokenAway.close(), ValueToken("r")),
+            (ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")),
             1,
             [],
             [],
@@ -136,12 +141,12 @@ def test_unclear_sign_with_flags():
             "ku]r",
             "kur",
         ),
-        ((ValueToken("kur"),), None, [], [], None, "kurₓ", "kur"),
-        ((ValueToken("kur"),), 0, [], [], None, "kur₀", "kur"),
-        ((ValueToken("kur"),), 1, [], [], Grapheme.of("KUR"), "kur(KUR)", "kur"),
-        ((ValueToken("kur"),), 1, ["@v", "@180"], [], None, "kur@v@180", "kur"),
+        ((ValueToken.of("kur"),), None, [], [], None, "kurₓ", "kur"),
+        ((ValueToken.of("kur"),), 0, [], [], None, "kur₀", "kur"),
+        ((ValueToken.of("kur"),), 1, [], [], Grapheme.of("KUR"), "kur(KUR)", "kur"),
+        ((ValueToken.of("kur"),), 1, ["@v", "@180"], [], None, "kur@v@180", "kur"),
         (
-            (ValueToken("kur"),),
+            (ValueToken.of("kur"),),
             1,
             [],
             [atf.Flag.DAMAGE, atf.Flag.CORRECTION],
@@ -150,7 +155,7 @@ def test_unclear_sign_with_flags():
             "kur",
         ),
         (
-            (ValueToken("kur"),),
+            (ValueToken.of("kur"),),
             10,
             ["@v"],
             [atf.Flag.CORRECTION],
@@ -187,6 +192,7 @@ def test_reading(
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
         "sign": sign and dump_token(sign),
+        "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
 
@@ -197,7 +203,7 @@ def test_load_old_style_reading():
     flags = []
     modifiers = []
     sign = "KUR"
-    reading = Reading.of_name(name, sub_index, modifiers, flags, ValueToken(sign))
+    reading = Reading.of_name(name, sub_index, modifiers, flags, ValueToken.of(sign))
 
     serialized = {
         "type": "Reading",
@@ -221,11 +227,11 @@ def test_invalid_reading(name, sub_index):
 @pytest.mark.parametrize(
     "name_parts,sub_index,modifiers,flags,sign,surrogate,expected_value,expected_name",
     [
-        ((ValueToken("KUR"),), 1, [], [], None, [], "KUR", "KUR"),
-        ((ValueToken("KURʾ"),), 1, [], [], None, [], "KURʾ", "KURʾ"),
-        ((ValueToken("ʾ"),), 1, [], [], None, [], "ʾ", "ʾ"),
+        ((ValueToken.of("KUR"),), 1, [], [], None, [], "KUR", "KUR"),
+        ((ValueToken.of("KURʾ"),), 1, [], [], None, [], "KURʾ", "KURʾ"),
+        ((ValueToken.of("ʾ"),), 1, [], [], None, [], "ʾ", "ʾ"),
         (
-            (ValueToken("KU"), BrokenAway.open(), ValueToken("R")),
+            (ValueToken.of("KU"), BrokenAway.open(), ValueToken.of("R")),
             1,
             [],
             [],
@@ -235,7 +241,7 @@ def test_invalid_reading(name, sub_index):
             "KUR",
         ),
         (
-            (ValueToken("K"), BrokenAway.close(), ValueToken("UR")),
+            (ValueToken.of("K"), BrokenAway.close(), ValueToken.of("UR")),
             1,
             [],
             [],
@@ -244,22 +250,22 @@ def test_invalid_reading(name, sub_index):
             "K]UR",
             "KUR",
         ),
-        ((ValueToken("KUR"),), None, [], [], None, [], "KURₓ", "KUR"),
-        ((ValueToken("KUR"),), 0, [], [], None, [], "KUR₀", "KUR"),
-        ((ValueToken("KUR"),), 1, [], [], Grapheme.of("KUR"), [], "KUR(KUR)", "KUR"),
+        ((ValueToken.of("KUR"),), None, [], [], None, [], "KURₓ", "KUR"),
+        ((ValueToken.of("KUR"),), 0, [], [], None, [], "KUR₀", "KUR"),
+        ((ValueToken.of("KUR"),), 1, [], [], Grapheme.of("KUR"), [], "KUR(KUR)", "KUR"),
         (
-            (ValueToken("KUR"),),
+            (ValueToken.of("KUR"),),
             1,
             [],
             [],
             None,
-            [Reading.of_name("kur"), Joiner(atf.Joiner.HYPHEN), Reading.of_name("kur")],
+            [Reading.of_name("kur"), Joiner.hyphen(), Reading.of_name("kur")],
             "KUR<(kur-kur)>",
             "KUR",
         ),
-        ((ValueToken("KUR"),), 1, ["@v", "@180"], [], None, [], "KUR@v@180", "KUR"),
+        ((ValueToken.of("KUR"),), 1, ["@v", "@180"], [], None, [], "KUR@v@180", "KUR"),
         (
-            (ValueToken("KUR"),),
+            (ValueToken.of("KUR"),),
             1,
             [],
             [atf.Flag.DAMAGE, atf.Flag.CORRECTION],
@@ -269,7 +275,7 @@ def test_invalid_reading(name, sub_index):
             "KUR",
         ),
         (
-            (ValueToken("KUR"),),
+            (ValueToken.of("KUR"),),
             10,
             ["@v"],
             [atf.Flag.CORRECTION],
@@ -316,6 +322,7 @@ def test_logogram(
         "flags": [flag.value for flag in flags],
         "surrogate": dump_tokens(surrogate),
         "sign": sign and dump_token(sign),
+        "enclosureType": [type.name for type in logogram.enclosure_type],
     }
     assert_token_serialization(logogram, serialized)
 
@@ -330,9 +337,9 @@ def test_invalid_logogram(name, sub_index):
 @pytest.mark.parametrize(
     "name_parts,modifiers,flags,sign,expected_value, expected_name",
     [
-        ((ValueToken("1"),), [], [], None, "1", "1"),
+        ((ValueToken.of("1"),), [], [], None, "1", "1"),
         (
-            (ValueToken("1"), BrokenAway.open(), ValueToken("4")),
+            (ValueToken.of("1"), BrokenAway.open(), ValueToken.of("4")),
             [],
             [],
             None,
@@ -340,17 +347,17 @@ def test_invalid_logogram(name, sub_index):
             "14",
         ),
         (
-            (ValueToken("1"), BrokenAway.close(), ValueToken("0")),
+            (ValueToken.of("1"), BrokenAway.close(), ValueToken.of("0")),
             [],
             [],
             None,
             "1]0",
             "10",
         ),
-        ((ValueToken("1"),), [], [], Grapheme.of("KUR"), "1(KUR)", "1"),
-        ((ValueToken("1"),), ["@v", "@180"], [], None, "1@v@180", "1"),
+        ((ValueToken.of("1"),), [], [], Grapheme.of("KUR"), "1(KUR)", "1"),
+        ((ValueToken.of("1"),), ["@v", "@180"], [], None, "1@v@180", "1"),
         (
-            (ValueToken("1"),),
+            (ValueToken.of("1"),),
             [],
             [atf.Flag.DAMAGE, atf.Flag.CORRECTION],
             None,
@@ -358,7 +365,7 @@ def test_invalid_logogram(name, sub_index):
             "1",
         ),
         (
-            (ValueToken("1"),),
+            (ValueToken.of("1"),),
             ["@v"],
             [atf.Flag.CORRECTION],
             Grapheme.of("KUR"),
@@ -394,6 +401,7 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_nam
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
         "sign": sign and dump_token(sign),
+        "enclosureType": [type.name for type in number.enclosure_type],
     }
     assert_token_serialization(number, serialized)
 
@@ -407,7 +415,7 @@ def test_invalid_number(name):
 
 def test_compound_grapheme():
     value = "|BI.IS|"
-    compound = CompoundGrapheme(value)
+    compound = CompoundGrapheme.of(value)
 
     assert compound.value == value
     assert compound.get_key() == f"CompoundGrapheme⁝{value}"
@@ -415,6 +423,7 @@ def test_compound_grapheme():
     serialized = {
         "type": "CompoundGrapheme",
         "value": value,
+        "enclosureType": [type.name for type in compound.enclosure_type],
     }
     assert_token_serialization(compound, serialized)
 
@@ -447,5 +456,6 @@ def test_grapheme(name, modifiers, flags, expected_value):
         "name": name,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
+        "enclosureType": [type.name for type in grapheme.enclosure_type],
     }
     assert_token_serialization(grapheme, serialized)

@@ -8,6 +8,7 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.atf_visitor import AtfVisitor
+from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language_visitor import LanguageVisitor
 from ebl.transliteration.domain.lemmatization import (
@@ -101,10 +102,15 @@ class TextLine(Line):
 
     @classmethod
     def of_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
-        visitor = LanguageVisitor()
+        enclosure_visitor = EnclosureUpdater()
         for token in content:
-            token.accept(visitor)
-        return cls(line_number.to_atf(), visitor.tokens)
+            token.accept(enclosure_visitor)
+
+        language_visitor = LanguageVisitor()
+        for token in enclosure_visitor.tokens:
+            token.accept(language_visitor)
+
+        return cls(line_number.to_atf(), language_visitor.tokens)
 
     @property
     def line_number(self) -> LineNumberLabel:

@@ -27,9 +27,9 @@ from ebl.transliteration.domain.word_tokens import Word
 LINES: Sequence[Line] = (
     TextLine.of_iterable(
         LineNumberLabel.from_atf("1."),
-        [Word(parts=[Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],)],
+        [Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],)],
     ),
-    ControlLine.of_single("$", ValueToken(" single ruling")),
+    ControlLine.of_single("$", ValueToken.of(" single ruling")),
 )
 PARSER_VERSION = "1.0.0"
 TEXT: Text = Text(LINES, PARSER_VERSION)
@@ -75,7 +75,7 @@ def test_update_lemmatization():
             TextLine(
                 "1.",
                 (
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),),
                         parts=[
                             Reading.of_name("ha"),
@@ -85,7 +85,7 @@ def test_update_lemmatization():
                     ),
                 ),
             ),
-            ControlLine("$", (ValueToken(" single ruling"),)),
+            ControlLine("$", (ValueToken.of(" single ruling"),)),
         ),
         TEXT.parser_version,
     )
@@ -114,43 +114,52 @@ def test_update_lemmatization_wrong_lines():
         (
             Text.of_iterable([EmptyLine()]),
             Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken(" single ruling"))]
+                [ControlLine.of_single("$", ValueToken.of(" single ruling"))]
             ),
             Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken(" single ruling"))]
+                [ControlLine.of_single("$", ValueToken.of(" single ruling"))]
+            ),
+        ),
+        (
+            Text.of_iterable(
+                [
+                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                    ControlLine.of_single("$", ValueToken.of(" single ruling")),
+                    EmptyLine(),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                    EmptyLine(),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                    EmptyLine(),
+                ]
             ),
         ),
         (
             Text.of_iterable(
                 [
-                    ControlLine.of_single("$", ValueToken(" double ruling")),
-                    ControlLine.of_single("$", ValueToken(" single ruling")),
                     EmptyLine(),
-                ]
-            ),
-            Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken(" double ruling")), EmptyLine(),]
-            ),
-            Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken(" double ruling")), EmptyLine(),]
-            ),
-        ),
-        (
-            Text.of_iterable(
-                [EmptyLine(), ControlLine.of_single("$", ValueToken(" double ruling")),]
-            ),
-            Text.of_iterable(
-                [
-                    EmptyLine(),
-                    ControlLine.of_single("$", ValueToken(" single ruling")),
-                    ControlLine.of_single("$", ValueToken(" double ruling")),
+                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
                 ]
             ),
             Text.of_iterable(
                 [
                     EmptyLine(),
-                    ControlLine.of_single("$", ValueToken(" single ruling")),
-                    ControlLine.of_single("$", ValueToken(" double ruling")),
+                    ControlLine.of_single("$", ValueToken.of(" single ruling")),
+                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    EmptyLine(),
+                    ControlLine.of_single("$", ValueToken.of(" single ruling")),
+                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
                 ]
             ),
         ),
@@ -160,13 +169,11 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word(
-                                unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of_name("nu")],
+                            Word.of(
+                                [Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)
                             ),
-                            Word(
-                                unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of_name("nu")],
+                            Word.of(
+                                [Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)
                             ),
                         ],
                     )
@@ -177,8 +184,8 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word(parts=[Reading.of_name("mu")]),
-                            Word(parts=[Reading.of_name("nu")]),
+                            Word.of([Reading.of_name("mu")]),
+                            Word.of([Reading.of_name("nu")]),
                         ],
                     )
                 ]
@@ -188,10 +195,9 @@ def test_update_lemmatization_wrong_lines():
                     TextLine.of_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
-                            Word(parts=[Reading.of_name("mu")]),
-                            Word(
-                                unique_lemma=(WordId("nu I"),),
-                                parts=[Reading.of_name("nu")],
+                            Word.of([Reading.of_name("mu")]),
+                            Word.of(
+                                [Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)
                             ),
                         ],
                     )

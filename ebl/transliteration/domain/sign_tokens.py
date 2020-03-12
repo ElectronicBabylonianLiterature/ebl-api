@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple, Union
+from typing import Iterable, Optional, Sequence, Tuple, Union, TypeVar, Type
 
 import attr
 
@@ -17,11 +17,18 @@ def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
     return tuple(flags)
 
 
+T = TypeVar("T", bound="UnknownSign")
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class UnknownSign(Token):
     flags: Sequence[atf.Flag] = attr.ib(
         default=tuple(), converter=convert_flag_sequence
     )
+
+    @classmethod
+    def of(cls: Type[T], flags: Sequence[atf.Flag] = tuple()) -> T:
+        return cls(frozenset(), flags)
 
     @property
     @abstractmethod
@@ -94,7 +101,7 @@ class Divider(AbstractSign):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ):
-        return Divider(modifiers, flags, divider)
+        return Divider(frozenset(), modifiers, flags, divider)
 
 
 SignName = Sequence[Union[ValueToken, BrokenAway]]
@@ -144,7 +151,7 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(modifiers, flags, name, sub_index, sign)
+        return Reading(frozenset(), modifiers, flags, name, sub_index, sign)
 
     @staticmethod
     def of_name(
@@ -154,7 +161,7 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading.of((ValueToken(name),), sub_index, modifiers, flags, sign)
+        return Reading.of((ValueToken.of(name),), sub_index, modifiers, flags, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -181,7 +188,7 @@ class Logogram(NamedSign):
         sign: Optional[Token] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
-        return Logogram(modifiers, flags, name, sub_index, sign, surrogate)
+        return Logogram(frozenset(), modifiers, flags, name, sub_index, sign, surrogate)
 
     @staticmethod
     def of_name(
@@ -193,7 +200,7 @@ class Logogram(NamedSign):
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
         return Logogram.of(
-            (ValueToken(name),), sub_index, modifiers, flags, sign, surrogate
+            (ValueToken.of(name),), sub_index, modifiers, flags, sign, surrogate
         )
 
 
@@ -207,7 +214,7 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(modifiers, flags, name, sub_index, sign)
+        return Number(frozenset(), modifiers, flags, name, sub_index, sign)
 
     @staticmethod
     def of_name(
@@ -217,7 +224,7 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number.of((ValueToken(name),), modifiers, flags, sign, sub_index)
+        return Number.of((ValueToken.of(name),), modifiers, flags, sign, sub_index)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -236,7 +243,7 @@ class Grapheme(AbstractSign):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ) -> "Grapheme":
-        return Grapheme(modifiers, flags, name)
+        return Grapheme(frozenset(), modifiers, flags, name)
 
 
 @attr.s(auto_attribs=True, frozen=True)

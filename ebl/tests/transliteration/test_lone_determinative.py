@@ -15,7 +15,7 @@ from ebl.transliteration.domain.word_tokens import (
 
 def test_of_value():
     value = "{bu}"
-    parts = [Determinative([Reading.of_name("bu")])]
+    parts = [Determinative.of([Reading.of_name("bu")])]
     lone_determinative = LoneDeterminative.of_value(parts)
     assert lone_determinative.value == value
     assert lone_determinative.lemmatizable is False
@@ -31,15 +31,15 @@ def test_of_value():
 )
 def test_lone_determinative(language, normalized):
     value = "{mu}"
-    parts = [Determinative([Reading.of_name("mu")])]
-    lone_determinative = LoneDeterminative(language, normalized, parts=parts)
+    parts = [Determinative.of([Reading.of_name("mu")])]
+    lone_determinative = LoneDeterminative.of(parts, language, normalized)
 
-    equal = LoneDeterminative(language, normalized, parts=parts)
-    other_language = LoneDeterminative(Language.UNKNOWN, normalized, parts=parts)
-    other_parts = LoneDeterminative(
-        language, normalized, parts=[Determinative([Reading.of_name("bu")])]
+    equal = LoneDeterminative.of(parts, language, normalized)
+    other_language = LoneDeterminative.of(parts, Language.UNKNOWN, normalized)
+    other_parts = LoneDeterminative.of(
+        [Determinative.of([Reading.of_name("bu")])], language, normalized
     )
-    other_normalized = LoneDeterminative(language, not normalized, parts=parts)
+    other_normalized = LoneDeterminative.of(parts, language, not normalized)
 
     assert lone_determinative.value == value
     assert lone_determinative.lemmatizable is False
@@ -56,6 +56,7 @@ def test_lone_determinative(language, normalized):
         "lemmatizable": lone_determinative.lemmatizable,
         "erasure": ErasureState.NONE.name,
         "parts": dump_tokens(parts),
+        "enclosureType": [type.name for type in lone_determinative.enclosure_type],
     }
     assert_token_serialization(lone_determinative, serialized)
 
@@ -70,16 +71,14 @@ def test_lone_determinative(language, normalized):
         assert lone_determinative != not_equal
         assert hash(lone_determinative) != hash(not_equal)
 
-    assert lone_determinative != ValueToken(value)
+    assert lone_determinative != ValueToken.of(value)
 
 
 def test_set_language():
-    parts = [Determinative([Reading.of_name("bu")])]
+    parts = [Determinative.of([Reading.of_name("bu")])]
     language = Language.SUMERIAN
     normalized = False
-    lone_determinative = LoneDeterminative(
-        Language.AKKADIAN, not normalized, parts=parts
-    )
-    expected = LoneDeterminative(language, normalized, parts=parts)
+    lone_determinative = LoneDeterminative.of(parts, Language.AKKADIAN, not normalized)
+    expected = LoneDeterminative.of(parts, language, normalized)
 
     assert lone_determinative.set_language(language, normalized) == expected

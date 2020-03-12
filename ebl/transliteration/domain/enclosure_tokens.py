@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Mapping, Sequence
+from typing import Mapping, Sequence, TypeVar, Type
 
 import attr
 
@@ -18,6 +18,9 @@ class OmissionOrRemoval(ValueToken):
         return Side.LEFT if (self.value in ["<(", "<", "<<"]) else Side.RIGHT
 
 
+E = TypeVar("E", bound="Enclosure")
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Enclosure(Token):
     side: Side
@@ -28,7 +31,7 @@ class Enclosure(Token):
         ...
 
     @property
-    def value(self):
+    def value(self) -> str:
         return self.get_sides()[self.side]
 
     @property
@@ -40,18 +43,22 @@ class Enclosure(Token):
         return self.side == Side.RIGHT
 
     @classmethod
-    def open(cls):
-        return cls(Side.LEFT)
+    def open(cls: Type[E]) -> E:
+        return cls(frozenset(), Side.LEFT)
 
     @classmethod
-    def close(cls):
-        return cls(Side.RIGHT)
+    def close(cls: Type[E]) -> E:
+        return cls(frozenset(), Side.RIGHT)
 
     @classmethod
-    def of_value(cls, value: str):
+    def of(cls: Type[E], side: Side) -> E:
+        return cls(frozenset(), side)
+
+    @classmethod
+    def of_value(cls: Type[E], value: str) -> E:
         sides = cls.get_sides()
         side = {v: k for k, v in sides.items()}[value]
-        return cls(side)
+        return cls(frozenset(), side)
 
 
 @attr.s(frozen=True)
@@ -103,13 +110,20 @@ class Erasure(Enclosure):
         return atf.ERASURE
 
     @classmethod
-    def center(cls):
-        return cls(Side.CENTER)
+    def center(cls) -> "Erasure":
+        return cls(frozenset(), Side.CENTER)
+
+
+G = TypeVar("G", bound="Gloss")
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Gloss(Token):
     _parts: Sequence[Token] = attr.ib(converter=convert_token_sequence)
+
+    @classmethod
+    def of(cls: Type[G], parts: Sequence[Token] = tuple()) -> G:
+        return cls(frozenset(), parts)
 
     @property
     @abstractmethod

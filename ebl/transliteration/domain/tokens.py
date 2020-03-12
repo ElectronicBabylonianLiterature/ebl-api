@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import AbstractSet, Iterable, Optional, Sequence, Tuple, Type, TypeVar
 
 import attr
 
 import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
@@ -22,7 +23,11 @@ def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
     return tuple(tokens)
 
 
+@attr.s(frozen=True, auto_attribs=True)
 class Token(ABC):
+    T = TypeVar("T", bound="Token")
+    enclosure_type: AbstractSet[EnclosureType]
+
     @property
     @abstractmethod
     def value(self) -> str:
@@ -58,6 +63,9 @@ class Token(ABC):
         else:
             raise AlignmentError()
 
+    def set_enclosure_type(self, enclosure_type: AbstractSet[EnclosureType]) -> "Token":
+        return attr.evolve(self, enclosure_type=enclosure_type)
+
     def strip_alignment(self):
         return self
 
@@ -68,6 +76,9 @@ class Token(ABC):
         visitor.visit(self)
 
 
+T = TypeVar("T", bound="ValueToken")
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class ValueToken(Token):
     _value: str
@@ -75,6 +86,10 @@ class ValueToken(Token):
     @property
     def value(self) -> str:
         return self._value
+
+    @classmethod
+    def of(cls: Type[T], value: str) -> T:
+        return cls(frozenset(), value)
 
 
 @attr.s(frozen=True)
@@ -113,6 +128,10 @@ class CommentaryProtocol(ValueToken):
 class Column(Token):
     number: Optional[int] = attr.ib(default=None)
 
+    @staticmethod
+    def of(number: Optional[int] = None) -> "Column":
+        return Column(frozenset(), number)
+
     @number.validator
     def _check_number(self, _, value) -> None:
         if value is not None and value < 0:
@@ -128,8 +147,8 @@ class Variant(Token):
     tokens: Sequence[Token]
 
     @staticmethod
-    def of(first: Token, second: Token) -> "Variant":
-        return Variant((first, second))
+    def of(*args: Token) -> "Variant":
+        return Variant(frozenset(), tuple(args))
 
     @property
     def value(self) -> str:
@@ -151,16 +170,20 @@ class Joiner(Token):
 
     @staticmethod
     def dot():
-        return Joiner(atf.Joiner.DOT)
+        return Joiner(frozenset(), atf.Joiner.DOT)
 
     @staticmethod
     def hyphen():
-        return Joiner(atf.Joiner.HYPHEN)
+        return Joiner(frozenset(), atf.Joiner.HYPHEN)
 
     @staticmethod
     def colon():
-        return Joiner(atf.Joiner.COLON)
+        return Joiner(frozenset(), atf.Joiner.COLON)
 
     @staticmethod
     def plus():
-        return Joiner(atf.Joiner.PLUS)
+        return Joiner(frozenset(), atf.Joiner.PLUS)
+
+    @staticmethod
+    def of(joiner: atf.Joiner):
+        return Joiner(frozenset(), joiner)

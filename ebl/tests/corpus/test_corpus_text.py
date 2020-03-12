@@ -64,9 +64,9 @@ LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
     "1.",
     (
-        Word(
-            parts=[
-                Reading.of([ValueToken("ku"), BrokenAway.close()]),
+        Word.of(
+            [
+                Reading.of([ValueToken.of("ku"), BrokenAway.close()]),
                 Joiner.hyphen(),
                 Reading.of_name("nu"),
                 Joiner.hyphen(),

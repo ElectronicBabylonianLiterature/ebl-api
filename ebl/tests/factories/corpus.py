@@ -76,17 +76,18 @@ class ManuscriptLineFactory(factory.Factory):
         SurfaceLabel.from_label(Surface.OBVERSE),
         ColumnLabel.from_label("iii", [Status.COLLATION, Status.CORRECTION]),
     )
-    line = TextLine(
-        "1.",
+    line = TextLine.of_iterable(
+        LineNumberLabel.from_atf("1."),
         (
-            Word(
-                parts=[
+            Word.of(
+                [
                     Reading.of_name("ku"),
-                    BrokenAway.close(),
                     Joiner.hyphen(),
+                    BrokenAway.open(),
                     Reading.of_name("nu"),
                     Joiner.hyphen(),
                     Reading.of_name("ši"),
+                    BrokenAway.close(),
                 ],
             ),
         ),
