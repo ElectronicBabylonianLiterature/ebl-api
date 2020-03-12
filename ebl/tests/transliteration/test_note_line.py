@@ -21,9 +21,9 @@ def test_note_line():
 
     assert line.parts == parts
     assert line.prefix == "#note: "
-    assert (
-        line.atf
-        == "#note: this is a note @it{italic text}@akk{Akkadian language}@sux{Sumerian language}"
+    assert line.atf == (
+        "#note: this is a note "
+        "@it{italic text}@akk{Akkadian language}@sux{Sumerian language}"
     )
     assert line.content == [
         ValueToken.of("this is a note "),
