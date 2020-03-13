@@ -17,7 +17,7 @@ eBL-ATF can be empty or consist of lines separated by a newline character.
 ```ebnf
 ebl-atf = [ line, { eol, line } ];
 
-free-text = { any-character }+;
+free-text = { any-character }-;
 word-character = ? A-Za-z ?;
 lower-case-letter = ? a-z ?;
 any-character = ? any UTF-8 character ?;
@@ -35,6 +35,7 @@ Continuation lines (starting with space) are not supported.
 line = empty-line
      | dollar-line
      | control-line
+     | note-line
      | text-line;
 
 empty-line = '';
@@ -397,6 +398,17 @@ modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n'
 
 sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅' 
                     | '₆' | '₇' | '₈' | '₉' | 'ₓ';
+```
+
+
+## Note lines
+
+```ebnf
+note-line = '#note: ', { emphasis | akkadian | sumerian  | note-text }-;
+emphasis = '@i{', note-text, '}';
+akkadian = '@akk{', note-text, '}';
+sumerian = '@sux{', note-text, '}';
+note-text = any-character - { '@' | '{' | '}' };
 ```
 
 ## Validation

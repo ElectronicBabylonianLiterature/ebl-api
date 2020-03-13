@@ -4,22 +4,27 @@ from typing import List, Mapping, Sequence, Tuple, Type, Union
 from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
+from ebl.transliteration.application.note_line_part_schemas import (
+    dump_parts,
+    load_parts,
+)
 from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.dollar_line import (
+    ImageDollarLine,
+    LooseDollarLine,
+    RulingDollarLine,
+    ScopeContainer,
+    StateDollarLine,
+)
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     Line,
-    TextLine,
 )
-from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
-    ImageDollarLine,
-    RulingDollarLine,
-    ScopeContainer,
-    StateDollarLine,
-)
+from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.text_line import TextLine
 
 
 class LineSchema(Schema):
@@ -155,6 +160,17 @@ class StateDollarLineSchema(LineSchema):
         return extent.name
 
 
+class NoteLineSchema(LineSchema):
+    type = fields.Constant("NoteLine", required=True)
+    parts = fields.Function(
+        lambda line: dump_parts(line.content), load_parts, required=True
+    )
+
+    @post_load
+    def make_line(self, data, **kwargs):
+        return NoteLine(data["parts"])
+
+
 _schemas: Mapping[str, Type[Schema]] = {
     "TextLine": TextLineSchema,
     "ControlLine": ControlLineSchema,
@@ -163,6 +179,7 @@ _schemas: Mapping[str, Type[Schema]] = {
     "ImageDollarLine": ImageDollarLineSchema,
     "RulingDollarLine": RulingDollarLineSchema,
     "StateDollarLine": StateDollarLineSchema,
+    "NoteLine": NoteLineSchema,
 }
 
 

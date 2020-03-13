@@ -18,7 +18,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, TextLine
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,

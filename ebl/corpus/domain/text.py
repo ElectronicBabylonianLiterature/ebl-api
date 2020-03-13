@@ -21,7 +21,7 @@ from ebl.corpus.domain.reconstructed_text import (
 )
 from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
-from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text_line import TextLine
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 

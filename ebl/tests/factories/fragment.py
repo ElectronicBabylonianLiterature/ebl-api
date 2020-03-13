@@ -17,7 +17,7 @@ from ebl.transliteration.domain.dollar_line import (
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
