@@ -396,7 +396,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
-                NoteLine(
+            NoteLine(
                 (
                     StringPart("a note "),
                     EmphasisPart("italic"),
