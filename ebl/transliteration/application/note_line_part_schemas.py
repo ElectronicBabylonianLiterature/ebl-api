@@ -31,7 +31,7 @@ class EmphasisPartSchema(Schema):
 
 
 class LanguagePartSchema(Schema):
-    type = fields.Constant("LangugeSchema", required=True)
+    type = fields.Constant("LanguagePart", required=True)
     text = fields.String(required=True)
     language = NameEnum(Language, required=True)
 

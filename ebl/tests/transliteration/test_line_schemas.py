@@ -224,6 +224,35 @@ LINES = [
             "status": "COLLATED",
         },
     ),
+    (
+        NoteLine(
+            (
+                StringPart("a note "),
+                EmphasisPart("italic"),
+                LanguagePart("Akkadian", Language.AKKADIAN),
+            )
+        ),
+        {
+            "type": "NoteLine",
+            "prefix": "#note: ",
+            "parts": [
+                {"type": "StringPart", "text": "a note ",},
+                {"type": "EmphasisPart", "text": "italic",},
+                {
+                    "type": "LanguagePart",
+                    "text": "Akkadian",
+                    "language": Language.AKKADIAN.name,
+                },
+            ],
+            "content": dump_tokens(
+                [
+                    ValueToken.of("a note "),
+                    ValueToken.of("@i{italic}"),
+                    ValueToken.of("@akk{Akkadian}"),
+                ]
+            ),
+        },
+    ),
 ]
 
 
@@ -281,35 +310,6 @@ def test_dump_line(line, expected):
                 "prefix": "$",
                 "content": dump_tokens([ValueToken.of(" double ruling")]),
                 "number": "SINGLE",
-            },
-        ),
-        (
-            NoteLine(
-                (
-                    StringPart("a note "),
-                    EmphasisPart("italic"),
-                    LanguagePart("Akkadian", Language.AKKADIAN),
-                )
-            ),
-            {
-                "type": "NoteLine",
-                "prefix": "#note: ",
-                "parts": [
-                    {"type": "StringPart", "text": "a note ",},
-                    {"type": "EmphasisPart", "text": "italic",},
-                    {
-                        "type": "LanguagePart",
-                        "text": "Akkadian",
-                        "language": Language.AKKADIAN.name,
-                    },
-                ],
-                "content": dump_tokens(
-                    [
-                        ValueToken.of("a note "),
-                        ValueToken.of("@it{italic}"),
-                        ValueToken.of("@akk{Akkadian}"),
-                    ]
-                ),
             },
         ),
     ],

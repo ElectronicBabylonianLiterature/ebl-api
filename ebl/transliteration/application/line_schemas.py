@@ -163,7 +163,7 @@ class StateDollarLineSchema(LineSchema):
 class NoteLineSchema(LineSchema):
     type = fields.Constant("NoteLine", required=True)
     parts = fields.Function(
-        lambda line: dump_parts(line.content), load_parts, required=True
+        lambda line: dump_parts(line.parts), load_parts, required=True
     )
 
     @post_load

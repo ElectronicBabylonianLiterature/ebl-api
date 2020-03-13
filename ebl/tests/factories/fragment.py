@@ -17,6 +17,13 @@ from ebl.transliteration.domain.dollar_line import (
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.note_line import (
+    EmphasisPart,
+    LanguagePart,
+    NoteLine,
+    StringPart,
+)
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -217,6 +224,13 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            NoteLine(
+                (
+                    StringPart("a note "),
+                    EmphasisPart("italic"),
+                    LanguagePart("Akkadian", Language.AKKADIAN),
+                )
+            ),
         )
     )
     signs = (
@@ -382,5 +396,12 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+                NoteLine(
+                (
+                    StringPart("a note "),
+                    EmphasisPart("italic"),
+                    LanguagePart("Akkadian", Language.AKKADIAN),
+                )
+            ),
         )
     )
