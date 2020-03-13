@@ -29,7 +29,7 @@ class StringPart(NotePart):
 class EmphasisPart(NotePart):
     @property
     def value(self) -> str:
-        return f"@it{{{self.text}}}"
+        return f"@i{{{self.text}}}"
 
 
 @attr.s(frozen=True, auto_attribs=True)

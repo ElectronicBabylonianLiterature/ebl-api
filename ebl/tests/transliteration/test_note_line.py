@@ -23,11 +23,11 @@ def test_note_line():
     assert line.prefix == "#note: "
     assert line.atf == (
         "#note: this is a note "
-        "@it{italic text}@akk{Akkadian language}@sux{Sumerian language}"
+        "@i{italic text}@akk{Akkadian language}@sux{Sumerian language}"
     )
     assert line.content == [
         ValueToken.of("this is a note "),
-        ValueToken.of("@it{italic text}"),
+        ValueToken.of("@i{italic text}"),
         ValueToken.of("@akk{Akkadian language}"),
         ValueToken.of("@sux{Sumerian language}"),
     ]

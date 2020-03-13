@@ -69,6 +69,7 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 
 
 class ErasureVisitor(TokenVisitor):
@@ -338,7 +339,7 @@ class TreeToLine(TreeToWord):
         ]
 
 
-class TreeDollarSignToTokens(TreeToLine):
+class TreeDollarSignToTokens(NoteLineTransformer, TreeToLine):
     def ebl_atf_dollar_line__free_text(self, content):
         return "".join(content)
 

@@ -404,10 +404,11 @@ sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
 ## Note lines
 
 ```ebnf
-note-line = '#note: ', { emphasis | akkadian | sumerian  | free-text }-
-emphasis = '@i{', free-text, '}'
-akkadian = '@akk{', free-text, '}'
-sumerian = '@sux{', free-text, '}'
+note-line = '#note: ', { emphasis | akkadian | sumerian  | note-text }-;
+emphasis = '@i{', note-text, '}';
+akkadian = '@akk{', note-text, '}';
+sumerian = '@sux{', note-text, '}';
+note-text = any-character - { '@' | '{' | '}' };
 ```
 
 ## Validation
