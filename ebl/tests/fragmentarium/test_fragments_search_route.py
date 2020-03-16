@@ -81,7 +81,7 @@ def test_latest(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
-    assert result.headers["Cache-Control"] == "public, max-age=600"
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_needs_revision(client, fragmentarium):
@@ -93,7 +93,7 @@ def test_needs_revision(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
-    assert result.headers["Cache-Control"] == "public, max-age=600"
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_search_fragment_no_query(client):

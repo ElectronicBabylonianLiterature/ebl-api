@@ -84,4 +84,4 @@ class FragmentSearch:
         infos = self._dispatch(req.params)
         resp.media = FragmentInfoSchema(many=True).dump(infos)
         if req.params.keys() <= CACHED_COMMANDS:
-            resp.cache_control = ["public", "max-age=600"]
+            resp.cache_control = ["private", "max-age=600"]
