@@ -7,3 +7,4 @@ def test_get_statistics(guest_client):
     assert result.json == {"transliteratedFragments": 0, "lines": 0}
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert result.headers["Cache-Control"] == "public, max-age=600"
