@@ -12,4 +12,4 @@ class StatisticsResource:
 
     def on_get(self, _req, resp: falcon.Response) -> None:
         resp.media = self._fragmentarium.statistics()
-        resp.set_header("Cache-Control", "public, max-age=600")
+        resp.cache_control = ["public", "max-age=600"]

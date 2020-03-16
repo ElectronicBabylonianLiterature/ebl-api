@@ -1,6 +1,5 @@
 import falcon
 import pydash
-from falcon import Request, Response
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -10,6 +9,9 @@ from ebl.fragmentarium.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from ebl.users.web.require_scope import require_scope
+
+
+CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
 
 
 class FragmentSearch:
@@ -33,7 +35,7 @@ class FragmentSearch:
         )
 
     @falcon.before(require_scope, "read:fragments")
-    def on_get(self, req: Request, resp: Response) -> None:
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """---
         description: >-
           Finds fragments matching the given query.
@@ -81,3 +83,5 @@ class FragmentSearch:
         """
         infos = self._dispatch(req.params)
         resp.media = FragmentInfoSchema(many=True).dump(infos)
+        if req.params.keys() <= CACHED_COMMANDS:
+            resp.cache_control = ["public", "max-age=600"]

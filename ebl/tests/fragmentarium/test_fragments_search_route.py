@@ -21,6 +21,7 @@ def test_search_fragment(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert "Cache-Control" not in result.headers
 
 
 def test_search_fragment_not_found(client):
@@ -44,6 +45,7 @@ def test_search_signs(client, fragmentarium, sign_repository, signs):
         )
     ]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert "Cache-Control" not in result.headers
 
 
 def test_random(client, fragmentarium):
@@ -55,6 +57,7 @@ def test_random(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert "Cache-Control" not in result.headers
 
 
 def test_interesting(client, fragmentarium):
@@ -66,6 +69,7 @@ def test_interesting(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(interesting_fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert "Cache-Control" not in result.headers
 
 
 def test_latest(client, fragmentarium):
@@ -77,6 +81,7 @@ def test_latest(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert result.headers["Cache-Control"] == "public, max-age=600"
 
 
 def test_needs_revision(client, fragmentarium):
@@ -87,7 +92,8 @@ def test_needs_revision(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
-    assert result.headers["Access-Control-Allow-Origin"]
+    assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert result.headers["Cache-Control"] == "public, max-age=600"
 
 
 def test_search_fragment_no_query(client):
