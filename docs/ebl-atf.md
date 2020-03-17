@@ -41,10 +41,6 @@ line = empty-line
 empty-line = '';
 
 control-line = '=:' | '$' | '@' | '&' | '#', { any-character };
-
-text-line = line-number, ' ', text;
-line-number = { not-space }-, '.';
-not-space = any-character - ' ';
 ```
 
 ## $-lines
@@ -109,7 +105,7 @@ dollar-status = '*' | '?' | '!' | '!?';
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
 
-## Text
+## Text lines
 
 Text is a series of tokens separated by a word separator (space). The separator
 can sometimes be omitted.
@@ -133,6 +129,14 @@ can sometimes be omitted.
 | ~~Line Continuation~~ | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
+text-line = line-number, '. ', text;
+
+line-number = line-number-range | single-line-number;
+line-number-range = single-line-number, '-', single-line-number;
+single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
+                     [ word-character ];
+prime = "'" | '′' | '’';
+
 text = token, { [ word-separator ], token },
        [ word-separator, line-continuation ];
        (* Word seprator can be ommitted after an opening bracket or before 
