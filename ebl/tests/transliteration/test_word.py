@@ -290,6 +290,56 @@ def test_set_alignment_invalid(word):
             Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
             Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         ),
+        (
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of([ValueToken.of("k[ur")]),
+                        Reading.of([ValueToken.of("r[a")]),
+                    )
+                ]
+            ),
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of(
+                            [
+                                ValueToken.of("k"),
+                                BrokenAway.open(),
+                                ValueToken.of("ur"),
+                            ]
+                        ),
+                        Reading.of(
+                            [
+                                ValueToken.of("r"),
+                                BrokenAway.open(),
+                                ValueToken.of("a"),
+                            ]
+                        ),
+                    )
+                ]
+            ),
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of(
+                            [
+                                ValueToken.of("k"),
+                                BrokenAway.open(),
+                                ValueToken.of("ur"),
+                            ]
+                        ),
+                        Reading.of(
+                            [
+                                ValueToken.of("r"),
+                                BrokenAway.open(),
+                                ValueToken.of("a"),
+                            ]
+                        ),
+                    )
+                ]
+            ),
+        ),
     ],
 )
 def test_merge(old, new, expected):

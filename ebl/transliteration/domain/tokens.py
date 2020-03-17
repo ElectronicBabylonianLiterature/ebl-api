@@ -154,6 +154,10 @@ class Variant(Token):
     def value(self) -> str:
         return "/".join(token.value for token in self.tokens)
 
+    @property
+    def parts(self):
+        return self.tokens
+
 
 @attr.s(frozen=True)
 class LineContinuation(ValueToken):
