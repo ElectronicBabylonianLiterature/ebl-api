@@ -13,7 +13,7 @@ def test_empty_line():
 
     assert line.prefix == ""
     assert line.content == tuple()
-    assert line.key == ""
+    assert line.key == "EmptyLine⁞⟨⟩"
     assert line.atf == ""
 
 

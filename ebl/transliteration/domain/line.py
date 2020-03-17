@@ -28,8 +28,8 @@ class Line(ABC):
 
     @property
     def key(self) -> str:
-        tokens = [token.get_key() for token in self.content]
-        return "⁞".join([str(self.atf)] + tokens)
+        tokens = "⁚".join(token.get_key() for token in self.content)
+        return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
 
     @property
     def atf(self) -> Atf:

@@ -4,6 +4,8 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
@@ -21,6 +23,7 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
     Joiner,
     ValueToken,
+    Variant,
 )
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -199,6 +202,93 @@ def test_update_lemmatization_wrong_lines():
                             Word.of(
                                 [Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)
                             ),
+                        ],
+                    )
+                ]
+            ),
+        ),
+        (
+            Text.of_iterable(
+                [ControlLine.of_single("$", ValueToken.of(" double ruling")),]
+            ),
+            Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE)]),
+            Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE)]),
+        ),
+        (
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumberLabel.from_atf("1."),
+                        [
+                            Word.of(
+                                [
+                                    Variant.of(
+                                        Reading.of([ValueToken.of("k[ur")]),
+                                        Reading.of([ValueToken.of("r[a")]),
+                                    )
+                                ]
+                            ),
+                            BrokenAway.close(),
+                        ],
+                    )
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumberLabel.from_atf("1."),
+                        [
+                            Word.of(
+                                [
+                                    Variant.of(
+                                        Reading.of(
+                                            [
+                                                ValueToken.of("k"),
+                                                BrokenAway.open(),
+                                                ValueToken.of("ur"),
+                                            ]
+                                        ),
+                                        Reading.of(
+                                            [
+                                                ValueToken.of("r"),
+                                                BrokenAway.open(),
+                                                ValueToken.of("a"),
+                                            ]
+                                        ),
+                                    )
+                                ]
+                            ),
+                            BrokenAway.close(),
+                        ],
+                    )
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumberLabel.from_atf("1."),
+                        [
+                            Word.of(
+                                [
+                                    Variant.of(
+                                        Reading.of(
+                                            [
+                                                ValueToken.of("k"),
+                                                BrokenAway.open(),
+                                                ValueToken.of("ur"),
+                                            ]
+                                        ),
+                                        Reading.of(
+                                            [
+                                                ValueToken.of("r"),
+                                                BrokenAway.open(),
+                                                ValueToken.of("a"),
+                                            ]
+                                        ),
+                                    )
+                                ]
+                            ),
+                            BrokenAway.close(),
                         ],
                     )
                 ]
