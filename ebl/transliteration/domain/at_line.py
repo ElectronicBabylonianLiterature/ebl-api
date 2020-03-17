@@ -27,7 +27,7 @@ class AtLine(Line):
 
     @property
     def content(self) -> Tuple[Token]:
-        return (ValueToken(f"{self._content_value}"),)
+        return (ValueToken.of(f"{self._content_value}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)

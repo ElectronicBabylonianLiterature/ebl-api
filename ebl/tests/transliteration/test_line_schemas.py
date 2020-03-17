@@ -51,7 +51,7 @@ LINES = [
         CompositeAtLine(atf.Composite.END, "part"),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("end part")]),
+            "content": dump_tokens([ValueToken.of("end part")]),
             "type": "CompositeAtLine",
             "composite": "END",
             "text": "part",
@@ -62,7 +62,7 @@ LINES = [
         CompositeAtLine(atf.Composite.DIV, "part", 5),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("div part 5")]),
+            "content": dump_tokens([ValueToken.of("div part 5")]),
             "type": "CompositeAtLine",
             "composite": "DIV",
             "text": "part",
@@ -73,7 +73,7 @@ LINES = [
         DivisionAtLine("paragraph", 5),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("m=division paragraph 5")]),
+            "content": dump_tokens([ValueToken.of("m=division paragraph 5")]),
             "type": "DivisionAtLine",
             "text": "paragraph",
             "number": 5,
@@ -83,7 +83,7 @@ LINES = [
         DivisionAtLine("paragraph"),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("m=division paragraph")]),
+            "content": dump_tokens([ValueToken.of("m=division paragraph")]),
             "type": "DivisionAtLine",
             "text": "paragraph",
             "number": None,
@@ -93,7 +93,7 @@ LINES = [
         DiscourseAtLine(atf.Discourse.DATE),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("date")]),
+            "content": dump_tokens([ValueToken.of("date")]),
             "type": "DiscourseAtLine",
             "discourse_label": "DATE",
         },
@@ -106,7 +106,7 @@ LINES = [
         ),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("object stone wig!*")]),
+            "content": dump_tokens([ValueToken.of("object stone wig!*")]),
             "type": "ObjectAtLine",
             "status": ["CORRECTION", "COLLATION"],
             "object_label": "OBJECT",
@@ -123,7 +123,7 @@ LINES = [
         ),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("surface stone wig!*")]),
+            "content": dump_tokens([ValueToken.of("surface stone wig!*")]),
             "type": "SurfaceAtLine",
             "surface_label": {
                 "status": ["CORRECTION", "COLLATION"],
@@ -136,7 +136,7 @@ LINES = [
         ColumnAtLine(ColumnLabel([atf.Status.CORRECTION, atf.Status.COLLATION], 1)),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("column 1!*")]),
+            "content": dump_tokens([ValueToken.of("column 1!*")]),
             "type": "ColumnAtLine",
             "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
         },
@@ -145,7 +145,7 @@ LINES = [
         ColumnAtLine(ColumnLabel([], 1)),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("column 1")]),
+            "content": dump_tokens([ValueToken.of("column 1")]),
             "type": "ColumnAtLine",
             "column_label": {"status": [], "column": 1},
         },
@@ -154,7 +154,7 @@ LINES = [
         SealAtLine(1),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("seal 1")]),
+            "content": dump_tokens([ValueToken.of("seal 1")]),
             "type": "SealAtLine",
             "number": 1,
         },
@@ -163,7 +163,7 @@ LINES = [
         HeadingAtLine(1),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken("h1")]),
+            "content": dump_tokens([ValueToken.of("h1")]),
             "type": "HeadingAtLine",
             "number": 1,
         },
@@ -361,7 +361,7 @@ LINES = [
         {
             "type": "SealDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" seal 1")]),
+            "content": dump_tokens([ValueToken.of(" seal 1")]),
             "number": 1,
         },
     ),
