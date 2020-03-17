@@ -16,8 +16,3 @@ SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
 face: "face " LCASE_LETTER
 edge: "edge" (" " LCASE_LETTER)?
 generic_surface : "surface " free_text
-
-
-
-
-
