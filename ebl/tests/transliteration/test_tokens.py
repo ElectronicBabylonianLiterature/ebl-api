@@ -5,6 +5,7 @@ from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
@@ -28,23 +29,27 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 TOKENS = [
-    UnknownNumberOfSigns(),
-    LanguageShift("%sux"),
+    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+    LanguageShift.of("%sux"),
     DocumentOrientedGloss.open(),
 ]
 
 
 def test_value_token():
     value = "value"
-    token = ValueToken(value)
-    equal = ValueToken(value)
-    other = ValueToken("anothervalue")
+    token = ValueToken.of(value)
+    equal = ValueToken.of(value)
+    other = ValueToken.of("anothervalue")
 
     assert token.value == value
     assert token.get_key() == f"ValueToken⁝{value}"
     assert token.lemmatizable is False
 
-    serialized = {"type": "Token", "value": token.value}
+    serialized = {
+        "type": "Token",
+        "value": token.value,
+        "enclosureType": [type.name for type in token.enclosure_type],
+    }
     assert_token_serialization(token, serialized)
 
     assert token == equal
@@ -65,9 +70,9 @@ def test_value_token():
     ],
 )
 def test_language_shift(value, expected_language, normalized):
-    shift = LanguageShift(value)
-    equal = LanguageShift(value)
-    other = ValueToken(r"%bar")
+    shift = LanguageShift.of(value)
+    equal = LanguageShift.of(value)
+    other = ValueToken.of(r"%bar")
 
     assert shift.value == value
     assert shift.get_key() == f"LanguageShift⁝{value}"
@@ -80,6 +85,7 @@ def test_language_shift(value, expected_language, normalized):
         "value": shift.value,
         "normalized": normalized,
         "language": shift.language.name,
+        "enclosureType": [type.name for type in shift.enclosure_type],
     }
     assert_token_serialization(shift, serialized)
 
@@ -89,7 +95,7 @@ def test_language_shift(value, expected_language, normalized):
     assert shift != other
     assert hash(shift) != hash(other)
 
-    assert shift != ValueToken(value)
+    assert shift != ValueToken.of(value)
 
 
 @pytest.mark.parametrize("token", TOKENS)
@@ -140,7 +146,9 @@ def test_merge(old, new):
 
 
 def test_unknown_number_of_signs():
-    unknown_number_of_signs = UnknownNumberOfSigns()
+    unknown_number_of_signs = UnknownNumberOfSigns(
+        frozenset({EnclosureType.BROKEN_AWAY})
+    )
 
     expected_value = "..."
     assert unknown_number_of_signs.value == expected_value
@@ -150,38 +158,47 @@ def test_unknown_number_of_signs():
     serialized = {
         "type": "UnknownNumberOfSigns",
         "value": expected_value,
+        "enclosureType": [type.name for type in unknown_number_of_signs.enclosure_type],
     }
     assert_token_serialization(unknown_number_of_signs, serialized)
 
 
 def test_tabulation():
     value = "($___$)"
-    tabulation = Tabulation(value)
+    tabulation = Tabulation.of(value)
 
     assert tabulation.value == value
     assert tabulation.get_key() == f"Tabulation⁝{value}"
     assert tabulation.lemmatizable is False
 
-    serialized = {"type": "Tabulation", "value": value}
+    serialized = {
+        "type": "Tabulation",
+        "value": value,
+        "enclosureType": [type.name for type in tabulation.enclosure_type],
+    }
     assert_token_serialization(tabulation, serialized)
 
 
 @pytest.mark.parametrize("protocol_enum", atf.CommentaryProtocol)
 def test_commentary_protocol(protocol_enum):
     value = protocol_enum.value
-    protocol = CommentaryProtocol(value)
+    protocol = CommentaryProtocol.of(value)
 
     assert protocol.value == value
     assert protocol.get_key() == f"CommentaryProtocol⁝{value}"
     assert protocol.lemmatizable is False
     assert protocol.protocol == protocol_enum
 
-    serialized = {"type": "CommentaryProtocol", "value": value}
+    serialized = {
+        "type": "CommentaryProtocol",
+        "value": value,
+        "enclosureType": [type.name for type in protocol.enclosure_type],
+    }
     assert_token_serialization(protocol, serialized)
 
 
 def test_column():
-    column = Column()
+    column = Column.of()
 
     expected_value = "&"
     assert column.value == expected_value
@@ -192,12 +209,13 @@ def test_column():
         "type": "Column",
         "value": expected_value,
         "number": None,
+        "enclosureType": [type.name for type in column.enclosure_type],
     }
     assert_token_serialization(column, serialized)
 
 
 def test_column_with_number():
-    column = Column(1)
+    column = Column.of(1)
 
     expected_value = "&1"
     assert column.value == expected_value
@@ -208,13 +226,14 @@ def test_column_with_number():
         "type": "Column",
         "value": expected_value,
         "number": 1,
+        "enclosureType": [type.name for type in column.enclosure_type],
     }
     assert_token_serialization(column, serialized)
 
 
 def test_invalid_column():
     with pytest.raises(ValueError):
-        Column(-1)
+        Column.of(-1)
 
 
 def test_variant():
@@ -224,13 +243,19 @@ def test_variant():
 
     expected_value = "sal/:"
     assert variant.value == expected_value
-    assert variant.get_key() == f"Variant⁝{expected_value}"
+    assert variant.tokens == (reading, divider)
+    assert variant.parts == variant.tokens
+    assert (
+        variant.get_key()
+        == f"Variant⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in variant.tokens)}⟩"
+    )
     assert variant.lemmatizable is False
 
     serialized = {
         "type": "Variant",
         "value": expected_value,
         "tokens": dump_tokens([reading, divider]),
+        "enclosureType": [type.name for type in variant.enclosure_type],
     }
     assert_token_serialization(variant, serialized)
 
@@ -252,12 +277,13 @@ def test_joiner(joiner, expected_value):
     serialized = {
         "type": "Joiner",
         "value": expected_value,
+        "enclosureType": [type.name for type in joiner.enclosure_type],
     }
     assert_token_serialization(joiner, serialized)
 
 
 def test_in_word_new_line():
-    newline = InWordNewline()
+    newline = InWordNewline(frozenset({EnclosureType.BROKEN_AWAY}))
 
     expected_value = ";"
     assert newline.value == expected_value
@@ -267,13 +293,14 @@ def test_in_word_new_line():
     serialized = {
         "type": "InWordNewline",
         "value": expected_value,
+        "enclosureType": [type.name for type in newline.enclosure_type],
     }
     assert_token_serialization(newline, serialized)
 
 
 def test_line_continuation():
     value = "→"
-    continuation = LineContinuation(value)
+    continuation = LineContinuation(frozenset({EnclosureType.BROKEN_AWAY}), value)
 
     assert continuation.value == value
     assert continuation.get_key() == f"LineContinuation⁝{value}"
@@ -282,5 +309,6 @@ def test_line_continuation():
     serialized = {
         "type": "LineContinuation",
         "value": continuation.value,
+        "enclosureType": [type.name for type in continuation.enclosure_type],
     }
     assert_token_serialization(continuation, serialized)

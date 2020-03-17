@@ -11,7 +11,7 @@ from ebl.transliteration.domain.labels import (
     LineNumberLabel,
     SurfaceLabel,
 )
-from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
@@ -21,19 +21,15 @@ LABELS = (ColumnLabel.from_int(1),)
 TEXT_LINE = TextLine(
     "1.",
     (
-        Word(
-            parts=[Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0
-        ),
-        Word(
-            parts=[Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1
-        ),
+        Word.of([Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0),
+        Word.of([Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1),
     ),
 )
 
 NEW_MANUSCRIPT_ID = 2
 NEW_LABELS = (SurfaceLabel.from_label(Surface.REVERSE),)
 NEW_TEXT_LINE = TextLine(
-    "1.", (Word(parts=[Reading.of_name("kur")]), Word(parts=[Reading.of_name("pa")]))
+    "1.", (Word.of([Reading.of_name("kur")]), Word.of([Reading.of_name("pa")]))
 )
 
 
@@ -82,10 +78,10 @@ LINE = Line(
                         TextLine(
                             "1.",
                             (
-                                Word(
-                                    parts=[
+                                Word.of(
+                                    [
                                         Reading.of(
-                                            [ValueToken("ku"), BrokenAway.close()]
+                                            [ValueToken.of("ku"), BrokenAway.close()]
                                         ),
                                         Joiner.hyphen(),
                                         Reading.of_name("nu"),
@@ -110,10 +106,10 @@ LINE = Line(
                         TextLine(
                             "1.",
                             (
-                                Word(
-                                    parts=[
+                                Word.of(
+                                    [
                                         Reading.of(
-                                            [ValueToken("ku"), BrokenAway.close()]
+                                            [ValueToken.of("ku"), BrokenAway.close()]
                                         ),
                                         Joiner.hyphen(),
                                         Reading.of_name("nu"),
@@ -136,10 +132,10 @@ LINE = Line(
                         TextLine(
                             "1.",
                             (
-                                Word(
-                                    parts=[
+                                Word.of(
+                                    [
                                         Reading.of(
-                                            [ValueToken("ku"), BrokenAway.close()]
+                                            [ValueToken.of("ku"), BrokenAway.close()]
                                         ),
                                         Joiner.hyphen(),
                                         Reading.of_name("nu"),
@@ -187,10 +183,10 @@ LINE = Line(
                         TextLine(
                             "1.",
                             (
-                                Word(
-                                    parts=[
+                                Word.of(
+                                    [
                                         Reading.of(
-                                            [ValueToken("ku"), BrokenAway.close()]
+                                            [ValueToken.of("ku"), BrokenAway.close()]
                                         ),
                                         Joiner.hyphen(),
                                         Reading.of_name("nu"),

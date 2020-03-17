@@ -22,6 +22,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import (
@@ -55,16 +56,22 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-class ValueTokenSchema(Schema):
+class TokenSchema(Schema):
+    enclosure_type = fields.List(
+        NameEnum(EnclosureType), missing=list, data_key="enclosureType"
+    )
+
+
+class ValueTokenSchema(TokenSchema):
     type = fields.Constant("Token", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return ValueToken(data["value"])
+        return ValueToken(frozenset(data["enclosure_type"]), data["value"])
 
 
-class LanguageShiftSchema(Schema):
+class LanguageShiftSchema(TokenSchema):
     type = fields.Constant("LanguageShift", required=True)
     value = fields.String(required=True)
     language = NameEnum(Language, required=True)
@@ -72,10 +79,10 @@ class LanguageShiftSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LanguageShift(data["value"])
+        return LanguageShift(frozenset(data["enclosure_type"]), data["value"])
 
 
-class DocumentOrientedGlossSchema(Schema):
+class DocumentOrientedGlossSchema(TokenSchema):
     type = fields.Constant("DocumentOrientedGloss", required=True)
     value = fields.String(required=True)
     side = NameEnum(Side, missing=None)
@@ -83,13 +90,17 @@ class DocumentOrientedGlossSchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            DocumentOrientedGloss(data["side"])
+            DocumentOrientedGloss.of(data["side"]).set_enclosure_type(
+                frozenset(data["enclosure_type"])
+            )
             if data["side"]
-            else DocumentOrientedGloss.of_value(data["value"])
+            else DocumentOrientedGloss.of_value(data["value"]).set_enclosure_type(
+                frozenset(data["enclosure_type"])
+            )
         )
 
 
-class BrokenAwaySchema(Schema):
+class BrokenAwaySchema(TokenSchema):
     type = fields.Constant("BrokenAway", required=True)
     value = fields.String(required=True)
     side = NameEnum(Side, missing=None)
@@ -97,13 +108,17 @@ class BrokenAwaySchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            BrokenAway(data["side"])
+            BrokenAway.of(data["side"]).set_enclosure_type(
+                frozenset(data["enclosure_type"])
+            )
             if data["side"]
-            else BrokenAway.of_value(data["value"])
+            else BrokenAway.of_value(data["value"]).set_enclosure_type(
+                frozenset(data["enclosure_type"])
+            )
         )
 
 
-class PerhapsBrokenAwaySchema(Schema):
+class PerhapsBrokenAwaySchema(TokenSchema):
     type = fields.Constant("PerhapsBrokenAway", required=True)
     value = fields.String(required=True)
     side = NameEnum(Side, missing=None)
@@ -111,13 +126,17 @@ class PerhapsBrokenAwaySchema(Schema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            PerhapsBrokenAway(data["side"])
+            PerhapsBrokenAway.of(data["side"]).set_enclosure_type(
+                frozenset(data["enclosure_type"])
+            )
             if data["side"]
-            else PerhapsBrokenAway.of_value(data["value"])
+            else PerhapsBrokenAway.of_value(data["value"]).set_enclosure_type(
+                frozenset(data["enclosure_type"])
+            )
         )
 
 
-class OmissionOrRemovalSchema(Schema):
+class OmissionOrRemovalSchema(TokenSchema):
     """This class is deprecated and kept only for backwards compatibility.
     Omission, AccidentalOmission, or Removal should be used instead."""
 
@@ -126,10 +145,10 @@ class OmissionOrRemovalSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return OmissionOrRemoval(data["value"])
+        return OmissionOrRemoval(frozenset(data["enclosure_type"]), data["value"])
 
 
-class EnclosureSchema(Schema):
+class EnclosureSchema(TokenSchema):
     value = fields.String(required=True)
     side = NameEnum(Side, required=True)
 
@@ -144,7 +163,9 @@ class AccidentalOmissionSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return AccidentalOmission(data["side"])
+        return AccidentalOmission.of(data["side"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
 class IntentionalOmissionSchema(EnclosureSchema):
@@ -152,7 +173,9 @@ class IntentionalOmissionSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return IntentionalOmission(data["side"])
+        return IntentionalOmission.of(data["side"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
 class RemovalSchema(EnclosureSchema):
@@ -160,7 +183,9 @@ class RemovalSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Removal(data["side"])
+        return Removal.of(data["side"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
 class ErasureSchema(EnclosureSchema):
@@ -168,46 +193,48 @@ class ErasureSchema(EnclosureSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Erasure(data["side"])
+        return Erasure.of(data["side"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
-class LineContinuationSchema(Schema):
+class LineContinuationSchema(TokenSchema):
     type = fields.Constant("LineContinuation", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LineContinuation(data["value"])
+        return LineContinuation(frozenset(data["enclosure_type"]), data["value"])
 
 
-class UnknownNumberOfSignsSchema(Schema):
+class UnknownNumberOfSignsSchema(TokenSchema):
     type = fields.Constant("UnknownNumberOfSigns", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnknownNumberOfSigns()
+        return UnknownNumberOfSigns(frozenset(data["enclosure_type"]))
 
 
-class TabulationSchema(Schema):
+class TabulationSchema(TokenSchema):
     type = fields.Constant("Tabulation", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Tabulation(data["value"])
+        return Tabulation(frozenset(data["enclosure_type"]), data["value"])
 
 
-class CommentaryProtocolSchema(Schema):
+class CommentaryProtocolSchema(TokenSchema):
     type = fields.Constant("CommentaryProtocol", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return CommentaryProtocol(data["value"])
+        return CommentaryProtocol(frozenset(data["enclosure_type"]), data["value"])
 
 
-class DividerSchema(Schema):
+class DividerSchema(TokenSchema):
     type = fields.Constant("Divider", required=True)
     value = fields.String(required=True)
     divider = fields.String(required=True)
@@ -218,56 +245,64 @@ class DividerSchema(Schema):
     def make_token(self, data, **kwargs):
         return Divider.of(
             data["divider"], tuple(data["modifiers"]), tuple(data["flags"]),
-        )
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class ColumnSchema(Schema):
+class ColumnSchema(TokenSchema):
     type = fields.Constant("Column", required=True)
     value = fields.String(required=True)
     number = fields.Integer(missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Column(data["number"])
+        return Column.of(data["number"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
-class UnidentifiedSignSchema(Schema):
+class UnidentifiedSignSchema(TokenSchema):
     type = fields.Constant("UnidentifiedSign", required=True)
     value = fields.String(required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnidentifiedSign(tuple(data["flags"]))
+        return UnidentifiedSign.of(tuple(data["flags"])).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
-class UnclearSignSchema(Schema):
+class UnclearSignSchema(TokenSchema):
     type = fields.Constant("UnclearSign", required=True)
     value = fields.String(required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnclearSign(tuple(data["flags"]))
+        return UnclearSign.of(tuple(data["flags"])).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
-class JoinerSchema(Schema):
+class JoinerSchema(TokenSchema):
     type = fields.Constant("Joiner", required=True)
     value = fields.String()
     enum_value = ValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Joiner(data["enum_value"])
+        return Joiner(
+            frozenset(data["enclosure_type"]), data["enum_value"]
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class InWordNewlineSchema(Schema):
+class InWordNewlineSchema(TokenSchema):
     type = fields.Constant("InWordNewline", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return InWordNewline()
+        return InWordNewline(frozenset(data["enclosure_type"]))
 
 
 def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
@@ -286,10 +321,10 @@ def _load_sign_none(sign: None) -> None:
 
 @_load_sign.register
 def _load_sign_str(sign: str) -> Token:
-    return ValueToken(sign)
+    return ValueToken.of(sign)
 
 
-class NamedSignSchema(Schema):
+class NamedSignSchema(TokenSchema):
     value = fields.String(required=True)
     name = fields.String(required=True)
     name_parts = fields.Function(
@@ -310,12 +345,12 @@ class ReadingSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Reading.of(
-            data["name_parts"] or (ValueToken(data["name"]),),
+            data["name_parts"] or (ValueToken.of(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
             data["sign"],
-        )
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
 class LogogramSchema(NamedSignSchema):
@@ -329,13 +364,13 @@ class LogogramSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Logogram.of(
-            data["name_parts"] or (ValueToken(data["name"]),),
+            data["name_parts"] or (ValueToken.of(data["name"]),),
             data["sub_index"],
             data["modifiers"],
             data["flags"],
             data["sign"],
             data["surrogate"],
-        )
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
 class NumberSchema(NamedSignSchema):
@@ -345,15 +380,15 @@ class NumberSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
-            data["name_parts"] or (ValueToken(data["name"]),),
+            data["name_parts"] or (ValueToken.of(data["name"]),),
             data["modifiers"],
             data["flags"],
             data["sign"],
             data["sub_index"],
-        )
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class WordSchema(Schema):
+class WordSchema(TokenSchema):
     type = fields.Constant("Word", required=True)
     value = fields.String(required=True)
     language = NameEnum(Language, required=True)
@@ -366,14 +401,14 @@ class WordSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Word(
+        return Word.of(
+            load_tokens(data["parts"]),
             data["language"],
             data["normalized"],
             tuple(data["unique_lemma"]),
             data.get("erasure"),
             data.get("alignment"),
-            parts=load_tokens(data["parts"]),
-        )
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
     def dump_token(self, data, **kwargs):
@@ -382,7 +417,7 @@ class WordSchema(Schema):
         )
 
 
-class LoneDeterminativeSchema(Schema):
+class LoneDeterminativeSchema(TokenSchema):
     class Meta:
         unknown = EXCLUDE
 
@@ -398,14 +433,14 @@ class LoneDeterminativeSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LoneDeterminative(
+        return LoneDeterminative.of(
+            load_tokens(data["parts"]),
             data["language"],
             data["normalized"],
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
-            parts=load_tokens(data["parts"]),
-        )
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
     def dump_token(self, data, **kwargs):
@@ -414,14 +449,14 @@ class LoneDeterminativeSchema(Schema):
         )
 
 
-class VariantSchema(Schema):
+class VariantSchema(TokenSchema):
     type = fields.Constant("Variant", required=True)
     value = fields.String()
     tokens = fields.List(fields.Dict(), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Variant(load_tokens(data["tokens"]))
+        return Variant.of(*load_tokens(data["tokens"]))
 
     @post_dump
     def dump_token(self, data, **kwargs):
@@ -431,7 +466,7 @@ class VariantSchema(Schema):
         }
 
 
-class GraphemeSchema(Schema):
+class GraphemeSchema(TokenSchema):
     type = fields.Constant("Grapheme", required=True)
     value = fields.String(required=True)
     name = fields.String(required=True)
@@ -440,19 +475,23 @@ class GraphemeSchema(Schema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Grapheme.of(data["name"], data["modifiers"], data["flags"])
+        return Grapheme.of(
+            data["name"], data["modifiers"], data["flags"]
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class CompoundGraphemeSchema(Schema):
+class CompoundGraphemeSchema(TokenSchema):
     type = fields.Constant("CompoundGrapheme", required=True)
     value = fields.String(required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
-        return CompoundGrapheme(data["value"])
+        return CompoundGrapheme.of(data["value"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
-class GlossSchema(Schema):
+class GlossSchema(TokenSchema):
     value = fields.String()
     parts = fields.List(fields.Dict(), required=True)
 
@@ -474,7 +513,9 @@ class DeterminativeSchema(GlossSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Determinative(load_tokens(data["parts"]))
+        return Determinative.of(load_tokens(data["parts"])).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
 class PhoneticGlossSchema(GlossSchema):
@@ -482,7 +523,9 @@ class PhoneticGlossSchema(GlossSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return PhoneticGloss(load_tokens(data["parts"]))
+        return PhoneticGloss.of(load_tokens(data["parts"])).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
 class LinguisticGlossSchema(GlossSchema):
@@ -490,7 +533,9 @@ class LinguisticGlossSchema(GlossSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return LinguisticGloss(load_tokens(data["parts"]))
+        return LinguisticGloss.of(load_tokens(data["parts"])).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
 
 
 _schemas: Mapping[str, Type[Schema]] = {

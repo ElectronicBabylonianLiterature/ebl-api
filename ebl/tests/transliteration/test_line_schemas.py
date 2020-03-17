@@ -28,13 +28,21 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
-    TextLine,
+)
+from ebl.transliteration.domain.note_line import (
+    EmphasisPart,
+    LanguagePart,
+    NoteLine,
+    StringPart,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
@@ -170,7 +178,9 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" at least 1-2 surface thing blank ?")]),
+            "content": dump_tokens(
+                [ValueToken.of(" at least 1-2 surface thing blank ?")]
+            ),
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": (1, 2),
@@ -189,7 +199,7 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" at least 1 obverse blank ?")]),
+            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": 1,
@@ -208,7 +218,7 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" beginning of obverse")]),
+            "content": dump_tokens([ValueToken.of(" beginning of obverse")]),
             "type": "StateDollarLine",
             "qualification": None,
             "extent": "BEGINNING_OF",
@@ -218,11 +228,11 @@ LINES = [
         },
     ),
     (
-        ControlLine.of_single("@", ValueToken("obverse")),
+        ControlLine.of_single("@", ValueToken.of("obverse")),
         {
             "type": "ControlLine",
             "prefix": "@",
-            "content": dump_tokens([ValueToken("obverse")]),
+            "content": dump_tokens([ValueToken.of("obverse")]),
         },
     ),
     (
@@ -230,8 +240,9 @@ LINES = [
             LineNumberLabel.from_atf("1."),
             [
                 DocumentOrientedGloss.open(),
-                Word(parts=[Reading.of_name("bu")]),
-                LoneDeterminative(parts=[Determinative([Reading.of_name("d")]),],),
+                Word.of([Reading.of_name("bu")]),
+                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                DocumentOrientedGloss.close(),
             ],
         ),
         {
@@ -240,8 +251,55 @@ LINES = [
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
-                    Word(parts=[Reading.of_name("bu")]),
-                    LoneDeterminative(parts=[Determinative([Reading.of_name("d")]),],),
+                    Word.of(
+                        [
+                            Reading.of(
+                                (
+                                    ValueToken(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        ),
+                                        "bu",
+                                    ),
+                                )
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ]
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    LoneDeterminative.of(
+                        [
+                            Determinative.of(
+                                [
+                                    Reading.of(
+                                        (
+                                            ValueToken(
+                                                frozenset(
+                                                    {
+                                                        EnclosureType.DOCUMENT_ORIENTED_GLOSS
+                                                    }
+                                                ),
+                                                "d",
+                                            ),
+                                        )
+                                    ).set_enclosure_type(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        )
+                                    ),
+                                ]
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ],
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    DocumentOrientedGloss.close().set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
                 ]
             ),
         },
@@ -252,7 +310,7 @@ LINES = [
         {
             "type": "LooseDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" (end of side)")]),
+            "content": dump_tokens([ValueToken.of(" (end of side)")]),
             "text": "end of side",
         },
     ),
@@ -261,7 +319,7 @@ LINES = [
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" (image 1a = great)")]),
+            "content": dump_tokens([ValueToken.of(" (image 1a = great)")]),
             "number": "1",
             "letter": "a",
             "text": "great",
@@ -272,7 +330,7 @@ LINES = [
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" (image 1 = great)")]),
+            "content": dump_tokens([ValueToken.of(" (image 1 = great)")]),
             "number": "1",
             "letter": None,
             "text": "great",
@@ -283,7 +341,7 @@ LINES = [
         {
             "type": "RulingDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" double ruling")]),
+            "content": dump_tokens([ValueToken.of(" double ruling")]),
             "number": "DOUBLE",
             "status": None,
         },
@@ -293,7 +351,7 @@ LINES = [
         {
             "type": "RulingDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken(" double ruling *")]),
+            "content": dump_tokens([ValueToken.of(" double ruling *")]),
             "number": "DOUBLE",
             "status": "COLLATED",
         },
@@ -305,6 +363,35 @@ LINES = [
             "prefix": "$",
             "content": dump_tokens([ValueToken(" seal 1")]),
             "number": 1,
+        },
+    ),
+    (
+        NoteLine(
+            (
+                StringPart("a note "),
+                EmphasisPart("italic"),
+                LanguagePart("Akkadian", Language.AKKADIAN),
+            )
+        ),
+        {
+            "type": "NoteLine",
+            "prefix": "#note: ",
+            "parts": [
+                {"type": "StringPart", "text": "a note ",},
+                {"type": "EmphasisPart", "text": "italic",},
+                {
+                    "type": "LanguagePart",
+                    "text": "Akkadian",
+                    "language": Language.AKKADIAN.name,
+                },
+            ],
+            "content": dump_tokens(
+                [
+                    ValueToken.of("a note "),
+                    ValueToken.of("@i{italic}"),
+                    ValueToken.of("@akk{Akkadian}"),
+                ]
+            ),
         },
     ),
 ]
@@ -329,7 +416,7 @@ def test_dump_line(line, expected):
             ),
             {
                 "prefix": "$",
-                "content": dump_tokens([ValueToken(" at least 1 obverse blank ?")]),
+                "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
                 "type": "StateDollarLine",
                 "qualification": "AT_LEAST",
                 "extent": 1,
@@ -348,7 +435,7 @@ def test_dump_line(line, expected):
             ),
             {
                 "prefix": "$",
-                "content": dump_tokens([ValueToken(" at least 1 obverse blank *")]),
+                "content": dump_tokens([ValueToken.of(" at least 1 obverse blank *")]),
                 "type": "StateDollarLine",
                 "qualification": "AT_LEAST",
                 "extent": 1,
@@ -362,7 +449,7 @@ def test_dump_line(line, expected):
             {
                 "type": "RulingDollarLine",
                 "prefix": "$",
-                "content": dump_tokens([ValueToken(" double ruling")]),
+                "content": dump_tokens([ValueToken.of(" double ruling")]),
                 "number": "SINGLE",
             },
         ),

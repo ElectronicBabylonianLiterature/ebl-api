@@ -29,35 +29,39 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 LEMMATIZABLE_TEST_WORDS = [
-    (Word(parts=[Reading.of_name("un")]), True),
-    (Word(parts=[Reading.of_name("un")], normalized=True), False),
-    (Word(parts=[Reading.of_name("un")], language=Language.SUMERIAN), False),
-    (Word(parts=[Reading.of_name("un")], language=Language.EMESAL), False),
-    (Word(parts=[Reading.of_name("un"), Joiner.hyphen(), UnclearSign()]), False),
-    (Word(parts=[UnidentifiedSign(), Joiner.hyphen(), Reading.of_name("un")]), False),
-    (Word(parts=[Reading.of_name("un"), Joiner.hyphen()]), False),
-    (Word(parts=[Joiner.hyphen(), Reading.of_name("un")]), False),
-    (Word(parts=[Reading.of_name("un"), Joiner.dot()]), False),
-    (Word(parts=[Joiner.dot(), Reading.of_name("un")]), False),
-    (Word(parts=[Reading.of_name("un"), Joiner.plus()]), False),
-    (Word(parts=[Joiner.plus(), Reading.of_name("un")]), False),
-    (Word(parts=[Reading.of_name("un"), Joiner.colon()]), False),
-    (Word(parts=[Joiner.colon(), Reading.of_name("un")]), False),
-    (Word(parts=[Variant([Reading.of_name("un"), Reading.of_name("ia")])]), False),
+    (Word.of([Reading.of_name("un")]), True),
+    (Word.of([Reading.of_name("un")], normalized=True), False),
+    (Word.of([Reading.of_name("un")], language=Language.SUMERIAN), False),
+    (Word.of([Reading.of_name("un")], language=Language.EMESAL), False),
+    (Word.of([Reading.of_name("un"), Joiner.hyphen(), UnclearSign.of()]), False),
+    (Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("un")]), False),
+    (Word.of([Reading.of_name("un"), Joiner.hyphen()]), False),
+    (Word.of([Joiner.hyphen(), Reading.of_name("un")]), False),
+    (Word.of([Reading.of_name("un"), Joiner.dot()]), False),
+    (Word.of([Joiner.dot(), Reading.of_name("un")]), False),
+    (Word.of([Reading.of_name("un"), Joiner.plus()]), False),
+    (Word.of([Joiner.plus(), Reading.of_name("un")]), False),
+    (Word.of([Reading.of_name("un"), Joiner.colon()]), False),
+    (Word.of([Joiner.colon(), Reading.of_name("un")]), False),
+    (Word.of([Variant.of(Reading.of_name("un"), Reading.of_name("ia"))]), False),
     (
-        Word(parts=[UnknownNumberOfSigns(), Joiner.hyphen(), Reading.of_name("un")]),
+        Word.of(
+            [UnknownNumberOfSigns(frozenset()), Joiner.hyphen(), Reading.of_name("un")]
+        ),
         False,
     ),
     (
-        Word(parts=[Reading.of_name("un"), Joiner.hyphen(), UnknownNumberOfSigns()]),
+        Word.of(
+            [Reading.of_name("un"), Joiner.hyphen(), UnknownNumberOfSigns(frozenset())]
+        ),
         False,
     ),
     (
-        Word(
+        Word.of(
             parts=[
                 Reading.of_name("un"),
                 Joiner.hyphen(),
-                UnknownNumberOfSigns(),
+                UnknownNumberOfSigns(frozenset()),
                 Joiner.hyphen(),
                 Reading.of_name("un"),
             ]
@@ -74,7 +78,7 @@ def test_default_normalized():
 def test_defaults():
     value = "value"
     reading = Reading.of_name(value)
-    word = Word(parts=[reading])
+    word = Word.of([reading])
 
     assert word.value == value
     assert word.get_key() == f"Word⁝{value}⟨{reading.get_key()}⟩"
@@ -102,19 +106,15 @@ def test_word(language, normalized, unique_lemma):
     value = "ku"
     parts = [Reading.of_name("ku")]
     erasure = ErasureState.NONE
-    word = Word(language, normalized, unique_lemma, erasure, parts=parts)
+    word = Word.of(parts, language, normalized, unique_lemma, erasure)
 
-    equal = Word(language, normalized, unique_lemma, parts=parts)
-    other_language = Word(Language.UNKNOWN, normalized, unique_lemma, parts=parts)
-    other_parts = Word(
-        language, normalized, unique_lemma, parts=[Reading.of_name("nu")]
-    )
-    other_unique_lemma = Word(
-        language, normalized, tuple(WordId("waklu I")), parts=parts
-    )
-    other_normalized = Word(language, not normalized, unique_lemma, parts=parts)
-    other_erasure = Word(
-        language, normalized, unique_lemma, ErasureState.ERASED, parts=parts
+    equal = Word.of(parts, language, normalized, unique_lemma)
+    other_language = Word.of(parts, Language.UNKNOWN, normalized, unique_lemma)
+    other_parts = Word.of([Reading.of_name("nu")], language, normalized, unique_lemma)
+    other_unique_lemma = Word.of(parts, language, normalized, tuple(WordId("waklu I")))
+    other_normalized = Word.of(parts, language, not normalized, unique_lemma)
+    other_erasure = Word.of(
+        parts, language, normalized, unique_lemma, ErasureState.ERASED
     )
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
@@ -133,6 +133,7 @@ def test_word(language, normalized, unique_lemma):
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
         "parts": dump_tokens(parts),
+        "enclosureType": [type.name for type in word.enclosure_type],
     }
     assert_token_serialization(word, serialized)
 
@@ -149,7 +150,7 @@ def test_word(language, normalized, unique_lemma):
         assert word != not_equal
         assert hash(word) != hash(not_equal)
 
-    assert word != ValueToken(value)
+    assert word != ValueToken.of(value)
 
 
 @pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)
@@ -166,28 +167,28 @@ def test_set_language():
     unique_lemma = (WordId("aklu I"),)
     language = Language.SUMERIAN
     normalized = False
-    word = Word(
-        Language.AKKADIAN, not normalized, unique_lemma, parts=[Reading.of_name("kur")]
+    word = Word.of(
+        [Reading.of_name("kur")], Language.AKKADIAN, not normalized, unique_lemma
     )
-    expected_word = Word(
-        language, normalized, unique_lemma, parts=[Reading.of_name("kur")]
+    expected_word = Word.of(
+        [Reading.of_name("kur")], language, normalized, unique_lemma
     )
 
     assert word.set_language(language, normalized) == expected_word
 
 
 def test_set_unique_lemma():
-    word = Word(parts=[Reading.of_name("bu")])
+    word = Word.of([Reading.of_name("bu")])
     lemma = LemmatizationToken("bu", (WordId("nu I"),))
-    expected = Word(parts=[Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))
+    expected = Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))
 
     assert word.set_unique_lemma(lemma) == expected
 
 
 def test_set_unique_lemma_empty():
-    word = Word(Language.SUMERIAN, parts=[Reading.of_name("bu")])
+    word = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
     lemma = LemmatizationToken("bu", tuple())
-    expected = Word(Language.SUMERIAN, parts=[Reading.of_name("bu")])
+    expected = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
 
     assert word.set_unique_lemma(lemma) == expected
 
@@ -195,13 +196,15 @@ def test_set_unique_lemma_empty():
 @pytest.mark.parametrize(
     "word",
     [
-        Word(parts=[Reading.of_name("mu")]),
-        Word(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-        Word(parts=[Reading.of_name("bu"), Joiner.hyphen(), UnclearSign()]),
-        Word(parts=[UnidentifiedSign(), Joiner.hyphen(), Reading.of_name("bu")]),
-        Word(parts=[Variant([Reading.of_name("bu"), Reading.of_name("nu")])]),
-        Word(parts=[Joiner.hyphen(), Reading.of_name("bu")]),
-        Word(parts=[Reading.of_name("bu"), Joiner.hyphen()]),
+        Word.of([Reading.of_name("mu")]),
+        Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign(frozenset())]),
+        Word.of(
+            [UnidentifiedSign(frozenset()), Joiner.hyphen(), Reading.of_name("bu")]
+        ),
+        Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
+        Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
+        Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
     ],
 )
 def test_set_unique_lemma_invalid(word):
@@ -211,17 +214,17 @@ def test_set_unique_lemma_invalid(word):
 
 
 def test_set_alignment():
-    word = Word(parts=[Reading.of_name("bu")])
+    word = Word.of([Reading.of_name("bu")])
     alignment = AlignmentToken("bu", 1)
-    expected = Word(parts=[Reading.of_name("bu")], alignment=1)
+    expected = Word.of([Reading.of_name("bu")], alignment=1)
 
     assert word.set_alignment(alignment) == expected
 
 
 def test_set_alignment_empty():
-    word = Word(Language.SUMERIAN, parts=[Reading.of_name("bu")])
+    word = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
     alignment = AlignmentToken("bu", None)
-    expected = Word(Language.SUMERIAN, parts=[Reading.of_name("bu")])
+    expected = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
 
     assert word.set_alignment(alignment) == expected
 
@@ -229,13 +232,15 @@ def test_set_alignment_empty():
 @pytest.mark.parametrize(
     "word",
     [
-        Word(parts=[Reading.of_name("mu")]),
-        Word(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-        Word(parts=[Reading.of_name("bu"), Joiner.hyphen(), UnclearSign()]),
-        Word(parts=[UnidentifiedSign(), Joiner.hyphen(), Reading.of_name("bu")]),
-        Word(parts=[Variant([Reading.of_name("bu"), Reading.of_name("nu")])]),
-        Word(parts=[Joiner.hyphen(), Reading.of_name("bu")]),
-        Word(parts=[Reading.of_name("bu"), Joiner.hyphen()]),
+        Word.of([Reading.of_name("mu")]),
+        Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign(frozenset())]),
+        Word.of(
+            [UnidentifiedSign(frozenset()), Joiner.hyphen(), Reading.of_name("bu")]
+        ),
+        Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
+        Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
+        Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
     ],
 )
 def test_set_alignment_invalid(word):
@@ -248,12 +253,12 @@ def test_set_alignment_invalid(word):
     "old,new,expected",
     [
         (
-            Word(alignment=1, parts=[Reading.of_name("bu")]),
-            UnknownNumberOfSigns(),
-            UnknownNumberOfSigns(),
+            Word.of(alignment=1, parts=[Reading.of_name("bu")]),
+            UnknownNumberOfSigns(frozenset()),
+            UnknownNumberOfSigns(frozenset()),
         ),
         (
-            Word(
+            Word.of(
                 alignment=1,
                 parts=[
                     BrokenAway.open(),
@@ -262,28 +267,70 @@ def test_set_alignment_invalid(word):
                     PerhapsBrokenAway.close(),
                 ],
             ),
-            Word(parts=[Reading.of_name("bu")]),
-            Word(alignment=1, parts=[Reading.of_name("bu")]),
+            Word.of([Reading.of_name("bu")]),
+            Word.of(alignment=1, parts=[Reading.of_name("bu")]),
         ),
         (
-            Word(alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])]),
-            Word(parts=[Reading.of_name("bu")]),
-            Word(alignment=1, parts=[Reading.of_name("bu")]),
+            Word.of(alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])]),
+            Word.of([Reading.of_name("bu")]),
+            Word.of(alignment=1, parts=[Reading.of_name("bu")]),
         ),
         (
-            Word(alignment=1, parts=[Reading.of_name("bu")]),
-            Word(parts=[Reading.of_name("bu", flags=[*atf.Flag])]),
-            Word(alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])],),
+            Word.of(alignment=1, parts=[Reading.of_name("bu")]),
+            Word.of([Reading.of_name("bu", flags=[*atf.Flag])]),
+            Word.of(alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])],),
         ),
         (
-            Word(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")]),
-            Word(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-            Word(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word.of(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")]),
+            Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         ),
         (
-            Word(alignment=1, parts=[Reading.of_name("bu")]),
-            Word(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-            Word(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word.of(alignment=1, parts=[Reading.of_name("bu")]),
+            Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+        ),
+        (
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of([ValueToken.of("k[ur")]),
+                        Reading.of([ValueToken.of("r[a")]),
+                    )
+                ]
+            ),
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of(
+                            [
+                                ValueToken.of("k"),
+                                BrokenAway.open(),
+                                ValueToken.of("ur"),
+                            ]
+                        ),
+                        Reading.of(
+                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a"),]
+                        ),
+                    )
+                ]
+            ),
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of(
+                            [
+                                ValueToken.of("k"),
+                                BrokenAway.open(),
+                                ValueToken.of("ur"),
+                            ]
+                        ),
+                        Reading.of(
+                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a"),]
+                        ),
+                    )
+                ]
+            ),
         ),
     ],
 )
@@ -295,11 +342,11 @@ def test_merge(old, new, expected):
     "word,expected",
     [
         (
-            Word(parts=[Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu")]),
+            Word.of([Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu")]),
             (False, False),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.hyphen(),
                     Reading.of_name("mu"),
@@ -310,7 +357,7 @@ def test_merge(old, new, expected):
             (True, False),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
@@ -321,7 +368,7 @@ def test_merge(old, new, expected):
             (False, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.hyphen(),
                     Reading.of_name("mu"),
@@ -333,7 +380,7 @@ def test_merge(old, new, expected):
             (True, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.colon(),
                     Reading.of_name("mu"),
@@ -344,7 +391,7 @@ def test_merge(old, new, expected):
             (True, False),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
@@ -355,7 +402,7 @@ def test_merge(old, new, expected):
             (False, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.colon(),
                     Reading.of_name("mu"),
@@ -367,7 +414,7 @@ def test_merge(old, new, expected):
             (True, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.plus(),
                     Reading.of_name("mu"),
@@ -378,7 +425,7 @@ def test_merge(old, new, expected):
             (True, False),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
@@ -389,7 +436,7 @@ def test_merge(old, new, expected):
             (False, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.plus(),
                     Reading.of_name("mu"),
@@ -401,7 +448,7 @@ def test_merge(old, new, expected):
             (True, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.dot(),
                     Reading.of_name("mu"),
@@ -412,7 +459,7 @@ def test_merge(old, new, expected):
             (True, False),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
@@ -423,7 +470,7 @@ def test_merge(old, new, expected):
             (False, True),
         ),
         (
-            Word(
+            Word.of(
                 parts=[
                     Joiner.dot(),
                     Reading.of_name("mu"),
@@ -435,25 +482,33 @@ def test_merge(old, new, expected):
             (True, True),
         ),
         (
-            Word(
-                parts=[UnknownNumberOfSigns(), Joiner.hyphen(), Reading.of_name("mu")]
+            Word.of(
+                parts=[
+                    UnknownNumberOfSigns(frozenset()),
+                    Joiner.hyphen(),
+                    Reading.of_name("mu"),
+                ]
             ),
             (True, False),
         ),
         (
-            Word(
-                parts=[Reading.of_name("mu"), Joiner.hyphen(), UnknownNumberOfSigns()]
+            Word.of(
+                [
+                    Reading.of_name("mu"),
+                    Joiner.hyphen(),
+                    UnknownNumberOfSigns(frozenset()),
+                ]
             ),
             (False, True),
         ),
         (
-            Word(
-                parts=[
-                    UnknownNumberOfSigns(),
+            Word.of(
+                [
+                    UnknownNumberOfSigns(frozenset()),
                     Joiner.hyphen(),
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
-                    UnknownNumberOfSigns(),
+                    UnknownNumberOfSigns(frozenset()),
                 ]
             ),
             (True, True),

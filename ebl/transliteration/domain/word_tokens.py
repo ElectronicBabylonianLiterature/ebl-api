@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Type, TypeVar
 
 import attr
 
@@ -26,6 +26,9 @@ class ErasureState(Enum):
     OVER_ERASED = auto()
 
 
+T = TypeVar("T", bound="Word")
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Word(Token):
     language: Language = DEFAULT_LANGUAGE
@@ -33,9 +36,21 @@ class Word(Token):
     unique_lemma: Sequence[WordId] = tuple()
     erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
-    _parts: Sequence[Token] = attr.ib(
-        default=tuple(), kw_only=True, converter=convert_token_sequence
-    )
+    _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
+
+    @classmethod
+    def of(
+        cls: Type[T],
+        parts: Sequence[Token],
+        language: Language = DEFAULT_LANGUAGE,
+        normalized: bool = DEFAULT_NORMALIZED,
+        unique_lemma: Sequence[WordId] = tuple(),
+        erasure: ErasureState = ErasureState.NONE,
+        alignment: Optional[int] = None,
+    ) -> T:
+        return cls(
+            frozenset(), language, normalized, unique_lemma, erasure, alignment, parts
+        )
 
     @property
     def value(self) -> str:
@@ -117,7 +132,7 @@ class LoneDeterminative(Word):
     def of_value(
         parts, erasure: ErasureState = ErasureState.NONE
     ) -> "LoneDeterminative":
-        return LoneDeterminative(erasure=erasure, parts=parts)
+        return LoneDeterminative.of(parts, erasure=erasure)
 
     @property
     def lemmatizable(self) -> bool:
@@ -129,3 +144,7 @@ class InWordNewline(Token):
     @property
     def value(self) -> str:
         return atf.IN_WORD_NEWLINE
+
+    @property
+    def parts(self):
+        return tuple()

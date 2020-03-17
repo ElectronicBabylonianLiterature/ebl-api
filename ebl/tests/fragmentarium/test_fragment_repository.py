@@ -20,9 +20,10 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -36,18 +37,13 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
             TextLine(
                 "1'.",
                 (
-                    Word(
-                        parts=[Logogram.of_name("GI", 6)],
-                        unique_lemma=(WordId("ginâ I"),),
+                    Word.of(
+                        [Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),),
                     ),
-                    Word(
-                        parts=[Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)
-                    ),
-                    Word(
-                        parts=[Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)
-                    ),
-                    Word(
-                        parts=[
+                    Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
+                    Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
+                    Word.of(
+                        [
                             Reading.of_name("u", 4),
                             Joiner.hyphen(),
                             Reading.of_name("šu"),
@@ -181,11 +177,11 @@ def test_statistics(database, fragment_repository):
                             TextLine(
                                 "1.",
                                 (
-                                    Word(parts=[Reading.of_name("first")]),
-                                    Word(parts=[Reading.of_name("line")]),
+                                    Word.of([Reading.of_name("first")]),
+                                    Word.of([Reading.of_name("line")]),
                                 ),
                             ),
-                            ControlLine("$", (ValueToken("ignore"),)),
+                            ControlLine("$", (ValueToken.of("ignore"),)),
                             EmptyLine(),
                         )
                     )
@@ -195,11 +191,11 @@ def test_statistics(database, fragment_repository):
                 FragmentFactory.build(
                     text=Text(
                         (
-                            ControlLine("$", (ValueToken("ignore"),)),
-                            TextLine("1.", (Word(parts=[Reading.of_name("second")]),)),
-                            TextLine("1.", (Word(parts=[Reading.of_name("third")]),)),
-                            ControlLine("$", (ValueToken("ignore"),)),
-                            TextLine("1.", (Word(parts=[Reading.of_name("fourth")]),)),
+                            ControlLine("$", (ValueToken.of("ignore"),)),
+                            TextLine("1.", (Word.of([Reading.of_name("second")]),)),
+                            TextLine("1.", (Word.of([Reading.of_name("third")]),)),
+                            ControlLine("$", (ValueToken.of("ignore"),)),
+                            TextLine("1.", (Word.of([Reading.of_name("fourth")]),)),
                         )
                     )
                 )
@@ -308,7 +304,7 @@ def test_find_lemmas_multiple(fragment_repository):
             BrokenAway.open(),
             PerhapsBrokenAway.open(),
             Reading.of(
-                [ValueToken("a"), ValueToken("n"), ValueToken("a")],
+                [ValueToken.of("a"), ValueToken.of("n"), ValueToken.of("a")],
                 flags=[Flag.DAMAGE, Flag.COLLATION, Flag.UNCERTAIN, Flag.CORRECTION],
             ),
             PerhapsBrokenAway.close(),
@@ -323,7 +319,7 @@ def test_find_lemmas_ignores_in_value(parts, fragment_repository):
             [
                 TextLine.of_iterable(
                     LineNumberLabel.from_atf("1'."),
-                    [Word(parts=parts, unique_lemma=(WordId("ana I"),))],
+                    [Word.of(parts, unique_lemma=(WordId("ana I"),))],
                 )
             ]
         ),

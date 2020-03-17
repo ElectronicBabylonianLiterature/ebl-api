@@ -13,7 +13,8 @@ from ebl.corpus.domain.reconstructed_text import (
     MetricalFootSeparator,
     ReconstructionToken,
 )
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text, TextLine
+from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import dump_line
 from ebl.transliteration.domain.labels import Label, LineNumberLabel

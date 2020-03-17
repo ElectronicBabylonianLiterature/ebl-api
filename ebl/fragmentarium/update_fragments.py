@@ -5,6 +5,7 @@ from typing import Callable, Iterable, List, Sequence
 import attr
 import pydash
 from joblib import Parallel, delayed
+from tqdm import tqdm
 
 from ebl.app import create_context
 from ebl.context import Context
@@ -13,7 +14,7 @@ from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.infrastructure.menoizing_sign_repository import (
@@ -51,7 +52,6 @@ class State:
     ) -> None:
         self.invalid_lemmas += 1
         self.errors.append(f"{fragment.number}\t{error}")
-        print(f"{fragment.number}\t{error}")
 
     def add_transliteration_error(
         self, transliteration_error: TransliterationError, fragment: Fragment
@@ -61,7 +61,6 @@ class State:
             atf = fragment.text.lines[error["lineNumber"] - 1].atf
             number = fragment.number if index == 0 else len(fragment.number) * " "
             self.errors.append(f"{number}\t{atf}\t{error}")
-            print(f"{number}\t{atf}\t{error}")
 
     def to_tsv(self) -> str:
         return "\n".join(
@@ -91,8 +90,8 @@ def update_fragments(
     updater = context.get_fragment_updater()
     state = State()
 
-    for number in numbers:
-        fragment = fragment_repository.query_by_fragment_number(FragmentNumber(number))
+    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
+        fragment = fragment_repository.query_by_fragment_number(number)
         try:
             update_fragment(transliteration_factory, updater, fragment)
             state.add_updated()
@@ -119,11 +118,8 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 1
+    number_of_jobs = 4
     chunks = create_chunks(number_of_jobs)
-
-    print(f"# Updating: {sum(len(chunk) for chunk in chunks)} fragments")
-
     states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
         delayed(update_fragments)(subset, index, create_context_)
         for index, subset in enumerate(chunks)
@@ -132,6 +128,5 @@ if __name__ == "__main__":
         lambda accumulator, state: accumulator.merge(state), states, State()
     )
 
-    print(f"# Updated fragments: {final_state.updated}")
-    print(f"# Invalid ATF: {final_state.invalid_atf}")
-    print(f"# Invalid lemmas: {final_state.invalid_lemmas}")
+    with open(f"invalid_fragments.tsv", "w", encoding="utf-8") as file:
+        file.write(final_state.to_tsv())

@@ -33,7 +33,7 @@ from ebl.transliteration.domain.labels import (
     LineNumberLabel,
     SurfaceLabel,
 )
-from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
@@ -64,9 +64,9 @@ LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
     "1.",
     (
-        Word(
-            parts=[
-                Reading.of([ValueToken("ku"), BrokenAway.close()]),
+        Word.of(
+            [
+                Reading.of([ValueToken.of("ku"), BrokenAway.close()]),
                 Joiner.hyphen(),
                 Reading.of_name("nu"),
                 Joiner.hyphen(),

@@ -43,7 +43,7 @@ from ebl.transliteration.domain.labels import (
     LineNumberLabel,
     SurfaceLabel,
 )
-from ebl.transliteration.domain.line import TextLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
@@ -76,17 +76,18 @@ class ManuscriptLineFactory(factory.Factory):
         SurfaceLabel.from_label(Surface.OBVERSE),
         ColumnLabel.from_label("iii", [Status.COLLATION, Status.CORRECTION]),
     )
-    line = TextLine(
-        "1.",
+    line = TextLine.of_iterable(
+        LineNumberLabel.from_atf("1."),
         (
-            Word(
-                parts=[
+            Word.of(
+                [
                     Reading.of_name("ku"),
-                    BrokenAway.close(),
                     Joiner.hyphen(),
+                    BrokenAway.open(),
                     Reading.of_name("nu"),
                     Joiner.hyphen(),
                     Reading.of_name("ši"),
+                    BrokenAway.close(),
                 ],
             ),
         ),

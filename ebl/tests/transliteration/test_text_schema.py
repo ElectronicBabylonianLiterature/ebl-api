@@ -6,7 +6,8 @@ from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.tokens import (
@@ -24,7 +25,7 @@ def test_dump_line():
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         parts=[
                             Reading.of_name("ha"),
                             Joiner.hyphen(),
@@ -34,7 +35,7 @@ def test_dump_line():
                 ],
             ),
             EmptyLine(),
-            ControlLine.of_single("$", ValueToken(" single ruling")),
+            ControlLine.of_single("$", ValueToken.of(" single ruling")),
         ),
         "1.0.0",
     )
@@ -49,24 +50,24 @@ def test_dump_line():
     "lines",
     [
         [EmptyLine()],
-        [ControlLine.of_single("$", ValueToken(" single ruling"))],
+        [ControlLine.of_single("$", ValueToken.of(" single ruling"))],
         [
             TextLine.of_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
-                    Word(
+                    Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")],
                     ),
-                    Word(alignment=1, parts=[Reading.of_name("nu")]),
-                    LanguageShift("%sux"),
-                    LoneDeterminative(
+                    Word.of(alignment=1, parts=[Reading.of_name("nu")]),
+                    LanguageShift.of("%sux"),
+                    LoneDeterminative.of(
+                        [Determinative.of([Reading.of_name("nu")])],
                         language=Language.SUMERIAN,
-                        parts=[Determinative([Reading.of_name("nu")])],
                     ),
                     Erasure.open(),
                     Erasure.center(),
                     Erasure.close(),
-                    LineContinuation("→"),
+                    LineContinuation.of("→"),
                 ],
             )
         ],
