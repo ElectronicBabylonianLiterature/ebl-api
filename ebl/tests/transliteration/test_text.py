@@ -263,36 +263,6 @@ def test_update_lemmatization_wrong_lines():
                     )
                 ]
             ),
-            Text.of_iterable(
-                [
-                    TextLine.of_iterable(
-                        LineNumberLabel.from_atf("1."),
-                        [
-                            Word.of(
-                                [
-                                    Variant.of(
-                                        Reading.of(
-                                            [
-                                                ValueToken.of("k"),
-                                                BrokenAway.open(),
-                                                ValueToken.of("ur"),
-                                            ]
-                                        ),
-                                        Reading.of(
-                                            [
-                                                ValueToken.of("r"),
-                                                BrokenAway.open(),
-                                                ValueToken.of("a"),
-                                            ]
-                                        ),
-                                    )
-                                ]
-                            ),
-                            BrokenAway.close(),
-                        ],
-                    )
-                ]
-            ),
         ),
     ],
 )
