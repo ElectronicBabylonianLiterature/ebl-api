@@ -310,11 +310,7 @@ def test_set_alignment_invalid(word):
                             ]
                         ),
                         Reading.of(
-                            [
-                                ValueToken.of("r"),
-                                BrokenAway.open(),
-                                ValueToken.of("a"),
-                            ]
+                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a"),]
                         ),
                     )
                 ]
@@ -330,11 +326,7 @@ def test_set_alignment_invalid(word):
                             ]
                         ),
                         Reading.of(
-                            [
-                                ValueToken.of("r"),
-                                BrokenAway.open(),
-                                ValueToken.of("a"),
-                            ]
+                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a"),]
                         ),
                     )
                 ]

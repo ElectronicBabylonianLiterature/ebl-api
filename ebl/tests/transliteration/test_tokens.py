@@ -245,7 +245,10 @@ def test_variant():
     assert variant.value == expected_value
     assert variant.tokens == (reading, divider)
     assert variant.parts == variant.tokens
-    assert variant.get_key() == f"Variant⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in variant.tokens)}⟩"
+    assert (
+        variant.get_key()
+        == f"Variant⁝{expected_value}⟨{'⁚'.join(token.get_key() for token in variant.tokens)}⟩"
+    )
     assert variant.lemmatizable is False
 
     serialized = {
