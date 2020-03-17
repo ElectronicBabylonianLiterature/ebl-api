@@ -35,6 +35,10 @@ class Enclosure(Token):
         return self.get_sides()[self.side]
 
     @property
+    def parts(self):
+        return tuple()
+
+    @property
     def is_open(self) -> bool:
         return self.side == Side.LEFT
 

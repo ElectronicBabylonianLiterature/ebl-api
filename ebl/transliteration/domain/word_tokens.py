@@ -144,3 +144,7 @@ class InWordNewline(Token):
     @property
     def value(self) -> str:
         return atf.IN_WORD_NEWLINE
+
+    @property
+    def parts(self):
+        return tuple()

@@ -34,16 +34,17 @@ class Token(ABC):
         ...
 
     @property
+    @abstractmethod
+    def parts(self) -> Sequence["Token"]:
+        ...
+
+    @property
     def lemmatizable(self) -> bool:
         return False
 
     @property
     def alignable(self) -> bool:
         return self.lemmatizable
-
-    @property
-    def parts(self) -> Sequence["Token"]:
-        return tuple()
 
     def get_key(self) -> str:
         parts = (
@@ -87,6 +88,10 @@ class ValueToken(Token):
     def value(self) -> str:
         return self._value
 
+    @property
+    def parts(self):
+        return tuple()
+
     @classmethod
     def of(cls: Type[T], value: str) -> T:
         return cls(frozenset(), value)
@@ -110,6 +115,10 @@ class UnknownNumberOfSigns(Token):
     @property
     def value(self) -> str:
         return atf.UNKNOWN_NUMBER_OF_SIGNS
+
+    @property
+    def parts(self):
+        return tuple()
 
 
 @attr.s(frozen=True)
@@ -141,6 +150,10 @@ class Column(Token):
     def value(self) -> str:
         return "&" if self.number is None else f"&{self.number}"
 
+    @property
+    def parts(self):
+        return tuple()
+
 
 @attr.s(frozen=True, auto_attribs=True)
 class Variant(Token):
@@ -171,6 +184,10 @@ class Joiner(Token):
     @property
     def value(self):
         return self._value.value
+
+    @property
+    def parts(self):
+        return tuple()
 
     @staticmethod
     def dot():

@@ -31,6 +31,10 @@ class UnknownSign(Token):
         return cls(frozenset(), flags)
 
     @property
+    def parts(self):
+        return tuple()
+
+    @property
     @abstractmethod
     def _sign(self) -> str:
         ...
@@ -90,6 +94,10 @@ class Divider(AbstractSign):
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
         return f"{self.divider}{modifiers}{flags}"
+
+    @property
+    def parts(self):
+        return tuple()
 
     @property
     def string_flags(self) -> Sequence[str]:
@@ -236,6 +244,10 @@ class Grapheme(AbstractSign):
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
         return f"{self.name}{modifiers}{flags}"
+
+    @property
+    def parts(self):
+        return tuple()
 
     @staticmethod
     def of(
