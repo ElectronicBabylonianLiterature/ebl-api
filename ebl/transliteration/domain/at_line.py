@@ -94,7 +94,7 @@ class ObjectAtLine(AtLine):
 
     @property
     def _status_string(self):
-        return "".join([status.value for status in self.status])
+        return "".join(status.value for status in self.status)
 
     @property
     def _content_value(self):
