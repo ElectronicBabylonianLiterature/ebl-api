@@ -33,13 +33,6 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     Line,
-    TextLine,
-)
-from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-    Line,
 )
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine

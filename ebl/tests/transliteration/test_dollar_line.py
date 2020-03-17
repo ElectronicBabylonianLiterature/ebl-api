@@ -95,7 +95,7 @@ def test_state_dollar_line_content():
         atf.DollarStatus.UNCERTAIN,
     )
 
-   assert actual.content == (ValueToken.of(" at least 1 obverse blank ?"),)
+    assert actual.content == (ValueToken.of(" at least 1 obverse blank ?"),)
 
 
 def test_state_dollar_line_non_empty_string_error():

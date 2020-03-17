@@ -41,7 +41,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
-from ebl.transliteration.domain.enclosure_visitor import EnclosureVisitor, EnclosureValidator
+from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
