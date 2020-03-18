@@ -43,7 +43,7 @@ class TextLine(Line):
         return cls(line_number.to_atf(), language_visitor.tokens)
 
     @property
-    def line_number(self) -> LineNumberLabel:
+    def line_number_label(self) -> LineNumberLabel:
         return LineNumberLabel.from_atf(self.prefix)
 
     @property
@@ -83,7 +83,7 @@ class TextLine(Line):
             return Merger(map_, inner_merge).merge(self.content, other.content)
 
         return (
-            TextLine.of_iterable(other.line_number, merge_tokens())
+            TextLine.of_iterable(other.line_number_label, merge_tokens())
             if isinstance(other, TextLine)
             else other
         )

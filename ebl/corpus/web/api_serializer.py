@@ -37,8 +37,8 @@ class ApiSerializer(TextSerializer):
             {
                 "manuscriptId": manuscript_line.manuscript_id,
                 "labels": [label.to_value() for label in manuscript_line.labels],
-                "number": line.line_number.to_value(),
-                "atf": line.atf[len(line.line_number.to_atf()) + 1 :],
+                "number": line.line_number_label.to_value(),
+                "atf": line.atf[len(line.line_number_label.to_atf()) + 1 :],
                 "atfTokens": dump_line(manuscript_line.line)["content"],
             }
         )

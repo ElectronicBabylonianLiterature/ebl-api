@@ -89,7 +89,7 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
     line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
     assert line.prefix == LINE_NUMBER.to_atf()
-    assert line.line_number == LINE_NUMBER
+    assert line.line_number_label == LINE_NUMBER
     assert line.content == expected_tokens
     assert (
         line.key
