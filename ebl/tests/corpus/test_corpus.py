@@ -16,6 +16,7 @@ from ebl.transliteration.domain.alignment import (
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
@@ -194,8 +195,8 @@ def test_updating_alignment(
                         manuscripts=(
                             attr.evolve(
                                 DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
-                                line=TextLine.of_legacy_iterable(
-                                    LineNumberLabel.from_atf("1."),
+                                line=TextLine.of_iterable(
+                                    LineNumber(1),
                                     (
                                         Word.of(
                                             [
@@ -357,8 +358,8 @@ def test_merging_lines(
 ):
     number = LineNumberLabel("1")
     reconstruction = (AkkadianWord((StringPart("buāru"),)),)
-    text_line = TextLine(
-        "1.",
+    text_line = TextLine.of_iterable(
+        LineNumber(1),
         (
             Word.of(
                 [Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0,
@@ -372,8 +373,9 @@ def test_merging_lines(
     line = Line(
         number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),),
     )
-    new_text_line = TextLine(
-        "1.", (Word.of([Reading.of_name("kur")]), Word.of([Reading.of_name("pa")])),
+    new_text_line = TextLine.of_iterable(
+        LineNumber(1),
+        (Word.of([Reading.of_name("kur")]), Word.of([Reading.of_name("pa")])),
     )
     new_line = Line(
         number,

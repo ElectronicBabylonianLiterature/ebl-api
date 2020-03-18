@@ -31,12 +31,12 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     Line,
 )
+from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -270,8 +270,20 @@ class TreeToLine(TreeToWord):
         return ControlLine.of_single(prefix, ValueToken.of(content))
 
     @v_args(inline=True)
-    def text_line(self, prefix, content):
-        return TextLine.of_legacy_iterable(LineNumberLabel.from_atf(prefix), content)
+    def text_line(self, line_number, content):
+        return TextLine.of_iterable(line_number, content)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__line_number_range(self, start, end):
+        return LineNumberRange(start, end)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__single_line_number(
+        self, prefix_modifier, number, prime, suffix_modifier
+    ):
+        return LineNumber(
+            int(number), prime is not None, prefix_modifier, suffix_modifier
+        )
 
     def ebl_atf_text_line__text(self, children):
         return (
