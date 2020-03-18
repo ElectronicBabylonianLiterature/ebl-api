@@ -17,8 +17,6 @@ from ebl.transliteration.domain.tokens import Token
 
 L = TypeVar("L", "TextLine", "Line")
 
-1
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
@@ -35,7 +33,7 @@ class TextLine(Line):
         return self._content
 
     @classmethod
-    def of_legacy_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
+    def of_iterable(cls, line_number: AbstractLineNumber, content: Iterable[Token]):
         enclosure_visitor = EnclosureUpdater()
         for token in content:
             token.accept(enclosure_visitor)
@@ -44,7 +42,19 @@ class TextLine(Line):
         for token in enclosure_visitor.tokens:
             token.accept(language_visitor)
 
-        return cls(line_number.to_atf(), language_visitor.tokens)
+        return cls(line_number.atf, language_visitor.tokens, line_number)
+
+    @classmethod
+    def of_legacy_iterable(cls, line_number_label: LineNumberLabel, content: Iterable[Token], line_number: Optional[AbstractLineNumber] = None):
+        enclosure_visitor = EnclosureUpdater()
+        for token in content:
+            token.accept(enclosure_visitor)
+
+        language_visitor = LanguageVisitor()
+        for token in enclosure_visitor.tokens:
+            token.accept(language_visitor)
+
+        return cls(line_number_label.to_atf(), language_visitor.tokens, line_number)
 
     @property
     def line_number_label(self) -> LineNumberLabel:

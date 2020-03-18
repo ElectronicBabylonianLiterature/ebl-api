@@ -4,6 +4,7 @@ from ebl.transliteration.application.line_schemas import (
     dump_line,
     load_line,
 )
+from ebl.transliteration.application.line_number_schemas import dump_line_number
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
@@ -24,6 +25,7 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
 )
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.note_line import (
     EmphasisPart,
     LanguagePart,
@@ -104,6 +106,76 @@ LINES = [
         },
     ),
     (
+        TextLine.of_iterable(
+            LineNumber(1),
+            (
+                DocumentOrientedGloss.open(),
+                Word.of([Reading.of_name("bu")]),
+                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                DocumentOrientedGloss.close(),
+            ),
+        ),
+        {
+            "type": "TextLine",
+            "prefix": "1.",
+            "lineNumber": dump_line_number(LineNumber(1)),
+            "content": dump_tokens(
+                [
+                    DocumentOrientedGloss.open(),
+                    Word.of(
+                        [
+                            Reading.of(
+                                (
+                                    ValueToken(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        ),
+                                        "bu",
+                                    ),
+                                )
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ]
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    LoneDeterminative.of(
+                        [
+                            Determinative.of(
+                                [
+                                    Reading.of(
+                                        (
+                                            ValueToken(
+                                                frozenset(
+                                                    {
+                                                        EnclosureType.DOCUMENT_ORIENTED_GLOSS
+                                                    }
+                                                ),
+                                                "d",
+                                            ),
+                                        )
+                                    ).set_enclosure_type(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        )
+                                    ),
+                                ]
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ],
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    DocumentOrientedGloss.close().set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                ]
+            ),
+        },
+    ),
+    (
         TextLine.of_legacy_iterable(
             LineNumberLabel.from_atf("1."),
             [
@@ -116,6 +188,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
+            "lineNumber": None,
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
@@ -310,6 +383,75 @@ def test_dump_line(line, expected):
                 "prefix": "$",
                 "content": dump_tokens([ValueToken.of(" double ruling")]),
                 "number": "SINGLE",
+            },
+        ),
+        (
+            TextLine.of_legacy_iterable(
+                LineNumberLabel.from_atf("1."),
+                [
+                    DocumentOrientedGloss.open(),
+                    Word.of([Reading.of_name("bu")]),
+                    LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                    DocumentOrientedGloss.close(),
+                ],
+            ),
+            {
+                "type": "TextLine",
+                "prefix": "1.",
+                "content": dump_tokens(
+                    [
+                        DocumentOrientedGloss.open(),
+                        Word.of(
+                            [
+                                Reading.of(
+                                    (
+                                        ValueToken(
+                                            frozenset(
+                                                {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                            ),
+                                            "bu",
+                                        ),
+                                    )
+                                ).set_enclosure_type(
+                                    frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                                ),
+                            ]
+                        ).set_enclosure_type(
+                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                        ),
+                        LoneDeterminative.of(
+                            [
+                                Determinative.of(
+                                    [
+                                        Reading.of(
+                                            (
+                                                ValueToken(
+                                                    frozenset(
+                                                        {
+                                                            EnclosureType.DOCUMENT_ORIENTED_GLOSS
+                                                        }
+                                                    ),
+                                                    "d",
+                                                ),
+                                            )
+                                        ).set_enclosure_type(
+                                            frozenset(
+                                                {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                            )
+                                        ),
+                                    ]
+                                ).set_enclosure_type(
+                                    frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                                ),
+                            ],
+                        ).set_enclosure_type(
+                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                        ),
+                        DocumentOrientedGloss.close().set_enclosure_type(
+                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                        ),
+                    ]
+                ),
             },
         ),
     ],

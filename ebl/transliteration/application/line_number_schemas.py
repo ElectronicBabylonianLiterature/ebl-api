@@ -1,4 +1,4 @@
-from typing import Mapping, Type
+from typing import Mapping, Optional, Type
 
 from marshmallow import Schema, fields, post_load, validate
 
@@ -52,8 +52,12 @@ _SCHEMAS: Mapping[str, Type[Schema]] = {
 }
 
 
-def dump_line_number(line_number: AbstractLineNumber) -> dict:
-    return _SCHEMAS[type(line_number).__name__]().dump(line_number)
+def dump_line_number(line_number: Optional[AbstractLineNumber]) -> Optional[dict]:
+    return (
+        line_number
+        if line_number is None
+        else _SCHEMAS[type(line_number).__name__]().dump(line_number)
+    )
 
 
 def load_line_number(data: dict) -> AbstractLineNumber:
