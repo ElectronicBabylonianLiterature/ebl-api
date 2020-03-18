@@ -19,42 +19,42 @@ from ebl.transliteration.domain.word_tokens import Word
     [
         (
             EmptyLine(),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
             ControlLine.of_single("$", ValueToken.of(" single ruling")),
             ControlLine.of_single("$", ValueToken.of(" single ruling")),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("2."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("2."), [Word.of([Reading.of_name("bu")])],
             ),
         ),
         (
-            TextLine.of_iterable(LineNumberLabel.from_atf("1."), [Word.of([])]),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(LineNumberLabel.from_atf("1."), [Word.of([])]),
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -62,10 +62,10 @@ from ebl.transliteration.domain.word_tokens import Word
                     )
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -75,7 +75,7 @@ from ebl.transliteration.domain.word_tokens import Word
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -83,15 +83,15 @@ from ebl.transliteration.domain.word_tokens import Word
                     )
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [LanguageShift.of("%sux")]
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [LanguageShift.of("%sux")]
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -99,15 +99,15 @@ from ebl.transliteration.domain.word_tokens import Word
                     )
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("mu")])],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("mu")])],
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -121,11 +121,11 @@ from ebl.transliteration.domain.word_tokens import Word
                     ),
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")]),],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -138,7 +138,7 @@ from ebl.transliteration.domain.word_tokens import Word
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -149,7 +149,7 @@ from ebl.transliteration.domain.word_tokens import Word
                     ),
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of([Reading.of_name("bu")]),
@@ -157,7 +157,7 @@ from ebl.transliteration.domain.word_tokens import Word
                     Word.of([Reading.of_name("bu")]),
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -171,7 +171,7 @@ from ebl.transliteration.domain.word_tokens import Word
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -207,7 +207,7 @@ from ebl.transliteration.domain.word_tokens import Word
                     ),
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -241,7 +241,7 @@ from ebl.transliteration.domain.word_tokens import Word
                     BrokenAway.close(),
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -281,18 +281,18 @@ from ebl.transliteration.domain.word_tokens import Word
             ),
         ),
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of([Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)),
                     Word.of([Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)),
                 ],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [Word.of([Reading.of_name("mu")]), Word.of([Reading.of_name("nu")]),],
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of([Reading.of_name("mu")]),

@@ -317,7 +317,7 @@ def test_find_lemmas_ignores_in_value(parts, fragment_repository):
     fragment = FragmentFactory.build(
         text=Text.of_iterable(
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1'."),
                     [Word.of(parts, unique_lemma=(WordId("ana I"),))],
                 )

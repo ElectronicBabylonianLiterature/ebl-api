@@ -78,7 +78,7 @@ class InterestingFragmentFactory(FragmentFactory):
 class TransliteratedFragmentFactory(FragmentFactory):
     text = Text(
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1'."),
                 (
                     Word.of([UnidentifiedSign(frozenset())]),
@@ -119,7 +119,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Word.of([Number.of_name("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("2'."),
                 (
                     BrokenAway.open(),
@@ -144,7 +144,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("3'."),
                 (
                     BrokenAway.open(),
@@ -182,7 +182,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("6'."),
                 (
                     BrokenAway.open(),
@@ -202,7 +202,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("7'."),
                 (
                     Word.of(
@@ -247,7 +247,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
     text = Text(
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1'."),
                 (
                     Word.of([UnidentifiedSign.of()]),
@@ -288,7 +288,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Word.of([Number.of_name("10", flags=[Flag.DAMAGE])]),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("2'."),
                 (
                     BrokenAway.open(),
@@ -309,7 +309,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("3'."),
                 (
                     BrokenAway.open(),
@@ -351,7 +351,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     BrokenAway.close(),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("6'."),
                 (
                     BrokenAway.open(),
@@ -374,7 +374,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     ),
                 ),
             ),
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("7'."),
                 (
                     Word.of(

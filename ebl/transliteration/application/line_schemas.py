@@ -39,7 +39,7 @@ class TextLineSchema(LineSchema):
 
     @post_load
     def make_line(self, data, **kwargs):
-        return TextLine.of_iterable(
+        return TextLine.of_legacy_iterable(
             LineNumberLabel.from_atf(data["prefix"]), data["content"]
         )
 

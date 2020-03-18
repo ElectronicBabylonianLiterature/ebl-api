@@ -194,7 +194,7 @@ def test_updating_alignment(
                         manuscripts=(
                             attr.evolve(
                                 DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
-                                line=TextLine.of_iterable(
+                                line=TextLine.of_legacy_iterable(
                                     LineNumberLabel.from_atf("1."),
                                     (
                                         Word.of(

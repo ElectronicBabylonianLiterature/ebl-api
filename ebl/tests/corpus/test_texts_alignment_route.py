@@ -58,7 +58,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                         manuscripts=(
                             attr.evolve(
                                 text.chapters[0].lines[0].manuscripts[0],
-                                line=TextLine.of_iterable(
+                                line=TextLine.of_legacy_iterable(
                                     LineNumberLabel.from_atf("1."),
                                     (
                                         Word.of(

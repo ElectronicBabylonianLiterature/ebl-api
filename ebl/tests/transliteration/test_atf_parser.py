@@ -102,7 +102,7 @@ def test_parser_version(parser, version):
         (
             "a+1.a+2. šu",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("a+1.a+2."),
                     (Word.of([Reading.of_name("šu")]),),
                 )
@@ -111,7 +111,7 @@ def test_parser_version(parser, version):
         (
             "1. ($___$)",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."), (Tabulation.of("($___$)"),)
                 )
             ],
@@ -119,7 +119,7 @@ def test_parser_version(parser, version):
         (
             "1. ... [...] [(...)]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         UnknownNumberOfSigns(frozenset()),
@@ -138,7 +138,7 @@ def test_parser_version(parser, version):
         (
             "1. [(x x x)]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -163,7 +163,7 @@ def test_parser_version(parser, version):
         (
             "1. <en-da-ab-su₈ ... >",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -187,7 +187,7 @@ def test_parser_version(parser, version):
         (
             "1. <<en ...>>",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of([Removal.open(), Reading.of_name("en"),]),
@@ -200,7 +200,7 @@ def test_parser_version(parser, version):
         (
             "1. & &12",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."), (Column.of(), Column.of(12))
                 )
             ],
@@ -208,7 +208,7 @@ def test_parser_version(parser, version):
         (
             "1. | : :' :\" :. :: ; /",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Divider.of("|"),
@@ -226,7 +226,7 @@ def test_parser_version(parser, version):
         (
             "1. |/: :'/sal //: ://",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Variant.of(Divider.of("|"), Divider.of(":")),
@@ -240,7 +240,7 @@ def test_parser_version(parser, version):
         (
             "1. me-e+li  me.e:li :\n2. ku",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -264,7 +264,7 @@ def test_parser_version(parser, version):
                         Divider.of(":"),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."), (Word.of([Reading.of_name("ku")]),)
                 ),
             ],
@@ -272,7 +272,7 @@ def test_parser_version(parser, version):
         (
             "1. |GAL|",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (Word.of([CompoundGrapheme.of("|GAL|")]),),
                 )
@@ -281,7 +281,7 @@ def test_parser_version(parser, version):
         (
             "1. !qt !bs !cm !zz",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         CommentaryProtocol.of("!qt"),
@@ -295,7 +295,7 @@ def test_parser_version(parser, version):
         (
             "1. x X x?# X#!",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of([UnclearSign.of()]),
@@ -317,7 +317,7 @@ def test_parser_version(parser, version):
         (
             "1. x-ti ti-X",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -337,7 +337,7 @@ def test_parser_version(parser, version):
         (
             "1. [... r]u?-u₂-qu na-a[n-...]\n2. ši-[ku-...-ku]-nu\n3. [...]-ku",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         BrokenAway.open(),
@@ -376,7 +376,7 @@ def test_parser_version(parser, version):
                         ),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -396,7 +396,7 @@ def test_parser_version(parser, version):
                         ),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("3."),
                     (
                         Word.of(
@@ -415,7 +415,7 @@ def test_parser_version(parser, version):
         (
             "1. [...]-qa-[...]-ba-[...]\n2. pa-[...]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -439,7 +439,7 @@ def test_parser_version(parser, version):
                         ),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -458,7 +458,7 @@ def test_parser_version(parser, version):
         (
             "1. [a?-ku (...)]\n2. [a?-ku (x)]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -475,7 +475,7 @@ def test_parser_version(parser, version):
                         BrokenAway.close(),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -501,7 +501,7 @@ def test_parser_version(parser, version):
         (
             "1. [...+ku....] [....ku+...]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -538,7 +538,7 @@ def test_parser_version(parser, version):
                 "4. [...]{bu}[...]"
             ),
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         BrokenAway.open(),
@@ -553,7 +553,7 @@ def test_parser_version(parser, version):
                         BrokenAway.close(),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -569,7 +569,7 @@ def test_parser_version(parser, version):
                         BrokenAway.close(),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("3."),
                     (
                         BrokenAway.open(),
@@ -585,7 +585,7 @@ def test_parser_version(parser, version):
                         ),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("4."),
                     (
                         Word.of(
@@ -606,7 +606,7 @@ def test_parser_version(parser, version):
         (
             "1. {bu}-nu {bu-bu}-nu\n2. {bu-bu}",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -631,7 +631,7 @@ def test_parser_version(parser, version):
                         ),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         LoneDeterminative.of_value(
@@ -653,7 +653,7 @@ def test_parser_version(parser, version):
         (
             "1. KIMIN {u₂#}[...] {u₂#} [...]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of([Logogram.of_name("KIMIN")]),
@@ -685,14 +685,14 @@ def test_parser_version(parser, version):
         (
             "1. šu gid₂\n2. [U₄].14.KAM₂ U₄.15.KAM₂",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of([Reading.of_name("šu")]),
                         Word.of([Reading.of_name("gid", 2)]),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -722,7 +722,7 @@ def test_parser_version(parser, version):
         (
             "1. {(he-pi₂ eš-šu₂)}\n2. {(NU SUR)}",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         DocumentOrientedGloss.open(),
@@ -743,7 +743,7 @@ def test_parser_version(parser, version):
                         DocumentOrientedGloss.close(),
                     ),
                 ),
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         DocumentOrientedGloss.open(),
@@ -757,7 +757,7 @@ def test_parser_version(parser, version):
         (
             "1.  sal/: šim ",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Variant.of(Reading.of_name("sal"), Divider.of(":"),),
@@ -769,7 +769,7 @@ def test_parser_version(parser, version):
         (
             "1. °me-e-li\\ku°",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Erasure.open(),
@@ -796,7 +796,7 @@ def test_parser_version(parser, version):
         (
             "1. me-e-li-°\\ku°",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -820,7 +820,7 @@ def test_parser_version(parser, version):
         (
             "1. °me-e-li\\°-ku",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -844,7 +844,7 @@ def test_parser_version(parser, version):
         (
             "1. me-°e\\li°-ku",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -867,7 +867,7 @@ def test_parser_version(parser, version):
         (
             "1. me-°e\\li°-me-°e\\li°-ku",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -898,7 +898,7 @@ def test_parser_version(parser, version):
         (
             "1. sal →",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (Word.of([Reading.of_name("sal")]), LineContinuation.of("→"),),
                 )
@@ -907,7 +907,7 @@ def test_parser_version(parser, version):
         (
             "2. sal →  ",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (Word.of([Reading.of_name("sal")]), LineContinuation.of("→"),),
                 )
@@ -916,7 +916,7 @@ def test_parser_version(parser, version):
         (
             "1. [{(he-pi₂ e]š-šu₂)}",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         BrokenAway.open(),
@@ -949,7 +949,7 @@ def test_parser_version(parser, version):
         (
             "1. [{iti}...]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -967,7 +967,7 @@ def test_parser_version(parser, version):
         (
             "2. RA{k[i}]",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -994,7 +994,7 @@ def test_parser_version(parser, version):
         (
             "2. [in]-<(...)>",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -1015,7 +1015,7 @@ def test_parser_version(parser, version):
         (
             "2. ...{d}kur ... {d}kur",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -1039,7 +1039,7 @@ def test_parser_version(parser, version):
         (
             "2. kur{d}... kur{d} ...",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("2."),
                     (
                         Word.of(
@@ -1063,7 +1063,7 @@ def test_parser_version(parser, version):
         (
             "1. mu-un;-e₃ ;",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         Word.of(
@@ -1084,7 +1084,7 @@ def test_parser_version(parser, version):
         (
             "1. [... {(he-p]i₂)}",
             [
-                TextLine.of_iterable(
+                TextLine.of_legacy_iterable(
                     LineNumberLabel.from_atf("1."),
                     (
                         BrokenAway.open(),
@@ -1119,7 +1119,7 @@ def test_parse_dividers():
     line, expected_tokens = (
         r'1. :? :#! :# ::? :.@v /@19* :"@20@c |@v@19!',
         [
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 (
                     Divider.of(":", tuple(), (atf.Flag.UNCERTAIN,)),
@@ -1171,7 +1171,7 @@ def test_parse_atf_language_shifts(code: str, expected_language: Language):
 
     expected = Text(
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 (
                     Word.of(parts, DEFAULT_LANGUAGE),

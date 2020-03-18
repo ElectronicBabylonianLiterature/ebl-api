@@ -104,7 +104,7 @@ LINES = [
         },
     ),
     (
-        TextLine.of_iterable(
+        TextLine.of_legacy_iterable(
             LineNumberLabel.from_atf("1."),
             [
                 DocumentOrientedGloss.open(),

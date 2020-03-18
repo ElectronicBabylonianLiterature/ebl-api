@@ -76,7 +76,7 @@ class ManuscriptLineFactory(factory.Factory):
         SurfaceLabel.from_label(Surface.OBVERSE),
         ColumnLabel.from_label("iii", [Status.COLLATION, Status.CORRECTION]),
     )
-    line = TextLine.of_iterable(
+    line = TextLine.of_legacy_iterable(
         LineNumberLabel.from_atf("1."),
         (
             Word.of(

@@ -31,7 +31,7 @@ class TextLine(Line):
         return self._content
 
     @classmethod
-    def of_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
+    def of_legacy_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
         enclosure_visitor = EnclosureUpdater()
         for token in content:
             token.accept(enclosure_visitor)
@@ -83,7 +83,7 @@ class TextLine(Line):
             return Merger(map_, inner_merge).merge(self.content, other.content)
 
         return (
-            TextLine.of_iterable(other.line_number_label, merge_tokens())
+            TextLine.of_legacy_iterable(other.line_number_label, merge_tokens())
             if isinstance(other, TextLine)
             else other
         )

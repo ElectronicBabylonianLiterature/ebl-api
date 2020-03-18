@@ -22,7 +22,7 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 def test_dump_line():
     text = Text(
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -52,7 +52,7 @@ def test_dump_line():
         [EmptyLine()],
         [ControlLine.of_single("$", ValueToken.of(" single ruling"))],
         [
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(

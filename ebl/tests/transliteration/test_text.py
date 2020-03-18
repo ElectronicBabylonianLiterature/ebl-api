@@ -28,7 +28,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import Word
 
 LINES: Sequence[Line] = (
-    TextLine.of_iterable(
+    TextLine.of_legacy_iterable(
         LineNumberLabel.from_atf("1."),
         [Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],)],
     ),
@@ -169,7 +169,7 @@ def test_update_lemmatization_wrong_lines():
         (
             Text.of_iterable(
                 [
-                    TextLine.of_iterable(
+                    TextLine.of_legacy_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
                             Word.of(
@@ -184,7 +184,7 @@ def test_update_lemmatization_wrong_lines():
             ),
             Text.of_iterable(
                 [
-                    TextLine.of_iterable(
+                    TextLine.of_legacy_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
                             Word.of([Reading.of_name("mu")]),
@@ -195,7 +195,7 @@ def test_update_lemmatization_wrong_lines():
             ),
             Text.of_iterable(
                 [
-                    TextLine.of_iterable(
+                    TextLine.of_legacy_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
                             Word.of([Reading.of_name("mu")]),
@@ -217,7 +217,7 @@ def test_update_lemmatization_wrong_lines():
         (
             Text.of_iterable(
                 [
-                    TextLine.of_iterable(
+                    TextLine.of_legacy_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
                             Word.of(
@@ -235,7 +235,7 @@ def test_update_lemmatization_wrong_lines():
             ),
             Text.of_iterable(
                 [
-                    TextLine.of_iterable(
+                    TextLine.of_legacy_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
                             Word.of(
@@ -265,7 +265,7 @@ def test_update_lemmatization_wrong_lines():
             ),
             Text.of_iterable(
                 [
-                    TextLine.of_iterable(
+                    TextLine.of_legacy_iterable(
                         LineNumberLabel.from_atf("1."),
                         [
                             Word.of(

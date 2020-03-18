@@ -271,7 +271,7 @@ class TreeToLine(TreeToWord):
 
     @v_args(inline=True)
     def text_line(self, prefix, content):
-        return TextLine.of_iterable(LineNumberLabel.from_atf(prefix), content)
+        return TextLine.of_legacy_iterable(LineNumberLabel.from_atf(prefix), content)
 
     def ebl_atf_text_line__text(self, children):
         return (

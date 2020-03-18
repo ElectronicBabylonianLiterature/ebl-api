@@ -86,7 +86,7 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
         UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
         BrokenAway.close().set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
     )
-    line = TextLine.of_iterable(LINE_NUMBER, tokens)
+    line = TextLine.of_legacy_iterable(LINE_NUMBER, tokens)
 
     assert line.prefix == LINE_NUMBER.to_atf()
     assert line.line_number_label == LINE_NUMBER
@@ -127,7 +127,7 @@ def test_text_line_atf(atf: str):
 
 
 def test_text_line_atf_gloss():
-    line = TextLine.of_iterable(
+    line = TextLine.of_legacy_iterable(
         LINE_NUMBER,
         [
             DocumentOrientedGloss.open(),
@@ -183,14 +183,14 @@ def test_text_line_atf_gloss():
 )
 def test_text_line_atf_erasure(erasure, expected: str):
     word = Word.of([Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("mu")])
-    line = TextLine.of_iterable(LINE_NUMBER, [word, *erasure, word])
+    line = TextLine.of_legacy_iterable(LINE_NUMBER, [word, *erasure, word])
     assert line.atf == f"{line.prefix} {word.value} {expected} {word.value}"
 
 
 def test_update_lemmatization_text_line():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("bu")])])
+    line = TextLine.of_legacy_iterable(LINE_NUMBER, [Word.of([Reading.of_name("bu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
-    expected = TextLine.of_iterable(
+    expected = TextLine.of_legacy_iterable(
         LINE_NUMBER, [Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))],
     )
 
@@ -198,14 +198,14 @@ def test_update_lemmatization_text_line():
 
 
 def test_update_lemmatization_incompatible():
-    line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("mu")])])
+    line = TextLine.of_legacy_iterable(LINE_NUMBER, [Word.of([Reading.of_name("mu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lenght():
-    line = TextLine.of_iterable(
+    line = TextLine.of_legacy_iterable(
         LINE_NUMBER,
         [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")])],
     )
