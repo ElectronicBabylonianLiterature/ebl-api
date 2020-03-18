@@ -45,7 +45,12 @@ class TextLine(Line):
         return cls(line_number.atf, language_visitor.tokens, line_number)
 
     @classmethod
-    def of_legacy_iterable(cls, line_number_label: LineNumberLabel, content: Iterable[Token], line_number: Optional[AbstractLineNumber] = None):
+    def of_legacy_iterable(
+        cls,
+        line_number_label: LineNumberLabel,
+        content: Iterable[Token],
+        line_number: Optional[AbstractLineNumber] = None,
+    ):
         enclosure_visitor = EnclosureUpdater()
         for token in content:
             token.accept(enclosure_visitor)
