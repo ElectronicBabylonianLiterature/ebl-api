@@ -384,73 +384,12 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
     ),
     (
         TextLine.of_legacy_iterable(
-            LineNumberLabel.from_atf("1."),
-            [
-                DocumentOrientedGloss.open(),
-                Word.of([Reading.of_name("bu")]),
-                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
-                DocumentOrientedGloss.close(),
-            ],
+            LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")]),],
         ),
         {
             "type": "TextLine",
             "prefix": "1.",
-            "content": dump_tokens(
-                [
-                    DocumentOrientedGloss.open(),
-                    Word.of(
-                        [
-                            Reading.of(
-                                (
-                                    ValueToken(
-                                        frozenset(
-                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                        ),
-                                        "bu",
-                                    ),
-                                )
-                            ).set_enclosure_type(
-                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ]
-                    ).set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                    LoneDeterminative.of(
-                        [
-                            Determinative.of(
-                                [
-                                    Reading.of(
-                                        (
-                                            ValueToken(
-                                                frozenset(
-                                                    {
-                                                        (
-                                                            EnclosureType.DOCUMENT_ORIENTED_GLOSS
-                                                        )
-                                                    }
-                                                ),
-                                                "d",
-                                            ),
-                                        )
-                                    ).set_enclosure_type(
-                                        frozenset(
-                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                        )
-                                    ),
-                                ]
-                            ).set_enclosure_type(
-                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ],
-                    ).set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                    DocumentOrientedGloss.close().set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                ]
-            ),
+            "content": dump_tokens([Word.of([Reading.of((ValueToken.of("bu",),)),]),]),
         },
     ),
 ]
