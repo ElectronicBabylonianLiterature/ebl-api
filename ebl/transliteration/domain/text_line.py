@@ -25,6 +25,12 @@ class TextLine(Line):
     line_number: Optional[AbstractLineNumber] = None
 
     @property
+    def key(self) -> str:
+        tokens = "⁚".join(token.get_key() for token in self.content)
+        line_number = self.line_number.atf if self.line_number else "None"
+        return f"{type(self).__name__}⁞{line_number}⁞{self.atf}⟨{tokens}⟩"
+
+    @property
     def prefix(self):
         return self._prefix
 
@@ -102,7 +108,9 @@ class TextLine(Line):
             return Merger(map_, inner_merge).merge(self.content, other.content)
 
         return (
-            TextLine.of_legacy_iterable(other.line_number_label, merge_tokens())
+            TextLine.of_legacy_iterable(
+                other.line_number_label, merge_tokens(), other.line_number
+            )
             if isinstance(other, TextLine)
             else other
         )

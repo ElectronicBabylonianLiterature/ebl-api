@@ -94,7 +94,7 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
     assert line.content == expected_tokens
     assert (
         line.key
-        == f"TextLine⁞{line.atf}⟨{'⁚'.join(token.get_key() for token in expected_tokens)}⟩"
+        == f"TextLine⁞None⁞{line.atf}⟨{'⁚'.join(token.get_key() for token in expected_tokens)}⟩"
     )
     assert line.atf == f"1. first {code} second %sb {{third}} [fourth ...]"
 

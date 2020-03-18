@@ -298,10 +298,33 @@ def test_update_lemmatization_wrong_lines():
                 ]
             ),
         ),
+        (
+            Text.of_iterable(
+                [
+                    TextLine.of_legacy_iterable(
+                        LineNumberLabel.from_atf("1."),
+                        [Word.of([Reading.of_name("bu")])],
+                    )
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumber(1), [Word.of([Reading.of_name("bu")])],
+                    )
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumber(1), [Word.of([Reading.of_name("bu")])],
+                    )
+                ]
+            ),
+        ),
     ],
 )
 def test_merge(old: Text, new: Text, expected: Text) -> None:
     new_version = f"{old.parser_version}-test"
-    assert old.merge(
-        new.set_parser_version(new_version)
-    ) == expected.set_parser_version(new_version)
+    merged = old.merge(new.set_parser_version(new_version))
+    assert merged == expected.set_parser_version(new_version)

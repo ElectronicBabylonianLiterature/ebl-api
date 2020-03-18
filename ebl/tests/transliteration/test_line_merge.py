@@ -8,6 +8,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
@@ -299,6 +300,18 @@ from ebl.transliteration.domain.word_tokens import Word
                     Word.of([Reading.of_name("nu")], unique_lemma=(WordId("nu I"),)),
                 ],
             ),
+        ),
+        (
+            TextLine.of_legacy_iterable(
+                LineNumberLabel.from_atf("1."),
+                [Word.of([Reading.of_name("bu")])],
+            ),
+            TextLine.of_iterable(
+                LineNumber(1), [Word.of([Reading.of_name("bu")])],
+            ),
+            TextLine.of_iterable(
+                LineNumber(1), [Word.of([Reading.of_name("bu")])],
+            )
         ),
     ],
 )
