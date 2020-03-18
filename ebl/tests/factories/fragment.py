@@ -7,15 +7,27 @@ from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import (
+    SealAtLine,
+    HeadingAtLine,
+    ColumnAtLine,
+    SurfaceAtLine,
+    ObjectAtLine,
+    DiscourseAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
+)
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.dollar_line import (
-    ImageDollarLine,
     LooseDollarLine,
+    ImageDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+    SealDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.note_line import (
@@ -224,6 +236,17 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            SealDollarLine(1),
+            SealAtLine(1),
+            HeadingAtLine(1),
+            ColumnAtLine(ColumnLabel([atf.Status.COLLATION], 1)),
+            SurfaceAtLine(
+                SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
+            ),
+            ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
+            DiscourseAtLine(atf.Discourse.DATE),
+            DivisionAtLine("paragraph", 5),
+            CompositeAtLine(atf.Composite.DIV, "part", 1),
             NoteLine(
                 (
                     StringPart("a note "),
@@ -396,6 +419,17 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ImageDollarLine("1", None, "numbered diagram of triangle"),
             RulingDollarLine(atf.Ruling.SINGLE),
             LooseDollarLine("this is a loose line"),
+            SealDollarLine(1),
+            SealAtLine(1),
+            HeadingAtLine(1),
+            ColumnAtLine(ColumnLabel([atf.Status.COLLATION], 1)),
+            SurfaceAtLine(
+                SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
+            ),
+            ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
+            DiscourseAtLine(atf.Discourse.DATE),
+            DivisionAtLine("paragraph", 5),
+            CompositeAtLine(atf.Composite.DIV, "part", 1),
             NoteLine(
                 (
                     StringPart("a note "),

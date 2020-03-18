@@ -22,8 +22,30 @@ word-character = ? A-Za-z ?;
 lower-case-letter = ? a-z ?;
 any-character = ? any UTF-8 character ?;
 decimal-digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+number = { decimal-digit };
+
 eol = ? end of line ?;
 ```
+
+Common grammar used in multiple places.
+
+```ebnf
+
+surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
+        | face | generic-surface | edge;
+face = 'face', ' ', lower-case-letter;
+edge = 'edge', ' ', lower-case-letter;
+generic-surface = 'surface', ' ', free-text;
+
+object = 'tablet' | 'envelope' | 'prism' | 'bulla' | fragment | generic-object;
+fragment = 'fragment', ' ', free-text;
+generic-object = 'object', ' ', free-text;
+
+status = "'" | '?' | '!' | '*';
+
+
+```
+
 
 ## Lines
 
@@ -34,14 +56,44 @@ Continuation lines (starting with space) are not supported.
 ```ebnf
 line = empty-line
      | dollar-line
-     | control-line
+     | at-line
      | note-line
-     | text-line;
+     | text-line
+     | control-line;
 
 empty-line = '';
 
-control-line = '=:' | '$' | '@' | '&' | '#', { any-character };
+control-line = '=:' | '&' | '#', { any-character };
 ```
+
+## @-lines
+
+
+@-lines are used for structural tags. Several kinds of structure may be indicated
+using this mechanism: physical structure, e.g., objects, surfaces; manuscript structure,
+i.e., columns; and document structure, e.g., divisions and colophons.
+
+```ebnf
+
+at-line = seal | column | heading | discourse | objct_with_status | surface_with_status
+          | divisions | composite;
+    
+surface_with_status = _surface, [" "], {status};
+
+object_with_status = _object, [" "], {status};
+
+column = "column ", number, [" "], {status};
+
+heading: "h",number;
+
+discourse = "catchline" | "colophon" | "date" | "signature" | "signatures"
+            | "summary"  | "witnesses";
+
+divisions = "m=division ", free-text, [" ", number];
+
+composite = composite_start | composite_end;
+composite_start = "div ", free-text, [" ", number];
+composite_end = "end ", free-text;
 
 ## $-lines
 
@@ -75,23 +127,6 @@ state-name = 'blank' | 'broken' | 'effaced' | 'illegible' | 'missing'
             | 'traces' | 'omitted' | 'continues';
 
 range = number, '-', number;
-
-object = 'tablet' | 'envelope' | 'prism' | 'bulla' | fragment | generic-object;
-
-fragment = 'fragment', ' ', free-text;
-
-generic-object = 'object', ' ', free-text;
-
-surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
-        | face | generic-surface | edge;
-
-face = 'face', ' ', lower-case-letter;
-
-edge = 'edge', ' ', lower-case-letter;
-
-generic-surface = 'surface', ' ', free-text;
-
-number = { decimal-digit }-;
 
 loose = '(', free-text, ')';
 
@@ -436,7 +471,6 @@ roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
 surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ),
                 { status };
 
-status = "'" | '?' | '!' | '*';
 ```
 
 See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html)

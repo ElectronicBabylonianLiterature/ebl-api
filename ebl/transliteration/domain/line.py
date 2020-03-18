@@ -12,7 +12,7 @@ from ebl.transliteration.domain.lemmatization import (
 from ebl.transliteration.domain.tokens import Token
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(frozen=True)
 class Line(ABC):
     T = TypeVar("T")
 

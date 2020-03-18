@@ -3,23 +3,34 @@ import pytest
 from ebl.transliteration.application.line_schemas import (
     dump_line,
     load_line,
+    SealAtLine,
 )
 from ebl.transliteration.application.line_number_schemas import dump_line_number
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import (
+    HeadingAtLine,
+    ColumnAtLine,
+    SurfaceAtLine,
+    ObjectAtLine,
+    DiscourseAtLine,
+    DivisionAtLine,
+    CompositeAtLine,
+)
 from ebl.transliteration.domain.dollar_line import (
-    ImageDollarLine,
     LooseDollarLine,
+    ImageDollarLine,
     RulingDollarLine,
     ScopeContainer,
     StateDollarLine,
+    SealDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -38,6 +49,127 @@ from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+    (
+        CompositeAtLine(atf.Composite.END, "part"),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("end part")]),
+            "type": "CompositeAtLine",
+            "composite": "END",
+            "text": "part",
+            "number": None,
+        },
+    ),
+    (
+        CompositeAtLine(atf.Composite.DIV, "part", 5),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("div part 5")]),
+            "type": "CompositeAtLine",
+            "composite": "DIV",
+            "text": "part",
+            "number": 5,
+        },
+    ),
+    (
+        DivisionAtLine("paragraph", 5),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("m=division paragraph 5")]),
+            "type": "DivisionAtLine",
+            "text": "paragraph",
+            "number": 5,
+        },
+    ),
+    (
+        DivisionAtLine("paragraph"),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("m=division paragraph")]),
+            "type": "DivisionAtLine",
+            "text": "paragraph",
+            "number": None,
+        },
+    ),
+    (
+        DiscourseAtLine(atf.Discourse.DATE),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("date")]),
+            "type": "DiscourseAtLine",
+            "discourse_label": "DATE",
+        },
+    ),
+    (
+        ObjectAtLine(
+            [atf.Status.CORRECTION, atf.Status.COLLATION],
+            atf.Object.OBJECT,
+            "stone wig",
+        ),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("object stone wig!*")]),
+            "type": "ObjectAtLine",
+            "status": ["CORRECTION", "COLLATION"],
+            "object_label": "OBJECT",
+            "text": "stone wig",
+        },
+    ),
+    (
+        SurfaceAtLine(
+            SurfaceLabel(
+                [atf.Status.CORRECTION, atf.Status.COLLATION],
+                atf.Surface.SURFACE,
+                "stone wig",
+            )
+        ),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("surface stone wig!*")]),
+            "type": "SurfaceAtLine",
+            "surface_label": {
+                "status": ["CORRECTION", "COLLATION"],
+                "surface": "SURFACE",
+                "text": "stone wig",
+            },
+        },
+    ),
+    (
+        ColumnAtLine(ColumnLabel([atf.Status.CORRECTION, atf.Status.COLLATION], 1)),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("column 1!*")]),
+            "type": "ColumnAtLine",
+            "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
+        },
+    ),
+    (
+        ColumnAtLine(ColumnLabel([], 1)),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("column 1")]),
+            "type": "ColumnAtLine",
+            "column_label": {"status": [], "column": 1},
+        },
+    ),
+    (
+        SealAtLine(1),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("seal 1")]),
+            "type": "SealAtLine",
+            "number": 1,
+        },
+    ),
+    (
+        HeadingAtLine(1),
+        {
+            "prefix": "@",
+            "content": dump_tokens([ValueToken.of("h1")]),
+            "type": "HeadingAtLine",
+            "number": 1,
+        },
+    ),
     (
         StateDollarLine(
             atf.Qualification.AT_LEAST,
@@ -295,6 +427,15 @@ LINES = [
             "content": dump_tokens([ValueToken.of(" double ruling *")]),
             "number": "DOUBLE",
             "status": "COLLATED",
+        },
+    ),
+    (
+        SealDollarLine(1),
+        {
+            "type": "SealDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" seal 1")]),
+            "number": 1,
         },
     ),
     (

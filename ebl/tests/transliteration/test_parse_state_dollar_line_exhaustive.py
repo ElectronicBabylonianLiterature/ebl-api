@@ -7,7 +7,6 @@ from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLi
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 
-
 if not bool(os.environ.get("CI", False)):
     pytest.skip("very large number of tests", allow_module_level=True)
 

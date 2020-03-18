@@ -27,6 +27,15 @@ class DollarLine(Line):
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class SealDollarLine(DollarLine):
+    number: int
+
+    @property
+    def _content_value(self):
+        return f"seal {self.number}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class LooseDollarLine(DollarLine):
     text: str = ""
 
@@ -73,15 +82,25 @@ class ScopeContainer:
             atf.Surface.EDGE,
         ]:
             raise ValueError(
-                "text can only be initialized if the content is 'object' or 'surface'"
+                "non-empty string only allowed if the content is "
+                "'atf.OBJECT.OBJECT' or 'atf.SURFACE.SURACE'"
             )
 
     @property
     def value(self):
-        if self.text:
-            return f"{self.content.name.lower()} {self.text}"
-        else:
-            return f"{self.content.name.lower()}"
+        text = f" {self.text}" if self.text else ""
+        content_value = ScopeContainer.to_value(self.content)
+        return f"{content_value}{text}"
+
+    @singledispatchmethod
+    @staticmethod
+    def to_value(enum) -> str:
+        return enum.value
+
+    @staticmethod
+    @to_value.register
+    def tuple_to_atf(enum: atf.Surface) -> str:
+        return enum.value[0]
 
 
 @attr.s(auto_attribs=True, frozen=True)
