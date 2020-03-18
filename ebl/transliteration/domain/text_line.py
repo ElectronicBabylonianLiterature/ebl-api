@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, Sequence, Type, TypeVar
+from typing import Callable, Iterable, Optional, Sequence, Type, TypeVar
 
 import attr
 import pydash
@@ -11,16 +11,20 @@ from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language_visitor import LanguageVisitor
 from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token
 
 
 L = TypeVar("L", "TextLine", "Line")
+
+1
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
     _prefix: str = ""
     _content: Sequence[Token] = tuple()
+    line_number: Optional[AbstractLineNumber] = None
 
     @property
     def prefix(self):

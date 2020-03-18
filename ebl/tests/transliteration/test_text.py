@@ -17,6 +17,7 @@ from ebl.transliteration.domain.line import (
     EmptyLine,
     Line,
 )
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
@@ -27,10 +28,12 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.word_tokens import Word
 
+
 LINES: Sequence[Line] = (
-    TextLine.of_legacy_iterable(
-        LineNumberLabel.from_atf("1."),
-        [Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],)],
+    TextLine(
+        "1.",
+        (Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],),),
+        LineNumber(1),
     ),
     ControlLine.of_single("$", ValueToken.of(" single ruling")),
 )
@@ -87,6 +90,7 @@ def test_update_lemmatization():
                         ],
                     ),
                 ),
+                LineNumber(1),
             ),
             ControlLine("$", (ValueToken.of(" single ruling"),)),
         ),

@@ -21,6 +21,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -51,6 +52,7 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
                         unique_lemma=(WordId("ūsu I"),),
                     ),
                 ),
+                LineNumber(1),
             ),
         )
     ),
@@ -192,10 +194,22 @@ def test_statistics(database, fragment_repository):
                     text=Text(
                         (
                             ControlLine("$", (ValueToken.of("ignore"),)),
-                            TextLine("1.", (Word.of([Reading.of_name("second")]),)),
-                            TextLine("1.", (Word.of([Reading.of_name("third")]),)),
-                            ControlLine("$", (ValueToken.of("ignore"),)),
-                            TextLine("1.", (Word.of([Reading.of_name("fourth")]),)),
+                            TextLine(
+                                "1.",
+                                (Word.of([Reading.of_name("second")]),),
+                                LineNumber(1),
+                            ),
+                            TextLine(
+                                "2.",
+                                (Word.of([Reading.of_name("third")]),),
+                                LineNumber(2),
+                            ),
+                            ControlLine("$", (ValueToken.of("ignore"),),),
+                            TextLine(
+                                "3.",
+                                (Word.of([Reading.of_name("fourth")]),),
+                                LineNumber(3),
+                            ),
                         )
                     )
                 )
