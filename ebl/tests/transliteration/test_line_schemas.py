@@ -334,127 +334,130 @@ def test_dump_line(line, expected):
     assert dump_line(line) == expected
 
 
-@pytest.mark.parametrize(
-    "expected,data",
-    [
-        *LINES,
-        (
-            StateDollarLine(
-                atf.Qualification.AT_LEAST,
-                1,
-                ScopeContainer(atf.Surface.OBVERSE),
-                atf.State.BLANK,
-                atf.DollarStatus.COLLATED,
-            ),
-            {
-                "prefix": "$",
-                "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
-                "type": "StateDollarLine",
-                "qualification": "AT_LEAST",
-                "extent": 1,
-                "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
-                "state": "BLANK",
-                "status": atf.Status.COLLATION.name,
-            },
+EXTRA_LINES_FOR_LOAD_LINE_TEST = [
+    (
+        StateDollarLine(
+            atf.Qualification.AT_LEAST,
+            1,
+            ScopeContainer(atf.Surface.OBVERSE),
+            atf.State.BLANK,
+            atf.DollarStatus.COLLATED,
         ),
-        (
-            StateDollarLine(
-                atf.Qualification.AT_LEAST,
-                1,
-                ScopeContainer(atf.Surface.OBVERSE),
-                atf.State.BLANK,
-                atf.DollarStatus.EMENDED_NOT_COLLATED,
-            ),
-            {
-                "prefix": "$",
-                "content": dump_tokens([ValueToken.of(" at least 1 obverse blank *")]),
-                "type": "StateDollarLine",
-                "qualification": "AT_LEAST",
-                "extent": 1,
-                "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
-                "state": "BLANK",
-                "status": atf.Status.CORRECTION.name,
-            },
+        {
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
+            "type": "StateDollarLine",
+            "qualification": "AT_LEAST",
+            "extent": 1,
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "BLANK",
+            "status": atf.Status.COLLATION.name,
+        },
+    ),
+    (
+        StateDollarLine(
+            atf.Qualification.AT_LEAST,
+            1,
+            ScopeContainer(atf.Surface.OBVERSE),
+            atf.State.BLANK,
+            atf.DollarStatus.EMENDED_NOT_COLLATED,
         ),
-        (
-            RulingDollarLine(atf.Ruling.SINGLE),
-            {
-                "type": "RulingDollarLine",
-                "prefix": "$",
-                "content": dump_tokens([ValueToken.of(" double ruling")]),
-                "number": "SINGLE",
-            },
+        {
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank *")]),
+            "type": "StateDollarLine",
+            "qualification": "AT_LEAST",
+            "extent": 1,
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "BLANK",
+            "status": atf.Status.CORRECTION.name,
+        },
+    ),
+    (
+        RulingDollarLine(atf.Ruling.SINGLE),
+        {
+            "type": "RulingDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" double ruling")]),
+            "number": "SINGLE",
+        },
+    ),
+    (
+        TextLine.of_legacy_iterable(
+            LineNumberLabel.from_atf("1."),
+            [
+                DocumentOrientedGloss.open(),
+                Word.of([Reading.of_name("bu")]),
+                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                DocumentOrientedGloss.close(),
+            ],
         ),
-        (
-            TextLine.of_legacy_iterable(
-                LineNumberLabel.from_atf("1."),
+        {
+            "type": "TextLine",
+            "prefix": "1.",
+            "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
-                    Word.of([Reading.of_name("bu")]),
-                    LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
-                    DocumentOrientedGloss.close(),
-                ],
-            ),
-            {
-                "type": "TextLine",
-                "prefix": "1.",
-                "content": dump_tokens(
-                    [
-                        DocumentOrientedGloss.open(),
-                        Word.of(
-                            [
-                                Reading.of(
-                                    (
-                                        ValueToken(
-                                            frozenset(
-                                                {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                            ),
-                                            "bu",
+                    Word.of(
+                        [
+                            Reading.of(
+                                (
+                                    ValueToken(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
                                         ),
-                                    )
-                                ).set_enclosure_type(
-                                    frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                                ),
-                            ]
-                        ).set_enclosure_type(
-                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                        ),
-                        LoneDeterminative.of(
-                            [
-                                Determinative.of(
-                                    [
-                                        Reading.of(
-                                            (
-                                                ValueToken(
-                                                    frozenset(
-                                                        {
+                                        "bu",
+                                    ),
+                                )
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ]
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    LoneDeterminative.of(
+                        [
+                            Determinative.of(
+                                [
+                                    Reading.of(
+                                        (
+                                            ValueToken(
+                                                frozenset(
+                                                    {
+                                                        (
                                                             EnclosureType.DOCUMENT_ORIENTED_GLOSS
-                                                        }
-                                                    ),
-                                                    "d",
+                                                        )
+                                                    }
                                                 ),
-                                            )
-                                        ).set_enclosure_type(
-                                            frozenset(
-                                                {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                            )
-                                        ),
-                                    ]
-                                ).set_enclosure_type(
-                                    frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                                ),
-                            ],
-                        ).set_enclosure_type(
-                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                        ),
-                        DocumentOrientedGloss.close().set_enclosure_type(
-                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                        ),
-                    ]
-                ),
-            },
-        ),
-    ],
+                                                "d",
+                                            ),
+                                        )
+                                    ).set_enclosure_type(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        )
+                                    ),
+                                ]
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ],
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    DocumentOrientedGloss.close().set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                ]
+            ),
+        },
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "expected,data", [*LINES, *EXTRA_LINES_FOR_LOAD_LINE_TEST],
 )
 def test_load_line(expected, data):
     assert load_line(data) == expected
