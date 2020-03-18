@@ -303,15 +303,10 @@ from ebl.transliteration.domain.word_tokens import Word
         ),
         (
             TextLine.of_legacy_iterable(
-                LineNumberLabel.from_atf("1."),
-                [Word.of([Reading.of_name("bu")])],
+                LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")])],
             ),
-            TextLine.of_iterable(
-                LineNumber(1), [Word.of([Reading.of_name("bu")])],
-            ),
-            TextLine.of_iterable(
-                LineNumber(1), [Word.of([Reading.of_name("bu")])],
-            )
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])],),
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])],),
         ),
     ],
 )
