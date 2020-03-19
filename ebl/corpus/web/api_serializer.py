@@ -94,4 +94,4 @@ def deserialize_lines(lines: list) -> Sequence[Line]:
     try:
         return tuple(deserializer.deserialize_line(line) for line in lines)
     except (ValueError, LarkParseError, ParsyParseError) as error:
-        raise DataError(error)p
+        raise DataError(error)
