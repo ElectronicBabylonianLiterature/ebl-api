@@ -1,6 +1,7 @@
 from typing import cast, Sequence
 
-from parsy import ParseError
+from lark.exceptions import ParseError as LarkParseError
+from parsy import ParseError as ParsyParseError
 
 from ebl.corpus.application.text_serializer import (
     TextDeserializer,
@@ -84,7 +85,7 @@ def serialize(text: Text, include_documents=True) -> dict:
 def deserialize(dto: dict) -> Text:
     try:
         return ApiDeserializer.deserialize(dto)
-    except (ValueError, ParseError) as error:
+    except (ValueError, LarkParseError, ParsyParseError) as error:
         raise DataError(error)
 
 
@@ -92,5 +93,5 @@ def deserialize_lines(lines: list) -> Sequence[Line]:
     deserializer = ApiDeserializer()
     try:
         return tuple(deserializer.deserialize_line(line) for line in lines)
-    except (ValueError, ParseError) as error:
-        raise DataError(error)
+    except (ValueError, LarkParseError, ParsyParseError) as error:
+        raise DataError(error)p
