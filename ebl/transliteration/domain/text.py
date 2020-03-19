@@ -1,4 +1,5 @@
-from typing import Iterable, Sequence
+from functools import singledispatch
+from typing import FrozenSet, Iterable, List, Optional, Sequence, Tuple
 
 import attr
 import pydash
@@ -7,13 +8,26 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.atf import (
     ATF_PARSER_VERSION,
     Atf,
+    Object
 )
+from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.labels import ColumnLabel, Status, SurfaceLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
 )
 from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
+
+
+Label = Tuple[
+    Optional[ColumnLabel],
+    Optional[SurfaceLabel],
+    Optional[Tuple[Object, FrozenSet[Status], str]],
+    Optional[AbstractLineNumber],
+]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -40,6 +54,39 @@ class Text:
     @property
     def atf(self) -> Atf:
         return Atf("\n".join(line.atf for line in self.lines))
+
+    @property
+    def labels(
+        self,
+    ) -> Sequence[Label]:
+        current: Label = (None, None, None, None)
+        labels: List[Label] = []
+
+        @singledispatch
+        def visit_line(line: Line) -> Label:
+            return current
+
+        @visit_line.register
+        def visit_line_text(line: TextLine) -> Label:
+            labels.append((*current[:-1], line.line_number))
+            return current
+
+        @visit_line.register
+        def visit_line_column(line: ColumnAtLine) -> Label:
+            return (line.column_label, *current[1:])
+
+        @visit_line.register
+        def visit_line_surface(line: SurfaceAtLine) -> Label:
+            return (current[0], line.surface_label, *current[2:])
+
+        @visit_line.register
+        def visit_line_object(line: ObjectAtLine) -> Label:
+            return (*current[:2], (line.object_label, frozenset(line.status), line.text), current[-1])
+
+        for line in self.lines:
+            current = visit_line(line)
+
+        return labels
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Text":
         if len(self.lines) == len(lemmatization.tokens):

@@ -4,9 +4,10 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
@@ -328,3 +329,24 @@ def test_merge(old: Text, new: Text, expected: Text) -> None:
     new_version = f"{old.parser_version}-test"
     merged = old.merge(new.set_parser_version(new_version))
     assert merged == expected.set_parser_version(new_version)
+
+
+def test_labels() -> None:
+    text = Text.of_iterable(
+        [
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])],),
+            ColumnAtLine(ColumnLabel.from_int(1)),
+            SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")),
+            ObjectAtLine([], atf.Object.OBJECT, "Stone wig"),
+            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])],),
+        ]
+    )
+    assert text.labels == [
+        (None, None, None, LineNumber(1)),
+        (
+            ColumnLabel.from_int(1),
+            SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
+            (atf.Object.OBJECT, frozenset(), "Stone wig"),
+            LineNumber(2)
+        ),
+    ]
