@@ -2,6 +2,16 @@ from typing import List, Mapping, Sequence, Tuple, Type
 
 from marshmallow import Schema
 
+from ebl.transliteration.application.at_line_schemas import (
+    SealAtLineSchema,
+    HeadingAtLineSchema,
+    ColumnAtLineSchema,
+    SurfaceAtLineSchema,
+    ObjectAtLineSchema,
+    DiscourseAtLineSchema,
+    DivisionAtLineSchema,
+    CompositeAtLineSchema,
+)
 from ebl.transliteration.application.line_schemas import (
     TextLineSchema,
     ControlLineSchema,
@@ -11,14 +21,6 @@ from ebl.transliteration.application.line_schemas import (
     RulingDollarLineSchema,
     SealDollarLineSchema,
     StateDollarLineSchema,
-    SealAtLineSchema,
-    HeadingAtLineSchema,
-    ColumnAtLineSchema,
-    SurfaceAtLineSchema,
-    ObjectAtLineSchema,
-    DiscourseAtLineSchema,
-    DivisionAtLineSchema,
-    CompositeAtLineSchema,
     NoteLineSchema
 )
 from ebl.transliteration.domain.line import Line

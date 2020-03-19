@@ -1,4 +1,4 @@
-from ebl.transliteration.application.line_schemas import (
+from ebl.transliteration.application.at_line_schemas import (
     ColumnLabelSchema,
     SurfaceLabelSchema,
 )
