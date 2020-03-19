@@ -12,16 +12,18 @@ from ebl.transliteration.application.at_line_schemas import (
     DivisionAtLineSchema,
     CompositeAtLineSchema,
 )
-from ebl.transliteration.application.line_schemas import (
-    TextLineSchema,
-    ControlLineSchema,
-    EmptyLineSchema,
+from ebl.transliteration.application.dollar_line_schemas import (
     LooseDollarLineSchema,
     ImageDollarLineSchema,
     RulingDollarLineSchema,
     SealDollarLineSchema,
     StateDollarLineSchema,
-    NoteLineSchema
+)
+from ebl.transliteration.application.line_schemas import (
+    TextLineSchema,
+    ControlLineSchema,
+    EmptyLineSchema,
+    NoteLineSchema,
 )
 from ebl.transliteration.domain.line import Line
 

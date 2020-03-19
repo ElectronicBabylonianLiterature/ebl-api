@@ -1,4 +1,4 @@
-from ebl.transliteration.application.line_schemas import (
+from ebl.transliteration.application.dollar_line_schemas import (
     ScopeContainerSchema,
     StateDollarLineSchema,
 )
