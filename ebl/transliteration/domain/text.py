@@ -5,11 +5,7 @@ import attr
 import pydash
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.atf import (
-    ATF_PARSER_VERSION,
-    Atf,
-    Object
-)
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
 from ebl.transliteration.domain.labels import ColumnLabel, Status, SurfaceLabel
 from ebl.transliteration.domain.lemmatization import (
@@ -56,9 +52,7 @@ class Text:
         return Atf("\n".join(line.atf for line in self.lines))
 
     @property
-    def labels(
-        self,
-    ) -> Sequence[Label]:
+    def labels(self,) -> Sequence[Label]:
         current: Label = (None, None, None, None)
         labels: List[Label] = []
 
@@ -81,7 +75,11 @@ class Text:
 
         @visit_line.register
         def visit_line_object(line: ObjectAtLine) -> Label:
-            return (*current[:2], (line.object_label, frozenset(line.status), line.text), current[-1])
+            return (
+                *current[:2],
+                (line.object_label, frozenset(line.status), line.text),
+                current[-1],
+            )
 
         for line in self.lines:
             current = visit_line(line)

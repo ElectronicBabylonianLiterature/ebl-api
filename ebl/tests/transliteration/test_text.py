@@ -347,6 +347,6 @@ def test_labels() -> None:
             ColumnLabel.from_int(1),
             SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
             (atf.Object.OBJECT, frozenset(), "Stone wig"),
-            LineNumber(2)
+            LineNumber(2),
         ),
     ]
