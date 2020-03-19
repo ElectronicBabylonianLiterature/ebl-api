@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.application.line_schemas import dump_lines
+from ebl.transliteration.application.line_serializer import dump_lines
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
 from ebl.transliteration.domain.labels import LineNumberLabel
@@ -22,7 +22,7 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 def test_dump_line():
     text = Text(
         (
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(
@@ -52,7 +52,7 @@ def test_dump_line():
         [EmptyLine()],
         [ControlLine.of_single("$", ValueToken.of(" single ruling"))],
         [
-            TextLine.of_iterable(
+            TextLine.of_legacy_iterable(
                 LineNumberLabel.from_atf("1."),
                 [
                     Word.of(

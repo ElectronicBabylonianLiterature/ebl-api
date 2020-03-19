@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from collections import Counter
-from typing import Iterable, Sequence
+from typing import Iterable, Sequence, Tuple
 
 import attr
 import roman
@@ -25,8 +25,12 @@ class LabelVisitor(ABC):
 
 
 def no_duplicate_status(_instance, _attribute, value):
-    if any(count > 1 for _, count in Counter(value).items()):
+    if any(count > 1 for count in Counter(value).values()):
         raise ValueError(f'Duplicate status in "{value}".')
+
+
+def convert_status_sequence(status: Iterable[Status]) -> Tuple[Status, ...]:
+    return tuple(status)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -37,7 +41,9 @@ class Label(ABC):
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
     """
 
-    status: Sequence[Status] = attr.ib(validator=no_duplicate_status)
+    status: Sequence[Status] = attr.ib(
+        validator=no_duplicate_status, converter=convert_status_sequence
+    )
 
     @property
     @abstractmethod
@@ -75,11 +81,11 @@ class ColumnLabel(Label):
 
     @staticmethod
     def from_label(column: str, status: Iterable[Status] = tuple()) -> "ColumnLabel":
-        return ColumnLabel(tuple(status), roman.fromRoman(column.upper()))
+        return ColumnLabel(status, roman.fromRoman(column.upper()))
 
     @staticmethod
     def from_int(column: int, status: Iterable[Status] = tuple()) -> "ColumnLabel":
-        return ColumnLabel(tuple(status), column)
+        return ColumnLabel(status, column)
 
     @property
     def _label(self) -> str:
@@ -114,7 +120,7 @@ class SurfaceLabel(Label):
     def from_label(
         surface: Surface, status: Iterable[Status] = tuple()
     ) -> "SurfaceLabel":
-        return SurfaceLabel(tuple(status), surface)
+        return SurfaceLabel(status, surface)
 
     @property
     def _label(self) -> str:

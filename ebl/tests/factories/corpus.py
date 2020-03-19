@@ -43,6 +43,7 @@ from ebl.transliteration.domain.labels import (
     LineNumberLabel,
     SurfaceLabel,
 )
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
@@ -77,7 +78,7 @@ class ManuscriptLineFactory(factory.Factory):
         ColumnLabel.from_label("iii", [Status.COLLATION, Status.CORRECTION]),
     )
     line = TextLine.of_iterable(
-        LineNumberLabel.from_atf("1."),
+        LineNumber(1),
         (
             Word.of(
                 [

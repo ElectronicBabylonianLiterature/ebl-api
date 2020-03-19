@@ -1,10 +1,10 @@
 import pytest
 
-from ebl.transliteration.application.line_schemas import (
+from ebl.transliteration.application.line_serializer import (
     dump_line,
     load_line,
-    SealAtLine,
 )
+from ebl.transliteration.application.line_number_schemas import dump_line_number
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
@@ -15,6 +15,7 @@ from ebl.transliteration.domain.at_line import (
     DiscourseAtLine,
     DivisionAtLine,
     CompositeAtLine,
+    SealAtLine,
 )
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,
@@ -35,6 +36,7 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
 )
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.note_line import (
     EmphasisPart,
     LanguagePart,
@@ -237,6 +239,76 @@ LINES = [
     ),
     (
         TextLine.of_iterable(
+            LineNumber(1),
+            (
+                DocumentOrientedGloss.open(),
+                Word.of([Reading.of_name("bu")]),
+                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                DocumentOrientedGloss.close(),
+            ),
+        ),
+        {
+            "type": "TextLine",
+            "prefix": "1.",
+            "lineNumber": dump_line_number(LineNumber(1)),
+            "content": dump_tokens(
+                [
+                    DocumentOrientedGloss.open(),
+                    Word.of(
+                        [
+                            Reading.of(
+                                (
+                                    ValueToken(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        ),
+                                        "bu",
+                                    ),
+                                )
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ]
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    LoneDeterminative.of(
+                        [
+                            Determinative.of(
+                                [
+                                    Reading.of(
+                                        (
+                                            ValueToken(
+                                                frozenset(
+                                                    {
+                                                        EnclosureType.DOCUMENT_ORIENTED_GLOSS
+                                                    }
+                                                ),
+                                                "d",
+                                            ),
+                                        )
+                                    ).set_enclosure_type(
+                                        frozenset(
+                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
+                                        )
+                                    ),
+                                ]
+                            ).set_enclosure_type(
+                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                            ),
+                        ],
+                    ).set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                    DocumentOrientedGloss.close().set_enclosure_type(
+                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                    ),
+                ]
+            ),
+        },
+    ),
+    (
+        TextLine.of_legacy_iterable(
             LineNumberLabel.from_atf("1."),
             [
                 DocumentOrientedGloss.open(),
@@ -248,6 +320,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
+            "lineNumber": None,
             "content": dump_tokens(
                 [
                     DocumentOrientedGloss.open(),
@@ -402,58 +475,69 @@ def test_dump_line(line, expected):
     assert dump_line(line) == expected
 
 
+EXTRA_LINES_FOR_LOAD_LINE_TEST = [
+    (
+        StateDollarLine(
+            atf.Qualification.AT_LEAST,
+            1,
+            ScopeContainer(atf.Surface.OBVERSE),
+            atf.State.BLANK,
+            atf.DollarStatus.COLLATED,
+        ),
+        {
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
+            "type": "StateDollarLine",
+            "qualification": "AT_LEAST",
+            "extent": 1,
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "BLANK",
+            "status": atf.Status.COLLATION.name,
+        },
+    ),
+    (
+        StateDollarLine(
+            atf.Qualification.AT_LEAST,
+            1,
+            ScopeContainer(atf.Surface.OBVERSE),
+            atf.State.BLANK,
+            atf.DollarStatus.EMENDED_NOT_COLLATED,
+        ),
+        {
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank *")]),
+            "type": "StateDollarLine",
+            "qualification": "AT_LEAST",
+            "extent": 1,
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "BLANK",
+            "status": atf.Status.CORRECTION.name,
+        },
+    ),
+    (
+        RulingDollarLine(atf.Ruling.SINGLE),
+        {
+            "type": "RulingDollarLine",
+            "prefix": "$",
+            "content": dump_tokens([ValueToken.of(" double ruling")]),
+            "number": "SINGLE",
+        },
+    ),
+    (
+        TextLine.of_legacy_iterable(
+            LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")]),],
+        ),
+        {
+            "type": "TextLine",
+            "prefix": "1.",
+            "content": dump_tokens([Word.of([Reading.of((ValueToken.of("bu",),)),]),]),
+        },
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    "expected,data",
-    [
-        *LINES,
-        (
-            StateDollarLine(
-                atf.Qualification.AT_LEAST,
-                1,
-                ScopeContainer(atf.Surface.OBVERSE),
-                atf.State.BLANK,
-                atf.DollarStatus.COLLATED,
-            ),
-            {
-                "prefix": "$",
-                "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
-                "type": "StateDollarLine",
-                "qualification": "AT_LEAST",
-                "extent": 1,
-                "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
-                "state": "BLANK",
-                "status": atf.Status.COLLATION.name,
-            },
-        ),
-        (
-            StateDollarLine(
-                atf.Qualification.AT_LEAST,
-                1,
-                ScopeContainer(atf.Surface.OBVERSE),
-                atf.State.BLANK,
-                atf.DollarStatus.EMENDED_NOT_COLLATED,
-            ),
-            {
-                "prefix": "$",
-                "content": dump_tokens([ValueToken.of(" at least 1 obverse blank *")]),
-                "type": "StateDollarLine",
-                "qualification": "AT_LEAST",
-                "extent": 1,
-                "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
-                "state": "BLANK",
-                "status": atf.Status.CORRECTION.name,
-            },
-        ),
-        (
-            RulingDollarLine(atf.Ruling.SINGLE),
-            {
-                "type": "RulingDollarLine",
-                "prefix": "$",
-                "content": dump_tokens([ValueToken.of(" double ruling")]),
-                "number": "SINGLE",
-            },
-        ),
-    ],
+    "expected,data", [*LINES, *EXTRA_LINES_FOR_LOAD_LINE_TEST],
 )
 def test_load_line(expected, data):
     assert load_line(data) == expected

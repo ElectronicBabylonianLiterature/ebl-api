@@ -1,5 +1,11 @@
-text_line: LINE_NUMBER _WORD_SEPARATOR+ text _WORD_SEPARATOR*
-LINE_NUMBER: /[^ ]+/ "."
+%import common.INT
+%import common.LETTER
+
+text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
+?line_number: line_number_range | single_line_number
+line_number_range: single_line_number "-" single_line_number
+single_line_number: [LETTER "+"] INT [PRIME] [LETTER]
+PRIME: "'" | "′" | "’" 
 
 
 text: _head _tail* line_continuation?

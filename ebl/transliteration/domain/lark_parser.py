@@ -1,3 +1,4 @@
+from collections import Counter
 from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
@@ -8,6 +9,7 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
+from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     SealAtLine,
@@ -42,12 +44,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
-from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
     Line,
 )
+from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -281,8 +284,20 @@ class TreeToLine(TreeToWord):
         return ControlLine.of_single(prefix, ValueToken.of(content))
 
     @v_args(inline=True)
-    def text_line(self, prefix, content):
-        return TextLine.of_iterable(LineNumberLabel.from_atf(prefix), content)
+    def text_line(self, line_number, content):
+        return TextLine.of_iterable(line_number, content)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__line_number_range(self, start, end):
+        return LineNumberRange(start, end)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__single_line_number(
+        self, prefix_modifier, number, prime, suffix_modifier
+    ):
+        return LineNumber(
+            int(number), prime is not None, prefix_modifier, suffix_modifier
+        )
 
     def ebl_atf_text_line__text(self, children):
         return (
@@ -621,4 +636,9 @@ def parse_atf_lark(atf_):
         .value()
     )
 
-    return Text(lines, f"{atf.ATF_PARSER_VERSION}")
+    text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
+
+    if any(count > 1 for count in Counter(text.labels).values()):
+        raise DataError("Duplicate labels.")
+
+    return text

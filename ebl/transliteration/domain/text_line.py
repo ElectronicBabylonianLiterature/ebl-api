@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, Sequence, Type, TypeVar
+from typing import Callable, Iterable, Optional, Sequence, Type, TypeVar
 
 import attr
 import pydash
@@ -11,6 +11,7 @@ from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.language_visitor import LanguageVisitor
 from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token
 
 
@@ -21,6 +22,13 @@ L = TypeVar("L", "TextLine", "Line")
 class TextLine(Line):
     _prefix: str = ""
     _content: Sequence[Token] = tuple()
+    line_number: Optional[AbstractLineNumber] = None
+
+    @property
+    def key(self) -> str:
+        tokens = "⁚".join(token.get_key() for token in self.content)
+        line_number = self.line_number.atf if self.line_number else "None"
+        return f"{type(self).__name__}⁞{line_number}⁞{self.atf}⟨{tokens}⟩"
 
     @property
     def prefix(self):
@@ -31,7 +39,7 @@ class TextLine(Line):
         return self._content
 
     @classmethod
-    def of_iterable(cls, line_number: LineNumberLabel, content: Iterable[Token]):
+    def of_iterable(cls, line_number: AbstractLineNumber, content: Iterable[Token]):
         enclosure_visitor = EnclosureUpdater()
         for token in content:
             token.accept(enclosure_visitor)
@@ -40,10 +48,27 @@ class TextLine(Line):
         for token in enclosure_visitor.tokens:
             token.accept(language_visitor)
 
-        return cls(line_number.to_atf(), language_visitor.tokens)
+        return cls(line_number.atf, language_visitor.tokens, line_number)
+
+    @classmethod
+    def of_legacy_iterable(
+        cls,
+        line_number_label: LineNumberLabel,
+        content: Iterable[Token],
+        line_number: Optional[AbstractLineNumber] = None,
+    ):
+        enclosure_visitor = EnclosureUpdater()
+        for token in content:
+            token.accept(enclosure_visitor)
+
+        language_visitor = LanguageVisitor()
+        for token in enclosure_visitor.tokens:
+            token.accept(language_visitor)
+
+        return cls(line_number_label.to_atf(), language_visitor.tokens, line_number)
 
     @property
-    def line_number(self) -> LineNumberLabel:
+    def line_number_label(self) -> LineNumberLabel:
         return LineNumberLabel.from_atf(self.prefix)
 
     @property
@@ -83,7 +108,9 @@ class TextLine(Line):
             return Merger(map_, inner_merge).merge(self.content, other.content)
 
         return (
-            TextLine.of_iterable(other.line_number, merge_tokens())
+            TextLine.of_legacy_iterable(
+                other.line_number_label, merge_tokens(), other.line_number
+            )
             if isinstance(other, TextLine)
             else other
         )

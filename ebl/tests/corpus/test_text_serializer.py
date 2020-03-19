@@ -7,7 +7,7 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.application.line_schemas import dump_line
+from ebl.transliteration.application.line_serializer import dump_line
 
 REFERENCES = (ReferenceWithDocumentFactory.build(),)
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
