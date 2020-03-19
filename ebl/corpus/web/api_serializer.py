@@ -16,7 +16,7 @@ from ebl.corpus.domain.reconstructed_text import (
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
-from ebl.transliteration.application.line_schemas import dump_line
+from ebl.transliteration.application.line_serializer import dump_line
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 

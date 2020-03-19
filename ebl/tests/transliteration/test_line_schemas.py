@@ -1,9 +1,8 @@
 import pytest
 
-from ebl.transliteration.application.line_schemas import (
+from ebl.transliteration.application.line_serializer import (
     dump_line,
     load_line,
-    SealAtLine,
 )
 from ebl.transliteration.application.line_number_schemas import dump_line_number
 from ebl.transliteration.application.token_schemas import dump_tokens
@@ -16,6 +15,7 @@ from ebl.transliteration.domain.at_line import (
     DiscourseAtLine,
     DivisionAtLine,
     CompositeAtLine,
+    SealAtLine,
 )
 from ebl.transliteration.domain.dollar_line import (
     LooseDollarLine,

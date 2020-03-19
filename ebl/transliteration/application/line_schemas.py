@@ -1,5 +1,5 @@
 from functools import singledispatchmethod  # type: ignore
-from typing import List, Mapping, Sequence, Tuple, Type, Union
+from typing import Mapping, Type, Union
 
 from marshmallow import Schema, fields, post_load
 
@@ -35,8 +35,7 @@ from ebl.transliteration.domain.dollar_line import (
 from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import (
     ControlLine,
-    EmptyLine,
-    Line,
+    EmptyLine
 )
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine
@@ -299,40 +298,3 @@ class NoteLineSchema(LineSchema):
     @post_load
     def make_line(self, data, **kwargs):
         return NoteLine(data["parts"])
-
-
-_schemas: Mapping[str, Type[Schema]] = {
-    "TextLine": TextLineSchema,
-    "ControlLine": ControlLineSchema,
-    "EmptyLine": EmptyLineSchema,
-    "LooseDollarLine": LooseDollarLineSchema,
-    "ImageDollarLine": ImageDollarLineSchema,
-    "RulingDollarLine": RulingDollarLineSchema,
-    "SealDollarLine": SealDollarLineSchema,
-    "StateDollarLine": StateDollarLineSchema,
-    "SealAtLine": SealAtLineSchema,
-    "HeadingAtLine": HeadingAtLineSchema,
-    "ColumnAtLine": ColumnAtLineSchema,
-    "SurfaceAtLine": SurfaceAtLineSchema,
-    "ObjectAtLine": ObjectAtLineSchema,
-    "DiscourseAtLine": DiscourseAtLineSchema,
-    "DivisionAtLine": DivisionAtLineSchema,
-    "CompositeAtLine": CompositeAtLineSchema,
-    "NoteLine": NoteLineSchema,
-}
-
-
-def dump_line(line: Line) -> dict:
-    return _schemas[type(line).__name__]().dump(line)
-
-
-def dump_lines(lines: Sequence[Line]) -> List[dict]:
-    return list(map(dump_line, lines))
-
-
-def load_line(data: dict) -> Line:
-    return _schemas[data["type"]]().load(data)
-
-
-def load_lines(lines: Sequence[dict]) -> Tuple[Line, ...]:
-    return tuple(map(load_line, lines))
