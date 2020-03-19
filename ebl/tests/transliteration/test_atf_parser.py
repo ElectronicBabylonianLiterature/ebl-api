@@ -3,6 +3,7 @@ from typing import List
 import pytest
 from hamcrest import assert_that, contains_exactly, has_entries, starts_with
 
+from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import SurfaceAtLine
 from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
@@ -1165,10 +1166,9 @@ def test_parse_dividers():
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-@pytest.mark.parametrize("parser", [parse_atf_lark])
-def test_parse_atf_invalid(parser):
+def test_parse_atf_invalid():
     with pytest.raises(Exception):
-        parser("invalid")
+        parse_atf_lark("invalid")
 
 
 @pytest.mark.parametrize(
@@ -1227,7 +1227,6 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
     )
 
 
-@pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
     "atf,line_numbers",
     [
@@ -1242,19 +1241,26 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
         ("a+1.a+2. šu", [1]),
     ],
 )
-def test_invalid_atf(parser, atf, line_numbers):
+def test_invalid_atf(atf, line_numbers):
     with pytest.raises(TransliterationError) as exc_info:
-        parser(atf)
+        parse_atf_lark(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
 
 
-@pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2]),],
 )
-def test_invalid_brackets(parser, atf, line_numbers):
+def test_invalid_brackets(atf, line_numbers):
     with pytest.raises(TransliterationError) as exc_info:
-        parser(atf)
+        parse_atf_lark(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, "Invalid brackets.")
+
+
+@pytest.mark.parametrize(
+    "atf,line_numbers", [("1. x\n1. x", [2]), ("1. x\n@obverse\n1. x\n1. x", [4]),],
+)
+def test_duplicate_labels(atf, line_numbers):
+    with pytest.raises(DataError, match="Duplicate labels."):
+        parse_atf_lark(atf)

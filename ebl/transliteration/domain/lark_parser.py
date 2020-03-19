@@ -1,3 +1,4 @@
+from collections import Counter
 from functools import singledispatchmethod  # type: ignore
 from typing import MutableSequence, Sequence, Type
 
@@ -8,6 +9,7 @@ from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
+from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     SealAtLine,
@@ -634,4 +636,9 @@ def parse_atf_lark(atf_):
         .value()
     )
 
-    return Text(lines, f"{atf.ATF_PARSER_VERSION}")
+    text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
+
+    if any(count > 1 for count in Counter(text.labels).values()):
+        raise DataError("Duplicate labels.")
+
+    return text
