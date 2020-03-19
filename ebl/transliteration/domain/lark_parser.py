@@ -513,7 +513,7 @@ class TreeAtSignToTokens(TreeDollarSignToTokens):
         return atf.Surface.FACE, str(text)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__edge(self, text):
+    def ebl_atf_at_line__edge(self, text=""):
         return atf.Surface.EDGE, str(text)
 
     @v_args(inline=True)
