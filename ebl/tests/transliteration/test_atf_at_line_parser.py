@@ -40,6 +40,8 @@ from ebl.transliteration.domain.text import Text
             [SurfaceAtLine(SurfaceLabel([atf.Status.CORRECTION], atf.Surface.REVERSE))],
         ),
         ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
+        ("@edge", [SurfaceAtLine(SurfaceLabel([], atf.Surface.EDGE, ""))],),
+        ("@edge a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.EDGE, "a"))],),
         (
             "@surface stone",
             [SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "stone"))],
