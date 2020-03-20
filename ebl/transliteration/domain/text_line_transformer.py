@@ -53,7 +53,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-def _children_to_tokens(children: Sequence) -> Sequence[Token]:
+def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
     return (
         pydash.chain(children)
         .flat_map_deep(lambda tree: (tree.children if isinstance(tree, Tree) else tree))
