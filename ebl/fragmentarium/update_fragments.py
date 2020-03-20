@@ -1,5 +1,5 @@
 import math
-from functools import reduce
+from functools import reduce, singledispatchmethod  # type: ignore
 from typing import Callable, Iterable, List, Sequence
 
 import attr
@@ -47,13 +47,20 @@ class State:
     def add_updated(self) -> None:
         self.updated += 1
 
-    def add_lemmatization_error(
+    @singledispatchmethod
+    def add_error(self, error: Exception, fragment: Fragment) -> None:
+        self.invalid_atf += 1
+        self.errors.append(f"{fragment.number}\t\t{error}")
+
+    @add_error.register
+    def _add_lemmatization_error(
         self, error: LemmatizationError, fragment: Fragment
     ) -> None:
         self.invalid_lemmas += 1
         self.errors.append(f"{fragment.number}\t{error}")
 
-    def add_transliteration_error(
+    @add_error.register
+    def _add_transliteration_error(
         self, transliteration_error: TransliterationError, fragment: Fragment
     ) -> None:
         self.invalid_atf += 1
@@ -95,10 +102,8 @@ def update_fragments(
         try:
             update_fragment(transliteration_factory, updater, fragment)
             state.add_updated()
-        except TransliterationError as error:
-            state.add_transliteration_error(error, fragment)
-        except LemmatizationError as error:
-            state.add_lemmatization_error(error, fragment)
+        except Exception as error:
+            state.add_error(error, fragment)
 
     return state
 
