@@ -17,7 +17,7 @@ from ebl.corpus.domain.reconstructed_text import (
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
-from ebl.transliteration.application.line_serializer import dump_line
+from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 
@@ -40,7 +40,7 @@ class ApiSerializer(TextSerializer):
                 "labels": [label.to_value() for label in manuscript_line.labels],
                 "number": line.line_number_label.to_value(),
                 "atf": line.atf[len(line.line_number_label.to_atf()) + 1 :],
-                "atfTokens": dump_line(manuscript_line.line)["content"],
+                "atfTokens": TextLineSchema().dump(manuscript_line.line)["content"],
             }
         )
 

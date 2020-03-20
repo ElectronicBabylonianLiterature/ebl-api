@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
-from ebl.transliteration.application.line_schemas import LineSchema
+from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     SealAtLine,
@@ -16,8 +16,7 @@ from ebl.transliteration.domain.at_line import (
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
 
-class SealAtLineSchema(LineSchema):
-    type = fields.Constant("SealAtLine", required=True)
+class SealAtLineSchema(LineBaseSchema):
     number = fields.Int(required=True)
 
     @post_load
@@ -25,8 +24,7 @@ class SealAtLineSchema(LineSchema):
         return SealAtLine(data["number"])
 
 
-class HeadingAtLineSchema(LineSchema):
-    type = fields.Constant("HeadingAtLine", required=True)
+class HeadingAtLineSchema(LineBaseSchema):
     number = fields.Int(required=True)
 
     @post_load
@@ -55,8 +53,7 @@ class SurfaceLabelSchema(LabelSchema):
         return SurfaceLabel(data["status"], data["surface"], data["text"])
 
 
-class ColumnAtLineSchema(LineSchema):
-    type = fields.Constant("ColumnAtLine", required=True)
+class ColumnAtLineSchema(LineBaseSchema):
     column_label = fields.Nested(ColumnLabelSchema, required=True)
 
     @post_load
@@ -64,8 +61,7 @@ class ColumnAtLineSchema(LineSchema):
         return ColumnAtLine(data["column_label"])
 
 
-class DiscourseAtLineSchema(LineSchema):
-    type = fields.Constant("DiscourseAtLine", required=True)
+class DiscourseAtLineSchema(LineBaseSchema):
     discourse_label = NameEnum(atf.Discourse, required=True)
 
     @post_load
@@ -73,8 +69,7 @@ class DiscourseAtLineSchema(LineSchema):
         return DiscourseAtLine(data["discourse_label"])
 
 
-class SurfaceAtLineSchema(LineSchema):
-    type = fields.Constant("SurfaceAtLine", required=True)
+class SurfaceAtLineSchema(LineBaseSchema):
     surface_label = fields.Nested(SurfaceLabelSchema, required=True)
 
     @post_load
@@ -82,8 +77,7 @@ class SurfaceAtLineSchema(LineSchema):
         return SurfaceAtLine(data["surface_label"])
 
 
-class ObjectAtLineSchema(LineSchema):
-    type = fields.Constant("ObjectAtLine", required=True)
+class ObjectAtLineSchema(LineBaseSchema):
     status = fields.List(NameEnum(atf.Status), required=True)
     object_label = NameEnum(atf.Object, required=True)
     text = fields.String(default="", required=True)
@@ -93,8 +87,7 @@ class ObjectAtLineSchema(LineSchema):
         return ObjectAtLine(data["status"], data["object_label"], data["text"])
 
 
-class DivisionAtLineSchema(LineSchema):
-    type = fields.Constant("DivisionAtLine", required=True)
+class DivisionAtLineSchema(LineBaseSchema):
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, default=None)
 
@@ -103,8 +96,7 @@ class DivisionAtLineSchema(LineSchema):
         return DivisionAtLine(data["text"], data["number"])
 
 
-class CompositeAtLineSchema(LineSchema):
-    type = fields.Constant("CompositeAtLine", required=True)
+class CompositeAtLineSchema(LineBaseSchema):
     composite = NameEnum(atf.Composite, required=True)
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, default=None)

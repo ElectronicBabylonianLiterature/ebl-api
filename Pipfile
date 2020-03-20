@@ -25,6 +25,7 @@ marshmallow = "*"
 inflect = "*"
 joblib = "*"
 tqdm = "*"
+marshmallow-oneofschema = "*"
 
 [dev-packages]
 pytest = "*"

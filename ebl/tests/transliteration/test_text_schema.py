@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.application.line_serializer import dump_lines
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
 from ebl.transliteration.domain.labels import LineNumberLabel
@@ -41,7 +41,7 @@ def test_dump_line():
     )
 
     assert TextSchema().dump(text) == {
-        "lines": dump_lines(text.lines),
+        "lines": OneOfLineSchema().dump(text.lines, many=True),
         "parser_version": text.parser_version,
     }
 
@@ -75,7 +75,7 @@ def test_dump_line():
 )
 def test_load_line(lines):
     parser_version = "2.3.1"
-    serialized_lines = dump_lines(lines)
+    serialized_lines = OneOfLineSchema().dump(lines, many=True)
     assert TextSchema().load(
         {"lines": serialized_lines, "parser_version": parser_version,}
     ) == Text.of_iterable(lines).set_parser_version(parser_version)

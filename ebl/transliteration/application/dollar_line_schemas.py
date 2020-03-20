@@ -4,7 +4,7 @@ from typing import Mapping, Type, Union
 from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
-from ebl.transliteration.application.line_schemas import LineSchema
+from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
@@ -16,8 +16,7 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class LooseDollarLineSchema(LineSchema):
-    type = fields.Constant("LooseDollarLine", required=True)
+class LooseDollarLineSchema(LineBaseSchema):
     text = fields.String(required=True)
 
     @post_load
@@ -25,8 +24,7 @@ class LooseDollarLineSchema(LineSchema):
         return LooseDollarLine(data["text"])
 
 
-class ImageDollarLineSchema(LineSchema):
-    type = fields.Constant("ImageDollarLine", required=True)
+class ImageDollarLineSchema(LineBaseSchema):
     number = fields.String(required=True)
     letter = fields.String(required=True, allow_none=True)
     text = fields.String(required=True)
@@ -36,8 +34,7 @@ class ImageDollarLineSchema(LineSchema):
         return ImageDollarLine(data["number"], data["letter"], data["text"])
 
 
-class RulingDollarLineSchema(LineSchema):
-    type = fields.Constant("RulingDollarLine", required=True)
+class RulingDollarLineSchema(LineBaseSchema):
     number = NameEnum(atf.Ruling, required=True)
     status = NameEnum(atf.DollarStatus, missing=None)
 
@@ -46,8 +43,7 @@ class RulingDollarLineSchema(LineSchema):
         return RulingDollarLine(data["number"], data["status"])
 
 
-class SealDollarLineSchema(LineSchema):
-    type = fields.Constant("SealDollarLine", required=True)
+class SealDollarLineSchema(LineBaseSchema):
     number = fields.Int(required=True)
 
     @post_load
@@ -81,8 +77,7 @@ class ScopeContainerSchema(Schema):
         return scope_types[type][content]
 
 
-class StateDollarLineSchema(LineSchema):
-    type = fields.Constant("StateDollarLine", required=True, allow_none=True)
+class StateDollarLineSchema(LineBaseSchema):
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),

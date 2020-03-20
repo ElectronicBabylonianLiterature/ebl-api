@@ -16,7 +16,6 @@ from ebl.corpus.domain.text import (
     Text,
     TextVisitor,
 )
-from ebl.transliteration.application.line_serializer import dump_line
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import Label, LineNumberLabel
 
@@ -91,7 +90,7 @@ class TextSerializer(TextVisitor):
             {
                 "manuscriptId": manuscript_line.manuscript_id,
                 "labels": [label.to_value() for label in manuscript_line.labels],
-                "line": dump_line(manuscript_line.line),
+                "line": TextLineSchema().dump(manuscript_line.line),
             }
         )
 

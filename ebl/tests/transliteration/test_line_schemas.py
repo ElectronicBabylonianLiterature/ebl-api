@@ -1,9 +1,6 @@
 import pytest
 
-from ebl.transliteration.application.line_serializer import (
-    dump_line,
-    load_line,
-)
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.line_number_schemas import dump_line_number
 from ebl.transliteration.application.token_schemas import dump_tokens
 from ebl.transliteration.domain import atf
@@ -168,6 +165,27 @@ LINES = [
             "content": dump_tokens([ValueToken.of("h1")]),
             "type": "HeadingAtLine",
             "number": 1,
+        },
+    ),
+    (
+        StateDollarLine(
+            atf.Qualification.AT_LEAST,
+            atf.Extent.BEGINNING_OF,
+            ScopeContainer(atf.Surface.OBVERSE),
+            atf.State.BLANK,
+            atf.DollarStatus.UNCERTAIN,
+        ),
+        {
+            "prefix": "$",
+            "content": dump_tokens(
+                [ValueToken.of(" at least beginning of obverse blank ?")]
+            ),
+            "type": "StateDollarLine",
+            "qualification": "AT_LEAST",
+            "extent": "BEGINNING_OF",
+            "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
+            "state": "BLANK",
+            "status": "UNCERTAIN",
         },
     ),
     (
@@ -472,7 +490,7 @@ LINES = [
 
 @pytest.mark.parametrize("line,expected", LINES)
 def test_dump_line(line, expected):
-    assert dump_line(line) == expected
+    assert OneOfLineSchema().dump(line) == expected
 
 
 EXTRA_LINES_FOR_LOAD_LINE_TEST = [
@@ -540,4 +558,4 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
     "expected,data", [*LINES, *EXTRA_LINES_FOR_LOAD_LINE_TEST],
 )
 def test_load_line(expected, data):
-    assert load_line(data) == expected
+    assert OneOfLineSchema().load(data) == expected
