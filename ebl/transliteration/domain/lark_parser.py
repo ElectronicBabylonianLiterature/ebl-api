@@ -2,7 +2,7 @@ from collections import Counter
 from typing import Sequence
 
 import pydash
-from lark.exceptions import ParseError, UnexpectedInput
+from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark
 from lark.visitors import v_args
 
@@ -95,6 +95,14 @@ def parse_atf_lark(atf_):
             return (
                 None,
                 {"description": f"Invalid brackets.", "lineNumber": line_number + 1,},
+            )
+        except VisitError as ex:
+            return (
+                None,
+                {
+                    "description": f"Invalid Value: {ex.orig_exc}",
+                    "lineNumber": line_number + 1,
+                },
             )
 
     def check_errors(pairs):
