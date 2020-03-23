@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import AbstractSet, Iterable, Optional, Sequence, Tuple, Type, TypeVar
+from typing import AbstractSet, Optional, Sequence, Type, TypeVar
 
 import attr
 
@@ -17,10 +17,6 @@ class TokenVisitor(ABC):
     @abstractmethod
     def visit(self, token: "Token") -> None:
         ...
-
-
-def convert_token_sequence(tokens: Iterable["Token"]) -> Tuple["Token", ...]:
-    return tuple(tokens)
 
 
 @attr.s(frozen=True, auto_attribs=True)

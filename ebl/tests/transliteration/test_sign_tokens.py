@@ -1,11 +1,7 @@
 import pytest
 
 from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import (
-    dump_token,
-    dump_tokens,
-    load_token,
-)
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.sign_tokens import (
@@ -187,11 +183,11 @@ def test_reading(
         "type": "Reading",
         "value": expected_value,
         "name": expected_name,
-        "nameParts": [dump_token(token) for token in name_parts],
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
-        "sign": sign and dump_token(sign),
+        "sign": sign and OneOfTokenSchema().dump(sign),
         "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
@@ -214,7 +210,7 @@ def test_load_old_style_reading():
         "flags": flags,
         "sign": sign,
     }
-    assert load_token(serialized) == reading
+    assert OneOfTokenSchema().load(serialized) == reading
 
 
 @pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
@@ -316,14 +312,16 @@ def test_logogram(
         "type": "Logogram",
         "value": expected_value,
         "name": expected_name,
-        "nameParts": [dump_token(token) for token in name_parts],
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
-        "surrogate": dump_tokens(surrogate),
-        "sign": sign and dump_token(sign),
+        "surrogate": OneOfTokenSchema().dump(surrogate, many=True),
+        "sign": sign and OneOfTokenSchema().dump(sign),
         "enclosureType": [type.name for type in logogram.enclosure_type],
     }
+    assert OneOfTokenSchema().dump(logogram) == serialized
+    assert OneOfTokenSchema().load(serialized) == logogram
     assert_token_serialization(logogram, serialized)
 
 
@@ -396,11 +394,11 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_nam
         "type": "Number",
         "value": expected_value,
         "name": expected_name,
-        "nameParts": [dump_token(token) for token in name_parts],
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
-        "sign": sign and dump_token(sign),
+        "sign": sign and OneOfTokenSchema().dump(sign),
         "enclosureType": [type.name for type in number.enclosure_type],
     }
     assert_token_serialization(number, serialized)

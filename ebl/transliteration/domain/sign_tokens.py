@@ -1,21 +1,17 @@
 from abc import abstractmethod
-from typing import Iterable, Optional, Sequence, Tuple, Union, TypeVar, Type
+from typing import Optional, Sequence, Type, TypeVar, Union
 
 import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import to_sub_index
+from ebl.transliteration.domain.converters import (
+    convert_flag_sequence,
+    convert_string_sequence,
+    convert_token_sequence,
+)
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.tokens import Token, ValueToken, convert_token_sequence
-
-
-def convert_string_sequence(strings: Iterable[str]) -> Tuple[str, ...]:
-    return tuple(strings)
-
-
-def convert_flag_sequence(flags: Iterable[atf.Flag]) -> Tuple[atf.Flag, ...]:
-    return tuple(flags)
-
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 T = TypeVar("T", bound="UnknownSign")
 
@@ -117,7 +113,7 @@ SignName = Sequence[Union[ValueToken, BrokenAway]]
 
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
-    name_parts: SignName
+    name_parts: SignName = attr.ib(converter=convert_token_sequence)
     sub_index: Optional[int] = attr.ib(default=1)
     sign: Optional[Token] = None
 

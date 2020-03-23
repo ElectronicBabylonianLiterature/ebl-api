@@ -1,4 +1,4 @@
-from marshmallow import EXCLUDE, fields, post_load, Schema
+from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from ebl.transliteration.application.line_number_schemas import (
     dump_line_number,
@@ -8,7 +8,7 @@ from ebl.transliteration.application.note_line_part_schemas import (
     dump_parts,
     load_parts,
 )
-from ebl.transliteration.application.token_schemas import dump_tokens, load_tokens
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
@@ -20,9 +20,7 @@ class LineBaseSchema(Schema):
         unknown = EXCLUDE
 
     prefix = fields.String(required=True)
-    content = fields.Function(
-        lambda line: dump_tokens(line.content), load_tokens, required=True
-    )
+    content = fields.Nested(OneOfTokenSchema, many=True)
 
 
 class TextLineSchema(LineBaseSchema):

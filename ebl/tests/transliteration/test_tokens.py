@@ -2,7 +2,7 @@ import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
@@ -46,7 +46,7 @@ def test_value_token():
     assert token.lemmatizable is False
 
     serialized = {
-        "type": "Token",
+        "type": "ValueToken",
         "value": token.value,
         "enclosureType": [type.name for type in token.enclosure_type],
     }
@@ -254,9 +254,11 @@ def test_variant():
     serialized = {
         "type": "Variant",
         "value": expected_value,
-        "tokens": dump_tokens([reading, divider]),
+        "tokens": OneOfTokenSchema().dump([reading, divider], many=True),
         "enclosureType": [type.name for type in variant.enclosure_type],
     }
+    assert OneOfTokenSchema().dump(variant) == serialized
+    assert OneOfTokenSchema().load(serialized) == variant
     assert_token_serialization(variant, serialized)
 
 

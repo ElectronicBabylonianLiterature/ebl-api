@@ -5,6 +5,7 @@ import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -65,7 +66,9 @@ class Line(ABC):
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
     _prefix: str = ""
-    _content: Sequence[Token] = tuple()
+    _content: Sequence[Token] = attr.ib(
+        default=tuple(), converter=convert_token_sequence
+    )
 
     @classmethod
     def of_single(cls, prefix: str, content: Token):

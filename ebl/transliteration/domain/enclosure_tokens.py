@@ -1,11 +1,12 @@
 from abc import abstractmethod
-from typing import Mapping, Sequence, TypeVar, Type
+from typing import Mapping, Sequence, Type, TypeVar
 
 import attr
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.side import Side
-from ebl.transliteration.domain.tokens import Token, ValueToken, convert_token_sequence
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 
 @attr.s(frozen=True)

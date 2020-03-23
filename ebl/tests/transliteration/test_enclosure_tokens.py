@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     Determinative,
@@ -70,7 +70,7 @@ def test_determinative():
     serialized = {
         "type": "Determinative",
         "value": determinative.value,
-        "parts": dump_tokens(parts),
+        "parts": OneOfTokenSchema().dump(parts, many=True),
         "enclosureType": [type.name for type in determinative.enclosure_type],
     }
     assert_token_serialization(determinative, serialized)
@@ -90,7 +90,7 @@ def test_phonetic_gloss():
     serialized = {
         "type": "PhoneticGloss",
         "value": gloss.value,
-        "parts": dump_tokens(parts),
+        "parts": OneOfTokenSchema().dump(parts, many=True),
         "enclosureType": [type.name for type in gloss.enclosure_type],
     }
     assert_token_serialization(gloss, serialized)
@@ -110,7 +110,7 @@ def test_linguistic_gloss():
     serialized = {
         "type": "LinguisticGloss",
         "value": gloss.value,
-        "parts": dump_tokens(parts),
+        "parts": OneOfTokenSchema().dump(parts, many=True),
         "enclosureType": [type.name for type in gloss.enclosure_type],
     }
     assert_token_serialization(gloss, serialized)

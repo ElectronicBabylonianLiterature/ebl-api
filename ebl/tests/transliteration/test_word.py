@@ -2,7 +2,7 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway, PerhapsBrokenAway
@@ -132,7 +132,7 @@ def test_word(language, normalized, unique_lemma):
         "language": word.language.name,
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
-        "parts": dump_tokens(parts),
+        "parts": OneOfTokenSchema().dump(parts, many=True),
         "enclosureType": [type.name for type in word.enclosure_type],
     }
     assert_token_serialization(word, serialized)

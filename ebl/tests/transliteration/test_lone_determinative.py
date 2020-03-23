@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.enclosure_tokens import Determinative
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.sign_tokens import Reading
@@ -55,7 +55,7 @@ def test_lone_determinative(language, normalized):
         "language": lone_determinative.language.name,
         "lemmatizable": lone_determinative.lemmatizable,
         "erasure": ErasureState.NONE.name,
-        "parts": dump_tokens(parts),
+        "parts": OneOfTokenSchema().dump(parts, many=True),
         "enclosureType": [type.name for type in lone_determinative.enclosure_type],
     }
     assert_token_serialization(lone_determinative, serialized)

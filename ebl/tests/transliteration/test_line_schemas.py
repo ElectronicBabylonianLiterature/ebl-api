@@ -1,33 +1,33 @@
 import pytest
 
-from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.line_number_schemas import dump_line_number
-from ebl.transliteration.application.token_schemas import dump_tokens
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
-    HeadingAtLine,
     ColumnAtLine,
-    SurfaceAtLine,
-    ObjectAtLine,
+    CompositeAtLine,
     DiscourseAtLine,
     DivisionAtLine,
-    CompositeAtLine,
+    HeadingAtLine,
+    ObjectAtLine,
     SealAtLine,
+    SurfaceAtLine,
 )
 from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
     ImageDollarLine,
+    LooseDollarLine,
     RulingDollarLine,
     ScopeContainer,
-    StateDollarLine,
     SealDollarLine,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import LineNumberLabel, ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -50,7 +50,7 @@ LINES = [
         CompositeAtLine(atf.Composite.END, "part"),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("end part")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],
             "type": "CompositeAtLine",
             "composite": "END",
             "text": "part",
@@ -61,7 +61,7 @@ LINES = [
         CompositeAtLine(atf.Composite.DIV, "part", 5),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("div part 5")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("div part 5"))],
             "type": "CompositeAtLine",
             "composite": "DIV",
             "text": "part",
@@ -72,7 +72,9 @@ LINES = [
         DivisionAtLine("paragraph", 5),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("m=division paragraph 5")]),
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of("m=division paragraph 5"))
+            ],
             "type": "DivisionAtLine",
             "text": "paragraph",
             "number": 5,
@@ -82,7 +84,7 @@ LINES = [
         DivisionAtLine("paragraph"),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("m=division paragraph")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("m=division paragraph"))],
             "type": "DivisionAtLine",
             "text": "paragraph",
             "number": None,
@@ -92,7 +94,7 @@ LINES = [
         DiscourseAtLine(atf.Discourse.DATE),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("date")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("date"))],
             "type": "DiscourseAtLine",
             "discourse_label": "DATE",
         },
@@ -105,7 +107,7 @@ LINES = [
         ),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("object stone wig!*")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("object stone wig!*"))],
             "type": "ObjectAtLine",
             "status": ["CORRECTION", "COLLATION"],
             "object_label": "OBJECT",
@@ -122,7 +124,7 @@ LINES = [
         ),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("surface stone wig!*")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("surface stone wig!*"))],
             "type": "SurfaceAtLine",
             "surface_label": {
                 "status": ["CORRECTION", "COLLATION"],
@@ -135,7 +137,7 @@ LINES = [
         ColumnAtLine(ColumnLabel([atf.Status.CORRECTION, atf.Status.COLLATION], 1)),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("column 1!*")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("column 1!*"))],
             "type": "ColumnAtLine",
             "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
         },
@@ -144,7 +146,7 @@ LINES = [
         ColumnAtLine(ColumnLabel([], 1)),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("column 1")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("column 1"))],
             "type": "ColumnAtLine",
             "column_label": {"status": [], "column": 1},
         },
@@ -153,7 +155,7 @@ LINES = [
         SealAtLine(1),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("seal 1")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("seal 1"))],
             "type": "SealAtLine",
             "number": 1,
         },
@@ -162,7 +164,7 @@ LINES = [
         HeadingAtLine(1),
         {
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("h1")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("h1"))],
             "type": "HeadingAtLine",
             "number": 1,
         },
@@ -177,9 +179,11 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens(
-                [ValueToken.of(" at least beginning of obverse blank ?")]
-            ),
+            "content": [
+                OneOfTokenSchema().dump(
+                    ValueToken.of(" at least beginning of obverse blank ?")
+                )
+            ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": "BEGINNING_OF",
@@ -198,9 +202,11 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens(
-                [ValueToken.of(" at least 1-2 surface thing blank ?")]
-            ),
+            "content": [
+                OneOfTokenSchema().dump(
+                    ValueToken.of(" at least 1-2 surface thing blank ?")
+                )
+            ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": (1, 2),
@@ -219,7 +225,9 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of(" at least 1 obverse blank ?"))
+            ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": 1,
@@ -238,7 +246,9 @@ LINES = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" beginning of obverse")]),
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of(" beginning of obverse"))
+            ],
             "type": "StateDollarLine",
             "qualification": None,
             "extent": "BEGINNING_OF",
@@ -252,7 +262,7 @@ LINES = [
         {
             "type": "ControlLine",
             "prefix": "@",
-            "content": dump_tokens([ValueToken.of("obverse")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of("obverse"))],
         },
     ),
     (
@@ -269,7 +279,7 @@ LINES = [
             "type": "TextLine",
             "prefix": "1.",
             "lineNumber": dump_line_number(LineNumber(1)),
-            "content": dump_tokens(
+            "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),
                     Word.of(
@@ -321,7 +331,8 @@ LINES = [
                     DocumentOrientedGloss.close().set_enclosure_type(
                         frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
                     ),
-                ]
+                ],
+                many=True,
             ),
         },
     ),
@@ -339,7 +350,7 @@ LINES = [
             "type": "TextLine",
             "prefix": "1.",
             "lineNumber": None,
-            "content": dump_tokens(
+            "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),
                     Word.of(
@@ -391,7 +402,8 @@ LINES = [
                     DocumentOrientedGloss.close().set_enclosure_type(
                         frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
                     ),
-                ]
+                ],
+                many=True,
             ),
         },
     ),
@@ -401,7 +413,7 @@ LINES = [
         {
             "type": "LooseDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" (end of side)")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" (end of side)"))],
             "text": "end of side",
         },
     ),
@@ -410,7 +422,7 @@ LINES = [
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" (image 1a = great)")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" (image 1a = great)"))],
             "number": "1",
             "letter": "a",
             "text": "great",
@@ -421,7 +433,7 @@ LINES = [
         {
             "type": "ImageDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" (image 1 = great)")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" (image 1 = great)"))],
             "number": "1",
             "letter": None,
             "text": "great",
@@ -432,7 +444,7 @@ LINES = [
         {
             "type": "RulingDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" double ruling")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "DOUBLE",
             "status": None,
         },
@@ -442,7 +454,7 @@ LINES = [
         {
             "type": "RulingDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" double ruling *")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling *"))],
             "number": "DOUBLE",
             "status": "COLLATED",
         },
@@ -452,7 +464,7 @@ LINES = [
         {
             "type": "SealDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" seal 1")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" seal 1"))],
             "number": 1,
         },
     ),
@@ -476,12 +488,13 @@ LINES = [
                     "language": Language.AKKADIAN.name,
                 },
             ],
-            "content": dump_tokens(
+            "content": OneOfTokenSchema().dump(
                 [
                     ValueToken.of("a note "),
                     ValueToken.of("@i{italic}"),
                     ValueToken.of("@akk{Akkadian}"),
-                ]
+                ],
+                many=True,
             ),
         },
     ),
@@ -504,7 +517,9 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank ?")]),
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of(" at least 1 obverse blank ?"))
+            ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": 1,
@@ -523,7 +538,9 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
         ),
         {
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" at least 1 obverse blank *")]),
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of(" at least 1 obverse blank *"))
+            ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
             "extent": 1,
@@ -537,7 +554,7 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
         {
             "type": "RulingDollarLine",
             "prefix": "$",
-            "content": dump_tokens([ValueToken.of(" double ruling")]),
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
         },
     ),
@@ -548,7 +565,9 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
         {
             "type": "TextLine",
             "prefix": "1.",
-            "content": dump_tokens([Word.of([Reading.of((ValueToken.of("bu",),)),]),]),
+            "content": [
+                OneOfTokenSchema().dump(Word.of([Reading.of((ValueToken.of("bu",),)),]))
+            ],
         },
     ),
 ]
