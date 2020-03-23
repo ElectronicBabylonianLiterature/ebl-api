@@ -2,8 +2,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.note_line_part_schemas import (
-    dump_parts,
-    load_parts,
+    OneOfNoteLinePartSchema,
 )
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import LineNumberLabel
@@ -47,9 +46,7 @@ class EmptyLineSchema(LineBaseSchema):
 
 
 class NoteLineSchema(LineBaseSchema):
-    parts = fields.Function(
-        lambda line: dump_parts(line.parts), load_parts, required=True
-    )
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
 
     @post_load
     def make_line(self, data, **kwargs):

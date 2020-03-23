@@ -2,21 +2,21 @@ import pytest
 
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.note_line import (
-    NoteLine,
-    StringPart,
     EmphasisPart,
     LanguagePart,
+    NoteLine,
+    StringPart,
 )
 from ebl.transliteration.domain.tokens import ValueToken
 
 
 def test_note_line():
-    parts = [
+    parts = (
         StringPart("this is a note "),
         EmphasisPart("italic text"),
         LanguagePart("Akkadian language", Language.AKKADIAN),
         LanguagePart("Sumerian language", Language.SUMERIAN),
-    ]
+    )
     line = NoteLine(parts)
 
     assert line.parts == parts

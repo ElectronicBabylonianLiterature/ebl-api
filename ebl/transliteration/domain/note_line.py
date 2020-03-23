@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Sequence
+from typing import Sequence, Iterable, Tuple
 
 import attr
 
@@ -47,9 +47,13 @@ class LanguagePart(NotePart):
         return f"@{code}{{{self.text}}}"
 
 
+def convert_part_sequence(flags: Iterable[NotePart]) -> Tuple[NotePart, ...]:
+    return tuple(flags)
+
+
 @attr.s(frozen=True, auto_attribs=True)
 class NoteLine(Line):
-    parts: Sequence[NotePart]
+    parts: Sequence[NotePart] = attr.ib(converter=convert_part_sequence)
 
     @property
     def prefix(self) -> str:
