@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.transliteration.application.line_number_schemas import dump_line_number
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf
@@ -278,7 +278,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
-            "lineNumber": dump_line_number(LineNumber(1)),
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
             "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),

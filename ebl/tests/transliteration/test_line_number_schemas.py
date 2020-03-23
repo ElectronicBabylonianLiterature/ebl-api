@@ -1,9 +1,6 @@
 import pytest
 
-from ebl.transliteration.application.line_number_schemas import (
-    dump_line_number,
-    load_line_number,
-)
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 
 
@@ -35,14 +32,12 @@ from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
             {
                 "type": "LineNumberRange",
                 "start": {
-                    "type": "LineNumber",
                     "number": 1,
                     "hasPrime": False,
                     "prefixModifier": None,
                     "suffixModifier": None,
                 },
                 "end": {
-                    "type": "LineNumber",
                     "number": 963,
                     "hasPrime": True,
                     "prefixModifier": "D",
@@ -53,5 +48,5 @@ from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
     ],
 )
 def test_line_number_schema(line_number, data):
-    assert dump_line_number(line_number) == data
-    assert load_line_number(data) == line_number
+    assert OneOfLineNumberSchema().dump(line_number) == data
+    assert OneOfLineNumberSchema().load(data) == line_number

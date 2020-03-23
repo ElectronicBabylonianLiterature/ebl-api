@@ -1,9 +1,6 @@
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
-from ebl.transliteration.application.line_number_schemas import (
-    dump_line_number,
-    load_line_number,
-)
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.note_line_part_schemas import (
     dump_parts,
     load_parts,
@@ -24,11 +21,8 @@ class LineBaseSchema(Schema):
 
 
 class TextLineSchema(LineBaseSchema):
-    line_number = fields.Function(
-        lambda line: dump_line_number(line.line_number),
-        load_line_number,
-        missing=None,
-        data_key="lineNumber",
+    line_number = fields.Nested(
+        OneOfLineNumberSchema, missing=None, data_key="lineNumber",
     )
 
     @post_load

@@ -1,16 +1,15 @@
-from typing import Mapping, Optional, Type
+from typing import Mapping, Type
 
-from marshmallow import Schema, fields, post_load, validate
+from marshmallow import EXCLUDE, Schema, fields, post_load, validate
+from marshmallow_oneofschema import OneOfSchema
 
 from ebl.transliteration.domain.line_number import (
-    AbstractLineNumber,
     LineNumber,
     LineNumberRange,
 )
 
 
 class LineNumberSchema(Schema):
-    type = fields.Constant("LineNumber", required=True)
     number = fields.Integer(required=True, validate=validate.Range(min=0))
     has_prime = fields.Boolean(required=True, data_key="hasPrime")
     prefix_modifier = fields.String(
@@ -37,28 +36,17 @@ class LineNumberSchema(Schema):
 
 
 class LineNumberRangeSchema(Schema):
-    type = fields.Constant("LineNumberRange", required=True)
-    start = fields.Nested(LineNumberSchema, required=True)
-    end = fields.Nested(LineNumberSchema, required=True)
+    start = fields.Nested(LineNumberSchema, required=True, unknown=EXCLUDE)
+    end = fields.Nested(LineNumberSchema, required=True, unknown=EXCLUDE)
 
     @post_load
     def make_line_number_range(self, data: dict, **kwargs) -> LineNumberRange:
         return LineNumberRange(data["start"], data["end"],)
 
 
-_SCHEMAS: Mapping[str, Type[Schema]] = {
-    "LineNumber": LineNumberSchema,
-    "LineNumberRange": LineNumberRangeSchema,
-}
-
-
-def dump_line_number(line_number: Optional[AbstractLineNumber]) -> Optional[dict]:
-    return (
-        line_number
-        if line_number is None
-        else _SCHEMAS[type(line_number).__name__]().dump(line_number)
-    )
-
-
-def load_line_number(data: dict) -> AbstractLineNumber:
-    return _SCHEMAS[data["type"]]().load(data)
+class OneOfLineNumberSchema(OneOfSchema):
+    type_field = "type"
+    type_schemas: Mapping[str, Type[Schema]] = {
+        "LineNumber": LineNumberSchema,
+        "LineNumberRange": LineNumberRangeSchema,
+    }
