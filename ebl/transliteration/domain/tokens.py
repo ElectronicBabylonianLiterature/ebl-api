@@ -168,11 +168,6 @@ class Variant(Token):
         return self.tokens
 
 
-@attr.s(frozen=True)
-class LineContinuation(ValueToken):
-    pass
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Joiner(Token):
     _value: atf.Joiner

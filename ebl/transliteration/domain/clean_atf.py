@@ -45,7 +45,6 @@ STRIP_PATTERN = r"|".join(
         OMISSION,
         TABULATION,
         SHIFT,
-        ATF_EXTENSIONS["line_continuation"],
         ALTERNATIVE_DAMAGE,
     ]
 )

@@ -17,7 +17,6 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
-    LineContinuation,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -298,19 +297,3 @@ def test_in_word_new_line():
         "enclosureType": [type.name for type in newline.enclosure_type],
     }
     assert_token_serialization(newline, serialized)
-
-
-def test_line_continuation():
-    value = "→"
-    continuation = LineContinuation(frozenset({EnclosureType.BROKEN_AWAY}), value)
-
-    assert continuation.value == value
-    assert continuation.get_key() == f"LineContinuation⁝{value}"
-    assert continuation.lemmatizable is False
-
-    serialized = {
-        "type": "LineContinuation",
-        "value": continuation.value,
-        "enclosureType": [type.name for type in continuation.enclosure_type],
-    }
-    assert_token_serialization(continuation, serialized)

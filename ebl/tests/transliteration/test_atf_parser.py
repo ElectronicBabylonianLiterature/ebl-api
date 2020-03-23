@@ -22,7 +22,6 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -33,12 +32,12 @@ from ebl.transliteration.domain.sign_tokens import (
     UnidentifiedSign,
 )
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
     Joiner,
     LanguageShift,
-    LineContinuation,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -925,24 +924,6 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "1. sal →",
-            [
-                TextLine.of_iterable(
-                    LineNumber(1),
-                    (Word.of([Reading.of_name("sal")]), LineContinuation.of("→"),),
-                )
-            ],
-        ),
-        (
-            "2. sal →  ",
-            [
-                TextLine.of_iterable(
-                    LineNumber(2),
-                    (Word.of([Reading.of_name("sal")]), LineContinuation.of("→"),),
-                )
-            ],
-        ),
-        (
             "1. [{(he-pi₂ e]š-šu₂)}",
             [
                 TextLine.of_iterable(
@@ -1234,7 +1215,6 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
         ("1'. ($____$) x [...]\n$ (too many underscores)", [1]),
         ("1. me°-e\\li°-ku", [1]),
         ("1. me-°e\\li-°ku", [1]),
-        ("1'. → x\n$ (line continuation in the middle)", [1]),
         ("this is not valid\nthis is not valid", [1, 2]),
         ("$ ", [1]),
         ("1. {[me}]\n2. [{me]}\n3. {[me]}", [1, 2, 3]),

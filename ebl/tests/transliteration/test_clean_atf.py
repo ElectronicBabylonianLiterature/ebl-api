@@ -227,12 +227,6 @@ def test_strip_at():
     assert clean_atf.cleaned == [["lu₂"], ["lu₂"], ["ta"]]
 
 
-def test_strip_line_continuation():
-    clean_atf = CleanAtf(Atf("1. ku →"))
-
-    assert clean_atf.cleaned == [["ku"]]
-
-
 @pytest.mark.parametrize(
     "erasure,cleaned",
     [

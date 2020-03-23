@@ -42,7 +42,6 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
-    LineContinuation,
     Tabulation,
     Token,
     UnknownNumberOfSigns,
@@ -186,14 +185,6 @@ class ErasureSchema(EnclosureSchema):
         return Erasure.of(data["side"]).set_enclosure_type(
             frozenset(data["enclosure_type"])
         )
-
-
-class LineContinuationSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return LineContinuation(frozenset(data["enclosure_type"]), data["value"])
 
 
 class UnknownNumberOfSignsSchema(BaseTokenSchema):
@@ -490,7 +481,6 @@ class OneOfTokenSchema(OneOfSchema):
         "AccidentalOmission": AccidentalOmissionSchema,
         "IntentionalOmission": IntentionalOmissionSchema,
         "Removal": RemovalSchema,
-        "LineContinuation": LineContinuationSchema,
         "Erasure": ErasureSchema,
         "UnknownNumberOfSigns": UnknownNumberOfSignsSchema,
         "Tabulation": TabulationSchema,

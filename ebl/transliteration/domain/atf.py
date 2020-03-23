@@ -238,7 +238,6 @@ ATF_EXTENSIONS: Mapping[str, str] = {
     "erasure_boundary": ERASURE_BOUNDARY,
     "erasure_delimiter": ERASURE[Side.CENTER],
     "erasure_illegible": r"°[^\°]*\\",
-    "line_continuation": "→",
 }
 
 

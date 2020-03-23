@@ -37,7 +37,6 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
-    LineContinuation,
     Tabulation,
     Token as EblToken,
     TokenVisitor,
@@ -282,9 +281,6 @@ class TextLineTransformer(WordTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__language_shift(self, value):
         return LanguageShift.of(str(value))
-
-    def ebl_atf_text_line__line_continuation(self, _):
-        return LineContinuation.of("→")
 
     @v_args(inline=True)
     def ebl_atf_text_line__tabulation(self, value):
