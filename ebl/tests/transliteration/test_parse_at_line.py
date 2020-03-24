@@ -2,13 +2,13 @@ import pytest
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
-    HeadingAtLine,
     ColumnAtLine,
-    DiscourseAtLine,
-    SurfaceAtLine,
-    ObjectAtLine,
-    DivisionAtLine,
     CompositeAtLine,
+    DiscourseAtLine,
+    DivisionAtLine,
+    HeadingAtLine,
+    ObjectAtLine,
+    SurfaceAtLine,
 )
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -50,6 +50,7 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
         ("@prism!", [ObjectAtLine([atf.Status.CORRECTION], atf.Object.PRISM)]),
         ("@prism", [ObjectAtLine([], atf.Object.PRISM)]),
         ("@object stone", [ObjectAtLine([], atf.Object.OBJECT, "stone")]),
+        ("@fragment 1", [ObjectAtLine([], atf.Object.FRAGMENT, "1")]),
         ("@edge a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.EDGE, "a"))]),
         ("@face a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.FACE, "a"))]),
         ("@h1", [HeadingAtLine(1)]),

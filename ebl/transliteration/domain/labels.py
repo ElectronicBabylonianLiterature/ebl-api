@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from collections import Counter
-from typing import Iterable, Sequence, Tuple
+from typing import Iterable, Sequence, Tuple, Union
 
 import attr
 import roman
@@ -34,7 +34,9 @@ def no_duplicate_status(_instance, _attribute, value):
         raise DuplicateStatusError(f'Duplicate status in "{value}".')
 
 
-def convert_status_sequence(status: Iterable[Status]) -> Tuple[Status, ...]:
+def convert_status_sequence(
+    status: Union[Iterable[Status], Sequence[Status]]
+) -> Tuple[Status, ...]:
     return tuple(status)
 
 
@@ -123,9 +125,9 @@ class SurfaceLabel(Label):
 
     @staticmethod
     def from_label(
-        surface: Surface, status: Iterable[Status] = tuple()
+        surface: Surface, status: Iterable[Status] = tuple(), text: str = ""
     ) -> "SurfaceLabel":
-        return SurfaceLabel(status, surface)
+        return SurfaceLabel(status, surface, text)
 
     @property
     def _label(self) -> str:
