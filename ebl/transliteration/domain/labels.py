@@ -10,6 +10,11 @@ from parsy import char_from, regex, seq, string_from
 from ebl.transliteration.domain.atf import Status, Surface
 
 
+class DuplicateStatusError(ValueError):
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class LabelVisitor(ABC):
     @abstractmethod
     def visit_surface_label(self, label: "SurfaceLabel") -> "LabelVisitor":
@@ -26,7 +31,7 @@ class LabelVisitor(ABC):
 
 def no_duplicate_status(_instance, _attribute, value):
     if any(count > 1 for count in Counter(value).values()):
-        raise ValueError(f'Duplicate status in "{value}".')
+        raise DuplicateStatusError(f'Duplicate status in "{value}".')
 
 
 def convert_status_sequence(status: Iterable[Status]) -> Tuple[Status, ...]:

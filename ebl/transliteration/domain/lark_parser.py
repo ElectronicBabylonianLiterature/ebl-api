@@ -12,6 +12,7 @@ from ebl.transliteration.domain.at_line_transformer import AtLineTransformer
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
+from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
@@ -97,13 +98,16 @@ def parse_atf_lark(atf_):
                 {"description": f"Invalid brackets.", "lineNumber": line_number + 1,},
             )
         except VisitError as ex:
-            return (
-                None,
-                {
-                    "description": f"Invalid Value: {ex.orig_exc}",
-                    "lineNumber": line_number + 1,
-                },
-            )
+            if isinstance(ex.orig_exc, DuplicateStatusError):
+                return (
+                    None,
+                    {
+                        "description": f"Duplicate Status",
+                        "lineNumber": line_number + 1,
+                    },
+                )
+            else:
+                raise ex
 
     def check_errors(pairs):
         errors = [error for line, error in pairs if error is not None]
