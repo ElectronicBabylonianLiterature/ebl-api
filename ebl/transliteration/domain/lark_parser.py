@@ -98,7 +98,7 @@ def parse_atf_lark(atf_):
                 {"description": f"Invalid brackets.", "lineNumber": line_number + 1,},
             )
         except VisitError as ex:
-            if isinstance(ex.orig_exc, DuplicateStatusError):
+            if isinstance(ex.orig_exc, DuplicateStatusError):  # type: ignore
                 return (
                     None,
                     {
