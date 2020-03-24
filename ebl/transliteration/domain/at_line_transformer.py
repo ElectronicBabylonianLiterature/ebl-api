@@ -1,15 +1,18 @@
+from typing import Union
+
+from lark import Token
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
-    SealAtLine,
     ColumnAtLine,
-    HeadingAtLine,
-    DiscourseAtLine,
-    SurfaceAtLine,
-    ObjectAtLine,
-    DivisionAtLine,
     CompositeAtLine,
+    DiscourseAtLine,
+    DivisionAtLine,
+    HeadingAtLine,
+    ObjectAtLine,
+    SealAtLine,
+    SurfaceAtLine,
 )
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
@@ -62,29 +65,26 @@ class AtLineTransformer(Transformer):
         return (atf.Object.FRAGMENT,)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__SURFACE(self, surface):
-        return (atf.Surface.from_atf(str(surface)),)
+    def ebl_atf_at_line__SURFACE(self, surface: Token):
+        return SurfaceLabel.from_label(atf.Surface.from_atf(str(surface)))
 
     @v_args(inline=True)
-    def ebl_atf_at_line__generic_surface(self, text):
-        return atf.Surface.SURFACE, str(text)
+    def ebl_atf_at_line__generic_surface(self, text: Token):
+        return SurfaceLabel.from_label(atf.Surface.SURFACE, text=str(text))
 
     @v_args(inline=True)
-    def ebl_atf_at_line__face(self, text):
-        return atf.Surface.FACE, str(text)
+    def ebl_atf_at_line__face(self, text: Token):
+        return SurfaceLabel.from_label(atf.Surface.FACE, text=str(text))
 
     @v_args(inline=True)
-    def ebl_atf_at_line__edge(self, text=""):
-        return atf.Surface.EDGE, str(text)
+    def ebl_atf_at_line__edge(self, text: Union[Token, str] = ""):
+        return SurfaceLabel.from_label(atf.Surface.EDGE, text=str(text))
 
     @v_args(inline=True)
-    def ebl_atf_at_line__surface_with_status(self, surface, statuses):
-        if len(surface) == 2:
-            return SurfaceAtLine(
-                SurfaceLabel(statuses.children, surface[0], surface[1])
-            )
-        else:
-            return SurfaceAtLine(SurfaceLabel(statuses.children, surface[0]))
+    def ebl_atf_at_line__surface_with_status(self, surface: SurfaceLabel, statuses):
+        return SurfaceAtLine(
+            SurfaceLabel(statuses.children, surface.surface, surface.text)
+        )
 
     @v_args(inline=True)
     def ebl_atf_at_line__object_with_status(self, object, statuses):
