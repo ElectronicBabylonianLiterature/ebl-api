@@ -178,7 +178,7 @@ $ end of side"""
 if __name__ == "__main__":
     iterations = 1
     if len(sys.argv) > 1:
-        iterations = sys.argv[1]
+        iterations = int(sys.argv[1])
 
     for _ in tqdm(range(iterations), desc=f"Parsing"):
         parse_atf_lark(ATF)
