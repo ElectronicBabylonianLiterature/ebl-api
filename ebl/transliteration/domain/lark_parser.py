@@ -1,7 +1,6 @@
 from collections import Counter
 from typing import Sequence
 
-import pydash
 from lark.exceptions import ParseError, UnexpectedInput
 from lark.lark import Lark
 from lark.visitors import v_args
@@ -102,15 +101,9 @@ def parse_atf_lark(atf_):
         if any(errors):
             raise TransliterationError(errors)
 
-    lines = tuple(
-        pydash.chain(atf_)
-        .split("\n")
-        .map(parse_line_)
-        .tap(check_errors)
-        .map(lambda pair: pair[0])
-        .drop_right_while(lambda line: line.prefix == "")
-        .value()
-    )
+    lines = [parse_line_(line, number) for number, line in enumerate(atf_.split("\n"))]
+    check_errors(lines)
+    lines = tuple(pair[0] for pair in lines)
 
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 

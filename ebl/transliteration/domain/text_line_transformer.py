@@ -1,7 +1,9 @@
+from collections import Iterable
+from functools import singledispatch
+from itertools import chain
 from singledispatchmethod import singledispatchmethod
 from typing import MutableSequence, Sequence, Type
 
-import pydash
 from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
@@ -53,16 +55,19 @@ from ebl.transliteration.domain.word_tokens import (
 
 
 def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
-    return (
-        pydash.chain(children)
-        .flat_map_deep(lambda tree: (tree.children if isinstance(tree, Tree) else tree))
-        .map_(
-            lambda token: (
-                ValueToken.of(token.value) if isinstance(token, Token) else token
-            )
-        )
-        .value()
-    )
+    def token_mapper(token):
+        if isinstance(token, Tree):
+            return token.children
+        elif isinstance(token, list):
+            return token
+        else:
+            return [token]
+
+    tokens = map(token_mapper, children)
+    tokens = chain.from_iterable(tokens)
+    return tuple(map(lambda token: (
+        ValueToken.of(token.value) if isinstance(token, Token) else token
+    ), tokens))
 
 
 class ErasureVisitor(TokenVisitor):
@@ -257,18 +262,7 @@ class TextLineTransformer(WordTransformer):
         )
 
     def ebl_atf_text_line__text(self, children):
-        return (
-            pydash.chain(children)
-            .flat_map_deep(
-                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
-            )
-            .map_(
-                lambda token: (
-                    ValueToken.of(str(token)) if isinstance(token, Token) else token
-                )
-            )
-            .value()
-        )
+        return _children_to_tokens(children)
 
     @v_args(inline=True)
     def ebl_atf_text_line__open_document_oriented_gloss(self, _):

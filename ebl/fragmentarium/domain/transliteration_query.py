@@ -1,4 +1,5 @@
 from typing import Sequence
+from itertools import chain
 
 import attr
 import pydash
@@ -15,19 +16,15 @@ class TransliterationQuery:
 
     @property
     def regexp(self):
-        lines_regexp = (
-            pydash.chain(self._signs)
-            .map(
-                lambda row: [
-                    fr"([^\s]+/)*{escaped_sign}(/[^\s]+)*"
-                    for escaped_sign in (regex.escape(sign) for sign in row)
-                ]
-            )
-            .map(" ".join)
-            .map(lambda row: fr"(?<![^|\s]){row}")
-            .join(r"( .*)?\n.*")
-            .value()
+        lines_regexp = map(
+            lambda row: " ".join([
+                fr"([^\s]+/)*{escaped_sign}(/[^\s]+)*"
+                for escaped_sign in (regex.escape(sign) for sign in row)
+            ]),
+            self._signs
         )
+        lines_regexp = r"( .*)?\n.*".join(map(lambda row: fr"(?<![^|\s]){row}",
+                                              lines_regexp))
         return fr"{lines_regexp}(?![^|\s])"
 
     def is_empty(self) -> bool:
@@ -37,13 +34,9 @@ class TransliterationQuery:
         signs = fragment.signs
 
         def line_number(position):
-            return (
-                pydash.chain(signs[:position])
-                .chars()
-                .filter_(lambda char: char == "\n")
-                .size()
-                .value()
-            )
+            return len(char for char
+                       in chain.from_iterable(signs[:position])
+                       if char == "\n")
 
         matches = regex.finditer(self.regexp, signs, overlapped=True)
         positions = [(match.start(), match.end()) for match in matches]

@@ -1,6 +1,5 @@
 from typing import List, Sequence, Tuple
-
-import pydash
+from itertools import chain
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Atf
@@ -30,11 +29,8 @@ class AtfConverter:
         return self.convert_values_to_signs(values)
 
     def convert_atf_to_values(self, atf: Atf) -> Sequence[Sequence[Value]]:
-        return (
-            pydash.chain(CleanAtf(atf).cleaned)
-            .map(lambda row: [parse_reading(value) for value in row])
-            .value()
-        )
+        return list(map(lambda row: [parse_reading(value)
+                                     for value in row], CleanAtf(atf).cleaned))
 
     def convert_values_to_signs(
         self, values: Sequence[Sequence[Value]]
@@ -50,16 +46,10 @@ class AtfConverter:
         ]
 
     def _create_sign_map(self, values: Sequence[Sequence[Value]]) -> SignMap:
-        sign_map: SignMap = (
-            pydash.chain(values)
-            .flatten()
-            .flat_map(lambda value: value.keys)
-            .thru(self._sign_repository.search_many)
-            .flat_map(sign_to_pair)
-            .map_(lambda pair: self._expand_splittable(pair))
-            .from_pairs()
-            .value()
-        )
+        sign_map = [key for value in chain.from_iterable(values) for key in value.keys]
+        sign_map = self._sign_repository.search_many(sign_map)
+        sign_map = [inner for entry in map(sign_to_pair, sign_map) for inner in entry]
+        sign_map = {key: value for key, value in map(self._expand_splittable, sign_map)}
         return sign_map
 
     def _expand_splittable(self, pair: SignMapEntry) -> SignMapEntry:

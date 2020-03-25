@@ -1,7 +1,6 @@
 from typing import Sequence
 
 import attr
-import pydash
 
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
@@ -24,13 +23,17 @@ class FragmentInfo:
         def is_transliteration(entry: RecordEntry) -> bool:
             return entry.type == RecordType.TRANSLITERATION
 
-        first_transliteration = (
-            pydash.chain(fragment.record.entries)
-            .filter(is_transliteration)
-            .sort_by("date")
-            .head()
-            .value()
-        ) or RecordEntry("", RecordType.TRANSLITERATION, "")
+        def get_date(entry: RecordEntry) -> str:
+            return entry.date
+
+        sorted_transliterations = [entry
+                                   for entry in fragment.record.entries
+                                   if is_transliteration(entry)]
+        sorted_transliterations.sort(key=get_date)
+
+        first_transliteration = (sorted_transliterations[0]
+                                 if sorted_transliterations
+                                 else RecordEntry("", RecordType.TRANSLITERATION, ""))
 
         return FragmentInfo(
             fragment.number,

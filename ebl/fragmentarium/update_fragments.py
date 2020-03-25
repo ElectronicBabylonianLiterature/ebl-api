@@ -1,10 +1,11 @@
 import math
-from functools import reduce, singledispatchmethod  # type: ignore
+from functools import reduce
 from typing import Callable, Iterable, List, Sequence
 
 import attr
 import pydash
 from joblib import Parallel, delayed
+from singledispatchmethod import singledispatchmethod
 from tqdm import tqdm
 
 from ebl.app import create_context

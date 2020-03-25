@@ -63,18 +63,16 @@ BRACES_PATTERN = r"(?<![^\s])" r"\(([^\(\)]*)\)" r"(?!=[^\s])"
 
 
 def _clean_line(line: str) -> str:
-    return (
-        pydash.chain(line)
-        .reg_exp_replace(STRIP_PATTERN, "")
-        .reg_exp_replace(WHITE_SPACE_PATTERN, " ")
-        .reg_exp_replace(BRACES_PATTERN, r"\1")
-        .clean()
-        .value()
-    )
+    result: str = pydash.reg_exp_replace(line, STRIP_PATTERN, "")
+    result = pydash.reg_exp_replace(result, WHITE_SPACE_PATTERN, " ")
+    result = pydash.reg_exp_replace(result, BRACES_PATTERN, r"\1")
+    pydash.reg_exp_replace(result, r"\s+", " ")
+    return result.strip()
 
 
 def _clean_values(line: str) -> str:
-    return pydash.chain(line).split(" ").map(_clean_value).join(" ").clean().value()
+    result = " ".join(map(_clean_value, line.split(" "))).strip()
+    return pydash.reg_exp_replace(result, r"\s+", " ")
 
 
 def _clean_value(value: str) -> str:
@@ -95,13 +93,9 @@ def _clean_variant(value: str) -> str:
 
 
 def _clean_reading(value: str) -> str:
-    return (
-        pydash.chain(value)
-        .reg_exp_replace(r"[.+]", " ")
-        .reg_exp_replace(r"@[^\s]+", "")
-        .value()
-        .lower()
-    )
+    result: str = pydash.reg_exp_replace(value, r"[.+]", " ")
+    result = pydash.reg_exp_replace(result, r"@[^\s]+", "")
+    return result.lower()
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -110,13 +104,9 @@ class CleanAtf:
 
     @property
     def cleaned(self) -> List[List[str]]:
-        return (
-            pydash.chain(self.filtered)
-            .map(_clean_line)
-            .map(_clean_values)
-            .map(lambda row: row.split(WORD_SEPARATOR))
-            .value()
-        )
+        rows = map(_clean_line, self.filtered)
+        rows = map(_clean_values, rows)
+        return [row.split(WORD_SEPARATOR) for row in rows]
 
     @property
     def filtered(self) -> List[str]:
