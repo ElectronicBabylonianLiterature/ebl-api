@@ -1,4 +1,4 @@
-from functools import singledispatchmethod  # type: ignore
+from singledispatchmethod import singledispatchmethod
 from typing import List, Sequence
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language

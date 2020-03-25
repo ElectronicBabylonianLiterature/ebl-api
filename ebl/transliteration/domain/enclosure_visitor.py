@@ -1,4 +1,4 @@
-from functools import singledispatchmethod  # type: ignore
+from singledispatchmethod import singledispatchmethod
 from typing import FrozenSet, List, Sequence
 
 import attr

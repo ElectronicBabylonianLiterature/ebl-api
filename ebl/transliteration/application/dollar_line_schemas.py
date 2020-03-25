@@ -1,4 +1,4 @@
-from functools import singledispatchmethod  # type: ignore
+from singledispatchmethod import singledispatchmethod
 from typing import Mapping, Type, Union
 
 from marshmallow import Schema, fields, post_load

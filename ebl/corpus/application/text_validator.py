@@ -1,5 +1,6 @@
 from collections import Counter
-from functools import singledispatchmethod  # type: ignore
+
+from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.domain.text import (
     Chapter,

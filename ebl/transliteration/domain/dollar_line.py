@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from enum import Enum
-from functools import singledispatchmethod  # type: ignore
+from singledispatchmethod import singledispatchmethod
 from typing import Optional, Union, Tuple
 
 import attr

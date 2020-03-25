@@ -1,5 +1,6 @@
-from functools import singledispatchmethod  # type: ignore
 from typing import Callable, List
+
+from singledispatchmethod import singledispatchmethod
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.enclosure_tokens import (
