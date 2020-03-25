@@ -11,8 +11,7 @@ from ebl.transliteration.domain.atf import Status, Surface
 
 
 class DuplicateStatusError(ValueError):
-    def __init__(self, msg):
-        super().__init__(msg)
+    pass
 
 
 class LabelVisitor(ABC):
