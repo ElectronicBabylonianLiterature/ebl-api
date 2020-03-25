@@ -18,12 +18,17 @@ class DollarLine(Line):
 
     @property
     @abstractmethod
-    def _content_value(self) -> str:
+    def display_value(self) -> str:
         ...
 
     @property
     def content(self) -> Tuple[Token]:
-        return (ValueToken.of(f" {self._content_value}"),)
+        return (ValueToken.of(f" {self.display_value}"),)
+
+    @property
+    @abstractmethod
+    def display_value(self) -> str:
+        ...
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -31,7 +36,7 @@ class SealDollarLine(DollarLine):
     number: int
 
     @property
-    def _content_value(self):
+    def display_value(self):
         return f"seal {self.number}"
 
 
@@ -40,7 +45,7 @@ class LooseDollarLine(DollarLine):
     text: str = ""
 
     @property
-    def _content_value(self) -> str:
+    def display_value(self) -> str:
         return f"({self.text})"
 
 
@@ -51,7 +56,7 @@ class ImageDollarLine(DollarLine):
     text: str = ""
 
     @property
-    def _content_value(self) -> str:
+    def display_value(self) -> str:
         letter = self.letter or ""
         return f"(image {self.number}{letter} = {self.text})"
 
@@ -62,7 +67,7 @@ class RulingDollarLine(DollarLine):
     status: Optional[atf.DollarStatus] = None
 
     @property
-    def _content_value(self) -> str:
+    def display_value(self) -> str:
         status = f" {self.status.value}" if self.status else ""
         return f"{self.number.value} ruling{status}"
 
@@ -113,7 +118,7 @@ class StateDollarLine(DollarLine):
     status: Optional[atf.DollarStatus]
 
     @property
-    def _content_value(self) -> str:
+    def display_value(self) -> str:
         return " ".join(
             [
                 StateDollarLine.to_atf(x)

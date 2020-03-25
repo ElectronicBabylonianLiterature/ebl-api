@@ -4,7 +4,7 @@ from typing import Mapping, Type, Union
 from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
-from ebl.transliteration.application.line_schemas import LineBaseSchema
+from ebl.transliteration.application.line_schemas import ControlLinesSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
@@ -16,7 +16,7 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class LooseDollarLineSchema(LineBaseSchema):
+class LooseDollarLineSchema(ControlLinesSchema):
     text = fields.String(required=True)
 
     @post_load
@@ -24,7 +24,7 @@ class LooseDollarLineSchema(LineBaseSchema):
         return LooseDollarLine(data["text"])
 
 
-class ImageDollarLineSchema(LineBaseSchema):
+class ImageDollarLineSchema(ControlLinesSchema):
     number = fields.String(required=True)
     letter = fields.String(required=True, allow_none=True)
     text = fields.String(required=True)
@@ -34,7 +34,7 @@ class ImageDollarLineSchema(LineBaseSchema):
         return ImageDollarLine(data["number"], data["letter"], data["text"])
 
 
-class RulingDollarLineSchema(LineBaseSchema):
+class RulingDollarLineSchema(ControlLinesSchema):
     number = NameEnum(atf.Ruling, required=True)
     status = NameEnum(atf.DollarStatus, missing=None)
 
@@ -43,7 +43,7 @@ class RulingDollarLineSchema(LineBaseSchema):
         return RulingDollarLine(data["number"], data["status"])
 
 
-class SealDollarLineSchema(LineBaseSchema):
+class SealDollarLineSchema(ControlLinesSchema):
     number = fields.Int(required=True)
 
     @post_load
@@ -77,7 +77,7 @@ class ScopeContainerSchema(Schema):
         return scope_types[type][content]
 
 
-class StateDollarLineSchema(LineBaseSchema):
+class StateDollarLineSchema(ControlLinesSchema):
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),

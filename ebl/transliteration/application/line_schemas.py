@@ -33,6 +33,10 @@ class TextLineSchema(LineBaseSchema):
         )
 
 
+class ControlLinesSchema(LineBaseSchema):
+    display_value = fields.String(required=True)
+
+
 class ControlLineSchema(LineBaseSchema):
     @post_load
     def make_line(self, data, **kwargs):
