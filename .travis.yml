@@ -12,9 +12,7 @@ jobs:
         - chmod +x ./cc-test-reporter
         - "./cc-test-reporter before-build"
       script:
-        - pipenv run black ebl --check --diff
         - pipenv run flake8
-        - pipenv run mypy -p ebl
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
     - stage: deploy

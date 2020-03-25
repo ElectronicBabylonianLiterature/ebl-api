@@ -1,4 +1,9 @@
 {
     "python.pythonPath": ".venv/bin/python",
-    "editor.rulers": [88]
+    "editor.rulers": [
+        88
+    ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": false,
+    "python.linting.enabled": true
 }
