@@ -73,7 +73,7 @@ def parse_atf_lark(atf_):
             validate_line(parsed_line)
             return parsed_line, None
         except (UnexpectedInput, ParseError, EnclosureError, VisitError) as ex:
-            return create_transliteration_error_data(ex, line, line_number)
+            return (None, create_transliteration_error_data(ex, line, line_number))
 
     def check_errors(pairs):
         errors = [error for line, error in pairs if error is not None]
@@ -107,39 +107,27 @@ def create_transliteration_error_data(error: LarkError, line: str, line_number: 
 def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
-    return (
-        None,
-        {
-            "description": (
-                description + context[0] + "\n" + len(description) * " " + context[1]
-            ),
-            "lineNumber": line_number + 1,
-        },
-    )
+    return {
+        "description": (
+            description + context[0] + "\n" + len(description) * " " + context[1]
+        ),
+        "lineNumber": line_number + 1,
+    }
 
 
 @create_transliteration_error_data.register
 def parse_error(error: ParseError, line: str, line_number: int):
-    return (
-        None,
-        {"description": f"Invalid line: {error}", "lineNumber": line_number + 1,},
-    )
+    return {"description": f"Invalid line: {error}", "lineNumber": line_number + 1}
 
 
 @create_transliteration_error_data.register
 def enclosure_error(error: EnclosureError, line: str, line_number: int):
-    return (
-        None,
-        {"description": f"Invalid brackets.", "lineNumber": line_number + 1,},
-    )
+    return {"description": f"Invalid brackets.", "lineNumber": line_number + 1}
 
 
 @create_transliteration_error_data.register
 def duplicate_status_error(error: VisitError, line: str, line_number: int):
     if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
-        return (
-            None,
-            {"description": f"Duplicate Status", "lineNumber": line_number + 1,},
-        )
+        return {"description": f"Duplicate Status", "lineNumber": line_number + 1}
     else:
         raise error
