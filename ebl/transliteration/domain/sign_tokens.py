@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Optional, Sequence, Type, TypeVar, Union, TokenVisitor
+from typing import Optional, Sequence, Type, TypeVar, Union
 
 import attr
 
@@ -11,7 +11,7 @@ from ebl.transliteration.domain.converters import (
     convert_token_sequence,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.tokens import Token, ValueToken, TokenVisitor
 
 T = TypeVar("T", bound="UnknownSign")
 

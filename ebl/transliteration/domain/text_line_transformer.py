@@ -1,7 +1,4 @@
-from collections import Iterable
-from functools import singledispatch
 from itertools import chain
-from singledispatchmethod import singledispatchmethod
 from typing import MutableSequence, Sequence, Type
 
 from lark.lexer import Token
