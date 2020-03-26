@@ -99,6 +99,9 @@ class Divider(AbstractSign):
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_divider(self)
+
     @staticmethod
     def of(
         divider: str,

@@ -77,7 +77,7 @@ class ErasureVisitor(TokenVisitor):
         return tuple(self._tokens)
 
     def visit(self, token) -> None:
-        if isinstance(token, token):
+        if isinstance(token, Word):
             self._tokens.append(token.set_erasure(self._state))
         else:
             self._tokens.append(token)
@@ -301,8 +301,8 @@ class TextLineTransformer(WordTransformer):
 
         return [
             Erasure.open(),
-            set_erasure_state(erased, ErasureState.ERASED),
+            *set_erasure_state(erased, ErasureState.ERASED),
             Erasure.center(),
-            set_erasure_state(over_erased, ErasureState.OVER_ERASED),
+            *set_erasure_state(over_erased, ErasureState.OVER_ERASED),
             Erasure.close(),
         ]

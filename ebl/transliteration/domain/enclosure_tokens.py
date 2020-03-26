@@ -92,6 +92,9 @@ class PerhapsBrokenAway(Enclosure):
     def get_sides() -> Mapping[Side, str]:
         return atf.PERHAPS_BROKEN_AWAY
 
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_perhaps_broken_away(self)
+
 
 @attr.s(frozen=True)
 class AccidentalOmission(Enclosure):

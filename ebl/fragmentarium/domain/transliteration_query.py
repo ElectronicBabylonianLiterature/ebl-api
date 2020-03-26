@@ -34,9 +34,9 @@ class TransliterationQuery:
         signs = fragment.signs
 
         def line_number(position):
-            return len(char for char
+            return len([char for char
                        in chain.from_iterable(signs[:position])
-                       if char == "\n")
+                       if char == "\n"])
 
         matches = regex.finditer(self.regexp, signs, overlapped=True)
         positions = [(match.start(), match.end()) for match in matches]

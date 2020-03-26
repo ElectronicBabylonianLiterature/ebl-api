@@ -1,4 +1,5 @@
 from collections import Counter
+from itertools import dropwhile
 from typing import Sequence
 
 from lark.exceptions import ParseError, UnexpectedInput
@@ -101,7 +102,12 @@ def parse_atf_lark(atf_):
         if any(errors):
             raise TransliterationError(errors)
 
-    lines = [parse_line_(line, number) for number, line in enumerate(atf_.split("\n"))]
+    lines = atf_.split("\n")
+    lines = list(dropwhile(lambda line: line == "", reversed(lines)))
+    lines.reverse()
+    lines = [parse_line_(line, number)
+             for number, line
+             in enumerate(lines)]
     check_errors(lines)
     lines = tuple(pair[0] for pair in lines)
 

@@ -19,7 +19,7 @@ from ebl.transliteration.domain.at_line import (
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, auto_attribs=True)
 class ObjectData:
     object: atf.Object
     text: str = ""

@@ -143,70 +143,78 @@ class EnclosureUpdater(TokenVisitor):
         self._tokens.append(token)
 
     def visit(self, token: Token) -> None:
-        with_type = self._set_enclosure_type(token)
-        visited = self._visit(with_type)
-        self._append_token(visited)
+        self._append_token(self._set_enclosure_type(token))
 
-    def visit_variant(self, token: Variant) -> Variant:
+    def visit_variant(self, token: Variant) -> None:
         def sub_visit(sub_token: Token) -> EnclosureUpdater:
             sub_visitor = EnclosureUpdater(self._enclosures)
             sub_token.accept(sub_visitor)
             return sub_visitor
 
+        new_token = self._set_enclosure_type(token)
         visitors = list(map(sub_visit, token.tokens))
 
         enclosures = set(visitor._enclosures for visitor in visitors)
         self._enclosures = sorted(enclosures, key=len, reverse=True)[0]
 
         tokens = tuple(token for visitor in visitors for token in visitor.tokens)
-        return attr.evolve(token, tokens=tokens)
+        self._append_token(attr.evolve(new_token, tokens=tokens))
 
-    def visit_word(self, token: Word) -> Word:
+    def visit_word(self, token: Word) -> None:
+        new_token = self._set_enclosure_type(token)
         visited_parts = self._visit_parts(token.parts)
-        return attr.evolve(token, parts=visited_parts)
+        self._append_token(attr.evolve(new_token, parts=visited_parts))
 
-    def visit_named_sign(self, token: NamedSign) -> NamedSign:
+    def visit_named_sign(self, token: NamedSign) -> None:
+        new_token = self._set_enclosure_type(token)
         visited_parts: Sequence = self._visit_parts(token.name_parts)
-        return attr.evolve(token, name_parts=visited_parts)
+        self._append_token(attr.evolve(new_token, name_parts=visited_parts))
 
-    def visit_gloss(self, token: Gloss) -> Gloss:
+    def visit_gloss(self, token: Gloss) -> None:
+        new_token = self._set_enclosure_type(token)
         visited_parts = self._visit_parts(token.parts)
-        return attr.evolve(token, parts=visited_parts)
+        self._append_token(attr.evolve(new_token, parts=visited_parts))
 
     def visit_accidental_omission(
-        self, token: AccidentalOmission
-    ) -> AccidentalOmission:
+        self, token: None
+    ) -> None:
+        new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.ACCIDENTAL_OMISSION)
-        return token
+        self._append_token(new_token)
 
     def visit_intentional_omission(
         self, token: IntentionalOmission
-    ) -> IntentionalOmission:
+    ) -> None:
+        new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.INTENTIONAL_OMISSION)
-        return token
+        self._append_token(new_token)
 
-    def visit_removal(self, token: Removal) -> Removal:
+    def visit_removal(self, token: Removal) -> None:
+        new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.REMOVAL)
-        return token
+        self._append_token(new_token)
 
     def visit_broken_away(self, token: BrokenAway) -> BrokenAway:
+        new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.BROKEN_AWAY)
-        return token
+        self._append_token(new_token)
 
-    def visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> PerhapsBrokenAway:
+    def visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> None:
+        new_token = self._set_enclosure_type(token)
         perhaps_type = (
             EnclosureType.PERHAPS_BROKEN_AWAY
             if EnclosureType.BROKEN_AWAY in self._enclosures
             else EnclosureType.PERHAPS
         )
         self._update_enclosures(token, perhaps_type)
-        return token
+        self._append_token(new_token)
 
     def visit_document_oriented_gloss(
         self, token: DocumentOrientedGloss
-    ) -> DocumentOrientedGloss:
+    ) -> None:
+        new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
-        return token
+        self._append_token(new_token)
 
     def _visit_parts(self, tokens: Sequence[Token]) -> Sequence[Token]:
         part_visitor = EnclosureUpdater(self._enclosures)
