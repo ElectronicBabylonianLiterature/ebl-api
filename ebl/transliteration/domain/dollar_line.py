@@ -25,11 +25,6 @@ class DollarLine(Line):
     def content(self) -> Tuple[Token]:
         return (ValueToken.of(f" {self.display_value}"),)
 
-    @property
-    @abstractmethod
-    def display_value(self) -> str:
-        ...
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class SealDollarLine(DollarLine):
