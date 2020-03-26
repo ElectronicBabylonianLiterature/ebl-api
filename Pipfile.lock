@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8f1d726cd5be4c1a4ae46d80aeaf392dc4f274fcd941686cb013dccd88a69c22"
+            "sha256": "0755c06bc22b92d93b96e5afa26505adb0bc900146a98f618ee4f5f42b178e21"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -157,11 +157,11 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:06f5b3a99029c7134207dd882428a66992a9de2bef7c2b699b5641f9886c3302",
-                "sha256:b97607a1a18a5100839aec1dc26a1ea17ee0d93b20b0f008d80a5a050afb200b"
+                "sha256:298a914c82144c6b3b06c568a8973b89ad2176685f43cd1ea9ba968307300fa9",
+                "sha256:dfc83688553a91a786c6c91eeb5f3b1d31f24d71877bbd94ecbf5484e57690a2"
             ],
             "markers": "python_version < '3.8'",
-            "version": "==1.5.0"
+            "version": "==1.5.2"
         },
         "inflect": {
             "hashes": [
@@ -559,13 +559,6 @@
             "index": "pypi",
             "version": "==0.3.15"
         },
-        "httpretty": {
-            "hashes": [
-                "sha256:66216f26b9d2c52e81808f3e674a6fb65d4bf719721394a1a9be926177e55fbe"
-            ],
-            "index": "pypi",
-            "version": "==0.9.7"
-        },
         "identify": {
             "hashes": [
                 "sha256:a7577a1f55cee1d21953a5cf11a3c839ab87f5ef909a4cba6cf52ed72b4c6059",
@@ -575,11 +568,11 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:06f5b3a99029c7134207dd882428a66992a9de2bef7c2b699b5641f9886c3302",
-                "sha256:b97607a1a18a5100839aec1dc26a1ea17ee0d93b20b0f008d80a5a050afb200b"
+                "sha256:298a914c82144c6b3b06c568a8973b89ad2176685f43cd1ea9ba968307300fa9",
+                "sha256:dfc83688553a91a786c6c91eeb5f3b1d31f24d71877bbd94ecbf5484e57690a2"
             ],
             "markers": "python_version < '3.8'",
-            "version": "==1.5.0"
+            "version": "==1.5.2"
         },
         "importlib-resources": {
             "hashes": [
@@ -616,14 +609,6 @@
                 "sha256:b1ddb932186d8a6ac451e1d95844b382f55e12686d51ca0c68b6f61f2ab7a507"
             ],
             "version": "==8.2.0"
-        },
-        "mypy-extensions": {
-            "hashes": [
-                "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d",
-                "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"
-            ],
-            "index": "pypi",
-            "version": "==0.4.3"
         },
         "nodeenv": {
             "hashes": [
