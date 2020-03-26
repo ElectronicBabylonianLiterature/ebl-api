@@ -94,7 +94,7 @@ class ScopeContainer:
     @staticmethod
     def to_value(enum) -> str:
         if isinstance(enum, atf.Surface):
-            return enum.value.atf
+            return enum.atf
         else:
             return enum.value
 
