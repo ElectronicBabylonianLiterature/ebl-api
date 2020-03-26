@@ -79,13 +79,11 @@ class ErasureVisitor(TokenVisitor):
     def tokens(self) -> Sequence[EblToken]:
         return tuple(self._tokens)
 
-    @singledispatchmethod
-    def visit(self, token: EblToken) -> None:
-        self._tokens.append(token)
-
-    @visit.register
-    def _visit_word(self, word: Word) -> None:
-        self._tokens.append(word.set_erasure(self._state))
+    def visit(self, token) -> None:
+        if isinstance(token, token):
+            self._tokens.append(token.set_erasure(self._state))
+        else:
+            self._tokens.append(token)
 
 
 class SignTransformer(Transformer):

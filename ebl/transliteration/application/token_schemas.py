@@ -280,19 +280,13 @@ def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
     return None if named_sign.sign is None else OneOfTokenSchema().dump(named_sign.sign)
 
 
-@singledispatch
 def _load_sign(sign) -> Optional[Token]:
-    return OneOfTokenSchema().load(sign)
-
-
-@_load_sign.register
-def _load_sign_none(sign: None) -> None:
-    return sign
-
-
-@_load_sign.register
-def _load_sign_str(sign: str) -> Token:
-    return ValueToken.of(sign)
+    if sign is None:
+        return None
+    elif isinstance(sign, str):
+        return ValueToken.of(sign)
+    else:
+        return OneOfTokenSchema().load(sign)
 
 
 class NamedSignSchema(BaseTokenSchema):

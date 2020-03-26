@@ -5,7 +5,6 @@ from typing import Callable, Iterable, List, Sequence
 import attr
 import pydash
 from joblib import Parallel, delayed
-from singledispatchmethod import singledispatchmethod
 from tqdm import tqdm
 
 from ebl.app import create_context
@@ -48,27 +47,19 @@ class State:
     def add_updated(self) -> None:
         self.updated += 1
 
-    @singledispatchmethod
     def add_error(self, error: Exception, fragment: Fragment) -> None:
-        self.invalid_atf += 1
-        self.errors.append(f"{fragment.number}\t\t{error}")
-
-    @add_error.register
-    def _add_lemmatization_error(
-        self, error: LemmatizationError, fragment: Fragment
-    ) -> None:
-        self.invalid_lemmas += 1
-        self.errors.append(f"{fragment.number}\t{error}")
-
-    @add_error.register
-    def _add_transliteration_error(
-        self, transliteration_error: TransliterationError, fragment: Fragment
-    ) -> None:
-        self.invalid_atf += 1
-        for index, error in enumerate(transliteration_error.errors):
-            atf = fragment.text.lines[error["lineNumber"] - 1].atf
-            number = fragment.number if index == 0 else len(fragment.number) * " "
-            self.errors.append(f"{number}\t{atf}\t{error}")
+        if isinstance(error, LemmatizationError):
+            self.invalid_lemmas += 1
+            self.errors.append(f"{fragment.number}\t{error}")
+        elif isinstance(error, TransliterationError):
+            self.invalid_atf += 1
+            for index, error in enumerate(error.errors):
+                atf = fragment.text.lines[error["lineNumber"] - 1].atf
+                number = fragment.number if index == 0 else len(fragment.number) * " "
+                self.errors.append(f"{number}\t{atf}\t{error}")
+        else:
+            self.invalid_atf += 1
+            self.errors.append(f"{fragment.number}\t\t{error}")
 
     def to_tsv(self) -> str:
         return "\n".join(

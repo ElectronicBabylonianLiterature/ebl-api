@@ -13,7 +13,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_cleaner import clean_word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
@@ -125,6 +125,9 @@ class Word(Token):
         if is_compatible and token.alignable:
             result = result.set_alignment(AlignmentToken(token.value, self.alignment))
         return result
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_word(self)
 
 
 @attr.s(auto_attribs=True, frozen=True)

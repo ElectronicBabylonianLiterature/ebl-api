@@ -1,4 +1,3 @@
-from singledispatchmethod import singledispatchmethod
 from typing import FrozenSet, List, Sequence
 
 import attr
@@ -72,12 +71,7 @@ class EnclosureValidator(TokenVisitor):
         if self._state.has_enclosures:
             raise EnclosureError()
 
-    @singledispatchmethod
-    def visit(self, token: Token) -> None:
-        pass
-
-    @visit.register
-    def _visit_variant(self, token: Variant) -> None:
+    def visit_variant(self, token: Variant) -> None:
         def sub_visit(sub_token: Token) -> FrozenSet[EnclosureType]:
             sub_visitor = EnclosureValidator(self._state)
             sub_token.accept(sub_visitor)
@@ -90,39 +84,31 @@ class EnclosureValidator(TokenVisitor):
         else:
             raise EnclosureError()
 
-    @visit.register
-    def _visit_word(self, token: Word) -> None:
+    def visit_word(self, token: Word) -> None:
         for part in token.parts:
             part.accept(self)
 
-    @visit.register
-    def _visit_gloss(self, token: Gloss) -> None:
+    def visit_gloss(self, token: Gloss) -> None:
         for part in token.parts:
             part.accept(self)
 
-    @visit.register
-    def _visit_named_sign(self, token: NamedSign) -> None:
+    def visit_named_sign(self, token: NamedSign) -> None:
         for part in token.name_parts:
             part.accept(self)
 
-    @visit.register
-    def _visit_accidental_omission(self, token: AccidentalOmission) -> None:
+    def visit_accidental_omission(self, token: AccidentalOmission) -> None:
         self._update_state(token, EnclosureType.ACCIDENTAL_OMISSION)
 
-    @visit.register
-    def _visit_intentional_omission(self, token: IntentionalOmission) -> None:
+    def visit_intentional_omission(self, token: IntentionalOmission) -> None:
         self._update_state(token, EnclosureType.INTENTIONAL_OMISSION)
 
-    @visit.register
-    def _visit_removal(self, token: Removal) -> None:
+    def visit_removal(self, token: Removal) -> None:
         self._update_state(token, EnclosureType.REMOVAL)
 
-    @visit.register
-    def _visit_broken_away(self, token: BrokenAway) -> None:
+    def visit_broken_away(self, token: BrokenAway) -> None:
         self._update_state(token, EnclosureType.BROKEN_AWAY)
 
-    @visit.register
-    def _visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> None:
+    def visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> None:
         perhaps_type = (
             EnclosureType.PERHAPS_BROKEN_AWAY
             if self._state.is_open(EnclosureType.BROKEN_AWAY)
@@ -130,8 +116,7 @@ class EnclosureValidator(TokenVisitor):
         )
         self._update_state(token, perhaps_type)
 
-    @visit.register
-    def _visit_document_oriented_gloss(self, token: DocumentOrientedGloss) -> None:
+    def visit_document_oriented_gloss(self, token: DocumentOrientedGloss) -> None:
         self._update_state(token, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
 
     def _update_state(self, token: Enclosure, enclosure: EnclosureType):
@@ -162,12 +147,7 @@ class EnclosureUpdater(TokenVisitor):
         visited = self._visit(with_type)
         self._append_token(visited)
 
-    @singledispatchmethod
-    def _visit(self, token: Token) -> Token:
-        return token
-
-    @_visit.register
-    def _visit_variant(self, token: Variant) -> Variant:
+    def visit_variant(self, token: Variant) -> Variant:
         def sub_visit(sub_token: Token) -> EnclosureUpdater:
             sub_visitor = EnclosureUpdater(self._enclosures)
             sub_token.accept(sub_visitor)
@@ -181,47 +161,39 @@ class EnclosureUpdater(TokenVisitor):
         tokens = tuple(token for visitor in visitors for token in visitor.tokens)
         return attr.evolve(token, tokens=tokens)
 
-    @_visit.register
-    def _visit_word(self, token: Word) -> Word:
+    def visit_word(self, token: Word) -> Word:
         visited_parts = self._visit_parts(token.parts)
         return attr.evolve(token, parts=visited_parts)
 
-    @_visit.register
-    def _visit_named_sign(self, token: NamedSign) -> NamedSign:
+    def visit_named_sign(self, token: NamedSign) -> NamedSign:
         visited_parts: Sequence = self._visit_parts(token.name_parts)
         return attr.evolve(token, name_parts=visited_parts)
 
-    @_visit.register
-    def _visit_gloss(self, token: Gloss) -> Gloss:
+    def visit_gloss(self, token: Gloss) -> Gloss:
         visited_parts = self._visit_parts(token.parts)
         return attr.evolve(token, parts=visited_parts)
 
-    @_visit.register
-    def _visit_accidental_omission(
+    def visit_accidental_omission(
         self, token: AccidentalOmission
     ) -> AccidentalOmission:
         self._update_enclosures(token, EnclosureType.ACCIDENTAL_OMISSION)
         return token
 
-    @_visit.register
-    def _visit_intentional_omission(
+    def visit_intentional_omission(
         self, token: IntentionalOmission
     ) -> IntentionalOmission:
         self._update_enclosures(token, EnclosureType.INTENTIONAL_OMISSION)
         return token
 
-    @_visit.register
-    def _visit_removal(self, token: Removal) -> Removal:
+    def visit_removal(self, token: Removal) -> Removal:
         self._update_enclosures(token, EnclosureType.REMOVAL)
         return token
 
-    @_visit.register
-    def _visit_broken_away(self, token: BrokenAway) -> BrokenAway:
+    def visit_broken_away(self, token: BrokenAway) -> BrokenAway:
         self._update_enclosures(token, EnclosureType.BROKEN_AWAY)
         return token
 
-    @_visit.register
-    def _visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> PerhapsBrokenAway:
+    def visit_perhaps_broken_away(self, token: PerhapsBrokenAway) -> PerhapsBrokenAway:
         perhaps_type = (
             EnclosureType.PERHAPS_BROKEN_AWAY
             if EnclosureType.BROKEN_AWAY in self._enclosures
@@ -230,8 +202,7 @@ class EnclosureUpdater(TokenVisitor):
         self._update_enclosures(token, perhaps_type)
         return token
 
-    @_visit.register
-    def _visit_document_oriented_gloss(
+    def visit_document_oriented_gloss(
         self, token: DocumentOrientedGloss
     ) -> DocumentOrientedGloss:
         self._update_enclosures(token, EnclosureType.DOCUMENT_ORIENTED_GLOSS)

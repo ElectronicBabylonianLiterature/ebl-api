@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Optional, Sequence, Type, TypeVar, Union
+from typing import Optional, Sequence, Type, TypeVar, Union, TokenVisitor
 
 import attr
 
@@ -143,6 +143,9 @@ class NamedSign(AbstractSign):
         flags = "".join(self.string_flags)
         sign = f"({self.sign.value})" if self.sign else ""
         return f"{name}{sub_index}{modifiers}{flags}{sign}"
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_named_sign(self)
 
 
 @attr.s(auto_attribs=True, frozen=True)

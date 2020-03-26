@@ -26,7 +26,6 @@ inflect = "*"
 joblib = "*"
 tqdm = "*"
 marshmallow-oneofschema = "*"
-singledispatchmethod = "*"
 
 [dev-packages]
 pytest = "*"
