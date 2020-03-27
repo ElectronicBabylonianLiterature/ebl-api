@@ -13,9 +13,9 @@ from ebl.transliteration.domain.at_line import (
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
-@pytest.mark.parametrize("parser", [parse_atf_lark])
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
@@ -71,5 +71,13 @@ from ebl.transliteration.domain.text import Text
         ("@date", [DiscourseAtLine(atf.Discourse.DATE)]),
     ],
 )
-def test_parse_atf_at_line(parser, line, expected_tokens):
-    assert parser(line).lines == Text.of_iterable(expected_tokens).lines
+def test_parse_atf_at_line(line, expected_tokens):
+    assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
+
+
+def test_parse_atf_at_line_duplicate_status_error():
+    with pytest.raises(TransliterationError) as exc_info:
+        parse_atf_lark("@column 1!!")
+    assert exc_info.value.errors == [
+        {"description": "Duplicate Status", "lineNumber": 1}
+    ]
