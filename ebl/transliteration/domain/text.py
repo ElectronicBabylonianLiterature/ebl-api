@@ -55,19 +55,22 @@ class Text:
         current: Label = (None, None, None, None)
         labels: List[Label] = []
 
+        handlers = {
+            TextLine: lambda line: (current,
+                                    [*labels, (*current[:-1], line.line_number)]),
+            ColumnAtLine: lambda line: ((line.column_label, *current[1:]), labels),
+            SurfaceAtLine: lambda line: ((current[0], line.surface_label, *current[2:]),
+                                         labels),
+            ObjectAtLine: lambda line: ((
+                *current[:2],
+                (line.object_label, frozenset(line.status), line.text),
+                current[-1],
+            ), labels),
+        }
+
         for line in self.lines:
-            if(isinstance(line, TextLine)):
-                labels.append((*current[:-1], line.line_number))
-            elif(isinstance(line, ColumnAtLine)):
-                current = (line.column_label, *current[1:])
-            elif(isinstance(line, SurfaceAtLine)):
-                current = (current[0], line.surface_label, *current[2:])
-            elif(isinstance(line, ObjectAtLine)):
-                current = (
-                    *current[:2],
-                    (line.object_label, frozenset(line.status), line.text),
-                    current[-1],
-                )
+            if type(line) in handlers:
+                current, labels = handlers[type(line)](line)
 
         return labels
 
