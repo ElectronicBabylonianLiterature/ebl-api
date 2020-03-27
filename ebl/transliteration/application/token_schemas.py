@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from functools import singledispatch
 from typing import Mapping, Optional, Type
 
 import pydash
