@@ -1,10 +1,10 @@
+from itertools import chain
 from typing import MutableSequence, Sequence, Type
 
 from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
-from ebl.errors import Defect
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -52,22 +52,19 @@ from ebl.transliteration.domain.word_tokens import (
 
 
 def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
-    handlers = {
-        Tree: lambda tree: tree.children,
-        list: lambda list_: list_,
-        object: lambda token: [token],
-    }
-
     def token_mapper(token):
-        for type_, handler in handlers.items():
-            if isinstance(token, type_):
-                return handler(token)
+        if isinstance(token, Tree):
+            return token.children
+        elif isinstance(token, list):
+            return token
+        else:
+            return [token]
 
-        raise Defect(f"Missing handler function for {type(token)}.")
-
-    return tuple(ValueToken.of(token.value) if isinstance(token, Token) else token
-                 for child in children
-                 for token in token_mapper(child))
+    tokens = map(token_mapper, children)
+    tokens = chain.from_iterable(tokens)
+    return tuple(map(lambda token: (
+        ValueToken.of(token.value) if isinstance(token, Token) else token
+    ), tokens))
 
 
 class ErasureVisitor(TokenVisitor):
