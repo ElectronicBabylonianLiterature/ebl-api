@@ -1,10 +1,7 @@
 from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
-from ebl.transliteration.application.line_schemas import (
-    LineBaseSchema,
-    ControlLinesSchema,
-)
+from ebl.transliteration.application.line_schemas import ControlLinesSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     SealAtLine,
