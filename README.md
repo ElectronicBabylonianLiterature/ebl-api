@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api.svg?branch=master)](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
-[![Code style: Black](https://img.shields.io/badge/codestyle-black-black)](https://black.readthedocs.io/en/stable/)
 
 The API requires a MongoDB database. See the 
 [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
