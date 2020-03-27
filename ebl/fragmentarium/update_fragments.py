@@ -49,17 +49,34 @@ class State:
 
     def add_error(self, error: Exception, fragment: Fragment) -> None:
         if isinstance(error, LemmatizationError):
-            self.invalid_lemmas += 1
-            self.errors.append(f"{fragment.number}\t{error}")
+            self._add_lemmatization_error(error, fragment)
         elif isinstance(error, TransliterationError):
-            self.invalid_atf += 1
-            for index, error in enumerate(error.errors):
-                atf = fragment.text.lines[error["lineNumber"] - 1].atf
-                number = fragment.number if index == 0 else len(fragment.number) * " "
-                self.errors.append(f"{number}\t{atf}\t{error}")
+            self._add_transliteration_error(error, fragment)
         else:
-            self.invalid_atf += 1
-            self.errors.append(f"{fragment.number}\t\t{error}")
+            self._add_error(error, fragment)
+
+    def _add_lemmatization_error(
+        self,
+        error: LemmatizationError,
+        fragment: Fragment
+    ) -> None:
+        self.invalid_lemmas += 1
+        self.errors.append(f"{fragment.number}\t{error}")
+
+    def _add_transliteration_error(
+        self,
+        error: TransliterationError,
+        fragment: Fragment
+    ) -> None:
+        self.invalid_atf += 1
+        for index, error in enumerate(error.errors):
+            atf = fragment.text.lines[error["lineNumber"] - 1].atf
+            number = fragment.number if index == 0 else len(fragment.number) * " "
+            self.errors.append(f"{number}\t{atf}\t{error}")
+
+    def _add_error(self, error: Exception, fragment: Fragment) -> None:
+        self.invalid_atf += 1
+        self.errors.append(f"{fragment.number}\t\t{error}")
 
     def to_tsv(self) -> str:
         return "\n".join(
