@@ -46,11 +46,10 @@ class AtfConverter:
         ]
 
     def _create_sign_map(self, values: Sequence[Sequence[Value]]) -> SignMap:
-        sign_map = [key for value in chain.from_iterable(values) for key in value.keys]
-        sign_map = self._sign_repository.search_many(sign_map)
-        sign_map = [inner for entry in map(sign_to_pair, sign_map) for inner in entry]
-        sign_map = {key: value for key, value in map(self._expand_splittable, sign_map)}
-        return sign_map
+        keys = [key for value in chain.from_iterable(values) for key in value.keys]
+        return dict(self._expand_splittable(entry)
+                    for sign in self._sign_repository.search_many(keys)
+                    for entry in sign_to_pair(sign))
 
     def _expand_splittable(self, pair: SignMapEntry) -> SignMapEntry:
         key, standardization = pair
