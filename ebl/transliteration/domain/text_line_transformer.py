@@ -1,4 +1,4 @@
-from itertools import chain
+
 from typing import MutableSequence, Sequence, Type
 
 from lark.lexer import Token
@@ -51,20 +51,19 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
-    def token_mapper(token):
-        if isinstance(token, Tree):
-            return token.children
-        elif isinstance(token, list):
-            return token
-        else:
-            return [token]
+def _token_mapper(token):
+    if isinstance(token, Tree):
+        return token.children
+    elif isinstance(token, list):
+        return token
+    else:
+        return [token]
 
-    tokens = map(token_mapper, children)
-    tokens = chain.from_iterable(tokens)
-    return tuple(map(lambda token: (
-        ValueToken.of(token.value) if isinstance(token, Token) else token
-    ), tokens))
+
+def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
+    return tuple((ValueToken.of(token.value) if isinstance(token, Token) else token)
+                 for child in children
+                 for token in _token_mapper(child))
 
 
 class ErasureVisitor(TokenVisitor):
