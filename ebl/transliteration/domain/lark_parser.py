@@ -3,7 +3,7 @@ from itertools import dropwhile
 from typing import Sequence
 
 from lark.lark import Lark
-from lark.exceptions import ParseError, UnexpectedInput, VisitError, LarkError
+from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.visitors import v_args
 
 from ebl.errors import DataError
@@ -105,7 +105,7 @@ def create_transliteration_error_data(error, line: str, line_number: int):
     }
     for type_ in handlers:
         if isinstance(error, type_):
-            return handlers[type_](error, line, line_number) 
+            return handlers[type_](error, line, line_number)
 
     raise error
 
