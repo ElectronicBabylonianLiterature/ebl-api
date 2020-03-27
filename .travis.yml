@@ -1,6 +1,5 @@
 language: python
-python:
-- '3.6'
+python: 
 - 'pypy3'
 install:
 - pipenv install --dev
