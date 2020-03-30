@@ -14,7 +14,7 @@ or generating the initial data.
 
 Requirements:
 
-- Python 3.8 & pip
+- [PyPy3.6](https://www.pypy.org) & pip
 - Docker (optional for running the application)
 
 ```shell script
@@ -24,8 +24,9 @@ pipenv install --dev
 
 ## Codestyle
 
-Line length is 88, and bugbear B950 is used instead of E501.  PEP8 checks should be 
-enabled in PyCharm, but E501, E203, and E231 should be disabled.
+Line length is 88, and bugbear B950 is used instead of E501.
+PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
+disabled.
 
 ## Running the tests
 
