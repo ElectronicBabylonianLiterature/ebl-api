@@ -1,4 +1,3 @@
-from functools import singledispatchmethod  # type: ignore
 from typing import List, Sequence
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
@@ -20,20 +19,17 @@ class LanguageVisitor(TokenVisitor):
     def tokens(self) -> Sequence[Token]:
         return tuple(self._tokens)
 
-    @singledispatchmethod
     def visit(self, token: Token) -> None:
         self._append(token)
 
-    @visit.register
-    def _visit_language_shift(self, shift: LanguageShift) -> None:
+    def visit_language_shift(self, shift: LanguageShift) -> None:
         if shift.language is not Language.UNKNOWN:
             self._language = shift.language
             self._normalized = shift.normalized
 
         self._append(shift)
 
-    @visit.register
-    def _visit_word(self, word: Word) -> None:
+    def visit_word(self, word: Word) -> None:
         word_with_language = word.set_language(self._language, self._normalized)
         self._append(word_with_language)
 

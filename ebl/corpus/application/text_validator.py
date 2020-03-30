@@ -1,5 +1,4 @@
 from collections import Counter
-from functools import singledispatchmethod  # type: ignore
 
 from ebl.corpus.domain.text import (
     Chapter,
@@ -11,7 +10,7 @@ from ebl.corpus.domain.text import (
 from ebl.errors import DataError
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.tokens import Token, TokenVisitor
+from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -35,12 +34,7 @@ class AlignmentVisitor(TokenVisitor):
     def __init__(self):
         self.alignments = []
 
-    @singledispatchmethod
-    def visit(self, token: Token) -> None:
-        pass
-
-    @visit.register
-    def _visit_word(self, word: Word) -> None:
+    def visit_word(self, word: Word) -> None:
         if word.alignment is not None:
             self.alignments.append(word.alignment)
 

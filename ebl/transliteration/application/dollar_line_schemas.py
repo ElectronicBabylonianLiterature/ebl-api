@@ -1,4 +1,3 @@
-from functools import singledispatchmethod  # type: ignore
 from typing import Mapping, Type, Union
 
 from marshmallow import Schema, fields, post_load
@@ -99,22 +98,16 @@ class StateDollarLineSchema(LineBaseSchema):
             data["status"],
         )
 
-    @singledispatchmethod
     @staticmethod
     def load_extent(extent):
-        return extent
+        if isinstance(extent, str):
+            return atf.Extent[extent]
+        else:
+            return extent
 
-    @load_extent.register(str)
-    @staticmethod
-    def load_extent_to_enum(extent: str):
-        return atf.Extent[extent]
-
-    @singledispatchmethod
     @staticmethod
     def dump_extent(extent):
-        return extent
-
-    @dump_extent.register(atf.Extent)
-    @staticmethod
-    def dump_extent_to_str(extent: atf.Extent):
-        return extent.name
+        if isinstance(extent, atf.Extent):
+            return extent.name
+        else:
+            return extent

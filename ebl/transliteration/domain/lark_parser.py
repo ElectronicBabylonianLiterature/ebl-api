@@ -1,10 +1,9 @@
 from collections import Counter
-from functools import singledispatch
+from itertools import dropwhile
 from typing import Sequence
 
-import pydash
-from lark.exceptions import ParseError, UnexpectedInput, VisitError, LarkError
 from lark.lark import Lark
+from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.visitors import v_args
 
 from ebl.errors import DataError
@@ -80,15 +79,14 @@ def parse_atf_lark(atf_):
         if any(errors):
             raise TransliterationError(errors)
 
-    lines = tuple(
-        pydash.chain(atf_)
-        .split("\n")
-        .map(parse_line_)
-        .tap(check_errors)
-        .map(lambda pair: pair[0])
-        .drop_right_while(lambda line: line.prefix == "")
-        .value()
-    )
+    lines = atf_.split("\n")
+    lines = list(dropwhile(lambda line: line == "", reversed(lines)))
+    lines.reverse()
+    lines = [parse_line_(line, number)
+             for number, line
+             in enumerate(lines)]
+    check_errors(lines)
+    lines = tuple(pair[0] for pair in lines)
 
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 
@@ -98,12 +96,20 @@ def parse_atf_lark(atf_):
     return text
 
 
-@singledispatch
-def create_transliteration_error_data(error: LarkError, line: str, line_number: int):
+def create_transliteration_error_data(error, line: str, line_number: int):
+    handlers = {
+        UnexpectedInput: unexpected_input_error,
+        ParseError: parse_error,
+        EnclosureError: enclosure_error,
+        VisitError: visit_error,
+    }
+    for type_ in handlers:
+        if isinstance(error, type_):
+            return handlers[type_](error, line, line_number)
+
     raise error
 
 
-@create_transliteration_error_data.register
 def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
@@ -115,18 +121,15 @@ def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     }
 
 
-@create_transliteration_error_data.register
 def parse_error(error: ParseError, line: str, line_number: int):
     return {"description": f"Invalid line: {error}", "lineNumber": line_number + 1}
 
 
-@create_transliteration_error_data.register
 def enclosure_error(error: EnclosureError, line: str, line_number: int):
     return {"description": f"Invalid brackets.", "lineNumber": line_number + 1}
 
 
-@create_transliteration_error_data.register
-def duplicate_status_error(error: VisitError, line: str, line_number: int):
+def visit_error(error: VisitError, line: str, line_number: int):
     if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
         return {"description": f"Duplicate Status", "lineNumber": line_number + 1}
     else:

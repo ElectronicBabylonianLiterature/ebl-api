@@ -3,7 +3,6 @@ import pytest
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
@@ -28,15 +27,9 @@ def test_signs():
     assert transliteration.signs == signs
 
 
-@pytest.mark.parametrize(
-    "transliteration,expected",
-    [
-        (TransliterationUpdate(), Text()),
-        (TransliterationUpdate(Atf("1. kur")), parse_atf_lark(Atf("1. kur"))),
-    ],
-)
-def test_parse(transliteration, expected):
-    assert transliteration.parse() == expected
+def test_parse():
+    atf = Atf("1. kur")
+    assert TransliterationUpdate(atf).parse() == parse_atf_lark(atf)
 
 
 def test_parse_invalid():

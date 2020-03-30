@@ -1,5 +1,4 @@
 import attr
-import pydash
 import pytest
 
 from ebl.corpus.application.text_serializer import TextSerializer
@@ -60,17 +59,12 @@ def expect_bibliography(bibliography, when):
 
 
 def expect_validate_references(bibliography, when, text=TEXT):
-    (
-        pydash.chain(text.chapters)
-        .flat_map(lambda chapter: chapter.manuscripts)
-        .map(lambda manuscript: manuscript.references)
-        .for_each(
-            lambda references: when(bibliography)
-            .validate_references(references)
-            .thenReturn()
-        )
-        .value()
-    )
+    manuscript_references = [manuscript.references
+                             for chapter in text.chapters
+                             for manuscript in chapter.manuscripts]
+
+    for references in manuscript_references:
+        when(bibliography).validate_references(references).thenReturn()
 
 
 def allow_validate_references(bibliography, when):
@@ -82,18 +76,13 @@ def expect_invalid_references(bibliography, when):
 
 
 def expect_signs(transliteration_search, when, sign="X", text=TEXT):
-    (
-        pydash.chain(text.chapters)
-        .flat_map(lambda chapter: chapter.lines)
-        .flat_map(lambda line: line.manuscripts)
-        .map(lambda manuscript: manuscript.line.atf)
-        .for_each(
-            lambda values: when(transliteration_search)
-            .convert_atf_to_sign_matrix(values)
-            .thenReturn([[sign]])
-        )
-        .value()
-    )
+    atf_lines = [manuscript.line.atf
+                 for chapter in text.chapters
+                 for line in chapter.lines
+                 for manuscript in line.manuscripts]
+
+    for atf in atf_lines:
+        when(transliteration_search).convert_atf_to_sign_matrix(atf).thenReturn([[sign]])
 
 
 def expect_invalid_signs(transliteration_search, when):

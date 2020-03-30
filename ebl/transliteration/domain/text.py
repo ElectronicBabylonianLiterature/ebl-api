@@ -1,4 +1,3 @@
-from functools import singledispatch
 from typing import FrozenSet, Iterable, List, Optional, Sequence, Tuple
 
 import attr
@@ -56,33 +55,22 @@ class Text:
         current: Label = (None, None, None, None)
         labels: List[Label] = []
 
-        @singledispatch
-        def visit_line(line: Line) -> Label:
-            return current
-
-        @visit_line.register
-        def visit_line_text(line: TextLine) -> Label:
-            labels.append((*current[:-1], line.line_number))
-            return current
-
-        @visit_line.register
-        def visit_line_column(line: ColumnAtLine) -> Label:
-            return (line.column_label, *current[1:])
-
-        @visit_line.register
-        def visit_line_surface(line: SurfaceAtLine) -> Label:
-            return (current[0], line.surface_label, *current[2:])
-
-        @visit_line.register
-        def visit_line_object(line: ObjectAtLine) -> Label:
-            return (
+        handlers = {
+            TextLine: lambda line: (current,
+                                    [*labels, (*current[:-1], line.line_number)]),
+            ColumnAtLine: lambda line: ((line.column_label, *current[1:]), labels),
+            SurfaceAtLine: lambda line: ((current[0], line.surface_label, *current[2:]),
+                                         labels),
+            ObjectAtLine: lambda line: ((
                 *current[:2],
                 (line.object_label, frozenset(line.status), line.text),
                 current[-1],
-            )
+            ), labels),
+        }
 
         for line in self.lines:
-            current = visit_line(line)
+            if type(line) in handlers:
+                current, labels = handlers[type(line)](line)
 
         return labels
 

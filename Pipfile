@@ -32,21 +32,18 @@ pytest = "*"
 pytest-cov = "*"
 mongomock = "*"
 freezegun = "*"
-mypy = "==0.760"
-mypy-extensions = "*"
 pytest-watch = "*"
 pytest-mockito = "*"
 factory-boy = "*"
 rope = "*"
 flake8 = "*"
 pyhamcrest = "*"
-httpretty = "*"
-black = "*"
 flake8-bugbear = "*"
 pre-commit = "*"
+httpretty = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.6"
 
 [scripts]
 test = "pytest --cov=ebl --cov-report term --cov-report xml"

@@ -1,5 +1,6 @@
-from dataclasses import dataclass
 from typing import List
+
+import attr
 
 from lark import Token
 from lark.visitors import Transformer, v_args
@@ -18,7 +19,7 @@ from ebl.transliteration.domain.at_line import (
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
 
-@dataclass
+@attr.s(frozen=True, auto_attribs=True)
 class ObjectData:
     object: atf.Object
     text: str = ""

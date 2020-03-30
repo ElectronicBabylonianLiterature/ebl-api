@@ -14,9 +14,50 @@ from ebl.transliteration.domain.lemmatization import (
 
 
 class TokenVisitor(ABC):
-    @abstractmethod
     def visit(self, token: "Token") -> None:
-        ...
+        pass
+
+    def visit_word(self, word) -> None:
+        self.visit(word)
+
+    def visit_language_shift(self, shift) -> None:
+        self.visit(shift)
+
+    def visit_document_oriented_gloss(self, gloss) -> None:
+        self.visit(gloss)
+
+    def visit_broken_away(self, broken_away) -> None:
+        self.visit(broken_away)
+
+    def visit_perhaps_broken_away(self, broken_away) -> None:
+        self.visit(broken_away)
+
+    def visit_accidental_omission(self, omission) -> None:
+        self.visit(omission)
+
+    def visit_intentional_omission(self, omission) -> None:
+        self.visit(omission)
+
+    def visit_removal(self, removal) -> None:
+        self.visit(removal)
+
+    def visit_erasure(self, erasure):
+        self.visit(erasure)
+
+    def visit_divider(self, divider) -> None:
+        self.visit(divider)
+
+    def visit_commentary_protocol(self, protocol) -> None:
+        self.visit(protocol)
+
+    def visit_variant(self, variant) -> None:
+        self.visit(variant)
+
+    def visit_gloss(self, gloss) -> None:
+        self.visit(gloss)
+
+    def visit_named_sign(self, named_sign) -> None:
+        self.visit(named_sign)
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -105,6 +146,9 @@ class LanguageShift(ValueToken):
     def normalized(self):
         return self.value == LanguageShift._normalization_shift
 
+    def accept(self, visitor: "TokenVisitor") -> None:
+        visitor.visit_language_shift(self)
+
 
 @attr.s(frozen=True)
 class UnknownNumberOfSigns(Token):
@@ -127,6 +171,9 @@ class CommentaryProtocol(ValueToken):
     @property
     def protocol(self):
         return atf.CommentaryProtocol(self.value)
+
+    def accept(self, visitor: "TokenVisitor") -> None:
+        visitor.visit_commentary_protocol(self)
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -166,6 +213,9 @@ class Variant(Token):
     @property
     def parts(self):
         return self.tokens
+
+    def accept(self, visitor: "TokenVisitor") -> None:
+        visitor.visit_variant(self)
 
 
 @attr.s(auto_attribs=True, frozen=True)

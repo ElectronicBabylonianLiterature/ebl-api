@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from enum import Enum
-from functools import singledispatchmethod  # type: ignore
 from typing import Optional, Union, Tuple
 
 import attr
@@ -92,20 +91,19 @@ class ScopeContainer:
         content_value = ScopeContainer.to_value(self.content)
         return f"{content_value}{text}"
 
-    @singledispatchmethod
     @staticmethod
     def to_value(enum) -> str:
-        return enum.value
+        if isinstance(enum, atf.Surface):
+            return enum.atf
+        else:
+            return enum.value
 
-    @staticmethod
-    @to_value.register
-    def tuple_to_atf(enum: atf.Surface) -> str:
-        return enum.value[0]
+
+Range = Tuple[int, int]
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class StateDollarLine(DollarLine):
-    Range = Tuple[int, int]
     qualification: Optional[atf.Qualification]
     extent: Optional[Union[atf.Extent, int, Range]]
     scope: Optional[ScopeContainer]
@@ -128,22 +126,13 @@ class StateDollarLine(DollarLine):
             ]
         )
 
-    @singledispatchmethod
     @staticmethod
     def to_atf(column) -> str:
-        return str(column)
-
-    @staticmethod
-    @to_atf.register
-    def tuple_to_atf(column: tuple) -> str:
-        return f"{column[0]}-{column[1]}"
-
-    @staticmethod
-    @to_atf.register
-    def enum_to_atf(column: Enum) -> str:
-        return column.value
-
-    @staticmethod
-    @to_atf.register
-    def scope_container_to_atf(column: ScopeContainer) -> str:
-        return column.value
+        if isinstance(column, tuple):
+            return f"{column[0]}-{column[1]}"
+        elif isinstance(column, Enum):
+            return column.value
+        elif isinstance(column, ScopeContainer):
+            return column.value
+        else:
+            return str(column)
