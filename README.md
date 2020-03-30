@@ -20,25 +20,17 @@ Requirements:
 ```shell script
 pip install pipenv
 pipenv install --dev
-pipenv run pre-commit install
 ```
 
 ## Codestyle
 
-Use [Black](https://black.readthedocs.io/en/stable/) code style. Line
-length is 88, and bugbear B950 is used instead of E501. 
-
-PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be 
-disabled. PyCharm should not optimize imports, because the result does not match
-black code style.
-
-All files can be formatted with `pipenv run black ebl`.
+Line length is 88, and bugbear B950 is used instead of E501.  PEP8 checks should be 
+enabled in PyCharm, but E501, E203, and E231 should be disabled.
 
 ## Running the tests
 
 ```shell script
 pipenv run flake8
-pipenv run mypy -p ebl
 pipenv run test
 ```
 
@@ -132,12 +124,6 @@ pipenv run  python -m ebl.fragmentarium.update_fragments
 ## Type hints
 
 Use type hints in new code and add the to old code when making changes.
-
-Type checks can be run with `mypy`:
-
-```shell script
-pipenv run mypy -p ebl
-```
 
 ## Package dependencies
 
