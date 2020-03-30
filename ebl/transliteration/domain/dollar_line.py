@@ -99,9 +99,11 @@ class ScopeContainer:
             return enum.value
 
 
+Range = Tuple[int, int]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class StateDollarLine(DollarLine):
-    Range = Tuple[int, int]
     qualification: Optional[atf.Qualification]
     extent: Optional[Union[atf.Extent, int, Range]]
     scope: Optional[ScopeContainer]

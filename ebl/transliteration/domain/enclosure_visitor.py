@@ -176,7 +176,7 @@ class EnclosureUpdater(TokenVisitor):
         self._append_token(attr.evolve(new_token, parts=visited_parts))
 
     def visit_accidental_omission(
-        self, token: None
+        self, token: AccidentalOmission
     ) -> None:
         new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.ACCIDENTAL_OMISSION)
@@ -194,7 +194,7 @@ class EnclosureUpdater(TokenVisitor):
         self._update_enclosures(token, EnclosureType.REMOVAL)
         self._append_token(new_token)
 
-    def visit_broken_away(self, token: BrokenAway) -> BrokenAway:
+    def visit_broken_away(self, token: BrokenAway) -> None:
         new_token = self._set_enclosure_type(token)
         self._update_enclosures(token, EnclosureType.BROKEN_AWAY)
         self._append_token(new_token)
