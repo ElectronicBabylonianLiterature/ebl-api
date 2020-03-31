@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.enclosure_tokens import (

@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.atf import Atf

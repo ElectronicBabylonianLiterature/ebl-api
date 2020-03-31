@@ -1,8 +1,8 @@
 import json
 
 import attr
-import falcon
-import pytest
+import falcon  # pyre-ignore
+import pytest  # pyre-ignore
 
 from ebl.corpus.domain.enums import (
     ManuscriptType,

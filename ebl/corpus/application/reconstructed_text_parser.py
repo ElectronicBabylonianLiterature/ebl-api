@@ -1,7 +1,7 @@
 from typing import Optional
 
-import pydash
-from parsy import (
+import pydash  # pyre-ignore
+from parsy import (  # pyre-ignore
     ParseError,
     alt,
     char_from,

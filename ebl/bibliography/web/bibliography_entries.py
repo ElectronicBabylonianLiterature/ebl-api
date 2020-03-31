@@ -1,6 +1,6 @@
 from typing import Optional, Tuple
 
-import falcon
+import falcon  # pyre-ignore
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 
@@ -14,7 +14,7 @@ class BibliographyResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "read:bibliography")
-    def on_get(self, req: Request, resp: Response) -> None:
+    def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
         resp.media = self._bibliography.search(*self._parse_search_request(req))
 
     @staticmethod
@@ -48,7 +48,7 @@ class BibliographyResource:
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response) -> None:
+    def on_post(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
         bibliography_entry = req.media
         self._bibliography.create(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
@@ -61,12 +61,12 @@ class BibliographyEntriesResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "read:bibliography")
-    def on_get(self, _req, resp: Response, id_: str) -> None:
+    def on_get(self, _req, resp: Response, id_: str) -> None:  # pyre-ignore[11]
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response, id_: str) -> None:
+    def on_post(self, req: Request, resp: Response, id_: str) -> None:  # pyre-ignore[11]
         entry = {**req.media, "id": id_}
         self._bibliography.update(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT

@@ -1,5 +1,5 @@
-import pytest
-from mockito import spy2, unstub, verifyZeroInteractions
+import pytest  # pyre-ignore
+from mockito import spy2, unstub, verifyZeroInteractions  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError

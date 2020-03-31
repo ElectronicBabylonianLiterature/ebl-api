@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.enclosure_tokens import Erasure
 from ebl.transliteration.domain.lark_parser import parse_erasure

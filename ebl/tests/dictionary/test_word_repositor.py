@@ -1,5 +1,5 @@
-import pydash
-import pytest
+import pydash  # pyre-ignore
+import pytest  # pyre-ignore
 
 from ebl.errors import NotFoundError
 

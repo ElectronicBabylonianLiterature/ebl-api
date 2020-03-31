@@ -1,7 +1,7 @@
 from typing import Mapping, Type
 
-from marshmallow import EXCLUDE, Schema, fields, post_load, validate
-from marshmallow_oneofschema import OneOfSchema
+from marshmallow import EXCLUDE, Schema, fields, post_load, validate  # pyre-ignore
+from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
 from ebl.transliteration.domain.line_number import (
     LineNumber,
@@ -9,7 +9,7 @@ from ebl.transliteration.domain.line_number import (
 )
 
 
-class LineNumberSchema(Schema):
+class LineNumberSchema(Schema):  # pyre-ignore[11]
     number = fields.Integer(required=True, validate=validate.Range(min=0))
     has_prime = fields.Boolean(required=True, data_key="hasPrime")
     prefix_modifier = fields.String(
@@ -35,7 +35,7 @@ class LineNumberSchema(Schema):
         )
 
 
-class LineNumberRangeSchema(Schema):
+class LineNumberRangeSchema(Schema):  # pyre-ignore[11]
     start = fields.Nested(LineNumberSchema, required=True, unknown=EXCLUDE)
     end = fields.Nested(LineNumberSchema, required=True, unknown=EXCLUDE)
 
@@ -44,9 +44,9 @@ class LineNumberRangeSchema(Schema):
         return LineNumberRange(data["start"], data["end"],)
 
 
-class OneOfLineNumberSchema(OneOfSchema):
+class OneOfLineNumberSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[Schema]] = {
+    type_schemas: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
         "LineNumber": LineNumberSchema,
         "LineNumberRange": LineNumberRangeSchema,
     }

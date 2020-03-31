@@ -1,7 +1,7 @@
 import datetime
 
-import dictdiffer
-import pydash
+import dictdiffer  # pyre-ignore
+import pydash  # pyre-ignore
 
 from ebl.mongo_collection import MongoCollection
 

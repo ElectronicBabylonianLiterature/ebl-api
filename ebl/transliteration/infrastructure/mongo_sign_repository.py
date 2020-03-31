@@ -1,8 +1,8 @@
 from functools import reduce
 from typing import List, Optional, Sequence, Tuple, cast
 
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
-from pymongo.database import Database
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
+from pymongo.database import Database  # pyre-ignore
 
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -18,7 +18,7 @@ from ebl.transliteration.domain.sign_map import SignKey
 COLLECTION = "signs"
 
 
-class SignListRecordSchema(Schema):
+class SignListRecordSchema(Schema):  # pyre-ignore[11]
     name = fields.String(required=True)
     number = fields.String(required=True)
 
@@ -27,7 +27,7 @@ class SignListRecordSchema(Schema):
         return SignListRecord(**data)
 
 
-class ValueSchema(Schema):
+class ValueSchema(Schema):  # pyre-ignore[11]
     value = fields.String(required=True)
     sub_index = fields.Int(missing=None, data_key="subIndex")
 
@@ -40,7 +40,7 @@ class ValueSchema(Schema):
         return {key: value for key, value in data.items() if value is not None}
 
 
-class SignSchema(Schema):
+class SignSchema(Schema):  # pyre-ignore[11]
     name = fields.String(required=True, data_key="_id",)
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
@@ -94,7 +94,7 @@ def create_signs_query(keys: List[SignKey]):
 
 
 class MongoSignRepository(SignRepository):
-    def __init__(self, database: Database):
+    def __init__(self, database: Database):  # pyre-ignore[11]
         self._collection = MongoCollection(database, COLLECTION)
 
     def create(self, sign: Sign) -> str:

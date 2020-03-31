@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.corpus.domain.enclosure import (
     BROKEN_OFF_CLOSE,

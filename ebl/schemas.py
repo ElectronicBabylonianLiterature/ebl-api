@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Type, Optional, Any, List
 
-from marshmallow import fields
+from marshmallow import fields  # pyre-ignore
 
 
-class EnumField(fields.String, ABC):
+class EnumField(fields.String, ABC):  # pyre-ignore[11]
     default_error_messages = {
         "invalid_value": "Invalid value.",
         "not_enum": "Not a valid Enum.",

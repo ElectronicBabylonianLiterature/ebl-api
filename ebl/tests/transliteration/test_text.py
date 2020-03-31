@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf

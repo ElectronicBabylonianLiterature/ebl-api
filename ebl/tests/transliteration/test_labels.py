@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import (

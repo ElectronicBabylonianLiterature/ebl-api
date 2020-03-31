@@ -2,8 +2,8 @@ from typing import Sequence
 from itertools import chain
 
 import attr
-import pydash
-import regex
+import pydash  # pyre-ignore
+import regex  # pyre-ignore
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import Lines

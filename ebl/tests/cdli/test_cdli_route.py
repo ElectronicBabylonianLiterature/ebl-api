@@ -1,6 +1,6 @@
-import falcon
-import httpretty
-import pytest
+import falcon  # pyre-ignore
+import httpretty  # pyre-ignore
+import pytest  # pyre-ignore
 
 
 STATUSES = {200: True, 404: False}

@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.corpus.domain.enclosure import BROKEN_OFF_OPEN
 from ebl.corpus.domain.enums import (

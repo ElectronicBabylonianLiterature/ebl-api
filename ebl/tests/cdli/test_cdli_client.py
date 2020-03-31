@@ -1,5 +1,5 @@
-import httpretty
-import pytest
+import httpretty  # pyre-ignore
+import pytest  # pyre-ignore
 
 import ebl.cdli.infrastructure.cdli_client as client
 

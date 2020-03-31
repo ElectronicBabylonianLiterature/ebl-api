@@ -1,7 +1,7 @@
 
 from typing import MutableSequence, Sequence, Type
 
-from lark.lexer import Token
+from lark.lexer import Token  # pyre-ignore
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
@@ -82,7 +82,7 @@ class ErasureVisitor(TokenVisitor):
             self._tokens.append(token)
 
 
-class SignTransformer(Transformer):
+class SignTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
         return UnidentifiedSign.of(flags)
@@ -160,7 +160,7 @@ class SignTransformer(Transformer):
         return BrokenAway.open()
 
 
-class EnclosureTransformer(Transformer):
+class EnclosureTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_text_line__open_accidental_omission(self, _):
         return AccidentalOmission.open()
 
@@ -180,7 +180,7 @@ class EnclosureTransformer(Transformer):
         return Removal.close()
 
 
-class GlossTransformer(Transformer):
+class GlossTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__determinative(self, tree):
         tokens = _children_to_tokens(tree.children)
@@ -292,7 +292,7 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__erasure(self, erased, over_erased):
-        def set_erasure_state(tree: Tree, state: ErasureState):
+        def set_erasure_state(tree: Tree, state: ErasureState):  # pyre-ignore[11]
             visitor = ErasureVisitor(state)
             for child in tree.children:
                 visitor.visit(child)

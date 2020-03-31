@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from lark.lexer import Token
+from lark.lexer import Token  # pyre-ignore
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain.language import Language
@@ -13,13 +13,13 @@ from ebl.transliteration.domain.note_line import (
 )
 
 
-class NoteLineTransformer(Transformer):
+class NoteLineTransformer(Transformer):  # pyre-ignore[11]
     def note_line(self, children: Sequence[NotePart]) -> NoteLine:
         return NoteLine(children)
 
     @v_args(inline=True)
     def ebl_atf_note_line__language_part(
-        self, language: Token, text: str
+        self, language: Token, text: str  # pyre-ignore[11]
     ) -> LanguagePart:
         return LanguagePart(text, Language.of_atf(f"%{language}"))
 
@@ -31,5 +31,5 @@ class NoteLineTransformer(Transformer):
     def ebl_atf_note_line__string_part(self, text: str) -> StringPart:
         return StringPart(text)
 
-    def ebl_atf_note_line__note_text(self, children: Sequence[Token]) -> str:
+    def ebl_atf_note_line__note_text(self, children: Sequence[Token]) -> str:  # pyre-ignore[11]
         return "".join(children)

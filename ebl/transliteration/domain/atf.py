@@ -2,7 +2,7 @@ import unicodedata
 from enum import Enum
 from typing import Mapping, NewType, Optional
 
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.transliteration.domain.side import Side
 

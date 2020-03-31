@@ -1,5 +1,5 @@
 import attr
-from marshmallow import fields, pre_dump
+from marshmallow import fields, pre_dump  # pyre-ignore
 
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment

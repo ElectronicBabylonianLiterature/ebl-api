@@ -13,7 +13,7 @@ from typing import (
     TypeVar,
 )
 
-import pydash
+import pydash  # pyre-ignore
 
 T = TypeVar("T")
 DiffMapping = Callable[[T], str]
@@ -74,7 +74,7 @@ def take_new(_: T, new: T) -> T:
 
 class Merger(Generic[T]):
     def __init__(
-        self, map_: DiffMapping[T], inner_merge: Optional[InnerMerge[T]] = None
+        self, map_: DiffMapping[T], inner_merge: Optional[InnerMerge[T]] = None  # pyre-ignore[11]
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             "- ": lambda state: state.delete(),
@@ -82,8 +82,8 @@ class Merger(Generic[T]):
             "  ": lambda state: state.keep(),
             "? ": pydash.identity,
         }
-        self._map: DiffMapping[T] = map_
-        self._merge_strategy: InnerMerge[T] = inner_merge or take_new
+        self._map: DiffMapping[T] = map_  # pyre-ignore[11]
+        self._merge_strategy: InnerMerge[T] = inner_merge or take_new  # pyre-ignore[11]
 
     def _add_entry(self, state: Merge[T]) -> Merge[T]:
         new_entry = self._inner_merge(state.pop_edited(), state.current_new)

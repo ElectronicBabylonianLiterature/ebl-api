@@ -4,8 +4,8 @@ from collections import Counter
 from typing import Iterable, Sequence, Tuple, Union
 
 import attr
-import roman
-from parsy import char_from, regex, seq, string_from
+import roman  # pyre-ignore
+from parsy import char_from, regex, seq, string_from  # pyre-ignore
 
 from ebl.transliteration.domain.atf import Status, Surface
 

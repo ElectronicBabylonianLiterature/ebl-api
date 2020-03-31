@@ -1,4 +1,4 @@
-import pydash
+import pydash  # pyre-ignore
 
 
 def create_mongo_entry(entry):

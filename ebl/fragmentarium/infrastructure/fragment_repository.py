@@ -1,4 +1,4 @@
-from marshmallow import EXCLUDE
+from marshmallow import EXCLUDE  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError

@@ -1,7 +1,7 @@
 from typing import Sequence
 
-import factory.fuzzy
-import pydash
+import factory  # pyre-ignore.fuzzy  # pyre-ignore
+import pydash  # pyre-ignore
 
 from ebl.corpus.domain.enclosure import (
     Enclosure,
@@ -50,7 +50,7 @@ from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 
 
-class ManuscriptFactory(factory.Factory):
+class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Manuscript
 
@@ -68,7 +68,7 @@ class ManuscriptFactory(factory.Factory):
     )
 
 
-class ManuscriptLineFactory(factory.Factory):
+class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = ManuscriptLine
 
@@ -95,7 +95,7 @@ class ManuscriptLineFactory(factory.Factory):
     )
 
 
-class LineFactory(factory.Factory):
+class LineFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Line
 
@@ -122,7 +122,7 @@ class LineFactory(factory.Factory):
     )
 
 
-class ChapterFactory(factory.Factory):
+class ChapterFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Chapter
 
@@ -136,7 +136,7 @@ class ChapterFactory(factory.Factory):
     parser_version = ""
 
 
-class TextFactory(factory.Factory):
+class TextFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Text
 

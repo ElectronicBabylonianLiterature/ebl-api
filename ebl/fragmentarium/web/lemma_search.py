@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder

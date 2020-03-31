@@ -1,6 +1,6 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon import testing
-from falcon_auth import FalconAuthMiddleware, NoneAuthBackend
+from falcon_auth import FalconAuthMiddleware, NoneAuthBackend  # pyre-ignore
 
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.users.web.require_scope import require_scope

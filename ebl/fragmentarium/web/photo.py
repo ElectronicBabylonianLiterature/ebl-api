@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon import Response
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -11,7 +11,7 @@ class PhotoResource:
         self._finder = finder
 
     @falcon.before(require_scope, "read:fragments")
-    def on_get(self, _req, resp: Response, number: str):
+    def on_get(self, _req, resp: Response, number: str):  # pyre-ignore[11]
         """---
         description: Gets the photo of the fragment.
         responses:

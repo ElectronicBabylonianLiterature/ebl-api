@@ -1,12 +1,12 @@
 import os
 from base64 import b64decode
 
-import falcon
-import sentry_sdk
+import falcon  # pyre-ignore
+import sentry_sdk  # pyre-ignore
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
-from falcon_auth import FalconAuthMiddleware
-from pymongo import MongoClient
+from falcon_auth import FalconAuthMiddleware  # pyre-ignore
+from pymongo import MongoClient  # pyre-ignore
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
@@ -71,7 +71,7 @@ def create_context():
     return context
 
 
-def create_api(context: Context) -> falcon.API:
+def create_api(context: Context) -> falcon.API:  # pyre-ignore[11]
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
     api = falcon.API(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)

@@ -1,7 +1,7 @@
 from typing import cast, Sequence
 
-from lark.exceptions import ParseError as LarkParseError
-from parsy import ParseError as ParsyParseError
+from lark.exceptions import ParseError as LarkParseError  # pyre-ignore
+from parsy import ParseError as ParsyParseError  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import (
     TextDeserializer,

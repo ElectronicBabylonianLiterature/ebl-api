@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater

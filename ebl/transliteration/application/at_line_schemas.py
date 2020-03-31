@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load  # pyre-ignore
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.line_schemas import LineBaseSchema
@@ -32,7 +32,7 @@ class HeadingAtLineSchema(LineBaseSchema):
         return HeadingAtLine(data["number"])
 
 
-class LabelSchema(Schema):
+class LabelSchema(Schema):  # pyre-ignore[11]
     status = fields.List(NameEnum(atf.Status), required=True)
 
 

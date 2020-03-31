@@ -1,8 +1,8 @@
 import json
 
-import falcon
-import pydash
-import pytest
+import falcon  # pyre-ignore
+import pydash  # pyre-ignore
+import pytest  # pyre-ignore
 
 INVALID_ENTRIES = [
     lambda entry: {**entry, "title": 47},

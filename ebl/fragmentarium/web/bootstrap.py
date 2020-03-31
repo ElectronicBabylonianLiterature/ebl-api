@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.context import Context
 from ebl.dictionary.application.dictionary import Dictionary
@@ -24,7 +24,7 @@ from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
 
 
-def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
+def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyre-ignore[11]
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.fragment_repository,

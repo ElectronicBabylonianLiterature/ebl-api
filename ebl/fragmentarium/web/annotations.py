@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.fragment import FragmentNumber
@@ -12,7 +12,7 @@ class AnnotationResource:
 
     @falcon.before(require_scope, "annotate:fragments")
     @validate(AnnotationsSchema(), AnnotationsSchema())
-    def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):
+    def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):  # pyre-ignore[11]
         """---
         description: >-
           Creates or updates fragment image annotations. The fragment number in the
@@ -53,7 +53,7 @@ class AnnotationResource:
 
     @falcon.before(require_scope, "read:fragments")
     @validate(None, AnnotationsSchema())
-    def on_get(self, _, resp: falcon.Response, number: str):
+    def on_get(self, _, resp: falcon.Response, number: str):  # pyre-ignore[11]
         """---
         description: >-
           Retrieves fragment image annotations.

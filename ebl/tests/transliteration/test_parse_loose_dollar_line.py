@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.dollar_line import LooseDollarLine
 from ebl.transliteration.domain.lark_parser import parse_atf_lark

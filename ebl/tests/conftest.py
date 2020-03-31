@@ -4,12 +4,12 @@ import json
 from typing import Any, Dict, Mapping
 
 import attr
-import mongomock
-import pydash
-import pytest
-from dictdiffer import diff
-from falcon import testing
-from falcon_auth import NoneAuthBackend
+import mongomock  # pyre-ignore
+import pydash  # pyre-ignore
+import pytest  # pyre-ignore
+from dictdiffer import diff  # pyre-ignore
+from falcon import testing  # pyre-ignore
+from falcon_auth import NoneAuthBackend   # pyre-ignore
 
 import ebl.app
 import ebl.context

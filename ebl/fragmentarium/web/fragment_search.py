@@ -1,5 +1,5 @@
-import falcon
-import pydash
+import falcon  # pyre-ignore
+import pydash  # pyre-ignore
 
 from ebl.dispatcher import create_dispatcher
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -35,7 +35,7 @@ class FragmentSearch:
         )
 
     @falcon.before(require_scope, "read:fragments")
-    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]
         """---
         description: >-
           Finds fragments matching the given query.

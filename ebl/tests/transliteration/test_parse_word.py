@@ -1,5 +1,5 @@
-import pytest
-from lark import ParseError
+import pytest  # pyre-ignore
+from lark import ParseError  # pyre-ignore
 from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain import atf

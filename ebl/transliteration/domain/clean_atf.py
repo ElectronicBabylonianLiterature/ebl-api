@@ -2,7 +2,7 @@ import re
 from typing import List, Mapping
 
 import attr
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.transliteration.domain.atf import (
     ATF_EXTENSIONS,

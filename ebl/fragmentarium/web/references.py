@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
 from ebl.bibliography.domain.reference import REFERENCE_DTO_SCHEMA, Reference

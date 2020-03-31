@@ -1,4 +1,4 @@
-import factory.fuzzy
+import factory  # pyre-ignore.fuzzy  # pyre-ignore
 
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
 )
 
 
-class GeometryFactory(factory.Factory):
+class GeometryFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Geometry
 
@@ -18,7 +18,7 @@ class GeometryFactory(factory.Factory):
     height = factory.fuzzy.FuzzyFloat(0, 100)
 
 
-class AnnotationDataFactory(factory.Factory):
+class AnnotationDataFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = AnnotationData
 
@@ -33,7 +33,7 @@ class AnnotationDataFactory(factory.Factory):
     )
 
 
-class AnnotationFactory(factory.Factory):
+class AnnotationFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Annotation
 
@@ -41,7 +41,7 @@ class AnnotationFactory(factory.Factory):
     data = factory.SubFactory(AnnotationDataFactory)
 
 
-class AnnotationsFactory(factory.Factory):
+class AnnotationsFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Annotations
 

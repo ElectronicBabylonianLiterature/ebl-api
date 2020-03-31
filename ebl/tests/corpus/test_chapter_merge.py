@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.corpus.domain.enums import Classification, Stage
 from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart

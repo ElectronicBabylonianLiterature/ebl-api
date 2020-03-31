@@ -2,7 +2,7 @@ from collections import Counter
 from itertools import dropwhile
 from typing import Callable, Mapping, Sequence, Type
 
-from lark.lark import Lark
+from lark.lark import Lark  # pyre-ignore
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.visitors import v_args
 
@@ -110,7 +110,7 @@ def create_transliteration_error_data(error: Exception, line: str, line_number: 
     raise error
 
 
-def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
+def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):  # pyre-ignore[11]
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
     return {
@@ -121,7 +121,7 @@ def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     }
 
 
-def parse_error(error: ParseError, line: str, line_number: int):
+def parse_error(error: ParseError, line: str, line_number: int):  # pyre-ignore[11]
     return {"description": f"Invalid line: {error}", "lineNumber": line_number + 1}
 
 
@@ -129,7 +129,7 @@ def enclosure_error(error: EnclosureError, line: str, line_number: int):
     return {"description": f"Invalid brackets.", "lineNumber": line_number + 1}
 
 
-def visit_error(error: VisitError, line: str, line_number: int):
+def visit_error(error: VisitError, line: str, line_number: int):  # pyre-ignore[11]
     if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
         return {"description": f"Duplicate Status", "lineNumber": line_number + 1}
     else:

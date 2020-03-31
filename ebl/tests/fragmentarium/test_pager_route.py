@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.tests.factories.fragment import FragmentFactory
 

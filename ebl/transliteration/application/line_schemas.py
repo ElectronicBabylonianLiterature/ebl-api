@@ -1,4 +1,4 @@
-from marshmallow import EXCLUDE, Schema, fields, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_load  # pyre-ignore
 
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.note_line_part_schemas import (
@@ -10,7 +10,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine
 
 
-class LineBaseSchema(Schema):
+class LineBaseSchema(Schema):  # pyre-ignore[11]
     class Meta:
         unknown = EXCLUDE
 

@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon import Request, Response
 
 from ebl.cdli.infrastructure.cdli_client import (
@@ -11,7 +11,7 @@ from ebl.users.web.require_scope import require_scope
 
 class CdliResource:
     @falcon.before(require_scope, "read:fragments")
-    def on_get(self, req: Request, resp: Response, cdli_number: str):
+    def on_get(self, req: Request, resp: Response, cdli_number: str):  # pyre-ignore[11]
         """---
         description: Gets URLs for the given CDLI number
         responses:

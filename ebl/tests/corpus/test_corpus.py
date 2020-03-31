@@ -1,5 +1,5 @@
 import attr
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart

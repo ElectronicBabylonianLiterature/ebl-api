@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Mapping, Type
 
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load  # pyre-ignore
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.line_schemas import LineBaseSchema
@@ -51,7 +51,7 @@ class SealDollarLineSchema(LineBaseSchema):
         return SealDollarLine(data["number"])
 
 
-class ScopeContainerSchema(Schema):
+class ScopeContainerSchema(Schema):  # pyre-ignore[11]
     type = fields.Function(
         lambda scope_container: type(scope_container.content).__name__,
         lambda value: value,

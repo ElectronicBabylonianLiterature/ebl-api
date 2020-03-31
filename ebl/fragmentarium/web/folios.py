@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon import Request, Response
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -18,7 +18,7 @@ class FoliosResource:
         self._finder = finder
 
     @falcon.before(require_scope, "read:fragments")
-    def on_get(self, req: Request, resp: Response, name: str, number: str):
+    def on_get(self, req: Request, resp: Response, name: str, number: str):  # pyre-ignore[11]
         """---
         description: Gets the folio image.
         responses:

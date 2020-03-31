@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (

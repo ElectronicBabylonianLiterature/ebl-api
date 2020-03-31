@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from typing import Mapping, Type
 
-import pydash
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
-from marshmallow_oneofschema import OneOfSchema
+import pydash  # pyre-ignore
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
+from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
@@ -53,7 +53,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-class BaseTokenSchema(Schema):
+class BaseTokenSchema(Schema):  # pyre-ignore[11]
     class Meta:
         unknown = EXCLUDE
 
@@ -422,7 +422,7 @@ class LinguisticGlossSchema(GlossSchema):
         )
 
 
-class OneOfTokenSchema(OneOfSchema):
+class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
         "Token": ValueTokenSchema,

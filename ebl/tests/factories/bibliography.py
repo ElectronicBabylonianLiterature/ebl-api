@@ -1,4 +1,4 @@
-import factory.fuzzy
+import factory  # pyre-ignore.fuzzy  # pyre-ignore
 
 from ebl.bibliography.domain.reference import (
     BibliographyId,
@@ -8,7 +8,7 @@ from ebl.bibliography.domain.reference import (
 from ebl.tests.factories.collections import TupleFactory
 
 
-class ReferenceFactory(factory.Factory):
+class ReferenceFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Reference
 

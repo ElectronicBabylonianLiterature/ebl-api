@@ -1,7 +1,7 @@
 from typing import Callable, Iterable, Sequence, Type, TypeVar
 
 import attr
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken

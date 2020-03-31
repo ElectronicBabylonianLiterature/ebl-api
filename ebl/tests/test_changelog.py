@@ -1,4 +1,4 @@
-from freezegun import freeze_time
+from freezegun import freeze_time  # pyre-ignore
 
 
 COLLECTION = "changelog"

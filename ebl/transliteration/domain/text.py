@@ -3,7 +3,7 @@ from typing import (
 )
 
 import attr
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object
