@@ -8,7 +8,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
