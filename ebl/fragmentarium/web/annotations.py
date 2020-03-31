@@ -12,7 +12,12 @@ class AnnotationResource:
 
     @falcon.before(require_scope, "annotate:fragments")
     @validate(AnnotationsSchema(), AnnotationsSchema())
-    def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):  # pyre-ignore[11]
+    def on_post(
+        self,
+        req: falcon.Request,  # pyre-ignore[11]
+        resp: falcon.Response,  # pyre-ignore[11]
+        number: str
+    ):
         """---
         description: >-
           Creates or updates fragment image annotations. The fragment number in the

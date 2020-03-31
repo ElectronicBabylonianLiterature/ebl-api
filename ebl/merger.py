@@ -74,7 +74,9 @@ def take_new(_: T, new: T) -> T:
 
 class Merger(Generic[T]):
     def __init__(
-        self, map_: DiffMapping[T], inner_merge: Optional[InnerMerge[T]] = None  # pyre-ignore[11]
+        self,
+        map_: DiffMapping[T],  # pyre-ignore[11]
+        inner_merge: Optional[InnerMerge[T]] = None  # pyre-ignore[11]
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             "- ": lambda state: state.delete(),

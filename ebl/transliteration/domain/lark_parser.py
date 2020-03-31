@@ -110,7 +110,11 @@ def create_transliteration_error_data(error: Exception, line: str, line_number: 
     raise error
 
 
-def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):  # pyre-ignore[11]
+def unexpected_input_error(
+    error: UnexpectedInput,  # pyre-ignore[11]
+    line: str,
+    line_number: int
+):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
     return {

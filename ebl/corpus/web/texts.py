@@ -136,6 +136,12 @@ class TextResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "read:texts")
-    def on_get(self, _, resp: falcon.Response, category: str, index: str) -> None:  # pyre-ignore[11]
+    def on_get(
+        self,
+        _,
+        resp: falcon.Response,  # pyre-ignore[11]
+        category: str,
+        index: str
+    ) -> None:
         text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(text)

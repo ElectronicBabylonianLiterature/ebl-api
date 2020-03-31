@@ -6,7 +6,8 @@ from marshmallow import Schema  # pyre-ignore
 
 
 def validate(
-    req_schema: Optional[Schema] = None, resp_schema: Optional[Schema] = None,  # pyre-ignore[11]
+    req_schema: Optional[Schema] = None,  # pyre-ignore[11]
+    resp_schema: Optional[Schema] = None,  # pyre-ignore[11]
 ):
     def decorator(func):
         @wraps(func)
