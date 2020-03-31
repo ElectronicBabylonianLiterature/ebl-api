@@ -94,6 +94,7 @@ divisions = "m=division ", free-text, [" ", number];
 composite = composite_start | composite_end;
 composite_start = "div ", free-text, [" ", number];
 composite_end = "end ", free-text;
+```
 
 ## $-lines
 
