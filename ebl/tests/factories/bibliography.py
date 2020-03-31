@@ -1,4 +1,4 @@
-import factory  # pyre-ignore.fuzzy  # pyre-ignore
+import factory.fuzzy  # pyre-ignore
 
 from ebl.bibliography.domain.reference import (
     BibliographyId,

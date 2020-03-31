@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import factory  # pyre-ignore.fuzzy  # pyre-ignore
+import factory.fuzzy  # pyre-ignore
 import pydash  # pyre-ignore
 
 from ebl.corpus.domain.enclosure import (

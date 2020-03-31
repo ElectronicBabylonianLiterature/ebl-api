@@ -1,4 +1,4 @@
-import factory  # pyre-ignore.fuzzy  # pyre-ignore  # pyre-ignore
+import factory.fuzzy  # pyre-ignore  # pyre-ignore
 
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.collections import TupleFactory
