@@ -27,7 +27,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -336,77 +336,6 @@ LINES = [
             ),
         },
     ),
-    (
-        TextLine.of_legacy_iterable(
-            LineNumberLabel.from_atf("1."),
-            [
-                DocumentOrientedGloss.open(),
-                Word.of([Reading.of_name("bu")]),
-                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
-                DocumentOrientedGloss.close(),
-            ],
-        ),
-        {
-            "type": "TextLine",
-            "prefix": "1.",
-            "lineNumber": None,
-            "content": OneOfTokenSchema().dump(
-                [
-                    DocumentOrientedGloss.open(),
-                    Word.of(
-                        [
-                            Reading.of(
-                                (
-                                    ValueToken(
-                                        frozenset(
-                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                        ),
-                                        "bu",
-                                    ),
-                                )
-                            ).set_enclosure_type(
-                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ]
-                    ).set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                    LoneDeterminative.of(
-                        [
-                            Determinative.of(
-                                [
-                                    Reading.of(
-                                        (
-                                            ValueToken(
-                                                frozenset(
-                                                    {
-                                                        EnclosureType.DOCUMENT_ORIENTED_GLOSS
-                                                    }
-                                                ),
-                                                "d",
-                                            ),
-                                        )
-                                    ).set_enclosure_type(
-                                        frozenset(
-                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                        )
-                                    ),
-                                ]
-                            ).set_enclosure_type(
-                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ],
-                    ).set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                    DocumentOrientedGloss.close().set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                ],
-                many=True,
-            ),
-        },
-    ),
     (EmptyLine(), {"type": "EmptyLine", "prefix": "", "content": []}),
     (
         LooseDollarLine("end of side"),
@@ -556,18 +485,6 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "prefix": "$",
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
-        },
-    ),
-    (
-        TextLine.of_legacy_iterable(
-            LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")]),],
-        ),
-        {
-            "type": "TextLine",
-            "prefix": "1.",
-            "content": [
-                OneOfTokenSchema().dump(Word.of([Reading.of((ValueToken.of("bu",),)),]))
-            ],
         },
     ),
 ]

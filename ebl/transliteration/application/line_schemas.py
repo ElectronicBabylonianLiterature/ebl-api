@@ -5,7 +5,6 @@ from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine
@@ -21,15 +20,14 @@ class LineBaseSchema(Schema):
 
 class TextLineSchema(LineBaseSchema):
     line_number = fields.Nested(
-        OneOfLineNumberSchema, missing=None, data_key="lineNumber",
+        OneOfLineNumberSchema, rquired=True, data_key="lineNumber",
     )
 
     @post_load
     def make_line(self, data, **kwargs):
-        return TextLine.of_legacy_iterable(
-            LineNumberLabel.from_atf(data["prefix"]),
-            data["content"],
+        return TextLine.of_iterable(
             data["line_number"],
+            data["content"],
         )
 
 

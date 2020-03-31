@@ -33,6 +33,7 @@ from ebl.transliteration.domain.labels import (
     LineNumberLabel,
     SurfaceLabel,
 )
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
@@ -62,7 +63,7 @@ LINE_NUMBER = LineNumberLabel("1")
 LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
-    "1.",
+    LineNumber(1),
     (
         Word.of(
             [
@@ -219,7 +220,7 @@ def test_missing_manuscripts_are_invalid():
 )
 def test_invalid_labels(labels: Sequence[Label]):
     with pytest.raises(ValueError):
-        ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine())
+        ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine(LineNumber(1)))
 
 
 def test_invalid_reconstruction():

@@ -4,7 +4,7 @@ from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.sign_tokens import Reading
@@ -21,8 +21,8 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 def test_dump_line():
     text = Text(
         (
-            TextLine.of_legacy_iterable(
-                LineNumberLabel.from_atf("1."),
+            TextLine.of_iterable(
+                LineNumber(1),
                 [
                     Word.of(
                         parts=[
@@ -51,8 +51,8 @@ def test_dump_line():
         [EmptyLine()],
         [ControlLine.of_single("$", ValueToken.of(" single ruling"))],
         [
-            TextLine.of_legacy_iterable(
-                LineNumberLabel.from_atf("1."),
+            TextLine.of_iterable(
+                LineNumber(1),
                 [
                     Word.of(
                         unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")],

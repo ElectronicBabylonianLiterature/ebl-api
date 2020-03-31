@@ -7,7 +7,7 @@ import pytest
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import Joiner
@@ -58,8 +58,8 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                         manuscripts=(
                             attr.evolve(
                                 text.chapters[0].lines[0].manuscripts[0],
-                                line=TextLine.of_legacy_iterable(
-                                    LineNumberLabel.from_atf("1."),
+                                line=TextLine.of_iterable(
+                                    LineNumber(1),
                                     (
                                         Word.of(
                                             [

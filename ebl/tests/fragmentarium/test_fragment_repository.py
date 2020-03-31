@@ -18,7 +18,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     PerhapsBrokenAway,
 )
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
@@ -36,7 +35,7 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
     text=Text(
         (
             TextLine(
-                "1'.",
+                LineNumber(1),
                 (
                     Word.of(
                         [Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),),
@@ -52,7 +51,6 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
                         unique_lemma=(WordId("ūsu I"),),
                     ),
                 ),
-                LineNumber(1),
             ),
         )
     ),
@@ -177,7 +175,7 @@ def test_statistics(database, fragment_repository):
                     text=Text(
                         (
                             TextLine(
-                                "1.",
+                                LineNumber(1),
                                 (
                                     Word.of([Reading.of_name("first")]),
                                     Word.of([Reading.of_name("line")]),
@@ -195,20 +193,17 @@ def test_statistics(database, fragment_repository):
                         (
                             ControlLine("$", (ValueToken.of("ignore"),)),
                             TextLine(
-                                "1.",
-                                (Word.of([Reading.of_name("second")]),),
                                 LineNumber(1),
+                                (Word.of([Reading.of_name("second")]),),
                             ),
                             TextLine(
-                                "2.",
-                                (Word.of([Reading.of_name("third")]),),
                                 LineNumber(2),
+                                (Word.of([Reading.of_name("third")]),),
                             ),
                             ControlLine("$", (ValueToken.of("ignore"),),),
                             TextLine(
-                                "3.",
-                                (Word.of([Reading.of_name("fourth")]),),
                                 LineNumber(3),
+                                (Word.of([Reading.of_name("fourth")]),),
                             ),
                         )
                     )
@@ -331,8 +326,8 @@ def test_find_lemmas_ignores_in_value(parts, fragment_repository):
     fragment = FragmentFactory.build(
         text=Text.of_iterable(
             [
-                TextLine.of_legacy_iterable(
-                    LineNumberLabel.from_atf("1'."),
+                TextLine.of_iterable(
+                    LineNumber(1, True),
                     [Word.of(parts, unique_lemma=(WordId("ana I"),))],
                 )
             ]

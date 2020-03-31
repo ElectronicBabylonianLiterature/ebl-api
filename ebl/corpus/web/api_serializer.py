@@ -34,12 +34,13 @@ class ApiSerializer(TextSerializer):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         line = manuscript_line.line
+        atf_line_number = line.line_number.atf
         self.line["manuscripts"].append(
             {
                 "manuscriptId": manuscript_line.manuscript_id,
                 "labels": [label.to_value() for label in manuscript_line.labels],
-                "number": line.line_number_label.to_value(),
-                "atf": line.atf[len(line.line_number_label.to_atf()) + 1 :],
+                "number": LineNumberLabel.from_atf(atf_line_number).to_value(),
+                "atf": line.atf[len(atf_line_number) + 1 :],
                 "atfTokens": TextLineSchema().dump(manuscript_line.line)["content"],
             }
         )
