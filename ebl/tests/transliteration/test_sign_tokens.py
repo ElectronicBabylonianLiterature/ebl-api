@@ -193,26 +193,6 @@ def test_reading(
     assert_token_serialization(reading, serialized)
 
 
-def test_load_old_style_reading():
-    name = "kur"
-    sub_index = 1
-    flags = []
-    modifiers = []
-    sign = "KUR"
-    reading = Reading.of_name(name, sub_index, modifiers, flags, ValueToken.of(sign))
-
-    serialized = {
-        "type": "Reading",
-        "value": "kur(KUR)",
-        "name": name,
-        "subIndex": sub_index,
-        "modifiers": modifiers,
-        "flags": flags,
-        "sign": sign,
-    }
-    assert OneOfTokenSchema().load(serialized) == reading
-
-
 @pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
 @pytest.mark.skip
 def test_invalid_reading(name, sub_index):

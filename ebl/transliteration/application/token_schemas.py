@@ -29,7 +29,6 @@ from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Grapheme,
     Logogram,
-    NamedSign,
     Number,
     Reading,
     UnclearSign,
@@ -41,7 +40,6 @@ from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,
     Tabulation,
-    Token,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
@@ -263,36 +261,23 @@ class InWordNewlineSchema(BaseTokenSchema):
         return InWordNewline(frozenset(data["enclosure_type"]))
 
 
-def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
-    return None if named_sign.sign is None else OneOfTokenSchema().dump(named_sign.sign)
-
-
-def _load_sign(sign) -> Optional[Token]:
-    if sign is None:
-        return None
-    elif isinstance(sign, str):
-        return ValueToken.of(sign)
-    else:
-        return OneOfTokenSchema().load(sign)
-
-
 class NamedSignSchema(BaseTokenSchema):
     value = fields.String(required=True)
     name = fields.String(required=True)
     name_parts = fields.List(
-        fields.Nested(lambda: OneOfTokenSchema()), missing=None, data_key="nameParts"
+        fields.Nested(lambda: OneOfTokenSchema()), required=True, data_key="nameParts"
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Function(_dump_sign, _load_sign, missing=None)
+    sign = fields.Nested(lambda: OneOfTokenSchema(), allow_none=True)
 
 
 class ReadingSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Reading.of(
-            data["name_parts"] or (ValueToken.of(data["name"]),),
+            data["name_parts"],
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -306,7 +291,7 @@ class LogogramSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Logogram.of(
-            data["name_parts"] or (ValueToken.of(data["name"]),),
+            data["name_parts"],
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -321,7 +306,7 @@ class NumberSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
-            data["name_parts"] or (ValueToken.of(data["name"]),),
+            data["name_parts"],
             data["modifiers"],
             data["flags"],
             data["sign"],
