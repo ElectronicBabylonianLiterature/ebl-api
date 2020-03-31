@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Mapping, Optional, Type
+from typing import Mapping, Type
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load

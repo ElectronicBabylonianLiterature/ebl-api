@@ -6,7 +6,7 @@ import attr
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.side import Side
-from ebl.transliteration.domain.tokens import Token, ValueToken, TokenVisitor
+from ebl.transliteration.domain.tokens import Token, TokenVisitor
 
 
 E = TypeVar("E", bound="Enclosure")
