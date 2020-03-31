@@ -293,8 +293,6 @@ class LogogramSchema(NamedSignSchema):
 
 
 class NumberSchema(NamedSignSchema):
-    numeral = fields.Integer(load_only=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
