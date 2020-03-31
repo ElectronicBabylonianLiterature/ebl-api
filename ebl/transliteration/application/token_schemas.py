@@ -43,6 +43,7 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
+    Token
 )
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
@@ -79,10 +80,17 @@ class LanguageShiftSchema(BaseTokenSchema):
         return LanguageShift(frozenset(data["enclosure_type"]), data["value"])
 
 
-class DocumentOrientedGlossSchema(BaseTokenSchema):
+class EnclosureSchema(BaseTokenSchema):
     value = fields.String(required=True)
-    side = NameEnum(Side, missing=None)
+    side = NameEnum(Side, required=True)
 
+    @abstractmethod
+    @post_load
+    def make_token(self, data, **kwargs) -> Token:
+        ...
+
+
+class DocumentOrientedGlossSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
@@ -96,10 +104,7 @@ class DocumentOrientedGlossSchema(BaseTokenSchema):
         )
 
 
-class BrokenAwaySchema(BaseTokenSchema):
-    value = fields.String(required=True)
-    side = NameEnum(Side, missing=None)
-
+class BrokenAwaySchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
@@ -113,10 +118,7 @@ class BrokenAwaySchema(BaseTokenSchema):
         )
 
 
-class PerhapsBrokenAwaySchema(BaseTokenSchema):
-    value = fields.String(required=True)
-    side = NameEnum(Side, missing=None)
-
+class PerhapsBrokenAwaySchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
@@ -128,16 +130,6 @@ class PerhapsBrokenAwaySchema(BaseTokenSchema):
                 frozenset(data["enclosure_type"])
             )
         )
-
-
-class EnclosureSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-    side = NameEnum(Side, required=True)
-
-    @abstractmethod
-    @post_load
-    def make_token(self, data, **kwargs) -> Gloss:
-        ...
 
 
 class AccidentalOmissionSchema(EnclosureSchema):
