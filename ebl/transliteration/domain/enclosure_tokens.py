@@ -9,16 +9,6 @@ from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.tokens import Token, ValueToken, TokenVisitor
 
 
-@attr.s(frozen=True)
-class OmissionOrRemoval(ValueToken):
-    """This class is deprecated and kept only for backwards compatibility.
-    Omission, AccidentalOmission, or Removal should be used instead."""
-
-    @property
-    def side(self) -> Side:
-        return Side.LEFT if (self.value in ["<(", "<", "<<"]) else Side.RIGHT
-
-
 E = TypeVar("E", bound="Enclosure")
 
 

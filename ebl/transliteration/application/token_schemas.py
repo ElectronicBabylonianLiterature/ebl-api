@@ -17,7 +17,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Gloss,
     IntentionalOmission,
     LinguisticGloss,
-    OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
     Removal,
@@ -131,17 +130,6 @@ class PerhapsBrokenAwaySchema(BaseTokenSchema):
                 frozenset(data["enclosure_type"])
             )
         )
-
-
-class OmissionOrRemovalSchema(BaseTokenSchema):
-    """This class is deprecated and kept only for backwards compatibility.
-    Omission, AccidentalOmission, or Removal should be used instead."""
-
-    value = fields.String(required=True)
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return OmissionOrRemoval(frozenset(data["enclosure_type"]), data["value"])
 
 
 class EnclosureSchema(BaseTokenSchema):
@@ -470,7 +458,6 @@ class OneOfTokenSchema(OneOfSchema):
         "DocumentOrientedGloss": DocumentOrientedGlossSchema,
         "BrokenAway": BrokenAwaySchema,
         "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
-        "OmissionOrRemoval": OmissionOrRemovalSchema,
         "AccidentalOmission": AccidentalOmissionSchema,
         "IntentionalOmission": IntentionalOmissionSchema,
         "Removal": RemovalSchema,
