@@ -60,9 +60,11 @@ class TokenVisitor(ABC):
         self.visit(named_sign)
 
 
+T = TypeVar("T", bound="Token")
+
+
 @attr.s(frozen=True, auto_attribs=True)
 class Token(ABC):
-    T = TypeVar("T", bound="Token")
     enclosure_type: AbstractSet[EnclosureType]
 
     @property

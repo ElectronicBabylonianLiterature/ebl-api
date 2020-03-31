@@ -16,6 +16,7 @@ from ebl.transliteration.domain.tokens import Token
 
 
 L = TypeVar("L", "TextLine", "Line")
+T = TypeVar("T")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -86,8 +87,8 @@ class TextLine(Line):
 
     def _update_tokens(
         self,
-        updates: Sequence[Line.T],
-        updater: Callable[[Token, Line.T], Token],
+        updates: Sequence[T],
+        updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
     ) -> "Line":
         if len(self.content) == len(updates):

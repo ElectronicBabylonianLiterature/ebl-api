@@ -1,6 +1,6 @@
 from collections import Counter
 from itertools import dropwhile
-from typing import Sequence
+from typing import Callable, Mapping, Sequence, Type
 
 from lark.lark import Lark
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
@@ -96,8 +96,8 @@ def parse_atf_lark(atf_):
     return text
 
 
-def create_transliteration_error_data(error, line: str, line_number: int):
-    handlers = {
+def create_transliteration_error_data(error: Exception, line: str, line_number: int):
+    handlers: Mapping[Type, Callable[[Exception, str, int], dict]] = {
         UnexpectedInput: unexpected_input_error,
         ParseError: parse_error,
         EnclosureError: enclosure_error,

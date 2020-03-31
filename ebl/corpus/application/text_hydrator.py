@@ -15,12 +15,19 @@ class TextHydrator(TextVisitor):
     def __init__(self, bibliography):
         super().__init__(TextVisitor.Order.POST)
         self._bibliography = bibliography
-        self.text = None
+        self._text = None
         self._chapters = []
         self._manuscripts = []
 
+    @property
+    def text(self) -> Text:
+        if self._text is None:
+            raise Defect("Trying to access text before a text was visited.")
+
+        return self._text
+
     def visit_text(self, text: Text) -> None:
-        self.text = attr.evolve(text, chapters=tuple(self._chapters))
+        self._text = attr.evolve(text, chapters=tuple(self._chapters))
         self._chapters = []
 
     def visit_chapter(self, chapter: Chapter) -> None:

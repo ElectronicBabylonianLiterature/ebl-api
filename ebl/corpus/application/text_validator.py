@@ -7,7 +7,7 @@ from ebl.corpus.domain.text import (
     ManuscriptLine,
     TextVisitor,
 )
-from ebl.errors import DataError
+from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.tokens import TokenVisitor
@@ -51,6 +51,20 @@ class TextValidator(TextVisitor):
         self._chapter = None
         self._line = None
 
+    @property
+    def line(self) -> Line:
+        if self._line is None:
+            raise Defect("Trying to access line before a line was visited.")
+
+        return self._line
+
+    @property
+    def chapter(self) -> Chapter:
+        if self._chapter is None:
+            raise Defect("Trying to access chapter before a chapter was visited.")
+
+        return self._chapter
+
     def visit_chapter(self, chapter: Chapter) -> None:
         self._chapter = chapter
 
@@ -65,7 +79,7 @@ class TextValidator(TextVisitor):
             self._transliteration_factory.create(manuscript_line.line.atf)
         except TransliterationError:
             raise invalid_atf(
-                self._chapter, self._line.number, manuscript_line.manuscript_id
+                self.chapter, self.line.number, manuscript_line.manuscript_id
             )
 
         alignment_validator = AlignmentVisitor()

@@ -104,7 +104,7 @@ class Variant(Value):
     def keys(self) -> Sequence[SignKey]:
         return [key for value in self.values for key in value.keys]
 
-    def to_sign(self, sign_map: SignMap, _) -> str:
+    def to_sign(self, sign_map: SignMap, is_deep: bool) -> str:
         return VARIANT_SEPARATOR.join(
             [value.to_sign(sign_map, False) for value in self.values]
         )

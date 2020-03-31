@@ -1,4 +1,5 @@
-from typing import Mapping, Type, Union
+from enum import Enum
+from typing import Mapping, Type
 
 from marshmallow import Schema, fields, post_load
 
@@ -71,7 +72,7 @@ class ScopeContainerSchema(Schema):
 
     def load_scope(self, type: str, content: str):
         scope_types: Mapping[
-            str, Union[Type[atf.Surface], Type[atf.Scope], Type[atf.Object]]
+            str, Type[Enum]
         ] = {"Surface": atf.Surface, "Scope": atf.Scope, "Object": atf.Object}
         return scope_types[type][content]
 

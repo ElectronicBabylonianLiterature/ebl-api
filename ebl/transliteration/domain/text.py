@@ -1,4 +1,6 @@
-from typing import FrozenSet, Iterable, List, Optional, Sequence, Tuple
+from typing import (
+    Callable, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
+)
 
 import attr
 import pydash
@@ -55,7 +57,7 @@ class Text:
         current: Label = (None, None, None, None)
         labels: List[Label] = []
 
-        handlers = {
+        handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
             TextLine: lambda line: (current,
                                     [*labels, (*current[:-1], line.line_number)]),
             ColumnAtLine: lambda line: ((line.column_label, *current[1:]), labels),

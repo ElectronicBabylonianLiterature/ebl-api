@@ -65,8 +65,8 @@ class AtfVisitor(TokenVisitor):
     def visit_accidental_omission(self, omission: IntentionalOmission) -> None:
         self._side(omission.side)(omission)
 
-    def visit_removal(self, omission: Removal) -> None:
-        self._side(omission.side)(omission)
+    def visit_removal(self, removal: Removal) -> None:
+        self._side(removal.side)(removal)
 
     def _side(self, side: Side) -> Callable[[Token], None]:
         return {Side.LEFT: self._left, Side.RIGHT: self._right}[side]
