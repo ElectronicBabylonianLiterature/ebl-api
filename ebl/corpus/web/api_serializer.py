@@ -18,7 +18,7 @@ from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 
 
@@ -41,6 +41,7 @@ class ApiSerializer(TextSerializer):
                 "labels": [label.to_value() for label in manuscript_line.labels],
                 "number": LineNumberLabel.from_atf(atf_line_number).to_value(),
                 "atf": line.atf[len(atf_line_number) + 1 :],
+                # pyre-ignore[16]
                 "atfTokens": TextLineSchema().dump(manuscript_line.line)["content"],
             }
         )
@@ -74,7 +75,7 @@ class ApiDeserializer(TextDeserializer):
         line = cast(TextLine, parse_line(f"{line_number} {atf}"))
         return ManuscriptLine(
             manuscript_line["manuscriptId"],
-            tuple(Label.parse(label) for label in manuscript_line["labels"]),
+            tuple(parse_label(label) for label in manuscript_line["labels"]),
             line,
         )
 

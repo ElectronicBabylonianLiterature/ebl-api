@@ -1,3 +1,4 @@
+from typing import Optional
 from collections import Counter
 
 from ebl.corpus.domain.text import (
@@ -48,22 +49,22 @@ class TextValidator(TextVisitor):
         super().__init__(TextVisitor.Order.PRE)
         self._bibliography = bibliography
         self._transliteration_factory = transliteration_factory
-        self._chapter = None
-        self._line = None
+        self._chapter: Optional[Chapter] = None
+        self._line: Optional[Line] = None
 
     @property
     def line(self) -> Line:
         if self._line is None:
             raise Defect("Trying to access line before a line was visited.")
 
-        return self._line
+        return self._line  # pyre-ignore[7]
 
     @property
     def chapter(self) -> Chapter:
         if self._chapter is None:
             raise Defect("Trying to access chapter before a chapter was visited.")
 
-        return self._chapter
+        return self._chapter  # pyre-ignore[7]
 
     def visit_chapter(self, chapter: Chapter) -> None:
         self._chapter = chapter

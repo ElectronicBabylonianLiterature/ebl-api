@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import cast, List, Optional
 
 import attr
 
@@ -15,8 +15,8 @@ class ChapterUpdater(TextVisitor):
 
     def update(self, text: Text) -> Text:
         text.accept(self)
-        if self._text:
-            return self._text
+        if self._text is not None:
+            return cast(Text, self._text)
         else:
             raise Defect("Result text was not set.")
 

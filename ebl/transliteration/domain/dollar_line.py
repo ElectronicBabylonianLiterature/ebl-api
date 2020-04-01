@@ -62,7 +62,7 @@ class RulingDollarLine(DollarLine):
 
     @property
     def _content_value(self) -> str:
-        status = f" {self.status.value}" if self.status else ""
+        status = f" {self.status.value}" if self.status else ""  # pyre-ignore[16]
         return f"{self.number.value} ruling{status}"
 
 

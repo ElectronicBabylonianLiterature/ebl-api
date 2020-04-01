@@ -69,10 +69,6 @@ class Label(ABC):
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         ...
 
-    @staticmethod
-    def parse(label: str) -> "Label":
-        return LABEL.parse(label)
-
     def to_value(self) -> str:
         return f"{self._label}{self._status_string}"
 
@@ -87,11 +83,11 @@ class ColumnLabel(Label):
 
     @staticmethod
     def from_label(column: str, status: Iterable[Status] = tuple()) -> "ColumnLabel":
-        return ColumnLabel(status, roman.fromRoman(column.upper()))
+        return ColumnLabel(status, roman.fromRoman(column.upper()))  # pyre-fixme[6]
 
     @staticmethod
     def from_int(column: int, status: Iterable[Status] = tuple()) -> "ColumnLabel":
-        return ColumnLabel(status, column)
+        return ColumnLabel(status, column)  # pyre-fixme[6]
 
     @property
     def _label(self) -> str:
@@ -126,7 +122,7 @@ class SurfaceLabel(Label):
     def from_label(
         surface: Surface, status: Iterable[Status] = tuple(), text: str = ""
     ) -> "SurfaceLabel":
-        return SurfaceLabel(status, surface, text)
+        return SurfaceLabel(status, surface, text)  # pyre-fixme[6]
 
     @property
     def _label(self) -> str:
@@ -197,3 +193,7 @@ LINE_NUMBER_LABEL = (
     regex(LINE_NUMBER_EXPRESSION).map(LineNumberLabel).desc("line number label")
 )
 LABEL = SURFACE_LABEL | COLUMN_LABEL | LINE_NUMBER_LABEL
+
+
+def parse_label(label: str) -> Label:
+    return LABEL.parse(label)
