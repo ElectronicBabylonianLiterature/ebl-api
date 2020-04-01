@@ -21,3 +21,16 @@ def test_valid_params(parameter, command):
 def test_invalid_params(parameters):
     with pytest.raises(DispatchError):
         DISPATCH(parameters)
+
+
+@pytest.mark.parametrize(
+    "parameters", [{}, {"invalid": "parameter"}, {"a": "a", "b": "b"}]
+)
+def test_key_error(parameters):
+    def raise_key_error(value):
+        raise KeyError(value)
+
+    parameter = "fail"
+    message = "key error"
+    with pytest.raises(KeyError, match=message):
+        create_dispatcher({parameter: raise_key_error})({parameter: message})

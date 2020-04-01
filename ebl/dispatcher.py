@@ -18,11 +18,14 @@ def get_parameter(parameters: dict) -> Tuple[str, str]:
 
 
 def create_dispatcher(commands: Mapping[str, Command]) -> Dispatcher:
-    def dispatch(parameters: dict) -> T:
-        parameter, value = get_parameter(parameters)
+    def get_command(parameter: str) -> Command:
         try:
-            return commands[parameter](value)
+            return commands[parameter]
         except KeyError:
             raise DispatchError(f"Invalid parameter {parameter}.")
+
+    def dispatch(parameters: dict) -> T:
+        parameter, value = get_parameter(parameters)
+        return get_command(parameter)(value)
 
     return dispatch
