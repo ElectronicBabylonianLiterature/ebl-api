@@ -19,6 +19,7 @@ Requirements:
 
 ```shell script
 pip install pipenv
+pip install pyre-check
 pipenv install --dev
 ```
 
@@ -32,7 +33,7 @@ disabled.
 
 ```shell script
 pipenv run flake8 ebl
-pipenv run pyre check
+pyre check
 pipenv run test
 ```
 
