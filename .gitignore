@@ -110,5 +110,8 @@ venv.bak/
 # Docker
 docker-entrypoint-initdb.d/
 
+# Pyre 
+.pyre/
+
 # Run backend locally
 run_backend.sh

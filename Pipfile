@@ -41,6 +41,7 @@ pyhamcrest = "*"
 flake8-bugbear = "*"
 pre-commit = "*"
 httpretty = "*"
+pyre-check = "*"
 
 [requires]
 python_version = "3.6"

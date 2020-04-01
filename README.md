@@ -31,7 +31,8 @@ disabled.
 ## Running the tests
 
 ```shell script
-pipenv run flake8
+pipenv run flake8 ebl
+pipenv run pyre check
 pipenv run test
 ```
 
