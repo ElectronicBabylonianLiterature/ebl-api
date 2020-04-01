@@ -154,7 +154,7 @@ class TextDeserializer:
         return ManuscriptLine(
             manuscript_line["manuscriptId"],
             tuple(Label.parse(label) for label in manuscript_line["labels"]),
-            TextLineSchema().load(manuscript_line["line"]),
+            TextLineSchema().load(manuscript_line["line"]),  # pyre-ignore[16]
         )
 
 

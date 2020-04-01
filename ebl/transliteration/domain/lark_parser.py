@@ -45,17 +45,17 @@ LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__
 
 def parse_word(atf: str) -> Word:
     tree = WORD_PARSER.parse(atf)
-    return LineTransformer().transform(tree)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
 def parse_erasure(atf: str) -> Sequence[EblToken]:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__erasure")
-    return LineTransformer().transform(tree)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
-    return LineTransformer().transform(tree)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
 def validate_line(line: Line) -> None:

@@ -18,6 +18,8 @@ class FragmentDtoSchema(FragmentSchema):
 
 
 def create_response_dto(fragment: Fragment, user: User, has_photo: bool):
-    return FragmentDtoSchema(context={"user": user, "has_photo": has_photo}).dump(
+    return FragmentDtoSchema(  # pyre-ignore[16,28]
+        context={"user": user, "has_photo": has_photo}
+    ).dump(
         fragment
     )

@@ -12,7 +12,7 @@ from ebl.tests.factories.corpus import (
 )
 
 COLLECTION = "texts"
-TEXT = TextFactory.build(
+TEXT = TextFactory.build(  # pyre-ignore[16]
     chapters=(
         ChapterFactory.build(
             manuscripts=(

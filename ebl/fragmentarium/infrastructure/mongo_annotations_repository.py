@@ -21,7 +21,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
     def create_or_update(self, annotations: Annotations) -> None:
         self._collection.replace_one(
-            AnnotationsSchema().dump(annotations),
+            AnnotationsSchema().dump(annotations),  # pyre-ignore[16]
             {"fragmentNumber": annotations.fragment_number},
             True,
         )
@@ -30,6 +30,6 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         try:
             result = self._collection.find_one({"fragmentNumber": fragment_number})
 
-            return AnnotationsSchema().load(result, unknown=EXCLUDE)
+            return AnnotationsSchema().load(result, unknown=EXCLUDE)  # pyre-ignore[16]
         except NotFoundError:
             return Annotations(fragment_number)

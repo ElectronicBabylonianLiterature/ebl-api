@@ -4,7 +4,7 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.fragment import FragmentFactory
 
-FRAGMENT = FragmentFactory.build()
+FRAGMENT = FragmentFactory.build()  # pyre-ignore[16]
 
 
 def test_of():

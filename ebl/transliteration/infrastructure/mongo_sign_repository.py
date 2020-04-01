@@ -98,11 +98,11 @@ class MongoSignRepository(SignRepository):
         self._collection = MongoCollection(database, COLLECTION)
 
     def create(self, sign: Sign) -> str:
-        return self._collection.insert_one(SignSchema().dump(sign))
+        return self._collection.insert_one(SignSchema().dump(sign))  # pyre-ignore[16]
 
     def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
-        return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
+        return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))  # pyre-ignore[16,28]
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
@@ -114,7 +114,7 @@ class MongoSignRepository(SignRepository):
                     }
                 }
             )
-            return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
+            return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))  # pyre-ignore[16, 28]
         except NotFoundError:
             return None
 
@@ -123,7 +123,7 @@ class MongoSignRepository(SignRepository):
             query = create_signs_query(readings)
             return cast(
                 List[Sign],
-                SignSchema(unknown=EXCLUDE, many=True).load(
+                SignSchema(unknown=EXCLUDE, many=True).load(  # pyre-ignore[16,28]
                     self._collection.find_many(query)
                 ),
             )

@@ -31,7 +31,7 @@ COLLECTION = "fragments"
 
 
 ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
-    TransliteratedFragmentFactory.build(),
+    TransliteratedFragmentFactory.build(),  # pyre-ignore[16]
     text=Text(
         (
             TextLine(

@@ -133,7 +133,7 @@ class ValueToken(Token):
 
     @classmethod
     def of(cls: Type[T], value: str) -> T:
-        return cls(frozenset(), value)
+        return cls(frozenset(), value)  # pyre-ignore[19]
 
 
 @attr.s(frozen=True)

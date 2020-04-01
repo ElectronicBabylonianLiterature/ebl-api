@@ -41,4 +41,4 @@ class GridFsFileRepository(FileRepository):
         if grid_out is None:
             raise NotFoundError(f"File {file_name} not found.")
         else:
-            return GridFsFile(grid_out)
+            return GridFsFile(grid_out)  # pyre-ignore[19]

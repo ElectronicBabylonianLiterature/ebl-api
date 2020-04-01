@@ -24,7 +24,7 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
 COLLECTION = "texts"
-TEXT = TextFactory.build()
+TEXT = TextFactory.build()  # pyre-ignore[16]
 DEHYDRATED_TEXT = attr.evolve(
     TEXT,
     chapters=tuple(

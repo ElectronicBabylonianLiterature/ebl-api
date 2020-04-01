@@ -82,6 +82,6 @@ class FragmentSearch:
             type: string
         """
         infos = self._dispatch(req.params)
-        resp.media = FragmentInfoSchema(many=True).dump(infos)
+        resp.media = FragmentInfoSchema(many=True).dump(infos)  # pyre-ignore[16,28]
         if req.params.keys() <= CACHED_COMMANDS:
             resp.cache_control = ["private", "max-age=600"]

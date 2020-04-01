@@ -50,9 +50,9 @@ class AnnotationResource:
         """
         if number == req.media.get("fragmentNumber"):
             annotations = self._annotation_service.update(
-                AnnotationsSchema().load(req.media), req.context.user
+                AnnotationsSchema().load(req.media), req.context.user  # pyre-ignore[16]
             )
-            resp.media = AnnotationsSchema().dump(annotations)
+            resp.media = AnnotationsSchema().dump(annotations)  # pyre-ignore[16]
         else:
             raise falcon.HTTPUnprocessableEntity("Fragment numbers do not match.")
 
@@ -80,4 +80,4 @@ class AnnotationResource:
             type: string
         """
         annotations = self._annotation_service.find(FragmentNumber(number))
-        resp.media = AnnotationsSchema().dump(annotations)
+        resp.media = AnnotationsSchema().dump(annotations)  # pyre-ignore[16]

@@ -50,7 +50,7 @@ LINES = [
         CompositeAtLine(atf.Composite.END, "part"),
         {
             "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],  # pyre-ignore[16]
             "type": "CompositeAtLine",
             "composite": "END",
             "text": "part",
@@ -278,7 +278,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
-            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),  # pyre-ignore[16]
             "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),

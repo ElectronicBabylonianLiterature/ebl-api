@@ -144,7 +144,7 @@ class NamedSign(AbstractSign):
         sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
-        sign = f"({self.sign.value})" if self.sign else ""
+        sign = f"({self.sign.value})" if self.sign else ""  # pyre-ignore[16]
         return f"{name}{sub_index}{modifiers}{flags}{sign}"
 
     def accept(self, visitor: TokenVisitor) -> None:
