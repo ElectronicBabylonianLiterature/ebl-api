@@ -55,7 +55,7 @@ LINES = [
             "composite": "END",
             "text": "part",
             "number": None,
-            "display_value": "end part",
+            "displayValue": "end part",
         },
     ),
     (
@@ -67,7 +67,7 @@ LINES = [
             "composite": "DIV",
             "text": "part",
             "number": 5,
-            "display_value": "div part 5",
+            "displayValue": "div part 5",
         },
     ),
     (
@@ -80,7 +80,7 @@ LINES = [
             "type": "DivisionAtLine",
             "text": "paragraph",
             "number": 5,
-            "display_value": "m=division paragraph 5",
+            "displayValue": "m=division paragraph 5",
         },
     ),
     (
@@ -91,7 +91,7 @@ LINES = [
             "type": "DivisionAtLine",
             "text": "paragraph",
             "number": None,
-            "display_value": "m=division paragraph",
+            "displayValue": "m=division paragraph",
         },
     ),
     (
@@ -101,7 +101,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("date"))],
             "type": "DiscourseAtLine",
             "discourse_label": "DATE",
-            "display_value": "date",
+            "displayValue": "date",
         },
     ),
     (
@@ -117,7 +117,7 @@ LINES = [
             "status": ["CORRECTION", "COLLATION"],
             "object_label": "OBJECT",
             "text": "stone wig",
-            "display_value": "object stone wig!*",
+            "displayValue": "object stone wig!*",
         },
     ),
     (
@@ -137,7 +137,7 @@ LINES = [
                 "surface": "SURFACE",
                 "text": "stone wig",
             },
-            "display_value": "surface stone wig!*",
+            "displayValue": "surface stone wig!*",
         },
     ),
     (
@@ -147,7 +147,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("column 1!*"))],
             "type": "ColumnAtLine",
             "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
-            "display_value": "column 1!*",
+            "displayValue": "column 1!*",
         },
     ),
     (
@@ -157,7 +157,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("column 1"))],
             "type": "ColumnAtLine",
             "column_label": {"status": [], "column": 1},
-            "display_value": "column 1",
+            "displayValue": "column 1",
         },
     ),
     (
@@ -167,7 +167,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("seal 1"))],
             "type": "SealAtLine",
             "number": 1,
-            "display_value": "seal 1",
+            "displayValue": "seal 1",
         },
     ),
     (
@@ -177,7 +177,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("h1"))],
             "type": "HeadingAtLine",
             "number": 1,
-            "display_value": "h1",
+            "displayValue": "h1",
         },
     ),
     (
@@ -201,7 +201,7 @@ LINES = [
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": "BLANK",
             "status": "UNCERTAIN",
-            "display_value": "at least beginning of obverse blank ?",
+            "displayValue": "at least beginning of obverse blank ?",
         },
     ),
     (
@@ -225,7 +225,7 @@ LINES = [
             "scope": {"type": "Surface", "content": "SURFACE", "text": "thing"},
             "state": "BLANK",
             "status": "UNCERTAIN",
-            "display_value": "at least 1-2 surface thing blank ?",
+            "displayValue": "at least 1-2 surface thing blank ?",
         },
     ),
     (
@@ -247,7 +247,7 @@ LINES = [
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": "BLANK",
             "status": "UNCERTAIN",
-            "display_value": "at least 1 obverse blank ?",
+            "displayValue": "at least 1 obverse blank ?",
         },
     ),
     (
@@ -269,7 +269,7 @@ LINES = [
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": None,
             "status": None,
-            "display_value": "beginning of obverse",
+            "displayValue": "beginning of obverse",
         },
     ),
     (
@@ -430,7 +430,7 @@ LINES = [
             "prefix": "$",
             "content": [OneOfTokenSchema().dump(ValueToken.of(" (end of side)"))],
             "text": "end of side",
-            "display_value": "(end of side)",
+            "displayValue": "(end of side)",
         },
     ),
     (
@@ -442,7 +442,7 @@ LINES = [
             "number": "1",
             "letter": "a",
             "text": "great",
-            "display_value": "(image 1a = great)",
+            "displayValue": "(image 1a = great)",
         },
     ),
     (
@@ -454,7 +454,7 @@ LINES = [
             "number": "1",
             "letter": None,
             "text": "great",
-            "display_value": "(image 1 = great)",
+            "displayValue": "(image 1 = great)",
         },
     ),
     (
@@ -465,7 +465,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "DOUBLE",
             "status": None,
-            "display_value": "double ruling",
+            "displayValue": "double ruling",
         },
     ),
     (
@@ -476,7 +476,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling *"))],
             "number": "DOUBLE",
             "status": "COLLATED",
-            "display_value": "double ruling *",
+            "displayValue": "double ruling *",
         },
     ),
     (
@@ -486,7 +486,7 @@ LINES = [
             "prefix": "$",
             "content": [OneOfTokenSchema().dump(ValueToken.of(" seal 1"))],
             "number": 1,
-            "display_value": "seal 1",
+            "displayValue": "seal 1",
         },
     ),
     (
@@ -547,7 +547,7 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": "BLANK",
             "status": atf.Status.COLLATION.name,
-            "display_value": "at least 1 obverse blank ?",
+            "displayValue": "at least 1 obverse blank ?",
         },
     ),
     (
@@ -569,7 +569,7 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "scope": {"type": "Surface", "content": "OBVERSE", "text": ""},
             "state": "BLANK",
             "status": atf.Status.CORRECTION.name,
-            "display_value": "at least 1 obverse blank *",
+            "displayValue": "at least 1 obverse blank *",
         },
     ),
     (
@@ -579,7 +579,7 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "prefix": "$",
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
-            "display_value": "double ruling",
+            "displayValue": "double ruling",
         },
     ),
     (

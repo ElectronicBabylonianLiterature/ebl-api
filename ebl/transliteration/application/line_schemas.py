@@ -34,7 +34,7 @@ class TextLineSchema(LineBaseSchema):
 
 
 class ControlLinesSchema(LineBaseSchema):
-    display_value = fields.String(required=True)
+    display_value = fields.String(required=True, data_key="displayValue")
 
 
 class ControlLineSchema(LineBaseSchema):
