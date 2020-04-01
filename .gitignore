@@ -103,9 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# pyoracc
-parselog.txt
-
 # IDEs
 .vscode/
 .idea/
