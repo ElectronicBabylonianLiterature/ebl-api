@@ -2,7 +2,6 @@ language: python
 python: 
 - 'pypy3'
 install:
-- pip install pyre-check
 - pipenv install --dev
 - yes | pip uninstall numpy
 jobs:
@@ -14,7 +13,7 @@ jobs:
         - "./cc-test-reporter before-build"
       script:
         - pipenv run flake8
-        - pyre check
+        - pipenv run pyre check
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
     - stage: deploy
