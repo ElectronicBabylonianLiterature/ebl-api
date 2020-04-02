@@ -10,21 +10,26 @@ from ebl.fragmentarium.domain.fragment_info import Lines
 from ebl.transliteration.domain.clean_atf import CleanAtf
 
 
+def create_sign_regexp(sign):
+    return fr"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
+
+
+def create_line_regexp(line):
+    signs_regexp = " ".join(create_sign_regexp(sign) for sign in line)
+    return fr"(?<![^|\s]){signs_regexp}"
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
     _signs: Sequence[Sequence[str]]
 
     @property
     def regexp(self):
-        lines_regexp = map(
-            lambda row: " ".join([
-                fr"([^\s]+\/)*{escaped_sign}(\/[^\s]+)*"
-                for escaped_sign in (re.escape(sign) for sign in row)
-            ]),
-            self._signs
+        lines_regexp = r"( .*)?\n.*".join(
+            create_line_regexp(line)
+            for line in self._signs
         )
-        lines_regexp = r"( .*)?\n.*".join(map(lambda row: fr"(?<![^|\s]){row}",
-                                              lines_regexp))
+
         return fr"{lines_regexp}(?![^|\s])"
 
     def is_empty(self) -> bool:
@@ -39,10 +44,9 @@ class TransliterationQuery:
                        if char == "\n"])
 
         matches = re.finditer(self.regexp, signs)
-        positions = [(match.start(), match.end()) for match in matches]
         line_numbers = [
-            (line_number(position[0]), line_number(position[1]))
-            for position in positions
+            (line_number(match.start()), line_number(match.end()))
+            for match in matches
         ]
 
         lines = CleanAtf(fragment.text.atf).filtered
