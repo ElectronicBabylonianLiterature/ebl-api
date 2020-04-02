@@ -8,7 +8,7 @@ FROM gitpod/workspace-mongodb
 #         ... \
 #     && rm -rf /var/lib/apt/lists/*
 # More information: https://www.gitpod.io/docs/42_config_docker/
-ARG PYTHON_VERSION=3.8.2
+ARG PYTHON_VERSION=pypy3.6-7.2.0
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 RUN pip install --upgrade pip

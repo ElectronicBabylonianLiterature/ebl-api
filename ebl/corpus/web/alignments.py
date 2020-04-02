@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.web.api_serializer import serialize
@@ -39,8 +39,8 @@ class AlignmentResource:
     @validate(ALIGNMENT_DTO_SCHEMA)
     def on_post(
         self,
-        req: falcon.Request,
-        resp: falcon.Response,
+        req: falcon.Request,  # pyre-ignore[11]
+        resp: falcon.Response,  # pyre-ignore[11]
         category: str,
         index: str,
         chapter_index: str,

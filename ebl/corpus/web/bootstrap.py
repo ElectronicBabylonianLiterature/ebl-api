@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
@@ -8,7 +8,7 @@ from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.texts import TextResource, TextsResource
 
 
-def create_corpus_routes(api: falcon.API, context: Context, spec):
+def create_corpus_routes(api: falcon.API, context: Context, spec):  # pyre-ignore[11]
     corpus = Corpus(
         context.text_repository,
         context.get_bibliography(),

@@ -1,5 +1,5 @@
-import pytest
-from parsy import ParseError
+import pytest  # pyre-ignore
+from parsy import ParseError  # pyre-ignore
 
 from ebl.corpus.application.reconstructed_text_parser import (
     akkadian_word,

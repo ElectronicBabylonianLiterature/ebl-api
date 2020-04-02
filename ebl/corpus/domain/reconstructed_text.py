@@ -3,7 +3,7 @@ from enum import Enum, unique
 from typing import Sequence
 
 import attr
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.corpus.domain.enclosure import Enclosure, EnclosureVisitor
 

@@ -1,7 +1,8 @@
-from typing import Iterable, Sequence
+from typing import cast, Iterable, List, Optional, Sequence
 
 import attr
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.text import Chapter, Manuscript, Text, TextVisitor
 from ebl.errors import Defect, NotFoundError
@@ -12,15 +13,22 @@ def invalid_reference(error: Exception) -> Exception:
 
 
 class TextHydrator(TextVisitor):
-    def __init__(self, bibliography):
+    def __init__(self, bibliography: Bibliography):
         super().__init__(TextVisitor.Order.POST)
-        self._bibliography = bibliography
-        self.text = None
-        self._chapters = []
-        self._manuscripts = []
+        self._bibliography: Bibliography = bibliography
+        self._text: Optional[Text] = None
+        self._chapters: List[Chapter] = []
+        self._manuscripts: List[Manuscript] = []
+
+    @property
+    def text(self) -> Text:
+        if self._text is None:
+            raise Defect("Trying to access text before a text was visited.")
+        else:
+            return cast(Text, self._text)
 
     def visit_text(self, text: Text) -> None:
-        self.text = attr.evolve(text, chapters=tuple(self._chapters))
+        self._text = attr.evolve(text, chapters=tuple(self._chapters))
         self._chapters = []
 
     def visit_chapter(self, chapter: Chapter) -> None:

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-pipenv run black ebl --check --diff
-pipenv run flake8
-pipenv run mypy -p ebl
-pipenv run pytest --cov=ebl --cov-report term --cov-report xml
+flake8 ebl
+pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
+pytest

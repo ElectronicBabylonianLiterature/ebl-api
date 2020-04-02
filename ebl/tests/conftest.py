@@ -4,12 +4,11 @@ import json
 from typing import Any, Dict, Mapping
 
 import attr
-import mongomock
-import pydash
-import pytest
-from dictdiffer import diff
-from falcon import testing
-from falcon_auth import NoneAuthBackend
+import mongomock  # pyre-ignore
+import pytest  # pyre-ignore
+from dictdiffer import diff  # pyre-ignore
+from falcon import testing  # pyre-ignore
+from falcon_auth import NoneAuthBackend   # pyre-ignore
 
 import ebl.app
 import ebl.context
@@ -344,9 +343,10 @@ def word():
 def make_changelog_entry(user):
     def _make_changelog_entry(resource_type, resource_id, old, new):
         return {
-            "user_profile": pydash.map_keys(
-                user.profile, lambda _, key: key.replace(".", "_")
-            ),
+            "user_profile": {
+                key.replace(".", "_"): value
+                for key, value in user.profile.items()
+            },
             "resource_type": resource_type,
             "resource_id": resource_id,
             "date": datetime.datetime.utcnow().isoformat(),

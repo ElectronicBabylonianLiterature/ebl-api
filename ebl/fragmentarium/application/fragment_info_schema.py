@@ -1,9 +1,9 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load  # pyre-ignore
 
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 
 
-class FragmentInfoSchema(Schema):
+class FragmentInfoSchema(Schema):  # pyre-ignore[11]
     number = fields.String(required=True)
     accession = fields.String(required=True)
     script = fields.String(required=True)

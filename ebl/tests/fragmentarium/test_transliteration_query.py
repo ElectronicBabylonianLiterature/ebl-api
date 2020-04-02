@@ -1,6 +1,6 @@
 import re
 
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.tests.factories.fragment import FragmentFactory
@@ -67,7 +67,6 @@ GET_MATCHING_LINES_DATA = [
         [["MA"], ["TA"]],
         [
             ["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]",],
-            ["3'. [... k]i-du u ba-ma-t[a ...]", "6'. [...] x mu ta-ma-tu₂"],
         ],
     ),
     ([["BU"]], [["7'. šu/gid"]]),

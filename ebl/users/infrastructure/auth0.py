@@ -1,9 +1,9 @@
 import copy
 from typing import Any, Callable
 
-import pydash
+import pydash  # pyre-ignore
 import requests
-from falcon_auth import JWTAuthBackend
+from falcon_auth import JWTAuthBackend  # pyre-ignore
 
 from ebl.users.domain.user import User
 
@@ -34,7 +34,7 @@ class Auth0User(User):
         return scope in self._access_token["scope"]
 
 
-class Auth0Backend(JWTAuthBackend):
+class Auth0Backend(JWTAuthBackend):  # pyre-ignore[11]
     def __init__(self, public_key, audience, issuer, set_user):
         super().__init__(
             lambda payload: payload,

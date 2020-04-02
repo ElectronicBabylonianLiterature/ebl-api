@@ -1,4 +1,4 @@
-from marshmallow import EXCLUDE
+from marshmallow import EXCLUDE  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -83,7 +83,10 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentInfoSchema(many=True).load(cursor)
 
     def query_by_transliteration(self, query):
-        cursor = self._collection.find_many({"signs": {"$regex": query.regexp}})
+        cursor = self._collection.find_many(
+            {"signs": {"$regex": query.regexp}},
+            limit=20
+        )
         return self._map_fragments(cursor)
 
     def update_transliteration(self, fragment):

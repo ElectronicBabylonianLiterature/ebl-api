@@ -1,7 +1,7 @@
 import json
 
-import falcon
-import pytest
+import falcon  # pyre-ignore
+import pytest  # pyre-ignore
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import (

@@ -1,7 +1,7 @@
 from typing import List, Optional, Sequence
 
 import attr
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 

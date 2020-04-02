@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
 from ebl.bibliography.domain.reference import REFERENCE_DTO_SCHEMA
@@ -117,13 +117,13 @@ class TextsResource:
     def __init__(self, corpus):
         self._corpus = corpus
 
-    def on_get(self, _, resp: falcon.Response) -> None:
+    def on_get(self, _, resp: falcon.Response) -> None:  # pyre-ignore[11]
         texts = self._corpus.list()
         resp.media = [serialize_public_text(text) for text in texts]
 
     @falcon.before(require_scope, "create:texts")
     @validate(TEXT_DTO_SCHEMA)
-    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]
         text = deserialize(req.media)
         self._corpus.create(text, req.context.user)
         resp.status = falcon.HTTP_CREATED
@@ -136,6 +136,12 @@ class TextResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "read:texts")
-    def on_get(self, _, resp: falcon.Response, category: str, index: str) -> None:
+    def on_get(
+        self,
+        _,
+        resp: falcon.Response,  # pyre-ignore[11]
+        category: str,
+        index: str
+    ) -> None:
         text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(text)

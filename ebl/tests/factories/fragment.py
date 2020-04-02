@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import factory
+import factory  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -59,7 +59,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 
 
-class FragmentFactory(factory.Factory):
+class FragmentFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Fragment
 

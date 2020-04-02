@@ -1,3 +1,6 @@
+from typing import Optional
+
+from ebl.errors import Defect
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
 from ebl.corpus.domain.enums import (
@@ -17,7 +20,7 @@ from ebl.corpus.domain.text import (
     TextVisitor,
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
 
 
 class TextSerializer(TextVisitor):
@@ -27,14 +30,69 @@ class TextSerializer(TextVisitor):
         text.accept(serializer)
         return serializer.text
 
-    def __init__(self, include_documents):
+    def __init__(self, include_documents: bool):
         super().__init__(TextVisitor.Order.PRE)
         self._include_documents = include_documents
-        self.text = None
-        self.chapter = None
-        self.manuscript = None
-        self.line = None
-        self.manuscript_line = None
+        self._text: Optional[dict] = None
+        self._chapter: Optional[dict] = None
+        self._manuscript: Optional[dict] = None
+        self._line: Optional[dict] = None
+        self._manuscript_line: Optional[dict] = None
+
+    @property
+    def text(self) -> dict:
+        if self._text is None:
+            raise Defect("Text accessed before set.")
+        else:
+            return self._text  # pyre-ignore[7]
+
+    @text.setter
+    def text(self, text: dict) -> None:
+        self._text = text
+
+    @property
+    def chapter(self) -> dict:
+        if self._chapter is None:
+            raise Defect("Chapter accessed before set.")
+        else:
+            return self._chapter  # pyre-ignore[7]
+
+    @chapter.setter
+    def chapter(self, chapter: dict) -> None:
+        self._chapter = chapter
+
+    @property
+    def line(self) -> dict:
+        if self._line is None:
+            raise Defect("Line accessed before set.")
+        else:
+            return self._line  # pyre-ignore[7]
+
+    @line.setter
+    def line(self, line: dict) -> None:
+        self._line = line
+
+    @property
+    def manuscript(self) -> dict:
+        if self._manuscript is None:
+            raise Defect("Manuscript accessed before set.")
+        else:
+            return self._manuscript  # pyre-ignore[7]
+
+    @manuscript.setter
+    def manuscript(self, manuscript: dict) -> None:
+        self._manuscript = manuscript
+
+    @property
+    def manuscript_line(self) -> dict:
+        if self._manuscript_line is None:
+            raise Defect("Manuscript line accessed before set.")
+        else:
+            return self._manuscript_line  # pyre-ignore[7]
+
+    @manuscript_line.setter
+    def manuscirpt_line(self, manuscript_line: dict) -> None:
+        self._manuscript_line = manuscript_line
 
     def visit_text(self, text: Text) -> None:
         self.text = {
@@ -90,7 +148,7 @@ class TextSerializer(TextVisitor):
             {
                 "manuscriptId": manuscript_line.manuscript_id,
                 "labels": [label.to_value() for label in manuscript_line.labels],
-                "line": TextLineSchema().dump(manuscript_line.line),
+                "line": TextLineSchema().dump(manuscript_line.line),  # pyre-ignore[16]
             }
         )
 
@@ -153,8 +211,8 @@ class TextDeserializer:
     def deserialize_manuscript_line(self, manuscript_line: dict) -> ManuscriptLine:
         return ManuscriptLine(
             manuscript_line["manuscriptId"],
-            tuple(Label.parse(label) for label in manuscript_line["labels"]),
-            TextLineSchema().load(manuscript_line["line"]),
+            tuple(parse_label(label) for label in manuscript_line["labels"]),
+            TextLineSchema().load(manuscript_line["line"]),  # pyre-ignore[16]
         )
 
 

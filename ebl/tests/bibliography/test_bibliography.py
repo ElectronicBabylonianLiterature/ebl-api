@@ -1,6 +1,6 @@
-import pydash
-import pytest
-from freezegun import freeze_time
+import pydash  # pyre-ignore
+import pytest  # pyre-ignore
+from freezegun import freeze_time  # pyre-ignore
 
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory

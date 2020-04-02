@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.dictionary.application.word_schema import WordSchema
 from ebl.marshmallowschema import validate

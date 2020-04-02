@@ -1,6 +1,6 @@
 from typing import List
 
-import pymongo
+import pymongo  # pyre-ignore
 
 from ebl.corpus.application.corpus import COLLECTION, TextRepository
 from ebl.corpus.application.text_serializer import deserialize, serialize

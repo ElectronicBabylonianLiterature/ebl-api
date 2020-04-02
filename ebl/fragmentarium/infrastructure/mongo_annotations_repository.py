@@ -1,5 +1,5 @@
-from marshmallow import EXCLUDE
-from pymongo.database import Database
+from marshmallow import EXCLUDE  # pyre-ignore
+from pymongo.database import Database  # pyre-ignore
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
@@ -16,12 +16,12 @@ def has_none_values(dictionary: dict) -> bool:
 
 
 class MongoAnnotationsRepository(AnnotationsRepository):
-    def __init__(self, database: Database) -> None:
+    def __init__(self, database: Database) -> None:  # pyre-ignore[11]
         self._collection = MongoCollection(database, COLLECTION)
 
     def create_or_update(self, annotations: Annotations) -> None:
         self._collection.replace_one(
-            AnnotationsSchema().dump(annotations),
+            AnnotationsSchema().dump(annotations),  # pyre-ignore[16]
             {"fragmentNumber": annotations.fragment_number},
             True,
         )
@@ -30,6 +30,6 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         try:
             result = self._collection.find_one({"fragmentNumber": fragment_number})
 
-            return AnnotationsSchema().load(result, unknown=EXCLUDE)
+            return AnnotationsSchema().load(result, unknown=EXCLUDE)  # pyre-ignore[16]
         except NotFoundError:
             return Annotations(fragment_number)

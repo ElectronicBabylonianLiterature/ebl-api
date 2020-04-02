@@ -1,8 +1,9 @@
 language: python
-python:
-- '3.8.2'
+python: 
+- 'pypy3'
 install:
 - pipenv install --dev
+- yes | pip uninstall numpy
 jobs:
   include:
     - stage: test
@@ -11,9 +12,8 @@ jobs:
         - chmod +x ./cc-test-reporter
         - "./cc-test-reporter before-build"
       script:
-        - pipenv run black ebl --check --diff
         - pipenv run flake8
-        - pipenv run mypy -p ebl
+        - pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
     - stage: deploy

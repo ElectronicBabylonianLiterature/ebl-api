@@ -1,7 +1,7 @@
 from typing import Mapping, Type
 
-from marshmallow import Schema
-from marshmallow_oneofschema import OneOfSchema
+from marshmallow import Schema  # pyre-ignore
+from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
 from ebl.transliteration.application.at_line_schemas import (
     SealAtLineSchema,
@@ -28,9 +28,9 @@ from ebl.transliteration.application.line_schemas import (
 )
 
 
-class OneOfLineSchema(OneOfSchema):
+class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[Schema]] = {
+    type_schemas: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
         "TextLine": TextLineSchema,
         "ControlLine": ControlLineSchema,
         "EmptyLine": EmptyLineSchema,

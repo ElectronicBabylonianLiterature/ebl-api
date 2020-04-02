@@ -1,0 +1,10 @@
+{
+  "source_directories": [
+    "."
+  ],
+  "taint_models_path": ".venv/lib/pyre_check/taint/",
+  "typeshed": ".venv/lib/pyre_check/typeshed/",
+  "ignore_all_errors": [
+    ".venv"
+  ]
+}

@@ -1,5 +1,5 @@
-import mongomock
-import pytest
+import mongomock  # pyre-ignore
+import pytest  # pyre-ignore
 
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection

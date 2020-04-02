@@ -1,8 +1,7 @@
 import unicodedata
 from enum import Enum
+import re
 from typing import Mapping, NewType, Optional
-
-import pydash
 
 from ebl.transliteration.domain.side import Side
 
@@ -220,10 +219,10 @@ DOCUMENT_ORIENTED_GLOSS: Mapping[Side, str] = {
 COMPOUND_GRAPHEME_DELIMITER = "|"
 
 FLAGS: Mapping[str, str] = {
-    "uncertainty": pydash.escape_reg_exp(Flag.UNCERTAIN.value),
-    "collation": pydash.escape_reg_exp(Flag.COLLATION.value),
-    "damage": pydash.escape_reg_exp(Flag.DAMAGE.value),
-    "correction": pydash.escape_reg_exp(Flag.CORRECTION.value),
+    "uncertainty": re.escape(Flag.UNCERTAIN.value),
+    "collation": re.escape(Flag.COLLATION.value),
+    "damage": re.escape(Flag.DAMAGE.value),
+    "correction": re.escape(Flag.CORRECTION.value),
 }
 
 ATF_SPEC: Mapping[str, str] = {

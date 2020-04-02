@@ -9,12 +9,12 @@ from ebl.tests.factories.corpus import (
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
 
-REFERENCES = (ReferenceWithDocumentFactory.build(),)
-MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
-MANUSCRIPT_LINE = ManuscriptLineFactory.build()
-LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE,))
-CHAPTER = ChapterFactory.build(manuscripts=(MANUSCRIPT,), lines=(LINE,))
-TEXT = TextFactory.build(chapters=(CHAPTER,))
+REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
+MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
+MANUSCRIPT_LINE = ManuscriptLineFactory.build()  # pyre-ignore[16]
+LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE,))  # pyre-ignore[16]
+CHAPTER = ChapterFactory.build(manuscripts=(MANUSCRIPT,), lines=(LINE,))  # pyre-ignore[16]
+TEXT = TextFactory.build(chapters=(CHAPTER,))  # pyre-ignore[16]
 
 
 def to_dict(include_documents):

@@ -1,7 +1,8 @@
-from dataclasses import dataclass
 from typing import List
 
-from lark import Token
+import attr
+
+from lark import Token  # pyre-ignore
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
@@ -18,14 +19,14 @@ from ebl.transliteration.domain.at_line import (
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
 
-@dataclass
+@attr.s(frozen=True, auto_attribs=True)
 class ObjectData:
     object: atf.Object
     text: str = ""
 
 
-class AtLineTransformer(Transformer):
-    def ebl_atf_at_line__free_text(self, content: List[Token]):
+class AtLineTransformer(Transformer):  # pyre-ignore[11]
+    def ebl_atf_at_line__free_text(self, content: List[Token]):  # pyre-ignore[11]
         return "".join(content)
 
     @v_args(inline=True)
@@ -57,7 +58,7 @@ class AtLineTransformer(Transformer):
         return HeadingAtLine(number)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__OBJECT(self, object_: Token):
+    def ebl_atf_at_line__OBJECT(self, object_: Token):  # pyre-ignore[11]
         return ObjectData(atf.Object(object_))
 
     @v_args(inline=True)
@@ -69,7 +70,7 @@ class AtLineTransformer(Transformer):
         return ObjectData(atf.Object.FRAGMENT, text)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__SURFACE(self, surface: Token):
+    def ebl_atf_at_line__SURFACE(self, surface: Token):  # pyre-ignore[11]
         return SurfaceLabel.from_label(atf.Surface.from_atf(surface))
 
     @v_args(inline=True)
@@ -77,7 +78,7 @@ class AtLineTransformer(Transformer):
         return SurfaceLabel.from_label(atf.Surface.SURFACE, text=text)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__face(self, text: Token):
+    def ebl_atf_at_line__face(self, text: Token):  # pyre-ignore[11]
         return SurfaceLabel.from_label(atf.Surface.FACE, text=str(text))
 
     @v_args(inline=True)

@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.errors import NotFoundError
 from ebl.transliteration.domain.sign import (

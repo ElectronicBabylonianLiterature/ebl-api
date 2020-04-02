@@ -1,5 +1,5 @@
+from typing import Optional
 from collections import Counter
-from functools import singledispatchmethod  # type: ignore
 
 from ebl.corpus.domain.text import (
     Chapter,
@@ -8,10 +8,10 @@ from ebl.corpus.domain.text import (
     ManuscriptLine,
     TextVisitor,
 )
-from ebl.errors import DataError
+from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.tokens import Token, TokenVisitor
+from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -35,12 +35,7 @@ class AlignmentVisitor(TokenVisitor):
     def __init__(self):
         self.alignments = []
 
-    @singledispatchmethod
-    def visit(self, token: Token) -> None:
-        pass
-
-    @visit.register
-    def _visit_word(self, word: Word) -> None:
+    def visit_word(self, word: Word) -> None:
         if word.alignment is not None:
             self.alignments.append(word.alignment)
 
@@ -54,8 +49,22 @@ class TextValidator(TextVisitor):
         super().__init__(TextVisitor.Order.PRE)
         self._bibliography = bibliography
         self._transliteration_factory = transliteration_factory
-        self._chapter = None
-        self._line = None
+        self._chapter: Optional[Chapter] = None
+        self._line: Optional[Line] = None
+
+    @property
+    def line(self) -> Line:
+        if self._line is None:
+            raise Defect("Trying to access line before a line was visited.")
+
+        return self._line  # pyre-ignore[7]
+
+    @property
+    def chapter(self) -> Chapter:
+        if self._chapter is None:
+            raise Defect("Trying to access chapter before a chapter was visited.")
+
+        return self._chapter  # pyre-ignore[7]
 
     def visit_chapter(self, chapter: Chapter) -> None:
         self._chapter = chapter
@@ -71,7 +80,7 @@ class TextValidator(TextVisitor):
             self._transliteration_factory.create(manuscript_line.line.atf)
         except TransliterationError:
             raise invalid_atf(
-                self._chapter, self._line.number, manuscript_line.manuscript_id
+                self.chapter, self.line.number, manuscript_line.manuscript_id
             )
 
         alignment_validator = AlignmentVisitor()

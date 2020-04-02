@@ -1,4 +1,4 @@
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.fragment import FragmentNumber
@@ -12,7 +12,12 @@ class AnnotationResource:
 
     @falcon.before(require_scope, "annotate:fragments")
     @validate(AnnotationsSchema(), AnnotationsSchema())
-    def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):
+    def on_post(
+        self,
+        req: falcon.Request,  # pyre-ignore[11]
+        resp: falcon.Response,  # pyre-ignore[11]
+        number: str
+    ):
         """---
         description: >-
           Creates or updates fragment image annotations. The fragment number in the
@@ -45,15 +50,15 @@ class AnnotationResource:
         """
         if number == req.media.get("fragmentNumber"):
             annotations = self._annotation_service.update(
-                AnnotationsSchema().load(req.media), req.context.user
+                AnnotationsSchema().load(req.media), req.context.user  # pyre-ignore[16]
             )
-            resp.media = AnnotationsSchema().dump(annotations)
+            resp.media = AnnotationsSchema().dump(annotations)  # pyre-ignore[16]
         else:
             raise falcon.HTTPUnprocessableEntity("Fragment numbers do not match.")
 
     @falcon.before(require_scope, "read:fragments")
     @validate(None, AnnotationsSchema())
-    def on_get(self, _, resp: falcon.Response, number: str):
+    def on_get(self, _, resp: falcon.Response, number: str):  # pyre-ignore[11]
         """---
         description: >-
           Retrieves fragment image annotations.
@@ -75,4 +80,4 @@ class AnnotationResource:
             type: string
         """
         annotations = self._annotation_service.find(FragmentNumber(number))
-        resp.media = AnnotationsSchema().dump(annotations)
+        resp.media = AnnotationsSchema().dump(annotations)  # pyre-ignore[16]

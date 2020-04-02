@@ -1,8 +1,8 @@
 import json
 
-import falcon
-import pytest
-from freezegun import freeze_time
+import falcon  # pyre-ignore
+import pytest  # pyre-ignore
+from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto

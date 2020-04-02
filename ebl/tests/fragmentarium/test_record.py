@@ -1,7 +1,7 @@
 import datetime
 
-import pytest
-from freezegun import freeze_time
+import pytest  # pyre-ignore
+from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 

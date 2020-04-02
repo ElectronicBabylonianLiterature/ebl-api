@@ -1,8 +1,9 @@
-from functools import singledispatch
-from typing import FrozenSet, Iterable, List, Optional, Sequence, Tuple
+from itertools import zip_longest
+from typing import (
+    Callable, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
+)
 
 import attr
-import pydash
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object
@@ -56,39 +57,28 @@ class Text:
         current: Label = (None, None, None, None)
         labels: List[Label] = []
 
-        @singledispatch
-        def visit_line(line: Line) -> Label:
-            return current
-
-        @visit_line.register
-        def visit_line_text(line: TextLine) -> Label:
-            labels.append((*current[:-1], line.line_number))
-            return current
-
-        @visit_line.register
-        def visit_line_column(line: ColumnAtLine) -> Label:
-            return (line.column_label, *current[1:])
-
-        @visit_line.register
-        def visit_line_surface(line: SurfaceAtLine) -> Label:
-            return (current[0], line.surface_label, *current[2:])
-
-        @visit_line.register
-        def visit_line_object(line: ObjectAtLine) -> Label:
-            return (
+        handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
+            TextLine: lambda line: (current,
+                                    [*labels, (*current[:-1], line.line_number)]),
+            ColumnAtLine: lambda line: ((line.column_label, *current[1:]), labels),
+            SurfaceAtLine: lambda line: ((current[0], line.surface_label, *current[2:]),
+                                         labels),
+            ObjectAtLine: lambda line: ((
                 *current[:2],
                 (line.object_label, frozenset(line.status), line.text),
                 current[-1],
-            )
+            ), labels),
+        }
 
         for line in self.lines:
-            current = visit_line(line)
+            if type(line) in handlers:
+                current, labels = handlers[type(line)](line)
 
         return labels
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Text":
         if len(self.lines) == len(lemmatization.tokens):
-            zipped = pydash.zip_(list(self.lines), list(lemmatization.tokens))
+            zipped = zip_longest(self.lines, lemmatization.tokens)
             lines = tuple(
                 line.update_lemmatization(lemmas) for [line, lemmas] in zipped
             )

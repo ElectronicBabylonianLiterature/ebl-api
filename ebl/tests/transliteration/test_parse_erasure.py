@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.enclosure_tokens import Erasure
 from ebl.transliteration.domain.lark_parser import parse_erasure
@@ -62,8 +62,8 @@ ERASURE_RIGHT = Erasure.close()
 def test_erasure(parser, atf, erased, over_erased):
     assert parser(atf) == [
         ERASURE_LEFT,
-        erased,
+        *erased,
         ERASURE_CENTER,
-        over_erased,
+        *over_erased,
         ERASURE_RIGHT,
     ]

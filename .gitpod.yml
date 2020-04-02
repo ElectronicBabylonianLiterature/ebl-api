@@ -7,7 +7,7 @@ ports:
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/44_config_start_tasks/
 tasks:
-- init: pipenv --python python3.8 && pipenv install --dev
+- init: pipenv install --dev
   command: pipenv run start
 - init: mkdir -p /workspace/data
   command: mongod --dbpath /workspace/data --bind_ip 127.0.0.1

@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load  # pyre-ignore
 
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
 )
 
 
-class GeometrySchema(Schema):
+class GeometrySchema(Schema):  # pyre-ignore[11]
     x = fields.Float(required=True)
     y = fields.Float(required=True)
     width = fields.Float(required=True)
@@ -19,7 +19,7 @@ class GeometrySchema(Schema):
         return Geometry(**data)
 
 
-class AnnotationDataSchema(Schema):
+class AnnotationDataSchema(Schema):  # pyre-ignore[11]
     id = fields.String(required=True)
     value = fields.String(required=True)
     path = fields.List(fields.Int, required=True)
@@ -29,7 +29,7 @@ class AnnotationDataSchema(Schema):
         return AnnotationData(**data)
 
 
-class AnnotationSchema(Schema):
+class AnnotationSchema(Schema):  # pyre-ignore[11]
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
 
@@ -38,7 +38,7 @@ class AnnotationSchema(Schema):
         return Annotation(**data)
 
 
-class AnnotationsSchema(Schema):
+class AnnotationsSchema(Schema):  # pyre-ignore[11]
     fragment_number = fields.String(requred=True, data_key="fragmentNumber")
     annotations = fields.Nested(AnnotationSchema, many=True, required=True)
 

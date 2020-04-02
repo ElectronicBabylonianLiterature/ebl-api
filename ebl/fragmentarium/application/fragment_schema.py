@@ -1,5 +1,5 @@
-import pydash
-from marshmallow import Schema, fields, post_dump, post_load
+import pydash  # pyre-ignore
+from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 
 from ebl.bibliography.domain.reference import (
     BibliographyId,
@@ -18,7 +18,7 @@ from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
 
 
-class MeasureSchema(Schema):
+class MeasureSchema(Schema):  # pyre-ignore[11]
     value = fields.Float(missing=None)
     note = fields.String(missing=None)
 
@@ -31,7 +31,7 @@ class MeasureSchema(Schema):
         return pydash.omit_by(data, pydash.is_none)
 
 
-class RecordEntrySchema(Schema):
+class RecordEntrySchema(Schema):  # pyre-ignore[11]
     user = fields.String(required=True)
     type = ValueEnum(RecordType, required=True)
     date = fields.String(required=True)
@@ -41,7 +41,7 @@ class RecordEntrySchema(Schema):
         return RecordEntry(**data)
 
 
-class RecordSchema(Schema):
+class RecordSchema(Schema):  # pyre-ignore[11]
     entries = fields.Nested(RecordEntrySchema, many=True, required=True)
 
     @post_load
@@ -49,7 +49,7 @@ class RecordSchema(Schema):
         return Record(tuple(data["entries"]))
 
 
-class FolioSchema(Schema):
+class FolioSchema(Schema):  # pyre-ignore[11]
     name = fields.String(required=True)
     number = fields.String(required=True)
 
@@ -58,7 +58,7 @@ class FolioSchema(Schema):
         return Folio(**data)
 
 
-class FoliosSchema(Schema):
+class FoliosSchema(Schema):  # pyre-ignore[11]
     entries = fields.Nested(FolioSchema, many=True, required=True)
 
     @post_load
@@ -66,7 +66,7 @@ class FoliosSchema(Schema):
         return Folios(tuple(data["entries"]))
 
 
-class ReferenceSchema(Schema):
+class ReferenceSchema(Schema):  # pyre-ignore[11]
     id = fields.String(required=True)
     type = NameEnum(ReferenceType, required=True)
     pages = fields.String(required=True)
@@ -81,7 +81,7 @@ class ReferenceSchema(Schema):
         return Reference(**data)
 
 
-class UncuratedReferenceSchema(Schema):
+class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]
     document = fields.String(required=True)
     pages = fields.List(fields.Integer(), required=True)
 
@@ -91,7 +91,7 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
-class FragmentSchema(Schema):
+class FragmentSchema(Schema):  # pyre-ignore[11]
     number = fields.String(required=True, data_key="_id")
     accession = fields.String(required=True)
     cdli_number = fields.String(required=True, data_key="cdliNumber")
@@ -106,7 +106,7 @@ class FragmentSchema(Schema):
     thickness = fields.Nested(MeasureSchema, required=True)
     joins = fields.List(fields.String(), required=True)
     record = fields.Pluck(RecordSchema, "entries")
-    folios: fields.Field = fields.Pluck(FoliosSchema, "entries")
+    folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
     signs = fields.String(missing=None)
     notes = fields.String(required=True)

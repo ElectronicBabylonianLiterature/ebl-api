@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.asserts import assert_token_serialization

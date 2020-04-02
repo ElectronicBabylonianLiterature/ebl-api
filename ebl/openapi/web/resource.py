@@ -1,11 +1,11 @@
-import falcon
-from apispec import APISpec
+import falcon  # pyre-ignore
+from apispec import APISpec  # pyre-ignore
 
 
 class OpenApiResource:
     auth = {"auth_disabled": True}
 
-    def __init__(self, spec: APISpec):
+    def __init__(self, spec: APISpec):  # pyre-ignore[11]
         self._spec = spec
 
     def on_get(self, _req, resp):

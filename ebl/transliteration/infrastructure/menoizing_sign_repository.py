@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-import pydash
+import pydash  # pyre-ignore
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign, SignName

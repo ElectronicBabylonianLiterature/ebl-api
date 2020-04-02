@@ -1,6 +1,6 @@
 import json
 
-import falcon
+import falcon  # pyre-ignore
 
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory

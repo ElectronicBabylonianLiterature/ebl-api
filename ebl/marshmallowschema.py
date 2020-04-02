@@ -1,12 +1,13 @@
 from functools import wraps
 from typing import Optional
 
-import falcon
-from marshmallow import Schema
+import falcon  # pyre-ignore
+from marshmallow import Schema  # pyre-ignore
 
 
 def validate(
-    req_schema: Optional[Schema] = None, resp_schema: Optional[Schema] = None,
+    req_schema: Optional[Schema] = None,  # pyre-ignore[11]
+    resp_schema: Optional[Schema] = None,  # pyre-ignore[11]
 ):
     def decorator(func):
         @wraps(func)

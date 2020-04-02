@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
@@ -27,7 +27,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -50,7 +50,7 @@ LINES = [
         CompositeAtLine(atf.Composite.END, "part"),
         {
             "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],  # pyre-ignore[16]
             "type": "CompositeAtLine",
             "composite": "END",
             "text": "part",
@@ -293,78 +293,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
-            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
-            "content": OneOfTokenSchema().dump(
-                [
-                    DocumentOrientedGloss.open(),
-                    Word.of(
-                        [
-                            Reading.of(
-                                (
-                                    ValueToken(
-                                        frozenset(
-                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                        ),
-                                        "bu",
-                                    ),
-                                )
-                            ).set_enclosure_type(
-                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ]
-                    ).set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                    LoneDeterminative.of(
-                        [
-                            Determinative.of(
-                                [
-                                    Reading.of(
-                                        (
-                                            ValueToken(
-                                                frozenset(
-                                                    {
-                                                        EnclosureType.DOCUMENT_ORIENTED_GLOSS
-                                                    }
-                                                ),
-                                                "d",
-                                            ),
-                                        )
-                                    ).set_enclosure_type(
-                                        frozenset(
-                                            {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
-                                        )
-                                    ),
-                                ]
-                            ).set_enclosure_type(
-                                frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ],
-                    ).set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                    DocumentOrientedGloss.close().set_enclosure_type(
-                        frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                    ),
-                ],
-                many=True,
-            ),
-        },
-    ),
-    (
-        TextLine.of_legacy_iterable(
-            LineNumberLabel.from_atf("1."),
-            [
-                DocumentOrientedGloss.open(),
-                Word.of([Reading.of_name("bu")]),
-                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
-                DocumentOrientedGloss.close(),
-            ],
-        ),
-        {
-            "type": "TextLine",
-            "prefix": "1.",
-            "lineNumber": None,
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),  # pyre-ignore[16]
             "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),
@@ -580,18 +509,6 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
             "displayValue": "double ruling",
-        },
-    ),
-    (
-        TextLine.of_legacy_iterable(
-            LineNumberLabel.from_atf("1."), [Word.of([Reading.of_name("bu")]),],
-        ),
-        {
-            "type": "TextLine",
-            "prefix": "1.",
-            "content": [
-                OneOfTokenSchema().dump(Word.of([Reading.of((ValueToken.of("bu",),)),]))
-            ],
         },
     ),
 ]

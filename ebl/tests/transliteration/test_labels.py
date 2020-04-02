@@ -1,7 +1,8 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import (
+    parse_label,
     ColumnLabel,
     Label,
     LabelVisitor,
@@ -49,7 +50,7 @@ LABELS = [
 
 @pytest.mark.parametrize("label,_,expected", LABELS)
 def test_parse_label(label, _, expected):
-    assert Label.parse(label) == expected
+    assert parse_label(label) == expected
 
 
 @pytest.mark.parametrize("label,_,model", LABELS)

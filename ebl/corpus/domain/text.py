@@ -243,7 +243,7 @@ class ManuscriptIdValidator(TextVisitor):
         self._sigla = []
         self._used_manuscripts_ids = set()
 
-    def visit_chapter(self, _) -> None:
+    def visit_chapter(self, chapter) -> None:
         def get_duplicates(collection: list) -> list:
             return [
                 item

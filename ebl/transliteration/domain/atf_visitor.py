@@ -1,4 +1,3 @@
-from functools import singledispatchmethod  # type: ignore
 from typing import Callable, List
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
@@ -8,7 +7,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
     Erasure,
     IntentionalOmission,
-    OmissionOrRemoval,
     PerhapsBrokenAway,
     Removal,
 )
@@ -33,7 +31,6 @@ class AtfVisitor(TokenVisitor):
     def result(self) -> Atf:
         return Atf("".join(self._parts))
 
-    @singledispatchmethod
     def visit(self, token: Token) -> None:
         if self._force_separator or not self._omit_separator:
             self._append_separator()
@@ -41,47 +38,35 @@ class AtfVisitor(TokenVisitor):
         self._parts.append(token.value)
         self._set_omit(False)
 
-    @visit.register
-    def _visit_language_shift(self, shift: LanguageShift) -> None:
+    def visit_language_shift(self, shift: LanguageShift) -> None:
         self._append_separator()
         self._parts.append(shift.value)
         self._set_force()
 
-    @visit.register
-    def _visit_word(self, word: Word) -> None:
+    def visit_word(self, word: Word) -> None:
         if not self._omit_separator:
             self._append_separator()
 
         self._parts.append(word.value)
         self._set_omit(False)
 
-    @visit.register
-    def _visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
+    def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._side(gloss.side)(gloss)
 
-    @visit.register
-    def _visit_broken_away(self, broken_away: BrokenAway) -> None:
+    def visit_broken_away(self, broken_away: BrokenAway) -> None:
         self._side(broken_away.side)(broken_away)
 
-    @visit.register
-    def _visit_perhaps_broken_away(self, broken_away: PerhapsBrokenAway) -> None:
+    def visit_perhaps_broken_away(self, broken_away: PerhapsBrokenAway) -> None:
         self._side(broken_away.side)(broken_away)
 
-    @visit.register
-    def _visit_omission_or_removal(self, omission: OmissionOrRemoval) -> None:
+    def visit_omission(self, omission: AccidentalOmission) -> None:
         self._side(omission.side)(omission)
 
-    @visit.register
-    def _visit_omission(self, omission: AccidentalOmission) -> None:
+    def visit_accidental_omission(self, omission: IntentionalOmission) -> None:
         self._side(omission.side)(omission)
 
-    @visit.register
-    def _visit_accidental_omission(self, omission: IntentionalOmission) -> None:
-        self._side(omission.side)(omission)
-
-    @visit.register
-    def _visit_removal(self, omission: Removal) -> None:
-        self._side(omission.side)(omission)
+    def visit_removal(self, removal: Removal) -> None:
+        self._side(removal.side)(removal)
 
     def _side(self, side: Side) -> Callable[[Token], None]:
         return {Side.LEFT: self._left, Side.RIGHT: self._right}[side]
@@ -98,8 +83,7 @@ class AtfVisitor(TokenVisitor):
         self._parts.append(token.value)
         self._set_omit(False)
 
-    @visit.register
-    def _visit_erasure(self, erasure: Erasure):
+    def visit_erasure(self, erasure: Erasure):
         def left():
             self._append_separator()
             self._parts.append(erasure.value)
@@ -115,14 +99,12 @@ class AtfVisitor(TokenVisitor):
 
         {Side.LEFT: left, Side.CENTER: center, Side.RIGHT: right}[erasure.side]()
 
-    @visit.register
-    def _visit_divider(self, divider: Divider) -> None:
+    def visit_divider(self, divider: Divider) -> None:
         self._append_separator()
         self._parts.append(divider.value)
         self._set_force()
 
-    @visit.register
-    def _visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
+    def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
         self._append_separator()
         self._parts.append(protocol.value)
         self._set_force()

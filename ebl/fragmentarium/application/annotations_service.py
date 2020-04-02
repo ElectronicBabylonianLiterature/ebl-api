@@ -22,7 +22,7 @@ class AnnotationsService:
         self._changelog.create(
             "annotations",
             user.profile,
-            {"_id": _id, **schema.dump(old_annotations)},
+            {"_id": _id, **schema.dump(old_annotations)},  # pyre-ignore[16]
             {"_id": _id, **schema.dump(annotations)},
         )
         self._repository.create_or_update(annotations)

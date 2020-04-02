@@ -1,4 +1,4 @@
-from bson.objectid import ObjectId
+from bson.objectid import ObjectId   # pyre-ignore
 
 
 def test_cors(client):

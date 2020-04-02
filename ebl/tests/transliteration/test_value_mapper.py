@@ -1,6 +1,6 @@
 from typing import Any
 
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.value import (

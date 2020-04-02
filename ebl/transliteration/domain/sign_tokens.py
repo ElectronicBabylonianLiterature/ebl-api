@@ -11,7 +11,7 @@ from ebl.transliteration.domain.converters import (
     convert_token_sequence,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.tokens import Token, ValueToken, TokenVisitor
 
 T = TypeVar("T", bound="UnknownSign")
 
@@ -99,6 +99,9 @@ class Divider(AbstractSign):
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_divider(self)
+
     @staticmethod
     def of(
         divider: str,
@@ -141,8 +144,11 @@ class NamedSign(AbstractSign):
         sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
-        sign = f"({self.sign.value})" if self.sign else ""
+        sign = f"({self.sign.value})" if self.sign else ""  # pyre-ignore[16]
         return f"{name}{sub_index}{modifiers}{flags}{sign}"
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_named_sign(self)
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -83,6 +83,6 @@ class FragmentUpdater:
         self._changelog.create(
             COLLECTION,
             user.profile,
-            schema.dump(fragment),
+            schema.dump(fragment),  # pyre-ignore[16]
             schema.dump(updated_fragment),
         )

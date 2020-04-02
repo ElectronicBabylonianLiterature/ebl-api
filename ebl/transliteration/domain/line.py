@@ -13,10 +13,11 @@ from ebl.transliteration.domain.lemmatization import (
 from ebl.transliteration.domain.tokens import Token
 
 
+T = TypeVar("T")
+
+
 @attr.s(frozen=True)
 class Line(ABC):
-    T = TypeVar("T")
-
     @property
     @abstractmethod
     def prefix(self) -> str:

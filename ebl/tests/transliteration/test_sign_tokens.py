@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pyre-ignore
 
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -191,26 +191,6 @@ def test_reading(
         "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
-
-
-def test_load_old_style_reading():
-    name = "kur"
-    sub_index = 1
-    flags = []
-    modifiers = []
-    sign = "KUR"
-    reading = Reading.of_name(name, sub_index, modifiers, flags, ValueToken.of(sign))
-
-    serialized = {
-        "type": "Reading",
-        "value": "kur(KUR)",
-        "name": name,
-        "subIndex": sub_index,
-        "modifiers": modifiers,
-        "flags": flags,
-        "sign": sign,
-    }
-    assert OneOfTokenSchema().load(serialized) == reading
 
 
 @pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])

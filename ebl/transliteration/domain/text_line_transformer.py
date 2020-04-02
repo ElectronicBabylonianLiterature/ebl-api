@@ -1,8 +1,7 @@
-from functools import singledispatchmethod  # type: ignore
+
 from typing import MutableSequence, Sequence, Type
 
-import pydash
-from lark.lexer import Token
+from lark.lexer import Token  # pyre-ignore
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
@@ -52,17 +51,19 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
+def _token_mapper(token):
+    if isinstance(token, Tree):
+        return token.children
+    elif isinstance(token, list):
+        return token
+    else:
+        return [token]
+
+
 def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
-    return (
-        pydash.chain(children)
-        .flat_map_deep(lambda tree: (tree.children if isinstance(tree, Tree) else tree))
-        .map_(
-            lambda token: (
-                ValueToken.of(token.value) if isinstance(token, Token) else token
-            )
-        )
-        .value()
-    )
+    return tuple((ValueToken.of(token.value) if isinstance(token, Token) else token)
+                 for child in children
+                 for token in _token_mapper(child))
 
 
 class ErasureVisitor(TokenVisitor):
@@ -74,16 +75,14 @@ class ErasureVisitor(TokenVisitor):
     def tokens(self) -> Sequence[EblToken]:
         return tuple(self._tokens)
 
-    @singledispatchmethod
-    def visit(self, token: EblToken) -> None:
-        self._tokens.append(token)
-
-    @visit.register
-    def _visit_word(self, word: Word) -> None:
-        self._tokens.append(word.set_erasure(self._state))
+    def visit(self, token) -> None:
+        if isinstance(token, Word):
+            self._tokens.append(token.set_erasure(self._state))
+        else:
+            self._tokens.append(token)
 
 
-class SignTransformer(Transformer):
+class SignTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
         return UnidentifiedSign.of(flags)
@@ -161,7 +160,7 @@ class SignTransformer(Transformer):
         return BrokenAway.open()
 
 
-class EnclosureTransformer(Transformer):
+class EnclosureTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_text_line__open_accidental_omission(self, _):
         return AccidentalOmission.open()
 
@@ -181,7 +180,7 @@ class EnclosureTransformer(Transformer):
         return Removal.close()
 
 
-class GlossTransformer(Transformer):
+class GlossTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__determinative(self, tree):
         tokens = _children_to_tokens(tree.children)
@@ -257,18 +256,7 @@ class TextLineTransformer(WordTransformer):
         )
 
     def ebl_atf_text_line__text(self, children):
-        return (
-            pydash.chain(children)
-            .flat_map_deep(
-                lambda tree: (tree.children if isinstance(tree, Tree) else tree)
-            )
-            .map_(
-                lambda token: (
-                    ValueToken.of(str(token)) if isinstance(token, Token) else token
-                )
-            )
-            .value()
-        )
+        return _children_to_tokens(children)
 
     @v_args(inline=True)
     def ebl_atf_text_line__open_document_oriented_gloss(self, _):
@@ -304,7 +292,7 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__erasure(self, erased, over_erased):
-        def set_erasure_state(tree: Tree, state: ErasureState):
+        def set_erasure_state(tree: Tree, state: ErasureState):  # pyre-ignore[11]
             visitor = ErasureVisitor(state)
             for child in tree.children:
                 visitor.visit(child)
@@ -312,8 +300,8 @@ class TextLineTransformer(WordTransformer):
 
         return [
             Erasure.open(),
-            set_erasure_state(erased, ErasureState.ERASED),
+            *set_erasure_state(erased, ErasureState.ERASED),
             Erasure.center(),
-            set_erasure_state(over_erased, ErasureState.OVER_ERASED),
+            *set_erasure_state(over_erased, ErasureState.OVER_ERASED),
             Erasure.close(),
         ]

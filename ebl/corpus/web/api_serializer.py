@@ -1,7 +1,7 @@
 from typing import cast, Sequence
 
-from lark.exceptions import ParseError as LarkParseError
-from parsy import ParseError as ParsyParseError
+from lark.exceptions import ParseError as LarkParseError  # pyre-ignore
+from parsy import ParseError as ParsyParseError  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import (
     TextDeserializer,
@@ -18,7 +18,7 @@ from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 
 
@@ -34,12 +34,14 @@ class ApiSerializer(TextSerializer):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         line = manuscript_line.line
+        atf_line_number = line.line_number.atf
         self.line["manuscripts"].append(
             {
                 "manuscriptId": manuscript_line.manuscript_id,
                 "labels": [label.to_value() for label in manuscript_line.labels],
-                "number": line.line_number_label.to_value(),
-                "atf": line.atf[len(line.line_number_label.to_atf()) + 1 :],
+                "number": LineNumberLabel.from_atf(atf_line_number).to_value(),
+                "atf": line.atf[len(atf_line_number) + 1 :],
+                # pyre-ignore[16]
                 "atfTokens": TextLineSchema().dump(manuscript_line.line)["content"],
             }
         )
@@ -73,7 +75,7 @@ class ApiDeserializer(TextDeserializer):
         line = cast(TextLine, parse_line(f"{line_number} {atf}"))
         return ManuscriptLine(
             manuscript_line["manuscriptId"],
-            tuple(Label.parse(label) for label in manuscript_line["labels"]),
+            tuple(parse_label(label) for label in manuscript_line["labels"]),
             line,
         )
 

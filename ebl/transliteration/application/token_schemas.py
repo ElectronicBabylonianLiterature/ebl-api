@@ -1,10 +1,9 @@
 from abc import abstractmethod
-from functools import singledispatch
-from typing import Mapping, Optional, Type
+from typing import Mapping, Type
 
-import pydash
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
-from marshmallow_oneofschema import OneOfSchema
+import pydash  # pyre-ignore
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
+from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
@@ -18,7 +17,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Gloss,
     IntentionalOmission,
     LinguisticGloss,
-    OmissionOrRemoval,
     PerhapsBrokenAway,
     PhoneticGloss,
     Removal,
@@ -31,7 +29,6 @@ from ebl.transliteration.domain.sign_tokens import (
     Divider,
     Grapheme,
     Logogram,
-    NamedSign,
     Number,
     Reading,
     UnclearSign,
@@ -43,10 +40,10 @@ from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,
     Tabulation,
-    Token,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
+    Token
 )
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
@@ -56,7 +53,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-class BaseTokenSchema(Schema):
+class BaseTokenSchema(Schema):  # pyre-ignore[11]
     class Meta:
         unknown = EXCLUDE
 
@@ -83,10 +80,17 @@ class LanguageShiftSchema(BaseTokenSchema):
         return LanguageShift(frozenset(data["enclosure_type"]), data["value"])
 
 
-class DocumentOrientedGlossSchema(BaseTokenSchema):
+class EnclosureSchema(BaseTokenSchema):
     value = fields.String(required=True)
-    side = NameEnum(Side, missing=None)
+    side = NameEnum(Side, required=True)
 
+    @abstractmethod
+    @post_load
+    def make_token(self, data, **kwargs) -> Token:
+        ...
+
+
+class DocumentOrientedGlossSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
@@ -100,10 +104,7 @@ class DocumentOrientedGlossSchema(BaseTokenSchema):
         )
 
 
-class BrokenAwaySchema(BaseTokenSchema):
-    value = fields.String(required=True)
-    side = NameEnum(Side, missing=None)
-
+class BrokenAwaySchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
@@ -117,10 +118,7 @@ class BrokenAwaySchema(BaseTokenSchema):
         )
 
 
-class PerhapsBrokenAwaySchema(BaseTokenSchema):
-    value = fields.String(required=True)
-    side = NameEnum(Side, missing=None)
-
+class PerhapsBrokenAwaySchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
@@ -132,27 +130,6 @@ class PerhapsBrokenAwaySchema(BaseTokenSchema):
                 frozenset(data["enclosure_type"])
             )
         )
-
-
-class OmissionOrRemovalSchema(BaseTokenSchema):
-    """This class is deprecated and kept only for backwards compatibility.
-    Omission, AccidentalOmission, or Removal should be used instead."""
-
-    value = fields.String(required=True)
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return OmissionOrRemoval(frozenset(data["enclosure_type"]), data["value"])
-
-
-class EnclosureSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-    side = NameEnum(Side, required=True)
-
-    @abstractmethod
-    @post_load
-    def make_token(self, data, **kwargs) -> Gloss:
-        ...
 
 
 class AccidentalOmissionSchema(EnclosureSchema):
@@ -276,42 +253,23 @@ class InWordNewlineSchema(BaseTokenSchema):
         return InWordNewline(frozenset(data["enclosure_type"]))
 
 
-def _dump_sign(named_sign: NamedSign) -> Optional[dict]:
-    return None if named_sign.sign is None else OneOfTokenSchema().dump(named_sign.sign)
-
-
-@singledispatch
-def _load_sign(sign) -> Optional[Token]:
-    return OneOfTokenSchema().load(sign)
-
-
-@_load_sign.register
-def _load_sign_none(sign: None) -> None:
-    return sign
-
-
-@_load_sign.register
-def _load_sign_str(sign: str) -> Token:
-    return ValueToken.of(sign)
-
-
 class NamedSignSchema(BaseTokenSchema):
     value = fields.String(required=True)
     name = fields.String(required=True)
     name_parts = fields.List(
-        fields.Nested(lambda: OneOfTokenSchema()), missing=None, data_key="nameParts"
+        fields.Nested(lambda: OneOfTokenSchema()), required=True, data_key="nameParts"
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
-    sign = fields.Function(_dump_sign, _load_sign, missing=None)
+    sign = fields.Nested(lambda: OneOfTokenSchema(), allow_none=True)
 
 
 class ReadingSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Reading.of(
-            data["name_parts"] or (ValueToken.of(data["name"]),),
+            data["name_parts"],
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -325,7 +283,7 @@ class LogogramSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Logogram.of(
-            data["name_parts"] or (ValueToken.of(data["name"]),),
+            data["name_parts"],
             data["sub_index"],
             data["modifiers"],
             data["flags"],
@@ -335,12 +293,10 @@ class LogogramSchema(NamedSignSchema):
 
 
 class NumberSchema(NamedSignSchema):
-    numeral = fields.Integer(load_only=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return Number.of(
-            data["name_parts"] or (ValueToken.of(data["name"]),),
+            data["name_parts"],
             data["modifiers"],
             data["flags"],
             data["sign"],
@@ -466,7 +422,7 @@ class LinguisticGlossSchema(GlossSchema):
         )
 
 
-class OneOfTokenSchema(OneOfSchema):
+class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
         "Token": ValueTokenSchema,
@@ -477,7 +433,6 @@ class OneOfTokenSchema(OneOfSchema):
         "DocumentOrientedGloss": DocumentOrientedGlossSchema,
         "BrokenAway": BrokenAwaySchema,
         "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
-        "OmissionOrRemoval": OmissionOrRemovalSchema,
         "AccidentalOmission": AccidentalOmissionSchema,
         "IntentionalOmission": IntentionalOmissionSchema,
         "Removal": RemovalSchema,
