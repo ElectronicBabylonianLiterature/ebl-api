@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from enum import Enum
-from functools import singledispatchmethod  # type: ignore
 from typing import Optional, Union, Tuple
 
 import attr
@@ -63,7 +62,7 @@ class RulingDollarLine(DollarLine):
 
     @property
     def display_value(self) -> str:
-        status = f" {self.status.value}" if self.status else "" # pyre-ignore[16]
+        status = f" {self.status.value}" if self.status else ""  # pyre-ignore[16]
         return f"{self.number.value} ruling{status}"
 
 
