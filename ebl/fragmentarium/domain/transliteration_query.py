@@ -1,9 +1,8 @@
-from itertools import chain
+from itertools import chain, groupby
 import re
 from typing import Sequence
 
 import attr
-import pydash  # pyre-ignore
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import Lines
@@ -53,5 +52,5 @@ class TransliterationQuery:
 
         return tuple(
             tuple(lines[numbers[0] : numbers[1] + 1])
-            for numbers in pydash.uniq(line_numbers)
+            for numbers, _ in groupby(line_numbers)
         )

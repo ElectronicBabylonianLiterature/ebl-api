@@ -1,9 +1,9 @@
+from itertools import zip_longest
 from typing import (
     Callable, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
 )
 
 import attr
-import pydash  # pyre-ignore
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object
@@ -78,7 +78,7 @@ class Text:
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Text":
         if len(self.lines) == len(lemmatization.tokens):
-            zipped = pydash.zip_(list(self.lines), list(lemmatization.tokens))
+            zipped = zip_longest(self.lines, lemmatization.tokens)
             lines = tuple(
                 line.update_lemmatization(lemmas) for [line, lemmas] in zipped
             )

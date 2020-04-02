@@ -1,16 +1,15 @@
 import datetime
 
 import dictdiffer  # pyre-ignore
-import pydash  # pyre-ignore
 
 from ebl.mongo_collection import MongoCollection
 
 
-def create_entry(user_profile, resource_type, resource_id, diff):
+def create_entry(user_profile: dict, resource_type, resource_id, diff) -> dict:
     return {
-        "user_profile": pydash.map_keys(
-            user_profile, lambda _, key: key.replace(".", "_")
-        ),
+        "user_profile": {
+            key.replace(".", "_"): value for key, value in user_profile.items()
+        },
         "resource_type": resource_type,
         "resource_id": resource_id,
         "date": datetime.datetime.utcnow().isoformat(),

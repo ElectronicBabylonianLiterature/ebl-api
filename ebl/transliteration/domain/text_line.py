@@ -1,7 +1,7 @@
+from itertools import zip_longest
 from typing import Callable, Iterable, Sequence, Type, TypeVar
 
 import attr
-import pydash  # pyre-ignore
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
@@ -68,7 +68,7 @@ class TextLine(Line):
         error_class: Type[Exception],
     ) -> "Line":
         if len(self.content) == len(updates):
-            zipped = pydash.zip_(list(self.content), list(updates))
+            zipped = zip_longest(self.content, updates)
             content = tuple(updater(pair[0], pair[1]) for pair in zipped)
             return attr.evolve(self, content=content)
         else:
