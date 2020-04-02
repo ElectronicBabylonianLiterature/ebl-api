@@ -1,9 +1,9 @@
-from typing import Sequence
 from itertools import chain
+import re
+from typing import Sequence
 
 import attr
 import pydash  # pyre-ignore
-import regex  # pyre-ignore
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import Lines
@@ -18,8 +18,8 @@ class TransliterationQuery:
     def regexp(self):
         lines_regexp = map(
             lambda row: " ".join([
-                fr"([^\s]+/)*{escaped_sign}(/[^\s]+)*"
-                for escaped_sign in (regex.escape(sign) for sign in row)
+                fr"([^\s]+\/)*{escaped_sign}(\/[^\s]+)*"
+                for escaped_sign in (re.escape(sign) for sign in row)
             ]),
             self._signs
         )
@@ -38,7 +38,7 @@ class TransliterationQuery:
                        in chain.from_iterable(signs[:position])
                        if char == "\n"])
 
-        matches = regex.finditer(self.regexp, signs, overlapped=True)
+        matches = re.finditer(self.regexp, signs)
         positions = [(match.start(), match.end()) for match in matches]
         line_numbers = [
             (line_number(position[0]), line_number(position[1]))
