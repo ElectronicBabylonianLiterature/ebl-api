@@ -38,7 +38,6 @@ rope = "*"
 flake8 = "*"
 pyhamcrest = "*"
 flake8-bugbear = "*"
-pre-commit = "*"
 httpretty = "*"
 pyre-check = "*"
 
