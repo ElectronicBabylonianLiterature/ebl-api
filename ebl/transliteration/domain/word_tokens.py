@@ -14,7 +14,6 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
-from ebl.transliteration.domain.word_cleaner import clean_word
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
@@ -118,7 +117,7 @@ class Word(Token):
         return attr.evolve(self, alignment=None)
 
     def merge(self, token: Token) -> Token:
-        same_value = clean_word(self.value) == clean_word(token.value)
+        same_value = self.clean_value == token.clean_value
         is_compatible = type(token) == Word and same_value
 
         result = token
