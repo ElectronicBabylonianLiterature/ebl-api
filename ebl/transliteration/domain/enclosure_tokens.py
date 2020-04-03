@@ -26,6 +26,10 @@ class Enclosure(Token):
         return self.get_sides()[self.side]
 
     @property
+    def clean_value(self) -> str:
+        return ""
+
+    @property
     def parts(self):
         return tuple()
 
@@ -158,6 +162,11 @@ class Gloss(Token):
     @property
     def value(self) -> str:
         parts = "".join(token.value for token in self.parts)
+        return f"{self.open}{parts}{self.close}"
+
+    @property
+    def clean_value(self) -> str:
+        parts = "".join(token.clean_value for token in self.parts)
         return f"{self.open}{parts}{self.close}"
 
     def accept(self, visitor: TokenVisitor) -> None:

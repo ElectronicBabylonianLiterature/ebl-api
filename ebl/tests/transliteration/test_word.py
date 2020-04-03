@@ -12,10 +12,12 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import (
+    Logogram,
     Reading,
     UnclearSign,
     UnidentifiedSign,
 )
+from ebl.transliteration.domain.enclosure_tokens import Determinative
 from ebl.transliteration.domain.tokens import (
     Joiner,
     UnknownNumberOfSigns,
@@ -81,6 +83,7 @@ def test_defaults():
     word = Word.of([reading])
 
     assert word.value == value
+    assert word.clean_value == value
     assert word.get_key() == f"Word⁝{value}⟨{reading.get_key()}⟩"
     assert word.parts == (reading,)
     assert word.lemmatizable is True
@@ -118,6 +121,7 @@ def test_word(language, normalized, unique_lemma):
     )
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
+    assert word.clean_value == value
     assert word.get_key() == f"Word⁝{value}{expected_parts}"
     assert word.parts == tuple(parts)
     assert word.language == language
@@ -151,6 +155,27 @@ def test_word(language, normalized, unique_lemma):
         assert hash(word) != hash(not_equal)
 
     assert word != ValueToken.of(value)
+
+
+def test_clean_value():
+    word = Word.of([
+        BrokenAway.open(),
+        Reading.of([ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")]),
+        Joiner.hyphen(),
+        Variant.of(
+            Reading.of([ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]),
+            Reading.of([ValueToken.of("p"), BrokenAway.open(), ValueToken.of("a")]),
+        ),
+        PerhapsBrokenAway.open(),
+        Determinative.of([Logogram.of([
+            ValueToken.of("KU"),
+            BrokenAway.close(),
+            ValueToken.of("R")
+        ])]),
+        PerhapsBrokenAway.close(),
+    ])
+
+    assert word.clean_value == "kur-ra/pa{KUR}"
 
 
 @pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)

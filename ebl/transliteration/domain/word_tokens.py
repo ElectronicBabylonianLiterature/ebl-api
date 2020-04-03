@@ -58,6 +58,10 @@ class Word(Token):
         return "".join(part.value for part in self.parts)
 
     @property
+    def clean_value(self) -> str:
+        return "".join(part.clean_value for part in self.parts)
+
+    @property
     def lemmatizable(self) -> bool:
         non_lemmatizables = [
             atf.VARIANT_SEPARATOR,

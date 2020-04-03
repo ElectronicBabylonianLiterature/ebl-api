@@ -22,6 +22,10 @@ class UnknownSign(Token):
         default=tuple(), converter=convert_flag_sequence
     )
 
+    @property
+    def clean_value(self) -> str:
+        return self._sign
+
     @classmethod
     def of(cls: Type[T], flags: Sequence[atf.Flag] = tuple()) -> T:
         return cls(frozenset(), flags)
@@ -96,6 +100,11 @@ class Divider(AbstractSign):
         return tuple()
 
     @property
+    def clean_value(self) -> str:
+        modifiers = "".join(self.modifiers)
+        return f"{self.divider}{modifiers}"
+
+    @property
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
@@ -130,6 +139,13 @@ class NamedSign(AbstractSign):
         return "".join(
             token.value for token in self.name_parts if type(token) == ValueToken
         )
+
+    @property
+    def clean_value(self) -> str:
+        sub_index = to_sub_index(self.sub_index)
+        modifiers = "".join(self.modifiers)
+        sign = f"({self.sign.value})" if self.sign else ""  # pyre-ignore[16]
+        return f"{self.name}{sub_index}{modifiers}{sign}"
 
     @property
     def parts(self) -> Sequence[Token]:
@@ -182,12 +198,19 @@ class Logogram(NamedSign):
 
     @property
     def value(self) -> str:
-        surrogate = (
+        return f"{super().value}{self._surrogate_value}"
+
+    @property
+    def clean_value(self) -> str:
+        return f"{super().clean_value}{self._surrogate_value}"
+
+    @property
+    def _surrogate_value(self) -> str:
+        return (
             f"<({''.join(token.value for token in self.surrogate)})>"
             if self.surrogate
             else ""
         )
-        return f"{super().value}{surrogate}"
 
     @staticmethod
     def of(
@@ -246,6 +269,11 @@ class Grapheme(AbstractSign):
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
         return f"{self.name}{modifiers}{flags}"
+
+    @property
+    def clean_value(self) -> str:
+        modifiers = "".join(self.modifiers)
+        return f"{self.name}{modifiers}"
 
     @property
     def parts(self):

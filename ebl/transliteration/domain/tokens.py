@@ -78,6 +78,10 @@ class Token(ABC):
         ...
 
     @property
+    def clean_value(self) -> str:
+        return self.value
+
+    @property
     def lemmatizable(self) -> bool:
         return False
 
@@ -211,6 +215,10 @@ class Variant(Token):
     @property
     def value(self) -> str:
         return "/".join(token.value for token in self.tokens)
+
+    @property
+    def clean_value(self) -> str:
+        return "/".join(token.clean_value for token in self.tokens)
 
     @property
     def parts(self):
