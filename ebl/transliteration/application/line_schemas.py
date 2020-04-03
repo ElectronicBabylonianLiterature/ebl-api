@@ -31,8 +31,8 @@ class TextLineSchema(LineBaseSchema):
         )
 
 
-class ControlLinesSchema(LineBaseSchema):
-    display_value = fields.String(required=True, data_key="displayValue")
+class DollarAndAtLineSchema(LineBaseSchema):
+    display_value = fields.String(data_key="displayValue")
 
 
 class ControlLineSchema(LineBaseSchema):

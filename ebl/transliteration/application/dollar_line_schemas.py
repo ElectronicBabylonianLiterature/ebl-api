@@ -4,7 +4,7 @@ from typing import Mapping, Type
 from marshmallow import Schema, fields, post_load  # pyre-ignore
 
 from ebl.schemas import NameEnum
-from ebl.transliteration.application.line_schemas import ControlLinesSchema
+from ebl.transliteration.application.line_schemas import DollarAndAtLineSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
@@ -16,7 +16,7 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class LooseDollarLineSchema(ControlLinesSchema):
+class LooseDollarLineSchema(DollarAndAtLineSchema):
     text = fields.String(required=True)
 
     @post_load
@@ -24,7 +24,7 @@ class LooseDollarLineSchema(ControlLinesSchema):
         return LooseDollarLine(data["text"])
 
 
-class ImageDollarLineSchema(ControlLinesSchema):
+class ImageDollarLineSchema(DollarAndAtLineSchema):
     number = fields.String(required=True)
     letter = fields.String(required=True, allow_none=True)
     text = fields.String(required=True)
@@ -34,7 +34,7 @@ class ImageDollarLineSchema(ControlLinesSchema):
         return ImageDollarLine(data["number"], data["letter"], data["text"])
 
 
-class RulingDollarLineSchema(ControlLinesSchema):
+class RulingDollarLineSchema(DollarAndAtLineSchema):
     number = NameEnum(atf.Ruling, required=True)
     status = NameEnum(atf.DollarStatus, missing=None)
 
@@ -43,7 +43,7 @@ class RulingDollarLineSchema(ControlLinesSchema):
         return RulingDollarLine(data["number"], data["status"])
 
 
-class SealDollarLineSchema(ControlLinesSchema):
+class SealDollarLineSchema(DollarAndAtLineSchema):
     number = fields.Int(required=True)
 
     @post_load
@@ -77,7 +77,7 @@ class ScopeContainerSchema(Schema):  # pyre-ignore[11]
         return scope_types[type][content]
 
 
-class StateDollarLineSchema(ControlLinesSchema):
+class StateDollarLineSchema(DollarAndAtLineSchema):
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),
