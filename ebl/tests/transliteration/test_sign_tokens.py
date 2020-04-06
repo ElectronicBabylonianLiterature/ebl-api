@@ -340,8 +340,6 @@ def test_logogram(
         "sign": sign and OneOfTokenSchema().dump(sign),
         "enclosureType": [type.name for type in logogram.enclosure_type],
     }
-    assert OneOfTokenSchema().dump(logogram) == serialized
-    assert OneOfTokenSchema().load(serialized) == logogram
     assert_token_serialization(logogram, serialized)
 
 

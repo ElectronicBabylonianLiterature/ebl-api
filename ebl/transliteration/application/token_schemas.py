@@ -61,6 +61,8 @@ class BaseTokenSchema(Schema):  # pyre-ignore[11]
         NameEnum(EnclosureType), missing=list, data_key="enclosureType"
     )
 
+    clean_value = fields.String(data_key="cleanValue")
+
 
 class ValueTokenSchema(BaseTokenSchema):
     value = fields.String(required=True)

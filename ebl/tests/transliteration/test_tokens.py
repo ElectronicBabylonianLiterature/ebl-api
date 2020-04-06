@@ -265,8 +265,6 @@ def test_variant():
         "tokens": OneOfTokenSchema().dump([reading, divider], many=True),
         "enclosureType": [type.name for type in variant.enclosure_type],
     }
-    assert OneOfTokenSchema().dump(variant) == serialized
-    assert OneOfTokenSchema().load(serialized) == variant
     assert_token_serialization(variant, serialized)
 
 
