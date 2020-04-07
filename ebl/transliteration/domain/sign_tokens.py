@@ -11,7 +11,9 @@ from ebl.transliteration.domain.converters import (
     convert_token_sequence,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.tokens import Token, ValueToken, TokenVisitor
+from ebl.transliteration.domain.tokens import (
+    ErasureState, Token, ValueToken, TokenVisitor
+)
 
 T = TypeVar("T", bound="UnknownSign")
 
@@ -28,7 +30,7 @@ class UnknownSign(Token):
 
     @classmethod
     def of(cls: Type[T], flags: Sequence[atf.Flag] = tuple()) -> T:
-        return cls(frozenset(), flags)
+        return cls(frozenset(), ErasureState.NONE, flags)
 
     @property
     def parts(self):
@@ -117,7 +119,7 @@ class Divider(AbstractSign):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ):
-        return Divider(frozenset(), modifiers, flags, divider)
+        return Divider(frozenset(), ErasureState.NONE, modifiers, flags, divider)
 
 
 SignName = Sequence[Union[ValueToken, BrokenAway]]
@@ -177,7 +179,8 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(frozenset(), modifiers, flags, name, sub_index, sign)
+        return Reading(frozenset(), ErasureState.NONE, modifiers, flags, name,
+                       sub_index, sign)
 
     @staticmethod
     def of_name(
@@ -221,7 +224,8 @@ class Logogram(NamedSign):
         sign: Optional[Token] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
-        return Logogram(frozenset(), modifiers, flags, name, sub_index, sign, surrogate)
+        return Logogram(frozenset(), ErasureState.NONE, modifiers, flags, name,
+                        sub_index, sign, surrogate)
 
     @staticmethod
     def of_name(
@@ -247,7 +251,8 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(frozenset(), modifiers, flags, name, sub_index, sign)
+        return Number(frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index,
+                      sign)
 
     @staticmethod
     def of_name(
@@ -285,7 +290,7 @@ class Grapheme(AbstractSign):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ) -> "Grapheme":
-        return Grapheme(frozenset(), modifiers, flags, name)
+        return Grapheme(frozenset(), ErasureState.NONE, modifiers, flags, name)
 
 
 @attr.s(auto_attribs=True, frozen=True)

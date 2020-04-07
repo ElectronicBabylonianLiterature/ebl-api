@@ -605,7 +605,7 @@ from ebl.transliteration.domain.word_tokens import (
             "...{d}kur",
             Word.of(
                 [
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Determinative.of([Reading.of_name("d")]),
                     Reading.of_name("kur"),
                 ],
@@ -617,7 +617,7 @@ from ebl.transliteration.domain.word_tokens import (
                 [
                     Reading.of_name("kur"),
                     Determinative.of([Reading.of_name("d")]),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                 ],
             ),
         ),
@@ -625,11 +625,11 @@ from ebl.transliteration.domain.word_tokens import (
             "...-kur-...",
             Word.of(
                 [
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Joiner.hyphen(),
                     Reading.of_name("kur"),
                     Joiner.hyphen(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                 ],
             ),
         ),
@@ -639,11 +639,11 @@ from ebl.transliteration.domain.word_tokens import (
                 [
                     Reading.of_name("kur"),
                     Joiner.hyphen(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Joiner.hyphen(),
                     Reading.of_name("kur"),
                     Joiner.hyphen(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Joiner.hyphen(),
                     Reading.of_name("kur"),
                 ],
@@ -653,7 +653,7 @@ from ebl.transliteration.domain.word_tokens import (
             "...]-ku",
             Word.of(
                 [
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     BrokenAway.close(),
                     Joiner.hyphen(),
                     Reading.of_name("ku"),
@@ -667,7 +667,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("ku"),
                     Joiner.hyphen(),
                     BrokenAway.open(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                 ],
             ),
         ),
@@ -675,7 +675,7 @@ from ebl.transliteration.domain.word_tokens import (
             "....ku",
             Word.of(
                 [
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Joiner.dot(),
                     Reading.of_name("ku"),
                 ],
@@ -687,7 +687,7 @@ from ebl.transliteration.domain.word_tokens import (
                 [
                     Reading.of_name("ku"),
                     Joiner.dot(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                 ],
             ),
         ),
@@ -765,7 +765,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
                     Reading.of_name("un"),
-                    InWordNewline(frozenset()),
+                    InWordNewline.of(),
                     Joiner.hyphen(),
                     Reading.of_name("e", 3),
                 ],

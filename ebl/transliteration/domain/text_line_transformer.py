@@ -82,6 +82,15 @@ class ErasureVisitor(TokenVisitor):
             self._tokens.append(token)
 
 
+def set_erasure_state(
+    tree: Tree, state: ErasureState  # pyre-ignore[11]
+) -> Sequence[EblToken]:
+    visitor = ErasureVisitor(state)
+    for child in tree.children:
+        visitor.visit(child)
+    return visitor.tokens
+
+
 class SignTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
@@ -93,7 +102,7 @@ class SignTransformer(Transformer):  # pyre-ignore[11]
 
     @v_args(inline=True)
     def ebl_atf_text_line__unknown_number_of_signs(self, _):
-        return UnknownNumberOfSigns(frozenset())
+        return UnknownNumberOfSigns.of()
 
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, symbol):
@@ -198,6 +207,15 @@ class GlossTransformer(Transformer):  # pyre-ignore[11]
 
 
 class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
+    def _transform_erasure(self, erased, over_erased):
+        return [
+            Erasure.open(),
+            *set_erasure_state(erased, ErasureState.ERASED),
+            Erasure.center(),
+            *set_erasure_state(over_erased, ErasureState.OVER_ERASED),
+            Erasure.close(),
+        ]
+
     def ebl_atf_text_line__lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
 
@@ -211,11 +229,11 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, symbol):
-        return Joiner(frozenset(), atf.Joiner(str(symbol)))
+        return Joiner.of(atf.Joiner(str(symbol)))
 
     @v_args(inline=True)
     def ebl_atf_text_line__in_word_newline(self, _):
-        return InWordNewline(frozenset())
+        return InWordNewline.of()
 
     def ebl_atf_text_line__variant(self, children):
         tokens = _children_to_tokens(children)
@@ -223,13 +241,7 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__inline_erasure(self, erased, over_erased):
-        return [
-            Erasure.open(),
-            *erased.children,
-            Erasure.center(),
-            *over_erased.children,
-            Erasure.close(),
-        ]
+        return self._transform_erasure(erased, over_erased)
 
     def ebl_atf_text_line__close_perhaps_broken_away(self, _):
         return PerhapsBrokenAway.close()
@@ -272,7 +284,7 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__tabulation(self, value):
-        return Tabulation.of(value)
+        return Tabulation.of()
 
     @v_args(inline=True)
     def ebl_atf_text_line__commentary_protocol(self, value):
@@ -292,16 +304,4 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__erasure(self, erased, over_erased):
-        def set_erasure_state(tree: Tree, state: ErasureState):  # pyre-ignore[11]
-            visitor = ErasureVisitor(state)
-            for child in tree.children:
-                visitor.visit(child)
-            return visitor.tokens
-
-        return [
-            Erasure.open(),
-            *set_erasure_state(erased, ErasureState.ERASED),
-            Erasure.center(),
-            *set_erasure_state(over_erased, ErasureState.OVER_ERASED),
-            Erasure.close(),
-        ]
+        return self._transform_erasure(erased, over_erased)

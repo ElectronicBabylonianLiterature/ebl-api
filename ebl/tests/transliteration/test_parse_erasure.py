@@ -47,14 +47,14 @@ ERASURE_RIGHT = Erasure.close()
         (
             "°x X\\X x°",
             (
-                Word.of([UnclearSign(frozenset())], erasure=ErasureState.ERASED),
-                Word.of([UnidentifiedSign(frozenset())], erasure=ErasureState.ERASED),
+                Word.of([UnclearSign.of()], erasure=ErasureState.ERASED),
+                Word.of([UnidentifiedSign.of()], erasure=ErasureState.ERASED),
             ),
             (
                 Word.of(
-                    [UnidentifiedSign(frozenset())], erasure=ErasureState.OVER_ERASED,
+                    [UnidentifiedSign.of()], erasure=ErasureState.OVER_ERASED,
                 ),
-                Word.of([UnclearSign(frozenset())], erasure=ErasureState.OVER_ERASED),
+                Word.of([UnclearSign.of()], erasure=ErasureState.OVER_ERASED),
             ),
         ),
     ],

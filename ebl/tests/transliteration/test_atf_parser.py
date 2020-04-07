@@ -105,7 +105,7 @@ def test_parser_version(parser, version):
             "1'. ...",
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True), (UnknownNumberOfSigns(frozenset()),)
+                    LineNumber(1, True), (UnknownNumberOfSigns.of(),)
                 )
             ],
         ),
@@ -113,7 +113,7 @@ def test_parser_version(parser, version):
             "1′. ...",
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True), (UnknownNumberOfSigns(frozenset()),)
+                    LineNumber(1, True), (UnknownNumberOfSigns.of(),)
                 )
             ],
         ),
@@ -121,7 +121,7 @@ def test_parser_version(parser, version):
             "1’. ...",
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True), (UnknownNumberOfSigns(frozenset()),)
+                    LineNumber(1, True), (UnknownNumberOfSigns.of(),)
                 )
             ],
         ),
@@ -130,7 +130,7 @@ def test_parser_version(parser, version):
             [
                 TextLine.of_iterable(
                     LineNumber(113, True, "D", "a"),
-                    (UnknownNumberOfSigns(frozenset()),),
+                    (UnknownNumberOfSigns.of(),),
                 )
             ],
         ),
@@ -141,13 +141,13 @@ def test_parser_version(parser, version):
                     LineNumberRange(
                         LineNumber(113, True, "z", "a"), LineNumber(9, False, None, "b")
                     ),
-                    (UnknownNumberOfSigns(frozenset()),),
+                    (UnknownNumberOfSigns.of(),),
                 )
             ],
         ),
         (
             "1. ($___$)",
-            [TextLine.of_iterable(LineNumber(1), (Tabulation.of("($___$)"),))],
+            [TextLine.of_iterable(LineNumber(1), (Tabulation.of(),))],
         ),
         (
             "1. ... [...] [(...)]",
@@ -155,13 +155,13 @@ def test_parser_version(parser, version):
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.close(),
                         BrokenAway.open(),
                         PerhapsBrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         PerhapsBrokenAway.close(),
                         BrokenAway.close(),
                     ),
@@ -178,13 +178,13 @@ def test_parser_version(parser, version):
                             parts=[
                                 BrokenAway.open(),
                                 PerhapsBrokenAway.open(),
-                                UnclearSign(frozenset()),
+                                UnclearSign.of(),
                             ],
                         ),
-                        Word.of([UnclearSign(frozenset())]),
+                        Word.of([UnclearSign.of()]),
                         Word.of(
                             parts=[
-                                UnclearSign(frozenset()),
+                                UnclearSign.of(),
                                 PerhapsBrokenAway.close(),
                                 BrokenAway.close(),
                             ],
@@ -211,7 +211,7 @@ def test_parser_version(parser, version):
                                 Reading.of_name("su", 8),
                             ],
                         ),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         AccidentalOmission.close(),
                     ),
                 )
@@ -224,7 +224,7 @@ def test_parser_version(parser, version):
                     LineNumber(1),
                     (
                         Word.of([Removal.open(), Reading.of_name("en"),]),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         Removal.close(),
                     ),
                 )
@@ -369,7 +369,7 @@ def test_parser_version(parser, version):
                     LineNumber(1),
                     (
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         Word.of(
                             parts=[
                                 Reading.of(
@@ -398,7 +398,7 @@ def test_parser_version(parser, version):
                                     )
                                 ),
                                 Joiner.hyphen(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -414,7 +414,7 @@ def test_parser_version(parser, version):
                                 BrokenAway.open(),
                                 Reading.of_name("ku"),
                                 Joiner.hyphen(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 Joiner.hyphen(),
                                 Reading.of_name("ku"),
                                 BrokenAway.close(),
@@ -430,7 +430,7 @@ def test_parser_version(parser, version):
                         Word.of(
                             parts=[
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("ku"),
@@ -449,19 +449,19 @@ def test_parser_version(parser, version):
                         Word.of(
                             parts=[
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("qa"),
                                 Joiner.hyphen(),
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("ba"),
                                 Joiner.hyphen(),
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -475,7 +475,7 @@ def test_parser_version(parser, version):
                                 Reading.of_name("pa"),
                                 Joiner.hyphen(),
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -498,7 +498,7 @@ def test_parser_version(parser, version):
                             ],
                         ),
                         PerhapsBrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         PerhapsBrokenAway.close(),
                         BrokenAway.close(),
                     ),
@@ -535,22 +535,22 @@ def test_parser_version(parser, version):
                         Word.of(
                             parts=[
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 Joiner.plus(),
                                 Reading.of_name("ku"),
                                 Joiner.dot(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
                         Word.of(
                             parts=[
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 Joiner.dot(),
                                 Reading.of_name("ku"),
                                 Joiner.plus(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -570,14 +570,14 @@ def test_parser_version(parser, version):
                     LineNumber(1),
                     (
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.close(),
                         LoneDeterminative.of_value(
                             [Determinative.of([Reading.of_name("bu")]),],
                             ErasureState.NONE,
                         ),
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.close(),
                     ),
                 ),
@@ -587,13 +587,13 @@ def test_parser_version(parser, version):
                         Word.of(
                             parts=[
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                                 Determinative.of([Reading.of_name("bu")]),
                             ],
                         ),
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.close(),
                     ),
                 ),
@@ -601,13 +601,13 @@ def test_parser_version(parser, version):
                     LineNumber(3),
                     (
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.close(),
                         Word.of(
                             parts=[
                                 Determinative.of([Reading.of_name("bu")]),
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -619,11 +619,11 @@ def test_parser_version(parser, version):
                         Word.of(
                             parts=[
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                                 Determinative.of([Reading.of_name("bu")]),
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -691,7 +691,7 @@ def test_parser_version(parser, version):
                                     [Reading.of_name("u", 2, flags=[atf.Flag.DAMAGE])]
                                 ),
                                 BrokenAway.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -704,7 +704,7 @@ def test_parser_version(parser, version):
                             ErasureState.NONE,
                         ),
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         BrokenAway.close(),
                     ),
                 )
@@ -966,7 +966,7 @@ def test_parser_version(parser, version):
                             parts=[
                                 BrokenAway.open(),
                                 Determinative.of([Reading.of_name("iti")]),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                             ],
                         ),
@@ -1014,7 +1014,7 @@ def test_parser_version(parser, version):
                                 BrokenAway.close(),
                                 Joiner.hyphen(),
                                 IntentionalOmission.open(),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 IntentionalOmission.close(),
                             ],
                         ),
@@ -1030,12 +1030,12 @@ def test_parser_version(parser, version):
                     (
                         Word.of(
                             parts=[
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                                 Determinative.of([Reading.of_name("d")]),
                                 Reading.of_name("kur"),
                             ],
                         ),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         Word.of(
                             parts=[
                                 Determinative.of([Reading.of_name("d")]),
@@ -1056,7 +1056,7 @@ def test_parser_version(parser, version):
                             parts=[
                                 Reading.of_name("kur"),
                                 Determinative.of([Reading.of_name("d")]),
-                                UnknownNumberOfSigns(frozenset()),
+                                UnknownNumberOfSigns.of(),
                             ],
                         ),
                         Word.of(
@@ -1065,7 +1065,7 @@ def test_parser_version(parser, version):
                                 Determinative.of([Reading.of_name("d")]),
                             ],
                         ),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                     ),
                 )
             ],
@@ -1081,7 +1081,7 @@ def test_parser_version(parser, version):
                                 Reading.of_name("mu"),
                                 Joiner.hyphen(),
                                 Reading.of_name("un"),
-                                InWordNewline(frozenset()),
+                                InWordNewline.of(),
                                 Joiner.hyphen(),
                                 Reading.of_name("e", 3),
                             ],
@@ -1098,7 +1098,7 @@ def test_parser_version(parser, version):
                     LineNumber(1),
                     (
                         BrokenAway.open(),
-                        UnknownNumberOfSigns(frozenset()),
+                        UnknownNumberOfSigns.of(),
                         DocumentOrientedGloss.open(),
                         Word.of(
                             parts=[
