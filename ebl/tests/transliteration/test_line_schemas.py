@@ -42,7 +42,7 @@ from ebl.transliteration.domain.note_line import (
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
@@ -290,6 +290,7 @@ LINES = [
                                         frozenset(
                                             {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
                                         ),
+                                        ErasureState.NONE,
                                         "bu",
                                     ),
                                 )
@@ -312,6 +313,7 @@ LINES = [
                                                         EnclosureType.DOCUMENT_ORIENTED_GLOSS
                                                     }
                                                 ),
+                                                ErasureState.NONE,
                                                 "d",
                                             ),
                                         )

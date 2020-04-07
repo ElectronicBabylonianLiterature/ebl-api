@@ -22,6 +22,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnidentifiedSign,
 )
 from ebl.transliteration.domain.tokens import (
+    ErasureState,
     Token,
     UnknownNumberOfSigns,
     Variant,
@@ -42,12 +43,13 @@ def map_line(atf) -> Sequence[Token]:
 @pytest.mark.parametrize(
     "atf, expected",
     [
-        ("...", (UnknownNumberOfSigns(frozenset()),)),
+        ("...", (UnknownNumberOfSigns.of(),)),
         (
             "[...]",
             (
                 BrokenAway.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+                UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}),
+                                     ErasureState.NONE),
                 BrokenAway.close().set_enclosure_type(
                     frozenset({EnclosureType.BROKEN_AWAY})
                 ),
@@ -57,7 +59,8 @@ def map_line(atf) -> Sequence[Token]:
             "(...)",
             (
                 PerhapsBrokenAway.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.PERHAPS})),
+                UnknownNumberOfSigns(frozenset({EnclosureType.PERHAPS}),
+                                     ErasureState.NONE),
                 PerhapsBrokenAway.close().set_enclosure_type(
                     frozenset({EnclosureType.PERHAPS})
                 ),
@@ -70,10 +73,10 @@ def map_line(atf) -> Sequence[Token]:
                 PerhapsBrokenAway.open().set_enclosure_type(
                     frozenset({EnclosureType.BROKEN_AWAY})
                 ),
-                UnknownNumberOfSigns(
+                UnknownNumberOfSigns.of().set_enclosure_type(
                     frozenset(
                         {EnclosureType.BROKEN_AWAY, EnclosureType.PERHAPS_BROKEN_AWAY}
-                    )
+                    ),
                 ),
                 PerhapsBrokenAway.close().set_enclosure_type(
                     frozenset(
@@ -89,7 +92,9 @@ def map_line(atf) -> Sequence[Token]:
             "<(...)>",
             (
                 IntentionalOmission.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.INTENTIONAL_OMISSION})),
+                UnknownNumberOfSigns.of().set_enclosure_type(
+                    frozenset({EnclosureType.INTENTIONAL_OMISSION})
+                ),
                 IntentionalOmission.close().set_enclosure_type(
                     frozenset({EnclosureType.INTENTIONAL_OMISSION})
                 ),
@@ -99,7 +104,9 @@ def map_line(atf) -> Sequence[Token]:
             "<...>",
             (
                 AccidentalOmission.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.ACCIDENTAL_OMISSION})),
+                UnknownNumberOfSigns.of().set_enclosure_type(
+                    frozenset({EnclosureType.ACCIDENTAL_OMISSION})
+                ),
                 AccidentalOmission.close().set_enclosure_type(
                     frozenset({EnclosureType.ACCIDENTAL_OMISSION})
                 ),
@@ -109,7 +116,9 @@ def map_line(atf) -> Sequence[Token]:
             "<<...>>",
             (
                 Removal.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.REMOVAL})),
+                UnknownNumberOfSigns.of().set_enclosure_type(
+                    frozenset({EnclosureType.REMOVAL})
+                ),
                 Removal.close().set_enclosure_type(frozenset({EnclosureType.REMOVAL})),
             ),
         ),
@@ -117,7 +126,7 @@ def map_line(atf) -> Sequence[Token]:
             "{(...)}",
             (
                 DocumentOrientedGloss.open(),
-                UnknownNumberOfSigns(
+                UnknownNumberOfSigns.of().set_enclosure_type(
                     frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
                 ),
                 DocumentOrientedGloss.close().set_enclosure_type(
@@ -136,13 +145,17 @@ def map_line(atf) -> Sequence[Token]:
                                     ValueToken.of("ku"),
                                     BrokenAway.open(),
                                     ValueToken(
-                                        frozenset({EnclosureType.BROKEN_AWAY}), "r"
+                                        frozenset({EnclosureType.BROKEN_AWAY}),
+                                        ErasureState.NONE,
+                                        "r"
                                     ),
                                 )
                             ),
                         )
                     ),
-                    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+                    UnknownNumberOfSigns.of().set_enclosure_type(
+                        frozenset({EnclosureType.BROKEN_AWAY})
+                    ),
                     BrokenAway.close().set_enclosure_type(
                         frozenset({EnclosureType.BROKEN_AWAY})
                     ),
@@ -163,6 +176,7 @@ def map_line(atf) -> Sequence[Token]:
                                             BrokenAway.open(),
                                             ValueToken(
                                                 frozenset({EnclosureType.BROKEN_AWAY}),
+                                                ErasureState.NONE,
                                                 "ur",
                                             ),
                                         )
@@ -172,7 +186,9 @@ def map_line(atf) -> Sequence[Token]:
                             Joiner.hyphen().set_enclosure_type(
                                 frozenset({EnclosureType.BROKEN_AWAY})
                             ),
-                            UnidentifiedSign(frozenset({EnclosureType.BROKEN_AWAY})),
+                            UnidentifiedSign.of().set_enclosure_type(
+                                frozenset({EnclosureType.BROKEN_AWAY})
+                            ),
                             BrokenAway.close().set_enclosure_type(
                                 frozenset({EnclosureType.BROKEN_AWAY})
                             ),
@@ -193,7 +209,9 @@ def map_line(atf) -> Sequence[Token]:
                                         ValueToken.of("ku"),
                                         BrokenAway.open(),
                                         ValueToken(
-                                            frozenset({EnclosureType.BROKEN_AWAY}), "r"
+                                            frozenset({EnclosureType.BROKEN_AWAY}),
+                                            ErasureState.NONE,
+                                            "r"
                                         ),
                                     )
                                 ),
@@ -202,7 +220,9 @@ def map_line(atf) -> Sequence[Token]:
                                         ValueToken.of("12"),
                                         BrokenAway.open(),
                                         ValueToken(
-                                            frozenset({EnclosureType.BROKEN_AWAY}), "3"
+                                            frozenset({EnclosureType.BROKEN_AWAY}),
+                                            ErasureState.NONE,
+                                            "3"
                                         ),
                                     )
                                 ),
@@ -210,10 +230,14 @@ def map_line(atf) -> Sequence[Token]:
                             Joiner.hyphen().set_enclosure_type(
                                 frozenset({EnclosureType.BROKEN_AWAY})
                             ),
-                            UnclearSign(frozenset({EnclosureType.BROKEN_AWAY})),
+                            UnclearSign.of().set_enclosure_type(
+                                frozenset({EnclosureType.BROKEN_AWAY})
+                            ),
                         )
                     ),
-                    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+                    UnknownNumberOfSigns.of().set_enclosure_type(
+                        frozenset({EnclosureType.BROKEN_AWAY})
+                    ),
                     BrokenAway.close().set_enclosure_type(
                         frozenset({EnclosureType.BROKEN_AWAY})
                     ),

@@ -15,6 +15,7 @@ from ebl.transliteration.domain.sign_tokens import Divider, Reading
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    ErasureState,
     Joiner,
     LanguageShift,
     Tabulation,
@@ -29,7 +30,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 TOKENS = [
-    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),
     LanguageShift.of("%sux"),
     DocumentOrientedGloss.open(),
 ]
@@ -149,7 +150,7 @@ def test_merge(old, new):
 
 def test_unknown_number_of_signs():
     unknown_number_of_signs = UnknownNumberOfSigns(
-        frozenset({EnclosureType.BROKEN_AWAY})
+        frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE
     )
 
     expected_value = "..."
@@ -168,7 +169,7 @@ def test_unknown_number_of_signs():
 
 def test_tabulation():
     value = "($___$)"
-    tabulation = Tabulation.of(value)
+    tabulation = Tabulation.of()
 
     assert tabulation.value == value
     assert tabulation.clean_value == value
@@ -292,7 +293,7 @@ def test_joiner(joiner, expected_value):
 
 
 def test_in_word_new_line():
-    newline = InWordNewline(frozenset({EnclosureType.BROKEN_AWAY}))
+    newline = InWordNewline(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE)
 
     expected_value = ";"
     assert newline.value == expected_value

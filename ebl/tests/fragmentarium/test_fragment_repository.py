@@ -24,7 +24,7 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
 COLLECTION = "fragments"
@@ -307,27 +307,52 @@ def test_find_lemmas_multiple(fragment_repository):
 
 
 @pytest.mark.parametrize(
-    "parts",
+    "parts,expected",
     [
-        [
-            BrokenAway.open(),
-            PerhapsBrokenAway.open(),
+        ([
             Reading.of(
-                [ValueToken.of("a"), ValueToken.of("n"), ValueToken.of("a")],
+                [ValueToken.of("ana")],
                 flags=[Flag.DAMAGE, Flag.COLLATION, Flag.UNCERTAIN, Flag.CORRECTION],
             ),
+        ], [["ana I"]]),
+        ([
+            BrokenAway.open(),
+            PerhapsBrokenAway.open(),
+            Reading.of([ValueToken.of("ana")]),
             PerhapsBrokenAway.close(),
             BrokenAway.close(),
-        ],
-        [Erasure.open(), Erasure.center(), Reading.of_name("ana"), Erasure.close()],
+        ], [["ana I"]]),
+        ([
+            Reading.of(
+                [
+                    ValueToken.of("a"),
+                    BrokenAway.open(),
+                    ValueToken.of("n"),
+                    PerhapsBrokenAway.close(),
+                    ValueToken.of("a")
+                ],
+            ),
+        ], [["ana I"]]),
+        ([
+            Erasure.open(),
+            Erasure.center(),
+            Reading.of_name("ana").set_erasure(ErasureState.OVER_ERASED),
+            Erasure.close()
+        ], [["ana I"]]),
+        ([
+            Erasure.open(),
+            Reading.of_name("ana").set_erasure(ErasureState.ERASED),
+            Erasure.center(),
+            Erasure.close()
+        ], []),
     ],
 )
-def test_find_lemmas_ignores_in_value(parts, fragment_repository):
+def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
     fragment = FragmentFactory.build(
         text=Text.of_iterable(
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True),
+                    LineNumber(1),
                     [Word.of(parts, unique_lemma=(WordId("ana I"),))],
                 )
             ]
@@ -336,23 +361,7 @@ def test_find_lemmas_ignores_in_value(parts, fragment_repository):
     )
     fragment_repository.create(fragment)
 
-    assert fragment_repository.query_lemmas("ana") == [["ana I"]]
-
-
-@pytest.mark.parametrize(
-    "query,expected",
-    [
-        ("[(a)]n[(a*#!?)]", [["ana I"]]),
-        ("°ana\\me-e-li°", []),
-        ("°me-e-li\\ana°", [["ana I"]]),
-        ("°\\ana°", [["ana I"]]),
-    ],
-)
-def test_find_lemmas_ignores_in_query(query, expected, fragment_repository):
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-
-    assert fragment_repository.query_lemmas(query) == expected
+    assert fragment_repository.query_lemmas("ana") == expected
 
 
 def test_find_lemmas_not_found(fragment_repository):

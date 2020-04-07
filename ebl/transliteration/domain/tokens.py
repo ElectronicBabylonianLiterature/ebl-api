@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import auto, Enum
 from typing import AbstractSet, Optional, Sequence, Type, TypeVar
 
 import attr
@@ -60,12 +61,19 @@ class TokenVisitor(ABC):
         self.visit(named_sign)
 
 
+class ErasureState(Enum):
+    NONE = auto()
+    ERASED = auto()
+    OVER_ERASED = auto()
+
+
 T = TypeVar("T", bound="Token")
 
 
 @attr.s(frozen=True, auto_attribs=True)
 class Token(ABC):
     enclosure_type: AbstractSet[EnclosureType]
+    erasure: ErasureState
 
     @property
     @abstractmethod
@@ -107,11 +115,14 @@ class Token(ABC):
         else:
             raise AlignmentError()
 
-    def set_enclosure_type(self, enclosure_type: AbstractSet[EnclosureType]) -> "Token":
-        return attr.evolve(self, enclosure_type=enclosure_type)
-
     def strip_alignment(self):
         return self
+
+    def set_enclosure_type(self: T, enclosure_type: AbstractSet[EnclosureType]) -> T:
+        return attr.evolve(self, enclosure_type=enclosure_type)
+
+    def set_erasure(self: T, erasure: ErasureState,) -> T:
+        return attr.evolve(self, erasure=erasure)
 
     def merge(self, token: "Token") -> "Token":
         return token
@@ -120,7 +131,7 @@ class Token(ABC):
         visitor.visit(self)
 
 
-T = TypeVar("T", bound="ValueToken")
+VT = TypeVar("T", bound="ValueToken")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -136,8 +147,8 @@ class ValueToken(Token):
         return tuple()
 
     @classmethod
-    def of(cls: Type[T], value: str) -> T:
-        return cls(frozenset(), value)  # pyre-ignore[19]
+    def of(cls: Type[VT], value: str) -> VT:
+        return cls(frozenset(), ErasureState.NONE, value)
 
 
 @attr.s(frozen=True)
@@ -166,10 +177,24 @@ class UnknownNumberOfSigns(Token):
     def parts(self):
         return tuple()
 
+    @staticmethod
+    def of() -> "UnknownNumberOfSigns":
+        return UnknownNumberOfSigns(frozenset(), ErasureState.NONE)
+
 
 @attr.s(frozen=True)
-class Tabulation(ValueToken):
-    pass
+class Tabulation(Token):
+    @property
+    def value(self) -> str:
+        return atf.TABULATION
+
+    @property
+    def parts(self):
+        return tuple()
+
+    @staticmethod
+    def of() -> "Tabulation":
+        return Tabulation(frozenset(), ErasureState.NONE)
 
 
 @attr.s(frozen=True)
@@ -188,7 +213,7 @@ class Column(Token):
 
     @staticmethod
     def of(number: Optional[int] = None) -> "Column":
-        return Column(frozenset(), number)
+        return Column(frozenset(), ErasureState.NONE, number)
 
     @number.validator
     def _check_number(self, _, value) -> None:
@@ -210,7 +235,7 @@ class Variant(Token):
 
     @staticmethod
     def of(*args: Token) -> "Variant":
-        return Variant(frozenset(), tuple(args))
+        return Variant(frozenset(), ErasureState.NONE, tuple(args))
 
     @property
     def value(self) -> str:
@@ -242,20 +267,20 @@ class Joiner(Token):
 
     @staticmethod
     def dot():
-        return Joiner(frozenset(), atf.Joiner.DOT)
+        return Joiner.of(atf.Joiner.DOT)
 
     @staticmethod
     def hyphen():
-        return Joiner(frozenset(), atf.Joiner.HYPHEN)
+        return Joiner.of(atf.Joiner.HYPHEN)
 
     @staticmethod
     def colon():
-        return Joiner(frozenset(), atf.Joiner.COLON)
+        return Joiner.of(atf.Joiner.COLON)
 
     @staticmethod
     def plus():
-        return Joiner(frozenset(), atf.Joiner.PLUS)
+        return Joiner.of(atf.Joiner.PLUS)
 
     @staticmethod
     def of(joiner: atf.Joiner):
-        return Joiner(frozenset(), joiner)
+        return Joiner(frozenset(), ErasureState.NONE, joiner)
