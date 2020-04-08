@@ -18,6 +18,7 @@ from ebl.transliteration.domain.lemmatization import (
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
+    ErasureState,
     Joiner,
     LanguageShift,
     UnknownNumberOfSigns,
@@ -62,7 +63,7 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
         LanguageShift.of("%sb"),
         LoneDeterminative.of([Determinative.of([Reading.of_name("third")])]),
         Word.of([BrokenAway.open(), Reading.of_name("fourth")]),
-        UnknownNumberOfSigns(frozenset()),
+        UnknownNumberOfSigns.of(),
         BrokenAway.close(),
     ]
     expected_tokens = (
@@ -77,13 +78,15 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
             [
                 BrokenAway.open(),
                 Reading.of(
-                    (ValueToken(frozenset({EnclosureType.BROKEN_AWAY}), "fourth"),)
+                    (ValueToken(frozenset({EnclosureType.BROKEN_AWAY}),
+                                ErasureState.NONE,
+                                "fourth"),)
                 ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
             ],
             DEFAULT_LANGUAGE,
             DEFAULT_NORMALIZED,
         ),
-        UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+        UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),
         BrokenAway.close().set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
     )
     line = TextLine.of_iterable(LINE_NUMBER, tokens)

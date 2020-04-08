@@ -11,7 +11,9 @@ from ebl.transliteration.domain.converters import (
     convert_token_sequence,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.tokens import Token, ValueToken, TokenVisitor
+from ebl.transliteration.domain.tokens import (
+    ErasureState, Token, ValueToken, TokenVisitor
+)
 
 T = TypeVar("T", bound="UnknownSign")
 
@@ -22,9 +24,13 @@ class UnknownSign(Token):
         default=tuple(), converter=convert_flag_sequence
     )
 
+    @property
+    def clean_value(self) -> str:
+        return self._sign
+
     @classmethod
     def of(cls: Type[T], flags: Sequence[atf.Flag] = tuple()) -> T:
-        return cls(frozenset(), flags)
+        return cls(frozenset(), ErasureState.NONE, flags)
 
     @property
     def parts(self):
@@ -96,6 +102,11 @@ class Divider(AbstractSign):
         return tuple()
 
     @property
+    def clean_value(self) -> str:
+        modifiers = "".join(self.modifiers)
+        return f"{self.divider}{modifiers}"
+
+    @property
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
@@ -108,7 +119,7 @@ class Divider(AbstractSign):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ):
-        return Divider(frozenset(), modifiers, flags, divider)
+        return Divider(frozenset(), ErasureState.NONE, modifiers, flags, divider)
 
 
 SignName = Sequence[Union[ValueToken, BrokenAway]]
@@ -130,6 +141,13 @@ class NamedSign(AbstractSign):
         return "".join(
             token.value for token in self.name_parts if type(token) == ValueToken
         )
+
+    @property
+    def clean_value(self) -> str:
+        sub_index = to_sub_index(self.sub_index)
+        modifiers = "".join(self.modifiers)
+        sign = f"({self.sign.value})" if self.sign else ""  # pyre-ignore[16]
+        return f"{self.name}{sub_index}{modifiers}{sign}"
 
     @property
     def parts(self) -> Sequence[Token]:
@@ -161,7 +179,8 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(frozenset(), modifiers, flags, name, sub_index, sign)
+        return Reading(frozenset(), ErasureState.NONE, modifiers, flags, name,
+                       sub_index, sign)
 
     @staticmethod
     def of_name(
@@ -182,12 +201,19 @@ class Logogram(NamedSign):
 
     @property
     def value(self) -> str:
-        surrogate = (
+        return f"{super().value}{self._surrogate_value}"
+
+    @property
+    def clean_value(self) -> str:
+        return f"{super().clean_value}{self._surrogate_value}"
+
+    @property
+    def _surrogate_value(self) -> str:
+        return (
             f"<({''.join(token.value for token in self.surrogate)})>"
             if self.surrogate
             else ""
         )
-        return f"{super().value}{surrogate}"
 
     @staticmethod
     def of(
@@ -198,7 +224,8 @@ class Logogram(NamedSign):
         sign: Optional[Token] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
-        return Logogram(frozenset(), modifiers, flags, name, sub_index, sign, surrogate)
+        return Logogram(frozenset(), ErasureState.NONE, modifiers, flags, name,
+                        sub_index, sign, surrogate)
 
     @staticmethod
     def of_name(
@@ -224,7 +251,8 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(frozenset(), modifiers, flags, name, sub_index, sign)
+        return Number(frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index,
+                      sign)
 
     @staticmethod
     def of_name(
@@ -248,6 +276,11 @@ class Grapheme(AbstractSign):
         return f"{self.name}{modifiers}{flags}"
 
     @property
+    def clean_value(self) -> str:
+        modifiers = "".join(self.modifiers)
+        return f"{self.name}{modifiers}"
+
+    @property
     def parts(self):
         return tuple()
 
@@ -257,7 +290,7 @@ class Grapheme(AbstractSign):
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ) -> "Grapheme":
-        return Grapheme(frozenset(), modifiers, flags, name)
+        return Grapheme(frozenset(), ErasureState.NONE, modifiers, flags, name)
 
 
 @attr.s(auto_attribs=True, frozen=True)

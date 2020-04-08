@@ -41,6 +41,7 @@ def test_enclosure(enclosure_class, type_, sides, side):
     enclosure = enclosure_class.of(side)
 
     assert enclosure.value == value
+    assert enclosure.clean_value == ""
     assert enclosure.get_key() == f"{type_}⁝{value}"
     assert enclosure.side == side
     assert enclosure.is_open == (side == Side.LEFT)
@@ -61,8 +62,10 @@ def test_determinative():
     determinative = Determinative.of(parts)
 
     expected_value = f"{{{''.join(part.value for part in parts)}}}"
+    expected_clean_value = f"{{{''.join(part.clean_value for part in parts)}}}"
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
     assert determinative.value == expected_value
+    assert determinative.clean_value == expected_clean_value
     assert determinative.get_key() == f"Determinative⁝{expected_value}{expected_parts}"
     assert determinative.parts == tuple(parts)
     assert determinative.lemmatizable is False
@@ -81,8 +84,10 @@ def test_phonetic_gloss():
     gloss = PhoneticGloss.of(parts)
 
     expected_value = f"{{+{''.join(part.value for part in parts)}}}"
+    expected_clean_value = f"{{+{''.join(part.clean_value for part in parts)}}}"
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
     assert gloss.value == expected_value
+    assert gloss.clean_value == expected_clean_value
     assert gloss.get_key() == f"PhoneticGloss⁝{expected_value}{expected_parts}"
     assert gloss.parts == tuple(parts)
     assert gloss.lemmatizable is False
@@ -101,8 +106,10 @@ def test_linguistic_gloss():
     gloss = LinguisticGloss.of(parts)
 
     expected_value = f"{{{{{''.join(part.value for part in parts)}}}}}"
+    expected_clean_value = f"{{{{{''.join(part.clean_value for part in parts)}}}}}"
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩"
     assert gloss.value == expected_value
+    assert gloss.clean_value == expected_clean_value
     assert gloss.get_key() == f"LinguisticGloss⁝{expected_value}{expected_parts}"
     assert gloss.parts == tuple(parts)
     assert gloss.lemmatizable is False

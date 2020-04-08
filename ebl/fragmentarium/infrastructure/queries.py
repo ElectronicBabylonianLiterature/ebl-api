@@ -1,42 +1,35 @@
-import re
+from typing import List
 
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.transliteration.domain.word_cleaner import IGNORE_REGEX, clean_word
 
-HAS_TRANSLITERATION = {"text.lines.type": {"$exists": True}}
-NUMBER_OF_LATEST_TRANSLITERATIONS = 20
-NUMBER_OF_NEEDS_REVISION = 20
+HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
+NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
+NUMBER_OF_NEEDS_REVISION: int = 20
 
 
-def fragment_is(fragment):
+def fragment_is(fragment) -> dict:
     return {"_id": fragment.number}
 
 
-def number_is(number):
+def number_is(number) -> dict:
     return {"$or": [{"_id": number}, {"cdliNumber": number}, {"accession": number}]}
 
 
-def sample_size_one():
+def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def aggregate_random():
+def aggregate_random() -> List[dict]:
     return [{"$match": HAS_TRANSLITERATION}, sample_size_one()]
 
 
-def aggregate_lemmas(word):
-    cleaned_word = clean_word(word)
-    word_regex = (
-        f"^{IGNORE_REGEX}"
-        + "".join([f"{re.escape(char)}{IGNORE_REGEX}" for char in cleaned_word])
-        + "$"
-    )
+def aggregate_lemmas(word: str) -> List[dict]:
     pipeline = [
         {
             "$match": {
                 "text.lines.content": {
                     "$elemMatch": {
-                        "value": {"$regex": word_regex},
+                        "cleanValue": word,
                         "uniqueLemma.0": {"$exists": True},
                     }
                 }
@@ -48,7 +41,7 @@ def aggregate_lemmas(word):
         {"$unwind": "$tokens"},
         {
             "$match": {
-                "tokens.value": {"$regex": word_regex},
+                "tokens.cleanValue": word,
                 "tokens.uniqueLemma.0": {"$exists": True},
             }
         },
@@ -58,7 +51,7 @@ def aggregate_lemmas(word):
     return pipeline
 
 
-def aggregate_latest():
+def aggregate_latest() -> List[dict]:
     temp_field_name = "_temp"
     return [
         {"$match": {"record.type": RecordType.TRANSLITERATION.value}},
@@ -81,7 +74,7 @@ def aggregate_latest():
     ]
 
 
-def aggregate_needs_revision():
+def aggregate_needs_revision() -> List[dict]:
     return [
         {"$match": {"record.type": "Transliteration"}},
         {"$unwind": "$record"},
@@ -157,7 +150,7 @@ def aggregate_needs_revision():
     ]
 
 
-def aggregate_path_of_the_pioneers():
+def aggregate_path_of_the_pioneers() -> List[dict]:
     return [
         {
             "$match": {

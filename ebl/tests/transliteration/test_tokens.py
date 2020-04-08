@@ -15,6 +15,7 @@ from ebl.transliteration.domain.sign_tokens import Divider, Reading
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
+    ErasureState,
     Joiner,
     LanguageShift,
     Tabulation,
@@ -22,13 +23,14 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     InWordNewline,
 )
 
 TOKENS = [
-    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY})),
+    UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),
     LanguageShift.of("%sux"),
     DocumentOrientedGloss.open(),
 ]
@@ -41,6 +43,7 @@ def test_value_token():
     other = ValueToken.of("anothervalue")
 
     assert token.value == value
+    assert token.clean_value == value
     assert token.get_key() == f"ValueToken⁝{value}"
     assert token.lemmatizable is False
 
@@ -74,6 +77,7 @@ def test_language_shift(value, expected_language, normalized):
     other = ValueToken.of(r"%bar")
 
     assert shift.value == value
+    assert shift.clean_value == value
     assert shift.get_key() == f"LanguageShift⁝{value}"
     assert shift.lemmatizable is False
     assert shift.normalized == normalized
@@ -146,11 +150,12 @@ def test_merge(old, new):
 
 def test_unknown_number_of_signs():
     unknown_number_of_signs = UnknownNumberOfSigns(
-        frozenset({EnclosureType.BROKEN_AWAY})
+        frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE
     )
 
     expected_value = "..."
     assert unknown_number_of_signs.value == expected_value
+    assert unknown_number_of_signs.clean_value == expected_value
     assert unknown_number_of_signs.get_key() == f"UnknownNumberOfSigns⁝{expected_value}"
     assert unknown_number_of_signs.lemmatizable is False
 
@@ -164,9 +169,10 @@ def test_unknown_number_of_signs():
 
 def test_tabulation():
     value = "($___$)"
-    tabulation = Tabulation.of(value)
+    tabulation = Tabulation.of()
 
     assert tabulation.value == value
+    assert tabulation.clean_value == value
     assert tabulation.get_key() == f"Tabulation⁝{value}"
     assert tabulation.lemmatizable is False
 
@@ -184,6 +190,7 @@ def test_commentary_protocol(protocol_enum):
     protocol = CommentaryProtocol.of(value)
 
     assert protocol.value == value
+    assert protocol.clean_value == value
     assert protocol.get_key() == f"CommentaryProtocol⁝{value}"
     assert protocol.lemmatizable is False
     assert protocol.protocol == protocol_enum
@@ -201,6 +208,7 @@ def test_column():
 
     expected_value = "&"
     assert column.value == expected_value
+    assert column.clean_value == expected_value
     assert column.get_key() == f"Column⁝{expected_value}"
     assert column.lemmatizable is False
 
@@ -218,6 +226,7 @@ def test_column_with_number():
 
     expected_value = "&1"
     assert column.value == expected_value
+    assert column.clean_value == expected_value
     assert column.get_key() == f"Column⁝{expected_value}"
     assert column.lemmatizable is False
 
@@ -236,12 +245,13 @@ def test_invalid_column():
 
 
 def test_variant():
-    reading = Reading.of_name("sal")
+    reading = Reading.of([ValueToken.of("sa"), BrokenAway.open(), ValueToken.of("l")])
     divider = Divider.of(":")
     variant = Variant.of(reading, divider)
 
-    expected_value = "sal/:"
+    expected_value = "sa[l/:"
     assert variant.value == expected_value
+    assert variant.clean_value == f"sal/:"
     assert variant.tokens == (reading, divider)
     assert variant.parts == variant.tokens
     assert (
@@ -256,8 +266,6 @@ def test_variant():
         "tokens": OneOfTokenSchema().dump([reading, divider], many=True),
         "enclosureType": [type.name for type in variant.enclosure_type],
     }
-    assert OneOfTokenSchema().dump(variant) == serialized
-    assert OneOfTokenSchema().load(serialized) == variant
     assert_token_serialization(variant, serialized)
 
 
@@ -272,6 +280,7 @@ def test_variant():
 )
 def test_joiner(joiner, expected_value):
     assert joiner.value == expected_value
+    assert joiner.clean_value == expected_value
     assert joiner.get_key() == f"Joiner⁝{expected_value}"
     assert joiner.lemmatizable is False
 
@@ -284,10 +293,11 @@ def test_joiner(joiner, expected_value):
 
 
 def test_in_word_new_line():
-    newline = InWordNewline(frozenset({EnclosureType.BROKEN_AWAY}))
+    newline = InWordNewline(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE)
 
     expected_value = ";"
     assert newline.value == expected_value
+    assert newline.clean_value == expected_value
     assert newline.get_key() == f"InWordNewline⁝{expected_value}"
     assert newline.lemmatizable is False
 

@@ -12,10 +12,12 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.sign_tokens import (
+    Logogram,
     Reading,
     UnclearSign,
     UnidentifiedSign,
 )
+from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
 from ebl.transliteration.domain.tokens import (
     Joiner,
     UnknownNumberOfSigns,
@@ -46,13 +48,13 @@ LEMMATIZABLE_TEST_WORDS = [
     (Word.of([Variant.of(Reading.of_name("un"), Reading.of_name("ia"))]), False),
     (
         Word.of(
-            [UnknownNumberOfSigns(frozenset()), Joiner.hyphen(), Reading.of_name("un")]
+            [UnknownNumberOfSigns.of(), Joiner.hyphen(), Reading.of_name("un")]
         ),
         False,
     ),
     (
         Word.of(
-            [Reading.of_name("un"), Joiner.hyphen(), UnknownNumberOfSigns(frozenset())]
+            [Reading.of_name("un"), Joiner.hyphen(), UnknownNumberOfSigns.of()]
         ),
         False,
     ),
@@ -61,7 +63,7 @@ LEMMATIZABLE_TEST_WORDS = [
             parts=[
                 Reading.of_name("un"),
                 Joiner.hyphen(),
-                UnknownNumberOfSigns(frozenset()),
+                UnknownNumberOfSigns.of(),
                 Joiner.hyphen(),
                 Reading.of_name("un"),
             ]
@@ -81,6 +83,7 @@ def test_defaults():
     word = Word.of([reading])
 
     assert word.value == value
+    assert word.clean_value == value
     assert word.get_key() == f"Word⁝{value}⟨{reading.get_key()}⟩"
     assert word.parts == (reading,)
     assert word.lemmatizable is True
@@ -118,6 +121,7 @@ def test_word(language, normalized, unique_lemma):
     )
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
+    assert word.clean_value == value
     assert word.get_key() == f"Word⁝{value}{expected_parts}"
     assert word.parts == tuple(parts)
     assert word.language == language
@@ -151,6 +155,33 @@ def test_word(language, normalized, unique_lemma):
         assert hash(word) != hash(not_equal)
 
     assert word != ValueToken.of(value)
+
+
+def test_clean_value():
+    word = Word.of([
+        BrokenAway.open(),
+        Erasure.open(),
+        Reading.of_name("ra").set_erasure(ErasureState.ERASED),
+        Erasure.center(),
+        Reading.of(
+            [ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")]
+        ).set_erasure(ErasureState.OVER_ERASED),
+        Erasure.close(),
+        Joiner.hyphen(),
+        Variant.of(
+            Reading.of([ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]),
+            Reading.of([ValueToken.of("p"), BrokenAway.open(), ValueToken.of("a")]),
+        ),
+        PerhapsBrokenAway.open(),
+        Determinative.of([Logogram.of([
+            ValueToken.of("KU"),
+            BrokenAway.close(),
+            ValueToken.of("R")
+        ])]),
+        PerhapsBrokenAway.close(),
+    ])
+
+    assert word.clean_value == "kur-ra/pa{KUR}"
 
 
 @pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)
@@ -198,9 +229,9 @@ def test_set_unique_lemma_empty():
     [
         Word.of([Reading.of_name("mu")]),
         Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign(frozenset())]),
+        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
         Word.of(
-            [UnidentifiedSign(frozenset()), Joiner.hyphen(), Reading.of_name("bu")]
+            [UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]
         ),
         Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
         Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
@@ -234,9 +265,9 @@ def test_set_alignment_empty():
     [
         Word.of([Reading.of_name("mu")]),
         Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign(frozenset())]),
+        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
         Word.of(
-            [UnidentifiedSign(frozenset()), Joiner.hyphen(), Reading.of_name("bu")]
+            [UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]
         ),
         Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
         Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
@@ -254,8 +285,8 @@ def test_set_alignment_invalid(word):
     [
         (
             Word.of(alignment=1, parts=[Reading.of_name("bu")]),
-            UnknownNumberOfSigns(frozenset()),
-            UnknownNumberOfSigns(frozenset()),
+            UnknownNumberOfSigns.of(),
+            UnknownNumberOfSigns.of(),
         ),
         (
             Word.of(
@@ -484,7 +515,7 @@ def test_merge(old, new, expected):
         (
             Word.of(
                 parts=[
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Joiner.hyphen(),
                     Reading.of_name("mu"),
                 ]
@@ -496,7 +527,7 @@ def test_merge(old, new, expected):
                 [
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                 ]
             ),
             (False, True),
@@ -504,11 +535,11 @@ def test_merge(old, new, expected):
         (
             Word.of(
                 [
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                     Joiner.hyphen(),
                     Reading.of_name("mu"),
                     Joiner.hyphen(),
-                    UnknownNumberOfSigns(frozenset()),
+                    UnknownNumberOfSigns.of(),
                 ]
             ),
             (True, True),

@@ -1,5 +1,4 @@
 import collections
-from enum import Enum, auto
 from typing import Optional, Sequence, Type, TypeVar
 
 import attr
@@ -13,18 +12,11 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token, TokenVisitor
-from ebl.transliteration.domain.word_cleaner import clean_word
+from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
 Partial = collections.namedtuple("Partial", "start end")
-
-
-class ErasureState(Enum):
-    NONE = auto()
-    ERASED = auto()
-    OVER_ERASED = auto()
 
 
 T = TypeVar("T", bound="Word")
@@ -35,7 +27,6 @@ class Word(Token):
     language: Language = DEFAULT_LANGUAGE
     normalized: bool = DEFAULT_NORMALIZED
     unique_lemma: Sequence[WordId] = tuple()
-    erasure: ErasureState = ErasureState.NONE
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
 
@@ -50,12 +41,19 @@ class Word(Token):
         alignment: Optional[int] = None,
     ) -> T:
         return cls(
-            frozenset(), language, normalized, unique_lemma, erasure, alignment, parts
+            frozenset(), erasure, language, normalized, unique_lemma, alignment, parts
         )
 
     @property
     def value(self) -> str:
         return "".join(part.value for part in self.parts)
+
+    @property
+    def clean_value(self) -> str:
+        return "".join(part.clean_value
+                       for part
+                       in self.parts
+                       if part.erasure != ErasureState.ERASED)
 
     @property
     def lemmatizable(self) -> bool:
@@ -91,9 +89,6 @@ class Word(Token):
     def set_language(self, language: Language, normalized: bool) -> "Word":
         return attr.evolve(self, language=language, normalized=normalized)
 
-    def set_erasure(self, erasure: ErasureState,) -> "Word":
-        return attr.evolve(self, erasure=erasure)
-
     def set_unique_lemma(self, lemma: LemmatizationToken) -> "Word":
         value_is_compatible = self.value == lemma.value
         lemma_is_compatible = self.lemmatizable or not lemma.unique_lemma
@@ -114,7 +109,7 @@ class Word(Token):
         return attr.evolve(self, alignment=None)
 
     def merge(self, token: Token) -> Token:
-        same_value = clean_word(self.value) == clean_word(token.value)
+        same_value = self.clean_value == token.clean_value
         is_compatible = type(token) == Word and same_value
 
         result = token
@@ -152,3 +147,7 @@ class InWordNewline(Token):
     @property
     def parts(self):
         return tuple()
+
+    @staticmethod
+    def of() -> "InWordNewline":
+        return InWordNewline(frozenset(), ErasureState.NONE)

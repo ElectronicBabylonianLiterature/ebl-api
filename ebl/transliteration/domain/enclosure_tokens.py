@@ -6,7 +6,7 @@ import attr
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.side import Side
-from ebl.transliteration.domain.tokens import Token, TokenVisitor
+from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
 
 E = TypeVar("E", bound="Enclosure")
@@ -26,6 +26,10 @@ class Enclosure(Token):
         return self.get_sides()[self.side]
 
     @property
+    def clean_value(self) -> str:
+        return ""
+
+    @property
     def parts(self):
         return tuple()
 
@@ -39,21 +43,21 @@ class Enclosure(Token):
 
     @classmethod
     def open(cls: Type[E]) -> E:
-        return cls(frozenset(), Side.LEFT)
+        return cls.of(Side.LEFT)
 
     @classmethod
     def close(cls: Type[E]) -> E:
-        return cls(frozenset(), Side.RIGHT)
+        return cls.of(Side.RIGHT)
 
     @classmethod
     def of(cls: Type[E], side: Side) -> E:
-        return cls(frozenset(), side)
+        return cls(frozenset(), ErasureState.NONE, side)
 
     @classmethod
     def of_value(cls: Type[E], value: str) -> E:
         sides = cls.get_sides()
         side = {v: k for k, v in sides.items()}[value]
-        return cls(frozenset(), side)
+        return cls.of(side)
 
 
 @attr.s(frozen=True)
@@ -124,7 +128,7 @@ class Erasure(Enclosure):
 
     @classmethod
     def center(cls) -> "Erasure":
-        return cls(frozenset(), Side.CENTER)
+        return cls.of(Side.CENTER)
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_erasure(self)
@@ -139,7 +143,7 @@ class Gloss(Token):
 
     @classmethod
     def of(cls: Type[G], parts: Sequence[Token] = tuple()) -> G:
-        return cls(frozenset(), parts)
+        return cls(frozenset(), ErasureState.NONE, parts)
 
     @property
     @abstractmethod
@@ -158,6 +162,11 @@ class Gloss(Token):
     @property
     def value(self) -> str:
         parts = "".join(token.value for token in self.parts)
+        return f"{self.open}{parts}{self.close}"
+
+    @property
+    def clean_value(self) -> str:
+        parts = "".join(token.clean_value for token in self.parts)
         return f"{self.open}{parts}{self.close}"
 
     def accept(self, visitor: TokenVisitor) -> None:
