@@ -31,10 +31,6 @@ class TextLineSchema(LineBaseSchema):
         )
 
 
-class DollarAndAtLineSchema(LineBaseSchema):
-    display_value = fields.String(data_key="displayValue")
-
-
 class ControlLineSchema(LineBaseSchema):
     @post_load
     def make_line(self, data, **kwargs):

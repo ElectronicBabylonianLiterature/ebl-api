@@ -4,7 +4,7 @@ from typing import Mapping, Type
 from marshmallow import Schema, fields, post_load  # pyre-ignore
 
 from ebl.schemas import NameEnum
-from ebl.transliteration.application.line_schemas import DollarAndAtLineSchema
+from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
@@ -16,35 +16,39 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class LooseDollarLineSchema(DollarAndAtLineSchema):
+class LooseDollarLineSchema(LineBaseSchema):
     text = fields.String(required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
         return LooseDollarLine(data["text"])
 
 
-class ImageDollarLineSchema(DollarAndAtLineSchema):
+class ImageDollarLineSchema(LineBaseSchema):
     number = fields.String(required=True)
     letter = fields.String(required=True, allow_none=True)
     text = fields.String(required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
         return ImageDollarLine(data["number"], data["letter"], data["text"])
 
 
-class RulingDollarLineSchema(DollarAndAtLineSchema):
+class RulingDollarLineSchema(LineBaseSchema):
     number = NameEnum(atf.Ruling, required=True)
     status = NameEnum(atf.DollarStatus, missing=None)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
         return RulingDollarLine(data["number"], data["status"])
 
 
-class SealDollarLineSchema(DollarAndAtLineSchema):
+class SealDollarLineSchema(LineBaseSchema):
     number = fields.Int(required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -63,6 +67,7 @@ class ScopeContainerSchema(Schema):  # pyre-ignore[11]
         required=True,
     )
     text = fields.String(required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -77,7 +82,7 @@ class ScopeContainerSchema(Schema):  # pyre-ignore[11]
         return scope_types[type][content]
 
 
-class StateDollarLineSchema(DollarAndAtLineSchema):
+class StateDollarLineSchema(LineBaseSchema):
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),
@@ -88,6 +93,7 @@ class StateDollarLineSchema(DollarAndAtLineSchema):
     scope = fields.Nested(ScopeContainerSchema, required=True, allow_none=True)
     state = NameEnum(atf.State, required=True, allow_none=True)
     status = NameEnum(atf.DollarStatus, required=True, allow_none=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
