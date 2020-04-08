@@ -55,7 +55,7 @@ class SurfaceLabelSchema(LabelSchema):
 
 class ColumnAtLineSchema(DollarAndAtLineSchema):
     column_label = fields.Nested(
-        ColumnLabelSchema, required=True, data_key="columnLabel"
+        ColumnLabelSchema, required=True
     )
 
     @post_load
@@ -64,7 +64,7 @@ class ColumnAtLineSchema(DollarAndAtLineSchema):
 
 
 class DiscourseAtLineSchema(DollarAndAtLineSchema):
-    discourse_label = NameEnum(atf.Discourse, required=True, data_key="discourseLabel")
+    discourse_label = NameEnum(atf.Discourse, required=True)
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -73,7 +73,7 @@ class DiscourseAtLineSchema(DollarAndAtLineSchema):
 
 class SurfaceAtLineSchema(DollarAndAtLineSchema):
     surface_label = fields.Nested(
-        SurfaceLabelSchema, required=True, data_key="surfaceLabel"
+        SurfaceLabelSchema, required=True
     )
 
     @post_load
@@ -83,7 +83,7 @@ class SurfaceAtLineSchema(DollarAndAtLineSchema):
 
 class ObjectAtLineSchema(DollarAndAtLineSchema):
     status = fields.List(NameEnum(atf.Status), required=True)
-    object_label = NameEnum(atf.Object, required=True, data_key="objectLabel")
+    object_label = NameEnum(atf.Object, required=True)
     text = fields.String(default="", required=True)
 
     @post_load
