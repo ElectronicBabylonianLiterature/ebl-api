@@ -18,6 +18,7 @@ def test_at_line_heading():
 
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("h1"),)
+    assert at_line.display_value == "h1"
 
 
 def test_at_line_column():
@@ -25,6 +26,7 @@ def test_at_line_column():
 
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("column 1*"),)
+    assert at_line.display_value == "column 1*"
 
 
 def test_at_line_column_no_status():
@@ -32,6 +34,7 @@ def test_at_line_column_no_status():
 
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("column 1"),)
+    assert at_line.display_value == "column 1"
 
 
 def test_at_line_discourse():
@@ -40,6 +43,7 @@ def test_at_line_discourse():
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("signatures"),)
     assert at_line.discourse_label == atf.Discourse.SIGNATURES
+    assert at_line.display_value == "signatures"
 
 
 def test_at_line_surface():
@@ -53,6 +57,7 @@ def test_at_line_surface():
     assert at_line.surface_label == SurfaceLabel(
         (atf.Status.CORRECTION,), atf.Surface.SURFACE, "Stone wig"
     )
+    assert at_line.display_value == "surface Stone wig!"
 
 
 def test_at_line_surface_no_status():
@@ -62,6 +67,7 @@ def test_at_line_surface_no_status():
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("surface Stone wig"),)
     assert at_line.surface_label == SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")
+    assert at_line.display_value == "surface Stone wig"
 
 
 def test_at_line_surface_instantiate_text_with_wrong_surface():
@@ -75,6 +81,7 @@ def test_at_line_surface_instantiate_text_with_wrong_surface():
         assert at_line.surface_label == SurfaceLabel(
             (atf.Status.CORRECTION,), atf.Surface.OBVERSE, "Stone wig"
         )
+        assert at_line.display_value == "obverse Stone wig!"
 
 
 def test_at_line_object_no_status():
@@ -85,6 +92,7 @@ def test_at_line_object_no_status():
     assert at_line.object_label == atf.Object.OBJECT
     assert at_line.status == []
     assert at_line.text == "Stone wig"
+    assert at_line.display_value == "object Stone wig"
 
 
 def test_at_line_object():
@@ -95,6 +103,7 @@ def test_at_line_object():
     assert at_line.object_label == atf.Object.OBJECT
     assert at_line.status == [atf.Status.CORRECTION]
     assert at_line.text == "Stone wig"
+    assert at_line.display_value == "object Stone wig!"
 
 
 def test_at_line_composite():
@@ -105,6 +114,7 @@ def test_at_line_composite():
     assert at_line.composite == atf.Composite.DIV
     assert at_line.text == "paragraph"
     assert at_line.number == 1
+    assert at_line.display_value == "div paragraph 1"
 
 
 def test_at_line_composite_raise_error():

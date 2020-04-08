@@ -22,12 +22,12 @@ class AtLine(Line):
 
     @property
     @abstractmethod
-    def _content_value(self) -> str:
+    def display_value(self) -> str:
         ...
 
     @property
     def content(self) -> Tuple[Token]:
-        return (ValueToken.of(f"{self._content_value}"),)
+        return (ValueToken.of(f"{self.display_value}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -35,7 +35,7 @@ class SealAtLine(AtLine):
     number: int
 
     @property
-    def _content_value(self):
+    def display_value(self):
         return f"seal {self.number}"
 
 
@@ -44,7 +44,7 @@ class HeadingAtLine(AtLine):
     number: int
 
     @property
-    def _content_value(self):
+    def display_value(self):
         return f"h{self.number}"
 
 
@@ -53,7 +53,7 @@ class ColumnAtLine(AtLine):
     column_label: ColumnLabel
 
     @property
-    def _content_value(self):
+    def display_value(self):
         return f"column {self.column_label.column}{self.column_label._status_string}"
 
 
@@ -62,7 +62,7 @@ class DiscourseAtLine(AtLine):
     discourse_label: atf.Discourse
 
     @property
-    def _content_value(self):
+    def display_value(self):
         return f"{self.discourse_label.value}"
 
 
@@ -71,7 +71,7 @@ class SurfaceAtLine(AtLine):
     surface_label: SurfaceLabel
 
     @property
-    def _content_value(self):
+    def display_value(self):
         text = f" {self.surface_label.text}" if self.surface_label.text else ""
         return f"{self.surface_label.surface.value[0]}{text}{self.surface_label._status_string}"
 
@@ -97,7 +97,7 @@ class ObjectAtLine(AtLine):
         return "".join(status.value for status in self.status)
 
     @property
-    def _content_value(self):
+    def display_value(self):
         text = f" {self.text}" if self.text else ""
         return f"{self.object_label.value}{text}{self._status_string}"
 
@@ -108,7 +108,7 @@ class DivisionAtLine(AtLine):
     number: Optional[int] = None
 
     @property
-    def _content_value(self):
+    def display_value(self):
         number = f" {str(self.number)}" if self.number else ""
         return f"m=division {self.text}{number}"
 
@@ -125,6 +125,6 @@ class CompositeAtLine(AtLine):
             raise ValueError("number only allowed with '@end' composite")
 
     @property
-    def _content_value(self):
+    def display_value(self):
         number = f" {str(self.number)}" if self.number else ""
         return f"{self.composite.value} {self.text}{number}"

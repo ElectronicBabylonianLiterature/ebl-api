@@ -18,6 +18,7 @@ from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
 class SealAtLineSchema(LineBaseSchema):
     number = fields.Int(required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -26,6 +27,7 @@ class SealAtLineSchema(LineBaseSchema):
 
 class HeadingAtLineSchema(LineBaseSchema):
     number = fields.Int(required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -47,6 +49,7 @@ class ColumnLabelSchema(LabelSchema):
 class SurfaceLabelSchema(LabelSchema):
     surface = NameEnum(atf.Surface, required=True)
     text = fields.String(default="")
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_label(self, data, **kwargs):
@@ -54,7 +57,10 @@ class SurfaceLabelSchema(LabelSchema):
 
 
 class ColumnAtLineSchema(LineBaseSchema):
-    column_label = fields.Nested(ColumnLabelSchema, required=True)
+    column_label = fields.Nested(
+        ColumnLabelSchema, required=True
+    )
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -63,6 +69,7 @@ class ColumnAtLineSchema(LineBaseSchema):
 
 class DiscourseAtLineSchema(LineBaseSchema):
     discourse_label = NameEnum(atf.Discourse, required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -70,7 +77,10 @@ class DiscourseAtLineSchema(LineBaseSchema):
 
 
 class SurfaceAtLineSchema(LineBaseSchema):
-    surface_label = fields.Nested(SurfaceLabelSchema, required=True)
+    surface_label = fields.Nested(
+        SurfaceLabelSchema, required=True
+    )
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -81,6 +91,7 @@ class ObjectAtLineSchema(LineBaseSchema):
     status = fields.List(NameEnum(atf.Status), required=True)
     object_label = NameEnum(atf.Object, required=True)
     text = fields.String(default="", required=True)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -90,6 +101,7 @@ class ObjectAtLineSchema(LineBaseSchema):
 class DivisionAtLineSchema(LineBaseSchema):
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, default=None)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
@@ -100,6 +112,7 @@ class CompositeAtLineSchema(LineBaseSchema):
     composite = NameEnum(atf.Composite, required=True)
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, default=None)
+    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs):
