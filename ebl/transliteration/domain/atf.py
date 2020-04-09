@@ -173,6 +173,8 @@ class Discourse(Enum):
 
 
 class Composite(Enum):
+    MILESTONE = "m=locator"
+    COMPOSITE = "composite"
     DIV = "div"
     END = "end"
 

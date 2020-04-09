@@ -19,6 +19,9 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 @pytest.mark.parametrize(
     "line,expected_tokens",
     [
+        ("@composite", [CompositeAtLine(atf.Composite.COMPOSITE, "")]),
+        ("@m=locator o 1", [CompositeAtLine(atf.Composite.MILESTONE, "o", 1)]),
+        ("@m=locator o", [CompositeAtLine(atf.Composite.MILESTONE, "o")]),
         ("@div part 1", [CompositeAtLine(atf.Composite.DIV, "part", 1)]),
         ("@end part", [CompositeAtLine(atf.Composite.END, "part")]),
         ("@m=division paragraph ", [DivisionAtLine("paragraph")]),

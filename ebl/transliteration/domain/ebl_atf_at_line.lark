@@ -24,6 +24,9 @@ heading: "h" INT
 
 divisions: "m=division " free_text [" " INT]
 
-?composite: composite_start | composite_end
+?composite: composite_constant | composite_start | composite_end | composite_milestone
 composite_start: "div " free_text [" " INT]
 composite_end: "end " free_text
+composite_constant: "composite"
+composite_milestone: "m=locator " free_text [" " INT]
+

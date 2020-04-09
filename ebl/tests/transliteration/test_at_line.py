@@ -117,6 +117,28 @@ def test_at_line_composite():
     assert at_line.display_value == "div paragraph 1"
 
 
+def test_at_line_composite_constant():
+    at_line = CompositeAtLine(atf.Composite.COMPOSITE, "")
+
+    assert at_line.prefix == "@"
+    assert at_line.content == (ValueToken.of("composite"),)
+    assert at_line.composite == atf.Composite.COMPOSITE
+    assert at_line.text == ""
+    assert at_line.number is None
+    assert at_line.display_value == "composite"
+
+
+def test_at_line_composite_milestone():
+    at_line = CompositeAtLine(atf.Composite.MILESTONE, "o", 1)
+
+    assert at_line.prefix == "@"
+    assert at_line.content == (ValueToken.of("m=locator o 1"),)
+    assert at_line.composite == atf.Composite.MILESTONE
+    assert at_line.text == "o"
+    assert at_line.number == 1
+    assert at_line.display_value == "m=locator o 1"
+
+
 def test_at_line_composite_raise_error():
     with pytest.raises(ValueError):
         CompositeAtLine(atf.Composite.END, "paragraph", 1)
