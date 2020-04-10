@@ -14,6 +14,7 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import ValueToken, Token
 
 
+
 @attr.s(auto_attribs=True, frozen=True)
 class AtLine(Line):
     @property
