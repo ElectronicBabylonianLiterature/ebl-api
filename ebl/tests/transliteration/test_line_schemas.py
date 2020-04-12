@@ -64,7 +64,7 @@ LINES = [
         {
             "prefix": "@",
             "content": [
-                OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))],  # pyre-ignore[16]
+                OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))],
             "type": "CompositeAtLine",
             "composite": "MILESTONE",
             "text": "o",
@@ -77,7 +77,7 @@ LINES = [
         {
             "prefix": "@",
             "content": [
-                OneOfTokenSchema().dump(ValueToken.of("composite"))],  # pyre-ignore[16]
+                OneOfTokenSchema().dump(ValueToken.of("composite"))],
             "type": "CompositeAtLine",
             "composite": "COMPOSITE",
             "text": "",
@@ -89,7 +89,7 @@ LINES = [
         CompositeAtLine(atf.Composite.END, "part"),
         {
             "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],  # pyre-ignore[16]
+            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],
             "type": "CompositeAtLine",
             "composite": "END",
             "text": "part",
