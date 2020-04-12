@@ -51,8 +51,7 @@ LINES = [
         {
             "prefix": "@",
             "content": [
-                OneOfTokenSchema().dump(ValueToken.of("m=locator o"))
-            ],  # pyre-ignore[16]
+                OneOfTokenSchema().dump(ValueToken.of("m=locator o"))],  # pyre-ignore[16]
             "type": "CompositeAtLine",
             "composite": "MILESTONE",
             "text": "o",
@@ -65,8 +64,7 @@ LINES = [
         {
             "prefix": "@",
             "content": [
-                OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))
-            ],  # pyre-ignore[16]
+                OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))],  # pyre-ignore[16]
             "type": "CompositeAtLine",
             "composite": "MILESTONE",
             "text": "o",
@@ -79,8 +77,7 @@ LINES = [
         {
             "prefix": "@",
             "content": [
-                OneOfTokenSchema().dump(ValueToken.of("composite"))
-            ],  # pyre-ignore[16]
+                OneOfTokenSchema().dump(ValueToken.of("composite"))],  # pyre-ignore[16]
             "type": "CompositeAtLine",
             "composite": "COMPOSITE",
             "text": "",
@@ -335,9 +332,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
-            "lineNumber": OneOfLineNumberSchema().dump(
-                LineNumber(1)
-            ),  # pyre-ignore[16]
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),  # pyre-ignore[16]
             "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),
