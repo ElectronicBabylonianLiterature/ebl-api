@@ -162,7 +162,6 @@ can sometimes be omitted.
 | Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
 | Broken Away | `[` or `]`| No | No | See Presence below. |
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
-| ~~Line Continuation~~ | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
 text-line = line-number, '. ', text;
@@ -173,13 +172,10 @@ single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
                      [ word-character ];
 prime = "'" | '′' | '’';
 
-text = token, { [ word-separator ], token },
-       [ word-separator, line-continuation ];
+text = token, { [ word-separator ], token };
        (* Word seprator can be ommitted after an opening bracket or before 
           a closing bracket. Commentary protocols and dividers must be
           surrounded by word separators. *)
-
-line-continuation = '→';
 
 token = commentary-protocol
       | divider
