@@ -108,7 +108,7 @@ class AtLineTransformer(Transformer):  # pyre-ignore[11]
         return CompositeAtLine(atf.Composite.END, text)
 
     @v_args(inline=True)
-    def ebl_atf_at_line__composite_constant(self):
+    def ebl_atf_at_line__composite_composite(self):
         return CompositeAtLine(atf.Composite.COMPOSITE, "")
 
     @v_args(inline=True)
