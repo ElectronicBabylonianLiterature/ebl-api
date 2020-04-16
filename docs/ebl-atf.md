@@ -42,8 +42,6 @@ fragment = 'fragment', ' ', free-text;
 generic-object = 'object', ' ', free-text;
 
 status = "'" | '?' | '!' | '*';
-
-
 ```
 
 
@@ -75,25 +73,25 @@ i.e., columns; and document structure, e.g., divisions and colophons.
 
 ```ebnf
 
-at-line = seal | column | heading | discourse | objct_with_status | surface_with_status
-          | divisions | composite;
+at-line = seal | column | heading | discourse | objct-with-status | surface-with-status
+        | divisions | composite;
     
-surface_with_status = _surface, [" "], {status};
+surface-with-status = surface, [ ' ' ], { status };
 
-object_with_status = _object, [" "], {status};
+object-with-status = object, [ ' ' ], { status };
 
-column = "column ", number, [" "], {status};
+column = 'column ', number, [ ' ' ], { status };
 
-heading: "h",number;
+heading = 'h', number;
 
-discourse = "catchline" | "colophon" | "date" | "signature" | "signatures"
-            | "summary"  | "witnesses";
+discourse = 'catchline' | 'colophon' | 'date' | 'signature' | 'signatures'
+          | 'summary'  | 'witnesses';
 
-divisions = "m=division ", free-text, [" ", number];
+divisions = 'm=division ', free-text, [ ' ', number ];
 
-composite = composite_start | composite_end;
-composite_start = "div ", free-text, [" ", number];
-composite_end = "end ", free-text;
+composite = composite-start | composite-end;
+composite-start = 'div ', free-text, [ ' ', number ];
+composite-end = 'end ', free-text;
 ```
 
 ## $-lines
