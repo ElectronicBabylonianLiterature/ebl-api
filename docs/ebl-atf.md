@@ -42,8 +42,6 @@ fragment = 'fragment', ' ', free-text;
 generic-object = 'object', ' ', free-text;
 
 status = "'" | '?' | '!' | '*';
-
-
 ```
 
 
@@ -75,27 +73,27 @@ i.e., columns; and document structure, e.g., divisions and colophons.
 
 ```ebnf
 
-at-line = seal | column | heading | discourse | objct_with_status | surface_with_status
-          | divisions | composite;
+at-line = seal | column | heading | discourse | objct-with-status | surface-with-status
+        | divisions | composite;
     
-surface_with_status = _surface, [" "], {status};
+surface-with-status = surface, [ ' ' ], { status };
 
-object_with_status = _object, [" "], {status};
+object-with-status = object, [ ' ' ], { status };
 
-column = "column ", number, [" "], {status};
+column = 'column ', number, [ ' ' ], { status };
 
-heading: "h",number;
+heading = 'h', number;
 
-discourse = "catchline" | "colophon" | "date" | "signature" | "signatures"
-            | "summary"  | "witnesses";
+discourse = 'catchline' | 'colophon' | 'date' | 'signature' | 'signatures'
+          | 'summary'  | 'witnesses';
 
-divisions = "m=division ", free-text, [" ", number];
+divisions = 'm=division ', free-text, [ ' ', number ];
 
 composite = composite_composite | composite_start | composite_end | composite_milestone;
-composite_start = "div ", free-text, [" ", number];
+composite_start = "div ", free-text, [' ', number];
 composite_end = "end ", free-text;
-composite_composite: "composite"
-composite_milestone: "m=locator ", free_text, [" " number]
+composite_composite: "composite";
+composite_milestone: "m=locator ", free_text, [' ', number];
 ```
 
 ## $-lines
@@ -164,7 +162,6 @@ can sometimes be omitted.
 | Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
 | Broken Away | `[` or `]`| No | No | See Presence below. |
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
-| ~~Line Continuation~~ | `→` | No | No | Must be at the end of the line. Will be replaced by a $-line in the future.
 
 ```ebnf
 text-line = line-number, '. ', text;
@@ -175,13 +172,10 @@ single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
                      [ word-character ];
 prime = "'" | '′' | '’';
 
-text = token, { [ word-separator ], token },
-       [ word-separator, line-continuation ];
+text = token, { [ word-separator ], token };
        (* Word seprator can be ommitted after an opening bracket or before 
           a closing bracket. Commentary protocols and dividers must be
           surrounded by word separators. *)
-
-line-continuation = '→';
 
 token = commentary-protocol
       | divider
