@@ -47,10 +47,49 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
     (
+        CompositeAtLine(atf.Composite.MILESTONE, "o"),
+        {
+            "prefix": "@",
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of("m=locator o"))],  # pyre-ignore[16]
+            "type": "CompositeAtLine",
+            "composite": "MILESTONE",
+            "text": "o",
+            "number": None,
+            "displayValue": "m=locator o",
+        },
+    ),
+    (
+        CompositeAtLine(atf.Composite.MILESTONE, "o", 1),
+        {
+            "prefix": "@",
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))],
+            "type": "CompositeAtLine",
+            "composite": "MILESTONE",
+            "text": "o",
+            "number": 1,
+            "displayValue": "m=locator o 1",
+        },
+    ),
+    (
+        CompositeAtLine(atf.Composite.COMPOSITE, ""),
+        {
+            "prefix": "@",
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of("composite"))],
+            "type": "CompositeAtLine",
+            "composite": "COMPOSITE",
+            "text": "",
+            "number": None,
+            "displayValue": "composite",
+        },
+    ),
+    (
         CompositeAtLine(atf.Composite.END, "part"),
         {
             "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],  # pyre-ignore[16]
+            "content": [OneOfTokenSchema().dump(ValueToken.of("end part"))],
             "type": "CompositeAtLine",
             "composite": "END",
             "text": "part",

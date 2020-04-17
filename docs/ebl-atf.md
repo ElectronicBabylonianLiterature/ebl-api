@@ -89,9 +89,11 @@ discourse = 'catchline' | 'colophon' | 'date' | 'signature' | 'signatures'
 
 divisions = 'm=division ', free-text, [ ' ', number ];
 
-composite = composite-start | composite-end;
-composite-start = 'div ', free-text, [ ' ', number ];
-composite-end = 'end ', free-text;
+composite = composite_composite | composite_start | composite_end | composite_milestone;
+composite_start = "div ", free-text, [' ', number];
+composite_end = "end ", free-text;
+composite_composite: "composite";
+composite_milestone: "m=locator ", free_text, [' ', number];
 ```
 
 ## $-lines

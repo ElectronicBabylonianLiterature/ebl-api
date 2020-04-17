@@ -127,4 +127,5 @@ class CompositeAtLine(AtLine):
     @property
     def display_value(self):
         number = f" {str(self.number)}" if self.number else ""
-        return f"{self.composite.value} {self.text}{number}"
+        text = f" {str(self.text)}" if self.text else ""
+        return f"{self.composite.value}{text}{number}"
