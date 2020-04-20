@@ -49,6 +49,10 @@ def test_lines():
     assert TEXT.lines == LINES
 
 
+def test_number_of_lines():
+    assert TEXT.number_of_lines == len(LINES)
+
+
 def test_version():
     assert TEXT.parser_version == PARSER_VERSION
 
