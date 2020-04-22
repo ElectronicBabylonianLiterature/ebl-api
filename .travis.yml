@@ -19,6 +19,7 @@ jobs:
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
     - stage: docker
+      install: skip
       script:
         - docker build -t ebl/api .
     - stage: deploy
