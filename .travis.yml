@@ -24,7 +24,7 @@ jobs:
       script:
         - docker build -t jlaasonen/ebl-test:travis .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker push jlaasonen/ebl-test
+        - docker push jlaasonen/ebl-test:$TRAVIS_BRANCH
     - stage: deploy
       install: skip
       script: skip
@@ -32,7 +32,7 @@ jobs:
         provider: heroku
         edge: true
     - stage: smoke test
-      if: branch = master<
+      if: branch = master
       install: skip
       script:
         - wget --no-check-certificate --output-document=/dev/null https://api.ebabylon.org/ebl.yml
