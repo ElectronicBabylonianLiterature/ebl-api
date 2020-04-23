@@ -107,4 +107,3 @@ def test_count(collection):
     collection.insert_one({"data": "another payload"})
 
     assert collection.count_documents({"data": "payload"}) == 2
-
