@@ -3,6 +3,8 @@ python:
 - 'pypy3'
 services:
 - docker
+env:
+  DOCKER_REPOSITORY=jlaasonen/ebl-api
 install:
 - pipenv install --dev
 - yes | pip uninstall numpy
@@ -23,9 +25,9 @@ jobs:
       if: type != pull_request
       install: skip
       script:
-        - docker build -t "jlaasonen/ebl-test:$TRAVIS_BRANCH" -t "jlaasonen/ebl-test:$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER" .
+        - docker build -t "$DOCKER_REPOSITORY:$TRAVIS_BRANCH" -t "$DOCKER_REPOSITORY:$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER" .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker push jlaasonen/ebl-test
+        - docker push $DOCKER_REPOSITORY
     - stage: deploy
       install: skip
       script: skip
