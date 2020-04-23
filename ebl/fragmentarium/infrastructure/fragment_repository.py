@@ -39,11 +39,11 @@ class MongoFragmentRepository(FragmentRepository):
                 {"$unwind": "$text.lines"},
                 {"$replaceRoot": {"newRoot": "$text.lines"}},
                 {"$match": {"type": "TextLine"}},
-                {"$count": "lines"},
+                {"$count": "numbers_of_lines"},
             ]
         )
         try:
-            return next(result)["lines"]
+            return next(result)["numbers_of_lines"]
         except StopIteration:
             return 0
 
