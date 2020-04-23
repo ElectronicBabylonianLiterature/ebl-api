@@ -42,7 +42,7 @@ def test_dump_line():
     assert TextSchema().dump(text) == {
         "lines": OneOfLineSchema().dump(text.lines, many=True),
         "parser_version": text.parser_version,
-        "number_of_lines": text.number_of_lines,
+        "numberOfLines": 1,
     }
 
 
