@@ -1,1 +1,0 @@
-web: NEW_RELIC_CONFIG_FILE=newrelic.ini newrelic-admin run-program waitress-serve --port=$PORT --threads=$WEB_CONCURRENCY --backlog=10 --call "ebl.app:get_app"

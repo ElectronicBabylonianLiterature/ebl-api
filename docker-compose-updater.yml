@@ -7,8 +7,6 @@ services:
       - AUTH0_ISSUER
       - AUTH0_PEM
       - MONGODB_URI
-      - NEW_RELIC_LICENSE_KEY
-      - NEW_RELIC_CONFIG_FILE=newrelic.ini
       - SENTRY_DSN
       - SENTRY_ENVIRONMENT=production
     command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]

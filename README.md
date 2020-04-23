@@ -48,9 +48,6 @@ MONGODB_URI=<MongoDB connection URI with database>
 MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
 SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
-# If NewRelic is used:
-#NEW_RELIC_LICENSE_KEY=<NewRelic license key>
-#NEW_RELIC_CONFIG_FILE=newrelic.ini
 ```
 
 For docker compose with DB:

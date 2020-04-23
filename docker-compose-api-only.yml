@@ -10,8 +10,6 @@ services:
       - AUTH0_PEM
       - MONGODB_URI
       - MONGODB_DB
-      - NEW_RELIC_LICENSE_KEY
-      - NEW_RELIC_CONFIG_FILE
       - SENTRY_DSN
       - SENTRY_ENVIRONMENT
     volumes:
