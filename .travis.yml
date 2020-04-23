@@ -22,9 +22,9 @@ jobs:
     - stage: docker
       install: skip
       script:
-        - docker build -t "jlaasonen/ebl-test:$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER" .
+        - docker build -t "jlaasonen/ebl-test:$TRAVIS_BRANCH" -t "jlaasonen/ebl-test:$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER" .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker push "jlaasonen/ebl-test:$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER"
+        - docker push jlaasonen/ebl-test
     - stage: deploy
       install: skip
       script: skip
