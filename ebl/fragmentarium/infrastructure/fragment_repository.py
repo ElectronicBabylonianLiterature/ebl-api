@@ -35,10 +35,9 @@ class MongoFragmentRepository(FragmentRepository):
     def count_lines(self):
         result = self._collection.aggregate(
             [
-                {"$replaceRoot": {"newRoot": "$text"}},
                 {"$group": {
                     "_id": None,
-                    "total": {"$sum": "$numberOfLines"}
+                    "total": {"$sum": "$text.numberOfLines"}
                 }}
             ]
         )
@@ -46,6 +45,7 @@ class MongoFragmentRepository(FragmentRepository):
             return next(result)["total"]
         except StopIteration:
             return 0
+
 
     def create(self, fragment):
         return self._collection.insert_one(FragmentSchema().dump(fragment))
