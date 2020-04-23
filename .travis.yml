@@ -22,7 +22,7 @@ jobs:
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
     - stage: docker
-      if: type != pull_request
+      if: branch = master AND type != pull_request
       install: skip
       script:
         - docker build -t "$DOCKER_REPOSITORY:$TRAVIS_BRANCH" -t "$DOCKER_REPOSITORY:$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER" .
