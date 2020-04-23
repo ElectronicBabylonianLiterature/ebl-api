@@ -24,7 +24,7 @@ jobs:
       script:
         - docker build -t jlaasonen/ebl-test:travis .
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker push jlaasonen/ebl-test:$TRAVIS_BRANCH
+        - docker push "jlaasonen/ebl-test:$TRAVIS_BRANCH"
     - stage: deploy
       install: skip
       script: skip
