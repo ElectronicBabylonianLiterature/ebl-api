@@ -50,7 +50,7 @@ def test_lines():
 
 
 def test_number_of_lines():
-    assert TEXT.number_of_lines == len(LINES)
+    assert TEXT.number_of_lines == 1
 
 
 def test_version():

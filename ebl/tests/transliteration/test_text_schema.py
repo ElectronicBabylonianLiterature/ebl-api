@@ -79,6 +79,6 @@ def test_load_line(lines):
         {
             "lines": serialized_lines,
             "parser_version": parser_version,
-            "number_of_lines": len(serialized_lines)
+            "numberOfLines": 1,
         }
     ) == Text.of_iterable(lines).set_parser_version(parser_version)
