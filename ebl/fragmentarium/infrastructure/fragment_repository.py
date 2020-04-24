@@ -46,7 +46,6 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration:
             return 0
 
-
     def create(self, fragment):
         return self._collection.insert_one(FragmentSchema().dump(fragment))
 
