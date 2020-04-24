@@ -7,7 +7,6 @@ RUN echo "\n[system_default_sect]\nMinProtocol = TLSv1.0" >> /etc/ssl/openssl.cn
 RUN pip install pipenv
 
 EXPOSE 8000
-nmap --script ssl-enum-ciphers -p 443 cdli.ucla.edu
 
 WORKDIR /usr/src/ebl
 
