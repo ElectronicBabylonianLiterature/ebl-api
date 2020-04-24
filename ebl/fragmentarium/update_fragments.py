@@ -107,8 +107,8 @@ def update_fragments(
     state = State()
 
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        fragment = fragment_repository.query_by_fragment_number(number)
         try:
+            fragment = fragment_repository.query_by_fragment_number(number)
             update_fragment(transliteration_factory, updater, fragment)
             state.add_updated()
         except Exception as error:
@@ -132,9 +132,9 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 16
+    number_of_jobs = 4
     chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs, prefer="processes")(
+    states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
         delayed(update_fragments)(subset, index, create_context_)
         for index, subset in enumerate(chunks)
     )
