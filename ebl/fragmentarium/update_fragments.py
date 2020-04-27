@@ -105,8 +105,7 @@ def update_fragments(
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
-    fragment = None
-
+    fragment: Fragment
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         try:
             fragment = fragment_repository.query_by_fragment_number(number)
