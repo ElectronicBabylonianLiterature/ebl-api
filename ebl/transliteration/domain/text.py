@@ -34,11 +34,7 @@ class Text:
 
     @property
     def number_of_lines(self) -> int:
-        counter = 0
-        for line in self.lines:
-            if isinstance(line, TextLine):
-                counter = counter + 1
-        return counter
+        return len([line for line in self.lines if isinstance(line, TextLine)])
 
     @property
     def lemmatization(self) -> Lemmatization:
