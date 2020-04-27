@@ -1,7 +1,7 @@
 import pytest  # pyre-ignore
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine, LooseDollarLine
+from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError

@@ -312,7 +312,7 @@ LINES = [
             "displayValue": "beginning of obverse",
         },
     ),
-(
+    (
         StateDollarLine(
             None,
             (2, 4),
