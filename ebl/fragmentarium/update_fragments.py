@@ -144,3 +144,5 @@ if __name__ == "__main__":
 
     with open(f"invalid_fragments.tsv", "w", encoding="utf-8") as file:
         file.write(final_state.to_tsv())
+
+    print("Update fragments completed!")
