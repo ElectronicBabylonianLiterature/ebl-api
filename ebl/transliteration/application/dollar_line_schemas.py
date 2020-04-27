@@ -109,7 +109,7 @@ class StateDollarLineSchema(LineBaseSchema):
     def load_extent(extent):
         if isinstance(extent, str):
             return atf.Extent[extent]
-        if isinstance(extent, list):
+        elif isinstance(extent, list):
             return tuple(extent)
         else:
             return extent
@@ -118,5 +118,7 @@ class StateDollarLineSchema(LineBaseSchema):
     def dump_extent(extent):
         if isinstance(extent, atf.Extent):
             return extent.name
+        elif isinstance(extent, tuple):
+            return list(extent)
         else:
             return extent
