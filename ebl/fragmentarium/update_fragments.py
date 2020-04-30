@@ -55,7 +55,7 @@ class State:
         else:
             self._add_error(error, fragment)
 
-    def add_querying_error(self, error: Exception, number: int)-> None:
+    def add_querying_error(self, error: Exception, number: str) -> None:
         self.invalid_atf += 1
         self.errors.append(f"{number}\t\t{error}")
 
