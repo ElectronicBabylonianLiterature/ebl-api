@@ -105,8 +105,12 @@ def test_update_entry_invalid(transform, client, saved_entry):
 @pytest.mark.parametrize(
     "params",
     [
-        {"0": "CT", "1": "1"},
-
+        {},
+        {"0": "Author"},
+        {"0": 2019},
+        {"0": "Title"},
+        {"0": "Author", "1": 2019, "2": "Title"},
+        {"0": "Author", "1": "", "2": ""},
     ],
 )
 def test_search(client, saved_entry, params):
@@ -117,7 +121,7 @@ def test_search(client, saved_entry, params):
     assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
-@pytest.mark.parametrize("params", [{"invalid": "param"}, {"year": "invalid"}])
+@pytest.mark.parametrize("params", [{"invalid": "param"}, {"0": "Author", "1": "invalid"}])
 def test_search_invalid_query(client, params):
     result = client.simulate_get("/bibliography", params=params)
 

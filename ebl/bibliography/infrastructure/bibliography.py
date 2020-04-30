@@ -68,7 +68,8 @@ class MongoBibliographyRepository(BibliographyRepository):
             match["collection-number"] = str(collection_number)
         return [
             create_object_entry(data)
-            for data in self._collection.aggregate([
+            for data in self._collection.aggregate(
+                [
                     {"$match": match},
                     {
                         "$addFields": {
@@ -82,7 +83,7 @@ class MongoBibliographyRepository(BibliographyRepository):
                     },
                     {"$sort": {"author.0.family": 1, "primaryYear": 1, "collection-title": 1,}},
                     {"$project": {"primaryYear": 0}},
-            ],
+                ],
                 collation={"locale": "en", "strength": 1, "normalization": True, },
             )
         ]

@@ -26,7 +26,3 @@ class BibliographyRepository(ABC):
             self, container_title_short: Optional[str], collection_number: Optional[str]
     ):
         ...
-
-
-
-
