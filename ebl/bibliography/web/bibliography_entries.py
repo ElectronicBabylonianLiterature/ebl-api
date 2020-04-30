@@ -15,7 +15,7 @@ class BibliographyResource:
 
     @falcon.before(require_scope, "read:bibliography")
     def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
-        resp.media = self._bibliography.search(*self._parse_search_request(req))
+        resp.media = self._bibliography.search([*self._parse_search_request(req)])
 
     @staticmethod
     def _parse_year(year: str) -> Optional[int]:
@@ -25,26 +25,26 @@ class BibliographyResource:
     def _parse_search_request(
         req,
     ) -> Tuple[Optional[str], Optional[int], Optional[str]]:
-        author = "author"
-        year = "year"
-        title = "title"
-        allowed_params = {author, year, title}
+        first = "0"
+        second = "1"
+        third = "2"
+        allowed_params = {first, second, third}
         req_params = set(req.params.keys())
         if not req_params <= allowed_params:
             extra_params = req_params - allowed_params
             raise DataError(f"Unsupported query parameters: {extra_params}.")
         try:
             return (
-                req.params.get(author),
+                req.params.get(first),
                 (
-                    BibliographyResource._parse_year(req.params[year])
-                    if year in req.params
+                    BibliographyResource._parse_year(req.params[second])
+                    if second in req.params
                     else None
                 ),
-                req.params.get(title),
+                req.params.get(third),
             )
         except ValueError:
-            raise DataError(f'Year "{year}" is not numeric.')
+            raise DataError(f'Year "{second}" is not numeric.')
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)

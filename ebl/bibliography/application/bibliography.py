@@ -36,11 +36,27 @@ class Bibliography:
 
     def search(
         self,
+        query
+    ) -> list:
+        first_result = self._repository.query_by_author_year_and_title(query[0], query[1], query[2])
+        second_result = self._repository.query_by_container_title_and_collection_number(query[0], query[1])
+        return first_result + second_result
+
+    def search_author_year_and_title(
+        self,
         author: Optional[str] = None,
-        year: Optional[str] = None,
+        year: Optional[int] = None,
         title: Optional[str] = None,
     ):
         return self._repository.query_by_author_year_and_title(author, year, title)
+
+    def search_container_title_and_collection_number(
+        self,
+        container_title: Optional[str] = None,
+        collection_number: Optional[str] = None,
+    ):
+        return self._repository.query_by_container_title_and_collection_number(
+            container_title, collection_number)
 
     def validate_references(self, references: Sequence[Reference]):
         def is_invalid(reference):

@@ -105,12 +105,8 @@ def test_update_entry_invalid(transform, client, saved_entry):
 @pytest.mark.parametrize(
     "params",
     [
-        {},
-        {"author": "Author"},
-        {"year": 2019},
-        {"title": "Title"},
-        {"author": "Author", "year": 2019, "title": "Title"},
-        {"author": "Author", "year": "", "title": ""},
+        {"0": "CT", "1": "1"},
+
     ],
 )
 def test_search(client, saved_entry, params):

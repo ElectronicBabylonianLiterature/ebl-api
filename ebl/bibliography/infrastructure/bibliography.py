@@ -27,7 +27,7 @@ class MongoBibliographyRepository(BibliographyRepository):
         self._collection.replace_one(mongo_entry)
 
     def query_by_author_year_and_title(
-        self, author: Optional[str], year: Optional[str], title: Optional[str]
+        self, author: Optional[str], year: Optional[int], title: Optional[str]
     ):
         match: Dict[str, Any] = {}
         if author:
@@ -55,5 +55,34 @@ class MongoBibliographyRepository(BibliographyRepository):
                     {"$project": {"primaryYear": 0}},
                 ],
                 collation={"locale": "en", "strength": 1, "normalization": True,},
+            )
+        ]
+
+    def query_by_container_title_and_collection_number(
+            self, container_title_short: Optional[str], collection_number: Optional[str]
+    ):
+        match: Dict[str, Any] = {}
+        if container_title_short:
+            match["container-title-short"] = container_title_short
+        if collection_number:
+            match["collection-number"] = str(collection_number)
+        return [
+            create_object_entry(data)
+            for data in self._collection.aggregate([
+                    {"$match": match},
+                    {
+                        "$addFields": {
+                            "primaryYear": {
+                                "$arrayElemAt": [
+                                    {"$arrayElemAt": ["$issued.date-parts", 0,]},
+                                    0,
+                                ]
+                            }
+                        }
+                    },
+                    {"$sort": {"author.0.family": 1, "primaryYear": 1, "collection-title": 1,}},
+                    {"$project": {"primaryYear": 0}},
+            ],
+                collation={"locale": "en", "strength": 1, "normalization": True, },
             )
         ]
