@@ -55,6 +55,10 @@ class State:
         else:
             self._add_error(error, fragment)
 
+    def add_querying_error(self, error: Exception, number: int)-> None:
+        self.invalid_atf += 1
+        self.errors.append(f"{number}\t\t{error}")
+
     def _add_lemmatization_error(
         self,
         error: LemmatizationError,
@@ -107,13 +111,15 @@ def update_fragments(
     state = State()
 
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        fragment = fragment_repository.query_by_fragment_number(number)
         try:
-            update_fragment(transliteration_factory, updater, fragment)
-            state.add_updated()
+            fragment = fragment_repository.query_by_fragment_number(number)
+            try:
+                update_fragment(transliteration_factory, updater, fragment)
+                state.add_updated()
+            except Exception as error:
+                state.add_error(error, fragment)
         except Exception as error:
-            state.add_error(error, fragment)
-
+            state.add_querying_error(error, number)
     return state
 
 
