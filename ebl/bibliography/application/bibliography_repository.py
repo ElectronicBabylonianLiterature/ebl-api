@@ -20,19 +20,3 @@ class BibliographyRepository(ABC):
         self, author: Optional[str], year: Optional[str], title: Optional[str]
     ):
         ...
-
-    @abstractmethod
-    def query_by_author_year_and_title(
-            self, author: Optional[str], year: Optional[str], title: Optional[str]
-    ):
-        ...
-
-    @abstractmethod
-    def query_by_container_title_and_collection_number(
-            self, container_title: Optional[str], collection_number: Optional[str]
-    ):
-        ...
-
-
-
-

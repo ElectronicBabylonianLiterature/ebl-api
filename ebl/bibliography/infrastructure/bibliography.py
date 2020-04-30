@@ -57,8 +57,3 @@ class MongoBibliographyRepository(BibliographyRepository):
                 collation={"locale": "en", "strength": 1, "normalization": True,},
             )
         ]
-
-    def query_by_container_title_and_collection_number(
-            self, container_title: Optional[str], collection_number: Optional[str]
-    ):
-        pass
