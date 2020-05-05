@@ -21,7 +21,10 @@ class NoteLineTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_text_line__language_part(
         self, language: Token, transliteration: Sequence[Token]  # pyre-ignore[11]
     ) -> LanguagePart:
-        return LanguagePart(Language.of_atf(f"%{language}"), transliteration)
+        return LanguagePart.of_transliteration(
+            Language.of_atf(f"%{language}"),
+            transliteration
+        )
 
     @v_args(inline=True)
     def ebl_atf_text_line__emphasis_part(self, text: str) -> EmphasisPart:

@@ -251,7 +251,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 (
                     StringPart("a note "),
                     EmphasisPart("italic"),
-                    LanguagePart(
+                    LanguagePart.of_transliteration(
                         Language.AKKADIAN,
                         (Word.of([Reading.of_name("bu")]),)
                     ),
@@ -437,7 +437,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 (
                     StringPart("a note "),
                     EmphasisPart("italic"),
-                    LanguagePart(
+                    LanguagePart.of_transliteration(
                         Language.AKKADIAN,
                         (Word.of([Reading.of_name("bu")]),)
                     ),

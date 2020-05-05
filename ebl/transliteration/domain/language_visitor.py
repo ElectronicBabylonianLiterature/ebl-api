@@ -1,4 +1,4 @@
-from typing import List, Sequence
+from typing import Iterable, List, Sequence, Union
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.tokens import (
@@ -10,10 +10,21 @@ from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
 
 class LanguageVisitor(TokenVisitor):
-    def __init__(self):
+    def __init__(self, language: Language = DEFAULT_LANGUAGE):
         self._tokens: List[Token] = []
-        self._language: Language = DEFAULT_LANGUAGE
+        self._language: Language = language
         self._normalized: bool = DEFAULT_NORMALIZED
+
+    @staticmethod
+    def set_language(
+        tokens: Union[Sequence[Token], Iterable[Token]],
+        language: Language = DEFAULT_LANGUAGE
+    ) -> Sequence[Token]:
+        language_visitor = LanguageVisitor(language)
+        for token in tokens:
+            token.accept(language_visitor)
+
+        return language_visitor.tokens
 
     @property
     def tokens(self) -> Sequence[Token]:

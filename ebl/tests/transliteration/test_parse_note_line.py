@@ -18,7 +18,7 @@ def parse_text(atf: str):
 
 
 def expected_language_part(language: Language, transliteration: str) -> LanguagePart:
-    return LanguagePart(language, parse_text(transliteration))
+    return LanguagePart.of_transliteration(language, parse_text(transliteration))
 
 
 @pytest.mark.parametrize(

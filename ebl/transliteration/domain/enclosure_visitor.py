@@ -1,4 +1,4 @@
-from typing import FrozenSet, List, Sequence
+from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
@@ -131,6 +131,16 @@ class EnclosureValidator(TokenVisitor):
 class EnclosureUpdater(TokenVisitor):
     _enclosures: FrozenSet[EnclosureType] = frozenset()
     _tokens: List[Token] = attr.ib(factory=list)
+
+    @staticmethod
+    def set_enclosure_types(
+        tokens: Union[Sequence[Token], Iterable[Token]]
+    ) -> Sequence[Token]:
+        enclosure_visitor = EnclosureUpdater()
+        for token in tokens:
+            token.accept(enclosure_visitor)
+
+        return enclosure_visitor.tokens
 
     @property
     def tokens(self) -> Sequence[Token]:

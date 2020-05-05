@@ -37,7 +37,7 @@ class LanguagePartSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_part(self, data, **kwargs):
-        return LanguagePart(
+        return LanguagePart.of_transliteration(
             data["language"],
             data["tokens"] or (ValueToken.of(data["text"]),)
         )

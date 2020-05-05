@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import Sequence, Iterable, Tuple
+from typing import Iterable, Sequence, Tuple
 
 import attr
 
 from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.atf_visitor import AtfVisitor
+from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.language_visitor import LanguageVisitor
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import Token, ValueToken
 
@@ -48,8 +51,21 @@ class LanguagePart(NotePart):
     @property
     def value(self) -> str:
         code = {Language.AKKADIAN: "akk", Language.SUMERIAN: "sux"}[self.language]
-        transliteration = " ".join(token.value for token in self.tokens)
+        transliteration = AtfVisitor.to_atf(None, self.tokens)
         return f"@{code}{{{transliteration}}}"
+
+    @staticmethod
+    def of_transliteration(
+        language: Language,
+        tokens: Sequence[Token]
+    ) -> "LanguagePart":
+        tokens_with_enclosures = EnclosureUpdater.set_enclosure_types(tokens)
+        tokens_with_language = LanguageVisitor.set_language(
+            tokens_with_enclosures,
+            language
+        )
+
+        return LanguagePart(language, tokens_with_language)
 
 
 def convert_part_sequence(flags: Iterable[NotePart]) -> Tuple[NotePart, ...]:

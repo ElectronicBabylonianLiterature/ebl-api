@@ -464,7 +464,10 @@ LINES = [
             (
                 StringPart("a note "),
                 EmphasisPart("italic"),
-                LanguagePart(Language.AKKADIAN, [Word.of([Reading.of_name("bu")]),]),
+                LanguagePart.of_transliteration(
+                    Language.AKKADIAN,
+                    [Word.of([Reading.of_name("bu")]),]
+                ),
             )
         ),
         {
@@ -557,7 +560,10 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
     (
         NoteLine(
             (
-                LanguagePart(Language.AKKADIAN, [ValueToken.of("bu")]),
+                LanguagePart.of_transliteration(
+                    Language.AKKADIAN,
+                    [ValueToken.of("bu")]
+                ),
             )
         ),
         {

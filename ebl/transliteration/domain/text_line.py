@@ -37,23 +37,19 @@ class TextLine(Line):
         return self._content
 
     @classmethod
-    def of_iterable(cls, line_number: AbstractLineNumber, content: Iterable[Token]):
-        enclosure_visitor = EnclosureUpdater()
-        for token in content:
-            token.accept(enclosure_visitor)
+    def of_iterable(
+        cls,
+        line_number: AbstractLineNumber,
+        content: Iterable[Token]
+    ):
+        content_with_enclosures = EnclosureUpdater.set_enclosure_types(content)
+        content_with_language = LanguageVisitor.set_language(content_with_enclosures)
 
-        language_visitor = LanguageVisitor()
-        for token in enclosure_visitor.tokens:
-            token.accept(language_visitor)
-
-        return cls(line_number, language_visitor.tokens)
+        return cls(line_number, content_with_language)
 
     @property
     def atf(self) -> Atf:
-        visitor = AtfVisitor(self.prefix)
-        for token in self.content:
-            token.accept(visitor)
-        return visitor.result
+        return AtfVisitor.to_atf(self.prefix, self.content)
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
         def updater(token, alignment_token):
