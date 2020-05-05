@@ -554,6 +554,25 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "displayValue": "double ruling",
         },
     ),
+    (
+        NoteLine(
+            (
+                LanguagePart(Language.AKKADIAN, [ValueToken.of("bu")]),
+            )
+        ),
+        {
+            "type": "NoteLine",
+            "prefix": "#note: ",
+            "parts": [
+                {
+                    "type": "LanguagePart",
+                    "language": Language.AKKADIAN.name,
+                    "text": "bu"
+                },
+            ],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("@akk{bu}"))],
+        },
+    )
 ]
 
 
