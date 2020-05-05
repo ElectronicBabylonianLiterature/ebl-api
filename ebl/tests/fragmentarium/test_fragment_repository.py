@@ -212,7 +212,6 @@ def test_statistics(database, fragment_repository):
             SCHEMA.dump(FragmentFactory.build(text=Text())),
         ]
     )
-
     assert fragment_repository.count_transliterated_fragments() == 2
     assert fragment_repository.count_lines() == 4
 

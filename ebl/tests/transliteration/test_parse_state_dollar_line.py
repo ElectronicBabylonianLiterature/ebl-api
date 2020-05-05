@@ -13,6 +13,16 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
     "line,expected_line",
     [
         (
+            "2-4 lines missing",
+            StateDollarLine(
+                None,
+                (2, 4),
+                ScopeContainer(atf.Scope.LINES),
+                atf.State.MISSING,
+                None
+            ),
+        ),
+        (
             "at least 1 obverse missing",
             StateDollarLine(
                 atf.Qualification.AT_LEAST,
