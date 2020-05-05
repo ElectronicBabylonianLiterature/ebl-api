@@ -44,7 +44,7 @@ class Bibliography:
         second_result = self._repository.query_by_container_title_and_collection_number(
             query[0], query[1]
         )
-        return first_result + [x for x in second_result if x not in second_result]
+        return first_result + [x for x in second_result if x not in first_result]
 
     def search_author_year_and_title(
         self,
