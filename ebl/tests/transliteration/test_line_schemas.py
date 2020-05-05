@@ -464,7 +464,7 @@ LINES = [
             (
                 StringPart("a note "),
                 EmphasisPart("italic"),
-                LanguagePart("Akkadian", Language.AKKADIAN),
+                LanguagePart(Language.AKKADIAN, [Word.of([Reading.of_name("bu")]),]),
             )
         ),
         {
@@ -475,15 +475,17 @@ LINES = [
                 {"type": "EmphasisPart", "text": "italic",},
                 {
                     "type": "LanguagePart",
-                    "text": "Akkadian",
                     "language": Language.AKKADIAN.name,
+                    "tokens": [
+                        OneOfTokenSchema().dump(Word.of([Reading.of_name("bu")]))
+                    ],
                 },
             ],
             "content": OneOfTokenSchema().dump(
                 [
                     ValueToken.of("a note "),
                     ValueToken.of("@i{italic}"),
-                    ValueToken.of("@akk{Akkadian}"),
+                    ValueToken.of("@akk{bu}"),
                 ],
                 many=True,
             ),

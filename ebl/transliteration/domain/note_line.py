@@ -6,27 +6,30 @@ import attr
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 
 @attr.s(frozen=True, auto_attribs=True)
 class NotePart(ABC):
-    text: str
-
     @property
     @abstractmethod
     def value(self) -> str:
         ...
 
 
+@attr.s(frozen=True, auto_attribs=True)
 class StringPart(NotePart):
+    text: str
+
     @property
     def value(self) -> str:
         return self.text
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, auto_attribs=True)
 class EmphasisPart(NotePart):
+    text: str
+
     @property
     def value(self) -> str:
         return f"@i{{{self.text}}}"
@@ -35,6 +38,7 @@ class EmphasisPart(NotePart):
 @attr.s(frozen=True, auto_attribs=True)
 class LanguagePart(NotePart):
     language: Language = attr.ib()
+    tokens: Sequence[Token] = attr.ib(converter=tuple)
 
     @language.validator
     def _check_language(self, attribute, value):
@@ -44,7 +48,8 @@ class LanguagePart(NotePart):
     @property
     def value(self) -> str:
         code = {Language.AKKADIAN: "akk", Language.SUMERIAN: "sux"}[self.language]
-        return f"@{code}{{{self.text}}}"
+        transliteration = " ".join(token.value for token in self.tokens)
+        return f"@{code}{{{transliteration}}}"
 
 
 def convert_part_sequence(flags: Iterable[NotePart]) -> Tuple[NotePart, ...]:

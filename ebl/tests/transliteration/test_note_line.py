@@ -7,15 +7,20 @@ from ebl.transliteration.domain.note_line import (
     NoteLine,
     StringPart,
 )
+from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.word_tokens import Word
+
+
+TRANSLITERATION = (Word.of([Reading.of_name("bu")]),)
 
 
 def test_note_line():
     parts = (
         StringPart("this is a note "),
         EmphasisPart("italic text"),
-        LanguagePart("Akkadian language", Language.AKKADIAN),
-        LanguagePart("Sumerian language", Language.SUMERIAN),
+        LanguagePart(Language.AKKADIAN, TRANSLITERATION),
+        LanguagePart(Language.SUMERIAN, TRANSLITERATION),
     )
     line = NoteLine(parts)
 
@@ -23,16 +28,16 @@ def test_note_line():
     assert line.prefix == "#note: "
     assert line.atf == (
         "#note: this is a note "
-        "@i{italic text}@akk{Akkadian language}@sux{Sumerian language}"
+        "@i{italic text}@akk{bu}@sux{bu}"
     )
     assert line.content == [
         ValueToken.of("this is a note "),
         ValueToken.of("@i{italic text}"),
-        ValueToken.of("@akk{Akkadian language}"),
-        ValueToken.of("@sux{Sumerian language}"),
+        ValueToken.of("@akk{bu}"),
+        ValueToken.of("@sux{bu}"),
     ]
 
 
 def test_invalid_language():
     with (pytest.raises(ValueError)):
-        LanguagePart("bad language", Language.EMESAL)
+        LanguagePart(Language.EMESAL, TRANSLITERATION)
