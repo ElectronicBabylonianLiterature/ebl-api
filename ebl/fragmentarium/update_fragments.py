@@ -112,37 +112,16 @@ def update_fragments(
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
-
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         try:
             fragment = fragment_repository.query_by_fragment_number(number)
-        except Exception as error:
-            state.add_querying_error(error, number)
             try:
                 update_fragment(transliteration_factory, updater, fragment)
                 state.add_updated()
             except Exception as error:
                 state.add_error(error, fragment)
-
-    return state
-
-
-def update_fragments(
-    numbers: Iterable[str], id_: int, context_factory: Callable[[], Context]
-) -> State:
-    context = context_factory()
-    fragment_repository = context.fragment_repository
-    transliteration_factory = context.get_transliteration_update_factory()
-    updater = context.get_fragment_updater()
-    state = State()
-
-    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        try:
-            fragment = fragment_repository.query_by_fragment_number(number)
-            update_fragment(transliteration_factory, updater, fragment)
-            state.add_updated()
         except Exception as error:
-            state.add_error(error, fragment)  # pyre-ignore[18]
+            state.add_querying_error(error, number)
 
     return state
 
