@@ -19,6 +19,10 @@ class NotePart(ABC):
     def value(self) -> str:
         ...
 
+    @property
+    def key(self) -> str:
+        return self.value
+
 
 @attr.s(frozen=True, auto_attribs=True)
 class StringPart(NotePart):
@@ -44,14 +48,24 @@ class LanguagePart(NotePart):
     tokens: Sequence[Token] = attr.ib(converter=tuple)
 
     @property
-    def value(self) -> str:
+    def code(self) -> str:
         code = {
             Language.AKKADIAN: "akk",
             Language.SUMERIAN: "sux",
             Language.EMESAL: "es"
         }[self.language]
+
+        return f"@{code}"
+
+    @property
+    def value(self) -> str:
         transliteration = convert_to_atf(None, self.tokens)
-        return f"@{code}{{{transliteration}}}"
+        return f"{self.code}{{{transliteration}}}"
+
+    @property
+    def key(self) -> str:
+        tokens = "⁚".join(token.get_key() for token in self.tokens)
+        return f"{self.code}⟨{tokens}⟩"
 
     @staticmethod
     def of_transliteration(
@@ -82,6 +96,11 @@ class NoteLine(Line):
     @property
     def content(self) -> Sequence[ValueToken]:
         return [ValueToken.of(part.value) for part in self.parts]
+
+    @property
+    def key(self) -> str:
+        parts = "⁚".join(part.key for part in self.parts)
+        return f"NoteLine⁞{self.atf}⟨{parts}⟩"
 
     @property
     def atf(self) -> Atf:
