@@ -6,9 +6,9 @@ import attr
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.atf_visitor import AtfVisitor
-from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
-from ebl.transliteration.domain.language_visitor import LanguageVisitor
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
+from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token
@@ -42,14 +42,14 @@ class TextLine(Line):
         line_number: AbstractLineNumber,
         content: Iterable[Token]
     ):
-        content_with_enclosures = EnclosureUpdater.set_enclosure_types(content)
-        content_with_language = LanguageVisitor.set_language(content_with_enclosures)
+        content_with_enclosures = set_enclosure_type(content)
+        content_with_language = set_language(content_with_enclosures)
 
         return cls(line_number, content_with_language)
 
     @property
     def atf(self) -> Atf:
-        return AtfVisitor.to_atf(self.prefix, self.content)
+        return convert_to_atf(self.prefix, self.content)
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
         def updater(token, alignment_token):

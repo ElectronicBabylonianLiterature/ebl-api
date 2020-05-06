@@ -4,10 +4,10 @@ from typing import Iterable, Sequence, Tuple
 import attr
 
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.atf_visitor import AtfVisitor
-from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.language_visitor import LanguageVisitor
+from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import Token, ValueToken
 
@@ -51,7 +51,7 @@ class LanguagePart(NotePart):
     @property
     def value(self) -> str:
         code = {Language.AKKADIAN: "akk", Language.SUMERIAN: "sux"}[self.language]
-        transliteration = AtfVisitor.to_atf(None, self.tokens)
+        transliteration = convert_to_atf(None, self.tokens)
         return f"@{code}{{{transliteration}}}"
 
     @staticmethod
@@ -59,8 +59,8 @@ class LanguagePart(NotePart):
         language: Language,
         tokens: Sequence[Token]
     ) -> "LanguagePart":
-        tokens_with_enclosures = EnclosureUpdater.set_enclosure_types(tokens)
-        tokens_with_language = LanguageVisitor.set_language(
+        tokens_with_enclosures = set_enclosure_type(tokens)
+        tokens_with_language = set_language(
             tokens_with_enclosures,
             language
         )

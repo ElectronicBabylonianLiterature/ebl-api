@@ -27,13 +27,6 @@ class AtfVisitor(TokenVisitor):
         self._force_separator: bool = prefix is not None
         self._omit_separator: bool = prefix is None
 
-    @staticmethod
-    def to_atf(prefix: Optional[str], tokens: Sequence[Token]) -> Atf:
-        visitor = AtfVisitor(prefix)
-        for token in tokens:
-            token.accept(visitor)
-        return visitor.result
-
     @property
     def result(self) -> Atf:
         return Atf("".join(self._parts))
@@ -126,3 +119,10 @@ class AtfVisitor(TokenVisitor):
     def _set_force(self):
         self._omit_separator = False
         self._force_separator = True
+
+
+def convert_to_atf(prefix: Optional[str], tokens: Sequence[Token]) -> Atf:
+    visitor = AtfVisitor(prefix)
+    for token in tokens:
+        token.accept(visitor)
+    return visitor.result

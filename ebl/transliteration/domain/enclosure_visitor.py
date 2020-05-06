@@ -132,16 +132,6 @@ class EnclosureUpdater(TokenVisitor):
     _enclosures: FrozenSet[EnclosureType] = frozenset()
     _tokens: List[Token] = attr.ib(factory=list)
 
-    @staticmethod
-    def set_enclosure_types(
-        tokens: Union[Sequence[Token], Iterable[Token]]
-    ) -> Sequence[Token]:
-        enclosure_visitor = EnclosureUpdater()
-        for token in tokens:
-            token.accept(enclosure_visitor)
-
-        return enclosure_visitor.tokens
-
     @property
     def tokens(self) -> Sequence[Token]:
         return tuple(self._tokens)
@@ -241,3 +231,13 @@ class EnclosureUpdater(TokenVisitor):
             if token.is_open
             else self._enclosures.difference({enclosure})
         )
+
+
+def set_enclosure_type(
+    tokens: Union[Sequence[Token], Iterable[Token]]
+) -> Sequence[Token]:
+    enclosure_visitor = EnclosureUpdater()
+    for token in tokens:
+        token.accept(enclosure_visitor)
+
+    return enclosure_visitor.tokens
