@@ -1,24 +1,14 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore
-
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.note_line import (
-    EmphasisPart,
-    LanguagePart,
-    NoteLine,
-    StringPart,
-)
+from ebl.transliteration.domain.note_line import (EmphasisPart, LanguagePart,
+                                                  NoteLine, StringPart)
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import (
-    LanguageShift,
-    EnclosureType,
-    ErasureState,
-    Token,
-    UnknownNumberOfSigns,
-    ValueToken,
-)
+from ebl.transliteration.domain.tokens import (EnclosureType, ErasureState,
+                                               LanguageShift, Token,
+                                               UnknownNumberOfSigns,
+                                               ValueToken)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
 
@@ -59,6 +49,7 @@ def test_note_line():
         EmphasisPart("italic text"),
         LanguagePart.of_transliteration(Language.AKKADIAN, TRANSLITERATION),
         LanguagePart.of_transliteration(Language.SUMERIAN, TRANSLITERATION),
+        LanguagePart.of_transliteration(Language.EMESAL, TRANSLITERATION),
     )
     line = NoteLine(parts)
 
@@ -67,20 +58,18 @@ def test_note_line():
         EmphasisPart("italic text"),
         LanguagePart(Language.AKKADIAN, expected_transliteration(Language.AKKADIAN)),
         LanguagePart(Language.SUMERIAN, expected_transliteration(Language.SUMERIAN)),
+        LanguagePart(Language.EMESAL, expected_transliteration(Language.EMESAL)),
     )
     assert line.prefix == "#note: "
     assert line.atf == (
         "#note: this is a note "
-        f"@i{{italic text}}@akk{{{EXPECTED_ATF}}}@sux{{{EXPECTED_ATF}}}"
+        "@i{italic text}"
+        f"@akk{{{EXPECTED_ATF}}}@sux{{{EXPECTED_ATF}}}@es{{{EXPECTED_ATF}}}"
     )
     assert line.content == [
         ValueToken.of("this is a note "),
         ValueToken.of("@i{italic text}"),
         ValueToken.of(f"@akk{{{EXPECTED_ATF}}}"),
         ValueToken.of(f"@sux{{{EXPECTED_ATF}}}"),
+        ValueToken.of(f"@es{{{EXPECTED_ATF}}}"),
     ]
-
-
-def test_invalid_language():
-    with (pytest.raises(ValueError)):
-        LanguagePart(Language.EMESAL, TRANSLITERATION)

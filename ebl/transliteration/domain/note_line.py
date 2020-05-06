@@ -43,14 +43,13 @@ class LanguagePart(NotePart):
     language: Language = attr.ib()
     tokens: Sequence[Token] = attr.ib(converter=tuple)
 
-    @language.validator
-    def _check_language(self, attribute, value):
-        if value not in [Language.AKKADIAN, Language.SUMERIAN]:
-            raise ValueError("language must be AKKADIAN or SUMERIAN")
-
     @property
     def value(self) -> str:
-        code = {Language.AKKADIAN: "akk", Language.SUMERIAN: "sux"}[self.language]
+        code = {
+            Language.AKKADIAN: "akk",
+            Language.SUMERIAN: "sux",
+            Language.EMESAL: "es"
+        }[self.language]
         transliteration = convert_to_atf(None, self.tokens)
         return f"@{code}{{{transliteration}}}"
 
