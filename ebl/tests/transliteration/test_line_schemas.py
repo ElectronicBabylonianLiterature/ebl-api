@@ -46,6 +46,7 @@ from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+
     (
         CompositeAtLine(atf.Composite.MILESTONE, "o"),
         {
@@ -260,7 +261,7 @@ LINES = [
             ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
-            "extent": (1, 2),
+            "extent": [1, 2],
             "scope": {"type": "Surface", "content": "SURFACE", "text": "thing"},
             "state": "BLANK",
             "status": "UNCERTAIN",
@@ -309,6 +310,28 @@ LINES = [
             "state": None,
             "status": None,
             "displayValue": "beginning of obverse",
+        },
+    ),
+    (
+        StateDollarLine(
+            None,
+            (2, 4),
+            ScopeContainer(atf.Scope.LINES),
+            atf.State.MISSING,
+            None,
+        ),
+        {
+            "prefix": "$",
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of(" 2-4 lines missing"))
+            ],
+            "type": "StateDollarLine",
+            "qualification": None,
+            "extent": [2, 4],
+            "scope": {"type": "Scope", "content": "LINES", "text": ""},
+            "state": "MISSING",
+            "status": None,
+            "displayValue": "2-4 lines missing",
         },
     ),
     (

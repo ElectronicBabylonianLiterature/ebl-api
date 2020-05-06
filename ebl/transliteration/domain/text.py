@@ -33,6 +33,10 @@ class Text:
     parser_version: str = ATF_PARSER_VERSION
 
     @property
+    def number_of_lines(self) -> int:
+        return len([line for line in self.lines if isinstance(line, TextLine)])
+
+    @property
     def lemmatization(self) -> Lemmatization:
         return Lemmatization.from_list(
             [
