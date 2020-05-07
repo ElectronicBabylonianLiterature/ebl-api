@@ -65,7 +65,7 @@ class MongoBibliographyRepository(BibliographyRepository):
         if container_title_short:
             match["container-title-short"] = container_title_short
         if collection_number:
-            match["collection-number"] = str(collection_number)
+            match["collection-number"] = collection_number
         return [
             create_object_entry(data)
             for data in self._collection.aggregate(
