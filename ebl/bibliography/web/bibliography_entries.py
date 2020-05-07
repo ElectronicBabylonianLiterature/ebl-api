@@ -30,8 +30,6 @@ class BibliographyResource:
         third = "2"
         allowed_params = {first, second, third}
         req_params = set(req.params.keys())
-        if second in req.params:
-            x = 3
         if not req_params <= allowed_params:
             extra_params = req_params - allowed_params
             raise DataError(f"Unsupported query parameters: {extra_params}.")

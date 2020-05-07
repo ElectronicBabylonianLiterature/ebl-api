@@ -73,6 +73,11 @@ class TestBibliographyRepository(MongoBibliographyRepository):
     def query_by_author_year_and_title(self, _author=None, _year=None, _title=None):
         return [create_object_entry(self._collection.find_one({}))]
 
+    def query_by_container_title_and_collection_number(
+            self, _container_title_short=None, _collection_number=None
+    ):
+        return [create_object_entry(self._collection.find_one({}))]
+
 
 @pytest.fixture
 def bibliography_repository(database):

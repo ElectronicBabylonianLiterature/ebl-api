@@ -107,10 +107,12 @@ def test_update_entry_invalid(transform, client, saved_entry):
     [
         {},
         {"0": "Author"},
-        {"0": 2019},
+        {"0": "2019"},
         {"0": "Title"},
-        {"0": "Author", "1": 2019, "2": "Title"},
+        {"0": "Author", "1": "2019", "2": "Title"},
         {"0": "Author", "1": "", "2": ""},
+        {"0": "Container-Title-Short"},
+        {"0": "Container-Title-Short", "1": "2", "2": ""},
     ],
 )
 def test_search(client, saved_entry, params):
