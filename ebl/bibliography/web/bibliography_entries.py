@@ -18,8 +18,8 @@ class BibliographyResource:
         resp.media = self._bibliography.search([*self._parse_search_request(req)])
 
     @staticmethod
-    def _parse_year(year: str) -> Optional[int]:
-        return None if year == "" else int(year)
+    def _parse_number(number: str) -> Optional[int]:
+        return None if number == "" else int(number)
 
     @staticmethod
     def _parse_search_request(
@@ -30,6 +30,8 @@ class BibliographyResource:
         third = "2"
         allowed_params = {first, second, third}
         req_params = set(req.params.keys())
+        if second in req.params:
+            x = 3
         if not req_params <= allowed_params:
             extra_params = req_params - allowed_params
             raise DataError(f"Unsupported query parameters: {extra_params}.")
@@ -37,14 +39,14 @@ class BibliographyResource:
             return (
                 req.params.get(first),
                 (
-                    BibliographyResource._parse_year(req.params[second])
+                    BibliographyResource._parse_number(req.params[second])
                     if second in req.params
                     else None
                 ),
                 req.params.get(third),
             )
         except ValueError:
-            raise DataError(f'Year "{second}" is not numeric.')
+            raise DataError(f'"{second}" is not numeric.')
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)

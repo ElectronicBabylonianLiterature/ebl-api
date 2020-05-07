@@ -23,6 +23,6 @@ class BibliographyRepository(ABC):
 
     @abstractmethod
     def query_by_container_title_and_collection_number(
-            self, container_title_short: Optional[str], collection_number: Optional[str]
+            self, container_title_short: Optional[str], collection_number: Optional[int]
     ):
         ...

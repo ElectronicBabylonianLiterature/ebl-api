@@ -59,13 +59,13 @@ class MongoBibliographyRepository(BibliographyRepository):
         ]
 
     def query_by_container_title_and_collection_number(
-            self, container_title_short: Optional[str], collection_number: Optional[str]
+            self, container_title_short: Optional[str], collection_number: Optional[int]
     ):
         match: Dict[str, Any] = {}
         if container_title_short:
             match["container-title-short"] = container_title_short
         if collection_number:
-            match["collection-number"] = collection_number
+            match["collection-number"] = str(collection_number)
         return [
             create_object_entry(data)
             for data in self._collection.aggregate(
