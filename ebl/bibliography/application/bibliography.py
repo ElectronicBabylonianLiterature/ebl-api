@@ -1,5 +1,7 @@
 from typing import Optional, Sequence
 
+from pydash import uniq, uniq_with
+
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
@@ -44,7 +46,7 @@ class Bibliography:
         second_result = self._repository.query_by_container_title_and_collection_number(
             query[0], query[1]
         )
-        return first_result + [x for x in second_result if x not in first_result]
+        return uniq_with((first_result + second_result), lambda a, b: a == b)
 
     def search_author_year_and_title(
         self,
