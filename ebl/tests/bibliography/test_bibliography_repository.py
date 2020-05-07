@@ -55,3 +55,15 @@ def test_update(bibliography_repository, bibliography_entry):
 def test_update_not_found(bibliography_repository, bibliography_entry):
     with pytest.raises(NotFoundError):
         bibliography_repository.update(bibliography_entry)
+
+
+def test_query_by_author_year_title(database, bibliography_repository, bibliography_entry, mongo_entry):
+    database[COLLECTION].insert_one(mongo_entry)
+    assert (
+            bibliography_repository.query_by_author_year_and_title(
+                bibliography_entry["author"][0]["family"],
+                bibliography_entry["issued"]["date-parts"][0],
+                bibliography_entry["title"]
+            )
+            == [bibliography_entry]
+    )
