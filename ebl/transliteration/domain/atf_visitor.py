@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable, List, Optional, Sequence
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -22,10 +22,10 @@ from ebl.transliteration.domain.word_tokens import Word
 
 
 class AtfVisitor(TokenVisitor):
-    def __init__(self, prefix: str):
-        self._parts: List[str] = [prefix]
-        self._force_separator: bool = True
-        self._omit_separator: bool = False
+    def __init__(self, prefix: Optional[str]):
+        self._parts: List[str] = [] if prefix is None else [prefix]
+        self._force_separator: bool = prefix is not None
+        self._omit_separator: bool = prefix is None
 
     @property
     def result(self) -> Atf:
@@ -119,3 +119,10 @@ class AtfVisitor(TokenVisitor):
     def _set_force(self):
         self._omit_separator = False
         self._force_separator = True
+
+
+def convert_to_atf(prefix: Optional[str], tokens: Sequence[Token]) -> Atf:
+    visitor = AtfVisitor(prefix)
+    for token in tokens:
+        token.accept(visitor)
+    return visitor.result

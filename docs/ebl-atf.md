@@ -440,10 +440,11 @@ sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
 ## Note lines
 
 ```ebnf
-note-line = '#note: ', { emphasis | akkadian | sumerian  | note-text }-;
+note-line = '#note: ', { emphasis | akkadian | sumerian | emesal | note-text }-;
 emphasis = '@i{', note-text, '}';
-akkadian = '@akk{', note-text, '}';
-sumerian = '@sux{', note-text, '}';
+akkadian = '@akk{', text, '}';
+sumerian = '@sux{', text, '}';
+emesal = '@es{', text, '}';
 note-text = any-character - { '@' | '{' | '}' };
 ```
 

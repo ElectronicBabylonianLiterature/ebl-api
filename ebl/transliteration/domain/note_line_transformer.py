@@ -18,18 +18,21 @@ class NoteLineTransformer(Transformer):  # pyre-ignore[11]
         return NoteLine(children)
 
     @v_args(inline=True)
-    def ebl_atf_note_line__language_part(
-        self, language: Token, text: str  # pyre-ignore[11]
+    def ebl_atf_text_line__language_part(
+        self, language: Token, transliteration: Sequence[Token]  # pyre-ignore[11]
     ) -> LanguagePart:
-        return LanguagePart(text, Language.of_atf(f"%{language}"))
+        return LanguagePart.of_transliteration(
+            Language.of_atf(f"%{language}"),
+            transliteration
+        )
 
     @v_args(inline=True)
-    def ebl_atf_note_line__emphasis_part(self, text: str) -> EmphasisPart:
+    def ebl_atf_text_line__emphasis_part(self, text: str) -> EmphasisPart:
         return EmphasisPart(text)
 
     @v_args(inline=True)
-    def ebl_atf_note_line__string_part(self, text: str) -> StringPart:
+    def ebl_atf_text_line__string_part(self, text: str) -> StringPart:
         return StringPart(text)
 
-    def ebl_atf_note_line__note_text(self, children: Sequence[Token]) -> str:  # pyre-ignore[11]
+    def ebl_atf_text_line__note_text(self, children: Sequence[Token]) -> str:  # pyre-ignore[11]
         return "".join(children)

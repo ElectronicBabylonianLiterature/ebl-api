@@ -487,7 +487,10 @@ LINES = [
             (
                 StringPart("a note "),
                 EmphasisPart("italic"),
-                LanguagePart("Akkadian", Language.AKKADIAN),
+                LanguagePart.of_transliteration(
+                    Language.AKKADIAN,
+                    [Word.of([Reading.of_name("bu")]),]
+                ),
             )
         ),
         {
@@ -498,15 +501,17 @@ LINES = [
                 {"type": "EmphasisPart", "text": "italic",},
                 {
                     "type": "LanguagePart",
-                    "text": "Akkadian",
                     "language": Language.AKKADIAN.name,
+                    "tokens": [
+                        OneOfTokenSchema().dump(Word.of([Reading.of_name("bu")]))
+                    ],
                 },
             ],
             "content": OneOfTokenSchema().dump(
                 [
                     ValueToken.of("a note "),
                     ValueToken.of("@i{italic}"),
-                    ValueToken.of("@akk{Akkadian}"),
+                    ValueToken.of("@akk{bu}"),
                 ],
                 many=True,
             ),
@@ -575,6 +580,28 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "displayValue": "double ruling",
         },
     ),
+    (
+        NoteLine(
+            (
+                LanguagePart.of_transliteration(
+                    Language.AKKADIAN,
+                    [ValueToken.of("bu")]
+                ),
+            )
+        ),
+        {
+            "type": "NoteLine",
+            "prefix": "#note: ",
+            "parts": [
+                {
+                    "type": "LanguagePart",
+                    "language": Language.AKKADIAN.name,
+                    "text": "bu"
+                },
+            ],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("@akk{bu}"))],
+        },
+    )
 ]
 
 

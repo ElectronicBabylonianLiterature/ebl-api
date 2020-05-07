@@ -1,14 +1,20 @@
 import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.note_line import (
-    NoteLine,
-    StringPart,
-    EmphasisPart,
-    LanguagePart,
-)
+from ebl.transliteration.domain.lark_parser import LINE_PARSER, parse_atf_lark
+from ebl.transliteration.domain.note_line import (EmphasisPart, LanguagePart,
+                                                  NoteLine, StringPart)
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
+
+
+def parse_text(atf: str):
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__text")
+    return TextLineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def expected_language_part(language: Language, transliteration: str) -> LanguagePart:
+    return LanguagePart.of_transliteration(language, parse_text(transliteration))
 
 
 @pytest.mark.parametrize(
@@ -17,24 +23,28 @@ from ebl.transliteration.domain.text import Text
         ("#note: this is a note ", NoteLine([StringPart("this is a note "),]),),
         ("#note: @i{italic text}", NoteLine([EmphasisPart("italic text"),]),),
         (
-            "#note: @akk{Akkadian language}",
-            NoteLine([LanguagePart("Akkadian language", Language.AKKADIAN),]),
+            "#note: @akk{{d}kur}",
+            NoteLine([expected_language_part(Language.AKKADIAN, "{d}kur"),]),
         ),
         (
-            "#note: @sux{Sumerian language}",
-            NoteLine([LanguagePart("Sumerian language", Language.SUMERIAN),]),
+            "#note: @sux{kur}",
+            NoteLine([expected_language_part(Language.SUMERIAN, "kur"),]),
+        ),
+        (
+            "#note: @es{kur}",
+            NoteLine([expected_language_part(Language.EMESAL, "kur"),]),
         ),
         (
             (
                 "#note: this is a note "
-                "@i{italic text}@akk{Akkadian language}@sux{Sumerian language}"
+                "@i{italic text}@akk{kur}@sux{kur}"
             ),
             NoteLine(
                 [
                     StringPart("this is a note "),
                     EmphasisPart("italic text"),
-                    LanguagePart("Akkadian language", Language.AKKADIAN),
-                    LanguagePart("Sumerian language", Language.SUMERIAN),
+                    expected_language_part(Language.AKKADIAN, "kur"),
+                    expected_language_part(Language.SUMERIAN, "kur"),
                 ]
             ),
         ),
