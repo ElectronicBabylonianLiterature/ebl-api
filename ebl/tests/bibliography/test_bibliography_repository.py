@@ -67,3 +67,14 @@ def test_query_by_author_year_title(database, bibliography_repository, bibliogra
             )
             == [bibliography_entry]
     )
+
+def container_by_title_and_collection_number(database, bibliography_repository, bibliography_entry, mongo_entry):
+    database[COLLECTION].insert_one(mongo_entry)
+    assert (
+            bibliography_repository.query_by_author_year_and_title(
+                bibliography_entry["author"][0]["family"],
+                bibliography_entry["issued"]["date-parts"][0],
+                bibliography_entry["title"]
+            )
+            == [bibliography_entry]
+    )
