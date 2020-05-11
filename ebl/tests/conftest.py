@@ -415,6 +415,8 @@ def bibliography_entry():
         "page": "837-846",
         "issue": "4",
         "container-title": "Molecular Endocrinology",
+        "container-title-short": "ME",
+        "collection-number": "1",
         "author": [
             {"given": "Stefania", "family": "Miccadei"},
             {"given": "Rossana", "family": "De Leo"},
