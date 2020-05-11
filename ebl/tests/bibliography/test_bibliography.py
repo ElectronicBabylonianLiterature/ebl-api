@@ -24,7 +24,8 @@ def test_find(bibliography, bibliography_repository, when, bibliography_entry):
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
 
 
-def test_create_and_find(bibliography, bibliography_repository, bibliography_entry, user, changelog,when, mongo_entry):
+def test_create(bibliography, bibliography_repository, bibliography_entry, user,
+                changelog, when, mongo_entry):
     (
         when(changelog)
         .create(
@@ -43,15 +44,34 @@ def test_create_and_find(bibliography, bibliography_repository, bibliography_ent
     bibliography.create(bibliography_entry, user)
 
 
-def test_create_duplicate(bibliography, bibliography_entry, user):
-    bibliography.create(bibliography_entry, user)
+def test_create_duplicate(bibliography, bibliography_entry, user, when, changelog,
+                          bibliography_repository, mongo_entry):
+    (
+        when(changelog)
+        .create(
+            COLLECTION,
+            user.profile,
+            {"_id": bibliography_entry["id"]},
+            mongo_entry,
+        ).thenReturn()
+    )
+    (
+        when(bibliography_repository)
+        .create(bibliography_entry)
+        .thenRaise(DuplicateError)
+    )
     with pytest.raises(DuplicateError):
         bibliography.create(bibliography_entry, user)
 
 
-def test_entry_not_found(bibliography):
+def test_entry_not_found(bibliography, bibliography_repository, bibliography_entry, when):
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["id"])
+        .thenRaise(NotFoundError)
+    )
     with pytest.raises(NotFoundError):
-        bibliography.find("not found")
+        bibliography.find(bibliography_entry["id"])
 
 
 def test_update(bibliography, bibliography_entry, user):
@@ -64,9 +84,9 @@ def test_update(bibliography, bibliography_entry, user):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_changelog(
-    bibliography, database, bibliography_entry, mongo_entry, user, make_changelog_entry,
+        bibliography, database, bibliography_entry, mongo_entry, user,
+        make_changelog_entry,
 ):
-
     updated_entry = {**bibliography_entry, "title": "New Title"}
     bibliography.create(bibliography_entry, user)
     bibliography.update(updated_entry, user)
@@ -89,11 +109,11 @@ def test_changelog(
     ]
 
     assert [
-        change
-        for change in database["changelog"].find(
+               change
+               for change in database["changelog"].find(
             {"resource_id": bibliography_entry["id"]}, {"_id": 0}
         )
-    ] == expected_changelog
+           ] == expected_changelog
 
 
 def test_update_not_found(bibliography, bibliography_entry, user):
