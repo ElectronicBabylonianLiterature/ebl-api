@@ -106,13 +106,13 @@ def test_update_entry_invalid(transform, client, saved_entry):
     "params",
     [
         {},
-        {"0": "Author"},
-        {"0": "2019"},
-        {"0": "Title"},
-        {"0": "Author", "1": "2019", "2": "Title"},
-        {"0": "Author", "1": "", "2": ""},
-        {"0": "Container-Title-Short"},
-        {"0": "Container-Title-Short", "1": "2", "2": ""},
+        {"query": "Author"},
+        {"query": "2019"},
+        {"query": "Title"},
+        {"query": "Author 2019 Title"},
+        {"query": "Author 1"},
+        {"query": "Container-Title-Short"},
+        {"query": "Container-Title-Short 1"},
     ],
 )
 def test_search(client, saved_entry, params):

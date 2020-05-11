@@ -1,8 +1,10 @@
-from typing import Optional, Tuple
+import re
+from typing import Optional, Tuple, Sequence
 
 import falcon  # pyre-ignore
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
+from pydash import uniq_with
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.errors import DataError
@@ -15,36 +17,36 @@ class BibliographyResource:
 
     @falcon.before(require_scope, "read:bibliography")
     def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
-        resp.media = self._bibliography.search([*self._parse_search_request(req)])
+        resp.media = self._parse_search_request(req.params)
 
     @staticmethod
     def _parse_number(number: str) -> Optional[int]:
-        return None if number == "" else int(number)
-
-    @staticmethod
-    def _parse_search_request(
-        req,
-    ) -> Tuple[Optional[str], Optional[int], Optional[str]]:
-        first = "0"
-        second = "1"
-        third = "2"
-        allowed_params = {first, second, third}
-        req_params = set(req.params.keys())
-        if not req_params <= allowed_params:
-            extra_params = req_params - allowed_params
-            raise DataError(f"Unsupported query parameters: {extra_params}.")
         try:
-            return (
-                req.params.get(first),
-                (
-                    BibliographyResource._parse_number(req.params[second])
-                    if second in req.params
-                    else None
-                ),
-                req.params.get(third),
-            )
+            return None if number == "" else int(number)
         except ValueError:
-            raise DataError(f'"{second}" is not numeric.')
+            raise DataError(f'"{number}" is not numeric.')
+
+    def _author_and_title_query(self, query: str) -> Sequence[dict]:
+        match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', query)
+        return self._bibliography.search_author_year_and_title(
+            match.group(1),
+            BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
+            match.group(3)
+        )
+
+    def _collection_title_short_and_collection_number(self, query: str)\
+            -> Sequence[dict]:
+        match = re.match(r'^(.+) (\d*)?$', query)
+        return self._bibliography.search_container_title_and_collection_number(
+            match.group(1),
+            BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
+        )
+
+    def _parse_search_request(self, req_params,) -> Sequence[dict]:
+        first_query = self._author_and_title_query(req_params.get("query"))
+        second_query = self._collection_title_short_and_collection_number(req_params.get("query"))
+        queries_combined = uniq_with(first_query + second_query, lambda a, b: a == b)
+        return queries_combined
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)
