@@ -1,6 +1,6 @@
-from typing import Optional, Sequence, Union, Tuple
+from typing import Optional, Sequence, Tuple
 
-from pydash import uniq_with # pyre-ignore
+from pydash import uniq_with  # pyre-ignore
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry
@@ -39,7 +39,7 @@ class Bibliography:
     def search(
         self,
         query: Tuple[str, int, str]
-    ):
+    ) -> Sequence[dict]:
         first_result = self._repository.query_by_author_year_and_title(
             query[0], query[1], query[2]
         )
@@ -59,7 +59,7 @@ class Bibliography:
     def search_container_title_and_collection_number(
         self,
         container_title: Optional[str] = None,
-        collection_number: Optional[str] = None,
+        collection_number: Optional[int] = None,
     ):
         return self._repository.query_by_container_title_and_collection_number(
             container_title, collection_number)
