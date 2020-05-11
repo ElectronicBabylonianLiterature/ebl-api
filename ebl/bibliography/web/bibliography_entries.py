@@ -28,25 +28,31 @@ class BibliographyResource:
 
     def _author_and_title_query(self, query: str) -> Sequence[dict]:
         match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', query)
-        return self._bibliography.search_author_year_and_title(
-            match.group(1),
-            BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
-            match.group(3)
-        )
-
+        if match.group() is not None:
+            return self._bibliography.search_author_year_and_title(
+                match.group(1),
+                BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
+                match.group(3)
+            )
+        else:
+            return []
     def _collection_title_short_and_collection_number(self, query: str)\
             -> Sequence[dict]:
         match = re.match(r'^(.+) (\d*)?$', query)
-        return self._bibliography.search_container_title_and_collection_number(
-            match.group(1),
-            BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
-        )
+        if match.group() is not None:
+            return self._bibliography.search_container_title_and_collection_number(
+                match.group(1),
+                BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
+            )
+        else:
+            return []
 
     def _parse_search_request(self, req_params,) -> Sequence[dict]:
         first_query = self._author_and_title_query(req_params.get("query"))
         second_query = self._collection_title_short_and_collection_number(req_params.get("query"))
         queries_combined = uniq_with(first_query + second_query, lambda a, b: a == b)
         return queries_combined
+
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)

@@ -36,18 +36,6 @@ class Bibliography:
         )
         self._repository.update(entry)
 
-    def search(
-        self,
-        query: Tuple[str, int, str]
-    ) -> Sequence[dict]:
-        first_result = self._repository.query_by_author_year_and_title(
-            query[0], query[1], query[2]
-        )
-        second_result = self._repository.query_by_container_title_and_collection_number(
-            query[0], query[1]
-        )
-        return uniq_with((first_result + second_result), lambda a, b: a == b)
-
     def search_author_year_and_title(
         self,
         author: Optional[str] = None,
