@@ -5,6 +5,8 @@ from freezegun import freeze_time  # pyre-ignore
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 
+COLLECTION = "bibliography"
+
 
 @pytest.fixture
 def mongo_entry(bibliography_entry):
@@ -13,13 +15,32 @@ def mongo_entry(bibliography_entry):
     )
 
 
-COLLECTION = "bibliography"
-
-
-def test_create_and_find(bibliography, bibliography_entry, user):
-    bibliography.create(bibliography_entry, user)
-
+def test_find(bibliography, bibliography_repository, when, bibliography_entry):
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["id"])
+        .thenReturn(bibliography_entry)
+    )
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
+
+
+def test_create_and_find(bibliography, bibliography_repository, bibliography_entry, user, changelog,when, mongo_entry):
+    (
+        when(changelog)
+        .create(
+            COLLECTION,
+            user.profile,
+            {"_id": bibliography_entry["id"]},
+            mongo_entry,
+        ).thenReturn()
+    )
+    (
+        when(bibliography_repository)
+        .create(bibliography_entry)
+        .thenReturn()
+    )
+
+    bibliography.create(bibliography_entry, user)
 
 
 def test_create_duplicate(bibliography, bibliography_entry, user):
