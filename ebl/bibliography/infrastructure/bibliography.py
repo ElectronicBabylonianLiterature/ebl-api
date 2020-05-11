@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import (
@@ -18,17 +18,17 @@ class MongoBibliographyRepository(BibliographyRepository):
         mongo_entry = create_mongo_entry(entry)
         return self._collection.insert_one(mongo_entry)
 
-    def query_by_id(self, id_: str):
+    def query_by_id(self, id_: str) -> dict:
         data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
 
-    def update(self, entry):
+    def update(self, entry) -> None :
         mongo_entry = create_mongo_entry(entry)
         self._collection.replace_one(mongo_entry)
 
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]
-    ):
+    ) -> Sequence[dict]:
         match: Dict[str, Any] = {}
         if author:
             match["author.0.family"] = author
@@ -60,7 +60,7 @@ class MongoBibliographyRepository(BibliographyRepository):
 
     def query_by_container_title_and_collection_number(
             self, container_title_short: Optional[str], collection_number: Optional[int]
-    ):
+    ) -> Sequence[dict]:
         match: Dict[str, Any] = {}
         if container_title_short:
             match["container-title-short"] = container_title_short
