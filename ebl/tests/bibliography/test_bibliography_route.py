@@ -105,26 +105,12 @@ def test_update_entry_invalid(transform, client, saved_entry):
 @pytest.mark.parametrize(
     "params",
     [
-        {},
-        {"query": "Author"},
-        {"query": "2019"},
-        {"query": "Title"},
-        {"query": "Author 2019 Title"},
-        {"query": "Author 1"},
         {"query": "Container-Title-Short"},
-        {"query": "Container-Title-Short 1"},
     ],
 )
 def test_search(client, saved_entry, params):
-    result = client.simulate_get("/bibliography", params=params)
+    result = client.simulate_get("/bibliography?query=CT",)
 
     assert result.json == [saved_entry]
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"
-
-
-@pytest.mark.parametrize("params", [{"invalid": "param"}, {"0": "Author", "1": "invalid"}])
-def test_search_invalid_query(client, params):
-    result = client.simulate_get("/bibliography", params=params)
-
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

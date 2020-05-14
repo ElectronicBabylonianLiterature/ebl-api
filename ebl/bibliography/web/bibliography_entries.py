@@ -28,10 +28,11 @@ class BibliographyResource:
 
     def _author_and_title_query(self, query: str) -> Sequence[dict]:
         match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', query)
-        if match.group() is not None:
+        if match:
             return self._bibliography.search_author_year_and_title(
                 match.group(1),
-                BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
+                BibliographyResource._parse_number(match.group(2))
+                if match.group(2) else None,
                 match.group(3)
             )
         else:
@@ -40,11 +41,11 @@ class BibliographyResource:
     def _collection_title_short_and_collection_number(self, query: str)\
             -> Sequence[dict]:
         match = re.match(r'^(.+) (\d*)?$', query)
-        if match.group() is not None:
+        if match:
             return self._bibliography.search_container_title_and_collection_number(
                 match.group(1),
                 BibliographyResource._parse_number(match.group(2))
-                if match.group(2) else None,
+                if match.group(2) else None
             )
         else:
             return []
