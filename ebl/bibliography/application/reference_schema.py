@@ -20,3 +20,7 @@ class ReferenceSchema(Schema):  # pyre-ignore[11]
         data["id"] = BibliographyId(data["id"])
         data["lines_cited"] = tuple(data["lines_cited"])
         return Reference(**data)
+
+
+class ApiReferenceSchema(ReferenceSchema):
+    document = fields.Mapping(missing=None)

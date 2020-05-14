@@ -1,3 +1,4 @@
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.corpus import (
@@ -43,10 +44,11 @@ def to_dict(include_documents):
                         "provenance": MANUSCRIPT.provenance.long_name,
                         "type": MANUSCRIPT.type.long_name,
                         "notes": MANUSCRIPT.notes,
-                        "references": [
-                            reference.to_dict(include_documents)
-                            for reference in REFERENCES
-                        ],
+                        "references": (
+                            ApiReferenceSchema
+                            if include_documents
+                            else ReferenceSchema
+                        )().dump(MANUSCRIPT.references, many=True),
                     }
                 ],
                 "lines": [

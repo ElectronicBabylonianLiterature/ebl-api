@@ -1,5 +1,6 @@
 import pytest  # pyre-ignore
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
@@ -511,11 +512,11 @@ LINES = [
                 },
                 {
                     "type": "BibliographyPart",
-                    "reference": Reference(
+                    "reference": ReferenceSchema().dump(Reference(  # pyre-ignore[16]
                         BibliographyId("A"),
                         ReferenceType.DISCUSSION,
                         "1-4"
-                    ).to_dict(),
+                    )),
                 },
             ],
             "content": OneOfTokenSchema().dump(
