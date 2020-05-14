@@ -4,6 +4,8 @@ FROM pypy:3
 # See also https://security.googleblog.com/2018/10/modernizing-transport-security.html
 RUN echo "\n[system_default_sect]\nMinProtocol = TLSv1.0" >> /etc/ssl/openssl.cnf
 
+ENV PIPENV_VENV_IN_PROJECT 1
+
 RUN pip install pipenv
 
 EXPOSE 8000
