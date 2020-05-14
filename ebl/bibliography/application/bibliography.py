@@ -1,6 +1,4 @@
-from typing import Optional, Sequence, Tuple
-
-from pydash import uniq_with  # pyre-ignore
+from typing import Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry

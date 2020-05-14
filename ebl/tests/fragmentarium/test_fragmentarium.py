@@ -36,8 +36,7 @@ def test_statistics(fragmentarium, fragment_repository, when):
     )
     when(fragment_repository).count_lines().thenReturn(lines)
 
-    assert fragmentarium.stat
-    istics() == {
+    assert fragmentarium.statistics() == {
         "transliteratedFragments": transliterated_fragments,
         "lines": lines,
     }

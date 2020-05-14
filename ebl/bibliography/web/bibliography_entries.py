@@ -1,10 +1,10 @@
 import re
-from typing import Optional, Tuple, Sequence
+from typing import Optional, Sequence
 
 import falcon  # pyre-ignore
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
-from pydash import uniq_with
+from pydash import uniq_with  # pyre-ignore
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.errors import DataError
@@ -36,23 +36,25 @@ class BibliographyResource:
             )
         else:
             return []
+
     def _collection_title_short_and_collection_number(self, query: str)\
             -> Sequence[dict]:
         match = re.match(r'^(.+) (\d*)?$', query)
         if match.group() is not None:
             return self._bibliography.search_container_title_and_collection_number(
                 match.group(1),
-                BibliographyResource._parse_number(match.group(2)) if match.group(2) else None,
+                BibliographyResource._parse_number(match.group(2))
+                if match.group(2) else None,
             )
         else:
             return []
 
     def _parse_search_request(self, req_params,) -> Sequence[dict]:
         first_query = self._author_and_title_query(req_params.get("query"))
-        second_query = self._collection_title_short_and_collection_number(req_params.get("query"))
+        second_query = self._collection_title_short_and_collection_number(
+            req_params.get("query"))
         queries_combined = uniq_with(first_query + second_query, lambda a, b: a == b)
         return queries_combined
-
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)

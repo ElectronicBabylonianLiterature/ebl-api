@@ -152,7 +152,7 @@ def test_validate_references(bibliography_repository, bibliography,
 
 
 def test_validate_references_invalid(bibliography_repository, bibliography,
-                             bibliography_entry, user, changelog, when):
+                                     bibliography_entry, user, changelog, when):
     valid_reference = ReferenceWithDocumentFactory.build()
     first_invalid = ReferenceWithDocumentFactory.build()
     second_invalid = ReferenceWithDocumentFactory.build()
@@ -185,5 +185,3 @@ def test_validate_references_invalid(bibliography_repository, bibliography,
         bibliography.validate_references(
             [first_invalid, valid_reference, second_invalid]
         )
-
-
