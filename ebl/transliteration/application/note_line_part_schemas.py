@@ -11,14 +11,13 @@ from ebl.transliteration.domain.note_line import (
     LanguagePart,
     StringPart,
 )
-from ebl.transliteration.domain.tokens import ValueToken
 
 
 class StringPartSchema(Schema):  # pyre-ignore[11]
     text = fields.String(required=True)
 
     @post_load
-    def make_part(self, data, **kwargs):
+    def make_part(self, data, **kwargs) -> StringPart:
         return StringPart(data["text"])
 
 
@@ -26,20 +25,19 @@ class EmphasisPartSchema(Schema):  # pyre-ignore[11]
     text = fields.String(required=True)
 
     @post_load
-    def make_part(self, data, **kwargs):
+    def make_part(self, data, **kwargs) -> EmphasisPart:
         return EmphasisPart(data["text"])
 
 
 class LanguagePartSchema(Schema):  # pyre-ignore[11]
     language = NameEnum(Language, required=True)
     tokens = fields.Nested(OneOfTokenSchema, many=True, missing=None)
-    text = fields.String(missing="", load_only=True)
 
     @post_load
-    def make_part(self, data, **kwargs):
+    def make_part(self, data, **kwargs) -> LanguagePart:
         return LanguagePart.of_transliteration(
             data["language"],
-            data["tokens"] or (ValueToken.of(data["text"]),)
+            data["tokens"]
         )
 
 
