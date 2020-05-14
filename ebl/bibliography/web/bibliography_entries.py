@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Sequence
+from typing import Sequence
 
 import falcon  # pyre-ignore
 from falcon import Request, Response
@@ -7,7 +7,6 @@ from falcon.media.validators.jsonschema import validate
 from pydash import uniq_with  # pyre-ignore
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
-from ebl.errors import DataError
 from ebl.users.web.require_scope import require_scope
 
 
@@ -19,20 +18,12 @@ class BibliographyResource:
     def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
         resp.media = self._parse_search_request(req.params)
 
-    @staticmethod
-    def _parse_number(number: str) -> Optional[int]:
-        try:
-            return None if number == "" else int(number)
-        except ValueError:
-            raise DataError(f'"{number}" is not numeric.')
-
     def _author_and_title_query(self, query: str) -> Sequence[dict]:
         match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', query)
         if match:
             return self._bibliography.search_author_year_and_title(
                 match.group(1),
-                BibliographyResource._parse_number(match.group(2))
-                if match.group(2) else None,
+                int(match.group(2)) if match.group(2) else None,
                 match.group(3)
             )
         else:
@@ -40,12 +31,11 @@ class BibliographyResource:
 
     def _collection_title_short_and_collection_number(self, query: str)\
             -> Sequence[dict]:
-        match = re.match(r'^(.+) (\d*)?$', query)
+        match = re.match(r'^([^\s]+)(?: (\d*))?$', query)
         if match:
             return self._bibliography.search_container_title_and_collection_number(
                 match.group(1),
-                BibliographyResource._parse_number(match.group(2))
-                if match.group(2) else None
+                int(match.group(2)) if match.group(2) else None,
             )
         else:
             return []
