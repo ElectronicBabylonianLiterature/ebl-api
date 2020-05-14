@@ -105,7 +105,6 @@ def test_update_entry_invalid(transform, client, saved_entry):
 @pytest.mark.parametrize(
     "params",
     [
-        {},
         {"query": "Author"},
         {"query": "2019"},
         {"query": "Title"},
@@ -115,7 +114,7 @@ def test_update_entry_invalid(transform, client, saved_entry):
     ],
 )
 def test_search(client, saved_entry, params):
-    result = client.simulate_get("/bibliography?query=Starr",)
+    result = client.simulate_get("/bibliography", params=params)
 
     assert result.json == [saved_entry]
     assert result.status == falcon.HTTP_OK
