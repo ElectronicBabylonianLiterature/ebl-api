@@ -98,6 +98,7 @@ def test_update(bibliography, bibliography_repository,
 def test_changelog(
         bibliography, database, bibliography_entry, mongo_entry, user,
         make_changelog_entry, ):
+
     updated_entry = {**bibliography_entry, "title": "New Title"}
     bibliography.create(bibliography_entry, user)
     bibliography.update(updated_entry, user)
@@ -138,17 +139,40 @@ def test_update_not_found(bibliography_repository, bibliography,
         bibliography.update(bibliography_entry, user)
 
 
-def test_validate_references(bibliography, user):
+def test_validate_references(bibliography_repository, bibliography,
+                             bibliography_entry, user, changelog, when):
     reference = ReferenceWithDocumentFactory.build()
-    bibliography.create(reference.document, user)
+
+    (
+        when(bibliography)
+        .find(reference.id)
+        .thenReturn(reference)
+    )
     bibliography.validate_references([reference])
 
 
-def test_validate_references_invalid(bibliography, user):
+def test_validate_references_invalid(bibliography_repository, bibliography,
+                             bibliography_entry, user, changelog, when):
     valid_reference = ReferenceWithDocumentFactory.build()
     first_invalid = ReferenceWithDocumentFactory.build()
     second_invalid = ReferenceWithDocumentFactory.build()
     bibliography.create(valid_reference.document, user)
+    (
+        when(bibliography)
+        .find(valid_reference.id)
+        .thenReturn(valid_reference)
+    )
+    (
+        when(bibliography)
+        .find(first_invalid.id)
+        .thenRaise(NotFoundError)
+    )
+    (
+        when(bibliography)
+        .find(second_invalid.id)
+        .thenRaise(NotFoundError)
+    )
+
     expected_error = (
         "Unknown bibliography entries: "
         f"{first_invalid.id}"
@@ -161,3 +185,5 @@ def test_validate_references_invalid(bibliography, user):
         bibliography.validate_references(
             [first_invalid, valid_reference, second_invalid]
         )
+
+
