@@ -84,7 +84,16 @@ class LanguagePart(NotePart):
 
 @attr.s(auto_attribs=True, frozen=True)
 class BibliographyPart(NotePart):
-    reference: Reference
+    reference: Reference = attr.ib()
+
+    @reference.validator
+    def validate_reference(self, _attribute, value: Reference) -> None:
+        is_type_invalid = value.type != ReferenceType.DISCUSSION
+        is_notes_invalid = value.notes != ""
+        is_lines_invalid = len(value.lines_cited) != 0
+
+        if is_type_invalid or is_notes_invalid or is_lines_invalid:
+            raise ValueError("The reference must be a DISCUSSION without notes or lines cited.")
 
     @property
     def value(self) -> str:
