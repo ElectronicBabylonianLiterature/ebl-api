@@ -35,15 +35,14 @@ class MongoFragmentRepository(FragmentRepository):
     def count_lines(self):
         result = self._collection.aggregate(
             [
-                {"$match": {"text.lines.type": "TextLine"}},
-                {"$unwind": "$text.lines"},
-                {"$replaceRoot": {"newRoot": "$text.lines"}},
-                {"$match": {"type": "TextLine"}},
-                {"$count": "lines"},
+                {"$group": {
+                    "_id": None,
+                    "total": {"$sum": "$text.numberOfLines"}
+                }}
             ]
         )
         try:
-            return next(result)["lines"]
+            return next(result)["total"]
         except StopIteration:
             return 0
 

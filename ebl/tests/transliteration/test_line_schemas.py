@@ -46,6 +46,7 @@ from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
+
     (
         CompositeAtLine(atf.Composite.MILESTONE, "o"),
         {
@@ -260,7 +261,7 @@ LINES = [
             ],
             "type": "StateDollarLine",
             "qualification": "AT_LEAST",
-            "extent": (1, 2),
+            "extent": [1, 2],
             "scope": {"type": "Surface", "content": "SURFACE", "text": "thing"},
             "state": "BLANK",
             "status": "UNCERTAIN",
@@ -309,6 +310,28 @@ LINES = [
             "state": None,
             "status": None,
             "displayValue": "beginning of obverse",
+        },
+    ),
+    (
+        StateDollarLine(
+            None,
+            (2, 4),
+            ScopeContainer(atf.Scope.LINES),
+            atf.State.MISSING,
+            None,
+        ),
+        {
+            "prefix": "$",
+            "content": [
+                OneOfTokenSchema().dump(ValueToken.of(" 2-4 lines missing"))
+            ],
+            "type": "StateDollarLine",
+            "qualification": None,
+            "extent": [2, 4],
+            "scope": {"type": "Scope", "content": "LINES", "text": ""},
+            "state": "MISSING",
+            "status": None,
+            "displayValue": "2-4 lines missing",
         },
     ),
     (
@@ -464,7 +487,10 @@ LINES = [
             (
                 StringPart("a note "),
                 EmphasisPart("italic"),
-                LanguagePart("Akkadian", Language.AKKADIAN),
+                LanguagePart.of_transliteration(
+                    Language.AKKADIAN,
+                    [Word.of([Reading.of_name("bu")]),]
+                ),
             )
         ),
         {
@@ -475,15 +501,17 @@ LINES = [
                 {"type": "EmphasisPart", "text": "italic",},
                 {
                     "type": "LanguagePart",
-                    "text": "Akkadian",
                     "language": Language.AKKADIAN.name,
+                    "tokens": [
+                        OneOfTokenSchema().dump(Word.of([Reading.of_name("bu")]))
+                    ],
                 },
             ],
             "content": OneOfTokenSchema().dump(
                 [
                     ValueToken.of("a note "),
                     ValueToken.of("@i{italic}"),
-                    ValueToken.of("@akk{Akkadian}"),
+                    ValueToken.of("@akk{bu}"),
                 ],
                 many=True,
             ),
@@ -552,6 +580,28 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "displayValue": "double ruling",
         },
     ),
+    (
+        NoteLine(
+            (
+                LanguagePart.of_transliteration(
+                    Language.AKKADIAN,
+                    [ValueToken.of("bu")]
+                ),
+            )
+        ),
+        {
+            "type": "NoteLine",
+            "prefix": "#note: ",
+            "parts": [
+                {
+                    "type": "LanguagePart",
+                    "language": Language.AKKADIAN.name,
+                    "text": "bu"
+                },
+            ],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("@akk{bu}"))],
+        },
+    )
 ]
 
 

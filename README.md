@@ -111,8 +111,8 @@ docker-compose up
 
 ## Updating transliterations and signs in fragments
 
-Improving the parser can lead to existing transliterations to have obsolete
-tokens or becoming invalid. The signs are calculated when a fragment is saved,
+Improving the parser can lead to existing transliterations to become obsolete
+tokens or invalid. The signs are calculated when a fragment is saved,
 but if the sign list is updated the fragments are not automatically updated.
 
 The `ebl.fragmentarium.update_fragments` module can be used to recreate
@@ -122,6 +122,17 @@ saved to `invalid_fragments.tsv`.
 ```shell script
 pipenv run  python -m ebl.fragmentarium.update_fragments
 ```
+
+### Steps to update the production database
+
+1) Implement the new functionality.
+2) Implement fallback to handle old data, if the new model is incompatible.
+3) Test that fragments are updated correctly in the development database.
+4) Deploy to production.
+5) Run the migration script. Do not start the script until the deployment has been succesfully completed.
+6) Fix invalid fragments.
+7) Remove fallback logic.
+8) Deploy to production.
 
 ## Type hints
 

@@ -110,3 +110,17 @@ def test_state_dollar_line_non_empty_string_error():
         StateDollarLine(
             None, None, ScopeContainer(atf.Surface.REVERSE, "test"), None, None
         )
+
+
+def test_state_dollar_line_range():
+    scope = ScopeContainer(atf.Scope.LINES)
+    actual = StateDollarLine(
+        None,
+        (2, 4),
+        scope,
+        atf.State.MISSING,
+        None,
+    )
+
+    assert actual.content == (ValueToken.of(" 2-4 lines missing"),)
+    assert actual.display_value == "2-4 lines missing"

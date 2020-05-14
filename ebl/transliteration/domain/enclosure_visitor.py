@@ -1,4 +1,4 @@
-from typing import FrozenSet, List, Sequence
+from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
@@ -231,3 +231,13 @@ class EnclosureUpdater(TokenVisitor):
             if token.is_open
             else self._enclosures.difference({enclosure})
         )
+
+
+def set_enclosure_type(
+    tokens: Union[Sequence[Token], Iterable[Token]]
+) -> Sequence[Token]:
+    enclosure_visitor = EnclosureUpdater()
+    for token in tokens:
+        token.accept(enclosure_visitor)
+
+    return enclosure_visitor.tokens

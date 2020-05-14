@@ -41,6 +41,7 @@ def find_transliterated(fragment_repository: FragmentRepository) -> List[str]:
 class State:
     invalid_atf: int = 0
     invalid_lemmas: int = 0
+    invalid_fragment_query: int = 0
     updated: int = 0
     errors: List[str] = attr.ib(factory=list)
 
@@ -54,6 +55,10 @@ class State:
             self._add_transliteration_error(error, fragment)
         else:
             self._add_error(error, fragment)
+
+    def add_querying_error(self, error: Exception, number: str) -> None:
+        self.invalid_fragment_query += 1
+        self.errors.append(f"{number}\t\t{error}")
 
     def _add_lemmatization_error(
         self,
@@ -85,6 +90,7 @@ class State:
                 f"# Updated fragments: {self.updated}",
                 f"# Invalid ATF: {self.invalid_atf}",
                 f"# Invalid lemmas: {self.invalid_lemmas}",
+                f"# Invalid fragment querys: {self.invalid_fragment_query}",
             ]
         )
 
@@ -92,6 +98,7 @@ class State:
         return State(
             self.invalid_atf + other.invalid_atf,
             self.invalid_lemmas + other.invalid_lemmas,
+            self.invalid_fragment_query + other.invalid_fragment_query,
             self.updated + other.updated,
             self.errors + other.errors,
         )
@@ -105,14 +112,16 @@ def update_fragments(
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
-
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        fragment = fragment_repository.query_by_fragment_number(number)
         try:
-            update_fragment(transliteration_factory, updater, fragment)
-            state.add_updated()
+            fragment = fragment_repository.query_by_fragment_number(number)
+            try:
+                update_fragment(transliteration_factory, updater, fragment)
+                state.add_updated()
+            except Exception as error:
+                state.add_error(error, fragment)
         except Exception as error:
-            state.add_error(error, fragment)
+            state.add_querying_error(error, number)
 
     return state
 
@@ -144,3 +153,5 @@ if __name__ == "__main__":
 
     with open(f"invalid_fragments.tsv", "w", encoding="utf-8") as file:
         file.write(final_state.to_tsv())
+
+    print("Update fragments completed!")
