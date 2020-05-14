@@ -35,4 +35,4 @@ class Language(Enum):
         return codes.get(code, cls.UNKNOWN)
 
 
-DEFAULT_LANGUAGE = Language.AKKADIAN
+DEFAULT_LANGUAGE: Language = Language.AKKADIAN
