@@ -4,13 +4,10 @@ from lark.lexer import Token  # pyre-ignore
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.note_line import (
-    EmphasisPart,
-    LanguagePart,
-    NoteLine,
-    NotePart,
-    StringPart,
-)
+from ebl.transliteration.domain.note_line import (BibliographyPart,
+                                                  EmphasisPart, LanguagePart,
+                                                  NoteLine, NotePart,
+                                                  StringPart)
 
 
 class NoteLineTransformer(Transformer):  # pyre-ignore[11]
@@ -33,6 +30,10 @@ class NoteLineTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__string_part(self, text: str) -> StringPart:
         return StringPart(text)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__bibliography_part(self, id_, pages) -> BibliographyPart:
+        return BibliographyPart.of(id_.value, pages.value)
 
     def ebl_atf_text_line__note_text(self, children: Sequence[Token]) -> str:  # pyre-ignore[11]
         return "".join(children)
