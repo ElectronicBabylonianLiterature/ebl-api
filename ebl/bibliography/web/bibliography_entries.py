@@ -1,10 +1,9 @@
 import re
-from typing import Sequence
 
 import falcon  # pyre-ignore
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
-from pydash import uniq_with  # pyre-ignore
+
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.users.web.require_scope import require_scope
@@ -16,36 +15,27 @@ class BibliographyResource:
 
     @falcon.before(require_scope, "read:bibliography")
     def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
-        resp.media = self._parse_search_request(req.params)
+        parsed_request = self._parse_search_request(req.params["query"])
+        resp.media = self._bibliography.search(parsed_request)
 
-    def _author_and_title_query(self, query: str) -> Sequence[dict]:
-        match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', query)
+    @staticmethod
+    def _parse_search_request(request) -> dict:
+        parsed_request = {
+            "query_1": dict.fromkeys(["author", "year", "title"]),
+            "query_2": dict.fromkeys(["container_title_short", "collection_number"])
+        }
+        match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', request)
         if match:
-            return self._bibliography.search_author_year_and_title(
-                match.group(1),
-                int(match.group(2)) if match.group(2) else None,
-                match.group(3)
-            )
-        else:
-            return []
+            parsed_request["query_1"]["author"] = match.group(1)
+            parsed_request["query_1"]["year"] = int(match.group(2))\
+                if match.group(2) else None
+            parsed_request["query_1"]["title"] = match.group(3)
 
-    def _collection_title_short_and_collection_number(self, query: str)\
-            -> Sequence[dict]:
-        match = re.match(r'^([^\s]+)(?: (\d*))?$', query)
+        match = re.match(r'^([^\s]+)(?: (\d*))?$', request)
         if match:
-            return self._bibliography.search_container_title_and_collection_number(
-                match.group(1),
-                int(match.group(2)) if match.group(2) else None,
-            )
-        else:
-            return []
-
-    def _parse_search_request(self, req_params,) -> Sequence[dict]:
-        first_query = self._author_and_title_query(req_params.get("query"))
-        second_query = self._collection_title_short_and_collection_number(
-            req_params.get("query"))
-        queries_combined = uniq_with(first_query + second_query, lambda a, b: a == b)
-        return queries_combined
+            parsed_request["query_2"]["container_title_short"] = match.group(1)
+            parsed_request["query_2"]["collection_number"] = match.group(2)
+        return parsed_request
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)

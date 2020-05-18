@@ -106,7 +106,6 @@ def test_update_entry_invalid(transform, client, saved_entry):
     "params",
     [
         {"query": "Author"},
-        {"query": "2019"},
         {"query": "Title"},
         {"query": "Author 2019 Title"},
         {"query": "Author 1"},
