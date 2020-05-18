@@ -42,7 +42,10 @@ class Bibliography:
             first_result = self.search_author_year_and_title(
                 query["query_1"]["author"],
                 query["query_1"]["year"],
-                query["query_1"]["title"]
+                query["query_1"]["title"],
+                True
+                if query["query_1"]["year"] and len(str(query["query_1"]["year"])) < 4
+                else False
             )
 
         second_result = []
@@ -58,8 +61,10 @@ class Bibliography:
         author: Optional[str] = None,
         year: Optional[int] = None,
         title: Optional[str] = None,
+        greater_than: bool = False,
     ) -> Sequence[dict]:
-        return self._repository.query_by_author_year_and_title(author, year, title)
+        return self._repository.query_by_author_year_and_title(author, year, title,
+                                                               greater_than)
 
     def search_container_title_and_collection_number(
         self,

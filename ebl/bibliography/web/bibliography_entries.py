@@ -24,7 +24,7 @@ class BibliographyResource:
             "query_1": dict.fromkeys(["author", "year", "title"]),
             "query_2": dict.fromkeys(["container_title_short", "collection_number"])
         }
-        match = re.match(r'^([^\d]+)(?: (\d{4})(?: (.*))?)?$', request)
+        match = re.match(r'^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$', request)
         if match:
             parsed_request["query_1"]["author"] = match.group(1)
             parsed_request["query_1"]["year"] = int(match.group(2))\

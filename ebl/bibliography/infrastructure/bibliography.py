@@ -27,13 +27,24 @@ class MongoBibliographyRepository(BibliographyRepository):
         self._collection.replace_one(mongo_entry)
 
     def query_by_author_year_and_title(
-        self, author: Optional[str], year: Optional[int], title: Optional[str]
-    ) -> Sequence[dict]:
+            self,
+            author: Optional[str],
+            year: Optional[int],
+            title: Optional[str],
+            greater_than: bool) -> Sequence[dict]:
         match: Dict[str, Any] = {}
+
+        def pad_trailing_zeroes(year: int) -> int:
+            padded_year = str(year).ljust(4, '0')
+            return int(padded_year)
+
         if author:
             match["author.0.family"] = author
         if year:
-            match["issued.date-parts.0.0"] = year
+            if greater_than:
+                match["issued.date-parts.0.0"] = {"$gt": pad_trailing_zeroes(year)}
+            else:
+                match["issued.date-parts.0.0"] = year
         if title:
             match["$expr"] = {"$eq": [{"$substrCP": ["$title", 0, len(title)]}, title]}
         return [
