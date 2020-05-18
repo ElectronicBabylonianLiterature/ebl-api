@@ -2,10 +2,11 @@
 %import common.LETTER
 
 
-note_line: "#note: " (emphasis_part | language_part | string_part)+
+note_line: "#note: " (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
 emphasis_part: "@i{" note_text "}"
-bibliography_part: "@bib{" /./*"@" /./* "}"
+bibliography_part: "@bib{" any "@" any "}"
+any: /./*
 string_part: note_text
 note_text: /[^@{}]+/
 LANGUAGE: "akk" | "sux" | "es"
