@@ -36,7 +36,8 @@ def expected_language_part(language: Language, transliteration: str) -> Language
             "#note: @es{kur}",
             NoteLine([expected_language_part(Language.EMESAL, "kur"),]),
         ),
-        (            "#note: @bib{RN123@x 2-3a}",
+        (
+            "#note: @bib{RN123@x 2-3a}",
             NoteLine([BibliographyPart.of("RN123", "x 2-3a")]),
         ),
         (
