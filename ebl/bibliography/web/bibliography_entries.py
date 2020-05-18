@@ -1,5 +1,3 @@
-import re
-
 import falcon  # pyre-ignore
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
@@ -15,27 +13,7 @@ class BibliographyResource:
 
     @falcon.before(require_scope, "read:bibliography")
     def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
-        parsed_request = self._parse_search_request(req.params["query"])
-        resp.media = self._bibliography.search(parsed_request)
-
-    @staticmethod
-    def _parse_search_request(request) -> dict:
-        parsed_request = {
-            "query_1": dict.fromkeys(["author", "year", "title"]),
-            "query_2": dict.fromkeys(["container_title_short", "collection_number"])
-        }
-        match = re.match(r'^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$', request)
-        if match:
-            parsed_request["query_1"]["author"] = match.group(1)
-            parsed_request["query_1"]["year"] = int(match.group(2))\
-                if match.group(2) else None
-            parsed_request["query_1"]["title"] = match.group(3)
-
-        match = re.match(r'^([^\s]+)(?: (\d*))?$', request)
-        if match:
-            parsed_request["query_2"]["container_title_short"] = match.group(1)
-            parsed_request["query_2"]["collection_number"] = match.group(2)
-        return parsed_request
+        resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)

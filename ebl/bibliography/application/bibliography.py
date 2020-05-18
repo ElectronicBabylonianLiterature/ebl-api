@@ -1,3 +1,4 @@
+import re
 from typing import Optional, Sequence
 
 from pydash import uniq_with  # pyre-ignore
@@ -36,25 +37,45 @@ class Bibliography:
         )
         self._repository.update(entry)
 
-    def search(self, query: dict) -> Sequence[dict]:
-        first_result = []
-        if not all(value is None for value in query["query_1"].values()):
-            first_result = self.search_author_year_and_title(
-                query["query_1"]["author"],
-                query["query_1"]["year"],
-                query["query_1"]["title"],
-                True
-                if query["query_1"]["year"] and len(str(query["query_1"]["year"])) < 4
-                else False
+    def search(self, query: str) -> Sequence[dict]:
+        author_query_result = []
+        author_query = self._parse_author_year_and_title(query)
+        if not all(value is None for value in list(author_query.values())):
+            author_query_result = self.search_author_year_and_title(
+                author_query["author"],
+                author_query["year"],
+                author_query["title"],
+                False
             )
 
-        second_result = []
-        if not all(value is None for value in query["query_2"].values()):
-            second_result = self.search_container_title_and_collection_number(
-                query["query_2"]["container_title_short"],
-                query["query_2"]["collection_number"],
+        container_query_result = []
+        container_query = self._parse_container_title_short_and_collection_number(query)
+        if not all(value is None for value in list(container_query.values())):
+            container_query_result = self.search_container_title_and_collection_number(
+                container_query["container_title_short"],
+                container_query["collection_number"]
             )
-        return uniq_with(first_result + second_result, lambda a, b: a == b)
+        return uniq_with(author_query_result + container_query_result, lambda a, b: a == b)
+
+    @staticmethod
+    def _parse_author_year_and_title(query: str) -> dict:
+        parsed_query = dict.fromkeys(["author", "year", "title"])
+        match = re.match(r'^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$', query)
+        if match:
+            parsed_query["author"] = match.group(1),
+            parsed_query["year"] = int(match.group(2)) if match.group(2) else None
+            parsed_query["title"] = match.group(3)
+        return parsed_query
+
+    @staticmethod
+    def _parse_container_title_short_and_collection_number(query: str)\
+            -> dict:
+        parsed_query = dict.fromkeys(["container_title_short", "collection_number"])
+        match = re.match(r'^([^\s]+)(?: (\d*))?$', query)
+        if match:
+            parsed_query["container_title_short"] = match.group(1),
+            parsed_query["collection_number"] = match.group(2),
+        return parsed_query
 
     def search_author_year_and_title(
         self,
@@ -63,6 +84,7 @@ class Bibliography:
         title: Optional[str] = None,
         greater_than: bool = False,
     ) -> Sequence[dict]:
+
         return self._repository.query_by_author_year_and_title(author, year, title,
                                                                greater_than)
 
