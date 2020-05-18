@@ -76,7 +76,7 @@ def test_entry_not_found(bibliography, bibliography_repository,
 
 
 def test_update(bibliography, bibliography_repository,
-                bibliography_entry, user, when, changelog):
+                bibliography_entry, user, when, changelog, mongo_entry):
     (
         when(bibliography_repository)
         .query_by_id(bibliography_entry["id"])
@@ -84,7 +84,12 @@ def test_update(bibliography, bibliography_repository,
     )
     (
         when(changelog)
-        .create(...).thenReturn()
+        .create(
+            COLLECTION,
+            user.profile,
+            mongo_entry,
+            mongo_entry,
+        ).thenReturn()
     )
     (
         when(bibliography_repository)
@@ -92,40 +97,6 @@ def test_update(bibliography, bibliography_repository,
         .thenReturn()
     )
     bibliography.update(bibliography_entry, user)
-
-
-@freeze_time("2018-09-07 15:41:24.032")
-def test_changelog(
-        bibliography, database, bibliography_entry, mongo_entry, user,
-        make_changelog_entry, ):
-
-    updated_entry = {**bibliography_entry, "title": "New Title"}
-    bibliography.create(bibliography_entry, user)
-    bibliography.update(updated_entry, user)
-
-    expected_changelog = [
-        make_changelog_entry(
-            COLLECTION,
-            bibliography_entry["id"],
-            {"_id": bibliography_entry["id"]},
-            mongo_entry,
-        ),
-        make_changelog_entry(
-            COLLECTION,
-            bibliography_entry["id"],
-            mongo_entry,
-            pydash.map_keys(
-                updated_entry, lambda _, key: ("_id" if key == "id" else key)
-            ),
-        ),
-    ]
-
-    assert [
-        change
-        for change in database["changelog"].find(
-            {"resource_id": bibliography_entry["id"]}, {"_id": 0}
-        )
-    ] == expected_changelog
 
 
 def test_update_not_found(bibliography_repository, bibliography,
