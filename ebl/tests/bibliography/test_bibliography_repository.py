@@ -64,7 +64,7 @@ def test_query_by_author_year_title(
     assert (
         bibliography_repository.query_by_author_year_and_title(
             bibliography_entry["author"][0]["family"],
-            bibliography_entry["issued"]["date-parts"][0],
+            bibliography_entry["issued"]["date-parts"][0][0],
             bibliography_entry["title"]
         )
         == [bibliography_entry]
