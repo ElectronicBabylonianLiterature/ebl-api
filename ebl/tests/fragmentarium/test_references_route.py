@@ -3,6 +3,7 @@ import json
 import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.fragment import FragmentFactory
@@ -16,7 +17,7 @@ def test_update_references(client, fragmentarium, bibliography, user):
     fragment_number = fragmentarium.create(fragment)
     reference = ReferenceWithDocumentFactory.build()
     bibliography.create(reference.document, ANY_USER)
-    references = [reference.to_dict()]
+    references = [ReferenceSchema().dump(reference)]
     body = json.dumps({"references": references})
     url = f"/fragments/{fragment_number}/references"
     post_result = client.simulate_post(url, body=body)
@@ -82,7 +83,7 @@ def test_update_references_invalid_id(client, fragmentarium):
     reference = ReferenceWithDocumentFactory.build()
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
-    body = json.dumps({"references": [reference.to_dict()]})
+    body = json.dumps({"references": [ReferenceSchema().dump(reference)]})
     url = f"/fragments/{fragment_number}/references"
     post_result = client.simulate_post(url, body=body)
 

@@ -1,5 +1,7 @@
 import pytest  # pyre-ignore
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -35,6 +37,7 @@ from ebl.transliteration.domain.line import (
 )
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.note_line import (
+    BibliographyPart,
     EmphasisPart,
     LanguagePart,
     NoteLine,
@@ -491,6 +494,7 @@ LINES = [
                     Language.AKKADIAN,
                     [Word.of([Reading.of_name("bu")]),]
                 ),
+                BibliographyPart.of(BibliographyId("A"), "1-4"),
             )
         ),
         {
@@ -506,12 +510,21 @@ LINES = [
                         OneOfTokenSchema().dump(Word.of([Reading.of_name("bu")]))
                     ],
                 },
+                {
+                    "type": "BibliographyPart",
+                    "reference": ReferenceSchema().dump(Reference(  # pyre-ignore[16]
+                        BibliographyId("A"),
+                        ReferenceType.DISCUSSION,
+                        "1-4"
+                    )),
+                },
             ],
             "content": OneOfTokenSchema().dump(
                 [
                     ValueToken.of("a note "),
                     ValueToken.of("@i{italic}"),
                     ValueToken.of("@akk{bu}"),
+                    ValueToken.of("@bib{A@1-4}"),
                 ],
                 many=True,
             ),

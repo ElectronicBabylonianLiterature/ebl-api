@@ -1,11 +1,7 @@
 import pydash  # pyre-ignore
 from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 
-from ebl.bibliography.domain.reference import (
-    BibliographyId,
-    Reference,
-    ReferenceType,
-)
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
@@ -14,7 +10,7 @@ from ebl.fragmentarium.domain.fragment import (
     UncuratedReference,
 )
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import NameEnum, ValueEnum
+from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
 
 
@@ -64,21 +60,6 @@ class FoliosSchema(Schema):  # pyre-ignore[11]
     @post_load
     def make_folio(self, data, **kwargs):
         return Folios(tuple(data["entries"]))
-
-
-class ReferenceSchema(Schema):  # pyre-ignore[11]
-    id = fields.String(required=True)
-    type = NameEnum(ReferenceType, required=True)
-    pages = fields.String(required=True)
-    notes = fields.String(required=True)
-    lines_cited = fields.List(fields.String(), required=True, data_key="linesCited")
-    document = fields.Mapping(missing=None, load_only=True)
-
-    @post_load
-    def make_reference(self, data, **kwargs):
-        data["id"] = BibliographyId(data["id"])
-        data["lines_cited"] = tuple(data["lines_cited"])
-        return Reference(**data)
 
 
 class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]

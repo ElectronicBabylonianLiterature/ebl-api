@@ -3,10 +3,12 @@ from typing import Mapping, Type
 from marshmallow import Schema, fields, post_load  # pyre-ignore
 from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.note_line import (
+    BibliographyPart,
     EmphasisPart,
     LanguagePart,
     StringPart,
@@ -41,10 +43,19 @@ class LanguagePartSchema(Schema):  # pyre-ignore[11]
         )
 
 
+class BibliographyPartSchema(Schema):  # pyre-ignore[11]
+    reference = fields.Nested(ReferenceSchema, required=True)
+
+    @post_load
+    def make_part(self, data, **kwargs) -> BibliographyPart:
+        return BibliographyPart(data["reference"])
+
+
 class OneOfNoteLinePartSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
         "StringPart": StringPartSchema,
         "EmphasisPart": EmphasisPartSchema,
         "LanguagePart": LanguagePartSchema,
+        "BibliographyPart": BibliographyPartSchema,
     }

@@ -1,7 +1,7 @@
 import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
-from ebl.bibliography.domain.reference import REFERENCE_DTO_SCHEMA
+from ebl.bibliography.domain.reference import ReferenceType
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,
@@ -13,6 +13,22 @@ from ebl.corpus.domain.enums import (
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.corpus.web.text_utils import create_text_id, serialize_public_text
 from ebl.users.web.require_scope import require_scope
+
+
+REFERENCE_DTO_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "id": {"type": "string"},
+        "type": {
+            "type": "string",
+            "enum": [name for name, _ in ReferenceType.__members__.items()],
+        },
+        "pages": {"type": "string"},
+        "notes": {"type": "string"},
+        "linesCited": {"type": "array", "items": {"type": "string"}},
+    },
+    "required": ["id", "type", "pages", "notes", "linesCited"],
+}
 
 MANUSCRIPT_DTO_SCHEMA = {
     "type": "object",

@@ -17,7 +17,7 @@ from ebl.transliteration.domain.sign_tokens import (
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 
 
-def test_divider():
+def test_divider() -> None:
     value = ":"
     modifiers = ("@v",)
     flags = (atf.Flag.UNCERTAIN,)
@@ -40,7 +40,7 @@ def test_divider():
     assert_token_serialization(divider, serialized)
 
 
-def test_unidentified_sign():
+def test_unidentified_sign() -> None:
     sign = UnidentifiedSign.of()
 
     expected_value = "X"
@@ -98,7 +98,7 @@ def test_unclear_sign():
     assert_token_serialization(sign, serialized)
 
 
-def test_unclear_sign_with_flags():
+def test_unclear_sign_with_flags() -> None:
     flags = [atf.Flag.CORRECTION]
     sign = UnclearSign.of(flags)
 
@@ -174,7 +174,7 @@ def test_unclear_sign_with_flags():
 def test_reading(
     name_parts, sub_index, modifiers, flags, sign, expected_value, expected_clean_value,
     expected_name
-):
+) -> None:
     reading = Reading.of(name_parts, sub_index, modifiers, flags, sign)
 
     expected_parts = (*name_parts, sign) if sign else name_parts
@@ -195,7 +195,7 @@ def test_reading(
         "type": "Reading",
         "value": expected_value,
         "name": expected_name,
-        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
@@ -203,13 +203,6 @@ def test_reading(
         "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
-
-
-@pytest.mark.parametrize("name,sub_index", [("kur", -1), ("KUR", 1)])
-@pytest.mark.skip
-def test_invalid_reading(name, sub_index):
-    with pytest.raises(ValueError):
-        Reading.of(name, sub_index)
 
 
 @pytest.mark.parametrize(
@@ -343,13 +336,6 @@ def test_logogram(
     assert_token_serialization(logogram, serialized)
 
 
-@pytest.mark.parametrize("name,sub_index", [("KUR", -1), ("kur", 1)])
-@pytest.mark.skip
-def test_invalid_logogram(name, sub_index):
-    with pytest.raises(ValueError):
-        Logogram.of(name, sub_index)
-
-
 @pytest.mark.parametrize(
     "name_parts,modifiers,flags,sign,expected_value,expected_clean_value,expected_name",
     [
@@ -426,13 +412,6 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_cle
         "enclosureType": [type.name for type in number.enclosure_type],
     }
     assert_token_serialization(number, serialized)
-
-
-@pytest.mark.parametrize("name", ["-1", "kur", "KUR"])
-@pytest.mark.skip
-def test_invalid_number(name):
-    with pytest.raises(ValueError):
-        Number.of(name)
 
 
 def test_compound_grapheme():

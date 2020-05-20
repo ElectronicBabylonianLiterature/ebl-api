@@ -4,6 +4,7 @@ import attr
 import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.enums import (
     ManuscriptType,
     Period,
@@ -104,7 +105,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
         "provenance": Provenance.BABYLON.long_name,
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
-        "references": [ReferenceFactory.build().to_dict()],
+        "references": [ReferenceSchema().dump(ReferenceFactory.build())],
     }
 
     post_result = client.simulate_post(
