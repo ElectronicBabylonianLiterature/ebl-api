@@ -62,7 +62,7 @@ class Bibliography:
         parsed_query = dict.fromkeys(["author", "year", "title"])
         match = re.match(r'^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$', query)
         if match:
-            parsed_query["author"] = match.group(1),
+            parsed_query["author"] = match.group(1)
             parsed_query["year"] = int(match.group(2)) if match.group(2) else None
             parsed_query["title"] = match.group(3)
         return parsed_query
@@ -73,8 +73,8 @@ class Bibliography:
         parsed_query = dict.fromkeys(["container_title_short", "collection_number"])
         match = re.match(r'^([^\s]+)(?: (\d*))?$', query)
         if match:
-            parsed_query["container_title_short"] = match.group(1),
-            parsed_query["collection_number"] = match.group(2),
+            parsed_query["container_title_short"] = match.group(1)
+            parsed_query["collection_number"] = match.group(2)
         return parsed_query
 
     def search_author_year_and_title(
