@@ -1,9 +1,10 @@
 import pydash  # pyre-ignore
 import pytest  # pyre-ignore
-from freezegun import freeze_time  # pyre-ignore
-
+from mockito import verify  # pyre-ignore
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+
+COLLECTION = "bibliography"
 
 
 @pytest.fixture
@@ -13,84 +14,179 @@ def mongo_entry(bibliography_entry):
     )
 
 
-COLLECTION = "bibliography"
+def test_search_container_short_collection_number(bibliography, bibliography_repository,
+                                                  when, bibliography_entry):
+    container_title = bibliography_entry["container-title-short"]
+    collection_number = bibliography_entry["collection-number"]
+    query = f"{container_title} {collection_number}"
+    (
+        when(bibliography_repository).query_by_author_year_and_title(
+            container_title,
+            int(collection_number),
+            None)
+        .thenReturn([])
+    )
+    (
+        when(bibliography_repository).query_by_container_title_and_collection_number(
+            container_title,
+            collection_number)
+        .thenReturn([bibliography_entry])
+    )
+    assert [bibliography_entry] == bibliography.search(query)
 
 
-def test_create_and_find(bibliography, bibliography_entry, user):
-    bibliography.create(bibliography_entry, user)
+def test_search_author_title_year(bibliography, bibliography_repository, when,
+                                  bibliography_entry):
+    author = bibliography_entry["author"][0]["family"]
+    year = bibliography_entry["issued"]["date-parts"][0][0]
+    title = bibliography_entry["title"]
+    query = f"{author} {year} {title}"
+    (
+        when(bibliography_repository).query_by_author_year_and_title(
+            author,
+            year,
+            title)
+        .thenReturn([bibliography_entry])
+    )
+    (
+        verify(bibliography_repository, 0).
+        query_by_container_title_and_collection_number(
+            author,
+            str(year))
 
+    )
+    assert [bibliography_entry] == bibliography.search(query)
+
+
+def test_find(bibliography, bibliography_repository, when, bibliography_entry):
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["id"])
+        .thenReturn(bibliography_entry)
+    )
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
 
 
-def test_create_duplicate(bibliography, bibliography_entry, user):
+def test_create(bibliography, bibliography_repository, bibliography_entry, user,
+                changelog, when, mongo_entry):
+    (
+        when(changelog)
+        .create(
+            COLLECTION,
+            user.profile,
+            {"_id": bibliography_entry["id"]},
+            mongo_entry,
+        ).thenReturn()
+    )
+    (
+        when(bibliography_repository)
+        .create(bibliography_entry)
+        .thenReturn()
+    )
+
     bibliography.create(bibliography_entry, user)
+
+
+def test_create_duplicate(bibliography, bibliography_entry, user, when, changelog,
+                          bibliography_repository, mongo_entry):
+    (
+        when(changelog)
+        .create(
+            COLLECTION,
+            user.profile,
+            {"_id": bibliography_entry["id"]},
+            mongo_entry,
+        ).thenReturn()
+    )
+    (
+        when(bibliography_repository)
+        .create(bibliography_entry)
+        .thenRaise(DuplicateError)
+    )
     with pytest.raises(DuplicateError):
         bibliography.create(bibliography_entry, user)
 
 
-def test_entry_not_found(bibliography):
+def test_entry_not_found(bibliography, bibliography_repository,
+                         bibliography_entry, when):
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["id"])
+        .thenRaise(NotFoundError)
+    )
     with pytest.raises(NotFoundError):
-        bibliography.find("not found")
+        bibliography.find(bibliography_entry["id"])
 
 
-def test_update(bibliography, bibliography_entry, user):
-    updated_entry = pydash.omit({**bibliography_entry, "title": "New Title"}, "PMID")
-    bibliography.create(bibliography_entry, user)
-    bibliography.update(updated_entry, user)
-
-    assert bibliography.find(bibliography_entry["id"]) == updated_entry
-
-
-@freeze_time("2018-09-07 15:41:24.032")
-def test_changelog(
-    bibliography, database, bibliography_entry, mongo_entry, user, make_changelog_entry,
-):
-
-    updated_entry = {**bibliography_entry, "title": "New Title"}
-    bibliography.create(bibliography_entry, user)
-    bibliography.update(updated_entry, user)
-
-    expected_changelog = [
-        make_changelog_entry(
+def test_update(bibliography, bibliography_repository,
+                bibliography_entry, user, when, changelog, mongo_entry):
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["id"])
+        .thenReturn(bibliography_entry)
+    )
+    (
+        when(changelog)
+        .create(
             COLLECTION,
-            bibliography_entry["id"],
-            {"_id": bibliography_entry["id"]},
+            user.profile,
             mongo_entry,
-        ),
-        make_changelog_entry(
-            COLLECTION,
-            bibliography_entry["id"],
             mongo_entry,
-            pydash.map_keys(
-                updated_entry, lambda _, key: ("_id" if key == "id" else key)
-            ),
-        ),
-    ]
-
-    assert [
-        change
-        for change in database["changelog"].find(
-            {"resource_id": bibliography_entry["id"]}, {"_id": 0}
-        )
-    ] == expected_changelog
+        ).thenReturn()
+    )
+    (
+        when(bibliography_repository)
+        .update(bibliography_entry)
+        .thenReturn()
+    )
+    bibliography.update(bibliography_entry, user)
 
 
-def test_update_not_found(bibliography, bibliography_entry, user):
+def test_update_not_found(bibliography_repository, bibliography,
+                          bibliography_entry, user, when):
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["id"])
+        .thenRaise(NotFoundError)
+    )
     with pytest.raises(NotFoundError):
         bibliography.update(bibliography_entry, user)
 
 
-def test_validate_references(bibliography, user):
+def test_validate_references(bibliography_repository, bibliography,
+                             bibliography_entry, user, changelog, when):
     reference = ReferenceWithDocumentFactory.build()
-    bibliography.create(reference.document, user)
+
+    (
+        when(bibliography)
+        .find(reference.id)
+        .thenReturn(reference)
+    )
     bibliography.validate_references([reference])
 
 
-def test_validate_references_invalid(bibliography, user):
+def test_validate_references_invalid(bibliography_repository, bibliography,
+                                     bibliography_entry, user, changelog, when):
     valid_reference = ReferenceWithDocumentFactory.build()
     first_invalid = ReferenceWithDocumentFactory.build()
     second_invalid = ReferenceWithDocumentFactory.build()
     bibliography.create(valid_reference.document, user)
+    (
+        when(bibliography)
+        .find(valid_reference.id)
+        .thenReturn(valid_reference)
+    )
+    (
+        when(bibliography)
+        .find(first_invalid.id)
+        .thenRaise(NotFoundError)
+    )
+    (
+        when(bibliography)
+        .find(second_invalid.id)
+        .thenRaise(NotFoundError)
+    )
+
     expected_error = (
         "Unknown bibliography entries: "
         f"{first_invalid.id}"
