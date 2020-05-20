@@ -1,6 +1,6 @@
 import pydash  # pyre-ignore
 import pytest  # pyre-ignore
-
+from mockito import verify  # pyre-ignore
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 
@@ -12,6 +12,50 @@ def mongo_entry(bibliography_entry):
     return pydash.map_keys(
         bibliography_entry, lambda _, key: "_id" if key == "id" else key
     )
+
+
+def test_search_container_short_collection_number(bibliography, bibliography_repository,
+                                                  when, bibliography_entry):
+    container_title = bibliography_entry["container-title-short"]
+    collection_number = bibliography_entry["collection-number"]
+    query = f"{container_title} {collection_number}"
+    (
+        when(bibliography_repository).query_by_author_year_and_title(
+            container_title,
+            int(collection_number),
+            None)
+        .thenReturn([])
+    )
+    (
+        when(bibliography_repository).query_by_container_title_and_collection_number(
+            container_title,
+            collection_number)
+        .thenReturn([bibliography_entry])
+    )
+    assert [bibliography_entry] == bibliography.search(query)
+
+
+def test_search_author_title_year(bibliography, bibliography_repository, when,
+                                  bibliography_entry):
+    author = bibliography_entry["author"][0]["family"]
+    year = bibliography_entry["issued"]["date-parts"][0][0]
+    title = bibliography_entry["title"]
+    query = f"{author} {year} {title}"
+    (
+        when(bibliography_repository).query_by_author_year_and_title(
+            author,
+            year,
+            title)
+        .thenReturn([bibliography_entry])
+    )
+    (
+        verify(bibliography_repository, 0).
+        query_by_container_title_and_collection_number(
+            author,
+            str(year))
+
+    )
+    assert [bibliography_entry] == bibliography.search(query)
 
 
 def test_find(bibliography, bibliography_repository, when, bibliography_entry):
