@@ -45,7 +45,6 @@ class Bibliography:
                 author_query["author"],
                 author_query["year"],
                 author_query["title"],
-                False
             )
 
         container_query_result = []
@@ -82,11 +81,9 @@ class Bibliography:
         author: Optional[str] = None,
         year: Optional[int] = None,
         title: Optional[str] = None,
-        greater_than: bool = False,
     ) -> Sequence[dict]:
 
-        return self._repository.query_by_author_year_and_title(author, year, title,
-                                                               greater_than)
+        return self._repository.query_by_author_year_and_title(author, year, title)
 
     def search_container_title_and_collection_number(
         self,

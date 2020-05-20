@@ -30,8 +30,7 @@ class MongoBibliographyRepository(BibliographyRepository):
             self,
             author: Optional[str],
             year: Optional[int],
-            title: Optional[str],
-            greater_than: bool) -> Sequence[dict]:
+            title: Optional[str]) -> Sequence[dict]:
         match: Dict[str, Any] = {}
 
         def pad_trailing_zeroes(year: int) -> int:
@@ -41,10 +40,9 @@ class MongoBibliographyRepository(BibliographyRepository):
         if author:
             match["author.0.family"] = author
         if year:
-            if greater_than:
-                match["issued.date-parts.0.0"] = {"$gt": pad_trailing_zeroes(year)}
-            else:
-                match["issued.date-parts.0.0"] = year
+            match["issued.date-parts.0.0"] = {
+                "$gte": pad_trailing_zeroes(year),
+                "$lt": pad_trailing_zeroes(year + 1)}
         if title:
             match["$expr"] = {"$eq": [{"$substrCP": ["$title", 0, len(title)]}, title]}
         return [
