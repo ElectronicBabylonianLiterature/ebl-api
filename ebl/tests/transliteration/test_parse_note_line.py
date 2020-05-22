@@ -8,6 +8,7 @@ from ebl.transliteration.domain.note_line import (BibliographyPart,
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import \
     TextLineTransformer
+from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
 def parse_text(atf: str):
@@ -41,19 +42,19 @@ def expected_language_part(language: Language, transliteration: str) -> Language
             NoteLine([BibliographyPart.of("RN123", "x 2-3a")]),
         ),
         (
-            "#note: @bib{RN1}@2}",
+            "#note: @bib{RN1\\}@2}",
             NoteLine([BibliographyPart.of("RN1}", "2")]),
         ),
         (
-            "#note: @bib{RN1@1}2}",
+            "#note: @bib{RN1@1\\}2}",
             NoteLine([BibliographyPart.of("RN1", "1}2")]),
         ),
         (
-            "#note: @bib{RN12@3@3}",
+            "#note: @bib{RN12\\@3@3}",
             NoteLine([BibliographyPart.of("RN12@3", "3")]),
         ),
         (
-            "#note: @bib{RN@1}@2}",
+            "#note: @bib{RN@1\\}\\@2}",
             NoteLine([BibliographyPart.of("RN", "1}@2")]),
         ),
         (
