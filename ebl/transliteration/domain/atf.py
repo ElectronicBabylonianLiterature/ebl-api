@@ -8,7 +8,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "2.1.0"
+ATF_PARSER_VERSION = "2.2.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
