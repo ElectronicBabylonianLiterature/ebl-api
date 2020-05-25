@@ -8,7 +8,6 @@ from ebl.transliteration.domain.note_line import (BibliographyPart,
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import \
     TextLineTransformer
-from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
 def parse_text(atf: str):
