@@ -11,7 +11,6 @@ The file uses the EBNF variant of the [Lark parsing library](https://github.com/
 See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/)
 and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
 
-
 eBL-ATF can be empty or consist of lines separated by a newline character.
 
 ```ebnf
@@ -44,7 +43,6 @@ generic-object = 'object', ' ', free-text;
 status = "'" | '?' | '!' | '*';
 ```
 
-
 ## Lines
 
 A line can be either *empty*, *control* or *text line*. Text lines contain
@@ -66,7 +64,6 @@ control-line = '=:' | '&' | '#', { any-character };
 
 ## @-lines
 
-
 @-lines are used for structural tags. Several kinds of structure may be indicated
 using this mechanism: physical structure, e.g., objects, surfaces; manuscript structure,
 i.e., columns; and document structure, e.g., divisions and colophons.
@@ -75,7 +72,7 @@ i.e., columns; and document structure, e.g., divisions and colophons.
 
 at-line = seal | column | heading | discourse | objct-with-status | surface-with-status
         | divisions | composite;
-    
+
 surface-with-status = surface, [ ' ' ], { status };
 
 object-with-status = object, [ ' ' ], { status };
@@ -102,7 +99,7 @@ $-lines are used to indicate information about the state of the text or object,
 or to describe features on the object which are not part of the transliteration
 proper.
 
-- State: `$ <qualification> <extent> <scope> <state> <status>`, e.g.: 
+- State: `$ <qualification> <extent> <scope> <state> <status>`, e.g.:
   `$ 3 lines blank` or `$ rest of obverse missing`.
 - Loose: `$ (<free text>)`, e.g.: `$ (head of statue broken)`
 - Ruling: `$ (single | double | triple) ruling`, e.g.: `$ double ruling`.
@@ -120,7 +117,7 @@ qualification = 'at least' | 'at most' | 'about';
 
 extent = 'several' | 'some' | number | range | 'rest of' | 'start of'
        | beginning of | 'middle of' | 'end of';
-    
+
 scope = object | surface | 'column' | 'columns' | 'line' | 'lines' | 'case'
       | 'cases' | 'side' | 'excerpt' | 'surface';
 
@@ -131,7 +128,7 @@ range = number, '-', number;
 
 loose = '(', free-text, ')';
 
-ruling = ('single' | 'double' | 'triple'), ' ', 'ruling', 
+ruling = ('single' | 'double' | 'triple'), ' ', 'ruling',
          [ [ ' ' ], dollar-status];
 
 image = '(image ' number, [ lower-case-letter ], ' = ', free-text, ')';
@@ -173,7 +170,7 @@ single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
 prime = "'" | '′' | '’';
 
 text = token, { [ word-separator ], token };
-       (* Word seprator can be ommitted after an opening bracket or before 
+       (* Word seprator can be ommitted after an opening bracket or before
           a closing bracket. Commentary protocols and dividers must be
           surrounded by word separators. *)
 
@@ -199,7 +196,7 @@ token = commentary-protocol
       | open-accidental-omission
       | open-removal
       | open-document-oriented-gloss;
-           
+
 tabulation = '($___$)';
 
 column = '&', { decimal-digit };
@@ -313,7 +310,7 @@ and *Unknown* are lemmatizable.
 
 ### Word
 
-A word is considered partial if starts or end ends with `-`, `.`, or `+`. 
+A word is considered partial if starts or end ends with `-`, `.`, or `+`.
 A *lone determinative* is a special case of a word consisting only a single
 determinative. A word is lemmatizable and alignable if:
 
@@ -330,42 +327,42 @@ determinative. A word is lemmatizable and alignable if:
 word = [ joiner ], [ open-any ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
        [ close-any ], [ joiner ];
- 
+
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( value | determinative | linguistic-gloss | phonetic-gloss | 
+parts = ( value | determinative | linguistic-gloss | phonetic-gloss |
           unknown-number-of-signs ),
-        { [ part-joiner ], ( value | determinative | linguistic-gloss | 
+        { [ part-joiner ], ( value | determinative | linguistic-gloss |
                              phonetic-gloss | unknown-number-of-signs ) };
         (* Word cannot consist of only unknown-number-of-signs. *)
 
 linguistic-gloss = '{{', gloss-body, '}}';
 phonetic-gloss = '{+', gloss-body, '}';
 determinative = '{', gloss-body, '}';
-gloss-body = { open-intentional-omission | open-accidental-omission 
+gloss-body = { open-intentional-omission | open-accidental-omission
              | open-removal },  
              value, { part-joiner, value },
-             { close-intentional-omission | close-accidental-omission 
+             { close-intentional-omission | close-accidental-omission
              | close-removal };
 
 part-joiner = [ inword-newline ], [ close_any ], [ joiner ], [ open_any ];
-              (* The joiner can be omitted next to determinative, 
+              (* The joiner can be omitted next to determinative,
                  phonetic-gloss, or linguistic gloss. *)
- 
+
 open_any = { open-broken-away
-             | open-perhaps-away     
+             | open-perhaps-away
              | open-intentional-omission
              | open-accidental-omission
-             | open-removal }+; 
+             | open-removal }+;
 close_any = { close-broken-away
-             | close-perhaps-away     
+             | close-perhaps-away
              | close-intentional-omission
              | close-accidental-omission
-             | close-removal }+;         
+             | close-removal }+;
 joiner = '-' | '+' | '.' | ':';
 inword-newline = ';';
 
-value = unknown 
+value = unknown
       | value-with-sign
       | reading
       | compound-grapheme
@@ -375,7 +372,7 @@ value = unknown
       | variant;
 
 variant = variant-part, { variant-separator , variant-part };
-variant-part = unknown 
+variant-part = unknown
              | value-with-sign
              | reading
              | compound-grapheme
@@ -394,9 +391,9 @@ logogram-character = 'A' | 'Ā' | 'Â' | 'B' | 'D' | 'E' | 'Ē' | 'Ê' | 'G' | '
                    | 'R' | 'S' | 'Ṣ' | 'Š' | 'T' | 'Ṭ' | 'U' | 'Ū' | 'Û' | 'W'
                    | 'Z' | 'Ḫ' | 'ʾ';
 
-value-with-sign = ( reading | logogram | number ), 
+value-with-sign = ( reading | logogram | number ),
                  '(', ( compound-grapheme | grapheme ), ')';
-reading = reading-character, { [ invalue-broken-away ], reading-character }, 
+reading = reading-character, { [ invalue-broken-away ], reading-character },
         [ sub-index ], modifier, flag;
 reading-character = 'a' | 'ā' | 'â' | 'b' | 'd' | 'e' | 'ē' | 'ê' | 'g' | 'h'
                 | 'i' | 'ī' | 'î' | 'y' | 'k' | 'l' | 'm' | 'n' | 'p' | 'q'
@@ -411,12 +408,12 @@ compound-part = '(' grapheme-variant { compound-operator, grapheme-variant } ')'
 grapheme-variant = grapheme, { variant-separator, grapheme };
 compound-operator = '.' | '×' | '%' | '&' | '+';
 
-grapheme = grapheme-character, 
+grapheme = grapheme-character,
            { [ invalue-broken-away ], grapheme-character },
            modifier,
            flag;
 grapheme-character = word-character
-                   | 'Ṣ' | 'Š' | 'Ṭ' 
+                   | 'Ṣ' | 'Š' | 'Ṭ'
                    | 'ṣ' | 'š' | 'ṭ'
                    | decimal-digit
                    | sub-index-character - 'ₓ';
@@ -429,13 +426,12 @@ invalue-broken-away: open-broken-away | close-broken-away;
 variant-separator = '/';
 
 flag = { '!' | '?' | '*' | '#' };
-modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n' 
+modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n'
                   | 'z' | 'k' | 'r' | 'h' | 'v' | { decimal-digit }- ) };
 
-sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅' 
+sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
                     | '₆' | '₇' | '₈' | '₉' | 'ₓ';
 ```
-
 
 ## Note lines
 
