@@ -20,6 +20,14 @@ def test_bibliography_part() -> None:
     )
 
 
+def test_bibliography_part_escape() -> None:
+    unescaped = "@{\\}"
+    escaped = "\\@\\{\\\\\\}"
+    part = BibliographyPart.of(BibliographyId(unescaped), unescaped)
+
+    assert part.value == f"@bib{{{escaped}@{escaped}}}"
+
+
 @pytest.mark.parametrize("type,pages,note,lines", [
     (ReferenceType.EDITION, "1", "", tuple()),
     (ReferenceType.COPY, "1", "", tuple()),
