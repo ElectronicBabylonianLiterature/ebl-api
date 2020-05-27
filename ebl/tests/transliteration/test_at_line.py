@@ -21,12 +21,26 @@ def test_at_line_heading():
     assert at_line.display_value == "h1"
 
 
-def test_at_line_column():
-    at_line = ColumnAtLine(ColumnLabel.from_int(1, (atf.Status.COLLATION,)))
+@pytest.mark.parametrize("number,expected_abbreviation",[
+    [1, 'i'],
+    [2, 'ii'],
+    [3, 'iii'],
+    [4, 'iv'],
+    [5, 'v'],
+    [6, 'vi'],
+    [7, 'vii'],
+    [8, 'viii'],
+    [9, 'ix'],
+    [10, 'x'],
+])
+def test_at_line_column(number,expected_abbreviation):
+    at_line = ColumnAtLine(ColumnLabel.from_int(number, (atf.Status.COLLATION,)))
 
+    expected_value = f"column {number}*"
     assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("column 1*"),)
-    assert at_line.display_value == "column 1*"
+    assert at_line.content == (ValueToken.of(expected_value),)
+    assert at_line.display_value == expected_value
+    assert at_line.abbreviation == f"{expected_abbreviation}*"
 
 
 def test_at_line_column_no_status():
