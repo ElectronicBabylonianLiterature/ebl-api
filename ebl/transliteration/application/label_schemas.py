@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.domain import atf
@@ -6,7 +6,7 @@ from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 
 
 class LabelSchema(Schema):  # pyre-ignore[11]
-    status = fields.List(NameEnum(atf.Status), required=True)  # pyre-ignore[18]
+    status = fields.List(NameEnum(atf.Status), required=True)
 
 
 class ColumnLabelSchema(LabelSchema):

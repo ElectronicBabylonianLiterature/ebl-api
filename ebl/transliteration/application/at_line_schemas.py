@@ -1,4 +1,4 @@
-from marshmallow import fields, post_load  # pyre-ignore
+from marshmallow import fields, post_load  # pyre-ignore[21]
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.label_schemas import (ColumnLabelSchema,
