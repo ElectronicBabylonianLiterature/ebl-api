@@ -265,7 +265,7 @@ def test_search_reference(database, fragment_repository):
     assert (
         fragment_repository.query_by_id_and_page_in_references(
             fragment.references[0].id,
-            fragment.references[0].pages
+            None
         )
     ) == [fragment]
 

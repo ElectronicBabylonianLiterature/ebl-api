@@ -14,6 +14,8 @@ def get_parameter(parameters: dict) -> Tuple[str, Any]:
     if len(parameters) == 1:
         return next(iter(parameters.items()))
     elif len(parameters) == 2:
+        if parameters["reference_pages"] == "":
+            parameters["reference_pages"] = None
         return ("reference", parameters)
     else:
         raise DispatchError("Invalid number of parameters.")
