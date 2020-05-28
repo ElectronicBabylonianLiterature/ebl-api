@@ -49,22 +49,28 @@ LABELS = [
 ]
 
 
+UNPARSEABLE_LABELS = [
+    ("side a", "","@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
+    ("a", "","@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
+]
+
+
 @pytest.mark.parametrize("label,status,_,expected", LABELS)
 def test_parse_label(label, status, _, expected) -> None:
     assert parse_label(f"{label}{status}") == expected
 
 
-@pytest.mark.parametrize("label,status,_,model", LABELS)
+@pytest.mark.parametrize("label,status,_,model", LABELS + UNPARSEABLE_LABELS)
 def test_abbreviation(label, status, _, model) -> None:
     assert model.abbreviation == label
 
 
-@pytest.mark.parametrize("label,status,_,model", LABELS)
+@pytest.mark.parametrize("label,status,_,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_value(label, status, _, model) -> None:
     assert model.to_value() == f"{label}{status}"
 
 
-@pytest.mark.parametrize("_, status,atf,model", LABELS)
+@pytest.mark.parametrize("_, status,atf,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_atf(_, status, atf, model) -> None:
     assert model.to_atf() == f"{atf}{status}"
 

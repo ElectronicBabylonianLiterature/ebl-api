@@ -108,7 +108,7 @@ class SurfaceLabel(Label):
     text: str = attr.ib(default="")
 
     @text.validator
-    def _check_text(self, attribute, value):
+    def _check_text(self, attribute, value) -> None:
         if value and self.surface not in [
             Surface.SURFACE,
             Surface.FACE,
@@ -126,7 +126,7 @@ class SurfaceLabel(Label):
 
     @property
     def abbreviation(self) -> str:
-        return self.surface.label or ""
+        return self.surface.label or self.text
 
     @property
     def _atf(self) -> str:
@@ -143,7 +143,7 @@ class SurfaceLabel(Label):
 LINE_NUMBER_EXPRESSION = r"[^\s]+"
 
 
-def is_sequence_of_non_space_characters(_instance, _attribute, value):
+def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
     if not re.fullmatch(LINE_NUMBER_EXPRESSION, value):
         raise ValueError(
             f'Line number "{value}" is not a sequence of ' "non-space characters."
@@ -155,7 +155,7 @@ class LineNumberLabel(Label):
 
     number: str = attr.ib(validator=is_sequence_of_non_space_characters)
 
-    def __init__(self, number: str):
+    def __init__(self, number: str) -> None:
         super().__init__(tuple())
         object.__setattr__(self, "number", number)
         attr.validate(self)
