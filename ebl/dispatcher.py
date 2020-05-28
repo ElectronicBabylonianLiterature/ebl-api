@@ -1,4 +1,4 @@
-from typing import Callable, Mapping, Tuple, TypeVar
+from typing import Callable, Mapping, Tuple, TypeVar, Any
 
 
 class DispatchError(Exception):
@@ -10,9 +10,11 @@ Command = Callable[[str], T]
 Dispatcher = Callable[[dict], T]
 
 
-def get_parameter(parameters: dict) -> Tuple[str, str]:
+def get_parameter(parameters: dict) -> Tuple[str, Any]:
     if len(parameters) == 1:
         return next(iter(parameters.items()))
+    elif len(parameters) == 2:
+        return ("reference", parameters)
     else:
         raise DispatchError("Invalid number of parameters.")
 

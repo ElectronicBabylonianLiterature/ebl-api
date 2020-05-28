@@ -7,6 +7,7 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     TransliteratedFragmentFactory,
@@ -86,6 +87,23 @@ def test_search(fragment_finder, fragment_repository, when):
     )
 
     assert fragment_finder.search(query) == [FragmentInfo.of(fragment)]
+
+
+def test_fragment_search_references(fragment_finder, fragment_repository, when):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory(), ReferenceFactory())
+    )
+
+    references_id = fragment.references[0].id
+    references_pages = fragment.references[0].pages
+
+    (
+        when(fragment_repository)
+        .query_by_id_and_page_in_references(references_id, references_pages)
+        .thenReturn([fragment])
+    )
+    assert fragment_finder.search_references(references_id, references_pages
+                                             ) == [FragmentInfo.of(fragment)]
 
 
 def test_search_transliteration(fragment_finder, fragment_repository, when):

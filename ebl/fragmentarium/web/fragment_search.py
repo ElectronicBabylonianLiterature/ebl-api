@@ -23,6 +23,7 @@ class FragmentSearch:
     ):
         self._dispatch = create_dispatcher(
             {
+                "reference": lambda query: finder.search_references(**query),
                 "number": finder.search,
                 "random": lambda _: finder.find_random(),
                 "interesting": lambda _: finder.find_interesting(),

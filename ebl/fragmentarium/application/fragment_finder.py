@@ -37,6 +37,17 @@ class FragmentFinder:
             )
         )
 
+    def search_references(self, reference_id, reference_pages: str) -> List[FragmentInfo]:
+        return list(
+            map(
+                FragmentInfo.of,
+                self._repository.query_by_id_and_page_in_references(
+                    reference_id,
+                    reference_pages
+                ),
+            )
+        )
+
     def search_transliteration(self, query: TransliterationQuery) -> List[FragmentInfo]:
         if query.is_empty():
             return []

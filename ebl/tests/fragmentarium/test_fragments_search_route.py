@@ -2,6 +2,7 @@ import falcon  # pyre-ignore
 
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
@@ -28,6 +29,23 @@ def test_search_fragment_not_found(client):
     result = client.simulate_get(f"/fragments", params={"number": "K.1"})
 
     assert result.json == []
+
+
+def test_search_references(client, fragmentarium):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(), ReferenceFactory.build())
+    )
+    fragmentarium.create(fragment)
+    reference_id = fragment.references[0].id
+    reference_pages = fragment.references[0].pages
+    result = client.simulate_get(f"/fragments", params={
+        "reference_id": reference_id, "reference_pages": reference_pages
+    })
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [expected_fragment_info_dto(fragment)]
+    assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert "Cache-Control" not in result.headers
 
 
 def test_search_signs(client, fragmentarium, sign_repository, signs):
@@ -103,7 +121,7 @@ def test_search_fragment_no_query(client):
 
 
 def test_search_too_many_params(client):
-    params = {"random": True, "interesting": True}
+    params = {"random": True, "interesting": True, "page": "25"}
     result = client.simulate_get(f"/fragments", params=params)
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
