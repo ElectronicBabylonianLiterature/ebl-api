@@ -50,6 +50,7 @@ LABELS = [
 
 
 UNPARSEABLE_LABELS = [
+    ("a", "", "@edge a", SurfaceLabel(tuple(), Surface.EDGE, "a")),
     ("side a", "","@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
     ("a", "","@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
 ]

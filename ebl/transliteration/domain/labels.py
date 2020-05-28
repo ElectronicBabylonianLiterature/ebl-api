@@ -126,7 +126,11 @@ class SurfaceLabel(Label):
 
     @property
     def abbreviation(self) -> str:
-        return self.surface.label or self.text
+        return (
+            self.text or self.surface.label or ""
+            if self.surface == Surface.EDGE
+            else self.surface.label or self.text
+        )
 
     @property
     def _atf(self) -> str:
