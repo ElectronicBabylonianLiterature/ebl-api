@@ -7,7 +7,7 @@ import attr
 import roman  # pyre-ignore
 from parsy import char_from, regex, seq, string_from  # pyre-ignore
 
-from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Object, Status, Surface
 
 
 class DuplicateStatusError(ValueError):
@@ -24,11 +24,15 @@ class LabelVisitor(ABC):
         ...
 
     @abstractmethod
+    def visit_object_label(self, label: "ObjectLabel") -> "LabelVisitor":
+        ...
+
+    @abstractmethod
     def visit_line_number_label(self, label: "LineNumberLabel") -> "LabelVisitor":
         ...
 
 
-def no_duplicate_status(_instance, _attribute, value):
+def no_duplicate_status(_instance, _attribute, value) -> None:
     if any(count > 1 for count in Counter(value).values()):
         raise DuplicateStatusError(f'Duplicate status in "{value}".')
 
@@ -115,7 +119,7 @@ class SurfaceLabel(Label):
             Surface.EDGE,
         ]:
             raise ValueError(
-                "text can only be initialized if atf.surface is 'SURFACE' or 'EDGE' or 'FACE'"
+                "Non-empty text is only allowed for SURFACE, EDGE or FACE."
             )
 
     @staticmethod
@@ -138,6 +142,38 @@ class SurfaceLabel(Label):
 
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         return visitor.visit_surface_label(self)
+
+    def to_atf(self) -> str:
+        text = f" {self.text}" if self.text else ""
+        return f"{self._atf}{self._status_string}{text}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ObjectLabel(Label):
+
+    object: Object
+    text: str = attr.ib(default="")
+
+    @text.validator
+    def _check_text(self, attribute, value):
+        if value and self.object not in [
+            Object.OBJECT,
+            Object.FRAGMENT,
+        ]:
+            raise ValueError(
+                "Non-empty text is only allowed for OBJECT and FRAGMENT."
+            )
+
+    @property
+    def abbreviation(self) -> str:
+        return self.text or self.object.value
+
+    @property
+    def _atf(self) -> str:
+        return f"@{self.object.value}"
+
+    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+        return visitor.visit_object_label(self)
 
     def to_atf(self) -> str:
         text = f" {self.text}" if self.text else ""

@@ -6,9 +6,9 @@ from typing import (
 import attr
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object, Status
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
-from ebl.transliteration.domain.labels import ColumnLabel, Status, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,

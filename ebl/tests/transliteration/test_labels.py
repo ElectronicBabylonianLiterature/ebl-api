@@ -1,6 +1,6 @@
 import pytest  # pyre-ignore
 
-from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Status, Surface, Object
 from ebl.transliteration.domain.labels import (
     parse_label,
     ColumnLabel,
@@ -8,6 +8,7 @@ from ebl.transliteration.domain.labels import (
     LabelVisitor,
     LineNumberLabel,
     SurfaceLabel,
+    ObjectLabel,
 )
 
 LABELS = [
@@ -53,6 +54,12 @@ UNPARSEABLE_LABELS = [
     ("a", "", "@edge a", SurfaceLabel(tuple(), Surface.EDGE, "a")),
     ("side a", "","@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
     ("a", "","@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
+    ("bulla", "","@bulla", ObjectLabel(tuple(), Object.BULLA, "")),
+    ("envelope", "","@envelope", ObjectLabel(tuple(), Object.ENVELOPE, "")),
+    ("a", "","@fragment a", ObjectLabel(tuple(), Object.FRAGMENT, "a")),
+    ("Stone wig", "","@object Stone wig", ObjectLabel(tuple(), Object.OBJECT, "Stone wig")),
+    ("prism", "","@prism", ObjectLabel(tuple(), Object.PRISM, "")),
+    ("tablet", "","@tablet", ObjectLabel(tuple(), Object.TABLET, "")),
 ]
 
 
