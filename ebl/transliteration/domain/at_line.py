@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Sequence, Optional, Tuple
 
 import attr
@@ -12,13 +12,6 @@ from ebl.transliteration.domain.labels import (
 )
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import ValueToken, Token
-
-
-class LabelLine(ABC):
-    @property
-    @abstractmethod
-    def abbreviation(self) -> str:
-        ...
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -56,16 +49,12 @@ class HeadingAtLine(AtLine):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class ColumnAtLine(LabelLine, AtLine):
+class ColumnAtLine(AtLine):
     column_label: ColumnLabel
 
     @property
-    def display_value(self) -> str:
+    def display_value(self):
         return f"column {self.column_label.column}{self.column_label._status_string}"
-
-    @property
-    def abbreviation(self) -> str:
-        return self.column_label.to_value()
 
 
 @attr.s(auto_attribs=True, frozen=True)
