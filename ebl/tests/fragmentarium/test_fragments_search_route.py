@@ -38,13 +38,9 @@ def test_search_references(client, fragmentarium):
     fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
     reference_pages = fragment.references[0].pages
-    """
     result = client.simulate_get(f"/fragments", params={
         "reference_id": reference_id, "reference_pages": reference_pages
     })
-    """
-    result = client.simulate_get(f"/fragments?reference_id=RN.0&reference_pages=")
-
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(fragment)]
