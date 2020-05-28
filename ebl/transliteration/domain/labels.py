@@ -53,7 +53,7 @@ class Label(ABC):
 
     @property
     @abstractmethod
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         ...
 
     @property
@@ -70,7 +70,7 @@ class Label(ABC):
         ...
 
     def to_value(self) -> str:
-        return f"{self._label}{self._status_string}"
+        return f"{self.abbreviation}{self._status_string}"
 
     def to_atf(self) -> str:
         return f"{self._atf}{self._status_string}"
@@ -90,7 +90,7 @@ class ColumnLabel(Label):
         return ColumnLabel(status, column)  # pyre-fixme[6]
 
     @property
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         return roman.toRoman(self.column).lower()
 
     @property
@@ -125,7 +125,7 @@ class SurfaceLabel(Label):
         return SurfaceLabel(status, surface, text)  # pyre-fixme[6]
 
     @property
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         return self.surface.label or ""
 
     @property
@@ -165,7 +165,7 @@ class LineNumberLabel(Label):
         return LineNumberLabel(atf[:-1])
 
     @property
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         return self.number
 
     @property
