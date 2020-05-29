@@ -66,7 +66,7 @@ class Label(ABC):
         ...
 
     @property
-    def _status_string(self) -> str:
+    def status_string(self) -> str:
         return "".join([status.value for status in self.status])
 
     @abstractmethod
@@ -74,10 +74,10 @@ class Label(ABC):
         ...
 
     def to_value(self) -> str:
-        return f"{self.abbreviation}{self._status_string}"
+        return f"{self.abbreviation}{self.status_string}"
 
     def to_atf(self) -> str:
-        return f"{self._atf}{self._status_string}"
+        return f"{self._atf}{self.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -145,7 +145,7 @@ class SurfaceLabel(Label):
 
     def to_atf(self) -> str:
         text = f" {self.text}" if self.text else ""
-        return f"{self._atf}{self._status_string}{text}"
+        return f"{self._atf}{self.status_string}{text}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -155,7 +155,7 @@ class ObjectLabel(Label):
     text: str = attr.ib(default="")
 
     @text.validator
-    def _check_text(self, attribute, value):
+    def _check_text(self, attribute, value) -> None:
         if value and self.object not in [
             Object.OBJECT,
             Object.FRAGMENT,
@@ -177,7 +177,7 @@ class ObjectLabel(Label):
 
     def to_atf(self) -> str:
         text = f" {self.text}" if self.text else ""
-        return f"{self._atf}{self._status_string}{text}"
+        return f"{self._atf}{self.status_string}{text}"
 
 
 LINE_NUMBER_EXPRESSION = r"[^\s]+"

@@ -17,7 +17,7 @@ from ebl.transliteration.domain.tokens import ValueToken, Token
 @attr.s(auto_attribs=True, frozen=True)
 class AtLine(Line):
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         return "@"
 
     @property
@@ -35,7 +35,7 @@ class SealAtLine(AtLine):
     number: int
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         return f"seal {self.number}"
 
 
@@ -44,7 +44,7 @@ class HeadingAtLine(AtLine):
     number: int
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         return f"h{self.number}"
 
 
@@ -53,8 +53,8 @@ class ColumnAtLine(AtLine):
     column_label: ColumnLabel
 
     @property
-    def display_value(self):
-        return f"column {self.column_label.column}{self.column_label._status_string}"
+    def display_value(self) -> str:
+        return f"column {self.column_label.column}{self.column_label.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -62,7 +62,7 @@ class DiscourseAtLine(AtLine):
     discourse_label: atf.Discourse
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         return f"{self.discourse_label.value}"
 
 
@@ -71,9 +71,9 @@ class SurfaceAtLine(AtLine):
     surface_label: SurfaceLabel
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         text = f" {self.surface_label.text}" if self.surface_label.text else ""
-        return f"{self.surface_label.surface.value[0]}{text}{self.surface_label._status_string}"
+        return f"{self.surface_label.surface.value[0]}{text}{self.surface_label.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -83,7 +83,7 @@ class ObjectAtLine(AtLine):
     text: str = attr.ib(default="")
 
     @text.validator
-    def _check_text(self, attribute, value):
+    def _check_text(self, attribute, value) -> None:
         if value and self.object_label not in [
             atf.Object.OBJECT,
             atf.Object.FRAGMENT,
@@ -93,11 +93,11 @@ class ObjectAtLine(AtLine):
             )
 
     @property
-    def _status_string(self):
+    def _status_string(self) -> str:
         return "".join(status.value for status in self.status)
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         text = f" {self.text}" if self.text else ""
         return f"{self.object_label.value}{text}{self._status_string}"
 
@@ -108,7 +108,7 @@ class DivisionAtLine(AtLine):
     number: Optional[int] = None
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         number = f" {str(self.number)}" if self.number else ""
         return f"m=division {self.text}{number}"
 
@@ -120,12 +120,12 @@ class CompositeAtLine(AtLine):
     number: Optional[int] = attr.ib(default=None)
 
     @number.validator
-    def _check_text(self, attribute, value):
+    def _check_text(self, attribute, value) -> None:
         if value is not None and self.composite == atf.Composite.END:
             raise ValueError("number only allowed with '@end' composite")
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         number = f" {str(self.number)}" if self.number else ""
         text = f" {str(self.text)}" if self.text else ""
         return f"{self.composite.value}{text}{number}"
