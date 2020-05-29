@@ -1,14 +1,14 @@
 from itertools import zip_longest
 from typing import (
-    Callable, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
+    Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
 )
 
 import attr
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object, Status
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
@@ -22,7 +22,7 @@ from ebl.transliteration.domain.word_tokens import Word
 Label = Tuple[
     Optional[ColumnLabel],
     Optional[SurfaceLabel],
-    Optional[Tuple[Object, FrozenSet[Status], str]],
+    Optional[ObjectLabel],
     Optional[AbstractLineNumber],
 ]
 
@@ -69,7 +69,7 @@ class Text:
                                          labels),
             ObjectAtLine: lambda line: ((
                 *current[:2],
-                (line.object_label, frozenset(line.status), line.text),
+                line.label,
                 current[-1],
             ), labels),
         }
