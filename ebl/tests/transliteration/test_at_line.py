@@ -9,7 +9,7 @@ from ebl.transliteration.domain.at_line import (
     CompositeAtLine,
     HeadingAtLine,
 )
-from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel
+from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
 from ebl.transliteration.domain.tokens import ValueToken
 
 
@@ -100,9 +100,7 @@ def test_at_line_object():
 
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("object Stone wig!"),)
-    assert at_line.object_label == atf.Object.OBJECT
-    assert at_line.status == [atf.Status.CORRECTION]
-    assert at_line.text == "Stone wig"
+    assert at_line.label == ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
     assert at_line.display_value == "object Stone wig!"
 
 

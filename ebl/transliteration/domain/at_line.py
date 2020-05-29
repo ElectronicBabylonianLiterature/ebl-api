@@ -9,6 +9,7 @@ from ebl.transliteration.domain.labels import (
     SurfaceLabel,
     ColumnLabel,
     no_duplicate_status,
+    ObjectLabel,
 )
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import ValueToken, Token
@@ -73,7 +74,7 @@ class SurfaceAtLine(AtLine):
     @property
     def display_value(self) -> str:
         text = f" {self.surface_label.text}" if self.surface_label.text else ""
-        return f"{self.surface_label.surface.value[0]}{text}{self.surface_label.status_string}"
+        return f"{self.surface_label.surface.atf}{text}{self.surface_label.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -81,6 +82,10 @@ class ObjectAtLine(AtLine):
     status: Sequence[Status] = attr.ib(validator=no_duplicate_status)
     object_label: atf.Object
     text: str = attr.ib(default="")
+
+    @property
+    def label(self) -> ObjectLabel:
+        return ObjectLabel(self.status, self.object_label, self.text)
 
     @text.validator
     def _check_text(self, attribute, value) -> None:
@@ -93,13 +98,9 @@ class ObjectAtLine(AtLine):
             )
 
     @property
-    def _status_string(self) -> str:
-        return "".join(status.value for status in self.status)
-
-    @property
     def display_value(self) -> str:
-        text = f" {self.text}" if self.text else ""
-        return f"{self.object_label.value}{text}{self._status_string}"
+        text = f" {self.label.text}" if self.label.text else ""
+        return f"{self.label.object.value}{text}{self.label.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
