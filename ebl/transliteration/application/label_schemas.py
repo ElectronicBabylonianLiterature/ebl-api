@@ -20,7 +20,6 @@ class ColumnLabelSchema(LabelSchema):
 class SurfaceLabelSchema(LabelSchema):
     surface = NameEnum(atf.Surface, required=True)
     text = fields.String(default="")
-    display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_label(self, data, **kwargs) -> SurfaceLabel:
