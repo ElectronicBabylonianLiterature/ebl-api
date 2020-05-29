@@ -1,14 +1,12 @@
 from abc import abstractmethod
-from typing import Sequence, Optional, Tuple
+from typing import Optional, Tuple
 
 import attr
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.atf import Status
 from ebl.transliteration.domain.labels import (
     SurfaceLabel,
     ColumnLabel,
-    no_duplicate_status,
     ObjectLabel,
 )
 from ebl.transliteration.domain.line import Line
@@ -79,23 +77,7 @@ class SurfaceAtLine(AtLine):
 
 @attr.s(auto_attribs=True, frozen=True)
 class ObjectAtLine(AtLine):
-    status: Sequence[Status] = attr.ib(validator=no_duplicate_status)
-    object_label: atf.Object
-    text: str = attr.ib(default="")
-
-    @property
-    def label(self) -> ObjectLabel:
-        return ObjectLabel(self.status, self.object_label, self.text)
-
-    @text.validator
-    def _check_text(self, attribute, value) -> None:
-        if value and self.object_label not in [
-            atf.Object.OBJECT,
-            atf.Object.FRAGMENT,
-        ]:
-            raise ValueError(
-                "non-empty string only allowed if the content is 'atf.OBJECT.OBJECT'"
-            )
+    label: ObjectLabel
 
     @property
     def display_value(self) -> str:

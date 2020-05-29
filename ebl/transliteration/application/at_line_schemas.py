@@ -2,6 +2,7 @@ from marshmallow import fields, post_load  # pyre-ignore[21]
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.label_schemas import (ColumnLabelSchema,
+                                                           ObjectLabelSchema,
                                                            SurfaceLabelSchema)
 from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.domain import atf
@@ -10,6 +11,7 @@ from ebl.transliteration.domain.at_line import (ColumnAtLine, CompositeAtLine,
                                                 DivisionAtLine, HeadingAtLine,
                                                 ObjectAtLine, SealAtLine,
                                                 SurfaceAtLine)
+from ebl.transliteration.domain.labels import ObjectLabel
 
 
 class SealAtLineSchema(LineBaseSchema):
@@ -62,14 +64,19 @@ class SurfaceAtLineSchema(LineBaseSchema):
 
 
 class ObjectAtLineSchema(LineBaseSchema):
-    status = fields.List(NameEnum(atf.Status), required=True)
-    object_label = NameEnum(atf.Object, required=True)
-    text = fields.String(default="", required=True)
+    status = fields.List(NameEnum(atf.Status), load_only=True)
+    object_label = NameEnum(atf.Object, load_only=True)
+    text = fields.String(default="", load_only=True)
+    label = fields.Nested(ObjectLabelSchema)
     display_value = fields.String(data_key="displayValue")
 
     @post_load
     def make_line(self, data, **kwargs) -> ObjectAtLine:
-        return ObjectAtLine(data["status"], data["object_label"], data["text"])
+        return (
+            ObjectAtLine(data["label"])
+            if "label" in data
+            else ObjectAtLine(ObjectLabel(data["status"], data["object_label"], data["text"]))
+        )
 
 
 class DivisionAtLineSchema(LineBaseSchema):

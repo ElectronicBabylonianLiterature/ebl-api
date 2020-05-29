@@ -10,7 +10,7 @@ from ebl.transliteration.domain.at_line import (
     ObjectAtLine,
     SurfaceAtLine,
 )
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -49,10 +49,10 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
             "@surface stone",
             [SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "stone"))],
         ),
-        ("@prism!", [ObjectAtLine([atf.Status.CORRECTION], atf.Object.PRISM)]),
-        ("@prism", [ObjectAtLine([], atf.Object.PRISM)]),
-        ("@object stone", [ObjectAtLine([], atf.Object.OBJECT, "stone")]),
-        ("@fragment 1", [ObjectAtLine([], atf.Object.FRAGMENT, "1")]),
+        ("@prism!", [ObjectAtLine(ObjectLabel([atf.Status.CORRECTION], atf.Object.PRISM))]),
+        ("@prism", [ObjectAtLine(ObjectLabel([], atf.Object.PRISM))]),
+        ("@object stone", [ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "stone"))]),
+        ("@fragment 1", [ObjectAtLine(ObjectLabel([], atf.Object.FRAGMENT, "1"))]),
         ("@edge a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.EDGE, "a"))]),
         ("@face a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.FACE, "a"))]),
         ("@h1", [HeadingAtLine(1)]),

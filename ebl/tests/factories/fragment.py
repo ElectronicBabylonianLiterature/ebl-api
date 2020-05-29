@@ -27,7 +27,7 @@ from ebl.transliteration.domain.dollar_line import (
     SealDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.note_line import (
@@ -243,7 +243,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
             SurfaceAtLine(
                 SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
             ),
-            ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
+            ObjectAtLine(
+                ObjectLabel([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig")
+            ),
             DiscourseAtLine(atf.Discourse.DATE),
             DivisionAtLine("paragraph", 5),
             CompositeAtLine(atf.Composite.DIV, "part", 1),
@@ -429,7 +431,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             SurfaceAtLine(
                 SurfaceLabel([atf.Status.COLLATION], atf.Surface.SURFACE, "stone wig")
             ),
-            ObjectAtLine([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig"),
+            ObjectAtLine(
+                ObjectLabel([atf.Status.COLLATION], atf.Object.OBJECT, "stone wig")),
             DiscourseAtLine(atf.Discourse.DATE),
             DivisionAtLine("paragraph", 5),
             CompositeAtLine(atf.Composite.DIV, "part", 1),

@@ -29,7 +29,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -149,17 +149,21 @@ LINES = [
     ),
     (
         ObjectAtLine(
-            [atf.Status.CORRECTION, atf.Status.COLLATION],
-            atf.Object.OBJECT,
-            "stone wig",
+            ObjectLabel(
+                [atf.Status.CORRECTION, atf.Status.COLLATION],
+                atf.Object.OBJECT,
+                "stone wig",
+            )
         ),
         {
             "prefix": "@",
             "content": [OneOfTokenSchema().dump(ValueToken.of("object stone wig!*"))],
             "type": "ObjectAtLine",
-            "status": ["CORRECTION", "COLLATION"],
-            "object_label": "OBJECT",
-            "text": "stone wig",
+            "label": {
+                "status": ["CORRECTION", "COLLATION"],
+                "object": "OBJECT",
+                "text": "stone wig",
+            },
             "displayValue": "object stone wig!*",
         },
     ),
@@ -591,6 +595,24 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
             "displayValue": "double ruling",
+        },
+    ),
+    (
+        ObjectAtLine(
+            ObjectLabel(
+                [atf.Status.CORRECTION, atf.Status.COLLATION],
+                atf.Object.OBJECT,
+                "stone wig",
+            )
+        ),
+        {
+            "prefix": "@",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("object stone wig!*"))],
+            "type": "ObjectAtLine",
+            "status": ["CORRECTION", "COLLATION"],
+            "object_label": "OBJECT",
+            "text": "stone wig",
+            "displayValue": "object stone wig!*",
         },
     ),
 ]

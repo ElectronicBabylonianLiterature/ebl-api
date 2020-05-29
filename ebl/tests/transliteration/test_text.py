@@ -113,7 +113,7 @@ def test_labels() -> None:
             TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])],),
             ColumnAtLine(ColumnLabel.from_int(1)),
             SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")),
-            ObjectAtLine([], atf.Object.OBJECT, "Stone wig"),
+            ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "Stone wig")),
             TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])],),
         ]
     )
