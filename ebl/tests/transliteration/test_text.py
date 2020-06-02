@@ -15,7 +15,7 @@ from ebl.transliteration.domain.line import ControlLine, Line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text import Label, Text
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -118,8 +118,8 @@ def test_labels() -> None:
         ]
     )
     assert text.labels == [
-        (None, None, None, LineNumber(1)),
-        (
+        Label(None, None, None, LineNumber(1)),
+        Label(
             ColumnLabel.from_int(1),
             SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
             ObjectLabel([], atf.Object.OBJECT, "Stone wig"),

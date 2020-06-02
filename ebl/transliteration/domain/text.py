@@ -19,12 +19,24 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 
 
-Label = Tuple[
-    Optional[ColumnLabel],
-    Optional[SurfaceLabel],
-    Optional[ObjectLabel],
-    Optional[AbstractLineNumber],
-]
+@attr.s(auto_attribs=True, frozen=True)
+class Label:
+    column: Optional[ColumnLabel]
+    surface: Optional[SurfaceLabel]
+    object: Optional[ObjectLabel]
+    line_number: Optional[AbstractLineNumber]
+
+    def set_column(self, column: Optional[ColumnLabel]) -> "Label":
+        return attr.evolve(self, column=column)
+
+    def set_surface(self, surface: Optional[SurfaceLabel]) -> "Label":
+        return attr.evolve(self, surface=surface)
+
+    def set_object(self, object: Optional[ObjectLabel]) -> "Label":
+        return attr.evolve(self, object=object)
+
+    def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "Label":
+        return attr.evolve(self, line_number=line_number)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -58,20 +70,15 @@ class Text:
 
     @property
     def labels(self,) -> Sequence[Label]:
-        current: Label = (None, None, None, None)
+        current: Label = Label(None, None, None, None)
         labels: List[Label] = []
 
         handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
             TextLine: lambda line: (current,
-                                    [*labels, (*current[:-1], line.line_number)]),
-            ColumnAtLine: lambda line: ((line.column_label, *current[1:]), labels),
-            SurfaceAtLine: lambda line: ((current[0], line.surface_label, *current[2:]),
-                                         labels),
-            ObjectAtLine: lambda line: ((
-                *current[:2],
-                line.label,
-                current[-1],
-            ), labels),
+                                    [*labels, current.set_line_number(line.line_number)]),
+            ColumnAtLine: lambda line: (current.set_column(line.column_label), labels),
+            SurfaceAtLine: lambda line: (current.set_surface(line.surface_label), labels),
+            ObjectAtLine: lambda line: (current.set_object(line.label), labels),
         }
 
         for line in self.lines:
