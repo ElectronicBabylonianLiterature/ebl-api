@@ -29,11 +29,11 @@ class TextLine(Line):
         return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
 
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         return self.line_number.atf
 
     @property
-    def content(self):
+    def content(self) -> Sequence:
         return self._content
 
     @classmethod
