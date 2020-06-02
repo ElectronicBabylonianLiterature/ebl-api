@@ -7,6 +7,7 @@ from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectL
 
 class LabelSchema(Schema):  # pyre-ignore[11]
     status = fields.List(NameEnum(atf.Status), required=True)
+    abbreviation = fields.String()
 
 
 class ColumnLabelSchema(LabelSchema):

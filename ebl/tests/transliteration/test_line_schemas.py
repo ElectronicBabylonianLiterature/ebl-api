@@ -163,6 +163,7 @@ LINES = [
                 "status": ["CORRECTION", "COLLATION"],
                 "object": "OBJECT",
                 "text": "stone wig",
+                "abbreviation": "stone wig"
             },
             "displayValue": "object stone wig!*",
         },
@@ -183,6 +184,7 @@ LINES = [
                 "status": ["CORRECTION", "COLLATION"],
                 "surface": "SURFACE",
                 "text": "stone wig",
+                "abbreviation": "stone wig",
             },
             "displayValue": "surface stone wig!*",
         },
@@ -193,18 +195,12 @@ LINES = [
             "prefix": "@",
             "content": [OneOfTokenSchema().dump(ValueToken.of("column 1!*"))],
             "type": "ColumnAtLine",
-            "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
+            "column_label": {
+                "status": ["CORRECTION", "COLLATION"],
+                "column": 1,
+                "abbreviation": "i",
+            },
             "displayValue": "column 1!*",
-        },
-    ),
-    (
-        ColumnAtLine(ColumnLabel([], 1)),
-        {
-            "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("column 1"))],
-            "type": "ColumnAtLine",
-            "column_label": {"status": [], "column": 1},
-            "displayValue": "column 1",
         },
     ),
     (
