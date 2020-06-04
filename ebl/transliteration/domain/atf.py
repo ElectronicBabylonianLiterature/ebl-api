@@ -8,7 +8,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "2.0.0"
+ATF_PARSER_VERSION = "2.2.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -17,7 +17,7 @@ class AtfError(Exception):
 
 
 class AtfSyntaxError(AtfError):
-    def __init__(self, line_number):
+    def __init__(self, line_number) -> None:
         self.line_number = line_number
         message = f"Line {self.line_number} is invalid."
         super().__init__(message)
@@ -41,7 +41,7 @@ http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/ind
     SURFACE = ("surface", None)
     FACE = ("face", None)
 
-    def __init__(self, atf: str, label: Optional[str]):
+    def __init__(self, atf: str, label: Optional[str]) -> None:
         self.atf = atf
         self.label = label
 

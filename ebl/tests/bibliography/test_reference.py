@@ -1,3 +1,4 @@
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
 from ebl.bibliography.domain.reference import (
     BibliographyId,
     Reference,
@@ -5,14 +6,14 @@ from ebl.bibliography.domain.reference import (
 )
 
 ID = BibliographyId("RN.1")
-TYPE = ReferenceType.EDITION
+TYPE: ReferenceType = ReferenceType.EDITION
 PAGES = "1-6"
 NOTES = "some notes"
 LINES_CITED = ("o. 1", "r. iii! 2a.2", "9'")
 
 REFERENCE = Reference(ID, TYPE, PAGES, NOTES, LINES_CITED)
 
-SERIALIZED_REFERENCE = {
+SERIALIZED_REFERENCE: dict = {
     "id": ID,
     "type": TYPE.name,
     "pages": PAGES,
@@ -21,13 +22,13 @@ SERIALIZED_REFERENCE = {
 }
 
 
-def create_reference_with_document(bibliography_entry):
+def create_reference_with_document(bibliography_entry) -> Reference:
     return Reference(
         bibliography_entry["id"], TYPE, PAGES, NOTES, LINES_CITED, bibliography_entry,
     )
 
 
-def test_reference(bibliography_entry):
+def test_reference(bibliography_entry) -> None:
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     assert reference_with_document.id == bibliography_entry["id"]
@@ -38,7 +39,7 @@ def test_reference(bibliography_entry):
     assert reference_with_document.document == bibliography_entry
 
 
-def test_defaults():
+def test_defaults() -> None:
     reference = Reference(ID, TYPE)
 
     assert reference.pages == ""
@@ -47,35 +48,35 @@ def test_defaults():
     assert reference.document is None
 
 
-def test_to_dict(bibliography_entry):
+def test_to_dict(bibliography_entry) -> None:
     reference_with_document = create_reference_with_document(bibliography_entry)
 
-    assert reference_with_document.to_dict() == {
+    # pyre-ignore-nextline[16]
+    assert ReferenceSchema().dump(reference_with_document) == {
         **SERIALIZED_REFERENCE,
         "id": reference_with_document.id,
     }
 
 
-def test_to_dict_with_document(bibliography_entry):
+def test_to_dict_with_document(bibliography_entry) -> None:
     reference_with_document = create_reference_with_document(bibliography_entry)
 
-    assert reference_with_document.to_dict(True) == {
+    # pyre-ignore-nextline[16]
+    assert ApiReferenceSchema().dump(reference_with_document) == {
         **SERIALIZED_REFERENCE,
         "id": reference_with_document.id,
         "document": bibliography_entry,
     }
 
 
-def test_from_dict():
-    result = Reference.from_dict(SERIALIZED_REFERENCE)
-
-    assert result == REFERENCE
+def test_from_dict() -> None:
+    assert ReferenceSchema().load(SERIALIZED_REFERENCE) == REFERENCE  # pyre-ignore[16]
 
 
-def test_from_dict_with_document(bibliography_entry):
+def test_from_dict_with_document(bibliography_entry) -> None:
     reference_with_document = create_reference_with_document(bibliography_entry)
 
-    result = Reference.from_dict(
+    result = ReferenceSchema().load(  # pyre-ignore[16]
         {
             **SERIALIZED_REFERENCE,
             "id": reference_with_document.id,

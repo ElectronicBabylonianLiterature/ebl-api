@@ -70,7 +70,13 @@ def dictionary(word_repository, changelog):
 class TestBibliographyRepository(MongoBibliographyRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def query_by_author_year_and_title(self, _author=None, _year=None, _title=None):
+    def query_by_author_year_and_title(self, _author=None, _year=None, _title=None,
+                                       _greater_than=False):
+        return [create_object_entry(self._collection.find_one({}))]
+
+    def query_by_container_title_and_collection_number(
+            self, _container_title_short=None, _collection_number=None
+    ):
         return [create_object_entry(self._collection.find_one({}))]
 
 
@@ -410,6 +416,8 @@ def bibliography_entry():
         "page": "837-846",
         "issue": "4",
         "container-title": "Molecular Endocrinology",
+        "container-title-short": "ME",
+        "collection-number": "1",
         "author": [
             {"given": "Stefania", "family": "Miccadei"},
             {"given": "Rossana", "family": "De Leo"},
