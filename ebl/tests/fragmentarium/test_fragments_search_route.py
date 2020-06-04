@@ -33,7 +33,7 @@ def test_search_fragment_not_found(client):
 
 def test_search_references(client, fragmentarium):
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(), ReferenceFactory.build())
+        references=(ReferenceFactory.build(pages="254"), ReferenceFactory.build())
     )
     fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
@@ -46,6 +46,20 @@ def test_search_references(client, fragmentarium):
     assert result.json == [expected_fragment_info_dto(fragment)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
+
+
+def test_search_references_invalid_query(client, fragmentarium):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(), ReferenceFactory.build())
+    )
+    fragmentarium.create(fragment)
+    reference_id = fragment.references[0].id
+    reference_pages = "should be a number"
+    result = client.simulate_get(f"/fragments", params={
+        "id": reference_id, "pages": reference_pages
+    })
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_search_signs(client, fragmentarium, sign_repository, signs):

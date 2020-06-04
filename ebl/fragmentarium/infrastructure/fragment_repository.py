@@ -59,13 +59,17 @@ class MongoFragmentRepository(FragmentRepository):
             self, reference_id: str,
             reference_pages: str
     ):
-        match: Dict[str, str] = {}
-        match["references.id"] = reference_id
+        match = dict()
+        match["references.id"] = {
+                "$regex": fr"^{reference_id}[^\d]*$",
+                "$options": "i"
+                }
         if reference_pages:
-            match["references.pages"] = reference_pages
+            match["references.pages"] = {
+                "$regex": fr"^[^\d]*{reference_pages}[^\d]*$",
+                }
         cursor = self._collection.aggregate([
-            {"$match": match
-             }
+            {"$match": match}
         ])
         return self._map_fragments(cursor)
 

@@ -35,6 +35,8 @@ class FragmentSearch:
             }
         )
 
+
+
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]
         """---
