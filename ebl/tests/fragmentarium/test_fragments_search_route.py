@@ -39,7 +39,7 @@ def test_search_references(client, fragmentarium):
     reference_id = fragment.references[0].id
     reference_pages = fragment.references[0].pages
     result = client.simulate_get(f"/fragments", params={
-        "reference_id": reference_id, "reference_pages": reference_pages
+        "id": reference_id, "pages": reference_pages
     })
 
     assert result.status == falcon.HTTP_OK
