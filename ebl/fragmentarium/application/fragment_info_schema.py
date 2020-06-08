@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 
 
@@ -13,6 +14,7 @@ class FragmentInfoSchema(Schema):  # pyre-ignore[11]
     matching_lines = fields.List(
         fields.List(fields.String()), data_key="matchingLines", missing=tuple()
     )
+    references = fields.Nested(ReferenceSchema, many=True, required=True)
 
     @post_load
     def make_fragment_info(self, data, **kwargs):

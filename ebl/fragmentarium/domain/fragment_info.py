@@ -1,7 +1,8 @@
-from typing import Sequence
+from typing import Sequence, Tuple
 
 import attr
 
+from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 
@@ -17,6 +18,7 @@ class FragmentInfo:
     matching_lines: Lines
     editor: str
     edition_date: str
+    references: Tuple[Reference, ...] = tuple()
 
     @staticmethod
     def of(fragment: Fragment, matching_lines: Lines = tuple()) -> "FragmentInfo":
@@ -43,4 +45,5 @@ class FragmentInfo:
             matching_lines,
             first_transliteration.user,
             first_transliteration.date,
+            fragment.references,
         )
