@@ -16,7 +16,7 @@ def test_valid_params(parameter, command):
 
 
 @pytest.mark.parametrize(
-    "parameters", [{}, {"invalid": "parameter"}, {"a": "a", "b": "b"}]
+    "parameters", [{}, {"invalid": "parameter"}, {"a": "a", "b": "b", "c": "c"}]
 )
 def test_invalid_params(parameters):
     with pytest.raises(DispatchError):

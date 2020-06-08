@@ -18,14 +18,16 @@ def _check_pages(pages: str) -> None:
     except ValueError:
         raise DataError(f'Pages "{pages}" not numeric.')
 
+
 def get_parameter(parameters: dict) -> Tuple[str, Any]:
     if len(parameters) == 1:
         return next(iter(parameters.items()))
     elif len(parameters) == 2:
-        if parameters["pages"] == "":
-            parameters["pages"] = None
-        else:
-            _check_pages(parameters["pages"])
+        if "pages" in parameters:
+            if parameters["pages"] == "":
+                parameters["pages"] = None
+            else:
+                _check_pages(parameters["pages"])
         return ("reference", parameters)
     else:
         raise DispatchError("Invalid number of parameters.")

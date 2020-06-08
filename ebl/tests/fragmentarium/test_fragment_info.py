@@ -2,9 +2,13 @@ import attr
 
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
 
 FRAGMENT = FragmentFactory.build()  # pyre-ignore[16]
+FRAGMENT_WITH_REFERENCES = FragmentFactory.build(
+    references=(ReferenceFactory.build(), ReferenceFactory.build())
+)
 
 
 def test_of():
@@ -17,6 +21,20 @@ def test_of():
         matching_lines,
         "",
         "",
+    )
+
+
+def test_of_with_references():
+    matching_lines = (("1. kur",),)
+    assert FragmentInfo.of(FRAGMENT_WITH_REFERENCES, matching_lines) == FragmentInfo(
+        FRAGMENT_WITH_REFERENCES.number,
+        FRAGMENT_WITH_REFERENCES.accession,
+        FRAGMENT_WITH_REFERENCES.script,
+        FRAGMENT_WITH_REFERENCES.description,
+        matching_lines,
+        "",
+        "",
+        FRAGMENT_WITH_REFERENCES.references
     )
 
 

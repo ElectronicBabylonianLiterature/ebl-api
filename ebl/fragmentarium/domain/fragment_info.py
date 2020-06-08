@@ -1,4 +1,4 @@
-from typing import Sequence, Tuple
+from typing import Sequence
 
 import attr
 
@@ -18,7 +18,7 @@ class FragmentInfo:
     matching_lines: Lines
     editor: str
     edition_date: str
-    references: Tuple[Reference, ...] = tuple()
+    references: Sequence[Reference] = tuple()
 
     @staticmethod
     def of(fragment: Fragment, matching_lines: Lines = tuple()) -> "FragmentInfo":

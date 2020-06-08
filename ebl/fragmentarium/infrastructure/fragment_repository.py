@@ -1,5 +1,3 @@
-from typing import Dict
-
 from marshmallow import EXCLUDE  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
@@ -61,16 +59,14 @@ class MongoFragmentRepository(FragmentRepository):
     ):
         match = dict()
         match["references.id"] = {
-                "$regex": fr"^{reference_id}[^\d]*$",
-                "$options": "i"
-                }
+            "$regex": fr"^{reference_id}[^\d]*$",
+            "$options": "i"
+        }
         if reference_pages:
             match["references.pages"] = {
-                "$regex": fr"^[^\d]*{reference_pages}[^\d]*$",
-                }
-        cursor = self._collection.aggregate([
-            {"$match": match}
-        ])
+                "$regex": fr"^[^\d]*{reference_pages}[^\d]*$"
+            }
+        cursor = self._collection.aggregate([{"$match": match}])
         return self._map_fragments(cursor)
 
     def query_by_fragment_cdli_or_accession_number(self, number):
