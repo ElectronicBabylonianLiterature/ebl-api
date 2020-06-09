@@ -29,7 +29,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import (
     ControlLine,
@@ -149,17 +149,22 @@ LINES = [
     ),
     (
         ObjectAtLine(
-            [atf.Status.CORRECTION, atf.Status.COLLATION],
-            atf.Object.OBJECT,
-            "stone wig",
+            ObjectLabel(
+                [atf.Status.CORRECTION, atf.Status.COLLATION],
+                atf.Object.OBJECT,
+                "stone wig",
+            )
         ),
         {
             "prefix": "@",
             "content": [OneOfTokenSchema().dump(ValueToken.of("object stone wig!*"))],
             "type": "ObjectAtLine",
-            "status": ["CORRECTION", "COLLATION"],
-            "object_label": "OBJECT",
-            "text": "stone wig",
+            "label": {
+                "status": ["CORRECTION", "COLLATION"],
+                "object": "OBJECT",
+                "text": "stone wig",
+                "abbreviation": "stone wig"
+            },
             "displayValue": "object stone wig!*",
         },
     ),
@@ -179,6 +184,7 @@ LINES = [
                 "status": ["CORRECTION", "COLLATION"],
                 "surface": "SURFACE",
                 "text": "stone wig",
+                "abbreviation": "stone wig",
             },
             "displayValue": "surface stone wig!*",
         },
@@ -189,18 +195,12 @@ LINES = [
             "prefix": "@",
             "content": [OneOfTokenSchema().dump(ValueToken.of("column 1!*"))],
             "type": "ColumnAtLine",
-            "column_label": {"status": ["CORRECTION", "COLLATION"], "column": 1},
+            "column_label": {
+                "status": ["CORRECTION", "COLLATION"],
+                "column": 1,
+                "abbreviation": "i",
+            },
             "displayValue": "column 1!*",
-        },
-    ),
-    (
-        ColumnAtLine(ColumnLabel([], 1)),
-        {
-            "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("column 1"))],
-            "type": "ColumnAtLine",
-            "column_label": {"status": [], "column": 1},
-            "displayValue": "column 1",
         },
     ),
     (
@@ -591,6 +591,24 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
             "displayValue": "double ruling",
+        },
+    ),
+    (
+        ObjectAtLine(
+            ObjectLabel(
+                [atf.Status.CORRECTION, atf.Status.COLLATION],
+                atf.Object.OBJECT,
+                "stone wig",
+            )
+        ),
+        {
+            "prefix": "@",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("object stone wig!*"))],
+            "type": "ObjectAtLine",
+            "status": ["CORRECTION", "COLLATION"],
+            "object_label": "OBJECT",
+            "text": "stone wig",
+            "displayValue": "object stone wig!*",
         },
     ),
 ]

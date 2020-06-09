@@ -9,11 +9,11 @@ from ebl.transliteration.domain.at_line import (
     CompositeAtLine,
     HeadingAtLine,
 )
-from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel
+from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
 from ebl.transliteration.domain.tokens import ValueToken
 
 
-def test_at_line_heading():
+def test_at_line_heading() -> None:
     at_line = HeadingAtLine(1)
 
     assert at_line.prefix == "@"
@@ -21,7 +21,7 @@ def test_at_line_heading():
     assert at_line.display_value == "h1"
 
 
-def test_at_line_column():
+def test_at_line_column() -> None:
     at_line = ColumnAtLine(ColumnLabel.from_int(1, (atf.Status.COLLATION,)))
 
     assert at_line.prefix == "@"
@@ -29,7 +29,7 @@ def test_at_line_column():
     assert at_line.display_value == "column 1*"
 
 
-def test_at_line_column_no_status():
+def test_at_line_column_no_status() -> None:
     at_line = ColumnAtLine(ColumnLabel.from_int(1))
 
     assert at_line.prefix == "@"
@@ -37,7 +37,7 @@ def test_at_line_column_no_status():
     assert at_line.display_value == "column 1"
 
 
-def test_at_line_discourse():
+def test_at_line_discourse() -> None:
     at_line = DiscourseAtLine(atf.Discourse.SIGNATURES)
 
     assert at_line.prefix == "@"
@@ -46,8 +46,7 @@ def test_at_line_discourse():
     assert at_line.display_value == "signatures"
 
 
-def test_at_line_surface():
-
+def test_at_line_surface() -> None:
     at_line = SurfaceAtLine(
         SurfaceLabel((atf.Status.CORRECTION,), atf.Surface.SURFACE, "Stone wig")
     )
@@ -60,8 +59,7 @@ def test_at_line_surface():
     assert at_line.display_value == "surface Stone wig!"
 
 
-def test_at_line_surface_no_status():
-
+def test_at_line_surface_no_status() -> None:
     at_line = SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"))
 
     assert at_line.prefix == "@"
@@ -70,8 +68,7 @@ def test_at_line_surface_no_status():
     assert at_line.display_value == "surface Stone wig"
 
 
-def test_at_line_surface_instantiate_text_with_wrong_surface():
-
+def test_at_line_surface_instantiate_text_with_wrong_surface() -> None:
     with pytest.raises(ValueError):
         at_line = SurfaceAtLine(
             SurfaceLabel((atf.Status.CORRECTION,), atf.Surface.OBVERSE, "Stone wig")
@@ -84,29 +81,29 @@ def test_at_line_surface_instantiate_text_with_wrong_surface():
         assert at_line.display_value == "obverse Stone wig!"
 
 
-def test_at_line_object_no_status():
-    at_line = ObjectAtLine([], atf.Object.OBJECT, "Stone wig")
+def test_at_line_object_no_status() -> None:
+    at_line = ObjectAtLine(
+        ObjectLabel([], atf.Object.OBJECT, "Stone wig")
+    )
 
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("object Stone wig"),)
-    assert at_line.object_label == atf.Object.OBJECT
-    assert at_line.status == []
-    assert at_line.text == "Stone wig"
+    assert at_line.label == ObjectLabel([], atf.Object.OBJECT, "Stone wig")
     assert at_line.display_value == "object Stone wig"
 
 
-def test_at_line_object():
-    at_line = ObjectAtLine([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
+def test_at_line_object() -> None:
+    at_line = ObjectAtLine(
+        ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
+    )
 
     assert at_line.prefix == "@"
     assert at_line.content == (ValueToken.of("object Stone wig!"),)
-    assert at_line.object_label == atf.Object.OBJECT
-    assert at_line.status == [atf.Status.CORRECTION]
-    assert at_line.text == "Stone wig"
+    assert at_line.label == ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
     assert at_line.display_value == "object Stone wig!"
 
 
-def test_at_line_composite():
+def test_at_line_composite() -> None:
     at_line = CompositeAtLine(atf.Composite.DIV, "paragraph", 1)
 
     assert at_line.prefix == "@"
@@ -117,7 +114,7 @@ def test_at_line_composite():
     assert at_line.display_value == "div paragraph 1"
 
 
-def test_at_line_composite_constant():
+def test_at_line_composite_constant() -> None:
     at_line = CompositeAtLine(atf.Composite.COMPOSITE, "")
 
     assert at_line.prefix == "@"
@@ -128,7 +125,7 @@ def test_at_line_composite_constant():
     assert at_line.display_value == "composite"
 
 
-def test_at_line_composite_milestone():
+def test_at_line_composite_milestone() -> None:
     at_line = CompositeAtLine(atf.Composite.MILESTONE, "o", 1)
 
     assert at_line.prefix == "@"
@@ -139,6 +136,6 @@ def test_at_line_composite_milestone():
     assert at_line.display_value == "m=locator o 1"
 
 
-def test_at_line_composite_raise_error():
+def test_at_line_composite_raise_error() -> None:
     with pytest.raises(ValueError):
         CompositeAtLine(atf.Composite.END, "paragraph", 1)

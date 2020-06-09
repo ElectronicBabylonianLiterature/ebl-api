@@ -1,14 +1,14 @@
 from itertools import zip_longest
 from typing import (
-    Callable, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
+    Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
 )
 
 import attr
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, Object
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
-from ebl.transliteration.domain.labels import ColumnLabel, Status, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
@@ -19,12 +19,24 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 
 
-Label = Tuple[
-    Optional[ColumnLabel],
-    Optional[SurfaceLabel],
-    Optional[Tuple[Object, FrozenSet[Status], str]],
-    Optional[AbstractLineNumber],
-]
+@attr.s(auto_attribs=True, frozen=True)
+class Label:
+    column: Optional[ColumnLabel]
+    surface: Optional[SurfaceLabel]
+    object: Optional[ObjectLabel]
+    line_number: Optional[AbstractLineNumber]
+
+    def set_column(self, column: Optional[ColumnLabel]) -> "Label":
+        return attr.evolve(self, column=column)
+
+    def set_surface(self, surface: Optional[SurfaceLabel]) -> "Label":
+        return attr.evolve(self, surface=surface)
+
+    def set_object(self, object: Optional[ObjectLabel]) -> "Label":
+        return attr.evolve(self, object=object)
+
+    def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "Label":
+        return attr.evolve(self, line_number=line_number)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -58,20 +70,15 @@ class Text:
 
     @property
     def labels(self,) -> Sequence[Label]:
-        current: Label = (None, None, None, None)
+        current: Label = Label(None, None, None, None)
         labels: List[Label] = []
 
         handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
             TextLine: lambda line: (current,
-                                    [*labels, (*current[:-1], line.line_number)]),
-            ColumnAtLine: lambda line: ((line.column_label, *current[1:]), labels),
-            SurfaceAtLine: lambda line: ((current[0], line.surface_label, *current[2:]),
-                                         labels),
-            ObjectAtLine: lambda line: ((
-                *current[:2],
-                (line.object_label, frozenset(line.status), line.text),
-                current[-1],
-            ), labels),
+                                    [*labels, current.set_line_number(line.line_number)]),
+            ColumnAtLine: lambda line: (current.set_column(line.column_label), labels),
+            SurfaceAtLine: lambda line: (current.set_surface(line.surface_label), labels),
+            ObjectAtLine: lambda line: (current.set_object(line.label), labels),
         }
 
         for line in self.lines:

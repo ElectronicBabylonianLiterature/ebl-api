@@ -16,7 +16,7 @@ from ebl.transliteration.domain.at_line import (
     SealAtLine,
     SurfaceAtLine,
 )
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -93,7 +93,9 @@ class AtLineTransformer(Transformer):  # pyre-ignore[11]
 
     @v_args(inline=True)
     def ebl_atf_at_line__object_with_status(self, object_: ObjectData, statuses):
-        return ObjectAtLine(statuses.children, object_.object, object_.text)
+        return ObjectAtLine(
+            ObjectLabel(statuses.children, object_.object, object_.text)
+        )
 
     @v_args(inline=True)
     def ebl_atf_at_line__divisions(self, text, digit):
