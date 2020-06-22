@@ -389,10 +389,14 @@ class GraphemeSchema(BaseTokenSchema):
 
 class CompoundGraphemeSchema(BaseTokenSchema):
     value = fields.String(required=True)
+    compound_parts = fields.List(fields.String())
 
     @post_load
     def make_token(self, data, **kwargs):
-        return CompoundGrapheme.of(data["value"]).set_enclosure_type(
+        grapheme = (CompoundGrapheme.of(data["compound_parts"])
+                    if "compound_parts" in data
+                    else CompoundGrapheme.of([data["value"].strip('|')]))
+        return grapheme.set_enclosure_type(
             frozenset(data["enclosure_type"])
         ).set_erasure(data["erasure"])
 

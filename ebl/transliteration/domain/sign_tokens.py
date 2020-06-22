@@ -294,5 +294,17 @@ class Grapheme(AbstractSign):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class CompoundGrapheme(ValueToken):
-    pass
+class CompoundGrapheme(Token):
+    compound_parts: Sequence[str] = attr.ib(converter=convert_token_sequence)
+
+    @property
+    def value(self) -> str:
+        return f"|{'.'.join(self.compound_parts)}|"
+
+    @property
+    def parts(self) -> Sequence[Token]:
+        return [ValueToken.of(part) for part in self.compound_parts]
+
+    @staticmethod
+    def of(parts: Sequence[str]) -> "CompoundGrapheme":
+        return CompoundGrapheme(frozenset(), ErasureState.NONE, parts)

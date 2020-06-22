@@ -415,17 +415,18 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_cle
 
 
 def test_compound_grapheme():
-    value = "|BI.IS|"
-    compound = CompoundGrapheme.of(value)
+    compound = CompoundGrapheme.of(["BI", "IS"])
 
-    assert compound.value == value
-    assert compound.clean_value == value
-    assert compound.get_key() == f"CompoundGrapheme⁝{value}"
+    expected_value = "|BI.IS|"
+    assert compound.value == expected_value
+    assert compound.clean_value == expected_value
+    assert compound.get_key() == f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
 
     serialized = {
         "type": "CompoundGrapheme",
-        "value": value,
+        "value": expected_value,
         "enclosureType": [type.name for type in compound.enclosure_type],
+        "compound_parts": ['BI', 'IS']
     }
     assert_token_serialization(compound, serialized)
 

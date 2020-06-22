@@ -72,13 +72,13 @@ from ebl.transliteration.domain.word_tokens import (
         ("KUR(GAL)", Word.of([Logogram.of_name("KUR", sign=Grapheme.of("GAL"))]),),
         (
             "kur(|GAL|)",
-            Word.of([Reading.of_name("kur", sign=CompoundGrapheme.of("|GAL|"))],),
+            Word.of([Reading.of_name("kur", sign=CompoundGrapheme.of(["GAL"]))],),
         ),
         (
             "KUR(|GAL|)",
-            Word.of([Logogram.of_name("KUR", sign=CompoundGrapheme.of("|GAL|"))],),
+            Word.of([Logogram.of_name("KUR", sign=CompoundGrapheme.of(["GAL"]))],),
         ),
-        ("|GAL|", Word.of([CompoundGrapheme.of("|GAL|")])),
+        ("|GAL|", Word.of([CompoundGrapheme.of(["GAL"])])),
         (
             "x-ti",
             Word.of([UnclearSign.of(), Joiner.hyphen(), Reading.of_name("ti"),],),
@@ -142,7 +142,7 @@ from ebl.transliteration.domain.word_tokens import (
             ),
         ),
         ("gid₂", Word.of([Reading.of_name("gid", 2)])),
-        ("|U₄&KAM₂|", Word.of([CompoundGrapheme.of("|U₄&KAM₂|")])),
+        ("|U₄&KAM₂|", Word.of([CompoundGrapheme.of(["U₄&KAM₂"])])),
         (
             "U₄].14.KAM₂",
             Word.of(
@@ -206,7 +206,7 @@ from ebl.transliteration.domain.word_tokens import (
                 [
                     Variant.of(
                         Reading.of_name("šu"),
-                        CompoundGrapheme.of("|BI×IS|"),
+                        CompoundGrapheme.of(["BI×IS"]),
                         Logogram.of_name("BI"),
                     )
                 ],
@@ -749,7 +749,7 @@ from ebl.transliteration.domain.word_tokens import (
             "|UM×(ME.DA)|-b[i?",
             Word.of(
                 [
-                    CompoundGrapheme.of("|UM×(ME.DA)|"),
+                    CompoundGrapheme.of(["UM×(ME.DA)"]),
                     Joiner.hyphen(),
                     Reading.of(
                         (ValueToken.of("b"), BrokenAway.open(), ValueToken.of("i")),

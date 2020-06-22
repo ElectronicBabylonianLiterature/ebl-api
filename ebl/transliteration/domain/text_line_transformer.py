@@ -160,7 +160,7 @@ class SignTransformer(Transformer):  # pyre-ignore[11]
 
     @v_args(inline=True)
     def ebl_atf_text_line__compound_grapheme(self, name):
-        return CompoundGrapheme.of(name.value)
+        return CompoundGrapheme.of([name.value.strip('|')])
 
     def ebl_atf_text_line__close_broken_away(self, _):
         return BrokenAway.close()
