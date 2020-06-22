@@ -420,7 +420,8 @@ def test_compound_grapheme():
     expected_value = "|BI.IS|"
     assert compound.value == expected_value
     assert compound.clean_value == expected_value
-    assert compound.get_key() == f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
+    assert compound.get_key() ==\
+        f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
 
     serialized = {
         "type": "CompoundGrapheme",
