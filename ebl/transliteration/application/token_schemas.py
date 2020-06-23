@@ -57,18 +57,15 @@ class BaseTokenSchema(Schema):  # pyre-ignore[11]
     class Meta:
         unknown = EXCLUDE
 
+    value = fields.String(required=True)
+    clean_value = fields.String(data_key="cleanValue")
     enclosure_type = fields.List(
         NameEnum(EnclosureType), missing=list, data_key="enclosureType"
     )
-
     erasure = NameEnum(ErasureState, missing=ErasureState.NONE)
-
-    clean_value = fields.String(data_key="cleanValue")
 
 
 class ValueTokenSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return ValueToken(
@@ -77,7 +74,6 @@ class ValueTokenSchema(BaseTokenSchema):
 
 
 class LanguageShiftSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     language = NameEnum(Language, required=True)
     normalized = fields.Boolean(required=True)
 
@@ -89,7 +85,6 @@ class LanguageShiftSchema(BaseTokenSchema):
 
 
 class EnclosureSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     side = NameEnum(Side, required=True)
 
     @abstractmethod
@@ -161,24 +156,18 @@ class ErasureSchema(EnclosureSchema):
 
 
 class UnknownNumberOfSignsSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return UnknownNumberOfSigns(frozenset(data["enclosure_type"]), data["erasure"])
 
 
 class TabulationSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return Tabulation(frozenset(data["enclosure_type"]), data["erasure"])
 
 
 class CommentaryProtocolSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return CommentaryProtocol(
@@ -187,7 +176,6 @@ class CommentaryProtocolSchema(BaseTokenSchema):
 
 
 class DividerSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     divider = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
@@ -202,7 +190,6 @@ class DividerSchema(BaseTokenSchema):
 
 
 class ColumnSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     number = fields.Integer(missing=None)
 
     @post_load
@@ -213,7 +200,6 @@ class ColumnSchema(BaseTokenSchema):
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
@@ -224,7 +210,6 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
 
 class UnclearSignSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
@@ -235,7 +220,6 @@ class UnclearSignSchema(BaseTokenSchema):
 
 
 class JoinerSchema(BaseTokenSchema):
-    value = fields.String()
     enum_value = ValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
 
     @post_load
@@ -246,15 +230,12 @@ class JoinerSchema(BaseTokenSchema):
 
 
 class InWordNewlineSchema(BaseTokenSchema):
-    value = fields.String(required=True)
-
     @post_load
     def make_token(self, data, **kwargs):
         return InWordNewline(frozenset(data["enclosure_type"]), data["erasure"])
 
 
 class NamedSignSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     name = fields.String(required=True)
     name_parts = fields.List(
         fields.Nested(lambda: OneOfTokenSchema()), required=True, data_key="nameParts"
@@ -311,7 +292,6 @@ class NumberSchema(NamedSignSchema):
 
 
 class WordSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     language = NameEnum(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
@@ -336,7 +316,6 @@ class WordSchema(BaseTokenSchema):
 
 
 class LoneDeterminativeSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     language = NameEnum(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
@@ -362,7 +341,6 @@ class LoneDeterminativeSchema(BaseTokenSchema):
 
 
 class VariantSchema(BaseTokenSchema):
-    value = fields.String()
     tokens = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
 
     @post_load
@@ -373,7 +351,6 @@ class VariantSchema(BaseTokenSchema):
 
 
 class GraphemeSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     name = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnum(Flag), required=True)
@@ -388,7 +365,6 @@ class GraphemeSchema(BaseTokenSchema):
 
 
 class CompoundGraphemeSchema(BaseTokenSchema):
-    value = fields.String(required=True)
     compound_parts = fields.List(fields.String())
 
     @post_load
@@ -402,7 +378,6 @@ class CompoundGraphemeSchema(BaseTokenSchema):
 
 
 class GlossSchema(BaseTokenSchema):
-    value = fields.String()
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
 
     @abstractmethod
