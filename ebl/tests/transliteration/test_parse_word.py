@@ -79,6 +79,9 @@ from ebl.transliteration.domain.word_tokens import (
             Word.of([Logogram.of_name("KUR", sign=CompoundGrapheme.of(["GAL"]))],),
         ),
         ("|GAL|", Word.of([CompoundGrapheme.of(["GAL"])])),
+        ("|U₄&KAM₂|", Word.of([CompoundGrapheme.of(["U₄&KAM₂"])])),
+        ("|BI.IS|", Word.of([CompoundGrapheme.of(["BI", "IS"])])),
+        ("|BI×(IS.IS)|", Word.of([CompoundGrapheme.of(["BI×(IS.IS)"])])),
         (
             "x-ti",
             Word.of([UnclearSign.of(), Joiner.hyphen(), Reading.of_name("ti"),],),
@@ -142,7 +145,6 @@ from ebl.transliteration.domain.word_tokens import (
             ),
         ),
         ("gid₂", Word.of([Reading.of_name("gid", 2)])),
-        ("|U₄&KAM₂|", Word.of([CompoundGrapheme.of(["U₄&KAM₂"])])),
         (
             "U₄].14.KAM₂",
             Word.of(
@@ -800,7 +802,7 @@ from ebl.transliteration.domain.word_tokens import (
         ),
     ],
 )
-def test_word(atf, expected):
+def test_word(atf, expected) -> None:
     assert parse_word(atf) == expected
 
 
@@ -888,12 +890,12 @@ def test_word(atf, expected):
         ),
     ],
 )
-def test_lone_determinative(atf, expected):
+def test_lone_determinative(atf, expected) -> None:
     assert parse_word(atf) == expected
 
 
 @pytest.mark.parametrize("atf", ["{udu}?"])
-def test_invalid_lone_determinative(atf):
+def test_invalid_lone_determinative(atf) -> None:
     with pytest.raises(UnexpectedInput):
         parse_word(atf)
 
@@ -919,6 +921,6 @@ def test_invalid_lone_determinative(atf):
         "|KUR.[KUR|",
     ],
 )
-def test_invalid(invalid_atf):
+def test_invalid(invalid_atf) -> None:
     with pytest.raises((UnexpectedInput, ParseError)):
         parse_word(invalid_atf)
