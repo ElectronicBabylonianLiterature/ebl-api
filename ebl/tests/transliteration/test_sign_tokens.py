@@ -59,7 +59,7 @@ def test_unidentified_sign() -> None:
     assert_token_serialization(sign, serialized)
 
 
-def test_unidentified_sign_with_flags():
+def test_unidentified_sign_with_flags() -> None:
     flags = [atf.Flag.DAMAGE]
     sign = UnidentifiedSign.of(flags)
 
@@ -79,7 +79,7 @@ def test_unidentified_sign_with_flags():
     assert_token_serialization(sign, serialized)
 
 
-def test_unclear_sign():
+def test_unclear_sign() -> None:
     sign = UnclearSign.of()
 
     expected_value = "x"
@@ -303,7 +303,7 @@ def test_logogram(
     expected_value,
     expected_clean_value,
     expected_name,
-):
+) -> None:
     logogram = Logogram.of(name_parts, sub_index, modifiers, flags, sign, surrogate)
 
     expected_parts = (*name_parts, sign) if sign else name_parts
@@ -325,7 +325,7 @@ def test_logogram(
         "type": "Logogram",
         "value": expected_value,
         "name": expected_name,
-        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
@@ -381,7 +381,7 @@ def test_logogram(
     ],
 )
 def test_number(name_parts, modifiers, flags, sign, expected_value, expected_clean_value,
-                expected_name):
+                expected_name) -> None:
     number = Number.of(name_parts, modifiers, flags, sign)
 
     expected_sub_index = 1
@@ -404,7 +404,7 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_cle
         "type": "Number",
         "value": expected_value,
         "name": expected_name,
-        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
@@ -414,7 +414,7 @@ def test_number(name_parts, modifiers, flags, sign, expected_value, expected_cle
     assert_token_serialization(number, serialized)
 
 
-def test_compound_grapheme():
+def test_compound_grapheme() -> None:
     compound = CompoundGrapheme.of(["BI", "IS"])
 
     expected_value = "|BI.IS|"
@@ -444,7 +444,7 @@ def test_compound_grapheme():
         ("KUR", ["@v"], [atf.Flag.CORRECTION], "KUR@v!", "KUR@v"),
     ],
 )
-def test_grapheme(name, modifiers, flags, expected_value, expected_clean_value):
+def test_grapheme(name, modifiers, flags, expected_value, expected_clean_value) -> None:
     grapheme = Grapheme.of(name, modifiers, flags)
 
     assert grapheme.name == name
