@@ -86,4 +86,4 @@ class WordSchema(Schema):  # pyre-ignore[11]
     pos = fields.List(fields.String(), required=True)
     guideWord = fields.String(validate=Length(1), required=True)
     oraccWords = fields.Nested(OraccWordSchema, required=True, many=True)
-    origin = fields.String()
+    origin = fields.String(required=True)
