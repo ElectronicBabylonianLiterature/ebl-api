@@ -220,7 +220,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     Word.of(
                         [
                             Variant.of(
-                                Reading.of_name("šu"), CompoundGrapheme.of("|BI×IS|")
+                                Reading.of_name("šu"), CompoundGrapheme.of(["BI×IS"])
                             )
                         ],
                     ),
@@ -408,7 +408,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     Word.of(
                         [
                             Variant.of(
-                                Reading.of_name("šu"), CompoundGrapheme.of("|BI×IS|")
+                                Reading.of_name("šu"), CompoundGrapheme.of(["BI×IS"])
                             )
                         ],
                     ),

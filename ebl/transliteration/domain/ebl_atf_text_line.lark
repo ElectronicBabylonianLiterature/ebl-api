@@ -178,12 +178,13 @@ LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "
                    | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
 
 ?any_grapheme: compound_grapheme | grapheme
-compound_grapheme: COMPOUND_GRAPHEME
-COMPOUND_GRAPHEME: "|" SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)* "|"
-SUB_COMPOUND: "(" COMPOUND_PART (COMPOUND_OPERATOR COMPOUND_PART)* ")"
+compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
+COMPOUND_FRAGMENT: SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)*
+SUB_COMPOUND: "(" COMPOUND_PART ((COMPOUND_OPERATOR | COMPOUND_OPERATOR_DOT) COMPOUND_PART)* ")"
             | COMPOUND_PART
 COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
-COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+"
+COMPOUND_OPERATOR_DOT: "." 
+COMPOUND_OPERATOR: "×" | "%" | "&" | "+"
 
 grapheme: GRAPHEME_NAME modifiers flags
 GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
