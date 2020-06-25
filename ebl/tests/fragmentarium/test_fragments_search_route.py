@@ -31,11 +31,15 @@ def test_search_fragment_not_found(client):
     assert result.json == []
 
 
-def test_search_references(client, fragmentarium):
+def test_search_references(client, fragmentarium, bibliography, bibliography_entry, user):
+    bib_1 = bibliography_entry['pages'] = "254"
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(pages="254"), ReferenceFactory.build())
+        references=(ReferenceFactory.build(id=bibliography_entry['id'], pages="254"), ReferenceFactory.build(id='RN.0'))
     )
     fragmentarium.create(fragment)
+    bibliography.create(bibliography_entry, user)
+    bib_2 = bibliography_entry['id'] = 'RN.0'
+    bibliography.create(bibliography_entry, user)
     reference_id = fragment.references[0].id
     reference_pages = fragment.references[0].pages
     result = client.simulate_get(f"/fragments", params={
@@ -43,7 +47,7 @@ def test_search_references(client, fragmentarium):
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [expected_fragment_info_dto(fragment)]
+    assert result.json == {fragment.number:[bibliography_entry]}
     assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 

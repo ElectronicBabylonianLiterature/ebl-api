@@ -1,5 +1,6 @@
 import falcon  # pyre-ignore
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.context import Context
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
@@ -32,6 +33,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
         context.photo_repository,
         context.folio_repository,
     )
+
     updater = context.get_fragment_updater()
     annotations_service = AnnotationsService(
         context.annotations_repository, context.changelog
@@ -40,7 +42,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
     fragment_search = FragmentSearch(
-        fragmentarium, finder, context.get_transliteration_query_factory()
+        fragmentarium, finder, context.get_bibliography(), context.get_transliteration_query_factory()
     )
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)

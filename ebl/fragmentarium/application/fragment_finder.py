@@ -37,7 +37,7 @@ class FragmentFinder:
             )
         )
 
-    def search_references(self, reference_id, reference_pages: str) -> List[FragmentInfo]:
+    def search_references(self, reference_id: str, reference_pages: str) -> List[FragmentInfo]:
         return list(
             map(
                 FragmentInfo.of,

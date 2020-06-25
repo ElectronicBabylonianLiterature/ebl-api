@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Sequence
+from typing import Optional, Sequence, List
 
 from pydash import uniq_with  # pyre-ignore
 
@@ -8,6 +8,7 @@ from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
+from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
@@ -26,6 +27,16 @@ class Bibliography:
 
     def find(self, id_: str):
         return self._repository.query_by_id(id_)
+
+    def find_from_list(self, fragmentInfos : List[FragmentInfo]):
+        fragment_with_bib_entries = {}
+        for i in fragmentInfos:
+            bibliography_entries = []
+            for j in i.references:
+                    bibliography_entries.append(self.find(j.id))
+            fragment_with_bib_entries[i.number] = bibliography_entries
+        return fragment_with_bib_entries
+
 
     def update(self, entry, user: User):
         old_entry = self._repository.query_by_id(entry["id"])

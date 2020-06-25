@@ -1,6 +1,7 @@
 import falcon  # pyre-ignore
 import pydash  # pyre-ignore
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dispatcher import create_dispatcher
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
@@ -19,11 +20,13 @@ class FragmentSearch:
         self,
         fragmentarium: Fragmentarium,
         finder: FragmentFinder,
+        bibliography: Bibliography,
         transliteration_query_factory: TransliterationQueryFactory,
     ):
+        self._bibliography = bibliography
         self._dispatch = create_dispatcher(
             {
-                "reference": lambda query: finder.search_references(*query.values()),
+                "reference": lambda query: self._bibliography.find_from_list(finder.search_references(*query.values())),
                 "number": finder.search,
                 "random": lambda _: finder.find_random(),
                 "interesting": lambda _: finder.find_interesting(),
