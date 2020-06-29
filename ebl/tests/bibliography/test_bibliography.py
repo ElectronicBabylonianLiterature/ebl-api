@@ -69,6 +69,7 @@ def test_find(bibliography, bibliography_repository, when, bibliography_entry):
     )
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
 
+
 def test_find_from_list(bibliography, bibliography_repository, when, bibliography_entry):
     fragment_1 = FragmentInfo.of(FragmentFactory.build(number='K.1', references=(ReferenceFactory(id='RN.0'),)))
     fragment_2 = FragmentInfo.of(FragmentFactory.build(number='K.2', references=(ReferenceFactory(id='RN.1'), ReferenceFactory(id='RN.2'))))

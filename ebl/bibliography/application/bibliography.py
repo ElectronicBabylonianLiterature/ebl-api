@@ -1,6 +1,7 @@
 import re
 from typing import Optional, Sequence, List
 
+from attr import attr
 from pydash import uniq_with  # pyre-ignore
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
@@ -29,14 +30,10 @@ class Bibliography:
         return self._repository.query_by_id(id_)
 
     def find_from_list(self, fragmentInfos : List[FragmentInfo]):
-        fragment_with_bib_entries = {}
         for i in fragmentInfos:
-            bibliography_entries = []
             for j in i.references:
-                    bibliography_entries.append(self.find(j.id))
-            fragment_with_bib_entries[i.number] = bibliography_entries
-        return fragment_with_bib_entries
-
+                j.set_document({'cslData': self.find(j.id)})
+        return fragmentInfos
 
     def update(self, entry, user: User):
         old_entry = self._repository.query_by_id(entry["id"])

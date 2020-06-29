@@ -1,3 +1,5 @@
+import json
+
 import falcon  # pyre-ignore
 import pydash  # pyre-ignore
 
@@ -9,6 +11,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
+from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.users.web.require_scope import require_scope
 
 

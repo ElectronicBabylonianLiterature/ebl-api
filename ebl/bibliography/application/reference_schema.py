@@ -13,7 +13,7 @@ class ReferenceSchema(Schema):  # pyre-ignore[11]
     pages = fields.String(required=True)
     notes = fields.String(required=True)
     lines_cited = fields.List(fields.String(), required=True, data_key="linesCited")
-    document = fields.Mapping(missing=None, load_only=True)
+    document = fields.Mapping(missing=None)
 
     @post_load
     def make_reference(self, data, **kwargs) -> Reference:

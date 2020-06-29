@@ -1,3 +1,5 @@
+import json
+
 import falcon  # pyre-ignore
 
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
@@ -32,14 +34,18 @@ def test_search_fragment_not_found(client):
 
 
 def test_search_references(client, fragmentarium, bibliography, bibliography_entry, user):
-    bib_1 = bibliography_entry['pages'] = "254"
+    bib_entry_1 = bibliography_entry.copy()
+    bib_entry_1['id'] = 'RN.0'
+    bib_entry_1['pages'] = "254"
+
+    bib_entry_2 = bibliography_entry.copy()
+    bib_entry_2['id'] = 'RN.1'
+    bibliography.create(bib_entry_1, user)
+    bibliography.create(bib_entry_2, user)
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(id=bibliography_entry['id'], pages="254"), ReferenceFactory.build(id='RN.0'))
+        references=(ReferenceFactory.build(id='RN.0', pages="254"), ReferenceFactory.build(id='RN.1'))
     )
     fragmentarium.create(fragment)
-    bibliography.create(bibliography_entry, user)
-    bib_2 = bibliography_entry['id'] = 'RN.0'
-    bibliography.create(bibliography_entry, user)
     reference_id = fragment.references[0].id
     reference_pages = fragment.references[0].pages
     result = client.simulate_get(f"/fragments", params={
@@ -47,7 +53,10 @@ def test_search_references(client, fragmentarium, bibliography, bibliography_ent
     })
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == {fragment.number:[bibliography_entry]}
+    fragment_result = FragmentFactory.build(
+        references=(ReferenceFactory.build(id='RN.0', pages="254", document=bib_entry_1), ReferenceFactory.build(id='RN.1', document=bib_entry_2))
+    )
+    assert result.json == [FragmentInfo.of(fragment_result)]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
