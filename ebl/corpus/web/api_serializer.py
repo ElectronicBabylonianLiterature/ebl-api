@@ -15,11 +15,11 @@ from ebl.corpus.domain.reconstructed_text import (
     ReconstructionToken,
 )
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.text_line import TextLine
 
 
 class ApiSerializer(TextSerializer):

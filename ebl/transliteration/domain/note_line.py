@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 import re
+from abc import ABC, abstractmethod
 from typing import Iterable, Sequence, Tuple
 
 import attr
@@ -12,7 +12,6 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import Token, ValueToken
-
 
 SPECIAL_CHARACTERS = re.compile(r"[@{}\\]")
 

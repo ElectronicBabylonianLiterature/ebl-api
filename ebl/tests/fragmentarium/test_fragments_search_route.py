@@ -1,4 +1,4 @@
-import json
+import copy
 
 import falcon  # pyre-ignore
 
@@ -43,7 +43,9 @@ def test_search_references(client, fragmentarium, bibliography, bibliography_ent
     bibliography.create(bib_entry_1, user)
     bibliography.create(bib_entry_2, user)
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(id='RN.0', pages="254"), ReferenceFactory.build(id='RN.1'))
+        references=(
+            ReferenceFactory.build(id='RN.0', pages="254"),
+            ReferenceFactory.build(id='RN.1'))
     )
     fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
@@ -53,10 +55,10 @@ def test_search_references(client, fragmentarium, bibliography, bibliography_ent
     })
 
     assert result.status == falcon.HTTP_OK
-    fragment_result = FragmentFactory.build(
-        references=(ReferenceFactory.build(id='RN.0', pages="254", document=bib_entry_1), ReferenceFactory.build(id='RN.1', document=bib_entry_2))
-    )
-    assert result.json == [FragmentInfo.of(fragment_result)]
+    fragment_result = copy.deepcopy(fragment)
+    fragment_result.references[0].set_document(bib_entry_1)
+    fragment_result.references[1].set_document(bib_entry_2)
+    assert result.json == FragmentInfoSchema(many=True).dump([FragmentInfo.of(fragment_result)])
     assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 

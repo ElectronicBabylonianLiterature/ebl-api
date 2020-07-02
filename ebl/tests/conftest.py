@@ -8,7 +8,7 @@ import mongomock  # pyre-ignore
 import pytest  # pyre-ignore
 from dictdiffer import diff  # pyre-ignore
 from falcon import testing  # pyre-ignore
-from falcon_auth import NoneAuthBackend   # pyre-ignore
+from falcon_auth import NoneAuthBackend  # pyre-ignore
 
 import ebl.app
 import ebl.context

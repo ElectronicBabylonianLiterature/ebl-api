@@ -1,5 +1,5 @@
-from typing import List, Sequence, Tuple
 from itertools import chain
+from typing import List, Sequence, Tuple
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Atf

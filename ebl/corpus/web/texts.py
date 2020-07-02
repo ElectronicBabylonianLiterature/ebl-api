@@ -14,7 +14,6 @@ from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.corpus.web.text_utils import create_text_id, serialize_public_text
 from ebl.users.web.require_scope import require_scope
 
-
 REFERENCE_DTO_SCHEMA = {
     "type": "object",
     "properties": {

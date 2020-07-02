@@ -4,6 +4,7 @@ import ebl.transliteration.domain.atf as atf
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
@@ -23,7 +24,6 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.word_tokens import (
     DEFAULT_NORMALIZED,
     InWordNewline,

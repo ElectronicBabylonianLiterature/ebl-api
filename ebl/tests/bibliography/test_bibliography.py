@@ -1,6 +1,9 @@
+import copy
+
 import pydash  # pyre-ignore
 import pytest  # pyre-ignore
 from mockito import verify  # pyre-ignore
+
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory, \
@@ -71,9 +74,21 @@ def test_find(bibliography, bibliography_repository, when, bibliography_entry):
 
 
 def test_find_from_list(bibliography, bibliography_repository, when, bibliography_entry):
-    fragment_1 = FragmentInfo.of(FragmentFactory.build(number='K.1', references=(ReferenceFactory(id='RN.0'),)))
-    fragment_2 = FragmentInfo.of(FragmentFactory.build(number='K.2', references=(ReferenceFactory(id='RN.1'), ReferenceFactory(id='RN.2'))))
-    fragment_infos = [fragment_1, fragment_2]
+    fragment_1 = FragmentInfo.of(FragmentFactory.build(
+        number='K.1',
+        references=(ReferenceFactory(id='RN.0'),))
+    )
+    fragment_2 = FragmentInfo.of(FragmentFactory.build(
+        number='K.2',
+        references=(ReferenceFactory(id='RN.1'), ReferenceFactory(id='RN.2')))
+    )
+
+    expected_fragment_1 = copy.deepcopy(fragment_1)
+    expected_fragment_1.references[0].set_document(bibliography_entry)
+    expected_fragment_2 = copy.deepcopy(fragment_2)
+    expected_fragment_2.references[0].set_document(bibliography_entry)
+    expected_fragment_2.references[1].set_document(bibliography_entry)
+
     (
         when(bibliography_repository)
         .query_by_id("RN.0")
@@ -90,10 +105,9 @@ def test_find_from_list(bibliography, bibliography_repository, when, bibliograph
         .thenReturn(bibliography_entry)
     )
 
-    assert bibliography.find_from_list(fragment_infos) == {'K.1': [bibliography_entry], 'K.2': [bibliography_entry, bibliography_entry]}
-
-
-
+    assert bibliography.inject_document_in_references([fragment_1, fragment_2]) == [
+        expected_fragment_1, expected_fragment_2
+    ]
 
 
 def test_create(bibliography, bibliography_repository, bibliography_entry, user,

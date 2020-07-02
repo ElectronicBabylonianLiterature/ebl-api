@@ -1,5 +1,3 @@
-import json
-
 import falcon  # pyre-ignore
 import pydash  # pyre-ignore
 
@@ -11,9 +9,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.users.web.require_scope import require_scope
-
 
 CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
 
@@ -29,7 +25,8 @@ class FragmentSearch:
         self._bibliography = bibliography
         self._dispatch = create_dispatcher(
             {
-                "reference": lambda query: self._bibliography.find_from_list(finder.search_references(*query.values())),
+                "reference": lambda query: self._bibliography.inject_document_in_references(
+                    finder.search_references(*query.values())),
                 "number": finder.search,
                 "random": lambda _: finder.find_random(),
                 "interesting": lambda _: finder.find_interesting(),

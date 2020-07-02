@@ -24,4 +24,3 @@ class Reference:
 
     def set_document(self, new_document: dict) -> None:
         self.document = new_document
-
