@@ -1,4 +1,3 @@
-import re
 import unicodedata
 from enum import Enum
 import re
