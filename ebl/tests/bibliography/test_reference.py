@@ -46,6 +46,7 @@ def test_defaults() -> None:
     assert reference.notes == ""
     assert reference.lines_cited == tuple()
     assert reference.document is None
+    pass
 
 
 def test_to_dict(bibliography_entry) -> None:
@@ -55,6 +56,7 @@ def test_to_dict(bibliography_entry) -> None:
     assert ReferenceSchema().dump(reference_with_document) == {
         **SERIALIZED_REFERENCE,
         "id": reference_with_document.id,
+        "document": bibliography_entry
     }
 
 
