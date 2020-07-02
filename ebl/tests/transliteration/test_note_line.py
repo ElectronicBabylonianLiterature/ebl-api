@@ -11,6 +11,7 @@ from ebl.transliteration.domain.tokens import (EnclosureType, ErasureState,
                                                ValueToken)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
+
 TRANSLITERATION = (
     Word.of([Reading.of_name("bu")]),
     LanguageShift.of("%es"),

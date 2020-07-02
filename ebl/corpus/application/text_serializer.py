@@ -1,7 +1,7 @@
 from typing import Optional
 
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, \
-    ReferenceSchema
+from ebl.errors import Defect
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
 from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
 from ebl.corpus.domain.enums import (
     Classification,
@@ -19,7 +19,6 @@ from ebl.corpus.domain.text import (
     Text,
     TextVisitor,
 )
-from ebl.errors import Defect
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
 

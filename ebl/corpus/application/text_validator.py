@@ -1,5 +1,5 @@
-from collections import Counter
 from typing import Optional
+from collections import Counter
 
 from ebl.corpus.domain.text import (
     Chapter,

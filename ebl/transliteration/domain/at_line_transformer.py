@@ -1,6 +1,7 @@
 from typing import List
 
 import attr
+
 from lark import Token  # pyre-ignore
 from lark.visitors import Transformer, v_args
 

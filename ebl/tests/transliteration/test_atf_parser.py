@@ -1,8 +1,7 @@
 from typing import List
 
 import pytest  # pyre-ignore
-from hamcrest import assert_that, contains_exactly, has_entries, \
-    starts_with  # pyre-ignore
+from hamcrest import assert_that, contains_exactly, has_entries, starts_with  # pyre-ignore
 
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf

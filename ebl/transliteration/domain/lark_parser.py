@@ -2,8 +2,8 @@ from collections import Counter
 from itertools import dropwhile
 from typing import Callable, Mapping, Sequence, Type
 
-from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark  # pyre-ignore
+from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.visitors import v_args
 
 from ebl.errors import DataError

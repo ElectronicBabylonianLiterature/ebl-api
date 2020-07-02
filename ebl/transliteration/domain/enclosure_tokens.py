@@ -8,6 +8,7 @@ from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
+
 E = TypeVar("E", bound="Enclosure")
 
 

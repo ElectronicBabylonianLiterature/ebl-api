@@ -13,6 +13,7 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token
 
+
 L = TypeVar("L", "TextLine", "Line")
 T = TypeVar("T")
 
