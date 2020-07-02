@@ -1,4 +1,4 @@
-from typing import Callable, Mapping, Tuple, TypeVar, Any
+from typing import Callable, Mapping, TypeVar, Union, Tuple, Any
 
 from ebl.errors import DataError
 
@@ -12,23 +12,23 @@ Command = Callable[[str], T]
 Dispatcher = Callable[[dict], T]
 
 
-def _check_pages(pages: str) -> None:
-    try:
-        int(pages)
-    except ValueError:
-        raise DataError(f'Pages "{pages}" not numeric.')
+def _check_pages(pages: Union[str, None]) -> str:
+    if pages:
+        try:
+            int(pages)
+            return pages
+        except ValueError:
+            raise DataError(f'Pages "{pages}" not numeric.')
+    else:
+        return ""
 
 
 def get_parameter(parameters: dict) -> Tuple[str, Any]:
     if len(parameters) == 1:
         return next(iter(parameters.items()))
     elif len(parameters) == 2:
-        if "pages" in parameters:
-            if parameters["pages"] == "":
-                parameters["pages"] = None
-            else:
-                _check_pages(parameters["pages"])
-        return ("reference", parameters)
+        parameters["pages"] = _check_pages(parameters.get("pages"))
+        return "reference", parameters
     else:
         raise DispatchError("Invalid number of parameters.")
 
