@@ -342,6 +342,7 @@ def word():
         "pos": ["V"],
         "guideWord": "meaning",
         "oraccWords": [{"lemma": "oracc lemma", "guideWord": "oracc meaning"}],
+        "origin": "test",
     }
 
 

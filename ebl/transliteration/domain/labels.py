@@ -7,7 +7,7 @@ import attr
 import roman  # pyre-ignore
 from parsy import char_from, regex, seq, string_from  # pyre-ignore
 
-from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Object, Status, Surface
 
 
 class DuplicateStatusError(ValueError):
@@ -24,11 +24,15 @@ class LabelVisitor(ABC):
         ...
 
     @abstractmethod
+    def visit_object_label(self, label: "ObjectLabel") -> "LabelVisitor":
+        ...
+
+    @abstractmethod
     def visit_line_number_label(self, label: "LineNumberLabel") -> "LabelVisitor":
         ...
 
 
-def no_duplicate_status(_instance, _attribute, value):
+def no_duplicate_status(_instance, _attribute, value) -> None:
     if any(count > 1 for count in Counter(value).values()):
         raise DuplicateStatusError(f'Duplicate status in "{value}".')
 
@@ -53,7 +57,7 @@ class Label(ABC):
 
     @property
     @abstractmethod
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         ...
 
     @property
@@ -62,7 +66,7 @@ class Label(ABC):
         ...
 
     @property
-    def _status_string(self) -> str:
+    def status_string(self) -> str:
         return "".join([status.value for status in self.status])
 
     @abstractmethod
@@ -70,10 +74,10 @@ class Label(ABC):
         ...
 
     def to_value(self) -> str:
-        return f"{self._label}{self._status_string}"
+        return f"{self.abbreviation}{self.status_string}"
 
     def to_atf(self) -> str:
-        return f"{self._atf}{self._status_string}"
+        return f"{self._atf}{self.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -90,7 +94,7 @@ class ColumnLabel(Label):
         return ColumnLabel(status, column)  # pyre-fixme[6]
 
     @property
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         return roman.toRoman(self.column).lower()
 
     @property
@@ -108,14 +112,14 @@ class SurfaceLabel(Label):
     text: str = attr.ib(default="")
 
     @text.validator
-    def _check_text(self, attribute, value):
+    def _check_text(self, attribute, value) -> None:
         if value and self.surface not in [
             Surface.SURFACE,
             Surface.FACE,
             Surface.EDGE,
         ]:
             raise ValueError(
-                "text can only be initialized if atf.surface is 'SURFACE' or 'EDGE' or 'FACE'"
+                "Non-empty text is only allowed for SURFACE, EDGE or FACE."
             )
 
     @staticmethod
@@ -125,8 +129,12 @@ class SurfaceLabel(Label):
         return SurfaceLabel(status, surface, text)  # pyre-fixme[6]
 
     @property
-    def _label(self) -> str:
-        return self.surface.label or ""
+    def abbreviation(self) -> str:
+        return (
+            self.text or self.surface.label or ""
+            if self.surface == Surface.EDGE
+            else self.surface.label or self.text
+        )
 
     @property
     def _atf(self) -> str:
@@ -137,13 +145,45 @@ class SurfaceLabel(Label):
 
     def to_atf(self) -> str:
         text = f" {self.text}" if self.text else ""
-        return f"{self._atf}{self._status_string}{text}"
+        return f"{self._atf}{self.status_string}{text}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ObjectLabel(Label):
+
+    object: Object
+    text: str = attr.ib(default="")
+
+    @text.validator
+    def _check_text(self, attribute, value) -> None:
+        if value and self.object not in [
+            Object.OBJECT,
+            Object.FRAGMENT,
+        ]:
+            raise ValueError(
+                "Non-empty text is only allowed for OBJECT and FRAGMENT."
+            )
+
+    @property
+    def abbreviation(self) -> str:
+        return self.text or self.object.value
+
+    @property
+    def _atf(self) -> str:
+        return f"@{self.object.value}"
+
+    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+        return visitor.visit_object_label(self)
+
+    def to_atf(self) -> str:
+        text = f" {self.text}" if self.text else ""
+        return f"{self._atf}{self.status_string}{text}"
 
 
 LINE_NUMBER_EXPRESSION = r"[^\s]+"
 
 
-def is_sequence_of_non_space_characters(_instance, _attribute, value):
+def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
     if not re.fullmatch(LINE_NUMBER_EXPRESSION, value):
         raise ValueError(
             f'Line number "{value}" is not a sequence of ' "non-space characters."
@@ -155,7 +195,7 @@ class LineNumberLabel(Label):
 
     number: str = attr.ib(validator=is_sequence_of_non_space_characters)
 
-    def __init__(self, number: str):
+    def __init__(self, number: str) -> None:
         super().__init__(tuple())
         object.__setattr__(self, "number", number)
         attr.validate(self)
@@ -165,7 +205,7 @@ class LineNumberLabel(Label):
         return LineNumberLabel(atf[:-1])
 
     @property
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         return self.number
 
     @property

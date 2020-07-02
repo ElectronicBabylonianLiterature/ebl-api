@@ -148,7 +148,7 @@ can sometimes be omitted.
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
 | -------------|------------|--------------|-----------|-------|
 | Tabulation   | `($___$)` | No | No | |
-| Column       | `&` or `&` followed by numbers | No | No | |
+| Column       | `&` or `&` followed by numbers | No | No | Single `&` is a column separator. `&` followed by a number means that the following column spans the number of columns. If the first column spans multiple columns `&`+number can be put in the beginning of the line. If `&` is at the beginning the first column will be empty. |
 | Divider      | `\|`, `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | See  Commentary Protocols below. |
 | Shift | `%` followed by one or more word characters | No | No | See Shifts below for a list of supported codes. |

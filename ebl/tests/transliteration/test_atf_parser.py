@@ -302,7 +302,7 @@ def test_parser_version(parser, version):
             "1. |GAL|",
             [
                 TextLine.of_iterable(
-                    LineNumber(1), (Word.of([CompoundGrapheme.of("|GAL|")]),),
+                    LineNumber(1), (Word.of([CompoundGrapheme.of(["GAL"])]),),
                 )
             ],
         ),
