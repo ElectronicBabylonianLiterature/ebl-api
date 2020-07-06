@@ -1,6 +1,7 @@
 import copy
 
 import falcon  # pyre-ignore
+import pytest  # pyre-ignore
 
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
@@ -149,15 +150,17 @@ def test_search_fragment_no_query(client):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-def test_search_too_many_params(client):
-    params = {"random": True, "interesting": True, "page": "25"}
-    result = client.simulate_get(f"/fragments", params=params)
-
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-
-def test_search_invalid_param(client):
-    params = {"this_param": "is wrong"}
-    result = client.simulate_get(f"/fragments", params=params)
-
+@pytest.mark.parametrize(
+    "parameters", [
+        {},
+        {"random": True, "interesting": True},
+        {"random": True, "interesting": True, "pages": "254"},
+        {"this_param": "is wrong"},
+        {"invalid": "parameter"},
+        {"a": "a", "b": "b"},
+        {"a": "a", "b": "b", "c": "c"}
+    ]
+)
+def test_search_invalid_params(client, parameters):
+    result = client.simulate_get(f"/fragments", params=parameters)
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

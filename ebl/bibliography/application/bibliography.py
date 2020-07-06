@@ -29,9 +29,9 @@ class Bibliography:
         return self._repository.query_by_id(id_)
 
     def inject_document_in_references(self, fragmentInfos : List[FragmentInfo]):
-        for i in fragmentInfos:
-            for j in i.references:
-                j.set_document(self.find(j.id))
+        for fragmentInfo in fragmentInfos:
+            for reference in fragmentInfo.references:
+                reference.set_document(self.find(reference.id))
         return fragmentInfos
 
     def update(self, entry, user: User):

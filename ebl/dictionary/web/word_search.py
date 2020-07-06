@@ -7,7 +7,8 @@ from ebl.users.web.require_scope import require_scope
 class WordSearch:
     def __init__(self, dictionary):
         self._dispatch = create_dispatcher(
-            {"query": dictionary.search, "lemma": dictionary.search_lemma,}
+            {"query": lambda x: dictionary.search(*x),
+             "lemma": lambda x: dictionary.search_lemma(*x), }
         )
 
     @falcon.before(require_scope, "read:words")

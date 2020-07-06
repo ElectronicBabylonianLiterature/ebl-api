@@ -1,8 +1,10 @@
+from typing import Union
+
 import falcon  # pyre-ignore
-import pydash  # pyre-ignore
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dispatcher import create_dispatcher
+from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
@@ -25,18 +27,29 @@ class FragmentSearch:
         self._bibliography = bibliography
         self._dispatch = create_dispatcher(
             {
-                "reference": lambda query: self._bibliography.inject_document_in_references(
-                    finder.search_references(*query.values())),
-                "number": finder.search,
+                "id+pages": lambda x: self._bibliography.inject_document_in_references(
+                    finder.search_references(x[0], self._validate_pages(x[1]))),
+                "number": lambda x: finder.search(*x),
                 "random": lambda _: finder.find_random(),
                 "interesting": lambda _: finder.find_interesting(),
                 "latest": lambda _: fragmentarium.find_latest(),
                 "needsRevision": lambda _: fragmentarium.find_needs_revision(),
-                "transliteration": pydash.flow(
-                    transliteration_query_factory.create, finder.search_transliteration,
+                "transliteration": lambda x: finder.search_transliteration(
+                    transliteration_query_factory.create(*x)
                 ),
             }
         )
+
+    @staticmethod
+    def _validate_pages(pages: Union[str, None]) -> str:
+        if pages:
+            try:
+                int(pages)
+                return pages
+            except ValueError:
+                raise DataError(f'Pages "{pages}" not numeric.')
+        else:
+            return ""
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]

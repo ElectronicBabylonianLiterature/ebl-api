@@ -2,17 +2,23 @@ import pytest  # pyre-ignore
 
 from ebl.dispatcher import DispatchError, create_dispatcher
 
-COMMANDS = {"a": lambda value: f"a-{value}", "b": lambda value: f"b-{value}"}
+COMMANDS = {
+    "a": lambda value: "a_" + "-".join(value),
+    "b": lambda value: "b_" + "-".join(value),
+    "a+b": lambda value: "a&b_" + "-".join(value),
+}
 DISPATCH = create_dispatcher(COMMANDS)
 
 
 @pytest.mark.parametrize(
-    "parameter,command",
-    [(parameter, command) for parameter, command in COMMANDS.items()],
+    "parameter, results", [
+        ({"a": "value"}, "a_value"),
+        ({"b": "value"}, "b_value"),
+        ({"a": "value1", "b": "value2"}, "a&b_value1-value2")
+    ]
 )
-def test_valid_params(parameter, command):
-    value = "value"
-    assert DISPATCH({parameter: value}) == command(value)
+def test_valid_params(parameter, results):
+    assert DISPATCH(parameter) == results
 
 
 @pytest.mark.parametrize(

@@ -13,7 +13,7 @@ class ReferenceType(Enum):
     PHOTO = auto()
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class Reference:
     id: BibliographyId
     type: ReferenceType
@@ -23,4 +23,4 @@ class Reference:
     document: Optional[dict] = None
 
     def set_document(self, new_document: dict) -> None:
-        self.document = new_document
+        object.__setattr__(self, "document", new_document)

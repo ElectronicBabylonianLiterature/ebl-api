@@ -1,6 +1,4 @@
-from typing import Callable, Mapping, TypeVar, Union, Tuple, Any
-
-from ebl.errors import DataError
+from typing import Callable, Mapping, TypeVar, Tuple, Dict, Sequence
 
 
 class DispatchError(Exception):
@@ -8,29 +6,14 @@ class DispatchError(Exception):
 
 
 T = TypeVar("T")
-Command = Callable[[str], T]
+Command = Callable[[Sequence[str]], T]
 Dispatcher = Callable[[dict], T]
 
 
-def _check_pages(pages: Union[str, None]) -> str:
-    if pages:
-        try:
-            int(pages)
-            return pages
-        except ValueError:
-            raise DataError(f'Pages "{pages}" not numeric.')
-    else:
-        return ""
-
-
-def get_parameter(parameters: dict) -> Tuple[str, Any]:
-    if len(parameters) == 1:
-        return next(iter(parameters.items()))
-    elif len(parameters) == 2:
-        parameters["pages"] = _check_pages(parameters.get("pages"))
-        return "reference", parameters
-    else:
-        raise DispatchError("Invalid number of parameters.")
+def get_parameter(parameters: Dict[str, str]) -> Tuple[str, Sequence[str]]:
+    parameter = "+".join(parameters.keys())
+    values = tuple(parameters.values())
+    return parameter, values
 
 
 def create_dispatcher(commands: Mapping[str, Command]) -> Dispatcher:
@@ -40,7 +23,7 @@ def create_dispatcher(commands: Mapping[str, Command]) -> Dispatcher:
         except KeyError:
             raise DispatchError(f"Invalid parameter {parameter}.")
 
-    def dispatch(parameters: dict) -> T:
+    def dispatch(parameters: Dict[str, str]) -> T:
         parameter, value = get_parameter(parameters)
         return get_command(parameter)(value)
 
