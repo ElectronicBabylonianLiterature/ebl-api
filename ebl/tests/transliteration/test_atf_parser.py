@@ -69,20 +69,20 @@ def test_parser_version(parser, version):
         (
             "#first\n\n#second",
             [
-                ControlLine.of_single("#", ValueToken.of("first")),
+                ControlLine("#", "first"),
                 EmptyLine(),
-                ControlLine.of_single("#", ValueToken.of("second")),
+                ControlLine("#", "second"),
             ],
         ),
         (
             "#first\n \n#second",
             [
-                ControlLine.of_single("#", ValueToken.of("first")),
+                ControlLine("#", "first"),
                 EmptyLine(),
-                ControlLine.of_single("#", ValueToken.of("second")),
+                ControlLine("#", "second"),
             ],
         ),
-        ("&K11111", [ControlLine.of_single("&", ValueToken.of("K11111"))]),
+        ("&K11111", [ControlLine("&", "K11111")]),
         ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
         (
             "$ (end of side)",
@@ -96,10 +96,10 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
-        ("#some notes", [ControlLine.of_single("#", ValueToken.of("some notes"))],),
+        ("#some notes", [ControlLine("#", "some notes")],),
         (
             "=: continuation",
-            [ControlLine.of_single("=:", ValueToken.of(" continuation"))],
+            [ControlLine("=:", " continuation")],
         ),
         (
             "1'. ...",

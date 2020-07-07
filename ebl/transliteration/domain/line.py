@@ -1,19 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Sequence, Type, TypeVar
+from typing import Callable, Sequence, Tuple, Type, TypeVar
 
 import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
-from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 
 T = TypeVar("T")
+L = TypeVar("L", bound="Line")
 
 
 @attr.s(frozen=True)
@@ -50,44 +50,38 @@ class Line(ABC):
         return self
 
     def _update_tokens(
-        self,
+        self: L,
         updates: Sequence[T],
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
-    ) -> "Line":
+    ) -> L:
         return self
 
-    def merge(self, other: "Line") -> "Line":
+    def merge(self, other: L) -> L:
         return other
 
-    def strip_alignments(self):
+    def strip_alignments(self: L) -> L:
         return self
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
-    _prefix: str = ""
-    _content: Sequence[Token] = attr.ib(
-        default=tuple(), converter=convert_token_sequence
-    )
-
-    @classmethod
-    def of_single(cls, prefix: str, content: Token):
-        return cls(prefix, (content,))
+    _prefix: str
+    _content: str
 
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         return self._prefix
 
     @property
-    def content(self):
-        return self._content
+    def content(self) -> Tuple[ValueToken]:
+        return (ValueToken.of(self._content),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         return ""
 
     @property

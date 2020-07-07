@@ -181,7 +181,7 @@ def test_statistics(database, fragment_repository):
                                     Word.of([Reading.of_name("line")]),
                                 ),
                             ),
-                            ControlLine("$", (ValueToken.of("ignore"),)),
+                            ControlLine("#", "ignore"),
                             EmptyLine(),
                         )
                     )
@@ -191,7 +191,7 @@ def test_statistics(database, fragment_repository):
                 FragmentFactory.build(
                     text=Text(
                         (
-                            ControlLine("$", (ValueToken.of("ignore"),)),
+                            ControlLine("#", "ignore"),
                             TextLine(
                                 LineNumber(1),
                                 (Word.of([Reading.of_name("second")]),),
@@ -200,7 +200,7 @@ def test_statistics(database, fragment_repository):
                                 LineNumber(2),
                                 (Word.of([Reading.of_name("third")]),),
                             ),
-                            ControlLine("$", (ValueToken.of("ignore"),),),
+                            ControlLine("#", "ignore"),
                             TextLine(
                                 LineNumber(3),
                                 (Word.of([Reading.of_name("fourth")]),),

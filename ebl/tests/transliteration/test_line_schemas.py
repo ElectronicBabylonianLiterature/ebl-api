@@ -338,11 +338,11 @@ LINES = [
         },
     ),
     (
-        ControlLine.of_single("@", ValueToken.of("obverse")),
+        ControlLine("#", " comment"),
         {
             "type": "ControlLine",
-            "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("obverse"))],
+            "prefix": "#",
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" comment"))],
         },
     ),
     (

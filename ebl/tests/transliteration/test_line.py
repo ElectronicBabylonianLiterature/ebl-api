@@ -18,15 +18,16 @@ def test_empty_line():
 
 
 def test_control_line_of_single():
-    prefix = "$"
-    token = ValueToken.of("only")
-    line = ControlLine.of_single(prefix, token)
+    prefix = "#"
+    content = "only"
+    line = ControlLine(prefix, content)
 
-    assert line == ControlLine("$", (token,))
+    assert line.prefix == prefix
+    assert line.content == (ValueToken.of(content),)
 
 
 @pytest.mark.parametrize(
-    "line", [ControlLine.of_single("@", ValueToken.of("obverse")), EmptyLine()]
+    "line", [ControlLine("#", ' a comment'), EmptyLine()]
 )
 def test_update_lemmatization(line):
     lemmatization = tuple(LemmatizationToken(token.value) for token in line.content)

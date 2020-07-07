@@ -21,7 +21,7 @@ from ebl.transliteration.domain.line import (
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
-from ebl.transliteration.domain.tokens import ValueToken, Token as EblToken
+from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -34,7 +34,7 @@ class LineTransformer(
 
     @v_args(inline=True)
     def control_line(self, prefix, content):
-        return ControlLine.of_single(prefix, ValueToken.of(content))
+        return ControlLine(prefix, content)
 
 
 WORD_PARSER = Lark.open(

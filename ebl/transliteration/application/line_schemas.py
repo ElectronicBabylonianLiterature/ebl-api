@@ -34,7 +34,7 @@ class TextLineSchema(LineBaseSchema):
 class ControlLineSchema(LineBaseSchema):
     @post_load
     def make_line(self, data, **kwargs):
-        return ControlLine(data["prefix"], data["content"])
+        return ControlLine(data["prefix"], "".join(token.value for token in data["content"]))
 
 
 class EmptyLineSchema(LineBaseSchema):
