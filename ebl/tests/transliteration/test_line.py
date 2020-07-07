@@ -8,7 +8,7 @@ from ebl.transliteration.domain.line import (
 from ebl.transliteration.domain.tokens import ValueToken
 
 
-def test_empty_line():
+def test_empty_line() -> None:
     line = EmptyLine()
 
     assert line.prefix == ""
@@ -17,7 +17,7 @@ def test_empty_line():
     assert line.atf == ""
 
 
-def test_control_line_of_single():
+def test_control_line() -> None:
     prefix = "#"
     content = "only"
     line = ControlLine(prefix, content)
@@ -29,6 +29,6 @@ def test_control_line_of_single():
 @pytest.mark.parametrize(
     "line", [ControlLine("#", ' a comment'), EmptyLine()]
 )
-def test_update_lemmatization(line):
+def test_update_lemmatization(line) -> None:
     lemmatization = tuple(LemmatizationToken(token.value) for token in line.content)
     assert line.update_lemmatization(lemmatization) == line
