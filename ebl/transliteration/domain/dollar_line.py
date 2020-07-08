@@ -9,10 +9,13 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import ValueToken, Token
 
 
+Atf = atf.Atf
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class DollarLine(Line):
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         return "$"
 
     @property
@@ -24,13 +27,17 @@ class DollarLine(Line):
     def content(self) -> Tuple[Token]:
         return (ValueToken.of(f" {self.display_value}"),)
 
+    @property
+    def atf(self) -> Atf:
+        return Atf(f"{self.prefix} {self.display_value}")
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class SealDollarLine(DollarLine):
     number: int
 
     @property
-    def display_value(self):
+    def display_value(self) -> str:
         return f"seal {self.number}"
 
 
@@ -72,7 +79,7 @@ class ScopeContainer:
     text: str = attr.ib(default="")
 
     @text.validator
-    def _check_text(self, attribute, value):
+    def _check_text(self, attribute, value) -> None:
         if value and self.content not in [
             atf.Object.OBJECT,
             atf.Surface.SURFACE,
@@ -86,7 +93,7 @@ class ScopeContainer:
             )
 
     @property
-    def value(self):
+    def value(self) -> str:
         text = f" {self.text}" if self.text else ""
         content_value = ScopeContainer.to_value(self.content)
         return f"{content_value}{text}"

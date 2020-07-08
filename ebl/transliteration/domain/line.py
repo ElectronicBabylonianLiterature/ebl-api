@@ -4,7 +4,7 @@ from typing import Callable, Sequence, Tuple, Type, TypeVar
 import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
-from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -29,14 +29,14 @@ class Line(ABC):
         ...
 
     @property
+    @abstractmethod
+    def atf(self) -> Atf:
+        ...
+
+    @property
     def key(self) -> str:
         tokens = "⁚".join(token.get_key() for token in self.content)
         return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
-
-    @property
-    def atf(self) -> Atf:
-        content = WORD_SEPARATOR.join(token.value for token in self.content)
-        return Atf(f"{self.prefix}{content}")
 
     def update_lemmatization(
         self, lemmatization: Sequence[LemmatizationToken]
@@ -77,6 +77,10 @@ class ControlLine(Line):
     def content(self) -> Tuple[ValueToken]:
         return (ValueToken.of(self._content),)
 
+    @property
+    def atf(self) -> Atf:
+        return Atf(f"{self.prefix}{self._content}")
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
@@ -87,3 +91,7 @@ class EmptyLine(Line):
     @property
     def content(self):
         return tuple()
+
+    @property
+    def atf(self) -> Atf:
+        return Atf("")
