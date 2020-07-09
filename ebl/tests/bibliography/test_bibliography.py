@@ -70,11 +70,11 @@ def test_inject_document_in_references(bibliography, bibliography_repository, wh
     bibliography_entry = BibliographyEntryFactory.build()
     fragment_1 = FragmentInfo.of(FragmentFactory.build(
         number='K.1',
-        references=(ReferenceFactory(id='RN.0'),))
+        references=(ReferenceFactory.build(id='RN.0'),))
     )
     fragment_2 = FragmentInfo.of(FragmentFactory.build(
         number='K.2',
-        references=(ReferenceFactory(id='RN.1'), ReferenceFactory(id='RN.2')))
+        references=(ReferenceFactory.build(id='RN.1'), ReferenceFactory.build(id='RN.2')))
     )
     fragment_expected_1 = fragment_1.set_references([
         fragment_1.references[0].set_document(bibliography_entry)

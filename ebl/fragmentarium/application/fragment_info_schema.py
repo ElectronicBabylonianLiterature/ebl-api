@@ -23,5 +23,5 @@ class FragmentInfoSchema(Schema):  # pyre-ignore[11]
         return FragmentInfo(**data)
 
 
-class ApiFragmentInfoSchema(FragmentInfoSchema):  # pyre-ignore[11]
+class ApiFragmentInfoSchema(FragmentInfoSchema):
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)

@@ -21,7 +21,7 @@ class ReferenceFactory(factory.Factory):  # pyre-ignore[11]
     )
 
 
-class BibliographyEntryFactory(factory.Factory):  # pyre-ignore[11]
+class BibliographyEntryFactory(factory.Factory):  # pyre-ignore
     class Meta:
         model = dict
         rename = {

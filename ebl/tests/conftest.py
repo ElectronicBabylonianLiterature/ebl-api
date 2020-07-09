@@ -407,7 +407,7 @@ def signs():
 def mongo_entry():
     def _from_bibliography_entry(bibliography_entry: Union[dict, None] = None) -> dict:
         if not bibliography_entry:
-            bibliography_entry = BibliographyEntryFactory.build()
+            bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
         return pydash.map_keys(
             bibliography_entry, lambda _, key: "_id" if key == "id" else key
         )

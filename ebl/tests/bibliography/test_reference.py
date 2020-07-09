@@ -30,7 +30,7 @@ def create_reference_with_document(bibliography_entry) -> Reference:
 
 
 def test_reference() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     assert reference_with_document.id == bibliography_entry["id"]
@@ -51,7 +51,7 @@ def test_defaults() -> None:
 
 
 def test_to_dict() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     # pyre-ignore-nextline[16]
@@ -62,7 +62,7 @@ def test_to_dict() -> None:
 
 
 def test_to_dict_with_document() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     # pyre-ignore-nextline[16]
@@ -78,7 +78,7 @@ def test_from_dict() -> None:
 
 
 def test_from_dict_with_document() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     result = ReferenceSchema().load(  # pyre-ignore[16]
