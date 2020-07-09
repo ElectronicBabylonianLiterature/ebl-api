@@ -11,7 +11,7 @@ from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
@@ -97,3 +97,7 @@ class TextLine(Line):
     def strip_alignments(self) -> "TextLine":
         stripped_content = tuple(token.strip_alignment() for token in self.content)
         return attr.evolve(self, content=stripped_content)
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        for token in self.content:
+            token.accept(visitor)

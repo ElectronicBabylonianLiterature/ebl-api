@@ -3,14 +3,11 @@ import pytest  # pyre-ignore
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.lark_parser import parse_line
-from ebl.transliteration.domain.line import Line
 
 
-def validate_line(atf):
-    line: Line = parse_line(f"1. {atf}")
+def validate_line(atf) -> None:
     visitor = EnclosureValidator()
-    for token in line.content:
-        token.accept(visitor)
+    parse_line(f"1. {atf}").accept(visitor)
     visitor.done()
 
 

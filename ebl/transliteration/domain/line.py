@@ -9,7 +9,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.tokens import Token, TokenVisitor, ValueToken
 
 
 T = TypeVar("T")
@@ -62,6 +62,9 @@ class Line(ABC):
 
     def strip_alignments(self: L) -> L:
         return self
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        pass
 
 
 @attr.s(auto_attribs=True, frozen=True)

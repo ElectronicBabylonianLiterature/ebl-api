@@ -60,8 +60,7 @@ def parse_line(atf: str) -> Line:
 
 def validate_line(line: Line) -> None:
     visitor = EnclosureValidator()
-    for token in line.content:
-        token.accept(visitor)
+    line.accept(visitor)
     visitor.done()
 
 
