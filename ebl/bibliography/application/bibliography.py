@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Sequence, List
+from typing import Optional, Sequence, List, TYPE_CHECKING
 
 from pydash import uniq_with  # pyre-ignore
 
@@ -8,8 +8,10 @@ from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.users.domain.user import User
+if TYPE_CHECKING:
+    from ebl.fragmentarium.domain.fragment_info import FragmentInfo  # noqa: F401
+
 
 COLLECTION = "bibliography"
 
@@ -28,7 +30,10 @@ class Bibliography:
     def find(self, id_: str):
         return self._repository.query_by_id(id_)
 
-    def inject_document_in_references(self, fragment_infos : List[FragmentInfo]):
+    def inject_document_in_references(
+            self,
+            fragment_infos: List['FragmentInfo']
+    ):
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:
             references_with_documents = []
