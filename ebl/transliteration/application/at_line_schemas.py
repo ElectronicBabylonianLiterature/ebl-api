@@ -14,7 +14,10 @@ from ebl.transliteration.domain.at_line import (ColumnAtLine, CompositeAtLine,
 from ebl.transliteration.domain.labels import ObjectLabel
 
 
-class SealAtLineSchema(LineBaseSchema):
+class AtLineSchema(LineBaseSchema):
+    prefix = fields.Constant("@")
+
+class SealAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
 
@@ -23,7 +26,7 @@ class SealAtLineSchema(LineBaseSchema):
         return SealAtLine(data["number"])
 
 
-class HeadingAtLineSchema(LineBaseSchema):
+class HeadingAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
 
@@ -32,7 +35,7 @@ class HeadingAtLineSchema(LineBaseSchema):
         return HeadingAtLine(data["number"])
 
 
-class ColumnAtLineSchema(LineBaseSchema):
+class ColumnAtLineSchema(AtLineSchema):
     column_label = fields.Nested(
         ColumnLabelSchema, required=True
     )
@@ -43,7 +46,7 @@ class ColumnAtLineSchema(LineBaseSchema):
         return ColumnAtLine(data["column_label"])
 
 
-class DiscourseAtLineSchema(LineBaseSchema):
+class DiscourseAtLineSchema(AtLineSchema):
     discourse_label = NameEnum(atf.Discourse, required=True)
     display_value = fields.String(data_key="displayValue")
 
@@ -52,7 +55,7 @@ class DiscourseAtLineSchema(LineBaseSchema):
         return DiscourseAtLine(data["discourse_label"])
 
 
-class SurfaceAtLineSchema(LineBaseSchema):
+class SurfaceAtLineSchema(AtLineSchema):
     surface_label = fields.Nested(
         SurfaceLabelSchema, required=True
     )
@@ -63,7 +66,7 @@ class SurfaceAtLineSchema(LineBaseSchema):
         return SurfaceAtLine(data["surface_label"])
 
 
-class ObjectAtLineSchema(LineBaseSchema):
+class ObjectAtLineSchema(AtLineSchema):
     status = fields.List(NameEnum(atf.Status), load_only=True)
     object_label = NameEnum(atf.Object, load_only=True)
     text = fields.String(default="", load_only=True)
@@ -79,7 +82,7 @@ class ObjectAtLineSchema(LineBaseSchema):
         )
 
 
-class DivisionAtLineSchema(LineBaseSchema):
+class DivisionAtLineSchema(AtLineSchema):
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, default=None)
     display_value = fields.String(data_key="displayValue")
@@ -89,7 +92,7 @@ class DivisionAtLineSchema(LineBaseSchema):
         return DivisionAtLine(data["text"], data["number"])
 
 
-class CompositeAtLineSchema(LineBaseSchema):
+class CompositeAtLineSchema(AtLineSchema):
     composite = NameEnum(atf.Composite, required=True)
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, default=None)

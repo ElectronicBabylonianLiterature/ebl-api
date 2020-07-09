@@ -125,10 +125,6 @@ class NoteLine(Line):
     parts: Sequence[NotePart] = attr.ib(converter=convert_part_sequence)
 
     @property
-    def prefix(self) -> str:
-        return "#note: "
-
-    @property
     def content(self) -> Sequence[ValueToken]:
         return [ValueToken.of(part.value) for part in self.parts]
 
@@ -140,4 +136,4 @@ class NoteLine(Line):
     @property
     def atf(self) -> Atf:
         note = "".join(part.value for part in self.parts)
-        return Atf(f"{self.prefix}{note}")
+        return Atf(f"#note: {note}")

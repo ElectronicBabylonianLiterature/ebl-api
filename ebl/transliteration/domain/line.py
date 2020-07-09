@@ -20,11 +20,6 @@ L = TypeVar("L", bound="Line")
 class Line(ABC):
     @property
     @abstractmethod
-    def prefix(self) -> str:
-        ...
-
-    @property
-    @abstractmethod
     def content(self) -> Sequence[Token]:
         ...
 
@@ -66,12 +61,8 @@ class Line(ABC):
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
-    _prefix: str
+    prefix: str
     _content: str
-
-    @property
-    def prefix(self) -> str:
-        return self._prefix
 
     @property
     def content(self) -> Tuple[ValueToken]:
@@ -84,10 +75,6 @@ class ControlLine(Line):
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    @property
-    def prefix(self) -> str:
-        return ""
-
     @property
     def content(self):
         return tuple()

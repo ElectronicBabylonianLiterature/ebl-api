@@ -29,10 +29,6 @@ class TextLine(Line):
         return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
 
     @property
-    def prefix(self) -> str:
-        return self.line_number.atf
-
-    @property
     def content(self) -> Sequence:
         return self._content
 
@@ -49,7 +45,7 @@ class TextLine(Line):
 
     @property
     def atf(self) -> Atf:
-        return convert_to_atf(self.prefix, self.content)
+        return convert_to_atf(self.line_number.atf, self.content)
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
         def updater(token, alignment_token):

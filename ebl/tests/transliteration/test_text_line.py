@@ -91,7 +91,6 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
     )
     line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
-    assert line.prefix == "1."
     assert line.line_number == LINE_NUMBER
     assert line.content == expected_tokens
     assert (
@@ -139,7 +138,7 @@ def test_text_line_atf_gloss():
             DocumentOrientedGloss.close(),
         ],
     )
-    assert line.atf == f"{line.prefix} {{(mu bu)}}"
+    assert line.atf == f"{line.line_number.atf} {{(mu bu)}}"
 
 
 @pytest.mark.parametrize(
@@ -187,7 +186,7 @@ def test_text_line_atf_gloss():
 def test_text_line_atf_erasure(erasure, expected: str):
     word = Word.of([Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("mu")])
     line = TextLine.of_iterable(LINE_NUMBER, [word, *erasure, word])
-    assert line.atf == f"{line.prefix} {word.value} {expected} {word.value}"
+    assert line.atf == f"{line.line_number.atf} {word.value} {expected} {word.value}"
 
 
 def test_update_lemmatization_text_line():

@@ -76,10 +76,10 @@ def create(include_documents):
                                 "labels": [
                                     label.to_value() for label in manuscript_line.labels
                                 ],
-                                "number": manuscript_line.line.prefix[:-1],
+                                "number": manuscript_line.line.line_number.atf[:-1],
                                 "atf": (
                                     manuscript_line.line.atf[
-                                        len(manuscript_line.line.prefix) + 1 :
+                                        len(manuscript_line.line.line_number.atf) + 1 :
                                     ]
                                 ),
                                 "atfTokens": (

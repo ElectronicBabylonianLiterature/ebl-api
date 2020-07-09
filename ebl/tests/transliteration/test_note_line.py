@@ -60,7 +60,6 @@ def test_note_line():
         LanguagePart(Language.SUMERIAN, expected_transliteration(Language.SUMERIAN)),
         LanguagePart(Language.EMESAL, expected_transliteration(Language.EMESAL)),
     )
-    assert line.prefix == "#note: "
     assert line.atf == (
         "#note: this is a note "
         "@i{italic text}"

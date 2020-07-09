@@ -14,11 +14,14 @@ class LineBaseSchema(Schema):  # pyre-ignore[11]
     class Meta:
         unknown = EXCLUDE
 
-    prefix = fields.String(required=True)
     content = fields.Nested(OneOfTokenSchema, many=True)
 
 
 class TextLineSchema(LineBaseSchema):
+    prefix = fields.Function(
+        lambda obj: obj.line_number.atf,
+        lambda value: value
+    )
     line_number = fields.Nested(
         OneOfLineNumberSchema, rquired=True, data_key="lineNumber",
     )
@@ -32,18 +35,23 @@ class TextLineSchema(LineBaseSchema):
 
 
 class ControlLineSchema(LineBaseSchema):
+    prefix = fields.String(required=True)
+
     @post_load
     def make_line(self, data, **kwargs):
         return ControlLine(data["prefix"], " ".join(token.value for token in data["content"]))
 
 
 class EmptyLineSchema(LineBaseSchema):
+    prefix = fields.Constant("")
+
     @post_load
     def make_line(self, data, **kwargs):
         return EmptyLine()
 
 
 class NoteLineSchema(LineBaseSchema):
+    prefix = fields.Constant("#note: ")
     parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
 
     @post_load

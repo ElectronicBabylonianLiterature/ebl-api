@@ -11,7 +11,6 @@ from ebl.transliteration.domain.tokens import ValueToken
 def test_empty_line() -> None:
     line = EmptyLine()
 
-    assert line.prefix == ""
     assert line.content == tuple()
     assert line.key == "EmptyLine⁞⟨⟩"
     assert line.atf == ""

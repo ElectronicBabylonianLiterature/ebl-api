@@ -15,10 +15,6 @@ Atf = atf.Atf
 @attr.s(auto_attribs=True, frozen=True)
 class DollarLine(Line):
     @property
-    def prefix(self) -> str:
-        return "$"
-
-    @property
     @abstractmethod
     def display_value(self) -> str:
         ...
@@ -29,7 +25,7 @@ class DollarLine(Line):
 
     @property
     def atf(self) -> Atf:
-        return Atf(f"{self.prefix} {self.display_value}")
+        return Atf(f"$ {self.display_value}")
 
 
 @attr.s(auto_attribs=True, frozen=True)

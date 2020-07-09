@@ -16,7 +16,11 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class LooseDollarLineSchema(LineBaseSchema):
+class DollarLineSchema(LineBaseSchema):
+    prefix = fields.Constant("$")
+
+
+class LooseDollarLineSchema(DollarLineSchema):
     text = fields.String(required=True)
     display_value = fields.String(data_key="displayValue")
 
@@ -25,7 +29,7 @@ class LooseDollarLineSchema(LineBaseSchema):
         return LooseDollarLine(data["text"])
 
 
-class ImageDollarLineSchema(LineBaseSchema):
+class ImageDollarLineSchema(DollarLineSchema):
     number = fields.String(required=True)
     letter = fields.String(required=True, allow_none=True)
     text = fields.String(required=True)
@@ -36,7 +40,7 @@ class ImageDollarLineSchema(LineBaseSchema):
         return ImageDollarLine(data["number"], data["letter"], data["text"])
 
 
-class RulingDollarLineSchema(LineBaseSchema):
+class RulingDollarLineSchema(DollarLineSchema):
     number = NameEnum(atf.Ruling, required=True)
     status = NameEnum(atf.DollarStatus, missing=None)
     display_value = fields.String(data_key="displayValue")
@@ -46,7 +50,7 @@ class RulingDollarLineSchema(LineBaseSchema):
         return RulingDollarLine(data["number"], data["status"])
 
 
-class SealDollarLineSchema(LineBaseSchema):
+class SealDollarLineSchema(DollarLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
 
@@ -82,7 +86,7 @@ class ScopeContainerSchema(Schema):  # pyre-ignore[11]
         return scope_types[type][content]
 
 
-class StateDollarLineSchema(LineBaseSchema):
+class StateDollarLineSchema(DollarLineSchema):
     qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),
