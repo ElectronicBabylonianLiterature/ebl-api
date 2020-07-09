@@ -17,6 +17,7 @@ from ebl.transliteration.domain.labels import ObjectLabel
 class AtLineSchema(LineBaseSchema):
     prefix = fields.Constant("@")
 
+
 class SealAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")

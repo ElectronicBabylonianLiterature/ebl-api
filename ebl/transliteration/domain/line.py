@@ -29,6 +29,11 @@ class Line(ABC):
         ...
 
     @property
+    @abstractmethod
+    def lemmatization(self) -> Sequence[LemmatizationToken]:
+        ...
+
+    @property
     def key(self) -> str:
         tokens = "⁚".join(token.get_key() for token in self.content)
         return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
@@ -72,6 +77,10 @@ class ControlLine(Line):
     def atf(self) -> Atf:
         return Atf(f"{self.prefix}{self._content}")
 
+    @property
+    def lemmatization(self) -> Tuple[LemmatizationToken]:
+        return (LemmatizationToken(self._content),)
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
@@ -82,3 +91,7 @@ class EmptyLine(Line):
     @property
     def atf(self) -> Atf:
         return Atf("")
+
+    @property
+    def lemmatization(self) -> Tuple:
+        return tuple()

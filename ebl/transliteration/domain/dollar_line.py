@@ -7,6 +7,7 @@ import attr
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import ValueToken, Token
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
 Atf = atf.Atf
@@ -26,6 +27,10 @@ class DollarLine(Line):
     @property
     def atf(self) -> Atf:
         return Atf(f"$ {self.display_value}")
+
+    @property
+    def lemmatization(self) -> Tuple[LemmatizationToken]:
+        return (LemmatizationToken(f" {self.display_value}"),)
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import re
-from typing import Iterable, Sequence, Tuple
+from typing import Iterable, Pattern, Sequence, Tuple
 
 import attr
 
@@ -12,9 +12,10 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
-SPECIAL_CHARACTERS = re.compile(r"[@{}\\]")
+SPECIAL_CHARACTERS: Pattern[str] = re.compile(r"[@{}\\]")
 
 
 def escape(unescaped: str) -> str:
@@ -137,3 +138,10 @@ class NoteLine(Line):
     def atf(self) -> Atf:
         note = "".join(part.value for part in self.parts)
         return Atf(f"#note: {note}")
+
+    @property
+    def lemmatization(self) -> Sequence[LemmatizationToken]:
+        return tuple(
+            LemmatizationToken(part.value)
+            for part in self.parts
+        )

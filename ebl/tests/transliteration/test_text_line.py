@@ -189,7 +189,24 @@ def test_text_line_atf_erasure(erasure, expected: str):
     assert line.atf == f"{line.line_number.atf} {word.value} {expected} {word.value}"
 
 
-def test_update_lemmatization_text_line():
+def test_lemmatization():
+    line = TextLine.of_iterable(
+        LINE_NUMBER,
+        [
+            Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),)),
+            UnknownNumberOfSigns.of(),
+            Word.of([Reading.of_name("nu")]),
+        ]
+    )
+
+    assert line.lemmatization == (
+        LemmatizationToken("bu", (WordId("nu I"),)),
+        LemmatizationToken("..."),
+        LemmatizationToken("nu", tuple()),
+    )
+
+
+def test_update_lemmatization():
     line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("bu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     expected = TextLine.of_iterable(

@@ -10,9 +10,10 @@ from ebl.transliteration.domain.tokens import (EnclosureType, ErasureState,
                                                UnknownNumberOfSigns,
                                                ValueToken)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
-TRANSLITERATION = (
+TRANSLITERATION: Sequence[Token] = (
     Word.of([Reading.of_name("bu")]),
     LanguageShift.of("%es"),
     Word.of([BrokenAway.open(), Reading.of_name("kur")]),
@@ -72,3 +73,10 @@ def test_note_line():
         ValueToken.of(f"@sux{{{EXPECTED_ATF}}}"),
         ValueToken.of(f"@es{{{EXPECTED_ATF}}}"),
     ]
+    assert line.lemmatization == (
+        LemmatizationToken("this is a note "),
+        LemmatizationToken("@i{italic text}"),
+        LemmatizationToken(f"@akk{{{EXPECTED_ATF}}}"),
+        LemmatizationToken(f"@sux{{{EXPECTED_ATF}}}"),
+        LemmatizationToken(f"@es{{{EXPECTED_ATF}}}"),
+    )

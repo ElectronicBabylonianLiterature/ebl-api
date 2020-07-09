@@ -16,7 +16,6 @@ from ebl.transliteration.domain.lemmatization import (
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.word_tokens import Word
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -50,19 +49,10 @@ class Text:
 
     @property
     def lemmatization(self) -> Lemmatization:
-        return Lemmatization.from_list(
-            [
-                [
-                    (
-                        {"value": token.value, "uniqueLemma": list(token.unique_lemma),}
-                        if isinstance(token, Word)
-                        else {"value": token.value}
-                    )
-                    for token in line.content
-                ]
-                for line in self.lines
-            ]
-        )
+        return Lemmatization(tuple(
+            line.lemmatization
+            for line in self.lines
+        ))
 
     @property
     def atf(self) -> Atf:
