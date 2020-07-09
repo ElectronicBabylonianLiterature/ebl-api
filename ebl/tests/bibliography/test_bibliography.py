@@ -1,5 +1,3 @@
-import copy
-
 import pytest  # pyre-ignore
 from mockito import verify  # pyre-ignore
 
@@ -68,7 +66,7 @@ def test_find(bibliography, bibliography_repository, when):
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
 
 
-def test_find_from_list(bibliography, bibliography_repository, when):
+def test_inject_document_in_references(bibliography, bibliography_repository, when):
     bibliography_entry = BibliographyEntryFactory.build()
     fragment_1 = FragmentInfo.of(FragmentFactory.build(
         number='K.1',
@@ -78,12 +76,13 @@ def test_find_from_list(bibliography, bibliography_repository, when):
         number='K.2',
         references=(ReferenceFactory(id='RN.1'), ReferenceFactory(id='RN.2')))
     )
-
-    expected_fragment_1 = copy.deepcopy(fragment_1)
-    expected_fragment_1.references[0].set_document(bibliography_entry)
-    expected_fragment_2 = copy.deepcopy(fragment_2)
-    expected_fragment_2.references[0].set_document(bibliography_entry)
-    expected_fragment_2.references[1].set_document(bibliography_entry)
+    fragment_expected_1 = fragment_1.set_references([
+        fragment_1.references[0].set_document(bibliography_entry)
+    ])
+    fragment_expected_2 = fragment_2.set_references([
+        fragment_2.references[0].set_document(bibliography_entry),
+        fragment_2.references[1].set_document(bibliography_entry),
+    ])
 
     (
         when(bibliography_repository)
@@ -102,7 +101,7 @@ def test_find_from_list(bibliography, bibliography_repository, when):
     )
 
     assert bibliography.inject_document_in_references([fragment_1, fragment_2]) == [
-        expected_fragment_1, expected_fragment_2
+        fragment_expected_1, fragment_expected_2
     ]
 
 

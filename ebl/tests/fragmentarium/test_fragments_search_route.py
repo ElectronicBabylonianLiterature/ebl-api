@@ -1,9 +1,8 @@
-import copy
-
 import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
-from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema, \
+    ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 from ebl.tests.factories.fragment import (
@@ -35,27 +34,30 @@ def test_search_fragment_not_found(client):
 
 
 def test_search_references(client, fragmentarium, bibliography, user):
-    bib_entry_1 = BibliographyEntryFactory(id='RN.0', pages="254")
-    bib_entry_2 = BibliographyEntryFactory(id='RN.1')
+    bib_entry_1 = BibliographyEntryFactory.build(id='RN.0', pages="254")
+    bib_entry_2 = BibliographyEntryFactory.build(id='RN.1')
     bibliography.create(bib_entry_1, user)
     bibliography.create(bib_entry_2, user)
+
     fragment = FragmentFactory.build(
         references=(
             ReferenceFactory.build(id='RN.0', pages="254"),
             ReferenceFactory.build(id='RN.1'))
     )
     fragmentarium.create(fragment)
-    reference_id = fragment.references[0].id
-    reference_pages = fragment.references[0].pages
     result = client.simulate_get(f"/fragments", params={
-        "id": reference_id, "pages": reference_pages
+        "id": fragment.references[0].id, "pages": fragment.references[0].pages
     })
 
     assert result.status == falcon.HTTP_OK
-    fragment_result = copy.deepcopy(fragment)
-    fragment_result.references[0].set_document(bib_entry_1)
-    fragment_result.references[1].set_document(bib_entry_2)
-    assert result.json == FragmentInfoSchema(many=True).dump([FragmentInfo.of(fragment_result)])
+
+    fragment_expected = fragment.set_references([
+        fragment.references[0].set_document(bib_entry_1),
+        fragment.references[1].set_document(bib_entry_2)]
+    )
+    assert result.json == ApiFragmentInfoSchema(many=True).dump(
+        [FragmentInfo.of(fragment_expected)]
+    )
     assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
@@ -70,7 +72,6 @@ def test_search_references_invalid_query(client, fragmentarium):
     result = client.simulate_get(f"/fragments", params={
         "id": reference_id, "pages": reference_pages
     })
-
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 

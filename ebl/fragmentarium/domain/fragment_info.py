@@ -20,6 +20,9 @@ class FragmentInfo:
     edition_date: str
     references: Sequence[Reference] = tuple()
 
+    def set_references(self, references: Sequence[Reference]) -> "FragmentInfo":
+        return attr.evolve(self, references=references)
+
     @staticmethod
     def of(fragment: Fragment, matching_lines: Lines = tuple()) -> "FragmentInfo":
         def is_transliteration(entry: RecordEntry) -> bool:

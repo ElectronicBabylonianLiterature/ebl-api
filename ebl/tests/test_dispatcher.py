@@ -3,9 +3,9 @@ import pytest  # pyre-ignore
 from ebl.dispatcher import DispatchError, create_dispatcher
 
 COMMANDS = {
-    "a": lambda value: "a_" + "-".join(value),
-    "b": lambda value: "b_" + "-".join(value),
-    "a+b": lambda value: "a&b_" + "-".join(value),
+    frozenset(["a"]): lambda value: f"a_{''.join(value)}",
+    frozenset(["b"]): lambda value: f"b_{''.join(value)}",
+    frozenset(["a", "b"]): lambda value: f"a_b_{''.join(value)}",
 }
 DISPATCH = create_dispatcher(COMMANDS)
 
@@ -14,7 +14,7 @@ DISPATCH = create_dispatcher(COMMANDS)
     "parameter, results", [
         ({"a": "value"}, "a_value"),
         ({"b": "value"}, "b_value"),
-        ({"a": "value1", "b": "value2"}, "a&b_value1-value2")
+        ({"a": "value1", "b": "value2"}, "a_b_value1value2")
     ]
 )
 def test_valid_params(parameter, results):
@@ -39,4 +39,4 @@ def test_key_error(parameters):
     parameter = "fail"
     message = "key error"
     with pytest.raises(KeyError, match=message):
-        create_dispatcher({parameter: raise_key_error})({parameter: message})
+        create_dispatcher({frozenset([parameter]): raise_key_error})({parameter: message})

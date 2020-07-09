@@ -6,7 +6,7 @@ from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
-from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_query_factory import (
     TransliterationQueryFactory,
@@ -27,15 +27,17 @@ class FragmentSearch:
         self._bibliography = bibliography
         self._dispatch = create_dispatcher(
             {
-                "id+pages": lambda x: self._bibliography.inject_document_in_references(
-                    finder.search_references(x[0], self._validate_pages(x[1]))),
-                "number": lambda x: finder.search(*x),
-                "random": lambda _: finder.find_random(),
-                "interesting": lambda _: finder.find_interesting(),
-                "latest": lambda _: fragmentarium.find_latest(),
-                "needsRevision": lambda _: fragmentarium.find_needs_revision(),
-                "transliteration": lambda x: finder.search_transliteration(
-                    transliteration_query_factory.create(*x)
+                frozenset(["id", "pages"]): lambda value:
+                self._bibliography.inject_document_in_references(
+                    finder.search_references(value[0], self._validate_pages(value[1]))
+                ),
+                frozenset(["number"]): lambda value: finder.search(*value),
+                frozenset(["random"]): lambda _: finder.find_random(),
+                frozenset(["interesting"]): lambda _: finder.find_interesting(),
+                frozenset(["latest"]): lambda _: fragmentarium.find_latest(),
+                frozenset(["needsRevision"]): lambda _: fragmentarium.find_needs_revision(),
+                frozenset(["transliteration"]): lambda value: finder.search_transliteration(
+                    transliteration_query_factory.create(*value)
                 ),
             }
         )
@@ -99,6 +101,6 @@ class FragmentSearch:
             type: string
         """
         infos = self._dispatch(req.params)
-        resp.media = FragmentInfoSchema(many=True).dump(infos)  # pyre-ignore[16,28]
+        resp.media = ApiFragmentInfoSchema(many=True).dump(infos)  # pyre-ignore[16,28]
         if req.params.keys() <= CACHED_COMMANDS:
             resp.cache_control = ["private", "max-age=600"]
