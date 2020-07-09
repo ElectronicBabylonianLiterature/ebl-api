@@ -5,7 +5,7 @@ import pytest  # pyre-ignore
 
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.tests.factories.bibliography import ReferenceFactory
+from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
@@ -34,13 +34,9 @@ def test_search_fragment_not_found(client):
     assert result.json == []
 
 
-def test_search_references(client, fragmentarium, bibliography, bibliography_entry, user):
-    bib_entry_1 = bibliography_entry.copy()
-    bib_entry_1['id'] = 'RN.0'
-    bib_entry_1['pages'] = "254"
-
-    bib_entry_2 = bibliography_entry.copy()
-    bib_entry_2['id'] = 'RN.1'
+def test_search_references(client, fragmentarium, bibliography, user):
+    bib_entry_1 = BibliographyEntryFactory(id='RN.0', pages="254")
+    bib_entry_2 = BibliographyEntryFactory(id='RN.1')
     bibliography.create(bib_entry_1, user)
     bibliography.create(bib_entry_2, user)
     fragment = FragmentFactory.build(
@@ -155,9 +151,7 @@ def test_search_fragment_no_query(client):
         {},
         {"random": True, "interesting": True},
         {"random": True, "interesting": True, "pages": "254"},
-        {"this_param": "is wrong"},
         {"invalid": "parameter"},
-        {"a": "a", "b": "b"},
         {"a": "a", "b": "b", "c": "c"}
     ]
 )
