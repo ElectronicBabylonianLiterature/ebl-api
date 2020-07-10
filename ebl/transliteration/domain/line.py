@@ -1,28 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Sequence, Tuple, Type, TypeVar
+from typing import Sequence, Tuple, TypeVar
 
 import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
-from ebl.transliteration.domain.tokens import Token, TokenVisitor, ValueToken
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.transliteration.domain.tokens import TokenVisitor
 
 
-T = TypeVar("T")
 L = TypeVar("L", bound="Line")
 
 
 @attr.s(frozen=True)
 class Line(ABC):
-    @property
-    @abstractmethod
-    def content(self) -> Sequence[Token]:
-        ...
-
     @property
     @abstractmethod
     def atf(self) -> Atf:
@@ -35,26 +26,14 @@ class Line(ABC):
 
     @property
     def key(self) -> str:
-        tokens = "⁚".join(token.get_key() for token in self.content)
-        return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
+        return f"{type(self).__name__}⁞{self.atf}⁞{hash(self)}"
 
     def update_lemmatization(
-        self, lemmatization: Sequence[LemmatizationToken]
-    ) -> "Line":
-        def updater(token, lemmatization_token):
-            return token.set_unique_lemma(lemmatization_token)
-
-        return self._update_tokens(lemmatization, updater, LemmatizationError)
-
-    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
+        self: L, lemmatization: Sequence[LemmatizationToken]
+    ) -> L:
         return self
 
-    def _update_tokens(
-        self: L,
-        updates: Sequence[T],
-        updater: Callable[[Token, T], Token],
-        error_class: Type[Exception],
-    ) -> L:
+    def update_alignment(self: L, alignment: Sequence[AlignmentToken]) -> L:
         return self
 
     def merge(self, other: L) -> L:
@@ -70,27 +49,19 @@ class Line(ABC):
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
     prefix: str
-    _content: str
-
-    @property
-    def content(self) -> Tuple[ValueToken]:
-        return (ValueToken.of(self._content),)
+    content: str
 
     @property
     def atf(self) -> Atf:
-        return Atf(f"{self.prefix}{self._content}")
+        return Atf(f"{self.prefix}{self.content}")
 
     @property
     def lemmatization(self) -> Tuple[LemmatizationToken]:
-        return (LemmatizationToken(self._content),)
+        return (LemmatizationToken(self.content),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
-    @property
-    def content(self):
-        return tuple()
-
     @property
     def atf(self) -> Atf:
         return Atf("")

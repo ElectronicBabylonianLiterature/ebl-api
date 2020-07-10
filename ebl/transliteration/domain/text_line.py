@@ -13,7 +13,7 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.transliteration.domain.lemmatization import LemmatizationError, LemmatizationToken
 
 
 L = TypeVar("L", "TextLine", "Line")
@@ -59,7 +59,15 @@ class TextLine(Line):
             for token in self.content
         )
 
-    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
+    def update_lemmatization(
+        self, lemmatization: Sequence[LemmatizationToken]
+    ) -> "TextLine":
+        def updater(token, lemmatization_token):
+            return token.set_unique_lemma(lemmatization_token)
+
+        return self._update_tokens(lemmatization, updater, LemmatizationError)
+
+    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "TextLine":
         def updater(token, alignment_token):
             return token.set_alignment(alignment_token)
 
@@ -70,7 +78,7 @@ class TextLine(Line):
         updates: Sequence[T],
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
-    ) -> "Line":
+    ) -> "TextLine":
         if len(self.content) == len(updates):
             zipped = zip_longest(self.content, updates)
             content = tuple(updater(pair[0], pair[1]) for pair in zipped)

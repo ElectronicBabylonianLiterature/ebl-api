@@ -11,7 +11,7 @@ from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
@@ -124,10 +124,6 @@ def convert_part_sequence(flags: Iterable[NotePart]) -> Tuple[NotePart, ...]:
 @attr.s(frozen=True, auto_attribs=True)
 class NoteLine(Line):
     parts: Sequence[NotePart] = attr.ib(converter=convert_part_sequence)
-
-    @property
-    def content(self) -> Sequence[ValueToken]:
-        return [ValueToken.of(part.value) for part in self.parts]
 
     @property
     def key(self) -> str:

@@ -66,13 +66,6 @@ def test_note_line():
         "@i{italic text}"
         f"@akk{{{EXPECTED_ATF}}}@sux{{{EXPECTED_ATF}}}@es{{{EXPECTED_ATF}}}"
     )
-    assert line.content == [
-        ValueToken.of("this is a note "),
-        ValueToken.of("@i{italic text}"),
-        ValueToken.of(f"@akk{{{EXPECTED_ATF}}}"),
-        ValueToken.of(f"@sux{{{EXPECTED_ATF}}}"),
-        ValueToken.of(f"@es{{{EXPECTED_ATF}}}"),
-    ]
     assert line.lemmatization == (
         LemmatizationToken("this is a note "),
         LemmatizationToken("@i{italic text}"),

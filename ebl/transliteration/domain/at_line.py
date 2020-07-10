@@ -10,7 +10,6 @@ from ebl.transliteration.domain.labels import (
     ObjectLabel,
 )
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.tokens import ValueToken, Token
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
@@ -20,10 +19,6 @@ class AtLine(Line):
     @abstractmethod
     def display_value(self) -> str:
         ...
-
-    @property
-    def content(self) -> Tuple[Token]:
-        return (ValueToken.of(self.display_value),)
 
     @property
     def atf(self) -> Atf:

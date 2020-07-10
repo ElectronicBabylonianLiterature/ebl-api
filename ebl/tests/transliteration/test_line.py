@@ -5,15 +5,13 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
 )
-from ebl.transliteration.domain.tokens import ValueToken
 
 
 def test_empty_line() -> None:
     line = EmptyLine()
 
-    assert line.content == tuple()
     assert line.lemmatization == tuple()
-    assert line.key == "EmptyLine⁞⟨⟩"
+    assert line.key == f"EmptyLine⁞⁞{hash(line)}"
     assert line.atf == ""
 
 
@@ -23,7 +21,8 @@ def test_control_line() -> None:
     line = ControlLine(prefix, content)
 
     assert line.prefix == prefix
-    assert line.content == (ValueToken.of(content),)
+    assert line.content == content
+    assert line.key == f"ControlLine⁞#only⁞{hash(line)}"
     assert line.lemmatization == (LemmatizationToken(content),)
 
 

@@ -4,6 +4,7 @@ from ebl.schemas import NameEnum
 from ebl.transliteration.application.label_schemas import (ColumnLabelSchema,
                                                            ObjectLabelSchema,
                                                            SurfaceLabelSchema)
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (ColumnAtLine, CompositeAtLine,
@@ -12,10 +13,15 @@ from ebl.transliteration.domain.at_line import (ColumnAtLine, CompositeAtLine,
                                                 ObjectAtLine, SealAtLine,
                                                 SurfaceAtLine)
 from ebl.transliteration.domain.labels import ObjectLabel
+from ebl.transliteration.domain.tokens import ValueToken
 
 
 class AtLineSchema(LineBaseSchema):
     prefix = fields.Constant("@")
+    content = fields.Function(
+        lambda obj: [OneOfTokenSchema().dump(ValueToken.of(obj.display_value))],
+        lambda value: value
+    )
 
 
 class SealAtLineSchema(AtLineSchema):
