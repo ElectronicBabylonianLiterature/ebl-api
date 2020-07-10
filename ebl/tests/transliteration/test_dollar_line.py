@@ -8,7 +8,6 @@ from ebl.transliteration.domain.dollar_line import (
     ScopeContainer,
     StateDollarLine,
 )
-from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
