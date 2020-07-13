@@ -152,9 +152,10 @@ def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
 
 
 @pytest.fixture
-def fragment_finder(fragment_repository, dictionary, photo_repository, file_repository):
+def fragment_finder(fragment_repository, dictionary, photo_repository, file_repository,
+                    bibliography):
     return FragmentFinder(
-        fragment_repository, dictionary, photo_repository, file_repository
+        bibliography, fragment_repository, dictionary, photo_repository, file_repository
     )
 
 

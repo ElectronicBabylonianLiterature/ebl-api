@@ -28,8 +28,8 @@ class FragmentSearch:
         self._dispatch = create_dispatcher(
             {
                 frozenset(["id", "pages"]): lambda value:
-                self._bibliography.inject_document_in_references(
-                    finder.search_references(value[0], self._validate_pages(value[1]))
+                finder.inject_documents_in_fragment_infos(
+                    value[0], self._validate_pages(value[1])
                 ),
                 frozenset(["number"]): lambda value: finder.search(*value),
                 frozenset(["random"]): lambda _: finder.find_random(),

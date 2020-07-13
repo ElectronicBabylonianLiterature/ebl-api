@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Sequence, List, TYPE_CHECKING
+from typing import Optional, Sequence
 
 from pydash import uniq_with  # pyre-ignore
 
@@ -26,22 +26,6 @@ class Bibliography:
 
     def find(self, id_: str):
         return self._repository.query_by_id(id_)
-
-    def inject_document_in_references(
-            self,
-            fragment_infos: List[any]
-    ):
-        fragment_infos_with_documents = []
-        for fragment_info in fragment_infos:
-            references_with_documents = []
-            for reference in fragment_info.references:
-                references_with_documents.append(reference.set_document(
-                    self.find(reference.id))
-                )
-            fragment_infos_with_documents.append(
-                fragment_info.set_references(references_with_documents)
-            )
-        return fragment_infos_with_documents
 
     def update(self, entry, user: User):
         old_entry = self._repository.query_by_id(entry["id"])

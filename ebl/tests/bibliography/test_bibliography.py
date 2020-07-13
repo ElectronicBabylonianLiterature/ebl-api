@@ -2,11 +2,8 @@ import pytest  # pyre-ignore
 from mockito import verify  # pyre-ignore
 
 from ebl.errors import DataError, DuplicateError, NotFoundError
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory, \
-    ReferenceFactory, BibliographyEntryFactory
-from ebl.tests.factories.fragment import FragmentFactory
-
+    BibliographyEntryFactory
 
 COLLECTION = "bibliography"
 
@@ -64,45 +61,6 @@ def test_find(bibliography, bibliography_repository, when):
         .thenReturn(bibliography_entry)
     )
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
-
-
-def test_inject_document_in_references(bibliography, bibliography_repository, when):
-    bibliography_entry = BibliographyEntryFactory.build()
-    fragment_1 = FragmentInfo.of(FragmentFactory.build(
-        number='K.1',
-        references=(ReferenceFactory.build(id='RN.0'),))
-    )
-    fragment_2 = FragmentInfo.of(FragmentFactory.build(
-        number='K.2',
-        references=(ReferenceFactory.build(id='RN.1'), ReferenceFactory.build(id='RN.2')))
-    )
-    fragment_expected_1 = fragment_1.set_references([
-        fragment_1.references[0].set_document(bibliography_entry)
-    ])
-    fragment_expected_2 = fragment_2.set_references([
-        fragment_2.references[0].set_document(bibliography_entry),
-        fragment_2.references[1].set_document(bibliography_entry),
-    ])
-
-    (
-        when(bibliography_repository)
-        .query_by_id("RN.0")
-        .thenReturn(bibliography_entry)
-    )
-    (
-        when(bibliography_repository)
-        .query_by_id("RN.1")
-        .thenReturn(bibliography_entry)
-    )
-    (
-        when(bibliography_repository)
-        .query_by_id("RN.2")
-        .thenReturn(bibliography_entry)
-    )
-
-    assert bibliography.inject_document_in_references([fragment_1, fragment_2]) == [
-        fragment_expected_1, fragment_expected_2
-    ]
 
 
 def test_create(bibliography, bibliography_repository, user, changelog, when,

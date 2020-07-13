@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -12,12 +13,14 @@ from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 class FragmentFinder:
     def __init__(
         self,
+        bibliography: Bibliography,
         repository: FragmentRepository,
         dictionary: Dictionary,
         photos: FileRepository,
         folios: FileRepository,
     ):
 
+        self._bibliography = bibliography
         self._repository = repository
         self._dictionary = dictionary
         self._photos = photos
@@ -37,7 +40,23 @@ class FragmentFinder:
             )
         )
 
-    def search_references(self, reference_id: str, reference_pages: str) -> List[FragmentInfo]:
+    def inject_documents_in_fragment_infos(
+            self, reference_id: str, reference_pages: str) -> List[FragmentInfo]:
+        fragment_infos = self.search_references(reference_id, reference_pages)
+        fragment_infos_with_documents = []
+        for fragment_info in fragment_infos:
+            references_with_documents = []
+            for reference in fragment_info.references:
+                references_with_documents.append(reference.set_document(
+                    self._bibliography.find(reference.id))
+                )
+            fragment_infos_with_documents.append(
+                fragment_info.set_references(references_with_documents)
+            )
+        return fragment_infos_with_documents
+
+    def search_references(self, reference_id: str, reference_pages: str) \
+            -> List[FragmentInfo]:
         return list(
             map(
                 FragmentInfo.of,
