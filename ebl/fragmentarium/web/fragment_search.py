@@ -2,7 +2,6 @@ from typing import Union
 
 import falcon  # pyre-ignore
 
-from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -21,10 +20,8 @@ class FragmentSearch:
         self,
         fragmentarium: Fragmentarium,
         finder: FragmentFinder,
-        bibliography: Bibliography,
         transliteration_query_factory: TransliterationQueryFactory,
     ):
-        self._bibliography = bibliography
         self._dispatch = create_dispatcher(
             {
                 frozenset(["id", "pages"]): lambda value:

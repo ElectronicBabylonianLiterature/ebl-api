@@ -43,7 +43,6 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     fragment_search = FragmentSearch(
         fragmentarium,
         finder,
-        context.get_bibliography(),
         context.get_transliteration_query_factory()
     )
     lemmatization = LemmatizationResource(updater)
