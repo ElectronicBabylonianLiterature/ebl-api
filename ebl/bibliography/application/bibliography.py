@@ -9,9 +9,6 @@ from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
-if TYPE_CHECKING:
-    from ebl.fragmentarium.domain.fragment_info import FragmentInfo  # noqa: F401
-
 
 COLLECTION = "bibliography"
 
@@ -32,7 +29,7 @@ class Bibliography:
 
     def inject_document_in_references(
             self,
-            fragment_infos: List['FragmentInfo']
+            fragment_infos: List[any]
     ):
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:

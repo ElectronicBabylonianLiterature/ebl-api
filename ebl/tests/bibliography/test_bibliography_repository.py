@@ -11,10 +11,9 @@ def test_create(database, bibliography_repository, create_mongo_bibliography_ent
     bibliography_entry = BibliographyEntryFactory.build()
     bibliography_repository.create(bibliography_entry)
 
-    assert (
-            database[COLLECTION].find_one({"_id": bibliography_entry["id"]})
+    assert (database[COLLECTION].find_one({"_id": bibliography_entry["id"]})
             == create_mongo_bibliography_entry()
-    )
+            )
 
 
 def test_create_duplicate(bibliography_repository):
