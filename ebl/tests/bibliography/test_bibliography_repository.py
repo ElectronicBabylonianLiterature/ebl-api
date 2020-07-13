@@ -7,13 +7,13 @@ from ebl.tests.factories.bibliography import BibliographyEntryFactory
 COLLECTION = "bibliography"
 
 
-def test_create(database, bibliography_repository, mongo_entry):
+def test_create(database, bibliography_repository, create_mongo_bibliography_entry):
     bibliography_entry = BibliographyEntryFactory.build()
     bibliography_repository.create(bibliography_entry)
 
     assert (
-        database[COLLECTION].find_one({"_id": bibliography_entry["id"]})
-        == mongo_entry()
+            database[COLLECTION].find_one({"_id": bibliography_entry["id"]})
+            == create_mongo_bibliography_entry()
     )
 
 
@@ -24,13 +24,13 @@ def test_create_duplicate(bibliography_repository):
         bibliography_repository.create(bibliography_entry)
 
 
-def test_find(database, bibliography_repository, mongo_entry):
+def test_find(database, bibliography_repository, create_mongo_bibliography_entry):
     bibliography_entry = BibliographyEntryFactory.build()
-    mongo_entry_ = mongo_entry(bibliography_entry)
+    mongo_entry_ = create_mongo_bibliography_entry(bibliography_entry)
     database[COLLECTION].insert_one(mongo_entry_)
 
     assert (
-        bibliography_repository.query_by_id(bibliography_entry['id'])
+        bibliography_repository.query_by_id(bibliography_entry["id"])
         == bibliography_entry
     )
 

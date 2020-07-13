@@ -404,7 +404,7 @@ def signs():
 
 
 @pytest.fixture
-def mongo_entry():
+def create_mongo_bibliography_entry():
     def _from_bibliography_entry(bibliography_entry: Union[dict, None] = None) -> dict:
         if not bibliography_entry:
             bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]

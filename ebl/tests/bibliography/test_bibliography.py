@@ -106,7 +106,7 @@ def test_inject_document_in_references(bibliography, bibliography_repository, wh
 
 
 def test_create(bibliography, bibliography_repository, user, changelog, when,
-                mongo_entry):
+                create_mongo_bibliography_entry):
     bibliography_entry = BibliographyEntryFactory.build()
     (
         when(changelog)
@@ -114,7 +114,7 @@ def test_create(bibliography, bibliography_repository, user, changelog, when,
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
-            mongo_entry(),
+            create_mongo_bibliography_entry(),
         ).thenReturn()
     )
     (
@@ -126,8 +126,8 @@ def test_create(bibliography, bibliography_repository, user, changelog, when,
     bibliography.create(bibliography_entry, user)
 
 
-def test_create_duplicate(bibliography, user, when, changelog,bibliography_repository,
-                          mongo_entry):
+def test_create_duplicate(bibliography, user, when, changelog, bibliography_repository,
+                          create_mongo_bibliography_entry):
     bibliography_entry = BibliographyEntryFactory.build()
     (
         when(changelog)
@@ -135,7 +135,7 @@ def test_create_duplicate(bibliography, user, when, changelog,bibliography_repos
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
-            mongo_entry(),
+            create_mongo_bibliography_entry(),
         ).thenReturn()
     )
     (
@@ -159,7 +159,7 @@ def test_entry_not_found(bibliography, bibliography_repository, when):
 
 
 def test_update(bibliography, bibliography_repository,
-                user, when, changelog, mongo_entry):
+                user, when, changelog, create_mongo_bibliography_entry):
     bibliography_entry = BibliographyEntryFactory.build()
     (
         when(bibliography_repository)
@@ -171,8 +171,8 @@ def test_update(bibliography, bibliography_repository,
         .create(
             COLLECTION,
             user.profile,
-            mongo_entry(),
-            mongo_entry(),
+            create_mongo_bibliography_entry(),
+            create_mongo_bibliography_entry(),
         ).thenReturn()
     )
     (
