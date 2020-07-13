@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Tuple
 
 import falcon  # pyre-ignore
 
@@ -26,29 +26,29 @@ class FragmentSearch:
             {
                 frozenset(["id", "pages"]): lambda value:
                 finder.inject_documents_in_fragment_infos(
-                    value[0], self._validate_pages(value[1])
+                    *self._validate_pages(**value)
                 ),
-                frozenset(["number"]): lambda value: finder.search(*value),
+                frozenset(["number"]): lambda value: finder.search(**value),
                 frozenset(["random"]): lambda _: finder.find_random(),
                 frozenset(["interesting"]): lambda _: finder.find_interesting(),
                 frozenset(["latest"]): lambda _: fragmentarium.find_latest(),
                 frozenset(["needsRevision"]): lambda _: fragmentarium.find_needs_revision(),
                 frozenset(["transliteration"]): lambda value: finder.search_transliteration(
-                    transliteration_query_factory.create(*value)
+                    transliteration_query_factory.create(**value)
                 ),
             }
         )
 
     @staticmethod
-    def _validate_pages(pages: Union[str, None]) -> str:
+    def _validate_pages(id: str, pages: Union[str, None]) -> Tuple[str, str]:
         if pages:
             try:
                 int(pages)
-                return pages
+                return id, pages
             except ValueError:
                 raise DataError(f'Pages "{pages}" not numeric.')
         else:
-            return ""
+            return id, ""
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]

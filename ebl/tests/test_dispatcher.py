@@ -3,9 +3,9 @@ import pytest  # pyre-ignore
 from ebl.dispatcher import DispatchError, create_dispatcher
 
 COMMANDS = {
-    frozenset(["a"]): lambda value: f"a_{''.join(value)}",
-    frozenset(["b"]): lambda value: f"b_{''.join(value)}",
-    frozenset(["a", "b"]): lambda value: f"a_b_{''.join(value)}",
+    frozenset(["a"]): lambda value: f"a_{''.join(value.values())}",
+    frozenset(["b"]): lambda value: f"b_{''.join(value.values())}",
+    frozenset(["a", "b"]): lambda value: f"a_b_{''.join(value.values())}",
 }
 DISPATCH = create_dispatcher(COMMANDS)
 

@@ -1,4 +1,4 @@
-from typing import Callable, Mapping, TypeVar, Tuple, Dict, Sequence, FrozenSet
+from typing import Callable, Mapping, TypeVar, Tuple, Dict, FrozenSet
 
 
 class DispatchError(Exception):
@@ -6,13 +6,13 @@ class DispatchError(Exception):
 
 
 T = TypeVar("T")
-Command = Callable[[Sequence[str]], T]
+Command = Callable[[Mapping[str, str]], T]
 Dispatcher = Callable[[dict], T]
 
 
-def get_parameter(parameters: Dict[str, str]) -> Tuple[FrozenSet[str], Sequence[str]]:
+def get_parameter(parameters: Dict[str, str]) -> Tuple[FrozenSet[str], Mapping[str, str]]:
     parameter = frozenset(parameters.keys())
-    values = tuple(parameters.values())
+    values = parameters
     return parameter, values
 
 

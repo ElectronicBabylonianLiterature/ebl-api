@@ -7,6 +7,6 @@ class TransliterationQueryFactory:
     def __init__(self, atf_converter: AtfConverter):
         self._atf_converter = atf_converter
 
-    def create(self, atf: Atf):
-        signs = self._atf_converter.convert_atf_to_sign_matrix(atf)
+    def create(self, transliteration: Atf):
+        signs = self._atf_converter.convert_atf_to_sign_matrix(transliteration)
         return TransliterationQuery(signs)
