@@ -12,7 +12,6 @@ from ebl.transliteration.domain.at_line import (ColumnAtLine, CompositeAtLine,
                                                 DivisionAtLine, HeadingAtLine,
                                                 ObjectAtLine, SealAtLine,
                                                 SurfaceAtLine)
-from ebl.transliteration.domain.labels import ObjectLabel
 from ebl.transliteration.domain.tokens import ValueToken
 
 
