@@ -82,11 +82,7 @@ class ObjectAtLineSchema(AtLineSchema):
 
     @post_load
     def make_line(self, data, **kwargs) -> ObjectAtLine:
-        return (
-            ObjectAtLine(data["label"])
-            if "label" in data
-            else ObjectAtLine(ObjectLabel(data["status"], data["object_label"], data["text"]))
-        )
+        return ObjectAtLine(data["label"])
 
 
 class DivisionAtLineSchema(AtLineSchema):
