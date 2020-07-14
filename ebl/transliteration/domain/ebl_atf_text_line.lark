@@ -37,7 +37,6 @@ _have_both: tabulation
          | erasure
          | word
          | lone_determinative
-         | unknown_number_of_signs
 _omit_left.-1: close_broken_away
              | close_perhaps_broken_away
              | close_accidental_omission
@@ -114,10 +113,8 @@ inline_erasure_part: _parts?
 
 _parts: value _parts_tail*
       | gloss (_loose_joiner? value)? _parts_tail*
-      | gloss (_loose_joiner? unknown_number_of_signs)? _parts_tail*
-      | unknown_number_of_signs _parts_tail+
-_parts_tail: _strict_joiner (value | unknown_number_of_signs)
-           | _loose_joiner? (gloss _loose_joiner?)+ (value | unknown_number_of_signs)?
+_parts_tail: _strict_joiner value
+           | _loose_joiner? (gloss _loose_joiner?)+ value?
 
 ?gloss: linguistic_gloss | phonetic_gloss | determinative
 linguistic_gloss: "{{" gloss_body "}}"
@@ -139,6 +136,7 @@ _any_open: (open_accidental_omission | open_intentional_omission | open_removal 
 
 ?value: unidentified_sign
       | unclear_sign
+      | unknown_number_of_signs
       | reading
       | number
       | logogram

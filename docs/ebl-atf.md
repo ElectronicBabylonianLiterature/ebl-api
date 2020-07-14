@@ -155,7 +155,6 @@ can sometimes be omitted.
 | Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
 | Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
-| Unknown Number of Signs | `...` | No | No | |
 | Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
 | Removal | `<<`, `>>` | No | No | See Presence below. |
 | Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
@@ -185,7 +184,6 @@ token = commentary-protocol
       | erasure
       | word
       | determinative
-      | unknown-number-of-signs
       | close-broken-away
       | close-perhaps-broken-away
       | close-intentional-omission
@@ -320,6 +318,7 @@ determinative. A word is lemmatizable and alignable if:
 - It does not contain variants.
 - It does not contain unclear signs.
 - It does not contain unidentified signs.
+- It does not contain unknown number of signs.
 - The language is lemmatizable.
 - The language is not normalized.
 
@@ -330,11 +329,11 @@ word = [ open-any ],
 
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( value | determinative | linguistic-gloss | phonetic-gloss |
-          unknown-number-of-signs ),
-        { [ part-joiner ], ( value | determinative | linguistic-gloss |
-                             phonetic-gloss | unknown-number-of-signs ) };
-        (* Word cannot consist of only unknown-number-of-signs. *)
+parts = part, { [ part-joiner ], part };
+part = value
+     | determinative
+     | linguistic-gloss
+     | phonetic-gloss;
 
 linguistic-gloss = '{{', gloss-body, '}}';
 phonetic-gloss = '{+', gloss-body, '}';
@@ -373,6 +372,7 @@ value = unknown
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown
+             | unknown-number-of-signs
              | value-with-sign
              | reading
              | compound-grapheme

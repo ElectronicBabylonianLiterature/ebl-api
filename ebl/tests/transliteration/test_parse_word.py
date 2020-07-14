@@ -40,6 +40,7 @@ from ebl.transliteration.domain.word_tokens import (
 @pytest.mark.parametrize(
     "atf,expected",
     [
+        ("...", Word.of([UnknownNumberOfSigns.of()])),
         ("x", Word.of([UnclearSign.of()])),
         ("X", Word.of([UnidentifiedSign.of()])),
         ("x?", Word.of([UnclearSign.of([atf.Flag.UNCERTAIN])])),
