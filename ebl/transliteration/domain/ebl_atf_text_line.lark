@@ -106,7 +106,7 @@ close_removal: ">>"
 
 lone_determinative.4: _any_open? (phonetic_gloss | determinative) _any_close?
 
-word.3: joiner? _any_open? _word_body _any_close? joiner?
+word.3: _any_open? _word_body _any_close?
 _word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasure (_loose_joiner? _parts)?)*
 
 inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"

@@ -312,12 +312,10 @@ and *Unknown* are lemmatizable.
 
 ### Word
 
-A word is considered partial if starts or end ends with `-`, `.`, or `+`.
 A *lone determinative* is a special case of a word consisting only a single
 determinative. A word is lemmatizable and alignable if:
 
 - It is not erased.
-- It is not partial.
 - It is not lone determinative.
 - It does not contain variants.
 - It does not contain unclear signs.
@@ -326,9 +324,9 @@ determinative. A word is lemmatizable and alignable if:
 - The language is not normalized.
 
 ```ebnf
-word = [ joiner ], [ open-any ],
+word = [ open-any ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-any ], [ joiner ];
+       [ close-any ];
 
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 

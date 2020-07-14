@@ -55,7 +55,7 @@ LINE_NUMBER = LineNumber(1)
         ("%foo", DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
     ],
 )
-def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
+def test_text_line_of_iterable(code: str, language: Language, normalized: bool) -> None:
     tokens = [
         Word.of([Reading.of_name("first")]),
         LanguageShift.of(code),
@@ -117,18 +117,18 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool):
         "12. [ : ]",
         "13. [ %sux ]",
         "14. [ !cm ]",
-        "15. ($___$) -(x)-eš-am₃?#",
-        "16. am₃- ($___$)",
-        "17. pa- {(he-pi₂)}",
+        "15. ($___$) (x)-eš-am₃?#",
+        "16. am₃ ($___$)",
+        "17. pa {(he-pi₂)}",
         "18. du₃-am₃{{mu-un-<(du₃)>}}",
     ],
 )
-def test_text_line_atf(atf: str):
+def test_text_line_atf(atf: str) -> None:
     line = parse_line(atf)
     assert line.atf == atf
 
 
-def test_text_line_atf_gloss():
+def test_text_line_atf_gloss() -> None:
     line = TextLine.of_iterable(
         LINE_NUMBER,
         [
@@ -183,13 +183,13 @@ def test_text_line_atf_gloss():
         ),
     ],
 )
-def test_text_line_atf_erasure(erasure, expected: str):
+def test_text_line_atf_erasure(erasure, expected: str) -> None:
     word = Word.of([Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("mu")])
     line = TextLine.of_iterable(LINE_NUMBER, [word, *erasure, word])
     assert line.atf == f"{line.line_number.atf} {word.value} {expected} {word.value}"
 
 
-def test_lemmatization():
+def test_lemmatization() -> None:
     line = TextLine.of_iterable(
         LINE_NUMBER,
         [
@@ -206,7 +206,7 @@ def test_lemmatization():
     )
 
 
-def test_update_lemmatization():
+def test_update_lemmatization() -> None:
     line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("bu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     expected = TextLine.of_iterable(
@@ -216,14 +216,14 @@ def test_update_lemmatization():
     assert line.update_lemmatization(lemmatization) == expected
 
 
-def test_update_lemmatization_incompatible():
+def test_update_lemmatization_incompatible() -> None:
     line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("mu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
-def test_update_lemmatization_wrong_lenght():
+def test_update_lemmatization_wrong_lenght() -> None:
     line = TextLine.of_iterable(
         LINE_NUMBER,
         [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")])],
