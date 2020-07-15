@@ -14,6 +14,5 @@ tasks:
 
 vscode:
   extensions:
-    - almenon.arepl@1.0.20:Uu7lIOwyLgmNWpTwCl/iqQ==
     - eamodio.gitlens@10.2.1:ZI2Sl3DHdJu4aG2wW92CQQ==
     - DavidAnson.vscode-markdownlint@0.36.1:qV04OEElMWIf9PHKK19GYA==
