@@ -31,7 +31,7 @@ def allow_signs(signs, sign_list):
 
 
 def create_text(client, text):
-    post_result = client.simulate_post(f"/texts", body=json.dumps(create_dto(text)))
+    post_result = client.simulate_post("/texts", body=json.dumps(create_dto(text)))
     assert post_result.status == falcon.HTTP_CREATED
     assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
@@ -100,7 +100,7 @@ def test_listing_texts(client, bibliography, sign_repository, signs):
     create_text(client, first_text)
     create_text(client, second_text)
 
-    get_result = client.simulate_get(f"/texts")
+    get_result = client.simulate_get("/texts")
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"

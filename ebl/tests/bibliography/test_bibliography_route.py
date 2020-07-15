@@ -35,7 +35,7 @@ def test_get_entry_not_found(client):
 def test_create_entry(client, bibliography_entry):
     id_ = bibliography_entry["id"]
     body = json.dumps(bibliography_entry)
-    post_result = client.simulate_post(f"/bibliography", body=body)
+    post_result = client.simulate_post("/bibliography", body=body)
 
     assert post_result.status == falcon.HTTP_CREATED
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
@@ -50,7 +50,7 @@ def test_create_entry(client, bibliography_entry):
 def test_create_entry_duplicate(client, saved_entry):
     body = json.dumps(saved_entry)
 
-    put_result = client.simulate_post(f"/bibliography", body=body)
+    put_result = client.simulate_post("/bibliography", body=body)
 
     assert put_result.status == falcon.HTTP_CONFLICT
 
@@ -60,7 +60,7 @@ def test_create_entry_invalid(transform, client, bibliography_entry):
     invalid_entry = transform(bibliography_entry)
     body = json.dumps(invalid_entry)
 
-    put_result = client.simulate_post(f"/bibliography", body=body)
+    put_result = client.simulate_post("/bibliography", body=body)
 
     assert put_result.status == falcon.HTTP_BAD_REQUEST
 

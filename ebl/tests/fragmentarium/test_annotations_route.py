@@ -21,7 +21,7 @@ def test_find_annotations(client):
 
 
 def test_find_not_allowed(guest_client):
-    result = guest_client.simulate_get(f"/fragments/X.1/annotations")
+    result = guest_client.simulate_get("/fragments/X.1/annotations")
 
     assert result.status == falcon.HTTP_FORBIDDEN
 
@@ -46,7 +46,7 @@ def test_update(client):
 def test_update_number_mismatch(client):
     annotations = AnnotationsFactory.build()
     body = AnnotationsSchema().dumps(annotations)
-    url = f"/fragments/not match/annotations"
+    url = "/fragments/not match/annotations"
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -54,7 +54,7 @@ def test_update_number_mismatch(client):
 
 def test_update_invalid(client):
     body = json.dumps({"thisIs": "invalid annotations", "fragmentNumber": "X.1"})
-    url = f"/fragments/X.1/annotations"
+    url = "/fragments/X.1/annotations"
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_BAD_REQUEST
@@ -63,7 +63,7 @@ def test_update_invalid(client):
 def test_update_not_allowed(guest_client):
     annotations = AnnotationsFactory.build()
     body = AnnotationsSchema().dumps(annotations)
-    url = f"/fragments/not match/annotations"
+    url = "/fragments/not match/annotations"
     result = guest_client.simulate_post(url, body=body)
 
     assert result.status == falcon.HTTP_FORBIDDEN

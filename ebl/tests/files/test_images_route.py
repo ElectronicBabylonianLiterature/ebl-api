@@ -11,7 +11,7 @@ def test_get_image(client, file):
 
 
 def test_get_image_not_found(client):
-    result = client.simulate_get(f"/images/unknown.jpg")
+    result = client.simulate_get("/images/unknown.jpg")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 

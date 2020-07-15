@@ -129,11 +129,11 @@ def parse_error(error: ParseError, line: str, line_number: int):  # pyre-ignore[
 
 
 def enclosure_error(error: EnclosureError, line: str, line_number: int):
-    return {"description": f"Invalid brackets.", "lineNumber": line_number + 1}
+    return {"description": "Invalid brackets.", "lineNumber": line_number + 1}
 
 
 def visit_error(error: VisitError, line: str, line_number: int):  # pyre-ignore[11]
     if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
-        return {"description": f"Duplicate Status", "lineNumber": line_number + 1}
+        return {"description": "Duplicate Status", "lineNumber": line_number + 1}
     else:
         raise error

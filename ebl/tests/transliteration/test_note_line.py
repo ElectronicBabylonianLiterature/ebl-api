@@ -26,7 +26,7 @@ EXPECTED_ATF = "bu %es [kur ...]"
 def expected_transliteration(language: Language) -> Sequence[Token]:
     return (
         Word.of([Reading.of_name("bu")], language, DEFAULT_NORMALIZED),
-        LanguageShift.of(f"%es"),
+        LanguageShift.of("%es"),
         Word.of(
             [
                 BrokenAway.open(),
