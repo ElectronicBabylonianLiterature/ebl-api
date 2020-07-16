@@ -1136,6 +1136,33 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
+        (
+            "1. ... -ad ad- ... ad- ... -ad",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (
+                        Word.of((
+                            UnknownNumberOfSigns.of(),
+                            Joiner.hyphen(),
+                            Reading.of_name("ad"),
+                        )),
+                        Word.of((
+                            Reading.of_name("ad"),
+                            Joiner.hyphen(),
+                            UnknownNumberOfSigns.of(),
+                        )),
+                        Word.of((
+                            Reading.of_name("ad"),
+                            Joiner.hyphen(),
+                            UnknownNumberOfSigns.of(),
+                            Joiner.hyphen(),
+                            Reading.of_name("ad"),
+                        )),
+                    ),
+                )
+            ],
+        ),
     ],
 )
 def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:

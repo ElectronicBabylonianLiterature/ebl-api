@@ -142,8 +142,8 @@ See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginat
 
 ## Text lines
 
-Text is a series of tokens separated by a word separator (space). The separator
-can sometimes be omitted.
+Text is a series of tokens separated by a word separator (space). Sometimes
+the separator is ignored (see Word below) or can be omitted.
 
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
 | -------------|------------|--------------|-----------|-------|
@@ -322,6 +322,9 @@ determinative. A word is lemmatizable and alignable if:
 - The language is lemmatizable.
 - The language is not normalized.
 
+A word cannot start or end with a joiner and word separators adjecent to a joiner
+are ignored. E.g. `... -a]d` is equivalent to `...-a]d`.
+
 ```ebnf
 word = [ open-any ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
@@ -358,7 +361,7 @@ close_any = { close-broken-away
              | close-intentional-omission
              | close-accidental-omission
              | close-removal }+;
-joiner = '-' | '+' | '.' | ':';
+joiner = { word-separator } ( '-' | '+' | '.' | ':' ) { word-separator };
 inword-newline = ';';
 
 value = unknown
