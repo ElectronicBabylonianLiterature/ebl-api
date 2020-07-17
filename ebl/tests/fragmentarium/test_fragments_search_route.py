@@ -45,7 +45,7 @@ def test_search_references(client, fragmentarium, bibliography, user):
             ReferenceFactory.build(id='RN.1'))
     )
     fragmentarium.create(fragment)
-    result = client.simulate_get(f"/fragments", params={
+    result = client.simulate_get("/fragments", params={
         "id": fragment.references[0].id, "pages": fragment.references[0].pages
     })
 
@@ -69,7 +69,7 @@ def test_search_references_invalid_query(client, fragmentarium):
     fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
     reference_pages = "should be a number"
-    result = client.simulate_get(f"/fragments", params={
+    result = client.simulate_get("/fragments", params={
         "id": reference_id, "pages": reference_pages
     })
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -157,5 +157,5 @@ def test_search_fragment_no_query(client):
     ]
 )
 def test_search_invalid_params(client, parameters):
-    result = client.simulate_get(f"/fragments", params=parameters)
+    result = client.simulate_get("/fragments", params=parameters)
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
