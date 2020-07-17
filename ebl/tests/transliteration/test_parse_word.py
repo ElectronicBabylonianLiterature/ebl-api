@@ -40,6 +40,7 @@ from ebl.transliteration.domain.word_tokens import (
 @pytest.mark.parametrize(
     "atf,expected",
     [
+        ("...", Word.of([UnknownNumberOfSigns.of()])),
         ("x", Word.of([UnclearSign.of()])),
         ("X", Word.of([UnidentifiedSign.of()])),
         ("x?", Word.of([UnclearSign.of([atf.Flag.UNCERTAIN])])),
@@ -116,31 +117,6 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("u", 2),
                     Joiner.hyphen(),
                     Reading.of_name("qu"),
-                ],
-            ),
-        ),
-        (
-            "na-a[n-",
-            Word.of(
-                [
-                    Reading.of_name("na"),
-                    Joiner.hyphen(),
-                    Reading.of(
-                        (ValueToken.of("a"), BrokenAway.open(), ValueToken.of("n"))
-                    ),
-                    Joiner.hyphen(),
-                ],
-            ),
-        ),
-        (
-            "-ku]-nu",
-            Word.of(
-                [
-                    Joiner.hyphen(),
-                    Reading.of_name("ku"),
-                    BrokenAway.close(),
-                    Joiner.hyphen(),
-                    Reading.of_name("nu"),
                 ],
             ),
         ),
@@ -318,17 +294,6 @@ from ebl.transliteration.domain.word_tokens import (
                     Determinative.of([Reading.of_name("d")]),
                     BrokenAway.open(),
                     Logogram.of_name("UTU", flags=[atf.Flag.UNCERTAIN]),
-                ],
-            ),
-        ),
-        (
-            ".x.KAM",
-            Word.of(
-                [
-                    Joiner.dot(),
-                    UnclearSign.of(),
-                    Joiner.dot(),
-                    Logogram.of_name("KAM"),
                 ],
             ),
         ),
@@ -512,8 +477,8 @@ from ebl.transliteration.domain.word_tokens import (
             ),
         ),
         (
-            "in]-",
-            Word.of([Reading.of_name("in"), BrokenAway.close(), Joiner.hyphen(),],),
+            "in]",
+            Word.of([Reading.of_name("in"), BrokenAway.close()],),
         ),
         (
             "<en-da-ab>",
@@ -903,7 +868,8 @@ def test_invalid_lone_determinative(atf) -> None:
 @pytest.mark.parametrize(
     "invalid_atf",
     [
-        "Kur" "ku(r",
+        "Kur",
+        "ku(r",
         "K)UR",
         "K[(UR",
         "ku)]r",
@@ -919,6 +885,10 @@ def test_invalid_lone_determinative(atf) -> None:
         "01",
         "|KU]R|",
         "|KUR.[KUR|",
+        "-kur",
+        "kur-",
+        "]-kur",
+        "kur-[",
     ],
 )
 def test_invalid(invalid_atf) -> None:

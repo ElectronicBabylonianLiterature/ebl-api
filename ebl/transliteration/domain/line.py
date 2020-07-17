@@ -1,95 +1,71 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Sequence, Type, TypeVar
+from typing import Sequence, Tuple, TypeVar
 
 import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
-from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
-from ebl.transliteration.domain.converters import convert_token_sequence
-from ebl.transliteration.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.transliteration.domain.tokens import TokenVisitor
 
 
-T = TypeVar("T")
+L = TypeVar("L", bound="Line")
 
 
 @attr.s(frozen=True)
 class Line(ABC):
     @property
     @abstractmethod
-    def prefix(self) -> str:
+    def atf(self) -> Atf:
         ...
 
     @property
     @abstractmethod
-    def content(self) -> Sequence[Token]:
+    def lemmatization(self) -> Sequence[LemmatizationToken]:
         ...
 
     @property
     def key(self) -> str:
-        tokens = "⁚".join(token.get_key() for token in self.content)
-        return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
-
-    @property
-    def atf(self) -> Atf:
-        content = WORD_SEPARATOR.join(token.value for token in self.content)
-        return Atf(f"{self.prefix}{content}")
+        return f"{type(self).__name__}⁞{self.atf}⁞{hash(self)}"
 
     def update_lemmatization(
-        self, lemmatization: Sequence[LemmatizationToken]
-    ) -> "Line":
-        def updater(token, lemmatization_token):
-            return token.set_unique_lemma(lemmatization_token)
-
-        return self._update_tokens(lemmatization, updater, LemmatizationError)
-
-    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "Line":
+        self: L, lemmatization: Sequence[LemmatizationToken]
+    ) -> L:
         return self
 
-    def _update_tokens(
-        self,
-        updates: Sequence[T],
-        updater: Callable[[Token, T], Token],
-        error_class: Type[Exception],
-    ) -> "Line":
+    def update_alignment(self: L, alignment: Sequence[AlignmentToken]) -> L:
         return self
 
-    def merge(self, other: "Line") -> "Line":
+    def merge(self, other: L) -> L:
         return other
 
-    def strip_alignments(self):
+    def strip_alignments(self: L) -> L:
         return self
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        pass
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ControlLine(Line):
-    _prefix: str = ""
-    _content: Sequence[Token] = attr.ib(
-        default=tuple(), converter=convert_token_sequence
-    )
-
-    @classmethod
-    def of_single(cls, prefix: str, content: Token):
-        return cls(prefix, (content,))
+    prefix: str
+    content: str
 
     @property
-    def prefix(self):
-        return self._prefix
+    def atf(self) -> Atf:
+        return Atf(f"{self.prefix}{self.content}")
 
     @property
-    def content(self):
-        return self._content
+    def lemmatization(self) -> Tuple[LemmatizationToken]:
+        return (LemmatizationToken(self.content),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class EmptyLine(Line):
     @property
-    def prefix(self):
-        return ""
+    def atf(self) -> Atf:
+        return Atf("")
 
     @property
-    def content(self):
+    def lemmatization(self) -> Tuple:
         return tuple()

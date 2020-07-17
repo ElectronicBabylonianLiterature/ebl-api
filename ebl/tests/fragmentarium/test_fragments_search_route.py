@@ -19,7 +19,7 @@ def expected_fragment_info_dto(fragment, lines=tuple()):
 def test_search_fragment(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
-    result = client.simulate_get(f"/fragments", params={"number": fragment_number})
+    result = client.simulate_get("/fragments", params={"number": fragment_number})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(fragment)]
@@ -28,7 +28,7 @@ def test_search_fragment(client, fragmentarium):
 
 
 def test_search_fragment_not_found(client):
-    result = client.simulate_get(f"/fragments", params={"number": "K.1"})
+    result = client.simulate_get("/fragments", params={"number": "K.1"})
 
     assert result.json == []
 
@@ -81,7 +81,7 @@ def test_search_signs(client, fragmentarium, sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
 
-    result = client.simulate_get(f"/fragments", params={"transliteration": "ma-tu₂"})
+    result = client.simulate_get("/fragments", params={"transliteration": "ma-tu₂"})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [
@@ -97,7 +97,7 @@ def test_random(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
-    result = client.simulate_get(f"/fragments", params={"random": True})
+    result = client.simulate_get("/fragments", params={"random": True})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
@@ -109,7 +109,7 @@ def test_interesting(client, fragmentarium):
     interesting_fragment = InterestingFragmentFactory.build()
     fragmentarium.create(interesting_fragment)
 
-    result = client.simulate_get(f"/fragments", params={"interesting": True})
+    result = client.simulate_get("/fragments", params={"interesting": True})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(interesting_fragment)]
@@ -121,7 +121,7 @@ def test_latest(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
-    result = client.simulate_get(f"/fragments", params={"latest": True})
+    result = client.simulate_get("/fragments", params={"latest": True})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
@@ -133,7 +133,7 @@ def test_needs_revision(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
 
-    result = client.simulate_get(f"/fragments", params={"needsRevision": True})
+    result = client.simulate_get("/fragments", params={"needsRevision": True})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
@@ -142,7 +142,7 @@ def test_needs_revision(client, fragmentarium):
 
 
 def test_search_fragment_no_query(client):
-    result = client.simulate_get(f"/fragments")
+    result = client.simulate_get("/fragments")
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 

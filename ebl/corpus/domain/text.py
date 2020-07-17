@@ -42,7 +42,7 @@ class Manuscript:
     @accession.validator
     def validate_accession(self, _, value):
         if self.museum_number and value:
-            raise ValueError(f"Accession given when museum number present.")
+            raise ValueError("Accession given when museum number present.")
 
     @property
     def siglum(self):

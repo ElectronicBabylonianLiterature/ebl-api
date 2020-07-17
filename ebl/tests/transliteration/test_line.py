@@ -5,29 +5,32 @@ from ebl.transliteration.domain.line import (
     ControlLine,
     EmptyLine,
 )
-from ebl.transliteration.domain.tokens import ValueToken
 
 
-def test_empty_line():
+def test_empty_line() -> None:
     line = EmptyLine()
 
-    assert line.prefix == ""
-    assert line.content == tuple()
-    assert line.key == "EmptyLine⁞⟨⟩"
+    assert line.lemmatization == tuple()
+    assert line.key == f"EmptyLine⁞⁞{hash(line)}"
     assert line.atf == ""
 
 
-def test_control_line_of_single():
-    prefix = "$"
-    token = ValueToken.of("only")
-    line = ControlLine.of_single(prefix, token)
+def test_control_line() -> None:
+    prefix = "#"
+    content = "only"
+    line = ControlLine(prefix, content)
 
-    assert line == ControlLine("$", (token,))
+    assert line.prefix == prefix
+    assert line.content == content
+    assert line.key == f"ControlLine⁞#only⁞{hash(line)}"
+    assert line.lemmatization == (LemmatizationToken(content),)
 
 
 @pytest.mark.parametrize(
-    "line", [ControlLine.of_single("@", ValueToken.of("obverse")), EmptyLine()]
+    "line,lemmatization", [
+        (ControlLine("#", ' a comment'), (LemmatizationToken(' a comment'),)),
+        (EmptyLine(), tuple()),
+    ]
 )
-def test_update_lemmatization(line):
-    lemmatization = tuple(LemmatizationToken(token.value) for token in line.content)
+def test_update_lemmatization(line,lemmatization) -> None:
     assert line.update_lemmatization(lemmatization) == line

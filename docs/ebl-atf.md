@@ -142,8 +142,8 @@ See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginat
 
 ## Text lines
 
-Text is a series of tokens separated by a word separator (space). The separator
-can sometimes be omitted.
+Text is a series of tokens separated by a word separator (space). Sometimes
+the separator is ignored (see Word below) or can be omitted.
 
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
 | -------------|------------|--------------|-----------|-------|
@@ -155,7 +155,6 @@ can sometimes be omitted.
 | Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
 | Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
-| Unknown Number of Signs | `...` | No | No | |
 | Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
 | Removal | `<<`, `>>` | No | No | See Presence below. |
 | Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
@@ -185,7 +184,6 @@ token = commentary-protocol
       | erasure
       | word
       | determinative
-      | unknown-number-of-signs
       | close-broken-away
       | close-perhaps-broken-away
       | close-intentional-omission
@@ -312,31 +310,33 @@ and *Unknown* are lemmatizable.
 
 ### Word
 
-A word is considered partial if starts or end ends with `-`, `.`, or `+`.
 A *lone determinative* is a special case of a word consisting only a single
 determinative. A word is lemmatizable and alignable if:
 
 - It is not erased.
-- It is not partial.
 - It is not lone determinative.
 - It does not contain variants.
 - It does not contain unclear signs.
 - It does not contain unidentified signs.
+- It does not contain unknown number of signs.
 - The language is lemmatizable.
 - The language is not normalized.
 
+A word cannot start or end with a joiner and word separators adjecent to a joiner
+are ignored. E.g. `... -a]d` is equivalent to `...-a]d`.
+
 ```ebnf
-word = [ joiner ], [ open-any ],
+word = [ open-any ],
        ( inline-erasure | parts ), { part-joiner, ( inline-erasure | parts ) },
-       [ close-any ], [ joiner ];
+       [ close-any ];
 
 inline-erasure = '°', [ parts ], '\', [ parts ], '°';
 
-parts = ( value | determinative | linguistic-gloss | phonetic-gloss |
-          unknown-number-of-signs ),
-        { [ part-joiner ], ( value | determinative | linguistic-gloss |
-                             phonetic-gloss | unknown-number-of-signs ) };
-        (* Word cannot consist of only unknown-number-of-signs. *)
+parts = part, { [ part-joiner ], part };
+part = value
+     | determinative
+     | linguistic-gloss
+     | phonetic-gloss;
 
 linguistic-gloss = '{{', gloss-body, '}}';
 phonetic-gloss = '{+', gloss-body, '}';
@@ -361,7 +361,7 @@ close_any = { close-broken-away
              | close-intentional-omission
              | close-accidental-omission
              | close-removal }+;
-joiner = '-' | '+' | '.' | ':';
+joiner = { word-separator } ( '-' | '+' | '.' | ':' ) { word-separator };
 inword-newline = ';';
 
 value = unknown
@@ -375,6 +375,7 @@ value = unknown
 
 variant = variant-part, { variant-separator , variant-part };
 variant-part = unknown
+             | unknown-number-of-signs
              | value-with-sign
              | reading
              | compound-grapheme

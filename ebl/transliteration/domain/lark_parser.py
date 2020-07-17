@@ -21,7 +21,7 @@ from ebl.transliteration.domain.line import (
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
-from ebl.transliteration.domain.tokens import ValueToken, Token as EblToken
+from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -34,7 +34,7 @@ class LineTransformer(
 
     @v_args(inline=True)
     def control_line(self, prefix, content):
-        return ControlLine.of_single(prefix, ValueToken.of(content))
+        return ControlLine(prefix, content)
 
 
 WORD_PARSER = Lark.open(
@@ -60,8 +60,7 @@ def parse_line(atf: str) -> Line:
 
 def validate_line(line: Line) -> None:
     visitor = EnclosureValidator()
-    for token in line.content:
-        token.accept(visitor)
+    line.accept(visitor)
     visitor.done()
 
 
@@ -130,11 +129,11 @@ def parse_error(error: ParseError, line: str, line_number: int):  # pyre-ignore[
 
 
 def enclosure_error(error: EnclosureError, line: str, line_number: int):
-    return {"description": f"Invalid brackets.", "lineNumber": line_number + 1}
+    return {"description": "Invalid brackets.", "lineNumber": line_number + 1}
 
 
 def visit_error(error: VisitError, line: str, line_number: int):  # pyre-ignore[11]
     if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
-        return {"description": f"Duplicate Status", "lineNumber": line_number + 1}
+        return {"description": "Duplicate Status", "lineNumber": line_number + 1}
     else:
         raise error

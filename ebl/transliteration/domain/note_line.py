@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import re
-from typing import Iterable, Sequence, Tuple
+from typing import Iterable, Pattern, Sequence, Tuple
 
 import attr
 
@@ -11,10 +11,11 @@ from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.tokens import Token, ValueToken
+from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
-SPECIAL_CHARACTERS = re.compile(r"[@{}\\]")
+SPECIAL_CHARACTERS: Pattern[str] = re.compile(r"[@{}\\]")
 
 
 def escape(unescaped: str) -> str:
@@ -125,14 +126,6 @@ class NoteLine(Line):
     parts: Sequence[NotePart] = attr.ib(converter=convert_part_sequence)
 
     @property
-    def prefix(self) -> str:
-        return "#note: "
-
-    @property
-    def content(self) -> Sequence[ValueToken]:
-        return [ValueToken.of(part.value) for part in self.parts]
-
-    @property
     def key(self) -> str:
         parts = "⁚".join(part.key for part in self.parts)
         return f"NoteLine⁞{self.atf}⟨{parts}⟩"
@@ -140,4 +133,11 @@ class NoteLine(Line):
     @property
     def atf(self) -> Atf:
         note = "".join(part.value for part in self.parts)
-        return Atf(f"{self.prefix}{note}")
+        return Atf(f"#note: {note}")
+
+    @property
+    def lemmatization(self) -> Sequence[LemmatizationToken]:
+        return tuple(
+            LemmatizationToken(part.value)
+            for part in self.parts
+        )

@@ -10,38 +10,34 @@ from ebl.transliteration.domain.at_line import (
     HeadingAtLine,
 )
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
 def test_at_line_heading() -> None:
     at_line = HeadingAtLine(1)
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("h1"),)
+    assert at_line.lemmatization == (LemmatizationToken("h1"),)
     assert at_line.display_value == "h1"
 
 
 def test_at_line_column() -> None:
     at_line = ColumnAtLine(ColumnLabel.from_int(1, (atf.Status.COLLATION,)))
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("column 1*"),)
+    assert at_line.lemmatization == (LemmatizationToken("column 1*"),)
     assert at_line.display_value == "column 1*"
 
 
 def test_at_line_column_no_status() -> None:
     at_line = ColumnAtLine(ColumnLabel.from_int(1))
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("column 1"),)
+    assert at_line.lemmatization == (LemmatizationToken("column 1"),)
     assert at_line.display_value == "column 1"
 
 
 def test_at_line_discourse() -> None:
     at_line = DiscourseAtLine(atf.Discourse.SIGNATURES)
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("signatures"),)
+    assert at_line.lemmatization == (LemmatizationToken("signatures"),)
     assert at_line.discourse_label == atf.Discourse.SIGNATURES
     assert at_line.display_value == "signatures"
 
@@ -51,8 +47,7 @@ def test_at_line_surface() -> None:
         SurfaceLabel((atf.Status.CORRECTION,), atf.Surface.SURFACE, "Stone wig")
     )
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("surface Stone wig!"),)
+    assert at_line.lemmatization == (LemmatizationToken("surface Stone wig!"),)
     assert at_line.surface_label == SurfaceLabel(
         (atf.Status.CORRECTION,), atf.Surface.SURFACE, "Stone wig"
     )
@@ -62,8 +57,7 @@ def test_at_line_surface() -> None:
 def test_at_line_surface_no_status() -> None:
     at_line = SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"))
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("surface Stone wig"),)
+    assert at_line.lemmatization == (LemmatizationToken("surface Stone wig"),)
     assert at_line.surface_label == SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")
     assert at_line.display_value == "surface Stone wig"
 
@@ -73,8 +67,7 @@ def test_at_line_surface_instantiate_text_with_wrong_surface() -> None:
         at_line = SurfaceAtLine(
             SurfaceLabel((atf.Status.CORRECTION,), atf.Surface.OBVERSE, "Stone wig")
         )
-        assert at_line.prefix == "@"
-        assert at_line.content == (ValueToken.of("obverse Stone wig!"),)
+        assert at_line.lemmatization == (LemmatizationToken("obverse Stone wig!"),)
         assert at_line.surface_label == SurfaceLabel(
             (atf.Status.CORRECTION,), atf.Surface.OBVERSE, "Stone wig"
         )
@@ -86,8 +79,7 @@ def test_at_line_object_no_status() -> None:
         ObjectLabel([], atf.Object.OBJECT, "Stone wig")
     )
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("object Stone wig"),)
+    assert at_line.lemmatization == (LemmatizationToken("object Stone wig"),)
     assert at_line.label == ObjectLabel([], atf.Object.OBJECT, "Stone wig")
     assert at_line.display_value == "object Stone wig"
 
@@ -96,9 +88,7 @@ def test_at_line_object() -> None:
     at_line = ObjectAtLine(
         ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
     )
-
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("object Stone wig!"),)
+    assert at_line.lemmatization == (LemmatizationToken("object Stone wig!"),)
     assert at_line.label == ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
     assert at_line.display_value == "object Stone wig!"
 
@@ -106,8 +96,7 @@ def test_at_line_object() -> None:
 def test_at_line_composite() -> None:
     at_line = CompositeAtLine(atf.Composite.DIV, "paragraph", 1)
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("div paragraph 1"),)
+    assert at_line.lemmatization == (LemmatizationToken("div paragraph 1"),)
     assert at_line.composite == atf.Composite.DIV
     assert at_line.text == "paragraph"
     assert at_line.number == 1
@@ -117,8 +106,7 @@ def test_at_line_composite() -> None:
 def test_at_line_composite_constant() -> None:
     at_line = CompositeAtLine(atf.Composite.COMPOSITE, "")
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("composite"),)
+    assert at_line.lemmatization == (LemmatizationToken("composite"),)
     assert at_line.composite == atf.Composite.COMPOSITE
     assert at_line.text == ""
     assert at_line.number is None
@@ -128,8 +116,7 @@ def test_at_line_composite_constant() -> None:
 def test_at_line_composite_milestone() -> None:
     at_line = CompositeAtLine(atf.Composite.MILESTONE, "o", 1)
 
-    assert at_line.prefix == "@"
-    assert at_line.content == (ValueToken.of("m=locator o 1"),)
+    assert at_line.lemmatization == (LemmatizationToken("m=locator o 1"),)
     assert at_line.composite == atf.Composite.MILESTONE
     assert at_line.text == "o"
     assert at_line.number == 1

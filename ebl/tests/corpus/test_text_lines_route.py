@@ -30,7 +30,7 @@ def allow_signs(signs, sign_list):
 
 
 def create_text(client, text):
-    post_result = client.simulate_post(f"/texts", body=json.dumps(create_dto(text)))
+    post_result = client.simulate_post("/texts", body=json.dumps(create_dto(text)))
     assert post_result.status == falcon.HTTP_CREATED
     assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
@@ -78,7 +78,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        f"/texts/1/1/chapters/0/lines", body=json.dumps({"lines": []})
+        "/texts/1/1/chapters/0/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -86,7 +86,7 @@ def test_updating_text_not_found(client, bibliography):
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        f"/texts/invalid/1/chapters/0/lines", body=json.dumps({"lines": []})
+        "/texts/invalid/1/chapters/0/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -94,7 +94,7 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        f"/texts/1/invalid/chapters/0/lines", body=json.dumps({"lines": []})
+        "/texts/1/invalid/chapters/0/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -102,7 +102,7 @@ def test_updating_invalid_id(client):
 
 def test_updating_invalid_chapter_index(client):
     post_result = client.simulate_post(
-        f"/texts/1/1/chapters/invalid/lines", body=json.dumps({"lines": []})
+        "/texts/1/1/chapters/invalid/lines", body=json.dumps({"lines": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND

@@ -10,9 +10,10 @@ from ebl.transliteration.domain.tokens import (EnclosureType, ErasureState,
                                                UnknownNumberOfSigns,
                                                ValueToken)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
-TRANSLITERATION = (
+TRANSLITERATION: Sequence[Token] = (
     Word.of([Reading.of_name("bu")]),
     LanguageShift.of("%es"),
     Word.of([BrokenAway.open(), Reading.of_name("kur")]),
@@ -25,7 +26,7 @@ EXPECTED_ATF = "bu %es [kur ...]"
 def expected_transliteration(language: Language) -> Sequence[Token]:
     return (
         Word.of([Reading.of_name("bu")], language, DEFAULT_NORMALIZED),
-        LanguageShift.of(f"%es"),
+        LanguageShift.of("%es"),
         Word.of(
             [
                 BrokenAway.open(),
@@ -60,16 +61,15 @@ def test_note_line():
         LanguagePart(Language.SUMERIAN, expected_transliteration(Language.SUMERIAN)),
         LanguagePart(Language.EMESAL, expected_transliteration(Language.EMESAL)),
     )
-    assert line.prefix == "#note: "
     assert line.atf == (
         "#note: this is a note "
         "@i{italic text}"
         f"@akk{{{EXPECTED_ATF}}}@sux{{{EXPECTED_ATF}}}@es{{{EXPECTED_ATF}}}"
     )
-    assert line.content == [
-        ValueToken.of("this is a note "),
-        ValueToken.of("@i{italic text}"),
-        ValueToken.of(f"@akk{{{EXPECTED_ATF}}}"),
-        ValueToken.of(f"@sux{{{EXPECTED_ATF}}}"),
-        ValueToken.of(f"@es{{{EXPECTED_ATF}}}"),
-    ]
+    assert line.lemmatization == (
+        LemmatizationToken("this is a note "),
+        LemmatizationToken("@i{italic text}"),
+        LemmatizationToken(f"@akk{{{EXPECTED_ATF}}}"),
+        LemmatizationToken(f"@sux{{{EXPECTED_ATF}}}"),
+        LemmatizationToken(f"@es{{{EXPECTED_ATF}}}"),
+    )

@@ -69,20 +69,20 @@ def test_parser_version(parser, version):
         (
             "#first\n\n#second",
             [
-                ControlLine.of_single("#", ValueToken.of("first")),
+                ControlLine("#", "first"),
                 EmptyLine(),
-                ControlLine.of_single("#", ValueToken.of("second")),
+                ControlLine("#", "second"),
             ],
         ),
         (
             "#first\n \n#second",
             [
-                ControlLine.of_single("#", ValueToken.of("first")),
+                ControlLine("#", "first"),
                 EmptyLine(),
-                ControlLine.of_single("#", ValueToken.of("second")),
+                ControlLine("#", "second"),
             ],
         ),
-        ("&K11111", [ControlLine.of_single("&", ValueToken.of("K11111"))]),
+        ("&K11111", [ControlLine("&", "K11111")]),
         ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
         (
             "$ (end of side)",
@@ -96,16 +96,16 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
-        ("#some notes", [ControlLine.of_single("#", ValueToken.of("some notes"))],),
+        ("#some notes", [ControlLine("#", "some notes")],),
         (
             "=: continuation",
-            [ControlLine.of_single("=:", ValueToken.of(" continuation"))],
+            [ControlLine("=:", " continuation")],
         ),
         (
             "1'. ...",
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True), (UnknownNumberOfSigns.of(),)
+                    LineNumber(1, True), (Word.of((UnknownNumberOfSigns.of(),)),)
                 )
             ],
         ),
@@ -113,7 +113,7 @@ def test_parser_version(parser, version):
             "1′. ...",
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True), (UnknownNumberOfSigns.of(),)
+                    LineNumber(1, True), (Word.of((UnknownNumberOfSigns.of(),)),)
                 )
             ],
         ),
@@ -121,7 +121,7 @@ def test_parser_version(parser, version):
             "1’. ...",
             [
                 TextLine.of_iterable(
-                    LineNumber(1, True), (UnknownNumberOfSigns.of(),)
+                    LineNumber(1, True), (Word.of((UnknownNumberOfSigns.of(),)),)
                 )
             ],
         ),
@@ -130,7 +130,7 @@ def test_parser_version(parser, version):
             [
                 TextLine.of_iterable(
                     LineNumber(113, True, "D", "a"),
-                    (UnknownNumberOfSigns.of(),),
+                    (Word.of((UnknownNumberOfSigns.of(),)),)
                 )
             ],
         ),
@@ -141,7 +141,7 @@ def test_parser_version(parser, version):
                     LineNumberRange(
                         LineNumber(113, True, "z", "a"), LineNumber(9, False, None, "b")
                     ),
-                    (UnknownNumberOfSigns.of(),),
+                    (Word.of((UnknownNumberOfSigns.of(),)),)
                 )
             ],
         ),
@@ -155,15 +155,20 @@ def test_parser_version(parser, version):
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
-                        BrokenAway.open(),
-                        PerhapsBrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        PerhapsBrokenAway.close(),
-                        BrokenAway.close(),
+                        Word.of((UnknownNumberOfSigns.of(),)),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )),
+
+                        Word.of((
+                            BrokenAway.open(),
+                            PerhapsBrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            PerhapsBrokenAway.close(),
+                            BrokenAway.close(),
+                        )),
                     ),
                 )
             ],
@@ -211,7 +216,7 @@ def test_parser_version(parser, version):
                                 Reading.of_name("su", 8),
                             ],
                         ),
-                        UnknownNumberOfSigns.of(),
+                        Word.of((UnknownNumberOfSigns.of(),)),
                         AccidentalOmission.close(),
                     ),
                 )
@@ -224,8 +229,7 @@ def test_parser_version(parser, version):
                     LineNumber(1),
                     (
                         Word.of([Removal.open(), Reading.of_name("en"),]),
-                        UnknownNumberOfSigns.of(),
-                        Removal.close(),
+                        Word.of((UnknownNumberOfSigns.of(), Removal.close())),
                     ),
                 )
             ],
@@ -368,8 +372,7 @@ def test_parser_version(parser, version):
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
+                        Word.of((BrokenAway.open(), UnknownNumberOfSigns.of())),
                         Word.of(
                             parts=[
                                 Reading.of(
@@ -497,10 +500,12 @@ def test_parser_version(parser, version):
                                 Reading.of_name("ku"),
                             ],
                         ),
-                        PerhapsBrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        PerhapsBrokenAway.close(),
-                        BrokenAway.close(),
+                        Word.of((
+                            PerhapsBrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            PerhapsBrokenAway.close(),
+                            BrokenAway.close(),
+                        )),
                     ),
                 ),
                 TextLine.of_iterable(
@@ -569,42 +574,50 @@ def test_parser_version(parser, version):
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )),
                         LoneDeterminative.of_value(
                             [Determinative.of([Reading.of_name("bu")]),],
                             ErasureState.NONE,
                         ),
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ))
                     ),
                 ),
                 TextLine.of_iterable(
                     LineNumber(2),
                     (
                         Word.of(
-                            parts=[
+                            [
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns.of(),
                                 BrokenAway.close(),
                                 Determinative.of([Reading.of_name("bu")]),
                             ],
                         ),
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ))
                     ),
                 ),
                 TextLine.of_iterable(
                     LineNumber(3),
                     (
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )),
                         Word.of(
-                            parts=[
+                            [
                                 Determinative.of([Reading.of_name("bu")]),
                                 BrokenAway.open(),
                                 UnknownNumberOfSigns.of(),
@@ -703,9 +716,11 @@ def test_parser_version(parser, version):
                             ],
                             ErasureState.NONE,
                         ),
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )),
                     ),
                 )
             ],
@@ -1035,7 +1050,7 @@ def test_parser_version(parser, version):
                                 Reading.of_name("kur"),
                             ],
                         ),
-                        UnknownNumberOfSigns.of(),
+                        Word.of((UnknownNumberOfSigns.of(),)),
                         Word.of(
                             parts=[
                                 Determinative.of([Reading.of_name("d")]),
@@ -1065,7 +1080,7 @@ def test_parser_version(parser, version):
                                 Determinative.of([Reading.of_name("d")]),
                             ],
                         ),
-                        UnknownNumberOfSigns.of(),
+                        Word.of((UnknownNumberOfSigns.of(),)),
                     ),
                 )
             ],
@@ -1097,8 +1112,10 @@ def test_parser_version(parser, version):
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
+                        Word.of((
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                        )),
                         DocumentOrientedGloss.open(),
                         Word.of(
                             parts=[
@@ -1119,13 +1136,40 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
+        (
+            "1. ... -ad ad- ... ad- ... -ad",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (
+                        Word.of((
+                            UnknownNumberOfSigns.of(),
+                            Joiner.hyphen(),
+                            Reading.of_name("ad"),
+                        )),
+                        Word.of((
+                            Reading.of_name("ad"),
+                            Joiner.hyphen(),
+                            UnknownNumberOfSigns.of(),
+                        )),
+                        Word.of((
+                            Reading.of_name("ad"),
+                            Joiner.hyphen(),
+                            UnknownNumberOfSigns.of(),
+                            Joiner.hyphen(),
+                            Reading.of_name("ad"),
+                        )),
+                    ),
+                )
+            ],
+        ),
     ],
 )
-def test_parse_atf(line: str, expected_tokens: List[Line]):
+def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-def test_parse_dividers():
+def test_parse_dividers() -> None:
     line, expected_tokens = (
         r'1. :? :#! :# ::? :.@v /@19* :"@20@c |@v@19!',
         [
@@ -1147,7 +1191,7 @@ def test_parse_dividers():
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-def test_parse_atf_invalid():
+def test_parse_atf_invalid() -> None:
     with pytest.raises(Exception):
         parse_atf_lark("invalid")
 
@@ -1173,7 +1217,7 @@ def test_parse_atf_invalid():
         ("%foo", DEFAULT_LANGUAGE),
     ],
 )
-def test_parse_atf_language_shifts(code: str, expected_language: Language):
+def test_parse_atf_language_shifts(code: str, expected_language: Language) -> None:
     word = "ha-am"
     parts = [Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am")]
     line = f"1. {word} {code} {word} %sb {word}"
@@ -1196,7 +1240,7 @@ def test_parse_atf_language_shifts(code: str, expected_language: Language):
     assert parse_atf_lark(line).lines == expected.lines
 
 
-def assert_exception_has_errors(exc_info, line_numbers, description):
+def assert_exception_has_errors(exc_info, line_numbers, description) -> None:
     assert_that(
         exc_info.value.errors,
         contains_exactly(
@@ -1221,7 +1265,7 @@ def assert_exception_has_errors(exc_info, line_numbers, description):
         ("a+1.a+2. šu", [1]),
     ],
 )
-def test_invalid_atf(atf, line_numbers):
+def test_invalid_atf(atf, line_numbers) -> None:
     with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
@@ -1231,7 +1275,7 @@ def test_invalid_atf(atf, line_numbers):
 @pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2]),],
 )
-def test_invalid_brackets(atf, line_numbers):
+def test_invalid_brackets(atf, line_numbers) -> None:
     with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
@@ -1241,6 +1285,6 @@ def test_invalid_brackets(atf, line_numbers):
 @pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n1. x", [2]), ("1. x\n@obverse\n1. x\n1. x", [4]),],
 )
-def test_duplicate_labels(atf, line_numbers):
+def test_duplicate_labels(atf, line_numbers) -> None:
     with pytest.raises(DataError, match="Duplicate labels."):
         parse_atf_lark(atf)

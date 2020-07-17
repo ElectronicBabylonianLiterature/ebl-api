@@ -3,30 +3,30 @@ from typing import Optional, Tuple
 
 import attr
 
-from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.atf import Atf, Composite, Discourse
 from ebl.transliteration.domain.labels import (
     SurfaceLabel,
     ColumnLabel,
     ObjectLabel,
 )
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.tokens import ValueToken, Token
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class AtLine(Line):
-    @property
-    def prefix(self) -> str:
-        return "@"
-
     @property
     @abstractmethod
     def display_value(self) -> str:
         ...
 
     @property
-    def content(self) -> Tuple[Token]:
-        return (ValueToken.of(f"{self.display_value}"),)
+    def atf(self) -> Atf:
+        return Atf(f"@{self.display_value}")
+
+    @property
+    def lemmatization(self) -> Tuple[LemmatizationToken]:
+        return (LemmatizationToken(self.display_value),)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -58,7 +58,7 @@ class ColumnAtLine(AtLine):
 
 @attr.s(auto_attribs=True, frozen=True)
 class DiscourseAtLine(AtLine):
-    discourse_label: atf.Discourse
+    discourse_label: Discourse
 
     @property
     def display_value(self) -> str:
@@ -98,13 +98,13 @@ class DivisionAtLine(AtLine):
 
 @attr.s(auto_attribs=True, frozen=True)
 class CompositeAtLine(AtLine):
-    composite: atf.Composite
+    composite: Composite
     text: str
     number: Optional[int] = attr.ib(default=None)
 
     @number.validator
     def _check_text(self, attribute, value) -> None:
-        if value is not None and self.composite == atf.Composite.END:
+        if value is not None and self.composite == Composite.END:
             raise ValueError("number only allowed with '@end' composite")
 
     @property

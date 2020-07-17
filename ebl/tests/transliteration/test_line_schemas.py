@@ -338,11 +338,11 @@ LINES = [
         },
     ),
     (
-        ControlLine.of_single("@", ValueToken.of("obverse")),
+        ControlLine("#", " comment"),
         {
             "type": "ControlLine",
-            "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("obverse"))],
+            "prefix": "#",
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" comment"))],
         },
     ),
     (
@@ -591,24 +591,6 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
             "displayValue": "double ruling",
-        },
-    ),
-    (
-        ObjectAtLine(
-            ObjectLabel(
-                [atf.Status.CORRECTION, atf.Status.COLLATION],
-                atf.Object.OBJECT,
-                "stone wig",
-            )
-        ),
-        {
-            "prefix": "@",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("object stone wig!*"))],
-            "type": "ObjectAtLine",
-            "status": ["CORRECTION", "COLLATION"],
-            "object_label": "OBJECT",
-            "text": "stone wig",
-            "displayValue": "object stone wig!*",
         },
     ),
 ]

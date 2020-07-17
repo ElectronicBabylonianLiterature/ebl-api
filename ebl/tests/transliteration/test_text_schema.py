@@ -13,7 +13,6 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,
-    ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
@@ -34,7 +33,7 @@ def test_dump_line():
                 ],
             ),
             EmptyLine(),
-            ControlLine.of_single("$", ValueToken.of(" single ruling")),
+            ControlLine("#", " comment"),
         ),
         "1.0.0",
     )
@@ -50,7 +49,7 @@ def test_dump_line():
     "lines",
     [
         [EmptyLine()],
-        [ControlLine.of_single("$", ValueToken.of(" single ruling"))],
+        [ControlLine("#", " comment")],
         [
             TextLine.of_iterable(
                 LineNumber(1),

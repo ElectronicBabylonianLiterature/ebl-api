@@ -37,7 +37,6 @@ _have_both: tabulation
          | erasure
          | word
          | lone_determinative
-         | unknown_number_of_signs
 _omit_left.-1: close_broken_away
              | close_perhaps_broken_away
              | close_accidental_omission
@@ -106,7 +105,7 @@ close_removal: ">>"
 
 lone_determinative.4: _any_open? (phonetic_gloss | determinative) _any_close?
 
-word.3: joiner? _any_open? _word_body _any_close? joiner?
+word.3: _any_open? _word_body _any_close?
 _word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasure (_loose_joiner? _parts)?)*
 
 inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"
@@ -114,10 +113,8 @@ inline_erasure_part: _parts?
 
 _parts: value _parts_tail*
       | gloss (_loose_joiner? value)? _parts_tail*
-      | gloss (_loose_joiner? unknown_number_of_signs)? _parts_tail*
-      | unknown_number_of_signs _parts_tail+
-_parts_tail: _strict_joiner (value | unknown_number_of_signs)
-           | _loose_joiner? (gloss _loose_joiner?)+ (value | unknown_number_of_signs)?
+_parts_tail: _strict_joiner value
+           | _loose_joiner? (gloss _loose_joiner?)+ value?
 
 ?gloss: linguistic_gloss | phonetic_gloss | determinative
 linguistic_gloss: "{{" gloss_body "}}"
@@ -131,14 +128,15 @@ gloss_body: open_omission_or_removal* value (_strict_joiner value)* close_omissi
 
 _loose_joiner: _strict_joiner
              | in_word_newline? _any_close joiner? _any_open?
-             | in_word_newline? _any_close? joiner? _any_open
+             | in_word_newline? joiner? _any_open
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
 _any_close: (close_broken_away | close_perhaps_broken_away | close_accidental_omission | close_intentional_omission | close_removal)+
 _any_open: (open_accidental_omission | open_intentional_omission | open_removal | open_broken_away | open_perhaps_broken_away)+
-!joiner: "-" | "+" | "." | ":"
+!joiner: _WORD_SEPARATOR* ("-" | "+" | "." | ":") _WORD_SEPARATOR*
 
 ?value: unidentified_sign
       | unclear_sign
+      | unknown_number_of_signs
       | reading
       | number
       | logogram

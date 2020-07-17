@@ -251,7 +251,7 @@ def test_variant():
 
     expected_value = "sa[l/:"
     assert variant.value == expected_value
-    assert variant.clean_value == f"sal/:"
+    assert variant.clean_value == "sal/:"
     assert variant.tokens == (reading, divider)
     assert variant.parts == variant.tokens
     assert (

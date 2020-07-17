@@ -30,7 +30,7 @@ from ebl.transliteration.domain.word_tokens import Word
                         Reading.of_name("am"),
                     ],)],
                 ),
-                ControlLine.of_single("$", ValueToken.of(" single ruling")),
+                ControlLine("#", " comment"),
             ]),
             Text.of_iterable([
                 TextLine.of_iterable(
@@ -41,7 +41,7 @@ from ebl.transliteration.domain.word_tokens import Word
                         Reading.of_name("am"),
                     ],)],
                 ),
-                ControlLine.of_single("$", ValueToken.of(" single ruling")),
+                ControlLine("#", " comment"),
             ]),
             Text.of_iterable([
                 TextLine.of_iterable(
@@ -52,58 +52,58 @@ from ebl.transliteration.domain.word_tokens import Word
                         Reading.of_name("am"),
                     ],)],
                 ),
-                ControlLine.of_single("$", ValueToken.of(" single ruling")),
+                ControlLine("#", " comment"),
             ]),
         ),
         (
             Text.of_iterable([EmptyLine()]),
             Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken.of(" single ruling"))]
+                [RulingDollarLine(atf.Ruling.SINGLE)]
             ),
             Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken.of(" single ruling"))]
-            ),
-        ),
-        (
-            Text.of_iterable(
-                [
-                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
-                    ControlLine.of_single("$", ValueToken.of(" single ruling")),
-                    EmptyLine(),
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
-                    EmptyLine(),
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
-                    EmptyLine(),
-                ]
+                [RulingDollarLine(atf.Ruling.SINGLE)]
             ),
         ),
         (
             Text.of_iterable(
                 [
+                    RulingDollarLine(atf.Ruling.DOUBLE),
+                    RulingDollarLine(atf.Ruling.SINGLE),
                     EmptyLine(),
-                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    RulingDollarLine(atf.Ruling.DOUBLE),
+                    EmptyLine(),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    RulingDollarLine(atf.Ruling.DOUBLE),
+                    EmptyLine(),
+                ]
+            ),
+        ),
+        (
+            Text.of_iterable(
+                [
+                    EmptyLine(),
+                    RulingDollarLine(atf.Ruling.DOUBLE),
                 ]
             ),
             Text.of_iterable(
                 [
                     EmptyLine(),
-                    ControlLine.of_single("$", ValueToken.of(" single ruling")),
-                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                    RulingDollarLine(atf.Ruling.SINGLE),
+                    RulingDollarLine(atf.Ruling.DOUBLE),
                 ]
             ),
             Text.of_iterable(
                 [
                     EmptyLine(),
-                    ControlLine.of_single("$", ValueToken.of(" single ruling")),
-                    ControlLine.of_single("$", ValueToken.of(" double ruling")),
+                    RulingDollarLine(atf.Ruling.SINGLE),
+                    RulingDollarLine(atf.Ruling.DOUBLE),
                 ]
             ),
         ),
@@ -150,7 +150,7 @@ from ebl.transliteration.domain.word_tokens import Word
         ),
         (
             Text.of_iterable(
-                [ControlLine.of_single("$", ValueToken.of(" double ruling")),]
+                [ControlLine("$", " double ruling"),]
             ),
             Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE)]),
             Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE)]),

@@ -1,4 +1,3 @@
-import collections
 from typing import Optional, Sequence, Type, TypeVar
 
 import attr
@@ -14,9 +13,8 @@ from ebl.transliteration.domain.lemmatization import (
 )
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
-DEFAULT_LANGUAGE = Language.AKKADIAN
+DEFAULT_LANGUAGE: Language = Language.AKKADIAN
 DEFAULT_NORMALIZED = False
-Partial = collections.namedtuple("Partial", "start end")
 
 
 T = TypeVar("T", bound="Word")
@@ -68,23 +66,11 @@ class Word(Token):
             and not self.normalized
             and self.erasure is not ErasureState.ERASED
             and all((substring not in self.value) for substring in non_lemmatizables)
-            and not any(self.partial)
         )
 
     @property
     def parts(self) -> Sequence[Token]:
         return self._parts
-
-    @property
-    def partial(self) -> Partial:
-        partials = [
-            *[joiner.value for joiner in atf.Joiner],
-            atf.UNKNOWN_NUMBER_OF_SIGNS,
-        ]
-        return Partial(
-            any(self.value.startswith(partial) for partial in partials),
-            any(self.value.endswith(partial) for partial in partials),
-        )
 
     def set_language(self, language: Language, normalized: bool) -> "Word":
         return attr.evolve(self, language=language, normalized=normalized)
@@ -97,7 +83,7 @@ class Word(Token):
         else:
             raise LemmatizationError(f"Cannot apply {lemma} to {self}.")
 
-    def set_alignment(self, alignment: AlignmentToken):
+    def set_alignment(self, alignment: AlignmentToken) -> "Word":
         if self.value == alignment.value and (
             self.alignable or alignment.alignment is None
         ):
@@ -105,7 +91,7 @@ class Word(Token):
         else:
             raise AlignmentError()
 
-    def strip_alignment(self):
+    def strip_alignment(self) -> "Word":
         return attr.evolve(self, alignment=None)
 
     def merge(self, token: Token) -> Token:

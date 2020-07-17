@@ -4,10 +4,10 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
 
-The API requires a MongoDB database. See the 
+The API requires a MongoDB database. See the
 [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
 and
-[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser) 
+[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser)
 or generating the initial data.
 
 ## Setup
@@ -31,7 +31,7 @@ disabled.
 ## Running the tests
 
 ```shell script
-pipenv run flake8 ebl
+pipenv run lint
 pipenv run pyre check
 pipenv run test
 ```
@@ -39,7 +39,7 @@ pipenv run test
 ## Running the application
 
 The application reads the configuration from following environment variables:
- 
+
  ```dotenv
 AUTH0_AUDIENCE=<the Auth0 API identifier>
 AUTH0_ISSUER=<the Auth0 application domain>
@@ -67,7 +67,7 @@ db.createUser(
 )
 ```
 
-In addition to the variables specified above, the following environment 
+In addition to the variables specified above, the following environment
 variables are needed:
 
 ```dotenv
@@ -83,7 +83,7 @@ MONGOEXPRESS_PASSWORD=<Mongo Express login password>
 Build and run the docker image:
 
 ```shell script
-docker build -t ebl/api . 
+docker build -t ebl/api .
 docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
 ```
 
@@ -96,9 +96,10 @@ docker-compose build
 ```
 
 Run only the API:
+
 ```shell script
 docker-compose -f ./docker-compose-api-only.yml up
-``` 
+```
 
 Run the full backend including the database and admin interface:
 

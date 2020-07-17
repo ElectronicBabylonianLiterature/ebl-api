@@ -10,7 +10,7 @@ def test_search_fragment(client, fragmentarium, dictionary, word):
     dictionary.create(matching_word)
     fragmentarium.create(lemmatized_fragment)
 
-    result = client.simulate_get(f"/lemmas", params={"word": "GI₆"})
+    result = client.simulate_get("/lemmas", params={"word": "GI₆"})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [[matching_word]]
@@ -18,20 +18,20 @@ def test_search_fragment(client, fragmentarium, dictionary, word):
 
 
 def test_search_fragment_no_query(client):
-    result = client.simulate_get(f"/lemmas")
+    result = client.simulate_get("/lemmas")
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_search_too_many_params(client):
     params = {"word": "GI₆", "this_param": "is wrong"}
-    result = client.simulate_get(f"/lemmas", params=params)
+    result = client.simulate_get("/lemmas", params=params)
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_search_invalid_param(client):
     params = {"this_param": "is wrong"}
-    result = client.simulate_get(f"/lemmas", params=params)
+    result = client.simulate_get("/lemmas", params=params)
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

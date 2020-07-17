@@ -10,7 +10,7 @@ from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
+from ebl.transliteration.domain.tokens import Joiner, LanguageShift
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -30,8 +30,8 @@ from ebl.transliteration.domain.word_tokens import Word
             TextLine.of_iterable(
                 LineNumber(1), [Word.of([Reading.of_name("bu")])],
             ),
-            ControlLine.of_single("$", ValueToken.of(" single ruling")),
-            ControlLine.of_single("$", ValueToken.of(" single ruling")),
+            ControlLine("#", " comment"),
+            ControlLine("#", " comment"),
         ),
         (
             TextLine.of_iterable(

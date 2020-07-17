@@ -5,18 +5,19 @@ import pytest  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.line import ControlLine, Line
+from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Label, Text
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -25,7 +26,7 @@ LINES: Sequence[Line] = (
         LineNumber(1),
         (Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],),),
     ),
-    ControlLine.of_single("$", ValueToken.of(" single ruling")),
+    RulingDollarLine(atf.Ruling.SINGLE),
 )
 PARSER_VERSION = "1.0.0"
 TEXT: Text = Text(LINES, PARSER_VERSION)
@@ -85,7 +86,7 @@ def test_update_lemmatization() -> None:
                     ),
                 ),
             ),
-            ControlLine("$", (ValueToken.of(" single ruling"),)),
+            RulingDollarLine(atf.Ruling.SINGLE),
         ),
         TEXT.parser_version,
     )
