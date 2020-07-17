@@ -1,10 +1,11 @@
 import datetime
 import io
 import json
-from typing import Any, Dict, Mapping
+from typing import Any, Dict, Mapping, Union
 
 import attr
 import mongomock  # pyre-ignore
+import pydash  # pyre-ignore
 import pytest  # pyre-ignore
 from dictdiffer import diff  # pyre-ignore
 from falcon import testing  # pyre-ignore
@@ -33,6 +34,7 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
@@ -150,9 +152,10 @@ def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
 
 
 @pytest.fixture
-def fragment_finder(fragment_repository, dictionary, photo_repository, file_repository):
+def fragment_finder(fragment_repository, dictionary, photo_repository, file_repository,
+                    bibliography):
     return FragmentFinder(
-        fragment_repository, dictionary, photo_repository, file_repository
+        bibliography, fragment_repository, dictionary, photo_repository, file_repository
     )
 
 
@@ -402,28 +405,11 @@ def signs():
 
 
 @pytest.fixture
-def bibliography_entry():
-    return {
-        "id": "Q30000000",
-        "title": (
-            "The Synergistic Activity of Thyroid Transcription Factor 1 "
-            "and Pax 8 Relies on the Promoter/Enhancer Interplay"
-        ),
-        "type": "article-journal",
-        "DOI": "10.1210/MEND.16.4.0808",
-        "issued": {"date-parts": [[2002, 1, 1]]},
-        "PMID": "11923479",
-        "volume": "16",
-        "page": "837-846",
-        "issue": "4",
-        "container-title": "Molecular Endocrinology",
-        "container-title-short": "ME",
-        "collection-number": "1",
-        "author": [
-            {"given": "Stefania", "family": "Miccadei"},
-            {"given": "Rossana", "family": "De Leo"},
-            {"given": "Enrico", "family": "Zammarchi"},
-            {"given": "Pier Giorgio", "family": "Natali"},
-            {"given": "Donato", "family": "Civitareale"},
-        ],
-    }
+def create_mongo_bibliography_entry():
+    def _from_bibliography_entry(bibliography_entry: Union[dict, None] = None) -> dict:
+        if not bibliography_entry:
+            bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
+        return pydash.map_keys(
+            bibliography_entry, lambda _, key: "_id" if key == "id" else key
+        )
+    return _from_bibliography_entry

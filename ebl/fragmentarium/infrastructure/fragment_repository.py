@@ -53,6 +53,22 @@ class MongoFragmentRepository(FragmentRepository):
         data = self._collection.find_one_by_id(number)
         return FragmentSchema(unknown=EXCLUDE).load(data)
 
+    def query_by_id_and_page_in_references(
+            self, reference_id: str,
+            reference_pages: str
+    ):
+        match = dict()
+        match["references.id"] = {
+            "$regex": fr"^{reference_id}[^\d]*$",
+            "$options": "i"
+        }
+        if reference_pages:
+            match["references.pages"] = {
+                "$regex": fr"^[^\d]*{reference_pages}[^\d]*$"
+            }
+        cursor = self._collection.aggregate([{"$match": match}])
+        return self._map_fragments(cursor)
+
     def query_by_fragment_cdli_or_accession_number(self, number):
         cursor = self._collection.find_many(number_is(number))
 

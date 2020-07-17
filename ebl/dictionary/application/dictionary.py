@@ -22,8 +22,8 @@ class Dictionary:
     def search(self, query: str) -> Sequence:
         return self._repository.query_by_lemma_form_or_meaning(query)
 
-    def search_lemma(self, query: str) -> Sequence:
-        return self._repository.query_by_lemma_prefix(query)
+    def search_lemma(self, lemma: str) -> Sequence:
+        return self._repository.query_by_lemma_prefix(lemma)
 
     def update(self, word, user: User) -> None:
         old_word = self.find(word["_id"])

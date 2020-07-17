@@ -4,6 +4,7 @@ from ebl.bibliography.domain.reference import (
     Reference,
     ReferenceType,
 )
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 ID = BibliographyId("RN.1")
 TYPE: ReferenceType = ReferenceType.EDITION
@@ -28,7 +29,8 @@ def create_reference_with_document(bibliography_entry) -> Reference:
     )
 
 
-def test_reference(bibliography_entry) -> None:
+def test_reference() -> None:
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     assert reference_with_document.id == bibliography_entry["id"]
@@ -48,7 +50,8 @@ def test_defaults() -> None:
     assert reference.document is None
 
 
-def test_to_dict(bibliography_entry) -> None:
+def test_to_dict() -> None:
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     # pyre-ignore-nextline[16]
@@ -58,7 +61,8 @@ def test_to_dict(bibliography_entry) -> None:
     }
 
 
-def test_to_dict_with_document(bibliography_entry) -> None:
+def test_to_dict_with_document() -> None:
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     # pyre-ignore-nextline[16]
@@ -73,7 +77,8 @@ def test_from_dict() -> None:
     assert ReferenceSchema().load(SERIALIZED_REFERENCE) == REFERENCE  # pyre-ignore[16]
 
 
-def test_from_dict_with_document(bibliography_entry) -> None:
+def test_from_dict_with_document() -> None:
+    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     result = ReferenceSchema().load(  # pyre-ignore[16]

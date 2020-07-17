@@ -16,8 +16,8 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.value import INVALID_READING
 from ebl.transliteration.domain.word_tokens import Word

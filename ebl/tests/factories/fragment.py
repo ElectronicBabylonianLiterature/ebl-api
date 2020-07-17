@@ -28,15 +28,14 @@ from ebl.transliteration.domain.dollar_line import (
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
-from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.note_line import (
     EmphasisPart,
     LanguagePart,
     NoteLine,
     StringPart,
 )
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -47,6 +46,7 @@ from ebl.transliteration.domain.sign_tokens import (
     UnidentifiedSign,
 )
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,

@@ -1,5 +1,5 @@
-from itertools import chain, groupby
 import re
+from itertools import chain, groupby
 from typing import Sequence
 
 import attr

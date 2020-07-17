@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+
 from ebl.bibliography.domain.reference import (
     BibliographyId,
     Reference,

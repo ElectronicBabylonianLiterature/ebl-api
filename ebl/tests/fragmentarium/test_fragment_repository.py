@@ -258,6 +258,56 @@ def test_search_not_found(fragment_repository):
     assert (fragment_repository.query_by_fragment_cdli_or_accession_number("K.1")) == []
 
 
+def test_search_reference_id(database, fragment_repository):
+    fragment = FragmentFactory.build(references=(ReferenceFactory.build(),
+                                                 ReferenceFactory.build(),))
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id,
+            None,
+        )
+    ) == [fragment]
+
+
+def test_search_reference_id_partially(database, fragment_repository):
+    fragment = FragmentFactory.build(references=(ReferenceFactory.build(id="RN.0a"),
+                                                 ReferenceFactory.build(),))
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            "RN.0",
+            None,
+        )
+    ) == [fragment]
+
+
+def test_search_reference_id_and_pages(database, fragment_repository):
+    fragment = FragmentFactory.build(references=(ReferenceFactory.build(),
+                                                 ReferenceFactory.build(),))
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id,
+            fragment.references[0].pages,
+        )
+    ) == [fragment]
+
+
+def test_search_reference_id_and_pages_partially(database, fragment_repository):
+    fragment = FragmentFactory.build(references=(
+        ReferenceFactory.build(pages="no. 163"),
+        ReferenceFactory.build(),
+    ))
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id,
+            "163",
+        )
+    ) == [fragment]
+
+
 SEARCH_SIGNS_DATA = [
     ([["DIŠ", "UD"]], True),
     ([["KU"]], True),

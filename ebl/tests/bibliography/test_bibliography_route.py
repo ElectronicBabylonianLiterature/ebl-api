@@ -4,6 +4,8 @@ import falcon  # pyre-ignore
 import pydash  # pyre-ignore
 import pytest  # pyre-ignore
 
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
+
 INVALID_ENTRIES = [
     lambda entry: {**entry, "title": 47},
     lambda entry: pydash.omit(entry, "type"),
@@ -11,7 +13,8 @@ INVALID_ENTRIES = [
 
 
 @pytest.fixture
-def saved_entry(bibliography, bibliography_entry, user):
+def saved_entry(bibliography, user):
+    bibliography_entry = BibliographyEntryFactory.build()
     bibliography.create(bibliography_entry, user)
     return bibliography_entry
 
@@ -32,7 +35,8 @@ def test_get_entry_not_found(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_create_entry(client, bibliography_entry):
+def test_create_entry(client):
+    bibliography_entry = BibliographyEntryFactory.build()
     id_ = bibliography_entry["id"]
     body = json.dumps(bibliography_entry)
     post_result = client.simulate_post("/bibliography", body=body)
@@ -56,7 +60,8 @@ def test_create_entry_duplicate(client, saved_entry):
 
 
 @pytest.mark.parametrize("transform", INVALID_ENTRIES)
-def test_create_entry_invalid(transform, client, bibliography_entry):
+def test_create_entry_invalid(transform, client):
+    bibliography_entry = BibliographyEntryFactory.build()
     invalid_entry = transform(bibliography_entry)
     body = json.dumps(invalid_entry)
 
@@ -79,7 +84,8 @@ def test_update_entry(client, saved_entry):
     assert get_result.json == updated_entry
 
 
-def test_update_entry_not_found(client, bibliography_entry):
+def test_update_entry_not_found(client):
+    bibliography_entry = BibliographyEntryFactory.build()
     id_ = bibliography_entry["id"]
     body = json.dumps(bibliography_entry)
 

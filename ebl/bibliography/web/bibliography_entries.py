@@ -2,7 +2,6 @@ import falcon  # pyre-ignore
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 
-
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.users.web.require_scope import require_scope
 

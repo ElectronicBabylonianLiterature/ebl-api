@@ -1,21 +1,16 @@
-import pydash  # pyre-ignore
 import pytest  # pyre-ignore
 from mockito import verify  # pyre-ignore
+
 from ebl.errors import DataError, DuplicateError, NotFoundError
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory, \
+    BibliographyEntryFactory
 
 COLLECTION = "bibliography"
 
 
-@pytest.fixture
-def mongo_entry(bibliography_entry):
-    return pydash.map_keys(
-        bibliography_entry, lambda _, key: "_id" if key == "id" else key
-    )
-
-
 def test_search_container_short_collection_number(bibliography, bibliography_repository,
-                                                  when, bibliography_entry):
+                                                  when):
+    bibliography_entry = BibliographyEntryFactory.build()
     container_title = bibliography_entry["container-title-short"]
     collection_number = bibliography_entry["collection-number"]
     query = f"{container_title} {collection_number}"
@@ -35,8 +30,8 @@ def test_search_container_short_collection_number(bibliography, bibliography_rep
     assert [bibliography_entry] == bibliography.search(query)
 
 
-def test_search_author_title_year(bibliography, bibliography_repository, when,
-                                  bibliography_entry):
+def test_search_author_title_year(bibliography, bibliography_repository, when):
+    bibliography_entry = BibliographyEntryFactory.build()
     author = bibliography_entry["author"][0]["family"]
     year = bibliography_entry["issued"]["date-parts"][0][0]
     title = bibliography_entry["title"]
@@ -58,7 +53,8 @@ def test_search_author_title_year(bibliography, bibliography_repository, when,
     assert [bibliography_entry] == bibliography.search(query)
 
 
-def test_find(bibliography, bibliography_repository, when, bibliography_entry):
+def test_find(bibliography, bibliography_repository, when):
+    bibliography_entry = BibliographyEntryFactory.build()
     (
         when(bibliography_repository)
         .query_by_id(bibliography_entry["id"])
@@ -67,15 +63,16 @@ def test_find(bibliography, bibliography_repository, when, bibliography_entry):
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
 
 
-def test_create(bibliography, bibliography_repository, bibliography_entry, user,
-                changelog, when, mongo_entry):
+def test_create(bibliography, bibliography_repository, user, changelog, when,
+                create_mongo_bibliography_entry):
+    bibliography_entry = BibliographyEntryFactory.build()
     (
         when(changelog)
         .create(
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
-            mongo_entry,
+            create_mongo_bibliography_entry(),
         ).thenReturn()
     )
     (
@@ -87,15 +84,16 @@ def test_create(bibliography, bibliography_repository, bibliography_entry, user,
     bibliography.create(bibliography_entry, user)
 
 
-def test_create_duplicate(bibliography, bibliography_entry, user, when, changelog,
-                          bibliography_repository, mongo_entry):
+def test_create_duplicate(bibliography, user, when, changelog, bibliography_repository,
+                          create_mongo_bibliography_entry):
+    bibliography_entry = BibliographyEntryFactory.build()
     (
         when(changelog)
         .create(
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
-            mongo_entry,
+            create_mongo_bibliography_entry(),
         ).thenReturn()
     )
     (
@@ -107,8 +105,8 @@ def test_create_duplicate(bibliography, bibliography_entry, user, when, changelo
         bibliography.create(bibliography_entry, user)
 
 
-def test_entry_not_found(bibliography, bibliography_repository,
-                         bibliography_entry, when):
+def test_entry_not_found(bibliography, bibliography_repository, when):
+    bibliography_entry = BibliographyEntryFactory.build()
     (
         when(bibliography_repository)
         .query_by_id(bibliography_entry["id"])
@@ -119,7 +117,8 @@ def test_entry_not_found(bibliography, bibliography_repository,
 
 
 def test_update(bibliography, bibliography_repository,
-                bibliography_entry, user, when, changelog, mongo_entry):
+                user, when, changelog, create_mongo_bibliography_entry):
+    bibliography_entry = BibliographyEntryFactory.build()
     (
         when(bibliography_repository)
         .query_by_id(bibliography_entry["id"])
@@ -130,8 +129,8 @@ def test_update(bibliography, bibliography_repository,
         .create(
             COLLECTION,
             user.profile,
-            mongo_entry,
-            mongo_entry,
+            create_mongo_bibliography_entry(),
+            create_mongo_bibliography_entry(),
         ).thenReturn()
     )
     (
@@ -142,8 +141,8 @@ def test_update(bibliography, bibliography_repository,
     bibliography.update(bibliography_entry, user)
 
 
-def test_update_not_found(bibliography_repository, bibliography,
-                          bibliography_entry, user, when):
+def test_update_not_found(bibliography_repository, bibliography, user, when):
+    bibliography_entry = BibliographyEntryFactory.build()
     (
         when(bibliography_repository)
         .query_by_id(bibliography_entry["id"])
@@ -153,8 +152,8 @@ def test_update_not_found(bibliography_repository, bibliography,
         bibliography.update(bibliography_entry, user)
 
 
-def test_validate_references(bibliography_repository, bibliography,
-                             bibliography_entry, user, changelog, when):
+def test_validate_references(bibliography_repository, bibliography, user, changelog,
+                             when):
     reference = ReferenceWithDocumentFactory.build()
 
     (
@@ -166,7 +165,7 @@ def test_validate_references(bibliography_repository, bibliography,
 
 
 def test_validate_references_invalid(bibliography_repository, bibliography,
-                                     bibliography_entry, user, changelog, when):
+                                     user, changelog, when):
     valid_reference = ReferenceWithDocumentFactory.build()
     first_invalid = ReferenceWithDocumentFactory.build()
     second_invalid = ReferenceWithDocumentFactory.build()
