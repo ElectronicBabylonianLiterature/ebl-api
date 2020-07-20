@@ -59,7 +59,7 @@ class MongoFragmentRepository(FragmentRepository):
     ):
         match = dict()
         match["references.id"] = {
-            "$regex": fr"^{reference_id}[^\d]*$",
+            "$regex": fr"^{reference_id}$",
             "$options": "i"
         }
         if reference_pages:
