@@ -58,15 +58,14 @@ class MongoFragmentRepository(FragmentRepository):
             reference_pages: str
     ):
         match = dict()
-        match["references.id"] = {
-            "$regex": fr"^{reference_id}$",
-            "$options": "i"
+        match["references"] = {
+            "$elemMatch": {
+                "id": reference_id,
+            }
         }
         if reference_pages:
-            match["references.pages"] = {
-                "$regex": fr"^[^\d]*{reference_pages}[^\d]*$"
-            }
-        cursor = self._collection.aggregate([{"$match": match}])
+            match["references"]["$elemMatch"]["pages"] = {"$regex": reference_pages}
+        cursor = self._collection.find_many(match)
         return self._map_fragments(cursor)
 
     def query_by_fragment_cdli_or_accession_number(self, number):
