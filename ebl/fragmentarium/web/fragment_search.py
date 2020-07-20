@@ -1,9 +1,6 @@
-from typing import Union, Tuple
-
 import falcon  # pyre-ignore
 
 from ebl.dispatcher import create_dispatcher
-from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
