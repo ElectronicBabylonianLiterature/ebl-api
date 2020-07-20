@@ -270,18 +270,6 @@ def test_search_reference_id(database, fragment_repository):
     ) == [fragment]
 
 
-def test_search_reference_id_partially(database, fragment_repository):
-    fragment = FragmentFactory.build(references=(ReferenceFactory.build(id="RN.0a"),
-                                                 ReferenceFactory.build(),))
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
-    assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            "RN.0",
-            None,
-        )
-    ) == [fragment]
-
-
 def test_search_reference_id_and_pages(database, fragment_repository):
     fragment = FragmentFactory.build(references=(ReferenceFactory.build(),
                                                  ReferenceFactory.build(),))

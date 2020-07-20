@@ -64,7 +64,9 @@ class MongoFragmentRepository(FragmentRepository):
             }
         }
         if reference_pages:
-            match["references"]["$elemMatch"]["pages"] = {"$regex": reference_pages}
+            match["references"]["$elemMatch"]["pages"] = {
+                "$regex": fr"^(no.\s*)?{reference_pages}-*[\d]*"
+            }
         cursor = self._collection.find_many(match)
         return self._map_fragments(cursor)
 
