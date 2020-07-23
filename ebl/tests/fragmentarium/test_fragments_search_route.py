@@ -69,7 +69,7 @@ def test_search_references_invalid_query(client, fragmentarium):
     fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
     reference_pages = "should be a number"
-    result = client.simulate_get(f"/fragments", params={
+    result = client.simulate_get("/fragments", params={
         "id": reference_id, "pages": reference_pages
     })
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
