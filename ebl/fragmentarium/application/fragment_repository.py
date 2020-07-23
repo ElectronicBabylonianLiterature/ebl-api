@@ -25,7 +25,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_by_id_and_page_in_references(
-            self, ref_id: str, ref_pages: str) -> List[Fragment]:
+            self, _id: str, pages: str) -> List[Fragment]:
         ...
 
     @abstractmethod
