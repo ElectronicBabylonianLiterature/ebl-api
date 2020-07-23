@@ -1,6 +1,10 @@
+from typing import Union
+from typing import Tuple
+
 import falcon  # pyre-ignore
 
 from ebl.dispatcher import create_dispatcher
+from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
@@ -22,7 +26,9 @@ class FragmentSearch:
         self._dispatch = create_dispatcher(
             {
                 frozenset(["id", "pages"]): lambda value:
-                finder.inject_documents_in_fragment_infos(**value),
+                finder.search_references_in_fragment_infos(
+                    *self._validate_pages(**value)
+                ),
                 frozenset(["number"]): lambda value: finder.search(**value),
                 frozenset(["random"]): lambda _: finder.find_random(),
                 frozenset(["interesting"]): lambda _: finder.find_interesting(),
@@ -33,6 +39,17 @@ class FragmentSearch:
                 ),
             }
         )
+
+    @staticmethod
+    def _validate_pages(id: str, pages: Union[str, None]) -> Tuple[str, str]:
+        if pages:
+            try:
+                int(pages)
+                return id, pages
+            except ValueError:
+                raise DataError(f'Pages "{pages}" not numeric.')
+        else:
+            return id, ""
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]
