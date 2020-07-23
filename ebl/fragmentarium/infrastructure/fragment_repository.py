@@ -54,13 +54,13 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE).load(data)
 
     def query_by_id_and_page_in_references(
-            self, _id: str,
+            self, id_: str,
             pages: str
     ):
         match = dict()
         match["references"] = {
             "$elemMatch": {
-                "id": _id,
+                "id": id_,
             }
         }
         if pages:
