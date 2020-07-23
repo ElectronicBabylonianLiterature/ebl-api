@@ -127,7 +127,7 @@ def test_inject_document_in_fragment_infos(fragment_finder, when, bibliography):
         .thenReturn(bibliography_entry)
     )
 
-    assert fragment_finder.inject_documents_in_fragment_infos("id", "pages") \
+    assert fragment_finder.search_references_in_fragment_infos("id", "pages") \
         == [fragment_expected_1, fragment_expected_2]
 
 

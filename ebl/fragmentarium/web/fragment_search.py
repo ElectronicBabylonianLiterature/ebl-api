@@ -1,4 +1,5 @@
-from typing import Union, Tuple
+from typing import Union
+from typing import Tuple
 
 import falcon  # pyre-ignore
 
@@ -25,7 +26,7 @@ class FragmentSearch:
         self._dispatch = create_dispatcher(
             {
                 frozenset(["id", "pages"]): lambda value:
-                finder.inject_documents_in_fragment_infos(
+                finder.search_references_in_fragment_infos(
                     *self._validate_pages(**value)
                 ),
                 frozenset(["number"]): lambda value: finder.search(**value),

@@ -40,9 +40,9 @@ class FragmentFinder:
             )
         )
 
-    def inject_documents_in_fragment_infos(
-            self, reference_id: str, reference_pages: str) -> List[FragmentInfo]:
-        fragment_infos = self.search_references(reference_id, reference_pages)
+    def search_references_in_fragment_infos(
+            self, id: str, pages: str) -> List[FragmentInfo]:
+        fragment_infos = self.search_references(id, pages)
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:
             references_with_documents = []
