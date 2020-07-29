@@ -34,5 +34,5 @@ class SignsVisitor(TokenVisitor):
         self._signs.extend(sub_visitor._signs)
 
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
-        sign: Optional[Sign] = self._sign_repository.find(grapheme.clean_value)
+        sign: Optional[Sign] = self._sign_repository.find(grapheme.name)
         self._signs.append(sign)

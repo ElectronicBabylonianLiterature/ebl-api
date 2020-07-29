@@ -11,6 +11,7 @@ from ebl.transliteration.domain.converters import (
     convert_token_sequence,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.tokens import (
     ErasureState, Token, ValueToken, TokenVisitor
 )
@@ -122,12 +123,12 @@ class Divider(AbstractSign):
         return Divider(frozenset(), ErasureState.NONE, modifiers, flags, divider)
 
 
-SignName = Sequence[Union[ValueToken, BrokenAway]]
+NameParts = Sequence[Union[ValueToken, BrokenAway]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
-    name_parts: SignName = attr.ib(converter=convert_token_sequence)
+    name_parts: NameParts = attr.ib(converter=convert_token_sequence)
     sub_index: Optional[int] = attr.ib(default=1)
     sign: Optional[Token] = None
 
@@ -173,7 +174,7 @@ class NamedSign(AbstractSign):
 class Reading(NamedSign):
     @staticmethod
     def of(
-        name: SignName,
+        name: NameParts,
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
@@ -217,7 +218,7 @@ class Logogram(NamedSign):
 
     @staticmethod
     def of(
-        name: SignName,
+        name: NameParts,
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
@@ -245,7 +246,7 @@ class Logogram(NamedSign):
 class Number(NamedSign):
     @staticmethod
     def of(
-        name: SignName,
+        name: NameParts,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
@@ -298,12 +299,19 @@ class CompoundGrapheme(Token):
     compound_parts: Sequence[str] = attr.ib(converter=convert_token_sequence)
 
     @property
+    def name(self) -> SignName:
+        return SignName(f"|{'.'.join(self.compound_parts)}|")
+
+    @property
     def value(self) -> str:
-        return f"|{'.'.join(self.compound_parts)}|"
+        return self.name
 
     @property
     def parts(self) -> Sequence[Token]:
         return [ValueToken.of(part) for part in self.compound_parts]
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_compound_grapheme(self)
 
     @staticmethod
     def of(parts: Sequence[str]) -> "CompoundGrapheme":
