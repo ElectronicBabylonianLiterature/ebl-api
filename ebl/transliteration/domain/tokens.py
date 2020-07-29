@@ -60,6 +60,9 @@ class TokenVisitor(ABC):
     def visit_named_sign(self, named_sign) -> None:
         self.visit(named_sign)
 
+    def visit_compound_grapheme(self, grapheme) -> None:
+        self.visit(grapheme)
+
 
 class ErasureState(Enum):
     NONE = auto()

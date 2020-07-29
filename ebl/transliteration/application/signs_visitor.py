@@ -3,7 +3,7 @@ from typing import MutableSequence, Sequence, Optional
 import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.sign_tokens import NamedSign
+from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, NamedSign
 from ebl.transliteration.domain.sign import Sign
 from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.standardization import Standardization
@@ -32,3 +32,7 @@ class SignsVisitor(TokenVisitor):
         for token in word.parts:
             token.accept(sub_visitor)
         self._signs.extend(sub_visitor._signs)
+
+    def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
+        sign: Optional[Sign] = self._sign_repository.find(grapheme.clean_value)
+        self._signs.append(sign)
