@@ -25,7 +25,26 @@ from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Logogram, R
             Word.of([Logogram.of_name("NU")]),
         ],
         ["ABZ531+588", "|(AŠ&AŠ@180)×U|", "ABZ075"]
-    )
+    ),
+    (
+        [
+            Word.of([Reading.of_name("ummu", 3)]),
+            Word.of([CompoundGrapheme.of(["IGI", "KU"])]),
+            Word.of([Reading.of_name("mat", 3)]),
+            Word.of([Reading.of_name("kunga", 1)]),
+        ],
+        [
+            "A",
+            "ABZ168",
+            "LAL",
+            "ABZ207a\\u002F207b\\u0020X",
+            "KU",
+            "HU",
+            "HI",
+            "ŠU₂",
+            "3×AN",
+        ],
+    ),
 ])
 def test_signs_visitor(
     tokens: Sequence[Token],
