@@ -43,11 +43,6 @@ class UnknownSign(Token):
         ...
 
     @property
-    @abstractmethod
-    def _type(self) -> str:
-        ...
-
-    @property
     def string_flags(self) -> Sequence[str]:
         return [flag.value for flag in self.flags]
 
@@ -62,20 +57,12 @@ class UnidentifiedSign(UnknownSign):
     def _sign(self) -> str:
         return atf.UNIDENTIFIED_SIGN
 
-    @property
-    def _type(self) -> str:
-        return "UnidentifiedSign"
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class UnclearSign(UnknownSign):
     @property
     def _sign(self) -> str:
         return atf.UNCLEAR_SIGN
-
-    @property
-    def _type(self) -> str:
-        return "UnclearSign"
 
 
 @attr.s(auto_attribs=True, frozen=True)
