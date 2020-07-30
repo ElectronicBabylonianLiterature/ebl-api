@@ -50,6 +50,9 @@ class UnknownSign(Token):
     def value(self) -> str:
         return f'{self._sign}{"".join(self.string_flags)}'
 
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_unknown_sign(self)
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class UnidentifiedSign(UnknownSign):

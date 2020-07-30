@@ -5,7 +5,9 @@ import pytest  # pyre-ignore[21]
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Logogram, Reading
+from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme, Logogram, Reading, UnclearSign, UnidentifiedSign
+)
 
 
 @pytest.mark.parametrize("tokens,expected",[
@@ -44,6 +46,14 @@ from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Logogram, R
             "ŠU₂",
             "3×AN",
         ],
+    ),
+    (
+        [
+            Word.of([Reading.of_name("unknown", 1)]),
+            Word.of([UnidentifiedSign.of()]),
+            Word.of([UnclearSign.of()]),
+        ],
+        ["?", "X", "X"],
     ),
 ])
 def test_signs_visitor(

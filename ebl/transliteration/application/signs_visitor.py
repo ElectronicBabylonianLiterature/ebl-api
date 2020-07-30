@@ -4,7 +4,9 @@ import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
-from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, NamedSign
+from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme, NamedSign, UnknownSign
+)
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.standardization import is_splittable, Standardization
@@ -27,6 +29,15 @@ class SignsVisitor(TokenVisitor):
             for sign in self._standardizations
         ]
 
+    def visit_word(self, word: Word) -> None:
+        sub_visitor = SignsVisitor(self._sign_repository)
+        for token in word.parts:
+            token.accept(sub_visitor)
+        self._standardizations.extend(sub_visitor._standardizations)
+
+    def visit_unknown_sign(self, sign: UnknownSign) -> None:
+        self._standardizations.append(Standardization.of_string("X"))
+
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         sign: Optional[Sign] = self._sign_repository.search(named_sign.name.lower(),
                                                             named_sign.sub_index)
@@ -34,12 +45,6 @@ class SignsVisitor(TokenVisitor):
             self._standardizations.append(sign)
         else:
             self._visit_sign(sign)
-
-    def visit_word(self, word: Word) -> None:
-        sub_visitor = SignsVisitor(self._sign_repository)
-        for token in word.parts:
-            token.accept(sub_visitor)
-        self._standardizations.extend(sub_visitor._standardizations)
 
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if is_splittable(grapheme.name):
