@@ -234,6 +234,9 @@ class Logogram(NamedSign):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Number(NamedSign):
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_number(self)
+
     @staticmethod
     def of(
         name: NameParts,
@@ -274,6 +277,9 @@ class Grapheme(AbstractSign):
     @property
     def parts(self):
         return tuple()
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_grapheme(self)
 
     @staticmethod
     def of(

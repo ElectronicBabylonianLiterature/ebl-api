@@ -60,6 +60,12 @@ class TokenVisitor(ABC):
     def visit_named_sign(self, named_sign) -> None:
         self.visit(named_sign)
 
+    def visit_number(self, number) -> None:
+        self.visit_named_sign(number)
+
+    def visit_grapheme(self, grapheme) -> None:
+        self.visit(grapheme)
+
     def visit_compound_grapheme(self, grapheme) -> None:
         self.visit(grapheme)
 
