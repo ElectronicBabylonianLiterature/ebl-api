@@ -261,7 +261,7 @@ class Number(NamedSign):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Grapheme(AbstractSign):
-    name: str
+    name: SignName
 
     @property
     def value(self) -> str:
@@ -283,7 +283,7 @@ class Grapheme(AbstractSign):
 
     @staticmethod
     def of(
-        name: str,
+        name: SignName,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ) -> "Grapheme":
