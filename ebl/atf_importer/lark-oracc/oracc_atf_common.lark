@@ -1,0 +1,27 @@
+%import common.DIGIT
+%import common.INT
+%import common.LCASE_LETTER
+
+seal : "seal "  INT
+
+free_text.-2 : /./+ " "*
+
+?object: OBJECT | generic_object | fragment
+OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+fragment: "fragment " free_text
+generic_object : "object " free_text
+
+?surface: SURFACE | generic_surface | face | edge
+SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
+face: "face " LCASE_LETTER
+edge: "edge" (" " LCASE_LETTER)?
+generic_surface : "surface " free_text
+
+VALUE_CHARACTER: "a" | "ā" | "â" | "á" | "b" | "d" | "e" | "ē" | "ê" | "é" | "g" | "h"
+               | "i" | "ī" | "î" | "í" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
+               | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "ú" | "w" | "*"
+               | "z" | "ḫ" | "ʾ"
+
+LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "Á" | "B" | "D" | "E" | "Ē" | "Ê" | "É" | "G" | "H" | "I"
+                   | "Ī" | "Î" | "Ì" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
+                   | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "Ú" | "W" | "Z" | "Ḫ" | "ʾ" | "*"

@@ -1,0 +1,19 @@
+?start: line
+
+?line: empty_line
+     | note_line
+     | text_line
+     | dollar_line
+     | lem_line
+     | at_line
+     | control_line
+
+empty_line: /\s+/?
+
+!control_line.-2: ("=:" | "&" | "#") /.+/?
+
+%import .oracc_atf_text_line (text_line, any_word)
+%import .oracc_atf_dollar_line (dollar_line)
+%import .oracc_atf_at_line (at_line)
+%import .oracc_atf_lem_line (lem_line)
+%import .oracc_atf_note_line (note_line)

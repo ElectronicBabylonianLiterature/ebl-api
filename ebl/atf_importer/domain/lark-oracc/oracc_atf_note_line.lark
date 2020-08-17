@@ -1,0 +1,7 @@
+
+note_line: "#note: " (emphasis_part | language_part | string_part)+
+language_part: "@" LANGUAGE "{" note_text "}"
+emphasis_part: "@i{" note_text "}"
+string_part: note_text
+note_text: /[^@{}]+/
+LANGUAGE: "akk" | "sux"

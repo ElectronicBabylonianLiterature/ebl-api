@@ -1,0 +1,209 @@
+%import common.INT
+%import common.LETTER
+
+text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
+?line_number: line_number_range | single_line_number
+line_number_range: single_line_number "-" single_line_number
+single_line_number: [LETTER "+"] INT [PRIME] [LETTER]
+PRIME: "'" | "′" | "’" 
+
+
+text: _head _tail*
+_head: _have_both
+     | _require_both
+     | _omit_left
+     | _omit_right+ _have_both?
+_tail: _WORD_SEPARATOR _omit_right* _have_both?
+     | _WORD_SEPARATOR? _omit_left+
+     | _WORD_SEPARATOR _require_both
+
+_require_both: commentary_protocol
+             | divider_variant
+             | divider
+_have_both: tabulation
+         | column
+         | language_shift
+         | erasure
+         | word
+         | lone_determinative
+_omit_left.-1: close_broken_away
+             | close_perhaps_broken_away
+             | close_accidental_omission
+             | close_intentional_omission
+             | close_removal
+             | close_document_oriented_gloss
+_omit_right.-1: open_broken_away
+             | open_perhaps_broken_away
+             | open_accidental_omission
+             | open_intentional_omission
+             | open_removal
+             | open_document_oriented_gloss
+
+divider.5: DIVIDER_SYMBOL modifiers flags
+close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
+open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
+language_shift: SHIFT
+
+divider_variant: divider _VARIANT_SEPARATOR divider
+               | divider _VARIANT_SEPARATOR variant_part
+               | variant_part _VARIANT_SEPARATOR divider
+
+tabulation: TABULATION
+TABULATION: "($___$)"
+
+column: "&" [COLUMN_NUMBER]
+COLUMN_NUMBER: "1".."9" ("0".."9")*
+
+commentary_protocol: PROTOCOL_QUOTATION
+                   | PROTOCOL_BASE_TEXT
+                   | PROTOCOL_COMMENTARY
+                   | PROTOCOL_UNCERTAIN
+PROTOCOL_QUOTATION: "!qt"
+PROTOCOL_BASE_TEXT: "!bs"
+PROTOCOL_COMMENTARY: "!cm"
+PROTOCOL_UNCERTAIN: "!zz"
+
+DOCUMENT_ORIENTED_GLOSS: OPEN_DOCUMENT_ORIENTED_GLOSS
+                       | CLOSE_DOCUMENT_ORIENTED_GLOSS
+OPEN_DOCUMENT_ORIENTED_GLOSS: "{("
+CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
+
+SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
+
+erasure.-1: "°" erasure_part "\\" erasure_part "°"
+erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
+
+_WORD_SEPARATOR: " "
+
+?any_word: lone_determinative
+         | word
+
+DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
+
+?broken_away: open_broken_away | close_broken_away
+open_broken_away: "["
+close_broken_away: "]"
+open_perhaps_broken_away: "("
+close_perhaps_broken_away: ")"
+open_accidental_omission: "<"
+close_accidental_omission: ">"
+open_intentional_omission: "<("
+close_intentional_omission: ")>"
+open_removal: "<<"
+close_removal: ">>"
+
+lone_determinative.4: _any_open? (phonetic_gloss | determinative) _any_close?
+
+word.3: joiner? _any_open? _word_body _any_close? joiner?
+_word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasure (_loose_joiner? _parts)?)*
+
+inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"
+inline_erasure_part: _parts?
+
+_parts: value _parts_tail*
+      | gloss (_loose_joiner? value)? _parts_tail*
+_parts_tail: _strict_joiner value
+           | _loose_joiner? (gloss _loose_joiner?)+ value?
+
+
+?gloss: linguistic_gloss | phonetic_gloss | determinative
+linguistic_gloss: "{{" gloss_body "}}"
+phonetic_gloss: "{+" gloss_body "}"
+determinative: "{" gloss_body "}"
+gloss_body: open_omission_or_removal* value (_strict_joiner value)* close_omission_or_removal*
+?open_omission_or_removal: open_accidental_omission | open_intentional_omission | open_removal
+?close_omission_or_removal: close_accidental_omission | close_intentional_omission | close_removal
+
+
+
+_loose_joiner: _strict_joiner
+             | in_word_newline? _any_close joiner? _any_open?
+             | in_word_newline? _any_close? joiner? _any_open
+_strict_joiner: in_word_newline? _any_close? joiner _any_open?
+_any_close: (close_broken_away | close_perhaps_broken_away | close_accidental_omission | close_intentional_omission | close_removal)+
+_any_open: (open_accidental_omission | open_intentional_omission | open_removal | open_broken_away | open_perhaps_broken_away)+
+!joiner: "-" | "+" | "." | ":"
+
+?value: unidentified_sign
+      | unclear_sign
+      | unknown_number_of_signs
+      | reading
+      | number
+      | logogram
+      | surrogate
+      | compound_grapheme
+      | variant
+variant: variant_part (_VARIANT_SEPARATOR variant_part)+
+?variant_part: unidentified_sign
+             | unclear_sign
+             | reading
+             | logogram
+             | surrogate
+             | number
+             | compound_grapheme
+
+
+number: number_name modifiers flags ["(" any_grapheme ")"]
+reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]
+logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"]
+surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>"
+surrogate_text: reading (joiner reading)*
+sub_index: [SUB_INDEX]
+
+number_name: number_name_head (broken_away number_name_part)*
+value_name: value_name_part (broken_away value_name_part)*
+logogram_name: logogram_name_part (broken_away logogram_name_part)*
+!number_name_head:  "1".."9" "0".."9"*
+!number_name_part:  "0".."9"+
+value_name_part: VALUE_CHARACTER+
+logogram_name_part: LOGOGRAM_CHARACTER+
+VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h"
+               | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
+               | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
+               | "z" | "ḫ" | "ʾ"
+LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
+                   | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
+                   | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
+
+?any_grapheme: compound_grapheme | grapheme
+compound_grapheme: COMPOUND_GRAPHEME
+COMPOUND_GRAPHEME: "|" SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)* "|"
+SUB_COMPOUND: "(" COMPOUND_PART (COMPOUND_OPERATOR COMPOUND_PART)* ")"
+            | COMPOUND_PART
+COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
+COMPOUND_OPERATOR: "." | "×" | "%" | "&" | "+"
+
+grapheme: GRAPHEME_NAME modifiers flags
+GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
+GRAPHEME_NAME: GRAPHEME_CHARACTER (GRAPHEME_CHARACTER)* SUB_INDEX?
+GRAPHEME_CHARACTER: "a".."z"
+                  | "A".."Z"
+                  | "Ṣ" | "Š" | "Ṭ"
+                  | "ṣ" | "š" | "ṭ"
+                  | "0".."9"
+
+SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
+NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")*
+
+unidentified_sign: "X" flags
+unclear_sign: "x" flags
+
+_VARIANT_SEPARATOR: VARIANT_SEPARATOR
+VARIANT_SEPARATOR: "/"
+
+flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+UNCERTAIN: "?"
+CORRECTION: "!"
+COLLATION: "*"
+DAMAGE: "#"
+
+modifiers: MODIFIER*
+MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
+MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
+
+in_word_newline: IN_WORD_NEWLINE
+IN_WORD_NEWLINE: ";"
+
+unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
+UNKNOWN_NUMBER_OF_SIGNS: "..."

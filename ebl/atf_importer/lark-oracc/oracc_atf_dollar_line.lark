@@ -1,0 +1,42 @@
+%import .ebl_atf_common (DIGIT, INT, LCASE_LETTER)
+%import .ebl_atf_common (free_text)
+%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
+%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (seal)
+
+WORD_SEPARATOR : " "
+DOLLAR_SIGN: "$"
+word_separator : WORD_SEPARATOR
+?dollar_line: DOLLAR_SIGN WORD_SEPARATOR* value
+?value: strict
+      | "(" " "* strict " "* ")"
+      | loose
+?strict: state | RULING | image | seal
+loose: "(" free_text ")"
+
+state: QUALIFICATION [WORD_SEPARATOR extent] [WORD_SEPARATOR scope] [WORD_SEPARATOR STATE] [WORD_SEPARATOR DOLLAR_STATUS]
+     | extent [WORD_SEPARATOR scope] [WORD_SEPARATOR STATE] [WORD_SEPARATOR DOLLAR_STATUS] -> state_extent
+     | scope [WORD_SEPARATOR STATE] [WORD_SEPARATOR DOLLAR_STATUS] -> state_scope
+     | STATE [WORD_SEPARATOR DOLLAR_STATUS] -> state_state
+     | DOLLAR_STATUS -> state_status
+
+QUALIFICATION : "at least" | "at most" | "about"
+
+?extent: INT | range | EXTENT
+EXTENT: "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
+range.2: INT " "? "-" " "? INT
+
+?scope: SCOPE | object | surface
+SCOPE: "columns" | "column" | "lines" | "line" | "cases" | "case" | "surface" | "side" | "excerpt"
+
+
+STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
+     | "omitted" | "continues"
+
+DOLLAR_STATUS: "!?" | "*" | "?" | "!"
+
+RULING : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
+RULING_NUMBER : "single" | "double" | "triple"
+
+
+image.1 : "(" " "? "image " INT [LCASE_LETTER] " = " free_text ")"
