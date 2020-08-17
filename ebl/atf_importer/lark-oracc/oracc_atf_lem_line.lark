@@ -1,0 +1,16 @@
+%import .oracc_atf_common (VALUE_CHARACTER)
+%import .oracc_atf_common (LOGOGRAM_CHARACTER)
+
+lem_line: "#lem: " lemma (LEM_SEPARATOR lemma)*
+LEM_SEPARATOR : "; "
+lemma :  value_part guide_word? pos_tag? e_pos_tag? norm0? unit? ("&" lemma)*  
+
+value_part: ("+"|"!+")? (VALUE_CHARACTER|LOGOGRAM_CHARACTER|/[\.A-Za-z\s\d\)\(\/\-]/)+
+guide_word: "["/[\.A-Za-z\s\d\)\(\/\-\?]/*"]"
+pos_tag: POS_TAG
+e_pos_tag: "'" POS_TAG
+norm0: NORM(VALUE_CHARACTER|LOGOGRAM_CHARACTER|/[\.A-Za-z\s\d\)\(\/\-]/)+ | NORM
+unit: " +."|" -."
+NORM : "$"
+POS_TAG : "REL" | "DET" | "CNJ" | "MOD" | "PRP" | "SBJ" | "AJ"| "AV" | "NU" | "DP" | "IP" | "PP" | "RP" | "XP" | "QP" |"DN" | "AN" | "CN" | "EN" | "FN" | "GN" | "LN"| "MN" | "ON" | "PN" | "QN" | "RN" | "SN" | "TN" | "WN" |"YN" | "N" | "V" | "J" 
+

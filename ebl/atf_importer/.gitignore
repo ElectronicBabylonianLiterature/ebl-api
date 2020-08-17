@@ -1,0 +1,7 @@
+bfg-1.13.0.jar
+test-files/
+output/
+__pycache__
+.env
+input/
+notes.txt
