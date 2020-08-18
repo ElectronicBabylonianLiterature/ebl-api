@@ -22,6 +22,7 @@ from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import StatisticsResource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
+from ebl.fragmentarium.web.atf_import import ATF_ImportResource
 
 
 def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyre-ignore[11]
@@ -57,6 +58,8 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
 
+    atf_importer = ATF_ImportResource(context.get_transliteration_update_factory())
+
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}", fragments)
     api.add_route("/fragments/{number}/pager", fragment_pager)
@@ -69,6 +72,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     api.add_route("/statistics", statistics)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
     api.add_route("/folios/{name}/{number}", folios)
+    api.add_route("/atf_import", atf_importer)
 
     spec.components.schema("FragmentInfo", schema=FragmentInfoSchema)
     spec.components.schema("Fragment", schema=FragmentDtoSchema)
