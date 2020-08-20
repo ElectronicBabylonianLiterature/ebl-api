@@ -65,6 +65,33 @@ def test_update_update_transliteration_not_found(
         )
 
 
+def test_update_genre(
+        fragment_updater, user, fragment_repository, changelog, when
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    genre = [["ARCHIVE", "Administrative"]]
+    expected_fragment = fragment.set_genre(genre)
+
+    (
+        when(fragment_repository)
+            .query_by_fragment_number(number)
+            .thenReturn(fragment)
+    )
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        SCHEMA.dump(fragment),
+        SCHEMA.dump(expected_fragment),
+    ).thenReturn()
+    (when(fragment_repository).update_genre(expected_fragment).thenReturn())
+
+    updated_fragment = fragment_updater.update_genre(
+        number, genre, user
+    )
+    assert updated_fragment == (expected_fragment, False)
+
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_lemmatization(
     fragment_updater, user, fragment_repository, changelog, when

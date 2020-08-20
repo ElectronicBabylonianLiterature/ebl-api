@@ -146,6 +146,15 @@ def test_update_update_transliteration_not_found(fragment_repository):
         fragment_repository.update_transliteration(transliterated_fragment)
 
 
+def test_update_genre(fragment_repository):
+    fragment = FragmentFactory.build(genre=None)
+    fragment_number = fragment_repository.create(fragment)
+    updated_fragment = fragment.set_genre([["ARCHIVE", "Administrative"]])
+    fragment_repository.update_genre(updated_fragment)
+    result = fragment_repository.query_by_fragment_number(fragment_number)
+
+    assert result == updated_fragment
+
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragment_repository.create(transliterated_fragment)
@@ -424,3 +433,4 @@ def test_update_update_references(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_references(transliterated_fragment)
+

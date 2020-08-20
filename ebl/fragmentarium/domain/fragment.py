@@ -11,7 +11,7 @@ from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
 
 FragmentNumber = NewType("FragmentNumber", str)
-
+Genre = Sequence[Sequence[str]]
 
 @attr.s(auto_attribs=True, frozen=True)
 class UncuratedReference:
@@ -25,7 +25,7 @@ class Measure:
     note: Optional[str] = None
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True)
 class Fragment:
     number: FragmentNumber
     accession: str = ""
@@ -47,6 +47,7 @@ class Fragment:
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
+    genre: Optional[Genre] = tuple()
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
@@ -65,6 +66,9 @@ class Fragment:
             signs=transliteration.signs,
             record=record,
         )
+
+    def set_genre(self, genre: Sequence[Sequence[str]]) -> "Fragment":
+        return attr.evolve(self, genre=genre)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)

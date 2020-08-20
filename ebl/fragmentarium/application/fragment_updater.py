@@ -46,6 +46,23 @@ class FragmentUpdater:
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
+    def update_genre(
+            self,
+            number: FragmentNumber,
+            genre: Sequence[Sequence[str]],
+            user: User
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_fragment_number(number)
+        updated_fragment = fragment.set_genre(genre)
+
+        self._create_changlelog(user, fragment, updated_fragment)
+        self._repository.update_genre(updated_fragment)
+
+        return (
+            updated_fragment,
+            self._photos.query_if_file_exists(f"{number}.jpg"),
+        )
+
     def update_lemmatization(
         self, number: FragmentNumber, lemmatization: Lemmatization, user: User
     ) -> Tuple[Fragment, bool]:
