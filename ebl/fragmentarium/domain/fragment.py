@@ -13,6 +13,7 @@ from ebl.users.domain.user import User
 FragmentNumber = NewType("FragmentNumber", str)
 Genre = Sequence[Sequence[str]]
 
+
 @attr.s(auto_attribs=True, frozen=True)
 class UncuratedReference:
     document: str
@@ -47,7 +48,7 @@ class Fragment:
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
-    genre: Optional[Genre] = tuple()
+    genre: Genre = tuple(tuple())
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
@@ -67,8 +68,8 @@ class Fragment:
             record=record,
         )
 
-    def set_genre(self, genre: Sequence[Sequence[str]]) -> "Fragment":
-        return attr.evolve(self, genre=genre)
+    def set_genre(self, genre: Genre) -> "Fragment":
+        return attr.evolve(self, genre=tuple(map(tuple, genre)))  # pyre-ignore[6]
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)

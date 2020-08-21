@@ -75,8 +75,8 @@ def test_update_genre(
 
     (
         when(fragment_repository)
-            .query_by_fragment_number(number)
-            .thenReturn(fragment)
+        .query_by_fragment_number(number)
+        .thenReturn(fragment)
     )
     when(changelog).create(
         "fragments",

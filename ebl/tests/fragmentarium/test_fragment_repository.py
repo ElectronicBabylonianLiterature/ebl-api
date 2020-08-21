@@ -155,6 +155,7 @@ def test_update_genre(fragment_repository):
 
     assert result == updated_fragment
 
+
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_number = fragment_repository.create(transliterated_fragment)
@@ -433,4 +434,3 @@ def test_update_update_references(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_references(transliterated_fragment)
-

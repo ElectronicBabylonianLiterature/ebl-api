@@ -98,6 +98,9 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
         data_key="uncuratedReferences",
         missing=None,
     )
+    genre = fields.List(
+        fields.List(fields.String()), missing=tuple()
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):
@@ -106,6 +109,7 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
         data["record"] = data["record"]
         data["folios"] = data["folios"]
         data["references"] = tuple(data["references"])
+        data["genre"] = tuple(map(tuple, data["genre"]))
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)

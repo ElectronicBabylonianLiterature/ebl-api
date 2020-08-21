@@ -73,6 +73,15 @@ class FragmentFactory(factory.Factory):  # pyre-ignore[11]
     description = factory.Faker("text")
     script = factory.Iterator(["NA", "NB"])
     folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    genre = factory.Iterator([
+        (
+            ("ARCHIVE", "Administrative", "Lists", "One Entry"),
+            ("CANONICAL", "Catalogues"),
+        ),
+        (
+            ("ARCHIVE", "Administrative", "Lists", "One Entry"),
+        )
+    ])
 
 
 class InterestingFragmentFactory(FragmentFactory):
