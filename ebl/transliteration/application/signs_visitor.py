@@ -5,7 +5,7 @@ import attr
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme, Grapheme, NamedSign, Number, UnknownSign
+    CompoundGrapheme, Divider, Grapheme, NamedSign, Number, UnknownSign
 )
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
@@ -74,6 +74,12 @@ class SignsVisitor(TokenVisitor):
 
     def visit_grapheme(self, grapheme: Grapheme) -> None:
         self._standardizations.append(self._find(grapheme.name))
+
+    def visit_divider(self, divider: Divider) -> None:
+        sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
+        (self._standardizations.append(INVALID)
+            if sign is None
+            else self._visit_sign(sign))
 
     def _visit_sign(self, sign: Sign) -> None:
         if is_splittable(sign.name):

@@ -6,7 +6,8 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme, Grapheme, Logogram, Number, Reading, UnclearSign, UnidentifiedSign
+    CompoundGrapheme, Divider, Grapheme, Logogram, Number, Reading, UnclearSign, 
+    UnidentifiedSign
 )
 
 
@@ -66,6 +67,12 @@ from ebl.transliteration.domain.sign_tokens import (
             Word.of([Number.of_name("256")]),
         ],
         ["ABZ001", "DIŠ", "2", "ABZ411", "ABZ411", "ABZ411", "30", "256"],
+    ),
+    (
+        [
+            Divider.of(":"),
+        ],
+        ["ABZ377n1"],
     ),
 ])
 def test_signs_visitor(
