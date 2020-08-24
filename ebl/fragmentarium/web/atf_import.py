@@ -13,12 +13,14 @@ class ATF_ImportResource:
 
     auth = {"auth_disabled": True}
 
-    def __init__(self, transliteration_factory):
+    def __init__(self, transliteration_factory,updater):
         self._transliteration_factory = transliteration_factory
+        self._updater = updater
 
-    def on_get(self, _req, resp: falcon.Response) -> None:  # pyre-ignore[11]
+    def on_get(self, req, resp: falcon.Response) -> None:  # pyre-ignore[11]
+        user = req.context.user
 
-        importer = ATF_Importer(self._transliteration_factory,True)
+        importer = ATF_Importer(self._transliteration_factory,self._updater,user)
         importer.start()
 
         resp.media = "XXXXXYYYY"
@@ -28,11 +30,10 @@ class ATF_ImportResource:
     def on_post(self, req, resp, number):
         try:
             print("XXXX")
-            #user = req.context.user
-            #updated_fragment, has_photo = self._updater.update_transliteration(
-            #    number, self._create_transliteration(req.media), user
-            #)
-            #resp.media = create_response_dto(updated_fragment, user, has_photo)
+            user = req.context.user
+            importer = ATF_Importer(self._transliteration_factory, self._updater, user,number)
+            importer.start()
+
         except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {
