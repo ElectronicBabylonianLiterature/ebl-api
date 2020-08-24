@@ -3,12 +3,13 @@ from typing import MutableSequence, Optional, Sequence
 import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.atf import VARIANT_SEPARATOR
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme, Divider, Grapheme, NamedSign, Number, UnknownSign
 )
 from ebl.transliteration.domain.sign import Sign, SignName
-from ebl.transliteration.domain.tokens import Token, TokenVisitor
+from ebl.transliteration.domain.tokens import Token, TokenVisitor, Variant
 from ebl.transliteration.domain.standardization import (
     INVALID, is_splittable, Standardization, UNKNOWN
 )
@@ -80,6 +81,15 @@ class SignsVisitor(TokenVisitor):
         (self._standardizations.append(INVALID)
             if sign is None
             else self._visit_sign(sign))
+
+    def visit_variant(self, variant: Variant) -> None:
+        variant_visitor = SignsVisitor(self._sign_repository)
+        for token in variant.tokens:
+            token.accept(variant_visitor)
+
+        self._standardizations.append(
+            Standardization.of_string(VARIANT_SEPARATOR.join(variant_visitor.result))
+        )
 
     def _visit_sign(self, sign: Sign) -> None:
         if is_splittable(sign.name):

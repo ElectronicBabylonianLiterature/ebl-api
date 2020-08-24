@@ -3,10 +3,10 @@ from typing import Sequence
 import pytest  # pyre-ignore[21]
 
 from ebl.transliteration.application.signs_visitor import SignsVisitor
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, Variant
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme, Divider, Grapheme, Logogram, Number, Reading, UnclearSign, 
+    CompoundGrapheme, Divider, Grapheme, Logogram, Number, Reading, UnclearSign,
     UnidentifiedSign
 )
 
@@ -74,6 +74,21 @@ from ebl.transliteration.domain.sign_tokens import (
         ],
         ["ABZ377n1"],
     ),
+    (
+        [
+            Variant.of(
+                Divider.of(":"), Reading.of_name("ku"),
+            ),
+            Word.of(
+                [
+                    Variant.of(
+                        Reading.of_name("šu"), CompoundGrapheme.of(["BI×IS"])
+                    ),
+                ],
+            ),
+        ],
+        ["ABZ377n1/KU", "ŠU/|BI×IS|"],
+    )
 ])
 def test_signs_visitor(
     tokens: Sequence[Token],
