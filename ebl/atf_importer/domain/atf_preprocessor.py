@@ -6,6 +6,7 @@ import traceback
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
 from lark import Tree, Transformer, Visitor
+import logging
 
 
 class ConversionError(Exception):
@@ -162,10 +163,10 @@ class ATF_Preprocessor:
         pass
         self.EBL_PARSER = Lark.open("lark-ebl/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
         self.ORACC_PARSER = Lark.open("lark-oracc/oracc_atf.lark", maybe_placeholders=True, rel_to=__file__)
+        self.logger = logging.getLogger("atf-importer")
 
-    def process_line(self,atf,debug):
-        if debug:
-            print("original line: '"+atf+"'")
+    def process_line(self,atf):
+        self.logger.debug("original line: '"+atf+"'")
 
         try:
 
@@ -182,9 +183,8 @@ class ATF_Preprocessor:
             words_serializer.visit_topdown(tree)
             converted_line_array = words_serializer.result
 
-            if debug:
-                print("line successfully parsed, no conversion needed")
-                print("----------------------------------------------------------------------")
+            self.debug.info("line successfully parsed, no conversion needed")
+            self.debug.info("----------------------------------------------------------------------")
             return atf,converted_line_array,tree.data
 
         except Exception :
@@ -199,8 +199,7 @@ class ATF_Preprocessor:
             try:
                 tree = self.ORACC_PARSER.parse(atf)
 
-                if debug:
-                    print("converting " + tree.data)
+                self.logger.debug("converting " + tree.data)
 
                 #print(tree.pretty())
 
@@ -209,8 +208,7 @@ class ATF_Preprocessor:
                     lemmas_and_guidewords_serializer.result = []
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.visit(tree)
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
-                    if debug:
-                        print("----------------------------------------------------------------------")
+                    self.logger.debug("----------------------------------------------------------------------")
                     return None,lemmas_and_guidewords_array,tree.data
 
 
@@ -233,36 +231,30 @@ class ATF_Preprocessor:
 
                     try:
                         tree3 = self.EBL_PARSER.parse(converted_line)
-                        if debug:
-                            print('successfully parsed converted line')
-                            print(converted_line)
-                        if debug:
-                            print("----------------------------------------------------------------------")
+                        self.logger.debug('successfully parsed converted line')
+                        self.logger.debug(converted_line)
+                        self.logger.debug("----------------------------------------------------------------------")
 
                         return converted_line,converted_line_array,tree.data
 
                     except Exception as e:
-                        if debug:
-                            print("could not parse converted line")
-                            traceback.print_exc(file=sys.stdout)
+                        self.logger.exception("could not parse converted line")
+                        traceback.print_exc(file=sys.stdout)
 
-                    if debug:
-                        print("converted line as " + tree.data + " --> '" + converted_line + "'")
+                    self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
 
             except:
 
-                if debug:
-                    error = "could not convert line"
-                    print(error+": "+atf,'red')
+                error = "could not convert line"
+                self.logger.exception(error+": "+atf)
                 traceback.print_exc(file=sys.stdout)
 
                 return(error+": "+atf),None,None
 
 
 
-    def convert_lines(self,file,debug):
-        if debug:
-            Util.print_frame("converting: \""+file+"\"")
+    def convert_lines(self,file):
+        self.logger.debug(Util.print_frame("converting: \""+file+"\""))
 
         with codecs.open(file, 'r', encoding='utf8') as f:
             atf_ = f.read()
@@ -271,10 +263,9 @@ class ATF_Preprocessor:
 
         processed_lines = []
         for line in lines:
-            c_line,c_array,c_type = self.process_line(line,debug)
+            c_line,c_array,c_type = self.process_line(line)
             processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type})
-        if debug:
-           Util.print_frame("conversion finished")
+        self.logger.debug(Util.print_frame("conversion finished"))
 
         return processed_lines
 
