@@ -20,6 +20,7 @@ from ebl.errors import NotFoundError
 @attr.s(auto_attribs=True)
 class SignsVisitor(TokenVisitor):
     _sign_repository: SignRepository
+    _is_deep: bool = True
     _standardizations: MutableSequence[Standardization] = attr.ib(
         init=False,
         factory=list
@@ -28,7 +29,7 @@ class SignsVisitor(TokenVisitor):
     @property
     def result(self) -> Sequence[str]:
         return [
-            standardization.get_value(True)
+            standardization.get_value(self._is_deep)
             for standardization in self._standardizations
         ]
 
@@ -64,7 +65,7 @@ class SignsVisitor(TokenVisitor):
             sign_token.accept(self)
 
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
-        if is_splittable(grapheme.name):
+        if self._is_deep and is_splittable(grapheme.name):
             standardizations: Sequence[Standardization] = [
                 self._find(SignName(part))
                 for part in grapheme.compound_parts
@@ -83,7 +84,7 @@ class SignsVisitor(TokenVisitor):
             else self._visit_sign(sign))
 
     def visit_variant(self, variant: Variant) -> None:
-        variant_visitor = SignsVisitor(self._sign_repository)
+        variant_visitor = SignsVisitor(self._sign_repository, False)
         for token in variant.tokens:
             token.accept(variant_visitor)
 
@@ -92,7 +93,7 @@ class SignsVisitor(TokenVisitor):
         )
 
     def _visit_sign(self, sign: Sign) -> None:
-        if is_splittable(sign.name):
+        if self._is_deep and is_splittable(sign.name):
             grapheme: CompoundGrapheme = parse_compound_grapheme(sign.name)
             grapheme.accept(self)
         else:

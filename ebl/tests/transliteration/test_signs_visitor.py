@@ -84,10 +84,15 @@ from ebl.transliteration.domain.sign_tokens import (
                     Variant.of(
                         Reading.of_name("šu"), CompoundGrapheme.of(["BI×IS"])
                     ),
+                    Variant.of(
+                        Reading.of_name("ummu", 3),
+                        CompoundGrapheme.of(["IGI", "KU"]),
+                        Reading.of_name("mat", 3),
+                    ),
                 ],
             ),
         ],
-        ["ABZ377n1/KU", "ŠU/|BI×IS|"],
+        ["ABZ377n1/KU", "ŠU/|BI×IS|", "|A.EDIN.LAL|/|IGI.KU|/ABZ081"],
     )
 ])
 def test_signs_visitor(
