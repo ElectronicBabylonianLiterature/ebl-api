@@ -98,8 +98,8 @@ def sign_repository(database):
 
 
 @pytest.fixture
-def transliteration_factory(atf_converter):
-    return TransliterationUpdateFactory(atf_converter)
+def transliteration_factory(sign_repository):
+    return TransliterationUpdateFactory(sign_repository)
 
 
 @pytest.fixture

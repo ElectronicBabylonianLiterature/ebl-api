@@ -46,8 +46,7 @@ class Context:
         )
 
     def get_transliteration_update_factory(self):
-        atf_converter = AtfConverter(self.sign_repository)
-        return TransliterationUpdateFactory(atf_converter)
+        return TransliterationUpdateFactory(self.sign_repository)
 
     def get_transliteration_query_factory(self):
         atf_converter = AtfConverter(self.sign_repository)

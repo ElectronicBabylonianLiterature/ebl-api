@@ -19,7 +19,6 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
-from ebl.transliteration.domain.value import INVALID_READING
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
@@ -75,20 +74,9 @@ def expect_invalid_references(bibliography, when):
     when(bibliography).validate_references(...).thenRaise(DataError())
 
 
-def expect_signs(transliteration_search, when, sign="X", text=TEXT):
-    atf_lines = [manuscript.line.atf
-                 for chapter in text.chapters
-                 for line in chapter.lines
-                 for manuscript in line.manuscripts]
-
-    for atf in atf_lines:
-        when(transliteration_search).convert_atf_to_sign_matrix(atf).thenReturn([[sign]])
-
-
-def expect_invalid_signs(transliteration_search, when):
-    when(transliteration_search).convert_values_to_signs(...).thenReturn(
-        [[INVALID_READING]]
-    )
+def expect_signs(signs, sign_repository):
+    for sign in signs:
+        sign_repository.create(sign)
 
 
 def expect_text_update(
@@ -96,12 +84,13 @@ def expect_text_update(
     changelog,
     dehydrated_text,
     dehydrated_updated_text,
-    transliteration_search,
+    signs,
+    sign_repository,
     text_repository,
     user,
     when,
 ):
-    expect_signs(transliteration_search, when, text=dehydrated_updated_text)
+    expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when, dehydrated_text)
     when(text_repository).find(TEXT.id).thenReturn(dehydrated_text)
     (
@@ -118,9 +107,10 @@ def expect_text_update(
 
 
 def test_creating_text(
-    corpus, text_repository, bibliography, changelog, atf_converter, user, when
+    corpus, text_repository, bibliography, changelog, signs, sign_repository,
+    user, when
 ):
-    expect_signs(atf_converter, when)
+    expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
     when(changelog).create(
         COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id},
@@ -131,10 +121,9 @@ def test_creating_text(
 
 
 def test_create_raises_exception_if_invalid_signs(
-    corpus, bibliography, atf_converter, when
+    corpus, bibliography, when
 ):
     allow_validate_references(bibliography, when)
-    expect_invalid_signs(atf_converter, when)
 
     with pytest.raises(DataError):
         corpus.create(TEXT, ANY_USER)
@@ -171,7 +160,8 @@ def test_find_raises_exception_if_references_not_found(
 
 
 def test_updating_alignment(
-    corpus, text_repository, bibliography, changelog, atf_converter, user, when
+    corpus, text_repository, bibliography, changelog, signs,
+    sign_repository, user, when
 ):
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
@@ -213,7 +203,8 @@ def test_updating_alignment(
         changelog,
         DEHYDRATED_TEXT,
         dehydrated_updated_text,
-        atf_converter,
+        signs,
+        sign_repository,
         text_repository,
         user,
         when,
@@ -251,7 +242,8 @@ def test_invalid_alignment(alignment, corpus, text_repository, when):
 
 
 def test_updating_manuscripts(
-    corpus, text_repository, bibliography, changelog, atf_converter, user, when
+    corpus, text_repository, bibliography, changelog, signs,
+    sign_repository, user, when
 ):
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
@@ -272,7 +264,8 @@ def test_updating_manuscripts(
         changelog,
         DEHYDRATED_TEXT,
         dehydrated_updated_text,
-        atf_converter,
+        signs,
+        sign_repository,
         text_repository,
         user,
         when,
@@ -310,7 +303,8 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
 
 
 def test_updating_lines(
-    corpus, text_repository, bibliography, changelog, atf_converter, user, when
+    corpus, text_repository, bibliography, changelog, signs,
+    sign_repository, user, when
 ):
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
@@ -332,7 +326,8 @@ def test_updating_lines(
         changelog,
         DEHYDRATED_TEXT,
         dehydrated_updated_text,
-        atf_converter,
+        signs,
+        sign_repository,
         text_repository,
         user,
         when,
@@ -343,7 +338,8 @@ def test_updating_lines(
 
 
 def test_merging_lines(
-    corpus, text_repository, bibliography, changelog, atf_converter, user, when
+    corpus, text_repository, bibliography, changelog, signs,
+    sign_repository, user, when
 ):
     number = LineNumberLabel("1")
     reconstruction = (AkkadianWord((StringPart("buāru"),)),)
@@ -351,10 +347,10 @@ def test_merging_lines(
         LineNumber(1),
         (
             Word.of(
-                [Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0,
+                [Reading.of_name("ku")], unique_lemma=(WordId("word1"),), alignment=0,
             ),
             Word.of(
-                [Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1,
+                [Reading.of_name("nu")], unique_lemma=(WordId("word2"),), alignment=1,
             ),
         ),
     )
@@ -364,7 +360,7 @@ def test_merging_lines(
     )
     new_text_line = TextLine.of_iterable(
         LineNumber(1),
-        (Word.of([Reading.of_name("kur")]), Word.of([Reading.of_name("pa")])),
+        (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ši")])),
     )
     new_line = Line(
         number,
@@ -390,7 +386,8 @@ def test_merging_lines(
         changelog,
         dehydrated_text,
         dehydrated_updated_text,
-        atf_converter,
+        signs,
+        sign_repository,
         text_repository,
         user,
         when,
@@ -407,12 +404,11 @@ def test_merging_lines(
 
 
 def test_update_lines_raises_exception_if_invalid_signs(
-    corpus, text_repository, bibliography, atf_converter, when
+    corpus, text_repository, bibliography, when
 ):
     lines = TEXT.chapters[0].lines
     when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
     allow_validate_references(bibliography, when)
-    expect_invalid_signs(atf_converter, when)
 
     with pytest.raises(DataError):
         corpus.update_lines(TEXT.id, 0, lines, ANY_USER)

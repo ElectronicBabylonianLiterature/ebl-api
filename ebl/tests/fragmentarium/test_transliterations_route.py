@@ -93,7 +93,7 @@ def test_update_transliteration_merge_lemmatization(
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
-    updates = {"transliteration": "this is not valid", "notes": ""}
+    updates = {"transliteration": "1. kururu", "notes": ""}
     body = json.dumps(updates)
     url = f"/fragments/{fragment_number}/transliteration"
     post_result = client.simulate_post(url, body=body)
