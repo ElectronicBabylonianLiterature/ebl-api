@@ -16,7 +16,7 @@ class TransliterationUpdateFactory:
             self._map_line(line)
             for line in text.lines if isinstance(line, TextLine)
         )
-        return TransliterationUpdate(atf, text, notes, signs)
+        return TransliterationUpdate(text, notes, signs)
 
     def _map_line(self, line: TextLine) -> str:
         visitor = SignsVisitor(self._sing_repository)

@@ -12,7 +12,7 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.transliteration.domain.atf import Atf, Flag
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Erasure,
@@ -133,7 +133,6 @@ def test_update_transliteration_with_record(fragment_repository, user):
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
         TransliterationUpdate(
-            Atf("$ (the transliteration)"),
             parse_atf_lark("$ (the transliteration)"),
             "notes"
         ),

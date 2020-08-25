@@ -10,7 +10,6 @@ from ebl.tests.factories.fragment import (
     FragmentFactory,
     LemmatizedFragmentFactory,
 )
-from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 
@@ -30,7 +29,6 @@ def test_update_transliteration(client, fragmentarium, user, database):
         **create_response_dto(
             fragment.update_transliteration(
                 TransliterationUpdate(
-                    Atf(updates["transliteration"]),
                     parse_atf_lark(updates["transliteration"]),
                     updates["notes"]
                 ),

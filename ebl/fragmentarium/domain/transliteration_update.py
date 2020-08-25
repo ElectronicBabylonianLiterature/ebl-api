@@ -2,7 +2,6 @@ from typing import Optional
 
 import attr
 
-from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.clean_atf import CleanAtf
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -10,14 +9,13 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationUpdate:
-    atf: Atf = attr.ib(default=Atf(""))
     text: Text = Text()
     notes: str = ""
     signs: Optional[str] = attr.ib(default=None)
 
     @signs.validator
     def _check_signs(self, _attribute, value):
-        clean_atf = CleanAtf(self.atf)
+        clean_atf = CleanAtf(self.text.atf)
         lines = clean_atf.atf.split("\n")
 
         def get_line_number(filtered_line_number):

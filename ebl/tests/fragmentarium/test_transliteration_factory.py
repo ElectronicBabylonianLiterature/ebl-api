@@ -17,7 +17,6 @@ def test_create(sign_repository, signs):
     notes = "notes"
 
     assert factory.create(atf, notes) == TransliterationUpdate(
-        atf,
         parse_atf_lark(atf),
         notes,
         "ŠU BU"

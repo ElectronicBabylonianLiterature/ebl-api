@@ -10,9 +10,7 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
 )
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.dollar_line import LooseDollarLine
 from ebl.transliteration.domain.lemmatization import Lemmatization
-from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 SCHEMA = FragmentSchema()
@@ -26,7 +24,6 @@ def test_update_transliteration(
     number = transliterated_fragment.number
     atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(
-        atf,
         parse_atf_lark(atf),
         "updated notes",
         "X X\nX"
@@ -68,8 +65,7 @@ def test_update_update_transliteration_not_found(
         fragment_updater.update_transliteration(
             number,
             TransliterationUpdate(
-                Atf("$ (the transliteration)"),
-                Text.of_iterable([LooseDollarLine("the transliteration")]),
+                parse_atf_lark("$ (the transliteration)"),
                 "notes"
             ),
             user,

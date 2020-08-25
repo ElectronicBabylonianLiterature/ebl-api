@@ -54,7 +54,7 @@ class Fragment:
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
-        record = self.record.add_entry(self.text.atf, transliteration.atf, user)
+        record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
 
         text = self.text.merge(transliteration.text)
 

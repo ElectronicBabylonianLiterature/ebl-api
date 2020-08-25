@@ -153,7 +153,7 @@ def test_add_transliteration(user):
     fragment = FragmentFactory.build()
     atf = Atf("1. x x")
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(atf, text, fragment.notes)
+    transliteration = TransliterationUpdate(text, fragment.notes)
     record = fragment.record.add_entry("", atf, user)
 
     updated_fragment = fragment.update_transliteration(transliteration, user)
@@ -169,7 +169,7 @@ def test_update_transliteration(user):
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
     atf = Atf("\n".join(lines))
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(atf, text, "updated notes", "X X\nX")
+    transliteration = TransliterationUpdate(text, "updated notes", "X X\nX")
     updated_fragment = lemmatized_fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(
@@ -178,7 +178,7 @@ def test_update_transliteration(user):
         notes=transliteration.notes,
         signs=transliteration.signs,
         record=lemmatized_fragment.record.add_entry(
-            lemmatized_fragment.text.atf, transliteration.atf, user
+            lemmatized_fragment.text.atf, transliteration.text.atf, user
         ),
     )
 
@@ -187,11 +187,7 @@ def test_update_transliteration(user):
 
 def test_update_notes(user):
     fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(
-        fragment.text.atf,
-        fragment.text,
-        "new notes"
-    )
+    transliteration = TransliterationUpdate(fragment.text, "new notes")
     updated_fragment = fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(fragment, notes=transliteration.notes)
