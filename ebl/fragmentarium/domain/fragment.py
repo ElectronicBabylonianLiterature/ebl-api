@@ -56,7 +56,7 @@ class Fragment:
     ) -> "Fragment":
         record = self.record.add_entry(self.text.atf, transliteration.atf, user)
 
-        text = self.text.merge(transliteration.parse())
+        text = self.text.merge(transliteration.text)
 
         return attr.evolve(
             self,

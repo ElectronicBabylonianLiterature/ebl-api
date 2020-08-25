@@ -26,6 +26,7 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 COLLECTION = "fragments"
 
@@ -131,7 +132,12 @@ def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(Atf("$ (the transliteration)"), "notes"), user
+        TransliterationUpdate(
+            Atf("$ (the transliteration)"),
+            parse_atf_lark("$ (the transliteration)"),
+            "notes"
+        ),
+        user
     )
 
     fragment_repository.update_transliteration(updated_fragment)

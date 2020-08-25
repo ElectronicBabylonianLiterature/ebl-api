@@ -4,7 +4,6 @@ import attr
 
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.clean_atf import CleanAtf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
@@ -12,11 +11,9 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationUpdate:
     atf: Atf = attr.ib(default=Atf(""))
+    text: Text = Text()
     notes: str = ""
     signs: Optional[str] = attr.ib(default=None)
-
-    def parse(self) -> Text:
-        return parse_atf_lark(self.atf)
 
     @signs.validator
     def _check_signs(self, _attribute, value):

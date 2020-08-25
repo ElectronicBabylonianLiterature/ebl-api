@@ -24,7 +24,6 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
 )
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
 def test_number():
@@ -153,8 +152,8 @@ def test_references_default():
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()
     atf = Atf("1. x x")
-    transliteration = TransliterationUpdate(atf, fragment.notes)
     text = parse_atf_lark(atf)
+    transliteration = TransliterationUpdate(atf, text, fragment.notes)
     record = fragment.record.add_entry("", atf, user)
 
     updated_fragment = fragment.update_transliteration(transliteration, user)
@@ -170,7 +169,7 @@ def test_update_transliteration(user):
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
     atf = Atf("\n".join(lines))
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(atf, "updated notes", "X X\nX")
+    transliteration = TransliterationUpdate(atf, text, "updated notes", "X X\nX")
     updated_fragment = lemmatized_fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(
@@ -186,26 +185,13 @@ def test_update_transliteration(user):
     assert updated_fragment == expected_fragment
 
 
-def test_test_update_transliteration_invalid_atf(user):
-    fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(Atf("1. {kur}?"), fragment.notes)
-
-    with pytest.raises(
-        TransliterationError, match="Invalid transliteration"
-    ) as excinfo:
-        fragment.update_transliteration(transliteration, user)
-
-    assert excinfo.value.errors == [
-        {
-            "description": ("Invalid line:  {kur}?\n" "                    ^\n"),
-            "lineNumber": 1,
-        }
-    ]
-
-
 def test_update_notes(user):
     fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(fragment.text.atf, "new notes")
+    transliteration = TransliterationUpdate(
+        fragment.text.atf,
+        fragment.text,
+        "new notes"
+    )
     updated_fragment = fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(fragment, notes=transliteration.notes)

@@ -13,6 +13,13 @@ def test_atf():
     assert transliteration.atf == atf
 
 
+def test_text():
+    text = parse_atf_lark("1. kur")
+    transliteration = TransliterationUpdate(text=text)
+
+    assert transliteration.text == text
+
+
 def test_notes():
     notes = "notes"
     transliteration = TransliterationUpdate(notes=notes)
@@ -25,17 +32,6 @@ def test_signs():
     transliteration = TransliterationUpdate(signs=signs)
 
     assert transliteration.signs == signs
-
-
-def test_parse():
-    atf = Atf("1. kur")
-    assert TransliterationUpdate(atf).parse() == parse_atf_lark(atf)
-
-
-def test_parse_invalid():
-    transliteration = TransliterationUpdate(Atf("1. ö invalid atf"))
-    with pytest.raises(TransliterationError):
-        transliteration.parse()
 
 
 def test_validate_valid_signs(transliteration_factory):
