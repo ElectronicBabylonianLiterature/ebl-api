@@ -4,7 +4,6 @@ import attr
 
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
-from ebl.transliteration.domain.text_line import TextLine
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -26,11 +25,7 @@ class TransliterationUpdate:
 
     def _get_questionable_lines(self, value: str) -> List[int]:
         lines = [line.atf for line in self.text.lines]
-        text_lines = [
-            line.atf
-            for line in self.text.lines
-            if isinstance(line, TextLine)
-        ]
+        text_lines = [line.atf for line in self.text.text_lines]
         signs = value.split("\n")
 
         def get_line_number(text_line_number: int) -> int:

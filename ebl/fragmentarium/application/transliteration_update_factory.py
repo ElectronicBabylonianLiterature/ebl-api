@@ -14,7 +14,7 @@ class TransliterationUpdateFactory:
         text = parse_atf_lark(atf)
         signs = "\n".join(
             self._map_line(line)
-            for line in text.lines if isinstance(line, TextLine)
+            for line in text.text_lines
         )
         return TransliterationUpdate(text, notes, signs)
 
