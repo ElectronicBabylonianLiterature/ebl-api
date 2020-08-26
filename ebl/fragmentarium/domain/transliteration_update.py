@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import attr
 
@@ -14,25 +14,9 @@ class TransliterationUpdate:
     signs: Optional[str] = attr.ib(default=None)
 
     @signs.validator
-    def _check_signs(self, _attribute, value):
-        lines = [line.atf for line in self.text.lines]
-        text_lines = [
-            line.atf
-            for line in self.text.lines
-            if isinstance(line, TextLine)
-        ]
-
-        def get_line_number(text_line_number):
-            line = text_lines[text_line_number]
-            return lines.index(line) + 1
-
+    def _check_signs(self, _attribute, value) -> None:
         if value is not None:
-            signs = value.split("\n")
-            questionable_lines = [
-                get_line_number(index)
-                for index, line in enumerate(signs)
-                if "?" in line
-            ]
+            questionable_lines = self._get_questionable_lines(value)
             if questionable_lines:
                 raise TransliterationError(
                     [
@@ -40,3 +24,22 @@ class TransliterationUpdate:
                         for line_number in questionable_lines
                     ]
                 )
+
+    def _get_questionable_lines(self, value: str) -> List[int]:
+        lines = [line.atf for line in self.text.lines]
+        text_lines = [
+            line.atf
+            for line in self.text.lines
+            if isinstance(line, TextLine)
+        ]
+        signs = value.split("\n")
+
+        def get_line_number(text_line_number: int) -> int:
+            line = text_lines[text_line_number]
+            return lines.index(line) + 1
+
+        return [
+            get_line_number(index)
+            for index, line in enumerate(signs)
+            if "?" in line
+        ]
