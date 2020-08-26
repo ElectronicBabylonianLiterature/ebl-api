@@ -27,6 +27,9 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 from ebl.transliteration.domain.word_tokens import Word
 
 
+PARSE_ERRORS = (UnexpectedInput, ParseError, VisitError, EnclosureError)
+
+
 class LineTransformer(
     AtLineTransformer, DollarLineTransfomer, NoteLineTransformer, TextLineTransformer
 ):
@@ -76,7 +79,7 @@ def parse_atf_lark(atf_):
             parsed_line = parse_line(line) if line else EmptyLine()
             validate_line(parsed_line)
             return parsed_line, None
-        except (UnexpectedInput, ParseError, EnclosureError, VisitError) as ex:
+        except PARSE_ERRORS as ex:
             return (None, create_transliteration_error_data(ex, line, line_number))
 
     def check_errors(pairs):

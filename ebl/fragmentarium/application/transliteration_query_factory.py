@@ -3,8 +3,9 @@ from typing import Sequence, cast
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.signs_visitor import SignsVisitor
-from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_line
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.errors import DataError
 
 
 class TransliterationQueryFactory:
@@ -20,9 +21,14 @@ class TransliterationQueryFactory:
         return TransliterationQuery(signs)
 
     def _create_signs(self, line: str) -> Sequence[str]:
-        parsed_line = cast(TextLine, parse_line(f"1. {line}"))
         visitor = SignsVisitor(self._sign_repositoy)
-        for token in parsed_line.content:
+        for token in self._parse_line(line).content:
             token.accept(visitor)
 
         return visitor.result
+
+    def _parse_line(self, line: str) -> TextLine:
+        try:
+            return cast(TextLine, parse_line(f"1. {line}"))
+        except PARSE_ERRORS:
+            raise DataError("Invalid transliteration query.")
