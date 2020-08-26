@@ -1,8 +1,7 @@
-from functools import reduce
-from typing import List, Optional, Sequence, Tuple, cast
+from typing import Optional, cast
 
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
-from pymongo.database import Database  # pyre-ignore
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore[21]
+from pymongo.database import Database  # pyre-ignore[21]
 
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -13,7 +12,7 @@ from ebl.transliteration.domain.sign import (
     SignName,
     Value,
 )
-from ebl.transliteration.domain.sign_map import SignKey
+
 
 COLLECTION = "signs"
 
@@ -52,47 +51,6 @@ class SignSchema(Schema):  # pyre-ignore[11]
         return Sign(**data)
 
 
-def create_value_query(keys: Sequence[Value]):
-    value_queries = [
-        {
-            "value": value.value,
-            "subIndex": {"$exists": False}
-            if value.sub_index is None
-            else value.sub_index,
-        }
-        for value in keys
-    ]
-    return {"values": {"$elemMatch": {"$or": value_queries}}}
-
-
-def creates_name_query(keys: Sequence[SignName]):
-    return {"_id": {"$in": keys}}
-
-
-def partition_keys(
-    keys: Sequence[SignKey],
-) -> Tuple[Sequence[Value], Sequence[SignName]]:
-    def partition(acc, key):
-        values, names = acc
-        if type(key) == Value:
-            values.append(key)
-        else:
-            names.append(SignName(key))
-        return values, names
-
-    return reduce(partition, keys, ([], []))
-
-
-def create_signs_query(keys: List[SignKey]):
-    values, names = partition_keys(keys)
-    sub_queries: list = []
-    if values:
-        sub_queries.append(create_value_query(values))
-    if names:
-        sub_queries.append(creates_name_query(names))
-    return {"$or": sub_queries}
-
-
 class MongoSignRepository(SignRepository):
     def __init__(self, database: Database):  # pyre-ignore[11]
         self._collection = MongoCollection(database, COLLECTION)
@@ -117,15 +75,3 @@ class MongoSignRepository(SignRepository):
             return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))  # pyre-ignore[16, 28]
         except NotFoundError:
             return None
-
-    def search_many(self, readings: List[SignKey]) -> List[Sign]:
-        if readings:
-            query = create_signs_query(readings)
-            return cast(
-                List[Sign],
-                SignSchema(unknown=EXCLUDE, many=True).load(  # pyre-ignore[16,28]
-                    self._collection.find_many(query)
-                ),
-            )
-        else:
-            return []
