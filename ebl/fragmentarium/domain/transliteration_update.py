@@ -2,9 +2,9 @@ from typing import Optional
 
 import attr
 
-from ebl.transliteration.domain.clean_atf import CleanAtf
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.text_line import TextLine
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -15,11 +15,15 @@ class TransliterationUpdate:
 
     @signs.validator
     def _check_signs(self, _attribute, value):
-        clean_atf = CleanAtf(self.text.atf)
-        lines = clean_atf.atf.split("\n")
+        lines = [line.atf for line in self.text.lines]
+        text_lines = [
+            line.atf
+            for line in self.text.lines
+            if isinstance(line, TextLine)
+        ]
 
-        def get_line_number(filtered_line_number):
-            line = clean_atf.filtered[filtered_line_number]
+        def get_line_number(text_line_number):
+            line = text_lines[text_line_number]
             return lines.index(line) + 1
 
         if value is not None:
