@@ -35,7 +35,6 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
-from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.domain.user import User
@@ -100,11 +99,6 @@ def sign_repository(database):
 @pytest.fixture
 def transliteration_factory(sign_repository):
     return TransliterationUpdateFactory(sign_repository)
-
-
-@pytest.fixture
-def atf_converter(sign_repository):
-    return AtfConverter(sign_repository)
 
 
 @pytest.fixture
