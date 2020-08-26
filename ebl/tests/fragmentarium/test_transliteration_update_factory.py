@@ -23,6 +23,17 @@ def test_create(sign_repository, signs):
     )
 
 
+def test_create_empty(sign_repository):
+    factory = TransliterationUpdateFactory(sign_repository)
+    atf = Atf("")
+
+    assert factory.create(atf, "") == TransliterationUpdate(
+        parse_atf_lark(atf),
+        "",
+        ""
+    )
+
+
 def test_create_invalid_atf(sign_repository):
     factory = TransliterationUpdateFactory(sign_repository)
     atf = Atf("1. {kur}?")

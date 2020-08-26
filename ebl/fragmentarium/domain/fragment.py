@@ -43,7 +43,7 @@ class Fragment:
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()
-    signs: Optional[str] = None
+    signs: str = ""
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None

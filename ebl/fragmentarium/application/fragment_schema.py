@@ -89,7 +89,7 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
     record = fields.Pluck(RecordSchema, "entries")
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
-    signs = fields.String(missing=None)
+    signs = fields.String(missing="")
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     uncurated_references = fields.Nested(

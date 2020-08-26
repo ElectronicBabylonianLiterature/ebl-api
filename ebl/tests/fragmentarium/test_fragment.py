@@ -101,11 +101,6 @@ def test_signs():
     assert transliterated_fragment.signs == TransliteratedFragmentFactory.signs
 
 
-def test_signs_none():
-    fragment = FragmentFactory.build()
-    assert fragment.signs is None
-
-
 def test_record():
     record = RecordFactory.build()
     fragment = Fragment(FragmentNumber("X.1"), record=record)

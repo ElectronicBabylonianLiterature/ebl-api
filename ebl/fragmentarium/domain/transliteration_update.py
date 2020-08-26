@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 import attr
 
@@ -11,19 +11,18 @@ from ebl.transliteration.domain.text_line import TextLine
 class TransliterationUpdate:
     text: Text = Text()
     notes: str = ""
-    signs: Optional[str] = attr.ib(default=None)
+    signs: str = attr.ib(default="")
 
     @signs.validator
     def _check_signs(self, _attribute, value) -> None:
-        if value is not None:
-            questionable_lines = self._get_questionable_lines(value)
-            if questionable_lines:
-                raise TransliterationError(
-                    [
-                        {"description": "Invalid value", "lineNumber": line_number,}
-                        for line_number in questionable_lines
-                    ]
-                )
+        questionable_lines = self._get_questionable_lines(value)
+        if questionable_lines:
+            raise TransliterationError(
+                [
+                    {"description": "Invalid value", "lineNumber": line_number,}
+                    for line_number in questionable_lines
+                ]
+            )
 
     def _get_questionable_lines(self, value: str) -> List[int]:
         lines = [line.atf for line in self.text.lines]
