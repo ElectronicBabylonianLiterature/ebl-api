@@ -102,7 +102,7 @@ class MongoFragmentRepository(FragmentRepository):
     def query_by_transliteration(self, query):
         cursor = self._collection.find_many(
             {"signs": {"$regex": query.regexp}},
-            limit=30
+            limit=100
         )
         return self._map_fragments(cursor)
 
