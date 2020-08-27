@@ -287,7 +287,7 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__commentary_protocol(self, value):
-        return CommentaryProtocol.of(value)
+        return CommentaryProtocol.of(str(value))
 
     @v_args(inline=True)
     def ebl_atf_text_line__divider(self, value, modifiers, flags):
