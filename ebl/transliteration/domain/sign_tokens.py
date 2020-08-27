@@ -296,7 +296,9 @@ class CompoundGrapheme(Token):
 
     @property
     def name(self) -> SignName:
-        return SignName(f"|{'.'.join(self.compound_parts)}|")
+        parts = '.'.join(self.compound_parts)
+        delimiter = atf.COMPOUND_GRAPHEME_DELIMITER
+        return SignName(f"{delimiter}{parts}{delimiter}")
 
     @property
     def value(self) -> str:

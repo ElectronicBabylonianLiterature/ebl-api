@@ -228,13 +228,6 @@ FLAGS: Mapping[str, str] = {
     "correction": re.escape(Flag.CORRECTION.value),
 }
 
-ATF_SPEC: Mapping[str, str] = {
-    "reading": r"([^₀-₉ₓ/]+)([₀-₉]+)?",
-    "with_sign": r"[^\(/\|]+\((.+)\)",
-    "grapheme": r"\|([.x×%&+@]?(\d+[.x×%&+@])?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|",
-    "number": r"\d+",
-    "variant": r"([^/]+)(?:/([^/]+))+",
-}
 
 ATF_EXTENSIONS: Mapping[str, str] = {
     "erasure_boundary": ERASURE_BOUNDARY,
