@@ -1,9 +1,7 @@
 
 import os
-import sys
 import glob
 import unittest
-import argparse
 import json
 from pymongo import MongoClient
 import logging
@@ -11,16 +9,10 @@ import logging
 from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.atf import Atf
-from ebl.fragmentarium.application.transliteration_update_factory import TransliterationUpdateFactory
-from ebl.transliteration.application.atf_converter import AtfConverter
 
-from ebl.context import Context
-
+from ebl.transliteration.domain.text_line import TextLine
 
 from dotenv import load_dotenv
-import requests
-import time
 
 
 
@@ -123,11 +115,8 @@ class TestConverter(unittest.TestCase):
 
 class ATF_Importer:
 
-    def __init__(self, transliteration_factory,updater,user,number):
-        self.transliteration_factory = transliteration_factory
-        self.updater = updater
-        self.user = user
-        self.number = number
+    def __init__(self):
+
 
         self.atf_preprocessor = ATF_Preprocessor()
         self.logger = logging.getLogger("atf-importer")
@@ -144,32 +133,8 @@ class ATF_Importer:
         self.db = db
 
     def get_ebl_transliteration(self,line):
-
-
-        #parsed_atf = parse_atf_lark(line)
-
-        transliteration = self.transliteration_factory.create(Atf(line), "")
-
-        updated_fragment, has_photo = self._updater.update_transliteration(
-        self.number, transliteration, self.user
-        )
-        #resp.media = create_response_dto(updated_fragment, user, has_photo)
-
-
-
-
-        self.logger.error(updated_fragment)
-
-
-        time.sleep(2)
-        dict = {}
-        dict['notes'] = ""
-        dict['transliteration'] = line
-
-        headers = {'authorization': os.getenv("AUTH0_TOKEN")}
-        test_url = 'https://api.ebabylon.org/fragments/Tobias.Test.Fragment/transliteration'
-        r = requests.post(test_url, headers=headers, json=dict)
-        return r.json()['text']['lines']
+        parsed_atf = parse_atf_lark(line)
+        return parsed_atf
 
     def get_ebl_lemmata(self,oracc_lemma,oracc_guideword,all_unique_lemmas):
 
@@ -335,9 +300,9 @@ class ATF_Importer:
                             all_unique_lemmas = []
                             lemma_line = []
 
-                            print("last_transliteration",last_transliteration, " length ",len(last_transliteration))
+                            self.logger.debug("last transliteration " + str(last_transliteration) + " " + str(len(last_transliteration)))
 
-                            print("lem_line: ",line['c_array']," length ",len(line['c_array']))
+                            self.logger.debug("lem_line: " + str(line['c_array']) + " length " + str(len(line['c_array'])))
 
                             for pair in line['c_array'] :
 
@@ -350,9 +315,9 @@ class ATF_Importer:
                                 # get unique lemmata from ebl database
                                 self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas)
 
-                            print("transliteration", last_transliteration_line)
-                            print("ebl transliteration", last_transliteration, len(last_transliteration))
-                            print("all_unique_lemmata", all_unique_lemmas, len(all_unique_lemmas))
+                            self.logger.debug("transliteration " + str(last_transliteration_line))
+                            self.logger.debug("ebl transliteration" + str(last_transliteration) + " " + str(len(last_transliteration)))
+                            self.logger.debug("all_unique_lemmata " + str(all_unique_lemmas) + " " + str(len(all_unique_lemmas)))
 
                             # join oracc_word with ebl unique lemmata
                             oracc_word_ebl_lemmas = dict()
@@ -363,19 +328,26 @@ class ATF_Importer:
                                 oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
                                 cnt += 1
 
-                            print("oracc_word_ebl_lemmas: ",oracc_word_ebl_lemmas)
-                            print("----------------------------------------------------------------------")
+                            self.logger.debug("oracc_word_ebl_lemmas: " + str(oracc_word_ebl_lemmas))
+                            self.logger.debug("----------------------------------------------------------------------")
 
                             # join ebl transliteration with lemma line:
                             ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
 
-                            for ebl_word in ebl_lines[0]['content']:
+
+                            for ebl_word in ebl_lines.lines[0]._content:
+                                self.logger.debug(ebl_word)
+                                self.logger.debug(ebl_word._value)
+                                #self.logger.debug(text_line)
+                                #self.logger.debug("----------------------x------------------------------------------------")
+
+                                #self.logger.debug(text_line.line_number)
 
                                 unique_lemma = []
-                                if ebl_word['cleanValue'] in oracc_word_ebl_lemmas:
-                                    unique_lemma = oracc_word_ebl_lemmas[ebl_word['cleanValue']]
+                                if ebl_word._value in oracc_word_ebl_lemmas:
+                                    unique_lemma = oracc_word_ebl_lemmas[ebl_word._value]
 
-                                lemma_line.append({"value": ebl_word['cleanValue'], "uniqueLemma": unique_lemma })
+                                lemma_line.append({"value": ebl_word._value, "uniqueLemma": unique_lemma })
 
 
                             result['lemmatization'].append(lemma_line)
