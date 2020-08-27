@@ -71,6 +71,7 @@ from ebl.transliteration.domain.sign_tokens import (
     (
         [
             Divider.of(":"),
+            Divider.of("|"),
         ],
         ["ABZ377n1"],
     ),

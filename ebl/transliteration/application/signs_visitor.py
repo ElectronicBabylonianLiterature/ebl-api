@@ -78,10 +78,13 @@ class SignsVisitor(TokenVisitor):
         self._standardizations.append(self._find(grapheme.name))
 
     def visit_divider(self, divider: Divider) -> None:
-        sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
-        (self._standardizations.append(INVALID)
-            if sign is None
-            else self._visit_sign(sign))
+        # | should not be handled as divider. It is not a value of any sign.
+        # See: Editorial conventions (Corpus) 3.2.1.3 lines of tablet
+        if divider.divider != "|":
+            sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
+            (self._standardizations.append(INVALID)
+             if sign is None
+             else self._visit_sign(sign))
 
     def visit_variant(self, variant: Variant) -> None:
         variant_visitor = SignsVisitor(self._sign_repository, False)
