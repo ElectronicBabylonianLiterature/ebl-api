@@ -13,14 +13,12 @@ class ATF_ImportResource:
 
     auth = {"auth_disabled": True}
 
-    def __init__(self, transliteration_factory,updater):
-        self._transliteration_factory = transliteration_factory
-        self._updater = updater
+    def __init__(self):
+        pass
 
     def on_get(self, req, resp: falcon.Response) -> None:  # pyre-ignore[11]
-        user = req.context.user
 
-        importer = ATF_Importer(self._transliteration_factory,self._updater,user)
+        importer = ATF_Importer()
         importer.start()
 
         resp.media = "XXXXXYYYY"
@@ -30,8 +28,7 @@ class ATF_ImportResource:
     def on_post(self, req, resp, number):
         try:
             print("XXXX")
-            user = req.context.user
-            importer = ATF_Importer(self._transliteration_factory, self._updater, user,number)
+            importer = ATF_Importer()
             importer.start()
 
         except TransliterationError as error:

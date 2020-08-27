@@ -58,7 +58,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
 
-    atf_importer = ATF_ImportResource(context.get_transliteration_update_factory(),updater)
+    atf_importer = ATF_ImportResource()
 
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}", fragments)
