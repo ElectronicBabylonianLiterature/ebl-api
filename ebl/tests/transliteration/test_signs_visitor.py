@@ -6,9 +6,9 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.tokens import Token, Variant
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme, Divider, Grapheme, Logogram, Number, Reading, UnclearSign,
-    UnidentifiedSign
+    CompoundGrapheme, Divider, Grapheme, Logogram, Number, Reading
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 
 
 @pytest.mark.parametrize("tokens,expected",[

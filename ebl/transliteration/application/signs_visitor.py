@@ -6,8 +6,9 @@ from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import VARIANT_SEPARATOR
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme, Divider, Grapheme, NamedSign, Number, UnknownSign
+    CompoundGrapheme, Divider, Grapheme, NamedSign, Number
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.tokens import Token, TokenVisitor, Variant
 from ebl.transliteration.domain.standardization import (

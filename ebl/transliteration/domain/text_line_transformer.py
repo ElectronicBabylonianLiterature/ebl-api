@@ -26,10 +26,9 @@ from ebl.transliteration.domain.sign_tokens import (
     Grapheme,
     Logogram,
     Number,
-    Reading,
-    UnclearSign,
-    UnidentifiedSign,
+    Reading
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Column,
