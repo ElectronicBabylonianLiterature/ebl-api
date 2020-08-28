@@ -193,14 +193,12 @@ class ATF_Importer:
                 except:
                     not_lemmatized[oracc_lemma] = True
 
-                    if self.debug:
-                        print(
-                            "Incompatible lemmatization: No citation form found in the glossary for '" + oracc_lemma + "'")
+                    self.logger.error("Incompatible lemmatization: No citation form found in the glossary for '" + oracc_lemma + "'")
 
             # all attempts to find a ebl lemma failed
             if len(unique_lemmas) == 0:
                 not_lemmatized[oracc_lemma] = True
-                print("Incompatible lemmatization: No eBL word found to oracc lemma or guide word (" + oracc_lemma + " : " + oracc_guideword + ")")
+                self.logger.error("Incompatible lemmatization: No eBL word found to oracc lemma or guide word (" + oracc_lemma + " : " + oracc_guideword + ")")
 
             all_unique_lemmas.append(unique_lemmas)
 
@@ -287,91 +285,82 @@ class ATF_Importer:
                 result['transliteration'] = []
                 result['lemmatization'] = []
 
-                if True:
-                    split = filepath.split("\\")
-                    filename = split[-1]
-                    filename = filename.split(".")[0]
+                split = filepath.split("/")
+                filename = split[-1]
+                filename = filename.split(".")[0]
+                for line in converted_lines:
 
-                    for line in converted_lines:
+                    if line['c_type'] == "lem_line":
 
-                        if line['c_type'] == "lem_line":
+                        wrong_lemmatization = False
+                        all_unique_lemmas = []
+                        lemma_line = []
 
-                            wrong_lemmatization = False
-                            all_unique_lemmas = []
-                            lemma_line = []
+                        self.logger.debug("last transliteration " + str(last_transliteration) + " " + str(len(last_transliteration)))
 
-                            self.logger.debug("last transliteration " + str(last_transliteration) + " " + str(len(last_transliteration)))
+                        self.logger.debug("lem_line: " + str(line['c_array']) + " length " + str(len(line['c_array'])))
 
-                            self.logger.debug("lem_line: " + str(line['c_array']) + " length " + str(len(line['c_array'])))
+                        for pair in line['c_array'] :
 
-                            for pair in line['c_array'] :
+                            oracc_lemma = pair[0]
+                            oracc_guideword = pair[1]
 
-                                oracc_lemma = pair[0]
-                                oracc_guideword = pair[1]
+                            if "//" in oracc_guideword:
+                                oracc_guideword = oracc_guideword.split("//")[0]
 
-                                if "//" in oracc_guideword:
-                                    oracc_guideword = oracc_guideword.split("//")[0]
+                            # get unique lemmata from ebl database
+                            self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas)
 
-                                # get unique lemmata from ebl database
-                                self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas)
+                        self.logger.debug("transliteration " + str(last_transliteration_line))
+                        self.logger.debug("ebl transliteration" + str(last_transliteration) + " " + str(len(last_transliteration)))
+                        self.logger.debug("all_unique_lemmata " + str(all_unique_lemmas) + " " + str(len(all_unique_lemmas)))
 
-                            self.logger.debug("transliteration " + str(last_transliteration_line))
-                            self.logger.debug("ebl transliteration" + str(last_transliteration) + " " + str(len(last_transliteration)))
-                            self.logger.debug("all_unique_lemmata " + str(all_unique_lemmas) + " " + str(len(all_unique_lemmas)))
+                        # join oracc_word with ebl unique lemmata
+                        oracc_word_ebl_lemmas = dict()
+                        cnt = 0
+                        if len(last_transliteration) != len(all_unique_lemmas):
+                            self.logger.error("ARRAYS DON'T HAVE EQUAL LENGTH!!!")
+                        for oracc_word in last_transliteration:
+                            oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
+                            cnt += 1
 
-                            # join oracc_word with ebl unique lemmata
-                            oracc_word_ebl_lemmas = dict()
-                            cnt = 0
-                            if len(last_transliteration) != len(all_unique_lemmas):
-                                self.logger.error("ARRAYS DON'T HAVE EQUAL LENGTH!!!")
-                            for oracc_word in last_transliteration:
-                                oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
-                                cnt += 1
+                        self.logger.debug("oracc_word_ebl_lemmas: " + str(oracc_word_ebl_lemmas))
+                        self.logger.debug("----------------------------------------------------------------------")
 
-                            self.logger.debug("oracc_word_ebl_lemmas: " + str(oracc_word_ebl_lemmas))
-                            self.logger.debug("----------------------------------------------------------------------")
-
-                            # join ebl transliteration with lemma line:
-                            ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
+                        # join ebl transliteration with lemma line:
+                        ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
 
 
-                            for ebl_word in ebl_lines.lines[0]._content:
-                                self.logger.debug(ebl_word)
-                                self.logger.debug(ebl_word._value)
-                                #self.logger.debug(text_line)
-                                #self.logger.debug("----------------------x------------------------------------------------")
+                        for token in ebl_lines.lines[0].content:
 
-                                #self.logger.debug(text_line.line_number)
+                            unique_lemma = []
+                            if token.clean_value in oracc_word_ebl_lemmas:
+                                unique_lemma = oracc_word_ebl_lemmas[token.clean_value]
 
-                                unique_lemma = []
-                                if ebl_word._value in oracc_word_ebl_lemmas:
-                                    unique_lemma = oracc_word_ebl_lemmas[ebl_word._value]
-
-                                lemma_line.append({"value": ebl_word._value, "uniqueLemma": unique_lemma })
+                            lemma_line.append({"value": token.clean_value, "uniqueLemma": unique_lemma })
 
 
-                            result['lemmatization'].append(lemma_line)
+                        result['lemmatization'].append(lemma_line)
 
-                        else:
+                    else:
 
-                            if line['c_type'] == "text_line":
+                        if line['c_type'] == "text_line":
 
-                                # skip "DIŠ"
-                                oracc_words = []
-                                for entry in line['c_array']:
-                                    if entry != "DIŠ":
-                                        oracc_words.append(entry)
+                            # skip "DIŠ"
+                            oracc_words = []
+                            for entry in line['c_array']:
+                                if entry != "DIŠ":
+                                    oracc_words.append(entry)
 
-                                last_transliteration_line = line['c_line']
-                                last_transliteration = oracc_words
+                            last_transliteration_line = line['c_line']
+                            last_transliteration = oracc_words
 
-                            result['transliteration'].append(line['c_line'])
+                        result['transliteration'].append(line['c_line'])
 
 
-                    json_string = json.dumps(result, ensure_ascii=False).encode('utf8')
-
-                    with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
-                        json.dump(result,outputfile,ensure_ascii=False)
+                json_string = json.dumps(result, ensure_ascii=False).encode('utf8')
+                with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
+                    json.dump(result,outputfile,ensure_ascii=False)
 
 
 

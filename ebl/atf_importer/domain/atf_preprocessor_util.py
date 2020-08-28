@@ -1,17 +1,18 @@
 class Util:
 
     def print_frame(s):
-        print("")
-        print(" +-",end="")
+        r = "\n"
+        r+=(" +-")
 
         for char in s:
-            print("-",end="")
-        print("-+")
-        print(" | " + s + " |")
-        print(" +-",end="")
+            r+=("-")
+        r+=("-+\n")
+        r+=(" | " + s + " |\n")
+        r+=(" +-")
 
         for char in s:
-            print("-", end="")
+            r+=("-")
 
-        print("-+")
-        print("")
+        r+=("-+\n")
+        r+=("\n")
+        return r
