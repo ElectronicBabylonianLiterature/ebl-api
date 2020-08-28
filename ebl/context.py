@@ -16,7 +16,6 @@ from ebl.fragmentarium.application.transliteration_query_factory import (
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.application.sign_repository import SignRepository
 
 
@@ -46,9 +45,7 @@ class Context:
         )
 
     def get_transliteration_update_factory(self):
-        atf_converter = AtfConverter(self.sign_repository)
-        return TransliterationUpdateFactory(atf_converter)
+        return TransliterationUpdateFactory(self.sign_repository)
 
     def get_transliteration_query_factory(self):
-        atf_converter = AtfConverter(self.sign_repository)
-        return TransliterationQueryFactory(atf_converter)
+        return TransliterationQueryFactory(self.sign_repository)

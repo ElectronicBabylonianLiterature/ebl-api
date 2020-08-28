@@ -11,6 +11,7 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 SCHEMA = FragmentSchema()
 
@@ -21,8 +22,11 @@ def test_update_transliteration(
 ):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
+    atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(
-        Atf("1. x x\n2. x"), "updated notes", "X X\nX"
+        parse_atf_lark(atf),
+        "updated notes",
+        "X X\nX"
     )
     expected_fragment = transliterated_fragment.update_transliteration(
         transliteration, user
@@ -60,7 +64,10 @@ def test_update_update_transliteration_not_found(
     with pytest.raises(NotFoundError):
         fragment_updater.update_transliteration(
             number,
-            TransliterationUpdate(Atf("$ (the transliteration)"), "notes"),
+            TransliterationUpdate(
+                parse_atf_lark("$ (the transliteration)"),
+                "notes"
+            ),
             user,
         )
 

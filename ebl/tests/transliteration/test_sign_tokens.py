@@ -4,6 +4,7 @@ from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -11,9 +12,8 @@ from ebl.transliteration.domain.sign_tokens import (
     Logogram,
     Number,
     Reading,
-    UnclearSign,
-    UnidentifiedSign,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 
 
@@ -418,6 +418,7 @@ def test_compound_grapheme() -> None:
     compound = CompoundGrapheme.of(["BI", "IS"])
 
     expected_value = "|BI.IS|"
+    assert compound.name == SignName(expected_value)
     assert compound.value == expected_value
     assert compound.clean_value == expected_value
     assert compound.get_key() ==\

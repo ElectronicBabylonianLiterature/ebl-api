@@ -1,5 +1,4 @@
-from abc import abstractmethod
-from typing import Optional, Sequence, Type, TypeVar, Union
+from typing import Optional, Sequence, Union
 
 import attr
 
@@ -11,70 +10,10 @@ from ebl.transliteration.domain.converters import (
     convert_token_sequence,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.tokens import (
     ErasureState, Token, ValueToken, TokenVisitor
 )
-
-T = TypeVar("T", bound="UnknownSign")
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class UnknownSign(Token):
-    flags: Sequence[atf.Flag] = attr.ib(
-        default=tuple(), converter=convert_flag_sequence
-    )
-
-    @property
-    def clean_value(self) -> str:
-        return self._sign
-
-    @classmethod
-    def of(cls: Type[T], flags: Sequence[atf.Flag] = tuple()) -> T:
-        return cls(frozenset(), ErasureState.NONE, flags)
-
-    @property
-    def parts(self):
-        return tuple()
-
-    @property
-    @abstractmethod
-    def _sign(self) -> str:
-        ...
-
-    @property
-    @abstractmethod
-    def _type(self) -> str:
-        ...
-
-    @property
-    def string_flags(self) -> Sequence[str]:
-        return [flag.value for flag in self.flags]
-
-    @property
-    def value(self) -> str:
-        return f'{self._sign}{"".join(self.string_flags)}'
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class UnidentifiedSign(UnknownSign):
-    @property
-    def _sign(self) -> str:
-        return atf.UNIDENTIFIED_SIGN
-
-    @property
-    def _type(self) -> str:
-        return "UnidentifiedSign"
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class UnclearSign(UnknownSign):
-    @property
-    def _sign(self) -> str:
-        return atf.UNCLEAR_SIGN
-
-    @property
-    def _type(self) -> str:
-        return "UnclearSign"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -122,12 +61,12 @@ class Divider(AbstractSign):
         return Divider(frozenset(), ErasureState.NONE, modifiers, flags, divider)
 
 
-SignName = Sequence[Union[ValueToken, BrokenAway]]
+NameParts = Sequence[Union[ValueToken, BrokenAway]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
-    name_parts: SignName = attr.ib(converter=convert_token_sequence)
+    name_parts: NameParts = attr.ib(converter=convert_token_sequence)
     sub_index: Optional[int] = attr.ib(default=1)
     sign: Optional[Token] = None
 
@@ -173,7 +112,7 @@ class NamedSign(AbstractSign):
 class Reading(NamedSign):
     @staticmethod
     def of(
-        name: SignName,
+        name: NameParts,
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
@@ -217,7 +156,7 @@ class Logogram(NamedSign):
 
     @staticmethod
     def of(
-        name: SignName,
+        name: NameParts,
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
@@ -243,9 +182,12 @@ class Logogram(NamedSign):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Number(NamedSign):
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_number(self)
+
     @staticmethod
     def of(
-        name: SignName,
+        name: NameParts,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
@@ -267,7 +209,7 @@ class Number(NamedSign):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Grapheme(AbstractSign):
-    name: str
+    name: SignName
 
     @property
     def value(self) -> str:
@@ -284,9 +226,12 @@ class Grapheme(AbstractSign):
     def parts(self):
         return tuple()
 
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_grapheme(self)
+
     @staticmethod
     def of(
-        name: str,
+        name: SignName,
         modifiers: Sequence[str] = tuple(),
         flags: Sequence[atf.Flag] = tuple(),
     ) -> "Grapheme":
@@ -298,12 +243,21 @@ class CompoundGrapheme(Token):
     compound_parts: Sequence[str] = attr.ib(converter=convert_token_sequence)
 
     @property
+    def name(self) -> SignName:
+        parts = '.'.join(self.compound_parts)
+        delimiter = atf.COMPOUND_GRAPHEME_DELIMITER
+        return SignName(f"{delimiter}{parts}{delimiter}")
+
+    @property
     def value(self) -> str:
-        return f"|{'.'.join(self.compound_parts)}|"
+        return self.name
 
     @property
     def parts(self) -> Sequence[Token]:
         return [ValueToken.of(part) for part in self.compound_parts]
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_compound_grapheme(self)
 
     @staticmethod
     def of(parts: Sequence[str]) -> "CompoundGrapheme":

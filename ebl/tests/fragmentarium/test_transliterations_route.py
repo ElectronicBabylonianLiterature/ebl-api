@@ -10,7 +10,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory,
     LemmatizedFragmentFactory,
 )
-from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -29,7 +29,8 @@ def test_update_transliteration(client, fragmentarium, user, database):
         **create_response_dto(
             fragment.update_transliteration(
                 TransliterationUpdate(
-                    Atf(updates["transliteration"]), updates["notes"]
+                    parse_atf_lark(updates["transliteration"]),
+                    updates["notes"]
                 ),
                 user,
             ),
@@ -93,7 +94,7 @@ def test_update_transliteration_merge_lemmatization(
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragment_number = fragmentarium.create(fragment)
-    updates = {"transliteration": "this is not valid", "notes": ""}
+    updates = {"transliteration": "1. kururu", "notes": ""}
     body = json.dumps(updates)
     url = f"/fragments/{fragment_number}/transliteration"
     post_result = client.simulate_post(url, body=body)

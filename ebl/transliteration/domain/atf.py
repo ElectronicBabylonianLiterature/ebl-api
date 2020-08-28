@@ -12,17 +12,6 @@ ATF_PARSER_VERSION = "2.6.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
-class AtfError(Exception):
-    pass
-
-
-class AtfSyntaxError(AtfError):
-    def __init__(self, line_number) -> None:
-        self.line_number = line_number
-        message = f"Line {self.line_number} is invalid."
-        super().__init__(message)
-
-
 class Surface(Enum):
     """
 See "Surface" in
@@ -226,20 +215,6 @@ FLAGS: Mapping[str, str] = {
     "collation": re.escape(Flag.COLLATION.value),
     "damage": re.escape(Flag.DAMAGE.value),
     "correction": re.escape(Flag.CORRECTION.value),
-}
-
-ATF_SPEC: Mapping[str, str] = {
-    "reading": r"([^₀-₉ₓ/]+)([₀-₉]+)?",
-    "with_sign": r"[^\(/\|]+\((.+)\)",
-    "grapheme": r"\|([.x×%&+@]?(\d+[.x×%&+@])?\(?[A-ZṢŠṬ₀-₉ₓ]+([@~][a-z0-9]+)*\)?)+\|",
-    "number": r"\d+",
-    "variant": r"([^/]+)(?:/([^/]+))+",
-}
-
-ATF_EXTENSIONS: Mapping[str, str] = {
-    "erasure_boundary": ERASURE_BOUNDARY,
-    "erasure_delimiter": ERASURE[Side.CENTER],
-    "erasure_illegible": r"°[^\°]*\\",
 }
 
 

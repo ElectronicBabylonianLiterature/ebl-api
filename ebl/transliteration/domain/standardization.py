@@ -30,5 +30,9 @@ class Standardization:
         return sign.standardization.replace("/", "\\u002F").replace(" ", "\\u0020")
 
 
-def is_splittable(grapheme):
+def is_splittable(grapheme: str) -> bool:
     return "." in grapheme and "(" not in grapheme and ")" not in grapheme
+
+
+UNKNOWN = Standardization.of_string("X")
+INVALID = Standardization.of_string("?")

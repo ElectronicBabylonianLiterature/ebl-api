@@ -43,7 +43,7 @@ class Fragment:
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()
-    signs: Optional[str] = None
+    signs: str = ""
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
@@ -54,9 +54,9 @@ class Fragment:
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
-        record = self.record.add_entry(self.text.atf, transliteration.atf, user)
+        record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
 
-        text = self.text.merge(transliteration.parse())
+        text = self.text.merge(transliteration.text)
 
         return attr.evolve(
             self,

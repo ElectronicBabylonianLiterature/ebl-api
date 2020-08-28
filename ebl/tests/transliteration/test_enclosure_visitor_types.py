@@ -14,12 +14,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
 from ebl.transliteration.domain.lark_parser import parse_line
-from ebl.transliteration.domain.sign_tokens import (
-    Reading,
-    Number,
-    UnclearSign,
-    UnidentifiedSign,
-)
+from ebl.transliteration.domain.sign_tokens import Reading, Number
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import (
     ErasureState,
     Token,

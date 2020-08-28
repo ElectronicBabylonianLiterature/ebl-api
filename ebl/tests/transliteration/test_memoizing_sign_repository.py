@@ -27,16 +27,3 @@ def test_search_memoization(sign_repository, signs):
     second = memoizing_sign_repository.search(value, sub_index)
 
     assert first is second
-
-
-def test_search_many_memoization(sign_repository, signs):
-    sign = signs[0]
-    value = sign.values[0]
-
-    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
-    memoizing_sign_repository.create(sign)
-
-    first = memoizing_sign_repository.search_many([value])
-    second = memoizing_sign_repository.search_many([value])
-
-    assert first is second

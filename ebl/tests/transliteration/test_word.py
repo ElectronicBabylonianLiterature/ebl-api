@@ -13,12 +13,8 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-from ebl.transliteration.domain.sign_tokens import (
-    Logogram,
-    Reading,
-    UnclearSign,
-    UnidentifiedSign,
-)
+from ebl.transliteration.domain.sign_tokens import Logogram, Reading
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
 from ebl.transliteration.domain.tokens import (
     Joiner,

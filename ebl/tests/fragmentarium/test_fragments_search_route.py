@@ -93,6 +93,14 @@ def test_search_signs(client, fragmentarium, sign_repository, signs):
     assert "Cache-Control" not in result.headers
 
 
+def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):
+    result = client.simulate_get("/fragments", params={"transliteration": "$ invalid"})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert "Cache-Control" not in result.headers
+
+
 def test_random(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
