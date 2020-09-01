@@ -1,10 +1,11 @@
 import re
-from typing import MutableSequence, Optional, Sequence
+from typing import Callable, MutableSequence, Optional, Sequence, TypeVar
 
 import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme, Divider, Grapheme, NamedSign, Number
@@ -22,6 +23,24 @@ from ebl.errors import NotFoundError
 def strip_flags(name: str) -> str:
     pattern = f"[{''.join([re.escape(flag.value) for flag in Flag])}]"
     return re.sub(pattern, "", name)
+
+
+S = TypeVar("S")
+T = TypeVar("T", bound=Token)
+
+
+def skip_enclosures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
+    skipped_enclosures = {
+        EnclosureType.REMOVAL,
+        EnclosureType.ACCIDENTAL_OMISSION,
+        EnclosureType.INTENTIONAL_OMISSION
+    }
+
+    def inner(self: S, token: T) -> None:
+        if token.enclosure_type.isdisjoint(skipped_enclosures):
+            func(self, token)
+
+    return inner
 
 
 @attr.s(auto_attribs=True)
@@ -49,6 +68,7 @@ class SignsVisitor(TokenVisitor):
     def visit_unknown_sign(self, sign: UnknownSign) -> None:
         self._standardizations.append(UNKNOWN)
 
+    @skip_enclosures
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         sign_token: Optional[Token] = named_sign.sign
         if sign_token is None:
@@ -60,6 +80,7 @@ class SignsVisitor(TokenVisitor):
         else:
             sign_token.accept(self)
 
+    @skip_enclosures
     def visit_number(self, number: Number) -> None:
         sign_token: Optional[Token] = number.sign
         if sign_token is None:
@@ -71,6 +92,7 @@ class SignsVisitor(TokenVisitor):
         else:
             sign_token.accept(self)
 
+    @skip_enclosures
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if self._is_deep and is_splittable(grapheme.name):
             standardizations: Sequence[Standardization] = [
@@ -86,6 +108,7 @@ class SignsVisitor(TokenVisitor):
     def visit_grapheme(self, grapheme: Grapheme) -> None:
         self._standardizations.append(self._find(grapheme.name))
 
+    @skip_enclosures
     def visit_divider(self, divider: Divider) -> None:
         # | should not be handled as divider. It is not a value of any sign.
         # See: Editorial conventions (Corpus) 3.2.1.3 lines of tablet
@@ -95,6 +118,7 @@ class SignsVisitor(TokenVisitor):
              if sign is None
              else self._visit_sign(sign))
 
+    @skip_enclosures
     def visit_variant(self, variant: Variant) -> None:
         variant_visitor = SignsVisitor(self._sign_repository, False)
         for token in variant.tokens:

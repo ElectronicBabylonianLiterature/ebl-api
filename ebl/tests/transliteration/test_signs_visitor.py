@@ -1,8 +1,10 @@
-from typing import Sequence
+from typing import cast, Sequence
 
 import pytest  # pyre-ignore[21]
 
 from ebl.transliteration.application.signs_visitor import SignsVisitor
+from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token, Variant
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.sign_tokens import (
@@ -96,7 +98,27 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
             ),
         ],
         ["ABZ377n1/KU", "ŠU/|BI×IS|", "|A.EDIN.LAL|/|IGI.KU|/ABZ081"],
-    )
+    ),
+    (
+        cast(TextLine, parse_line("1. ku-[nu ši]")).content,
+        ["KU", "ABZ075", "ABZ207a\\u002F207b\\u0020X"],
+    ),
+    (
+        cast(TextLine, parse_line("1. < : ši>-ku")).content,
+        ["KU"],
+    ),
+    (
+        cast(TextLine, parse_line("1. ku-<<nu ši 1 |KU+KU| nu/ši nu(KU) : >>")).content,
+        ["KU"],
+    ),
+    (
+        cast(TextLine, parse_line("1. ku-<nu ši 1 |KU+KU| nu/ši nu(KU) : >")).content,
+        ["KU"],
+    ),
+    (
+        cast(TextLine, parse_line("1. ku-<(nu ši 1 |KU+KU| nu/ši nu(KU) : )>")).content,
+        ["KU"],
+    ),
 ])
 def test_signs_visitor(
     tokens: Sequence[Token],
