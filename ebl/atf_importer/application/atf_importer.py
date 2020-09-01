@@ -29,27 +29,27 @@ class TestConverter(unittest.TestCase):
     def test_lines(self):
         atf_preprocessor = ATF_Preprocessor()
 
-        converted_line,c_array,type=atf_preprocessor.process_line("1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} * AN.GE₆",False)
+        converted_line,c_array,type=atf_preprocessor.process_line("1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} * AN.GE₆")
         self.assertTrue(converted_line == "1. [ DIŠ ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} DIŠ AN.GE₆")
 
-        converted_line,c_array,type=atf_preprocessor.process_line("8. KAR <:> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta",False)
+        converted_line,c_array,type=atf_preprocessor.process_line("8. KAR <:> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
         self.assertTrue(converted_line == "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
 
     # Test case for removal of "$" if following sign not a logogram
     def test_following_sign_not_a_logogram(self):
         atf_preprocessor = ATF_Preprocessor()
 
-        converted_line,c_array,type = atf_preprocessor.process_line("5'.	[...] x [...] x-šu₂? : kal : nap-ha-ri : $WA-wa-ru : ia-ar₂-ru", False)
+        converted_line,c_array,type = atf_preprocessor.process_line("5'.	[...] x [...] x-šu₂? : kal : nap-ha-ri : $WA-wa-ru : ia-ar₂-ru",)
         self.assertTrue(converted_line == "5'. [...] x [...] x-šu₂? : kal : nap-ha-ri : WA-wa-ru : ia-ar₂-ru")
 
     # Test case for conversion of legacy grammar signs
     def test_legacy_grammar(self):
         atf_preprocessor = ATF_Preprocessor()
 
-        converted_line,c_array,type = atf_preprocessor.process_line("57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : ANŠE.KUR.RA-MEŠ", False)
+        converted_line,c_array,type = atf_preprocessor.process_line("57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : ANŠE.KUR.RA-MEŠ")
         self.assertTrue(converted_line == "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* E₂.GAL : ANŠE.KUR.RA-MEŠ")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* ÁM.GAL : ANŠE.KUR.RA-MEŠ", True)
+        converted_line,c_array,type = atf_preprocessor.process_line("57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* ÁM.GAL : ANŠE.KUR.RA-MEŠ")
         self.assertTrue(converted_line == "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL : ANŠE.KUR.RA-MEŠ")
 
     # Test case to test if a lem line is parsed as type "lem_line"
@@ -57,38 +57,36 @@ class TestConverter(unittest.TestCase):
         atf_preprocessor = ATF_Preprocessor()
 
         converted_line,c_array,type = atf_preprocessor.process_line(
-            "#lem: Sin[1]DN; ina[at]PRP; Nisannu[1]MN; ina[at]PRP; tāmartišu[appearance]N; adir[dark]AJ; ina[in]PRP; aṣîšu[going out]'N; adri[dark]AJ; uṣṣi[go out]V; šarrū[king]N; +šanānu[equal]V$iššannanū-ma",
-            True)
+            "#lem: Sin[1]DN; ina[at]PRP; Nisannu[1]MN; ina[at]PRP; tāmartišu[appearance]N; adir[dark]AJ; ina[in]PRP; aṣîšu[going out]'N; adri[dark]AJ; uṣṣi[go out]V; šarrū[king]N; +šanānu[equal]V$iššannanū-ma")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("#lem: iššannanū-ma[equal]V; +šanānu[equal]V$iššannanū-ma; umma[saying]PRP; +šarru[king]N$; mala[as many]PRP; +šarru[king]N$šarri; +maṣû[correspond]V$imaṣṣû",True)
+        converted_line,c_array,type = atf_preprocessor.process_line("#lem: iššannanū-ma[equal]V; +šanānu[equal]V$iššannanū-ma; umma[saying]PRP; +šarru[king]N$; mala[as many]PRP; +šarru[king]N$šarri; +maṣû[correspond]V$imaṣṣû")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type =  atf_preprocessor.process_line("#lem: +adrūssu[darkly]AV$; īrub[enter]V; +arītu[pregnant (woman)]N$arâtu; ša[of]DET; libbašina[belly]N; ittadûni[contain]V; ina[in]PRP; +Zuqiqīpu[Scorpius]CN$",True)
+        converted_line,c_array,type =  atf_preprocessor.process_line("#lem: +adrūssu[darkly]AV$; īrub[enter]V; +arītu[pregnant (woman)]N$arâtu; ša[of]DET; libbašina[belly]N; ittadûni[contain]V; ina[in]PRP; +Zuqiqīpu[Scorpius]CN$")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("#lem: šatti[year]N; n; +Artaxerxes[]RN$artakšatsu; šar[king]N; pālih[reverent one]N; Nabu[1]DN; lā[not]MOD; itabbal[disappear]V; maʾdiš[greatly]N; lišāqir[value]V",True)
+        converted_line,c_array,type = atf_preprocessor.process_line("#lem: šatti[year]N; n; +Artaxerxes[]RN$artakšatsu; šar[king]N; pālih[reverent one]N; Nabu[1]DN; lā[not]MOD; itabbal[disappear]V; maʾdiš[greatly]N; lišāqir[value]V")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("#lem: +arāmu[cover]V$īrim-ma; ana[according to]PRP; birṣu[(a luminous phenomenon)]N; itârma[turn]V; adi[until]PRP; šāt[who(m)]DET&urri[daytime]N; illakma[flow]V",True)
+        converted_line,c_array,type = atf_preprocessor.process_line("#lem: +arāmu[cover]V$īrim-ma; ana[according to]PRP; birṣu[(a luminous phenomenon)]N; itârma[turn]V; adi[until]PRP; šāt[who(m)]DET&urri[daytime]N; illakma[flow]V")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("#lem: u; eššu[new]AJ; u +.",True)
+        converted_line,c_array,type = atf_preprocessor.process_line("#lem: u; eššu[new]AJ; u +.")
         self.assertTrue(type == "lem_line")
 
         converted_line,c_array, type = atf_preprocessor.process_line(
-            "#lem: u; ubû[unit]N; n; n; qû[unit]N; ubû[unit]N; +Ištar[]DN$; Ištar[1]DN +.; +saparru[cart]N$; u", True)
+            "#lem: u; ubû[unit]N; n; n; qû[unit]N; ubû[unit]N; +Ištar[]DN$; Ištar[1]DN +.; +saparru[cart]N$; u")
         self.assertTrue(type == "lem_line")
 
         converted_line,c_array,type = atf_preprocessor.process_line(
-            "#lem: !+māru[son]N$; !+māru[son]N$māri; târu[turning back]'N; +našû[lift//carrying]V'N$ +.; u; +narkabtu[chariot]N$narkabta; īmur[see]V; marṣu[patient]N; šū[that]IP; qāt[hand]N; Ištar[1]DN; u",
-            True)
+            "#lem: !+māru[son]N$; !+māru[son]N$māri; târu[turning back]'N; +našû[lift//carrying]V'N$ +.; u; +narkabtu[chariot]N$narkabta; īmur[see]V; marṣu[patient]N; šū[that]IP; qāt[hand]N; Ištar[1]DN; u")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("#lem: +burmāmu[(an animal)//porcupine?]N$; +burmāmu[(an animal)//porcupine?]N$buriyāmu; ša[whose]REL; +zumru[body]N$zumuršu; kīma[like]PRP; +ṭīmu[yarn]N$ṭime; +eṣēru[draw//mark]V$uṣṣuru +.",True)
+        converted_line,c_array,type = atf_preprocessor.process_line("#lem: +burmāmu[(an animal)//porcupine?]N$; +burmāmu[(an animal)//porcupine?]N$buriyāmu; ša[whose]REL; +zumru[body]N$zumuršu; kīma[like]PRP; +ṭīmu[yarn]N$ṭime; +eṣēru[draw//mark]V$uṣṣuru +.")
         self.assertTrue(type == "lem_line")
 
-        converted_line,c_array,type = atf_preprocessor.process_line("#lem: u; +appāru[reed-bed]N$",True)
+        converted_line,c_array,type = atf_preprocessor.process_line("#lem: u; +appāru[reed-bed]N$")
         self.assertTrue(type == "lem_line")
 
 
@@ -97,7 +95,7 @@ class TestConverter(unittest.TestCase):
     def test_lemmatization_batch(self):
         atf_preprocessor = ATF_Preprocessor()
 
-        lines = atf_preprocessor.convert_lines("../test-files/test_lemma.atf",False)
+        lines = atf_preprocessor.convert_lines("../test-files/test_lemma.atf")
 
         for line in lines:
             self.assertTrue(line['c_type'] == "lem_line")
@@ -106,10 +104,10 @@ class TestConverter(unittest.TestCase):
     def test_cccp(self):
             atf_preprocessor = ATF_Preprocessor()
 
-            lines = atf_preprocessor.convert_lines("../test-files/cccp_3_1_16_test.atf",False)
+            lines = atf_preprocessor.convert_lines("../test-files/cccp_3_1_16_test.atf")
             self.assertTrue(len(lines)==259)
 
-            lines = atf_preprocessor.convert_lines("../test-files/cccp_3_1_21_test.atf",False)
+            lines = atf_preprocessor.convert_lines("../test-files/cccp_3_1_21_test.atf")
             self.assertTrue(len(lines) == 90) # one invalid line removed
 
 
