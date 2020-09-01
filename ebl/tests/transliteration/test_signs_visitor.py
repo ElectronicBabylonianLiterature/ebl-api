@@ -108,15 +108,21 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
         ["KU"],
     ),
     (
-        cast(TextLine, parse_line("1. ku-<<nu ši 1 |KU+KU| nu/ši nu(KU) : >>")).content,
+        cast(TextLine, parse_line(
+            "1. ku-<<nu ši 1 |KU+KU| nu/ši nu(KU) x X ... : >>"
+        )).content,
         ["KU"],
     ),
     (
-        cast(TextLine, parse_line("1. ku-<nu ši 1 |KU+KU| nu/ši nu(KU) : >")).content,
+        cast(TextLine, parse_line(
+            "1. ku-<nu ši 1 |KU+KU| nu/ši nu(KU) x X ... : >"
+        )).content,
         ["KU"],
     ),
     (
-        cast(TextLine, parse_line("1. ku-<(nu ši 1 |KU+KU| nu/ši nu(KU) : )>")).content,
+        cast(TextLine, parse_line(
+            "1. ku-<(nu ši 1 |KU+KU| nu/ši nu(KU) x X ... : )>"
+        )).content,
         ["KU"],
     ),
 ])

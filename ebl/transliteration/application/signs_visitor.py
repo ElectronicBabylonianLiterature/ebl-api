@@ -65,6 +65,7 @@ class SignsVisitor(TokenVisitor):
             token.accept(sub_visitor)
         self._standardizations.extend(sub_visitor._standardizations)
 
+    @skip_enclosures
     def visit_unknown_sign(self, sign: UnknownSign) -> None:
         self._standardizations.append(UNKNOWN)
 
