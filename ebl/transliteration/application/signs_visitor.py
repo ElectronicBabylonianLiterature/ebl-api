@@ -1,9 +1,10 @@
+import re
 from typing import MutableSequence, Optional, Sequence
 
 import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.atf import VARIANT_SEPARATOR
+from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme, Divider, Grapheme, NamedSign, Number
@@ -16,6 +17,11 @@ from ebl.transliteration.domain.standardization import (
 )
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.errors import NotFoundError
+
+
+def strip_flags(name: str) -> str:
+    pattern = f"[{''.join([re.escape(flag.value) for flag in Flag])}]"
+    return re.sub(pattern, "", name)
 
 
 @attr.s(auto_attribs=True)
@@ -68,12 +74,14 @@ class SignsVisitor(TokenVisitor):
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if self._is_deep and is_splittable(grapheme.name):
             standardizations: Sequence[Standardization] = [
-                self._find(SignName(part))
+                self._find(SignName(strip_flags(part)))
                 for part in grapheme.compound_parts
             ]
             self._standardizations.extend(standardizations)
         else:
-            self._standardizations.append(self._find(grapheme.name))
+            self._standardizations.append(
+                self._find(SignName(strip_flags(grapheme.name)))
+            )
 
     def visit_grapheme(self, grapheme: Grapheme) -> None:
         self._standardizations.append(self._find(grapheme.name))

@@ -26,8 +26,10 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
             Word.of([CompoundGrapheme.of(["(4×ZA)×KUR"])]),
             Word.of([CompoundGrapheme.of(["(AŠ&AŠ@180)×U"])]),
             Word.of([Logogram.of_name("NU")]),
+            Word.of([CompoundGrapheme.of(["GA₂#*+BAD!?"])]),
+            Word.of([CompoundGrapheme.of(["GA₂#*", "BAD!?"])]),
         ],
-        ["ABZ531+588", "|(AŠ&AŠ@180)×U|", "ABZ075"]
+        ["ABZ531+588", "|(AŠ&AŠ@180)×U|", "ABZ075", "|GA₂+BAD|", "GA₂", "BAD"]
     ),
     (
         [
