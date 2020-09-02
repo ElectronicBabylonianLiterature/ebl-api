@@ -138,8 +138,23 @@ The `ebl.fragmentarium.update_fragments` module can be used to recreate
 transliteration and signs in all fragments. A list of invalid fragments is
 saved to `invalid_fragments.tsv`.
 
+The script can be run locally:
+
 ```shell script
-pipenv run  python -m ebl.fragmentarium.update_fragments
+pipenv run python -m ebl.fragmentarium.update_fragments
+```
+
+, as stand alone container:
+
+```shell script
+docker build -t ebl/api .
+docker run --rm -it --env-file=FILE --name ebl-updater --volume=./ebl:/usr/src/ebl/ebl ebl/api pipenv run python -m ebl.fragmentarium.update_fragments
+```
+
+, or with `docker-compose`:
+
+```shell script
+docker-compose -f ./docker-compose-updater.yml up
 ```
 
 ### Steps to update the production database
