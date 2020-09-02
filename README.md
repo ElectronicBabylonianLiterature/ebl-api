@@ -59,23 +59,6 @@ SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
 ```
 
-For docker compose with DB:
-
-Create a script to create the MongoDB user in
-`./docker-entrypoint-initdb.d/create-users.js`:
-
-```javascript
-db.createUser(
-  {
-    user: "ebl-api",
-    pwd: "<password>",
-    roles: [
-       { role: "readWrite", db: "ebl" }
-    ]
-  }
-)
-```
-
 In addition to the variables specified above, the following environment
 variables are needed:
 
@@ -114,6 +97,22 @@ Run the full backend including the database and admin interface:
 
 ```shell script
 docker-compose up
+```
+
+⚠️ You must create a script to create the MongoDB user in
+`./docker-entrypoint-initdb.d/create-users.js` before the
+the database is started for the first time.
+
+```javascript
+db.createUser(
+  {
+    user: "ebl-api",
+    pwd: "<password>",
+    roles: [
+       { role: "readWrite", db: "ebl" }
+    ]
+  }
+)
 ```
 
 ## Updating transliterations and signs in fragments
