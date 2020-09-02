@@ -31,6 +31,13 @@ select extensions and a local MongoDB. Click the button below, configure the
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
 
+### Visual Studio Code
+
+The project includes a Visual Studio Code
+[development container](https://code.visualstudio.com/docs/remote/containers) which
+can be used locally or in
+[Codespaces](https://code.visualstudio.com/docs/remote/codespaces).
+
 ## Codestyle
 
 Line length is 88, and bugbear B950 is used instead of E501.
