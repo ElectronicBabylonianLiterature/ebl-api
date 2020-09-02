@@ -24,7 +24,11 @@ ERASURE_RIGHT = Erasure.close()
                 ),
             ),
         ),
-        ("°::\\:.°", (Divider.of("::"),), (Divider.of(":."),),),
+        (
+            "°::\\:.°",
+            (Divider.of("::").set_erasure(ErasureState.ERASED),),
+            (Divider.of(":.").set_erasure(ErasureState.OVER_ERASED),),
+        ),
         (
             "°\\ku°",
             tuple(),

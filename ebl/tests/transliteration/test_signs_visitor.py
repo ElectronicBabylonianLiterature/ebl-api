@@ -125,6 +125,14 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
         )).content,
         ["KU"],
     ),
+    (
+        cast(TextLine, parse_line("1. °nu : ši\\ku°")).content,
+        ["KU"],
+    ),
+    (
+        cast(TextLine, parse_line("1. ku-°|NU+NU|-1-nu-x-X-...-nu/ši\\ku°-ku")).content,
+        ["KU", "KU", "KU"],
+    ),
 ])
 def test_signs_visitor(
     tokens: Sequence[Token],

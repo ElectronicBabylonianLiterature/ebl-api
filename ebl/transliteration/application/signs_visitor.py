@@ -12,7 +12,7 @@ from ebl.transliteration.domain.sign_tokens import (
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
 from ebl.transliteration.domain.sign import Sign, SignName
-from ebl.transliteration.domain.tokens import Token, TokenVisitor, Variant
+from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor, Variant
 from ebl.transliteration.domain.standardization import (
     INVALID, is_splittable, Standardization, UNKNOWN
 )
@@ -43,6 +43,14 @@ def skip_enclosures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
     return inner
 
 
+def skip_erasures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
+    def inner(self: S, token: T) -> None:
+        if token.erasure != ErasureState.ERASED:
+            func(self, token)
+
+    return inner
+
+
 @attr.s(auto_attribs=True)
 class SignsVisitor(TokenVisitor):
     _sign_repository: SignRepository
@@ -59,16 +67,19 @@ class SignsVisitor(TokenVisitor):
             for standardization in self._standardizations
         ]
 
+    @skip_erasures
     def visit_word(self, word: Word) -> None:
         sub_visitor = SignsVisitor(self._sign_repository)
         for token in word.parts:
             token.accept(sub_visitor)
         self._standardizations.extend(sub_visitor._standardizations)
 
+    @skip_erasures
     @skip_enclosures
     def visit_unknown_sign(self, sign: UnknownSign) -> None:
         self._standardizations.append(UNKNOWN)
 
+    @skip_erasures
     @skip_enclosures
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         sign_token: Optional[Token] = named_sign.sign
@@ -81,6 +92,7 @@ class SignsVisitor(TokenVisitor):
         else:
             sign_token.accept(self)
 
+    @skip_erasures
     @skip_enclosures
     def visit_number(self, number: Number) -> None:
         sign_token: Optional[Token] = number.sign
@@ -93,6 +105,7 @@ class SignsVisitor(TokenVisitor):
         else:
             sign_token.accept(self)
 
+    @skip_erasures
     @skip_enclosures
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if self._is_deep and is_splittable(grapheme.name):
@@ -109,6 +122,7 @@ class SignsVisitor(TokenVisitor):
     def visit_grapheme(self, grapheme: Grapheme) -> None:
         self._standardizations.append(self._find(grapheme.name))
 
+    @skip_erasures
     @skip_enclosures
     def visit_divider(self, divider: Divider) -> None:
         # | should not be handled as divider. It is not a value of any sign.
@@ -119,6 +133,7 @@ class SignsVisitor(TokenVisitor):
              if sign is None
              else self._visit_sign(sign))
 
+    @skip_erasures
     @skip_enclosures
     def visit_variant(self, variant: Variant) -> None:
         variant_visitor = SignsVisitor(self._sign_repository, False)

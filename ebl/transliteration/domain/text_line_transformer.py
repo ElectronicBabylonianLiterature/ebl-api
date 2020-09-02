@@ -75,10 +75,7 @@ class ErasureVisitor(TokenVisitor):
         return tuple(self._tokens)
 
     def visit(self, token) -> None:
-        if isinstance(token, Word):
-            self._tokens.append(token.set_erasure(self._state))
-        else:
-            self._tokens.append(token)
+        self._tokens.append(token.set_erasure(self._state))
 
 
 def set_erasure_state(
