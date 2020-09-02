@@ -22,6 +22,15 @@ pip install pipenv
 pipenv install --dev
 ```
 
+### Gitpod
+
+The project comes with a [Gitpod](https://www.gitpod.io) configuration including
+select extensions and a local MongoDB. Click the button below, configure the
+[environment variables](https://www.gitpod.io/docs/environment-variables/)
+(, import the data if you wish to use the local DB) and you are good to go.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
+
 ## Codestyle
 
 Line length is 88, and bugbear B950 is used instead of E501.
