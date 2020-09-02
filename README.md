@@ -70,6 +70,12 @@ MONGOEXPRESS_LOGIN=<Mongo Express login username>
 MONGOEXPRESS_PASSWORD=<Mongo Express login password>
 ```
 
+### Locally
+
+```shell script
+pipenv run start
+```
+
 ### Docker image
 
 Build and run the docker image:
