@@ -20,6 +20,5 @@ class TransliterationUpdateFactory:
 
     def _map_line(self, line: TextLine) -> str:
         visitor = SignsVisitor(self._sing_repository)
-        for token in line.content:
-            token.accept(visitor)
+        line.accept(visitor)
         return WORD_SEPARATOR.join(visitor.result)

@@ -22,8 +22,7 @@ class TransliterationQueryFactory:
 
     def _create_signs(self, line: str) -> Sequence[str]:
         visitor = SignsVisitor(self._sign_repositoy)
-        for token in self._parse_line(line).content:
-            token.accept(visitor)
+        self._parse_line(line).accept(visitor)
 
         return visitor.result
 
