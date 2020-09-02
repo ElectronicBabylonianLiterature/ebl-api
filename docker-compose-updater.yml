@@ -10,6 +10,6 @@ services:
       - SENTRY_DSN
       - SENTRY_ENVIRONMENT=production
     volumes:
-      - ./ebl:/usr/src/ebl/ebl
+      - ./:/usr/src/ebl
     command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]
     restart: "no"
