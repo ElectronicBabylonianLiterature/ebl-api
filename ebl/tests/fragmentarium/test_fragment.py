@@ -160,6 +160,7 @@ def test_genre_empty():
     fragment = FragmentFactory.build(genre=genre)
     assert fragment.genre == genre
 
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()
@@ -251,8 +252,9 @@ def test_set_references():
 
     assert updated_fragment.references == references
 
+
 def test_set_genre():
     updated_genre = (("ARCHIVE", "Administrative", "Lists", "One Entry"),)
     fragment = FragmentFactory.build(genre=tuple())
     updated_fragment = fragment.set_genre(updated_genre)
-    assert updated_fragment.genre == genre
+    assert updated_fragment.genre == updated_genre
