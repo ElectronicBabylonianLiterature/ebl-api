@@ -5,6 +5,7 @@ import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
+from ebl.transliteration.domain.enclosure_tokens import Gloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
@@ -69,10 +70,10 @@ class SignsVisitor(TokenVisitor):
 
     @skip_erasures
     def visit_word(self, word: Word) -> None:
-        sub_visitor = SignsVisitor(self._sign_repository)
-        for token in word.parts:
-            token.accept(sub_visitor)
-        self._standardizations.extend(sub_visitor._standardizations)
+        self._visit_tokens(word.parts)
+
+    def visit_gloss(self, gloss: Gloss) -> None:
+        self._visit_tokens(gloss.parts)
 
     @skip_erasures
     @skip_enclosures
@@ -156,3 +157,9 @@ class SignsVisitor(TokenVisitor):
             return Standardization.of_sign(self._sign_repository.find(name))
         except NotFoundError:
             return Standardization.of_string(name)
+
+    def _visit_tokens(self, tokens: Sequence[Token]) -> None:
+        sub_visitor = SignsVisitor(self._sign_repository)
+        for token in tokens:
+            token.accept(sub_visitor)
+        self._standardizations.extend(sub_visitor._standardizations)

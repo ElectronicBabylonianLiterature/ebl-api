@@ -73,6 +73,22 @@ from ebl.transliteration.domain.lark_parser import parse_line
         "ku-°|NU+NU|-1-nu-x-X-...-nu/ši\\ku°-ku",
         ["KU", "KU", "KU"],
     ),
+    (
+        "<{ši>-ku} {ku-<ši}>",
+        ["KU", "KU"],
+    ),
+    (
+        "<{+ši>-ku} {+ku-<ši}>",
+        ["KU", "KU"],
+    ),
+    (
+        "<{{ši>-ku}} {{ku-<ši}}>",
+        ["KU", "KU"],
+    ),
+    (
+        "{(ku)}",
+        ["KU"],
+    ),
 ])
 def test_signs_visitor(
     text: str,
