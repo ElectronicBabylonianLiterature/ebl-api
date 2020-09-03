@@ -147,7 +147,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
 
 
 def test_update_genre(fragment_repository):
-    fragment = FragmentFactory.build(genre=None)
+    fragment = FragmentFactory.build(genre=tuple())
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.set_genre([["ARCHIVE", "Administrative"]])
     fragment_repository.update_genre(updated_fragment)

@@ -26,7 +26,7 @@ class Measure:
     note: Optional[str] = None
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: FragmentNumber
     accession: str = ""
