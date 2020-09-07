@@ -140,7 +140,7 @@ class Get_Words(Visitor):
         for child in tree.children:
 
             # try to find positions of removals to add placeholders to subsequent lem line
-            if child == "<<":
+            if child == "<<" and word == "" :
                 self.removal_open = True
             if child == ">>":
                 if self.removal_open:
@@ -282,7 +282,7 @@ class ATF_Preprocessor:
         for line in lines:
             c_line,c_array,c_type,c_alter_lemline_at = self.process_line(line)
             processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type,"c_alter_lemline_at":c_alter_lemline_at})
-        self.logger.debug(Util.print_frame("conversion finished"))
+        self.logger.debug(Util.print_frame("preprocessing finished"))
 
         return processed_lines
 
