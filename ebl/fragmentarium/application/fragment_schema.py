@@ -11,7 +11,7 @@ from ebl.fragmentarium.domain.fragment import (
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 
 class MeasureSchema(Schema):  # pyre-ignore[11]
@@ -73,7 +73,8 @@ class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]
 
 
 class FragmentSchema(Schema):  # pyre-ignore[11]
-    number = fields.String(required=True, data_key="_id")
+    _id = fields.String(dump_only=True, attribute="number")
+    number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
     cdli_number = fields.String(required=True, data_key="cdliNumber")
     bm_id_number = fields.String(required=True, data_key="bmIdNumber")
@@ -101,7 +102,6 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_fragment(self, data, **kwargs):
-        data["number"] = MuseumNumber.of(data["number"])
         data["joins"] = tuple(data["joins"])
         data["record"] = data["record"]
         data["folios"] = data["folios"]

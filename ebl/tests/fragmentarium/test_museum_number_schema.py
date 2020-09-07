@@ -30,7 +30,6 @@ def test_load_ignores_sortable_number():
 @pytest.mark.parametrize("property_,value", [
     ("prefix", ""),
     ("number", ""),
-    ("suffix", ""),
     ("number", "."),
     ("suffix", "."),
 ])
