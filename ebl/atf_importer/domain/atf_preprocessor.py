@@ -126,18 +126,32 @@ class Get_Line_Number(Visitor):
 
 
 class Get_Words(Visitor):
+    wordcounter = 0;
     result = []
+    alter_lemline_at = []
     prefix = "oracc"
+
+    removal_open = False
+
     def oracc_atf_text_line__word(self, tree):
         assert tree.data == "oracc_atf_text_line__word"
 
         word = ""
         for child in tree.children:
+
+            # try to find positions of removals to add placeholders to subsequent lem line
+            if child == "<<":
+                self.removal_open = True
+            if child == ">>":
+                if self.removal_open:
+                    self.removal_open = False
+                    self.alter_lemline_at.append(self.wordcounter)
             wordpart = DFS().visit_topdown(child,"")
             word += wordpart
 
-        self.result.append(word)
 
+        self.result.append(word)
+        self.wordcounter = self.wordcounter+1
 
 class Get_Lemma_Values_and_Guidewords(Visitor):
     result = []
@@ -187,7 +201,7 @@ class ATF_Preprocessor:
 
             self.debug.info("line successfully parsed, no conversion needed")
             self.debug.info("----------------------------------------------------------------------")
-            return atf,converted_line_array,tree.data
+            return atf,converted_line_array,tree.data,[]
 
         except Exception :
 
@@ -200,10 +214,9 @@ class ATF_Preprocessor:
 
             try:
                 tree = self.ORACC_PARSER.parse(atf)
-
+                #print(tree.pretty())
                 self.logger.debug("converting " + tree.data)
 
-                #print(tree.pretty())
 
                 if tree.data == "lem_line":
                     lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
@@ -211,7 +224,7 @@ class ATF_Preprocessor:
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.visit(tree)
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
                     self.logger.debug("----------------------------------------------------------------------")
-                    return None,lemmas_and_guidewords_array,tree.data
+                    return None,lemmas_and_guidewords_array,tree.data,[]
 
 
 
@@ -228,6 +241,8 @@ class ATF_Preprocessor:
 
                     words_serializer = Get_Words()
                     words_serializer.result = []
+                    words_serializer.alter_lemline_at = []
+
                     words_serializer.visit_topdown(tree)
                     converted_line_array = words_serializer.result
 
@@ -237,7 +252,7 @@ class ATF_Preprocessor:
                         self.logger.debug(converted_line)
                         self.logger.debug("----------------------------------------------------------------------")
 
-                        return converted_line,converted_line_array,tree.data
+                        return converted_line,converted_line_array,tree.data,words_serializer.alter_lemline_at
 
                     except Exception as e:
                         self.logger.exception("could not parse converted line")
@@ -251,7 +266,7 @@ class ATF_Preprocessor:
                 self.logger.exception(error+": "+atf)
                 traceback.print_exc(file=sys.stdout)
 
-                return(error+": "+atf),None,None
+                return(error+": "+atf),None,None,None
 
 
 
@@ -265,8 +280,8 @@ class ATF_Preprocessor:
 
         processed_lines = []
         for line in lines:
-            c_line,c_array,c_type = self.process_line(line)
-            processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type})
+            c_line,c_array,c_type,c_alter_lemline_at = self.process_line(line)
+            processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type,"c_alter_lemline_at":c_alter_lemline_at})
         self.logger.debug(Util.print_frame("conversion finished"))
 
         return processed_lines

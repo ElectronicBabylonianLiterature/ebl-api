@@ -22,6 +22,7 @@ class LemmatizationError(Exception):
 POS_TAGS  = ["REL" , "DET" , "CNJ" , "MOD" , "PRP" , "SBJ" , "AJ", "AV" , "NU" , "DP" , "IP" , "PP" , "RP" , "XP" , "QP" ,"DN" , "AN" , "CN" , "EN" , "FN" , "GN" , "LN", "MN" , "ON" , "PN" , "QN" , "RN" , "SN" , "TN" , "WN" ,"YN" , "N" , "V" , "J"]
 
 not_lemmatized = {}
+error_lines = []
 
 class TestConverter(unittest.TestCase):
 
@@ -246,6 +247,8 @@ class ATF_Importer:
     def start(self):
         self.logger.info("Atf-Importer started...")
 
+
+
         #atf_preprocessor.process_line("#lem: X; attallû[eclipse]N; iššakkan[take place]V; šar[king]N; imâtma[die]V",True)
         #atf_preprocessor.process_line("#lem: mīlū[flood]N; ina[in]PRP; nagbi[source]N; ipparrasū[cut (off)]V; mātu[land]N; ana[according to]PRP; mātu[land]N; +hâqu[go]V$ihâq-ma; šalāmu[peace]N; šakin[displayed]AJ",True)
         #self.atf_preprocessor.process_line("1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} * AN.GE₆")
@@ -309,6 +312,13 @@ class ATF_Importer:
                             # get unique lemmata from ebl database
                             self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas,filename)
 
+                        for alter_pos in last_alter_lemline_at:
+                            self.logger.warning("Adding placeholder to lemma line at position:"+str(alter_pos))
+                            all_unique_lemmas.insert(alter_pos,[])
+
+                        # reset lemma altering positions
+                        last_alter_lemline_at = []
+
                         self.logger.debug(filename+": transliteration " + str(last_transliteration_line))
                         self.logger.debug("ebl transliteration" + str(last_transliteration) + " " + str(len(last_transliteration)))
                         self.logger.debug("all_unique_lemmata " + str(all_unique_lemmas) + " " + str(len(all_unique_lemmas)))
@@ -318,6 +328,8 @@ class ATF_Importer:
                         cnt = 0
                         if len(last_transliteration) != len(all_unique_lemmas):
                             self.logger.error("ARRAYS DON'T HAVE EQUAL LENGTH!!!")
+                            error_lines.append(filename+": transliteration " + str(last_transliteration_line))
+
                         for oracc_word in last_transliteration:
                             oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
                             cnt += 1
@@ -352,6 +364,7 @@ class ATF_Importer:
 
                             last_transliteration_line = line['c_line']
                             last_transliteration = oracc_words
+                            last_alter_lemline_at = line['c_alter_lemline_at']
 
                         result['transliteration'].append(line['c_line'])
 
@@ -360,10 +373,14 @@ class ATF_Importer:
                 with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
 
-                with open("/usr/src/ebl/ebl/atf_importer/not_lemmatized/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
+                with open("/usr/src/ebl/ebl/atf_importer/debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
                         for key in not_lemmatized:
                             outputfile.write(key + "\n")
 
+                with open("/usr/src/ebl/ebl/atf_importer/debug/error_lines.txt", "w", encoding='utf8') as outputfile:
+                    for key in error_lines:
+                        outputfile.write(key + "\n")
 
+                self.logger.debug(Util.print_frame("conversion of "+filename+" finished"))
 
 

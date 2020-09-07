@@ -6,4 +6,4 @@ __pycache__
 input/
 notes.txt
 /application/glossary/
-not_lemmatized/
+debug/
