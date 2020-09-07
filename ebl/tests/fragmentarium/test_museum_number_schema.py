@@ -20,6 +20,13 @@ def test_load():
     assert MuseumNumberSchema().load(SERIALIZED) == MUSEUM_NUMBER
 
 
+def test_load_ignores_sortable_number():
+    assert MuseumNumberSchema().load({
+        **SERIALIZED,
+        "sortableNumber": SERIALIZED["number"].zfill(16)
+    }) == MUSEUM_NUMBER
+
+
 @pytest.mark.parametrize("property_,value", [
     ("prefix", ""),
     ("number", ""),
