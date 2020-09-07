@@ -103,8 +103,6 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
     @post_load
     def make_fragment(self, data, **kwargs):
         data["joins"] = tuple(data["joins"])
-        data["record"] = data["record"]
-        data["folios"] = data["folios"]
         data["references"] = tuple(data["references"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
