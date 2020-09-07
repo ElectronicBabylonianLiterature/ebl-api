@@ -373,13 +373,13 @@ class ATF_Importer:
                 with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
 
-                with open("/usr/src/ebl/ebl/atf_importer/debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
-                        for key in not_lemmatized:
-                            outputfile.write(key + "\n")
-
-                with open("/usr/src/ebl/ebl/atf_importer/debug/error_lines.txt", "w", encoding='utf8') as outputfile:
-                    for key in error_lines:
+            with open("/usr/src/ebl/ebl/atf_importer/debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
+                    for key in not_lemmatized:
                         outputfile.write(key + "\n")
+
+            with open("/usr/src/ebl/ebl/atf_importer/debug/error_lines.txt", "w", encoding='utf8') as outputfile:
+                for key in error_lines:
+                    outputfile.write(key + "\n")
 
                 self.logger.debug(Util.print_frame("conversion of "+filename+" finished"))
 
