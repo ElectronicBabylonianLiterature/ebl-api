@@ -2,8 +2,6 @@ from typing import Sequence
 
 import attr
 
-from ebl.fragmentarium.domain.fragment import FragmentNumber
-
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class Geometry:
@@ -28,5 +26,5 @@ class Annotation:
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class Annotations:
-    fragment_number: FragmentNumber
+    fragment_number: str
     annotations: Sequence[Annotation] = tuple()

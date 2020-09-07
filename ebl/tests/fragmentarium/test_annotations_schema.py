@@ -5,7 +5,6 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationData,
     Annotations,
 )
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 
 HEIGHT = 34.5
 WIDTH = 100.0
@@ -18,11 +17,11 @@ ID = "abc123"
 
 ANNOTATION = Annotation(Geometry(X, Y, WIDTH, HEIGHT), AnnotationData(ID, VALUE, PATH))
 
-FRAGMENT_NUMBER = FragmentNumber("K.1")
+FRAGMENT_NUMBER = "K.1"
 ANNOTATIONS = Annotations(FRAGMENT_NUMBER, [ANNOTATION])
 
 SERIALIZED = {
-    "fragmentNumber": str(FRAGMENT_NUMBER),
+    "fragmentNumber": FRAGMENT_NUMBER,
     "annotations": [
         {
             "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},

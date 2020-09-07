@@ -1,6 +1,5 @@
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 COLLECTION = "annotations"
@@ -42,7 +41,7 @@ def test_query_by_fragment_number(database, annotations_repository):
 
 
 def test_query_by_fragment_number_not_found(database, annotations_repository):
-    fragment_number = FragmentNumber("X.1")
+    fragment_number = "X.1"
 
     assert annotations_repository.query_by_fragment_number(
         fragment_number

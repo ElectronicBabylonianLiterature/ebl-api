@@ -56,13 +56,14 @@ from ebl.transliteration.domain.tokens import (
     Variant,
 )
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 class FragmentFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Fragment
 
-    number = factory.Sequence(lambda n: f"X.{n}")
+    number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     accession = factory.Sequence(lambda n: f"accession-{n}")

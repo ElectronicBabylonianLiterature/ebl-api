@@ -8,7 +8,7 @@ NUMBER_OF_NEEDS_REVISION: int = 20
 
 
 def fragment_is(fragment) -> dict:
-    return {"_id": fragment.number}
+    return {"_id": str(fragment.number)}
 
 
 def number_is(number) -> dict:

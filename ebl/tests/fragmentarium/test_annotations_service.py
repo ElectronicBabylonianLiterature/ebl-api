@@ -1,6 +1,5 @@
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 
@@ -18,7 +17,7 @@ def test_find(annotations_repository, changelog, when):
 
 
 def test_update(annotations_repository, when, user, changelog):
-    fragment_number = FragmentNumber("K.1")
+    fragment_number = "K.1"
     annotations = AnnotationsFactory.build(fragment_number=fragment_number)
     updated_annotations = AnnotationsFactory.build(fragment_number=fragment_number)
 

@@ -75,7 +75,7 @@ def test_query_by_fragment_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
 
-    assert fragment_repository.query_by_fragment_number(fragment.number) == fragment
+    assert fragment_repository.query_by_fragment_number(str(fragment.number)) == fragment
 
 
 def test_fragment_not_found(fragment_repository):
@@ -140,7 +140,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
     )
 
     fragment_repository.update_transliteration(updated_fragment)
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    result = fragment_repository.query_by_fragment_number(str(fragment_number))
 
     assert result == updated_fragment
 
@@ -232,8 +232,8 @@ def test_search_finds_by_id(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert (
-        fragment_repository.query_by_fragment_cdli_or_accession_number(fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
@@ -243,8 +243,8 @@ def test_search_finds_by_accession(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert (
-        fragment_repository.query_by_fragment_cdli_or_accession_number(fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
@@ -254,8 +254,8 @@ def test_search_finds_by_cdli(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert (
-        fragment_repository.query_by_fragment_cdli_or_accession_number(fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
@@ -328,7 +328,7 @@ def test_find_transliterated(database, fragment_repository):
     )
 
     assert fragment_repository.query_transliterated_numbers() == [
-        transliterated_fragment.number
+        str(transliterated_fragment.number)
     ]
 
 

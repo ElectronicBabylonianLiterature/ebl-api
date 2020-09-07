@@ -5,13 +5,13 @@ from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
-    FragmentNumber,
     Measure,
     UncuratedReference,
 )
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 class MeasureSchema(Schema):  # pyre-ignore[11]
@@ -101,7 +101,7 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_fragment(self, data, **kwargs):
-        data["number"] = FragmentNumber(data["number"])
+        data["number"] = MuseumNumber.of(data["number"])
         data["joins"] = tuple(data["joins"])
         data["record"] = data["record"]
         data["folios"] = data["folios"]

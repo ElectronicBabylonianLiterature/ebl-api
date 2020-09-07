@@ -1,7 +1,6 @@
 import falcon  # pyre-ignore
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
@@ -79,5 +78,5 @@ class AnnotationResource:
           schema:
             type: string
         """
-        annotations = self._annotation_service.find(FragmentNumber(number))
+        annotations = self._annotation_service.find(number)
         resp.media = AnnotationsSchema().dump(annotations)  # pyre-ignore[16]

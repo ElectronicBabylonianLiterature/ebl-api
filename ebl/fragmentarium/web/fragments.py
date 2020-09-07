@@ -2,7 +2,6 @@ import falcon  # pyre-ignore
 from falcon import Request, Response
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
@@ -33,5 +32,5 @@ class FragmentsResource:
             type: string
         """
         user: User = req.context.user
-        fragment, has_photo = self._finder.find(FragmentNumber(number))
+        fragment, has_photo = self._finder.find(number)
         resp.media = create_response_dto(fragment, user, has_photo)

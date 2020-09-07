@@ -5,7 +5,6 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_path_of_the_pioneers,
@@ -172,7 +171,7 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def query_next_and_previous_fragment(self, number: FragmentNumber):
+    def query_next_and_previous_fragment(self, number: str):
         next_ = (
             self._collection.find_many({"_id": {"$gt": f"{number}"}})
             .sort("_id", 1)

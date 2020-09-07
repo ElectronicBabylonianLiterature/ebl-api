@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentRepository(ABC):
     @abstractmethod
-    def create(self, fragment: Fragment) -> FragmentNumber:
+    def create(self, fragment: Fragment) -> str:
         ...
 
     @abstractmethod
@@ -20,7 +20,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_fragment_number(self, number: FragmentNumber) -> Fragment:
+    def query_by_fragment_number(self, number: str) -> Fragment:
         ...
 
     @abstractmethod
@@ -58,12 +58,12 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_next_and_previous_folio(
-        self, folio_name: str, folio_number: str, number: FragmentNumber
+        self, folio_name: str, folio_number: str, number: str
     ) -> dict:
         ...
 
     @abstractmethod
-    def query_next_and_previous_fragment(self, number: FragmentNumber) -> dict:
+    def query_next_and_previous_fragment(self, number: str) -> dict:
         ...
 
     @abstractmethod

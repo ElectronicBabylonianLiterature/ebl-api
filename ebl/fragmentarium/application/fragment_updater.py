@@ -6,7 +6,7 @@ from ebl.changelog import Changelog
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
@@ -30,7 +30,7 @@ class FragmentUpdater:
 
     def update_transliteration(
         self,
-        number: FragmentNumber,
+        number: str,
         transliteration: TransliterationUpdate,
         user: User,
     ) -> Tuple[Fragment, bool]:
@@ -47,7 +47,7 @@ class FragmentUpdater:
         )
 
     def update_lemmatization(
-        self, number: FragmentNumber, lemmatization: Lemmatization, user: User
+        self, number: str, lemmatization: Lemmatization, user: User
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_fragment_number(number)
         updated_fragment = fragment.update_lemmatization(lemmatization)
@@ -61,7 +61,7 @@ class FragmentUpdater:
         )
 
     def update_references(
-        self, number: FragmentNumber, references: Sequence[Reference], user: User,
+        self, number: str, references: Sequence[Reference], user: User,
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_fragment_number(number)
         self._bibliography.validate_references(references)

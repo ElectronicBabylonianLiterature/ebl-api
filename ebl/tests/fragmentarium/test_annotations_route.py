@@ -4,12 +4,11 @@ import falcon  # pyre-ignore
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 
 def test_find_annotations(client):
-    fragment_number = FragmentNumber("X.2")
+    fragment_number = "X.2"
     annotations = Annotations(fragment_number)
 
     result = client.simulate_get(f"/fragments/{fragment_number}/annotations")

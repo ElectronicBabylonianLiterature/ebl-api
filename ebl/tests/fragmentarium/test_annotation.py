@@ -4,7 +4,6 @@ from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Annotations,
 )
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 
 HEIGHT = 3.5
 WIDTH = 0.32
@@ -19,7 +18,7 @@ DATA = AnnotationData(ID, VALUE, PATH)
 
 ANNOTATION = Annotation(GEOMETRY, DATA)
 
-FRAGMENT_NUMBER = FragmentNumber("K.1")
+FRAGMENT_NUMBER = "K.1"
 ANNOTATIONS = Annotations(FRAGMENT_NUMBER, [ANNOTATION])
 
 

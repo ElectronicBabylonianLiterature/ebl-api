@@ -5,7 +5,6 @@ from freezegun import freeze_time  # pyre-ignore
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
-    FragmentNumber,
     Measure,
     UncuratedReference,
 )
@@ -24,11 +23,13 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
 )
 from ebl.transliteration.domain.text import Text
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def test_number():
-    fragment = FragmentFactory.build(number="1")
-    assert fragment.number == "1"
+    number = MuseumNumber("K", "1")
+    fragment = FragmentFactory.build(number=number)
+    assert fragment.number == number
 
 
 def test_accession():
@@ -103,7 +104,7 @@ def test_signs():
 
 def test_record():
     record = RecordFactory.build()
-    fragment = Fragment(FragmentNumber("X.1"), record=record)
+    fragment = Fragment(MuseumNumber.of("X.1"), record=record)
     assert fragment.record == record
 
 

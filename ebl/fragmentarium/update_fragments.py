@@ -30,7 +30,7 @@ def update_fragment(
 ) -> None:
     transliteration = transliteration_factory.create(fragment.text.atf, fragment.notes)
     user = ApiUser("update_fragments.py")
-    updater.update_transliteration(fragment.number, transliteration, user)
+    updater.update_transliteration(str(fragment.number), transliteration, user)
 
 
 def find_transliterated(fragment_repository: FragmentRepository) -> List[str]:
@@ -76,7 +76,7 @@ class State:
         self.invalid_atf += 1
         for index, error in enumerate(error.errors):
             atf = fragment.text.lines[error["lineNumber"] - 1].atf
-            number = fragment.number if index == 0 else len(fragment.number) * " "
+            number = fragment.number if index == 0 else len(str(fragment.number)) * " "
             self.errors.append(f"{number}\t{atf}\t{error}")
 
     def _add_error(self, error: Exception, fragment: Fragment) -> None:

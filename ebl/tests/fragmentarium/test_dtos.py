@@ -14,7 +14,7 @@ def test_create_response_dto(user):
     has_photo = True
     assert create_response_dto(lemmatized_fragment, user, has_photo) == pydash.omit_by(
         {
-            "_id": lemmatized_fragment.number,
+            "_id": str(lemmatized_fragment.number),
             "accession": lemmatized_fragment.accession,
             "cdliNumber": lemmatized_fragment.cdli_number,
             "bmIdNumber": lemmatized_fragment.bm_id_number,

@@ -3,7 +3,7 @@ from typing import Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 
 Lines = Sequence[Sequence[str]]
@@ -11,7 +11,7 @@ Lines = Sequence[Sequence[str]]
 
 @attr.s(frozen=True, auto_attribs=True)
 class FragmentInfo:
-    number: FragmentNumber
+    number: str
     accession: str
     script: str
     description: str
@@ -41,7 +41,7 @@ class FragmentInfo:
                                  else RecordEntry("", RecordType.TRANSLITERATION, ""))
 
         return FragmentInfo(
-            fragment.number,
+            str(fragment.number),
             fragment.accession,
             fragment.script,
             fragment.description,

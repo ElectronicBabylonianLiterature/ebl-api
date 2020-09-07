@@ -14,7 +14,7 @@ FRAGMENT_WITH_REFERENCES = FragmentFactory.build(
 def test_of():
     matching_lines = (("1. kur",),)
     assert FragmentInfo.of(FRAGMENT, matching_lines) == FragmentInfo(
-        FRAGMENT.number,
+        str(FRAGMENT.number),
         FRAGMENT.accession,
         FRAGMENT.script,
         FRAGMENT.description,
@@ -27,7 +27,7 @@ def test_of():
 def test_of_with_references():
     matching_lines = (("1. kur",),)
     assert FragmentInfo.of(FRAGMENT_WITH_REFERENCES, matching_lines) == FragmentInfo(
-        FRAGMENT_WITH_REFERENCES.number,
+        str(FRAGMENT_WITH_REFERENCES.number),
         FRAGMENT_WITH_REFERENCES.accession,
         FRAGMENT_WITH_REFERENCES.script,
         FRAGMENT_WITH_REFERENCES.description,
@@ -62,7 +62,7 @@ def test_of_with_record():
     )
     matching_lines = (("1. kur",),)
     assert FragmentInfo.of(fragment, matching_lines) == FragmentInfo(
-        FRAGMENT.number,
+        str(FRAGMENT.number),
         FRAGMENT.accession,
         FRAGMENT.script,
         FRAGMENT.description,
