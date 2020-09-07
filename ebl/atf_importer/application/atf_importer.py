@@ -134,17 +134,18 @@ class ATF_Importer:
         parsed_atf = parse_atf_lark(line)
         return parsed_atf
 
-    def get_ebl_lemmata(self,oracc_lemma,oracc_guideword,all_unique_lemmas):
+    def get_ebl_lemmata(self,oracc_lemma,oracc_guideword,all_unique_lemmas,filename):
 
         try:
             unique_lemmas = []
 
             if oracc_guideword == "":
-                not_lemmatized[oracc_lemma] = True
+                if oracc_lemma not in not_lemmatized:
+                    not_lemmatized[oracc_lemma] = True
                 self.logger.warning("Incompatible lemmatization: No guideWord to oracc lemma '" + oracc_lemma + "' present")
 
-            # if "X" then add [] and return
-            if oracc_lemma == "X":
+            # if "X" or "u" or "n" then add [] and return
+            if oracc_lemma == "X" or oracc_lemma == "u" or oracc_lemma == "n":
                 self.logger.warning("Oracc lemma was '"+oracc_lemma+"' ->  here no lemmatization")
                 all_unique_lemmas.append(unique_lemmas)
                 return
@@ -189,13 +190,15 @@ class ATF_Importer:
 
 
                 except:
-                    not_lemmatized[oracc_lemma] = True
+                    if oracc_lemma not in not_lemmatized:
+                        not_lemmatized[oracc_lemma] = True
 
                     self.logger.error("Incompatible lemmatization: No citation form found in the glossary for '" + oracc_lemma + "'")
 
             # all attempts to find a ebl lemma failed
             if len(unique_lemmas) == 0:
-                not_lemmatized[oracc_lemma] = True
+                if oracc_lemma not in not_lemmatized:
+                    not_lemmatized[oracc_lemma] = True
                 self.logger.error("Incompatible lemmatization: No eBL word found to oracc lemma or guide word (" + oracc_lemma + " : " + oracc_guideword + ")")
 
             all_unique_lemmas.append(unique_lemmas)
@@ -203,9 +206,6 @@ class ATF_Importer:
         except Exception as e:
             self.logger.exception(e)
 
-        #with open(args.output + "/not_lemmatized_" + filename + ".txt", "w", encoding='utf8') as outputfile:
-        #    for key in not_lemmatized:
-        #        outputfile.write(key + "\n")
 
 
     def parse_glossary(self,path):
@@ -307,9 +307,9 @@ class ATF_Importer:
                                 oracc_guideword = oracc_guideword.split("//")[0]
 
                             # get unique lemmata from ebl database
-                            self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas)
+                            self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas,filename)
 
-                        self.logger.debug("transliteration " + str(last_transliteration_line))
+                        self.logger.debug(filename+": transliteration " + str(last_transliteration_line))
                         self.logger.debug("ebl transliteration" + str(last_transliteration) + " " + str(len(last_transliteration)))
                         self.logger.debug("all_unique_lemmata " + str(all_unique_lemmas) + " " + str(len(all_unique_lemmas)))
 
@@ -360,6 +360,9 @@ class ATF_Importer:
                 with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
 
+                with open("/usr/src/ebl/ebl/atf_importer/not_lemmatized/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
+                        for key in not_lemmatized:
+                            outputfile.write(key + "\n")
 
 
 
