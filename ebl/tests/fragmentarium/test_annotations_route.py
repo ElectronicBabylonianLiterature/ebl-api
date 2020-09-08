@@ -1,14 +1,15 @@
 import json
 
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.tests.factories.annotation import AnnotationsFactory
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def test_find_annotations(client):
-    fragment_number = "X.2"
+    fragment_number = MuseumNumber("X", "2")
     annotations = Annotations(fragment_number)
 
     result = client.simulate_get(f"/fragments/{fragment_number}/annotations")
@@ -45,7 +46,16 @@ def test_update(client):
 def test_update_number_mismatch(client):
     annotations = AnnotationsFactory.build()
     body = AnnotationsSchema().dumps(annotations)
-    url = "/fragments/not match/annotations"
+    url = "/fragments/not.match/annotations"
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_update_invalid_number(client):
+    annotations = AnnotationsFactory.build()
+    body = AnnotationsSchema().dumps(annotations)
+    url = "/fragments/invalid/annotations"
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
