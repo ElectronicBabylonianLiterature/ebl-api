@@ -2,10 +2,11 @@ import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.web.dtos import create_response_dto
+from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.users.web.require_scope import require_scope
+
 
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
@@ -25,7 +26,9 @@ class TransliterationResource:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_transliteration(
-                number, self._create_transliteration(req.media), user
+                parse_museum_number(number),
+                self._create_transliteration(req.media),
+                user
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except TransliterationError as error:

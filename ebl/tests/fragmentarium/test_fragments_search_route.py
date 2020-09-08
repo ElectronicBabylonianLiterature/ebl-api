@@ -16,10 +16,15 @@ def expected_fragment_info_dto(fragment, lines=tuple()):
     return FragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
 
 
-def test_search_fragment(client, fragmentarium):
+@pytest.mark.parametrize("get_number", [
+    lambda fragment: str(fragment.number),
+    lambda fragment: fragment.cdli_number,
+    lambda fragment: fragment.accession,
+])
+def test_search_fragment(get_number, client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    result = client.simulate_get("/fragments", params={"number": fragment_number})
+    fragmentarium.create(fragment)
+    result = client.simulate_get("/fragments", params={"number": get_number(fragment)})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(fragment)]

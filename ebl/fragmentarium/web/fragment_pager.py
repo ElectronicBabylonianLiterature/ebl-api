@@ -3,6 +3,7 @@ import falcon  # pyre-ignore
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_pager_schema import FragmentPagerInfoSchema
 from ebl.users.web.require_scope import require_scope
+from ebl.fragmentarium.web.dtos import parse_museum_number
 
 
 class FragmentPagerResource:
@@ -22,17 +23,20 @@ class FragmentPagerResource:
                            $ref: '#/components/schemas/FragmentPagerInfo'
                   404:
                     description: Could not retrieve any fragments
+                  422:
+                    description: Invalid museum number
                 security:
                 - auth0:
                   - read:fragments
                 parameters:
                 - in: path
                   name: number
-                  description: Fragment number
+                  description: Museum number
                   required: true
                   schema:
                     type: string
+                    pattern: '^.+?\\.[^.]+(\\.[^.]+)?$'
                 """
 
-        fragment = self._finder.fragment_pager(number)
+        fragment = self._finder.fragment_pager(parse_museum_number(number))
         resp.media = FragmentPagerInfoSchema().dump(fragment)

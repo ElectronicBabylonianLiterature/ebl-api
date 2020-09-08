@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 
 
@@ -26,9 +27,9 @@ class FragmentFinder:
         self._photos = photos
         self._folios = folios
 
-    def find(self, number: str) -> Tuple[Fragment, bool]:
+    def find(self, number: MuseumNumber) -> Tuple[Fragment, bool]:
         return (
-            self._repository.query_by_fragment_number(number),
+            self._repository.query_by_museum_number(number),
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
@@ -87,13 +88,13 @@ class FragmentFinder:
         )
 
     def folio_pager(
-        self, folio_name: str, folio_number: str, number: str
+        self, folio_name: str, folio_number: str, number: MuseumNumber
     ) -> dict:
         return self._repository.query_next_and_previous_folio(
             folio_name, folio_number, number
         )
 
-    def fragment_pager(self, number: str) -> dict:
+    def fragment_pager(self, number: MuseumNumber) -> dict:
         return self._repository.query_next_and_previous_fragment(number)
 
     def find_lemmas(self, word: str) -> List[List[dict]]:

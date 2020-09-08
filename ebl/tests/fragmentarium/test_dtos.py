@@ -1,12 +1,15 @@
 import attr
-import pydash  # pyre-ignore
+import pydash  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.web.dtos import create_response_dto
+from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.application.text_schema import TextSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.errors import DataError
 
 
 def test_create_response_dto(user):
@@ -87,3 +90,13 @@ def test_create_fragment_info_dto():
         "editionDate": record_entry.date if is_transliteration else "",
         "references": [],
     }
+
+
+def test_parse_museum_number():
+    number = MuseumNumber("A", "B", "C")
+    assert parse_museum_number(str(number)) == number
+
+
+def test_parse_invalid_museum_number():
+    with pytest.raises(DataError):
+        parse_museum_number("invalid")

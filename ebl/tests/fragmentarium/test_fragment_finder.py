@@ -11,6 +11,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @pytest.mark.parametrize("has_photo", [True, False])
@@ -19,17 +20,17 @@ def test_find_with_photo(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    (when(fragment_repository).query_by_fragment_number(number).thenReturn(fragment))
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
 
     assert fragment_finder.find(number) == (fragment, has_photo)
 
 
 def test_find_not_found(fragment_finder, fragment_repository, when):
-    number = "unknown id"
+    number = MuseumNumber("unknown", "id")
     (
         when(fragment_repository)
-        .query_by_fragment_number(number)
+        .query_by_museum_number(number)
         .thenRaise(NotFoundError)
     )
 
