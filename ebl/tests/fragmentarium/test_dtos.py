@@ -2,7 +2,7 @@ import attr
 import pydash  # pyre-ignore[21]
 import pytest  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -80,8 +80,8 @@ def test_create_fragment_info_dto():
     info = FragmentInfo.of(lemmatized_fragment, ((line,),))
     record_entry = lemmatized_fragment.record.entries[0]
     is_transliteration = record_entry.type == RecordType.TRANSLITERATION
-    assert FragmentInfoSchema().dump(info) == {
-        "number": info.number,
+    assert ApiFragmentInfoSchema().dump(info) == {
+        "number": str(info.number),
         "accession": info.accession,
         "script": info.script,
         "description": info.description,

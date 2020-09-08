@@ -95,7 +95,7 @@ def aggregate_needs_revision() -> List[dict]:
         {"$sort": {"record.date": 1}},
         {
             "$group": {
-                "_id": "$_id",
+                "_id": "$museumNumber",
                 "accession": {"$first": "$accession"},
                 "description": {"$first": "$description"},
                 "script": {"$first": "$script"},
@@ -151,7 +151,7 @@ def aggregate_needs_revision() -> List[dict]:
         {
             "$project": {
                 "_id": 0,
-                "number": "$_id",
+                "number": "$museumNumber",
                 "accession": 1,
                 "description": 1,
                 "script": 1,

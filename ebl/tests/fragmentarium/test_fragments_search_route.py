@@ -1,8 +1,7 @@
 import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
-from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema, \
-    ApiFragmentInfoSchema
+from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 from ebl.tests.factories.fragment import (
@@ -13,7 +12,7 @@ from ebl.tests.factories.fragment import (
 
 
 def expected_fragment_info_dto(fragment, lines=tuple()):
-    return FragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
+    return ApiFragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
 
 
 @pytest.mark.parametrize("get_number", [
