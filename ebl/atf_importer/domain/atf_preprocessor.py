@@ -155,31 +155,58 @@ class Get_Words(Visitor):
 
 class Get_Lemma_Values_and_Guidewords(Visitor):
     result = []
+    additional_lemmata = False
+
 
     def oracc_atf_lem_line__lemma(self, tree):
+
+
         assert tree.data == "oracc_atf_lem_line__lemma"
-        lemma_value = ""
         guide_word = ""
         i = 0
         cl = len(tree.children)
+        lemmata = []
         for child in tree.children:
-            if child.data=="oracc_atf_lem_line__value_part":
+
+            # collect additional lemmata and guidwords
+            if child.data == "oracc_atf_lem_line__additional_lemmata":
+
+                for a_child in child.children:
+                    if hasattr(a_child, 'data'):
+
+                        if a_child.data == "oracc_atf_lem_line__additional_lemma":
+                            acl = len(a_child.children)
+                            j = 0
+                            for b_child in a_child.children:
+                                additional_lemma_value = ""
+                                additional_guide_word = ""
+                                if b_child.data == "oracc_atf_lem_line__value_part":
+                                    additional_lemma_value = DFS().visit_topdown(b_child, "")
+                                    if acl > 1:
+                                        if a_child.children[j + 1].data == "oracc_atf_lem_line__guide_word":
+                                            additional_guide_word = DFS().visit_topdown(a_child.children[j + 1], "")
+                                if(additional_lemma_value!=""): # to be fixed runs too often
+                                 lemmata.append((additional_lemma_value,additional_guide_word))
+
+            # find actual lemma and guidewords
+            if child.data == "oracc_atf_lem_line__value_part":
                 lemma_value = DFS().visit_topdown(child,"")
                 if cl>1 :
                     if tree.children[i+1].data== "oracc_atf_lem_line__guide_word":
                         guide_word = DFS().visit_topdown(tree.children[i+1],"")
-                self.result.append((lemma_value,guide_word))
+                lemmata.append((lemma_value,guide_word))
+                self.result.append(lemmata)
             i = i+1
 
 class ATF_Preprocessor:
 
     def __init__(self):
         pass
-        #self.EBL_PARSER = Lark.open("lark-ebl/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
         self.EBL_PARSER = Lark.open("../../transliteration/domain/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
         self.ORACC_PARSER = Lark.open("lark-oracc/oracc_atf.lark", maybe_placeholders=True, rel_to=__file__)
-        self.logger = logging.getLogger("atf-importer")
+        self.logger = logging.getLogger("atf-preprocessor")
+        self.logger.setLevel(10)
 
     def process_line(self,atf):
         self.logger.debug("original line: '"+atf+"'")
@@ -214,11 +241,12 @@ class ATF_Preprocessor:
 
             try:
                 tree = self.ORACC_PARSER.parse(atf)
-                #print(tree.pretty())
                 self.logger.debug("converting " + tree.data)
 
 
                 if tree.data == "lem_line":
+                    #self.logger.debug((tree.pretty()))
+
                     lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
                     lemmas_and_guidewords_serializer.result = []
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.visit(tree)
@@ -270,8 +298,8 @@ class ATF_Preprocessor:
 
 
 
-    def convert_lines(self,file):
-        self.logger.debug(Util.print_frame("converting: \""+file+"\""))
+    def convert_lines(self,file,filename):
+        self.logger.debug(Util.print_frame("converting: \""+filename+".atf\""))
 
         with codecs.open(file, 'r', encoding='utf8') as f:
             atf_ = f.read()

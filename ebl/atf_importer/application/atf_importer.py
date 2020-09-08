@@ -135,72 +135,76 @@ class ATF_Importer:
         parsed_atf = parse_atf_lark(line)
         return parsed_atf
 
-    def get_ebl_lemmata(self,oracc_lemma,oracc_guideword,all_unique_lemmas,filename):
+    def get_ebl_lemmata(self,orrac_lemma_tupel,all_unique_lemmas,filename):
 
         try:
             unique_lemmas = []
 
-            if oracc_guideword == "":
-                if oracc_lemma not in not_lemmatized:
-                    not_lemmatized[oracc_lemma] = True
-                self.logger.warning("Incompatible lemmatization: No guideWord to oracc lemma '" + oracc_lemma + "' present")
+            for pair in orrac_lemma_tupel:
 
-            # if "X" or "u" or "n" then add [] and return
-            if oracc_lemma == "X" or oracc_lemma == "u" or oracc_lemma == "n":
-                self.logger.warning("Oracc lemma was '"+oracc_lemma+"' ->  here no lemmatization")
-                all_unique_lemmas.append(unique_lemmas)
-                return
+                oracc_lemma = pair[0]
+                oracc_guideword = pair[1]
 
+                if "//" in oracc_guideword:
+                    oracc_guideword = oracc_guideword.split("//")[0]
 
-
-            for entry in self.db.get_collection('words').find({"oraccWords.guideWord": oracc_guideword}, {"_id"}):
-                unique_lemmas.append(entry['_id'])
-
-            for entry in self.db.get_collection('words').find({"oraccWords.lemma": oracc_lemma}, {"_id"}):
-                if entry['_id'] not in unique_lemmas:
-                    unique_lemmas.append(entry['_id'])
-
-            for entry in self.db.get_collection('words').find({"guideWord": oracc_guideword}, {"_id"}):
-                if entry['_id'] not in unique_lemmas:
-                    unique_lemmas.append(entry['_id'])
-
-            if len(unique_lemmas) == 0:
-                try:
-                    citation_form = self.lemmas_cfforms[oracc_lemma]
-                    guideword = self.cfform_guideword[citation_form]
-                    if "//" in guideword:
-                        guideword = guideword.split("//")[0]
-                    senses = self.cfforms_senses[citation_form]
-
-                    if senses != None and oracc_guideword in senses:
-
-                        for entry in self.db.get_collection('words').find({"oraccWords.guideWord": guideword}, {"_id"}):
-                            unique_lemmas.append(entry['_id'])
-
-                        for entry in self.db.get_collection('words').find({"oraccWords.lemma": citation_form}, {"_id"}):
-                            if entry['_id'] not in unique_lemmas:
-                                unique_lemmas.append(entry['_id'])
-
-                        for entry in self.db.get_collection('words').find({"oraccWords.lemma": oracc_lemma}, {"_id"}):
-                            if entry['_id'] not in unique_lemmas:
-                                unique_lemmas.append(entry['_id'])
-
-                        for entry in self.db.get_collection('words').find({"guideWord": oracc_guideword}, {"_id"}):
-                            if entry['_id'] not in unique_lemmas:
-                                unique_lemmas.append(entry['_id'])
-
-
-                except:
+                if oracc_guideword == "":
                     if oracc_lemma not in not_lemmatized:
                         not_lemmatized[oracc_lemma] = True
+                    self.logger.warning("Incompatible lemmatization: No guideWord to oracc lemma '" + oracc_lemma + "' present")
 
-                    self.logger.error("Incompatible lemmatization: No citation form found in the glossary for '" + oracc_lemma + "'")
+                # if "X" or "u" or "n" then add [] and return
+                if oracc_lemma == "X" or oracc_lemma == "u" or oracc_lemma == "n":
+                    self.logger.warning("Oracc lemma was '"+oracc_lemma+"' ->  here no lemmatization")
+                    all_unique_lemmas.append(unique_lemmas)
+                    return
+
+                for entry in self.db.get_collection('words').find({"oraccWords.guideWord": oracc_guideword}, {"_id"}):
+                    unique_lemmas.append(entry['_id'])
+
+                for entry in self.db.get_collection('words').find({"oraccWords.lemma": oracc_lemma}, {"_id"}):
+                    if entry['_id'] not in unique_lemmas:
+                        unique_lemmas.append(entry['_id'])
+
+                for entry in self.db.get_collection('words').find({"guideWord": oracc_guideword}, {"_id"}):
+                    if entry['_id'] not in unique_lemmas:
+                        unique_lemmas.append(entry['_id'])
+
+                if len(unique_lemmas) == 0:
+                    try:
+                        citation_form = self.lemmas_cfforms[oracc_lemma]
+                        guideword = self.cfform_guideword[citation_form]
+                        if "//" in guideword:
+                            guideword = guideword.split("//")[0]
+                        senses = self.cfforms_senses[citation_form]
+
+                        if senses != None and oracc_guideword in senses:
+
+                            for entry in self.db.get_collection('words').find({"oraccWords.guideWord": guideword}, {"_id"}):
+                                unique_lemmas.append(entry['_id'])
+
+                            for entry in self.db.get_collection('words').find({"oraccWords.lemma": citation_form}, {"_id"}):
+                                if entry['_id'] not in unique_lemmas:
+                                    unique_lemmas.append(entry['_id'])
+
+                            for entry in self.db.get_collection('words').find({"oraccWords.lemma": oracc_lemma}, {"_id"}):
+                                if entry['_id'] not in unique_lemmas:
+                                    unique_lemmas.append(entry['_id'])
+
+                            for entry in self.db.get_collection('words').find({"guideWord": oracc_guideword}, {"_id"}):
+                                if entry['_id'] not in unique_lemmas:
+                                    unique_lemmas.append(entry['_id'])
+                    except:
+                        if oracc_lemma not in not_lemmatized:
+                            not_lemmatized[oracc_lemma] = True
+
+                        self.logger.warning("Incompatible lemmatization: No citation form found in the glossary for '" + oracc_lemma + "'")
 
             # all attempts to find a ebl lemma failed
             if len(unique_lemmas) == 0:
                 if oracc_lemma not in not_lemmatized:
                     not_lemmatized[oracc_lemma] = True
-                self.logger.error("Incompatible lemmatization: No eBL word found to oracc lemma or guide word (" + oracc_lemma + " : " + oracc_guideword + ")")
+                self.logger.warning("Incompatible lemmatization: No eBL word found to oracc lemma or guide word (" + oracc_lemma + " : " + oracc_guideword + ")")
 
             all_unique_lemmas.append(unique_lemmas)
 
@@ -276,8 +280,12 @@ class ATF_Importer:
 
             with open(filepath, 'r') as f:
 
+                split = filepath.split("/")
+                filename = split[-1]
+                filename = filename.split(".")[0]
+
                 # convert all lines
-                converted_lines =  self.atf_preprocessor.convert_lines(filepath)
+                converted_lines =  self.atf_preprocessor.convert_lines(filepath,filename)
 
                 # write result output
                 self.logger.debug(Util.print_frame("writing output"))
@@ -286,9 +294,7 @@ class ATF_Importer:
                 result['transliteration'] = []
                 result['lemmatization'] = []
 
-                split = filepath.split("/")
-                filename = split[-1]
-                filename = filename.split(".")[0]
+
                 for line in converted_lines:
 
                     if line['c_type'] == "lem_line":
@@ -301,16 +307,10 @@ class ATF_Importer:
 
                         self.logger.debug("lem_line: " + str(line['c_array']) + " length " + str(len(line['c_array'])))
 
-                        for pair in line['c_array'] :
+                        for oracc_lemma_tupel in line['c_array']:
 
-                            oracc_lemma = pair[0]
-                            oracc_guideword = pair[1]
-
-                            if "//" in oracc_guideword:
-                                oracc_guideword = oracc_guideword.split("//")[0]
-
-                            # get unique lemmata from ebl database
-                            self.get_ebl_lemmata(oracc_lemma,oracc_guideword,all_unique_lemmas,filename)
+                                # get unique lemmata from ebl database
+                                self.get_ebl_lemmata(oracc_lemma_tupel,all_unique_lemmas,filename)
 
                         for alter_pos in last_alter_lemline_at:
                             self.logger.warning("Adding placeholder to lemma line at position:"+str(alter_pos))
@@ -381,6 +381,6 @@ class ATF_Importer:
                 for key in error_lines:
                     outputfile.write(key + "\n")
 
-                self.logger.debug(Util.print_frame("conversion of "+filename+" finished"))
+                self.logger.debug(Util.print_frame("conversion of \""+filename+".atf\" finished"))
 
 
