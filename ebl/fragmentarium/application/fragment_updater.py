@@ -81,9 +81,10 @@ class FragmentUpdater:
         self, user: User, fragment: Fragment, updated_fragment: Fragment
     ) -> None:
         schema = FragmentSchema()
+        fragment_id = str(fragment.number)
         self._changelog.create(
             COLLECTION,
             user.profile,
-            schema.dump(fragment),  # pyre-ignore[16]
-            schema.dump(updated_fragment),
+            {"_id": fragment_id, **schema.dump(fragment)},  # pyre-ignore[16]
+            {"_id": fragment_id, **schema.dump(updated_fragment)},
         )

@@ -6,7 +6,7 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 def test_serialization_and_deserialization():
     fragment = LemmatizedFragmentFactory.build()
-    schema = FragmentSchema(exclude=["_id"])
+    schema = FragmentSchema()
     data = schema.dump(fragment)
     assert schema.load(data) == fragment
 
@@ -20,13 +20,7 @@ def test_number_serialization():
 def test_number_deserialization():
     number = MuseumNumber.of("Z.1.b")
     fragment = FragmentSchema().load({
-        **FragmentSchema(exclude=["_id"]).dump(LemmatizedFragmentFactory.build()),
+        **FragmentSchema().dump(LemmatizedFragmentFactory.build()),
         "museumNumber": MuseumNumberSchema().dump(number)
     })
     assert fragment.number == number
-
-
-def test_id_serialization():
-    fragment = LemmatizedFragmentFactory.build()
-    data = FragmentSchema().dump(fragment)
-    assert data["_id"] == str(fragment.number)

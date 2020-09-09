@@ -73,7 +73,6 @@ class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]
 
 
 class FragmentSchema(Schema):  # pyre-ignore[11]
-    _id = fields.String(dump_only=True, attribute="number")
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
     cdli_number = fields.String(required=True, data_key="cdliNumber")

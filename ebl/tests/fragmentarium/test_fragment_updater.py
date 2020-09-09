@@ -40,8 +40,8 @@ def test_update_transliteration(
     when(changelog).create(
         "fragments",
         user.profile,
-        SCHEMA.dump(transliterated_fragment),
-        SCHEMA.dump(expected_fragment),
+        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **SCHEMA.dump(expected_fragment)},
     ).thenReturn()
     (when(fragment_repository).update_transliteration(expected_fragment).thenReturn())
 
@@ -90,8 +90,8 @@ def test_update_lemmatization(
     when(changelog).create(
         "fragments",
         user.profile,
-        SCHEMA.dump(transliterated_fragment),
-        SCHEMA.dump(expected_fragment),
+        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **SCHEMA.dump(expected_fragment)},
     ).thenReturn()
     (when(fragment_repository).update_lemmatization(expected_fragment).thenReturn())
 
@@ -134,8 +134,8 @@ def test_update_references(
     when(changelog).create(
         "fragments",
         user.profile,
-        SCHEMA.dump(fragment),
-        SCHEMA.dump(expected_fragment),
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(expected_fragment)},
     ).thenReturn()
 
     updated_fragment = fragment_updater.update_references(number, references, user)
