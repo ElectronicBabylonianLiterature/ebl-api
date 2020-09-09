@@ -1,18 +1,32 @@
 from typing import List
 
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
 NUMBER_OF_NEEDS_REVISION: int = 20
 
 
-def fragment_is(fragment) -> dict:
-    return {"_id": fragment.number}
+def museum_number_is(number: MuseumNumber) -> dict:
+    return {
+        "museumNumber": MuseumNumberSchema().dump(number)  # pyre-ignore[16]
+    }
 
 
-def number_is(number) -> dict:
-    return {"$or": [{"_id": number}, {"cdliNumber": number}, {"accession": number}]}
+def fragment_is(fragment: Fragment) -> dict:
+    return museum_number_is(fragment.number)
+
+
+def number_is(number: str) -> dict:
+    or_ = [{"cdliNumber": number}, {"accession": number}]
+    try:
+        or_.append(museum_number_is(MuseumNumber.of(number)))
+    except ValueError:
+        pass
+    return {"$or": or_}
 
 
 def sample_size_one() -> dict:
@@ -81,7 +95,7 @@ def aggregate_needs_revision() -> List[dict]:
         {"$sort": {"record.date": 1}},
         {
             "$group": {
-                "_id": "$_id",
+                "_id": "$museumNumber",
                 "accession": {"$first": "$accession"},
                 "description": {"$first": "$description"},
                 "script": {"$first": "$script"},
@@ -163,7 +177,17 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
                 ]
             }
         },
-        {"$addFields": {"filename": {"$concat": ["$_id", ".jpg"]}}},
+        {"$addFields": {"filename": {"$concat": [
+            "$museumNumber.prefix",
+            ".",
+            "$museumNumber.number",
+            {"$cond": {
+                "if": {"$eq": ["$museumNumber.suffix", ""]},
+                "then": "",
+                "else": {"$concat": [".", "$museumNumber.suffix"]}
+            }},
+            ".jpg"
+        ]}}},
         {
             "$lookup": {
                 "from": "photos.files",

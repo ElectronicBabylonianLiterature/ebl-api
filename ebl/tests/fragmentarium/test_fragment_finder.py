@@ -4,7 +4,6 @@ from mockito import spy2, unstub, verifyZeroInteractions  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.folios import Folio
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
@@ -12,6 +11,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @pytest.mark.parametrize("has_photo", [True, False])
@@ -20,17 +20,17 @@ def test_find_with_photo(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    (when(fragment_repository).query_by_fragment_number(number).thenReturn(fragment))
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
 
     assert fragment_finder.find(number) == (fragment, has_photo)
 
 
 def test_find_not_found(fragment_finder, fragment_repository, when):
-    number = "unknown id"
+    number = MuseumNumber("unknown", "id")
     (
         when(fragment_repository)
-        .query_by_fragment_number(number)
+        .query_by_museum_number(number)
         .thenRaise(NotFoundError)
     )
 
@@ -191,7 +191,7 @@ def test_find_lemmas(fragment_finder, dictionary, word, fragment_repository, whe
 
 
 def test_find_photo(fragment_finder, photo, photo_repository, when):
-    number = FragmentNumber("K.1")
+    number = "K.1"
     file_name = f"{number}.jpg"
     when(photo_repository).query_by_file_name(file_name).thenReturn(photo)
 

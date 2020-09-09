@@ -42,6 +42,14 @@ def test_update_references_not_found(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
+def test_update_references_invalid_museum_number(client):
+    url = "/fragments/invalid/references"
+    body = json.dumps({"references": []})
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
 @pytest.mark.parametrize(
     "body",
     [

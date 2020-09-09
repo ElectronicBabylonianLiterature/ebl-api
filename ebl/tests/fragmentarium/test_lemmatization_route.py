@@ -50,6 +50,14 @@ def test_update_lemmatization_not_found(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
+def test_update_lemmatization_invalid_number(client):
+    url = "/fragments/invalid/lemmatization"
+    body = json.dumps({"lemmatization": []})
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
 @pytest.mark.parametrize(
     "body",
     [

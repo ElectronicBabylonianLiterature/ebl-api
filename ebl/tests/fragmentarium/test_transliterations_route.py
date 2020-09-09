@@ -117,6 +117,14 @@ def test_update_transliteration_not_found(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
+def test_update_transliteration_invalid_number(client):
+    url = "/fragments/invalud/transliteration"
+    body = json.dumps({"transliteration": "", "notes": ""})
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
 @pytest.mark.parametrize(
     "body",
     [

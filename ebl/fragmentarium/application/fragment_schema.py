@@ -5,13 +5,13 @@ from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
-    FragmentNumber,
     Measure,
     UncuratedReference,
 )
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 
 class MeasureSchema(Schema):  # pyre-ignore[11]
@@ -73,7 +73,8 @@ class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]
 
 
 class FragmentSchema(Schema):  # pyre-ignore[11]
-    number = fields.String(required=True, data_key="_id")
+    _id = fields.String(dump_only=True, attribute="number")
+    number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
     cdli_number = fields.String(required=True, data_key="cdliNumber")
     bm_id_number = fields.String(required=True, data_key="bmIdNumber")
@@ -101,10 +102,7 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_fragment(self, data, **kwargs):
-        data["number"] = FragmentNumber(data["number"])
         data["joins"] = tuple(data["joins"])
-        data["record"] = data["record"]
-        data["folios"] = data["folios"]
         data["references"] = tuple(data["references"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])

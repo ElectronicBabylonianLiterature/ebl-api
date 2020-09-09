@@ -3,10 +3,11 @@ from marshmallow import Schema, fields, post_load  # pyre-ignore
 from ebl.bibliography.application.reference_schema import ReferenceSchema, \
     ApiReferenceSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 
 class FragmentInfoSchema(Schema):  # pyre-ignore[11]
-    number = fields.String(required=True)
+    number = fields.Nested(MuseumNumberSchema, required=True)
     accession = fields.String(required=True)
     script = fields.String(required=True)
     description = fields.String(required=True)
@@ -24,4 +25,5 @@ class FragmentInfoSchema(Schema):  # pyre-ignore[11]
 
 
 class ApiFragmentInfoSchema(FragmentInfoSchema):
+    number = fields.String(dump_only=True)
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)

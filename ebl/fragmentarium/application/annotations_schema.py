@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore
+from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
@@ -6,6 +6,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Annotations,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 class GeometrySchema(Schema):  # pyre-ignore[11]
@@ -44,4 +45,5 @@ class AnnotationsSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_annotation(self, data, **kwargs):
+        data["fragment_number"] = MuseumNumber.of(data["fragment_number"])
         return Annotations(**data)

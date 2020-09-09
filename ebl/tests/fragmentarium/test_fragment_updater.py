@@ -34,7 +34,7 @@ def test_update_transliteration(
 
     (
         when(fragment_repository)
-        .query_by_fragment_number(number)
+        .query_by_museum_number(number)
         .thenReturn(transliterated_fragment)
     )
     when(changelog).create(
@@ -57,7 +57,7 @@ def test_update_update_transliteration_not_found(
     number = "unknown.number"
     (
         when(fragment_repository)
-        .query_by_fragment_number(number)
+        .query_by_museum_number(number)
         .thenRaise(NotFoundError)
     )
 
@@ -84,7 +84,7 @@ def test_update_lemmatization(
     expected_fragment = transliterated_fragment.update_lemmatization(lemmatization)
     (
         when(fragment_repository)
-        .query_by_fragment_number(number)
+        .query_by_museum_number(number)
         .thenReturn(transliterated_fragment)
     )
     when(changelog).create(
@@ -107,7 +107,7 @@ def test_update_update_lemmatization_not_found(
     number = "K.1"
     (
         when(fragment_repository)
-        .query_by_fragment_number(number)
+        .query_by_museum_number(number)
         .thenRaise(NotFoundError)
     )
 
@@ -129,7 +129,7 @@ def test_update_references(
     references = (reference,)
     expected_fragment = fragment.set_references(references)
     when(bibliography).find(reference.id).thenReturn(reference)
-    (when(fragment_repository).query_by_fragment_number(number).thenReturn(fragment))
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     when(fragment_repository).update_references(expected_fragment).thenReturn()
     when(changelog).create(
         "fragments",
@@ -149,7 +149,7 @@ def test_update_references_invalid(
     number = fragment.number
     reference = ReferenceFactory.build()
     when(bibliography).find(reference.id).thenRaise(NotFoundError)
-    (when(fragment_repository).query_by_fragment_number(number).thenReturn(fragment))
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     references = (reference,)
 
     with pytest.raises(DataError):

@@ -1,4 +1,4 @@
-from typing import NewType, Optional, Sequence
+from typing import Optional, Sequence
 
 import attr
 
@@ -9,8 +9,7 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
-
-FragmentNumber = NewType("FragmentNumber", str)
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -27,7 +26,7 @@ class Measure:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Fragment:
-    number: FragmentNumber
+    number: MuseumNumber
     accession: str = ""
     cdli_number: str = ""
     bm_id_number: str = ""
