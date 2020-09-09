@@ -151,7 +151,7 @@ def aggregate_needs_revision() -> List[dict]:
         {
             "$project": {
                 "_id": 0,
-                "number": "$museumNumber",
+                "number": "$_id",
                 "accession": 1,
                 "description": 1,
                 "script": 1,

@@ -7,7 +7,7 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 
 
 class FragmentInfoSchema(Schema):  # pyre-ignore[11]
-    number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
+    number = fields.Nested(MuseumNumberSchema, required=True)
     accession = fields.String(required=True)
     script = fields.String(required=True)
     description = fields.String(required=True)
