@@ -1,12 +1,9 @@
-from marshmallow import Schema, EXCLUDE, fields, post_load, validate  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
 
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 class MuseumNumberSchema(Schema):  # pyre-ignore[11]
-    class Meta:
-        unknown = EXCLUDE
-
     prefix = fields.String(required=True, validate=validate.Length(min=1))
     number = fields.String(required=True, validate=(
         validate.Length(min=1),
