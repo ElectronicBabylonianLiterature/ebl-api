@@ -177,7 +177,17 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
                 ]
             }
         },
-        {"$addFields": {"filename": {"$concat": ["$_id", ".jpg"]}}},
+        {"$addFields": {"filename": {"$concat": [
+            "$museumNumber.prefix",
+            ".",
+            "$museumNumber.number",
+            {"$cond": {
+                "if": {"$eq": ["$museumNumber.suffix", ""]},
+                "then": "",
+                "else": {"$concat": [".", "$museumNumber.suffix"]}
+            }},
+            ".jpg"
+        ]}}},
         {
             "$lookup": {
                 "from": "photos.files",
