@@ -11,12 +11,19 @@ from ebl.tests.factories.fragment import FragmentFactory
     "parameters", [
         {
             "currentGenre": [],
-            "newGenre": [["ARCHIVES", "Administrative", "Lists"]]
+            "newGenre": [["ARCHIVAL", "Administrative", "Lists"]]
         },
         {
-            "currentGenre": [["ARCHIVES", "Administrative", "Lists"]],
-            "newGenre": [["ARCHIVES", "Administrative", "Lists"], ["CANONICAL", "Catalogues"]]
-        }
+            "currentGenre": [["ARCHIVAL", "Administrative", "Lists"]],
+            "newGenre": [
+                ["ARCHIVAL", "Administrative", "Lists"],
+                ["ARCHIVAL", "Administrative", "Multientry"]
+            ]
+        },
+        {
+            "currentGenre": [["ARCHIVAL", "Administrative", "Lists"]],
+            "newGenre": []
+        },
     ]
 )
 def test_update_genre(client, fragmentarium, user, database, parameters):
@@ -53,3 +60,26 @@ def test_update_genre(client, fragmentarium, user, database, parameters):
             "user_profile.name": user.profile["name"],
         }
     )
+
+
+def test_update_genre_invalid_genre(client, fragmentarium, user, database):
+    genre = [["asd", "wtz"], ["as4f"]]
+    fragment = FragmentFactory.build(genre=[])
+    fragment_number = fragmentarium.create(fragment)
+    updates = {
+        "genre": genre
+    }
+
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/genre",
+        body=json.dumps(updates)
+    )
+
+    expected_json = {
+        'title': '422 Unprocessable Entity',
+        'description': 'Not a valid Genre',
+    }
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert post_result.json == expected_json
