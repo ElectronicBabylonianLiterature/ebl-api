@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 from falcon import Response, Request
 
 from ebl.fragmentarium.domain.genre import genres
