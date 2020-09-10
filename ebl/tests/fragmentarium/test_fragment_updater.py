@@ -4,7 +4,6 @@ from freezegun import freeze_time  # pyre-ignore
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
-from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -83,7 +82,7 @@ def test_update_genre(
 
     (
         when(fragment_repository)
-        .query_by_museum_number(parse_museum_number(number))
+        .query_by_museum_number(number)
         .thenReturn(fragment)
     )
     when(changelog).create(
