@@ -2,12 +2,8 @@ import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.enclosure_tokens import Erasure
 from ebl.transliteration.domain.lark_parser import parse_erasure
-from ebl.transliteration.domain.sign_tokens import (
-    Divider,
-    Reading,
-    UnclearSign,
-    UnidentifiedSign,
-)
+from ebl.transliteration.domain.sign_tokens import Divider, Reading
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
 ERASURE_LEFT = Erasure.open()
@@ -28,7 +24,11 @@ ERASURE_RIGHT = Erasure.close()
                 ),
             ),
         ),
-        ("°::\\:.°", (Divider.of("::"),), (Divider.of(":."),),),
+        (
+            "°::\\:.°",
+            (Divider.of("::").set_erasure(ErasureState.ERASED),),
+            (Divider.of(":.").set_erasure(ErasureState.OVER_ERASED),),
+        ),
         (
             "°\\ku°",
             tuple(),

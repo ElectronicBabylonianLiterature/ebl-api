@@ -1,4 +1,4 @@
-from typing import NewType, Optional, Sequence
+from typing import Optional, Sequence
 
 import attr
 
@@ -9,8 +9,8 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
-FragmentNumber = NewType("FragmentNumber", str)
 Genre = Sequence[Sequence[str]]
 
 
@@ -28,7 +28,7 @@ class Measure:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Fragment:
-    number: FragmentNumber
+    number: MuseumNumber
     accession: str = ""
     cdli_number: str = ""
     bm_id_number: str = ""
@@ -44,7 +44,7 @@ class Fragment:
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()
-    signs: Optional[str] = None
+    signs: str = ""
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
@@ -56,9 +56,9 @@ class Fragment:
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
-        record = self.record.add_entry(self.text.atf, transliteration.atf, user)
+        record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
 
-        text = self.text.merge(transliteration.parse())
+        text = self.text.merge(transliteration.text)
 
         return attr.evolve(
             self,

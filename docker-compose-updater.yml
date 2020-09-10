@@ -9,17 +9,7 @@ services:
       - MONGODB_URI
       - SENTRY_DSN
       - SENTRY_ENVIRONMENT=production
+    volumes:
+      - ./:/usr/src/ebl/
     command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]
     restart: "no"
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2G
-      restart_policy:
-        condition: none
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "512M"
-        max-file: "2"

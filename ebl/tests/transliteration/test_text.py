@@ -40,6 +40,10 @@ def test_lines() -> None:
     assert TEXT.lines == LINES
 
 
+def test_text_lines() -> None:
+    assert TEXT.text_lines == LINES[:1]
+
+
 def test_number_of_lines() -> None:
     assert TEXT.number_of_lines == 1
 

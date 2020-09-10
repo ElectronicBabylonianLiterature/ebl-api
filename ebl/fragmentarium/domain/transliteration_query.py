@@ -6,7 +6,6 @@ import attr
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import Lines
-from ebl.transliteration.domain.clean_atf import CleanAtf
 
 
 def create_sign_regexp(sign):
@@ -48,7 +47,7 @@ class TransliterationQuery:
             for match in matches
         ]
 
-        lines = CleanAtf(fragment.text.atf).filtered
+        lines = [line.atf for line in fragment.text.text_lines]
 
         return tuple(
             tuple(lines[numbers[0] : numbers[1] + 1])

@@ -6,7 +6,7 @@ from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.web.dtos import create_response_dto
+from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
@@ -28,7 +28,7 @@ class ReferencesResource:
     def on_post(self, req, resp, number) -> None:
         user = req.context.user
         updated_fragment, has_photo = self._updater.update_references(
-            number,
+            parse_museum_number(number),
             ReferencesDtoSchema().load(req.media),  # pyre-ignore[16]
             user,
         )

@@ -26,10 +26,9 @@ from ebl.transliteration.domain.sign_tokens import (
     Grapheme,
     Logogram,
     Number,
-    Reading,
-    UnclearSign,
-    UnidentifiedSign,
+    Reading
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -76,10 +75,7 @@ class ErasureVisitor(TokenVisitor):
         return tuple(self._tokens)
 
     def visit(self, token) -> None:
-        if isinstance(token, Word):
-            self._tokens.append(token.set_erasure(self._state))
-        else:
-            self._tokens.append(token)
+        self._tokens.append(token.set_erasure(self._state))
 
 
 def set_erasure_state(
@@ -287,7 +283,7 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__commentary_protocol(self, value):
-        return CommentaryProtocol.of(value)
+        return CommentaryProtocol.of(str(value))
 
     @v_args(inline=True)
     def ebl_atf_text_line__divider(self, value, modifiers, flags):

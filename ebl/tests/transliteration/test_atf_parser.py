@@ -28,9 +28,8 @@ from ebl.transliteration.domain.sign_tokens import (
     Logogram,
     Number,
     Reading,
-    UnclearSign,
-    UnidentifiedSign,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
@@ -852,7 +851,9 @@ def test_parser_version(parser, version):
                                 Joiner.hyphen(),
                                 Erasure.open(),
                                 Erasure.center(),
-                                Reading.of_name("ku"),
+                                Reading.of_name("ku").set_erasure(
+                                    ErasureState.OVER_ERASED
+                                ),
                                 Erasure.close(),
                             ],
                         ),
@@ -869,11 +870,11 @@ def test_parser_version(parser, version):
                         Word.of(
                             parts=[
                                 Erasure.open(),
-                                Reading.of_name("me"),
-                                Joiner.hyphen(),
-                                Reading.of_name("e"),
-                                Joiner.hyphen(),
-                                Reading.of_name("li"),
+                                Reading.of_name("me").set_erasure(ErasureState.ERASED),
+                                Joiner.hyphen().set_erasure(ErasureState.ERASED),
+                                Reading.of_name("e").set_erasure(ErasureState.ERASED),
+                                Joiner.hyphen().set_erasure(ErasureState.ERASED),
+                                Reading.of_name("li").set_erasure(ErasureState.ERASED),
                                 Erasure.center(),
                                 Erasure.close(),
                                 Joiner.hyphen(),
@@ -895,9 +896,11 @@ def test_parser_version(parser, version):
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
                                 Erasure.open(),
-                                Reading.of_name("e"),
+                                Reading.of_name("e").set_erasure(ErasureState.ERASED),
                                 Erasure.center(),
-                                Reading.of_name("li"),
+                                Reading.of_name("li").set_erasure(
+                                    ErasureState.OVER_ERASED
+                                ),
                                 Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("ku"),
@@ -918,17 +921,21 @@ def test_parser_version(parser, version):
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
                                 Erasure.open(),
-                                Reading.of_name("e"),
+                                Reading.of_name("e").set_erasure(ErasureState.ERASED),
                                 Erasure.center(),
-                                Reading.of_name("li"),
+                                Reading.of_name("li").set_erasure(
+                                    ErasureState.OVER_ERASED
+                                ),
                                 Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("me"),
                                 Joiner.hyphen(),
                                 Erasure.open(),
-                                Reading.of_name("e"),
+                                Reading.of_name("e").set_erasure(ErasureState.ERASED),
                                 Erasure.center(),
-                                Reading.of_name("li"),
+                                Reading.of_name("li").set_erasure(
+                                    ErasureState.OVER_ERASED
+                                ),
                                 Erasure.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("ku"),

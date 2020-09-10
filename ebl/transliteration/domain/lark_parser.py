@@ -22,8 +22,12 @@ from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
+from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
+
+
+PARSE_ERRORS = (UnexpectedInput, ParseError, VisitError, EnclosureError)
 
 
 class LineTransformer(
@@ -45,6 +49,11 @@ LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__
 
 def parse_word(atf: str) -> Word:
     tree = WORD_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
@@ -70,7 +79,7 @@ def parse_atf_lark(atf_):
             parsed_line = parse_line(line) if line else EmptyLine()
             validate_line(parsed_line)
             return parsed_line, None
-        except (UnexpectedInput, ParseError, EnclosureError, VisitError) as ex:
+        except PARSE_ERRORS as ex:
             return (None, create_transliteration_error_data(ex, line, line_number))
 
     def check_errors(pairs):

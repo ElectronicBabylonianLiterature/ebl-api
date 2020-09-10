@@ -45,7 +45,11 @@ class Text:
 
     @property
     def number_of_lines(self) -> int:
-        return len([line for line in self.lines if isinstance(line, TextLine)])
+        return len(self.text_lines)
+
+    @property
+    def text_lines(self) -> Sequence[TextLine]:
+        return tuple(line for line in self.lines if isinstance(line, TextLine))
 
     @property
     def lemmatization(self) -> Lemmatization:

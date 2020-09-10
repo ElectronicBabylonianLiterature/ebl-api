@@ -14,6 +14,7 @@ from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -33,7 +34,7 @@ def update_fragment(
     updater.update_transliteration(fragment.number, transliteration, user)
 
 
-def find_transliterated(fragment_repository: FragmentRepository) -> List[str]:
+def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:
     return fragment_repository.query_transliterated_numbers()
 
 
@@ -76,7 +77,7 @@ class State:
         self.invalid_atf += 1
         for index, error in enumerate(error.errors):
             atf = fragment.text.lines[error["lineNumber"] - 1].atf
-            number = fragment.number if index == 0 else len(fragment.number) * " "
+            number = fragment.number if index == 0 else len(str(fragment.number)) * " "
             self.errors.append(f"{number}\t{atf}\t{error}")
 
     def _add_error(self, error: Exception, fragment: Fragment) -> None:
@@ -105,7 +106,7 @@ class State:
 
 
 def update_fragments(
-    numbers: Iterable[str], id_: int, context_factory: Callable[[], Context]
+    numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
 ) -> State:
     context = context_factory()
     fragment_repository = context.fragment_repository
@@ -114,7 +115,7 @@ def update_fragments(
     state = State()
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         try:
-            fragment = fragment_repository.query_by_fragment_number(number)
+            fragment = fragment_repository.query_by_museum_number(number)
             try:
                 update_fragment(transliteration_factory, updater, fragment)
                 state.add_updated()

@@ -9,7 +9,6 @@ from falcon_auth import FalconAuthMiddleware  # pyre-ignore
 from pymongo import MongoClient  # pyre-ignore
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
-from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
@@ -94,9 +93,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
 
 
 def get_app():
+    sentry_sdk.init(dsn=os.environ["SENTRY_DSN"], integrations=[FalconIntegration()])
     context = create_context()
 
-    app = create_app(context, os.environ["AUTH0_ISSUER"], os.environ["AUTH0_AUDIENCE"])
-
-    sentry_sdk.init(dsn=os.environ["SENTRY_DSN"], integrations=[FalconIntegration()])
-    return SentryWsgiMiddleware(app)
+    return create_app(context, os.environ["AUTH0_ISSUER"], os.environ["AUTH0_AUDIENCE"])

@@ -12,7 +12,7 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.transliteration.domain.atf import Atf, Flag
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Erasure,
@@ -26,6 +26,8 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 COLLECTION = "fragments"
 
@@ -63,23 +65,25 @@ SCHEMA = FragmentSchema()
 
 def test_create(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_id = fragment_repository.create(fragment)
 
-    assert database[COLLECTION].find_one({"_id": fragment_number}) == SCHEMA.dump(
-        fragment
-    )
+    assert fragment_id == str(fragment.number)
+    assert database[COLLECTION].find_one(
+        {"_id": fragment_id},
+        projection={'_id': False}
+    ) == SCHEMA.dump(fragment)
 
 
-def test_query_by_fragment_number(database, fragment_repository):
+def test_query_by_museum_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
 
-    assert fragment_repository.query_by_fragment_number(fragment.number) == fragment
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 
 def test_fragment_not_found(fragment_repository):
     with pytest.raises(NotFoundError):
-        fragment_repository.query_by_fragment_number("unknown id")
+        fragment_repository.query_by_museum_number(MuseumNumber("unknown", "id"))
 
 
 def test_find_random(fragment_repository,):
@@ -99,43 +103,49 @@ def test_folio_pager_exception(fragment_repository):
         fragment_repository.query_next_and_previous_fragment(query)
 
 
-FRAGMENTS = ["1841-07-26, 54", "1841-07-26, 57", "1841-07-26, 63"]
+FRAGMENTS = ["1841-07-26.54", "1841-07-26.57", "1841-07-26.63"]
 
 
 @pytest.mark.parametrize(
     "query,  existing,expected",
     [
-        ("1841-07-26, 57", FRAGMENTS, ["1841-07-26, 54", "1841-07-26, 63"]),
-        ("1841-07-26, 63", FRAGMENTS, ["1841-07-26, 57", "1841-07-26, 54"]),
-        ("1841-07-26, 54", FRAGMENTS, ["1841-07-26, 63", "1841-07-26, 57"]),
-        ("1841-07-26, 54", FRAGMENTS[:2], ["1841-07-26, 57", "1841-07-26, 57"]),
+        ("1841-07-26.57", FRAGMENTS, ["1841-07-26.54", "1841-07-26.63"]),
+        ("1841-07-26.63", FRAGMENTS, ["1841-07-26.57", "1841-07-26.54"]),
+        ("1841-07-26.54", FRAGMENTS, ["1841-07-26.63", "1841-07-26.57"]),
+        ("1841-07-26.54", FRAGMENTS[:2], ["1841-07-26.57", "1841-07-26.57"]),
     ],
 )
 def test_query_next_and_previous_fragment(
     query, existing, expected, fragment_repository
 ):
     for fragmentNumber in existing:
-        fragment_repository.create(FragmentFactory.build(number=fragmentNumber))
+        fragment_repository.create(
+            FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
+        )
 
     results = list(fragment_repository.query_next_and_previous_fragment(query).values())
     assert results == expected
 
 
 def test_query_next_and_previous_fragment_exception(fragment_repository):
-    query = "1841-07-26, 57"
+    query = MuseumNumber.of("1841-07-26.57")
     with pytest.raises(NotFoundError):
         fragment_repository.query_next_and_previous_fragment(query)
 
 
 def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(Atf("$ (the transliteration)"), "notes"), user
+        TransliterationUpdate(
+            parse_atf_lark("$ (the transliteration)"),
+            "notes"
+        ),
+        user
     )
 
     fragment_repository.update_transliteration(updated_fragment)
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
 
@@ -158,7 +168,7 @@ def test_update_genre(fragment_repository):
 
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragment_repository.create(transliterated_fragment)
+    fragment_repository.create(transliterated_fragment)
     tokens = transliterated_fragment.text.lemmatization.to_list()
     tokens[1][3]["uniqueLemma"] = ["aklu I"]
     updated_fragment = transliterated_fragment.update_lemmatization(
@@ -166,7 +176,7 @@ def test_update_lemmatization(fragment_repository):
     )
 
     fragment_repository.update_lemmatization(updated_fragment)
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    result = fragment_repository.query_by_museum_number(transliterated_fragment.number)
 
     assert result == updated_fragment
 
@@ -237,8 +247,8 @@ def test_search_finds_by_id(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert (
-        fragment_repository.query_by_fragment_cdli_or_accession_number(fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
@@ -248,8 +258,8 @@ def test_search_finds_by_accession(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert (
-        fragment_repository.query_by_fragment_cdli_or_accession_number(fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
@@ -259,8 +269,8 @@ def test_search_finds_by_cdli(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert (
-        fragment_repository.query_by_fragment_cdli_or_accession_number(fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
@@ -420,12 +430,12 @@ def test_find_lemmas_not_found(fragment_repository):
 def test_update_references(fragment_repository):
     reference = ReferenceFactory.build()
     fragment = FragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_repository.create(fragment)
     references = (reference,)
     updated_fragment = fragment.set_references(references)
 
     fragment_repository.update_references(updated_fragment)
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
 

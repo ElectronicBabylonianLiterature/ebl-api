@@ -1,13 +1,14 @@
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
-from ebl.fragmentarium.domain.fragment import FragmentNumber
+from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
+from ebl.fragmentarium.web.dtos import parse_museum_number
 
 
 class AnnotationResource:
-    def __init__(self, annotation_service):
+    def __init__(self, annotation_service: AnnotationsService):
         self._annotation_service = annotation_service
 
     @falcon.before(require_scope, "annotate:fragments")
@@ -69,6 +70,8 @@ class AnnotationResource:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Annotations'
+          422:
+            description: Invalid museum number
         security:
         - auth0:
           - read:fragments
@@ -78,6 +81,7 @@ class AnnotationResource:
           required: true
           schema:
             type: string
+            pattern: '^.+?\\.[^.]+(\\.[^.]+)?$'
         """
-        annotations = self._annotation_service.find(FragmentNumber(number))
+        annotations = self._annotation_service.find(parse_museum_number(number))
         resp.media = AnnotationsSchema().dump(annotations)  # pyre-ignore[16]

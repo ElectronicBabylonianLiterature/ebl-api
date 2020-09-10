@@ -39,7 +39,7 @@ flake8 = "*"
 pyhamcrest = "*"
 flake8-bugbear = "*"
 httpretty = "*"
-pyre-check = "*"
+pyre-check = "==0.0.46"
 
 [requires]
 python_version = "3.6"
