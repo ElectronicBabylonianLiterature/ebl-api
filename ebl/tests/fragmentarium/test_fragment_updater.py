@@ -88,8 +88,8 @@ def test_update_genre(
     when(changelog).create(
         "fragments",
         user.profile,
-        SCHEMA.dump(fragment),
-        SCHEMA.dump(expected_fragment),
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(expected_fragment)},
     ).thenReturn()
     (when(fragment_repository).update_genre(expected_fragment).thenReturn())
 
