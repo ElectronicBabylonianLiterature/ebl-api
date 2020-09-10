@@ -25,7 +25,7 @@ class TransliterationResource:
     @falcon.before(require_scope, "transliterate:fragments")
     @validate(TRANSLITERATION_DTO_SCHEMA)
     # pyre-ignore[11]
-    def on_post(self, req: Request, resp: Response, number: MuseumNumber) -> None:
+    def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_transliteration(
