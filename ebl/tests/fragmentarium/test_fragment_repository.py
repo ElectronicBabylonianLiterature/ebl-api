@@ -6,6 +6,7 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
+from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -161,7 +162,9 @@ def test_update_genre(fragment_repository):
     fragment_number = fragment_repository.create(fragment)
     updated_fragment = fragment.set_genre([["ARCHIVE", "Administrative"]])
     fragment_repository.update_genre(updated_fragment)
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    result = fragment_repository.query_by_museum_number(
+        parse_museum_number(fragment_number)
+    )
 
     assert result == updated_fragment
 
