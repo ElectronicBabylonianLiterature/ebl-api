@@ -1,7 +1,9 @@
 import falcon  # pyre-ignore[21]
+from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -23,7 +25,7 @@ class TransliterationResource:
     @falcon.before(require_scope, "transliterate:fragments")
     @validate(TRANSLITERATION_DTO_SCHEMA)
     # pyre-ignore[11]
-    def on_post(self, req: Request, resp: Response, number: FragmentNumber) -> None:
+    def on_post(self, req: Request, resp: Response, number: MuseumNumber) -> None:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_transliteration(

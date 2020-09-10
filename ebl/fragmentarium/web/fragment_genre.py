@@ -1,11 +1,10 @@
 from typing import Sequence
 
-import falcon  # pyre-ignore
-from falcon import Response, Request
-
+import falcon  # pyre-ignore[21]
+from falcon import Response, Request  # pyre-ignore[21]
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.domain.genre import genres
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.users.web.require_scope import require_scope
 
@@ -20,7 +19,7 @@ class FragmentGenreResource:
 
     @falcon.before(require_scope, "transliterate:fragments")
     # pyre-ignore[11]
-    def on_post(self, req: Request, resp: Response, number: FragmentNumber) -> None:
+    def on_post(self, req: Request, resp: Response, number: MuseumNumber) -> None:
         if FragmentGenreResource._validate_genre(req.media["genre"]):
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_genre(

@@ -49,11 +49,11 @@ class FragmentUpdater:
 
     def update_genre(
             self,
-            number: FragmentNumber,
+            number: MuseumNumber,
             genre: Sequence[Sequence[str]],
             user: User
     ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_fragment_number(number)
+        fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_genre(genre)
 
         self._create_changlelog(user, fragment, updated_fragment)
