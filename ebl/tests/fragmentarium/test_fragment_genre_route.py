@@ -64,7 +64,7 @@ def test_update_genre(client, fragmentarium, user, database, parameters):
 
 def test_update_genre_invalid_genre(client, fragmentarium, user, database):
     genre = [["asd", "wtz"], ["as4f"]]
-    fragment = FragmentFactory.build(genre=[])
+    fragment = FragmentFactory.build(genre=tuple())
     fragment_number = fragmentarium.create(fragment)
     updates = {
         "genre": genre
@@ -77,7 +77,7 @@ def test_update_genre_invalid_genre(client, fragmentarium, user, database):
 
     expected_json = {
         'title': '422 Unprocessable Entity',
-        'description': 'Not a valid Genre',
+        'description': "'[['asd', 'wtz'], ['as4f']]' is not a valid genre",
     }
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

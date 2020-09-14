@@ -4,6 +4,8 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.folios import Folios
+from ebl.fragmentarium.domain.genres import genres
+
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
@@ -68,8 +70,18 @@ class Fragment:
             record=record,
         )
 
-    def set_genre(self, genre: Genre) -> "Fragment":
-        return attr.evolve(self, genre=tuple(map(tuple, genre)))  # pyre-ignore[6]
+    @staticmethod
+    def _is_genre_valid(genres_retrieved: Sequence[Sequence[str]]) -> bool:
+        if all(genre in genres for genre in genres_retrieved):
+            return True
+        else:
+            return False
+
+    def set_genre(self, genre_retrieved: Genre) -> "Fragment":
+        if Fragment._is_genre_valid(genre_retrieved):
+            return attr.evolve(self, genre=tuple(map(tuple, genre_retrieved)))  # pyre-ignore[6]
+        else:
+            raise ValueError(f"'{(genre_retrieved)}' is not a valid genre")
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)

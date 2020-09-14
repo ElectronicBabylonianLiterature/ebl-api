@@ -150,10 +150,18 @@ def test_genre():
     assert fragment.genre == genre
 
 
-def test_genre_empty():
-    genre = tuple()
-    fragment = FragmentFactory.build(genre=genre)
-    assert fragment.genre == genre
+def test_set_genre():
+    updated_genre = (("ARCHIVE", "Administrative", "Lists", "One Entry"),)
+    fragment = FragmentFactory.build(genre=tuple())
+    updated_fragment = fragment.set_genre(updated_genre)
+    assert updated_fragment.genre == updated_genre
+
+
+def test_set_invalid_genre():
+    updated_genre = (("xyz", "wrq"),)
+    fragment = FragmentFactory.build(genre=tuple())
+    with pytest.raises(ValueError, match="is not a valid genre"):
+        fragment.set_genre(updated_genre)
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -229,10 +237,3 @@ def test_set_references():
     updated_fragment = fragment.set_references(references)
 
     assert updated_fragment.references == references
-
-
-def test_set_genre():
-    updated_genre = (("ARCHIVE", "Administrative", "Lists", "One Entry"),)
-    fragment = FragmentFactory.build(genre=tuple())
-    updated_fragment = fragment.set_genre(updated_genre)
-    assert updated_fragment.genre == updated_genre

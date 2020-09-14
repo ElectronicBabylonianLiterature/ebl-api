@@ -1,6 +1,6 @@
 import falcon  # pyre-ignore[21]
 
-from ebl.fragmentarium.domain.genre import genres
+from ebl.fragmentarium.domain.genres import genres
 
 
 def test_get_genre(client):
