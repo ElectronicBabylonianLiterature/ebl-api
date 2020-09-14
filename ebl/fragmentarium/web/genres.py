@@ -6,7 +6,6 @@ from ebl.users.web.require_scope import require_scope
 
 
 class GenresResource:
-
     @falcon.before(require_scope, "transliterate:fragments")
     def on_get(self, _req: Request, resp: Response) -> None:  # pyre-ignore[11]
         resp.media = genres

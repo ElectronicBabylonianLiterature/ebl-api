@@ -77,7 +77,7 @@ def test_update_genre(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    genre = [["ARCHIVE", "Administrative"]]
+    genre = [["ARCHIVAL", "Administrative"]]
     expected_fragment = fragment.set_genre(genre)
 
     (
