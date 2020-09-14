@@ -17,7 +17,7 @@ Genre = Sequence[Sequence[str]]
 
 
 # https://github.com/python/mypy/issues/1317
-def convert_genre_elem_to_tuple(genre: Sequence[str]) -> Tuple[str]:
+def convert_genre_elem_to_tuple(genre: Sequence[str]) -> Tuple[str, ...]:
     return tuple(genre)
 
 
