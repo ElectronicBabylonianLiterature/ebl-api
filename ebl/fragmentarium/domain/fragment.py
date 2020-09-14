@@ -17,8 +17,8 @@ Genre = Sequence[Sequence[str]]
 
 
 # https://github.com/python/mypy/issues/1317
-def tuple_(elem: Any) -> tuple(Any):
-    return tuple(elem)
+def convert_genre_elem_to_tuple(genre: Sequence[str]) -> tuple[str]:
+    return tuple(genre)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -83,7 +83,7 @@ class Fragment:
             return False
 
     def set_genre(self, genre_retrieved: Genre) -> "Fragment":
-        genre_retrieved = tuple(map(tuple_, genre_retrieved))
+        genre_retrieved = tuple(map(convert_genre_elem_to_tuple, genre_retrieved))
         if Fragment._is_genre_valid(genre_retrieved):
             return attr.evolve(self, genre=genre_retrieved)
         else:
