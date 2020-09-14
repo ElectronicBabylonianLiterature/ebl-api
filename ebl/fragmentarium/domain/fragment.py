@@ -53,7 +53,7 @@ class Fragment:
     genre: Genre = attr.ib(default=tuple(tuple()))
 
     @genre.validator
-    def _check_is_genre_valid(self, attribute, genre: Genre) -> bool:
+    def _check_is_genre_valid(self, _, genre: Genre) -> None:
         if not all(genre_elem in genres for genre_elem in genre):
             raise ValueError(f"All or parts of '{(genre)}' are not valid genres")
 
