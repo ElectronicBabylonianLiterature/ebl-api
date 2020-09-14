@@ -207,6 +207,9 @@ class ATF_Preprocessor:
         self.ORACC_PARSER = Lark.open("lark-oracc/oracc_atf.lark", maybe_placeholders=True, rel_to=__file__)
         self.logger = logging.getLogger("atf-preprocessor")
         self.logger.setLevel(10)
+        self.skip_next_lem_line = False
+
+        self.unparseable_lines = []
 
     def process_line(self,atf):
         self.logger.debug("original line: '"+atf+"'")
@@ -245,6 +248,12 @@ class ATF_Preprocessor:
 
 
                 if tree.data == "lem_line":
+
+                    if self.skip_next_lem_line:
+                        self.logger.warning("skipping lem line")
+                        self.skip_next_lem_line = False
+                        return None,None,"lem_line",None
+
                     #self.logger.debug((tree.pretty()))
 
                     lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
@@ -252,7 +261,7 @@ class ATF_Preprocessor:
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.visit(tree)
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
                     self.logger.debug("----------------------------------------------------------------------")
-                    return None,lemmas_and_guidewords_array,tree.data,[]
+                    return atf,lemmas_and_guidewords_array,tree.data,[]
 
 
 
@@ -283,18 +292,18 @@ class ATF_Preprocessor:
                         return converted_line,converted_line_array,tree.data,words_serializer.alter_lemline_at
 
                     except Exception as e:
-                        self.logger.exception("could not parse converted line")
-                        traceback.print_exc(file=sys.stdout)
+                        self.logger.error("could not parse converted line")
+                        self.logger.error(traceback.print_exc(file=sys.stdout))
 
                     self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
 
-            except:
+            except Exception as e:
 
                 error = "could not convert line"
-                self.logger.exception(error+": "+atf)
-                traceback.print_exc(file=sys.stdout)
-
-                return(error+": "+atf),None,None,None
+                self.logger.error(error+": "+atf)
+                self.logger.error(traceback.print_exc())
+                self.unparseable_lines.append(atf)
+                return None,None,None,None
 
 
 
@@ -309,8 +318,17 @@ class ATF_Preprocessor:
         processed_lines = []
         for line in lines:
             c_line,c_array,c_type,c_alter_lemline_at = self.process_line(line)
-            processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type,"c_alter_lemline_at":c_alter_lemline_at})
+
+            if c_line != None:
+                processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type,"c_alter_lemline_at":c_alter_lemline_at})
+            elif (c_type == None and c_line == None):
+                self.skip_next_lem_line = True
+
         self.logger.debug(Util.print_frame("preprocessing finished"))
+
+        with open("/usr/src/ebl/ebl/atf_importer/debug/unparseable_lines.txt", "w", encoding='utf8') as outputfile:
+            for key in self.unparseable_lines:
+                outputfile.write(key + "\n")
 
         return processed_lines
 

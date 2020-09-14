@@ -251,7 +251,8 @@ class ATF_Importer:
     def start(self):
         self.logger.info("Atf-Importer started...")
 
-
+        self.atf_preprocessor.process_line("5'. ($___$) !bs [GIŠ.GAN !cm : {(u-gu-la he]-hu-u₂)}SAG₂(|PA.GAN|) : !bs MIN#<(GIŠ.GAN)> !cm : ma-ha-ṣu")
+        self.atf_preprocessor.process_line("14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA--<E₂>.AN.NA")
 
         #atf_preprocessor.process_line("#lem: X; attallû[eclipse]N; iššakkan[take place]V; šar[king]N; imâtma[die]V",True)
         #atf_preprocessor.process_line("#lem: mīlū[flood]N; ina[in]PRP; nagbi[source]N; ipparrasū[cut (off)]V; mātu[land]N; ana[according to]PRP; mātu[land]N; +hâqu[go]V$ihâq-ma; šalāmu[peace]N; šakin[displayed]AJ",True)
@@ -276,7 +277,7 @@ class ATF_Importer:
 
 
         #read atf files from input folder
-        for filepath in glob.glob(os.path.join("/usr/src/ebl/ebl/atf_importer/input/", '*.atf')):
+        for filepath in glob.glob(os.path.join("/usr/src/ebl/ebl/atf_importer/inputx/", '*.atf')):
 
             with open(filepath, 'r') as f:
 
