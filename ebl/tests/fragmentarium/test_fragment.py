@@ -151,7 +151,7 @@ def test_genre():
 
 
 def test_set_genre():
-    updated_genre = (("ARCHIVE", "Administrative", "Lists", "One Entry"),)
+    updated_genre = (("ARCHIVAL", "Administrative", "Lists"),)
     fragment = FragmentFactory.build(genre=tuple())
     updated_fragment = fragment.set_genre(updated_genre)
     assert updated_fragment.genre == updated_genre
