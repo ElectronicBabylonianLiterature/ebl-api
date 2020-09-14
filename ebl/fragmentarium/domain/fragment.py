@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Tuple
 
 import attr
 
@@ -13,7 +13,7 @@ from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
-Genre = Sequence[Sequence[str]]
+Genre = Tuple[Tuple[str, ...], ...]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -50,7 +50,12 @@ class Fragment:
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
-    genre: Genre = tuple(tuple())
+    genre: Genre = attr.ib(default=tuple(tuple()))
+
+    @genre.validator
+    def _check_is_genre_valid(self, attribute, genre: Genre) -> bool:
+        if not all(genre_elem in genres for genre_elem in genre):
+            raise ValueError(f"All or parts of '{(genre)}' are not valid genres")
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
@@ -70,21 +75,13 @@ class Fragment:
             record=record,
         )
 
-    @staticmethod
-    def _is_genre_valid(genres_retrieved: Sequence[Sequence[str]]) -> bool:
-        if all(genre in genres for genre in genres_retrieved):
-            return True
-        else:
-            return False
-
-    def set_genre(self, genre_retrieved: Genre) -> "Fragment":
+    def set_genre(self, genre_retrieved: Sequence[Sequence[str]]) -> "Fragment":
         genre_retrieved = tuple(
             [tuple(single_genre) for single_genre in genre_retrieved]
         )
-        if Fragment._is_genre_valid(genre_retrieved):
-            return attr.evolve(self, genre=genre_retrieved)
-        else:
-            raise ValueError(f"'{(genre_retrieved)}' is not a valid genre")
+        self._check_is_genre_valid(genre_retrieved)
+        return attr.evolve(self, genre=genre_retrieved)
+
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)

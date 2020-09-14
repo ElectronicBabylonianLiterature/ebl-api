@@ -145,9 +145,14 @@ def test_references_default():
 
 
 def test_genre():
-    genre = (("ARCHIVE", "Administrative", "Lists", "One Entry"),)
+    genre = (("ARCHIVAL", "Administrative", "Lists",),)
     fragment = FragmentFactory.build(genre=genre)
     assert fragment.genre == genre
+
+
+def test_invalid_genre():
+    with pytest.raises(ValueError):
+        FragmentFactory.build(genre=(("xyz",),))
 
 
 def test_set_genre():
