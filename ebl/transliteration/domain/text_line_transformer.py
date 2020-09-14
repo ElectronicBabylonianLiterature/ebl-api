@@ -1,53 +1,38 @@
 
 from typing import MutableSequence, Sequence, Type
 
-from lark.lexer import Token  # pyre-ignore
+from lark.lexer import Token  # pyre-ignore[21]
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
-from ebl.transliteration.domain.enclosure_tokens import (
-    AccidentalOmission,
-    BrokenAway,
-    Determinative,
-    DocumentOrientedGloss,
-    Erasure,
-    IntentionalOmission,
-    LinguisticGloss,
-    PerhapsBrokenAway,
-    PhoneticGloss,
-    Removal,
-)
+from ebl.transliteration.domain.enclosure_tokens import (AccidentalOmission,
+                                                         BrokenAway,
+                                                         Determinative,
+                                                         DocumentOrientedGloss,
+                                                         Erasure,
+                                                         IntentionalOmission,
+                                                         LinguisticGloss,
+                                                         PerhapsBrokenAway,
+                                                         PhoneticGloss,
+                                                         Removal)
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
-from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme,
-    Divider,
-    Grapheme,
-    Logogram,
-    Number,
-    Reading
-)
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
+from ebl.transliteration.domain.sign_tokens import (CompoundGrapheme, Divider,
+                                                    Grapheme, Logogram, Number,
+                                                    Reading)
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import (
-    Column,
-    CommentaryProtocol,
-    Joiner,
-    LanguageShift,
-    Tabulation,
-    Token as EblToken,
-    TokenVisitor,
-    UnknownNumberOfSigns,
-    ValueToken,
-    Variant,
-)
-from ebl.transliteration.domain.word_tokens import (
-    ErasureState,
-    InWordNewline,
-    LoneDeterminative,
-    Word,
-)
+from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol,
+                                               Joiner, LanguageShift,
+                                               LineBreak, Tabulation, Token as EblToken,
+                                               TokenVisitor,
+                                               UnknownNumberOfSigns,
+                                               ValueToken, Variant)
+from ebl.transliteration.domain.unknown_sign_tokens import (UnclearSign,
+                                                            UnidentifiedSign)
+from ebl.transliteration.domain.word_tokens import (ErasureState,
+                                                    InWordNewline,
+                                                    LoneDeterminative, Word)
 
 
 def _token_mapper(token):
@@ -288,6 +273,9 @@ class TextLineTransformer(WordTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__divider(self, value, modifiers, flags):
         return Divider.of(str(value), modifiers, flags)
+
+    def ebl_atf_text_line__line_break(self, _):
+        return LineBreak.of()
 
     @v_args(inline=True)
     def ebl_atf_text_line__column(self, number):
