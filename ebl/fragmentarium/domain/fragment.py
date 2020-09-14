@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 import attr
 
@@ -14,11 +14,6 @@ from ebl.users.domain.user import User
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 Genre = Sequence[Sequence[str]]
-
-
-# https://github.com/python/mypy/issues/1317
-def convert_genre_elem_to_tuple(genre: Sequence[str]) -> Tuple[str, ...]:
-    return tuple(genre)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -83,7 +78,9 @@ class Fragment:
             return False
 
     def set_genre(self, genre_retrieved: Genre) -> "Fragment":
-        genre_retrieved = (map(tuple, genre_retrieved))
+        genre_retrieved = tuple(
+            [tuple(single_genre) for single_genre in genre_retrieved]
+        )
         if Fragment._is_genre_valid(genre_retrieved):
             return attr.evolve(self, genre=genre_retrieved)
         else:
