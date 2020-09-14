@@ -79,7 +79,7 @@ class Fragment:
         genre_retrieved = tuple(
             [tuple(single_genre) for single_genre in genre_retrieved]
         )
-        self._check_is_genre_valid(genre_retrieved)
+        self._check_is_genre_valid(None, genre_retrieved)
         return attr.evolve(self, genre=genre_retrieved)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
