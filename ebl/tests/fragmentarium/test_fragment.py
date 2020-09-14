@@ -155,11 +155,6 @@ def test_invalid_genre():
         FragmentFactory.build(genre=(("xyz",),))
 
 
-def test_invalid_genre_type():
-    with pytest.raises(TypeError):
-        FragmentFactory.build(genre=[["xyz"]])
-
-
 def test_set_genre():
     updated_genre = (("ARCHIVAL", "Administrative", "Lists"),)
     fragment = FragmentFactory.build(genre=tuple())
@@ -170,7 +165,7 @@ def test_set_genre():
 def test_set_invalid_genre():
     updated_genre = (("xyz", "wrq"),)
     fragment = FragmentFactory.build(genre=tuple())
-    with pytest.raises(ValueError, match="is not a valid genre"):
+    with pytest.raises(ValueError, match="are not valid genres"):
         fragment.set_genre(updated_genre)
 
 
