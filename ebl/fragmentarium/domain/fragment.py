@@ -78,8 +78,9 @@ class Fragment:
             return False
 
     def set_genre(self, genre_retrieved: Genre) -> "Fragment":
+        genre_retrieved = tuple(map(tuple, genre_retrieved))
         if Fragment._is_genre_valid(genre_retrieved):
-            return attr.evolve(self, genre=tuple(map(tuple, genre_retrieved)))  # pyre-ignore[6]
+            return attr.evolve(self, genre=genre_retrieved)
         else:
             raise ValueError(f"'{(genre_retrieved)}' is not a valid genre")
 

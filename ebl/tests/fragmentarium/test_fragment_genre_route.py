@@ -77,7 +77,7 @@ def test_update_genre_invalid_genre(client, fragmentarium, user, database):
 
     expected_json = {
         'title': '422 Unprocessable Entity',
-        'description': "'[['asd', 'wtz'], ['as4f']]' is not a valid genre",
+        'description': "'(('asd', 'wtz'), ('as4f',))' is not a valid genre",
     }
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
