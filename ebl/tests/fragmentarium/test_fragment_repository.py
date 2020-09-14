@@ -160,7 +160,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
 def test_update_genre(fragment_repository):
     fragment = FragmentFactory.build(genre=tuple())
     fragment_repository.create(fragment)
-    updated_fragment = fragment.set_genre([["ARCHIVE", "Administrative"]])
+    updated_fragment = fragment.set_genre([["ARCHIVAL", "Administrative"]])
     fragment_repository.update_genre(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
