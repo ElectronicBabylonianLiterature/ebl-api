@@ -10,19 +10,19 @@ from ebl.tests.factories.fragment import FragmentFactory
 @pytest.mark.parametrize(
     "parameters", [
         {
-            "currentGenre": [],
-            "newGenre": [["ARCHIVAL", "Administrative", "Lists"]]
+            "currentGenre": tuple(tuple()),
+            "newGenre": (("ARCHIVAL", "Administrative", "Lists",),)
         },
         {
-            "currentGenre": [["ARCHIVAL", "Administrative", "Lists"]],
-            "newGenre": [
-                ["ARCHIVAL", "Administrative", "Lists"],
-                ["ARCHIVAL", "Administrative", "Memos"]
-            ]
+            "currentGenre": (("ARCHIVAL", "Administrative", "Lists"),),
+            "newGenre": (
+                    ("ARCHIVAL", "Administrative", "Lists"),
+                    ("ARCHIVAL", "Administrative", "Memos")
+            )
         },
         {
-            "currentGenre": [["ARCHIVAL", "Administrative", "Lists"]],
-            "newGenre": []
+            "currentGenre": (("ARCHIVAL", "Administrative", "Lists"),),
+            "newGenre": tuple(tuple())
         },
     ]
 )
@@ -63,7 +63,7 @@ def test_update_genre(client, fragmentarium, user, database, parameters):
 
 
 def test_update_genre_invalid_genre(client, fragmentarium, user, database):
-    genre = [["asd", "wtz"], ["as4f"]]
+    genre = (("asd", "wtz"), ("as4f",),)
     fragment = FragmentFactory.build(genre=tuple())
     fragment_number = fragmentarium.create(fragment)
     updates = {

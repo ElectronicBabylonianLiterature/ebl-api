@@ -54,6 +54,8 @@ class Fragment:
 
     @genre.validator
     def _check_is_genre_valid(self, _, genre: Genre) -> None:
+        if type(genre) is not tuple:
+            raise TypeError(f"'{genre}' should be Tuple[Tuple[str, ...], ...]")
         if not all(genre_elem in genres for genre_elem in genre):
             raise ValueError(f"All or parts of '{(genre)}' are not valid genres")
 
