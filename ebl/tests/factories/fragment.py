@@ -75,11 +75,11 @@ class FragmentFactory(factory.Factory):  # pyre-ignore[11]
     folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
     genre = factory.Iterator([
         (
-            ("ARCHIVE", "Administrative", "Lists", "One Entry"),
+            ("ARCHIVAL", "Administrative", "Lists", "One Entry"),
             ("CANONICAL", "Catalogues"),
         ),
         (
-            ("ARCHIVE", "Administrative", "Lists", "One Entry"),
+            ("ARCHIVAL", "Administrative", "Lists", "One Entry"),
         )
     ])
 

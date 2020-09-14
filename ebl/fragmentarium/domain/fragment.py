@@ -82,7 +82,6 @@ class Fragment:
         self._check_is_genre_valid(genre_retrieved)
         return attr.evolve(self, genre=genre_retrieved)
 
-
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)
