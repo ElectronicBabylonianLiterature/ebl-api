@@ -15,6 +15,7 @@ from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     LanguageShift,
+    LineBreak,
     Token,
     TokenVisitor,
 )
@@ -102,6 +103,11 @@ class AtfVisitor(TokenVisitor):
     def visit_divider(self, divider: Divider) -> None:
         self._append_separator()
         self._parts.append(divider.value)
+        self._set_force()
+
+    def visit_line_break(self, line_break: LineBreak) -> None:
+        self._append_separator()
+        self._parts.append(line_break.value)
         self._set_force()
 
     def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:

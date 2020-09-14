@@ -2,54 +2,39 @@ from abc import abstractmethod
 from typing import Mapping, Type
 
 import pydash  # pyre-ignore
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
+from marshmallow import (EXCLUDE, Schema, fields, post_dump,  # pyre-ignore
+                         post_load)
 from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
-from ebl.transliteration.domain.enclosure_tokens import (
-    AccidentalOmission,
-    BrokenAway,
-    Determinative,
-    DocumentOrientedGloss,
-    Erasure,
-    Gloss,
-    IntentionalOmission,
-    LinguisticGloss,
-    PerhapsBrokenAway,
-    PhoneticGloss,
-    Removal,
-)
+from ebl.transliteration.domain.enclosure_tokens import (AccidentalOmission,
+                                                         BrokenAway,
+                                                         Determinative,
+                                                         DocumentOrientedGloss,
+                                                         Erasure, Gloss,
+                                                         IntentionalOmission,
+                                                         LinguisticGloss,
+                                                         PerhapsBrokenAway,
+                                                         PhoneticGloss,
+                                                         Removal)
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.side import Side
-from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme,
-    Divider,
-    Grapheme,
-    Logogram,
-    Number,
-    Reading,
-)
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
-from ebl.transliteration.domain.tokens import (
-    Column,
-    CommentaryProtocol,
-    Joiner,
-    LanguageShift,
-    Tabulation,
-    UnknownNumberOfSigns,
-    ValueToken,
-    Variant,
-    Token
-)
-from ebl.transliteration.domain.word_tokens import (
-    ErasureState,
-    InWordNewline,
-    LoneDeterminative,
-    Word,
-)
+from ebl.transliteration.domain.sign_tokens import (CompoundGrapheme, Divider,
+                                                    Grapheme, Logogram, Number,
+                                                    Reading)
+from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol,
+                                               Joiner, LanguageShift,
+                                               LineBreak, Tabulation, Token,
+                                               UnknownNumberOfSigns,
+                                               ValueToken, Variant)
+from ebl.transliteration.domain.unknown_sign_tokens import (UnclearSign,
+                                                            UnidentifiedSign)
+from ebl.transliteration.domain.word_tokens import (ErasureState,
+                                                    InWordNewline,
+                                                    LoneDeterminative, Word)
 
 
 class BaseTokenSchema(Schema):  # pyre-ignore[11]
@@ -406,6 +391,12 @@ class LinguisticGlossSchema(GlossSchema):
         ).set_erasure(data["erasure"])
 
 
+class LineBreakSchema(BaseTokenSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return LineBreak(frozenset(data["enclosure_type"]), data["erasure"])
+
+
 class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
@@ -439,4 +430,5 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "Determinative": DeterminativeSchema,
         "PhoneticGloss": PhoneticGlossSchema,
         "LinguisticGloss": LinguisticGlossSchema,
+        "LineBreak": LineBreakSchema,
     }

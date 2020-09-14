@@ -175,6 +175,7 @@ UNCLEAR_SIGN = "x"
 UNIDENTIFIED_SIGN = "X"
 IN_WORD_NEWLINE = ";"
 TABULATION = "($___$)"
+LINE_BREAK = "|"
 
 ERASURE_BOUNDARY = "°"
 ERASURE: Mapping[Side, str] = {
