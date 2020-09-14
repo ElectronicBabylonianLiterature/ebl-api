@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Any, Tuple
+from typing import Optional, Sequence, Tuple
 
 import attr
 
