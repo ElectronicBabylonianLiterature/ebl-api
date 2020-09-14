@@ -16,6 +16,10 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 Genre = Sequence[Sequence[str]]
 
 
+def tuple_(genre):
+    return tuple(genre)
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class UncuratedReference:
     document: str
@@ -77,8 +81,9 @@ class Fragment:
         else:
             return False
 
+
     def set_genre(self, genre_retrieved: Genre) -> "Fragment":
-        genre_retrieved = tuple(map(tuple, genre_retrieved))
+        genre_retrieved = tuple(map(tuple_, genre_retrieved))
         if Fragment._is_genre_valid(genre_retrieved):
             return attr.evolve(self, genre=genre_retrieved)
         else:

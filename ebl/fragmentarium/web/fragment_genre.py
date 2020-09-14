@@ -1,11 +1,8 @@
-from typing import Sequence
-
 import falcon  # pyre-ignore[21]
 from falcon import Response, Request
 
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.web.require_scope import require_scope
 
