@@ -17,7 +17,7 @@ from ebl.tests.factories.fragment import FragmentFactory
             "currentGenre": [["ARCHIVAL", "Administrative", "Lists"]],
             "newGenre": [
                 ["ARCHIVAL", "Administrative", "Lists"],
-                ["ARCHIVAL", "Administrative", "Multientry"]
+                ["ARCHIVAL", "Administrative", "Memos"]
             ]
         },
         {
