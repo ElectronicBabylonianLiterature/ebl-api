@@ -15,40 +15,74 @@ from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     LanguageShift,
+    LineBreak,
     Token,
     TokenVisitor,
 )
 from ebl.transliteration.domain.word_tokens import Word
 
 
-class AtfVisitor(TokenVisitor):
+class AtfVisitorState:
     def __init__(self, prefix: Optional[str]):
-        self._parts: List[str] = [] if prefix is None else [prefix]
+        self.parts: List[str] = [] if prefix is None else [prefix]
         self._force_separator: bool = prefix is not None
         self._omit_separator: bool = prefix is None
 
+    def append_with_forced_separator(self, token: Token) -> None:
+        self.append_separator()
+        self.append_token(token)
+        self.set_force()
+
+    def append_with_separator(self, token: Token) -> None:
+        if self._force_separator or not self._omit_separator:
+            self.append_separator()
+
+        self.append_token(token)
+        self.set_omit(False)
+
+    def append_left_bracket(self, token: Token) -> None:
+        if not self._omit_separator:
+            self.append_separator()
+        self.append_token(token)
+        self.set_omit(True)
+
+    def append_right_bracket(self, token: Token) -> None:
+        if self._force_separator:
+            self.append_separator()
+        self.append_token(token)
+        self.set_omit(False)
+
+    def append_token(self, token: Token) -> None:
+        self.parts.append(token.value)
+
+    def append_separator(self) -> None:
+        self.parts.append(WORD_SEPARATOR)
+
+    def set_omit(self, omit: bool) -> None:
+        self._omit_separator = omit
+        self._force_separator = False
+
+    def set_force(self) -> None:
+        self._omit_separator = False
+        self._force_separator = True
+
+
+class AtfVisitor(TokenVisitor):
+    def __init__(self, prefix: Optional[str]):
+        self._state = AtfVisitorState(prefix)
+
     @property
     def result(self) -> Atf:
-        return Atf("".join(self._parts))
+        return Atf("".join(self._state.parts))
 
     def visit(self, token: Token) -> None:
-        if self._force_separator or not self._omit_separator:
-            self._append_separator()
-
-        self._parts.append(token.value)
-        self._set_omit(False)
+        self._state.append_with_separator(token)
 
     def visit_language_shift(self, shift: LanguageShift) -> None:
-        self._append_separator()
-        self._parts.append(shift.value)
-        self._set_force()
+        self._state.append_with_forced_separator(shift)
 
     def visit_word(self, word: Word) -> None:
-        if not self._omit_separator:
-            self._append_separator()
-
-        self._parts.append(word.value)
-        self._set_omit(False)
+        self._state.append_with_separator(word)
 
     def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._side(gloss.side)(gloss)
@@ -69,56 +103,35 @@ class AtfVisitor(TokenVisitor):
         self._side(removal.side)(removal)
 
     def _side(self, side: Side) -> Callable[[Token], None]:
-        return {Side.LEFT: self._left, Side.RIGHT: self._right}[side]
-
-    def _left(self, token: Token) -> None:
-        if not self._omit_separator:
-            self._append_separator()
-        self._parts.append(token.value)
-        self._set_omit(True)
-
-    def _right(self, token: Token) -> None:
-        if self._force_separator:
-            self._append_separator()
-        self._parts.append(token.value)
-        self._set_omit(False)
+        return {
+            Side.LEFT: self._state.append_left_bracket,
+            Side.RIGHT: self._state.append_right_bracket
+        }[side]
 
     def visit_erasure(self, erasure: Erasure):
         def left():
-            self._append_separator()
-            self._parts.append(erasure.value)
-            self._set_omit(True)
+            self._state.append_separator()
+            self._state.append_token(erasure)
+            self._state.set_omit(True)
 
         def center():
-            self._parts.append(erasure.value)
-            self._set_omit(True)
+            self._state.append_token(erasure)
+            self._state.set_omit(True)
 
         def right():
-            self._parts.append(erasure.value)
-            self._set_force()
+            self._state.append_token(erasure)
+            self._state.set_force()
 
         {Side.LEFT: left, Side.CENTER: center, Side.RIGHT: right}[erasure.side]()
 
     def visit_divider(self, divider: Divider) -> None:
-        self._append_separator()
-        self._parts.append(divider.value)
-        self._set_force()
+        self._state.append_with_forced_separator(divider)
+
+    def visit_line_break(self, line_break: LineBreak) -> None:
+        self._state.append_with_forced_separator(line_break)
 
     def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
-        self._append_separator()
-        self._parts.append(protocol.value)
-        self._set_force()
-
-    def _append_separator(self) -> None:
-        self._parts.append(WORD_SEPARATOR)
-
-    def _set_omit(self, omit):
-        self._omit_separator = omit
-        self._force_separator = False
-
-    def _set_force(self):
-        self._omit_separator = False
-        self._force_separator = True
+        self._state.append_with_forced_separator(protocol)
 
 
 def convert_to_atf(prefix: Optional[str], tokens: Sequence[Token]) -> Atf:

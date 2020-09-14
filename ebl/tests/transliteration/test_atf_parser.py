@@ -1,6 +1,6 @@
 from typing import List
 
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 from hamcrest import assert_that, contains_exactly, has_entries, starts_with  # pyre-ignore
 
 from ebl.errors import DataError
@@ -37,6 +37,7 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
+    LineBreak,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -243,7 +244,7 @@ def test_parser_version(parser, version):
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        Divider.of("|"),
+                        LineBreak.of(),
                         Divider.of(":"),
                         Divider.of(":'"),
                         Divider.of(':"'),
@@ -256,12 +257,12 @@ def test_parser_version(parser, version):
             ],
         ),
         (
-            "1. |/: :'/sal //: ://",
+            "1. ;/: :'/sal //: ://",
             [
                 TextLine.of_iterable(
                     LineNumber(1),
                     (
-                        Variant.of(Divider.of("|"), Divider.of(":")),
+                        Variant.of(Divider.of(";"), Divider.of(":")),
                         Variant.of(Divider.of(":'"), Reading.of_name("sal"),),
                         Variant.of(Divider.of("/"), Divider.of(":")),
                         Variant.of(Divider.of(":"), Divider.of("/")),
@@ -1178,7 +1179,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
 
 def test_parse_dividers() -> None:
     line, expected_tokens = (
-        r'1. :? :#! :# ::? :.@v /@19* :"@20@c |@v@19!',
+        r'1. :? :#! :# ::? :.@v /@19* :"@20@c ;@v@19!',
         [
             TextLine.of_iterable(
                 LineNumber(1),
@@ -1190,7 +1191,7 @@ def test_parse_dividers() -> None:
                     Divider.of(":.", ("@v",), tuple()),
                     Divider.of("/", ("@19",), (atf.Flag.COLLATION,)),
                     Divider.of(':"', ("@20", "@c"), tuple()),
-                    Divider.of("|", ("@v", "@19"), (atf.Flag.CORRECTION,)),
+                    Divider.of(";", ("@v", "@19"), (atf.Flag.CORRECTION,)),
                 ),
             )
         ],
