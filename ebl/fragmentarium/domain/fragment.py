@@ -83,7 +83,7 @@ class Fragment:
             return False
 
     def set_genre(self, genre_retrieved: Genre) -> "Fragment":
-        genre_retrieved = tuple(map(tuple, genre_retrieved))
+        genre_retrieved = (map(tuple, genre_retrieved))
         if Fragment._is_genre_valid(genre_retrieved):
             return attr.evolve(self, genre=genre_retrieved)
         else:
