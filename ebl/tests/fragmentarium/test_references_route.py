@@ -26,7 +26,7 @@ def test_update_references(client, fragmentarium, bibliography, user):
     expected_json = create_response_dto(
         fragment.set_references((reference,)),
         user,
-        fragment.number == MuseumNumber("K", "1")
+        fragment.number == MuseumNumber("K", "1"),
     )
 
     assert post_result.status == falcon.HTTP_OK
@@ -74,7 +74,7 @@ def test_update_references_invalid_museum_number(client):
         json.dumps(
             {
                 "references": [
-                    {"type": "EDITION", "pages": "", "notes": "", "linesCited": [],}
+                    {"type": "EDITION", "pages": "", "notes": "", "linesCited": []}
                 ]
             }
         ),

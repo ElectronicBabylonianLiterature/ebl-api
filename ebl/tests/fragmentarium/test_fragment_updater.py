@@ -5,10 +5,7 @@ from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    TransliteratedFragmentFactory,
-)
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -24,9 +21,7 @@ def test_update_transliteration(
     number = transliterated_fragment.number
     atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(
-        parse_atf_lark(atf),
-        "updated notes",
-        "X X\nX"
+        parse_atf_lark(atf), "updated notes", "X X\nX"
     )
     expected_fragment = transliterated_fragment.update_transliteration(
         transliteration, user
@@ -55,19 +50,12 @@ def test_update_update_transliteration_not_found(
     fragment_updater, user, fragment_repository, when
 ):
     number = "unknown.number"
-    (
-        when(fragment_repository)
-        .query_by_museum_number(number)
-        .thenRaise(NotFoundError)
-    )
+    (when(fragment_repository).query_by_museum_number(number).thenRaise(NotFoundError))
 
     with pytest.raises(NotFoundError):
         fragment_updater.update_transliteration(
             number,
-            TransliterationUpdate(
-                parse_atf_lark("$ (the transliteration)"),
-                "notes"
-            ),
+            TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"),
             user,
         )
 
@@ -105,11 +93,7 @@ def test_update_update_lemmatization_not_found(
     fragment_updater, user, fragment_repository, when
 ):
     number = "K.1"
-    (
-        when(fragment_repository)
-        .query_by_museum_number(number)
-        .thenRaise(NotFoundError)
-    )
+    (when(fragment_repository).query_by_museum_number(number).thenRaise(NotFoundError))
 
     with pytest.raises(NotFoundError):
         fragment_updater.update_lemmatization(

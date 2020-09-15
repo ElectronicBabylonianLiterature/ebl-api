@@ -5,11 +5,7 @@ from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (
-    ChapterFactory,
-    ManuscriptFactory,
-    TextFactory,
-)
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 
 COLLECTION = "texts"
 TEXT = TextFactory.build(  # pyre-ignore[16]
@@ -35,7 +31,7 @@ def test_creating_text(database, text_repository):
     text_repository.create(TEXT)
 
     inserted_text = database[COLLECTION].find_one(
-        {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False},
+        {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False}
     )
     assert inserted_text == to_dict(TEXT)
 

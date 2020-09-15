@@ -16,6 +16,4 @@ def test_update_fragments(context, signs, when):
 
     update_fragments([number], 0, lambda: context)
 
-    assert (
-        fragment_repository.query_by_museum_number(number) == transliterated_fragment
-    )
+    assert fragment_repository.query_by_museum_number(number) == transliterated_fragment

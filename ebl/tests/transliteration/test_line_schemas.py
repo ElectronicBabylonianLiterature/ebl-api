@@ -31,10 +31,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-)
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.note_line import (
     BibliographyPart,
@@ -49,13 +46,13 @@ from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 LINES = [
-
     (
         CompositeAtLine(atf.Composite.MILESTONE, "o"),
         {
             "prefix": "@",
             "content": [
-                OneOfTokenSchema().dump(ValueToken.of("m=locator o"))],  # pyre-ignore[16]
+                OneOfTokenSchema().dump(ValueToken.of("m=locator o"))  # pyre-ignore[16]
+            ],
             "type": "CompositeAtLine",
             "composite": "MILESTONE",
             "text": "o",
@@ -67,8 +64,7 @@ LINES = [
         CompositeAtLine(atf.Composite.MILESTONE, "o", 1),
         {
             "prefix": "@",
-            "content": [
-                OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("m=locator o 1"))],
             "type": "CompositeAtLine",
             "composite": "MILESTONE",
             "text": "o",
@@ -80,8 +76,7 @@ LINES = [
         CompositeAtLine(atf.Composite.COMPOSITE, ""),
         {
             "prefix": "@",
-            "content": [
-                OneOfTokenSchema().dump(ValueToken.of("composite"))],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("composite"))],
             "type": "CompositeAtLine",
             "composite": "COMPOSITE",
             "text": "",
@@ -163,7 +158,7 @@ LINES = [
                 "status": ["CORRECTION", "COLLATION"],
                 "object": "OBJECT",
                 "text": "stone wig",
-                "abbreviation": "stone wig"
+                "abbreviation": "stone wig",
             },
             "displayValue": "object stone wig!*",
         },
@@ -317,17 +312,11 @@ LINES = [
     ),
     (
         StateDollarLine(
-            None,
-            (2, 4),
-            ScopeContainer(atf.Scope.LINES),
-            atf.State.MISSING,
-            None,
+            None, (2, 4), ScopeContainer(atf.Scope.LINES), atf.State.MISSING, None
         ),
         {
             "prefix": "$",
-            "content": [
-                OneOfTokenSchema().dump(ValueToken.of(" 2-4 lines missing"))
-            ],
+            "content": [OneOfTokenSchema().dump(ValueToken.of(" 2-4 lines missing"))],
             "type": "StateDollarLine",
             "qualification": None,
             "extent": [2, 4],
@@ -351,14 +340,16 @@ LINES = [
             (
                 DocumentOrientedGloss.open(),
                 Word.of([Reading.of_name("bu")]),
-                LoneDeterminative.of([Determinative.of([Reading.of_name("d")]),],),
+                LoneDeterminative.of([Determinative.of([Reading.of_name("d")])]),
                 DocumentOrientedGloss.close(),
             ),
         ),
         {
             "type": "TextLine",
             "prefix": "1.",
-            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),  # pyre-ignore[16]
+            "lineNumber": OneOfLineNumberSchema().dump(  # pyre-ignore[16]
+                LineNumber(1)
+            ),
             "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),
@@ -376,7 +367,7 @@ LINES = [
                                 )
                             ).set_enclosure_type(
                                 frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
+                            )
                         ]
                     ).set_enclosure_type(
                         frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
@@ -401,12 +392,12 @@ LINES = [
                                         frozenset(
                                             {EnclosureType.DOCUMENT_ORIENTED_GLOSS}
                                         )
-                                    ),
+                                    )
                                 ]
                             ).set_enclosure_type(
                                 frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                            ),
-                        ],
+                            )
+                        ]
                     ).set_enclosure_type(
                         frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
                     ),
@@ -491,8 +482,7 @@ LINES = [
                 StringPart("a note "),
                 EmphasisPart("italic"),
                 LanguagePart.of_transliteration(
-                    Language.AKKADIAN,
-                    [Word.of([Reading.of_name("bu")]),]
+                    Language.AKKADIAN, [Word.of([Reading.of_name("bu")])]
                 ),
                 BibliographyPart.of(BibliographyId("A"), "1-4"),
             )
@@ -501,8 +491,8 @@ LINES = [
             "type": "NoteLine",
             "prefix": "#note: ",
             "parts": [
-                {"type": "StringPart", "text": "a note ",},
-                {"type": "EmphasisPart", "text": "italic",},
+                {"type": "StringPart", "text": "a note "},
+                {"type": "EmphasisPart", "text": "italic"},
                 {
                     "type": "LanguagePart",
                     "language": Language.AKKADIAN.name,
@@ -512,11 +502,9 @@ LINES = [
                 },
                 {
                     "type": "BibliographyPart",
-                    "reference": ReferenceSchema().dump(Reference(  # pyre-ignore[16]
-                        BibliographyId("A"),
-                        ReferenceType.DISCUSSION,
-                        "1-4"
-                    )),
+                    "reference": ReferenceSchema().dump(  # pyre-ignore[16]
+                        Reference(BibliographyId("A"), ReferenceType.DISCUSSION, "1-4")
+                    ),
                 },
             ],
             "content": OneOfTokenSchema().dump(
@@ -596,8 +584,6 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
 ]
 
 
-@pytest.mark.parametrize(
-    "expected,data", [*LINES, *EXTRA_LINES_FOR_LOAD_LINE_TEST],
-)
+@pytest.mark.parametrize("expected,data", [*LINES, *EXTRA_LINES_FOR_LOAD_LINE_TEST])
 def test_load_line(expected, data):
     assert OneOfLineSchema().load(data) == expected

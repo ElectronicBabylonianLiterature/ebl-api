@@ -1,12 +1,7 @@
 import pytest  # pyre-ignore[21]
 
 from ebl.errors import NotFoundError
-from ebl.transliteration.domain.sign import (
-    Sign,
-    SignListRecord,
-    SignName,
-    Value,
-)
+from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import SignSchema
 
 COLLECTION = "signs"
@@ -106,7 +101,7 @@ def test_load():
     data = {
         "_id": "KUR",
         "lists": [{"name": "ABZ", "number": "03+53"}],
-        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"},],
+        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
     }
     sign = Sign(
         SignName("KUR"),
@@ -125,7 +120,7 @@ def test_dump():
     data = {
         "_id": "KUR",
         "lists": [{"name": "ABZ", "number": "03+53"}],
-        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"},],
+        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
     }
     assert SignSchema().dump(sign) == data
 

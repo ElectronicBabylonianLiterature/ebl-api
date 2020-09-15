@@ -13,11 +13,7 @@ class TransliterationQueryFactory:
         self._sign_repositoy = sign_repositoy
 
     def create(self, transliteration: str) -> TransliterationQuery:
-        signs = [
-            self._create_signs(line)
-            for line
-            in transliteration.split("\n")
-        ]
+        signs = [self._create_signs(line) for line in transliteration.split("\n")]
         return TransliterationQuery(signs)
 
     def _create_signs(self, line: str) -> Sequence[str]:

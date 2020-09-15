@@ -62,7 +62,7 @@ class LanguagePart(NotePart):
         code = {
             Language.AKKADIAN: "akk",
             Language.SUMERIAN: "sux",
-            Language.EMESAL: "es"
+            Language.EMESAL: "es",
         }[self.language]
 
         return f"@{code}"
@@ -79,14 +79,10 @@ class LanguagePart(NotePart):
 
     @staticmethod
     def of_transliteration(
-        language: Language,
-        tokens: Sequence[Token]
+        language: Language, tokens: Sequence[Token]
     ) -> "LanguagePart":
         tokens_with_enclosures = set_enclosure_type(tokens)
-        tokens_with_language = set_language(
-            tokens_with_enclosures,
-            language
-        )
+        tokens_with_language = set_language(tokens_with_enclosures, language)
 
         return LanguagePart(language, tokens_with_language)
 
@@ -102,7 +98,9 @@ class BibliographyPart(NotePart):
         is_lines_invalid = len(value.lines_cited) != 0
 
         if is_type_invalid or is_notes_invalid or is_lines_invalid:
-            raise ValueError("The reference must be a DISCUSSION without notes or lines cited.")
+            raise ValueError(
+                "The reference must be a DISCUSSION without notes or lines cited."
+            )
 
     @property
     def value(self) -> str:
@@ -112,9 +110,7 @@ class BibliographyPart(NotePart):
 
     @staticmethod
     def of(id: BibliographyId, pages: str) -> "BibliographyPart":
-        return BibliographyPart(
-            Reference(id, ReferenceType.DISCUSSION, pages)
-        )
+        return BibliographyPart(Reference(id, ReferenceType.DISCUSSION, pages))
 
 
 def convert_part_sequence(flags: Iterable[NotePart]) -> Tuple[NotePart, ...]:
@@ -137,7 +133,4 @@ class NoteLine(Line):
 
     @property
     def lemmatization(self) -> Sequence[LemmatizationToken]:
-        return tuple(
-            LemmatizationToken(part.value)
-            for part in self.parts
-        )
+        return tuple(LemmatizationToken(part.value) for part in self.parts)

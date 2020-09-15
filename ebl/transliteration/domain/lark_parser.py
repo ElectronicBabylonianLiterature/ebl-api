@@ -13,11 +13,7 @@ from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfo
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import DuplicateStatusError
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-    Line,
-)
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
@@ -90,9 +86,7 @@ def parse_atf_lark(atf_):
     lines = atf_.split("\n")
     lines = list(dropwhile(lambda line: line == "", reversed(lines)))
     lines.reverse()
-    lines = [parse_line_(line, number)
-             for number, line
-             in enumerate(lines)]
+    lines = [parse_line_(line, number) for number, line in enumerate(lines)]
     check_errors(lines)
     lines = tuple(pair[0] for pair in lines)
 
@@ -119,9 +113,7 @@ def create_transliteration_error_data(error: Exception, line: str, line_number: 
 
 
 def unexpected_input_error(
-    error: UnexpectedInput,  # pyre-ignore[11]
-    line: str,
-    line_number: int
+    error: UnexpectedInput, line: str, line_number: int  # pyre-ignore[11]
 ):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)

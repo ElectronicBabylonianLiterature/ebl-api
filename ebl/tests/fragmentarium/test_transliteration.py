@@ -44,8 +44,7 @@ def test_validate_multiple_errors():
         TransliterationError, match="Invalid transliteration"
     ) as excinfo:
         TransliterationUpdate(
-            parse_atf_lark("1. x\n$ (valid)\n2. x"),
-            signs="? ?\n? ? ?",
+            parse_atf_lark("1. x\n$ (valid)\n2. x"), signs="? ?\n? ? ?"
         )
 
     assert excinfo.value.errors == [

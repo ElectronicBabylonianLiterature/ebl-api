@@ -6,11 +6,7 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import (
-    ColumnLabel,
-    LineNumberLabel,
-    SurfaceLabel,
-)
+from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -116,7 +112,7 @@ LINE = Line(
                                         Reading.of_name("nu"),
                                         Joiner.hyphen(),
                                         Reading.of_name("si"),
-                                    ],
+                                    ]
                                 ),
                             ),
                         ),
@@ -250,7 +246,7 @@ NEW_LINE = Line(
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 OLD_LINE = Line(
-    LineNumberLabel("1'"), tuple(), (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),),
+    LineNumberLabel("1'"), tuple(), (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),)
 )
 
 

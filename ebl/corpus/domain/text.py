@@ -46,12 +46,7 @@ class Manuscript:
 
     @property
     def siglum(self):
-        return (
-            self.provenance,
-            self.period,
-            self.type,
-            self.siglum_disambiguator,
-        )
+        return (self.provenance, self.period, self.type, self.siglum_disambiguator)
 
     def accept(self, visitor: "TextVisitor") -> None:
         visitor.visit_manuscript(self)

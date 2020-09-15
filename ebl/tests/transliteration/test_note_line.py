@@ -2,13 +2,21 @@ from typing import Sequence
 
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.note_line import (EmphasisPart, LanguagePart,
-                                                  NoteLine, StringPart)
+from ebl.transliteration.domain.note_line import (
+    EmphasisPart,
+    LanguagePart,
+    NoteLine,
+    StringPart,
+)
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.tokens import (EnclosureType, ErasureState,
-                                               LanguageShift, Token,
-                                               UnknownNumberOfSigns,
-                                               ValueToken)
+from ebl.transliteration.domain.tokens import (
+    EnclosureType,
+    ErasureState,
+    LanguageShift,
+    Token,
+    UnknownNumberOfSigns,
+    ValueToken,
+)
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
@@ -31,9 +39,13 @@ def expected_transliteration(language: Language) -> Sequence[Token]:
             [
                 BrokenAway.open(),
                 Reading.of(
-                    (ValueToken(frozenset({EnclosureType.BROKEN_AWAY}),
-                                ErasureState.NONE,
-                                "kur"),)
+                    (
+                        ValueToken(
+                            frozenset({EnclosureType.BROKEN_AWAY}),
+                            ErasureState.NONE,
+                            "kur",
+                        ),
+                    )
                 ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
             ],
             Language.EMESAL,

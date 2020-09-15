@@ -1,7 +1,10 @@
 from typing import Optional
 
 from ebl.errors import Defect
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
+from ebl.bibliography.application.reference_schema import (
+    ApiReferenceSchema,
+    ReferenceSchema,
+)
 from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
 from ebl.corpus.domain.enums import (
     Classification,
@@ -32,7 +35,9 @@ class TextSerializer(TextVisitor):
 
     def __init__(self, include_documents: bool) -> None:
         super().__init__(TextVisitor.Order.PRE)
-        self._ReferenceSchema = ApiReferenceSchema if include_documents else ReferenceSchema
+        self._ReferenceSchema = (
+            ApiReferenceSchema if include_documents else ReferenceSchema
+        )
         self._text: Optional[dict] = None
         self._chapter: Optional[dict] = None
         self._manuscript: Optional[dict] = None
@@ -129,7 +134,9 @@ class TextSerializer(TextVisitor):
             "type": manuscript.type.long_name,
             "notes": manuscript.notes,
             # pyre-ignore-nextline[16]
-            "references": self._ReferenceSchema().dump(manuscript.references, many=True),
+            "references": self._ReferenceSchema().dump(
+                manuscript.references, many=True
+            ),
         }
         self.chapter["manuscripts"].append(self.manuscript)
 
@@ -193,7 +200,9 @@ class TextDeserializer:
             ManuscriptType.from_name(manuscript["type"]),
             manuscript["notes"],
             tuple(
-                ReferenceSchema().load(manuscript["references"], many=True)  # pyre-ignore[16]
+                ReferenceSchema().load(  # pyre-ignore[16]
+                    manuscript["references"], many=True
+                )
             ),
         )
 

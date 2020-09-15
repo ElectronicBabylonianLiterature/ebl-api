@@ -11,11 +11,12 @@ DISPATCH = create_dispatcher(COMMANDS)
 
 
 @pytest.mark.parametrize(
-    "parameter, results", [
+    "parameter, results",
+    [
         ({"a": "value"}, "a_value"),
         ({"b": "value"}, "b_value"),
-        ({"a": "value1", "b": "value2"}, "a_b_value1value2")
-    ]
+        ({"a": "value1", "b": "value2"}, "a_b_value1value2"),
+    ],
 )
 def test_valid_params(parameter, results):
     assert DISPATCH(parameter) == results
@@ -39,4 +40,6 @@ def test_key_error(parameters):
     parameter = "fail"
     message = "key error"
     with pytest.raises(KeyError, match=message):
-        create_dispatcher({frozenset([parameter]): raise_key_error})({parameter: message})
+        create_dispatcher({frozenset([parameter]): raise_key_error})(
+            {parameter: message}
+        )

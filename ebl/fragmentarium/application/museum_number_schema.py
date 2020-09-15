@@ -5,10 +5,9 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 class MuseumNumberSchema(Schema):  # pyre-ignore[11]
     prefix = fields.String(required=True, validate=validate.Length(min=1))
-    number = fields.String(required=True, validate=(
-        validate.Length(min=1),
-        validate.ContainsNoneOf("."),
-    ))
+    number = fields.String(
+        required=True, validate=(validate.Length(min=1), validate.ContainsNoneOf("."))
+    )
     suffix = fields.String(required=True, validate=validate.ContainsNoneOf("."))
 
     @post_load

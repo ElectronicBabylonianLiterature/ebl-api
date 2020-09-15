@@ -25,16 +25,21 @@ class FragmentSearch:
     ):
         self._dispatch = create_dispatcher(
             {
-                frozenset(["id", "pages"]): lambda value:
-                finder.search_references_in_fragment_infos(
+                frozenset(
+                    ["id", "pages"]
+                ): lambda value: finder.search_references_in_fragment_infos(
                     *self._validate_pages(**value)
                 ),
                 frozenset(["number"]): lambda value: finder.search(**value),
                 frozenset(["random"]): lambda _: finder.find_random(),
                 frozenset(["interesting"]): lambda _: finder.find_interesting(),
                 frozenset(["latest"]): lambda _: fragmentarium.find_latest(),
-                frozenset(["needsRevision"]): lambda _: fragmentarium.find_needs_revision(),
-                frozenset(["transliteration"]): lambda value: finder.search_transliteration(
+                frozenset(
+                    ["needsRevision"]
+                ): lambda _: fragmentarium.find_needs_revision(),
+                frozenset(
+                    ["transliteration"]
+                ): lambda value: finder.search_transliteration(
                     transliteration_query_factory.create(**value)
                 ),
             }
@@ -52,7 +57,9 @@ class FragmentSearch:
             return id, ""
 
     @falcon.before(require_scope, "read:fragments")
-    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]
+    def on_get(
+        self, req: falcon.Request, resp: falcon.Response  # pyre-ignore[11]
+    ) -> None:
         """---
         description: >-
           Finds fragments matching the given query.

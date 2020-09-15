@@ -6,10 +6,7 @@ from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    LemmatizedFragmentFactory,
-)
+from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -18,10 +15,7 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
-    updates = {
-        "transliteration": "$ (the transliteration)",
-        "notes": "some notes",
-    }
+    updates = {"transliteration": "$ (the transliteration)", "notes": "some notes"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -30,8 +24,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
         **create_response_dto(
             fragment.update_transliteration(
                 TransliterationUpdate(
-                    parse_atf_lark(updates["transliteration"]),
-                    updates["notes"]
+                    parse_atf_lark(updates["transliteration"]), updates["notes"]
                 ),
                 user,
             ),
@@ -59,7 +52,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration_merge_lemmatization(
-    client, fragmentarium, signs, sign_repository, transliteration_factory, user,
+    client, fragmentarium, signs, sign_repository, transliteration_factory, user
 ):
 
     for sign in signs:
@@ -68,10 +61,7 @@ def test_update_transliteration_merge_lemmatization(
     fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
-    updates = {
-        "transliteration": "\n".join(lines),
-        "notes": lemmatized_fragment.notes,
-    }
+    updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
@@ -107,7 +97,7 @@ def test_update_transliteration_invalid_atf(client, fragmentarium):
     assert post_result.json == {
         "title": "422 Unprocessable Entity",
         "description": "Invalid transliteration",
-        "errors": [{"description": "Invalid value", "lineNumber": 1,}],
+        "errors": [{"description": "Invalid value", "lineNumber": 1}],
     }
 
 

@@ -19,8 +19,10 @@ def test_number_serialization():
 
 def test_number_deserialization():
     number = MuseumNumber.of("Z.1.b")
-    fragment = FragmentSchema().load({
-        **FragmentSchema().dump(LemmatizedFragmentFactory.build()),
-        "museumNumber": MuseumNumberSchema().dump(number)
-    })
+    fragment = FragmentSchema().load(
+        {
+            **FragmentSchema().dump(LemmatizedFragmentFactory.build()),
+            "museumNumber": MuseumNumberSchema().dump(number),
+        }
+    )
     assert fragment.number == number

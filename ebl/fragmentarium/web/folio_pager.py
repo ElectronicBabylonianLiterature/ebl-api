@@ -48,9 +48,7 @@ class FolioPagerResource:
 
         if req.context.user.can_read_folio(folio_name):
             folio = self._finder.folio_pager(
-                folio_name,
-                folio_number,
-                parse_museum_number(number)
+                folio_name, folio_number, parse_museum_number(number)
             )
             resp.media = FolioPagerInfoSchema().dump(folio)
         else:

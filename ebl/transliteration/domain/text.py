@@ -1,7 +1,5 @@
 from itertools import zip_longest
-from typing import (
-    Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
-)
+from typing import Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
 
 import attr
 
@@ -9,10 +7,7 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
-from ebl.transliteration.domain.lemmatization import (
-    Lemmatization,
-    LemmatizationError,
-)
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine
@@ -53,10 +48,7 @@ class Text:
 
     @property
     def lemmatization(self) -> Lemmatization:
-        return Lemmatization(tuple(
-            line.lemmatization
-            for line in self.lines
-        ))
+        return Lemmatization(tuple(line.lemmatization for line in self.lines))
 
     @property
     def atf(self) -> Atf:
@@ -68,10 +60,15 @@ class Text:
         labels: List[Label] = []
 
         handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
-            TextLine: lambda line: (current,
-                                    [*labels, current.set_line_number(line.line_number)]),
+            TextLine: lambda line: (
+                current,
+                [*labels, current.set_line_number(line.line_number)],
+            ),
             ColumnAtLine: lambda line: (current.set_column(line.column_label), labels),
-            SurfaceAtLine: lambda line: (current.set_surface(line.surface_label), labels),
+            SurfaceAtLine: lambda line: (
+                current.set_surface(line.surface_label),
+                labels,
+            ),
             ObjectAtLine: lambda line: (current.set_object(line.label), labels),
         }
 
@@ -100,7 +97,7 @@ class Text:
 
         merged_lines = Merger(map_, inner_merge).merge(self.lines, other.lines)
         return attr.evolve(
-            self, lines=tuple(merged_lines), parser_version=other.parser_version,
+            self, lines=tuple(merged_lines), parser_version=other.parser_version
         )
 
     def set_parser_version(self, parser_version: str) -> "Text":

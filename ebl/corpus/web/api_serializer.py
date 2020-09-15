@@ -3,10 +3,7 @@ from typing import cast, Sequence
 from lark.exceptions import ParseError as LarkParseError  # pyre-ignore
 from parsy import ParseError as ParsyParseError  # pyre-ignore
 
-from ebl.corpus.application.text_serializer import (
-    TextDeserializer,
-    TextSerializer,
-)
+from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
 from ebl.corpus.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,

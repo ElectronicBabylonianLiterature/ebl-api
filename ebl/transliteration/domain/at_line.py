@@ -4,11 +4,7 @@ from typing import Optional, Tuple
 import attr
 
 from ebl.transliteration.domain.atf import Atf, Composite, Discourse
-from ebl.transliteration.domain.labels import (
-    SurfaceLabel,
-    ColumnLabel,
-    ObjectLabel,
-)
+from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
@@ -72,7 +68,9 @@ class SurfaceAtLine(AtLine):
     @property
     def display_value(self) -> str:
         text = f" {self.surface_label.text}" if self.surface_label.text else ""
-        return f"{self.surface_label.surface.atf}{text}{self.surface_label.status_string}"
+        return (
+            f"{self.surface_label.surface.atf}{text}{self.surface_label.status_string}"
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

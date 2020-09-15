@@ -11,9 +11,7 @@ NUMBER_OF_NEEDS_REVISION: int = 20
 
 
 def museum_number_is(number: MuseumNumber) -> dict:
-    return {
-        "museumNumber": MuseumNumberSchema().dump(number)  # pyre-ignore[16]
-    }
+    return {"museumNumber": MuseumNumberSchema().dump(number)}  # pyre-ignore[16]
 
 
 def fragment_is(fragment: Fragment) -> dict:
@@ -76,7 +74,7 @@ def aggregate_latest() -> List[dict]:
                         "input": "$record",
                         "as": "entry",
                         "cond": {
-                            "$eq": ["$$entry.type", RecordType.TRANSLITERATION.value,]
+                            "$eq": ["$$entry.type", RecordType.TRANSLITERATION.value]
                         },
                     }
                 }
@@ -137,14 +135,14 @@ def aggregate_needs_revision() -> List[dict]:
                     }
                 },
                 "revisors": {
-                    "$map": {"input": "$revisions", "as": "item", "in": "$$item.user",}
+                    "$map": {"input": "$revisions", "as": "item", "in": "$$item.user"}
                 },
             }
         },
         {
             "$match": {
                 "$expr": {
-                    "$eq": [{"$setDifference": ["$revisors", "$transliterators"]}, [],]
+                    "$eq": [{"$setDifference": ["$revisors", "$transliterators"]}, []]
                 }
             }
         },
@@ -177,17 +175,25 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
                 ]
             }
         },
-        {"$addFields": {"filename": {"$concat": [
-            "$museumNumber.prefix",
-            ".",
-            "$museumNumber.number",
-            {"$cond": {
-                "if": {"$eq": ["$museumNumber.suffix", ""]},
-                "then": "",
-                "else": {"$concat": [".", "$museumNumber.suffix"]}
-            }},
-            ".jpg"
-        ]}}},
+        {
+            "$addFields": {
+                "filename": {
+                    "$concat": [
+                        "$museumNumber.prefix",
+                        ".",
+                        "$museumNumber.number",
+                        {
+                            "$cond": {
+                                "if": {"$eq": ["$museumNumber.suffix", ""]},
+                                "then": "",
+                                "else": {"$concat": [".", "$museumNumber.suffix"]},
+                            }
+                        },
+                        ".jpg",
+                    ]
+                }
+            }
+        },
         {
             "$lookup": {
                 "from": "photos.files",

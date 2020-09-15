@@ -35,7 +35,7 @@ from ebl.transliteration.domain.tokens import Joiner
         ),
     ],
 )
-@pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT,])
+@pytest.mark.parametrize("side", [Side.LEFT, Side.RIGHT])
 def test_enclosure(enclosure_class, type_, sides, side):
     value = sides[side]
     enclosure = enclosure_class.of(side)

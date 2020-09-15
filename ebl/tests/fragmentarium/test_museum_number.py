@@ -47,19 +47,20 @@ def test_invalid_period_in_suffix() -> None:
 
 
 def test_of_short_prefix() -> None:
-    assert MuseumNumber.of(f"{PREFIX}.{NUMBER}.{SUFFIX}") ==\
-        MuseumNumber(PREFIX, NUMBER, SUFFIX)
+    assert MuseumNumber.of(f"{PREFIX}.{NUMBER}.{SUFFIX}") == MuseumNumber(
+        PREFIX, NUMBER, SUFFIX
+    )
 
 
 def test_of_short_prefix_no_suffix() -> None:
-    assert MuseumNumber.of(f"{PREFIX}.{NUMBER}") ==\
-        MuseumNumber(PREFIX, NUMBER)
+    assert MuseumNumber.of(f"{PREFIX}.{NUMBER}") == MuseumNumber(PREFIX, NUMBER)
 
 
 def test_of_long_prefix() -> None:
     long_prefix = f"{PREFIX}.A.B"
-    assert MuseumNumber.of(f"{long_prefix}.{NUMBER}.{SUFFIX}") ==\
-        MuseumNumber(long_prefix, NUMBER, SUFFIX)
+    assert MuseumNumber.of(f"{long_prefix}.{NUMBER}.{SUFFIX}") == MuseumNumber(
+        long_prefix, NUMBER, SUFFIX
+    )
 
 
 def test_of_invalid() -> None:

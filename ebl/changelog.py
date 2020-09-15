@@ -23,6 +23,6 @@ class Changelog:
 
     def create(self, resource_type, user_profile, old, new):
         entry = create_entry(
-            user_profile, resource_type, old["_id"], list(dictdiffer.diff(old, new)),
+            user_profile, resource_type, old["_id"], list(dictdiffer.diff(old, new))
         )
         return self._collection.insert_one(entry)

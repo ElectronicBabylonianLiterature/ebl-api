@@ -26,10 +26,10 @@ def create_corpus_routes(api: falcon.API, context: Context, spec):  # pyre-ignor
     api.add_route("/texts", texts)
     api.add_route("/texts/{category}/{index}", text)
     api.add_route(
-        "/texts/{category}/{index}/chapters/{chapter_index}/alignment", alignment,
+        "/texts/{category}/{index}/chapters/{chapter_index}/alignment", alignment
     )
     api.add_route(
-        "/texts/{category}/{index}/chapters/{chapter_index}/manuscripts", manuscript,
+        "/texts/{category}/{index}/chapters/{chapter_index}/manuscripts", manuscript
     )
 
     api.add_route("/texts/{category}/{index}/chapters/{chapter_index}/lines", lines)

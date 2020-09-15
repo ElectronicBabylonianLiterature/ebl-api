@@ -20,7 +20,7 @@ class Bibliography:
 
     def create(self, entry, user: User) -> str:
         self._changelog.create(
-            COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry),
+            COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry)
         )
         return self._repository.create(entry)
 
@@ -42,9 +42,7 @@ class Bibliography:
         author_query = self._parse_author_year_and_title(query)
         if not all(value is None for value in list(author_query.values())):
             author_query_result = self.search_author_year_and_title(
-                author_query["author"],
-                author_query["year"],
-                author_query["title"],
+                author_query["author"], author_query["year"], author_query["title"]
             )
 
         container_query_result = []
@@ -52,14 +50,16 @@ class Bibliography:
         if not all(value is None for value in list(container_query.values())):
             container_query_result = self.search_container_title_and_collection_number(
                 container_query["container_title_short"],
-                container_query["collection_number"]
+                container_query["collection_number"],
             )
-        return uniq_with(author_query_result + container_query_result, lambda a, b: a == b)
+        return uniq_with(
+            author_query_result + container_query_result, lambda a, b: a == b
+        )
 
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
         parsed_query = dict.fromkeys(["author", "year", "title"])
-        match = re.match(r'^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$', query)
+        match = re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query)
         if match:
             parsed_query["author"] = match.group(1)
             parsed_query["year"] = int(match.group(2)) if match.group(2) else None
@@ -67,10 +67,9 @@ class Bibliography:
         return parsed_query
 
     @staticmethod
-    def _parse_container_title_short_and_collection_number(query: str)\
-            -> dict:
+    def _parse_container_title_short_and_collection_number(query: str) -> dict:
         parsed_query = dict.fromkeys(["container_title_short", "collection_number"])
-        match = re.match(r'^([^\s]+)(?: (\d*))?$', query)
+        match = re.match(r"^([^\s]+)(?: (\d*))?$", query)
         if match:
             parsed_query["container_title_short"] = match.group(1)
             parsed_query["collection_number"] = match.group(2)
@@ -91,7 +90,8 @@ class Bibliography:
         collection_number: Optional[str] = None,
     ) -> Sequence[dict]:
         return self._repository.query_by_container_title_and_collection_number(
-            container_title, collection_number)
+            container_title, collection_number
+        )
 
     def validate_references(self, references: Sequence[Reference]):
         def is_invalid(reference):

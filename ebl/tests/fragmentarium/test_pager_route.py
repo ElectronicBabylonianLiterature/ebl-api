@@ -9,10 +9,7 @@ def test_get_fragment_pager(client, fragmentarium):
     fragmentarium.create(fragment)
     result = client.simulate_get(f"/fragments/{fragment.number}/pager")
 
-    assert result.json == {
-        "next": "X.1",
-        "previous": "X.1",
-    }
+    assert result.json == {"next": "X.1", "previous": "X.1"}
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"
 

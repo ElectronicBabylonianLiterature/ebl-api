@@ -6,12 +6,7 @@ from pymongo.database import Database  # pyre-ignore[21]
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.sign import (
-    Sign,
-    SignListRecord,
-    SignName,
-    Value,
-)
+from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value
 
 
 COLLECTION = "signs"
@@ -40,7 +35,7 @@ class ValueSchema(Schema):  # pyre-ignore[11]
 
 
 class SignSchema(Schema):  # pyre-ignore[11]
-    name = fields.String(required=True, data_key="_id",)
+    name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
 
@@ -68,10 +63,12 @@ class MongoSignRepository(SignRepository):
             data = self._collection.find_one(
                 {
                     "values": {
-                        "$elemMatch": {"value": reading, "subIndex": sub_index_query,}
+                        "$elemMatch": {"value": reading, "subIndex": sub_index_query}
                     }
                 }
             )
-            return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))  # pyre-ignore[16, 28]
+            return cast(
+                Sign, SignSchema(unknown=EXCLUDE).load(data)  # pyre-ignore[16, 28]
+            )
         except NotFoundError:
             return None

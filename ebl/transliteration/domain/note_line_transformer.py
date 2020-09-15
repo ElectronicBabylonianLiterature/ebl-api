@@ -5,10 +5,14 @@ from lark.visitors import Transformer, v_args
 
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.note_line import (BibliographyPart,
-                                                  EmphasisPart, LanguagePart,
-                                                  NoteLine, NotePart,
-                                                  StringPart)
+from ebl.transliteration.domain.note_line import (
+    BibliographyPart,
+    EmphasisPart,
+    LanguagePart,
+    NoteLine,
+    NotePart,
+    StringPart,
+)
 
 
 class NoteLineTransformer(Transformer):  # pyre-ignore[11]
@@ -20,8 +24,7 @@ class NoteLineTransformer(Transformer):  # pyre-ignore[11]
         self, language: Token, transliteration: Sequence[Token]  # pyre-ignore[11]
     ) -> LanguagePart:
         return LanguagePart.of_transliteration(
-            Language.of_atf(f"%{language}"),
-            transliteration
+            Language.of_atf(f"%{language}"), transliteration
         )
 
     @v_args(inline=True)
@@ -35,9 +38,10 @@ class NoteLineTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__bibliography_part(self, id_, pages) -> BibliographyPart:
         return BibliographyPart.of(
-            BibliographyId("".join(id_.children)),
-            "".join(pages.children)
+            BibliographyId("".join(id_.children)), "".join(pages.children)
         )
 
-    def ebl_atf_text_line__note_text(self, children: Sequence[Token]) -> str:  # pyre-ignore[11]
+    def ebl_atf_text_line__note_text(
+        self, children: Sequence[Token]  # pyre-ignore[11]
+    ) -> str:
         return "".join(children)

@@ -32,14 +32,16 @@ class FragmentInfo:
         def get_date(entry: RecordEntry) -> str:
             return entry.date
 
-        sorted_transliterations = [entry
-                                   for entry in fragment.record.entries
-                                   if is_transliteration(entry)]
+        sorted_transliterations = [
+            entry for entry in fragment.record.entries if is_transliteration(entry)
+        ]
         sorted_transliterations.sort(key=get_date)
 
-        first_transliteration = (sorted_transliterations[0]
-                                 if sorted_transliterations
-                                 else RecordEntry("", RecordType.TRANSLITERATION, ""))
+        first_transliteration = (
+            sorted_transliterations[0]
+            if sorted_transliterations
+            else RecordEntry("", RecordType.TRANSLITERATION, "")
+        )
 
         return FragmentInfo(
             fragment.number,

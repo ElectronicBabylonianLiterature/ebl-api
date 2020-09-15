@@ -48,10 +48,11 @@ class Word(Token):
 
     @property
     def clean_value(self) -> str:
-        return "".join(part.clean_value
-                       for part
-                       in self.parts
-                       if part.erasure != ErasureState.ERASED)
+        return "".join(
+            part.clean_value
+            for part in self.parts
+            if part.erasure != ErasureState.ERASED
+        )
 
     @property
     def lemmatizable(self) -> bool:

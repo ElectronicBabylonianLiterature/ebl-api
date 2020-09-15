@@ -48,5 +48,5 @@ class AnnotationsFactory(factory.Factory):  # pyre-ignore[11]
 
     fragment_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     annotations = factory.List(
-        [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory),]
+        [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory)]
     )

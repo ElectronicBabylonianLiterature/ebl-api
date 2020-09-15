@@ -1,4 +1,3 @@
-
 from typing import MutableSequence, Sequence, Type
 
 from lark.lexer import Token  # pyre-ignore[21]
@@ -7,32 +6,48 @@ from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
-from ebl.transliteration.domain.enclosure_tokens import (AccidentalOmission,
-                                                         BrokenAway,
-                                                         Determinative,
-                                                         DocumentOrientedGloss,
-                                                         Erasure,
-                                                         IntentionalOmission,
-                                                         LinguisticGloss,
-                                                         PerhapsBrokenAway,
-                                                         PhoneticGloss,
-                                                         Removal)
+from ebl.transliteration.domain.enclosure_tokens import (
+    AccidentalOmission,
+    BrokenAway,
+    Determinative,
+    DocumentOrientedGloss,
+    Erasure,
+    IntentionalOmission,
+    LinguisticGloss,
+    PerhapsBrokenAway,
+    PhoneticGloss,
+    Removal,
+)
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
-from ebl.transliteration.domain.sign_tokens import (CompoundGrapheme, Divider,
-                                                    Grapheme, Logogram, Number,
-                                                    Reading)
+from ebl.transliteration.domain.sign_tokens import (
+    CompoundGrapheme,
+    Divider,
+    Grapheme,
+    Logogram,
+    Number,
+    Reading,
+)
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import (Column, CommentaryProtocol,
-                                               Joiner, LanguageShift,
-                                               LineBreak, Tabulation, Token as EblToken,
-                                               TokenVisitor,
-                                               UnknownNumberOfSigns,
-                                               ValueToken, Variant)
-from ebl.transliteration.domain.unknown_sign_tokens import (UnclearSign,
-                                                            UnidentifiedSign)
-from ebl.transliteration.domain.word_tokens import (ErasureState,
-                                                    InWordNewline,
-                                                    LoneDeterminative, Word)
+from ebl.transliteration.domain.tokens import (
+    Column,
+    CommentaryProtocol,
+    Joiner,
+    LanguageShift,
+    LineBreak,
+    Tabulation,
+    Token as EblToken,
+    TokenVisitor,
+    UnknownNumberOfSigns,
+    ValueToken,
+    Variant,
+)
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
+from ebl.transliteration.domain.word_tokens import (
+    ErasureState,
+    InWordNewline,
+    LoneDeterminative,
+    Word,
+)
 
 
 def _token_mapper(token):
@@ -45,9 +60,11 @@ def _token_mapper(token):
 
 
 def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
-    return tuple((ValueToken.of(token.value) if isinstance(token, Token) else token)
-                 for child in children
-                 for token in _token_mapper(child))
+    return tuple(
+        (ValueToken.of(token.value) if isinstance(token, Token) else token)
+        for child in children
+        for token in _token_mapper(child)
+    )
 
 
 class ErasureVisitor(TokenVisitor):

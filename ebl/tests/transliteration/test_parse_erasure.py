@@ -18,11 +18,7 @@ ERASURE_RIGHT = Erasure.close()
         (
             "°ku\\ku°",
             (Word.of(erasure=ErasureState.ERASED, parts=[Reading.of_name("ku")]),),
-            (
-                Word.of(
-                    erasure=ErasureState.OVER_ERASED, parts=[Reading.of_name("ku")],
-                ),
-            ),
+            (Word.of(erasure=ErasureState.OVER_ERASED, parts=[Reading.of_name("ku")]),),
         ),
         (
             "°::\\:.°",
@@ -32,11 +28,7 @@ ERASURE_RIGHT = Erasure.close()
         (
             "°\\ku°",
             tuple(),
-            (
-                Word.of(
-                    erasure=ErasureState.OVER_ERASED, parts=[Reading.of_name("ku")],
-                ),
-            ),
+            (Word.of(erasure=ErasureState.OVER_ERASED, parts=[Reading.of_name("ku")]),),
         ),
         (
             "°ku\\°",
@@ -51,9 +43,7 @@ ERASURE_RIGHT = Erasure.close()
                 Word.of([UnidentifiedSign.of()], erasure=ErasureState.ERASED),
             ),
             (
-                Word.of(
-                    [UnidentifiedSign.of()], erasure=ErasureState.OVER_ERASED,
-                ),
+                Word.of([UnidentifiedSign.of()], erasure=ErasureState.OVER_ERASED),
                 Word.of([UnclearSign.of()], erasure=ErasureState.OVER_ERASED),
             ),
         ),

@@ -16,10 +16,7 @@ class EnclosureType(Enum):
     EMENDATION = ("<", ">", None)
 
     def __init__(self, open_: str, close: str, parent: "EnclosureType"):
-        self._delimiters = {
-            EnclosureVariant.OPEN: open_,
-            EnclosureVariant.CLOSE: close,
-        }
+        self._delimiters = {EnclosureVariant.OPEN: open_, EnclosureVariant.CLOSE: close}
         self.parent = parent
 
     def get_delimiter(self, variant: EnclosureVariant) -> str:

@@ -175,16 +175,12 @@ class EnclosureUpdater(TokenVisitor):
         visited_parts = self._visit_parts(gloss.parts)
         self._append_token(attr.evolve(new_token, parts=visited_parts))
 
-    def visit_accidental_omission(
-        self, omission: AccidentalOmission
-    ) -> None:
+    def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         new_token = self._set_enclosure_type(omission)
         self._update_enclosures(omission, EnclosureType.ACCIDENTAL_OMISSION)
         self._append_token(new_token)
 
-    def visit_intentional_omission(
-        self, omission: IntentionalOmission
-    ) -> None:
+    def visit_intentional_omission(self, omission: IntentionalOmission) -> None:
         new_token = self._set_enclosure_type(omission)
         self._update_enclosures(omission, EnclosureType.INTENTIONAL_OMISSION)
         self._append_token(new_token)
@@ -209,9 +205,7 @@ class EnclosureUpdater(TokenVisitor):
         self._update_enclosures(broken_away, perhaps_type)
         self._append_token(new_token)
 
-    def visit_document_oriented_gloss(
-        self, gloss: DocumentOrientedGloss
-    ) -> None:
+    def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         new_token = self._set_enclosure_type(gloss)
         self._update_enclosures(gloss, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
         self._append_token(new_token)
