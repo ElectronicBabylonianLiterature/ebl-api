@@ -28,7 +28,7 @@ from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
             },
         ),
         (
-            LineNumberRange(LineNumber(1), LineNumber(963, True, "D", "a"),),
+            LineNumberRange(LineNumber(1), LineNumber(963, True, "D", "a")),
             {
                 "type": "LineNumberRange",
                 "start": {

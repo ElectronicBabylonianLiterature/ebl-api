@@ -24,7 +24,7 @@ from ebl.transliteration.domain.word_tokens import Word
 LINES: Sequence[Line] = (
     TextLine(
         LineNumber(1),
-        (Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am"),],),),
+        (Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am")]),),
     ),
     RulingDollarLine(atf.Ruling.SINGLE),
 )
@@ -38,6 +38,10 @@ def test_of_iterable() -> None:
 
 def test_lines() -> None:
     assert TEXT.lines == LINES
+
+
+def test_text_lines() -> None:
+    assert TEXT.text_lines == LINES[:1]
 
 
 def test_number_of_lines() -> None:
@@ -111,11 +115,11 @@ def test_update_lemmatization_wrong_lines() -> None:
 def test_labels() -> None:
     text = Text.of_iterable(
         [
-            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])],),
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
             ColumnAtLine(ColumnLabel.from_int(1)),
             SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")),
             ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "Stone wig")),
-            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])],),
+            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
         ]
     )
     assert text.labels == [

@@ -46,10 +46,7 @@ def test_merge_edit_line():
 
 
 def test_merge_edit_lines():
-    new = [
-        {"key": "a1.1", "value": None},
-        {"key": "b1", "value": None},
-    ]
+    new = [{"key": "a1.1", "value": None}, {"key": "b1", "value": None}]
 
     assert Merger(map_, inner_merge).merge(OLD, new) == [
         {"key": "a1.1", "value": None},

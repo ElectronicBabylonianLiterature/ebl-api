@@ -19,8 +19,7 @@ class MongoTextRepository(TextRepository):
 
     def create_indexes(self) -> None:
         self._collection.create_index(
-            [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)],
-            unique=True,
+            [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
         )
 
     def create(self, text: Text) -> None:
@@ -42,5 +41,5 @@ class MongoTextRepository(TextRepository):
 
     def update(self, id_: TextId, text: Text) -> None:
         self._collection.update_one(
-            {"category": id_.category, "index": id_.index}, {"$set": serialize(text)},
+            {"category": id_.category, "index": id_.index}, {"$set": serialize(text)}
         )

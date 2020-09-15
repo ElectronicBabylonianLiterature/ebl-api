@@ -13,17 +13,17 @@ from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfo
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import DuplicateStatusError
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-    Line,
-)
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
+from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
+
+
+PARSE_ERRORS = (UnexpectedInput, ParseError, VisitError, EnclosureError)
 
 
 class LineTransformer(
@@ -45,6 +45,11 @@ LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__
 
 def parse_word(atf: str) -> Word:
     tree = WORD_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
@@ -70,7 +75,7 @@ def parse_atf_lark(atf_):
             parsed_line = parse_line(line) if line else EmptyLine()
             validate_line(parsed_line)
             return parsed_line, None
-        except (UnexpectedInput, ParseError, EnclosureError, VisitError) as ex:
+        except PARSE_ERRORS as ex:
             return (None, create_transliteration_error_data(ex, line, line_number))
 
     def check_errors(pairs):
@@ -81,9 +86,7 @@ def parse_atf_lark(atf_):
     lines = atf_.split("\n")
     lines = list(dropwhile(lambda line: line == "", reversed(lines)))
     lines.reverse()
-    lines = [parse_line_(line, number)
-             for number, line
-             in enumerate(lines)]
+    lines = [parse_line_(line, number) for number, line in enumerate(lines)]
     check_errors(lines)
     lines = tuple(pair[0] for pair in lines)
 
@@ -110,9 +113,7 @@ def create_transliteration_error_data(error: Exception, line: str, line_number: 
 
 
 def unexpected_input_error(
-    error: UnexpectedInput,  # pyre-ignore[11]
-    line: str,
-    line_number: int
+    error: UnexpectedInput, line: str, line_number: int  # pyre-ignore[11]
 ):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)

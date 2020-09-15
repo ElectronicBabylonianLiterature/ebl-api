@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 
 
@@ -29,5 +29,5 @@ class Fragmentarium:
     def find_needs_revision(self) -> List[FragmentInfo]:
         return self._repository.query_by_transliterated_not_revised_by_other()
 
-    def create(self, fragment: Fragment) -> FragmentNumber:
+    def create(self, fragment: Fragment) -> str:
         return self._repository.create(fragment)

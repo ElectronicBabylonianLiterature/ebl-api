@@ -1,4 +1,7 @@
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
+from ebl.bibliography.application.reference_schema import (
+    ApiReferenceSchema,
+    ReferenceSchema,
+)
 from ebl.corpus.application.text_serializer import TextSerializer
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.corpus import (
@@ -14,7 +17,9 @@ REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
 MANUSCRIPT_LINE = ManuscriptLineFactory.build()  # pyre-ignore[16]
 LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE,))  # pyre-ignore[16]
-CHAPTER = ChapterFactory.build(manuscripts=(MANUSCRIPT,), lines=(LINE,))  # pyre-ignore[16]
+CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
+    manuscripts=(MANUSCRIPT,), lines=(LINE,)
+)
 TEXT = TextFactory.build(chapters=(CHAPTER,))  # pyre-ignore[16]
 
 
@@ -45,9 +50,7 @@ def to_dict(include_documents):
                         "type": MANUSCRIPT.type.long_name,
                         "notes": MANUSCRIPT.notes,
                         "references": (
-                            ApiReferenceSchema
-                            if include_documents
-                            else ReferenceSchema
+                            ApiReferenceSchema if include_documents else ReferenceSchema
                         )().dump(MANUSCRIPT.references, many=True),
                     }
                 ],

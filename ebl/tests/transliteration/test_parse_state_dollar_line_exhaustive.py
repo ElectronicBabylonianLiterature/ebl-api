@@ -39,9 +39,9 @@ SCOPES = [
     ("right", ScopeContainer(atf.Surface.RIGHT)),
     ("top", ScopeContainer(atf.Surface.TOP)),
     ("surface thing right", ScopeContainer(atf.Surface.SURFACE, "thing right")),
-    ("surface th(in)g", ScopeContainer(atf.Surface.SURFACE, "th(in)g"),),
-    ("edge a", ScopeContainer(atf.Surface.EDGE, "a"),),
-    ("face z", ScopeContainer(atf.Surface.FACE, "z"),),
+    ("surface th(in)g", ScopeContainer(atf.Surface.SURFACE, "th(in)g")),
+    ("edge a", ScopeContainer(atf.Surface.EDGE, "a")),
+    ("face z", ScopeContainer(atf.Surface.FACE, "z")),
     ("tablet", ScopeContainer(atf.Object.TABLET)),
     ("envelope", ScopeContainer(atf.Object.ENVELOPE)),
     ("prism", ScopeContainer(atf.Object.PRISM)),
@@ -81,35 +81,35 @@ STATUSES = [
 @pytest.mark.parametrize("qualification,expected_qualification", QUALIFICATIONS)
 def test_qualification(qualification, expected_qualification):
     line = f"$ {qualification}"
-    expected_line = StateDollarLine(expected_qualification, None, None, None, None,)
+    expected_line = StateDollarLine(expected_qualification, None, None, None, None)
     assert parse_atf_lark(line).lines == Text.of_iterable([expected_line]).lines
 
 
 @pytest.mark.parametrize("extent,expected_extent", EXTENTS)
 def test_extent(extent, expected_extent):
     line = f"$ {extent}"
-    expected_line = StateDollarLine(None, expected_extent, None, None, None,)
+    expected_line = StateDollarLine(None, expected_extent, None, None, None)
     assert parse_atf_lark(line).lines == Text.of_iterable([expected_line]).lines
 
 
 @pytest.mark.parametrize("scope,expected_scope", SCOPES)
 def test_scope(scope, expected_scope):
     line = f"$ {scope}"
-    expected_line = StateDollarLine(None, None, expected_scope, None, None,)
+    expected_line = StateDollarLine(None, None, expected_scope, None, None)
     assert parse_atf_lark(line).lines == Text.of_iterable([expected_line]).lines
 
 
 @pytest.mark.parametrize("state,expected_state", STATES)
 def test_state(state, expected_state):
     line = f"$ {state}"
-    expected_line = StateDollarLine(None, None, None, expected_state, None,)
+    expected_line = StateDollarLine(None, None, None, expected_state, None)
     assert parse_atf_lark(line).lines == Text.of_iterable([expected_line]).lines
 
 
 @pytest.mark.parametrize("status,expected_status", STATUSES)
 def test_status(status, expected_status):
     line = f"$ {status}"
-    expected_line = StateDollarLine(None, None, None, None, expected_status,)
+    expected_line = StateDollarLine(None, None, None, None, expected_status)
     assert parse_atf_lark(line).lines == Text.of_iterable([expected_line]).lines
 
 

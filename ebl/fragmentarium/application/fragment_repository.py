@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentRepository(ABC):
     @abstractmethod
-    def create(self, fragment: Fragment) -> FragmentNumber:
+    def create(self, fragment: Fragment) -> str:
         ...
 
     @abstractmethod
@@ -20,12 +21,13 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_fragment_number(self, number: FragmentNumber) -> Fragment:
+    def query_by_museum_number(self, number: MuseumNumber) -> Fragment:
         ...
 
     @abstractmethod
     def query_by_id_and_page_in_references(
-            self, id_: str, pages: str) -> List[Fragment]:
+        self, id_: str, pages: str
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
@@ -53,17 +55,17 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_transliterated_numbers(self) -> List[str]:
+    def query_transliterated_numbers(self) -> List[MuseumNumber]:
         ...
 
     @abstractmethod
     def query_next_and_previous_folio(
-        self, folio_name: str, folio_number: str, number: FragmentNumber
+        self, folio_name: str, folio_number: str, number: MuseumNumber
     ) -> dict:
         ...
 
     @abstractmethod
-    def query_next_and_previous_fragment(self, number: FragmentNumber) -> dict:
+    def query_next_and_previous_fragment(self, number: MuseumNumber) -> dict:
         ...
 
     @abstractmethod

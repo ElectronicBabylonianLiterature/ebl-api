@@ -1,24 +1,23 @@
-import falcon  # pyre-ignore
-from apispec import APISpec  # pyre-ignore
+import falcon  # pyre-ignore[21]
+from apispec import APISpec  # pyre-ignore[21]
 from apispec.ext.marshmallow import MarshmallowPlugin
-from falcon_apispec import FalconPlugin  # pyre-ignore
+from falcon_apispec import FalconPlugin  # pyre-ignore[21]
 
 
 API_VERSION = "0.0.5"
 
 
-def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:  # pyre-ignore[11]
+def create_spec(
+    api: falcon.API, issuer: str, audience: str  # pyre-ignore[11]
+) -> APISpec:  # pyre-ignore[11]
     spec = APISpec(
         title="Electronic Babylonian Literature",
         version=API_VERSION,
         openapi_version="3.0.0",
         plugins=[FalconPlugin(api), MarshmallowPlugin()],
         servers=[
-            {
-                "url": "http://localhost:8000",
-                "description": "Local development server",
-            },
-            {"url": "https://api.ebabylon.org", "description": "Production server",},
+            {"url": "http://localhost:8000", "description": "Local development server"},
+            {"url": "https://api.ebabylon.org", "description": "Production server"},
         ],
     )
     authorization_url = f"{issuer}authorize" f"?audience={audience}"

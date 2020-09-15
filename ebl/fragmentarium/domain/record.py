@@ -42,7 +42,7 @@ class Record:
     ) -> "Record":
         if new_transliteration != old_transliteration:
             return Record(
-                (*self.entries, self._create_entry(old_transliteration, user.ebl_name),)
+                (*self.entries, self._create_entry(old_transliteration, user.ebl_name))
             )
         else:
             return self

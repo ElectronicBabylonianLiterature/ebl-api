@@ -5,8 +5,9 @@ from ebl.dictionary.application.dictionary import Dictionary
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.folios import Folio
-from ebl.fragmentarium.domain.fragment import Fragment, FragmentNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 
 
@@ -26,9 +27,9 @@ class FragmentFinder:
         self._photos = photos
         self._folios = folios
 
-    def find(self, number: FragmentNumber) -> Tuple[Fragment, bool]:
+    def find(self, number: MuseumNumber) -> Tuple[Fragment, bool]:
         return (
-            self._repository.query_by_fragment_number(number),
+            self._repository.query_by_museum_number(number),
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
@@ -41,28 +42,29 @@ class FragmentFinder:
         )
 
     def search_references_in_fragment_infos(
-            self, id: str, pages: str) -> List[FragmentInfo]:
+        self, id: str, pages: str
+    ) -> List[FragmentInfo]:
         fragment_infos = self.search_references(id, pages)
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:
             references_with_documents = []
             for reference in fragment_info.references:
-                references_with_documents.append(reference.set_document(
-                    self._bibliography.find(reference.id))
+                references_with_documents.append(
+                    reference.set_document(self._bibliography.find(reference.id))
                 )
             fragment_infos_with_documents.append(
                 fragment_info.set_references(references_with_documents)
             )
         return fragment_infos_with_documents
 
-    def search_references(self, reference_id: str, reference_pages: str) \
-            -> List[FragmentInfo]:
+    def search_references(
+        self, reference_id: str, reference_pages: str
+    ) -> List[FragmentInfo]:
         return list(
             map(
                 FragmentInfo.of,
                 self._repository.query_by_id_and_page_in_references(
-                    reference_id,
-                    reference_pages
+                    reference_id, reference_pages
                 ),
             )
         )
@@ -78,22 +80,22 @@ class FragmentFinder:
 
     def find_random(self) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, self._repository.query_random_by_transliterated(),)
+            map(FragmentInfo.of, self._repository.query_random_by_transliterated())
         )
 
     def find_interesting(self) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, (self._repository.query_path_of_the_pioneers()),)
+            map(FragmentInfo.of, (self._repository.query_path_of_the_pioneers()))
         )
 
     def folio_pager(
-        self, folio_name: str, folio_number: str, number: FragmentNumber
+        self, folio_name: str, folio_number: str, number: MuseumNumber
     ) -> dict:
         return self._repository.query_next_and_previous_folio(
             folio_name, folio_number, number
         )
 
-    def fragment_pager(self, number: FragmentNumber) -> dict:
+    def fragment_pager(self, number: MuseumNumber) -> dict:
         return self._repository.query_next_and_previous_fragment(number)
 
     def find_lemmas(self, word: str) -> List[List[dict]]:
@@ -106,6 +108,6 @@ class FragmentFinder:
         file_name = folio.file_name
         return self._folios.query_by_file_name(file_name)
 
-    def find_photo(self, number: FragmentNumber) -> File:
+    def find_photo(self, number: str) -> File:
         file_name = f"{number}.jpg"
         return self._photos.query_by_file_name(file_name)

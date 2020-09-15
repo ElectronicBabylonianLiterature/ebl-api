@@ -27,7 +27,7 @@ def test_of_value():
 
 
 @pytest.mark.parametrize(
-    "language,normalized", [(Language.SUMERIAN, False), (Language.AKKADIAN, True),],
+    "language,normalized", [(Language.SUMERIAN, False), (Language.AKKADIAN, True)]
 )
 def test_lone_determinative(language, normalized):
     value = "{mu}"
@@ -63,11 +63,7 @@ def test_lone_determinative(language, normalized):
     assert lone_determinative == equal
     assert hash(lone_determinative) == hash(equal)
 
-    for not_equal in [
-        other_language,
-        other_parts,
-        other_normalized,
-    ]:
+    for not_equal in [other_language, other_parts, other_normalized]:
         assert lone_determinative != not_equal
         assert hash(lone_determinative) != hash(not_equal)
 

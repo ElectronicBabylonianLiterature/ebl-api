@@ -25,7 +25,9 @@ from ebl.fragmentarium.web.transliterations import TransliterationResource
 from ebl.fragmentarium.web.atf_import import ATF_ImportResource
 
 
-def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyre-ignore[11]
+def create_fragmentarium_routes(
+    api: falcon.API, context: Context, spec  # pyre-ignore[11]
+):
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.get_bibliography(),
@@ -42,9 +44,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
     fragment_search = FragmentSearch(
-        fragmentarium,
-        finder,
-        context.get_transliteration_query_factory()
+        fragmentarium, finder, context.get_transliteration_query_factory()
     )
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)

@@ -48,6 +48,9 @@ class TokenVisitor(ABC):
     def visit_divider(self, divider) -> None:
         self.visit(divider)
 
+    def visit_line_break(self, line_break) -> None:
+        self.visit(line_break)
+
     def visit_commentary_protocol(self, protocol) -> None:
         self.visit(protocol)
 
@@ -59,6 +62,18 @@ class TokenVisitor(ABC):
 
     def visit_named_sign(self, named_sign) -> None:
         self.visit(named_sign)
+
+    def visit_number(self, number) -> None:
+        self.visit_named_sign(number)
+
+    def visit_grapheme(self, grapheme) -> None:
+        self.visit(grapheme)
+
+    def visit_compound_grapheme(self, grapheme) -> None:
+        self.visit(grapheme)
+
+    def visit_unknown_sign(self, sign) -> None:
+        self.visit(sign)
 
 
 class ErasureState(Enum):
@@ -121,7 +136,7 @@ class Token(ABC):
     def set_enclosure_type(self: T, enclosure_type: AbstractSet[EnclosureType]) -> T:
         return attr.evolve(self, enclosure_type=enclosure_type)
 
-    def set_erasure(self: T, erasure: ErasureState,) -> T:
+    def set_erasure(self: T, erasure: ErasureState) -> T:
         return attr.evolve(self, erasure=erasure)
 
     def merge(self, token: "Token") -> "Token":
@@ -284,3 +299,21 @@ class Joiner(Token):
     @staticmethod
     def of(joiner: atf.Joiner):
         return Joiner(frozenset(), ErasureState.NONE, joiner)
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class LineBreak(Token):
+    @property
+    def value(self) -> str:
+        return atf.LINE_BREAK
+
+    @property
+    def parts(self):
+        return tuple()
+
+    def accept(self, visitor: "TokenVisitor") -> None:
+        visitor.visit_line_break(self)
+
+    @staticmethod
+    def of() -> "LineBreak":
+        return LineBreak(frozenset(), ErasureState.NONE)

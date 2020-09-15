@@ -46,6 +46,7 @@ class Provenance(SiglumEnumWithParent):
     BABYLON = ("Babylon", "Bab", "Babylonia")
     BORSIPPA = ("Borsippa", "Bor", "Babylonia")
     CUTHA = ("Cutha", "Cut", "Babylonia")
+    DILBAT = ("Dilbat", "Dil", "Babylonia")
     ISIN = ("Isin", "Isn", "Babylonia")
     KIS = ("Kiš", "Kiš", "Babylonia")
     LARSA = ("Larsa", "Lar", "Babylonia")

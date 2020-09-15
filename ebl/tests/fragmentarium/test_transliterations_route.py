@@ -6,35 +6,30 @@ from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    LemmatizedFragmentFactory,
-)
-from ebl.transliteration.domain.atf import Atf
+from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    updates = {
-        "transliteration": "$ (the transliteration)",
-        "notes": "some notes",
-    }
+    fragmentarium.create(fragment)
+    updates = {"transliteration": "$ (the transliteration)", "notes": "some notes"}
     body = json.dumps(updates)
-    url = f"/fragments/{fragment_number}/transliteration"
+    url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
 
     expected_json = {
         **create_response_dto(
             fragment.update_transliteration(
                 TransliterationUpdate(
-                    Atf(updates["transliteration"]), updates["notes"]
+                    parse_atf_lark(updates["transliteration"]), updates["notes"]
                 ),
                 user,
             ),
             user,
-            fragment.number == "K.1",
+            fragment.number == MuseumNumber("K", "1"),
         ),
         "signs": "",
     }
@@ -43,12 +38,12 @@ def test_update_transliteration(client, fragmentarium, user, database):
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == expected_json
 
-    get_result = client.simulate_get(f"/fragments/{fragment_number}")
+    get_result = client.simulate_get(f"/fragments/{fragment.number}")
     assert get_result.json == expected_json
 
     assert database["changelog"].find_one(
         {
-            "resource_id": fragment_number,
+            "resource_id": str(fragment.number),
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
         }
@@ -57,52 +52,52 @@ def test_update_transliteration(client, fragmentarium, user, database):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration_merge_lemmatization(
-    client, fragmentarium, signs, sign_repository, transliteration_factory, user,
+    client, fragmentarium, signs, sign_repository, transliteration_factory, user
 ):
 
     for sign in signs:
         sign_repository.create(sign)
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_number = fragmentarium.create(lemmatized_fragment)
+    fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
-    updates = {
-        "transliteration": "\n".join(lines),
-        "notes": lemmatized_fragment.notes,
-    }
+    updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
     expected_json = create_response_dto(
         lemmatized_fragment.update_transliteration(updated_transliteration, user),
         user,
-        lemmatized_fragment.number == "K.1",
+        lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
 
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/transliteration", body=json.dumps(updates),
+        f"/fragments/{lemmatized_fragment.number}/transliteration",
+        body=json.dumps(updates),
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected_json
 
-    updated_fragment = client.simulate_get(f"/fragments/{fragment_number}").json
+    updated_fragment = client.simulate_get(
+        f"/fragments/{lemmatized_fragment.number}"
+    ).json
     assert updated_fragment == expected_json
 
 
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    updates = {"transliteration": "this is not valid", "notes": ""}
+    fragmentarium.create(fragment)
+    updates = {"transliteration": "1. kururu", "notes": ""}
     body = json.dumps(updates)
-    url = f"/fragments/{fragment_number}/transliteration"
+    url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert post_result.json == {
         "title": "422 Unprocessable Entity",
         "description": "Invalid transliteration",
-        "errors": [{"description": "Invalid value", "lineNumber": 1,}],
+        "errors": [{"description": "Invalid value", "lineNumber": 1}],
     }
 
 
@@ -114,6 +109,14 @@ def test_update_transliteration_not_found(client):
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_update_transliteration_invalid(client):
+    url = "/fragments/invalud/transliteration"
+    body = json.dumps({"transliteration": "", "notes": ""})
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.parametrize(
@@ -129,8 +132,8 @@ def test_update_transliteration_not_found(client):
 )
 def test_update_transliteration_invalid_entity(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    url = f"/fragments/{fragment_number}/transliteration"
+    fragmentarium.create(fragment)
+    url = f"/fragments/{fragment.number}/transliteration"
 
     post_result = client.simulate_post(url, body=body)
 

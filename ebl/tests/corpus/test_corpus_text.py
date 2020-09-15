@@ -11,11 +11,7 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.corpus.domain.reconstructed_text import (
-    AkkadianWord,
-    EnclosurePart,
-    StringPart,
-)
+from ebl.corpus.domain.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
 from ebl.corpus.domain.text import (
     Chapter,
     Line,
@@ -72,7 +68,7 @@ MANUSCRIPT_TEXT = TextLine(
                 Reading.of_name("nu"),
                 Joiner.hyphen(),
                 Reading.of_name("si"),
-            ],
+            ]
         ),
     ),
 )
@@ -164,8 +160,8 @@ def test_duplicate_ids_are_invalid():
     with pytest.raises(ValueError):
         Chapter(
             manuscripts=(
-                Manuscript(MANUSCRIPT_ID, siglum_disambiguator="a",),
-                Manuscript(MANUSCRIPT_ID, siglum_disambiguator="b",),
+                Manuscript(MANUSCRIPT_ID, siglum_disambiguator="a"),
+                Manuscript(MANUSCRIPT_ID, siglum_disambiguator="b"),
             )
         )
 
@@ -214,7 +210,7 @@ def test_missing_manuscripts_are_invalid():
             SurfaceLabel.from_label(Surface.OBVERSE),
             SurfaceLabel.from_label(Surface.REVERSE),
         ),
-        (ColumnLabel.from_label("i"), SurfaceLabel.from_label(Surface.REVERSE),),
+        (ColumnLabel.from_label("i"), SurfaceLabel.from_label(Surface.REVERSE)),
         (LineNumberLabel("1"),),
     ],
 )
@@ -225,9 +221,7 @@ def test_invalid_labels(labels: Sequence[Label]):
 
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
-        Line(
-            LINE_NUMBER, (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN),)),), tuple(),
-        )
+        Line(LINE_NUMBER, (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN),)),), tuple())
 
 
 def test_stage():

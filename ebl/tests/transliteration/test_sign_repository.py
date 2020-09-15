@@ -1,12 +1,7 @@
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.errors import NotFoundError
-from ebl.transliteration.domain.sign import (
-    Sign,
-    SignListRecord,
-    SignName,
-    Value,
-)
+from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import SignSchema
 
 COLLECTION = "signs"
@@ -106,7 +101,7 @@ def test_load():
     data = {
         "_id": "KUR",
         "lists": [{"name": "ABZ", "number": "03+53"}],
-        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"},],
+        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
     }
     sign = Sign(
         SignName("KUR"),
@@ -125,7 +120,7 @@ def test_dump():
     data = {
         "_id": "KUR",
         "lists": [{"name": "ABZ", "number": "03+53"}],
-        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"},],
+        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
     }
     assert SignSchema().dump(sign) == data
 
@@ -160,29 +155,3 @@ def test_search(
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search("unknown", 1) is None
-
-
-def test_search_many_one_reading(sign_repository, sign_igi, sign_si):
-    sign_repository.create(sign_igi)
-    sign_repository.create(sign_si)
-    value = sign_igi.values[0]
-
-    assert sign_repository.search_many([value]) == [sign_igi]
-
-
-def test_search_many_multiple_readings(sign_repository, sign_igi, sign_si):
-    sign_repository.create(sign_igi)
-    sign_repository.create(sign_si)
-    first_value = sign_igi.values[0]
-    second_value = sign_si.values[0]
-    assert sign_repository.search_many([first_value, second_value]) == [
-        sign_igi,
-        sign_si,
-    ]
-
-
-def test_search_many_no_readings(sign_repository, mongo_sign_igi, mongo_sign_si):
-    sign_repository.create(mongo_sign_igi)
-    sign_repository.create(mongo_sign_si)
-
-    assert sign_repository.search_many([]) == []

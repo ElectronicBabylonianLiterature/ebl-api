@@ -31,20 +31,20 @@ from ebl.transliteration.domain.sign_tokens import (
     Logogram,
     Number,
     Reading,
-    UnclearSign,
-    UnidentifiedSign,
 )
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
     Joiner,
     LanguageShift,
+    LineBreak,
     Tabulation,
+    Token,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
-    Token
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
@@ -97,9 +97,9 @@ class DocumentOrientedGlossSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            DocumentOrientedGloss.of(data["side"]).set_enclosure_type(
-                frozenset(data["enclosure_type"])
-            ).set_erasure(data["erasure"])
+            DocumentOrientedGloss.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
         )
 
 
@@ -107,9 +107,9 @@ class BrokenAwaySchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            BrokenAway.of(data["side"]).set_enclosure_type(
-                frozenset(data["enclosure_type"])
-            ).set_erasure(data["erasure"])
+            BrokenAway.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
         )
 
 
@@ -117,42 +117,50 @@ class PerhapsBrokenAwaySchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return (
-            PerhapsBrokenAway.of(data["side"]).set_enclosure_type(
-                frozenset(data["enclosure_type"])
-            ).set_erasure(data["erasure"])
+            PerhapsBrokenAway.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
         )
 
 
 class AccidentalOmissionSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return AccidentalOmission.of(data["side"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            AccidentalOmission.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class IntentionalOmissionSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return IntentionalOmission.of(data["side"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            IntentionalOmission.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class RemovalSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return Removal.of(data["side"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Removal.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class ErasureSchema(EnclosureSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return Erasure.of(data["side"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Erasure.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class UnknownNumberOfSignsSchema(BaseTokenSchema):
@@ -182,11 +190,11 @@ class DividerSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Divider.of(
-            data["divider"], tuple(data["modifiers"]), tuple(data["flags"]),
-        ).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Divider.of(data["divider"], tuple(data["modifiers"]), tuple(data["flags"]))
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class ColumnSchema(BaseTokenSchema):
@@ -194,9 +202,11 @@ class ColumnSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Column.of(data["number"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Column.of(data["number"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
@@ -204,9 +214,11 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnidentifiedSign.of(tuple(data["flags"])).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            UnidentifiedSign.of(tuple(data["flags"]))
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class UnclearSignSchema(BaseTokenSchema):
@@ -214,9 +226,11 @@ class UnclearSignSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return UnclearSign.of(tuple(data["flags"])).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            UnclearSign.of(tuple(data["flags"]))
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class JoinerSchema(BaseTokenSchema):
@@ -249,15 +263,17 @@ class NamedSignSchema(BaseTokenSchema):
 class ReadingSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return Reading.of(
-            data["name_parts"],
-            data["sub_index"],
-            data["modifiers"],
-            data["flags"],
-            data["sign"],
-        ).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Reading.of(
+                data["name_parts"],
+                data["sub_index"],
+                data["modifiers"],
+                data["flags"],
+                data["sign"],
+            )
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class LogogramSchema(NamedSignSchema):
@@ -265,30 +281,34 @@ class LogogramSchema(NamedSignSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Logogram.of(
-            data["name_parts"],
-            data["sub_index"],
-            data["modifiers"],
-            data["flags"],
-            data["sign"],
-            data["surrogate"],
-        ).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Logogram.of(
+                data["name_parts"],
+                data["sub_index"],
+                data["modifiers"],
+                data["flags"],
+                data["sign"],
+                data["surrogate"],
+            )
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class NumberSchema(NamedSignSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return Number.of(
-            data["name_parts"],
-            data["modifiers"],
-            data["flags"],
-            data["sign"],
-            data["sub_index"],
-        ).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Number.of(
+                data["name_parts"],
+                data["modifiers"],
+                data["flags"],
+                data["sign"],
+                data["sub_index"],
+            )
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class WordSchema(BaseTokenSchema):
@@ -312,7 +332,7 @@ class WordSchema(BaseTokenSchema):
 
     @post_dump
     def dump_token(self, data, **kwargs):
-        return pydash.omit_by(data, lambda value: value is None,)
+        return pydash.omit_by(data, lambda value: value is None)
 
 
 class LoneDeterminativeSchema(BaseTokenSchema):
@@ -337,7 +357,7 @@ class LoneDeterminativeSchema(BaseTokenSchema):
 
     @post_dump
     def dump_token(self, data, **kwargs):
-        return pydash.omit_by(data, lambda value: value is None,)
+        return pydash.omit_by(data, lambda value: value is None)
 
 
 class VariantSchema(BaseTokenSchema):
@@ -345,9 +365,11 @@ class VariantSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Variant.of(*data["tokens"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Variant.of(*data["tokens"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class GraphemeSchema(BaseTokenSchema):
@@ -357,11 +379,11 @@ class GraphemeSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return Grapheme.of(
-            data["name"], data["modifiers"], data["flags"]
-        ).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Grapheme.of(data["name"], data["modifiers"], data["flags"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class CompoundGraphemeSchema(BaseTokenSchema):
@@ -369,9 +391,11 @@ class CompoundGraphemeSchema(BaseTokenSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return CompoundGrapheme.of(data["compound_parts"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            CompoundGrapheme.of(data["compound_parts"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class GlossSchema(BaseTokenSchema):
@@ -386,25 +410,37 @@ class GlossSchema(BaseTokenSchema):
 class DeterminativeSchema(GlossSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return Determinative.of(data["parts"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            Determinative.of(data["parts"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class PhoneticGlossSchema(GlossSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return PhoneticGloss.of(data["parts"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            PhoneticGloss.of(data["parts"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
 
 
 class LinguisticGlossSchema(GlossSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return LinguisticGloss.of(data["parts"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
-        ).set_erasure(data["erasure"])
+        return (
+            LinguisticGloss.of(data["parts"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
+
+
+class LineBreakSchema(BaseTokenSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return LineBreak(frozenset(data["enclosure_type"]), data["erasure"])
 
 
 class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
@@ -440,4 +476,5 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "Determinative": DeterminativeSchema,
         "PhoneticGloss": PhoneticGlossSchema,
         "LinguisticGloss": LinguisticGlossSchema,
+        "LineBreak": LineBreakSchema,
     }

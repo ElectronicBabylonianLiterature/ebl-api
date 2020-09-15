@@ -3,11 +3,7 @@ from typing import Sequence
 import factory.fuzzy  # pyre-ignore
 import pydash  # pyre-ignore
 
-from ebl.corpus.domain.enclosure import (
-    Enclosure,
-    EnclosureType,
-    EnclosureVariant,
-)
+from ebl.corpus.domain.enclosure import Enclosure, EnclosureType, EnclosureVariant
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,
@@ -27,22 +23,12 @@ from ebl.corpus.domain.reconstructed_text import (
     SeparatorPart,
     StringPart,
 )
-from ebl.corpus.domain.text import (
-    Chapter,
-    Line,
-    Manuscript,
-    ManuscriptLine,
-    Text,
-)
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import (
-    ColumnLabel,
-    LineNumberLabel,
-    SurfaceLabel,
-)
+from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -89,7 +75,7 @@ class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
                     Joiner.hyphen(),
                     Reading.of_name("ši"),
                     BrokenAway.close(),
-                ],
+                ]
             ),
         ),
     )
@@ -103,7 +89,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
     reconstruction = (
         AkkadianWord((StringPart("buāru"),)),
         MetricalFootSeparator(True),
-        Lacuna((Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN),), tuple(),),
+        Lacuna((Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN),), tuple()),
         Caesura(False),
         AkkadianWord(
             (

@@ -34,7 +34,7 @@ def test_of_with_references():
         matching_lines,
         "",
         "",
-        FRAGMENT_WITH_REFERENCES.references
+        FRAGMENT_WITH_REFERENCES.references,
     )
 
 
@@ -44,7 +44,7 @@ def test_of_with_record():
         record=Record(
             (
                 RecordEntry(
-                    "Not This User", RecordType.REVISION, "2017-06-20T00:00:00.000Z",
+                    "Not This User", RecordType.REVISION, "2017-06-20T00:00:00.000Z"
                 ),
                 RecordEntry(
                     "Not This User",
@@ -52,10 +52,10 @@ def test_of_with_record():
                     "2015-06-20/2017-06-20",
                 ),
                 RecordEntry(
-                    "Not This User", RecordType.COLLATION, "2017-06-20T00:00:00.000Z",
+                    "Not This User", RecordType.COLLATION, "2017-06-20T00:00:00.000Z"
                 ),
                 RecordEntry(
-                    "This User", RecordType.TRANSLITERATION, "2018-06-20T00:00:00.000Z",
+                    "This User", RecordType.TRANSLITERATION, "2018-06-20T00:00:00.000Z"
                 ),
             )
         ),

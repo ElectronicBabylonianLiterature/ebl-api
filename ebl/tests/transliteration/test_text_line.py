@@ -78,9 +78,13 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
             [
                 BrokenAway.open(),
                 Reading.of(
-                    (ValueToken(frozenset({EnclosureType.BROKEN_AWAY}),
-                                ErasureState.NONE,
-                                "fourth"),)
+                    (
+                        ValueToken(
+                            frozenset({EnclosureType.BROKEN_AWAY}),
+                            ErasureState.NONE,
+                            "fourth",
+                        ),
+                    )
                 ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
             ],
             DEFAULT_LANGUAGE,
@@ -114,7 +118,8 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
         "9. [...] {bu}[...]",
         "10. [...]{bu}[...]",
         "11. in]-<(...)>",
-        "12. [ : ]",
+        "12a. [ : ]",
+        "12b. [ | ]",
         "13. [ %sux ]",
         "14. [ !cm ]",
         "15. ($___$) (x)-eš-am₃?#",
@@ -144,12 +149,12 @@ def test_text_line_atf_gloss() -> None:
 @pytest.mark.parametrize(
     "erasure,expected",
     [
-        ([Erasure.open(), Erasure.center(), Erasure.close(),], "°\\°",),
+        ([Erasure.open(), Erasure.center(), Erasure.close()], "°\\°"),
         (
             [
                 Erasure.open(),
                 Word.of(
-                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu")]
                 ),
                 Erasure.center(),
                 Erasure.close(),
@@ -161,7 +166,7 @@ def test_text_line_atf_gloss() -> None:
                 Erasure.open(),
                 Erasure.center(),
                 Word.of(
-                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu")]
                 ),
                 Erasure.close(),
             ],
@@ -171,11 +176,11 @@ def test_text_line_atf_gloss() -> None:
             [
                 Erasure.open(),
                 Word.of(
-                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu")]
                 ),
                 Erasure.center(),
                 Word.of(
-                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu"),]
+                    [Reading.of_name("mu"), Joiner.hyphen(), Reading.of_name("bu")]
                 ),
                 Erasure.close(),
             ],
@@ -196,7 +201,7 @@ def test_lemmatization() -> None:
             Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),)),
             UnknownNumberOfSigns.of(),
             Word.of([Reading.of_name("nu")]),
-        ]
+        ],
     )
 
     assert line.lemmatization == (
@@ -210,7 +215,7 @@ def test_update_lemmatization() -> None:
     line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("bu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     expected = TextLine.of_iterable(
-        LINE_NUMBER, [Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))],
+        LINE_NUMBER, [Word.of([Reading.of_name("bu")], unique_lemma=(WordId("nu I"),))]
     )
 
     assert line.update_lemmatization(lemmatization) == expected

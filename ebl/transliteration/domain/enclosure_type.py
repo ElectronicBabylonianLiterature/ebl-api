@@ -4,22 +4,13 @@ from typing import FrozenSet, Set, AbstractSet
 
 @unique
 class EnclosureType(Enum):
-    ACCIDENTAL_OMISSION = (
-        "ACCIDENTAL_OMISSION",
-        frozenset(["INTENTIONAL_OMISSION"]),
-    )
-    INTENTIONAL_OMISSION = (
-        "INTENTIONAL_OMISSION",
-        frozenset(["ACCIDENTAL_OMISSION"]),
-    )
+    ACCIDENTAL_OMISSION = ("ACCIDENTAL_OMISSION", frozenset(["INTENTIONAL_OMISSION"]))
+    INTENTIONAL_OMISSION = ("INTENTIONAL_OMISSION", frozenset(["ACCIDENTAL_OMISSION"]))
     REMOVAL = ("REMOVAL",)
-    BROKEN_AWAY = (
-        "BROKEN_AWAY",
-        frozenset(["PERHAPS_BROKEN_AWAY", "PERHAPS"]),
-    )
+    BROKEN_AWAY = ("BROKEN_AWAY", frozenset(["PERHAPS_BROKEN_AWAY", "PERHAPS"]))
     PERHAPS_BROKEN_AWAY = (
         "PERHAPS_BROKEN_AWAY",
-        frozenset(["PERHAPS", "ACCIDENTAL_OMISSION", "INTENTIONAL_OMISSION",]),
+        frozenset(["PERHAPS", "ACCIDENTAL_OMISSION", "INTENTIONAL_OMISSION"]),
         frozenset(["BROKEN_AWAY"]),
     )
     PERHAPS = (

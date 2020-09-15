@@ -1,12 +1,15 @@
 import attr
-import pydash  # pyre-ignore
+import pydash  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.web.dtos import create_response_dto
+from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.application.text_schema import TextSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.errors import DataError
 
 
 def test_create_response_dto(user):
@@ -14,7 +17,7 @@ def test_create_response_dto(user):
     has_photo = True
     assert create_response_dto(lemmatized_fragment, user, has_photo) == pydash.omit_by(
         {
-            "_id": lemmatized_fragment.number,
+            "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": lemmatized_fragment.accession,
             "cdliNumber": lemmatized_fragment.cdli_number,
             "bmIdNumber": lemmatized_fragment.bm_id_number,
@@ -22,14 +25,13 @@ def test_create_response_dto(user):
             "description": lemmatized_fragment.description,
             "joins": list(lemmatized_fragment.joins),
             "length": attr.asdict(
-                lemmatized_fragment.length, filter=lambda _, value: value is not None,
+                lemmatized_fragment.length, filter=lambda _, value: value is not None
             ),
             "width": attr.asdict(
-                lemmatized_fragment.width, filter=lambda _, value: value is not None,
+                lemmatized_fragment.width, filter=lambda _, value: value is not None
             ),
             "thickness": attr.asdict(
-                lemmatized_fragment.thickness,
-                filter=lambda _, value: value is not None,
+                lemmatized_fragment.thickness, filter=lambda _, value: value is not None
             ),
             "collection": lemmatized_fragment.collection,
             "script": lemmatized_fragment.script,
@@ -37,7 +39,7 @@ def test_create_response_dto(user):
             "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,
             "record": [
-                {"user": entry.user, "type": entry.type.value, "date": entry.date,}
+                {"user": entry.user, "type": entry.type.value, "date": entry.date}
                 for entry in lemmatized_fragment.record.entries
             ],
             "folios": [
@@ -76,8 +78,8 @@ def test_create_fragment_info_dto():
     info = FragmentInfo.of(lemmatized_fragment, ((line,),))
     record_entry = lemmatized_fragment.record.entries[0]
     is_transliteration = record_entry.type == RecordType.TRANSLITERATION
-    assert FragmentInfoSchema().dump(info) == {
-        "number": info.number,
+    assert ApiFragmentInfoSchema().dump(info) == {
+        "number": str(info.number),
         "accession": info.accession,
         "script": info.script,
         "description": info.description,
@@ -86,3 +88,13 @@ def test_create_fragment_info_dto():
         "editionDate": record_entry.date if is_transliteration else "",
         "references": [],
     }
+
+
+def test_parse_museum_number():
+    number = MuseumNumber("A", "B", "C")
+    assert parse_museum_number(str(number)) == number
+
+
+def test_parse_invalid_museum_number():
+    with pytest.raises(DataError):
+        parse_museum_number("invalid")

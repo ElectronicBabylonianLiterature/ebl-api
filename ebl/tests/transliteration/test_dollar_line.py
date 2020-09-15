@@ -89,7 +89,9 @@ def test_state_dollar_line() -> None:
     assert actual.extent == atf.Extent.SEVERAL
     assert actual.state == atf.State.BLANK
     assert actual.status == atf.DollarStatus.UNCERTAIN
-    assert actual.lemmatization == (LemmatizationToken(" at least several columns blank ?"),)
+    assert actual.lemmatization == (
+        LemmatizationToken(" at least several columns blank ?"),
+    )
     assert actual.atf == "$ at least several columns blank ?"
     assert actual.display_value == "at least several columns blank ?"
 
@@ -118,13 +120,7 @@ def test_state_dollar_line_non_empty_string_error() -> None:
 
 def test_state_dollar_line_range() -> None:
     scope = ScopeContainer(atf.Scope.LINES)
-    actual = StateDollarLine(
-        None,
-        (2, 4),
-        scope,
-        atf.State.MISSING,
-        None,
-    )
+    actual = StateDollarLine(None, (2, 4), scope, atf.State.MISSING, None)
 
     assert actual.scope == scope
     assert actual.lemmatization == (LemmatizationToken(" 2-4 lines missing"),)

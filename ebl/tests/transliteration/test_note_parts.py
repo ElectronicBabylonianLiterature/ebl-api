@@ -12,11 +12,7 @@ def test_bibliography_part() -> None:
     part = BibliographyPart.of(BIBLIOGRAPHY_ID, pages)
 
     assert part.reference == Reference(
-        BIBLIOGRAPHY_ID,
-        ReferenceType.DISCUSSION,
-        pages,
-        "",
-        tuple()
+        BIBLIOGRAPHY_ID, ReferenceType.DISCUSSION, pages, "", tuple()
     )
 
 
@@ -28,13 +24,16 @@ def test_bibliography_part_escape() -> None:
     assert part.value == f"@bib{{{escaped}@{escaped}}}"
 
 
-@pytest.mark.parametrize("type,pages,note,lines", [
-    (ReferenceType.EDITION, "1", "", tuple()),
-    (ReferenceType.COPY, "1", "", tuple()),
-    (ReferenceType.PHOTO, "1", "", tuple()),
-    (ReferenceType.DISCUSSION, "1", "notes not allowed", tuple()),
-    (ReferenceType.DISCUSSION, "1", "", ("1", "2")),
-])
-def test_invalid_reference(type,pages,note,lines) -> None:
-    with(pytest.raises(ValueError)):
+@pytest.mark.parametrize(
+    "type,pages,note,lines",
+    [
+        (ReferenceType.EDITION, "1", "", tuple()),
+        (ReferenceType.COPY, "1", "", tuple()),
+        (ReferenceType.PHOTO, "1", "", tuple()),
+        (ReferenceType.DISCUSSION, "1", "notes not allowed", tuple()),
+        (ReferenceType.DISCUSSION, "1", "", ("1", "2")),
+    ],
+)
+def test_invalid_reference(type, pages, note, lines) -> None:
+    with (pytest.raises(ValueError)):
         BibliographyPart(Reference(BIBLIOGRAPHY_ID, type, pages, note, lines))

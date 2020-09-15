@@ -6,6 +6,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     Geometry,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 class GeometryFactory(factory.Factory):  # pyre-ignore[11]
@@ -45,7 +46,7 @@ class AnnotationsFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Annotations
 
-    fragment_number = factory.Sequence(lambda n: f"X.{n}")
+    fragment_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     annotations = factory.List(
-        [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory),]
+        [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory)]
     )

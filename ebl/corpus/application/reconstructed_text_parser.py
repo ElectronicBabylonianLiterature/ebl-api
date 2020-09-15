@@ -11,11 +11,7 @@ from parsy import (  # pyre-ignore
     string_from,
 )
 
-from ebl.corpus.domain.enclosure import (
-    Enclosure,
-    EnclosureType,
-    EnclosureVariant,
-)
+from ebl.corpus.domain.enclosure import Enclosure, EnclosureType, EnclosureVariant
 from ebl.corpus.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,

@@ -49,7 +49,7 @@ GET_MATCHING_LINES_DATA = [
     ([["GI₆"]], [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]"]]),
     (
         [["GI₆", "DIŠ"], ["U", "BA", "MA"]],
-        [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]",]],
+        [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]"]],
     ),
     (
         [["NU", "IGI"], ["GI₆", "DIŠ"]],
@@ -65,9 +65,7 @@ GET_MATCHING_LINES_DATA = [
     ),
     (
         [["MA"], ["TA"]],
-        [
-            ["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]",],
-        ],
+        [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]"]],
     ),
     ([["BU"]], [["7'. šu/gid"]]),
 ]

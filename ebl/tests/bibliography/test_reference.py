@@ -1,9 +1,8 @@
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
-from ebl.bibliography.domain.reference import (
-    BibliographyId,
-    Reference,
-    ReferenceType,
+from ebl.bibliography.application.reference_schema import (
+    ApiReferenceSchema,
+    ReferenceSchema,
 )
+from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 ID = BibliographyId("RN.1")
@@ -25,7 +24,7 @@ SERIALIZED_REFERENCE: dict = {
 
 def create_reference_with_document(bibliography_entry) -> Reference:
     return Reference(
-        bibliography_entry["id"], TYPE, PAGES, NOTES, LINES_CITED, bibliography_entry,
+        bibliography_entry["id"], TYPE, PAGES, NOTES, LINES_CITED, bibliography_entry
     )
 
 

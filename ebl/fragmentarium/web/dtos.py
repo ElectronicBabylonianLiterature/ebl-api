@@ -4,6 +4,8 @@ from marshmallow import fields, pre_dump  # pyre-ignore
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.users.domain.user import User
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.errors import DataError
 
 
 class FragmentDtoSchema(FragmentSchema):
@@ -20,6 +22,11 @@ class FragmentDtoSchema(FragmentSchema):
 def create_response_dto(fragment: Fragment, user: User, has_photo: bool):
     return FragmentDtoSchema(  # pyre-ignore[16,28]
         context={"user": user, "has_photo": has_photo}
-    ).dump(
-        fragment
-    )
+    ).dump(fragment)
+
+
+def parse_museum_number(number: str) -> MuseumNumber:
+    try:
+        return MuseumNumber.of(number)
+    except ValueError as error:
+        raise DataError(error)

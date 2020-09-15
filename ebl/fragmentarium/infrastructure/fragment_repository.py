@@ -5,18 +5,21 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import FragmentNumber
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
-    aggregate_path_of_the_pioneers,
     aggregate_latest,
     aggregate_lemmas,
     aggregate_needs_revision,
+    aggregate_path_of_the_pioneers,
     aggregate_random,
     fragment_is,
+    museum_number_is,
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+
 
 COLLECTION = "fragments"
 
@@ -34,12 +37,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def count_lines(self):
         result = self._collection.aggregate(
-            [
-                {"$group": {
-                    "_id": None,
-                    "total": {"$sum": "$text.numberOfLines"}
-                }}
-            ]
+            [{"$group": {"_id": None, "total": {"$sum": "$text.numberOfLines"}}}]
         )
         try:
             return next(result)["total"]
@@ -47,26 +45,20 @@ class MongoFragmentRepository(FragmentRepository):
             return 0
 
     def create(self, fragment):
-        return self._collection.insert_one(FragmentSchema().dump(fragment))
+        return self._collection.insert_one(
+            {"_id": str(fragment.number), **FragmentSchema().dump(fragment)}
+        )
 
-    def query_by_fragment_number(self, number):
-        data = self._collection.find_one_by_id(number)
-        return FragmentSchema(unknown=EXCLUDE).load(data)
+    def query_by_museum_number(self, number: MuseumNumber):
+        data = self._collection.find_one(museum_number_is(number))
+        return FragmentSchema(unknown=EXCLUDE).load(data)  # pyre-ignore[16,28]
 
-    def query_by_id_and_page_in_references(
-            self, id_: str,
-            pages: str
-    ):
+    def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match = dict()
-        match["references"] = {
-            "$elemMatch": {
-                "id": id_,
-            }
-        }
+        match["references"] = {"$elemMatch": {"id": id_}}
         if pages:
             match["references"]["$elemMatch"]["pages"] = {
-                "$regex":
-                    fr"^([^0-9]*\s*)?({pages}(-|\s)|[\d]*-{pages}\s|{pages}$)"
+                "$regex": fr"^([^0-9]*\s*)?({pages}(-|\s)|[\d]*-{pages}\s|{pages}$)"
             }
         cursor = self._collection.find_many(match)
         return self._map_fragments(cursor)
@@ -87,9 +79,13 @@ class MongoFragmentRepository(FragmentRepository):
         return self._map_fragments(cursor)
 
     def query_transliterated_numbers(self):
-        cursor = self._collection.find_many(HAS_TRANSLITERATION, projection=["_id"])
+        cursor = self._collection.find_many(
+            HAS_TRANSLITERATION, projection=["museumNumber"]
+        )
 
-        return [fragment["_id"] for fragment in cursor]
+        return MuseumNumberSchema(many=True).load(
+            fragment["museumNumber"] for fragment in cursor
+        )
 
     def query_by_transliterated_sorted_by_date(self):
         cursor = self._collection.aggregate(aggregate_latest())
@@ -101,8 +97,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_by_transliteration(self, query):
         cursor = self._collection.find_many(
-            {"signs": {"$regex": query.regexp}},
-            limit=100
+            {"signs": {"$regex": query.regexp}}, limit=100
         )
         return self._map_fragments(cursor)
 
@@ -146,19 +141,16 @@ class MongoFragmentRepository(FragmentRepository):
             cursor = self._collection.aggregate(pipeline)
             if cursor.alive:
                 entry = next(cursor)
-                return {
-                    "fragmentNumber": entry["_id"],
-                    "folioNumber": entry["number"],
-                }
+                return {"fragmentNumber": entry["_id"], "folioNumber": entry["number"]}
             else:
                 return None
 
         first = create_pipeline(sort_ascending)
         previous = create_pipeline(
-            {"$match": {"key": {"$lt": f"{folio_number}-{number}"}}}, sort_descending,
+            {"$match": {"key": {"$lt": f"{folio_number}-{number}"}}}, sort_descending
         )
         next_ = create_pipeline(
-            {"$match": {"key": {"$gt": f"{folio_number}-{number}"}}}, sort_ascending,
+            {"$match": {"key": {"$gt": f"{folio_number}-{number}"}}}, sort_ascending
         )
         last = create_pipeline(sort_descending)
 
@@ -172,14 +164,14 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def query_next_and_previous_fragment(self, number: FragmentNumber):
+    def query_next_and_previous_fragment(self, number: MuseumNumber):
         next_ = (
-            self._collection.find_many({"_id": {"$gt": f"{number}"}})
+            self._collection.find_many({"_id": {"$gt": f"{str(number)}"}})
             .sort("_id", 1)
             .limit(1)
         )
         previous = (
-            self._collection.find_many({"_id": {"$lt": f"{number}"}})
+            self._collection.find_many({"_id": {"$lt": f"{str(number)}"}})
             .sort("_id", -1)
             .limit(1)
         )

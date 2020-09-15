@@ -60,7 +60,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     body = {"lines": create_dto(updated_text)["chapters"][0]["lines"]}
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}/chapters/0/lines", body=json.dumps(body),
+        f"/texts/{text.category}/{text.index}/chapters/0/lines", body=json.dumps(body)
     )
 
     assert post_result.status == falcon.HTTP_OK

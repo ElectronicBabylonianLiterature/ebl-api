@@ -4,14 +4,11 @@ from mockito import spy2, unstub, verifyZeroInteractions  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.folios import Folio
-from ebl.fragmentarium.domain.fragment import FragmentNumber
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    TransliteratedFragmentFactory,
-)
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @pytest.mark.parametrize("has_photo", [True, False])
@@ -20,19 +17,15 @@ def test_find_with_photo(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    (when(fragment_repository).query_by_fragment_number(number).thenReturn(fragment))
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
 
     assert fragment_finder.find(number) == (fragment, has_photo)
 
 
 def test_find_not_found(fragment_finder, fragment_repository, when):
-    number = "unknown id"
-    (
-        when(fragment_repository)
-        .query_by_fragment_number(number)
-        .thenRaise(NotFoundError)
-    )
+    number = MuseumNumber("unknown", "id")
+    (when(fragment_repository).query_by_museum_number(number).thenRaise(NotFoundError))
 
     with pytest.raises(NotFoundError):
         fragment_finder.find(number)
@@ -91,44 +84,42 @@ def test_search(fragment_finder, fragment_repository, when):
 
 def test_inject_document_in_fragment_infos(fragment_finder, when, bibliography):
     bibliography_entry = BibliographyEntryFactory.build()
-    fragment_1 = FragmentInfo.of(FragmentFactory.build(
-        number='K.1',
-        references=(ReferenceFactory.build(id='RN.0'),))
+    fragment_1 = FragmentInfo.of(
+        FragmentFactory.build(
+            number="K.1", references=(ReferenceFactory.build(id="RN.0"),)
+        )
     )
-    fragment_2 = FragmentInfo.of(FragmentFactory.build(
-        number='K.2',
-        references=(ReferenceFactory.build(id='RN.1'), ReferenceFactory.build(id='RN.2')))
+    fragment_2 = FragmentInfo.of(
+        FragmentFactory.build(
+            number="K.2",
+            references=(
+                ReferenceFactory.build(id="RN.1"),
+                ReferenceFactory.build(id="RN.2"),
+            ),
+        )
     )
-    fragment_expected_1 = fragment_1.set_references([
-        fragment_1.references[0].set_document(bibliography_entry)
-    ])
-    fragment_expected_2 = fragment_2.set_references([
-        fragment_2.references[0].set_document(bibliography_entry),
-        fragment_2.references[1].set_document(bibliography_entry),
-    ])
+    fragment_expected_1 = fragment_1.set_references(
+        [fragment_1.references[0].set_document(bibliography_entry)]
+    )
+    fragment_expected_2 = fragment_2.set_references(
+        [
+            fragment_2.references[0].set_document(bibliography_entry),
+            fragment_2.references[1].set_document(bibliography_entry),
+        ]
+    )
     (
         when(fragment_finder)
         .search_references("id", "pages")
         .thenReturn([fragment_1, fragment_2])
     )
-    (
-        when(bibliography)
-        .find("RN.0")
-        .thenReturn(bibliography_entry)
-    )
-    (
-        when(bibliography)
-        .find("RN.1")
-        .thenReturn(bibliography_entry)
-    )
-    (
-        when(bibliography)
-        .find("RN.2")
-        .thenReturn(bibliography_entry)
-    )
+    (when(bibliography).find("RN.0").thenReturn(bibliography_entry))
+    (when(bibliography).find("RN.1").thenReturn(bibliography_entry))
+    (when(bibliography).find("RN.2").thenReturn(bibliography_entry))
 
-    assert fragment_finder.search_references_in_fragment_infos("id", "pages") \
-        == [fragment_expected_1, fragment_expected_2]
+    assert fragment_finder.search_references_in_fragment_infos("id", "pages") == [
+        fragment_expected_1,
+        fragment_expected_2,
+    ]
 
 
 def test_fragment_search_references(fragment_finder, fragment_repository, when):
@@ -144,8 +135,9 @@ def test_fragment_search_references(fragment_finder, fragment_repository, when):
         .query_by_id_and_page_in_references(references_id, references_pages)
         .thenReturn([fragment])
     )
-    assert fragment_finder.search_references(references_id, references_pages
-                                             ) == [FragmentInfo.of(fragment)]
+    assert fragment_finder.search_references(references_id, references_pages) == [
+        FragmentInfo.of(fragment)
+    ]
 
 
 def test_search_transliteration(fragment_finder, fragment_repository, when):
@@ -191,7 +183,7 @@ def test_find_lemmas(fragment_finder, dictionary, word, fragment_repository, whe
 
 
 def test_find_photo(fragment_finder, photo, photo_repository, when):
-    number = FragmentNumber("K.1")
+    number = "K.1"
     file_name = f"{number}.jpg"
     when(photo_repository).query_by_file_name(file_name).thenReturn(photo)
 

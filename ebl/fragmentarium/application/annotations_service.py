@@ -1,7 +1,7 @@
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.fragmentarium.domain.fragment import FragmentNumber
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
 
@@ -10,14 +10,14 @@ class AnnotationsService:
         self._repository = repository
         self._changelog = changelog
 
-    def find(self, fragment_number: FragmentNumber) -> Annotations:
-        return self._repository.query_by_fragment_number(fragment_number)
+    def find(self, number: MuseumNumber) -> Annotations:
+        return self._repository.query_by_museum_number(number)
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
-        old_annotations = self._repository.query_by_fragment_number(
+        old_annotations = self._repository.query_by_museum_number(
             annotations.fragment_number
         )
-        _id = annotations.fragment_number
+        _id = str(annotations.fragment_number)
         schema = AnnotationsSchema()
         self._changelog.create(
             "annotations",

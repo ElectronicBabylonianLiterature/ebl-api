@@ -3,10 +3,7 @@ from typing import Mapping, Type
 from marshmallow import EXCLUDE, Schema, fields, post_load, validate  # pyre-ignore
 from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
-from ebl.transliteration.domain.line_number import (
-    LineNumber,
-    LineNumberRange,
-)
+from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 
 
 class LineNumberSchema(Schema):  # pyre-ignore[11]
@@ -41,7 +38,7 @@ class LineNumberRangeSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_line_number_range(self, data: dict, **kwargs) -> LineNumberRange:
-        return LineNumberRange(data["start"], data["end"],)
+        return LineNumberRange(data["start"], data["end"])
 
 
 class OneOfLineNumberSchema(OneOfSchema):  # pyre-ignore[11]

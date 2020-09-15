@@ -9,7 +9,7 @@ import pydash  # pyre-ignore
 import pytest  # pyre-ignore
 from dictdiffer import diff  # pyre-ignore
 from falcon import testing  # pyre-ignore
-from falcon_auth import NoneAuthBackend   # pyre-ignore
+from falcon_auth import NoneAuthBackend  # pyre-ignore
 
 import ebl.app
 import ebl.context
@@ -35,7 +35,6 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
-from ebl.transliteration.application.atf_converter import AtfConverter
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.domain.user import User
@@ -72,12 +71,13 @@ def dictionary(word_repository, changelog):
 class TestBibliographyRepository(MongoBibliographyRepository):
     # Mongomock does not support $addFields so we need to
     # stub the methods using them.
-    def query_by_author_year_and_title(self, _author=None, _year=None, _title=None,
-                                       _greater_than=False):
+    def query_by_author_year_and_title(
+        self, _author=None, _year=None, _title=None, _greater_than=False
+    ):
         return [create_object_entry(self._collection.find_one({}))]
 
     def query_by_container_title_and_collection_number(
-            self, _container_title_short=None, _collection_number=None
+        self, _container_title_short=None, _collection_number=None
     ):
         return [create_object_entry(self._collection.find_one({}))]
 
@@ -98,18 +98,13 @@ def sign_repository(database):
 
 
 @pytest.fixture
-def transliteration_factory(atf_converter):
-    return TransliterationUpdateFactory(atf_converter)
-
-
-@pytest.fixture
-def atf_converter(sign_repository):
-    return AtfConverter(sign_repository)
+def transliteration_factory(sign_repository):
+    return TransliterationUpdateFactory(sign_repository)
 
 
 @pytest.fixture
 def text_repository(database):
-    return MongoTextRepository(database,)
+    return MongoTextRepository(database)
 
 
 @pytest.fixture
@@ -132,7 +127,7 @@ class TestFragmentRepository(MongoFragmentRepository):
     # Mongomock does not support $concat so we need to stub the methods using it.
     def query_next_and_previous_folio(self, _folio_name, _folio_number, _number):
         return {
-            "previous": {"fragmentNumber": _number, "folioNumber": _folio_number,},
+            "previous": {"fragmentNumber": _number, "folioNumber": _folio_number},
             "next": {"fragmentNumber": _number, "folioNumber": _folio_number},
         }
 
@@ -152,8 +147,9 @@ def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
 
 
 @pytest.fixture
-def fragment_finder(fragment_repository, dictionary, photo_repository, file_repository,
-                    bibliography):
+def fragment_finder(
+    fragment_repository, dictionary, photo_repository, file_repository, bibliography
+):
     return FragmentFinder(
         bibliography, fragment_repository, dictionary, photo_repository, file_repository
     )
@@ -326,7 +322,7 @@ def word():
         "_id": "part1 part2 I",
         "forms": [
             {"lemma": ["form1"], "notes": [], "attested": True},
-            {"lemma": ["form2", "part2"], "notes": ["a note"], "attested": False,},
+            {"lemma": ["form2", "part2"], "notes": ["a note"], "attested": False},
         ],
         "meaning": "a meaning",
         "amplifiedMeanings": [
@@ -354,8 +350,7 @@ def make_changelog_entry(user):
     def _make_changelog_entry(resource_type, resource_id, old, new):
         return {
             "user_profile": {
-                key.replace(".", "_"): value
-                for key, value in user.profile.items()
+                key.replace(".", "_"): value for key, value in user.profile.items()
             },
             "resource_type": resource_type,
             "resource_id": resource_id,
@@ -412,4 +407,5 @@ def create_mongo_bibliography_entry():
         return pydash.map_keys(
             bibliography_entry, lambda _, key: "_id" if key == "id" else key
         )
+
     return _from_bibliography_entry

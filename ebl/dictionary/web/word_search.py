@@ -9,7 +9,8 @@ class WordSearch:
         self._dispatch = create_dispatcher(
             {
                 frozenset(["query"]): lambda value: dictionary.search(**value),
-                frozenset(["lemma"]): lambda value: dictionary.search_lemma(**value), }
+                frozenset(["lemma"]): lambda value: dictionary.search_lemma(**value),
+            }
         )
 
     @falcon.before(require_scope, "read:words")

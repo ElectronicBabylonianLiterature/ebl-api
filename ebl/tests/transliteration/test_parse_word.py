@@ -21,9 +21,8 @@ from ebl.transliteration.domain.sign_tokens import (
     Logogram,
     Number,
     Reading,
-    UnclearSign,
-    UnidentifiedSign,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import (
     Joiner,
     UnknownNumberOfSigns,
@@ -31,6 +30,7 @@ from ebl.transliteration.domain.tokens import (
     Variant,
 )
 from ebl.transliteration.domain.word_tokens import (
+    ErasureState,
     InWordNewline,
     LoneDeterminative,
     Word,
@@ -53,46 +53,39 @@ from ebl.transliteration.domain.word_tokens import (
                     Number.of(
                         (ValueToken.of("1"), BrokenAway.close(), ValueToken.of("2"))
                     )
-                ],
+                ]
             ),
         ),
         (
             "1[2",
             Word.of(
-                [
-                    Number.of(
-                        (ValueToken.of("1"), BrokenAway.open(), ValueToken.of("2"))
-                    )
-                ],
+                [Number.of((ValueToken.of("1"), BrokenAway.open(), ValueToken.of("2")))]
             ),
         ),
         ("ʾ", Word.of([Reading.of_name("ʾ")])),
         ("du₁₁", Word.of([Reading.of_name("du", 11)])),
         ("GAL", Word.of([Logogram.of_name("GAL")])),
-        ("kur(GAL)", Word.of([Reading.of_name("kur", sign=Grapheme.of("GAL"))]),),
-        ("KUR(GAL)", Word.of([Logogram.of_name("KUR", sign=Grapheme.of("GAL"))]),),
+        ("kur(GAL)", Word.of([Reading.of_name("kur", sign=Grapheme.of("GAL"))])),
+        ("KUR(GAL)", Word.of([Logogram.of_name("KUR", sign=Grapheme.of("GAL"))])),
         (
             "kur(|GAL|)",
-            Word.of([Reading.of_name("kur", sign=CompoundGrapheme.of(["GAL"]))],),
+            Word.of([Reading.of_name("kur", sign=CompoundGrapheme.of(["GAL"]))]),
         ),
         (
             "KUR(|GAL|)",
-            Word.of([Logogram.of_name("KUR", sign=CompoundGrapheme.of(["GAL"]))],),
+            Word.of([Logogram.of_name("KUR", sign=CompoundGrapheme.of(["GAL"]))]),
         ),
         ("|GAL|", Word.of([CompoundGrapheme.of(["GAL"])])),
         ("|U₄&KAM₂|", Word.of([CompoundGrapheme.of(["U₄&KAM₂"])])),
         ("|BI.IS|", Word.of([CompoundGrapheme.of(["BI", "IS"])])),
         ("|BI×(IS.IS)|", Word.of([CompoundGrapheme.of(["BI×(IS.IS)"])])),
-        (
-            "x-ti",
-            Word.of([UnclearSign.of(), Joiner.hyphen(), Reading.of_name("ti"),],),
-        ),
-        ("x.ti", Word.of([UnclearSign.of(), Joiner.dot(), Reading.of_name("ti"),],),),
-        ("x+ti", Word.of([UnclearSign.of(), Joiner.plus(), Reading.of_name("ti"),],),),
-        ("x:ti", Word.of([UnclearSign.of(), Joiner.colon(), Reading.of_name("ti"),],),),
+        ("x-ti", Word.of([UnclearSign.of(), Joiner.hyphen(), Reading.of_name("ti")])),
+        ("x.ti", Word.of([UnclearSign.of(), Joiner.dot(), Reading.of_name("ti")])),
+        ("x+ti", Word.of([UnclearSign.of(), Joiner.plus(), Reading.of_name("ti")])),
+        ("x:ti", Word.of([UnclearSign.of(), Joiner.colon(), Reading.of_name("ti")])),
         (
             "ti-X",
-            Word.of([Reading.of_name("ti"), Joiner.hyphen(), UnidentifiedSign.of(),],),
+            Word.of([Reading.of_name("ti"), Joiner.hyphen(), UnidentifiedSign.of()]),
         ),
         (
             "r]u-u₂-qu",
@@ -105,7 +98,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("u", 2),
                     Joiner.hyphen(),
                     Reading.of_name("qu"),
-                ],
+                ]
             ),
         ),
         (
@@ -117,7 +110,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("u", 2),
                     Joiner.hyphen(),
                     Reading.of_name("qu"),
-                ],
+                ]
             ),
         ),
         ("gid₂", Word.of([Reading.of_name("gid", 2)])),
@@ -131,41 +124,37 @@ from ebl.transliteration.domain.word_tokens import (
                     Number.of_name("14"),
                     Joiner.dot(),
                     Logogram.of_name("KAM", 2),
-                ],
+                ]
             ),
         ),
         (
             "{ku}nu",
-            Word.of(
-                [Determinative.of([Reading.of_name("ku")]), Reading.of_name("nu"),],
-            ),
+            Word.of([Determinative.of([Reading.of_name("ku")]), Reading.of_name("nu")]),
         ),
         (
             "{{ku}}nu",
             Word.of(
-                [LinguisticGloss.of([Reading.of_name("ku"),]), Reading.of_name("nu"),],
+                [LinguisticGloss.of([Reading.of_name("ku")]), Reading.of_name("nu")]
             ),
         ),
         (
             "ku{{nu}}",
             Word.of(
-                [Reading.of_name("ku"), LinguisticGloss.of([Reading.of_name("nu"),]),],
+                [Reading.of_name("ku"), LinguisticGloss.of([Reading.of_name("nu")])]
             ),
         ),
         (
             "ku{nu}",
-            Word.of(
-                [Reading.of_name("ku"), Determinative.of([Reading.of_name("nu")]),],
-            ),
+            Word.of([Reading.of_name("ku"), Determinative.of([Reading.of_name("nu")])]),
         ),
         (
             "ku{{nu}}si",
             Word.of(
                 [
                     Reading.of_name("ku"),
-                    LinguisticGloss.of([Reading.of_name("nu"),]),
+                    LinguisticGloss.of([Reading.of_name("nu")]),
                     Reading.of_name("si"),
-                ],
+                ]
             ),
         ),
         (
@@ -175,7 +164,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Determinative.of([Reading.of_name("iti")]),
                     BrokenAway.close(),
                     Logogram.of_name("ŠE"),
-                ],
+                ]
             ),
         ),
         (
@@ -187,7 +176,7 @@ from ebl.transliteration.domain.word_tokens import (
                         CompoundGrapheme.of(["BI×IS"]),
                         Logogram.of_name("BI"),
                     )
-                ],
+                ]
             ),
         ),
         (
@@ -198,7 +187,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("aš"),
                     Joiner.plus(),
                     Reading.of_name("šur"),
-                ],
+                ]
             ),
         ),
         (
@@ -213,7 +202,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.hyphen(),
                     BrokenAway.open(),
                     Reading.of_name("e"),
-                ],
+                ]
             ),
         ),
         (
@@ -225,7 +214,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Variant.of(Number.of_name("27"), Number.of_name("29")),
                     Joiner.dot(),
                     Logogram.of_name("KAM"),
-                ],
+                ]
             ),
         ),
         (
@@ -235,10 +224,10 @@ from ebl.transliteration.domain.word_tokens import (
                     Variant.of(
                         UnclearSign.of(),
                         Reading.of(
-                            (ValueToken.of("m"), BrokenAway.open(), ValueToken.of("a"),)
+                            (ValueToken.of("m"), BrokenAway.open(), ValueToken.of("a"))
                         ),
                     )
-                ],
+                ]
             ),
         ),
         (
@@ -256,7 +245,7 @@ from ebl.transliteration.domain.word_tokens import (
                             Reading.of_name("ub"),
                         ]
                     ),
-                ],
+                ]
             ),
         ),
         (
@@ -274,7 +263,7 @@ from ebl.transliteration.domain.word_tokens import (
                     ),
                     BrokenAway.open(),
                     Logogram.of_name("LA"),
-                ],
+                ]
             ),
         ),
         (
@@ -284,7 +273,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Logogram.of_name("I"),
                     Joiner.dot(),
                     Determinative.of([Reading.of_name("d")]),
-                ],
+                ]
             ),
         ),
         (
@@ -294,12 +283,12 @@ from ebl.transliteration.domain.word_tokens import (
                     Determinative.of([Reading.of_name("d")]),
                     BrokenAway.open(),
                     Logogram.of_name("UTU", flags=[atf.Flag.UNCERTAIN]),
-                ],
+                ]
             ),
         ),
         (
             "3.AM₃",
-            Word.of([Number.of_name("3"), Joiner.dot(), Logogram.of_name("AM", 3),],),
+            Word.of([Number.of_name("3"), Joiner.dot(), Logogram.of_name("AM", 3)]),
         ),
         (
             "<{10}>bu",
@@ -309,7 +298,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Determinative.of([Number.of_name("10")]),
                     AccidentalOmission.close(),
                     Reading.of_name("bu"),
-                ],
+                ]
             ),
         ),
         (
@@ -326,7 +315,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Determinative.of(
                         [Reading.of_name("ki", flags=[atf.Flag.UNCERTAIN])]
                     ),
-                ],
+                ]
             ),
         ),
         (
@@ -348,7 +337,7 @@ from ebl.transliteration.domain.word_tokens import (
                         (ValueToken.of("mu"), BrokenAway.open(), ValueToken.of("d")),
                         flags=[atf.Flag.UNCERTAIN],
                     ),
-                ],
+                ]
             ),
         ),
         (
@@ -358,14 +347,14 @@ from ebl.transliteration.domain.word_tokens import (
                     AccidentalOmission.open(),
                     Logogram.of_name("GAR", flags=[atf.Flag.UNCERTAIN]),
                     AccidentalOmission.close(),
-                ],
+                ]
             ),
         ),
         (
             "<<GAR>>",
-            Word.of([Removal.open(), Logogram.of_name("GAR"), Removal.close(),],),
+            Word.of([Removal.open(), Logogram.of_name("GAR"), Removal.close()]),
         ),
-        ("lu₂@v", Word.of([Reading.of_name("lu", 2, modifiers=["@v"])]),),
+        ("lu₂@v", Word.of([Reading.of_name("lu", 2, modifiers=["@v"])])),
         (
             "{lu₂@v}UM.ME.[A",
             Word.of(
@@ -377,7 +366,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.dot(),
                     BrokenAway.open(),
                     Logogram.of_name("A"),
-                ],
+                ]
             ),
         ),
         (
@@ -393,7 +382,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Logogram.of(
                         (ValueToken.of("M"), BrokenAway.open(), ValueToken.of("EŠ"))
                     ),
-                ],
+                ]
             ),
         ),
         (
@@ -410,7 +399,7 @@ from ebl.transliteration.domain.word_tokens import (
                             Reading.of_name("hi"),
                         ],
                     )
-                ],
+                ]
             ),
         ),
         (
@@ -425,7 +414,7 @@ from ebl.transliteration.domain.word_tokens import (
                             Reading.of_name("u", 2),
                         ],
                     )
-                ],
+                ]
             ),
         ),
         (
@@ -440,7 +429,7 @@ from ebl.transliteration.domain.word_tokens import (
                             Reading.of_name("u", 2),
                         ],
                     )
-                ],
+                ]
             ),
         ),
         ("UN#", Word.of([Logogram.of_name("UN", flags=[atf.Flag.DAMAGE])])),
@@ -453,7 +442,7 @@ from ebl.transliteration.domain.word_tokens import (
                     IntentionalOmission.open(),
                     Reading.of_name("pa", 3),
                     IntentionalOmission.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -469,17 +458,14 @@ from ebl.transliteration.domain.word_tokens import (
                                     BrokenAway.close(),
                                     ValueToken.of("ti"),
                                 )
-                            ),
+                            )
                         ]
                     ),
                     Logogram.of_name("AB"),
-                ],
+                ]
             ),
         ),
-        (
-            "in]",
-            Word.of([Reading.of_name("in"), BrokenAway.close()],),
-        ),
+        ("in]", Word.of([Reading.of_name("in"), BrokenAway.close()])),
         (
             "<en-da-ab>",
             Word.of(
@@ -491,7 +477,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.hyphen(),
                     Reading.of_name("ab"),
                     AccidentalOmission.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -506,9 +492,9 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.hyphen(),
                     Erasure.open(),
                     Erasure.center(),
-                    Reading.of_name("ku"),
+                    Reading.of_name("ku").set_erasure(ErasureState.OVER_ERASED),
                     Erasure.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -516,16 +502,16 @@ from ebl.transliteration.domain.word_tokens import (
             Word.of(
                 [
                     Erasure.open(),
-                    Reading.of_name("me"),
-                    Joiner.hyphen(),
-                    Reading.of_name("e"),
-                    Joiner.hyphen(),
-                    Reading.of_name("li"),
+                    Reading.of_name("me").set_erasure(ErasureState.ERASED),
+                    Joiner.hyphen().set_erasure(ErasureState.ERASED),
+                    Reading.of_name("e").set_erasure(ErasureState.ERASED),
+                    Joiner.hyphen().set_erasure(ErasureState.ERASED),
+                    Reading.of_name("li").set_erasure(ErasureState.ERASED),
                     Erasure.center(),
                     Erasure.close(),
                     Joiner.hyphen(),
                     Reading.of_name("ku"),
-                ],
+                ]
             ),
         ),
         (
@@ -535,13 +521,13 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("me"),
                     Joiner.hyphen(),
                     Erasure.open(),
-                    Reading.of_name("e"),
+                    Reading.of_name("e").set_erasure(ErasureState.ERASED),
                     Erasure.center(),
-                    Reading.of_name("li"),
+                    Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
                     Erasure.close(),
                     Joiner.hyphen(),
                     Reading.of_name("ku"),
-                ],
+                ]
             ),
         ),
         (
@@ -551,21 +537,21 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("me"),
                     Joiner.hyphen(),
                     Erasure.open(),
-                    Reading.of_name("e"),
+                    Reading.of_name("e").set_erasure(ErasureState.ERASED),
                     Erasure.center(),
-                    Reading.of_name("li"),
+                    Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
                     Erasure.close(),
                     Joiner.hyphen(),
                     Reading.of_name("me"),
                     Joiner.hyphen(),
                     Erasure.open(),
-                    Reading.of_name("e"),
+                    Reading.of_name("e").set_erasure(ErasureState.ERASED),
                     Erasure.center(),
-                    Reading.of_name("li"),
+                    Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
                     Erasure.close(),
                     Joiner.hyphen(),
                     Reading.of_name("ku"),
-                ],
+                ]
             ),
         ),
         (
@@ -575,7 +561,7 @@ from ebl.transliteration.domain.word_tokens import (
                     UnknownNumberOfSigns.of(),
                     Determinative.of([Reading.of_name("d")]),
                     Reading.of_name("kur"),
-                ],
+                ]
             ),
         ),
         (
@@ -585,7 +571,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("kur"),
                     Determinative.of([Reading.of_name("d")]),
                     UnknownNumberOfSigns.of(),
-                ],
+                ]
             ),
         ),
         (
@@ -597,7 +583,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("kur"),
                     Joiner.hyphen(),
                     UnknownNumberOfSigns.of(),
-                ],
+                ]
             ),
         ),
         (
@@ -613,7 +599,7 @@ from ebl.transliteration.domain.word_tokens import (
                     UnknownNumberOfSigns.of(),
                     Joiner.hyphen(),
                     Reading.of_name("kur"),
-                ],
+                ]
             ),
         ),
         (
@@ -624,7 +610,7 @@ from ebl.transliteration.domain.word_tokens import (
                     BrokenAway.close(),
                     Joiner.hyphen(),
                     Reading.of_name("ku"),
-                ],
+                ]
             ),
         ),
         (
@@ -635,28 +621,16 @@ from ebl.transliteration.domain.word_tokens import (
                     Joiner.hyphen(),
                     BrokenAway.open(),
                     UnknownNumberOfSigns.of(),
-                ],
+                ]
             ),
         ),
         (
             "....ku",
-            Word.of(
-                [
-                    UnknownNumberOfSigns.of(),
-                    Joiner.dot(),
-                    Reading.of_name("ku"),
-                ],
-            ),
+            Word.of([UnknownNumberOfSigns.of(), Joiner.dot(), Reading.of_name("ku")]),
         ),
         (
             "ku....",
-            Word.of(
-                [
-                    Reading.of_name("ku"),
-                    Joiner.dot(),
-                    UnknownNumberOfSigns.of(),
-                ],
-            ),
+            Word.of([Reading.of_name("ku"), Joiner.dot(), UnknownNumberOfSigns.of()]),
         ),
         (
             "(x)]",
@@ -666,7 +640,7 @@ from ebl.transliteration.domain.word_tokens import (
                     UnclearSign.of(),
                     PerhapsBrokenAway.close(),
                     BrokenAway.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -676,7 +650,7 @@ from ebl.transliteration.domain.word_tokens import (
                     BrokenAway.open(),
                     Determinative.of([Reading.of_name("d")]),
                     Logogram.of_name("UTU"),
-                ],
+                ]
             ),
         ),
         (
@@ -691,7 +665,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("sa"),
                     Joiner.hyphen(),
                     Reading.of_name("lim"),
-                ],
+                ]
             ),
         ),
         (
@@ -709,7 +683,7 @@ from ebl.transliteration.domain.word_tokens import (
                     Reading.of_name("u", 5),
                     IntentionalOmission.close(),
                     BrokenAway.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -722,7 +696,7 @@ from ebl.transliteration.domain.word_tokens import (
                         (ValueToken.of("b"), BrokenAway.open(), ValueToken.of("i")),
                         flags=[atf.Flag.UNCERTAIN],
                     ),
-                ],
+                ]
             ),
         ),
         (
@@ -735,7 +709,7 @@ from ebl.transliteration.domain.word_tokens import (
                     InWordNewline.of(),
                     Joiner.hyphen(),
                     Reading.of_name("e", 3),
-                ],
+                ]
             ),
         ),
         (
@@ -756,15 +730,12 @@ from ebl.transliteration.domain.word_tokens import (
                             IntentionalOmission.close(),
                         ]
                     ),
-                ],
+                ]
             ),
         ),
-        ("kurₓ", Word.of([Reading.of_name("kur", None),]),),
-        ("KURₓ", Word.of([Logogram.of_name("KUR", None),]),),
-        (
-            "kurₓ(KUR)",
-            Word.of([Reading.of_name("kur", None, sign=Grapheme.of("KUR")),],),
-        ),
+        ("kurₓ", Word.of([Reading.of_name("kur", None)])),
+        ("KURₓ", Word.of([Logogram.of_name("KUR", None)])),
+        ("kurₓ(KUR)", Word.of([Reading.of_name("kur", None, sign=Grapheme.of("KUR"))])),
     ],
 )
 def test_word(atf, expected) -> None:
@@ -781,7 +752,7 @@ def test_word(atf, expected) -> None:
                     AccidentalOmission.open(),
                     Determinative.of([Number.of_name("10")]),
                     AccidentalOmission.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -799,20 +770,20 @@ def test_word(atf, expected) -> None:
                                 flags=[atf.Flag.UNCERTAIN],
                             )
                         ]
-                    ),
-                ],
+                    )
+                ]
             ),
         ),
         (
             "{u₂#}",
             LoneDeterminative.of(
-                [Determinative.of([Reading.of_name("u", 2, flags=[atf.Flag.DAMAGE])]),],
+                [Determinative.of([Reading.of_name("u", 2, flags=[atf.Flag.DAMAGE])])]
             ),
         ),
         (
             "{lu₂@v}",
             LoneDeterminative.of(
-                [Determinative.of([Reading.of_name("lu", 2, modifiers=["@v"])]),],
+                [Determinative.of([Reading.of_name("lu", 2, modifiers=["@v"])])]
             ),
         ),
         (
@@ -827,11 +798,11 @@ def test_word(atf, expected) -> None:
                                     BrokenAway.open(),
                                     ValueToken.of("i"),
                                 )
-                            ),
+                            )
                         ]
                     ),
                     BrokenAway.close(),
-                ],
+                ]
             ),
         ),
         (
@@ -847,10 +818,10 @@ def test_word(atf, expected) -> None:
                                     BrokenAway.close(),
                                     ValueToken.of("i"),
                                 )
-                            ),
+                            )
                         ]
                     ),
-                ],
+                ]
             ),
         ),
     ],

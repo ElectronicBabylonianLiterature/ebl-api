@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api.svg?branch=master)](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 The API requires a MongoDB database. See the
 [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
@@ -22,8 +23,25 @@ pip install pipenv
 pipenv install --dev
 ```
 
+### Gitpod
+
+The project comes with a [Gitpod](https://www.gitpod.io) configuration including
+select extensions and a local MongoDB. Click the button below, configure the
+[environment variables](https://www.gitpod.io/docs/environment-variables/)
+(, import the data if you wish to use the local DB) and you are good to go.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
+
+### Visual Studio Code
+
+The project includes a Visual Studio Code
+[development container](https://code.visualstudio.com/docs/remote/containers) which
+can be used locally or in
+[Codespaces](https://code.visualstudio.com/docs/remote/codespaces).
+
 ## Codestyle
 
+Use [Black](https://black.readthedocs.io/en/stable/) codestyle.
 Line length is 88, and bugbear B950 is used instead of E501.
 PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
 disabled.
@@ -31,6 +49,7 @@ disabled.
 ## Running the tests
 
 ```shell script
+pipenv run black ebl --check
 pipenv run lint
 pipenv run pyre check
 pipenv run test
@@ -50,23 +69,6 @@ SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
 ```
 
-For docker compose with DB:
-
-Create a script to create the MongoDB user in
-`./docker-entrypoint-initdb.d/create-users.js`:
-
-```javascript
-db.createUser(
-  {
-    user: "ebl-api",
-    pwd: "<password>",
-    roles: [
-       { role: "readWrite", db: "ebl" }
-    ]
-  }
-)
-```
-
 In addition to the variables specified above, the following environment
 variables are needed:
 
@@ -76,6 +78,12 @@ MONGO_INITDB_ROOT_USERNAME=<Mongo root user>
 MONGO_INITDB_ROOT_PASSWORD=<Mongo root user password>
 MONGOEXPRESS_LOGIN=<Mongo Express login username>
 MONGOEXPRESS_PASSWORD=<Mongo Express login password>
+```
+
+### Locally
+
+```shell script
+pipenv run start
 ```
 
 ### Docker image
@@ -107,6 +115,22 @@ Run the full backend including the database and admin interface:
 docker-compose up
 ```
 
+⚠️ You must create a script to create the MongoDB user in
+`./docker-entrypoint-initdb.d/create-users.js` before the
+the database is started for the first time.
+
+```javascript
+db.createUser(
+  {
+    user: "ebl-api",
+    pwd: "<password>",
+    roles: [
+       { role: "readWrite", db: "ebl" }
+    ]
+  }
+)
+```
+
 ## Updating transliterations and signs in fragments
 
 Improving the parser can lead to existing transliterations to become obsolete
@@ -117,8 +141,29 @@ The `ebl.fragmentarium.update_fragments` module can be used to recreate
 transliteration and signs in all fragments. A list of invalid fragments is
 saved to `invalid_fragments.tsv`.
 
+The script can be run locally:
+
 ```shell script
-pipenv run  python -m ebl.fragmentarium.update_fragments
+pipenv run python -m ebl.fragmentarium.update_fragments
+```
+
+, as stand alone container:
+
+```shell script
+docker build -t ebl/api .
+docker run --rm -it --env-file=FILE --name ebl-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.fragmentarium.update_fragments
+```
+
+, or with `docker-compose`:
+
+```shell script
+docker-compose -f ./docker-compose-updater.yml up
+```
+
+If you need to run custom operations inside Docker you can start the shell:
+
+```shell script
+docker run --rm -it --env-file=.env --name ebl-shell --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api bash
 ```
 
 ### Steps to update the production database

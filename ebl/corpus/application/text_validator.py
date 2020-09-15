@@ -84,6 +84,5 @@ class TextValidator(TextVisitor):
             )
 
         alignment_validator = AlignmentVisitor()
-        for token in manuscript_line.line.content:
-            token.accept(alignment_validator)
+        manuscript_line.line.accept(alignment_validator)
         alignment_validator.validate()

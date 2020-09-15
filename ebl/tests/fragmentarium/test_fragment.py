@@ -3,12 +3,7 @@ import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import (
-    Fragment,
-    FragmentNumber,
-    Measure,
-    UncuratedReference,
-)
+from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -19,17 +14,15 @@ from ebl.tests.factories.fragment import (
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.lemmatization import (
-    Lemmatization,
-    LemmatizationError,
-)
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def test_number():
-    fragment = FragmentFactory.build(number="1")
-    assert fragment.number == "1"
+    number = MuseumNumber("K", "1")
+    fragment = FragmentFactory.build(number=number)
+    assert fragment.number == number
 
 
 def test_accession():
@@ -102,14 +95,9 @@ def test_signs():
     assert transliterated_fragment.signs == TransliteratedFragmentFactory.signs
 
 
-def test_signs_none():
-    fragment = FragmentFactory.build()
-    assert fragment.signs is None
-
-
 def test_record():
     record = RecordFactory.build()
-    fragment = Fragment(FragmentNumber("X.1"), record=record)
+    fragment = Fragment(MuseumNumber.of("X.1"), record=record)
     assert fragment.record == record
 
 
@@ -153,8 +141,8 @@ def test_references_default():
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()
     atf = Atf("1. x x")
-    transliteration = TransliterationUpdate(atf, fragment.notes)
     text = parse_atf_lark(atf)
+    transliteration = TransliterationUpdate(text, fragment.notes)
     record = fragment.record.add_entry("", atf, user)
 
     updated_fragment = fragment.update_transliteration(transliteration, user)
@@ -170,7 +158,7 @@ def test_update_transliteration(user):
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
     atf = Atf("\n".join(lines))
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(atf, "updated notes", "X X\nX")
+    transliteration = TransliterationUpdate(text, "updated notes", "X X\nX")
     updated_fragment = lemmatized_fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(
@@ -179,33 +167,16 @@ def test_update_transliteration(user):
         notes=transliteration.notes,
         signs=transliteration.signs,
         record=lemmatized_fragment.record.add_entry(
-            lemmatized_fragment.text.atf, transliteration.atf, user
+            lemmatized_fragment.text.atf, transliteration.text.atf, user
         ),
     )
 
     assert updated_fragment == expected_fragment
 
 
-def test_test_update_transliteration_invalid_atf(user):
-    fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(Atf("1. {kur}?"), fragment.notes)
-
-    with pytest.raises(
-        TransliterationError, match="Invalid transliteration"
-    ) as excinfo:
-        fragment.update_transliteration(transliteration, user)
-
-    assert excinfo.value.errors == [
-        {
-            "description": ("Invalid line:  {kur}?\n" "                    ^\n"),
-            "lineNumber": 1,
-        }
-    ]
-
-
 def test_update_notes(user):
     fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(fragment.text.atf, "new notes")
+    transliteration = TransliterationUpdate(fragment.text, "new notes")
     updated_fragment = fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(fragment, notes=transliteration.notes)
