@@ -137,7 +137,7 @@ _loose_joiner: _strict_joiner
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
 _any_close: (CLOSE_BROKEN_AWAY | CLOSE_PERHAPS_BROKEN_AWAY | CLOSE_ACCIDENTAL_OMISSION | CLOSE_INTENTIONAL_OMISSION | CLOSE_REMOVAL)+
 _any_open: (OPEN_ACCIDENTAL_OMISSION | OPEN_INTENTIONAL_OMISSION | OPEN_REMOVAL | OPEN_BROKEN_AWAY | OPEN_PERHAPS_BORKEN_AWAY)+
-!joiner: "-" | "+" | "." | ":"
+!joiner: "-" | "+" | "." | ":" | "--"
 
 ?value: unidentified_sign
       | unclear_sign

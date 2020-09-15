@@ -23,6 +23,13 @@ class Convert_Line_Dividers(Visitor):
     if tree.children[0] == "*":
         tree.children[0] = "DIŠ"
 
+class Convert_Line_Joiner(Visitor):
+
+  def oracc_atf_text_line__joiner(self, tree):
+    assert tree.data == "oracc_atf_text_line__joiner"
+    if tree.children[0] == "--":
+        tree.children[0] = "-"
+
 class Convert_Legacy_Grammar_Signs(Visitor):
 
   replacement_chars = {
@@ -86,6 +93,7 @@ class Strip_Signs(Visitor):
     assert tree.data == "oracc_atf_text_line__uncertain_sign"
     if tree.children[0] == "$":
         tree.children[0] = ""
+
 
 class DFS(Visitor):
     def visit_topdown(self,tree,result):
@@ -246,6 +254,7 @@ class ATF_Preprocessor:
                 tree = self.ORACC_PARSER.parse(atf)
                 self.logger.debug("converting " + tree.data)
 
+                #self.logger.debug((tree.pretty()))
 
                 if tree.data == "lem_line":
 
@@ -254,7 +263,6 @@ class ATF_Preprocessor:
                         self.skip_next_lem_line = False
                         return None,None,"lem_line",None
 
-                    #self.logger.debug((tree.pretty()))
 
                     lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
                     lemmas_and_guidewords_serializer.result = []
@@ -267,6 +275,8 @@ class ATF_Preprocessor:
 
                 else:
                     Convert_Line_Dividers().visit(tree)
+                    Convert_Line_Joiner().visit(tree)
+
                     Convert_Legacy_Grammar_Signs().visit(tree)
 
                     Strip_Signs().visit(tree)
