@@ -126,13 +126,10 @@ class SignsVisitor(TokenVisitor):
     @skip_erasures
     @skip_enclosures
     def visit_divider(self, divider: Divider) -> None:
-        # | should not be handled as divider. It is not a value of any sign.
-        # See: Editorial conventions (Corpus) 3.2.1.3 lines of tablet
-        if divider.divider != "|":
-            sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
-            (self._standardizations.append(INVALID)
-             if sign is None
-             else self._visit_sign(sign))
+        sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
+        (self._standardizations.append(INVALID)
+            if sign is None
+            else self._visit_sign(sign))
 
     @skip_erasures
     @skip_enclosures
