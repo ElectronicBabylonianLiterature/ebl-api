@@ -1,5 +1,4 @@
 
-import sys
 import codecs
 import re
 import traceback
@@ -302,7 +301,7 @@ class ATF_Preprocessor:
 
                     except Exception as e:
                         self.logger.error("could not parse converted line")
-                        self.logger.error(traceback.print_exc())
+                        #self.logger.error(traceback.print_exc())
 
                     self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
 
@@ -310,7 +309,7 @@ class ATF_Preprocessor:
 
                 error = "could not convert line"
                 self.logger.error(error+": "+atf)
-                self.logger.error(traceback.print_exc())
+                #self.logger.error(traceback.print_exc())
                 self.unparseable_lines.append(atf)
                 return None,None,None,None
 
