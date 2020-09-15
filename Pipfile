@@ -40,6 +40,7 @@ pyhamcrest = "*"
 flake8-bugbear = "*"
 httpretty = "*"
 pyre-check = "==0.0.46"
+black = "==19.3b0"
 
 [requires]
 python_version = "3.6"
