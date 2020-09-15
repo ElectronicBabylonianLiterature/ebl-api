@@ -1,7 +1,7 @@
 
 import codecs
 import re
-import traceback
+#import traceback
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
 from lark import Visitor
