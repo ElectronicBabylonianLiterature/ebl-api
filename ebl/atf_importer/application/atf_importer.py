@@ -36,6 +36,12 @@ class TestConverter(unittest.TestCase):
         converted_line,c_array,type,c_alter_lemline_at=atf_preprocessor.process_line("8. KAR <:> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
         self.assertTrue(converted_line == "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
 
+        converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line("14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA--<E₂>.AN.NA")
+        self.assertTrue(converted_line == "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA-<E₂>.AN.NA")
+
+        self.atf_preprocessor.process_line()
+
+
     # Test case for removal of "$" if following sign not a logogram
     def test_following_sign_not_a_logogram(self):
         atf_preprocessor = ATF_Preprocessor()
@@ -251,8 +257,7 @@ class ATF_Importer:
     def start(self):
         self.logger.info("Atf-Importer started...")
 
-        self.atf_preprocessor.process_line("5'. ($___$) !bs [GIŠ.GAN !cm : {(u-gu-la he]-hu-u₂)}SAG₂(|PA.GAN|) : !bs MIN#<(GIŠ.GAN)> !cm : ma-ha-ṣu")
-        self.atf_preprocessor.process_line("14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA--<E₂>.AN.NA")
+        #self.atf_preprocessor.process_line("5'. ($___$) !bs [GIŠ.GAN !cm : {(u-gu-la he]-hu-u₂)}SAG₂(|PA.GAN|) : !bs MIN#<(GIŠ.GAN)> !cm : ma-ha-ṣu")
 
         #atf_preprocessor.process_line("#lem: X; attallû[eclipse]N; iššakkan[take place]V; šar[king]N; imâtma[die]V",True)
         #atf_preprocessor.process_line("#lem: mīlū[flood]N; ina[in]PRP; nagbi[source]N; ipparrasū[cut (off)]V; mātu[land]N; ana[according to]PRP; mātu[land]N; +hâqu[go]V$ihâq-ma; šalāmu[peace]N; šakin[displayed]AJ",True)
@@ -277,7 +282,7 @@ class ATF_Importer:
 
 
         #read atf files from input folder
-        for filepath in glob.glob(os.path.join("/usr/src/ebl/ebl/atf_importer/inputx/", '*.atf')):
+        for filepath in glob.glob(os.path.join("/usr/src/ebl/ebl/atf_importer/input/", '*.atf')):
 
             with open(filepath, 'r') as f:
 
