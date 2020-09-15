@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api.svg?branch=master)](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 The API requires a MongoDB database. See the
 [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
@@ -40,6 +41,7 @@ can be used locally or in
 
 ## Codestyle
 
+Use [Black](https://black.readthedocs.io/en/stable/) codestyle.
 Line length is 88, and bugbear B950 is used instead of E501.
 PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
 disabled.
@@ -47,6 +49,7 @@ disabled.
 ## Running the tests
 
 ```shell script
+pipenv run black ebl --check
 pipenv run lint
 pipenv run pyre check
 pipenv run test
