@@ -22,5 +22,5 @@ class Reference:
     lines_cited: Sequence[str] = tuple()
     document: Optional[dict] = None
 
-    def set_document(self, new_document: dict) -> 'Reference':
+    def set_document(self, new_document: dict) -> "Reference":
         return attr.evolve(self, document=new_document)

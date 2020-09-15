@@ -64,7 +64,7 @@ class Corpus:
         self._update_chapter(id_, AlignmentUpdater(chapter_index, alignment), user)
 
     def update_manuscripts(
-        self, id_: TextId, chapter_index: int, manuscripts: Sequence[Manuscript], user,
+        self, id_: TextId, chapter_index: int, manuscripts: Sequence[Manuscript], user
     ):
         self._update_chapter(id_, ManuscriptUpdater(chapter_index, manuscripts), user)
 

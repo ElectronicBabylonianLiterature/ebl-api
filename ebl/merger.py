@@ -74,7 +74,7 @@ class Merger(Generic[T]):
     def __init__(
         self,
         map_: DiffMapping[T],  # pyre-ignore[11]
-        inner_merge: Optional[InnerMerge[T]] = None  # pyre-ignore[11]
+        inner_merge: Optional[InnerMerge[T]] = None,  # pyre-ignore[11]
     ) -> None:
         self._operations: Mapping[str, Callable[[Merge[T]], Merge[T]]] = {
             "- ": lambda state: state.delete(),
@@ -94,7 +94,7 @@ class Merger(Generic[T]):
 
     def _diff(self, old: Sequence[T], new: Sequence[T]) -> Iterator[str]:
         return difflib.ndiff(
-            [self._map(entry) for entry in old], [self._map(entry) for entry in new],
+            [self._map(entry) for entry in old], [self._map(entry) for entry in new]
         )
 
     def merge(self, old: Sequence[T], new: Sequence[T]) -> List[T]:

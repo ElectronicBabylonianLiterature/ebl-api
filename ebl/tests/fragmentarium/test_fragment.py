@@ -3,11 +3,7 @@ import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import (
-    Fragment,
-    Measure,
-    UncuratedReference,
-)
+from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -18,10 +14,7 @@ from ebl.tests.factories.fragment import (
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.lemmatization import (
-    Lemmatization,
-    LemmatizationError,
-)
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.transliteration.domain.text import Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 

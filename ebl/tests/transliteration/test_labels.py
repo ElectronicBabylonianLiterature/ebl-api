@@ -18,7 +18,7 @@ LABELS = [
     ("e.", "", "@edge", SurfaceLabel(tuple(), Surface.EDGE)),
     ("l.e.", "", "@left", SurfaceLabel(tuple(), Surface.LEFT)),
     ("r.e.", "", "@right", SurfaceLabel(tuple(), Surface.RIGHT)),
-    ("t.e.", "","@top", SurfaceLabel(tuple(), Surface.TOP)),
+    ("t.e.", "", "@top", SurfaceLabel(tuple(), Surface.TOP)),
     ("o", "'", "@obverse", SurfaceLabel((Status.PRIME,), Surface.OBVERSE)),
     ("r", "?", "@reverse", SurfaceLabel((Status.UNCERTAIN,), Surface.REVERSE)),
     ("b.e.", "!", "@bottom", SurfaceLabel((Status.CORRECTION,), Surface.BOTTOM)),
@@ -52,14 +52,19 @@ LABELS = [
 
 UNPARSEABLE_LABELS = [
     ("a", "", "@edge a", SurfaceLabel(tuple(), Surface.EDGE, "a")),
-    ("side a", "","@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
-    ("a", "","@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
-    ("bulla", "","@bulla", ObjectLabel(tuple(), Object.BULLA, "")),
-    ("envelope", "","@envelope", ObjectLabel(tuple(), Object.ENVELOPE, "")),
-    ("a", "","@fragment a", ObjectLabel(tuple(), Object.FRAGMENT, "a")),
-    ("Stone wig", "","@object Stone wig", ObjectLabel(tuple(), Object.OBJECT, "Stone wig")),
-    ("prism", "","@prism", ObjectLabel(tuple(), Object.PRISM, "")),
-    ("tablet", "","@tablet", ObjectLabel(tuple(), Object.TABLET, "")),
+    ("side a", "", "@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
+    ("a", "", "@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
+    ("bulla", "", "@bulla", ObjectLabel(tuple(), Object.BULLA, "")),
+    ("envelope", "", "@envelope", ObjectLabel(tuple(), Object.ENVELOPE, "")),
+    ("a", "", "@fragment a", ObjectLabel(tuple(), Object.FRAGMENT, "a")),
+    (
+        "Stone wig",
+        "",
+        "@object Stone wig",
+        ObjectLabel(tuple(), Object.OBJECT, "Stone wig"),
+    ),
+    ("prism", "", "@prism", ObjectLabel(tuple(), Object.PRISM, "")),
+    ("tablet", "", "@tablet", ObjectLabel(tuple(), Object.TABLET, "")),
 ]
 
 

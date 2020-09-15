@@ -96,7 +96,7 @@ def test_update_entry_not_found(client):
 
 @pytest.mark.parametrize(
     "transform",
-    [lambda entry: {**entry, "title": 47}, lambda entry: pydash.omit(entry, "type"),],
+    [lambda entry: {**entry, "title": 47}, lambda entry: pydash.omit(entry, "type")],
 )
 def test_update_entry_invalid(transform, client, saved_entry):
     id_ = saved_entry["id"]

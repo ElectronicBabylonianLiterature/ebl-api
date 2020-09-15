@@ -10,7 +10,9 @@ Command = Callable[[Mapping[str, str]], T]
 Dispatcher = Callable[[dict], T]
 
 
-def get_parameter(parameters: Dict[str, str]) -> Tuple[FrozenSet[str], Mapping[str, str]]:
+def get_parameter(
+    parameters: Dict[str, str]
+) -> Tuple[FrozenSet[str], Mapping[str, str]]:
     parameter = frozenset(parameters.keys())
     values = parameters
     return parameter, values

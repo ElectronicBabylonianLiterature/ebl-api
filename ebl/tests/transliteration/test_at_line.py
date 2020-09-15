@@ -75,9 +75,7 @@ def test_at_line_surface_instantiate_text_with_wrong_surface() -> None:
 
 
 def test_at_line_object_no_status() -> None:
-    at_line = ObjectAtLine(
-        ObjectLabel([], atf.Object.OBJECT, "Stone wig")
-    )
+    at_line = ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "Stone wig"))
 
     assert at_line.lemmatization == (LemmatizationToken("object Stone wig"),)
     assert at_line.label == ObjectLabel([], atf.Object.OBJECT, "Stone wig")
@@ -89,7 +87,9 @@ def test_at_line_object() -> None:
         ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
     )
     assert at_line.lemmatization == (LemmatizationToken("object Stone wig!"),)
-    assert at_line.label == ObjectLabel([atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig")
+    assert at_line.label == ObjectLabel(
+        [atf.Status.CORRECTION], atf.Object.OBJECT, "Stone wig"
+    )
     assert at_line.display_value == "object Stone wig!"
 
 

@@ -19,7 +19,7 @@ ALIGNMENT_DTO_SCHEMA = {
                         "type": "object",
                         "properties": {
                             "value": {"type": "string"},
-                            "alignment": {"type": ["integer", "null"], "minimum": 0,},
+                            "alignment": {"type": ["integer", "null"], "minimum": 0},
                         },
                         "required": ["value"],
                     },

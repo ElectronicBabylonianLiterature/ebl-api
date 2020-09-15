@@ -1,4 +1,3 @@
-
 import pytest  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
@@ -8,8 +7,12 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.note_line import (EmphasisPart, LanguagePart,
-                                                  NoteLine, StringPart)
+from ebl.transliteration.domain.note_line import (
+    EmphasisPart,
+    LanguagePart,
+    NoteLine,
+    StringPart,
+)
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -21,48 +24,62 @@ from ebl.transliteration.domain.word_tokens import Word
     "old,new,expected",
     [
         (
-            Text.of_iterable([
-                TextLine.of_iterable(
-                    LineNumber(1),
-                    [Word.of([
-                        Reading.of_name("ha"),
-                        Joiner.hyphen(),
-                        Reading.of_name("am"),
-                    ],)],
-                ),
-                ControlLine("#", " comment"),
-            ]),
-            Text.of_iterable([
-                TextLine.of_iterable(
-                    LineNumber(1),
-                    [Word.of([
-                        Reading.of_name("ha"),
-                        Joiner.hyphen(),
-                        Reading.of_name("am"),
-                    ],)],
-                ),
-                ControlLine("#", " comment"),
-            ]),
-            Text.of_iterable([
-                TextLine.of_iterable(
-                    LineNumber(1),
-                    [Word.of([
-                        Reading.of_name("ha"),
-                        Joiner.hyphen(),
-                        Reading.of_name("am"),
-                    ],)],
-                ),
-                ControlLine("#", " comment"),
-            ]),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumber(1),
+                        [
+                            Word.of(
+                                [
+                                    Reading.of_name("ha"),
+                                    Joiner.hyphen(),
+                                    Reading.of_name("am"),
+                                ]
+                            )
+                        ],
+                    ),
+                    ControlLine("#", " comment"),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumber(1),
+                        [
+                            Word.of(
+                                [
+                                    Reading.of_name("ha"),
+                                    Joiner.hyphen(),
+                                    Reading.of_name("am"),
+                                ]
+                            )
+                        ],
+                    ),
+                    ControlLine("#", " comment"),
+                ]
+            ),
+            Text.of_iterable(
+                [
+                    TextLine.of_iterable(
+                        LineNumber(1),
+                        [
+                            Word.of(
+                                [
+                                    Reading.of_name("ha"),
+                                    Joiner.hyphen(),
+                                    Reading.of_name("am"),
+                                ]
+                            )
+                        ],
+                    ),
+                    ControlLine("#", " comment"),
+                ]
+            ),
         ),
         (
             Text.of_iterable([EmptyLine()]),
-            Text.of_iterable(
-                [RulingDollarLine(atf.Ruling.SINGLE)]
-            ),
-            Text.of_iterable(
-                [RulingDollarLine(atf.Ruling.SINGLE)]
-            ),
+            Text.of_iterable([RulingDollarLine(atf.Ruling.SINGLE)]),
+            Text.of_iterable([RulingDollarLine(atf.Ruling.SINGLE)]),
         ),
         (
             Text.of_iterable(
@@ -72,26 +89,11 @@ from ebl.transliteration.domain.word_tokens import Word
                     EmptyLine(),
                 ]
             ),
-            Text.of_iterable(
-                [
-                    RulingDollarLine(atf.Ruling.DOUBLE),
-                    EmptyLine(),
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    RulingDollarLine(atf.Ruling.DOUBLE),
-                    EmptyLine(),
-                ]
-            ),
+            Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE), EmptyLine()]),
+            Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE), EmptyLine()]),
         ),
         (
-            Text.of_iterable(
-                [
-                    EmptyLine(),
-                    RulingDollarLine(atf.Ruling.DOUBLE),
-                ]
-            ),
+            Text.of_iterable([EmptyLine(), RulingDollarLine(atf.Ruling.DOUBLE)]),
             Text.of_iterable(
                 [
                     EmptyLine(),
@@ -149,9 +151,7 @@ from ebl.transliteration.domain.word_tokens import Word
             ),
         ),
         (
-            Text.of_iterable(
-                [ControlLine("$", " double ruling"),]
-            ),
+            Text.of_iterable([ControlLine("$", " double ruling")]),
             Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE)]),
             Text.of_iterable([RulingDollarLine(atf.Ruling.DOUBLE)]),
         ),
@@ -239,98 +239,67 @@ from ebl.transliteration.domain.word_tokens import Word
             Text.of_iterable(
                 [
                     TextLine.of_iterable(
-                        LineNumber(1),
-                        [Word.of([Reading.of_name("bu")])],
+                        LineNumber(1), [Word.of([Reading.of_name("bu")])]
                     )
                 ]
             ),
             Text.of_iterable(
                 [
                     TextLine.of_iterable(
-                        LineNumber(1), [Word.of([Reading.of_name("bu")])],
+                        LineNumber(1), [Word.of([Reading.of_name("bu")])]
                     )
                 ]
             ),
             Text.of_iterable(
                 [
                     TextLine.of_iterable(
-                        LineNumber(1), [Word.of([Reading.of_name("bu")])],
+                        LineNumber(1), [Word.of([Reading.of_name("bu")])]
                     )
                 ]
             ),
         ),
         (
-            Text.of_iterable(
-                [
-                    NoteLine((
-                        StringPart("this is a note "),
-                    ))
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    NoteLine((
-                        StringPart("this is another note "),
-                    ))
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    NoteLine((
-                        StringPart("this is another note "),
-                    ))
-                ]
-            ),
+            Text.of_iterable([NoteLine((StringPart("this is a note "),))]),
+            Text.of_iterable([NoteLine((StringPart("this is another note "),))]),
+            Text.of_iterable([NoteLine((StringPart("this is another note "),))]),
+        ),
+        (
+            Text.of_iterable([NoteLine((StringPart("this is a note "),))]),
+            Text.of_iterable([NoteLine((EmphasisPart("this is a note "),))]),
+            Text.of_iterable([NoteLine((EmphasisPart("this is a note "),))]),
         ),
         (
             Text.of_iterable(
                 [
-                    NoteLine((
-                        StringPart("this is a note "),
-                    ))
+                    NoteLine(
+                        (
+                            LanguagePart.of_transliteration(
+                                Language.AKKADIAN, (ValueToken.of("bu"),)
+                            ),
+                        )
+                    )
                 ]
             ),
             Text.of_iterable(
                 [
-                    NoteLine((
-                        EmphasisPart("this is a note "),
-                    ))
+                    NoteLine(
+                        (
+                            LanguagePart.of_transliteration(
+                                Language.AKKADIAN, (Word.of([Reading.of_name("bu")]),)
+                            ),
+                        )
+                    )
                 ]
             ),
             Text.of_iterable(
                 [
-                    NoteLine((
-                        EmphasisPart("this is a note "),
-                    ))
-                ]
-            ),
-        ),
-        (
-            Text.of_iterable(
-                [
-                    NoteLine((
-                        LanguagePart.of_transliteration(Language.AKKADIAN, (
-                            ValueToken.of("bu"),
-                        )),
-                    ))
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    NoteLine((
-                        LanguagePart.of_transliteration(Language.AKKADIAN, (
-                            Word.of([Reading.of_name("bu")]),
-                        )),
-                    ))
-                ]
-            ),
-            Text.of_iterable(
-                [
-                    NoteLine((
-                        LanguagePart.of_transliteration(Language.AKKADIAN, (
-                            Word.of([Reading.of_name("bu")]),
-                        )),
-                    ))
+                    NoteLine(
+                        (
+                            LanguagePart.of_transliteration(
+                                Language.AKKADIAN, (Word.of([Reading.of_name("bu")]),)
+                            ),
+                        )
+                    )
                 ]
             ),
         ),

@@ -105,7 +105,7 @@ class AtfVisitor(TokenVisitor):
     def _side(self, side: Side) -> Callable[[Token], None]:
         return {
             Side.LEFT: self._state.append_left_bracket,
-            Side.RIGHT: self._state.append_right_bracket
+            Side.RIGHT: self._state.append_right_bracket,
         }[side]
 
     def visit_erasure(self, erasure: Erasure):

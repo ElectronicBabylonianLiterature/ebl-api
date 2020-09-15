@@ -10,7 +10,7 @@ def test_alignment():
 def test_number_of_lines():
     assert (
         Alignment(
-            (((AlignmentToken("ku]-nu-ši", 0),), (AlignmentToken("ku]-nu-ši", 0),),),)
+            (((AlignmentToken("ku]-nu-ši", 0),), (AlignmentToken("ku]-nu-ši", 0),)),)
         ).get_number_of_lines()
         == 1
     )
@@ -20,7 +20,7 @@ def test_number_of_manuscripts():
     assert (
         Alignment(
             (
-                ((AlignmentToken("ku]-nu-ši", 0),), (AlignmentToken("ku]-nu-ši", 0),),),
+                ((AlignmentToken("ku]-nu-ši", 0),), (AlignmentToken("ku]-nu-ši", 0),)),
                 ((AlignmentToken("ku]-nu-ši", 0),),),
             )
         ).get_number_of_manuscripts(0)

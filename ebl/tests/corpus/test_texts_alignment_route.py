@@ -35,9 +35,7 @@ def allow_signs(signs, sign_list):
 
 
 def create_text(client, text):
-    post_result = client.simulate_post(
-        "/texts", body=json.dumps(create_text_dto(text))
-    )
+    post_result = client.simulate_post("/texts", body=json.dumps(create_text_dto(text)))
     assert post_result.status == falcon.HTTP_CREATED
 
 

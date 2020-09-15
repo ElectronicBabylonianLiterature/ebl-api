@@ -1,7 +1,9 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore
 
-from ebl.bibliography.application.reference_schema import ReferenceSchema, \
-    ApiReferenceSchema
+from ebl.bibliography.application.reference_schema import (
+    ReferenceSchema,
+    ApiReferenceSchema,
+)
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 

@@ -13,9 +13,7 @@ def _does_not_contain_period(_, attribute: attr.Attribute, value: str) -> None:
 
 
 def _require_suffix_if_contains_period(
-    museum_number: "MuseumNumber",
-    attribute: attr.Attribute,
-    value: str
+    museum_number: "MuseumNumber", attribute: attr.Attribute, value: str
 ) -> None:
     if "." in value and not museum_number.suffix:
         raise ValueError("If {attribute} contains period suffix cannot be empty.")
@@ -38,10 +36,6 @@ class MuseumNumber:
         pattern = re.compile(r"(.+?)\.([^.]+)(?:\.([^.]+))?")
         match = pattern.fullmatch(source)
         if match:
-            return MuseumNumber(
-                match.group(1),
-                match.group(2),
-                match.group(3) or ""
-            )
+            return MuseumNumber(match.group(1), match.group(2), match.group(3) or "")
         else:
             raise ValueError(f"'{source}' is not a valid museum number.")

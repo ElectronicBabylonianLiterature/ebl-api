@@ -21,7 +21,7 @@ class DollarLineSchema(LineBaseSchema):
     prefix = fields.Constant("$")
     content = fields.Function(
         lambda obj: [OneOfTokenSchema().dump(ValueToken.of(f" {obj.display_value}"))],
-        lambda value: value
+        lambda value: value,
     )
 
 
@@ -84,10 +84,14 @@ class ScopeContainerSchema(Schema):  # pyre-ignore[11]
             self.load_scope(data["type"], data["content"]), data["text"]
         )
 
-    def load_scope(self, type: str, content: str) -> Union[atf.Surface, atf.Scope, atf.Object]:
-        scope_types: Mapping[
-            str, Type[Union[atf.Surface, atf.Scope, atf.Object]]
-        ] = {"Surface": atf.Surface, "Scope": atf.Scope, "Object": atf.Object}
+    def load_scope(
+        self, type: str, content: str
+    ) -> Union[atf.Surface, atf.Scope, atf.Object]:
+        scope_types: Mapping[str, Type[Union[atf.Surface, atf.Scope, atf.Object]]] = {
+            "Surface": atf.Surface,
+            "Scope": atf.Scope,
+            "Object": atf.Object,
+        }
         return scope_types[type][content]
 
 

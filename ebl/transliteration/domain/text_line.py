@@ -13,7 +13,10 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.lemmatization import LemmatizationError, LemmatizationToken
+from ebl.transliteration.domain.lemmatization import (
+    LemmatizationError,
+    LemmatizationToken,
+)
 
 
 L = TypeVar("L", "TextLine", "Line")
@@ -36,8 +39,7 @@ class TextLine(Line):
 
     @staticmethod
     def of_iterable(
-        line_number: AbstractLineNumber,
-        content: Iterable[Token]
+        line_number: AbstractLineNumber, content: Iterable[Token]
     ) -> "TextLine":
         content_with_enclosures = set_enclosure_type(content)
         content_with_language = set_language(content_with_enclosures)

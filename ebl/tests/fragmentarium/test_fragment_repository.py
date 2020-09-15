@@ -40,7 +40,7 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
                 LineNumber(1),
                 (
                     Word.of(
-                        [Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),),
+                        [Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),)
                     ),
                     Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
                     Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
@@ -69,8 +69,7 @@ def test_create(database, fragment_repository):
 
     assert fragment_id == str(fragment.number)
     assert database[COLLECTION].find_one(
-        {"_id": fragment_id},
-        projection={'_id': False}
+        {"_id": fragment_id}, projection={"_id": False}
     ) == SCHEMA.dump(fragment)
 
 
@@ -137,11 +136,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
     fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(
-            parse_atf_lark("$ (the transliteration)"),
-            "notes"
-        ),
-        user
+        TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"), user
     )
 
     fragment_repository.update_transliteration(updated_fragment)
@@ -203,17 +198,14 @@ def test_statistics(database, fragment_repository):
                         (
                             ControlLine("#", "ignore"),
                             TextLine(
-                                LineNumber(1),
-                                (Word.of([Reading.of_name("second")]),),
+                                LineNumber(1), (Word.of([Reading.of_name("second")]),)
                             ),
                             TextLine(
-                                LineNumber(2),
-                                (Word.of([Reading.of_name("third")]),),
+                                LineNumber(2), (Word.of([Reading.of_name("third")]),)
                             ),
                             ControlLine("#", "ignore"),
                             TextLine(
-                                LineNumber(3),
-                                (Word.of([Reading.of_name("fourth")]),),
+                                LineNumber(3), (Word.of([Reading.of_name("fourth")]),)
                             ),
                         )
                     )
@@ -269,39 +261,37 @@ def test_search_not_found(fragment_repository):
 
 
 def test_search_reference_id(database, fragment_repository):
-    fragment = FragmentFactory.build(references=(ReferenceFactory.build(),
-                                                 ReferenceFactory.build(),))
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(), ReferenceFactory.build())
+    )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
         fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id,
-            None,
+            fragment.references[0].id, None
         )
     ) == [fragment]
 
 
 def test_search_reference_id_and_pages(database, fragment_repository):
-    fragment = FragmentFactory.build(references=(ReferenceFactory.build(),
-                                                 ReferenceFactory.build(),))
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(), ReferenceFactory.build())
+    )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
         fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id,
-            fragment.references[0].pages,
+            fragment.references[0].id, fragment.references[0].pages
         )
     ) == [fragment]
 
 
 def test_search_reference_id_and_pages_partially(database, fragment_repository):
-    fragment = FragmentFactory.build(references=(
-        ReferenceFactory.build(pages="no. 163"),
-        ReferenceFactory.build(),
-    ))
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(pages="no. 163"), ReferenceFactory.build())
+    )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
         fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id,
-            "163",
+            fragment.references[0].id, "163"
         )
     ) == [fragment]
 
@@ -329,7 +319,7 @@ def test_search_signs(signs, is_match, fragment_repository):
 def test_find_transliterated(database, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     database[COLLECTION].insert_many(
-        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build()),]
+        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
     assert fragment_repository.query_transliterated_numbers() == [
@@ -356,42 +346,62 @@ def test_find_lemmas_multiple(fragment_repository):
 @pytest.mark.parametrize(
     "parts,expected",
     [
-        ([
-            Reading.of(
-                [ValueToken.of("ana")],
-                flags=[Flag.DAMAGE, Flag.COLLATION, Flag.UNCERTAIN, Flag.CORRECTION],
-            ),
-        ], [["ana I"]]),
-        ([
-            BrokenAway.open(),
-            PerhapsBrokenAway.open(),
-            Reading.of([ValueToken.of("ana")]),
-            PerhapsBrokenAway.close(),
-            BrokenAway.close(),
-        ], [["ana I"]]),
-        ([
-            Reading.of(
-                [
-                    ValueToken.of("a"),
-                    BrokenAway.open(),
-                    ValueToken.of("n"),
-                    PerhapsBrokenAway.close(),
-                    ValueToken.of("a")
-                ],
-            ),
-        ], [["ana I"]]),
-        ([
-            Erasure.open(),
-            Erasure.center(),
-            Reading.of_name("ana").set_erasure(ErasureState.OVER_ERASED),
-            Erasure.close()
-        ], [["ana I"]]),
-        ([
-            Erasure.open(),
-            Reading.of_name("ana").set_erasure(ErasureState.ERASED),
-            Erasure.center(),
-            Erasure.close()
-        ], []),
+        (
+            [
+                Reading.of(
+                    [ValueToken.of("ana")],
+                    flags=[
+                        Flag.DAMAGE,
+                        Flag.COLLATION,
+                        Flag.UNCERTAIN,
+                        Flag.CORRECTION,
+                    ],
+                )
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                BrokenAway.open(),
+                PerhapsBrokenAway.open(),
+                Reading.of([ValueToken.of("ana")]),
+                PerhapsBrokenAway.close(),
+                BrokenAway.close(),
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                Reading.of(
+                    [
+                        ValueToken.of("a"),
+                        BrokenAway.open(),
+                        ValueToken.of("n"),
+                        PerhapsBrokenAway.close(),
+                        ValueToken.of("a"),
+                    ]
+                )
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                Erasure.open(),
+                Erasure.center(),
+                Reading.of_name("ana").set_erasure(ErasureState.OVER_ERASED),
+                Erasure.close(),
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                Erasure.open(),
+                Reading.of_name("ana").set_erasure(ErasureState.ERASED),
+                Erasure.center(),
+                Erasure.close(),
+            ],
+            [],
+        ),
     ],
 )
 def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
@@ -399,8 +409,7 @@ def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
         text=Text.of_iterable(
             [
                 TextLine.of_iterable(
-                    LineNumber(1),
-                    [Word.of(parts, unique_lemma=(WordId("ana I"),))],
+                    LineNumber(1), [Word.of(parts, unique_lemma=(WordId("ana I"),))]
                 )
             ]
         ),

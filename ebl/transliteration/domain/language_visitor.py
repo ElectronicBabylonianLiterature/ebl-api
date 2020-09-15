@@ -1,11 +1,7 @@
 from typing import Iterable, List, Sequence, Union
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.domain.tokens import (
-    LanguageShift,
-    Token,
-    TokenVisitor,
-)
+from ebl.transliteration.domain.tokens import LanguageShift, Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
 
 
@@ -39,7 +35,7 @@ class LanguageVisitor(TokenVisitor):
 
 def set_language(
     tokens: Union[Sequence[Token], Iterable[Token]],
-    language: Language = DEFAULT_LANGUAGE
+    language: Language = DEFAULT_LANGUAGE,
 ) -> Sequence[Token]:
     language_visitor = LanguageVisitor(language)
     for token in tokens:

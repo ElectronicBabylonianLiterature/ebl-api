@@ -2,10 +2,7 @@ from ebl.transliteration.domain.lemmatization import Lemmatization
 
 
 def create_token(value, unique_lemma=None):
-    return {
-        "value": value,
-        "uniqueLemma": [] if unique_lemma is None else unique_lemma,
-    }
+    return {"value": value, "uniqueLemma": [] if unique_lemma is None else unique_lemma}
 
 
 def create_lemmatized_token(value):

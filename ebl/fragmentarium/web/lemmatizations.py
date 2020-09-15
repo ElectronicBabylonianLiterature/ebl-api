@@ -17,7 +17,7 @@ LEMMATIZATION_DTO_SCHEMA = {
                     "type": "object",
                     "properties": {
                         "value": {"type": "string"},
-                        "uniqueLemma": {"type": "array", "items": {"type": "string"},},
+                        "uniqueLemma": {"type": "array", "items": {"type": "string"}},
                     },
                     "required": ["value"],
                 },
@@ -39,6 +39,6 @@ class LemmatizationResource:
         updated_fragment, has_photo = self._updater.update_lemmatization(
             parse_museum_number(number),
             Lemmatization.from_list(req.media["lemmatization"]),
-            user
+            user,
         )
         resp.media = create_response_dto(updated_fragment, user, has_photo)

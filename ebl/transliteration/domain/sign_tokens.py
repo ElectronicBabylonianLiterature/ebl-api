@@ -12,7 +12,10 @@ from ebl.transliteration.domain.converters import (
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.tokens import (
-    ErasureState, Token, ValueToken, TokenVisitor
+    ErasureState,
+    Token,
+    ValueToken,
+    TokenVisitor,
 )
 
 
@@ -118,8 +121,9 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = tuple(),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(frozenset(), ErasureState.NONE, modifiers, flags, name,
-                       sub_index, sign)
+        return Reading(
+            frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index, sign
+        )
 
     @staticmethod
     def of_name(
@@ -163,8 +167,16 @@ class Logogram(NamedSign):
         sign: Optional[Token] = None,
         surrogate: Sequence[Token] = tuple(),
     ) -> "Logogram":
-        return Logogram(frozenset(), ErasureState.NONE, modifiers, flags, name,
-                        sub_index, sign, surrogate)
+        return Logogram(
+            frozenset(),
+            ErasureState.NONE,
+            modifiers,
+            flags,
+            name,
+            sub_index,
+            sign,
+            surrogate,
+        )
 
     @staticmethod
     def of_name(
@@ -193,8 +205,9 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index,
-                      sign)
+        return Number(
+            frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index, sign
+        )
 
     @staticmethod
     def of_name(
@@ -244,7 +257,7 @@ class CompoundGrapheme(Token):
 
     @property
     def name(self) -> SignName:
-        parts = '.'.join(self.compound_parts)
+        parts = ".".join(self.compound_parts)
         delimiter = atf.COMPOUND_GRAPHEME_DELIMITER
         return SignName(f"{delimiter}{parts}{delimiter}")
 

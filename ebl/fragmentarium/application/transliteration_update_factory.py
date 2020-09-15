@@ -12,10 +12,7 @@ class TransliterationUpdateFactory:
 
     def create(self, atf: Atf, notes: str = "") -> TransliterationUpdate:
         text = parse_atf_lark(atf)
-        signs = "\n".join(
-            self._map_line(line)
-            for line in text.text_lines
-        )
+        signs = "\n".join(self._map_line(line) for line in text.text_lines)
         return TransliterationUpdate(text, notes, signs)
 
     def _map_line(self, line: TextLine) -> str:

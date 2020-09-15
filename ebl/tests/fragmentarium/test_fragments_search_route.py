@@ -15,11 +15,14 @@ def expected_fragment_info_dto(fragment, lines=tuple()):
     return ApiFragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
 
 
-@pytest.mark.parametrize("get_number", [
-    lambda fragment: str(fragment.number),
-    lambda fragment: fragment.cdli_number,
-    lambda fragment: fragment.accession,
-])
+@pytest.mark.parametrize(
+    "get_number",
+    [
+        lambda fragment: str(fragment.number),
+        lambda fragment: fragment.cdli_number,
+        lambda fragment: fragment.accession,
+    ],
+)
 def test_search_fragment(get_number, client, fragmentarium):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
@@ -38,26 +41,30 @@ def test_search_fragment_not_found(client):
 
 
 def test_search_references(client, fragmentarium, bibliography, user):
-    bib_entry_1 = BibliographyEntryFactory.build(id='RN.0', pages="254")
-    bib_entry_2 = BibliographyEntryFactory.build(id='RN.1')
+    bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
+    bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
     bibliography.create(bib_entry_1, user)
     bibliography.create(bib_entry_2, user)
 
     fragment = FragmentFactory.build(
         references=(
-            ReferenceFactory.build(id='RN.0', pages="254"),
-            ReferenceFactory.build(id='RN.1'))
+            ReferenceFactory.build(id="RN.0", pages="254"),
+            ReferenceFactory.build(id="RN.1"),
+        )
     )
     fragmentarium.create(fragment)
-    result = client.simulate_get("/fragments", params={
-        "id": fragment.references[0].id, "pages": fragment.references[0].pages
-    })
+    result = client.simulate_get(
+        "/fragments",
+        params={"id": fragment.references[0].id, "pages": fragment.references[0].pages},
+    )
 
     assert result.status == falcon.HTTP_OK
 
-    fragment_expected = fragment.set_references([
-        fragment.references[0].set_document(bib_entry_1),
-        fragment.references[1].set_document(bib_entry_2)]
+    fragment_expected = fragment.set_references(
+        [
+            fragment.references[0].set_document(bib_entry_1),
+            fragment.references[1].set_document(bib_entry_2),
+        ]
     )
     assert result.json == ApiFragmentInfoSchema(many=True).dump(
         [FragmentInfo.of(fragment_expected)]
@@ -73,9 +80,9 @@ def test_search_references_invalid_query(client, fragmentarium):
     fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
     reference_pages = "should be a number"
-    result = client.simulate_get("/fragments", params={
-        "id": reference_id, "pages": reference_pages
-    })
+    result = client.simulate_get(
+        "/fragments", params={"id": reference_id, "pages": reference_pages}
+    )
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
@@ -160,13 +167,14 @@ def test_search_fragment_no_query(client):
 
 
 @pytest.mark.parametrize(
-    "parameters", [
+    "parameters",
+    [
         {},
         {"random": True, "interesting": True},
         {"random": True, "interesting": True, "pages": "254"},
         {"invalid": "parameter"},
-        {"a": "a", "b": "b", "c": "c"}
-    ]
+        {"a": "a", "b": "b", "c": "c"},
+    ],
 )
 def test_search_invalid_params(client, parameters):
     result = client.simulate_get("/fragments", params=parameters)

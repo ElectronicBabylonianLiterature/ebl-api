@@ -1,8 +1,5 @@
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    TransliteratedFragmentFactory,
-)
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 
 
 def test_find_latest(fragmentarium, fragment_repository, when):

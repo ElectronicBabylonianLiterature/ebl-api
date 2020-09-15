@@ -18,7 +18,7 @@ class TransliterationUpdate:
         if questionable_lines:
             raise TransliterationError(
                 [
-                    {"description": "Invalid value", "lineNumber": line_number,}
+                    {"description": "Invalid value", "lineNumber": line_number}
                     for line_number in questionable_lines
                 ]
             )
@@ -33,7 +33,5 @@ class TransliterationUpdate:
             return lines.index(line) + 1
 
         return [
-            get_line_number(index)
-            for index, line in enumerate(signs)
-            if "?" in line
+            get_line_number(index) for index, line in enumerate(signs) if "?" in line
         ]

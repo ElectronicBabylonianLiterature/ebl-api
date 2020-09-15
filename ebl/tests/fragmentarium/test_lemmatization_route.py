@@ -4,10 +4,7 @@ import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.fragment import (
-    FragmentFactory,
-    TransliteratedFragmentFactory,
-)
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 

@@ -1,10 +1,6 @@
 import factory.fuzzy  # pyre-ignore
 
-from ebl.bibliography.domain.reference import (
-    BibliographyId,
-    Reference,
-    ReferenceType,
-)
+from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.tests.factories.collections import TupleFactory
 
 
@@ -56,6 +52,5 @@ class BibliographyEntryFactory(factory.Factory):  # pyre-ignore
 
 class ReferenceWithDocumentFactory(ReferenceFactory):
     document = factory.SubFactory(
-        BibliographyEntryFactory,
-        id=factory.SelfAttribute("..id")
+        BibliographyEntryFactory, id=factory.SelfAttribute("..id")
     )

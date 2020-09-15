@@ -17,7 +17,7 @@ class AnnotationResource:
         self,
         req: falcon.Request,  # pyre-ignore[11]
         resp: falcon.Response,  # pyre-ignore[11]
-        number: str
+        number: str,
     ):
         """---
         description: >-

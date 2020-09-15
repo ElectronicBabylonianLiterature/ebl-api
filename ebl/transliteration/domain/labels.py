@@ -113,11 +113,7 @@ class SurfaceLabel(Label):
 
     @text.validator
     def _check_text(self, attribute, value) -> None:
-        if value and self.surface not in [
-            Surface.SURFACE,
-            Surface.FACE,
-            Surface.EDGE,
-        ]:
+        if value and self.surface not in [Surface.SURFACE, Surface.FACE, Surface.EDGE]:
             raise ValueError(
                 "Non-empty text is only allowed for SURFACE, EDGE or FACE."
             )
@@ -156,13 +152,8 @@ class ObjectLabel(Label):
 
     @text.validator
     def _check_text(self, attribute, value) -> None:
-        if value and self.object not in [
-            Object.OBJECT,
-            Object.FRAGMENT,
-        ]:
-            raise ValueError(
-                "Non-empty text is only allowed for OBJECT and FRAGMENT."
-            )
+        if value and self.object not in [Object.OBJECT, Object.FRAGMENT]:
+            raise ValueError("Non-empty text is only allowed for OBJECT and FRAGMENT.")
 
     @property
     def abbreviation(self) -> str:

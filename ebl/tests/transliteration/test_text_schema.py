@@ -10,10 +10,7 @@ from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import (
-    Joiner,
-    LanguageShift,
-)
+from ebl.transliteration.domain.tokens import Joiner, LanguageShift
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 
 
@@ -28,7 +25,7 @@ def test_dump_line():
                             Reading.of_name("ha"),
                             Joiner.hyphen(),
                             Reading.of_name("am"),
-                        ],
+                        ]
                     )
                 ],
             ),
@@ -55,7 +52,7 @@ def test_dump_line():
                 LineNumber(1),
                 [
                     Word.of(
-                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")],
+                        unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("nu")]
                     ),
                     Word.of(alignment=1, parts=[Reading.of_name("nu")]),
                     LanguageShift.of("%sux"),

@@ -136,7 +136,7 @@ class Token(ABC):
     def set_enclosure_type(self: T, enclosure_type: AbstractSet[EnclosureType]) -> T:
         return attr.evolve(self, enclosure_type=enclosure_type)
 
-    def set_erasure(self: T, erasure: ErasureState,) -> T:
+    def set_erasure(self: T, erasure: ErasureState) -> T:
         return attr.evolve(self, erasure=erasure)
 
     def merge(self, token: "Token") -> "Token":

@@ -22,19 +22,17 @@ class MongoBibliographyRepository(BibliographyRepository):
         data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
 
-    def update(self, entry) -> None :
+    def update(self, entry) -> None:
         mongo_entry = create_mongo_entry(entry)
         self._collection.replace_one(mongo_entry)
 
     def query_by_author_year_and_title(
-            self,
-            author: Optional[str],
-            year: Optional[int],
-            title: Optional[str]) -> Sequence[dict]:
+        self, author: Optional[str], year: Optional[int], title: Optional[str]
+    ) -> Sequence[dict]:
         match: Dict[str, Any] = {}
 
         def pad_trailing_zeroes(year: int) -> int:
-            padded_year = str(year).ljust(4, '0')
+            padded_year = str(year).ljust(4, "0")
             return int(padded_year)
 
         if author:
@@ -42,7 +40,8 @@ class MongoBibliographyRepository(BibliographyRepository):
         if year:
             match["issued.date-parts.0.0"] = {
                 "$gte": pad_trailing_zeroes(year),
-                "$lt": pad_trailing_zeroes(year + 1)}
+                "$lt": pad_trailing_zeroes(year + 1),
+            }
         if title:
             match["$expr"] = {"$eq": [{"$substrCP": ["$title", 0, len(title)]}, title]}
         return [
@@ -54,21 +53,21 @@ class MongoBibliographyRepository(BibliographyRepository):
                         "$addFields": {
                             "primaryYear": {
                                 "$arrayElemAt": [
-                                    {"$arrayElemAt": ["$issued.date-parts", 0,]},
+                                    {"$arrayElemAt": ["$issued.date-parts", 0]},
                                     0,
                                 ]
                             }
                         }
                     },
-                    {"$sort": {"author.0.family": 1, "primaryYear": 1, "title": 1,}},
+                    {"$sort": {"author.0.family": 1, "primaryYear": 1, "title": 1}},
                     {"$project": {"primaryYear": 0}},
                 ],
-                collation={"locale": "en", "strength": 1, "normalization": True,},
+                collation={"locale": "en", "strength": 1, "normalization": True},
             )
         ]
 
     def query_by_container_title_and_collection_number(
-            self, container_title_short: Optional[str], collection_number: Optional[str]
+        self, container_title_short: Optional[str], collection_number: Optional[str]
     ) -> Sequence[dict]:
         match: Dict[str, Any] = {}
         if container_title_short:
@@ -84,15 +83,21 @@ class MongoBibliographyRepository(BibliographyRepository):
                         "$addFields": {
                             "primaryYear": {
                                 "$arrayElemAt": [
-                                    {"$arrayElemAt": ["$issued.date-parts", 0,]},
+                                    {"$arrayElemAt": ["$issued.date-parts", 0]},
                                     0,
                                 ]
                             }
                         }
                     },
-                    {"$sort": {"author.0.family": 1, "primaryYear": 1, "collection-title": 1,}},
+                    {
+                        "$sort": {
+                            "author.0.family": 1,
+                            "primaryYear": 1,
+                            "collection-title": 1,
+                        }
+                    },
                     {"$project": {"primaryYear": 0}},
                 ],
-                collation={"locale": "en", "strength": 1, "normalization": True, },
+                collation={"locale": "en", "strength": 1, "normalization": True},
             )
         ]
