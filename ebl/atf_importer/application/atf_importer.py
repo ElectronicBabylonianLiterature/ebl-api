@@ -10,8 +10,6 @@ from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
-from ebl.transliteration.domain.text_line import TextLine
-
 from dotenv import load_dotenv
 
 
@@ -31,13 +29,13 @@ class TestConverter(unittest.TestCase):
         atf_preprocessor = ATF_Preprocessor()
 
         converted_line,c_array,type,c_alter_lemline_at=atf_preprocessor.process_line("1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} * AN.GE₆")
-        self.assertTrue(converted_line == "1. [ DIŠ ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} DIŠ AN.GE₆")
+        self.assertEqual(converted_line, "1. [ DIŠ ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} DIŠ AN.GE₆")
 
         converted_line,c_array,type,c_alter_lemline_at=atf_preprocessor.process_line("8. KAR <:> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
-        self.assertTrue(converted_line == "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
+        self.assertEqual(converted_line , "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
 
         converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line("14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA--<E₂>.AN.NA")
-        self.assertTrue(converted_line == "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA-<E₂>.AN.NA")
+        self.assertEqual(converted_line , "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA-<E₂>.AN.NA")
 
         self.atf_preprocessor.process_line()
 
@@ -54,10 +52,10 @@ class TestConverter(unittest.TestCase):
         atf_preprocessor = ATF_Preprocessor()
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : ANŠE.KUR.RA-MEŠ")
-        self.assertTrue(converted_line == "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* E₂.GAL : ANŠE.KUR.RA-MEŠ")
+        self.assertEqual(converted_line , "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* E₂.GAL : ANŠE.KUR.RA-MEŠ")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* ÁM.GAL : ANŠE.KUR.RA-MEŠ")
-        self.assertTrue(converted_line == "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL : ANŠE.KUR.RA-MEŠ")
+        self.assertEqual(converted_line , "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL : ANŠE.KUR.RA-MEŠ")
 
     # Test case to test if a lem line is parsed as type "lem_line"
     def test_lemmantization(self):
@@ -65,36 +63,36 @@ class TestConverter(unittest.TestCase):
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line(
             "#lem: Sin[1]DN; ina[at]PRP; Nisannu[1]MN; ina[at]PRP; tāmartišu[appearance]N; adir[dark]AJ; ina[in]PRP; aṣîšu[going out]'N; adri[dark]AJ; uṣṣi[go out]V; šarrū[king]N; +šanānu[equal]V$iššannanū-ma")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("#lem: iššannanū-ma[equal]V; +šanānu[equal]V$iššannanū-ma; umma[saying]PRP; +šarru[king]N$; mala[as many]PRP; +šarru[king]N$šarri; +maṣû[correspond]V$imaṣṣû")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =   atf_preprocessor.process_line("#lem: +adrūssu[darkly]AV$; īrub[enter]V; +arītu[pregnant (woman)]N$arâtu; ša[of]DET; libbašina[belly]N; ittadûni[contain]V; ina[in]PRP; +Zuqiqīpu[Scorpius]CN$")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("#lem: šatti[year]N; n; +Artaxerxes[]RN$artakšatsu; šar[king]N; pālih[reverent one]N; Nabu[1]DN; lā[not]MOD; itabbal[disappear]V; maʾdiš[greatly]N; lišāqir[value]V")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("#lem: +arāmu[cover]V$īrim-ma; ana[according to]PRP; birṣu[(a luminous phenomenon)]N; itârma[turn]V; adi[until]PRP; šāt[who(m)]DET&urri[daytime]N; illakma[flow]V")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("#lem: u; eššu[new]AJ; u +.")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at = atf_preprocessor.process_line(
             "#lem: u; ubû[unit]N; n; n; qû[unit]N; ubû[unit]N; +Ištar[]DN$; Ištar[1]DN +.; +saparru[cart]N$; u")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line(
             "#lem: !+māru[son]N$; !+māru[son]N$māri; târu[turning back]'N; +našû[lift//carrying]V'N$ +.; u; +narkabtu[chariot]N$narkabta; īmur[see]V; marṣu[patient]N; šū[that]IP; qāt[hand]N; Ištar[1]DN; u")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("#lem: +burmāmu[(an animal)//porcupine?]N$; +burmāmu[(an animal)//porcupine?]N$buriyāmu; ša[whose]REL; +zumru[body]N$zumuršu; kīma[like]PRP; +ṭīmu[yarn]N$ṭime; +eṣēru[draw//mark]V$uṣṣuru +.")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
         converted_line,c_array,type,c_alter_lemline_at =  atf_preprocessor.process_line("#lem: u; +appāru[reed-bed]N$")
-        self.assertTrue(type == "lem_line")
+        self.assertEqual(type , "lem_line")
 
 
 
@@ -105,17 +103,17 @@ class TestConverter(unittest.TestCase):
         lines = atf_preprocessor.convert_lines("../test-files/test_lemma.atf","test_lemma")
 
         for line in lines:
-            self.assertTrue(line['c_type'] == "lem_line")
+            self.assertEqual(line['c_type'] , "lem_line")
 
     # Batch test for cccp files
     def test_cccp(self):
             atf_preprocessor = ATF_Preprocessor()
 
             lines = atf_preprocessor.convert_lines("../test-files/cccp_3_1_16_test.atf","cccp_3_1_16_test")
-            self.assertTrue(len(lines)==259)
+            self.assertEqual(len(lines) , 259)
 
             lines = atf_preprocessor.convert_lines("../test-files/cccp_3_1_21_test.atf","cccp_3_1_21_test")
-            self.assertTrue(len(lines) == 90) # one invalid line removed
+            self.assertEqual(len(lines) , 90) # one invalid line removed
 
 
 class ATF_Importer:
@@ -200,7 +198,7 @@ class ATF_Importer:
                             for entry in self.db.get_collection('words').find({"guideWord": oracc_guideword}, {"_id"}):
                                 if entry['_id'] not in unique_lemmas:
                                     unique_lemmas.append(entry['_id'])
-                    except:
+                    except Exception as e:
                         if oracc_lemma not in not_lemmatized:
                             not_lemmatized[oracc_lemma] = True
 
@@ -305,7 +303,6 @@ class ATF_Importer:
 
                     if line['c_type'] == "lem_line":
 
-                        wrong_lemmatization = False
                         all_unique_lemmas = []
                         lemma_line = []
 
@@ -375,7 +372,6 @@ class ATF_Importer:
                         result['transliteration'].append(line['c_line'])
 
 
-                json_string = json.dumps(result, ensure_ascii=False).encode('utf8')
                 with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
 

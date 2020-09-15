@@ -5,7 +5,7 @@ import re
 import traceback
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
-from lark import Tree, Transformer, Visitor
+from lark import Visitor
 import logging
 
 
@@ -59,7 +59,7 @@ class Convert_Legacy_Grammar_Signs(Visitor):
                 tree.children[cnt] = self.replacement_chars[match]
                 tree.children[cnt + 1] = next_char + "₃"
 
-            except:
+            except Exception as e:
                 tree.children[cnt] = self.replacement_chars[match] + "₂"
 
         cnt = cnt + 1
@@ -80,7 +80,7 @@ class Convert_Legacy_Grammar_Signs(Visitor):
                tree.children[cnt] = self.replacement_chars[match]
                tree.children[cnt+1] = next_char+"₃"
 
-           except:
+           except Exception as e:
                tree.children[cnt] = self.replacement_chars[match]+"₂"
 
 
@@ -209,7 +209,6 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
 class ATF_Preprocessor:
 
     def __init__(self):
-        pass
         self.EBL_PARSER = Lark.open("../../transliteration/domain/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
         self.ORACC_PARSER = Lark.open("lark-oracc/oracc_atf.lark", maybe_placeholders=True, rel_to=__file__)
@@ -228,7 +227,7 @@ class ATF_Preprocessor:
                 raise Exception
 
             # try to parse line with ebl-parser
-            tree = self.EBL_PARSER.parse(atf)
+            self.EBL_PARSER.parse(atf)
 
             # words serializer oracc parser
             tree = self.ORACC_PARSER.parse(atf)
@@ -266,7 +265,7 @@ class ATF_Preprocessor:
 
                     lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
                     lemmas_and_guidewords_serializer.result = []
-                    lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.visit(tree)
+                    lemmas_and_guidewords_serializer.visit(tree)
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
                     self.logger.debug("----------------------------------------------------------------------")
                     return atf,lemmas_and_guidewords_array,tree.data,[]
@@ -294,7 +293,7 @@ class ATF_Preprocessor:
                     converted_line_array = words_serializer.result
 
                     try:
-                        tree3 = self.EBL_PARSER.parse(converted_line)
+                        self.EBL_PARSER.parse(converted_line)
                         self.logger.debug('successfully parsed converted line')
                         self.logger.debug(converted_line)
                         self.logger.debug("----------------------------------------------------------------------")
@@ -303,7 +302,7 @@ class ATF_Preprocessor:
 
                     except Exception as e:
                         self.logger.error("could not parse converted line")
-                        self.logger.error(traceback.print_exc(file=sys.stdout))
+                        self.logger.error(traceback.print_exc())
 
                     self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
 
@@ -331,7 +330,7 @@ class ATF_Preprocessor:
 
             if c_line != None:
                 processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type,"c_alter_lemline_at":c_alter_lemline_at})
-            elif (c_type == None and c_line == None):
+            elif (c_type is None and c_line is None):
                 self.skip_next_lem_line = True
 
         self.logger.debug(Util.print_frame("preprocessing finished"))

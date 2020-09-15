@@ -1,16 +1,17 @@
 class Util:
 
+    @staticmethod
     def print_frame(s):
         r = "\n"
         r+=(" +-")
 
-        for char in s:
+        for i in range(len(s)):
             r+=("-")
         r+=("-+\n")
         r+=(" | " + s + " |\n")
         r+=(" +-")
 
-        for char in s:
+        for i in range(len(s)):
             r+=("-")
 
         r+=("-+\n")
