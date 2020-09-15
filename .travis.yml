@@ -16,6 +16,7 @@ jobs:
         - chmod +x ./cc-test-reporter
         - "./cc-test-reporter before-build"
       script:
+        - pipenv run black ebl --check
         - pipenv run flake8
         - pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
