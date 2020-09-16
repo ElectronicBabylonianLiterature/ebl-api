@@ -42,7 +42,10 @@ mongodump -h $sourceHost \
 
 if [ $targetUser ]
 then
-    mongorestore -h $targetHost -u $targetUser -p $targetPassword $tempFolder
+    mongorestore -h $targetHost \
+        -u $targetUser -p $targetPassword \
+        --authenticationDatabase $sourceDb \
+        $tempFolder
 else
     mongorestore -h $targetHost --drop $tempFolder
 fi
