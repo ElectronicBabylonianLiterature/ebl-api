@@ -210,9 +210,11 @@ class TextDeserializer:
 
     def deserialize_line(self, line: dict) -> Line:
         return Line(
-            (parse_line_number(line["number"])
-             if isinstance(line["number"], str)
-             else OneOfLineNumberSchema().load(line["number"])),  # pyre-ignore[16]
+            (
+                parse_line_number(line["number"])
+                if isinstance(line["number"], str)
+                else OneOfLineNumberSchema().load(line["number"])  # pyre-ignore[16]
+            ),
             parse_reconstructed_line(line["reconstruction"]),
             tuple(
                 self.deserialize_manuscript_line(line) for line in line["manuscripts"]

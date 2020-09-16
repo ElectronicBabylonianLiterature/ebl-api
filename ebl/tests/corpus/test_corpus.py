@@ -308,8 +308,7 @@ def test_updating_lines(
                 DEHYDRATED_TEXT.chapters[0],
                 lines=(
                     attr.evolve(
-                        DEHYDRATED_TEXT.chapters[0].lines[0],
-                        number=LineNumber(1, True),
+                        DEHYDRATED_TEXT.chapters[0].lines[0], number=LineNumber(1, True)
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,

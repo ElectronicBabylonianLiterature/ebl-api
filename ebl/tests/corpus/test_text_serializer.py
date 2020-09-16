@@ -92,6 +92,7 @@ def test_deserialize():
 
 def test_deserialize_with_old_line_number():
     data = to_dict(True)
-    data["chapters"][0]["lines"][0]["number"] =\
-        LineNumberLabel.from_atf(LINE.number.atf).to_value()
+    data["chapters"][0]["lines"][0]["number"] = LineNumberLabel.from_atf(
+        LINE.number.atf
+    ).to_value()
     assert TextDeserializer.deserialize(data) == TEXT
