@@ -29,6 +29,7 @@ fi
 
 mongodump -h $sourceHost \
     -d $sourceDb \
+    --forceTableScan \
     --excludeCollection=changelog \
     --excludeCollection=folios.files \
     --excludeCollection=folios.chunks \
