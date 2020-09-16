@@ -15,6 +15,7 @@ from ebl.tests.factories.corpus import (
     TextFactory,
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.domain.labels import LineNumberLabel
 
 
 def create(include_documents):
@@ -60,7 +61,7 @@ def create(include_documents):
                 ],
                 "lines": [
                     {
-                        "number": line.number.to_value(),
+                        "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
                         "reconstruction": " ".join(
                             str(token) for token in line.reconstruction
                         ),

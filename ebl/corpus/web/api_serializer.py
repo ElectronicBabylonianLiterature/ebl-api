@@ -1,6 +1,6 @@
 from typing import cast, Sequence
 
-from lark.exceptions import ParseError as LarkParseError  # pyre-ignore
+from lark.exceptions import ParseError as LarkParseError, UnexpectedInput  # pyre-ignore
 from parsy import ParseError as ParsyParseError  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
@@ -16,7 +16,8 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
-from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
+from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
 
 
 class ApiSerializer(TextSerializer):
@@ -46,6 +47,7 @@ class ApiSerializer(TextSerializer):
     def visit_line(self, line: Line) -> None:
         super().visit_line(line)
         self.line["reconstructionTokens"] = []
+        self.line["number"] = LineNumberLabel.from_atf(line.number.atf).to_value()
 
     def visit_akkadian_word(self, word: AkkadianWord):
         self._visit_reconstruction_token("AkkadianWord", word)
@@ -66,6 +68,15 @@ class ApiSerializer(TextSerializer):
 
 
 class ApiDeserializer(TextDeserializer):
+    def deserialize_line(self, line: dict) -> Line:
+        return Line(
+            parse_line_number(line["number"]),
+            parse_reconstructed_line(line["reconstruction"]),
+            tuple(
+                self.deserialize_manuscript_line(line) for line in line["manuscripts"]
+            ),
+        )
+
     def deserialize_manuscript_line(self, manuscript_line: dict) -> ManuscriptLine:
         line_number = LineNumberLabel(manuscript_line["number"]).to_atf()
         atf = manuscript_line["atf"]
@@ -84,7 +95,7 @@ def serialize(text: Text, include_documents=True) -> dict:
 def deserialize(dto: dict) -> Text:
     try:
         return ApiDeserializer.deserialize(dto)
-    except (ValueError, LarkParseError, ParsyParseError) as error:
+    except (ValueError, LarkParseError, UnexpectedInput, ParsyParseError) as error:
         raise DataError(error)
 
 
@@ -92,5 +103,5 @@ def deserialize_lines(lines: list) -> Sequence[Line]:
     deserializer = ApiDeserializer()
     try:
         return tuple(deserializer.deserialize_line(line) for line in lines)
-    except (ValueError, LarkParseError, ParsyParseError) as error:
+    except (ValueError, LarkParseError, UnexpectedInput, ParsyParseError) as error:
         raise DataError(error)

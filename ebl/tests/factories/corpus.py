@@ -28,7 +28,7 @@ from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -85,7 +85,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Line
 
-    number = factory.Sequence(lambda n: LineNumberLabel(str(n)))
+    number = factory.Sequence(lambda n: LineNumber(n))
     reconstruction = (
         AkkadianWord((StringPart("buāru"),)),
         MetricalFootSeparator(True),

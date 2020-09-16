@@ -2,7 +2,7 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.text_serializer import TextSerializer
+from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -11,7 +11,9 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.domain.labels import LineNumberLabel
 
 REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
@@ -56,7 +58,7 @@ def to_dict(include_documents):
                 ],
                 "lines": [
                     {
-                        "number": LINE.number.to_value(),
+                        "number": OneOfLineNumberSchema().dump(LINE.number),
                         "reconstruction": " ".join(
                             str(token) for token in LINE.reconstruction
                         ),
@@ -82,3 +84,15 @@ def test_serializing_to_dict():
 
 def test_serializing_to_dict_with_documents():
     assert TextSerializer.serialize(TEXT, True) == to_dict(True)
+
+
+def test_deserialize():
+    assert TextDeserializer.deserialize(to_dict(True)) == TEXT
+
+
+def test_deserialize_with_old_line_number():
+    data = to_dict(True)
+    data["chapters"][0]["lines"][0]["number"] = LineNumberLabel.from_atf(
+        LINE.number.atf
+    ).to_value()
+    assert TextDeserializer.deserialize(data) == TEXT

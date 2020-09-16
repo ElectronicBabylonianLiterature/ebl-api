@@ -6,7 +6,7 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -51,7 +51,7 @@ def test_merge_manuscript_line(old, new, expected):
     assert old.merge(new) == expected
 
 
-LINE_NUMBER = LineNumberLabel("1")
+LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
 LINE = Line(
     LINE_NUMBER,
@@ -94,7 +94,7 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumberLabel("2"),
+                LineNumber(2),
                 (AkkadianWord((StringPart("kur"),)),),
                 (
                     ManuscriptLine(
@@ -120,7 +120,7 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumberLabel("2"),
+                LineNumber(2),
                 (AkkadianWord((StringPart("kur"),)),),
                 (
                     ManuscriptLine(
@@ -155,12 +155,12 @@ LINE = Line(
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),),
             ),
             Line(
-                LineNumberLabel("2"),
+                LineNumber(2),
                 LINE_RECONSTRUCTION,
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
             ),
             Line(
-                LineNumberLabel("2"),
+                LineNumber(2),
                 LINE_RECONSTRUCTION,
                 (
                     ManuscriptLine(
@@ -246,7 +246,7 @@ NEW_LINE = Line(
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 OLD_LINE = Line(
-    LineNumberLabel("1'"), tuple(), (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),)
+    LineNumber(1), tuple(), (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),)
 )
 
 
@@ -293,7 +293,7 @@ OLD_LINE = Line(
                 (MANUSCRIPT,),
                 (
                     Line(
-                        LineNumberLabel("1'"),
+                        LineNumber(1, True),
                         tuple(),
                         (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),),
                     ),
