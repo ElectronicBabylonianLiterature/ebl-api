@@ -62,7 +62,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     folios = FoliosResource(finder)
 
     api.add_route("/fragments", fragment_search)
-    api.add_route("/fragments/{number}/genre", fragment_genre)
+    api.add_route("/fragments/{number}/genres", fragment_genre)
     api.add_route("/fragments/{number}", fragments)
     api.add_route("/fragments/{number}/pager", fragment_pager)
     api.add_route("/fragments/{number}/lemmatization", lemmatization)

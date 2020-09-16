@@ -4,6 +4,7 @@ import pytest  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -157,9 +158,13 @@ def test_update_update_transliteration_not_found(fragment_repository):
 
 
 def test_update_genre(fragment_repository):
-    fragment = FragmentFactory.build(genre=tuple())
+    fragment = FragmentFactory.build(genres=tuple())
     fragment_repository.create(fragment)
-    updated_fragment = fragment.set_genre([["ARCHIVAL", "Administrative"]])
+    updated_fragment = fragment.set_genres(
+        (
+            Genre(["ARCHIVAL", "Administrative"], False),
+        )
+    )
     fragment_repository.update_genre(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 

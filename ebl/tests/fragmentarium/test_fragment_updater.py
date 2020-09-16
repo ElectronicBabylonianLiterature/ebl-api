@@ -3,6 +3,7 @@ from freezegun import freeze_time  # pyre-ignore
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -77,8 +78,8 @@ def test_update_genre(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    genre = [["ARCHIVAL", "Administrative"]]
-    expected_fragment = fragment.set_genre(genre)
+    genre = (Genre(["ARCHIVAL", "Administrative"], False),)
+    expected_fragment = fragment.set_genres(genre)
 
     (
         when(fragment_repository)

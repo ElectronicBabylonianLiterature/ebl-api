@@ -68,7 +68,10 @@ def test_create_response_dto(user):
             ),
             "atf": lemmatized_fragment.text.atf,
             "hasPhoto": has_photo,
-            "genre": list(map(list, lemmatized_fragment.genre))
+            "genres": [
+                {"category": genre.category, "uncertain": genre.uncertain}
+                for genre in lemmatized_fragment.genres
+            ]
         },
         pydash.is_none,
     )

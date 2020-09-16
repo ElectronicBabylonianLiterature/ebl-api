@@ -129,7 +129,7 @@ class MongoFragmentRepository(FragmentRepository):
         self._collection.update_one(
             fragment_is(fragment),
             {
-                "$set": FragmentSchema(only=("genre",)).dump(
+                "$set": FragmentSchema(only=("genres",)).dump(
                     fragment
                 )
             },

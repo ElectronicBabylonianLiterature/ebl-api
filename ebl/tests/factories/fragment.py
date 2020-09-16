@@ -4,7 +4,7 @@ import factory  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference
+from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference, Genre
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
@@ -73,13 +73,13 @@ class FragmentFactory(factory.Factory):  # pyre-ignore[11]
     description = factory.Faker("text")
     script = factory.Iterator(["NA", "NB"])
     folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
-    genre = factory.Iterator([
+    genres = factory.Iterator([
         (
-            ("ARCHIVAL", "Administrative", "Lists", "One Entry"),
-            ("CANONICAL", "Catalogues"),
+            Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),
+            Genre(["CANONICAL", "Catalogues"], False),
         ),
         (
-            ("ARCHIVAL", "Administrative", "Lists", "One Entry"),
+            Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False)
         )
     ])
 

@@ -6,7 +6,7 @@ from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Measure,
-    UncuratedReference,
+    UncuratedReference, Genre,
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -145,28 +145,26 @@ def test_references_default():
 
 
 def test_genre():
-    genre = (("ARCHIVAL", "Administrative", "Lists",),)
-    fragment = FragmentFactory.build(genre=genre)
+    genre = Genre(["ARCHIVAL", "Administrative", "Lists"], False)
+    fragment = FragmentFactory.build(genres=(genre,))
     assert fragment.genre == genre
 
 
 def test_invalid_genre():
     with pytest.raises(ValueError):
-        FragmentFactory.build(genre=(("xyz",),))
+        FragmentFactory.build(genres=(Genre(["xyz"], False),))
 
 
 def test_set_genre():
-    updated_genre = (("ARCHIVAL", "Administrative", "Lists"),)
-    fragment = FragmentFactory.build(genre=tuple())
-    updated_fragment = fragment.set_genre(updated_genre)
-    assert updated_fragment.genre == updated_genre
+    updated_genres = (Genre(["ARCHIVAL", "Administrative", "Lists"], True),)
+    fragment = FragmentFactory.build(genres=tuple())
+    updated_fragment = fragment.set_genres(updated_genres)
+    assert updated_fragment.genres == updated_genres
 
 
 def test_set_invalid_genre():
-    updated_genre = (("xyz", "wrq"),)
-    fragment = FragmentFactory.build(genre=tuple())
-    with pytest.raises(ValueError, match="are not valid genres"):
-        fragment.set_genre(updated_genre)
+    with pytest.raises(ValueError, match="is not valid genre"):
+        Genre(["xyz", "wrq"], False)
 
 
 @freeze_time("2018-09-07 15:41:24.032")

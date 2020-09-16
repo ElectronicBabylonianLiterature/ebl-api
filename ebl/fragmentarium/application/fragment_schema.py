@@ -1,6 +1,7 @@
 import pydash  # pyre-ignore
 from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 
+from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
@@ -98,15 +99,13 @@ class FragmentSchema(Schema):  # pyre-ignore[11]
         data_key="uncuratedReferences",
         missing=None,
     )
-    genre = fields.List(
-        fields.List(fields.String()), missing=tuple()
-    )
+    genres = fields.Nested(GenreSchema, many=True, missing=tuple())
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["joins"] = tuple(data["joins"])
         data["references"] = tuple(data["references"])
-        data["genre"] = tuple(map(tuple, data["genre"]))
+        data["genres"] = tuple(data["genres"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)

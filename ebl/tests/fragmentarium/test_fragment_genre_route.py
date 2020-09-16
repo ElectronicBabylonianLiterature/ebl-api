@@ -3,6 +3,8 @@ import json
 import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
+from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory
 
@@ -10,37 +12,35 @@ from ebl.tests.factories.fragment import FragmentFactory
 @pytest.mark.parametrize(
     "parameters", [
         {
-            "currentGenre": tuple(tuple()),
-            "newGenre": (("ARCHIVAL", "Administrative", "Lists",),)
+            "currentGenres": tuple(),
+            "newGenres": [Genre(["ARCHIVAL", "Administrative", "Lists"], False)]
         },
         {
-            "currentGenre": (("ARCHIVAL", "Administrative", "Lists"),),
-            "newGenre": (
-                ("ARCHIVAL", "Administrative", "Lists"),
-                ("ARCHIVAL", "Administrative", "Memos")
-            )
+            "currentGenres": (Genre(["ARCHIVAL", "Administrative", "Lists"], False),),
+            "newGenres": [
+                Genre(["ARCHIVAL", "Administrative", "Lists"], False),
+                Genre(["ARCHIVAL", "Administrative", "Memos"], False)
+            ]
         },
         {
-            "currentGenre": (("ARCHIVAL", "Administrative", "Lists"),),
-            "newGenre": tuple(tuple())
+            "currentGenres": (Genre(["ARCHIVAL", "Administrative", "Lists"], False),),
+            "newGenres": []
         },
     ]
 )
 def test_update_genre(client, fragmentarium, user, database, parameters):
-    fragment = FragmentFactory.build(genre=parameters["currentGenre"])
+    fragment = FragmentFactory.build(genres=parameters["currentGenres"])
     fragment_number = fragmentarium.create(fragment)
     updates = {
-        "genre": parameters["newGenre"]
+        "genres": GenreSchema().dump(parameters["newGenres"], many=True),
     }
-
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/genre",
+        f"/fragments/{fragment_number}/genres",
         body=json.dumps(updates)
     )
-
     expected_json = {
         **create_response_dto(
-            fragment.set_genre(updates["genre"]),
+            fragment.set_genres(updates["genres"]),
             user,
             fragment.number == "K.1",
         )
@@ -63,21 +63,21 @@ def test_update_genre(client, fragmentarium, user, database, parameters):
 
 
 def test_update_genre_invalid_genre(client, fragmentarium, user, database):
-    genre = (("asd", "wtz"), ("as4f",),)
+    genres = [Genre(["asd", "wtz"], False),]
     fragment = FragmentFactory.build(genre=tuple())
     fragment_number = fragmentarium.create(fragment)
     updates = {
-        "genre": genre
+        "genres": genres
     }
 
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/genre",
+        f"/fragments/{fragment_number}/genres",
         body=json.dumps(updates)
     )
 
     expected_json = {
         'title': '422 Unprocessable Entity',
-        'description': "All or parts of '(('asd', 'wtz'), ('as4f',))' are not valid genres",
+        'description': """'["asd", "wtz"]' is not valid genres""",
     }
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

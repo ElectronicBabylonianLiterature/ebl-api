@@ -1,6 +1,7 @@
 import falcon  # pyre-ignore[21]
 from falcon import Response, Request
 
+from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -18,7 +19,8 @@ class FragmentGenreResource:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_genre(
                 parse_museum_number(number),
-                req.media["genre"], user
+                GenreSchema().load(req.media["genres"], many=True),
+                user
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except ValueError as error:
