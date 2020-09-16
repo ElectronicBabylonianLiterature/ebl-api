@@ -25,6 +25,7 @@ from ebl.corpus.domain.text import (
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.domain.lark_parser import parse_line_number
 
 
 class TextSerializer(TextVisitor):
@@ -209,7 +210,9 @@ class TextDeserializer:
 
     def deserialize_line(self, line: dict) -> Line:
         return Line(
-            OneOfLineNumberSchema().load(line["number"]),  # pyre-ignore[16]
+            (parse_line_number(line["number"])
+             if isinstance(line["number"], str)
+             else OneOfLineNumberSchema().load(line["number"])),  # pyre-ignore[16]
             parse_reconstructed_line(line["reconstruction"]),
             tuple(
                 self.deserialize_manuscript_line(line) for line in line["manuscripts"]
