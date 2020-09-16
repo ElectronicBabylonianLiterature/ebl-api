@@ -55,6 +55,12 @@ pipenv run pyre check
 pipenv run test
 ```
 
+## Database
+
+`pull-db.sh` can be used to pull a database from an another MongoDB instance to
+your development MongoDB. It will use `mongodump` and `mongorestore` to get
+all data except `changelog` collection, and `photos` and `folios` buckets.
+
 ## Running the application
 
 The application reads the configuration from following environment variables:
