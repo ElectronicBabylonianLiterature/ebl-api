@@ -33,8 +33,9 @@ class Genre:
 
     @category.validator
     def _check_is_genres_valid(self, _, category: Sequence[str]) -> None:
-        if tuple(category) not in genres:
-            raise ValueError(f"'{category}' is not valid genres")
+        category = tuple(category)
+        if category not in genres:
+            raise ValueError(f"'{category}' is not a valid genre")
 
 
 @attr.s(auto_attribs=True, frozen=True)

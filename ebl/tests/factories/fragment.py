@@ -79,7 +79,7 @@ class FragmentFactory(factory.Factory):  # pyre-ignore[11]
             Genre(["CANONICAL", "Catalogues"], False),
         ),
         (
-            Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False)
+            Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),
         )
     ])
 

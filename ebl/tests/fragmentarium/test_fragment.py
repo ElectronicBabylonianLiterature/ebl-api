@@ -145,9 +145,9 @@ def test_references_default():
 
 
 def test_genre():
-    genre = Genre(["ARCHIVAL", "Administrative", "Lists"], False)
-    fragment = FragmentFactory.build(genres=(genre,))
-    assert fragment.genre == genre
+    genres = Genre(["ARCHIVAL", "Administrative", "Lists"], False)
+    fragment = FragmentFactory.build(genres=(genres,))
+    assert fragment.genres == genres
 
 
 def test_invalid_genre():
