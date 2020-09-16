@@ -70,7 +70,7 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):  # pyr
     api.add_route("/fragments/{number}/transliteration", transliteration)
     api.add_route("/fragments/{number}/annotations", annotations)
     api.add_route("/fragments/{number}/photo", photo)
-    api.add_route("/genre", genres)
+    api.add_route("/genres", genres)
     api.add_route("/lemmas", lemma_search)
     api.add_route("/statistics", statistics)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
