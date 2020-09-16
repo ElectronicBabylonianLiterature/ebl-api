@@ -23,7 +23,8 @@ from ebl.corpus.domain.text import (
     TextVisitor,
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
+from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 
 
 class TextSerializer(TextVisitor):
@@ -142,7 +143,7 @@ class TextSerializer(TextVisitor):
 
     def visit_line(self, line: Line) -> None:
         self.line = {
-            "number": line.number.to_value(),
+            "number": OneOfLineNumberSchema().dump(line.number),  # pyre-ignore[16]
             "reconstruction": " ".join(str(token) for token in line.reconstruction),
             "manuscripts": [],
         }
@@ -208,7 +209,7 @@ class TextDeserializer:
 
     def deserialize_line(self, line: dict) -> Line:
         return Line(
-            LineNumberLabel(line["number"]),
+            OneOfLineNumberSchema().load(line["number"]),  # pyre-ignore[16]
             parse_reconstructed_line(line["reconstruction"]),
             tuple(
                 self.deserialize_manuscript_line(line) for line in line["manuscripts"]

@@ -14,6 +14,7 @@ from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
@@ -60,6 +61,11 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_line_number(atf: str) -> AbstractLineNumber:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__line_number")
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 

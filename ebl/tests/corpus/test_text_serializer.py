@@ -11,6 +11,7 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import TextLineSchema
 
 REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
@@ -56,7 +57,7 @@ def to_dict(include_documents):
                 ],
                 "lines": [
                     {
-                        "number": LINE.number.to_value(),
+                        "number": OneOfLineNumberSchema().dump(LINE.number),
                         "reconstruction": " ".join(
                             str(token) for token in LINE.reconstruction
                         ),

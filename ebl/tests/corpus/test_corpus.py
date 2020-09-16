@@ -14,7 +14,6 @@ from ebl.transliteration.domain.alignment import (
 )
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -310,7 +309,7 @@ def test_updating_lines(
                 lines=(
                     attr.evolve(
                         DEHYDRATED_TEXT.chapters[0].lines[0],
-                        number=LineNumberLabel.from_atf("1'."),
+                        number=LineNumber(1, True),
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
@@ -336,7 +335,7 @@ def test_updating_lines(
 def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    number = LineNumberLabel("1")
+    number = LineNumber(1)
     reconstruction = (AkkadianWord((StringPart("buāru"),)),)
     text_line = TextLine.of_iterable(
         LineNumber(1),
