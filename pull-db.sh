@@ -45,6 +45,7 @@ then
     mongorestore -h $targetHost \
         -u $targetUser -p $targetPassword \
         --authenticationDatabase $sourceDb \
+        --drop \
         $tempFolder
 else
     mongorestore -h $targetHost --drop $tempFolder
