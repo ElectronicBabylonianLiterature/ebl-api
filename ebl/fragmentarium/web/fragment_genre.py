@@ -19,7 +19,7 @@ class FragmentGenreResource:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_genre(
                 parse_museum_number(number),
-                GenreSchema().load(req.media["genres"], many=True),
+                GenreSchema().load(req.media["genres"], many=True),  # pyre-ignore[16]
                 user
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
