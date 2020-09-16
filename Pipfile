@@ -48,7 +48,6 @@ python_version = "3.6"
 [scripts]
 test = "pytest --cov=ebl --cov-report term --cov-report xml"
 test-watch = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
-test-ci = "./run_tests.sh"
 start = "waitress-serve --port=8000 --call ebl.app:get_app"
 lint = "flake8 ebl"
 
