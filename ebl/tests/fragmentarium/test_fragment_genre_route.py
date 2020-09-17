@@ -28,7 +28,7 @@ from ebl.tests.factories.fragment import FragmentFactory
         },
     ]
 )
-def test_update_genre(client, fragmentarium, user, database, parameters):
+def test_update_genres(client, fragmentarium, user, database, parameters):
     fragment = FragmentFactory.build(genres=parameters["currentGenres"])
     fragment_number = fragmentarium.create(fragment)
     updates = {
@@ -62,7 +62,7 @@ def test_update_genre(client, fragmentarium, user, database, parameters):
     )
 
 
-def test_update_genre_invalid_genre(client, fragmentarium, user, database):
+def test_update_invalid_genres(client, fragmentarium, user, database):
     fragment = FragmentFactory.build(genres=tuple())
     fragment_number = fragmentarium.create(fragment)
     updates = {

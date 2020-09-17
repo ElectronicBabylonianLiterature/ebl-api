@@ -77,7 +77,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def update_genre(self, fragment: Fragment) -> None:
+    def update_genres(self, fragment: Fragment) -> None:
         ...
 
     @abstractmethod

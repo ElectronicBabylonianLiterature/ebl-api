@@ -66,7 +66,7 @@ class Fragment:
         return attr.evolve(self, references=references)
 
     def update_transliteration(
-            self, transliteration: TransliterationUpdate, user: User
+        self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
         record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
 

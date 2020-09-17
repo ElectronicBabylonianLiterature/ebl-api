@@ -147,11 +147,6 @@ def test_genre():
     assert fragment.genres == genres
 
 
-def test_invalid_genre():
-    with pytest.raises(ValueError):
-        FragmentFactory.build(genres=(Genre(["xyz"], False),))
-
-
 def test_set_genre():
     updated_genres = (Genre(["ARCHIVAL", "Administrative", "Lists"], True),)
     fragment = FragmentFactory.build(genres=tuple())
@@ -159,7 +154,7 @@ def test_set_genre():
     assert updated_fragment.genres == updated_genres
 
 
-def test_set_invalid_genre():
+def test_invalid_genre():
     with pytest.raises(ValueError, match="is not a valid genre"):
         Genre(["xyz", "wrq"], False)
 

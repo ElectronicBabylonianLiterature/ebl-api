@@ -41,7 +41,7 @@ class FragmentUpdater:
 
         return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
 
-    def update_genre(
+    def update_genres(
             self,
             number: MuseumNumber,
             genres: Sequence[Genre],
@@ -51,7 +51,7 @@ class FragmentUpdater:
         updated_fragment = fragment.set_genres(genres)
 
         self._create_changlelog(user, fragment, updated_fragment)
-        self._repository.update_genre(updated_fragment)
+        self._repository.update_genres(updated_fragment)
 
         return (
             updated_fragment,

@@ -152,7 +152,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
         fragment_repository.update_transliteration(transliterated_fragment)
 
 
-def test_update_genre(fragment_repository):
+def test_update_genres(fragment_repository):
     fragment = FragmentFactory.build(genres=tuple())
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_genres(
