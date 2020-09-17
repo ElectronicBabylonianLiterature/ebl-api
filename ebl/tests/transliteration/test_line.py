@@ -1,10 +1,7 @@
 import pytest  # pyre-ignore
 
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
-from ebl.transliteration.domain.line import (
-    ControlLine,
-    EmptyLine,
-)
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
 
 
 def test_empty_line() -> None:
@@ -27,10 +24,11 @@ def test_control_line() -> None:
 
 
 @pytest.mark.parametrize(
-    "line,lemmatization", [
-        (ControlLine("#", ' a comment'), (LemmatizationToken(' a comment'),)),
+    "line,lemmatization",
+    [
+        (ControlLine("#", " a comment"), (LemmatizationToken(" a comment"),)),
         (EmptyLine(), tuple()),
-    ]
+    ],
 )
-def test_update_lemmatization(line,lemmatization) -> None:
+def test_update_lemmatization(line, lemmatization) -> None:
     assert line.update_lemmatization(lemmatization) == line

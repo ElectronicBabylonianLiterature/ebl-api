@@ -36,9 +36,7 @@ def test_query_by_museum_number(database, annotations_repository):
 
     database[COLLECTION].insert_one(AnnotationsSchema().dump(annotations))
 
-    assert (
-        annotations_repository.query_by_museum_number(fragment_number) == annotations
-    )
+    assert annotations_repository.query_by_museum_number(fragment_number) == annotations
 
 
 def test_query_by_museum_number_not_found(database, annotations_repository):

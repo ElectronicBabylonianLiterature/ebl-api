@@ -1,7 +1,10 @@
 from typing import Optional
 
 from ebl.errors import Defect
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
+from ebl.bibliography.application.reference_schema import (
+    ApiReferenceSchema,
+    ReferenceSchema,
+)
 from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
 from ebl.corpus.domain.enums import (
     Classification,
@@ -20,7 +23,8 @@ from ebl.corpus.domain.text import (
     TextVisitor,
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
+from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 
 
 class TextSerializer(TextVisitor):
@@ -32,7 +36,9 @@ class TextSerializer(TextVisitor):
 
     def __init__(self, include_documents: bool) -> None:
         super().__init__(TextVisitor.Order.PRE)
-        self._ReferenceSchema = ApiReferenceSchema if include_documents else ReferenceSchema
+        self._ReferenceSchema = (
+            ApiReferenceSchema if include_documents else ReferenceSchema
+        )
         self._text: Optional[dict] = None
         self._chapter: Optional[dict] = None
         self._manuscript: Optional[dict] = None
@@ -129,13 +135,15 @@ class TextSerializer(TextVisitor):
             "type": manuscript.type.long_name,
             "notes": manuscript.notes,
             # pyre-ignore-nextline[16]
-            "references": self._ReferenceSchema().dump(manuscript.references, many=True),
+            "references": self._ReferenceSchema().dump(
+                manuscript.references, many=True
+            ),
         }
         self.chapter["manuscripts"].append(self.manuscript)
 
     def visit_line(self, line: Line) -> None:
         self.line = {
-            "number": line.number.to_value(),
+            "number": OneOfLineNumberSchema().dump(line.number),  # pyre-ignore[16]
             "reconstruction": " ".join(str(token) for token in line.reconstruction),
             "manuscripts": [],
         }
@@ -193,13 +201,15 @@ class TextDeserializer:
             ManuscriptType.from_name(manuscript["type"]),
             manuscript["notes"],
             tuple(
-                ReferenceSchema().load(manuscript["references"], many=True)  # pyre-ignore[16]
+                ReferenceSchema().load(  # pyre-ignore[16]
+                    manuscript["references"], many=True
+                )
             ),
         )
 
     def deserialize_line(self, line: dict) -> Line:
         return Line(
-            LineNumberLabel(line["number"]),
+            OneOfLineNumberSchema().load(line["number"]),  # pyre-ignore[16]
             parse_reconstructed_line(line["reconstruction"]),
             tuple(
                 self.deserialize_manuscript_line(line) for line in line["manuscripts"]

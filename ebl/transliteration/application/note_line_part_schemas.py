@@ -37,10 +37,7 @@ class LanguagePartSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_part(self, data, **kwargs) -> LanguagePart:
-        return LanguagePart.of_transliteration(
-            data["language"],
-            data["tokens"]
-        )
+        return LanguagePart.of_transliteration(data["language"], data["tokens"])
 
 
 class BibliographyPartSchema(Schema):  # pyre-ignore[11]

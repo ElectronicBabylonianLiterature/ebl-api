@@ -1,4 +1,7 @@
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
+from ebl.bibliography.application.reference_schema import (
+    ApiReferenceSchema,
+    ReferenceSchema,
+)
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import (
     ReferenceFactory,
@@ -12,6 +15,7 @@ from ebl.tests.factories.corpus import (
     TextFactory,
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.domain.labels import LineNumberLabel
 
 
 def create(include_documents):
@@ -51,15 +55,13 @@ def create(include_documents):
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
                         "references": (
-                            ApiReferenceSchema
-                            if include_documents
-                            else ReferenceSchema
+                            ApiReferenceSchema if include_documents else ReferenceSchema
                         )().dump(references, many=True),
                     }
                 ],
                 "lines": [
                     {
-                        "number": line.number.to_value(),
+                        "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
                         "reconstruction": " ".join(
                             str(token) for token in line.reconstruction
                         ),

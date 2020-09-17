@@ -31,6 +31,7 @@ _tail: _WORD_SEPARATOR _omit_right* _have_both?
 _require_both: commentary_protocol
              | divider_variant
              | divider
+             | line_break
 _have_both: tabulation
          | column
          | language_shift
@@ -51,6 +52,7 @@ _omit_right.-1: open_broken_away
              | open_document_oriented_gloss
 
 divider.5: DIVIDER_SYMBOL modifiers flags
+line_break.5: "|"
 close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
 open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
@@ -89,7 +91,7 @@ _WORD_SEPARATOR: " "
 ?any_word: lone_determinative
          | word
 
-DIVIDER_SYMBOL: "|" | ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
+DIVIDER_SYMBOL: ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
 
 ?broken_away: open_broken_away | close_broken_away
 open_broken_away: "["

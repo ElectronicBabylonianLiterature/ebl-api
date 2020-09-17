@@ -5,12 +5,7 @@ import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.enums import (
-    ManuscriptType,
-    Period,
-    PeriodModifier,
-    Provenance,
-)
+from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import TextFactory
@@ -55,7 +50,7 @@ def test_updating(client, bibliography, sign_repository, signs):
                 text.chapters[0],
                 manuscripts=(
                     attr.evolve(
-                        text.chapters[0].manuscripts[0], museum_number="new number",
+                        text.chapters[0].manuscripts[0], museum_number="new number"
                     ),
                 ),
             ),
@@ -84,7 +79,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []}),
+        "/texts/1/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -118,8 +113,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        "/texts/invalid/1/chapters/0/manuscripts",
-        body=json.dumps({"manuscripts": []}),
+        "/texts/invalid/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -127,8 +121,7 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        "/texts/1/invalid/chapters/0/manuscripts",
-        body=json.dumps({"manuscripts": []}),
+        "/texts/1/invalid/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -136,8 +129,7 @@ def test_updating_invalid_id(client):
 
 def test_updating_invalid_chapter_index(client):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/invalid/manuscripts",
-        body=json.dumps({"manuscripts": []}),
+        "/texts/1/1/chapters/invalid/manuscripts", body=json.dumps({"manuscripts": []})
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND

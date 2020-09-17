@@ -13,7 +13,7 @@ def test_get(client, fragmentarium, user):
     assert result.json == create_response_dto(
         transliterated_fragment,
         user,
-        transliterated_fragment.number == MuseumNumber("K", "1")
+        transliterated_fragment.number == MuseumNumber("K", "1"),
     )
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"

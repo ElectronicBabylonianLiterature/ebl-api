@@ -62,17 +62,13 @@ class State:
         self.errors.append(f"{number}\t\t{error}")
 
     def _add_lemmatization_error(
-        self,
-        error: LemmatizationError,
-        fragment: Fragment
+        self, error: LemmatizationError, fragment: Fragment
     ) -> None:
         self.invalid_lemmas += 1
         self.errors.append(f"{fragment.number}\t{error}")
 
     def _add_transliteration_error(
-        self,
-        error: TransliterationError,
-        fragment: Fragment
+        self, error: TransliterationError, fragment: Fragment
     ) -> None:
         self.invalid_atf += 1
         for index, error in enumerate(error.errors):
@@ -130,7 +126,7 @@ def update_fragments(
 def create_context_() -> Context:
     context = create_context()
     context = attr.evolve(
-        context, sign_repository=MemoizingSignRepository(context.sign_repository),
+        context, sign_repository=MemoizingSignRepository(context.sign_repository)
     )
     return context
 

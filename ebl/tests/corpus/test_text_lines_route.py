@@ -7,8 +7,8 @@ import pytest  # pyre-ignore
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.users.domain.user import Guest
+from ebl.transliteration.domain.line_number import LineNumber
 
 ANY_USER = Guest()
 
@@ -48,10 +48,7 @@ def test_updating(client, bibliography, sign_repository, signs):
             attr.evolve(
                 text.chapters[0],
                 lines=(
-                    attr.evolve(
-                        text.chapters[0].lines[0],
-                        number=LineNumberLabel.from_atf("1'."),
-                    ),
+                    attr.evolve(text.chapters[0].lines[0], number=LineNumber(1, True)),
                 ),
                 parser_version=ATF_PARSER_VERSION,
             ),
@@ -60,7 +57,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     body = {"lines": create_dto(updated_text)["chapters"][0]["lines"]}
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}/chapters/0/lines", body=json.dumps(body),
+        f"/texts/{text.category}/{text.index}/chapters/0/lines", body=json.dumps(body)
     )
 
     assert post_result.status == falcon.HTTP_OK

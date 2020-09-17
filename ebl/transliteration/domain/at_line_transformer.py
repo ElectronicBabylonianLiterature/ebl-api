@@ -63,7 +63,7 @@ class AtLineTransformer(Transformer):  # pyre-ignore[11]
 
     @v_args(inline=True)
     def ebl_atf_at_line__generic_object(self, text: str):
-        return ObjectData(atf.Object.OBJECT, text,)
+        return ObjectData(atf.Object.OBJECT, text)
 
     @v_args(inline=True)
     def ebl_atf_at_line__fragment(self, text: str):

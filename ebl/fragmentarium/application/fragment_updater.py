@@ -30,10 +30,7 @@ class FragmentUpdater:
         self._photos = photos
 
     def update_transliteration(
-        self,
-        number: MuseumNumber,
-        transliteration: TransliterationUpdate,
-        user: User,
+        self, number: MuseumNumber, transliteration: TransliterationUpdate, user: User
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
 
@@ -42,10 +39,7 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
-        return (
-            updated_fragment,
-            self._photos.query_if_file_exists(f"{number}.jpg"),
-        )
+        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
 
     def update_genre(
             self,
@@ -73,13 +67,10 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_lemmatization(updated_fragment)
 
-        return (
-            updated_fragment,
-            self._photos.query_if_file_exists(f"{number}.jpg"),
-        )
+        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
 
     def update_references(
-        self, number: MuseumNumber, references: Sequence[Reference], user: User,
+        self, number: MuseumNumber, references: Sequence[Reference], user: User
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
         self._bibliography.validate_references(references)
@@ -89,10 +80,7 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_references(updated_fragment)
 
-        return (
-            updated_fragment,
-            self._photos.query_if_file_exists(f"{number}.jpg"),
-        )
+        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
 
     def _create_changlelog(
         self, user: User, fragment: Fragment, updated_fragment: Fragment

@@ -15,11 +15,7 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
         (
             "2-4 lines missing",
             StateDollarLine(
-                None,
-                (2, 4),
-                ScopeContainer(atf.Scope.LINES),
-                atf.State.MISSING,
-                None
+                None, (2, 4), ScopeContainer(atf.Scope.LINES), atf.State.MISSING, None
             ),
         ),
         (
@@ -34,7 +30,7 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
         ),
         (
             "2 lines",
-            StateDollarLine(None, 2, ScopeContainer(atf.Scope.LINES), None, None,),
+            StateDollarLine(None, 2, ScopeContainer(atf.Scope.LINES), None, None),
         ),
         (
             "at most 1-3 object stone blank ?",
@@ -59,18 +55,18 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
         (
             "1-3 obverse",
             StateDollarLine(
-                None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None,
+                None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None
             ),
         ),
         (
             "1 - 3 obverse",
             StateDollarLine(
-                None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None,
+                None, (1, 3), ScopeContainer(atf.Surface.OBVERSE), None, None
             ),
         ),
         (
             "1 obverse",
-            StateDollarLine(None, 1, ScopeContainer(atf.Surface.OBVERSE), None, None,),
+            StateDollarLine(None, 1, ScopeContainer(atf.Surface.OBVERSE), None, None),
         ),
         (
             "several obverse",
@@ -145,7 +141,7 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
         (
             "1 line effaced",
             StateDollarLine(
-                None, 1, ScopeContainer(atf.Scope.LINE), atf.State.EFFACED, None,
+                None, 1, ScopeContainer(atf.Scope.LINE), atf.State.EFFACED, None
             ),
         ),
         (
@@ -274,7 +270,7 @@ def test_parse_state_dollar_line_surface_ambiguity(line, expected_line):
     assert parse_atf_lark(line).lines == Text.of_iterable([expected_line]).lines
 
 
-@pytest.mark.parametrize("line", ["$ face", "$ object",])
+@pytest.mark.parametrize("line", ["$ face", "$ object"])
 def test_parse_state_dollar_line_invalid(line):
     with (pytest.raises(TransliterationError)):
         parse_atf_lark(line)

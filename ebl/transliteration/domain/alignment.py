@@ -15,7 +15,7 @@ class AlignmentToken:
 
     @staticmethod
     def from_dict(data):
-        return AlignmentToken(data["value"], data.get("alignment"),)
+        return AlignmentToken(data["value"], data.get("alignment"))
 
 
 @attr.s(auto_attribs=True, frozen=True)

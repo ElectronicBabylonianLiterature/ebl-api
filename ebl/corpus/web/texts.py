@@ -41,7 +41,7 @@ MANUSCRIPT_DTO_SCHEMA = {
             "type": "string",
             "enum": [modifier.value for modifier in PeriodModifier],
         },
-        "period": {"type": "string", "enum": [period.long_name for period in Period],},
+        "period": {"type": "string", "enum": [period.long_name for period in Period]},
         "provenance": {
             "type": "string",
             "enum": [provenance.long_name for provenance in Provenance],
@@ -83,7 +83,7 @@ LINE_DTO_SCHEMA = {
     "properties": {
         "number": {"type": "string"},
         "reconstruction": {"type": "string"},
-        "manuscripts": {"type": "array", "items": MANUSCRIPT_LINE_DTO_SCHEMA,},
+        "manuscripts": {"type": "array", "items": MANUSCRIPT_LINE_DTO_SCHEMA},
     },
     "required": ["number", "reconstruction", "manuscripts"],
 }
@@ -103,7 +103,7 @@ CHAPTER_DTO_SCHEMA = {
         "lines": {"type": "array", "items": LINE_DTO_SCHEMA},
         "parserVersion": {"type": "string"},
     },
-    "required": ["classification", "stage", "name", "order", "manuscripts", "lines",],
+    "required": ["classification", "stage", "name", "order", "manuscripts", "lines"],
 }
 
 TEXT_DTO_SCHEMA = {
@@ -139,7 +139,9 @@ class TextsResource:
 
     @falcon.before(require_scope, "create:texts")
     @validate(TEXT_DTO_SCHEMA)
-    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:  # pyre-ignore[11]
+    def on_post(
+        self, req: falcon.Request, resp: falcon.Response  # pyre-ignore[11]
+    ) -> None:
         text = deserialize(req.media)
         self._corpus.create(text, req.context.user)
         resp.status = falcon.HTTP_CREATED
@@ -153,11 +155,7 @@ class TextResource:
 
     @falcon.before(require_scope, "read:texts")
     def on_get(
-        self,
-        _,
-        resp: falcon.Response,  # pyre-ignore[11]
-        category: str,
-        index: str
+        self, _, resp: falcon.Response, category: str, index: str  # pyre-ignore[11]
     ) -> None:
         text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(text)

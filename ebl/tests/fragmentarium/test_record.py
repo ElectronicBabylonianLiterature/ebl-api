@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 
 @pytest.mark.parametrize(
     "old,new,type_",
-    [("", "new", RecordType.TRANSLITERATION), ("old", "new", RecordType.REVISION),],
+    [("", "new", RecordType.TRANSLITERATION), ("old", "new", RecordType.REVISION)],
 )
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_record(old, new, type_, user):

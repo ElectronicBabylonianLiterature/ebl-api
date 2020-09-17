@@ -1,9 +1,6 @@
 import pytest  # pyre-ignore
 
-from ebl.transliteration.domain.atf import (
-    to_sub_index,
-    sub_index_to_int,
-)
+from ebl.transliteration.domain.atf import to_sub_index, sub_index_to_int
 
 SUB_INDICES = [
     (None, "ₓ"),
@@ -21,15 +18,11 @@ SUB_INDICES = [
 ]
 
 
-@pytest.mark.parametrize(
-    "number,expected", SUB_INDICES,
-)
+@pytest.mark.parametrize("number,expected", SUB_INDICES)
 def test_to_sub_index(number, expected):
     assert to_sub_index(number) == expected
 
 
-@pytest.mark.parametrize(
-    "expected,sub_index,", [*SUB_INDICES, (1, "₁")],
-)
+@pytest.mark.parametrize("expected,sub_index,", [*SUB_INDICES, (1, "₁")])
 def test_sub_index_to_int(sub_index, expected):
     assert sub_index_to_int(sub_index) == expected

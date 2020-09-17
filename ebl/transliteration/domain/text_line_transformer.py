@@ -1,7 +1,6 @@
-
 from typing import MutableSequence, Sequence, Type
 
-from lark.lexer import Token  # pyre-ignore
+from lark.lexer import Token  # pyre-ignore[21]
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
@@ -26,15 +25,15 @@ from ebl.transliteration.domain.sign_tokens import (
     Grapheme,
     Logogram,
     Number,
-    Reading
+    Reading,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
     Joiner,
     LanguageShift,
+    LineBreak,
     Tabulation,
     Token as EblToken,
     TokenVisitor,
@@ -42,6 +41,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
@@ -60,9 +60,11 @@ def _token_mapper(token):
 
 
 def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
-    return tuple((ValueToken.of(token.value) if isinstance(token, Token) else token)
-                 for child in children
-                 for token in _token_mapper(child))
+    return tuple(
+        (ValueToken.of(token.value) if isinstance(token, Token) else token)
+        for child in children
+        for token in _token_mapper(child)
+    )
 
 
 class ErasureVisitor(TokenVisitor):
@@ -288,6 +290,9 @@ class TextLineTransformer(WordTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__divider(self, value, modifiers, flags):
         return Divider.of(str(value), modifiers, flags)
+
+    def ebl_atf_text_line__line_break(self, _):
+        return LineBreak.of()
 
     @v_args(inline=True)
     def ebl_atf_text_line__column(self, number):

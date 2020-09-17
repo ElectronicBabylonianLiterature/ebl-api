@@ -28,9 +28,7 @@ class Line(ABC):
     def key(self) -> str:
         return f"{type(self).__name__}⁞{self.atf}⁞{hash(self)}"
 
-    def update_lemmatization(
-        self: L, lemmatization: Sequence[LemmatizationToken]
-    ) -> L:
+    def update_lemmatization(self: L, lemmatization: Sequence[LemmatizationToken]) -> L:
         return self
 
     def update_alignment(self: L, alignment: Sequence[AlignmentToken]) -> L:

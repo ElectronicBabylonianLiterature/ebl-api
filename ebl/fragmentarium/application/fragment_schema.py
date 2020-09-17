@@ -4,11 +4,7 @@ from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import (
-    Fragment,
-    Measure,
-    UncuratedReference,
-)
+from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema

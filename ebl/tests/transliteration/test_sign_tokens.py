@@ -147,8 +147,26 @@ def test_unclear_sign_with_flags() -> None:
         ),
         ((ValueToken.of("kur"),), None, [], [], None, "kurₓ", "kurₓ", "kur"),
         ((ValueToken.of("kur"),), 0, [], [], None, "kur₀", "kur₀", "kur"),
-        ((ValueToken.of("kur"),), 1, [], [], Grapheme.of("KUR"), "kur(KUR)", "kur(KUR)", "kur"),
-        ((ValueToken.of("kur"),), 1, ["@v", "@180"], [], None, "kur@v@180", "kur@v@180", "kur"),
+        (
+            (ValueToken.of("kur"),),
+            1,
+            [],
+            [],
+            Grapheme.of("KUR"),
+            "kur(KUR)",
+            "kur(KUR)",
+            "kur",
+        ),
+        (
+            (ValueToken.of("kur"),),
+            1,
+            ["@v", "@180"],
+            [],
+            None,
+            "kur@v@180",
+            "kur@v@180",
+            "kur",
+        ),
         (
             (ValueToken.of("kur"),),
             1,
@@ -172,8 +190,14 @@ def test_unclear_sign_with_flags() -> None:
     ],
 )
 def test_reading(
-    name_parts, sub_index, modifiers, flags, sign, expected_value, expected_clean_value,
-    expected_name
+    name_parts,
+    sub_index,
+    modifiers,
+    flags,
+    sign,
+    expected_value,
+    expected_clean_value,
+    expected_name,
 ) -> None:
     reading = Reading.of(name_parts, sub_index, modifiers, flags, sign)
 
@@ -210,7 +234,7 @@ def test_reading(
     "expected_clean_value,expected_name",
     [
         ((ValueToken.of("KUR"),), 1, [], [], None, [], "KUR", "KUR", "KUR"),
-        ((ValueToken.of("KURʾ"),), 1, [], [], None, [], "KURʾ","KURʾ", "KURʾ"),
+        ((ValueToken.of("KURʾ"),), 1, [], [], None, [], "KURʾ", "KURʾ", "KURʾ"),
         ((ValueToken.of("ʾ"),), 1, [], [], None, [], "ʾ", "ʾ", "ʾ"),
         (
             (ValueToken.of("KU"), BrokenAway.open(), ValueToken.of("R")),
@@ -245,7 +269,7 @@ def test_reading(
             [],
             "KUR(KUR)",
             "KUR(KUR)",
-            "KUR"
+            "KUR",
         ),
         (
             (ValueToken.of("KUR"),),
@@ -267,7 +291,7 @@ def test_reading(
             [],
             "KUR@v@180",
             "KUR@v@180",
-            "KUR"
+            "KUR",
         ),
         (
             (ValueToken.of("KUR"),),
@@ -380,8 +404,15 @@ def test_logogram(
         ),
     ],
 )
-def test_number(name_parts, modifiers, flags, sign, expected_value, expected_clean_value,
-                expected_name) -> None:
+def test_number(
+    name_parts,
+    modifiers,
+    flags,
+    sign,
+    expected_value,
+    expected_clean_value,
+    expected_name,
+) -> None:
     number = Number.of(name_parts, modifiers, flags, sign)
 
     expected_sub_index = 1
@@ -421,14 +452,16 @@ def test_compound_grapheme() -> None:
     assert compound.name == SignName(expected_value)
     assert compound.value == expected_value
     assert compound.clean_value == expected_value
-    assert compound.get_key() ==\
-        f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
+    assert (
+        compound.get_key()
+        == f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
+    )
 
     serialized = {
         "type": "CompoundGrapheme",
         "value": expected_value,
         "enclosureType": [type.name for type in compound.enclosure_type],
-        "compound_parts": ['BI', 'IS']
+        "compound_parts": ["BI", "IS"],
     }
     assert_token_serialization(compound, serialized)
 

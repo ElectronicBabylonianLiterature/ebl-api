@@ -25,14 +25,13 @@ def test_create_response_dto(user):
             "description": lemmatized_fragment.description,
             "joins": list(lemmatized_fragment.joins),
             "length": attr.asdict(
-                lemmatized_fragment.length, filter=lambda _, value: value is not None,
+                lemmatized_fragment.length, filter=lambda _, value: value is not None
             ),
             "width": attr.asdict(
-                lemmatized_fragment.width, filter=lambda _, value: value is not None,
+                lemmatized_fragment.width, filter=lambda _, value: value is not None
             ),
             "thickness": attr.asdict(
-                lemmatized_fragment.thickness,
-                filter=lambda _, value: value is not None,
+                lemmatized_fragment.thickness, filter=lambda _, value: value is not None
             ),
             "collection": lemmatized_fragment.collection,
             "script": lemmatized_fragment.script,
@@ -40,7 +39,7 @@ def test_create_response_dto(user):
             "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,
             "record": [
-                {"user": entry.user, "type": entry.type.value, "date": entry.date,}
+                {"user": entry.user, "type": entry.type.value, "date": entry.date}
                 for entry in lemmatized_fragment.record.entries
             ],
             "folios": [

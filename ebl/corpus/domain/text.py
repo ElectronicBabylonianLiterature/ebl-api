@@ -20,8 +20,9 @@ from ebl.corpus.domain.reconstructed_text import (
     ReconstructionTokenVisitor,
 )
 from ebl.merger import Merger
-from ebl.transliteration.domain.labels import Label, LineNumberLabel
+from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
@@ -46,12 +47,7 @@ class Manuscript:
 
     @property
     def siglum(self):
-        return (
-            self.provenance,
-            self.period,
-            self.type,
-            self.siglum_disambiguator,
-        )
+        return (self.provenance, self.period, self.type, self.siglum_disambiguator)
 
     def accept(self, visitor: "TextVisitor") -> None:
         visitor.visit_manuscript(self)
@@ -91,7 +87,7 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
-    number: LineNumberLabel
+    number: AbstractLineNumber
     reconstruction: Sequence[ReconstructionToken] = attr.ib(default=tuple())
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
@@ -136,7 +132,7 @@ class Line:
 
 
 def map_line(line: Line) -> str:
-    number = line.number.to_atf()
+    number = line.number.atf
     reconstruction = " ".join(str(token) for token in line.reconstruction)
     lines = "⁞".join(
         map_manuscript_line(manuscript_line) for manuscript_line in line.manuscripts

@@ -4,11 +4,7 @@ import falcon  # pyre-ignore
 
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (
-    ChapterFactory,
-    ManuscriptFactory,
-    TextFactory,
-)
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
@@ -106,5 +102,5 @@ def test_listing_texts(client, bibliography, sign_repository, signs):
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == [
         {**dto, "chapters": []}
-        for dto in [create_dto(first_text, False), create_dto(second_text, False),]
+        for dto in [create_dto(first_text, False), create_dto(second_text, False)]
     ]

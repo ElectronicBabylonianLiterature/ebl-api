@@ -37,15 +37,11 @@ LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
     (Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("un")]), False),
     (Word.of([Variant.of(Reading.of_name("un"), Reading.of_name("ia"))]), False),
     (
-        Word.of(
-            [UnknownNumberOfSigns.of(), Joiner.hyphen(), Reading.of_name("un")]
-        ),
+        Word.of([UnknownNumberOfSigns.of(), Joiner.hyphen(), Reading.of_name("un")]),
         False,
     ),
     (
-        Word.of(
-            [Reading.of_name("un"), Joiner.hyphen(), UnknownNumberOfSigns.of()]
-        ),
+        Word.of([Reading.of_name("un"), Joiner.hyphen(), UnknownNumberOfSigns.of()]),
         False,
     ),
     (
@@ -148,28 +144,32 @@ def test_word(language, normalized, unique_lemma) -> None:
 
 
 def test_clean_value() -> None:
-    word = Word.of([
-        BrokenAway.open(),
-        Erasure.open(),
-        Reading.of_name("ra").set_erasure(ErasureState.ERASED),
-        Erasure.center(),
-        Reading.of(
-            [ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")]
-        ).set_erasure(ErasureState.OVER_ERASED),
-        Erasure.close(),
-        Joiner.hyphen(),
-        Variant.of(
-            Reading.of([ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]),
-            Reading.of([ValueToken.of("p"), BrokenAway.open(), ValueToken.of("a")]),
-        ),
-        PerhapsBrokenAway.open(),
-        Determinative.of([Logogram.of([
-            ValueToken.of("KU"),
-            BrokenAway.close(),
-            ValueToken.of("R")
-        ])]),
-        PerhapsBrokenAway.close(),
-    ])
+    word = Word.of(
+        [
+            BrokenAway.open(),
+            Erasure.open(),
+            Reading.of_name("ra").set_erasure(ErasureState.ERASED),
+            Erasure.center(),
+            Reading.of(
+                [ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")]
+            ).set_erasure(ErasureState.OVER_ERASED),
+            Erasure.close(),
+            Joiner.hyphen(),
+            Variant.of(
+                Reading.of([ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]),
+                Reading.of([ValueToken.of("p"), BrokenAway.open(), ValueToken.of("a")]),
+            ),
+            PerhapsBrokenAway.open(),
+            Determinative.of(
+                [
+                    Logogram.of(
+                        [ValueToken.of("KU"), BrokenAway.close(), ValueToken.of("R")]
+                    )
+                ]
+            ),
+            PerhapsBrokenAway.close(),
+        ]
+    )
 
     assert word.clean_value == "kur-ra/pa{KUR}"
 
@@ -220,9 +220,7 @@ def test_set_unique_lemma_empty() -> None:
         Word.of([Reading.of_name("mu")]),
         Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
-        Word.of(
-            [UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]
-        ),
+        Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]),
         Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
         Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
         Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
@@ -256,9 +254,7 @@ def test_set_alignment_empty() -> None:
         Word.of([Reading.of_name("mu")]),
         Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
-        Word.of(
-            [UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]
-        ),
+        Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]),
         Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
         Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
         Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
@@ -299,7 +295,7 @@ def test_set_alignment_invalid(word) -> None:
         (
             Word.of(alignment=1, parts=[Reading.of_name("bu")]),
             Word.of([Reading.of_name("bu", flags=[*atf.Flag])]),
-            Word.of(alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])],),
+            Word.of(alignment=1, parts=[Reading.of_name("bu", flags=[*atf.Flag])]),
         ),
         (
             Word.of(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")]),
@@ -324,14 +320,10 @@ def test_set_alignment_invalid(word) -> None:
                 [
                     Variant.of(
                         Reading.of(
-                            [
-                                ValueToken.of("k"),
-                                BrokenAway.open(),
-                                ValueToken.of("ur"),
-                            ]
+                            [ValueToken.of("k"), BrokenAway.open(), ValueToken.of("ur")]
                         ),
                         Reading.of(
-                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a"),]
+                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]
                         ),
                     )
                 ]
@@ -340,14 +332,10 @@ def test_set_alignment_invalid(word) -> None:
                 [
                     Variant.of(
                         Reading.of(
-                            [
-                                ValueToken.of("k"),
-                                BrokenAway.open(),
-                                ValueToken.of("ur"),
-                            ]
+                            [ValueToken.of("k"), BrokenAway.open(), ValueToken.of("ur")]
                         ),
                         Reading.of(
-                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a"),]
+                            [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]
                         ),
                     )
                 ]

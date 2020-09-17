@@ -9,13 +9,20 @@ from ebl.transliteration.domain.enclosure_tokens import Gloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
 from ebl.transliteration.domain.sign_tokens import (
-    CompoundGrapheme, Divider, Grapheme, NamedSign, Number
+    CompoundGrapheme,
+    Divider,
+    Grapheme,
+    NamedSign,
+    Number,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor, Variant
 from ebl.transliteration.domain.standardization import (
-    INVALID, is_splittable, Standardization, UNKNOWN
+    INVALID,
+    is_splittable,
+    Standardization,
+    UNKNOWN,
 )
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.errors import NotFoundError
@@ -34,7 +41,7 @@ def skip_enclosures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
     skipped_enclosures = {
         EnclosureType.REMOVAL,
         EnclosureType.ACCIDENTAL_OMISSION,
-        EnclosureType.INTENTIONAL_OMISSION
+        EnclosureType.INTENTIONAL_OMISSION,
     }
 
     def inner(self: S, token: T) -> None:
@@ -57,8 +64,7 @@ class SignsVisitor(TokenVisitor):
     _sign_repository: SignRepository
     _is_deep: bool = True
     _standardizations: MutableSequence[Standardization] = attr.ib(
-        init=False,
-        factory=list
+        init=False, factory=list
     )
 
     @property
@@ -85,11 +91,14 @@ class SignsVisitor(TokenVisitor):
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         sign_token: Optional[Token] = named_sign.sign
         if sign_token is None:
-            sign: Optional[Sign] = self._sign_repository.search(named_sign.name.lower(),
-                                                                named_sign.sub_index)
-            (self._standardizations.append(INVALID)
-             if sign is None
-             else self._visit_sign(sign))
+            sign: Optional[Sign] = self._sign_repository.search(
+                named_sign.name.lower(), named_sign.sub_index
+            )
+            (
+                self._standardizations.append(INVALID)
+                if sign is None
+                else self._visit_sign(sign)
+            )
         else:
             sign_token.accept(self)
 
@@ -98,11 +107,14 @@ class SignsVisitor(TokenVisitor):
     def visit_number(self, number: Number) -> None:
         sign_token: Optional[Token] = number.sign
         if sign_token is None:
-            sign: Optional[Sign] = self._sign_repository.search(number.name.lower(),
-                                                                number.sub_index)
-            (self._standardizations.append(Standardization.of_string(number.name))
-             if sign is None
-             else self._visit_sign(sign))
+            sign: Optional[Sign] = self._sign_repository.search(
+                number.name.lower(), number.sub_index
+            )
+            (
+                self._standardizations.append(Standardization.of_string(number.name))
+                if sign is None
+                else self._visit_sign(sign)
+            )
         else:
             sign_token.accept(self)
 
@@ -126,13 +138,12 @@ class SignsVisitor(TokenVisitor):
     @skip_erasures
     @skip_enclosures
     def visit_divider(self, divider: Divider) -> None:
-        # | should not be handled as divider. It is not a value of any sign.
-        # See: Editorial conventions (Corpus) 3.2.1.3 lines of tablet
-        if divider.divider != "|":
-            sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
-            (self._standardizations.append(INVALID)
-             if sign is None
-             else self._visit_sign(sign))
+        sign: Optional[Sign] = self._sign_repository.search(divider.divider, 1)
+        (
+            self._standardizations.append(INVALID)
+            if sign is None
+            else self._visit_sign(sign)
+        )
 
     @skip_erasures
     @skip_enclosures

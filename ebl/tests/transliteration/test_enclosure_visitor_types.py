@@ -39,89 +39,129 @@ def map_line(atf) -> Sequence[Token]:
         ("...", (Word.of((UnknownNumberOfSigns.of(),)),)),
         (
             "[...]",
-            (Word.of((
-                BrokenAway.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}),
-                                     ErasureState.NONE),
-                BrokenAway.close().set_enclosure_type(
-                    frozenset({EnclosureType.BROKEN_AWAY})
+            (
+                Word.of(
+                    (
+                        BrokenAway.open(),
+                        UnknownNumberOfSigns(
+                            frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE
+                        ),
+                        BrokenAway.close().set_enclosure_type(
+                            frozenset({EnclosureType.BROKEN_AWAY})
+                        ),
+                    )
                 ),
-            )),)
+            ),
         ),
         (
             "(...)",
-            (Word.of((
-                PerhapsBrokenAway.open(),
-                UnknownNumberOfSigns(frozenset({EnclosureType.PERHAPS}),
-                                     ErasureState.NONE),
-                PerhapsBrokenAway.close().set_enclosure_type(
-                    frozenset({EnclosureType.PERHAPS})
+            (
+                Word.of(
+                    (
+                        PerhapsBrokenAway.open(),
+                        UnknownNumberOfSigns(
+                            frozenset({EnclosureType.PERHAPS}), ErasureState.NONE
+                        ),
+                        PerhapsBrokenAway.close().set_enclosure_type(
+                            frozenset({EnclosureType.PERHAPS})
+                        ),
+                    )
                 ),
-            )),)
+            ),
         ),
         (
             "[(...)]",
-            (Word.of((
-                BrokenAway.open(),
-                PerhapsBrokenAway.open().set_enclosure_type(
-                    frozenset({EnclosureType.BROKEN_AWAY})
-                ),
-                UnknownNumberOfSigns.of().set_enclosure_type(
-                    frozenset(
-                        {EnclosureType.BROKEN_AWAY, EnclosureType.PERHAPS_BROKEN_AWAY}
-                    ),
-                ),
-                PerhapsBrokenAway.close().set_enclosure_type(
-                    frozenset(
-                        {EnclosureType.BROKEN_AWAY, EnclosureType.PERHAPS_BROKEN_AWAY}
+            (
+                Word.of(
+                    (
+                        BrokenAway.open(),
+                        PerhapsBrokenAway.open().set_enclosure_type(
+                            frozenset({EnclosureType.BROKEN_AWAY})
+                        ),
+                        UnknownNumberOfSigns.of().set_enclosure_type(
+                            frozenset(
+                                {
+                                    EnclosureType.BROKEN_AWAY,
+                                    EnclosureType.PERHAPS_BROKEN_AWAY,
+                                }
+                            )
+                        ),
+                        PerhapsBrokenAway.close().set_enclosure_type(
+                            frozenset(
+                                {
+                                    EnclosureType.BROKEN_AWAY,
+                                    EnclosureType.PERHAPS_BROKEN_AWAY,
+                                }
+                            )
+                        ),
+                        BrokenAway.close().set_enclosure_type(
+                            frozenset({EnclosureType.BROKEN_AWAY})
+                        ),
                     )
                 ),
-                BrokenAway.close().set_enclosure_type(
-                    frozenset({EnclosureType.BROKEN_AWAY})
-                ),
-            )),)
+            ),
         ),
         (
             "<(...)>",
-            (Word.of((
-                IntentionalOmission.open(),
-                UnknownNumberOfSigns.of().set_enclosure_type(
-                    frozenset({EnclosureType.INTENTIONAL_OMISSION})
+            (
+                Word.of(
+                    (
+                        IntentionalOmission.open(),
+                        UnknownNumberOfSigns.of().set_enclosure_type(
+                            frozenset({EnclosureType.INTENTIONAL_OMISSION})
+                        ),
+                        IntentionalOmission.close().set_enclosure_type(
+                            frozenset({EnclosureType.INTENTIONAL_OMISSION})
+                        ),
+                    )
                 ),
-                IntentionalOmission.close().set_enclosure_type(
-                    frozenset({EnclosureType.INTENTIONAL_OMISSION})
-                ),
-            )),)
+            ),
         ),
         (
             "<...>",
-            (Word.of((
-                AccidentalOmission.open(),
-                UnknownNumberOfSigns.of().set_enclosure_type(
-                    frozenset({EnclosureType.ACCIDENTAL_OMISSION})
+            (
+                Word.of(
+                    (
+                        AccidentalOmission.open(),
+                        UnknownNumberOfSigns.of().set_enclosure_type(
+                            frozenset({EnclosureType.ACCIDENTAL_OMISSION})
+                        ),
+                        AccidentalOmission.close().set_enclosure_type(
+                            frozenset({EnclosureType.ACCIDENTAL_OMISSION})
+                        ),
+                    )
                 ),
-                AccidentalOmission.close().set_enclosure_type(
-                    frozenset({EnclosureType.ACCIDENTAL_OMISSION})
-                ),
-            )),)
+            ),
         ),
         (
             "<<...>>",
-            (Word.of((
-                Removal.open(),
-                UnknownNumberOfSigns.of().set_enclosure_type(
-                    frozenset({EnclosureType.REMOVAL})
+            (
+                Word.of(
+                    (
+                        Removal.open(),
+                        UnknownNumberOfSigns.of().set_enclosure_type(
+                            frozenset({EnclosureType.REMOVAL})
+                        ),
+                        Removal.close().set_enclosure_type(
+                            frozenset({EnclosureType.REMOVAL})
+                        ),
+                    )
                 ),
-                Removal.close().set_enclosure_type(frozenset({EnclosureType.REMOVAL})),
-            )),)
+            ),
         ),
         (
             "{(...)}",
             (
                 DocumentOrientedGloss.open(),
-                Word.of((UnknownNumberOfSigns.of().set_enclosure_type(
+                Word.of(
+                    (
+                        UnknownNumberOfSigns.of().set_enclosure_type(
+                            frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
+                        ),
+                    )
+                ).set_enclosure_type(
                     frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
-                ),)).set_enclosure_type(frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})),
+                ),
                 DocumentOrientedGloss.close().set_enclosure_type(
                     frozenset({EnclosureType.DOCUMENT_ORIENTED_GLOSS})
                 ),
@@ -140,7 +180,7 @@ def map_line(atf) -> Sequence[Token]:
                                     ValueToken(
                                         frozenset({EnclosureType.BROKEN_AWAY}),
                                         ErasureState.NONE,
-                                        "r"
+                                        "r",
                                     ),
                                 )
                             ),
@@ -154,7 +194,7 @@ def map_line(atf) -> Sequence[Token]:
                             BrokenAway.close().set_enclosure_type(
                                 frozenset({EnclosureType.BROKEN_AWAY})
                             ),
-                        ),
+                        )
                     ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
                 ),
             )
@@ -189,7 +229,7 @@ def map_line(atf) -> Sequence[Token]:
                             BrokenAway.close().set_enclosure_type(
                                 frozenset({EnclosureType.BROKEN_AWAY})
                             ),
-                        ),
+                        )
                     ),
                 ),
             )
@@ -208,7 +248,7 @@ def map_line(atf) -> Sequence[Token]:
                                         ValueToken(
                                             frozenset({EnclosureType.BROKEN_AWAY}),
                                             ErasureState.NONE,
-                                            "r"
+                                            "r",
                                         ),
                                     )
                                 ),
@@ -219,7 +259,7 @@ def map_line(atf) -> Sequence[Token]:
                                         ValueToken(
                                             frozenset({EnclosureType.BROKEN_AWAY}),
                                             ErasureState.NONE,
-                                            "3"
+                                            "3",
                                         ),
                                     )
                                 ),
@@ -240,7 +280,7 @@ def map_line(atf) -> Sequence[Token]:
                             BrokenAway.close().set_enclosure_type(
                                 frozenset({EnclosureType.BROKEN_AWAY})
                             ),
-                        ),
+                        )
                     ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
                 ),
             )

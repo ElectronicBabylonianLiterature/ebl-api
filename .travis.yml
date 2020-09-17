@@ -1,6 +1,6 @@
 language: python
 python: 
-- 'pypy3'
+- 'pypy3.6-7.3.1'
 services:
 - docker
 env:
@@ -16,6 +16,7 @@ jobs:
         - chmod +x ./cc-test-reporter
         - "./cc-test-reporter before-build"
       script:
+        - pipenv run black ebl --check
         - pipenv run flake8
         - pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
         - pipenv run pytest --cov=ebl --cov-report term --cov-report xml

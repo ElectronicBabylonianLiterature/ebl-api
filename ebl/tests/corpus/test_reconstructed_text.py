@@ -32,7 +32,7 @@ from ebl.corpus.domain.reconstructed_text import (
             ),
             "ibnû?#!",
         ),
-        (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN), StringPart("ibnû"))), "[ibnû",),
+        (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN), StringPart("ibnû"))), "[ibnû"),
         (
             AkkadianWord(
                 (
@@ -72,8 +72,8 @@ from ebl.corpus.domain.reconstructed_text import (
             ),
             "ibnû?)]",
         ),
-        (AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû"))), "ib...nû",),
-        (AkkadianWord((StringPart("ib"), SeparatorPart(), StringPart("nû"))), "ib-nû",),
+        (AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû"))), "ib...nû"),
+        (AkkadianWord((StringPart("ib"), SeparatorPart(), StringPart("nû"))), "ib-nû"),
     ],
 )
 def test_akkadian_word(word, expected):
@@ -87,9 +87,7 @@ def test_akkadian_word(word, expected):
         (Lacuna((BROKEN_OFF_OPEN,), tuple()), "[..."),
         (Lacuna(tuple(), (MAYBE_BROKEN_OFF_CLOSE,)), "...)"),
         (
-            Lacuna(
-                (BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN), (MAYBE_BROKEN_OFF_CLOSE,),
-            ),
+            Lacuna((BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN), (MAYBE_BROKEN_OFF_CLOSE,)),
             "[(...)",
         ),
     ],
@@ -107,7 +105,7 @@ def test_caesura(caesura, expected):
 
 @pytest.mark.parametrize(
     "separator,expected",
-    [(MetricalFootSeparator(False), "|"), (MetricalFootSeparator(True), "(|)"),],
+    [(MetricalFootSeparator(False), "|"), (MetricalFootSeparator(True), "(|)")],
 )
 def test_metrical_foot_separator(separator, expected):
     assert str(separator) == expected

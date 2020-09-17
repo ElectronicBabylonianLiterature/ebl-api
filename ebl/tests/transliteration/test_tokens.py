@@ -24,10 +24,8 @@ from ebl.transliteration.domain.tokens import (
     Variant,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.word_tokens import (
-    DEFAULT_NORMALIZED,
-    InWordNewline,
-)
+from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED
+
 
 TOKENS = [
     UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),
@@ -290,20 +288,3 @@ def test_joiner(joiner, expected_value):
         "enclosureType": [type.name for type in joiner.enclosure_type],
     }
     assert_token_serialization(joiner, serialized)
-
-
-def test_in_word_new_line():
-    newline = InWordNewline(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE)
-
-    expected_value = ";"
-    assert newline.value == expected_value
-    assert newline.clean_value == expected_value
-    assert newline.get_key() == f"InWordNewline⁝{expected_value}"
-    assert newline.lemmatizable is False
-
-    serialized = {
-        "type": "InWordNewline",
-        "value": expected_value,
-        "enclosureType": [type.name for type in newline.enclosure_type],
-    }
-    assert_token_serialization(newline, serialized)

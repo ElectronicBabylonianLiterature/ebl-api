@@ -14,7 +14,6 @@ from ebl.transliteration.domain.alignment import (
 )
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -58,9 +57,11 @@ def expect_bibliography(bibliography, when):
 
 
 def expect_validate_references(bibliography, when, text=TEXT):
-    manuscript_references = [manuscript.references
-                             for chapter in text.chapters
-                             for manuscript in chapter.manuscripts]
+    manuscript_references = [
+        manuscript.references
+        for chapter in text.chapters
+        for manuscript in chapter.manuscripts
+    ]
 
     for references in manuscript_references:
         when(bibliography).validate_references(references).thenReturn()
@@ -102,27 +103,24 @@ def expect_text_update(
         COLLECTION,
         user.profile,
         {**to_dict(dehydrated_text), "_id": dehydrated_text.id},
-        {**to_dict(dehydrated_updated_text), "_id": dehydrated_updated_text.id,},
+        {**to_dict(dehydrated_updated_text), "_id": dehydrated_updated_text.id},
     ).thenReturn()
 
 
 def test_creating_text(
-    corpus, text_repository, bibliography, changelog, signs, sign_repository,
-    user, when
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
     expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
     when(changelog).create(
-        COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id},
+        COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
     corpus.create(TEXT, user)
 
 
-def test_create_raises_exception_if_invalid_signs(
-    corpus, bibliography, when
-):
+def test_create_raises_exception_if_invalid_signs(corpus, bibliography, when):
     allow_validate_references(bibliography, when)
 
     with pytest.raises(DataError):
@@ -160,8 +158,7 @@ def test_find_raises_exception_if_references_not_found(
 
 
 def test_updating_alignment(
-    corpus, text_repository, bibliography, changelog, signs,
-    sign_repository, user, when
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
@@ -218,11 +215,11 @@ def test_updating_alignment(
     "alignment",
     [
         Alignment(
-            (((AlignmentToken("ku-[nu-ši]", 0), AlignmentToken("ku-[nu-ši]", 0),),),)
+            (((AlignmentToken("ku-[nu-ši]", 0), AlignmentToken("ku-[nu-ši]", 0)),),)
         ),
         Alignment(((tuple(),),)),
         Alignment(
-            (((AlignmentToken("ku-[nu-ši]", 0),), (AlignmentToken("ku-[nu-ši]", 0),),),)
+            (((AlignmentToken("ku-[nu-ši]", 0),), (AlignmentToken("ku-[nu-ši]", 0),)),)
         ),
         Alignment((tuple())),
         Alignment(
@@ -242,8 +239,7 @@ def test_invalid_alignment(alignment, corpus, text_repository, when):
 
 
 def test_updating_manuscripts(
-    corpus, text_repository, bibliography, changelog, signs,
-    sign_repository, user, when
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
@@ -303,8 +299,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
 
 
 def test_updating_lines(
-    corpus, text_repository, bibliography, changelog, signs,
-    sign_repository, user, when
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
     dehydrated_updated_text = attr.evolve(
         DEHYDRATED_TEXT,
@@ -313,8 +308,7 @@ def test_updating_lines(
                 DEHYDRATED_TEXT.chapters[0],
                 lines=(
                     attr.evolve(
-                        DEHYDRATED_TEXT.chapters[0].lines[0],
-                        number=LineNumberLabel.from_atf("1'."),
+                        DEHYDRATED_TEXT.chapters[0].lines[0], number=LineNumber(1, True)
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
@@ -338,25 +332,24 @@ def test_updating_lines(
 
 
 def test_merging_lines(
-    corpus, text_repository, bibliography, changelog, signs,
-    sign_repository, user, when
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    number = LineNumberLabel("1")
+    number = LineNumber(1)
     reconstruction = (AkkadianWord((StringPart("buāru"),)),)
     text_line = TextLine.of_iterable(
         LineNumber(1),
         (
             Word.of(
-                [Reading.of_name("ku")], unique_lemma=(WordId("word1"),), alignment=0,
+                [Reading.of_name("ku")], unique_lemma=(WordId("word1"),), alignment=0
             ),
             Word.of(
-                [Reading.of_name("nu")], unique_lemma=(WordId("word2"),), alignment=1,
+                [Reading.of_name("nu")], unique_lemma=(WordId("word2"),), alignment=1
             ),
         ),
     )
     manuscript_id = DEHYDRATED_TEXT.chapters[0].manuscripts[0].id
     line = Line(
-        number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),),
+        number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),)
     )
     new_text_line = TextLine.of_iterable(
         LineNumber(1),

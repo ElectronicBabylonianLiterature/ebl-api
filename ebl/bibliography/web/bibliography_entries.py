@@ -34,7 +34,9 @@ class BibliographyEntriesResource:
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response, id_: str) -> None:  # pyre-ignore[11]
+    def on_post(
+        self, req: Request, resp: Response, id_: str  # pyre-ignore[11]
+    ) -> None:
         entry = {**req.media, "id": id_}
         self._bibliography.update(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT

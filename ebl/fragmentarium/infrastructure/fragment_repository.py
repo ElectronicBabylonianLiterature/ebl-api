@@ -9,11 +9,13 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
-    aggregate_lemmas, aggregate_needs_revision,
-    aggregate_path_of_the_pioneers, aggregate_random,
+    aggregate_lemmas,
+    aggregate_needs_revision,
+    aggregate_path_of_the_pioneers,
+    aggregate_random,
     fragment_is,
     museum_number_is,
-    number_is
+    number_is,
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
@@ -35,12 +37,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def count_lines(self):
         result = self._collection.aggregate(
-            [
-                {"$group": {
-                    "_id": None,
-                    "total": {"$sum": "$text.numberOfLines"}
-                }}
-            ]
+            [{"$group": {"_id": None, "total": {"$sum": "$text.numberOfLines"}}}]
         )
         try:
             return next(result)["total"]
@@ -48,30 +45,20 @@ class MongoFragmentRepository(FragmentRepository):
             return 0
 
     def create(self, fragment):
-        return self._collection.insert_one({
-            "_id": str(fragment.number),
-            **FragmentSchema().dump(fragment)
-        })
+        return self._collection.insert_one(
+            {"_id": str(fragment.number), **FragmentSchema().dump(fragment)}
+        )
 
     def query_by_museum_number(self, number: MuseumNumber):
         data = self._collection.find_one(museum_number_is(number))
         return FragmentSchema(unknown=EXCLUDE).load(data)  # pyre-ignore[16,28]
 
-    def query_by_id_and_page_in_references(
-            self,
-            id_: str,
-            pages: str
-    ):
+    def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match = dict()
-        match["references"] = {
-            "$elemMatch": {
-                "id": id_,
-            }
-        }
+        match["references"] = {"$elemMatch": {"id": id_}}
         if pages:
             match["references"]["$elemMatch"]["pages"] = {
-                "$regex":
-                    fr"^([^0-9]*\s*)?({pages}(-|\s)|[\d]*-{pages}\s|{pages}$)"
+                "$regex": fr"^([^0-9]*\s*)?({pages}(-|\s)|[\d]*-{pages}\s|{pages}$)"
             }
         cursor = self._collection.find_many(match)
         return self._map_fragments(cursor)
@@ -110,8 +97,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_by_transliteration(self, query):
         cursor = self._collection.find_many(
-            {"signs": {"$regex": query.regexp}},
-            limit=100
+            {"signs": {"$regex": query.regexp}}, limit=100
         )
         return self._map_fragments(cursor)
 
@@ -165,19 +151,16 @@ class MongoFragmentRepository(FragmentRepository):
             cursor = self._collection.aggregate(pipeline)
             if cursor.alive:
                 entry = next(cursor)
-                return {
-                    "fragmentNumber": entry["_id"],
-                    "folioNumber": entry["number"],
-                }
+                return {"fragmentNumber": entry["_id"], "folioNumber": entry["number"]}
             else:
                 return None
 
         first = create_pipeline(sort_ascending)
         previous = create_pipeline(
-            {"$match": {"key": {"$lt": f"{folio_number}-{number}"}}}, sort_descending,
+            {"$match": {"key": {"$lt": f"{folio_number}-{number}"}}}, sort_descending
         )
         next_ = create_pipeline(
-            {"$match": {"key": {"$gt": f"{folio_number}-{number}"}}}, sort_ascending,
+            {"$match": {"key": {"$gt": f"{folio_number}-{number}"}}}, sort_ascending
         )
         last = create_pipeline(sort_descending)
 

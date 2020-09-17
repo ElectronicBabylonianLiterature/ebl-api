@@ -44,16 +44,13 @@ def assert_parse_error(parser, text):
     [
         (
             "ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄",
-            [
-                StringPart("ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄"),
-                [],
-            ],
+            [StringPart("ʾABDEGHIKLMNPSTUYZabcdefghiklmnpqrstuwyzÉâêîûāĒēīŠšūṣṭ₄"), []],
         ),
         ("ibnû?", [StringPart("ibnû"), [Modifier.UNCERTAIN]]),
         ("ibnû#", [StringPart("ibnû"), [Modifier.DAMAGED]]),
         ("ibnû!", [StringPart("ibnû"), [Modifier.CORRECTED]]),
-        ("ibnû#?", [StringPart("ibnû"), [Modifier.DAMAGED, Modifier.UNCERTAIN]],),
-        ("ibnû?#", [StringPart("ibnû"), [Modifier.UNCERTAIN, Modifier.DAMAGED]],),
+        ("ibnû#?", [StringPart("ibnû"), [Modifier.DAMAGED, Modifier.UNCERTAIN]]),
+        ("ibnû?#", [StringPart("ibnû"), [Modifier.UNCERTAIN, Modifier.DAMAGED]]),
         (
             "ibnû?#!",
             [
@@ -73,11 +70,11 @@ def assert_parse_error(parser, text):
         ),
         (
             "ib[nû",
-            [StringPart("ib"), EnclosurePart(BROKEN_OFF_OPEN), StringPart("nû"), [],],
+            [StringPart("ib"), EnclosurePart(BROKEN_OFF_OPEN), StringPart("nû"), []],
         ),
         (
             "ib]nû",
-            [StringPart("ib"), EnclosurePart(BROKEN_OFF_CLOSE), StringPart("nû"), [],],
+            [StringPart("ib"), EnclosurePart(BROKEN_OFF_CLOSE), StringPart("nû"), []],
         ),
         (
             "i[b]nû",
@@ -92,11 +89,7 @@ def assert_parse_error(parser, text):
         ),
         (
             "ibnû?]",
-            [
-                StringPart("ibnû"),
-                EnclosurePart(BROKEN_OFF_CLOSE),
-                [Modifier.UNCERTAIN],
-            ],
+            [StringPart("ibnû"), EnclosurePart(BROKEN_OFF_CLOSE), [Modifier.UNCERTAIN]],
         ),
         (
             "(ibnû)",
@@ -222,11 +215,11 @@ def assert_parse_error(parser, text):
         ),
         (
             "ib<nû",
-            [StringPart("ib"), EnclosurePart(EMENDATION_OPEN), StringPart("nû"), [],],
+            [StringPart("ib"), EnclosurePart(EMENDATION_OPEN), StringPart("nû"), []],
         ),
         (
             "ib>nû",
-            [StringPart("ib"), EnclosurePart(EMENDATION_CLOSE), StringPart("nû"), [],],
+            [StringPart("ib"), EnclosurePart(EMENDATION_CLOSE), StringPart("nû"), []],
         ),
         (
             "i<b>nû",
@@ -241,30 +234,26 @@ def assert_parse_error(parser, text):
         ),
         (
             "ibnû?>",
-            [
-                StringPart("ibnû"),
-                EnclosurePart(EMENDATION_CLOSE),
-                [Modifier.UNCERTAIN],
-            ],
+            [StringPart("ibnû"), EnclosurePart(EMENDATION_CLOSE), [Modifier.UNCERTAIN]],
         ),
         ("...ibnû", [LacunaPart(), StringPart("ibnû"), []]),
         ("ibnû...", [StringPart("ibnû"), LacunaPart(), []]),
         ("ib...nû", [StringPart("ib"), LacunaPart(), StringPart("nû"), []]),
         (
             "<...ibnû",
-            [EnclosurePart(EMENDATION_OPEN), LacunaPart(), StringPart("ibnû"), [],],
+            [EnclosurePart(EMENDATION_OPEN), LacunaPart(), StringPart("ibnû"), []],
         ),
         (
             "ibnû...>",
-            [StringPart("ibnû"), LacunaPart(), EnclosurePart(EMENDATION_CLOSE), [],],
+            [StringPart("ibnû"), LacunaPart(), EnclosurePart(EMENDATION_CLOSE), []],
         ),
         (
             "...>ibnû",
-            [LacunaPart(), EnclosurePart(EMENDATION_CLOSE), StringPart("ibnû"), [],],
+            [LacunaPart(), EnclosurePart(EMENDATION_CLOSE), StringPart("ibnû"), []],
         ),
         (
             "ibnû<...",
-            [StringPart("ibnû"), EnclosurePart(EMENDATION_OPEN), LacunaPart(), [],],
+            [StringPart("ibnû"), EnclosurePart(EMENDATION_OPEN), LacunaPart(), []],
         ),
         (
             "<...>ibnû",
@@ -566,14 +555,11 @@ WORD = AkkadianWord((StringPart("ibnû"),))
         ("...", [Lacuna(tuple(), tuple())]),
         ("... ibnû", [Lacuna(tuple(), tuple()), WORD]),
         ("ibnû ...", [WORD, Lacuna(tuple(), tuple())]),
-        ("[...] ibnû", [Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,)), WORD],),
-        ("ibnû [...]", [WORD, Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,))],),
+        ("[...] ibnû", [Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,)), WORD]),
+        ("ibnû [...]", [WORD, Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,))]),
         ("...ibnû", [AkkadianWord((LacunaPart(), StringPart("ibnû")))]),
         ("ibnû...", [AkkadianWord((StringPart("ibnû"), LacunaPart()))]),
-        (
-            "ib...nû",
-            [AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû")))],
-        ),
+        ("ib...nû", [AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû")))]),
         ("ibnû | ibnû", [WORD, MetricalFootSeparator(False), WORD]),
         ("ibnû (|) ibnû", [WORD, MetricalFootSeparator(True), WORD]),
         ("ibnû || ibnû", [WORD, Caesura(False), WORD]),

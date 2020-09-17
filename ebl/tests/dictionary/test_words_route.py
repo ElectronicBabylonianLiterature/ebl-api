@@ -100,7 +100,7 @@ def test_update_word_not_found(client, word):
 
 @pytest.mark.parametrize(
     "transform",
-    [lambda word: {**word, "lemma": []}, lambda word: {**word, "derived": [[]]},],
+    [lambda word: {**word, "lemma": []}, lambda word: {**word, "derived": [[]]}],
 )
 def test_update_word_invalid_entity(transform, client, saved_word):
     unique_lemma = saved_word["_id"]

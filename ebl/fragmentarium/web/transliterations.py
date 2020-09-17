@@ -11,7 +11,7 @@ from ebl.users.web.require_scope import require_scope
 
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
-    "properties": {"transliteration": {"type": "string"}, "notes": {"type": "string"},},
+    "properties": {"transliteration": {"type": "string"}, "notes": {"type": "string"}},
     "required": ["transliteration", "notes"],
 }
 
@@ -30,7 +30,7 @@ class TransliterationResource:
             updated_fragment, has_photo = self._updater.update_transliteration(
                 parse_museum_number(number),
                 self._create_transliteration(req.media),
-                user
+                user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except TransliterationError as error:
