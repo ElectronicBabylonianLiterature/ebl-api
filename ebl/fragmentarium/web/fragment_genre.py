@@ -20,7 +20,7 @@ class FragmentGenreResource:
             updated_fragment, has_photo = self._updater.update_genres(
                 parse_museum_number(number),
                 GenreSchema().load(req.media["genres"], many=True),  # pyre-ignore[16]
-                user
+                user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except ValueError as error:

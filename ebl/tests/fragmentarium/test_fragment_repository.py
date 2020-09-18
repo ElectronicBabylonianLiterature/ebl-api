@@ -156,9 +156,7 @@ def test_update_genres(fragment_repository):
     fragment = FragmentFactory.build(genres=tuple())
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_genres(
-        (
-            Genre(["ARCHIVAL", "Administrative"], False),
-        )
+        (Genre(["ARCHIVAL", "Administrative"], False),)
     )
     fragment_repository.update_genres(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)

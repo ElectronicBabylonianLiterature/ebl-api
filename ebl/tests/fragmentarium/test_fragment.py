@@ -6,7 +6,8 @@ from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Measure,
-    UncuratedReference, Genre,
+    UncuratedReference,
+    Genre,
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory

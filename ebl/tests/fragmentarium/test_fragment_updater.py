@@ -61,19 +61,13 @@ def test_update_update_transliteration_not_found(
         )
 
 
-def test_update_genres(
-        fragment_updater, user, fragment_repository, changelog, when
-):
+def test_update_genres(fragment_updater, user, fragment_repository, changelog, when):
     fragment = FragmentFactory.build()
     number = fragment.number
     genres = (Genre(["ARCHIVAL", "Administrative"], False),)
     expected_fragment = fragment.set_genres(genres)
 
-    (
-        when(fragment_repository)
-        .query_by_museum_number(number)
-        .thenReturn(fragment)
-    )
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     when(changelog).create(
         "fragments",
         user.profile,
@@ -82,9 +76,7 @@ def test_update_genres(
     ).thenReturn()
     (when(fragment_repository).update_genres(expected_fragment).thenReturn())
 
-    updated_fragment = fragment_updater.update_genres(
-        number, genres, user
-    )
+    updated_fragment = fragment_updater.update_genres(number, genres, user)
     assert updated_fragment == (expected_fragment, False)
 
 
