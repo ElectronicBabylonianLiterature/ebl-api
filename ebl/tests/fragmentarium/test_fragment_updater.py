@@ -82,7 +82,7 @@ def test_update_genres(
     ).thenReturn()
     (when(fragment_repository).update_genres(expected_fragment).thenReturn())
 
-    updated_fragment = fragment_updater.update_genre(
+    updated_fragment = fragment_updater.update_genres(
         number, genres, user
     )
     assert updated_fragment == (expected_fragment, False)

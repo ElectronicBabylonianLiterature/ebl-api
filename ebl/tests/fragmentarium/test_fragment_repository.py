@@ -160,7 +160,7 @@ def test_update_genres(fragment_repository):
             Genre(["ARCHIVAL", "Administrative"], False),
         )
     )
-    fragment_repository.update_genre(updated_fragment)
+    fragment_repository.update_genres(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
