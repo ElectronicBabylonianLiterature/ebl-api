@@ -179,6 +179,7 @@ text = token, { [ word-separator ], token };
 token = commentary-protocol
       | divider
       | divider-variant
+      | line-break
       | tabulation
       | column
       | shift
@@ -205,7 +206,9 @@ column = '&', { decimal-digit };
 divider-variant = ( variant-part | divider ), variant-separator,
                   ( variant-part | divider );
 divider = divider-symbol, modifier, flag;
-divider-symbol = '|' | ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
+divider-symbol = ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
+
+line-break: '|';
 
 commentary-protocol = '!qt' | '!bs' | '!cm' | '!zz';
 
