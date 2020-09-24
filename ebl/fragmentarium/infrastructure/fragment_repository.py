@@ -111,6 +111,12 @@ class MongoFragmentRepository(FragmentRepository):
             },
         )
 
+    def update_genres(self, fragment):
+        self._collection.update_one(
+            fragment_is(fragment),
+            {"$set": FragmentSchema(only=("genres",)).dump(fragment)},
+        )
+
     def update_lemmatization(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),

@@ -4,6 +4,7 @@ import pytest  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -149,6 +150,18 @@ def test_update_update_transliteration_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_transliteration(transliterated_fragment)
+
+
+def test_update_genres(fragment_repository):
+    fragment = FragmentFactory.build(genres=tuple())
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_genres(
+        (Genre(["ARCHIVAL", "Administrative"], False),)
+    )
+    fragment_repository.update_genres(updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
 
 
 def test_update_lemmatization(fragment_repository):

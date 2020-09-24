@@ -4,6 +4,8 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.folios import Folios
+from ebl.fragmentarium.domain.genres import genres
+
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
@@ -22,6 +24,18 @@ class UncuratedReference:
 class Measure:
     value: Optional[float] = None
     note: Optional[str] = None
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Genre:
+    category: Sequence[str] = attr.ib()
+    uncertain: bool
+
+    @category.validator
+    def _check_is_genres_valid(self, _, category: Sequence[str]) -> None:
+        category = tuple(category)
+        if category not in genres:
+            raise ValueError(f"'{category}' is not a valid genre")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -46,6 +60,7 @@ class Fragment:
     notes: str = ""
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
+    genres: Sequence[Genre] = tuple()
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
@@ -64,6 +79,9 @@ class Fragment:
             signs=transliteration.signs,
             record=record,
         )
+
+    def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
+        return attr.evolve(self, genres=tuple(genres_new))
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
