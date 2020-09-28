@@ -319,7 +319,7 @@ def test_search_reference_id_and_pages(pages, database, fragment_repository):
 
 @pytest.mark.parametrize("pages",[
     "1631",
-    "11631",
+    "1163",
     "116311",
 ])
 def test_not_find_reference_id_and_pages_search(pages, database, fragment_repository):
