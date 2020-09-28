@@ -317,7 +317,7 @@ def test_search_reference_id_and_pages(pages, database, fragment_repository):
     ) == [fragment]
 
 
-@pytest.mark.parametrize("pages",[
+@pytest.mark.parametrize("pages", [
     "1631",
     "1163",
     "116311",
