@@ -285,26 +285,9 @@ def test_search_reference_id(database, fragment_repository):
     ) == [fragment]
 
 
-def test_search_reference_id_and_pages(database, fragment_repository):
-    fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(), ReferenceFactory.build())
-    )
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
-    assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id, fragment.references[0].pages
-        )
-    ) == [fragment]
-
-
-@pytest.mark.parametrize("pages",[
-    "163",
-    "no. 163",
-    "161-163",
-    "163-161"
-    "pl. 163",
-    "pl. 42 no. 163",
-])
+@pytest.mark.parametrize(
+    "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
+)
 def test_search_reference_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
@@ -317,12 +300,10 @@ def test_search_reference_id_and_pages(pages, database, fragment_repository):
     ) == [fragment]
 
 
-@pytest.mark.parametrize("pages", [
-    "1631",
-    "1163",
-    "116311",
-])
-def test_not_find_reference_id_and_pages_search(pages, database, fragment_repository):
+@pytest.mark.parametrize("pages", ["1631", "1163", "116311"])
+def test_empty_result_search_reference_id_and_pages(
+    pages, database, fragment_repository
+):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
