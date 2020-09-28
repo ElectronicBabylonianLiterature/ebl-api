@@ -297,9 +297,17 @@ def test_search_reference_id_and_pages(database, fragment_repository):
     ) == [fragment]
 
 
-def test_search_reference_id_and_pages_partially(database, fragment_repository):
+@pytest.mark.parametrize("pages",[
+    "163",
+    "no. 163",
+    "161-163",
+    "163-161"
+    "pl. 163",
+    "pl. 42 no. 163",
+])
+def test_search_reference_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(pages="no. 163"), ReferenceFactory.build())
+        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
@@ -307,6 +315,23 @@ def test_search_reference_id_and_pages_partially(database, fragment_repository):
             fragment.references[0].id, "163"
         )
     ) == [fragment]
+
+
+@pytest.mark.parametrize("pages",[
+    "1631",
+    "11631",
+    "116311",
+])
+def test_not_find_reference_id_and_pages_search(pages, database, fragment_repository):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+    )
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, "163"
+        )
+    ) == []
 
 
 SEARCH_SIGNS_DATA = [
