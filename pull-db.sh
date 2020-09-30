@@ -4,14 +4,20 @@ defaultTempFolder="/tmp/pull-db"
 read -p "Download folder [$defaultTempFolder]: " tempFolder
 tempFolder=${tempFolder:-$defaultTempFolder}
 
-read -p "Source host: " sourceHost
+defaultSourceHost=$PULL_DB_DEFAULT_SOURCE_HOST
+read -p "Source host [$defaultSourceHost]: " sourceHost
+sourceHost=${sourceHost:-$defaultSourceHost}
 
 defaultSourceDb="ebl"
 read -p "Database [$defaultSourceDb]: " sourceDb
 sourceDb=${sourceDb:-$defaultSourceDb}
 
-read -p "Source user name: " sourceUser
-read -sp "Source password: " sourcePassword
+defaultSourceUser=$PULL_DB_DEFAULT_SOURCE_USER
+defaultSourcePassword=$PULL_DB_DEFAULT_SOURCE_PASSWORD
+read -p "Source user name [$defaultSourceUser]: " sourceUser
+read -sp "Source password [${defaultSourcePassword//?/*}]: " sourcePassword
+sourceUser=${sourceUser:-$defaultSourceUser}
+sourcePassword=${sourcePassword:-$defaultSourcePassword}
 echo
 
 
@@ -26,6 +32,7 @@ then
     echo
 fi
 
+mkdir -p $tempFolder
 
 mongodump -h $sourceHost \
     -d $sourceDb \

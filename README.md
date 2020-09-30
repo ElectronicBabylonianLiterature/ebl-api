@@ -61,6 +61,15 @@ pipenv run test
 your development MongoDB. It will use `mongodump` and `mongorestore` to get
 all data except `changelog` collection, and `photos` and `folios` buckets.
 
+To make the use less tedious the scripts reads defaults from the following
+environment varaiables:
+
+```dotenv
+PULL_DB_DEFAULT_SOURCE_HOST=<source MongoDB host>
+PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
+PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
+```
+
 ## Running the application
 
 The application reads the configuration from following environment variables:
