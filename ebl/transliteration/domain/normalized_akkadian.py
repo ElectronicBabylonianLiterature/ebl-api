@@ -30,7 +30,7 @@ class AkkadianWord(Token):
     @property
     def value(self) -> str:
         last_parts = pydash.take_right_while(
-            list(self.parts), lambda part: isinstance(part, Enclosure)
+            self.parts, lambda part: isinstance(part, Enclosure)
         )
         main_parts = self.parts[: len(self.parts) - len(last_parts)]
         return "".join(
