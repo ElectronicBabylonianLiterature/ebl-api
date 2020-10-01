@@ -77,7 +77,7 @@ from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, Valu
     ],
 )
 def test_akkadian_word(word, expected):
-    assert str(word) == expected
+    assert word.value == expected
 
 
 def test_akkadian_word_invalid_modifier():
@@ -101,14 +101,14 @@ def test_akkadian_word_invalid_modifier():
     ],
 )
 def test_lacuna(lacuna, expected):
-    assert str(lacuna) == expected
+    assert lacuna.value == expected
 
 
 @pytest.mark.parametrize(
     "caesura,expected", [(Caesura.certain(), "||"), (Caesura.uncertain(), "(||)")]
 )
 def test_caesura(caesura, expected):
-    assert str(caesura) == expected
+    assert caesura.value == expected
 
 
 @pytest.mark.parametrize(
@@ -119,4 +119,4 @@ def test_caesura(caesura, expected):
     ],
 )
 def test_metrical_foot_separator(separator, expected):
-    assert str(separator) == expected
+    assert separator.value == expected

@@ -1,11 +1,11 @@
 from typing import Iterable
 
-from ebl.transliteration.domain.reconstructed_text import ReconstructionToken
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 
 
-def validate(line: Iterable[ReconstructionToken]):
+def validate(line: Iterable[Token]):
     try:
         visitor = EnclosureValidator()
         for token in line:

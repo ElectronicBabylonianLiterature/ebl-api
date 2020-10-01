@@ -3,13 +3,9 @@ from typing import Sequence
 from lark.lark import Lark  # pyre-ignore[21]
 from lark.exceptions import ParseError, UnexpectedInput
 
-from ebl.transliteration.domain.reconstructed_text import (
-    AkkadianWord,
-    Break,
-    Lacuna,
-    ReconstructionToken,
-)
+from ebl.transliteration.domain.reconstructed_text import AkkadianWord, Break, Lacuna
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
+from ebl.transliteration.domain.tokens import Token
 
 
 RECONSTRUCTED_LINE_PARSER = Lark.open(
@@ -37,7 +33,7 @@ def parse_break(break_: str) -> Break:
     return TextLineTransformer().transform(tree)  # pyre-ignore[16]
 
 
-def parse_reconstructed_line(text: str) -> Sequence[ReconstructionToken]:
+def parse_reconstructed_line(text: str) -> Sequence[Token]:
     try:
         tree = RECONSTRUCTED_LINE_PARSER.parse(text)
         return TextLineTransformer().transform(tree)  # pyre-ignore[16]

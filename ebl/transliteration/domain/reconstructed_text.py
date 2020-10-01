@@ -14,16 +14,8 @@ from ebl.transliteration.domain.tokens import (
 )
 
 
-@attr.s(frozen=True, str=False)
-class ReconstructionToken(Token):
-    @property
-    def value(self) -> str:
-        return str(self)
-
-
 @attr.s(auto_attribs=True, frozen=True, str=False)
-class AkkadianWord(ReconstructionToken):
-
+class AkkadianWord(Token):
     _parts: Sequence[Token]
     modifiers: Sequence[Flag] = attr.ib(default=tuple())
 
@@ -40,7 +32,8 @@ class AkkadianWord(ReconstructionToken):
     def parts(self) -> Sequence[Token]:
         return self._parts
 
-    def __str__(self) -> str:
+    @property
+    def value(self) -> str:
         last_parts = pydash.take_right_while(
             list(self.parts), lambda part: isinstance(part, Enclosure)
         )
@@ -59,7 +52,7 @@ class AkkadianWord(ReconstructionToken):
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
-class Lacuna(ReconstructionToken):
+class Lacuna(Token):
     _before: Sequence[Enclosure]
     _after: Sequence[Enclosure]
 
@@ -70,7 +63,8 @@ class Lacuna(ReconstructionToken):
     def parts(self) -> Sequence[Token]:
         return [*self._before, UnknownNumberOfSigns.of(), *self._after]
 
-    def __str__(self):
+    @property
+    def value(self):
         return "".join(part.value for part in self.parts)
 
     @staticmethod
@@ -82,20 +76,21 @@ T = TypeVar("T", bound="Break")
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
-class Break(ReconstructionToken):
+class Break(Token):
     is_uncertain: bool
 
     @property
     @abstractmethod
-    def _value(self) -> str:
+    def _symbol(self) -> str:
         ...
 
     @property
     def parts(self) -> Sequence["Token"]:
         return tuple()
 
-    def __str__(self) -> str:
-        return f"({self._value})" if self.is_uncertain else self._value
+    @property
+    def value(self) -> str:
+        return f"({self._symbol})" if self.is_uncertain else self._symbol
 
     @classmethod
     def certain(cls: Type[T]) -> T:
@@ -109,7 +104,7 @@ class Break(ReconstructionToken):
 @attr.s(frozen=True, str=False)
 class Caesura(Break):
     @property
-    def _value(self) -> str:
+    def _symbol(self) -> str:
         return "||"
 
     def accept(self, visitor: TokenVisitor):
@@ -119,7 +114,7 @@ class Caesura(Break):
 @attr.s(frozen=True, str=False)
 class MetricalFootSeparator(Break):
     @property
-    def _value(self) -> str:
+    def _symbol(self) -> str:
         return "|"
 
     def accept(self, visitor: TokenVisitor):
