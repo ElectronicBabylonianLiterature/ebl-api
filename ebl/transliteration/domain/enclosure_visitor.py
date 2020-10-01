@@ -2,11 +2,13 @@ from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
+from ebl.corpus.domain.reconstructed_text import AkkadianWord, Lacuna
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
     DocumentOrientedGloss,
+    Emendation,
     Enclosure,
     Gloss,
     IntentionalOmission,
@@ -96,6 +98,14 @@ class EnclosureValidator(TokenVisitor):
         for part in named_sign.name_parts:
             part.accept(self)
 
+    def visit_akkadian_word(self, word: AkkadianWord) -> None:
+        for part in word.parts:
+            part.accept(self)
+
+    def visit_lacuna(self, lacuna: Lacuna) -> None:
+        for enclosure in lacuna.parts:
+            enclosure.accept(self)
+
     def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         self._update_state(omission, EnclosureType.ACCIDENTAL_OMISSION)
 
@@ -115,6 +125,9 @@ class EnclosureValidator(TokenVisitor):
             else EnclosureType.PERHAPS
         )
         self._update_state(broken_away, perhaps_type)
+
+    def visit_emendation(self, emendation: Emendation) -> None:
+        self._update_state(emendation, EnclosureType.EMENDATION)
 
     def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._update_state(gloss, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
