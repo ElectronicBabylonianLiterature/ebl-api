@@ -1,12 +1,10 @@
 import pytest  # pyre-ignore[21]
-from parsy import ParseError  # pyre-ignore[21]
 
 from ebl.corpus.application.reconstructed_text_parser import (
-    caesura,
-    foot_separator,
-    lacuna,
+    parse_break,
+    parse_lacuna,
+    parse_reconstructed_line,
     parse_reconstructed_word,
-    reconstructed_line,
 )
 from ebl.corpus.domain.enclosure import (
     BROKEN_OFF_CLOSE,
@@ -28,18 +26,16 @@ from ebl.corpus.domain.reconstructed_text import (
     SeparatorPart,
     StringPart,
 )
-from lark.exceptions import (  # pyre-ignore[21]
-    ParseError as LarkParseError,
-    UnexpectedInput,
-)
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
+import re
 
 
 def assert_parse(parser, expected, text):
-    assert [token for token in parser.parse(text) if token] == expected
+    assert [token for token in parser(text) if token] == expected
 
 
 def assert_parse_error(parser, text):
-    with pytest.raises((ParseError, UnexpectedInput, LarkParseError)):
+    with pytest.raises((UnexpectedInput, ParseError)):
         parser(text)
 
 
@@ -483,29 +479,26 @@ def test_invalid_word(text):
 
 
 @pytest.mark.parametrize(
-    "text,expected",
+    "text,before,after",
     [
-        ("...", ["..."]),
-        ("[...", [[BROKEN_OFF_OPEN], "..."]),
-        ("...]", ["...", [BROKEN_OFF_CLOSE]]),
-        ("[...]", [[BROKEN_OFF_OPEN], "...", [BROKEN_OFF_CLOSE]]),
-        ("(...", [[MAYBE_BROKEN_OFF_OPEN], "..."]),
-        ("...)", ["...", [MAYBE_BROKEN_OFF_CLOSE]]),
-        ("(...)", [[MAYBE_BROKEN_OFF_OPEN], "...", [MAYBE_BROKEN_OFF_CLOSE]]),
-        ("[(...", [[BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN], "..."]),
-        ("...)]", ["...", [MAYBE_BROKEN_OFF_CLOSE, BROKEN_OFF_CLOSE]]),
+        ("...", tuple(), tuple()),
+        ("[...", (BROKEN_OFF_OPEN,), tuple()),
+        ("...]", tuple(), (BROKEN_OFF_CLOSE,)),
+        ("[...]", (BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,)),
+        ("(...", (MAYBE_BROKEN_OFF_OPEN,), tuple()),
+        ("...)", tuple(), (MAYBE_BROKEN_OFF_CLOSE,)),
+        ("(...)", (MAYBE_BROKEN_OFF_OPEN,), (MAYBE_BROKEN_OFF_CLOSE,)),
+        ("[(...", (BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN), tuple()),
+        ("...)]", tuple(), (MAYBE_BROKEN_OFF_CLOSE, BROKEN_OFF_CLOSE)),
         (
             "[(...)]",
-            [
-                [BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN],
-                "...",
-                [MAYBE_BROKEN_OFF_CLOSE, BROKEN_OFF_CLOSE],
-            ],
+            (BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN),
+            (MAYBE_BROKEN_OFF_CLOSE, BROKEN_OFF_CLOSE),
         ),
     ],
 )
-def test_lacuna(text, expected):
-    assert_parse(lacuna(), expected, text)
+def test_lacuna(text, before, after):
+    assert parse_lacuna(text) == Lacuna(before, after)
 
 
 @pytest.mark.parametrize(
@@ -528,27 +521,22 @@ def test_lacuna(text, expected):
     ],
 )
 def test_invalid_lacuna(text):
-    assert_parse_error(lacuna().parse, text)
+    assert_parse_error(parse_lacuna, text)
 
 
-@pytest.mark.parametrize("text,expected", [("||", "||"), ("(||)", "(||)")])
-def test_caesura(text, expected):
-    assert caesura().parse(text) == expected
+@pytest.mark.parametrize("text,is_uncertain", [("||", False), ("(||)", True)])
+def test_caesura(text, is_uncertain):
+    assert parse_break(text) == Caesura(is_uncertain)
 
 
-@pytest.mark.parametrize("text", ["|", "|||", "||||", "[||]", "[(||)]"])
-def test_invalid_caesura(text):
-    assert_parse_error(caesura().parse, text)
+@pytest.mark.parametrize("text,is_uncertain", [("|", False), ("(|)", True)])
+def test_feet_separator(text, is_uncertain):
+    assert parse_break(text) == MetricalFootSeparator(is_uncertain)
 
 
-@pytest.mark.parametrize("text,expected", [("|", "|"), ("(|)", "(|)")])
-def test_feet_separator(text, expected):
-    assert foot_separator().parse(text) == expected
-
-
-@pytest.mark.parametrize("text", ["||", "|||", "[|]", "[(|)]"])
-def test_invalid_feet_separator(text):
-    assert_parse_error(foot_separator().parse, text)
+@pytest.mark.parametrize("text", ["|||", "||||", "[|]", "[(|)]", "[||]", "[(||)]"])
+def test_invalid_break(text):
+    assert_parse_error(parse_break, text)
 
 
 WORD = AkkadianWord((StringPart("ibnû"),))
@@ -557,23 +545,26 @@ WORD = AkkadianWord((StringPart("ibnû"),))
 @pytest.mark.parametrize(
     "text,expected",
     [
-        ("ibnû", [WORD]),
-        ("...", [Lacuna(tuple(), tuple())]),
-        ("... ibnû", [Lacuna(tuple(), tuple()), WORD]),
-        ("ibnû ...", [WORD, Lacuna(tuple(), tuple())]),
-        ("[...] ibnû", [Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,)), WORD]),
-        ("ibnû [...]", [WORD, Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,))]),
-        ("...ibnû", [AkkadianWord((LacunaPart(), StringPart("ibnû")))]),
-        ("ibnû...", [AkkadianWord((StringPart("ibnû"), LacunaPart()))]),
-        ("ib...nû", [AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû")))]),
-        ("ibnû | ibnû", [WORD, MetricalFootSeparator(False), WORD]),
-        ("ibnû (|) ibnû", [WORD, MetricalFootSeparator(True), WORD]),
-        ("ibnû || ibnû", [WORD, Caesura(False), WORD]),
-        ("ibnû (||) ibnû", [WORD, Caesura(True), WORD]),
+        ("ibnû", (WORD,)),
+        ("...", (Lacuna(tuple(), tuple()),)),
+        ("... ibnû", (Lacuna(tuple(), tuple()), WORD)),
+        ("ibnû ...", (WORD, Lacuna(tuple(), tuple()))),
+        ("[...] ibnû", (Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,)), WORD)),
+        ("ibnû [...]", (WORD, Lacuna((BROKEN_OFF_OPEN,), (BROKEN_OFF_CLOSE,)))),
+        ("...ibnû", (AkkadianWord((LacunaPart(), StringPart("ibnû"))),)),
+        ("ibnû...", (AkkadianWord((StringPart("ibnû"), LacunaPart())),)),
+        (
+            "ib...nû",
+            (AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû"))),),
+        ),
+        ("ibnû | ibnû", (WORD, MetricalFootSeparator(False), WORD)),
+        ("ibnû (|) ibnû", (WORD, MetricalFootSeparator(True), WORD)),
+        ("ibnû || ibnû", (WORD, Caesura(False), WORD)),
+        ("ibnû (||) ibnû", (WORD, Caesura(True), WORD)),
     ],
 )
 def test_reconstructed_line(text, expected):
-    assert reconstructed_line().parse(text) == expected
+    assert parse_reconstructed_line(text) == expected
 
 
 @pytest.mark.parametrize(
@@ -593,7 +584,10 @@ def test_reconstructed_line(text, expected):
     ],
 )
 def test_invalid_reconstructed_line(text):
-    assert_parse_error(reconstructed_line().parse, text)
+    with pytest.raises(
+        ValueError, match=f"Invalid reconstructed line: {re.escape(text)}"
+    ):
+        parse_reconstructed_line(text)
 
 
 @pytest.mark.parametrize(
@@ -620,7 +614,7 @@ def test_invalid_reconstructed_line(text):
     ],
 )
 def test_validate_invalid(text):
-    line = reconstructed_line().parse(text)
+    line = parse_reconstructed_line(text)
     with pytest.raises(ValueError):
         validate(line)
 
@@ -634,5 +628,5 @@ def test_validate_invalid(text):
     ],
 )
 def test_validate_valid(text):
-    line = reconstructed_line().parse(text)
+    line = parse_reconstructed_line(text)
     validate(line)
