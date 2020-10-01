@@ -432,7 +432,12 @@ invalue-broken-away: open-broken-away | close-broken-away;
 
 variant-separator = '/';
 
-flag = { '!' | '?' | '*' | '#' };
+flag = { damage | uncertain | correction | collation };
+damage = '#';
+uncertain = '?';
+correction = '!';
+collation = '*';
+
 modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n'
                   | 'z' | 'k' | 'r' | 'h' | 'v' | { decimal-digit }- ) };
 
@@ -443,17 +448,17 @@ sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
 ### Normalized Akkadian
 
 ```ebnf
-reconstructed-line = text, { word-separator, break, word-separator, text };
-text = ( akkadian-word | lacuna ), { word-separator, ( akkadian-word | lacuna ) };
-word-separator = ' ';
+normalized-akkadian = normalized-text, { break, normalized-text };
+normalized-text = ( normalized-word | lacuna ),
+                  { word-separator, ( normalized-word | lacuna ) };
 
-break = caesura | foot-separator;
+break =  word-separator, ( caesura | foot-separator )  word-separator;
 caesura = '||' | '(||)';
 foot-separator = '|' | '(|)';
 
 lacuna = { enclosure-open }, ellipsis, { enclosure-close };
 
-akkadian-word = { enclosure-open },
+normalized-word = { enclosure-open },
                 [ ellipsis, [ between-strings ] ],
                 akkadian-string,
                 { between-strings, ( akkadian-string | ellipsis )
@@ -461,12 +466,12 @@ akkadian-word = { enclosure-open },
                 | akkadian-string
                 },
                 [ [ between-strings ], ellipsis ],
-                [ modifier ], [ modifier ], [ modifier],
+                [ normalization-modifier ],
+                [ normalization-modifier ],
+                [ normalization-modifier ],
                 { enclosure-close };
-modifier = damage | uncertain | corrected;
-damage = '#';
-uncertain = '?';
-corrected = '!';
+normalization-modifier = damage | uncertain | correction;
+
 between-strings = { enclosure }-, separator
                 | separator, { enclosure }-
                 | { enclosure }-
@@ -476,14 +481,10 @@ separator = '-';
 ellipsis = '...';
 
 enclosure = enclosure-open | enclosure-close;
-enclosure-open = broken-off-open | maybe-broken-off-open | emendation-open;
-enclosure-close = broken-off-close | maybe-broken-off-close | emendation-close;
-broken-off-open = '[';
-broken-off-close = ']';
-maybe-broken-off-open = '(';
-maybe-broken-off-close = ')';
-emendation-open = '<';
-emendation-close = '>';
+enclosure-open = open-broken-away | open-perhaps-broken-away | open-emendation;
+enclosure-close = open-broken-away | close-perhaps-broken-away | close-emendation;
+open-emendation = '<';
+close-emendation = '>';
 
 akkadian-string = { akkadian-alphabet }-;
 akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
