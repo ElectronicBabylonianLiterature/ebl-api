@@ -3,7 +3,7 @@ from typing import cast, Sequence
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
-from ebl.transliteration.domain.reconstructed_text import (
+from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
     MetricalFootSeparator,

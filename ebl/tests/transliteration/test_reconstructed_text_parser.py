@@ -6,7 +6,7 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_word,
 )
 from ebl.corpus.domain.enclosure_validator import validate
-from ebl.transliteration.domain.reconstructed_text import (
+from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
     MetricalFootSeparator,

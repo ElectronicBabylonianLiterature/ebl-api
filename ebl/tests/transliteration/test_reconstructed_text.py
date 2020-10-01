@@ -7,7 +7,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Emendation,
     PerhapsBrokenAway,
 )
-from ebl.transliteration.domain.reconstructed_text import (
+from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
     MetricalFootSeparator,

@@ -11,7 +11,7 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.transliteration.domain.reconstructed_text import (
+from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
     MetricalFootSeparator,

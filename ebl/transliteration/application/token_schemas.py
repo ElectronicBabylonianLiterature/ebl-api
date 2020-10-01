@@ -52,7 +52,7 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
-from ebl.transliteration.domain.reconstructed_text import (
+from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
     MetricalFootSeparator,

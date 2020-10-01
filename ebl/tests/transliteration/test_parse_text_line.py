@@ -47,7 +47,7 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
-from ebl.transliteration.domain.reconstructed_text import AkkadianWord
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 

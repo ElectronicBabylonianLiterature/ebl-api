@@ -2,7 +2,7 @@ import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import TextSerializer
-from ebl.transliteration.domain.reconstructed_text import AkkadianWord
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
