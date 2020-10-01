@@ -5,8 +5,8 @@ from ebl.corpus.domain.reconstructed_text import (
     Caesura,
     Lacuna,
     MetricalFootSeparator,
-    Modifier,
 )
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Emendation,
@@ -21,8 +21,7 @@ from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, Valu
         (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû"),
         (
             AkkadianWord.of(
-                (ValueToken.of("ibnû"),),
-                (Modifier.UNCERTAIN, Modifier.DAMAGED, Modifier.CORRECTED),
+                (ValueToken.of("ibnû"),), (Flag.UNCERTAIN, Flag.DAMAGE, Flag.CORRECTION)
             ),
             "ibnû?#!",
         ),
@@ -58,7 +57,7 @@ from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, Valu
         (
             AkkadianWord.of(
                 (ValueToken.of("ibnû"), PerhapsBrokenAway.close(), BrokenAway.close()),
-                (Modifier.UNCERTAIN,),
+                (Flag.UNCERTAIN,),
             ),
             "ibnû?)]",
         ),
@@ -78,6 +77,11 @@ from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, Valu
 )
 def test_akkadian_word(word, expected):
     assert str(word) == expected
+
+
+def test_akkadian_word_invalid_modifier():
+    with pytest.raises(ValueError):
+        AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
 
 
 @pytest.mark.parametrize(

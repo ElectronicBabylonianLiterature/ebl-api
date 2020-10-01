@@ -1,10 +1,10 @@
 from abc import abstractmethod
-from enum import Enum, unique
 from typing import Sequence, Type, TypeVar
 
 import attr
 import pydash  # pyre-ignore[21]
 
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import Enclosure
 from ebl.transliteration.domain.tokens import (
     ErasureState,
@@ -21,18 +21,17 @@ class ReconstructionToken(Token):
         return str(self)
 
 
-@unique
-class Modifier(Enum):
-    DAMAGED = "#"
-    UNCERTAIN = "?"
-    CORRECTED = "!"
-
-
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class AkkadianWord(ReconstructionToken):
 
     _parts: Sequence[Token]
-    modifiers: Sequence[Modifier] = tuple()
+    modifiers: Sequence[Flag] = attr.ib(default=tuple())
+
+    @modifiers.validator
+    def _validate_modifiers(self, _, value):
+        allowed_modifiers = set(Flag) - {Flag.COLLATION}
+        if not set(value).issubset(allowed_modifiers):
+            raise ValueError(f"Invalid modifiers: {value}")
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_akkadian_word(self)
@@ -54,7 +53,7 @@ class AkkadianWord(ReconstructionToken):
 
     @staticmethod
     def of(
-        parts: Sequence[Token], modifier: Sequence[Modifier] = tuple()
+        parts: Sequence[Token], modifier: Sequence[Flag] = tuple()
     ) -> "AkkadianWord":
         return AkkadianWord(frozenset(), ErasureState.NONE, parts, modifier)
 

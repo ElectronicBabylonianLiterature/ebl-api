@@ -16,12 +16,11 @@ from ebl.corpus.domain.reconstructed_text import (
     Caesura,
     Lacuna,
     MetricalFootSeparator,
-    Modifier,
 )
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Flag, Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
@@ -93,7 +92,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
                 Joiner.hyphen(),
                 ValueToken.of("buāru"),
             ),
-            (Modifier.DAMAGED,),
+            (Flag.DAMAGE,),
         ),
     )
     manuscripts: Sequence[ManuscriptLine] = factory.List(

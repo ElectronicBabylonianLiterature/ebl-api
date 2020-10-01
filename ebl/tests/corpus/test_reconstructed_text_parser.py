@@ -12,8 +12,8 @@ from ebl.corpus.domain.reconstructed_text import (
     Caesura,
     Lacuna,
     MetricalFootSeparator,
-    Modifier,
 )
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Emendation,
@@ -45,19 +45,16 @@ def assert_parse_error(parser, text):
                 [],
             ],
         ),
-        ("ibnû?", [ValueToken.of("ibnû"), [Modifier.UNCERTAIN]]),
-        ("ibnû#", [ValueToken.of("ibnû"), [Modifier.DAMAGED]]),
-        ("ibnû!", [ValueToken.of("ibnû"), [Modifier.CORRECTED]]),
-        ("ibnû#?", [ValueToken.of("ibnû"), [Modifier.DAMAGED, Modifier.UNCERTAIN]]),
-        ("ibnû?#", [ValueToken.of("ibnû"), [Modifier.UNCERTAIN, Modifier.DAMAGED]]),
+        ("ibnû?", [ValueToken.of("ibnû"), [Flag.UNCERTAIN]]),
+        ("ibnû#", [ValueToken.of("ibnû"), [Flag.DAMAGE]]),
+        ("ibnû!", [ValueToken.of("ibnû"), [Flag.CORRECTION]]),
+        ("ibnû#?", [ValueToken.of("ibnû"), [Flag.DAMAGE, Flag.UNCERTAIN]]),
+        ("ibnû?#", [ValueToken.of("ibnû"), [Flag.UNCERTAIN, Flag.DAMAGE]]),
         (
             "ibnû?#!",
-            [
-                ValueToken.of("ibnû"),
-                [Modifier.UNCERTAIN, Modifier.DAMAGED, Modifier.CORRECTED],
-            ],
+            [ValueToken.of("ibnû"), [Flag.UNCERTAIN, Flag.DAMAGE, Flag.CORRECTION]],
         ),
-        ("ibnû##", [ValueToken.of("ibnû"), [Modifier.DAMAGED]]),
+        ("ibnû##", [ValueToken.of("ibnû"), [Flag.DAMAGE]]),
         ("[ibnû]", [BrokenAway.open(), ValueToken.of("ibnû"), BrokenAway.close(), []]),
         ("ib[nû", [ValueToken.of("ib"), BrokenAway.open(), ValueToken.of("nû"), []]),
         ("ib]nû", [ValueToken.of("ib"), BrokenAway.close(), ValueToken.of("nû"), []]),
@@ -72,7 +69,7 @@ def assert_parse_error(parser, text):
                 [],
             ],
         ),
-        ("ibnû?]", [ValueToken.of("ibnû"), BrokenAway.close(), [Modifier.UNCERTAIN]]),
+        ("ibnû?]", [ValueToken.of("ibnû"), BrokenAway.close(), [Flag.UNCERTAIN]]),
         (
             "(ibnû)",
             [
@@ -101,10 +98,7 @@ def assert_parse_error(parser, text):
                 [],
             ],
         ),
-        (
-            "ibnû#)",
-            [ValueToken.of("ibnû"), PerhapsBrokenAway.close(), [Modifier.DAMAGED]],
-        ),
+        ("ibnû#)", [ValueToken.of("ibnû"), PerhapsBrokenAway.close(), [Flag.DAMAGE]]),
         (
             "[(ibnû)]",
             [
@@ -169,7 +163,7 @@ def assert_parse_error(parser, text):
                 ValueToken.of("ibnû"),
                 PerhapsBrokenAway.close(),
                 BrokenAway.close(),
-                [Modifier.UNCERTAIN],
+                [Flag.UNCERTAIN],
             ],
         ),
         ("<ibnû>", [Emendation.open(), ValueToken.of("ibnû"), Emendation.close(), []]),
@@ -186,7 +180,7 @@ def assert_parse_error(parser, text):
                 [],
             ],
         ),
-        ("ibnû?>", [ValueToken.of("ibnû"), Emendation.close(), [Modifier.UNCERTAIN]]),
+        ("ibnû?>", [ValueToken.of("ibnû"), Emendation.close(), [Flag.UNCERTAIN]]),
         ("...ibnû", [UnknownNumberOfSigns.of(), ValueToken.of("ibnû"), []]),
         ("ibnû...", [ValueToken.of("ibnû"), UnknownNumberOfSigns.of(), []]),
         (
@@ -333,7 +327,7 @@ def assert_parse_error(parser, text):
                 PerhapsBrokenAway.close(),
                 Emendation.close(),
                 BrokenAway.close(),
-                [Modifier.UNCERTAIN],
+                [Flag.UNCERTAIN],
             ],
         ),
         ("ib-nû", [ValueToken.of("ib"), Joiner.hyphen(), ValueToken.of("nû"), []]),

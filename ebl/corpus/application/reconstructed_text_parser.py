@@ -12,9 +12,9 @@ from ebl.corpus.domain.reconstructed_text import (
     Caesura,
     Lacuna,
     MetricalFootSeparator,
-    Modifier,
     ReconstructionToken,
 )
+from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
@@ -49,19 +49,19 @@ class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]
     def akkadian_word(
         self,
         parts: Tree,  # pyre-ignore[11]
-        modifiers: Sequence[Modifier],
+        modifiers: Sequence[Flag],
         closing_enclosures: Tree,  # pyre-ignore[11]
     ) -> AkkadianWord:
         return AkkadianWord.of(
             tuple(parts.children + closing_enclosures.children), modifiers
         )
 
-    def modifiers(self, modifiers: Iterable[Modifier]) -> Sequence[Modifier]:
+    def modifiers(self, modifiers: Iterable[Flag]) -> Sequence[Flag]:
         return tuple(set(modifiers))
 
     @v_args(inline=True)
-    def modifier(self, modifier: Token) -> Modifier:  # pyre-ignore[11]
-        return Modifier(modifier)
+    def modifier(self, modifier: Token) -> Flag:  # pyre-ignore[11]
+        return Flag(modifier)
 
     def lacuna_part(self, _) -> UnknownNumberOfSigns:
         return UnknownNumberOfSigns.of()
