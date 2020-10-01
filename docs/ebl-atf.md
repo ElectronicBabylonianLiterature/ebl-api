@@ -461,8 +461,8 @@ akkadian-word = { enclosure-open },
                 | akkadian-string
                 },
                 [ [ between-strings ], ellipsis ],
-                { enclosure-close },
-                [ modifier ], [ modifier ], [ modifier];
+                [ modifier ], [ modifier ], [ modifier],
+                { enclosure-close };
 modifier = damage | uncertain | corrected;
 damage = '#';
 uncertain = '?';
