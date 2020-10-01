@@ -14,6 +14,8 @@ from ebl.transliteration.domain.reconstructed_text import (
     MetricalFootSeparator,
 )
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
+from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
 @pytest.mark.parametrize(
@@ -79,6 +81,15 @@ from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, Valu
 def test_akkadian_word(word, expected):
     assert word.value == expected
 
+    serialized = {
+        "type": "AkkadianWord",
+        "value": expected,
+        "parts": OneOfTokenSchema(many=True).dump(word.parts),
+        "modifiers": [modifier.value for modifier in word.modifiers],
+        "enclosureType": [],
+    }
+    assert_token_serialization(word, serialized)
+
 
 def test_akkadian_word_invalid_modifier():
     with pytest.raises(ValueError):
@@ -103,20 +114,49 @@ def test_akkadian_word_invalid_modifier():
 def test_lacuna(lacuna, expected):
     assert lacuna.value == expected
 
+    token_schema = OneOfTokenSchema(many=True)
+    serialized = {
+        "type": "Lacuna",
+        "value": expected,
+        "before": token_schema.dump(lacuna.before),
+        "after": token_schema.dump(lacuna.after),
+        "enclosureType": [],
+    }
+    assert_token_serialization(lacuna, serialized)
+
 
 @pytest.mark.parametrize(
-    "caesura,expected", [(Caesura.certain(), "||"), (Caesura.uncertain(), "(||)")]
+    "caesura,is_uncertain,value",
+    [(Caesura.certain(), False, "||"), (Caesura.uncertain(), True, "(||)")],
 )
-def test_caesura(caesura, expected):
-    assert caesura.value == expected
+def test_caesura(caesura, is_uncertain, value):
+    assert caesura.value == value
+    assert caesura.is_uncertain == is_uncertain
+
+    serialized = {
+        "type": "Caesura",
+        "value": value,
+        "isUncertain": is_uncertain,
+        "enclosureType": [],
+    }
+    assert_token_serialization(caesura, serialized)
 
 
 @pytest.mark.parametrize(
-    "separator,expected",
+    "separator,is_uncertain,value",
     [
-        (MetricalFootSeparator.certain(), "|"),
-        (MetricalFootSeparator.uncertain(), "(|)"),
+        (MetricalFootSeparator.certain(), False, "|"),
+        (MetricalFootSeparator.uncertain(), True, "(|)"),
     ],
 )
-def test_metrical_foot_separator(separator, expected):
-    assert separator.value == expected
+def test_metrical_foot_separator(separator, is_uncertain, value):
+    assert separator.value == value
+    assert separator.is_uncertain == is_uncertain
+
+    serialized = {
+        "type": "MetricalFootSeparator",
+        "value": value,
+        "isUncertain": is_uncertain,
+        "enclosureType": [],
+    }
+    assert_token_serialization(separator, serialized)

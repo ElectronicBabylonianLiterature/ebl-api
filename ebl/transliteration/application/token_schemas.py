@@ -52,6 +52,12 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.reconstructed_text import (
+    AkkadianWord,
+    Caesura,
+    Lacuna,
+    MetricalFootSeparator,
+)
 
 
 class BaseTokenSchema(Schema):  # pyre-ignore[11]
@@ -454,6 +460,48 @@ class LineBreakSchema(BaseTokenSchema):
         return LineBreak(frozenset(data["enclosure_type"]), data["erasure"])
 
 
+class AkkadianWordSchema(BaseTokenSchema):
+    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+    modifiers = fields.List(ValueEnum(Flag), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return AkkadianWord.of(
+            tuple(data["parts"]), tuple(data["modifiers"])
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+
+
+class LacunaSchema(BaseTokenSchema):
+    before = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+    after = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Lacuna.of(
+            tuple(data["before"]), tuple(data["after"])
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+
+
+class Breakchema(BaseTokenSchema):
+    is_uncertain = fields.Boolean(data_key="isUncertain", required=True)
+
+
+class CaesuraSchema(Breakchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Caesura.of(data["is_uncertain"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
+
+
+class MetricalFootSeparatorSchema(Breakchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return MetricalFootSeparator.of(data["is_uncertain"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
+
+
 class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
@@ -489,4 +537,8 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "PhoneticGloss": PhoneticGlossSchema,
         "LinguisticGloss": LinguisticGlossSchema,
         "LineBreak": LineBreakSchema,
+        "AkkadianWord": AkkadianWordSchema,
+        "Lacuna": LacunaSchema,
+        "Caesura": CaesuraSchema,
+        "MetricalFootSeparator": MetricalFootSeparatorSchema,
     }

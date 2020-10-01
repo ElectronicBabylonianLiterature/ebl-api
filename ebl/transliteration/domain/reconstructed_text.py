@@ -53,15 +53,15 @@ class AkkadianWord(Token):
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class Lacuna(Token):
-    _before: Sequence[Enclosure]
-    _after: Sequence[Enclosure]
+    before: Sequence[Enclosure]
+    after: Sequence[Enclosure]
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_lacuna(self)
 
     @property
     def parts(self) -> Sequence[Token]:
-        return [*self._before, UnknownNumberOfSigns.of(), *self._after]
+        return [*self.before, UnknownNumberOfSigns.of(), *self.after]
 
     @property
     def value(self):
@@ -91,6 +91,10 @@ class Break(Token):
     @property
     def value(self) -> str:
         return f"({self._symbol})" if self.is_uncertain else self._symbol
+
+    @classmethod
+    def of(cls: Type[T], is_uncertain: bool) -> T:
+        return cls(frozenset(), ErasureState.NONE, is_uncertain)
 
     @classmethod
     def certain(cls: Type[T]) -> T:
