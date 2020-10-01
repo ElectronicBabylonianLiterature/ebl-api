@@ -47,6 +47,7 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.reconstructed_text import AkkadianWord
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
@@ -1202,6 +1203,28 @@ def test_parse_atf_language_shifts(code: str, expected_language: Language) -> No
                     Word.of(parts, expected_language),
                     LanguageShift.of("%sb"),
                     Word.of(parts, Language.AKKADIAN),
+                ),
+            ),
+        )
+    )
+
+    assert parse_atf_lark(line).lines == expected.lines
+
+
+def test_parse_normalized_akkadain_shift() -> None:
+    word = "ha"
+    line = f"1. {word} %n {word} %sux {word}"
+
+    expected = Text(
+        (
+            TextLine.of_iterable(
+                LineNumber(1),
+                (
+                    Word.of((Reading.of_name(word),), DEFAULT_LANGUAGE),
+                    LanguageShift.of("%n"),
+                    AkkadianWord.of((ValueToken.of(word),)),
+                    LanguageShift.of("%sux"),
+                    Word.of((Reading.of_name(word),), Language.SUMERIAN),
                 ),
             ),
         )
