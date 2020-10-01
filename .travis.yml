@@ -11,16 +11,22 @@ install:
 jobs:
   include:
     - stage: test
+      script: pipenv run black ebl --check
+      name: "Code Style"
+    - 
+      script: pipenv run flake8
+      name: "Lint"
+    -
+      script: pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
+      name: "Type Check"
+    -
       before_script:
         - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
         - chmod +x ./cc-test-reporter
         - "./cc-test-reporter before-build"
-      script:
-        - pipenv run black ebl --check
-        - pipenv run flake8
-        - pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
-        - pipenv run pytest --cov=ebl --cov-report term --cov-report xml
+      script: pipenv run pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+      name: "Unit Tests"
     - stage: docker
       if: branch = master AND type != pull_request
       install: skip
