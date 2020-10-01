@@ -14,7 +14,6 @@ from ebl.corpus.domain.enums import (
 from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    Lacuna,
     MetricalFootSeparator,
 )
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
@@ -89,7 +88,8 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
         LanguageShift.normalized_akkadian(),
         AkkadianWord.of((ValueToken.of("buāru"),)),
         MetricalFootSeparator.uncertain(),
-        Lacuna.of((BrokenAway.open(),), tuple()),
+        BrokenAway.open(),
+        UnknownNumberOfSigns.of(),
         Caesura.certain(),
         AkkadianWord.of(
             (

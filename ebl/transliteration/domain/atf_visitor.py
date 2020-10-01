@@ -9,6 +9,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     IntentionalOmission,
     PerhapsBrokenAway,
     Removal,
+    Emendation,
 )
 from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import Divider
@@ -73,7 +74,7 @@ class AtfVisitor(TokenVisitor):
 
     @property
     def result(self) -> Atf:
-        return Atf("".join(self._state.parts))
+        return Atf("".join(self._state.parts).strip())
 
     def visit(self, token: Token) -> None:
         self._state.append_with_separator(token)
@@ -101,6 +102,9 @@ class AtfVisitor(TokenVisitor):
 
     def visit_removal(self, removal: Removal) -> None:
         self._side(removal.side)(removal)
+
+    def visit_emendation(self, emendation: Emendation) -> None:
+        self._side(emendation.side)(emendation)
 
     def _side(self, side: Side) -> Callable[[Token], None]:
         return {

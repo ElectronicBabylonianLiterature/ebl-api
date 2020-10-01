@@ -16,6 +16,7 @@ from ebl.tests.factories.corpus import (
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 
 def create(include_documents):
@@ -62,14 +63,13 @@ def create(include_documents):
                 "lines": [
                     {
                         "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
-                        "reconstruction": " ".join(
-                            token.value for token in line.reconstruction
-                        ),
+                        "reconstruction": convert_to_atf(None, line.reconstruction),
                         "reconstructionTokens": [
                             {"type": "LanguageShift", "value": "%n"},
                             {"type": "AkkadianWord", "value": "buāru"},
                             {"type": "MetricalFootSeparator", "value": "(|)"},
-                            {"type": "Lacuna", "value": "[..."},
+                            {"type": "BrokenAway", "value": "["},
+                            {"type": "UnknownNumberOfSigns", "value": "..."},
                             {"type": "Caesura", "value": "||"},
                             {"type": "AkkadianWord", "value": "...]-buāru#"},
                         ],

@@ -10,7 +10,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    Lacuna,
     MetricalFootSeparator,
 )
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
@@ -94,35 +93,6 @@ def test_akkadian_word(word, expected):
 def test_akkadian_word_invalid_modifier():
     with pytest.raises(ValueError):
         AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
-
-
-@pytest.mark.parametrize(
-    "lacuna,expected",
-    [
-        (Lacuna.of(tuple(), tuple()), "..."),
-        (Lacuna.of((BrokenAway.open(),), tuple()), "[..."),
-        (Lacuna.of(tuple(), (PerhapsBrokenAway.close(),)), "...)"),
-        (
-            Lacuna.of(
-                (BrokenAway.open(), PerhapsBrokenAway.open()),
-                (PerhapsBrokenAway.close(),),
-            ),
-            "[(...)",
-        ),
-    ],
-)
-def test_lacuna(lacuna, expected):
-    assert lacuna.value == expected
-
-    token_schema = OneOfTokenSchema(many=True)
-    serialized = {
-        "type": "Lacuna",
-        "value": expected,
-        "before": token_schema.dump(lacuna.before),
-        "after": token_schema.dump(lacuna.after),
-        "enclosureType": [],
-    }
-    assert_token_serialization(lacuna, serialized)
 
 
 @pytest.mark.parametrize(

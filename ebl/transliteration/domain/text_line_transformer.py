@@ -52,7 +52,6 @@ from ebl.transliteration.domain.word_tokens import (
 from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    Lacuna,
     MetricalFootSeparator,
 )
 
@@ -269,12 +268,6 @@ class ReconstructedLineTransformer(WordTransformer):
 
     def ebl_atf_text_line__uncertain_foot_separator(self, _) -> MetricalFootSeparator:
         return MetricalFootSeparator.uncertain()
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__lacuna(
-        self, before: Tree, _, after: Tree  # pyre-ignore[11]
-    ) -> Lacuna:
-        return Lacuna.of(tuple(before.children), tuple(after.children))
 
     @v_args(inline=True)
     def ebl_atf_text_line__akkadian_word(

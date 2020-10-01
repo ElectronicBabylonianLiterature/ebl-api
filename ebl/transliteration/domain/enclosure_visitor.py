@@ -2,7 +2,7 @@ from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
-from ebl.transliteration.domain.reconstructed_text import AkkadianWord, Lacuna
+from ebl.transliteration.domain.reconstructed_text import AkkadianWord
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -101,10 +101,6 @@ class EnclosureValidator(TokenVisitor):
     def visit_akkadian_word(self, word: AkkadianWord) -> None:
         for part in word.parts:
             part.accept(self)
-
-    def visit_lacuna(self, lacuna: Lacuna) -> None:
-        for enclosure in lacuna.parts:
-            enclosure.accept(self)
 
     def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         self._update_state(omission, EnclosureType.ACCIDENTAL_OMISSION)

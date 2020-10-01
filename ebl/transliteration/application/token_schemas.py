@@ -55,7 +55,6 @@ from ebl.transliteration.domain.word_tokens import (
 from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    Lacuna,
     MetricalFootSeparator,
 )
 
@@ -471,17 +470,6 @@ class AkkadianWordSchema(BaseTokenSchema):
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class LacunaSchema(BaseTokenSchema):
-    before = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
-    after = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return Lacuna.of(
-            tuple(data["before"]), tuple(data["after"])
-        ).set_enclosure_type(frozenset(data["enclosure_type"]))
-
-
 class Breakchema(BaseTokenSchema):
     is_uncertain = fields.Boolean(data_key="isUncertain", required=True)
 
@@ -538,7 +526,6 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "LinguisticGloss": LinguisticGlossSchema,
         "LineBreak": LineBreakSchema,
         "AkkadianWord": AkkadianWordSchema,
-        "Lacuna": LacunaSchema,
         "Caesura": CaesuraSchema,
         "MetricalFootSeparator": MetricalFootSeparatorSchema,
     }

@@ -81,9 +81,6 @@ class TokenVisitor(ABC):
     def visit_akkadian_word(self, word) -> None:
         self.visit(word)
 
-    def visit_lacuna(self, lacuna) -> None:
-        self.visit(lacuna)
-
     def visit_metrical_foot_separator(self, separator) -> None:
         self.visit(separator)
 

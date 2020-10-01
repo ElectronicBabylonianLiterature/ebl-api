@@ -27,6 +27,7 @@ from ebl.corpus.domain.text import (
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 
 class TextSerializer(TextVisitor):
@@ -146,7 +147,7 @@ class TextSerializer(TextVisitor):
     def visit_line(self, line: Line) -> None:
         self.line = {
             "number": OneOfLineNumberSchema().dump(line.number),  # pyre-ignore[16]
-            "reconstruction": " ".join(token.value for token in line.reconstruction),
+            "reconstruction": convert_to_atf(None, line.reconstruction),
             "manuscripts": [],
         }
         self.chapter["lines"].append(self.line)

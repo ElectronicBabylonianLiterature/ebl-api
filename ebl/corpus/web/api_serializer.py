@@ -6,7 +6,6 @@ from ebl.corpus.application.text_serializer import TextDeserializer, TextSeriali
 from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    Lacuna,
     MetricalFootSeparator,
 )
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
@@ -55,9 +54,6 @@ class ApiSerializer(TextSerializer):
 
     def visit_akkadian_word(self, word: AkkadianWord):
         self._visit_reconstruction_token("AkkadianWord", word)
-
-    def visit_lacuna(self, lacuna: Lacuna) -> None:
-        self._visit_reconstruction_token("Lacuna", lacuna)
 
     def visit_metrical_foot_separator(self, separator: MetricalFootSeparator) -> None:
         self._visit_reconstruction_token("MetricalFootSeparator", separator)

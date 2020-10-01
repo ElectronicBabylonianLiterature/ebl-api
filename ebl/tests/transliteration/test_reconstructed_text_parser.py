@@ -2,7 +2,6 @@ import pytest  # pyre-ignore[21]
 
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_break,
-    parse_lacuna,
     parse_reconstructed_line,
     parse_reconstructed_word,
 )
@@ -10,7 +9,6 @@ from ebl.corpus.domain.enclosure_validator import validate
 from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    Lacuna,
     MetricalFootSeparator,
 )
 from ebl.transliteration.domain.atf import Flag
@@ -437,52 +435,6 @@ def test_invalid_word(text) -> None:
     assert_parse_error(parse_reconstructed_word, text)
 
 
-@pytest.mark.parametrize(
-    "text,before,after",
-    [
-        ("...", tuple(), tuple()),
-        ("[...", (BrokenAway.open(),), tuple()),
-        ("...]", tuple(), (BrokenAway.close(),)),
-        ("[...]", (BrokenAway.open(),), (BrokenAway.close(),)),
-        ("(...", (PerhapsBrokenAway.open(),), tuple()),
-        ("...)", tuple(), (PerhapsBrokenAway.close(),)),
-        ("(...)", (PerhapsBrokenAway.open(),), (PerhapsBrokenAway.close(),)),
-        ("[(...", (BrokenAway.open(), PerhapsBrokenAway.open()), tuple()),
-        ("...)]", tuple(), (PerhapsBrokenAway.close(), BrokenAway.close())),
-        (
-            "[(...)]",
-            (BrokenAway.open(), PerhapsBrokenAway.open()),
-            (PerhapsBrokenAway.close(), BrokenAway.close()),
-        ),
-    ],
-)
-def test_lacuna(text, before, after) -> None:
-    assert parse_lacuna(text) == Lacuna.of(before, after)
-
-
-@pytest.mark.parametrize(
-    "text",
-    [
-        ".",
-        "..",
-        "....",
-        "......",
-        "]...",
-        "...[",
-        ")...",
-        "...(",
-        ".)..",
-        "..].",
-        "..[(.",
-        "...?",
-        "...#",
-        "...!",
-    ],
-)
-def test_invalid_lacuna(text) -> None:
-    assert_parse_error(parse_lacuna, text)
-
-
 @pytest.mark.parametrize("text,is_uncertain", [("||", False), ("(||)", True)])
 def test_caesura(text, is_uncertain) -> None:
     assert (
@@ -511,11 +463,16 @@ WORD = AkkadianWord.of((ValueToken.of("ibnû"),))
     "text,expected",
     [
         ("ibnû", (WORD,)),
-        ("...", (Lacuna.of(tuple(), tuple()),)),
-        ("... ibnû", (Lacuna.of(tuple(), tuple()), WORD)),
-        ("ibnû ...", (WORD, Lacuna.of(tuple(), tuple()))),
-        ("[...] ibnû", (Lacuna.of((BrokenAway.open(),), (BrokenAway.close(),)), WORD)),
-        ("ibnû [...]", (WORD, Lacuna.of((BrokenAway.open(),), (BrokenAway.close(),)))),
+        ("... ibnû", (UnknownNumberOfSigns.of(), WORD)),
+        ("ibnû ...", (WORD, UnknownNumberOfSigns.of())),
+        (
+            "[...] ibnû",
+            (BrokenAway.open(), UnknownNumberOfSigns.of(), BrokenAway.close(), WORD),
+        ),
+        (
+            "ibnû [...]",
+            (WORD, BrokenAway.open(), UnknownNumberOfSigns.of(), BrokenAway.close()),
+        ),
         (
             "...ibnû",
             (AkkadianWord.of((UnknownNumberOfSigns.of(), ValueToken.of("ibnû"))),),
@@ -540,6 +497,41 @@ WORD = AkkadianWord.of((ValueToken.of("ibnû"),))
         ("ibnû (|) ibnû", (WORD, MetricalFootSeparator.uncertain(), WORD)),
         ("ibnû || ibnû", (WORD, Caesura.certain(), WORD)),
         ("ibnû (||) ibnû", (WORD, Caesura.uncertain(), WORD)),
+        ("...", (UnknownNumberOfSigns.of(),)),
+        ("[...", (BrokenAway.open(), UnknownNumberOfSigns.of())),
+        ("...]", (UnknownNumberOfSigns.of(), BrokenAway.close())),
+        ("[...]", (BrokenAway.open(), UnknownNumberOfSigns.of(), BrokenAway.close())),
+        ("(...", (PerhapsBrokenAway.open(), UnknownNumberOfSigns.of())),
+        ("...)", (UnknownNumberOfSigns.of(), PerhapsBrokenAway.close())),
+        (
+            "(...)",
+            (
+                PerhapsBrokenAway.open(),
+                UnknownNumberOfSigns.of(),
+                PerhapsBrokenAway.close(),
+            ),
+        ),
+        (
+            "[(...",
+            (BrokenAway.open(), PerhapsBrokenAway.open(), UnknownNumberOfSigns.of()),
+        ),
+        (
+            "...)]",
+            (UnknownNumberOfSigns.of(), PerhapsBrokenAway.close(), BrokenAway.close()),
+        ),
+        (
+            "[(...)]",
+            (
+                BrokenAway.open(),
+                PerhapsBrokenAway.open(),
+                UnknownNumberOfSigns.of(),
+                PerhapsBrokenAway.close(),
+                BrokenAway.close(),
+            ),
+        ),
+        ("<...", (Emendation.open(), UnknownNumberOfSigns.of())),
+        ("...>", (UnknownNumberOfSigns.of(), Emendation.close())),
+        ("<...>", (Emendation.open(), UnknownNumberOfSigns.of(), Emendation.close())),
     ],
 )
 def test_reconstructed_line(text, expected) -> None:
@@ -563,6 +555,20 @@ def test_reconstructed_line(text, expected) -> None:
         "(|) ...",
         "ibnû | | ibnû",
         "ibnû | || ibnû",
+        ".",
+        "..",
+        "....",
+        "......",
+        "]...",
+        "...[",
+        ")...",
+        "...(",
+        ".)..",
+        "..].",
+        "..[(.",
+        "...?",
+        "...#",
+        "...!",
     ],
 )
 def test_invalid_reconstructed_line(text) -> None:

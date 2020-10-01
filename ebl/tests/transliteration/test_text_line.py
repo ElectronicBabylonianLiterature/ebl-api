@@ -147,6 +147,8 @@ def test_text_line_of_iterable_normalized() -> None:
         "17. pa {(he-pi₂)}",
         "18. du₃-am₃{{mu-un-<(du₃)>}}",
         "19. kur %n kur (||) kur %sux kur",
+        "20. %n [...] (...) [(...)] <...>",
+        "21. %n buāru (|) [... || ...]-buāru#]",
     ],
 )
 def test_text_line_atf(atf: str) -> None:

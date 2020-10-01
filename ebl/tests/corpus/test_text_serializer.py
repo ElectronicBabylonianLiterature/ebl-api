@@ -13,6 +13,7 @@ from ebl.tests.factories.corpus import (
 )
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 
 REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
@@ -59,9 +60,7 @@ def to_dict(include_documents):
                 "lines": [
                     {
                         "number": OneOfLineNumberSchema().dump(LINE.number),
-                        "reconstruction": " ".join(
-                            token.value for token in LINE.reconstruction
-                        ),
+                        "reconstruction": convert_to_atf(None, LINE.reconstruction),
                         "manuscripts": [
                             {
                                 "manuscriptId": MANUSCRIPT_LINE.manuscript_id,

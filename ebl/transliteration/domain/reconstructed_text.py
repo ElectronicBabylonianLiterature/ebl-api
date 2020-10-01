@@ -6,12 +6,7 @@ import pydash  # pyre-ignore[21]
 
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import Enclosure
-from ebl.transliteration.domain.tokens import (
-    ErasureState,
-    Token,
-    TokenVisitor,
-    UnknownNumberOfSigns,
-)
+from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
@@ -49,27 +44,6 @@ class AkkadianWord(Token):
         parts: Sequence[Token], modifier: Sequence[Flag] = tuple()
     ) -> "AkkadianWord":
         return AkkadianWord(frozenset(), ErasureState.NONE, parts, modifier)
-
-
-@attr.s(auto_attribs=True, frozen=True, str=False)
-class Lacuna(Token):
-    before: Sequence[Enclosure]
-    after: Sequence[Enclosure]
-
-    def accept(self, visitor: TokenVisitor) -> None:
-        visitor.visit_lacuna(self)
-
-    @property
-    def parts(self) -> Sequence[Token]:
-        return [*self.before, UnknownNumberOfSigns.of(), *self.after]
-
-    @property
-    def value(self):
-        return "".join(part.value for part in self.parts)
-
-    @staticmethod
-    def of(before: Sequence[Enclosure], after: Sequence[Enclosure]) -> "Lacuna":
-        return Lacuna(frozenset(), ErasureState.NONE, before, after)
 
 
 T = TypeVar("T", bound="Break")
