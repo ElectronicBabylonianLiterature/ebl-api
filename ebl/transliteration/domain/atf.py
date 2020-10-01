@@ -1,5 +1,5 @@
 import unicodedata
-from enum import Enum
+from enum import Enum, unique
 import re
 from typing import Mapping, NewType, Optional
 
@@ -12,6 +12,7 @@ ATF_PARSER_VERSION = "2.7.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
+@unique
 class Surface(Enum):
     """
 See "Surface" in
@@ -43,6 +44,7 @@ http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/ind
         return [enum for enum in Surface if enum.atf == atf][0]
 
 
+@unique
 class Status(Enum):
     """ See "Status" in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
@@ -68,6 +70,7 @@ class DollarStatus(Enum):
     COLLATION = "*"
 
 
+@unique
 class CommentaryProtocol(Enum):
     """ See
     http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html
@@ -79,6 +82,7 @@ class CommentaryProtocol(Enum):
     UNCERTAIN = "!zz"
 
 
+@unique
 class Flag(Enum):
     """ See "Metadata" in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html
@@ -90,6 +94,7 @@ class Flag(Enum):
     COLLATION = "*"
 
 
+@unique
 class Joiner(Enum):
     HYPHEN = "-"
     DOT = "."
@@ -97,12 +102,14 @@ class Joiner(Enum):
     COLON = ":"
 
 
+@unique
 class Ruling(Enum):
     SINGLE = "single"
     DOUBLE = "double"
     TRIPLE = "triple"
 
 
+@unique
 class Object(Enum):
     TABLET = "tablet"
     ENVELOPE = "envelope"
@@ -112,6 +119,7 @@ class Object(Enum):
     OBJECT = "object"
 
 
+@unique
 class Scope(Enum):
     COLUMN = "column"
     COLUMNS = "columns"
@@ -124,12 +132,14 @@ class Scope(Enum):
     SURFACE = "surface"
 
 
+@unique
 class Qualification(Enum):
     AT_LEAST = "at least"
     AT_MOST = "at most"
     ABOUT = "about"
 
 
+@unique
 class Extent(Enum):
     SEVERAL = "several"
     SOME = "some"
@@ -140,6 +150,7 @@ class Extent(Enum):
     END_OF = "end of"
 
 
+@unique
 class State(Enum):
     BLANK = "blank"
     BROKEN = "broken"
@@ -151,6 +162,7 @@ class State(Enum):
     EFFACED = "effaced"
 
 
+@unique
 class Discourse(Enum):
     CATCHLINE = "catchline"
     COLOPHON = "colophon"
@@ -161,6 +173,7 @@ class Discourse(Enum):
     WITNESSES = "witnesses"
 
 
+@unique
 class Composite(Enum):
     MILESTONE = "m=locator"
     COMPOSITE = "composite"
