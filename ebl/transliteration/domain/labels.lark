@@ -1,0 +1,25 @@
+?start: label
+
+?label: line_number_label | column_label | surface_label
+
+line_number_label.-1: LINE_NUMBER
+LINE_NUMBER: /[^\s]+/
+
+column_label: ROMAN_NUMERAL status
+ROMAN_NUMERAL: /[ivx]+/
+
+surface_label: surface status
+surface: OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP
+OBVERSE: "o"
+REVERSE:"r"
+BOTTOM: "b.e."
+EDGE: "e."
+LEFT: "l.e."
+RIGHT: "r.e."
+TOP: "t.e."
+
+status: (PRIME | UNCERTAIN | CORRECTION | COLLATION)*
+PRIME: "'"
+UNCERTAIN: "?"
+CORRECTION: "!"
+COLLATION: "*"

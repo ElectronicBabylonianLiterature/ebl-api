@@ -1,7 +1,6 @@
 from typing import cast, Sequence
 
-from lark.exceptions import ParseError as LarkParseError, UnexpectedInput  # pyre-ignore
-from parsy import ParseError as ParsyParseError  # pyre-ignore
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
 from ebl.corpus.domain.reconstructed_text import (
@@ -95,7 +94,7 @@ def serialize(text: Text, include_documents=True) -> dict:
 def deserialize(dto: dict) -> Text:
     try:
         return ApiDeserializer.deserialize(dto)
-    except (ValueError, LarkParseError, UnexpectedInput, ParsyParseError) as error:
+    except (ValueError, ParseError, UnexpectedInput) as error:
         raise DataError(error)
 
 
@@ -103,5 +102,5 @@ def deserialize_lines(lines: list) -> Sequence[Line]:
     deserializer = ApiDeserializer()
     try:
         return tuple(deserializer.deserialize_line(line) for line in lines)
-    except (ValueError, LarkParseError, UnexpectedInput, ParsyParseError) as error:
+    except (ValueError, ParseError, UnexpectedInput) as error:
         raise DataError(error)

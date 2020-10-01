@@ -3,6 +3,8 @@ from typing import Iterable, Sequence
 from lark.lexer import Token  # pyre-ignore[21]
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
+from lark.lark import Lark
+from lark.exceptions import ParseError, UnexpectedInput
 
 from ebl.corpus.domain.enclosure import Enclosure, EnclosureType, EnclosureVariant
 from ebl.corpus.domain.reconstructed_text import (
@@ -18,8 +20,6 @@ from ebl.corpus.domain.reconstructed_text import (
     SeparatorPart,
     StringPart,
 )
-from lark.lark import Lark
-from lark.exceptions import ParseError, UnexpectedInput
 
 
 class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]

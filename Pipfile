@@ -13,7 +13,6 @@ pydash = "*"
 requests = "*"
 dictdiffer = "*"
 jsonschema = "*"
-parsy = "*"
 attrs = "*"
 sentry-sdk = {extras = ["falcon"],version = "*"}
 roman = "*"
