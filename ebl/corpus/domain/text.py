@@ -15,14 +15,12 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
-from ebl.corpus.domain.reconstructed_text import (
-    ReconstructionToken,
-    ReconstructionTokenVisitor,
-)
+from ebl.corpus.domain.reconstructed_text import ReconstructionToken
 from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.tokens import TokenVisitor
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
@@ -200,7 +198,7 @@ class Text:
             visitor.visit_text(self)
 
 
-class TextVisitor(ReconstructionTokenVisitor):
+class TextVisitor(TokenVisitor):
     class Order(Enum):
         PRE = auto()
         POST = auto()

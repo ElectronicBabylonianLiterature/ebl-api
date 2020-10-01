@@ -13,10 +13,8 @@ uncertain_foot_separator: "(" _FOOT_SEPARATOR ")"
 _FOOT_SEPARATOR: "|"
 
 lacuna: opening_enclosures _ELLIPSIS closing_enclosures
-opening_enclosures: (broken_off_open | maybe_broken_off_open | emendation_open)*
-closing_enclosures: (broken_off_close | maybe_broken_off_close | emendation_close)*
 
-akkadian_word: parts modifiers closing_enclosure_parts
+akkadian_word: parts modifiers closing_enclosures
 parts: _akkadian_word_head _akkadian_word_body*
 _akkadian_word_head: enclosure_open* (lacuna_part _between_strings)? _part_sequence
 _akkadian_word_body: _between_strings (akkadian_string lacuna_part)+ akkadian_string?
@@ -41,10 +39,11 @@ separator: "-"
 lacuna_part: _ELLIPSIS
 _ELLIPSIS: "..."
 
+opening_enclosures: enclosure_open*
+closing_enclosures: enclosure_close*
 ?enclosure: enclosure_open | enclosure_close
-closing_enclosure_parts: enclosure_close*
-enclosure_open: broken_off_open | maybe_broken_off_open | emendation_open
-enclosure_close: broken_off_close | maybe_broken_off_close | emendation_close
+?enclosure_open: broken_off_open | maybe_broken_off_open | emendation_open
+?enclosure_close: broken_off_close | maybe_broken_off_close | emendation_close
 broken_off_open: "["
 broken_off_close: "]"
 maybe_broken_off_open: "("

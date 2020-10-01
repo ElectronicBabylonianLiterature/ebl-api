@@ -1,31 +1,24 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from enum import Enum, unique
-from typing import Sequence
+from typing import Sequence, Type, TypeVar
 
 import attr
-import pydash  # pyre-ignore
+import pydash  # pyre-ignore[21]
 
-from ebl.corpus.domain.enclosure import Enclosure, EnclosureVisitor
-
-
-class ReconstructionTokenVisitor(EnclosureVisitor):
-    def visit_akkadian_word(self, word: "AkkadianWord") -> None:
-        pass
-
-    def visit_lacuna(self, lacuna: "Lacuna") -> None:
-        pass
-
-    def visit_metrical_foot_separator(self, separator: "MetricalFootSeparator") -> None:
-        pass
-
-    def visit_caesura(self, caesura: "Caesura") -> None:
-        pass
+from ebl.transliteration.domain.enclosure_tokens import Enclosure
+from ebl.transliteration.domain.tokens import (
+    ErasureState,
+    Token,
+    TokenVisitor,
+    UnknownNumberOfSigns,
+)
 
 
-class ReconstructionToken(ABC):
-    @abstractmethod
-    def accept(self, visitor: ReconstructionTokenVisitor) -> None:
-        ...
+@attr.s(frozen=True, str=False)
+class ReconstructionToken(Token):
+    @property
+    def value(self) -> str:
+        return str(self)
 
 
 @unique
@@ -35,136 +28,100 @@ class Modifier(Enum):
     CORRECTED = "!"
 
 
-@attr.s(frozen=True)
-class Part(ABC):
-    @property
-    @abstractmethod
-    def is_text(self) -> bool:
-        ...
-
-    def accept(self, visitor: EnclosureVisitor) -> None:
-        pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class StringPart(Part):
-    _value: str
-
-    @property
-    def is_text(self) -> bool:
-        return True
-
-    def __str__(self) -> str:
-        return self._value
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class EnclosurePart(Part):
-    _value: Enclosure
-
-    @property
-    def is_text(self) -> bool:
-        return False
-
-    def accept(self, visitor: EnclosureVisitor) -> None:
-        self._value.accept(visitor)
-
-    def __str__(self) -> str:
-        return str(self._value)
-
-
-@attr.s(frozen=True)
-class LacunaPart(Part):
-    @property
-    def is_text(self) -> bool:
-        return True
-
-    def __str__(self) -> str:
-        return str(Lacuna(tuple(), tuple()))
-
-
-@attr.s(frozen=True)
-class SeparatorPart(Part):
-    @property
-    def is_text(self) -> bool:
-        return True
-
-    def __str__(self) -> str:
-        return "-"
-
-
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True, frozen=True, str=False)
 class AkkadianWord(ReconstructionToken):
 
-    parts: Sequence[Part]
+    _parts: Sequence[Token]
     modifiers: Sequence[Modifier] = tuple()
 
-    def accept(self, visitor: ReconstructionTokenVisitor) -> None:
+    def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_akkadian_word(self)
-        for part in self.parts:
-            part.accept(visitor)
+
+    @property
+    def parts(self) -> Sequence[Token]:
+        return self._parts
 
     def __str__(self) -> str:
         last_parts = pydash.take_right_while(
-            list(self.parts), lambda part: not part.is_text
+            list(self.parts), lambda part: isinstance(part, Enclosure)
         )
         main_parts = self.parts[: len(self.parts) - len(last_parts)]
         return "".join(
-            [str(part) for part in main_parts]
+            [part.value for part in main_parts]
             + [modifier.value for modifier in self.modifiers]
-            + [str(part) for part in last_parts]
+            + [part.value for part in last_parts]
         )
 
+    @staticmethod
+    def of(
+        parts: Sequence[Token], modifier: Sequence[Modifier] = tuple()
+    ) -> "AkkadianWord":
+        return AkkadianWord(frozenset(), ErasureState.NONE, parts, modifier)
 
-@attr.s(auto_attribs=True, frozen=True)
+
+@attr.s(auto_attribs=True, frozen=True, str=False)
 class Lacuna(ReconstructionToken):
     _before: Sequence[Enclosure]
     _after: Sequence[Enclosure]
 
-    def accept(self, visitor: ReconstructionTokenVisitor) -> None:
+    def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_lacuna(self)
-        for enclosure in [*self._before, *self._after]:
-            enclosure.accept(visitor)
+
+    @property
+    def parts(self) -> Sequence[Token]:
+        return [*self._before, UnknownNumberOfSigns.of(), *self._after]
 
     def __str__(self):
-        return "".join(self._generate_parts())
+        return "".join(part.value for part in self.parts)
 
-    def _generate_parts(self):
-        for enclosure in self._before:
-            yield str(enclosure)
-        yield "..."
-        for enclosure in self._after:
-            yield str(enclosure)
+    @staticmethod
+    def of(before: Sequence[Enclosure], after: Sequence[Enclosure]) -> "Lacuna":
+        return Lacuna(frozenset(), ErasureState.NONE, before, after)
 
 
-@attr.s(auto_attribs=True, frozen=True)
+T = TypeVar("T", bound="Break")
+
+
+@attr.s(auto_attribs=True, frozen=True, str=False)
 class Break(ReconstructionToken):
-    uncertain: bool
+    is_uncertain: bool
 
     @property
     @abstractmethod
     def _value(self) -> str:
         ...
 
+    @property
+    def parts(self) -> Sequence["Token"]:
+        return tuple()
+
     def __str__(self) -> str:
-        return f"({self._value})" if self.uncertain else self._value
+        return f"({self._value})" if self.is_uncertain else self._value
+
+    @classmethod
+    def certain(cls: Type[T]) -> T:
+        return cls(frozenset(), ErasureState.NONE, False)
+
+    @classmethod
+    def uncertain(cls: Type[T]) -> T:
+        return cls(frozenset(), ErasureState.NONE, True)
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, str=False)
 class Caesura(Break):
     @property
     def _value(self) -> str:
         return "||"
 
-    def accept(self, visitor: ReconstructionTokenVisitor):
+    def accept(self, visitor: TokenVisitor):
         visitor.visit_caesura(self)
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, str=False)
 class MetricalFootSeparator(Break):
     @property
     def _value(self) -> str:
         return "|"
 
-    def accept(self, visitor: ReconstructionTokenVisitor):
+    def accept(self, visitor: TokenVisitor):
         visitor.visit_metrical_foot_separator(self)

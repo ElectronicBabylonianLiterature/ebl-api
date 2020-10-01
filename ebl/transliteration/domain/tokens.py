@@ -78,6 +78,18 @@ class TokenVisitor(ABC):
     def visit_unknown_sign(self, sign) -> None:
         self.visit(sign)
 
+    def visit_akkadian_word(self, word) -> None:
+        pass
+
+    def visit_lacuna(self, lacuna) -> None:
+        pass
+
+    def visit_metrical_foot_separator(self, separator) -> None:
+        pass
+
+    def visit_caesura(self, caesura) -> None:
+        pass
+
 
 class ErasureState(Enum):
     NONE = auto()

@@ -1,8 +1,7 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enclosure import BROKEN_OFF_OPEN
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,
@@ -11,7 +10,7 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.corpus.domain.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
+from ebl.corpus.domain.reconstructed_text import AkkadianWord
 from ebl.corpus.domain.text import (
     Chapter,
     Line,
@@ -56,7 +55,7 @@ TYPE = ManuscriptType.LIBRARY
 NOTES = "some notes"
 REFERENCES = (ReferenceFactory.build(),)  # pyre-ignore[16]
 LINE_NUMBER = LineNumber(1)
-LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
+LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
     LineNumber(1),
@@ -221,7 +220,7 @@ def test_invalid_labels(labels: Sequence[Label]):
 
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
-        Line(LINE_NUMBER, (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN),)),), tuple())
+        Line(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), tuple())
 
 
 def test_stage():

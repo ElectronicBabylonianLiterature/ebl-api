@@ -1,79 +1,79 @@
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enclosure import (
-    BROKEN_OFF_CLOSE,
-    BROKEN_OFF_OPEN,
-    EMENDATION_CLOSE,
-    EMENDATION_OPEN,
-    MAYBE_BROKEN_OFF_CLOSE,
-    MAYBE_BROKEN_OFF_OPEN,
-)
 from ebl.corpus.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
-    EnclosurePart,
     Lacuna,
-    LacunaPart,
     MetricalFootSeparator,
     Modifier,
-    SeparatorPart,
-    StringPart,
 )
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    Emendation,
+    PerhapsBrokenAway,
+)
+from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 
 
 @pytest.mark.parametrize(
     "word,expected",
     [
-        (AkkadianWord((StringPart("ibnû"),)), "ibnû"),
+        (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû"),
         (
-            AkkadianWord(
-                (StringPart("ibnû"),),
+            AkkadianWord.of(
+                (ValueToken.of("ibnû"),),
                 (Modifier.UNCERTAIN, Modifier.DAMAGED, Modifier.CORRECTED),
             ),
             "ibnû?#!",
         ),
-        (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN), StringPart("ibnû"))), "[ibnû"),
+        (AkkadianWord.of((BrokenAway.open(), ValueToken.of("ibnû"))), "[ibnû"),
         (
-            AkkadianWord(
+            AkkadianWord.of(
                 (
-                    EnclosurePart(BROKEN_OFF_OPEN),
-                    EnclosurePart(MAYBE_BROKEN_OFF_OPEN),
-                    StringPart("ib"),
-                    EnclosurePart(MAYBE_BROKEN_OFF_CLOSE),
-                    StringPart("nû"),
-                    EnclosurePart(BROKEN_OFF_CLOSE),
+                    BrokenAway.open(),
+                    PerhapsBrokenAway.open(),
+                    ValueToken.of("ib"),
+                    PerhapsBrokenAway.close(),
+                    ValueToken.of("nû"),
+                    BrokenAway.close(),
                 )
             ),
             "[(ib)nû]",
         ),
         (
-            AkkadianWord(
+            AkkadianWord.of(
                 (
-                    EnclosurePart(BROKEN_OFF_OPEN),
-                    EnclosurePart(MAYBE_BROKEN_OFF_OPEN),
-                    EnclosurePart(EMENDATION_OPEN),
-                    StringPart("ib"),
-                    EnclosurePart(MAYBE_BROKEN_OFF_CLOSE),
-                    StringPart("nû"),
-                    EnclosurePart(EMENDATION_CLOSE),
-                    EnclosurePart(BROKEN_OFF_CLOSE),
+                    BrokenAway.open(),
+                    PerhapsBrokenAway.open(),
+                    Emendation.open(),
+                    ValueToken.of("ib"),
+                    PerhapsBrokenAway.close(),
+                    ValueToken.of("nû"),
+                    Emendation.close(),
+                    BrokenAway.close(),
                 )
             ),
             "[(<ib)nû>]",
         ),
         (
-            AkkadianWord(
-                (
-                    StringPart("ibnû"),
-                    EnclosurePart(MAYBE_BROKEN_OFF_CLOSE),
-                    EnclosurePart(BROKEN_OFF_CLOSE),
-                ),
+            AkkadianWord.of(
+                (ValueToken.of("ibnû"), PerhapsBrokenAway.close(), BrokenAway.close()),
                 (Modifier.UNCERTAIN,),
             ),
             "ibnû?)]",
         ),
-        (AkkadianWord((StringPart("ib"), LacunaPart(), StringPart("nû"))), "ib...nû"),
-        (AkkadianWord((StringPart("ib"), SeparatorPart(), StringPart("nû"))), "ib-nû"),
+        (
+            AkkadianWord.of(
+                (ValueToken.of("ib"), UnknownNumberOfSigns.of(), ValueToken.of("nû"))
+            ),
+            "ib...nû",
+        ),
+        (
+            AkkadianWord.of(
+                (ValueToken.of("ib"), Joiner.hyphen(), ValueToken.of("nû"))
+            ),
+            "ib-nû",
+        ),
     ],
 )
 def test_akkadian_word(word, expected):
@@ -83,11 +83,14 @@ def test_akkadian_word(word, expected):
 @pytest.mark.parametrize(
     "lacuna,expected",
     [
-        (Lacuna(tuple(), tuple()), "..."),
-        (Lacuna((BROKEN_OFF_OPEN,), tuple()), "[..."),
-        (Lacuna(tuple(), (MAYBE_BROKEN_OFF_CLOSE,)), "...)"),
+        (Lacuna.of(tuple(), tuple()), "..."),
+        (Lacuna.of((BrokenAway.open(),), tuple()), "[..."),
+        (Lacuna.of(tuple(), (PerhapsBrokenAway.close(),)), "...)"),
         (
-            Lacuna((BROKEN_OFF_OPEN, MAYBE_BROKEN_OFF_OPEN), (MAYBE_BROKEN_OFF_CLOSE,)),
+            Lacuna.of(
+                (BrokenAway.open(), PerhapsBrokenAway.open()),
+                (PerhapsBrokenAway.close(),),
+            ),
             "[(...)",
         ),
     ],
@@ -97,7 +100,7 @@ def test_lacuna(lacuna, expected):
 
 
 @pytest.mark.parametrize(
-    "caesura,expected", [(Caesura(False), "||"), (Caesura(True), "(||)")]
+    "caesura,expected", [(Caesura.certain(), "||"), (Caesura.uncertain(), "(||)")]
 )
 def test_caesura(caesura, expected):
     assert str(caesura) == expected
@@ -105,7 +108,10 @@ def test_caesura(caesura, expected):
 
 @pytest.mark.parametrize(
     "separator,expected",
-    [(MetricalFootSeparator(False), "|"), (MetricalFootSeparator(True), "(|)")],
+    [
+        (MetricalFootSeparator.certain(), "|"),
+        (MetricalFootSeparator.uncertain(), "(|)"),
+    ],
 )
 def test_metrical_foot_separator(separator, expected):
     assert str(separator) == expected

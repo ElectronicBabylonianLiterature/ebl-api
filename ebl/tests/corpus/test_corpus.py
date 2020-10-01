@@ -1,8 +1,8 @@
 import attr
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import TextSerializer
-from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
+from ebl.corpus.domain.reconstructed_text import AkkadianWord
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
@@ -17,7 +17,7 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
@@ -335,7 +335,7 @@ def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
     number = LineNumber(1)
-    reconstruction = (AkkadianWord((StringPart("buāru"),)),)
+    reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
     text_line = TextLine.of_iterable(
         LineNumber(1),
         (
