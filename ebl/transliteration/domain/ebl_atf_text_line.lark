@@ -220,3 +220,53 @@ IN_WORD_NEWLINE: ";"
 
 unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
 UNKNOWN_NUMBER_OF_SIGNS: "..."
+
+
+normalized_akkadian: _normalized_text (_WORD_SEPARATOR break _WORD_SEPARATOR _normalized_text)*
+
+_normalized_text: (akkadian_word | lacuna) (_WORD_SEPARATOR (akkadian_word | lacuna))*
+
+?break: certain_caesura | uncertain_caesura | certain_foot_separator | uncertain_foot_separator
+certain_caesura: _CAESURA
+uncertain_caesura: "(" _CAESURA ")"
+_CAESURA: "||"
+certain_foot_separator: _FOOT_SEPARATOR
+uncertain_foot_separator: "(" _FOOT_SEPARATOR ")"
+_FOOT_SEPARATOR: "|"
+
+lacuna: opening_enclosures unknown_number_of_signs closing_enclosures
+
+akkadian_word: parts normalized_modifiers closing_enclosures
+parts: _akkadian_word_head _akkadian_word_body*
+_akkadian_word_head: enclosure_open* (unknown_number_of_signs _between_strings)? _part_sequence
+_akkadian_word_body: _between_strings (akkadian_string unknown_number_of_signs)+ akkadian_string?
+                   | _between_strings (unknown_number_of_signs akkadian_string)+ unknown_number_of_signs?
+                   | _between_strings akkadian_string
+                   | _between_strings unknown_number_of_signs
+_part_sequence: (akkadian_string unknown_number_of_signs)+ akkadian_string?
+              | (unknown_number_of_signs akkadian_string)+ unknown_number_of_signs?
+              | akkadian_string
+
+normalized_modifiers: normalized_modifier~0..3
+normalized_modifier: DAMAGE | UNCERTAIN | CORRECTION
+_between_strings: enclosure+ separator
+                | separator enclosure+
+                | enclosure+
+                | separator
+separator: "-"
+
+opening_enclosures: enclosure_open*
+closing_enclosures: enclosure_close*
+?enclosure: enclosure_open | enclosure_close
+?enclosure_open: open_broken_away | open_perhaps_broken_away | open_emendation
+?enclosure_close: close_broken_away | close_perhaps_broken_away | close_emendation
+open_emendation: "<"
+close_emendation: ">"
+
+akkadian_string: AKKADIAN_ALPHABET+
+AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
+                 | "M" | "N" | "P" | "S" | "T" | "U" | "Y" | "Z" | "a" | "b"
+                 | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
+                 | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
+                 | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
+                 | "š" | "ū" | "ṣ" | "ṭ" | "₄"

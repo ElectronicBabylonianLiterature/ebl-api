@@ -6,7 +6,7 @@ from lark.visitors import Transformer, v_args
 from lark.lark import Lark
 from lark.exceptions import ParseError, UnexpectedInput
 
-from ebl.corpus.domain.reconstructed_text import (
+from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Break,
     Caesura,
@@ -24,7 +24,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
 
 
 class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]
-    def reconstructed_line(
+    def normalized_akkadian(
         self, children: Iterable[ReconstructionToken]
     ) -> Sequence[ReconstructionToken]:
         return tuple(children)
@@ -42,7 +42,7 @@ class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]
         return MetricalFootSeparator.uncertain()
 
     @v_args(inline=True)
-    def lacuna(self, before: Tree, after: Tree) -> Lacuna:  # pyre-ignore[11]
+    def lacuna(self, before: Tree, _, after: Tree) -> Lacuna:  # pyre-ignore[11]
         return Lacuna.of(tuple(before.children), tuple(after.children))
 
     @v_args(inline=True)
@@ -56,15 +56,12 @@ class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]
             tuple(parts.children + closing_enclosures.children), modifiers
         )
 
-    def modifiers(self, modifiers: Iterable[Flag]) -> Sequence[Flag]:
+    def normalized_modifiers(self, modifiers: Iterable[Flag]) -> Sequence[Flag]:
         return tuple(set(modifiers))
 
     @v_args(inline=True)
-    def modifier(self, modifier: Token) -> Flag:  # pyre-ignore[11]
+    def normalized_modifier(self, modifier: Token) -> Flag:  # pyre-ignore[11]
         return Flag(modifier)
-
-    def lacuna_part(self, _) -> UnknownNumberOfSigns:
-        return UnknownNumberOfSigns.of()
 
     def akkadian_string(
         self, children: Iterable[Token]  # pyre-ignore[11]
@@ -74,27 +71,33 @@ class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]
     def separator(self, _) -> Joiner:
         return Joiner.hyphen()
 
-    def broken_off_open(self, _) -> BrokenAway:
+    def unknown_number_of_signs(self, _) -> UnknownNumberOfSigns:
+        return UnknownNumberOfSigns.of()
+
+    def open_broken_away(self, _) -> BrokenAway:
         return BrokenAway.open()
 
-    def broken_off_close(self, _) -> BrokenAway:
+    def close_broken_away(self, _) -> BrokenAway:
         return BrokenAway.close()
 
-    def maybe_broken_off_open(self, _) -> PerhapsBrokenAway:
+    def open_perhaps_broken_away(self, _) -> PerhapsBrokenAway:
         return PerhapsBrokenAway.open()
 
-    def maybe_broken_off_close(self, _) -> PerhapsBrokenAway:
+    def close_perhaps_broken_away(self, _) -> PerhapsBrokenAway:
         return PerhapsBrokenAway.close()
 
-    def emendation_open(self, _) -> Emendation:
+    def open_emendation(self, _) -> Emendation:
         return Emendation.open()
 
-    def emendation_close(self, _) -> Emendation:
+    def close_emendation(self, _) -> Emendation:
         return Emendation.close()
 
 
 RECONSTRUCTED_LINE_PARSER = Lark.open(
-    "reconstructed_line.lark", maybe_placeholders=True, rel_to=__file__
+    "ebl_atf_text_line.lark",
+    maybe_placeholders=True,
+    rel_to=__file__,
+    start="normalized_akkadian",
 )
 
 
@@ -115,7 +118,7 @@ def parse_break(break_: str) -> Break:
 
 def parse_reconstructed_line(text: str) -> Sequence[ReconstructionToken]:
     try:
-        tree = RECONSTRUCTED_LINE_PARSER.parse(text)
+        tree = RECONSTRUCTED_LINE_PARSER.parse(text, start="normalized_akkadian")
         return ReconstructedLineTransformer().transform(tree)  # pyre-ignore[16]
     except (UnexpectedInput, ParseError) as error:
         raise ValueError(f"Invalid reconstructed line: {text}. {error}")

@@ -15,7 +15,7 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
-from ebl.corpus.domain.reconstructed_text import ReconstructionToken
+from ebl.transliteration.domain.reconstructed_text import ReconstructionToken
 from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine

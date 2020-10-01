@@ -3,7 +3,7 @@ from typing import cast, Sequence
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
-from ebl.corpus.domain.reconstructed_text import (
+from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
     Lacuna,
@@ -16,7 +16,9 @@ from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
 from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
-from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
+from ebl.transliteration.domain.reconstructed_text_parser import (
+    parse_reconstructed_line,
+)
 
 
 class ApiSerializer(TextSerializer):

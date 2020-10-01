@@ -1,16 +1,17 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.reconstructed_text import (
-    AkkadianWord,
-    Caesura,
-    Lacuna,
-    MetricalFootSeparator,
-)
+
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Emendation,
     PerhapsBrokenAway,
+)
+from ebl.transliteration.domain.reconstructed_text import (
+    AkkadianWord,
+    Caesura,
+    Lacuna,
+    MetricalFootSeparator,
 )
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 

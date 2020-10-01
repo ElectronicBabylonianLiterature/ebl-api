@@ -5,7 +5,9 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
+from ebl.transliteration.domain.reconstructed_text_parser import (
+    parse_reconstructed_line,
+)
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,

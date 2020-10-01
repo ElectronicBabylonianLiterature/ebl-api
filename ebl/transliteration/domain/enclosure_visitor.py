@@ -2,7 +2,7 @@ from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
-from ebl.corpus.domain.reconstructed_text import AkkadianWord, Lacuna
+from ebl.transliteration.domain.reconstructed_text import AkkadianWord, Lacuna
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,

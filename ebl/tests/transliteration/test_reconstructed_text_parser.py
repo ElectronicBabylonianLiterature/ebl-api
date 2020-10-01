@@ -1,13 +1,13 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.application.reconstructed_text_parser import (
+from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_break,
     parse_lacuna,
     parse_reconstructed_line,
     parse_reconstructed_word,
 )
 from ebl.corpus.domain.enclosure_validator import validate
-from ebl.corpus.domain.reconstructed_text import (
+from ebl.transliteration.domain.reconstructed_text import (
     AkkadianWord,
     Caesura,
     Lacuna,

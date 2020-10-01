@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from ebl.corpus.domain.reconstructed_text import ReconstructionToken
+from ebl.transliteration.domain.reconstructed_text import ReconstructionToken
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 
