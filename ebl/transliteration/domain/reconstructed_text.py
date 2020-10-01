@@ -39,6 +39,10 @@ class AkkadianWord(Token):
             + [part.value for part in last_parts]
         )
 
+    @property
+    def clean_value(self) -> str:
+        return "".join(part.clean_value for part in self.parts)
+
     @staticmethod
     def of(
         parts: Sequence[Token], modifier: Sequence[Flag] = tuple()

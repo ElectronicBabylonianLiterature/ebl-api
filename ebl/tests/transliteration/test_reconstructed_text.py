@@ -77,20 +77,21 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
         ),
     ],
 )
-def test_akkadian_word(word, expected):
+def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
     assert word.value == expected
+    assert word.clean_value == expected.translate(str.maketrans("", "", "[]()<>#?!"))
 
     serialized = {
         "type": "AkkadianWord",
         "value": expected,
-        "parts": OneOfTokenSchema(many=True).dump(word.parts),
+        "parts": OneOfTokenSchema().dump(word.parts, many=True),  # pyre-ignore[16]
         "modifiers": [modifier.value for modifier in word.modifiers],
         "enclosureType": [],
     }
     assert_token_serialization(word, serialized)
 
 
-def test_akkadian_word_invalid_modifier():
+def test_akkadian_word_invalid_modifier() -> None:
     with pytest.raises(ValueError):
         AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
 
@@ -99,7 +100,7 @@ def test_akkadian_word_invalid_modifier():
     "caesura,is_uncertain,value",
     [(Caesura.certain(), False, "||"), (Caesura.uncertain(), True, "(||)")],
 )
-def test_caesura(caesura, is_uncertain, value):
+def test_caesura(caesura: Caesura, is_uncertain: bool, value: str) -> None:
     assert caesura.value == value
     assert caesura.is_uncertain == is_uncertain
 
@@ -119,7 +120,9 @@ def test_caesura(caesura, is_uncertain, value):
         (MetricalFootSeparator.uncertain(), True, "(|)"),
     ],
 )
-def test_metrical_foot_separator(separator, is_uncertain, value):
+def test_metrical_foot_separator(
+    separator: MetricalFootSeparator, is_uncertain: bool, value: str
+) -> None:
     assert separator.value == value
     assert separator.is_uncertain == is_uncertain
 
