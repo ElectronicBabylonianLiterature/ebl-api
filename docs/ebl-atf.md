@@ -142,6 +142,80 @@ See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginat
 
 ## Text lines
 
+```ebnf
+text-line = line-number, '. ', text;
+
+line-number = line-number-range | single-line-number;
+line-number-range = single-line-number, '-', single-line-number;
+single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
+                     [ word-character ];
+prime = "'" | '′' | '’';
+```
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
+
+## Note lines
+
+```ebnf
+note-line = '#note: ',
+            { emphasis | akkadian | sumerian | emesal | note-text | bibliography }-;
+emphasis = '@i{', note-text, '}';
+akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
+sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
+emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
+bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
+escaped-text = { ( note-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
+note-text = { note-character };
+note-character = any-character - ( '@' | '{' | '}' );
+```
+
+## Text
+
+```ebnf
+text = ( non-normalized-text | shifted-text ), { word-separator, shifted-text };
+shifted-text = non-normalized-shift, word-separator, non-normalized-text
+             | normalized-akkadian-shift, word-separator, normalized-akkadian;
+word-separator = ' ';
+```
+
+### Shifts
+
+Shifts change the language and normalization of the subsequent words until
+another shift or the end of the line. Shifts are marked with `%` followed by a language
+code. If no shifts are present *Akkadian* is used as the default language.
+
+| Shift | Language | Dialect | Normalized |
+| ------|----------|---------|------------|
+| `%n` | Akkadian | | Yes |
+| `%ma` | Akkadian | Middle Assyrian | No |
+| `%mb` | Akkadian | Middle Babylonian | No |
+| `%na` | Akkadian | Neo-Assyrian | No |
+| `%nb` | Akkadian | Neo-Babylonian | No |
+| `%lb` | Akkadian | Late Babylonian | No |
+| `%sb` | Akkadian | Standard Babylonian | No |
+| `%a` | Akkadian | | No |
+| `%akk` | Akkadian | | No |
+| `%eakk` | Akkadian | Early Akkadian | No |
+| `%oakk` | Akkadian | Old Akkadian | No |
+| `%ur3akk` | Akkadian | Ur III Akkadian | No |
+| `%oa` | Akkadian | Old Assyrian | No |
+| `%ob` | Akkadian | Old Babylonian | No |
+| `%sux` | Sumerian | | No |
+| `%es` | Sumerian | Emesal | No |
+| `%e` | Sumerian | Emesal | No |
+
+Any other shifts are considered valid and have language *Unknown*. *Akkadian*
+and *Unknown* are lemmatizable.
+
+```ebnf
+non-normalized-shift: shift - normalized-akkadian-shift;
+normalized-akkadian-shift = '%n';
+shift = '%', { word-character }-;
+```
+
+### Non-normalized text
+
 Text is a series of tokens separated by a word separator (space). Sometimes
 the separator is ignored (see Word below) or can be omitted.
 
@@ -152,7 +226,6 @@ the separator is ignored (see Word below) or can be omitted.
 | Divider      | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Line Break   | `\|` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | See  Commentary Protocols below. |
-| Shift | `%` followed by one or more word characters | No | No | See Shifts below for a list of supported codes. |
 | Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
 | Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
@@ -163,16 +236,8 @@ the separator is ignored (see Word below) or can be omitted.
 | Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
 
 ```ebnf
-text-line = line-number, '. ', text;
-
-line-number = line-number-range | single-line-number;
-line-number-range = single-line-number, '-', single-line-number;
-single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
-                     [ word-character ];
-prime = "'" | '′' | '’';
-
-text = token, { [ word-separator ], token };
-       (* Word seprator can be ommitted after an opening bracket or before
+non-normalized-text = token, { [ word-separator ], token };
+       (* Word separator can be ommitted after an opening bracket or before
           a closing bracket. Commentary protocols and dividers must be
           surrounded by word separators. *)
 
@@ -182,7 +247,6 @@ token = commentary-protocol
       | line-break
       | tabulation
       | column
-      | shift
       | erasure
       | word
       | determinative
@@ -235,13 +299,9 @@ perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
 open-perhaps-broken-away = '(';
 close-perhaps-broken-away = ')';
 
-word-separator = ' ';
 ```
 
-See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
-and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
-
-### Presence
+#### Presence
 
 A presence cannot be nested within itself.
 
@@ -255,7 +315,7 @@ A presence cannot be nested within itself.
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
-### Glosses
+#### Glosses
 
 Glosses cannot be nested within other glosses in the same scope.
 
@@ -268,7 +328,7 @@ Glosses cannot be nested within other glosses in the same scope.
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
-### Commentary protocols
+#### Commentary protocols
 
 The Commentary protocol is used to change the display color of the text that
 follows it. It has to be declared at the beginning of every line. Once declared,
@@ -283,36 +343,7 @@ it is valid until another protocol replaces it.
 
 See: [Base Text and Commentary](http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html)
 
-### Shifts
-
-Shifts change the language and normalization of the subsequent words until
-another shift or the end of the line. If no shifts are present *Akkadian* is
-used as the default language.
-
-| Shift | Language | Dialect | Normalized |
-| ------|----------|---------|------------|
-| `%n` | Akkadian | | Yes |
-| `%ma` | Akkadian | Middle Assyrian | No |
-| `%mb` | Akkadian | Middle Babylonian | No |
-| `%na` | Akkadian | Neo-Assyrian | No |
-| `%nb` | Akkadian | Neo-Babylonian | No |
-| `%lb` | Akkadian | Late Babylonian | No |
-| `%sb` | Akkadian | Standard Babylonian | No |
-| `%a` | Akkadian | | No |
-| `%akk` | Akkadian | | No |
-| `%eakk` | Akkadian | Early Akkadian | No |
-| `%oakk` | Akkadian | Old Akkadian | No |
-| `%ur3akk` | Akkadian | Ur III Akkadian | No |
-| `%oa` | Akkadian | Old Assyrian | No |
-| `%ob` | Akkadian | Old Babylonian | No |
-| `%sux` | Sumerian | | No |
-| `%es` | Sumerian | Emesal | No |
-| `%e` | Sumerian | Emesal | No |
-
-Any other shifts are considered valid and have language *Unknown*. *Akkadian*
-and *Unknown* are lemmatizable.
-
-### Word
+#### Word
 
 A *lone determinative* is a special case of a word consisting only a single
 determinative. A word is lemmatizable and alignable if:
@@ -493,21 +524,6 @@ akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
                   | 'n' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'w' | 'y' | 'z'
                   | 'É' | 'â' | 'ê' | 'î' | 'û' | 'ā' | 'Ē' | 'ē' | 'ī' | 'Š'
                   | 'š' | 'ū' | 'ṣ' | 'ṭ' | '₄';
-```
-
-## Note lines
-
-```ebnf
-note-line = '#note: ', { emphasis | akkadian | sumerian | emesal | note-text
-                       | bibliography }-;
-emphasis = '@i{', note-text, '}';
-akkadian = '@akk{', text, '}';
-sumerian = '@sux{', text, '}';
-emesal = '@es{', text, '}';
-bibliography = '@bib{', escaped-text, '@', escaped-text, '}'
-escaped-text = { ( note-character - '\' ) | '\@' | '\{' | '\}' | '\\' }
-note-text = { note-character };
-note-character = any-character - ( '@' | '{' | '}' )
 ```
 
 ## Validation
