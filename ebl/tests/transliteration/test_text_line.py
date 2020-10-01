@@ -105,8 +105,14 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
 
 
 def test_text_line_of_iterable_normalized() -> None:
-    tokens = [LanguageShift.of("%n"), AkkadianWord.of((ValueToken.of("kur"),))]
-    expected_tokens = (LanguageShift.of("%n"), AkkadianWord.of((ValueToken.of("kur"),)))
+    tokens = [
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("kur"),)),
+    ]
+    expected_tokens = (
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("kur"),)),
+    )
     line = TextLine.of_iterable(LINE_NUMBER, tokens)
 
     assert line.content == expected_tokens

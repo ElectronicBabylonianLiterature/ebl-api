@@ -543,7 +543,10 @@ WORD = AkkadianWord.of((ValueToken.of("ibnû"),))
     ],
 )
 def test_reconstructed_line(text, expected) -> None:
-    assert parse_reconstructed_line(f"%n {text}") == (LanguageShift.of("%n"), *expected)
+    assert parse_reconstructed_line(f"%n {text}") == (
+        LanguageShift.normalized_akkadian(),
+        *expected,
+    )
 
 
 @pytest.mark.parametrize(

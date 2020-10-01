@@ -196,6 +196,10 @@ class LanguageShift(ValueToken):
     def accept(self, visitor: "TokenVisitor") -> None:
         visitor.visit_language_shift(self)
 
+    @staticmethod
+    def normalized_akkadian():
+        return LanguageShift.of(LanguageShift._normalization_shift)
+
 
 @attr.s(frozen=True)
 class UnknownNumberOfSigns(Token):

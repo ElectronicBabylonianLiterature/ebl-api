@@ -86,7 +86,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
 
     number = factory.Sequence(lambda n: LineNumber(n))
     reconstruction = (
-        LanguageShift.of("%n"),
+        LanguageShift.normalized_akkadian(),
         AkkadianWord.of((ValueToken.of("buāru"),)),
         MetricalFootSeparator.uncertain(),
         Lacuna.of((BrokenAway.open(),), tuple()),

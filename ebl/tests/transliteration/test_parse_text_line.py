@@ -1221,7 +1221,7 @@ def test_parse_normalized_akkadain_shift() -> None:
                 LineNumber(1),
                 (
                     Word.of((Reading.of_name(word),), DEFAULT_LANGUAGE),
-                    LanguageShift.of("%n"),
+                    LanguageShift.normalized_akkadian(),
                     AkkadianWord.of((ValueToken.of(word),)),
                     LanguageShift.of("%sux"),
                     Word.of((Reading.of_name(word),), Language.SUMERIAN),
