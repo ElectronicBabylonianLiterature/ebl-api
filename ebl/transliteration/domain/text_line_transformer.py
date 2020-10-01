@@ -1,16 +1,17 @@
-from typing import MutableSequence, Sequence, Type
+from typing import Iterable, MutableSequence, Sequence, Type
 
 from lark.lexer import Token  # pyre-ignore[21]
 from lark.tree import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.atf import sub_index_to_int
+from ebl.transliteration.domain.atf import Flag, sub_index_to_int
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
+    Emendation,
     Erasure,
     IntentionalOmission,
     LinguisticGloss,
@@ -47,6 +48,12 @@ from ebl.transliteration.domain.word_tokens import (
     InWordNewline,
     LoneDeterminative,
     Word,
+)
+from ebl.transliteration.domain.reconstructed_text import (
+    AkkadianWord,
+    Caesura,
+    Lacuna,
+    MetricalFootSeparator,
 )
 
 
@@ -247,7 +254,66 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
         return PerhapsBrokenAway.open()
 
 
-class TextLineTransformer(WordTransformer):
+class ReconstructedLineTransformer(WordTransformer):
+    def ebl_atf_text_line__text(self, children) -> Sequence[EblToken]:
+        return tuple(children)
+
+    def ebl_atf_text_line__certain_caesura(self, _) -> Caesura:
+        return Caesura.certain()
+
+    def ebl_atf_text_line__uncertain_caesura(self, _) -> Caesura:
+        return Caesura.uncertain()
+
+    def ebl_atf_text_line__certain_foot_separator(self, _) -> MetricalFootSeparator:
+        return MetricalFootSeparator.certain()
+
+    def ebl_atf_text_line__uncertain_foot_separator(self, _) -> MetricalFootSeparator:
+        return MetricalFootSeparator.uncertain()
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__lacuna(
+        self, before: Tree, _, after: Tree  # pyre-ignore[11]
+    ) -> Lacuna:
+        return Lacuna.of(tuple(before.children), tuple(after.children))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__akkadian_word(
+        self,
+        parts: Tree,  # pyre-ignore[11]
+        modifiers: Sequence[Flag],
+        closing_enclosures: Tree,  # pyre-ignore[11]
+    ) -> AkkadianWord:
+        return AkkadianWord.of(
+            tuple(parts.children + closing_enclosures.children), modifiers
+        )
+
+    def ebl_atf_text_line__normalized_modifiers(
+        self, modifiers: Iterable[Flag]
+    ) -> Sequence[Flag]:
+        return tuple(set(modifiers))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__normalized_modifier(
+        self, modifier: Token  # pyre-ignore[11]
+    ) -> Flag:
+        return Flag(modifier)
+
+    def ebl_atf_text_line__akkadian_string(
+        self, children: Iterable[Token]  # pyre-ignore[11]
+    ) -> ValueToken:
+        return ValueToken.of("".join(children))
+
+    def ebl_atf_text_line__separator(self, _) -> Joiner:
+        return Joiner.hyphen()
+
+    def ebl_atf_text_line__open_emendation(self, _) -> Emendation:
+        return Emendation.open()
+
+    def ebl_atf_text_line__close_emendation(self, _) -> Emendation:
+        return Emendation.close()
+
+
+class TextLineTransformer(ReconstructedLineTransformer):
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
@@ -277,6 +343,10 @@ class TextLineTransformer(WordTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__language_shift(self, value):
+        return LanguageShift.of(str(value))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__normalized_akkadian_shift(self, value):
         return LanguageShift.of(str(value))
 
     @v_args(inline=True)

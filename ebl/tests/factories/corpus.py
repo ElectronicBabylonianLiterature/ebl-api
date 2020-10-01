@@ -26,7 +26,12 @@ from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    UnknownNumberOfSigns,
+    ValueToken,
+)
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -81,6 +86,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
 
     number = factory.Sequence(lambda n: LineNumber(n))
     reconstruction = (
+        LanguageShift.of("%n"),
         AkkadianWord.of((ValueToken.of("buāru"),)),
         MetricalFootSeparator.uncertain(),
         Lacuna.of((BrokenAway.open(),), tuple()),

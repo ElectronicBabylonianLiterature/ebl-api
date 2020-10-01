@@ -63,9 +63,10 @@ def create(include_documents):
                     {
                         "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
                         "reconstruction": " ".join(
-                            str(token) for token in line.reconstruction
+                            token.value for token in line.reconstruction
                         ),
                         "reconstructionTokens": [
+                            {"type": "LanguageShift", "value": "%n"},
                             {"type": "AkkadianWord", "value": "buāru"},
                             {"type": "MetricalFootSeparator", "value": "(|)"},
                             {"type": "Lacuna", "value": "[..."},

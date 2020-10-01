@@ -146,7 +146,7 @@ class TextSerializer(TextVisitor):
     def visit_line(self, line: Line) -> None:
         self.line = {
             "number": OneOfLineNumberSchema().dump(line.number),  # pyre-ignore[16]
-            "reconstruction": " ".join(str(token) for token in line.reconstruction),
+            "reconstruction": " ".join(token.value for token in line.reconstruction),
             "manuscripts": [],
         }
         self.chapter["lines"].append(self.line)

@@ -8,10 +8,10 @@ from ebl.transliteration.domain.reconstructed_text import (
     Caesura,
     Lacuna,
     MetricalFootSeparator,
-    ReconstructionToken,
 )
 from ebl.corpus.domain.text import Line, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.tokens import Token
 from ebl.errors import DataError
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label, LineNumberLabel
@@ -50,6 +50,9 @@ class ApiSerializer(TextSerializer):
         self.line["reconstructionTokens"] = []
         self.line["number"] = LineNumberLabel.from_atf(line.number.atf).to_value()
 
+    def visit(self, token: Token) -> None:
+        self._visit_reconstruction_token(type(token).__name__, token)
+
     def visit_akkadian_word(self, word: AkkadianWord):
         self._visit_reconstruction_token("AkkadianWord", word)
 
@@ -62,10 +65,8 @@ class ApiSerializer(TextSerializer):
     def visit_caesura(self, caesura: Caesura) -> None:
         self._visit_reconstruction_token("Caesura", caesura)
 
-    def _visit_reconstruction_token(
-        self, type: str, token: ReconstructionToken
-    ) -> None:
-        self.line["reconstructionTokens"].append({"type": type, "value": str(token)})
+    def _visit_reconstruction_token(self, type: str, token: Token) -> None:
+        self.line["reconstructionTokens"].append({"type": type, "value": token.value})
 
 
 class ApiDeserializer(TextDeserializer):

@@ -19,7 +19,12 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Emendation,
     PerhapsBrokenAway,
 )
-from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    UnknownNumberOfSigns,
+    ValueToken,
+)
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 import re
 
@@ -538,7 +543,7 @@ WORD = AkkadianWord.of((ValueToken.of("ibnû"),))
     ],
 )
 def test_reconstructed_line(text, expected) -> None:
-    assert parse_reconstructed_line(text) == expected
+    assert parse_reconstructed_line(f"%n {text}") == (LanguageShift.of("%n"), *expected)
 
 
 @pytest.mark.parametrize(
@@ -559,9 +564,9 @@ def test_reconstructed_line(text, expected) -> None:
 )
 def test_invalid_reconstructed_line(text) -> None:
     with pytest.raises(
-        ValueError, match=f"Invalid reconstructed line: {re.escape(text)}"
+        ValueError, match=f"Invalid reconstructed line: %n {re.escape(text)}"
     ):
-        parse_reconstructed_line(text)
+        parse_reconstructed_line(f"%n {text}")
 
 
 @pytest.mark.parametrize(
@@ -588,7 +593,7 @@ def test_invalid_reconstructed_line(text) -> None:
     ],
 )
 def test_validate_invalid(text) -> None:
-    line = parse_reconstructed_line(text)
+    line = parse_reconstructed_line(f"%n {text}")
     with pytest.raises(ValueError):
         validate(line)
 
@@ -602,5 +607,5 @@ def test_validate_invalid(text) -> None:
     ],
 )
 def test_validate_valid(text) -> None:
-    line = parse_reconstructed_line(text)
+    line = parse_reconstructed_line(f"%n {text}")
     validate(line)

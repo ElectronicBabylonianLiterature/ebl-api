@@ -18,8 +18,11 @@ line_number_range: single_line_number "-" single_line_number
 single_line_number: [LETTER "+"] INT [PRIME] [LETTER]
 PRIME: "'" | "′" | "’" 
 
+text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
+_shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
+             | language_shift _WORD_SEPARATOR+ _non_normalized_text
 
-text: _head _tail*
+_non_normalized_text: _head _tail*
 _head: _have_both
      | _require_both
      | _omit_left
@@ -34,7 +37,6 @@ _require_both: commentary_protocol
              | line_break
 _have_both: tabulation
          | column
-         | language_shift
          | erasure
          | word
          | lone_determinative
@@ -56,6 +58,7 @@ line_break.5: "|"
 close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
 open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
+normalized_akkadian_shift: NORMALIZED_SHIFT
 
 divider_variant: divider _VARIANT_SEPARATOR divider
                | divider _VARIANT_SEPARATOR variant_part
@@ -81,7 +84,9 @@ DOCUMENT_ORIENTED_GLOSS: OPEN_DOCUMENT_ORIENTED_GLOSS
 OPEN_DOCUMENT_ORIENTED_GLOSS: "{("
 CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
 
-SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9")+
+NORMALIZED_SHIFT: "%n"
+SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9") ("a".."z" | "A".."Z" | "0".."9")+
+     | "%" ("a".."m" | "o".."z" | "A".."Z" | "0".."9") 
 
 erasure.-1: "°" erasure_part "\\" erasure_part "°"
 erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
@@ -222,7 +227,7 @@ unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
 UNKNOWN_NUMBER_OF_SIGNS: "..."
 
 
-normalized_akkadian: _normalized_text (_WORD_SEPARATOR break _WORD_SEPARATOR _normalized_text)*
+_normalized_akkadian: _normalized_text (_WORD_SEPARATOR break _WORD_SEPARATOR _normalized_text)*
 
 _normalized_text: (akkadian_word | lacuna) (_WORD_SEPARATOR (akkadian_word | lacuna))*
 

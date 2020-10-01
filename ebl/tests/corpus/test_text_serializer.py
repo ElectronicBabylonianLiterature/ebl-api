@@ -60,7 +60,7 @@ def to_dict(include_documents):
                     {
                         "number": OneOfLineNumberSchema().dump(LINE.number),
                         "reconstruction": " ".join(
-                            str(token) for token in LINE.reconstruction
+                            token.value for token in LINE.reconstruction
                         ),
                         "manuscripts": [
                             {
