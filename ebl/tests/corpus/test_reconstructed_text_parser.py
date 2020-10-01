@@ -1,11 +1,11 @@
-import pytest  # pyre-ignore
-from parsy import ParseError  # pyre-ignore
+import pytest  # pyre-ignore[21]
+from parsy import ParseError  # pyre-ignore[21]
 
 from ebl.corpus.application.reconstructed_text_parser import (
-    akkadian_word,
     caesura,
     foot_separator,
     lacuna,
+    parse_reconstructed_word,
     reconstructed_line,
 )
 from ebl.corpus.domain.enclosure import (
@@ -28,6 +28,10 @@ from ebl.corpus.domain.reconstructed_text import (
     SeparatorPart,
     StringPart,
 )
+from lark.exceptions import (  # pyre-ignore[21]
+    ParseError as LarkParseError,
+    UnexpectedInput,
+)
 
 
 def assert_parse(parser, expected, text):
@@ -35,8 +39,8 @@ def assert_parse(parser, expected, text):
 
 
 def assert_parse_error(parser, text):
-    with pytest.raises(ParseError):
-        parser.parse(text)
+    with pytest.raises((ParseError, UnexpectedInput, LarkParseError)):
+        parser(text)
 
 
 @pytest.mark.parametrize(
@@ -428,7 +432,9 @@ def assert_parse_error(parser, text):
     ],
 )
 def test_word(text, expected):
-    assert akkadian_word().parse(text) == expected
+    assert parse_reconstructed_word(text) == AkkadianWord(
+        tuple(expected[:-1]), tuple(expected[-1])
+    )
 
 
 @pytest.mark.parametrize(
@@ -473,7 +479,7 @@ def test_word(text, expected):
     ],
 )
 def test_invalid_word(text):
-    assert_parse_error(akkadian_word(), text)
+    assert_parse_error(parse_reconstructed_word, text)
 
 
 @pytest.mark.parametrize(
@@ -522,7 +528,7 @@ def test_lacuna(text, expected):
     ],
 )
 def test_invalid_lacuna(text):
-    assert_parse_error(lacuna(), text)
+    assert_parse_error(lacuna().parse, text)
 
 
 @pytest.mark.parametrize("text,expected", [("||", "||"), ("(||)", "(||)")])
@@ -532,7 +538,7 @@ def test_caesura(text, expected):
 
 @pytest.mark.parametrize("text", ["|", "|||", "||||", "[||]", "[(||)]"])
 def test_invalid_caesura(text):
-    assert_parse_error(caesura(), text)
+    assert_parse_error(caesura().parse, text)
 
 
 @pytest.mark.parametrize("text,expected", [("|", "|"), ("(|)", "(|)")])
@@ -542,7 +548,7 @@ def test_feet_separator(text, expected):
 
 @pytest.mark.parametrize("text", ["||", "|||", "[|]", "[(|)]"])
 def test_invalid_feet_separator(text):
-    assert_parse_error(foot_separator(), text)
+    assert_parse_error(foot_separator().parse, text)
 
 
 WORD = AkkadianWord((StringPart("ibnû"),))
@@ -587,7 +593,7 @@ def test_reconstructed_line(text, expected):
     ],
 )
 def test_invalid_reconstructed_line(text):
-    assert_parse_error(reconstructed_line(), text)
+    assert_parse_error(reconstructed_line().parse, text)
 
 
 @pytest.mark.parametrize(

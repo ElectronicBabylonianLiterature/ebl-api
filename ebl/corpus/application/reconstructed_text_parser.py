@@ -1,7 +1,10 @@
-from typing import Optional
+from typing import Iterable, Optional, Sequence
 
-import pydash  # pyre-ignore
-from parsy import (  # pyre-ignore
+from lark.lexer import Token  # pyre-ignore[21]
+from lark.tree import Tree
+from lark.visitors import Transformer, v_args
+import pydash  # pyre-ignore[21]
+from parsy import (  # pyre-ignore[21]
     ParseError,
     alt,
     char_from,
@@ -20,9 +23,12 @@ from ebl.corpus.domain.reconstructed_text import (
     LacunaPart,
     MetricalFootSeparator,
     Modifier,
+    Part,
+    ReconstructionToken,
     SeparatorPart,
     StringPart,
 )
+from lark.lark import Lark
 
 ELLIPSIS = string("...")
 
@@ -130,7 +136,78 @@ def reconstructed_line():
     ).map(pydash.flatten_deep)
 
 
-def parse_reconstructed_line(text: str):
+class ReconstructedLineTransformer(Transformer):  # pyre-ignore[11]
+    @v_args(inline=True)
+    def lacuna(self, before, after) -> Lacuna:
+        return Lacuna(before, after)
+
+    @v_args(inline=True)
+    def akkadian_word(
+        self,
+        parts: Tree,  # pyre-ignore[11]
+        modifiers: Sequence[Modifier],
+        closing_enclosures: Tree,  # pyre-ignore[11]
+    ) -> AkkadianWord:
+        return AkkadianWord(
+            tuple(parts.children + closing_enclosures.children), modifiers
+        )
+
+    def modifiers(self, modifiers: Iterable[Modifier]) -> Sequence[Modifier]:
+        return tuple(set(modifiers))
+
+    @v_args(inline=True)
+    def modifier(self, modifier) -> Modifier:
+        return Modifier(modifier)
+
+    def lacuna_part(self, _) -> LacunaPart:
+        return LacunaPart()
+
+    def akkadian_string(
+        self, children: Iterable[Token]  # pyre-ignore[11]
+    ) -> StringPart:
+        return StringPart("".join(children))
+
+    def separator(self, _) -> SeparatorPart:
+        return SeparatorPart()
+
+    @v_args(inline=True)
+    def enclosure_open(self, enclosure) -> EnclosurePart:
+        return EnclosurePart(enclosure)
+
+    @v_args(inline=True)
+    def enclosure_close(self, enclosure) -> EnclosurePart:
+        return EnclosurePart(enclosure)
+
+    def broken_off_open(self, _) -> Enclosure:
+        return Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN)
+
+    def broken_off_close(self, _) -> Enclosure:
+        return Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.CLOSE)
+
+    def maybe_broken_off_open(self, _) -> Enclosure:
+        return Enclosure(EnclosureType.MAYBE_BROKEN_OFF, EnclosureVariant.OPEN)
+
+    def maybe_broken_off_close(self, _) -> Enclosure:
+        return Enclosure(EnclosureType.MAYBE_BROKEN_OFF, EnclosureVariant.CLOSE)
+
+    def emendation_open(self, _) -> Enclosure:
+        return Enclosure(EnclosureType.EMENDATION, EnclosureVariant.OPEN)
+
+    def emendation_close(self, _) -> Enclosure:
+        return Enclosure(EnclosureType.EMENDATION, EnclosureVariant.CLOSE)
+
+
+RECONSTRUCTED_LINE_PARSER = Lark.open(
+    "reconstructed_line.lark", maybe_placeholders=True, rel_to=__file__
+)
+
+
+def parse_reconstructed_word(word: str) -> Sequence[Part]:
+    tree = RECONSTRUCTED_LINE_PARSER.parse(word, start="akkadian_word")
+    return ReconstructedLineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_reconstructed_line(text: str) -> Sequence[ReconstructionToken]:
     try:
         return tuple(reconstructed_line().parse(text))
     except ParseError as error:

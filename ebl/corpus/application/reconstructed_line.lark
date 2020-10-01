@@ -1,0 +1,55 @@
+?start: reconstructed_line
+reconstructed_line: text (_WORD_SEPARATOR break _WORD_SEPARATOR text)*
+
+text: (akkadian_word | lacuna) (_WORD_SEPARATOR (akkadian_word | lacuna))*
+_WORD_SEPARATOR: " "
+
+break: caesura | foot_separator
+caesura: "||" | "(||)"
+foot_separator: "|" | "(|)"
+
+lacuna: enclosure_open* _ELLIPSIS enclosure_close*
+
+akkadian_word: parts modifiers closing_enclosures
+parts: _akkadian_word_head _akkadian_word_body*
+closing_enclosures: enclosure_close*
+_akkadian_word_head: enclosure_open* (lacuna_part _between_strings)? _part_sequence
+_akkadian_word_body: _between_strings (akkadian_string lacuna_part)+ akkadian_string?
+                   | _between_strings (lacuna_part akkadian_string)+ lacuna_part?
+                   | _between_strings akkadian_string
+                   | _between_strings lacuna_part
+_part_sequence: (akkadian_string lacuna_part)+ akkadian_string?
+              | (lacuna_part akkadian_string)+ lacuna_part?
+              | akkadian_string
+
+modifiers: modifier~0..3
+modifier: DAMAGE | UNCERTAIN | CORRECTED
+DAMAGE: "#"
+UNCERTAIN: "?"
+CORRECTED: "!"
+_between_strings: enclosure+ separator
+                | separator enclosure+
+                | enclosure+
+                | separator
+separator: "-"
+
+lacuna_part: _ELLIPSIS
+_ELLIPSIS: "..."
+
+?enclosure: enclosure_open | enclosure_close
+enclosure_open: broken_off_open | maybe_broken_off_open | emendation_open
+enclosure_close: broken_off_close | maybe_broken_off_close | emendation_close
+broken_off_open: "["
+broken_off_close: "]"
+maybe_broken_off_open: "("
+maybe_broken_off_close: ")"
+emendation_open: "<"
+emendation_close: ">"
+
+akkadian_string: AKKADIAN_ALPHABET+
+AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
+                 | "M" | "N" | "P" | "S" | "T" | "U" | "Y" | "Z" | "a" | "b"
+                 | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
+                 | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
+                 | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
+                 | "š" | "ū" | "ṣ" | "ṭ" | "₄"
