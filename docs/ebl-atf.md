@@ -440,6 +440,60 @@ sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
                     | '₆' | '₇' | '₈' | '₉' | 'ₓ';
 ```
 
+### Normalized Akkadian
+
+```ebnf
+reconstructed-line = text, { word-separator, break, word-separator, text };
+text = ( akkadian-word | lacuna ), { word-separator, ( akkadian-word | lacuna ) };
+word-separator = ' ';
+
+break = caesura | foot-separator;
+caesura = '||' | '(||)';
+foot-separator = '|' | '(|)';
+
+lacuna = { enclosure-open }, ellipsis, { enclosure-close };
+
+akkadian-word = { enclosure-open },
+                [ ellipsis, [ between-strings ] ],
+                akkadian-string,
+                { between-strings, ( akkadian-string | ellipsis )
+                | ellipsis, [ between-strings ], akkadian-string
+                | akkadian-string
+                },
+                [ [ between-strings ], ellipsis ],
+                { enclosure-close },
+                [ modifier ], [ modifier ], [ modifier];
+modifier = damage | uncertain | corrected;
+damage = '#';
+uncertain = '?';
+corrected = '!';
+between-strings = { enclosure }-, separator
+                | separator, { enclosure }-
+                | { enclosure }-
+                | separator;
+separator = '-';
+
+ellipsis = '...';
+
+enclosure = enclosure-open | enclosure-close;
+enclosure-open = broken-off-open | maybe-broken-off-open | emendation-open;
+enclosure-close = broken-off-close | maybe-broken-off-close | emendation-close;
+broken-off-open = '[';
+broken-off-close = ']';
+maybe-broken-off-open = '(';
+maybe-broken-off-close = ')';
+emendation-open = '<';
+emendation-close = '>';
+
+akkadian-string = { akkadian-alphabet }-;
+akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
+                  | 'M' | 'N' | 'P' | 'S' | 'T' | 'U' | 'Y' | 'Z' | 'a' | 'b'
+                  | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'k' | 'l' | 'm'
+                  | 'n' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'w' | 'y' | 'z'
+                  | 'É' | 'â' | 'ê' | 'î' | 'û' | 'ā' | 'Ē' | 'ē' | 'ī' | 'Š'
+                  | 'š' | 'ū' | 'ṣ' | 'ṭ' | '₄';
+```
+
 ## Note lines
 
 ```ebnf
