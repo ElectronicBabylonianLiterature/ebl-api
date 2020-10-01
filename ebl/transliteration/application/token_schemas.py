@@ -13,6 +13,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
+    Emendation,
     Erasure,
     Gloss,
     IntentionalOmission,
@@ -148,6 +149,16 @@ class RemovalSchema(EnclosureSchema):
     def make_token(self, data, **kwargs):
         return (
             Removal.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
+
+
+class EmendationSchema(EnclosureSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return (
+            Emendation.of(data["side"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
         )
@@ -457,6 +468,7 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "AccidentalOmission": AccidentalOmissionSchema,
         "IntentionalOmission": IntentionalOmissionSchema,
         "Removal": RemovalSchema,
+        "Emendation": EmendationSchema,
         "Erasure": ErasureSchema,
         "UnknownNumberOfSigns": UnknownNumberOfSignsSchema,
         "Tabulation": TabulationSchema,

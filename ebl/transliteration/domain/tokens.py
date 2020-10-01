@@ -42,6 +42,9 @@ class TokenVisitor(ABC):
     def visit_removal(self, removal) -> None:
         self.visit(removal)
 
+    def visit_emendation(self, emendation) -> None:
+        self.visit(emendation)
+
     def visit_erasure(self, erasure):
         self.visit(erasure)
 

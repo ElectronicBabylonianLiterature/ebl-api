@@ -189,6 +189,7 @@ PERHAPS_BROKEN_AWAY: Mapping[Side, str] = {Side.LEFT: "(", Side.RIGHT: ")"}
 ACCIDENTAL_OMISSION: Mapping[Side, str] = {Side.LEFT: "<", Side.RIGHT: ">"}
 INTENTIONAL_OMISSION: Mapping[Side, str] = {Side.LEFT: "<(", Side.RIGHT: ")>"}
 REMOVAL: Mapping[Side, str] = {Side.LEFT: "<<", Side.RIGHT: ">>"}
+EMENDATION: Mapping[Side, str] = {Side.LEFT: "<", Side.RIGHT: ">"}
 DOCUMENT_ORIENTED_GLOSS: Mapping[Side, str] = {Side.LEFT: "{(", Side.RIGHT: ")}"}
 
 COMPOUND_GRAPHEME_DELIMITER = "|"
