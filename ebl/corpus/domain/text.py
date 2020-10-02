@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Set, Sequence, TypeVar
+from typing import Iterable, Set, Sequence, TypeVar
 
 import attr
 
@@ -28,12 +28,11 @@ TextId = collections.namedtuple("TextId", ["category", "index"])
 T = TypeVar("T")
 
 
-def get_duplicates(collection: Sequence[T]) -> Set[T]:
+def get_duplicates(collection: Iterable[T]) -> Set[T]:
     return {
-        item
-        for item, count in collections.Counter(collection).items()
-        if count > 1
+        item for item, count in collections.Counter(collection).items() if count > 1
     }
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
@@ -103,6 +102,10 @@ class Line:
     def validate_reconstruction(self, _, value):
         validate(value)
 
+    @property
+    def manuscript_ids(self) -> Set[int]:
+        return {manuscript.manuscript_id for manuscript in self.manuscripts}
+
     def accept(self, visitor: "TextVisitor") -> None:
         if visitor.is_pre_order:
             visitor.visit_line(self)
@@ -155,7 +158,7 @@ class Chapter:
     name: str = ""
     order: int = 0
     manuscripts: Sequence[Manuscript] = attr.ib(default=tuple())
-    lines: Sequence[Line] = tuple()
+    lines: Sequence[Line] = attr.ib(default=tuple())
     parser_version: str = ""
 
     @manuscripts.validator
@@ -163,6 +166,18 @@ class Chapter:
         duplicate_ids = get_duplicates(manuscript.id for manuscript in value)
         if duplicate_ids:
             raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
+
+    @lines.validator
+    def _validate_orphan_manuscript_ids(self, _, value: Sequence[Line]) -> None:
+        manuscript_ids = {manuscript.id for manuscript in self.manuscripts}
+        used_manuscripts_ids = {
+            manuscript_id
+            for line in self.lines
+            for manuscript_id in line.manuscript_ids
+        }
+        orphans = used_manuscripts_ids - manuscript_ids
+        if orphans:
+            raise ValueError(f"Missing manuscripts: {orphans}.")
 
     def __attrs_post_init__(self) -> None:
         self.accept(ManuscriptIdValidator())
@@ -248,16 +263,10 @@ class TextVisitor(TokenVisitor):
 class ManuscriptIdValidator(TextVisitor):
     def __init__(self):
         super().__init__(TextVisitor.Order.POST)
-        self._manuscripts_ids = []
         self._sigla = []
-        self._used_manuscripts_ids = set()
 
     def visit_chapter(self, chapter) -> None:
         errors = []
-
-        orphans = self._used_manuscripts_ids - set(self._manuscripts_ids)
-        if orphans:
-            errors.append(f"Missing manuscripts: {orphans}.")
 
         duplicate_sigla = get_duplicates(self._sigla)
         if duplicate_sigla:
@@ -266,13 +275,7 @@ class ManuscriptIdValidator(TextVisitor):
         if errors:
             raise ValueError(f"Invalid manuscripts: {errors}.")
 
-        self._manuscripts_ids = []
         self._sigla = []
-        self._used_manuscripts_ids = set()
 
     def visit_manuscript(self, manuscript: Manuscript) -> None:
-        self._manuscripts_ids.append(manuscript.id)
         self._sigla.append(manuscript.siglum)
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        self._used_manuscripts_ids.add(manuscript_line.manuscript_id)
