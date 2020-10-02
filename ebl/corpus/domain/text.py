@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Sequence
+from typing import Set, Sequence, TypeVar
 
 import attr
 
@@ -24,6 +24,16 @@ from ebl.transliteration.domain.tokens import TokenVisitor
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
+
+T = TypeVar("T")
+
+
+def get_duplicates(collection: Sequence[T]) -> Set[T]:
+    return {
+        item
+        for item, count in collections.Counter(collection).items()
+        if count > 1
+    }
 
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
@@ -144,9 +154,15 @@ class Chapter:
     version: str = ""
     name: str = ""
     order: int = 0
-    manuscripts: Sequence[Manuscript] = tuple()
+    manuscripts: Sequence[Manuscript] = attr.ib(default=tuple())
     lines: Sequence[Line] = tuple()
     parser_version: str = ""
+
+    @manuscripts.validator
+    def _validate_manuscript_ids(self, _, value: Sequence[Manuscript]) -> None:
+        duplicate_ids = get_duplicates(manuscript.id for manuscript in value)
+        if duplicate_ids:
+            raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
 
     def __attrs_post_init__(self) -> None:
         self.accept(ManuscriptIdValidator())
@@ -237,22 +253,11 @@ class ManuscriptIdValidator(TextVisitor):
         self._used_manuscripts_ids = set()
 
     def visit_chapter(self, chapter) -> None:
-        def get_duplicates(collection: list) -> list:
-            return [
-                item
-                for item, count in collections.Counter(collection).items()
-                if count > 1
-            ]
-
         errors = []
 
         orphans = self._used_manuscripts_ids - set(self._manuscripts_ids)
         if orphans:
             errors.append(f"Missing manuscripts: {orphans}.")
-
-        duplicate_ids = get_duplicates(self._manuscripts_ids)
-        if duplicate_ids:
-            errors.append(f"Duplicate manuscript IDs: {duplicate_ids}.")
 
         duplicate_sigla = get_duplicates(self._sigla)
         if duplicate_sigla:
