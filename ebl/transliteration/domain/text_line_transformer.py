@@ -231,7 +231,7 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
         return PerhapsBrokenAway.open()
 
 
-class ReconstructedLineTransformer(WordTransformer):
+class NormalizedAkkadianTransformer(WordTransformer):
     def ebl_atf_text_line__text(self, children) -> Sequence[EblToken]:
         return tuple(children)
 
@@ -284,7 +284,7 @@ class ReconstructedLineTransformer(WordTransformer):
         return Emendation.close()
 
 
-class TextLineTransformer(ReconstructedLineTransformer):
+class TextLineTransformer(NormalizedAkkadianTransformer):
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
