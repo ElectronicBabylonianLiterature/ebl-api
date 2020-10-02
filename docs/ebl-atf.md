@@ -158,8 +158,13 @@ and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/qu
 ## Note lines
 
 ```ebnf
-note-line = '#note: ',
-            { emphasis | akkadian | sumerian | emesal | note-text | bibliography }-;
+note-line = '#note: ', { note-line-part }-;
+note-line-part = emphasis
+               | akkadian
+               | sumerian
+               | emesal
+               | note-text
+               | bibliography;
 emphasis = '@i{', note-text, '}';
 akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
 sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
