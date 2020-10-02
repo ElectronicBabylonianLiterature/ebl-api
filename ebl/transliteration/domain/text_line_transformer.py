@@ -1,4 +1,4 @@
-from typing import Iterable, MutableSequence, Sequence, Type
+from typing import Iterable, Sequence, Type
 
 from lark.lexer import Token  # pyre-ignore[21]
 from lark.tree import Tree
@@ -19,6 +19,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
+from ebl.transliteration.domain.erasure_visitor import set_erasure_state
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -37,7 +38,6 @@ from ebl.transliteration.domain.tokens import (
     LineBreak,
     Tabulation,
     Token as EblToken,
-    TokenVisitor,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
@@ -71,28 +71,6 @@ def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
         for child in children
         for token in _token_mapper(child)
     )
-
-
-class ErasureVisitor(TokenVisitor):
-    def __init__(self, state: ErasureState):
-        self._tokens: MutableSequence[EblToken] = []
-        self._state: ErasureState = state
-
-    @property
-    def tokens(self) -> Sequence[EblToken]:
-        return tuple(self._tokens)
-
-    def visit(self, token) -> None:
-        self._tokens.append(token.set_erasure(self._state))
-
-
-def set_erasure_state(
-    tree: Tree, state: ErasureState  # pyre-ignore[11]
-) -> Sequence[EblToken]:
-    visitor = ErasureVisitor(state)
-    for child in tree.children:
-        visitor.visit(child)
-    return visitor.tokens
 
 
 class SignTransformer(Transformer):  # pyre-ignore[11]
