@@ -121,6 +121,16 @@ class Removal(Enclosure):
 
 
 @attr.s(frozen=True)
+class Emendation(Enclosure):
+    @staticmethod
+    def get_sides() -> Mapping[Side, str]:
+        return atf.EMENDATION
+
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_emendation(self)
+
+
+@attr.s(frozen=True)
 class Erasure(Enclosure):
     @staticmethod
     def get_sides() -> Mapping[Side, str]:

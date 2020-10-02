@@ -3,7 +3,6 @@ from typing import Sequence
 import factory.fuzzy  # pyre-ignore
 import pydash  # pyre-ignore
 
-from ebl.corpus.domain.enclosure import Enclosure, EnclosureType, EnclosureVariant
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,
@@ -12,27 +11,26 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.corpus.domain.reconstructed_text import (
+from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
-    EnclosurePart,
-    Lacuna,
-    LacunaPart,
     MetricalFootSeparator,
-    Modifier,
-    SeparatorPart,
-    StringPart,
 )
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Flag, Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    LanguageShift,
+    UnknownNumberOfSigns,
+    ValueToken,
+)
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -87,20 +85,20 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
 
     number = factory.Sequence(lambda n: LineNumber(n))
     reconstruction = (
-        AkkadianWord((StringPart("buāru"),)),
-        MetricalFootSeparator(True),
-        Lacuna((Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.OPEN),), tuple()),
-        Caesura(False),
-        AkkadianWord(
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("buāru"),)),
+        MetricalFootSeparator.uncertain(),
+        BrokenAway.open(),
+        UnknownNumberOfSigns.of(),
+        Caesura.certain(),
+        AkkadianWord.of(
             (
-                LacunaPart(),
-                EnclosurePart(
-                    Enclosure(EnclosureType.BROKEN_OFF, EnclosureVariant.CLOSE)
-                ),
-                SeparatorPart(),
-                StringPart("buāru"),
+                UnknownNumberOfSigns.of(),
+                BrokenAway.close(),
+                Joiner.hyphen(),
+                ValueToken.of("buāru"),
             ),
-            (Modifier.DAMAGED,),
+            (Flag.DAMAGE,),
         ),
     )
     manuscripts: Sequence[ManuscriptLine] = factory.List(

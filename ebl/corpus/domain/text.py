@@ -15,14 +15,12 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
-from ebl.corpus.domain.reconstructed_text import (
-    ReconstructionToken,
-    ReconstructionTokenVisitor,
-)
+from ebl.transliteration.domain.tokens import Token
 from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.tokens import TokenVisitor
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
@@ -88,12 +86,11 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     number: AbstractLineNumber
-    reconstruction: Sequence[ReconstructionToken] = attr.ib(default=tuple())
+    reconstruction: Sequence[Token] = attr.ib(default=tuple())
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
     @reconstruction.validator
     def validate_reconstruction(self, _, value):
-
         validate(value)
 
     def accept(self, visitor: "TextVisitor") -> None:
@@ -133,7 +130,7 @@ class Line:
 
 def map_line(line: Line) -> str:
     number = line.number.atf
-    reconstruction = " ".join(str(token) for token in line.reconstruction)
+    reconstruction = " ".join(token.value for token in line.reconstruction)
     lines = "⁞".join(
         map_manuscript_line(manuscript_line) for manuscript_line in line.manuscripts
     )
@@ -200,7 +197,7 @@ class Text:
             visitor.visit_text(self)
 
 
-class TextVisitor(ReconstructionTokenVisitor):
+class TextVisitor(TokenVisitor):
     class Order(Enum):
         PRE = auto()
         POST = auto()

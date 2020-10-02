@@ -6,6 +6,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
     DocumentOrientedGloss,
+    Emendation,
     IntentionalOmission,
     PerhapsBrokenAway,
     Removal,
@@ -14,10 +15,16 @@ from ebl.transliteration.domain.enclosure_tokens import (
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
 from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
+)
 from ebl.transliteration.domain.sign_tokens import Reading, Number
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import (
     ErasureState,
+    LanguageShift,
     Token,
     UnknownNumberOfSigns,
     Variant,
@@ -284,6 +291,107 @@ def map_line(atf) -> Sequence[Token]:
                     ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
                 ),
             )
+        ),
+        (
+            "%n [...]",
+            (
+                LanguageShift.normalized_akkadian(),
+                BrokenAway.open(),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE
+                ),
+                BrokenAway.close().set_enclosure_type(
+                    frozenset({EnclosureType.BROKEN_AWAY})
+                ),
+            ),
+        ),
+        (
+            "%n (...)",
+            (
+                LanguageShift.normalized_akkadian(),
+                PerhapsBrokenAway.open(),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.PERHAPS}), ErasureState.NONE
+                ),
+                PerhapsBrokenAway.close().set_enclosure_type(
+                    frozenset({EnclosureType.PERHAPS})
+                ),
+            ),
+        ),
+        (
+            "%n <...>",
+            (
+                LanguageShift.normalized_akkadian(),
+                Emendation.open(),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
+                ),
+                Emendation.close().set_enclosure_type(
+                    frozenset({EnclosureType.EMENDATION})
+                ),
+            ),
+        ),
+        (
+            "%n kur-[kur ...]",
+            (
+                LanguageShift.normalized_akkadian(),
+                AkkadianWord.of(
+                    (
+                        ValueToken.of("kur"),
+                        Joiner.hyphen(),
+                        BrokenAway.open(),
+                        ValueToken(
+                            frozenset({EnclosureType.BROKEN_AWAY}),
+                            ErasureState.NONE,
+                            "kur",
+                        ),
+                    )
+                ),
+                UnknownNumberOfSigns.of().set_enclosure_type(
+                    frozenset({EnclosureType.BROKEN_AWAY})
+                ),
+                BrokenAway.close().set_enclosure_type(
+                    frozenset({EnclosureType.BROKEN_AWAY})
+                ),
+            ),
+        ),
+        (
+            "%n <... | ...>",
+            (
+                LanguageShift.normalized_akkadian(),
+                Emendation.open(),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
+                ),
+                MetricalFootSeparator.certain().set_enclosure_type(
+                    frozenset({EnclosureType.EMENDATION})
+                ),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
+                ),
+                Emendation.close().set_enclosure_type(
+                    frozenset({EnclosureType.EMENDATION})
+                ),
+            ),
+        ),
+        (
+            "%n <... || ...>",
+            (
+                LanguageShift.normalized_akkadian(),
+                Emendation.open(),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
+                ),
+                Caesura.certain().set_enclosure_type(
+                    frozenset({EnclosureType.EMENDATION})
+                ),
+                UnknownNumberOfSigns(
+                    frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
+                ),
+                Emendation.close().set_enclosure_type(
+                    frozenset({EnclosureType.EMENDATION})
+                ),
+            ),
         ),
     ],
 )

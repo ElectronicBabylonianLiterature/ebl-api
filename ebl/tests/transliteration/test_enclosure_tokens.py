@@ -6,6 +6,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     Determinative,
     DocumentOrientedGloss,
+    Emendation,
     Erasure,
     IntentionalOmission,
     LinguisticGloss,
@@ -28,6 +29,7 @@ from ebl.transliteration.domain.tokens import Joiner
             {Side.LEFT: "<(", Side.RIGHT: ")>"},
         ),
         (Removal, "Removal", {Side.LEFT: "<<", Side.RIGHT: ">>"}),
+        (Emendation, "Emendation", {Side.LEFT: "<", Side.RIGHT: ">"}),
         (
             DocumentOrientedGloss,
             "DocumentOrientedGloss",

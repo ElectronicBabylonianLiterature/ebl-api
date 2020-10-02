@@ -42,6 +42,9 @@ class TokenVisitor(ABC):
     def visit_removal(self, removal) -> None:
         self.visit(removal)
 
+    def visit_emendation(self, emendation) -> None:
+        self.visit(emendation)
+
     def visit_erasure(self, erasure):
         self.visit(erasure)
 
@@ -74,6 +77,15 @@ class TokenVisitor(ABC):
 
     def visit_unknown_sign(self, sign) -> None:
         self.visit(sign)
+
+    def visit_akkadian_word(self, word) -> None:
+        self.visit(word)
+
+    def visit_metrical_foot_separator(self, separator) -> None:
+        self.visit(separator)
+
+    def visit_caesura(self, caesura) -> None:
+        self.visit(caesura)
 
 
 class ErasureState(Enum):
@@ -180,6 +192,10 @@ class LanguageShift(ValueToken):
 
     def accept(self, visitor: "TokenVisitor") -> None:
         visitor.visit_language_shift(self)
+
+    @staticmethod
+    def normalized_akkadian():
+        return LanguageShift.of(LanguageShift._normalization_shift)
 
 
 @attr.s(frozen=True)

@@ -5,7 +5,9 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.reconstructed_text_parser import parse_reconstructed_line
+from ebl.transliteration.domain.reconstructed_text_parser import (
+    parse_reconstructed_line,
+)
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,
@@ -25,6 +27,7 @@ from ebl.corpus.domain.text import (
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 
 class TextSerializer(TextVisitor):
@@ -144,7 +147,7 @@ class TextSerializer(TextVisitor):
     def visit_line(self, line: Line) -> None:
         self.line = {
             "number": OneOfLineNumberSchema().dump(line.number),  # pyre-ignore[16]
-            "reconstruction": " ".join(str(token) for token in line.reconstruction),
+            "reconstruction": convert_to_atf(None, line.reconstruction),
             "manuscripts": [],
         }
         self.chapter["lines"].append(self.line)

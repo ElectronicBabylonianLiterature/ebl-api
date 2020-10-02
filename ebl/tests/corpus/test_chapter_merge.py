@@ -1,7 +1,7 @@
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.enums import Classification, Stage
-from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
@@ -52,7 +52,7 @@ def test_merge_manuscript_line(old, new, expected):
 
 
 LINE_NUMBER = LineNumber(1)
-LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
+LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 LINE = Line(
     LINE_NUMBER,
     LINE_RECONSTRUCTION,
@@ -95,7 +95,7 @@ LINE = Line(
             ),
             Line(
                 LineNumber(2),
-                (AkkadianWord((StringPart("kur"),)),),
+                (AkkadianWord.of((ValueToken.of("kur"),)),),
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID,
@@ -121,7 +121,7 @@ LINE = Line(
             ),
             Line(
                 LineNumber(2),
-                (AkkadianWord((StringPart("kur"),)),),
+                (AkkadianWord.of((ValueToken.of("kur"),)),),
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID,

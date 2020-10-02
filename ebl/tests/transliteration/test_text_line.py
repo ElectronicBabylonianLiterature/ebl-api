@@ -29,6 +29,7 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 LINE_NUMBER = LineNumber(1)
 
@@ -51,7 +52,6 @@ LINE_NUMBER = LineNumber(1)
         ("%ob", Language.AKKADIAN, False),
         ("%sux", Language.SUMERIAN, False),
         ("%es", Language.EMESAL, False),
-        ("%n", Language.AKKADIAN, True),
         ("%foo", DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
     ],
 )
@@ -104,6 +104,26 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
     assert line.atf == f"1. first {code} second %sb {{third}} [fourth ...]"
 
 
+def test_text_line_of_iterable_normalized() -> None:
+    tokens = [
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("kur"),)),
+    ]
+    expected_tokens = (
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("kur"),)),
+    )
+    line = TextLine.of_iterable(LINE_NUMBER, tokens)
+
+    assert line.content == expected_tokens
+    assert (
+        line.key
+        == f"TextLine⁞{line.atf}⟨{'⁚'.join(token.get_key() for token in expected_tokens)}⟩"
+    )
+
+    assert line.atf == "1. %n kur"
+
+
 @pytest.mark.parametrize(
     "atf",
     [
@@ -126,6 +146,9 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
         "16. am₃ ($___$)",
         "17. pa {(he-pi₂)}",
         "18. du₃-am₃{{mu-un-<(du₃)>}}",
+        "19. kur %n kur (||) kur %sux kur",
+        "20. %n [...] (...) [(...)] <...>",
+        "21. %n buāru (|) [... || ...]-buāru#]",
     ],
 )
 def test_text_line_atf(atf: str) -> None:
