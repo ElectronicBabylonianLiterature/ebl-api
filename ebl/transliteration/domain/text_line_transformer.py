@@ -56,7 +56,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 )
 
 
-def _token_mapper(token):
+def _token_to_list(token):
     if isinstance(token, Tree):
         return token.children
     elif isinstance(token, list):
@@ -69,7 +69,7 @@ def _children_to_tokens(children: Sequence) -> Sequence[EblToken]:
     return tuple(
         (ValueToken.of(token.value) if isinstance(token, Token) else token)
         for child in children
-        for token in _token_mapper(child)
+        for token in _token_to_list(child)
     )
 
 
