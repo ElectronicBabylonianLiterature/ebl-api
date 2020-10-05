@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Iterable, Set, Sequence, TypeVar
+from typing import Iterable, Optional, Set, Sequence, TypeVar
 
 import attr
 
@@ -15,6 +15,7 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.tokens import Token
 from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
@@ -37,7 +38,7 @@ def get_duplicates(collection: Iterable[T]) -> Set[T]:
 class Manuscript:
     id: int
     siglum_disambiguator: str = ""
-    museum_number: str = ""
+    museum_number: Optional[MuseumNumber] = None
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
     period: Period = Period.NEO_ASSYRIAN
@@ -227,7 +228,7 @@ class Text:
             visitor.visit_text(self)
 
 
-class TextVisitor():
+class TextVisitor:
     class Order(Enum):
         PRE = auto()
         POST = auto()

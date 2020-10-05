@@ -50,7 +50,7 @@ def test_updating(client, bibliography, sign_repository, signs):
                 text.chapters[0],
                 manuscripts=(
                     attr.evolve(
-                        text.chapters[0].manuscripts[0], museum_number="new number"
+                        text.chapters[0].manuscripts[0], museum_number="new.number"
                     ),
                 ),
             ),
@@ -163,12 +163,29 @@ AMBIGUOUS_MANUSCRIPTS = [
 ]
 
 
+INVALID_MUSEUM_NUMBER = [
+    {
+        "id": 1,
+        "siglumDisambiguator": "1c",
+        "museumNumber": "invalid",
+        "accession": "",
+        "periodModifier": PeriodModifier.NONE.value,
+        "period": Period.OLD_ASSYRIAN.long_name,
+        "provenance": Provenance.BABYLON.long_name,
+        "type": ManuscriptType.SCHOOL.long_name,
+        "notes": "",
+        "references": [],
+    }
+]
+
+
 @pytest.mark.parametrize(
     "manuscripts,expected_status",
     [
         [[{}], falcon.HTTP_BAD_REQUEST],
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
         [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [INVALID_MUSEUM_NUMBER, falcon.HTTP_UNPROCESSABLE_ENTITY],
     ],
 )
 def test_update_invalid_entity(

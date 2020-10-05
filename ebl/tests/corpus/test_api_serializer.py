@@ -48,7 +48,8 @@ def create(include_documents):
                     {
                         "id": manuscript.id,
                         "siglumDisambiguator": manuscript.siglum_disambiguator,
-                        "museumNumber": manuscript.museum_number,
+                        "museumNumber": manuscript.museum_number
+                        and str(manuscript.museum_number),
                         "accession": manuscript.accession,
                         "periodModifier": manuscript.period_modifier.value,
                         "period": manuscript.period.long_name,

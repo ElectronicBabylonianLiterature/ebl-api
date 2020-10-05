@@ -24,6 +24,7 @@ from ebl.corpus.domain.text import (
     Text,
     TextVisitor,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -130,7 +131,9 @@ class TextSerializer(TextVisitor):
         self.manuscript = {
             "id": manuscript.id,
             "siglumDisambiguator": manuscript.siglum_disambiguator,
-            "museumNumber": manuscript.museum_number,
+            "museumNumber": str(manuscript.museum_number)
+            if manuscript.museum_number
+            else "",
             "accession": manuscript.accession,
             "periodModifier": manuscript.period_modifier.value,
             "period": manuscript.period.long_name,
@@ -196,7 +199,9 @@ class TextDeserializer:
         return Manuscript(
             manuscript["id"],
             manuscript["siglumDisambiguator"],
-            manuscript["museumNumber"],
+            MuseumNumber.of(manuscript["museumNumber"])
+            if manuscript["museumNumber"]
+            else None,
             manuscript["accession"],
             PeriodModifier(manuscript["periodModifier"]),
             Period.from_name(manuscript["period"]),

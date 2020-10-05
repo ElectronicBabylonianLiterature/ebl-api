@@ -17,6 +17,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
     MetricalFootSeparator,
 )
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Flag, Status, Surface
@@ -40,7 +41,9 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
 
     id = factory.Sequence(lambda n: n)
     siglum_disambiguator = factory.Faker("word")
-    museum_number = factory.Sequence(lambda n: f"M.{n}" if pydash.is_odd(n) else "")
+    museum_number = factory.Sequence(
+        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
+    )
     accession = factory.Sequence(lambda n: f"A.{n}" if pydash.is_even(n) else "")
     period_modifier = factory.fuzzy.FuzzyChoice(PeriodModifier)
     period = factory.fuzzy.FuzzyChoice(Period)

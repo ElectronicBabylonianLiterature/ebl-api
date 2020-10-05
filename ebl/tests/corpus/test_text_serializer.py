@@ -45,7 +45,9 @@ def to_dict(include_documents):
                     {
                         "id": MANUSCRIPT.id,
                         "siglumDisambiguator": MANUSCRIPT.siglum_disambiguator,
-                        "museumNumber": MANUSCRIPT.museum_number,
+                        "museumNumber": str(MANUSCRIPT.museum_number)
+                        if MANUSCRIPT.museum_number
+                        else "",
                         "accession": MANUSCRIPT.accession,
                         "periodModifier": MANUSCRIPT.period_modifier.value,
                         "period": MANUSCRIPT.period.long_name,
