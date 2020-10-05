@@ -167,6 +167,12 @@ class Chapter:
         if duplicate_ids:
             raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
 
+    @manuscripts.validator
+    def _validate_manuscript_sigla(self, _, value: Sequence[Manuscript]) -> None:
+        duplicate_sigla = get_duplicates(manuscript.siglum for manuscript in value)
+        if duplicate_sigla:
+            raise ValueError(f"Duplicate sigla: {duplicate_sigla}.")
+
     @lines.validator
     def _validate_orphan_manuscript_ids(self, _, value: Sequence[Line]) -> None:
         manuscript_ids = {manuscript.id for manuscript in self.manuscripts}
@@ -178,9 +184,6 @@ class Chapter:
         orphans = used_manuscripts_ids - manuscript_ids
         if orphans:
             raise ValueError(f"Missing manuscripts: {orphans}.")
-
-    def __attrs_post_init__(self) -> None:
-        self.accept(ManuscriptIdValidator())
 
     def accept(self, visitor: "TextVisitor") -> None:
         if visitor.is_pre_order:
@@ -258,24 +261,3 @@ class TextVisitor(TokenVisitor):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         pass
-
-
-class ManuscriptIdValidator(TextVisitor):
-    def __init__(self):
-        super().__init__(TextVisitor.Order.POST)
-        self._sigla = []
-
-    def visit_chapter(self, chapter) -> None:
-        errors = []
-
-        duplicate_sigla = get_duplicates(self._sigla)
-        if duplicate_sigla:
-            errors.append(f"Duplicate sigla: {duplicate_sigla}.")
-
-        if errors:
-            raise ValueError(f"Invalid manuscripts: {errors}.")
-
-        self._sigla = []
-
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
-        self._sigla.append(manuscript.siglum)
