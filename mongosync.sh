@@ -1,14 +1,23 @@
 #!/bin/bash
 
-MONGO_HOST=<MONGO_HOST>
-MONGO_USER=<MONGO_USER>
-MONGO_PASSWORD=<MONGO_PASSWORD>
-MONGO_PRODUCTION_DB=<MONGO_PRODUCTION_DB>
-MONGO_DEVELOPEMENT_DB=<MONGO_DEVELOPEMENT_DB>
+MONGO_HOST=MONGO_HOST
+MONGO_USER=MONGO_USER
+MONGO_PASSWORD=MONGO_PASSWORD
+MONGO_PRODUCTION_DB=ebl
+MONGO_DEVELOPEMENT_DB=ebldev
 DUMP_FOLDER=/tmp/pull-db/
 RESTORE_FOLDER=/tmp/pull-db/ebl
 
-mongodump -h $MONGO_HOST \
+
+if [ "$MONGO_PRODUCTION_DB" == "$MONGO_DEVELOPEMENT_DB" ] || [ "$MONGO_DEVELOPEMENT_DB" == "ebl" ]
+  then
+    echo "Error: MONGO_PRODUCTION_DB is equal to MONGO_DEVELOPEMENT_DB"
+    exit 1
+  else
+    echo "---------------STARTING---------------"
+    echo "Time: $(date +'%T')"
+    echo "Date: $(date +'%m/%d/%Y')"
+    mongodump -h $MONGO_HOST \
     -d $MONGO_PRODUCTION_DB \
     --forceTableScan \
     --excludeCollectionsWithPrefix=fragments_backup \
@@ -29,14 +38,17 @@ mongodump -h $MONGO_HOST \
     --ssl --sslAllowInvalidCertificates \
     -o $DUMP_FOLDER
 
+  mongorestore -h rs-ebl1/lmkwitg-ebl01.srv.mwn.de:27017,lmkwitg-ebl02.srv.mwn.de:27018  \
+      -d $MONGO_DEVELOPEMENT_DB \
+       -u $MONGO_USER -p $MONGO_PASSWORD \
+      --ssl --sslAllowInvalidCertificates \
+      --authenticationDatabase ebl \
+      --drop \
+      $RESTORE_FOLDER
 
-mongorestore -h rs-ebl1/lmkwitg-ebl01.srv.mwn.de:27017,lmkwitg-ebl02.srv.mwn.de:27018  \
-    -d $MONGO_DEVELOPEMENT_DB \
-     -u $MONGO_USER -p $MONGO_PASSWORD \
-    --ssl --sslAllowInvalidCertificates \
-    --authenticationDatabase ebl \
-    --drop \
-    $RESTORE_FOLDER
+  rm -rf $RESTORE_FOLDER
+  echo "---------------FINISHED---------------"
+  echo "-"
+  echo "-"
+fi
 
-
-rm -rf $RESTORE_FOLDER
