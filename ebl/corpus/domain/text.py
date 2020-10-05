@@ -20,7 +20,6 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.tokens import TokenVisitor
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
@@ -109,9 +108,6 @@ class Line:
     def accept(self, visitor: "TextVisitor") -> None:
         if visitor.is_pre_order:
             visitor.visit_line(self)
-
-        for token in self.reconstruction:
-            token.accept(visitor)
 
         for manuscript_line in self.manuscripts:
             manuscript_line.accept(visitor)
@@ -231,7 +227,7 @@ class Text:
             visitor.visit_text(self)
 
 
-class TextVisitor(TokenVisitor):
+class TextVisitor():
     class Order(Enum):
         PRE = auto()
         POST = auto()
