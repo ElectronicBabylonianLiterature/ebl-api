@@ -46,7 +46,7 @@ ANY_USER = Guest()
 
 
 def to_dict(text: Text) -> dict:
-    return TextSerializer.serialize(text, False)
+    return TextSerializer.serialize(text)
 
 
 def expect_bibliography(bibliography, when):

@@ -1,9 +1,9 @@
 from typing import cast, Sequence
 
-from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.corpus.domain.text import Line, Manuscript, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
 from ebl.errors import DataError
@@ -13,15 +13,16 @@ from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
+from ebl.corpus.application.schemas import ApiManuscriptSchema
 
 
 class ApiSerializer(TextSerializer):
-    def __init__(self, include_documents=True):
-        super().__init__(include_documents)
+    def __init__(self):
+        super().__init__(ApiManuscriptSchema)
 
     @staticmethod
     def serialize_public(text: Text):
-        serializer = ApiSerializer(False)
+        serializer = ApiSerializer()
         serializer.visit_text(text)
         return serializer.text
 
@@ -51,6 +52,9 @@ class ApiSerializer(TextSerializer):
 
 
 class ApiDeserializer(TextDeserializer):
+    def deserialize_manuscript(self, manuscript: dict) -> Manuscript:
+        return ApiManuscriptSchema().load(manuscript)  # pyre-ignore[16]
+
     def deserialize_line(self, line: dict) -> Line:
         return Line(
             parse_line_number(line["number"]),
@@ -71,8 +75,8 @@ class ApiDeserializer(TextDeserializer):
         )
 
 
-def serialize(text: Text, include_documents=True) -> dict:
-    return ApiSerializer.serialize(text, include_documents)
+def serialize(text: Text) -> dict:
+    return ApiSerializer.serialize(text)
 
 
 def deserialize(dto: dict) -> Text:

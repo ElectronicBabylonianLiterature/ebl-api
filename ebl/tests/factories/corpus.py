@@ -86,6 +86,13 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Line
 
+    class Params:
+        manuscript_id = factory.Sequence(lambda n: n)
+        manuscript = factory.SubFactory(
+            ManuscriptLineFactory,
+            manuscript_id=factory.SelfAttribute("..manuscript_id"),
+        )
+
     number = factory.Sequence(lambda n: LineNumber(n))
     reconstruction = (
         LanguageShift.normalized_akkadian(),
@@ -105,7 +112,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
         ),
     )
     manuscripts: Sequence[ManuscriptLine] = factory.List(
-        [factory.SubFactory(ManuscriptLineFactory)], TupleFactory
+        [factory.SelfAttribute("..manuscript")], TupleFactory
     )
 
 
@@ -118,8 +125,12 @@ class ChapterFactory(factory.Factory):  # pyre-ignore[11]
     version = factory.Faker("word")
     name = factory.Faker("sentence")
     order = factory.Faker("pyint")
-    manuscripts = factory.List([factory.SubFactory(ManuscriptFactory)], TupleFactory)
-    lines = factory.List([factory.SubFactory(LineFactory)], TupleFactory)
+    manuscripts = factory.List(
+        [factory.SubFactory(ManuscriptFactory, id=1)], TupleFactory
+    )
+    lines = factory.List(
+        [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
+    )
     parser_version = ""
 
 

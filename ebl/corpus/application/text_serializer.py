@@ -1,21 +1,11 @@
-from typing import Optional
+from typing import Optional, Type
 
 from ebl.errors import Defect
-from ebl.bibliography.application.reference_schema import (
-    ApiReferenceSchema,
-    ReferenceSchema,
-)
+from ebl.corpus.application.schemas import ManuscriptSchema
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
-from ebl.corpus.domain.enums import (
-    Classification,
-    ManuscriptType,
-    Period,
-    PeriodModifier,
-    Provenance,
-    Stage,
-)
+from ebl.corpus.domain.enums import Classification, Stage
 from ebl.corpus.domain.text import (
     Chapter,
     Line,
@@ -24,7 +14,6 @@ from ebl.corpus.domain.text import (
     Text,
     TextVisitor,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -33,16 +22,16 @@ from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 class TextSerializer(TextVisitor):
     @classmethod
-    def serialize(cls, text: Text, include_documents):
-        serializer = cls(include_documents)
+    def serialize(cls, text: Text):
+        serializer = cls()
         text.accept(serializer)
         return serializer.text
 
-    def __init__(self, include_documents: bool) -> None:
+    def __init__(
+        self, manuscript_schema_type: Type[ManuscriptSchema] = ManuscriptSchema
+    ) -> None:
         super().__init__(TextVisitor.Order.PRE)
-        self._ReferenceSchema = (
-            ApiReferenceSchema if include_documents else ReferenceSchema
-        )
+        self._manuscript_schema = manuscript_schema_type()
         self._text: Optional[dict] = None
         self._chapter: Optional[dict] = None
         self._manuscript: Optional[dict] = None
@@ -128,23 +117,7 @@ class TextSerializer(TextVisitor):
         self.text["chapters"].append(self.chapter)
 
     def visit_manuscript(self, manuscript: Manuscript) -> None:
-        self.manuscript = {
-            "id": manuscript.id,
-            "siglumDisambiguator": manuscript.siglum_disambiguator,
-            "museumNumber": str(manuscript.museum_number)
-            if manuscript.museum_number
-            else "",
-            "accession": manuscript.accession,
-            "periodModifier": manuscript.period_modifier.value,
-            "period": manuscript.period.long_name,
-            "provenance": manuscript.provenance.long_name,
-            "type": manuscript.type.long_name,
-            "notes": manuscript.notes,
-            # pyre-ignore-nextline[16]
-            "references": self._ReferenceSchema().dump(
-                manuscript.references, many=True
-            ),
-        }
+        self.manuscript = self._manuscript_schema.dump(manuscript)
         self.chapter["manuscripts"].append(self.manuscript)
 
     def visit_line(self, line: Line) -> None:
@@ -196,24 +169,7 @@ class TextDeserializer:
         )
 
     def deserialize_manuscript(self, manuscript: dict) -> Manuscript:
-        return Manuscript(
-            manuscript["id"],
-            manuscript["siglumDisambiguator"],
-            MuseumNumber.of(manuscript["museumNumber"])
-            if manuscript["museumNumber"]
-            else None,
-            manuscript["accession"],
-            PeriodModifier(manuscript["periodModifier"]),
-            Period.from_name(manuscript["period"]),
-            Provenance.from_name(manuscript["provenance"]),
-            ManuscriptType.from_name(manuscript["type"]),
-            manuscript["notes"],
-            tuple(
-                ReferenceSchema().load(  # pyre-ignore[16]
-                    manuscript["references"], many=True
-                )
-            ),
-        )
+        return ManuscriptSchema().load(manuscript)  # pyre-ignore[16]
 
     def deserialize_line(self, line: dict) -> Line:
         return Line(
@@ -233,7 +189,7 @@ class TextDeserializer:
 
 
 def serialize(text: Text) -> dict:
-    return TextSerializer.serialize(text, False)
+    return TextSerializer.serialize(text)
 
 
 def deserialize(dictionary: dict) -> Text:

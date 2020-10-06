@@ -20,7 +20,7 @@ TEXT = TextFactory.build(  # pyre-ignore[16]
 
 
 def to_dict(text: Text) -> dict:
-    return TextSerializer.serialize(text, False)
+    return TextSerializer.serialize(text)
 
 
 def when_text_in_collection(database, text=TEXT):
