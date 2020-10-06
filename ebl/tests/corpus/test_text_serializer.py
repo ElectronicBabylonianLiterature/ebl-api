@@ -3,7 +3,7 @@ from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
 )
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -18,7 +18,7 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 import attr
 
 
-REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
+REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
 ManuscriptFactory.build(references=REFERENCES)
 MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]

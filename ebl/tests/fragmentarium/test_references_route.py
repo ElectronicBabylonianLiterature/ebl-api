@@ -5,7 +5,7 @@ import pytest  # pyre-ignore
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.users.domain.user import Guest
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -16,7 +16,7 @@ ANY_USER = Guest()
 def test_update_references(client, fragmentarium, bibliography, user):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
-    reference = ReferenceWithDocumentFactory.build()
+    reference = ReferenceFactory.build(with_document=True)
     bibliography.create(reference.document, ANY_USER)
     references = [ReferenceSchema().dump(reference)]
     body = json.dumps({"references": references})
@@ -91,7 +91,7 @@ def test_update_references_invalid_reference(client, fragmentarium, body):
 
 
 def test_update_references_invalid_id(client, fragmentarium):
-    reference = ReferenceWithDocumentFactory.build()
+    reference = ReferenceFactory.build(with_document=True)
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
     body = json.dumps({"references": [ReferenceSchema().dump(reference)]})

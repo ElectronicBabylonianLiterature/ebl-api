@@ -18,7 +18,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 )
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Flag, Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -51,7 +51,7 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
     notes = factory.Faker("sentence")
     references = factory.List(
-        [factory.SubFactory(ReferenceWithDocumentFactory)], TupleFactory
+        [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )
 
 

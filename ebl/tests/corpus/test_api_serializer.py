@@ -3,10 +3,7 @@ from typing import Tuple
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.domain.text import Text
 from ebl.corpus.web.api_serializer import deserialize, serialize
-from ebl.tests.factories.bibliography import (
-    ReferenceFactory,
-    ReferenceWithDocumentFactory,
-)
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -21,9 +18,7 @@ from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
     references = (
-        (  # pyre-ignore[16]
-            ReferenceWithDocumentFactory if include_documents else ReferenceFactory
-        ).build(),
+        ReferenceFactory.build(with_document=include_documents),  # pyre-ignore[16]
     )
     manuscript = ManuscriptFactory.build(references=references)  # pyre-ignore[16]
     # pyre-ignore[16]
