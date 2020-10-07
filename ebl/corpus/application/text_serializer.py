@@ -6,14 +6,8 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.corpus.domain.enums import Classification, Stage
-from ebl.corpus.domain.text import (
-    Chapter,
-    Line,
-    Manuscript,
-    ManuscriptLine,
-    Text,
-    TextVisitor,
-)
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
+from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
