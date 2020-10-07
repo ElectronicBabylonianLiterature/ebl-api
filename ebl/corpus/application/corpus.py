@@ -10,6 +10,7 @@ from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.text import Line, Manuscript, Text, TextId
 from ebl.transliteration.domain.alignment import Alignment
+from ebl.users.domain.user import User
 
 COLLECTION = "texts"
 
@@ -59,23 +60,32 @@ class Corpus:
         return self._repository.list()
 
     def update_alignment(
-        self, id_: TextId, chapter_index: int, alignment: Alignment, user
-    ):
+        self, id_: TextId, chapter_index: int, alignment: Alignment, user: User
+    ) -> None:
         self._update_chapter(id_, AlignmentUpdater(chapter_index, alignment), user)
 
     def update_manuscripts(
-        self, id_: TextId, chapter_index: int, manuscripts: Sequence[Manuscript], user
-    ):
+        self,
+        id_: TextId,
+        chapter_index: int,
+        manuscripts: Sequence[Manuscript],
+        user: User,
+    ) -> None:
         self._update_chapter(id_, ManuscriptUpdater(chapter_index, manuscripts), user)
 
     def update_lines(
-        self, id_: TextId, chapter_index: int, lines: Sequence[Line], user
-    ):
+        self, id_: TextId, chapter_index: int, lines: Sequence[Line], user: User
+    ) -> None:
         self._update_chapter(id_, LinesUpdater(chapter_index, lines), user)
 
-    def _update_chapter(self, id_: TextId, updater: ChapterUpdater, user):
+    def _update_chapter(self, id_: TextId, updater: ChapterUpdater, user: User) -> None:
         old_text = self._repository.find(id_)
         updated_text = updater.update(old_text)
+        self.update_text(id_, old_text, updated_text, user)
+
+    def update_text(
+        self, id_: TextId, old_text: Text, updated_text: Text, user: User
+    ) -> None:
         self._validate_text(updated_text)
         self._create_changelog(old_text, updated_text, user)
         self._repository.update(id_, updated_text)
@@ -88,7 +98,7 @@ class Corpus:
         text.accept(hydrator)
         return hydrator.text
 
-    def _create_changelog(self, old_text, new_text, user):
+    def _create_changelog(self, old_text, new_text, user) -> None:
         old_dict: dict = {**serialize(old_text), "_id": old_text.id}
         new_dict: dict = {**serialize(new_text), "_id": new_text.id}
         self._changelog.create(COLLECTION, user.profile, old_dict, new_dict)

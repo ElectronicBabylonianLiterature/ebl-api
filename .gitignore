@@ -115,3 +115,7 @@ docker-entrypoint-initdb.d/
 
 # Run backend locally
 run_backend.sh
+
+# Migration script output
+invalid_fragments.tsv
+invalid_texts.tsv
