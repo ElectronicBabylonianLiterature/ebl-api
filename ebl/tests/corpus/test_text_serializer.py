@@ -112,13 +112,3 @@ def test_serializing_to_dict():
 
 def test_deserialize():
     assert TextDeserializer.deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS
-
-
-def test_deserialize_string_museum_number():
-    old_serialization_format = TextSerializer.serialize(TEXT)
-    old_serialization_format["chapters"][0]["manuscripts"][0]["museumNumber"] = (
-        str(MANUSCRIPT.museum_number) if MANUSCRIPT.museum_number else ""
-    )
-    assert (
-        TextDeserializer.deserialize(old_serialization_format) == TEXT_WITHOUT_DOCUMENTS
-    )

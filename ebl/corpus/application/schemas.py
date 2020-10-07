@@ -13,19 +13,8 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
-    museum_number = fields.Function(
-        lambda manuscript: manuscript.museum_number
-        and MuseumNumberSchema().dump(manuscript.museum_number),
-        lambda value: None
-        if not value
-        else (
-            MuseumNumber.of(value)
-            if isinstance(value, str)
-            else MuseumNumberSchema().load(value)
-        ),
-        required=True,
-        allow_none=True,
-        data_key="museumNumber",
+    museum_number = fields.Nested(
+        MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
     accession = fields.String(required=True)
     period_modifier = ValueEnum(
