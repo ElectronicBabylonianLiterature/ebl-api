@@ -13,8 +13,8 @@ from ebl.transliteration.domain.line_number import LineNumber
 ANY_USER = Guest()
 
 
-def create_dto(text, include_documents=False):
-    return serialize(text, include_documents)
+def create_dto(text):
+    return serialize(text)
 
 
 def allow_references(text, bibliography):
@@ -34,7 +34,7 @@ def create_text(client, text):
     assert post_result.status == falcon.HTTP_CREATED
     assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(text, True)
+    assert post_result.json == create_dto(text)
 
 
 def test_updating(client, bibliography, sign_repository, signs):
@@ -62,7 +62,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(updated_text, True)
+    assert post_result.json == create_dto(updated_text)
 
     get_result = client.simulate_get(
         f"/texts/{updated_text.category}/{updated_text.index}"
@@ -70,7 +70,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert get_result.json == create_dto(updated_text, True)
+    assert get_result.json == create_dto(updated_text)
 
 
 def test_updating_text_not_found(client, bibliography):

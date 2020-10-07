@@ -146,7 +146,12 @@ db.createUser(
 )
 ```
 
-## Updating transliterations and signs in fragments
+## Updating data
+
+Changes to the schemas or parsers can lead the data in the database to become obsolete.
+Below are instructions how to migrate Fragmentarium and Corpus to the latest state.
+
+### Fragmentarium
 
 Improving the parser can lead to existing transliterations to become obsolete
 tokens or invalid. The signs are calculated when a fragment is saved,
@@ -179,6 +184,25 @@ If you need to run custom operations inside Docker you can start the shell:
 
 ```shell script
 docker run --rm -it --env-file=.env --name ebl-shell --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api bash
+```
+
+### Corpus
+
+The `ebl.corpus.texts` module can be used to save the texts with the latest schema.
+A list of invalid texts is saved to `invalid_texts.tsv`. The script saves the texts
+as is. Transliterations are not reparsed.
+
+The script can be run locally:
+
+```shell script
+pipenv run python -m ebl.corpus.updte_texts
+```
+
+, as stand alone container:
+
+```shell script
+docker build -t ebl/api .
+docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.corpus.update_texts
 ```
 
 ### Steps to update the production database

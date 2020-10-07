@@ -1,14 +1,9 @@
 from typing import cast, Sequence
 
-from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
-from ebl.transliteration.domain.normalized_akkadian import (
-    AkkadianWord,
-    Caesura,
-    MetricalFootSeparator,
-)
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.corpus.domain.text import Line, Manuscript, ManuscriptLine, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
 from ebl.errors import DataError
@@ -18,15 +13,16 @@ from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
+from ebl.corpus.application.schemas import ApiManuscriptSchema
 
 
 class ApiSerializer(TextSerializer):
-    def __init__(self, include_documents=True):
-        super().__init__(include_documents)
+    def __init__(self):
+        super().__init__(ApiManuscriptSchema)
 
     @staticmethod
     def serialize_public(text: Text):
-        serializer = ApiSerializer(False)
+        serializer = ApiSerializer()
         serializer.visit_text(text)
         return serializer.text
 
@@ -46,26 +42,19 @@ class ApiSerializer(TextSerializer):
 
     def visit_line(self, line: Line) -> None:
         super().visit_line(line)
-        self.line["reconstructionTokens"] = []
+        self.line["reconstructionTokens"] = [
+            self._serialize_token(token) for token in line.reconstruction
+        ]
         self.line["number"] = LineNumberLabel.from_atf(line.number.atf).to_value()
 
-    def visit(self, token: Token) -> None:
-        self._visit_reconstruction_token(type(token).__name__, token)
-
-    def visit_akkadian_word(self, word: AkkadianWord):
-        self._visit_reconstruction_token("AkkadianWord", word)
-
-    def visit_metrical_foot_separator(self, separator: MetricalFootSeparator) -> None:
-        self._visit_reconstruction_token("MetricalFootSeparator", separator)
-
-    def visit_caesura(self, caesura: Caesura) -> None:
-        self._visit_reconstruction_token("Caesura", caesura)
-
-    def _visit_reconstruction_token(self, type: str, token: Token) -> None:
-        self.line["reconstructionTokens"].append({"type": type, "value": token.value})
+    def _serialize_token(self, token: Token) -> dict:
+        return {"type": type(token).__name__, "value": token.value}
 
 
 class ApiDeserializer(TextDeserializer):
+    def deserialize_manuscript(self, manuscript: dict) -> Manuscript:
+        return ApiManuscriptSchema().load(manuscript)  # pyre-ignore[16]
+
     def deserialize_line(self, line: dict) -> Line:
         return Line(
             parse_line_number(line["number"]),
@@ -86,8 +75,8 @@ class ApiDeserializer(TextDeserializer):
         )
 
 
-def serialize(text: Text, include_documents=True) -> dict:
-    return ApiSerializer.serialize(text, include_documents)
+def serialize(text: Text) -> dict:
+    return ApiSerializer.serialize(text)
 
 
 def deserialize(dto: dict) -> Text:

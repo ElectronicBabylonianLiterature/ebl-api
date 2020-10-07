@@ -1,6 +1,6 @@
 import collections
 from enum import Enum, auto
-from typing import Sequence
+from typing import Iterable, Optional, Set, Sequence, TypeVar
 
 import attr
 
@@ -15,21 +15,30 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.tokens import Token
 from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.tokens import TokenVisitor
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
+
+
+T = TypeVar("T")
+
+
+def get_duplicates(collection: Iterable[T]) -> Set[T]:
+    return {
+        item for item, count in collections.Counter(collection).items() if count > 1
+    }
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
     id: int
     siglum_disambiguator: str = ""
-    museum_number: str = ""
+    museum_number: Optional[MuseumNumber] = None
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
     period: Period = Period.NEO_ASSYRIAN
@@ -93,12 +102,13 @@ class Line:
     def validate_reconstruction(self, _, value):
         validate(value)
 
+    @property
+    def manuscript_ids(self) -> Set[int]:
+        return {manuscript.manuscript_id for manuscript in self.manuscripts}
+
     def accept(self, visitor: "TextVisitor") -> None:
         if visitor.is_pre_order:
             visitor.visit_line(self)
-
-        for token in self.reconstruction:
-            token.accept(visitor)
 
         for manuscript_line in self.manuscripts:
             manuscript_line.accept(visitor)
@@ -144,12 +154,33 @@ class Chapter:
     version: str = ""
     name: str = ""
     order: int = 0
-    manuscripts: Sequence[Manuscript] = tuple()
-    lines: Sequence[Line] = tuple()
+    manuscripts: Sequence[Manuscript] = attr.ib(default=tuple())
+    lines: Sequence[Line] = attr.ib(default=tuple())
     parser_version: str = ""
 
-    def __attrs_post_init__(self) -> None:
-        self.accept(ManuscriptIdValidator())
+    @manuscripts.validator
+    def _validate_manuscript_ids(self, _, value: Sequence[Manuscript]) -> None:
+        duplicate_ids = get_duplicates(manuscript.id for manuscript in value)
+        if duplicate_ids:
+            raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
+
+    @manuscripts.validator
+    def _validate_manuscript_sigla(self, _, value: Sequence[Manuscript]) -> None:
+        duplicate_sigla = get_duplicates(manuscript.siglum for manuscript in value)
+        if duplicate_sigla:
+            raise ValueError(f"Duplicate sigla: {duplicate_sigla}.")
+
+    @lines.validator
+    def _validate_orphan_manuscript_ids(self, _, value: Sequence[Line]) -> None:
+        manuscript_ids = {manuscript.id for manuscript in self.manuscripts}
+        used_manuscripts_ids = {
+            manuscript_id
+            for line in self.lines
+            for manuscript_id in line.manuscript_ids
+        }
+        orphans = used_manuscripts_ids - manuscript_ids
+        if orphans:
+            raise ValueError(f"Missing manuscripts: {orphans}.")
 
     def accept(self, visitor: "TextVisitor") -> None:
         if visitor.is_pre_order:
@@ -197,7 +228,7 @@ class Text:
             visitor.visit_text(self)
 
 
-class TextVisitor(TokenVisitor):
+class TextVisitor:
     class Order(Enum):
         PRE = auto()
         POST = auto()
@@ -227,47 +258,3 @@ class TextVisitor(TokenVisitor):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         pass
-
-
-class ManuscriptIdValidator(TextVisitor):
-    def __init__(self):
-        super().__init__(TextVisitor.Order.POST)
-        self._manuscripts_ids = []
-        self._sigla = []
-        self._used_manuscripts_ids = set()
-
-    def visit_chapter(self, chapter) -> None:
-        def get_duplicates(collection: list) -> list:
-            return [
-                item
-                for item, count in collections.Counter(collection).items()
-                if count > 1
-            ]
-
-        errors = []
-
-        orphans = self._used_manuscripts_ids - set(self._manuscripts_ids)
-        if orphans:
-            errors.append(f"Missing manuscripts: {orphans}.")
-
-        duplicate_ids = get_duplicates(self._manuscripts_ids)
-        if duplicate_ids:
-            errors.append(f"Duplicate manuscript IDs: {duplicate_ids}.")
-
-        duplicate_sigla = get_duplicates(self._sigla)
-        if duplicate_sigla:
-            errors.append(f"Duplicate sigla: {duplicate_sigla}.")
-
-        if errors:
-            raise ValueError(f"Invalid manuscripts: {errors}.")
-
-        self._manuscripts_ids = []
-        self._sigla = []
-        self._used_manuscripts_ids = set()
-
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
-        self._manuscripts_ids.append(manuscript.id)
-        self._sigla.append(manuscript.siglum)
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        self._used_manuscripts_ids.add(manuscript_line.manuscript_id)

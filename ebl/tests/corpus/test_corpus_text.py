@@ -19,6 +19,7 @@ from ebl.corpus.domain.text import (
     Text,
     TextId,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -46,7 +47,7 @@ CHAPTER_NAME = "IIc"
 ORDER = 1
 MANUSCRIPT_ID = 9001
 SIGLUM_DISAMBIGUATOR = "1c"
-MUSEUM_NUMBER = "BM.x"
+MUSEUM_NUMBER = MuseumNumber("BM", "x")
 ACCESSION = ""
 PERIOD_MODIFIER = PeriodModifier.LATE
 PERIOD = Period.OLD_BABYLONIAN
@@ -150,8 +151,8 @@ def test_giving_museum_number_and_accession_is_invalid():
     with pytest.raises(ValueError):
         Manuscript(
             MANUSCRIPT_ID,
-            museum_number="when museum number if given",
-            accession="then accession not allowed",
+            museum_number=MUSEUM_NUMBER,
+            accession="accession not allowed",
         )
 
 

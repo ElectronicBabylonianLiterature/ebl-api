@@ -3,7 +3,7 @@ from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
 )
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -14,19 +14,41 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+import attr
 
 
-REFERENCES = (ReferenceWithDocumentFactory.build(),)  # pyre-ignore[16]
+REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
-MANUSCRIPT_LINE = ManuscriptLineFactory.build()  # pyre-ignore[16]
+ManuscriptFactory.build(references=REFERENCES)
+MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
+    manuscript_id=MANUSCRIPT.id
+)
 LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE,))  # pyre-ignore[16]
 CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
     manuscripts=(MANUSCRIPT,), lines=(LINE,)
 )
 TEXT = TextFactory.build(chapters=(CHAPTER,))  # pyre-ignore[16]
+TEXT_WITHOUT_DOCUMENTS = attr.evolve(
+    TEXT,
+    chapters=(
+        attr.evolve(
+            CHAPTER,
+            manuscripts=(
+                attr.evolve(
+                    MANUSCRIPT,
+                    references=tuple(
+                        attr.evolve(reference, document=None)
+                        for reference in MANUSCRIPT.references
+                    ),
+                ),
+            ),
+        ),
+    ),
+)
 
 
-def to_dict(include_documents):
+def to_dict(include_documents=False):
     return {
         "category": TEXT.category,
         "index": TEXT.index,
@@ -45,7 +67,14 @@ def to_dict(include_documents):
                     {
                         "id": MANUSCRIPT.id,
                         "siglumDisambiguator": MANUSCRIPT.siglum_disambiguator,
-                        "museumNumber": MANUSCRIPT.museum_number,
+                        "museumNumber": (
+                            str(MANUSCRIPT.museum_number)
+                            if MANUSCRIPT.museum_number
+                            else ""
+                            if include_documents
+                            else MANUSCRIPT.museum_number
+                            and MuseumNumberSchema().dump(MANUSCRIPT.museum_number)
+                        ),
                         "accession": MANUSCRIPT.accession,
                         "periodModifier": MANUSCRIPT.period_modifier.value,
                         "period": MANUSCRIPT.period.long_name,
@@ -78,12 +107,18 @@ def to_dict(include_documents):
 
 
 def test_serializing_to_dict():
-    assert TextSerializer.serialize(TEXT, False) == to_dict(False)
-
-
-def test_serializing_to_dict_with_documents():
-    assert TextSerializer.serialize(TEXT, True) == to_dict(True)
+    assert TextSerializer.serialize(TEXT) == to_dict()
 
 
 def test_deserialize():
-    assert TextDeserializer.deserialize(to_dict(True)) == TEXT
+    assert TextDeserializer.deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS
+
+
+def test_deserialize_string_museum_number():
+    old_serialization_format = TextSerializer.serialize(TEXT)
+    old_serialization_format["chapters"][0]["manuscripts"][0]["museumNumber"] = (
+        str(MANUSCRIPT.museum_number) if MANUSCRIPT.museum_number else ""
+    )
+    assert (
+        TextDeserializer.deserialize(old_serialization_format) == TEXT_WITHOUT_DOCUMENTS
+    )
