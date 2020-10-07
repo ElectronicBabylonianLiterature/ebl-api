@@ -380,6 +380,8 @@ def test_merging_lines(
 ):
     number = LineNumber(1)
     reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    is_second_line_of_parallelism = False
+    is_beginning_of_section = False
     text_line = TextLine.of_iterable(
         LineNumber(1),
         (
@@ -393,7 +395,11 @@ def test_merging_lines(
     )
     manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
     line = Line(
-        number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),)
+        number,
+        reconstruction,
+        not is_second_line_of_parallelism,
+        not is_beginning_of_section,
+        (ManuscriptLine(manuscript_id, tuple(), text_line),),
     )
     new_text_line = TextLine.of_iterable(
         LineNumber(1),
@@ -402,6 +408,8 @@ def test_merging_lines(
     new_line = Line(
         number,
         reconstruction,
+        is_second_line_of_parallelism,
+        is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line.merge(new_text_line)),),
     )
     dehydrated_text = attr.evolve(
@@ -434,6 +442,8 @@ def test_merging_lines(
         Line(
             number,
             reconstruction,
+            is_second_line_of_parallelism,
+            is_beginning_of_section,
             (ManuscriptLine(manuscript_id, tuple(), new_text_line),),
         ),
     )

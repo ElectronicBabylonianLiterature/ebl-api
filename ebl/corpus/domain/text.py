@@ -96,6 +96,8 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 class Line:
     number: AbstractLineNumber
     reconstruction: Sequence[Token] = attr.ib(default=tuple())
+    is_second_line_of_parallelism: bool = False
+    is_beginning_of_section: bool = False
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
     @reconstruction.validator

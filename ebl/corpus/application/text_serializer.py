@@ -169,6 +169,8 @@ class TextDeserializer:
         return Line(
             OneOfLineNumberSchema().load(line["number"]),  # pyre-ignore[16]
             parse_reconstructed_line(line["reconstruction"]),
+            False,
+            False,
             tuple(
                 self.deserialize_manuscript_line(line) for line in line["manuscripts"]
             ),

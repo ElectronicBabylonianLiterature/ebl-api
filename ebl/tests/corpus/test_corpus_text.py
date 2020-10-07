@@ -57,6 +57,8 @@ NOTES = "some notes"
 REFERENCES = (ReferenceFactory.build(),)  # pyre-ignore[16]
 LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+IS_SECOND_LINE_OF_PARALLELISM = True
+IS_BEGINNING_OF_SECTION = True
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
     LineNumber(1),
@@ -76,6 +78,8 @@ MANUSCRIPT_TEXT = TextLine(
 LINE = Line(
     LINE_NUMBER,
     LINE_RECONSTRUCTION,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
 )
 
@@ -142,6 +146,11 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
+    assert (
+        TEXT.chapters[0].lines[0].is_second_line_of_parallelism
+        == IS_SECOND_LINE_OF_PARALLELISM
+    )
+    assert TEXT.chapters[0].lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
     assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
     assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
     assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
@@ -196,6 +205,8 @@ def test_missing_manuscripts_are_invalid():
                 Line(
                     LINE_NUMBER,
                     LINE_RECONSTRUCTION,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
                     (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
                 ),
             ),
@@ -221,7 +232,9 @@ def test_invalid_labels(labels: Sequence[Label]):
 
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
-        Line(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), tuple())
+        Line(
+            LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), False, False, tuple()
+        )
 
 
 def test_stage():

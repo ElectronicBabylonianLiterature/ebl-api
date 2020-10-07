@@ -59,6 +59,8 @@ class ApiDeserializer(TextDeserializer):
         return Line(
             parse_line_number(line["number"]),
             parse_reconstructed_line(line["reconstruction"]),
+            False,
+            False,
             tuple(
                 self.deserialize_manuscript_line(line) for line in line["manuscripts"]
             ),
