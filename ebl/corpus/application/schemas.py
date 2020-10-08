@@ -9,7 +9,10 @@ from ebl.bibliography.application.reference_schema import (
 from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
 from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
+from ebl.transliteration.domain.lark_parser import parse_line
+from typing import cast
+from ebl.transliteration.domain.text_line import TextLine
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -68,17 +71,56 @@ class ApiManuscriptSchema(ManuscriptSchema):
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
 
 
-class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
-    manuscript_id = fields.Integer(required=True, data_key="manuscriptId")
-    labels = fields.Function(
+def manuscript_id():
+    return fields.Integer(required=True, data_key="manuscriptId")
+
+
+def labels():
+    return fields.Function(
         lambda manuscript_line: [label.to_value() for label in manuscript_line.labels],
         lambda value: [parse_label(label) for label in value],
         required=True,
     )
+
+
+class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
+    manuscript_id = manuscript_id()
+    labels = labels()
     line = fields.Nested(TextLineSchema, required=True)
 
     @post_load
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         return ManuscriptLine(
             data["manuscript_id"], tuple(data["labels"]), data["line"]
+        )
+
+
+class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
+    manuscript_id = manuscript_id()
+    labels = labels()
+    number = fields.Function(
+        lambda manuscript_line: LineNumberLabel.from_atf(
+            manuscript_line.line.line_number.atf
+        ).to_value(),
+        lambda value: LineNumberLabel(value).to_atf(),
+        required=True,
+    )
+    atf = fields.Function(
+        lambda manuscript_line: manuscript_line.line.atf[
+            len(manuscript_line.line.line_number.atf) + 1 :
+        ],
+        lambda value: value,
+        required=True,
+    )
+    atfTokens = fields.Function(
+        lambda manuscript_line: TextLineSchema().dump(manuscript_line.line)["content"],
+        lambda value: value,
+    )
+
+    @post_load
+    def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
+        return ManuscriptLine(
+            data["manuscript_id"],
+            tuple(data["labels"]),
+            cast(TextLine, parse_line(f"{data['number']} {data['atf']}")),
         )
