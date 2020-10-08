@@ -13,7 +13,6 @@ from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
 from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
 from typing import cast
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.reconstructed_text_parser import (
@@ -158,19 +157,17 @@ class LineSchema(Schema):  # pyre-ignore[11]
         )
 
 
+class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
+    type = fields.Function(lambda token: type(token).__name__)
+    value = fields.String()
+
+
 class ApiLineSchema(LineSchema):
     number = fields.Function(
         lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
         lambda value: parse_line_number(value),
     )
-    reconstructionTokens = fields.Function(
-        lambda line: [
-            ApiLineSchema._serialize_token(token) for token in line.reconstruction
-        ],
-        lambda value: value,
+    reconstructionTokens = fields.Nested(
+        RecontsructionTokenSchema, many=True, attribute="reconstruction", dump_only=True
     )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
-
-    @staticmethod
-    def _serialize_token(token: Token) -> dict:
-        return {"type": type(token).__name__, "value": token.value}

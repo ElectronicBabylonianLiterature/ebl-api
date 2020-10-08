@@ -109,4 +109,5 @@ def test_serialize() -> None:
 
 def test_deserialize() -> None:
     text, dto = create(False)
+    del dto["chapters"][0]["lines"][0]["reconstructionTokens"]
     assert deserialize(dto) == text

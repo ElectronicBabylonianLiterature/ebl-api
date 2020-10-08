@@ -1,6 +1,7 @@
 from typing import Sequence
 
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
+from marshmallow import EXCLUDE  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
 from ebl.corpus.domain.text import Line, Manuscript, Text
@@ -31,7 +32,7 @@ class ApiDeserializer(TextDeserializer):
         return ApiManuscriptSchema().load(manuscript)  # pyre-ignore[16]
 
     def deserialize_line(self, line: dict) -> Line:
-        return ApiLineSchema().load(line)  # pyre-ignore[16]
+        return ApiLineSchema().load(line, unknown=EXCLUDE)  # pyre-ignore[16]
 
 
 def serialize(text: Text) -> dict:
