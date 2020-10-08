@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
-from ebl.corpus.domain.text import Manuscript
+from ebl.corpus.domain.text import Manuscript, ManuscriptLine
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
@@ -8,6 +9,7 @@ from ebl.bibliography.application.reference_schema import (
 from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
 from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.labels import parse_label
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -39,7 +41,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
     @post_load
-    def make_manuscript(self, data, **kwargs) -> Manuscript:
+    def make_manuscript(self, data: dict, **kwargs) -> Manuscript:
         return Manuscript(
             data["id"],
             data["siglum_disambiguator"],
@@ -64,3 +66,19 @@ class ApiManuscriptSchema(ManuscriptSchema):
         data_key="museumNumber",
     )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
+
+
+class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
+    manuscript_id = fields.Integer(required=True, data_key="manuscriptId")
+    labels = fields.Function(
+        lambda manuscript_line: [label.to_value() for label in manuscript_line.labels],
+        lambda value: [parse_label(label) for label in value],
+        required=True,
+    )
+    line = fields.Nested(TextLineSchema, required=True)
+
+    @post_load
+    def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
+        return ManuscriptLine(
+            data["manuscript_id"], tuple(data["labels"]), data["line"]
+        )

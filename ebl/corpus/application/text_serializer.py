@@ -1,15 +1,13 @@
 from typing import Optional, Type
 
 from ebl.errors import Defect
-from ebl.corpus.application.schemas import ManuscriptSchema
+from ebl.corpus.application.schemas import ManuscriptLineSchema, ManuscriptSchema
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.corpus.domain.enums import Classification, Stage
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.corpus.domain.text_visitor import TextVisitor
-from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
@@ -123,13 +121,8 @@ class TextSerializer(TextVisitor):
         self.chapter["lines"].append(self.line)
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        self.line["manuscripts"].append(
-            {
-                "manuscriptId": manuscript_line.manuscript_id,
-                "labels": [label.to_value() for label in manuscript_line.labels],
-                "line": TextLineSchema().dump(manuscript_line.line),  # pyre-ignore[16]
-            }
-        )
+        # pyre-ignore[16]
+        self.line["manuscripts"].append(ManuscriptLineSchema().dump(manuscript_line))
 
 
 class TextDeserializer:
@@ -177,11 +170,7 @@ class TextDeserializer:
         )
 
     def deserialize_manuscript_line(self, manuscript_line: dict) -> ManuscriptLine:
-        return ManuscriptLine(
-            manuscript_line["manuscriptId"],
-            tuple(parse_label(label) for label in manuscript_line["labels"]),
-            TextLineSchema().load(manuscript_line["line"]),  # pyre-ignore[16]
-        )
+        return ManuscriptLineSchema().load(manuscript_line)  # pyre-ignore[16]
 
 
 def serialize(text: Text) -> dict:
