@@ -1,15 +1,10 @@
-from typing import Optional, Type
+from typing import Optional
 
 from ebl.errors import Defect
-from ebl.corpus.application.schemas import ManuscriptLineSchema, ManuscriptSchema
-from ebl.transliteration.domain.reconstructed_text_parser import (
-    parse_reconstructed_line,
-)
+from ebl.corpus.application.schemas import LineSchema, ManuscriptSchema
 from ebl.corpus.domain.enums import Classification, Stage
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, Text
 from ebl.corpus.domain.text_visitor import TextVisitor
-from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
-from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 
 class TextSerializer(TextVisitor):
@@ -19,16 +14,11 @@ class TextSerializer(TextVisitor):
         text.accept(serializer)
         return serializer.text
 
-    def __init__(
-        self, manuscript_schema_type: Type[ManuscriptSchema] = ManuscriptSchema
-    ) -> None:
+    def __init__(self):
         super().__init__(TextVisitor.Order.PRE)
-        self._manuscript_schema = manuscript_schema_type()
         self._text: Optional[dict] = None
         self._chapter: Optional[dict] = None
         self._manuscript: Optional[dict] = None
-        self._line: Optional[dict] = None
-        self._manuscript_line: Optional[dict] = None
 
     @property
     def text(self) -> dict:
@@ -51,39 +41,6 @@ class TextSerializer(TextVisitor):
     @chapter.setter
     def chapter(self, chapter: dict) -> None:
         self._chapter = chapter
-
-    @property
-    def line(self) -> dict:
-        if self._line is None:
-            raise Defect("Line accessed before set.")
-        else:
-            return self._line  # pyre-ignore[7]
-
-    @line.setter
-    def line(self, line: dict) -> None:
-        self._line = line
-
-    @property
-    def manuscript(self) -> dict:
-        if self._manuscript is None:
-            raise Defect("Manuscript accessed before set.")
-        else:
-            return self._manuscript  # pyre-ignore[7]
-
-    @manuscript.setter
-    def manuscript(self, manuscript: dict) -> None:
-        self._manuscript = manuscript
-
-    @property
-    def manuscript_line(self) -> dict:
-        if self._manuscript_line is None:
-            raise Defect("Manuscript line accessed before set.")
-        else:
-            return self._manuscript_line  # pyre-ignore[7]
-
-    @manuscript_line.setter
-    def manuscirpt_line(self, manuscript_line: dict) -> None:
-        self._manuscript_line = manuscript_line
 
     def visit_text(self, text: Text) -> None:
         self.text = {
@@ -109,20 +66,11 @@ class TextSerializer(TextVisitor):
         self.text["chapters"].append(self.chapter)
 
     def visit_manuscript(self, manuscript: Manuscript) -> None:
-        self.manuscript = self._manuscript_schema.dump(manuscript)
-        self.chapter["manuscripts"].append(self.manuscript)
+        # pyre-ignore[16]
+        self.chapter["manuscripts"].append(ManuscriptSchema().dump(manuscript))
 
     def visit_line(self, line: Line) -> None:
-        self.line = {
-            "number": OneOfLineNumberSchema().dump(line.number),  # pyre-ignore[16]
-            "reconstruction": convert_to_atf(None, line.reconstruction),
-            "manuscripts": [],
-        }
-        self.chapter["lines"].append(self.line)
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        # pyre-ignore[16]
-        self.line["manuscripts"].append(ManuscriptLineSchema().dump(manuscript_line))
+        self.chapter["lines"].append(LineSchema().dump(line))  # pyre-ignore[16]
 
 
 class TextDeserializer:
@@ -159,18 +107,7 @@ class TextDeserializer:
         return ManuscriptSchema().load(manuscript)  # pyre-ignore[16]
 
     def deserialize_line(self, line: dict) -> Line:
-        return Line(
-            OneOfLineNumberSchema().load(line["number"]),  # pyre-ignore[16]
-            parse_reconstructed_line(line["reconstruction"]),
-            False,
-            False,
-            tuple(
-                self.deserialize_manuscript_line(line) for line in line["manuscripts"]
-            ),
-        )
-
-    def deserialize_manuscript_line(self, manuscript_line: dict) -> ManuscriptLine:
-        return ManuscriptLineSchema().load(manuscript_line)  # pyre-ignore[16]
+        return LineSchema().load(line)  # pyre-ignore[16]
 
 
 def serialize(text: Text) -> dict:

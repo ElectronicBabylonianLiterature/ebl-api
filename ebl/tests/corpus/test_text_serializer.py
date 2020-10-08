@@ -90,6 +90,8 @@ def to_dict(include_documents=False):
                     {
                         "number": OneOfLineNumberSchema().dump(LINE.number),
                         "reconstruction": convert_to_atf(None, LINE.reconstruction),
+                        "isSecondLineOfParallelism": LINE.is_second_line_of_parallelism,
+                        "isBeginningOfSection": LINE.is_beginning_of_section,
                         "manuscripts": [
                             {
                                 "manuscriptId": MANUSCRIPT_LINE.manuscript_id,

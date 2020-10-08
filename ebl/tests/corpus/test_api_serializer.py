@@ -71,6 +71,8 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                             {"type": "Caesura", "value": "||"},
                             {"type": "AkkadianWord", "value": "...]-buāru#"},
                         ],
+                        "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
+                        "isBeginningOfSection": line.is_beginning_of_section,
                         "manuscripts": [
                             {
                                 "manuscriptId": manuscript_line.manuscript_id,
