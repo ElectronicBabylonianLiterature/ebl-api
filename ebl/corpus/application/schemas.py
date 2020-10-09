@@ -139,10 +139,10 @@ class LineSchema(Schema):  # pyre-ignore[11]
         required=True,
     )
     is_second_line_of_parallelism = fields.Boolean(
-        missing=False, data_key="isSecondLineOfParallelism"
+        required=True, data_key="isSecondLineOfParallelism"
     )
     is_beginning_of_section = fields.Boolean(
-        missing=False, data_key="isBeginningOfSection"
+        required=True, data_key="isBeginningOfSection"
     )
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
 
