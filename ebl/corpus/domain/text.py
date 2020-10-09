@@ -140,15 +140,6 @@ class Line:
         return attr.evolve(self, manuscripts=stripped_manuscripts)
 
 
-def map_line(line: Line) -> str:
-    number = line.number.atf
-    reconstruction = " ".join(token.value for token in line.reconstruction)
-    lines = "⁞".join(
-        map_manuscript_line(manuscript_line) for manuscript_line in line.manuscripts
-    )
-    return f"{number}⁞{reconstruction}⁞{lines}"
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
@@ -201,7 +192,7 @@ class Chapter:
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
 
-        merged_lines = Merger(map_line, inner_merge).merge(self.lines, other.lines)
+        merged_lines = Merger(repr, inner_merge).merge(self.lines, other.lines)
         return attr.evolve(other, lines=tuple(merged_lines))
 
 
