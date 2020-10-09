@@ -1,5 +1,4 @@
 import collections
-from enum import Enum, auto
 from typing import Iterable, Optional, Set, Sequence, TypeVar
 
 import attr
@@ -15,6 +14,7 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
+import ebl.corpus.domain.text_visitor as text_visitor
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.tokens import Token
 from ebl.merger import Merger
@@ -56,7 +56,7 @@ class Manuscript:
     def siglum(self):
         return (self.provenance, self.period, self.type, self.siglum_disambiguator)
 
-    def accept(self, visitor: "TextVisitor") -> None:
+    def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript(self)
 
 
@@ -75,7 +75,7 @@ class ManuscriptLine:
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: TextLine
 
-    def accept(self, visitor: "TextVisitor") -> None:
+    def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript_line(self)
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
@@ -96,6 +96,8 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 class Line:
     number: AbstractLineNumber
     reconstruction: Sequence[Token] = attr.ib(default=tuple())
+    is_second_line_of_parallelism: bool = False
+    is_beginning_of_section: bool = False
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
     @reconstruction.validator
@@ -106,7 +108,7 @@ class Line:
     def manuscript_ids(self) -> Set[int]:
         return {manuscript.manuscript_id for manuscript in self.manuscripts}
 
-    def accept(self, visitor: "TextVisitor") -> None:
+    def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:
             visitor.visit_line(self)
 
@@ -136,15 +138,6 @@ class Line:
             manuscript_line.strip_alignments() for manuscript_line in self.manuscripts
         )
         return attr.evolve(self, manuscripts=stripped_manuscripts)
-
-
-def map_line(line: Line) -> str:
-    number = line.number.atf
-    reconstruction = " ".join(token.value for token in line.reconstruction)
-    lines = "⁞".join(
-        map_manuscript_line(manuscript_line) for manuscript_line in line.manuscripts
-    )
-    return f"{number}⁞{reconstruction}⁞{lines}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -182,7 +175,7 @@ class Chapter:
         if orphans:
             raise ValueError(f"Missing manuscripts: {orphans}.")
 
-    def accept(self, visitor: "TextVisitor") -> None:
+    def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:
             visitor.visit_chapter(self)
 
@@ -199,7 +192,7 @@ class Chapter:
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
 
-        merged_lines = Merger(map_line, inner_merge).merge(self.lines, other.lines)
+        merged_lines = Merger(repr, inner_merge).merge(self.lines, other.lines)
         return attr.evolve(other, lines=tuple(merged_lines))
 
 
@@ -217,7 +210,7 @@ class Text:
 
         return TextId(self.category, self.index)
 
-    def accept(self, visitor: "TextVisitor") -> None:
+    def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:
             visitor.visit_text(self)
 
@@ -226,35 +219,3 @@ class Text:
 
         if visitor.is_post_order:
             visitor.visit_text(self)
-
-
-class TextVisitor:
-    class Order(Enum):
-        PRE = auto()
-        POST = auto()
-
-    def __init__(self, order: "TextVisitor.Order"):
-        self._order = order
-
-    @property
-    def is_post_order(self) -> bool:
-        return self._order == TextVisitor.Order.POST
-
-    @property
-    def is_pre_order(self) -> bool:
-        return self._order == TextVisitor.Order.PRE
-
-    def visit_text(self, text: Text) -> None:
-        pass
-
-    def visit_chapter(self, chapter: Chapter) -> None:
-        pass
-
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
-        pass
-
-    def visit_line(self, line: Line) -> None:
-        pass
-
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        pass

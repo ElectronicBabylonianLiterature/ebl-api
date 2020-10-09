@@ -71,6 +71,8 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                             {"type": "Caesura", "value": "||"},
                             {"type": "AkkadianWord", "value": "...]-buāru#"},
                         ],
+                        "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
+                        "isBeginningOfSection": line.is_beginning_of_section,
                         "manuscripts": [
                             {
                                 "manuscriptId": manuscript_line.manuscript_id,
@@ -107,4 +109,5 @@ def test_serialize() -> None:
 
 def test_deserialize() -> None:
     text, dto = create(False)
+    del dto["chapters"][0]["lines"][0]["reconstructionTokens"]
     assert deserialize(dto) == text

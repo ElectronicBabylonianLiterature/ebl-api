@@ -73,6 +73,50 @@ def test_updating(client, bibliography, sign_repository, signs):
     assert get_result.json == create_dto(updated_text)
 
 
+def test_updating_strophic_information(client, bibliography, sign_repository, signs):
+    allow_signs(signs, sign_repository)
+    text = TextFactory.build()
+    allow_references(text, bibliography)
+    create_text(client, text)
+    updated_text = attr.evolve(
+        text,
+        chapters=(
+            attr.evolve(
+                text.chapters[0],
+                lines=(
+                    attr.evolve(
+                        text.chapters[0].lines[0],
+                        is_second_line_of_parallelism=not text.chapters[0]
+                        .lines[0]
+                        .is_second_line_of_parallelism,
+                        is_beginning_of_section=not text.chapters[0]
+                        .lines[0]
+                        .is_beginning_of_section,
+                    ),
+                ),
+                parser_version=ATF_PARSER_VERSION,
+            ),
+        ),
+    )
+
+    body = {"lines": create_dto(updated_text)["chapters"][0]["lines"]}
+    post_result = client.simulate_post(
+        f"/texts/{text.category}/{text.index}/chapters/0/lines", body=json.dumps(body)
+    )
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert post_result.json == create_dto(updated_text)
+
+    get_result = client.simulate_get(
+        f"/texts/{updated_text.category}/{updated_text.index}"
+    )
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert get_result.json == create_dto(updated_text)
+
+
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
         "/texts/1/1/chapters/0/lines", body=json.dumps({"lines": []})

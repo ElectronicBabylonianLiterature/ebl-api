@@ -1,13 +1,8 @@
 from typing import Optional
 from collections import Counter
 
-from ebl.corpus.domain.text import (
-    Chapter,
-    Line,
-    Manuscript,
-    ManuscriptLine,
-    TextVisitor,
-)
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.line_number import AbstractLineNumber
