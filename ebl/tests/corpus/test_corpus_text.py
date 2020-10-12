@@ -75,8 +75,11 @@ MANUSCRIPT_TEXT = TextLine(
     ),
 )
 
+RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
+NOTE = None
 LINE = Line(
-    TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION),
+    RECONSTRUCTION,
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
@@ -143,8 +146,10 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
+    assert TEXT.chapters[0].lines[0].text == RECONSTRUCTION
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
+    assert TEXT.chapters[0].lines[0].note == NOTE
     assert (
         TEXT.chapters[0].lines[0].is_second_line_of_parallelism
         == IS_SECOND_LINE_OF_PARALLELISM
@@ -202,7 +207,8 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION),
+                    RECONSTRUCTION,
+                    NOTE,
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                     (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
@@ -232,6 +238,7 @@ def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
             TextLine.of_iterable(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),)),
+            NOTE,
             False,
             False,
             tuple(),

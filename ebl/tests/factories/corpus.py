@@ -115,6 +115,9 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
             ),
         )
     )
+    note = None
+    is_second_line_of_parallelism = factory.Faker("boolean")
+    is_beginning_of_section = factory.Faker("boolean")
     manuscripts: Sequence[ManuscriptLine] = factory.List(
         [factory.SelfAttribute("..manuscript")], TupleFactory
     )

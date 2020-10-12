@@ -12,6 +12,7 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)
@@ -54,8 +55,10 @@ RECONSTRUCTION = TextLine.of_iterable(
 
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
+NOTE = None
 LINE = Line(
     RECONSTRUCTION,
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (MANUSCRIPT_LINE,),
@@ -69,6 +72,7 @@ LINE = Line(
         (
             Line(
                 RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -100,6 +104,7 @@ LINE = Line(
                 TextLine.of_iterable(
                     LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
                 ),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -129,6 +134,7 @@ LINE = Line(
                 TextLine.of_iterable(
                     LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
                 ),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -160,18 +166,21 @@ LINE = Line(
         (
             Line(
                 RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (MANUSCRIPT_LINE,),
             ),
             Line(
                 TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
             ),
             Line(
                 TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -184,6 +193,7 @@ LINE = Line(
         (
             Line(
                 RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -214,6 +224,7 @@ LINE = Line(
             ),
             Line(
                 RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -223,6 +234,7 @@ LINE = Line(
             ),
             Line(
                 RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -236,12 +248,36 @@ LINE = Line(
         (
             Line(
                 RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 tuple(),
             ),
-            Line(RECONSTRUCTION, True, True, tuple()),
-            Line(RECONSTRUCTION, True, True, tuple()),
+            Line(RECONSTRUCTION, NOTE, True, True, tuple()),
+            Line(RECONSTRUCTION, NOTE, True, True, tuple()),
+        ),
+        (
+            Line(
+                RECONSTRUCTION,
+                NoteLine((StringPart("a note"),)),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
+            Line(
+                RECONSTRUCTION,
+                NoteLine((StringPart("new note"),)),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
+            Line(
+                RECONSTRUCTION,
+                NoteLine((StringPart("new note"),)),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
         ),
     ],
 )
@@ -265,14 +301,17 @@ NEW_VERSION = "B"
 NEW_CHAPTER_NAME = "II"
 NEW_ORDER = 2
 NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator="b")
+NOTE = NoteLine((StringPart("a note"),))
 NEW_LINE = Line(
     RECONSTRUCTION,
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 OLD_LINE = Line(
     TextLine.of_iterable(RECONSTRUCTION.line_number, tuple()),
+    None,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (MANUSCRIPT_LINE,),

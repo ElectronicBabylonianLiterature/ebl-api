@@ -21,6 +21,7 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.note_line import NoteLine
 
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
@@ -96,6 +97,7 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     text: TextLine = attr.ib()
+    note: Optional[NoteLine] = None
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
     manuscripts: Sequence[ManuscriptLine] = tuple()

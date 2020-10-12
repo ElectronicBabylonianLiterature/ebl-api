@@ -400,6 +400,7 @@ def test_merging_lines(
     manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
     line = Line(
         reconstruction,
+        None,
         not is_second_line_of_parallelism,
         not is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line),),
@@ -410,6 +411,7 @@ def test_merging_lines(
     )
     new_line = Line(
         reconstruction,
+        None,
         is_second_line_of_parallelism,
         is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line.merge(new_text_line)),),
@@ -443,6 +445,7 @@ def test_merging_lines(
     lines = (
         Line(
             reconstruction,
+            None,
             is_second_line_of_parallelism,
             is_beginning_of_section,
             (ManuscriptLine(manuscript_id, tuple(), new_text_line),),

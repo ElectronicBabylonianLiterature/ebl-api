@@ -150,6 +150,7 @@ class LineSchema(Schema):  # pyre-ignore[11]
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
             TextLine.of_iterable(data["number"], data["reconstruction"]),
+            None,
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
