@@ -33,6 +33,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
@@ -115,7 +116,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
             ),
         )
     )
-    note = None
+    note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")
     manuscripts: Sequence[ManuscriptLine] = factory.List(

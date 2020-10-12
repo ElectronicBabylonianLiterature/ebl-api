@@ -14,6 +14,7 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
+import attr
 
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
@@ -110,4 +111,12 @@ def test_serialize() -> None:
 def test_deserialize() -> None:
     text, dto = create(False)
     del dto["chapters"][0]["lines"][0]["reconstructionTokens"]
-    assert deserialize(dto) == text
+    assert deserialize(dto) == attr.evolve(
+        text,
+        chapters=(
+            attr.evolve(
+                text.chapters[0],
+                lines=(attr.evolve(text.chapters[0].lines[0], note=None),),
+            ),
+        ),
+    )

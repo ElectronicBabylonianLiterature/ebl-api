@@ -6,6 +6,7 @@ from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
+import attr
 
 ANY_USER = Guest()
 
@@ -48,7 +49,15 @@ def test_parse_text():
     )
     dto = create_dto(text)
 
-    assert deserialize(dto) == text
+    assert deserialize(dto) == attr.evolve(
+        text,
+        chapters=(
+            attr.evolve(
+                text.chapters[0],
+                lines=(attr.evolve(text.chapters[0].lines[0], note=None),),
+            ),
+        ),
+    )
 
 
 def test_to_dto():
