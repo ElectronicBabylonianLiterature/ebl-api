@@ -135,7 +135,7 @@ class LineSchema(Schema):  # pyre-ignore[11]
     number = fields.Nested(OneOfLineNumberSchema, required=True)
     reconstruction = fields.Function(
         lambda line: convert_to_atf(None, line.reconstruction),
-        lambda value: parse_reconstructed_line(value),
+        parse_reconstructed_line,
         required=True,
     )
     is_second_line_of_parallelism = fields.Boolean(
@@ -149,8 +149,7 @@ class LineSchema(Schema):  # pyre-ignore[11]
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
-            data["number"],
-            data["reconstruction"],
+            TextLine.of_iterable(data["number"], data["reconstruction"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),

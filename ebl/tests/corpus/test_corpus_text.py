@@ -76,8 +76,7 @@ MANUSCRIPT_TEXT = TextLine(
 )
 
 LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
+    TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
@@ -203,8 +202,7 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    LINE_NUMBER,
-                    LINE_RECONSTRUCTION,
+                    TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION),
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                     (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
@@ -233,7 +231,10 @@ def test_invalid_labels(labels: Sequence[Label]):
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
-            LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), False, False, tuple()
+            TextLine.of_iterable(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),)),
+            False,
+            False,
+            tuple(),
         )
 
 

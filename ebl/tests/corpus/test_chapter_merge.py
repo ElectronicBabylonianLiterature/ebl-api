@@ -48,13 +48,14 @@ def test_merge_manuscript_line(old, new, expected):
     assert old.merge(new) == expected
 
 
-LINE_NUMBER = LineNumber(1)
-LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+RECONSTRUCTION = TextLine.of_iterable(
+    LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
+)
+
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
+    RECONSTRUCTION,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (MANUSCRIPT_LINE,),
@@ -67,8 +68,7 @@ LINE = Line(
         (LINE, LINE, LINE),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -97,8 +97,9 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumber(2),
-                (AkkadianWord.of((ValueToken.of("kur"),)),),
+                TextLine.of_iterable(
+                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
+                ),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -125,8 +126,9 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumber(2),
-                (AkkadianWord.of((ValueToken.of("kur"),)),),
+                TextLine.of_iterable(
+                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
+                ),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -157,22 +159,19 @@ LINE = Line(
         ),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (MANUSCRIPT_LINE,),
             ),
             Line(
-                LineNumber(2),
-                LINE_RECONSTRUCTION,
+                TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
             ),
             Line(
-                LineNumber(2),
-                LINE_RECONSTRUCTION,
+                TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -184,8 +183,7 @@ LINE = Line(
         ),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -215,8 +213,7 @@ LINE = Line(
                 ),
             ),
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -225,8 +222,7 @@ LINE = Line(
                 ),
             ),
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -239,14 +235,13 @@ LINE = Line(
         ),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 tuple(),
             ),
-            Line(LINE_NUMBER, LINE_RECONSTRUCTION, True, True, tuple()),
-            Line(LINE_NUMBER, LINE_RECONSTRUCTION, True, True, tuple()),
+            Line(RECONSTRUCTION, True, True, tuple()),
+            Line(RECONSTRUCTION, True, True, tuple()),
         ),
     ],
 )
@@ -271,15 +266,13 @@ NEW_CHAPTER_NAME = "II"
 NEW_ORDER = 2
 NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator="b")
 NEW_LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
+    RECONSTRUCTION,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 OLD_LINE = Line(
-    LINE_NUMBER,
-    tuple(),
+    TextLine.of_iterable(RECONSTRUCTION.line_number, tuple()),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (MANUSCRIPT_LINE,),

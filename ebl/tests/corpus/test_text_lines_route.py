@@ -48,7 +48,13 @@ def test_updating(client, bibliography, sign_repository, signs):
             attr.evolve(
                 text.chapters[0],
                 lines=(
-                    attr.evolve(text.chapters[0].lines[0], number=LineNumber(1, True)),
+                    attr.evolve(
+                        text.chapters[0].lines[0],
+                        text=attr.evolve(
+                            text.chapters[0].lines[0].text,
+                            line_number=LineNumber(1, True),
+                        ),
+                    ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
             ),

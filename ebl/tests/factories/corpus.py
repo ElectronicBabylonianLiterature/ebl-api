@@ -93,23 +93,27 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
             manuscript_id=factory.SelfAttribute("..manuscript_id"),
         )
 
-    number = factory.Sequence(lambda n: LineNumber(n))
-    reconstruction = (
-        LanguageShift.normalized_akkadian(),
-        AkkadianWord.of((ValueToken.of("buāru"),)),
-        MetricalFootSeparator.uncertain(),
-        BrokenAway.open(),
-        UnknownNumberOfSigns.of(),
-        Caesura.certain(),
-        AkkadianWord.of(
+    text = factory.Sequence(
+        lambda n: TextLine.of_iterable(
+            LineNumber(n),
             (
+                LanguageShift.normalized_akkadian(),
+                AkkadianWord.of((ValueToken.of("buāru"),)),
+                MetricalFootSeparator.uncertain(),
+                BrokenAway.open(),
                 UnknownNumberOfSigns.of(),
-                BrokenAway.close(),
-                Joiner.hyphen(),
-                ValueToken.of("buāru"),
+                Caesura.certain(),
+                AkkadianWord.of(
+                    (
+                        UnknownNumberOfSigns.of(),
+                        BrokenAway.close(),
+                        Joiner.hyphen(),
+                        ValueToken.of("buāru"),
+                    ),
+                    (Flag.DAMAGE,),
+                ),
             ),
-            (Flag.DAMAGE,),
-        ),
+        )
     )
     manuscripts: Sequence[ManuscriptLine] = factory.List(
         [factory.SelfAttribute("..manuscript")], TupleFactory

@@ -1,5 +1,5 @@
 import collections
-from typing import Iterable, Optional, Set, Sequence, TypeVar
+from typing import Iterable, Optional, Sequence, Set, TypeVar
 
 import attr
 
@@ -21,6 +21,7 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
@@ -94,15 +95,22 @@ def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
-    number: AbstractLineNumber
-    reconstruction: Sequence[Token] = attr.ib(default=tuple())
+    text: TextLine = attr.ib()
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
-    @reconstruction.validator
+    @text.validator
     def validate_reconstruction(self, _, value):
-        validate(value)
+        validate(value.content)
+
+    @property
+    def number(self) -> AbstractLineNumber:
+        return self.text.line_number
+
+    @property
+    def reconstruction(self) -> Sequence[Token]:
+        return self.text.content
 
     @property
     def manuscript_ids(self) -> Set[int]:
