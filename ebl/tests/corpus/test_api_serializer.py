@@ -1,12 +1,9 @@
-from ebl.bibliography.application.reference_schema import (
-    ApiReferenceSchema,
-    ReferenceSchema,
-)
+from typing import Tuple
+
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
+from ebl.corpus.domain.text import Text
 from ebl.corpus.web.api_serializer import deserialize, serialize
-from ebl.tests.factories.bibliography import (
-    ReferenceFactory,
-    ReferenceWithDocumentFactory,
-)
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -15,19 +12,21 @@ from ebl.tests.factories.corpus import (
     TextFactory,
 )
 from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
 
 
-def create(include_documents):
+def create(include_documents: bool) -> Tuple[Text, dict]:
     references = (
-        (
-            ReferenceWithDocumentFactory if include_documents else ReferenceFactory
-        ).build(),
+        ReferenceFactory.build(with_document=include_documents),  # pyre-ignore[16]
     )
-    manuscript = ManuscriptFactory.build(references=references)
-    manuscript_line = ManuscriptLineFactory.build()
-    line = LineFactory.build(manuscripts=(manuscript_line,))
+    manuscript = ManuscriptFactory.build(references=references)  # pyre-ignore[16]
+    # pyre-ignore[16]
+    manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
+    line = LineFactory.build(manuscripts=(manuscript_line,))  # pyre-ignore[16]
+    # pyre-ignore[16]
     chapter = ChapterFactory.build(manuscripts=(manuscript,), lines=(line,))
-    text = TextFactory.build(chapters=(chapter,))
+    text = TextFactory.build(chapters=(chapter,))  # pyre-ignore[16]
     dto = {
         "category": text.category,
         "index": text.index,
@@ -46,31 +45,34 @@ def create(include_documents):
                     {
                         "id": manuscript.id,
                         "siglumDisambiguator": manuscript.siglum_disambiguator,
-                        "museumNumber": manuscript.museum_number,
+                        "museumNumber": str(manuscript.museum_number)
+                        if manuscript.museum_number
+                        else "",
                         "accession": manuscript.accession,
                         "periodModifier": manuscript.period_modifier.value,
                         "period": manuscript.period.long_name,
                         "provenance": manuscript.provenance.long_name,
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
-                        "references": (
-                            ApiReferenceSchema if include_documents else ReferenceSchema
-                        )().dump(references, many=True),
+                        # pyre-ignore[16]
+                        "references": ApiReferenceSchema().dump(references, many=True),
                     }
                 ],
                 "lines": [
                     {
-                        "number": line.number.to_value(),
-                        "reconstruction": " ".join(
-                            str(token) for token in line.reconstruction
-                        ),
+                        "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
+                        "reconstruction": convert_to_atf(None, line.reconstruction),
                         "reconstructionTokens": [
+                            {"type": "LanguageShift", "value": "%n"},
                             {"type": "AkkadianWord", "value": "buāru"},
                             {"type": "MetricalFootSeparator", "value": "(|)"},
-                            {"type": "Lacuna", "value": "[..."},
+                            {"type": "BrokenAway", "value": "["},
+                            {"type": "UnknownNumberOfSigns", "value": "..."},
                             {"type": "Caesura", "value": "||"},
                             {"type": "AkkadianWord", "value": "...]-buāru#"},
                         ],
+                        "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
+                        "isBeginningOfSection": line.is_beginning_of_section,
                         "manuscripts": [
                             {
                                 "manuscriptId": manuscript_line.manuscript_id,
@@ -84,6 +86,7 @@ def create(include_documents):
                                     ]
                                 ),
                                 "atfTokens": (
+                                    # pyre-ignore[16]
                                     TextLineSchema().dump(manuscript_line.line)[
                                         "content"
                                     ]
@@ -99,11 +102,12 @@ def create(include_documents):
     return text, dto
 
 
-def test_serialize():
+def test_serialize() -> None:
     text, dto = create(True)
     assert serialize(text) == dto
 
 
-def test_deserialize():
+def test_deserialize() -> None:
     text, dto = create(False)
+    del dto["chapters"][0]["lines"][0]["reconstructionTokens"]
     assert deserialize(dto) == text

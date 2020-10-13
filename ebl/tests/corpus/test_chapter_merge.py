@@ -1,12 +1,12 @@
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.enums import Classification, Stage
-from ebl.corpus.domain.reconstructed_text import AkkadianWord, StringPart
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import ColumnLabel, LineNumberLabel, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -28,18 +28,15 @@ NEW_LABELS = (SurfaceLabel.from_label(Surface.REVERSE),)
 NEW_TEXT_LINE = TextLine(
     LineNumber(1), (Word.of([Reading.of_name("kur")]), Word.of([Reading.of_name("pa")]))
 )
+MANUSCRIPT_LINE = ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE)
 
 
 @pytest.mark.parametrize(
     "old,new,expected",
     [
+        (MANUSCRIPT_LINE, MANUSCRIPT_LINE, MANUSCRIPT_LINE),
         (
-            ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),
-            ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),
-            ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),
-        ),
-        (
-            ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),
+            MANUSCRIPT_LINE,
             ManuscriptLine(NEW_MANUSCRIPT_ID, NEW_LABELS, NEW_TEXT_LINE),
             ManuscriptLine(
                 NEW_MANUSCRIPT_ID, NEW_LABELS, TEXT_LINE.merge(NEW_TEXT_LINE)
@@ -51,12 +48,16 @@ def test_merge_manuscript_line(old, new, expected):
     assert old.merge(new) == expected
 
 
-LINE_NUMBER = LineNumberLabel("1")
-LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
+LINE_NUMBER = LineNumber(1)
+LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+IS_SECOND_LINE_OF_PARALLELISM = True
+IS_BEGINNING_OF_SECTION = True
 LINE = Line(
     LINE_NUMBER,
     LINE_RECONSTRUCTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    (MANUSCRIPT_LINE,),
 )
 
 
@@ -68,6 +69,8 @@ LINE = Line(
             Line(
                 LINE_NUMBER,
                 LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID,
@@ -94,8 +97,10 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumberLabel("2"),
-                (AkkadianWord((StringPart("kur"),)),),
+                LineNumber(2),
+                (AkkadianWord.of((ValueToken.of("kur"),)),),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID,
@@ -120,8 +125,10 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumberLabel("2"),
-                (AkkadianWord((StringPart("kur"),)),),
+                LineNumber(2),
+                (AkkadianWord.of((ValueToken.of("kur"),)),),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID,
@@ -152,16 +159,22 @@ LINE = Line(
             Line(
                 LINE_NUMBER,
                 LINE_RECONSTRUCTION,
-                (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                (MANUSCRIPT_LINE,),
             ),
             Line(
-                LineNumberLabel("2"),
+                LineNumber(2),
                 LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
             ),
             Line(
-                LineNumberLabel("2"),
+                LineNumber(2),
                 LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID, LABELS, TEXT_LINE.merge(NEW_TEXT_LINE)
@@ -173,6 +186,8 @@ LINE = Line(
             Line(
                 LINE_NUMBER,
                 LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(
                         MANUSCRIPT_ID,
@@ -196,12 +211,14 @@ LINE = Line(
                             ),
                         ),
                     ),
-                    ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),
+                    MANUSCRIPT_LINE,
                 ),
             ),
             Line(
                 LINE_NUMBER,
                 LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
                     ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
@@ -210,6 +227,8 @@ LINE = Line(
             Line(
                 LINE_NUMBER,
                 LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
                 (
                     ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
                     ManuscriptLine(
@@ -217,6 +236,17 @@ LINE = Line(
                     ),
                 ),
             ),
+        ),
+        (
+            Line(
+                LINE_NUMBER,
+                LINE_RECONSTRUCTION,
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
+            Line(LINE_NUMBER, LINE_RECONSTRUCTION, True, True, tuple()),
+            Line(LINE_NUMBER, LINE_RECONSTRUCTION, True, True, tuple()),
         ),
     ],
 )
@@ -243,10 +273,16 @@ NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator="b")
 NEW_LINE = Line(
     LINE_NUMBER,
     LINE_RECONSTRUCTION,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 OLD_LINE = Line(
-    LineNumberLabel("1'"), tuple(), (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),)
+    LINE_NUMBER,
+    tuple(),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    (MANUSCRIPT_LINE,),
 )
 
 
@@ -291,14 +327,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
-                (
-                    Line(
-                        LineNumberLabel("1'"),
-                        tuple(),
-                        (ManuscriptLine(MANUSCRIPT_ID, LABELS, TEXT_LINE),),
-                    ),
-                    LINE,
-                ),
+                (OLD_LINE, LINE),
             ),
             Chapter(
                 CLASSIFICATION,

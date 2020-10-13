@@ -3,7 +3,12 @@ import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    Measure,
+    UncuratedReference,
+    Genre,
+)
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -135,6 +140,24 @@ def test_references():
 def test_references_default():
     fragment = FragmentFactory.build()
     assert fragment.references == tuple()
+
+
+def test_genre():
+    genres = (Genre(["ARCHIVAL", "Administrative", "Lists"], False),)
+    fragment = FragmentFactory.build(genres=genres)
+    assert fragment.genres == genres
+
+
+def test_set_genre():
+    updated_genres = (Genre(["ARCHIVAL", "Administrative", "Lists"], True),)
+    fragment = FragmentFactory.build(genres=tuple())
+    updated_fragment = fragment.set_genres(updated_genres)
+    assert updated_fragment.genres == updated_genres
+
+
+def test_invalid_genre():
+    with pytest.raises(ValueError, match="is not a valid genre"):
+        Genre(["xyz", "wrq"], False)
 
 
 @freeze_time("2018-09-07 15:41:24.032")

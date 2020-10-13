@@ -2,11 +2,13 @@ from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
     DocumentOrientedGloss,
+    Emendation,
     Enclosure,
     Gloss,
     IntentionalOmission,
@@ -96,6 +98,10 @@ class EnclosureValidator(TokenVisitor):
         for part in named_sign.name_parts:
             part.accept(self)
 
+    def visit_akkadian_word(self, word: AkkadianWord) -> None:
+        for part in word.parts:
+            part.accept(self)
+
     def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         self._update_state(omission, EnclosureType.ACCIDENTAL_OMISSION)
 
@@ -115,6 +121,9 @@ class EnclosureValidator(TokenVisitor):
             else EnclosureType.PERHAPS
         )
         self._update_state(broken_away, perhaps_type)
+
+    def visit_emendation(self, emendation: Emendation) -> None:
+        self._update_state(emendation, EnclosureType.EMENDATION)
 
     def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._update_state(gloss, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
@@ -170,6 +179,11 @@ class EnclosureUpdater(TokenVisitor):
         visited_parts: Sequence = self._visit_parts(named_sign.name_parts)
         self._append_token(attr.evolve(new_token, name_parts=visited_parts))
 
+    def visit_akkadian_word(self, word: AkkadianWord) -> None:
+        new_token = self._set_enclosure_type(word)
+        visited_parts: Sequence = self._visit_parts(word.parts)
+        self._append_token(attr.evolve(new_token, parts=visited_parts))
+
     def visit_gloss(self, gloss: Gloss) -> None:
         new_token = self._set_enclosure_type(gloss)
         visited_parts = self._visit_parts(gloss.parts)
@@ -208,6 +222,11 @@ class EnclosureUpdater(TokenVisitor):
     def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         new_token = self._set_enclosure_type(gloss)
         self._update_enclosures(gloss, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
+        self._append_token(new_token)
+
+    def visit_emendation(self, emendation: Emendation) -> None:
+        new_token = self._set_enclosure_type(emendation)
+        self._update_enclosures(emendation, EnclosureType.EMENDATION)
         self._append_token(new_token)
 
     def _visit_parts(self, tokens: Sequence[Token]) -> Sequence[Token]:

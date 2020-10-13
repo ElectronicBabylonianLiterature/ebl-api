@@ -13,6 +13,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Determinative,
     DocumentOrientedGloss,
+    Emendation,
     Erasure,
     Gloss,
     IntentionalOmission,
@@ -50,6 +51,11 @@ from ebl.transliteration.domain.word_tokens import (
     InWordNewline,
     LoneDeterminative,
     Word,
+)
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
 )
 
 
@@ -148,6 +154,16 @@ class RemovalSchema(EnclosureSchema):
     def make_token(self, data, **kwargs):
         return (
             Removal.of(data["side"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
+        )
+
+
+class EmendationSchema(EnclosureSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return (
+            Emendation.of(data["side"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
         )
@@ -443,6 +459,37 @@ class LineBreakSchema(BaseTokenSchema):
         return LineBreak(frozenset(data["enclosure_type"]), data["erasure"])
 
 
+class AkkadianWordSchema(BaseTokenSchema):
+    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+    modifiers = fields.List(ValueEnum(Flag), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return AkkadianWord.of(
+            tuple(data["parts"]), tuple(data["modifiers"])
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+
+
+class Breakchema(BaseTokenSchema):
+    is_uncertain = fields.Boolean(data_key="isUncertain", required=True)
+
+
+class CaesuraSchema(Breakchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return Caesura.of(data["is_uncertain"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
+
+
+class MetricalFootSeparatorSchema(Breakchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return MetricalFootSeparator.of(data["is_uncertain"]).set_enclosure_type(
+            frozenset(data["enclosure_type"])
+        )
+
+
 class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
@@ -457,6 +504,7 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "AccidentalOmission": AccidentalOmissionSchema,
         "IntentionalOmission": IntentionalOmissionSchema,
         "Removal": RemovalSchema,
+        "Emendation": EmendationSchema,
         "Erasure": ErasureSchema,
         "UnknownNumberOfSigns": UnknownNumberOfSignsSchema,
         "Tabulation": TabulationSchema,
@@ -477,4 +525,7 @@ class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
         "PhoneticGloss": PhoneticGlossSchema,
         "LinguisticGloss": LinguisticGlossSchema,
         "LineBreak": LineBreakSchema,
+        "AkkadianWord": AkkadianWordSchema,
+        "Caesura": CaesuraSchema,
+        "MetricalFootSeparator": MetricalFootSeparatorSchema,
     }

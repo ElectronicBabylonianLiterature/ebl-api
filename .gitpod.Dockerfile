@@ -13,3 +13,5 @@ RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 RUN pip install --upgrade pip
 RUN pip install pipenv
+
+ENV NODE_OPTIONS=--experimental-worker

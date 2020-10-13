@@ -1,8 +1,7 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enclosure import BROKEN_OFF_OPEN
 from ebl.corpus.domain.enums import (
     Classification,
     ManuscriptType,
@@ -11,7 +10,7 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.corpus.domain.reconstructed_text import AkkadianWord, EnclosurePart, StringPart
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.corpus.domain.text import (
     Chapter,
     Line,
@@ -20,6 +19,7 @@ from ebl.corpus.domain.text import (
     Text,
     TextId,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -47,7 +47,7 @@ CHAPTER_NAME = "IIc"
 ORDER = 1
 MANUSCRIPT_ID = 9001
 SIGLUM_DISAMBIGUATOR = "1c"
-MUSEUM_NUMBER = "BM.x"
+MUSEUM_NUMBER = MuseumNumber("BM", "x")
 ACCESSION = ""
 PERIOD_MODIFIER = PeriodModifier.LATE
 PERIOD = Period.OLD_BABYLONIAN
@@ -55,8 +55,10 @@ PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 NOTES = "some notes"
 REFERENCES = (ReferenceFactory.build(),)  # pyre-ignore[16]
-LINE_NUMBER = LineNumberLabel("1")
-LINE_RECONSTRUCTION = (AkkadianWord((StringPart("buāru"),)),)
+LINE_NUMBER = LineNumber(1)
+LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+IS_SECOND_LINE_OF_PARALLELISM = True
+IS_BEGINNING_OF_SECTION = True
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
     LineNumber(1),
@@ -76,6 +78,8 @@ MANUSCRIPT_TEXT = TextLine(
 LINE = Line(
     LINE_NUMBER,
     LINE_RECONSTRUCTION,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
 )
 
@@ -142,6 +146,11 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
+    assert (
+        TEXT.chapters[0].lines[0].is_second_line_of_parallelism
+        == IS_SECOND_LINE_OF_PARALLELISM
+    )
+    assert TEXT.chapters[0].lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
     assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
     assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
     assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
@@ -151,8 +160,8 @@ def test_giving_museum_number_and_accession_is_invalid():
     with pytest.raises(ValueError):
         Manuscript(
             MANUSCRIPT_ID,
-            museum_number="when museum number if given",
-            accession="then accession not allowed",
+            museum_number=MUSEUM_NUMBER,
+            accession="accession not allowed",
         )
 
 
@@ -196,6 +205,8 @@ def test_missing_manuscripts_are_invalid():
                 Line(
                     LINE_NUMBER,
                     LINE_RECONSTRUCTION,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
                     (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
                 ),
             ),
@@ -221,7 +232,9 @@ def test_invalid_labels(labels: Sequence[Label]):
 
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
-        Line(LINE_NUMBER, (AkkadianWord((EnclosurePart(BROKEN_OFF_OPEN),)),), tuple())
+        Line(
+            LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), False, False, tuple()
+        )
 
 
 def test_stage():

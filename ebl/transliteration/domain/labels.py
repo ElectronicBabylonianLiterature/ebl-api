@@ -4,8 +4,10 @@ from collections import Counter
 from typing import Iterable, Sequence, Tuple, Union
 
 import attr
-import roman  # pyre-ignore
-from parsy import char_from, regex, seq, string_from  # pyre-ignore
+import roman  # pyre-ignore[21]
+from lark.lexer import Token  # pyre-ignore[21]
+from lark.visitors import Transformer, v_args
+from lark.lark import Lark
 
 from ebl.transliteration.domain.atf import Object, Status, Surface
 
@@ -207,24 +209,32 @@ class LineNumberLabel(Label):
         return visitor.visit_line_number_label(self)
 
 
-STATUS = (
-    char_from("".join([status.value for status in Status])).map(Status).desc("status")
-)
+class LabelTransformer(Transformer):  # pyre-ignore[11]
+    @v_args(inline=True)
+    def line_number_label(self, number: Token) -> LineNumberLabel:  # pyre-ignore[11]
+        return LineNumberLabel(number)
 
-SURFACE_LABEL = seq(
-    string_from(*[surface.label for surface in Surface if surface.label])
-    .map(Surface.from_label)
-    .desc("surface label"),
-    STATUS.many(),
-).combine(SurfaceLabel.from_label)
-COLUMN_LABEL = seq(regex(r"[ivx]+").desc("column label"), STATUS.many()).combine(
-    ColumnLabel.from_label
-)
-LINE_NUMBER_LABEL = (
-    regex(LINE_NUMBER_EXPRESSION).map(LineNumberLabel).desc("line number label")
-)
-LABEL = SURFACE_LABEL | COLUMN_LABEL | LINE_NUMBER_LABEL
+    @v_args(inline=True)
+    def column_label(
+        self, numeral: Token, status: Sequence[Status]  # pyre-ignore[11]
+    ) -> ColumnLabel:
+        return ColumnLabel.from_label(numeral, status)
+
+    @v_args(inline=True)
+    def surface_label(self, surface: Surface, status: Sequence[Status]) -> SurfaceLabel:
+        return SurfaceLabel.from_label(surface, status)
+
+    @v_args(inline=True)
+    def surface(self, surface: Token) -> Surface:  # pyre-ignore[11]
+        return Surface.from_label(surface)
+
+    def status(self, children: Iterable[Token]) -> Sequence[Status]:  # pyre-ignore[11]
+        return tuple(Status(token) for token in children)
+
+
+LABEL_PARSER = Lark.open("labels.lark", maybe_placeholders=True, rel_to=__file__)
 
 
 def parse_label(label: str) -> Label:
-    return LABEL.parse(label)
+    tree = LABEL_PARSER.parse(label)
+    return LabelTransformer().transform(tree)  # pyre-ignore[16]

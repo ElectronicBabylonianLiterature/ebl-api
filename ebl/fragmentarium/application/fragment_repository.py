@@ -77,6 +77,10 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def update_genres(self, fragment: Fragment) -> None:
+        ...
+
+    @abstractmethod
     def update_lemmatization(self, fragment: Fragment) -> None:
         ...
 

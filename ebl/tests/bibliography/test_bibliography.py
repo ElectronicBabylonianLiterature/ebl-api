@@ -2,10 +2,7 @@ import pytest  # pyre-ignore
 from mockito import verify  # pyre-ignore
 
 from ebl.errors import DataError, DuplicateError, NotFoundError
-from ebl.tests.factories.bibliography import (
-    ReferenceWithDocumentFactory,
-    BibliographyEntryFactory,
-)
+from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 
 COLLECTION = "bibliography"
 
@@ -162,7 +159,7 @@ def test_update_not_found(bibliography_repository, bibliography, user, when):
 def test_validate_references(
     bibliography_repository, bibliography, user, changelog, when
 ):
-    reference = ReferenceWithDocumentFactory.build()
+    reference = ReferenceFactory.build(with_document=True)
 
     (when(bibliography).find(reference.id).thenReturn(reference))
     bibliography.validate_references([reference])
@@ -171,9 +168,9 @@ def test_validate_references(
 def test_validate_references_invalid(
     bibliography_repository, bibliography, user, changelog, when
 ):
-    valid_reference = ReferenceWithDocumentFactory.build()
-    first_invalid = ReferenceWithDocumentFactory.build()
-    second_invalid = ReferenceWithDocumentFactory.build()
+    valid_reference = ReferenceFactory.build(with_document=True)
+    first_invalid = ReferenceFactory.build(with_document=True)
+    second_invalid = ReferenceFactory.build(with_document=True)
     bibliography.create(valid_reference.document, user)
     (when(bibliography).find(valid_reference.id).thenReturn(valid_reference))
     (when(bibliography).find(first_invalid.id).thenRaise(NotFoundError))

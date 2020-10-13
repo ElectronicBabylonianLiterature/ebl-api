@@ -2,7 +2,8 @@ from typing import cast, List, Optional
 
 import attr
 
-from ebl.corpus.domain.text import Chapter, Text, TextVisitor
+from ebl.corpus.domain.text import Chapter, Text
+from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.errors import DataError, Defect, NotFoundError
 
 

@@ -1,23 +1,18 @@
 from typing import Optional
 from collections import Counter
 
-from ebl.corpus.domain.text import (
-    Chapter,
-    Line,
-    Manuscript,
-    ManuscriptLine,
-    TextVisitor,
-)
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
-from ebl.transliteration.domain.labels import LineNumberLabel
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 
 
 def invalid_atf(
-    chapter: Chapter, line_number: LineNumberLabel, manuscript_id: int
+    chapter: Chapter, line_number: AbstractLineNumber, manuscript_id: int
 ) -> Exception:
     siglum = [
         manuscript.siglum
@@ -26,7 +21,7 @@ def invalid_atf(
     ][0]
     return DataError(
         f"Invalid transliteration on"
-        f" line {line_number.to_value()}"
+        f" line {line_number.atf}"
         f" manuscript {siglum}."
     )
 

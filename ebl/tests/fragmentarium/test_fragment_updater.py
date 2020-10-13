@@ -3,6 +3,7 @@ from freezegun import freeze_time  # pyre-ignore
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -58,6 +59,25 @@ def test_update_update_transliteration_not_found(
             TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"),
             user,
         )
+
+
+def test_update_genres(fragment_updater, user, fragment_repository, changelog, when):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    genres = (Genre(["ARCHIVAL", "Administrative"], False),)
+    expected_fragment = fragment.set_genres(genres)
+
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(expected_fragment)},
+    ).thenReturn()
+    (when(fragment_repository).update_genres(expected_fragment).thenReturn())
+
+    updated_fragment = fragment_updater.update_genres(number, genres, user)
+    assert updated_fragment == (expected_fragment, False)
 
 
 @freeze_time("2018-09-07 15:41:24.032")

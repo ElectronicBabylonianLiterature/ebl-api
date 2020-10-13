@@ -4,6 +4,7 @@ import pytest  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -151,6 +152,18 @@ def test_update_update_transliteration_not_found(fragment_repository):
         fragment_repository.update_transliteration(transliterated_fragment)
 
 
+def test_update_genres(fragment_repository):
+    fragment = FragmentFactory.build(genres=tuple())
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_genres(
+        (Genre(["ARCHIVAL", "Administrative"], False),)
+    )
+    fragment_repository.update_genres(updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
@@ -272,21 +285,12 @@ def test_search_reference_id(database, fragment_repository):
     ) == [fragment]
 
 
-def test_search_reference_id_and_pages(database, fragment_repository):
+@pytest.mark.parametrize(
+    "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
+)
+def test_search_reference_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(), ReferenceFactory.build())
-    )
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
-    assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id, fragment.references[0].pages
-        )
-    ) == [fragment]
-
-
-def test_search_reference_id_and_pages_partially(database, fragment_repository):
-    fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(pages="no. 163"), ReferenceFactory.build())
+        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
@@ -294,6 +298,21 @@ def test_search_reference_id_and_pages_partially(database, fragment_repository):
             fragment.references[0].id, "163"
         )
     ) == [fragment]
+
+
+@pytest.mark.parametrize("pages", ["1631", "1163", "116311"])
+def test_empty_result_search_reference_id_and_pages(
+    pages, database, fragment_repository
+):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+    )
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, "163"
+        )
+    ) == []
 
 
 SEARCH_SIGNS_DATA = [

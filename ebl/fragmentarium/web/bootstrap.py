@@ -13,9 +13,11 @@ from ebl.fragmentarium.web.annotations import AnnotationResource
 from ebl.fragmentarium.web.dtos import FragmentDtoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
+from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
 from ebl.fragmentarium.web.fragment_pager import FragmentPagerResource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsResource
+from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.lemma_search import LemmaSearch
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
@@ -43,9 +45,11 @@ def create_fragmentarium_routes(
 
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
+    fragment_genre = FragmentGenreResource(updater)
     fragment_search = FragmentSearch(
         fragmentarium, finder, context.get_transliteration_query_factory()
     )
+    genres = GenresResource()
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
     transliteration = TransliterationResource(
@@ -61,6 +65,7 @@ def create_fragmentarium_routes(
     atf_importer = ATF_ImportResource()
 
     api.add_route("/fragments", fragment_search)
+    api.add_route("/fragments/{number}/genres", fragment_genre)
     api.add_route("/fragments/{number}", fragments)
     api.add_route("/fragments/{number}/pager", fragment_pager)
     api.add_route("/fragments/{number}/lemmatization", lemmatization)
@@ -68,6 +73,7 @@ def create_fragmentarium_routes(
     api.add_route("/fragments/{number}/transliteration", transliteration)
     api.add_route("/fragments/{number}/annotations", annotations)
     api.add_route("/fragments/{number}/photo", photo)
+    api.add_route("/genres", genres)
     api.add_route("/lemmas", lemma_search)
     api.add_route("/statistics", statistics)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
@@ -82,6 +88,7 @@ def create_fragmentarium_routes(
 
     spec.path(resource=fragment_search)
     spec.path(resource=fragments)
+    spec.path(resource=fragment_genre)
     spec.path(resource=lemmatization)
     spec.path(resource=references)
     spec.path(resource=transliteration)
