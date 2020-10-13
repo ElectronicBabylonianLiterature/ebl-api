@@ -14,7 +14,6 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
-import attr
 
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
@@ -63,6 +62,7 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                     {
                         "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
                         "reconstruction": convert_to_atf(None, line.reconstruction),
+                        "note": line.note and line.note.atf,
                         "reconstructionTokens": [
                             {"type": "LanguageShift", "value": "%n"},
                             {"type": "AkkadianWord", "value": "buāru"},
@@ -111,12 +111,4 @@ def test_serialize() -> None:
 def test_deserialize() -> None:
     text, dto = create(False)
     del dto["chapters"][0]["lines"][0]["reconstructionTokens"]
-    assert deserialize(dto) == attr.evolve(
-        text,
-        chapters=(
-            attr.evolve(
-                text.chapters[0],
-                lines=(attr.evolve(text.chapters[0].lines[0], note=None),),
-            ),
-        ),
-    )
+    assert deserialize(dto) == text

@@ -10,7 +10,11 @@ from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Prov
 from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
-from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
+from ebl.transliteration.domain.lark_parser import (
+    parse_line,
+    parse_line_number,
+    parse_note_line,
+)
 from typing import cast
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
@@ -131,8 +135,8 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
 
 
 class LineSchema(Schema):  # pyre-ignore[11]
-    text = fields.Nested(TextLineSchema)
-    note = fields.Nested(NoteLineSchema, allow_none=True)
+    text = fields.Nested(TextLineSchema, required=True)
+    note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )
@@ -159,7 +163,7 @@ class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
 
 class ApiLineSchema(LineSchema):
     class Meta:
-        exclude = ("text", "note")
+        exclude = ("text",)
 
     number = fields.Function(
         lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
@@ -173,13 +177,19 @@ class ApiLineSchema(LineSchema):
     reconstructionTokens = fields.Nested(
         RecontsructionTokenSchema, many=True, attribute="reconstruction", dump_only=True
     )
+    note = fields.Function(
+        lambda line: line.note and line.note.atf,
+        lambda value: value and parse_note_line(value),
+        required=True,
+        allow_none=True,
+    )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
             TextLine.of_iterable(data["number"], data["reconstruction"]),
-            None,
+            data["note"],
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
