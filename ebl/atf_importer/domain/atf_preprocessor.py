@@ -316,7 +316,7 @@ class ATF_Preprocessor:
 
 
     def convert_lines(self,file,filename):
-        self.logger.debug(Util.print_frame("converting: \""+filename+".atf\""))
+        self.logger.info(Util.print_frame("converting: \""+filename+".atf\""))
 
         with codecs.open(file, 'r', encoding='utf8') as f:
             atf_ = f.read()
@@ -332,7 +332,7 @@ class ATF_Preprocessor:
             elif (c_type is None and c_line is None):
                 self.skip_next_lem_line = True
 
-        self.logger.debug(Util.print_frame("preprocessing finished"))
+        self.logger.info(Util.print_frame("preprocessing finished"))
 
         with open("/usr/src/ebl/ebl/atf_importer/debug/unparseable_lines.txt", "w", encoding='utf8') as outputfile:
             for key in self.unparseable_lines:

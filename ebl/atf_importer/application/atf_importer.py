@@ -5,6 +5,7 @@ import unittest
 import json
 from pymongo import MongoClient
 import logging
+import argparse
 
 from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
@@ -120,14 +121,11 @@ class ATF_Importer:
 
     def __init__(self):
 
+        logging.basicConfig(level=logging.DEBUG)
 
         self.atf_preprocessor = ATF_Preprocessor()
         self.logger = logging.getLogger("atf-importer")
-        self.logger.setLevel(10)
 
-
-        # parse glossary
-        self.lemmas_cfforms, self.cfforms_senses, self.cfform_guideword = self.parse_glossary("/usr/src/ebl/ebl/atf_importer/application/glossary/akk-x-stdbab.glo")
 
         # connect to eBL-db
         load_dotenv()
@@ -253,6 +251,7 @@ class ATF_Importer:
         return lemmas_cfforms,cfforms_senses,cfform_guideword
 
     def start(self):
+
         self.logger.info("Atf-Importer started...")
 
         #self.atf_preprocessor.process_line("5'. ($___$) !bs [GIŠ.GAN !cm : {(u-gu-la he]-hu-u₂)}SAG₂(|PA.GAN|) : !bs MIN#<(GIŠ.GAN)> !cm : ma-ha-ṣu")
@@ -261,26 +260,24 @@ class ATF_Importer:
         #atf_preprocessor.process_line("#lem: mīlū[flood]N; ina[in]PRP; nagbi[source]N; ipparrasū[cut (off)]V; mātu[land]N; ana[according to]PRP; mātu[land]N; +hâqu[go]V$ihâq-ma; šalāmu[peace]N; šakin[displayed]AJ",True)
         #self.atf_preprocessor.process_line("1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} * AN.GE₆")
 
-        # cli arguments
-        #parser = argparse.ArgumentParser(description='Converts ATF-files to eBL-ATF standard.')
-        #parser.add_argument('-i', "--input", required=True,
-                            #help='path of the input directory')
-        #parser.add_argument('-o', "--output", required=False,
-                            #help='path of the output directory')
-        #parser.add_argument('-g', "--glossary", required=True,
-                            #help='path to the glossary file')
-        #parser.add_argument('-t', "--test", required=False, default=False, action='store_true',
-                            #help='runs all unit-tests')
-        #parser.add_argument('-v', "--verbose", required=False, default=False, action='store_true',
-                            #help='display status messages')
+        #cli arguments
+        parser = argparse.ArgumentParser(description='Converts ATF-files to eBL-ATF standard.')
+        parser.add_argument('-i', "--input", required=True,
+                            help='path of the input directory')
+        parser.add_argument('-o', "--output", required=False,
+                            help='path of the output directory')
+        parser.add_argument('-g', "--glossary", required=True,
+                            help='path to the glossary file')
 
-        #args = parser.parse_args()
 
-        #debug = args.verbose
+        args = parser.parse_args()
 
+        # parse glossary
+        self.lemmas_cfforms, self.cfforms_senses, self.cfform_guideword = self.parse_glossary(
+            args.glossary)
 
         #read atf files from input folder
-        for filepath in glob.glob(os.path.join("/usr/src/ebl/ebl/atf_importer/input/", '*.atf')):
+        for filepath in glob.glob(os.path.join(args.input, '*.atf')):
 
             with open(filepath, 'r') as f:
 
@@ -292,7 +289,7 @@ class ATF_Importer:
                 converted_lines =  self.atf_preprocessor.convert_lines(filepath,filename)
 
                 # write result output
-                self.logger.debug(Util.print_frame("writing output"))
+                self.logger.info(Util.print_frame("writing output"))
 
                 result = dict()
                 result['transliteration'] = []
@@ -372,7 +369,7 @@ class ATF_Importer:
                         result['transliteration'].append(line['c_line'])
 
 
-                with open("/usr/src/ebl/ebl/atf_importer/output/" + filename+".json", "w", encoding='utf8') as outputfile:
+                with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
 
             with open("/usr/src/ebl/ebl/atf_importer/debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
@@ -383,6 +380,8 @@ class ATF_Importer:
                 for key in error_lines:
                     outputfile.write(key + "\n")
 
-                self.logger.debug(Util.print_frame("conversion of \""+filename+".atf\" finished"))
+                self.logger.info(Util.print_frame("conversion of \""+filename+".atf\" finished"))
 
-
+if __name__ == '__main__':
+    a = ATF_Importer()
+    a.start()

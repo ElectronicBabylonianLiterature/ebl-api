@@ -5,6 +5,6 @@ __pycache__
 .env
 input/
 notes.txt
-/application/glossary/
+glossary/
 debug/
 input_test
