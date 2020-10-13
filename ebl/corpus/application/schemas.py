@@ -163,33 +163,34 @@ class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
 
 class ApiLineSchema(LineSchema):
     class Meta:
-        exclude = ("text",)
+        exclude = ("text", "note")
 
     number = fields.Function(
         lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
         lambda value: parse_line_number(value),
+        required=True,
     )
     reconstruction = fields.Function(
-        lambda line: convert_to_atf(None, line.reconstruction),
-        parse_reconstructed_line,
+        lambda line: "".join(
+            [
+                convert_to_atf(None, line.reconstruction),
+                f"\n{line.note.atf}" if line.note else "",
+            ]
+        ),
+        lambda value: value,
         required=True,
     )
     reconstructionTokens = fields.Nested(
         RecontsructionTokenSchema, many=True, attribute="reconstruction", dump_only=True
     )
-    note = fields.Function(
-        lambda line: line.note and line.note.atf,
-        lambda value: value and parse_note_line(value),
-        required=True,
-        allow_none=True,
-    )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
+        [text, *notes] = data["reconstruction"].split("\n")
         return Line(
-            TextLine.of_iterable(data["number"], data["reconstruction"]),
-            data["note"],
+            TextLine.of_iterable(data["number"], parse_reconstructed_line(text)),
+            parse_note_line("".join(notes)) if notes else None,
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
