@@ -1,13 +1,20 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, EXCLUDE, fields, post_load  # pyre-ignore[21]
 from marshmallow.validate import Regexp
-from ebl.corpus.domain.text import Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
+from ebl.corpus.domain.enums import (
+    Classification,
+    ManuscriptType,
+    Period,
+    PeriodModifier,
+    Provenance,
+    Stage,
+)
 from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
@@ -165,6 +172,7 @@ class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
 class ApiLineSchema(LineSchema):
     class Meta:
         exclude = ("text", "note")
+        unknown = EXCLUDE
 
     number = fields.Function(
         lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
@@ -199,3 +207,32 @@ class ApiLineSchema(LineSchema):
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
         )
+
+
+class ChapterSchema(Schema):  # pyre-ignore[11]
+    classification = ValueEnum(Classification, required=True)
+    stage = ValueEnum(Stage, required=True)
+    version = fields.String(required=True)
+    name = fields.String(required=True)
+    order = fields.Integer(required=True)
+    manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
+    lines = fields.Nested(LineSchema, many=True, required=True)
+    parser_version = fields.String(missing="", data_key="parserVersion")
+
+    @post_load
+    def make_chapter(self, data: dict, **kwargs) -> Chapter:
+        return Chapter(
+            Classification(data["classification"]),
+            Stage(data["stage"]),
+            data["version"],
+            data["name"],
+            data["order"],
+            tuple(data["manuscripts"]),
+            tuple(data["lines"]),
+            data["parser_version"],
+        )
+
+
+class ApiChapterSchema(ChapterSchema):
+    manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
+    lines = fields.Nested(ApiLineSchema, many=True, required=True)

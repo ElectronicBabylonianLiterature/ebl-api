@@ -1,9 +1,8 @@
 from typing import Optional
 
 from ebl.errors import Defect
-from ebl.corpus.application.schemas import LineSchema, ManuscriptSchema
-from ebl.corpus.domain.enums import Classification, Stage
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, Text
+from ebl.corpus.application.schemas import ChapterSchema
+from ebl.corpus.domain.text import Chapter, Text
 from ebl.corpus.domain.text_visitor import TextVisitor
 
 
@@ -17,7 +16,6 @@ class TextSerializer(TextVisitor):
     def __init__(self):
         super().__init__(TextVisitor.Order.PRE)
         self._text: Optional[dict] = None
-        self._chapter: Optional[dict] = None
         self._manuscript: Optional[dict] = None
 
     @property
@@ -31,17 +29,6 @@ class TextSerializer(TextVisitor):
     def text(self, text: dict) -> None:
         self._text = text
 
-    @property
-    def chapter(self) -> dict:
-        if self._chapter is None:
-            raise Defect("Chapter accessed before set.")
-        else:
-            return self._chapter  # pyre-ignore[7]
-
-    @chapter.setter
-    def chapter(self, chapter: dict) -> None:
-        self._chapter = chapter
-
     def visit_text(self, text: Text) -> None:
         self.text = {
             "category": text.category,
@@ -53,24 +40,7 @@ class TextSerializer(TextVisitor):
         }
 
     def visit_chapter(self, chapter: Chapter) -> None:
-        self.chapter = {
-            "classification": chapter.classification.value,
-            "stage": chapter.stage.value,
-            "version": chapter.version,
-            "name": chapter.name,
-            "order": chapter.order,
-            "manuscripts": [],
-            "lines": [],
-            "parserVersion": chapter.parser_version,
-        }
-        self.text["chapters"].append(self.chapter)
-
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
-        # pyre-ignore[16]
-        self.chapter["manuscripts"].append(ManuscriptSchema().dump(manuscript))
-
-    def visit_line(self, line: Line) -> None:
-        self.chapter["lines"].append(LineSchema().dump(line))  # pyre-ignore[16]
+        self.text["chapters"].append(ChapterSchema().dump(chapter))  # pyre-ignore[16]
 
 
 class TextDeserializer:
@@ -89,25 +59,7 @@ class TextDeserializer:
         )
 
     def deserialize_chapter(self, chapter: dict) -> Chapter:
-        return Chapter(
-            Classification(chapter["classification"]),
-            Stage(chapter["stage"]),
-            chapter["version"],
-            chapter["name"],
-            chapter["order"],
-            tuple(
-                self.deserialize_manuscript(manuscript)
-                for manuscript in chapter["manuscripts"]
-            ),
-            tuple(self.deserialize_line(line) for line in chapter.get("lines", [])),
-            chapter.get("parserVersion", ""),
-        )
-
-    def deserialize_manuscript(self, manuscript: dict) -> Manuscript:
-        return ManuscriptSchema().load(manuscript)  # pyre-ignore[16]
-
-    def deserialize_line(self, line: dict) -> Line:
-        return LineSchema().load(line)  # pyre-ignore[16]
+        return ChapterSchema().load(chapter)  # pyre-ignore[16]
 
 
 def serialize(text: Text) -> dict:
