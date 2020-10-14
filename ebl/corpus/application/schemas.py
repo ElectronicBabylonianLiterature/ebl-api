@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 from ebl.corpus.domain.text import Line, Manuscript, ManuscriptLine
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
@@ -10,10 +10,13 @@ from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Prov
 from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
-from ebl.transliteration.domain.lark_parser import parse_line, parse_line_number
+from ebl.transliteration.domain.lark_parser import (
+    parse_line,
+    parse_line_number,
+    parse_note_line,
+)
 from typing import cast
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
@@ -132,12 +135,8 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
 
 
 class LineSchema(Schema):  # pyre-ignore[11]
-    number = fields.Nested(OneOfLineNumberSchema, required=True)
-    reconstruction = fields.Function(
-        lambda line: convert_to_atf(None, line.reconstruction),
-        lambda value: parse_reconstructed_line(value),
-        required=True,
-    )
+    text = fields.Nested(TextLineSchema, required=True)
+    note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )
@@ -149,8 +148,8 @@ class LineSchema(Schema):  # pyre-ignore[11]
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
-            data["number"],
-            data["reconstruction"],
+            data["text"],
+            data["note"],
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
@@ -163,11 +162,36 @@ class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
 
 
 class ApiLineSchema(LineSchema):
+    class Meta:
+        exclude = ("text", "note")
+
     number = fields.Function(
         lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
         lambda value: parse_line_number(value),
+        required=True,
+    )
+    reconstruction = fields.Function(
+        lambda line: "".join(
+            [
+                convert_to_atf(None, line.reconstruction),
+                f"\n{line.note.atf}" if line.note else "",
+            ]
+        ),
+        lambda value: value,
+        required=True,
     )
     reconstructionTokens = fields.Nested(
         RecontsructionTokenSchema, many=True, attribute="reconstruction", dump_only=True
     )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
+
+    @post_load
+    def make_line(self, data: dict, **kwargs) -> Line:
+        [text, *notes] = data["reconstruction"].split("\n")
+        return Line(
+            TextLine.of_iterable(data["number"], parse_reconstructed_line(text)),
+            parse_note_line("".join(notes)) if notes else None,
+            data["is_second_line_of_parallelism"],
+            data["is_beginning_of_section"],
+            tuple(data["manuscripts"]),
+        )

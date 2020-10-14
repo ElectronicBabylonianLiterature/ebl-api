@@ -352,7 +352,10 @@ def test_updating_lines(
                 lines=(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
-                        number=LineNumber(1, True),
+                        text=attr.evolve(
+                            TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].text,
+                            line_number=LineNumber(1, True),
+                        ),
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
@@ -378,8 +381,9 @@ def test_updating_lines(
 def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    number = LineNumber(1)
-    reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    reconstruction = TextLine.of_iterable(
+        LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    )
     is_second_line_of_parallelism = False
     is_beginning_of_section = False
     text_line = TextLine.of_iterable(
@@ -395,8 +399,8 @@ def test_merging_lines(
     )
     manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
     line = Line(
-        number,
         reconstruction,
+        None,
         not is_second_line_of_parallelism,
         not is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line),),
@@ -406,8 +410,8 @@ def test_merging_lines(
         (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ši")])),
     )
     new_line = Line(
-        number,
         reconstruction,
+        None,
         is_second_line_of_parallelism,
         is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line.merge(new_text_line)),),
@@ -440,8 +444,8 @@ def test_merging_lines(
 
     lines = (
         Line(
-            number,
             reconstruction,
+            None,
             is_second_line_of_parallelism,
             is_beginning_of_section,
             (ManuscriptLine(manuscript_id, tuple(), new_text_line),),

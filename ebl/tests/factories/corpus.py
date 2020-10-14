@@ -33,6 +33,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
@@ -93,24 +94,31 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
             manuscript_id=factory.SelfAttribute("..manuscript_id"),
         )
 
-    number = factory.Sequence(lambda n: LineNumber(n))
-    reconstruction = (
-        LanguageShift.normalized_akkadian(),
-        AkkadianWord.of((ValueToken.of("buāru"),)),
-        MetricalFootSeparator.uncertain(),
-        BrokenAway.open(),
-        UnknownNumberOfSigns.of(),
-        Caesura.certain(),
-        AkkadianWord.of(
+    text = factory.Sequence(
+        lambda n: TextLine.of_iterable(
+            LineNumber(n),
             (
+                LanguageShift.normalized_akkadian(),
+                AkkadianWord.of((ValueToken.of("buāru"),)),
+                MetricalFootSeparator.uncertain(),
+                BrokenAway.open(),
                 UnknownNumberOfSigns.of(),
-                BrokenAway.close(),
-                Joiner.hyphen(),
-                ValueToken.of("buāru"),
+                Caesura.certain(),
+                AkkadianWord.of(
+                    (
+                        UnknownNumberOfSigns.of(),
+                        BrokenAway.close(),
+                        Joiner.hyphen(),
+                        ValueToken.of("buāru"),
+                    ),
+                    (Flag.DAMAGE,),
+                ),
             ),
-            (Flag.DAMAGE,),
-        ),
+        )
     )
+    note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
+    is_second_line_of_parallelism = factory.Faker("boolean")
+    is_beginning_of_section = factory.Faker("boolean")
     manuscripts: Sequence[ManuscriptLine] = factory.List(
         [factory.SelfAttribute("..manuscript")], TupleFactory
     )

@@ -61,7 +61,12 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                 "lines": [
                     {
                         "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
-                        "reconstruction": convert_to_atf(None, line.reconstruction),
+                        "reconstruction": "".join(
+                            [
+                                convert_to_atf(None, line.reconstruction),
+                                f"\n{line.note.atf}" if line.note else "",
+                            ]
+                        ),
                         "reconstructionTokens": [
                             {"type": "LanguageShift", "value": "%n"},
                             {"type": "AkkadianWord", "value": "buāru"},

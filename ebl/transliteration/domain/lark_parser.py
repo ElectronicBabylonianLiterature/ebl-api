@@ -15,6 +15,7 @@ from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
@@ -41,6 +42,9 @@ class LineTransformer(
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
+NOTE_LINE_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
+)
 LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
 
@@ -61,6 +65,11 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_note_line(atf: str) -> NoteLine:
+    tree = NOTE_LINE_PARSER.parse(atf)
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 

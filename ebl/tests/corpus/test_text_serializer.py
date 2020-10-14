@@ -11,9 +11,7 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
-from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 import attr
 
@@ -88,8 +86,8 @@ def to_dict(include_documents=False):
                 ],
                 "lines": [
                     {
-                        "number": OneOfLineNumberSchema().dump(LINE.number),
-                        "reconstruction": convert_to_atf(None, LINE.reconstruction),
+                        "text": TextLineSchema().dump(LINE.text),
+                        "note": LINE.note and NoteLineSchema().dump(LINE.note),
                         "isSecondLineOfParallelism": LINE.is_second_line_of_parallelism,
                         "isBeginningOfSection": LINE.is_beginning_of_section,
                         "manuscripts": [

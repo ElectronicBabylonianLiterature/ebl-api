@@ -7,6 +7,7 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
 
+
 ANY_USER = Guest()
 
 
