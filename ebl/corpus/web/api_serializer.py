@@ -1,7 +1,7 @@
 from typing import Sequence
 
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
-from marshmallow import EXCLUDE  # pyre-ignore[21]
+from marshmallow import EXCLUDE, ValidationError  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
 from ebl.corpus.domain.text import Line, Manuscript, Text
@@ -42,7 +42,7 @@ def serialize(text: Text) -> dict:
 def deserialize(dto: dict) -> Text:
     try:
         return ApiDeserializer.deserialize(dto)
-    except (ValueError, ParseError, UnexpectedInput) as error:
+    except (ValueError, ParseError, UnexpectedInput, ValidationError) as error:
         raise DataError(error)
 
 
@@ -50,5 +50,5 @@ def deserialize_lines(lines: list) -> Sequence[Line]:
     deserializer = ApiDeserializer()
     try:
         return tuple(deserializer.deserialize_line(line) for line in lines)
-    except (ValueError, ParseError, UnexpectedInput) as error:
+    except (ValueError, ParseError, UnexpectedInput, ValidationError) as error:
         raise DataError(error)

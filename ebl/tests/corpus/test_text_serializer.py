@@ -66,9 +66,11 @@ def to_dict(include_documents=False):
                         "id": MANUSCRIPT.id,
                         "siglumDisambiguator": MANUSCRIPT.siglum_disambiguator,
                         "museumNumber": (
-                            str(MANUSCRIPT.museum_number)
-                            if MANUSCRIPT.museum_number
-                            else ""
+                            (
+                                str(MANUSCRIPT.museum_number)
+                                if MANUSCRIPT.museum_number
+                                else ""
+                            )
                             if include_documents
                             else MANUSCRIPT.museum_number
                             and MuseumNumberSchema().dump(MANUSCRIPT.museum_number)

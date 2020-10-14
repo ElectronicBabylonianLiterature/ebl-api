@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow.validate import Regexp
 from ebl.corpus.domain.text import Line, Manuscript, ManuscriptLine
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
@@ -179,6 +180,9 @@ class ApiLineSchema(LineSchema):
         ),
         lambda value: value,
         required=True,
+        validate=Regexp(
+            r"^[^\n]*(\n[^\n]*)?$", error="Too many note lines in reconstruction."
+        ),
     )
     reconstructionTokens = fields.Nested(
         RecontsructionTokenSchema, many=True, attribute="reconstruction", dump_only=True
@@ -190,7 +194,7 @@ class ApiLineSchema(LineSchema):
         [text, *notes] = data["reconstruction"].split("\n")
         return Line(
             TextLine.of_iterable(data["number"], parse_reconstructed_line(text)),
-            parse_note_line("".join(notes)) if notes else None,
+            parse_note_line(notes[0]) if notes else None,
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
