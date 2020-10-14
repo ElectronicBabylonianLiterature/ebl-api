@@ -2,7 +2,7 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
+from ebl.corpus.application.text_serializer import serialize, deserialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -108,9 +108,9 @@ def to_dict(include_documents=False):
     }
 
 
-def test_serializing_to_dict():
-    assert TextSerializer.serialize(TEXT) == to_dict()
+def test_serialize():
+    assert serialize(TEXT) == to_dict()
 
 
 def test_deserialize():
-    assert TextDeserializer.deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS
+    assert deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS

@@ -1,6 +1,6 @@
 from marshmallow import Schema, EXCLUDE, fields, post_load  # pyre-ignore[21]
 from marshmallow.validate import Regexp
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
 from ebl.bibliography.application.reference_schema import (
@@ -236,3 +236,27 @@ class ChapterSchema(Schema):  # pyre-ignore[11]
 class ApiChapterSchema(ChapterSchema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
     lines = fields.Nested(ApiLineSchema, many=True, required=True)
+
+
+class TextSchema(Schema):  # pyre-ignore[11]
+    category = fields.Integer(required=True)
+    index = fields.Integer(required=True)
+    name = fields.String(required=True)
+    number_of_verses = fields.Integer(required=True, data_key="numberOfVerses")
+    approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
+    chapters = fields.Nested(ChapterSchema, many=True, required=True)
+
+    @post_load
+    def make_text(self, data: dict, **kwargs) -> Text:
+        return Text(
+            data["category"],
+            data["index"],
+            data["name"],
+            data["number_of_verses"],
+            data["approximate_verses"],
+            tuple(data["chapters"]),
+        )
+
+
+class ApiTextSchema(TextSchema):
+    chapters = fields.Nested(ApiChapterSchema, many=True, required=True)

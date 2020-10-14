@@ -28,7 +28,8 @@ class MongoTextRepository(TextRepository):
     def find(self, id_: TextId) -> Text:
         try:
             mongo_text = self._collection.find_one(
-                {"category": id_.category, "index": id_.index}
+                {"category": id_.category, "index": id_.index},
+                projection={"_id": False},
             )
             return deserialize(mongo_text)
         except NotFoundError:
@@ -36,7 +37,8 @@ class MongoTextRepository(TextRepository):
 
     def list(self) -> List[Text]:
         return [
-            deserialize(mongo_text) for mongo_text in self._collection.find_many({})
+            deserialize(mongo_text)
+            for mongo_text in self._collection.find_many({}, projection={"_id": False})
         ]
 
     def update(self, id_: TextId, text: Text) -> None:

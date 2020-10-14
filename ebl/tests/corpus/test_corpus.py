@@ -1,9 +1,9 @@
 import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.application.text_serializer import TextSerializer
+from ebl.corpus.application.text_serializer import serialize
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.corpus.domain.text import Line, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
@@ -43,10 +43,6 @@ TEXT_WITHOUT_DOCUMENTS = attr.evolve(
     ),
 )
 ANY_USER = Guest()
-
-
-def to_dict(text: Text) -> dict:
-    return TextSerializer.serialize(text)
 
 
 def expect_bibliography(bibliography, when):
@@ -97,8 +93,8 @@ def expect_text_update(
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**to_dict(old_text), "_id": old_text.id},
-        {**to_dict(updated_text), "_id": updated_text.id},
+        {**serialize(old_text), "_id": old_text.id},
+        {**serialize(updated_text), "_id": updated_text.id},
     ).thenReturn()
 
 
@@ -133,7 +129,7 @@ def test_creating_text(
     expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
     when(changelog).create(
-        COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id}
+        COLLECTION, user.profile, {"_id": TEXT.id}, {**serialize(TEXT), "_id": TEXT.id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
