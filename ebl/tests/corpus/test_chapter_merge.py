@@ -309,6 +309,17 @@ NEW_LINE = Line(
     IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
+NEW_PARATEXT = Line(
+    RECONSTRUCTION,
+    NOTE,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, TEXT_LINE, (NoteLine((StringPart("paratext"),)),)
+        ),
+    ),
+)
 OLD_LINE = Line(
     TextLine.of_iterable(RECONSTRUCTION.line_number, tuple()),
     None,
@@ -378,6 +389,27 @@ OLD_LINE = Line(
                 ORDER,
                 (MANUSCRIPT,),
                 (OLD_LINE.merge(NEW_LINE), LINE.merge(NEW_LINE)),
+            ),
+        ),
+        (
+            CHAPTER,
+            Chapter(
+                CLASSIFICATION,
+                STAGE,
+                VERSION,
+                CHAPTER_NAME,
+                ORDER,
+                (MANUSCRIPT,),
+                (NEW_PARATEXT,),
+            ),
+            Chapter(
+                CLASSIFICATION,
+                STAGE,
+                VERSION,
+                CHAPTER_NAME,
+                ORDER,
+                (MANUSCRIPT,),
+                (NEW_PARATEXT,),
             ),
         ),
     ],

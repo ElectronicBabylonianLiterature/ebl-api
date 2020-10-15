@@ -10,8 +10,8 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.corpus.web.api_serializer import deserialize, serialize
-from ebl.corpus.web.text_utils import create_text_id, serialize_public_text
+from ebl.corpus.web.api_serializer import deserialize, serialize, serialize_public
+from ebl.corpus.web.text_utils import create_text_id
 from ebl.users.web.require_scope import require_scope
 
 
@@ -135,7 +135,7 @@ class TextsResource:
 
     def on_get(self, _, resp: falcon.Response) -> None:  # pyre-ignore[11]
         texts = self._corpus.list()
-        resp.media = [serialize_public_text(text) for text in texts]
+        resp.media = [serialize_public(text) for text in texts]
 
     @falcon.before(require_scope, "create:texts")
     @validate(TEXT_DTO_SCHEMA)

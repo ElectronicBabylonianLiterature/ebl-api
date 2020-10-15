@@ -21,7 +21,7 @@ from ebl.corpus.domain.text import (
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
@@ -34,6 +34,8 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 CATEGORY = 1
 INDEX = 2
@@ -74,6 +76,7 @@ MANUSCRIPT_TEXT = TextLine(
         ),
     ),
 )
+PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
 RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
 NOTE = None
@@ -82,7 +85,7 @@ LINE = Line(
     NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT),),
 )
 
 TEXT = Text(

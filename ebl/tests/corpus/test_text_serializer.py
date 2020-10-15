@@ -2,7 +2,7 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
+from ebl.corpus.application.text_serializer import serialize, deserialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -12,13 +12,13 @@ from ebl.tests.factories.corpus import (
     TextFactory,
 )
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 import attr
 
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
-ManuscriptFactory.build(references=REFERENCES)
 MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
     manuscript_id=MANUSCRIPT.id
 )
@@ -99,6 +99,9 @@ def to_dict(include_documents=False):
                                     label.to_value() for label in MANUSCRIPT_LINE.labels
                                 ],
                                 "line": TextLineSchema().dump(MANUSCRIPT_LINE.line),
+                                "paratext": OneOfLineSchema().dump(
+                                    MANUSCRIPT_LINE.paratext, many=True
+                                ),
                             }
                         ],
                     }
@@ -108,9 +111,9 @@ def to_dict(include_documents=False):
     }
 
 
-def test_serializing_to_dict():
-    assert TextSerializer.serialize(TEXT) == to_dict()
+def test_serialize():
+    assert serialize(TEXT) == to_dict()
 
 
 def test_deserialize():
-    assert TextDeserializer.deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS
+    assert deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS

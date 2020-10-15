@@ -1,5 +1,5 @@
 import collections
-from typing import Iterable, Optional, Sequence, Set, TypeVar
+from typing import Iterable, Optional, Sequence, Set, TypeVar, Union
 
 import attr
 
@@ -22,6 +22,7 @@ from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.dollar_line import DollarLine
 
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
@@ -76,6 +77,7 @@ class ManuscriptLine:
     manuscript_id: int
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: TextLine
+    paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript_line(self)
@@ -86,12 +88,6 @@ class ManuscriptLine:
 
     def strip_alignments(self) -> "ManuscriptLine":
         return attr.evolve(self, line=self.line.strip_alignments())
-
-
-def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
-    labels = " ".join(label.to_atf() for label in manuscript_line.labels)
-    manuscript_id = manuscript_line.manuscript_id
-    return f"{manuscript_id}⋮{labels}⋮{manuscript_line.line.atf}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -132,7 +128,7 @@ class Line:
         def inner_merge(old: ManuscriptLine, new: ManuscriptLine) -> ManuscriptLine:
             return old.merge(new)
 
-        merged_manuscripts = Merger(map_manuscript_line, inner_merge).merge(
+        merged_manuscripts = Merger(repr, inner_merge).merge(
             self.manuscripts, other.manuscripts
         )
         merged = attr.evolve(other, manuscripts=tuple(merged_manuscripts))

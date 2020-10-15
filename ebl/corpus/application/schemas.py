@@ -1,27 +1,35 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, EXCLUDE, fields, post_load  # pyre-ignore[21]
 from marshmallow.validate import Regexp
-from ebl.corpus.domain.text import Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
+from ebl.corpus.domain.enums import (
+    Classification,
+    ManuscriptType,
+    Period,
+    PeriodModifier,
+    Provenance,
+    Stage,
+)
 from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
 from ebl.transliteration.domain.lark_parser import (
-    parse_line,
     parse_line_number,
     parse_note_line,
+    parse_paratext,
+    parse_text_line,
 )
-from typing import cast
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -96,11 +104,15 @@ class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
     manuscript_id = manuscript_id()
     labels = labels()
     line = fields.Nested(TextLineSchema, required=True)
+    paratext = fields.Nested(OneOfLineSchema, many=True, required=True)
 
     @post_load
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         return ManuscriptLine(
-            data["manuscript_id"], tuple(data["labels"]), data["line"]
+            data["manuscript_id"],
+            tuple(data["labels"]),
+            data["line"],
+            tuple(data["paratext"]),
         )
 
 
@@ -115,9 +127,14 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         required=True,
     )
     atf = fields.Function(
-        lambda manuscript_line: manuscript_line.line.atf[
-            len(manuscript_line.line.line_number.atf) + 1 :
-        ],
+        lambda manuscript_line: "\n".join(
+            [
+                manuscript_line.line.atf[
+                    len(manuscript_line.line.line_number.atf) + 1 :
+                ],
+                *[line.atf for line in manuscript_line.paratext],
+            ]
+        ),
         lambda value: value,
         required=True,
     )
@@ -128,10 +145,12 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
 
     @post_load
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
+        lines = data["atf"].split("\n")
         return ManuscriptLine(
             data["manuscript_id"],
             tuple(data["labels"]),
-            cast(TextLine, parse_line(f"{data['number']} {data['atf']}")),
+            parse_text_line(f"{data['number']} {lines[0]}"),
+            tuple(parse_paratext(line) for line in lines[1:]),
         )
 
 
@@ -165,6 +184,7 @@ class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
 class ApiLineSchema(LineSchema):
     class Meta:
         exclude = ("text", "note")
+        unknown = EXCLUDE
 
     number = fields.Function(
         lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
@@ -199,3 +219,56 @@ class ApiLineSchema(LineSchema):
             data["is_beginning_of_section"],
             tuple(data["manuscripts"]),
         )
+
+
+class ChapterSchema(Schema):  # pyre-ignore[11]
+    classification = ValueEnum(Classification, required=True)
+    stage = ValueEnum(Stage, required=True)
+    version = fields.String(required=True)
+    name = fields.String(required=True)
+    order = fields.Integer(required=True)
+    manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
+    lines = fields.Nested(LineSchema, many=True, required=True)
+    parser_version = fields.String(missing="", data_key="parserVersion")
+
+    @post_load
+    def make_chapter(self, data: dict, **kwargs) -> Chapter:
+        return Chapter(
+            Classification(data["classification"]),
+            Stage(data["stage"]),
+            data["version"],
+            data["name"],
+            data["order"],
+            tuple(data["manuscripts"]),
+            tuple(data["lines"]),
+            data["parser_version"],
+        )
+
+
+class ApiChapterSchema(ChapterSchema):
+    manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
+    lines = fields.Nested(ApiLineSchema, many=True, required=True)
+
+
+class TextSchema(Schema):  # pyre-ignore[11]
+    category = fields.Integer(required=True)
+    index = fields.Integer(required=True)
+    name = fields.String(required=True)
+    number_of_verses = fields.Integer(required=True, data_key="numberOfVerses")
+    approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
+    chapters = fields.Nested(ChapterSchema, many=True, required=True)
+
+    @post_load
+    def make_text(self, data: dict, **kwargs) -> Text:
+        return Text(
+            data["category"],
+            data["index"],
+            data["name"],
+            data["number_of_verses"],
+            data["approximate_verses"],
+            tuple(data["chapters"]),
+        )
+
+
+class ApiTextSchema(TextSchema):
+    chapters = fields.Nested(ApiChapterSchema, many=True, required=True)

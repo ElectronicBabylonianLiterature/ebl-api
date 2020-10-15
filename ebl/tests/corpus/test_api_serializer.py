@@ -85,9 +85,16 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                     label.to_value() for label in manuscript_line.labels
                                 ],
                                 "number": manuscript_line.line.line_number.atf[:-1],
-                                "atf": (
-                                    manuscript_line.line.atf[
-                                        len(manuscript_line.line.line_number.atf) + 1 :
+                                "atf": "\n".join(
+                                    [
+                                        manuscript_line.line.atf[
+                                            len(manuscript_line.line.line_number.atf)
+                                            + 1 :
+                                        ],
+                                        *[
+                                            line.atf
+                                            for line in manuscript_line.paratext
+                                        ],
                                     ]
                                 ),
                                 "atfTokens": (

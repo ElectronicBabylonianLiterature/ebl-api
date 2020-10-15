@@ -4,12 +4,13 @@ import falcon  # pyre-ignore
 from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.web.alignments import create_chapter_index
-from ebl.corpus.web.api_serializer import ApiDeserializer, serialize
+from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.corpus.web.texts import MANUSCRIPT_DTO_SCHEMA
 from ebl.corpus.domain.text import Manuscript
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
+from ebl.corpus.application.schemas import ApiManuscriptSchema
 
 
 MANUSCRIPTS_DTO_SCHEMA = {
@@ -20,11 +21,9 @@ MANUSCRIPTS_DTO_SCHEMA = {
 
 
 def deserialize_manuscripts(manuscripts: Sequence[dict]) -> Sequence[Manuscript]:
-    deserializer = ApiDeserializer()
     try:
         return tuple(
-            deserializer.deserialize_manuscript(manuscript)
-            for manuscript in manuscripts
+            ApiManuscriptSchema().load(manuscripts, many=True)  # pyre-ignore[16]
         )
     except ValueError as error:
         raise DataError(error)
