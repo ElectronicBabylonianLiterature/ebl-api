@@ -1,5 +1,5 @@
 import collections
-from typing import Iterable, Optional, Sequence, Set, TypeVar
+from typing import Iterable, Optional, Sequence, Set, TypeVar, Union
 
 import attr
 
@@ -22,6 +22,7 @@ from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.dollar_line import DollarLine
 
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
@@ -76,6 +77,7 @@ class ManuscriptLine:
     manuscript_id: int
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: TextLine
+    paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript_line(self)
