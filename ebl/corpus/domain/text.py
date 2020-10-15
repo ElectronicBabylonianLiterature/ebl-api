@@ -90,12 +90,6 @@ class ManuscriptLine:
         return attr.evolve(self, line=self.line.strip_alignments())
 
 
-def map_manuscript_line(manuscript_line: ManuscriptLine) -> str:
-    labels = " ".join(label.to_atf() for label in manuscript_line.labels)
-    manuscript_id = manuscript_line.manuscript_id
-    return f"{manuscript_id}⋮{labels}⋮{manuscript_line.line.atf}"
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
     text: TextLine = attr.ib()
@@ -134,7 +128,7 @@ class Line:
         def inner_merge(old: ManuscriptLine, new: ManuscriptLine) -> ManuscriptLine:
             return old.merge(new)
 
-        merged_manuscripts = Merger(map_manuscript_line, inner_merge).merge(
+        merged_manuscripts = Merger(repr, inner_merge).merge(
             self.manuscripts, other.manuscripts
         )
         merged = attr.evolve(other, manuscripts=tuple(merged_manuscripts))
