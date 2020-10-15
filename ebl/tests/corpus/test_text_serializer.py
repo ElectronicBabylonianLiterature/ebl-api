@@ -12,13 +12,13 @@ from ebl.tests.factories.corpus import (
     TextFactory,
 )
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 import attr
 
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
-ManuscriptFactory.build(references=REFERENCES)
 MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
     manuscript_id=MANUSCRIPT.id
 )
@@ -99,6 +99,9 @@ def to_dict(include_documents=False):
                                     label.to_value() for label in MANUSCRIPT_LINE.labels
                                 ],
                                 "line": TextLineSchema().dump(MANUSCRIPT_LINE.line),
+                                "paratext": OneOfLineSchema().dump(
+                                    MANUSCRIPT_LINE.paratext, many=True
+                                ),
                             }
                         ],
                     }

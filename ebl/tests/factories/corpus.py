@@ -20,7 +20,7 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Te
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.domain.atf import Flag, Status, Surface
+from ebl.transliteration.domain.atf import Flag, Ruling, Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
@@ -34,6 +34,7 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
@@ -81,6 +82,7 @@ class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
             ),
         ),
     )
+    paratext = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
 
 class LineFactory(factory.Factory):  # pyre-ignore[11]
