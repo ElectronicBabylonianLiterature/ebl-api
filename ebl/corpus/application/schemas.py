@@ -19,19 +19,17 @@ from ebl.schemas import ValueEnum
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.labels import LineNumberLabel, parse_label
 from ebl.transliteration.domain.lark_parser import (
-    parse_line,
     parse_line_number,
     parse_note_line,
+    parse_paratext,
+    parse_text_line,
 )
-from typing import Union, cast
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.dollar_line import DollarLine
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -151,11 +149,8 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         return ManuscriptLine(
             data["manuscript_id"],
             tuple(data["labels"]),
-            cast(TextLine, parse_line(f"{data['number']} {lines[0]}")),
-            tuple(
-                cast(Union[DollarLine, NoteLine], parse_line(line))
-                for line in lines[1:]
-            ),
+            parse_text_line(f"{data['number']} {lines[0]}"),
+            tuple(parse_paratext(line) for line in lines[1:]),
         )
 
 
