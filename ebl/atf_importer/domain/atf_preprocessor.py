@@ -334,7 +334,7 @@ class ATF_Preprocessor:
 
         self.logger.info(Util.print_frame("preprocessing finished"))
 
-        with open("/usr/src/ebl/ebl/atf_importer/debug/unparseable_lines.txt", "w", encoding='utf8') as outputfile:
+        with open("../debug/unparseable_lines.txt", "w", encoding='utf8') as outputfile:
             for key in self.unparseable_lines:
                 outputfile.write(key + "\n")
 

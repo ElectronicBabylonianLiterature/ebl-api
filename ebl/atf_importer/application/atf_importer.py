@@ -281,10 +281,11 @@ class ATF_Importer:
 
             with open(filepath, 'r') as f:
 
+                filepath = filepath.replace("\\","/")
+
                 split = filepath.split("/")
                 filename = split[-1]
                 filename = filename.split(".")[0]
-
                 # convert all lines
                 converted_lines =  self.atf_preprocessor.convert_lines(filepath,filename)
 
@@ -372,11 +373,11 @@ class ATF_Importer:
                 with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
 
-            with open("/usr/src/ebl/ebl/atf_importer/debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
+            with open("../debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
                     for key in not_lemmatized:
                         outputfile.write(key + "\n")
 
-            with open("/usr/src/ebl/ebl/atf_importer/debug/error_lines.txt", "w", encoding='utf8') as outputfile:
+            with open("../debug/error_lines.txt", "w", encoding='utf8') as outputfile:
                 for key in error_lines:
                     outputfile.write(key + "\n")
 
