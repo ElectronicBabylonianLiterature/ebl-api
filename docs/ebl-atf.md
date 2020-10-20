@@ -72,7 +72,7 @@ i.e., columns; and document structure, e.g., divisions and colophons.
 
 ```ebnf
 
-at-line = seal | column | heading | discourse | objct-with-status | surface-with-status
+at-line = seal | column | heading | discourse | object-with-status | surface-with-status
         | divisions | composite;
 
 surface-with-status = surface, [ ' ' ], { status };
