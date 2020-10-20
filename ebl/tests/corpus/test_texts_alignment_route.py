@@ -18,8 +18,8 @@ ANY_USER = Guest()
 DTO = {"alignment": [[[{"value": "ku-[nu-ši]", "alignment": 0}]]]}
 
 
-def create_text_dto(text, include_documents=False):
-    return serialize(text, include_documents)
+def create_text_dto(text):
+    return serialize(text)
 
 
 def allow_references(text, bibliography):
@@ -81,7 +81,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
         ),
     )
 
-    expected_text = create_text_dto(updated_text, True)
+    expected_text = create_text_dto(updated_text)
 
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}" f"/chapters/{chapter_index}/alignment",

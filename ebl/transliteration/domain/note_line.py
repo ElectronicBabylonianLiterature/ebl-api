@@ -113,8 +113,8 @@ class BibliographyPart(NotePart):
         return BibliographyPart(Reference(id, ReferenceType.DISCUSSION, pages))
 
 
-def convert_part_sequence(flags: Iterable[NotePart]) -> Tuple[NotePart, ...]:
-    return tuple(flags)
+def convert_part_sequence(parts: Iterable[NotePart]) -> Tuple[NotePart, ...]:
+    return tuple(parts)
 
 
 @attr.s(frozen=True, auto_attribs=True)

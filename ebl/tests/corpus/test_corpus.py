@@ -1,9 +1,9 @@
 import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.application.text_serializer import TextSerializer
+from ebl.corpus.application.text_serializer import serialize
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.corpus.domain.text import Line, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
@@ -23,7 +23,7 @@ from ebl.users.domain.user import Guest
 
 COLLECTION = "texts"
 TEXT = TextFactory.build()  # pyre-ignore[16]
-DEHYDRATED_TEXT = attr.evolve(
+TEXT_WITHOUT_DOCUMENTS = attr.evolve(
     TEXT,
     chapters=tuple(
         attr.evolve(
@@ -43,10 +43,6 @@ DEHYDRATED_TEXT = attr.evolve(
     ),
 )
 ANY_USER = Guest()
-
-
-def to_dict(text: Text) -> dict:
-    return TextSerializer.serialize(text, False)
 
 
 def expect_bibliography(bibliography, when):
@@ -83,8 +79,8 @@ def expect_signs(signs, sign_repository):
 def expect_text_update(
     bibliography,
     changelog,
-    dehydrated_text,
-    dehydrated_updated_text,
+    old_text,
+    updated_text,
     signs,
     sign_repository,
     text_repository,
@@ -92,19 +88,39 @@ def expect_text_update(
     when,
 ):
     expect_signs(signs, sign_repository)
-    expect_validate_references(bibliography, when, dehydrated_text)
-    when(text_repository).find(TEXT.id).thenReturn(dehydrated_text)
-    (
-        when(text_repository)
-        .update(TEXT.id, dehydrated_updated_text)
-        .thenReturn(dehydrated_updated_text)
-    )
+    expect_validate_references(bibliography, when, old_text)
+    when(text_repository).update(TEXT.id, updated_text).thenReturn(updated_text)
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**to_dict(dehydrated_text), "_id": dehydrated_text.id},
-        {**to_dict(dehydrated_updated_text), "_id": dehydrated_updated_text.id},
+        {**serialize(old_text), "_id": old_text.id},
+        {**serialize(updated_text), "_id": updated_text.id},
     ).thenReturn()
+
+
+def expect_text_find_and_update(
+    bibliography,
+    changelog,
+    old_text,
+    updated_text,
+    signs,
+    sign_repository,
+    text_repository,
+    user,
+    when,
+):
+    when(text_repository).find(TEXT.id).thenReturn(old_text)
+    expect_text_update(
+        bibliography,
+        changelog,
+        old_text,
+        updated_text,
+        signs,
+        sign_repository,
+        text_repository,
+        user,
+        when,
+    )
 
 
 def test_creating_text(
@@ -113,7 +129,7 @@ def test_creating_text(
     expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
     when(changelog).create(
-        COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id}
+        COLLECTION, user.profile, {"_id": TEXT.id}, {**serialize(TEXT), "_id": TEXT.id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
@@ -135,42 +151,65 @@ def test_create_raises_exception_if_invalid_references(corpus, bibliography, whe
 
 
 def test_finding_text(corpus, text_repository, bibliography, when):
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     expect_bibliography(bibliography, when)
 
     assert corpus.find(TEXT.id) == TEXT
 
 
 def test_listing_texts(corpus, text_repository, when):
-    when(text_repository).list().thenReturn([DEHYDRATED_TEXT])
+    when(text_repository).list().thenReturn([TEXT_WITHOUT_DOCUMENTS])
 
-    assert corpus.list() == [DEHYDRATED_TEXT]
+    assert corpus.list() == [TEXT_WITHOUT_DOCUMENTS]
 
 
 def test_find_raises_exception_if_references_not_found(
     corpus, text_repository, bibliography, when
 ):
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     when(bibliography).find(...).thenRaise(NotFoundError())
 
     with pytest.raises(Defect):
         corpus.find(TEXT.id)
 
 
+def test_updating_text(
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+):
+    updated_text = attr.evolve(TEXT_WITHOUT_DOCUMENTS, name="New Name")
+    expect_text_update(
+        bibliography,
+        changelog,
+        TEXT_WITHOUT_DOCUMENTS,
+        updated_text,
+        signs,
+        sign_repository,
+        text_repository,
+        user,
+        when,
+    )
+
+    corpus.update_text(
+        TEXT_WITHOUT_DOCUMENTS.id, TEXT_WITHOUT_DOCUMENTS, updated_text, user
+    )
+
+
 def test_updating_alignment(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    dehydrated_updated_text = attr.evolve(
-        DEHYDRATED_TEXT,
+    updated_text = attr.evolve(
+        TEXT_WITHOUT_DOCUMENTS,
         chapters=(
             attr.evolve(
-                DEHYDRATED_TEXT.chapters[0],
+                TEXT_WITHOUT_DOCUMENTS.chapters[0],
                 lines=(
                     attr.evolve(
-                        DEHYDRATED_TEXT.chapters[0].lines[0],
+                        TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
                         manuscripts=(
                             attr.evolve(
-                                DEHYDRATED_TEXT.chapters[0].lines[0].manuscripts[0],
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .manuscripts[0],
                                 line=TextLine.of_iterable(
                                     LineNumber(1),
                                     (
@@ -195,11 +234,11 @@ def test_updating_alignment(
             ),
         ),
     )
-    expect_text_update(
+    expect_text_find_and_update(
         bibliography,
         changelog,
-        DEHYDRATED_TEXT,
-        dehydrated_updated_text,
+        TEXT_WITHOUT_DOCUMENTS,
+        updated_text,
         signs,
         sign_repository,
         text_repository,
@@ -233,7 +272,7 @@ def test_updating_alignment(
     ],
 )
 def test_invalid_alignment(alignment, corpus, text_repository, when):
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     with pytest.raises(AlignmentError):
         corpus.update_alignment(TEXT.id, 0, alignment, ANY_USER)
 
@@ -241,25 +280,25 @@ def test_invalid_alignment(alignment, corpus, text_repository, when):
 def test_updating_manuscripts(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    dehydrated_updated_text = attr.evolve(
-        DEHYDRATED_TEXT,
+    updated_text = attr.evolve(
+        TEXT_WITHOUT_DOCUMENTS,
         chapters=(
             attr.evolve(
-                DEHYDRATED_TEXT.chapters[0],
+                TEXT_WITHOUT_DOCUMENTS.chapters[0],
                 manuscripts=(
                     attr.evolve(
-                        DEHYDRATED_TEXT.chapters[0].manuscripts[0],
+                        TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
                         notes="Updated manuscript.",
                     ),
                 ),
             ),
         ),
     )
-    expect_text_update(
+    expect_text_find_and_update(
         bibliography,
         changelog,
-        DEHYDRATED_TEXT,
-        dehydrated_updated_text,
+        TEXT_WITHOUT_DOCUMENTS,
+        updated_text,
         signs,
         sign_repository,
         text_repository,
@@ -267,7 +306,7 @@ def test_updating_manuscripts(
         when,
     )
 
-    manuscripts = (dehydrated_updated_text.chapters[0].manuscripts[0],)
+    manuscripts = (updated_text.chapters[0].manuscripts[0],)
     corpus.update_manuscripts(TEXT.id, 0, manuscripts, user)
 
 
@@ -276,13 +315,13 @@ def test_updating_manuscripts(
     [
         tuple(),
         (
-            DEHYDRATED_TEXT.chapters[0].manuscripts[0],
-            DEHYDRATED_TEXT.chapters[0].manuscripts[0],
+            TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
+            TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
         ),
     ],
 )
 def test_invalid_manuscripts(manuscripts, corpus, text_repository, when):
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     with pytest.raises(DataError):
         corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
 
@@ -291,7 +330,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
     corpus, text_repository, bibliography, when
 ):
     manuscripts = TEXT.chapters[0].manuscripts
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
@@ -301,25 +340,29 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
 def test_updating_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    dehydrated_updated_text = attr.evolve(
-        DEHYDRATED_TEXT,
+    updated_text = attr.evolve(
+        TEXT_WITHOUT_DOCUMENTS,
         chapters=(
             attr.evolve(
-                DEHYDRATED_TEXT.chapters[0],
+                TEXT_WITHOUT_DOCUMENTS.chapters[0],
                 lines=(
                     attr.evolve(
-                        DEHYDRATED_TEXT.chapters[0].lines[0], number=LineNumber(1, True)
+                        TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
+                        text=attr.evolve(
+                            TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].text,
+                            line_number=LineNumber(1, True),
+                        ),
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),
     )
-    expect_text_update(
+    expect_text_find_and_update(
         bibliography,
         changelog,
-        DEHYDRATED_TEXT,
-        dehydrated_updated_text,
+        TEXT_WITHOUT_DOCUMENTS,
+        updated_text,
         signs,
         sign_repository,
         text_repository,
@@ -327,15 +370,18 @@ def test_updating_lines(
         when,
     )
 
-    lines = dehydrated_updated_text.chapters[0].lines
+    lines = updated_text.chapters[0].lines
     corpus.update_lines(TEXT.id, 0, lines, user)
 
 
 def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    number = LineNumber(1)
-    reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    reconstruction = TextLine.of_iterable(
+        LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    )
+    is_second_line_of_parallelism = False
+    is_beginning_of_section = False
     text_line = TextLine.of_iterable(
         LineNumber(1),
         (
@@ -347,38 +393,44 @@ def test_merging_lines(
             ),
         ),
     )
-    manuscript_id = DEHYDRATED_TEXT.chapters[0].manuscripts[0].id
+    manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
     line = Line(
-        number, reconstruction, (ManuscriptLine(manuscript_id, tuple(), text_line),)
+        reconstruction,
+        None,
+        not is_second_line_of_parallelism,
+        not is_beginning_of_section,
+        (ManuscriptLine(manuscript_id, tuple(), text_line),),
     )
     new_text_line = TextLine.of_iterable(
         LineNumber(1),
         (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ši")])),
     )
     new_line = Line(
-        number,
         reconstruction,
+        None,
+        is_second_line_of_parallelism,
+        is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line.merge(new_text_line)),),
     )
     dehydrated_text = attr.evolve(
-        DEHYDRATED_TEXT,
-        chapters=(attr.evolve(DEHYDRATED_TEXT.chapters[0], lines=(line,)),),
+        TEXT_WITHOUT_DOCUMENTS,
+        chapters=(attr.evolve(TEXT_WITHOUT_DOCUMENTS.chapters[0], lines=(line,)),),
     )
-    dehydrated_updated_text = attr.evolve(
-        DEHYDRATED_TEXT,
+    updated_text = attr.evolve(
+        TEXT_WITHOUT_DOCUMENTS,
         chapters=(
             attr.evolve(
-                DEHYDRATED_TEXT.chapters[0],
+                TEXT_WITHOUT_DOCUMENTS.chapters[0],
                 lines=(new_line,),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),
     )
-    expect_text_update(
+    expect_text_find_and_update(
         bibliography,
         changelog,
         dehydrated_text,
-        dehydrated_updated_text,
+        updated_text,
         signs,
         sign_repository,
         text_repository,
@@ -388,8 +440,10 @@ def test_merging_lines(
 
     lines = (
         Line(
-            number,
             reconstruction,
+            None,
+            is_second_line_of_parallelism,
+            is_beginning_of_section,
             (ManuscriptLine(manuscript_id, tuple(), new_text_line),),
         ),
     )
@@ -400,7 +454,7 @@ def test_update_lines_raises_exception_if_invalid_signs(
     corpus, text_repository, bibliography, when
 ):
     lines = TEXT.chapters[0].lines
-    when(text_repository).find(TEXT.id).thenReturn(DEHYDRATED_TEXT)
+    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     allow_validate_references(bibliography, when)
 
     with pytest.raises(DataError):

@@ -19,8 +19,9 @@ from ebl.corpus.domain.text import (
     Text,
     TextId,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
@@ -33,6 +34,8 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 CATEGORY = 1
 INDEX = 2
@@ -46,7 +49,7 @@ CHAPTER_NAME = "IIc"
 ORDER = 1
 MANUSCRIPT_ID = 9001
 SIGLUM_DISAMBIGUATOR = "1c"
-MUSEUM_NUMBER = "BM.x"
+MUSEUM_NUMBER = MuseumNumber("BM", "x")
 ACCESSION = ""
 PERIOD_MODIFIER = PeriodModifier.LATE
 PERIOD = Period.OLD_BABYLONIAN
@@ -56,6 +59,8 @@ NOTES = "some notes"
 REFERENCES = (ReferenceFactory.build(),)  # pyre-ignore[16]
 LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+IS_SECOND_LINE_OF_PARALLELISM = True
+IS_BEGINNING_OF_SECTION = True
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
 MANUSCRIPT_TEXT = TextLine(
     LineNumber(1),
@@ -71,11 +76,16 @@ MANUSCRIPT_TEXT = TextLine(
         ),
     ),
 )
+PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
+RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
+NOTE = None
 LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+    RECONSTRUCTION,
+    NOTE,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT),),
 )
 
 TEXT = Text(
@@ -139,8 +149,15 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
+    assert TEXT.chapters[0].lines[0].text == RECONSTRUCTION
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
+    assert TEXT.chapters[0].lines[0].note == NOTE
+    assert (
+        TEXT.chapters[0].lines[0].is_second_line_of_parallelism
+        == IS_SECOND_LINE_OF_PARALLELISM
+    )
+    assert TEXT.chapters[0].lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
     assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
     assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
     assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
@@ -150,8 +167,8 @@ def test_giving_museum_number_and_accession_is_invalid():
     with pytest.raises(ValueError):
         Manuscript(
             MANUSCRIPT_ID,
-            museum_number="when museum number if given",
-            accession="then accession not allowed",
+            museum_number=MUSEUM_NUMBER,
+            accession="accession not allowed",
         )
 
 
@@ -193,8 +210,10 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    LINE_NUMBER,
-                    LINE_RECONSTRUCTION,
+                    RECONSTRUCTION,
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
                     (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
                 ),
             ),
@@ -220,7 +239,13 @@ def test_invalid_labels(labels: Sequence[Label]):
 
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
-        Line(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), tuple())
+        Line(
+            TextLine.of_iterable(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),)),
+            NOTE,
+            False,
+            False,
+            tuple(),
+        )
 
 
 def test_stage():

@@ -4,7 +4,8 @@ import attr
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.domain.text import Chapter, Manuscript, Text, TextVisitor
+from ebl.corpus.domain.text_visitor import TextVisitor
+from ebl.corpus.domain.text import Chapter, Manuscript, Text
 from ebl.errors import Defect, NotFoundError
 
 

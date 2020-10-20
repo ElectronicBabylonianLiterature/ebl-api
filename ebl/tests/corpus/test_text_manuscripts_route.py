@@ -14,8 +14,8 @@ from ebl.users.domain.user import Guest
 ANY_USER = Guest()
 
 
-def create_dto(text, include_documents=False):
-    return serialize(text, include_documents)
+def create_dto(text):
+    return serialize(text)
 
 
 def allow_references(text, bibliography):
@@ -35,7 +35,7 @@ def create_text(client, text):
     assert post_result.status == falcon.HTTP_CREATED
     assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(text, True)
+    assert post_result.json == create_dto(text)
 
 
 def test_updating(client, bibliography, sign_repository, signs):
@@ -50,7 +50,9 @@ def test_updating(client, bibliography, sign_repository, signs):
                 text.chapters[0],
                 manuscripts=(
                     attr.evolve(
-                        text.chapters[0].manuscripts[0], museum_number="new number"
+                        text.chapters[0].manuscripts[0],
+                        museum_number="new.number",
+                        accession="",
                     ),
                 ),
             ),
@@ -66,7 +68,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(updated_text, True)
+    assert post_result.json == create_dto(updated_text)
 
     get_result = client.simulate_get(
         f"/texts/{updated_text.category}/{updated_text.index}"
@@ -74,7 +76,7 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert get_result.json == create_dto(updated_text, True)
+    assert get_result.json == create_dto(updated_text)
 
 
 def test_updating_text_not_found(client, bibliography):
@@ -163,12 +165,29 @@ AMBIGUOUS_MANUSCRIPTS = [
 ]
 
 
+INVALID_MUSEUM_NUMBER = [
+    {
+        "id": 1,
+        "siglumDisambiguator": "1c",
+        "museumNumber": "invalid",
+        "accession": "",
+        "periodModifier": PeriodModifier.NONE.value,
+        "period": Period.OLD_ASSYRIAN.long_name,
+        "provenance": Provenance.BABYLON.long_name,
+        "type": ManuscriptType.SCHOOL.long_name,
+        "notes": "",
+        "references": [],
+    }
+]
+
+
 @pytest.mark.parametrize(
     "manuscripts,expected_status",
     [
         [[{}], falcon.HTTP_BAD_REQUEST],
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
         [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [INVALID_MUSEUM_NUMBER, falcon.HTTP_UNPROCESSABLE_ENTITY],
     ],
 )
 def test_update_invalid_entity(

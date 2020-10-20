@@ -1,6 +1,6 @@
 from collections import Counter
 from itertools import dropwhile
-from typing import Callable, Mapping, Sequence, Type
+from typing import Callable, Mapping, Sequence, Type, Union
 
 from lark.lark import Lark  # pyre-ignore
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
@@ -9,14 +9,17 @@ from lark.visitors import v_args
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line_transformer import AtLineTransformer
+from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
@@ -41,6 +44,12 @@ class LineTransformer(
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
+NOTE_LINE_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
+)
+PARATEXT_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
+)
 LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
 
@@ -61,6 +70,21 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_note_line(atf: str) -> NoteLine:
+    tree = NOTE_LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_text_line(atf: str) -> TextLine:
+    tree = LINE_PARSER.parse(atf, start="text_line")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
+    tree = PARATEXT_PARSER.parse(atf)
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 

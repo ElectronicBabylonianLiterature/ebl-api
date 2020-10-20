@@ -4,19 +4,6 @@ from ebl.bibliography.domain.reference import BibliographyId, Reference, Referen
 from ebl.tests.factories.collections import TupleFactory
 
 
-class ReferenceFactory(factory.Factory):  # pyre-ignore[11]
-    class Meta:
-        model = Reference
-
-    id = factory.Sequence(lambda n: BibliographyId(f"RN.{n}"))
-    type = factory.fuzzy.FuzzyChoice(ReferenceType)
-    pages = factory.Sequence(lambda n: f"{n}-{n+2}, {n+5}")
-    notes = factory.Faker("paragraph")
-    lines_cited = factory.List(
-        [factory.Sequence(lambda n: f"r. iii*! {n}'.{n+1}a")], TupleFactory
-    )
-
-
 class BibliographyEntryFactory(factory.Factory):  # pyre-ignore
     class Meta:
         model = dict
@@ -50,7 +37,21 @@ class BibliographyEntryFactory(factory.Factory):  # pyre-ignore
     ]
 
 
-class ReferenceWithDocumentFactory(ReferenceFactory):
-    document = factory.SubFactory(
-        BibliographyEntryFactory, id=factory.SelfAttribute("..id")
+class ReferenceFactory(factory.Factory):  # pyre-ignore[11]
+    class Meta:
+        model = Reference
+
+    class Params:
+        with_document = factory.Trait(
+            document=factory.SubFactory(
+                BibliographyEntryFactory, id=factory.SelfAttribute("..id")
+            )
+        )
+
+    id = factory.Sequence(lambda n: BibliographyId(f"RN.{n}"))
+    type = factory.fuzzy.FuzzyChoice(ReferenceType)
+    pages = factory.Sequence(lambda n: f"{n}-{n+2}, {n+5}")
+    notes = factory.Faker("paragraph")
+    lines_cited = factory.List(
+        [factory.Sequence(lambda n: f"r. iii*! {n}'.{n+1}a")], TupleFactory
     )

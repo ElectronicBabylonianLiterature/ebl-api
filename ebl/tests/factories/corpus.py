@@ -17,9 +17,10 @@ from ebl.transliteration.domain.normalized_akkadian import (
     MetricalFootSeparator,
 )
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
-from ebl.tests.factories.bibliography import ReferenceWithDocumentFactory
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.domain.atf import Flag, Status, Surface
+from ebl.transliteration.domain.atf import Flag, Ruling, Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
@@ -32,6 +33,8 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
@@ -40,7 +43,9 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
 
     id = factory.Sequence(lambda n: n)
     siglum_disambiguator = factory.Faker("word")
-    museum_number = factory.Sequence(lambda n: f"M.{n}" if pydash.is_odd(n) else "")
+    museum_number = factory.Sequence(
+        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
+    )
     accession = factory.Sequence(lambda n: f"A.{n}" if pydash.is_even(n) else "")
     period_modifier = factory.fuzzy.FuzzyChoice(PeriodModifier)
     period = factory.fuzzy.FuzzyChoice(Period)
@@ -48,7 +53,7 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
     notes = factory.Faker("sentence")
     references = factory.List(
-        [factory.SubFactory(ReferenceWithDocumentFactory)], TupleFactory
+        [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )
 
 
@@ -77,32 +82,47 @@ class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
             ),
         ),
     )
+    paratext = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
 
 class LineFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Line
 
-    number = factory.Sequence(lambda n: LineNumber(n))
-    reconstruction = (
-        LanguageShift.normalized_akkadian(),
-        AkkadianWord.of((ValueToken.of("buāru"),)),
-        MetricalFootSeparator.uncertain(),
-        BrokenAway.open(),
-        UnknownNumberOfSigns.of(),
-        Caesura.certain(),
-        AkkadianWord.of(
+    class Params:
+        manuscript_id = factory.Sequence(lambda n: n)
+        manuscript = factory.SubFactory(
+            ManuscriptLineFactory,
+            manuscript_id=factory.SelfAttribute("..manuscript_id"),
+        )
+
+    text = factory.Sequence(
+        lambda n: TextLine.of_iterable(
+            LineNumber(n),
             (
+                LanguageShift.normalized_akkadian(),
+                AkkadianWord.of((ValueToken.of("buāru"),)),
+                MetricalFootSeparator.uncertain(),
+                BrokenAway.open(),
                 UnknownNumberOfSigns.of(),
-                BrokenAway.close(),
-                Joiner.hyphen(),
-                ValueToken.of("buāru"),
+                Caesura.certain(),
+                AkkadianWord.of(
+                    (
+                        UnknownNumberOfSigns.of(),
+                        BrokenAway.close(),
+                        Joiner.hyphen(),
+                        ValueToken.of("buāru"),
+                    ),
+                    (Flag.DAMAGE,),
+                ),
             ),
-            (Flag.DAMAGE,),
-        ),
+        )
     )
+    note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
+    is_second_line_of_parallelism = factory.Faker("boolean")
+    is_beginning_of_section = factory.Faker("boolean")
     manuscripts: Sequence[ManuscriptLine] = factory.List(
-        [factory.SubFactory(ManuscriptLineFactory)], TupleFactory
+        [factory.SelfAttribute("..manuscript")], TupleFactory
     )
 
 
@@ -115,8 +135,12 @@ class ChapterFactory(factory.Factory):  # pyre-ignore[11]
     version = factory.Faker("word")
     name = factory.Faker("sentence")
     order = factory.Faker("pyint")
-    manuscripts = factory.List([factory.SubFactory(ManuscriptFactory)], TupleFactory)
-    lines = factory.List([factory.SubFactory(LineFactory)], TupleFactory)
+    manuscripts = factory.List(
+        [factory.SubFactory(ManuscriptFactory, id=1)], TupleFactory
+    )
+    lines = factory.List(
+        [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
+    )
     parser_version = ""
 
 
