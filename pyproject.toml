@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "ebl-api"
+version = "0.1.0"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.6"
+falcon = "~=2.0.0"
+falcon-auth = "*"
+cryptography = "*"
+pymongo = "*"
+newrelic = "*"
+pydash = "*"
+requests = "*"
+dictdiffer = "*"
+jsonschema = "*"
+attrs = "*"
+sentry-sdk = {extras = ["falcon"], version = "*"}
+roman = "*"
+waitress = "*"
+falcon-apispec = "*"
+lark-parser = "*"
+marshmallow = "*"
+inflect = "*"
+joblib = "*"
+tqdm = "*"
+marshmallow-oneofschema = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-cov = "*"
+mongomock = "*"
+freezegun = "*"
+pytest-watch = "*"
+pytest-mockito = "*"
+factory-boy = "*"
+rope = "*"
+flake8 = "*"
+pyhamcrest = "*"
+flake8-bugbear = "*"
+httpretty = "*"
+pyre-check = "==0.0.46"
+black = "==19.3b0"
+
+
+[tool.poetry.scripts]
+test = "pytest --cov=ebl --cov-report term --cov-report xml"
+test-watch = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
+start = "waitress-serve --port=8000 --call ebl.app:get_app"
+lint = "flake8 ebl"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
