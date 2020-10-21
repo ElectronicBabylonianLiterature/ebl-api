@@ -23,6 +23,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.dollar_line import DollarLine
+from ebl.transliteration.domain.line import EmptyLine
 
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
@@ -76,7 +77,7 @@ def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
 class ManuscriptLine:
     manuscript_id: int
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
-    line: TextLine
+    line: Union[TextLine, EmptyLine]
     paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:

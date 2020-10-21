@@ -30,6 +30,7 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.domain.line import EmptyLine
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -103,7 +104,7 @@ def labels():
 class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
     manuscript_id = manuscript_id()
     labels = labels()
-    line = fields.Nested(TextLineSchema, required=True)
+    line = fields.Nested(OneOfLineSchema, required=True)
     paratext = fields.Nested(OneOfLineSchema, many=True, required=True)
 
     @post_load
@@ -122,8 +123,10 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
     number = fields.Function(
         lambda manuscript_line: LineNumberLabel.from_atf(
             manuscript_line.line.line_number.atf
-        ).to_value(),
-        lambda value: LineNumberLabel(value).to_atf(),
+        ).to_value()
+        if isinstance(manuscript_line.line, TextLine)
+        else "",
+        lambda value: value,
         required=True,
     )
     atf = fields.Function(
@@ -131,26 +134,35 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
             [
                 manuscript_line.line.atf[
                     len(manuscript_line.line.line_number.atf) + 1 :
-                ],
+                ]
+                if isinstance(manuscript_line.line, TextLine)
+                else "",
                 *[line.atf for line in manuscript_line.paratext],
             ]
-        ),
+        ).strip(),
         lambda value: value,
         required=True,
     )
     atfTokens = fields.Function(
-        lambda manuscript_line: TextLineSchema().dump(manuscript_line.line)["content"],
+        lambda manuscript_line: OneOfLineSchema().dump(manuscript_line.line)["content"],
         lambda value: value,
     )
 
     @post_load
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
+        has_text_line = len(data["number"]) > 0
         lines = data["atf"].split("\n")
+        text = (
+            parse_text_line(f"{LineNumberLabel(data['number']).to_atf()} {lines[0]}")
+            if has_text_line
+            else EmptyLine()
+        )
+        paratext = lines[1:] if has_text_line else lines
         return ManuscriptLine(
             data["manuscript_id"],
             tuple(data["labels"]),
-            parse_text_line(f"{data['number']} {lines[0]}"),
-            tuple(parse_paratext(line) for line in lines[1:]),
+            text,
+            tuple(parse_paratext(line) for line in paratext),
         )
 
 
