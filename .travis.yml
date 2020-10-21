@@ -6,25 +6,25 @@ services:
 env:
   DOCKER_REPOSITORY=jlaasonen/ebl-api
 install:
-- pipenv install --dev --deploy
+- pipenv install --dev --system --deploy
 - yes | pip uninstall numpy
 jobs:
   include:
     - stage: test
-      script: pipenv run black ebl --check
+      script: black ebl --check
       name: "Code Style"
     - 
-      script: pipenv run flake8
+      script: flake8
       name: "Lint"
     -
-      script: pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
+      script: pyre check
       name: "Type Check"
     -
       before_script:
         - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
         - chmod +x ./cc-test-reporter
         - "./cc-test-reporter before-build"
-      script: pipenv run pytest --cov=ebl --cov-report term --cov-report xml
+      script: pytest --cov=ebl --cov-report term --cov-report xml
       after_script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
       name: "Unit Tests"
     - stage: docker
