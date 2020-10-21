@@ -26,6 +26,7 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.domain.text_line import TextLine
+from typing import cast
 
 
 class ApiManuscriptSchema(ManuscriptSchema):
@@ -42,7 +43,9 @@ class ApiManuscriptSchema(ManuscriptSchema):
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:
     return (
-        LineNumberLabel.from_atf(manuscript_line.line.line_number.atf).to_value()
+        LineNumberLabel.from_atf(
+            cast(TextLine, manuscript_line.line).line_number.atf
+        ).to_value()
         if isinstance(manuscript_line.line, TextLine)
         else ""
     )
@@ -51,7 +54,9 @@ def _serialize_number(manuscript_line: ManuscriptLine) -> str:
 def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
     return "\n".join(
         [
-            manuscript_line.line.atf[len(manuscript_line.line.line_number.atf) + 1 :]
+            manuscript_line.line.atf[
+                len(cast(TextLine, manuscript_line.line).line_number.atf) + 1 :
+            ]
             if isinstance(manuscript_line.line, TextLine)
             else "",
             *[line.atf for line in manuscript_line.paratext],
