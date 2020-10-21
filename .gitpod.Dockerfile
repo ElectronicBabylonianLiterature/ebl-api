@@ -11,7 +11,8 @@ FROM gitpod/workspace-mongodb
 ARG PYTHON_VERSION=pypy3.6-7.3.1
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
+RUN python --version
 RUN python -m ensurepip
-RUN pip install --upgrade pip pipenv
+# RUN pip install --upgrade pip pipenv
 
 ENV NODE_OPTIONS=--experimental-worker
