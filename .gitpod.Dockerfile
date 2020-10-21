@@ -18,3 +18,6 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
 ENV PYMONGOIM__OPERATING_SYSTEM=ubuntu
+
+# See: https://github.com/gitpod-io/gitpod/issues/479
+ENV PIP_USER=no
