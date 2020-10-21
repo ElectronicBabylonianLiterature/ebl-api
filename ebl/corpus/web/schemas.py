@@ -40,32 +40,30 @@ class ApiManuscriptSchema(ManuscriptSchema):
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
 
 
+def _serialize_number(manuscript_line: ManuscriptLine) -> str:
+    return (
+        LineNumberLabel.from_atf(manuscript_line.line.line_number.atf).to_value()
+        if isinstance(manuscript_line.line, TextLine)
+        else ""
+    )
+
+
+def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
+    return "\n".join(
+        [
+            manuscript_line.line.atf[len(manuscript_line.line.line_number.atf) + 1 :]
+            if isinstance(manuscript_line.line, TextLine)
+            else "",
+            *[line.atf for line in manuscript_line.paratext],
+        ]
+    ).strip()
+
+
 class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
     manuscript_id = manuscript_id()
     labels = labels()
-    number = fields.Function(
-        lambda manuscript_line: LineNumberLabel.from_atf(
-            manuscript_line.line.line_number.atf
-        ).to_value()
-        if isinstance(manuscript_line.line, TextLine)
-        else "",
-        lambda value: value,
-        required=True,
-    )
-    atf = fields.Function(
-        lambda manuscript_line: "\n".join(
-            [
-                manuscript_line.line.atf[
-                    len(manuscript_line.line.line_number.atf) + 1 :
-                ]
-                if isinstance(manuscript_line.line, TextLine)
-                else "",
-                *[line.atf for line in manuscript_line.paratext],
-            ]
-        ).strip(),
-        lambda value: value,
-        required=True,
-    )
+    number = fields.Function(_serialize_number, lambda value: value, required=True)
+    atf = fields.Function(_serialize_atf, lambda value: value, required=True)
     atfTokens = fields.Function(
         lambda manuscript_line: OneOfLineSchema().dump(manuscript_line.line)["content"],
         lambda value: value,
