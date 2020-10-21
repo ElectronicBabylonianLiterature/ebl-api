@@ -10,7 +10,7 @@ from ebl.corpus.web.texts import MANUSCRIPT_DTO_SCHEMA
 from ebl.corpus.domain.text import Manuscript
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
-from ebl.corpus.application.schemas import ApiManuscriptSchema
+from ebl.corpus.web.schemas import ApiManuscriptSchema
 
 
 MANUSCRIPTS_DTO_SCHEMA = {
