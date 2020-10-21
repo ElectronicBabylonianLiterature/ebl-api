@@ -107,7 +107,7 @@ Build and run the docker image:
 
 ```shell script
 docker build -t ebl/api .
-docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
+docker run -p 8000:8000 --rm -it --env-file=.env --name ebl-api ebl/api
 ```
 
 ### Docker Compose
@@ -171,7 +171,7 @@ pipenv run python -m ebl.fragmentarium.update_fragments
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=FILE --name ebl-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.fragmentarium.update_fragments
+docker run --rm -it --env-file=.env --name ebl-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pypy3 -m ebl.fragmentarium.update_fragments
 ```
 
 , or with `docker-compose`:
@@ -202,7 +202,7 @@ pipenv run python -m ebl.corpus.updte_texts
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.corpus.update_texts
+docker run --rm -it --env-file=.env --name ebl-corpus-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pypy3 -m ebl.corpus.update_texts
 ```
 
 ### Steps to update the production database

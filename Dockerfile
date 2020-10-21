@@ -4,8 +4,6 @@ FROM pypy:3
 # See also https://security.googleblog.com/2018/10/modernizing-transport-security.html
 RUN echo "\n[system_default_sect]\nMinProtocol = TLSv1.0" >> /etc/ssl/openssl.cnf
 
-ENV PIPENV_VENV_IN_PROJECT 1
-
 RUN pip install pipenv
 
 EXPOSE 8000
@@ -13,11 +11,11 @@ EXPOSE 8000
 WORKDIR /usr/src/ebl
 
 COPY Pipfile* ./
-RUN pipenv install --dev
+RUN pipenv install --system --deploy
 
 COPY ./ebl ./ebl
 
 COPY ./docs ./docs
 RUN chmod -R a-wx ./docs
 
-CMD ["pipenv", "run", "start"]
+CMD ["waitress-serve", "--port=8000", "--call", "ebl.app:get_app"]

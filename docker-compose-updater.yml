@@ -11,5 +11,5 @@ services:
       - SENTRY_ENVIRONMENT=production
     volumes:
       - ./:/usr/src/ebl/
-    command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]
+    command: ["pypy3", "-m", "ebl.fragmentarium.update_fragments"]
     restart: "no"
