@@ -23,7 +23,7 @@ class TextLineSchema(LineBaseSchema):
         OneOfLineNumberSchema, rquired=True, data_key="lineNumber"
     )
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data, **kwargs) -> TextLine:
         return TextLine.of_iterable(data["line_number"], data["content"])
 
@@ -31,12 +31,13 @@ class TextLineSchema(LineBaseSchema):
 class ControlLineSchema(LineBaseSchema):
     prefix = fields.String(required=True)
     content = fields.Function(
+        # pyre-ignore[16]
         lambda obj: [OneOfTokenSchema().dump(ValueToken.of(obj.content))],
-        lambda value: OneOfTokenSchema().load(value, many=True),
+        lambda value: OneOfTokenSchema().load(value, many=True),  # pyre-ignore[16]
         required=True,
     )
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data, **kwargs) -> ControlLine:
         return ControlLine(
             data["prefix"], " ".join(token.value for token in data["content"])
@@ -47,7 +48,7 @@ class EmptyLineSchema(LineBaseSchema):
     prefix = fields.Constant("")
     content = fields.Constant([])
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data, **kwargs) -> EmptyLine:
         return EmptyLine()
 
@@ -55,6 +56,7 @@ class EmptyLineSchema(LineBaseSchema):
 class NoteLineSchema(LineBaseSchema):
     prefix = fields.Constant("#note: ")
     content = fields.Function(
+        # pyre-ignore[16]
         lambda obj: OneOfTokenSchema().dump(
             [ValueToken.of(part.value) for part in obj.parts], many=True
         ),
@@ -62,6 +64,6 @@ class NoteLineSchema(LineBaseSchema):
     )
     parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data, **kwargs) -> NoteLine:
         return NoteLine(data["parts"])

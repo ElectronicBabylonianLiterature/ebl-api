@@ -1,14 +1,14 @@
 import os
 from base64 import b64decode
 
-import falcon  # pyre-ignore
-import sentry_sdk  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import sentry_sdk  # pyre-ignore[21]
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
-from falcon_auth import FalconAuthMiddleware  # pyre-ignore
-from pymongo import MongoClient  # pyre-ignore
+from falcon_auth import FalconAuthMiddleware  # pyre-ignore[21]
+from pymongo import MongoClient  # pyre-ignore[21]
 from sentry_sdk import configure_scope
-from sentry_sdk.integrations.falcon import FalconIntegration
+from sentry_sdk.integrations.falcon import FalconIntegration  # pyre-ignore[21]
 
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository

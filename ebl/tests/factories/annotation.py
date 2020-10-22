@@ -19,7 +19,7 @@ class GeometryFactory(factory.Factory):  # pyre-ignore[11]
     height = factory.fuzzy.FuzzyFloat(0, 100)
 
 
-class AnnotationDataFactory(factory.Factory):  # pyre-ignore[11]
+class AnnotationDataFactory(factory.Factory):
     class Meta:
         model = AnnotationData
 
@@ -34,7 +34,7 @@ class AnnotationDataFactory(factory.Factory):  # pyre-ignore[11]
     )
 
 
-class AnnotationFactory(factory.Factory):  # pyre-ignore[11]
+class AnnotationFactory(factory.Factory):
     class Meta:
         model = Annotation
 
@@ -42,7 +42,7 @@ class AnnotationFactory(factory.Factory):  # pyre-ignore[11]
     data = factory.SubFactory(AnnotationDataFactory)
 
 
-class AnnotationsFactory(factory.Factory):  # pyre-ignore[11]
+class AnnotationsFactory(factory.Factory):
     class Meta:
         model = Annotations
 

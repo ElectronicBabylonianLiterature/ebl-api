@@ -1,5 +1,5 @@
 from marshmallow import Schema, EXCLUDE, fields, post_load  # pyre-ignore[21]
-from marshmallow.validate import Regexp
+from marshmallow.validate import Regexp  # pyre-ignore[21]
 from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
@@ -60,7 +60,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_manuscript(self, data: dict, **kwargs) -> Manuscript:
         return Manuscript(
             data["id"],
@@ -100,13 +100,13 @@ def labels():
     )
 
 
-class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
+class ManuscriptLineSchema(Schema):
     manuscript_id = manuscript_id()
     labels = labels()
     line = fields.Nested(TextLineSchema, required=True)
     paratext = fields.Nested(OneOfLineSchema, many=True, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         return ManuscriptLine(
             data["manuscript_id"],
@@ -116,7 +116,7 @@ class ManuscriptLineSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
+class ApiManuscriptLineSchema(Schema):
     manuscript_id = manuscript_id()
     labels = labels()
     number = fields.Function(
@@ -139,11 +139,12 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         required=True,
     )
     atfTokens = fields.Function(
+        # pyre-ignore[16]
         lambda manuscript_line: TextLineSchema().dump(manuscript_line.line)["content"],
         lambda value: value,
     )
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         lines = data["atf"].split("\n")
         return ManuscriptLine(
@@ -154,7 +155,7 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class LineSchema(Schema):  # pyre-ignore[11]
+class LineSchema(Schema):
     text = fields.Nested(TextLineSchema, required=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     is_second_line_of_parallelism = fields.Boolean(
@@ -165,7 +166,7 @@ class LineSchema(Schema):  # pyre-ignore[11]
     )
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
             data["text"],
@@ -176,7 +177,7 @@ class LineSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
+class RecontsructionTokenSchema(Schema):
     type = fields.Function(lambda token: type(token).__name__)
     value = fields.String()
 
@@ -209,7 +210,7 @@ class ApiLineSchema(LineSchema):
     )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         [text, *notes] = data["reconstruction"].split("\n")
         return Line(
@@ -221,7 +222,7 @@ class ApiLineSchema(LineSchema):
         )
 
 
-class ChapterSchema(Schema):  # pyre-ignore[11]
+class ChapterSchema(Schema):
     classification = ValueEnum(Classification, required=True)
     stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
@@ -231,7 +232,7 @@ class ChapterSchema(Schema):  # pyre-ignore[11]
     lines = fields.Nested(LineSchema, many=True, required=True)
     parser_version = fields.String(missing="", data_key="parserVersion")
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
         return Chapter(
             Classification(data["classification"]),
@@ -250,7 +251,7 @@ class ApiChapterSchema(ChapterSchema):
     lines = fields.Nested(ApiLineSchema, many=True, required=True)
 
 
-class TextSchema(Schema):  # pyre-ignore[11]
+class TextSchema(Schema):
     category = fields.Integer(required=True)
     index = fields.Integer(required=True)
     name = fields.String(required=True)
@@ -258,7 +259,7 @@ class TextSchema(Schema):  # pyre-ignore[11]
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     chapters = fields.Nested(ChapterSchema, many=True, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_text(self, data: dict, **kwargs) -> Text:
         return Text(
             data["category"],

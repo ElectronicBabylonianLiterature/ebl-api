@@ -1,7 +1,7 @@
 from typing import Sequence
 
 from lark.lark import Lark  # pyre-ignore[21]
-from lark.exceptions import ParseError, UnexpectedInput
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Break
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer

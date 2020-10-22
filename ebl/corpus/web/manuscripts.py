@@ -1,7 +1,7 @@
 from typing import Sequence
 
-import falcon  # pyre-ignore
-from falcon.media.validators.jsonschema import validate
+import falcon  # pyre-ignore[21]
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.corpus.web.alignments import create_chapter_index
 from ebl.corpus.web.api_serializer import serialize
@@ -34,7 +34,7 @@ class ManuscriptsResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
-    @validate(MANUSCRIPTS_DTO_SCHEMA)
+    @validate(MANUSCRIPTS_DTO_SCHEMA)  # pyre-ignore[56]
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]

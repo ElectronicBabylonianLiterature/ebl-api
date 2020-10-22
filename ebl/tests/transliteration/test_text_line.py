@@ -34,7 +34,7 @@ from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 LINE_NUMBER = LineNumber(1)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "code,language,normalized",
     [
         ("%ma", Language.AKKADIAN, False),
@@ -124,7 +124,7 @@ def test_text_line_of_iterable_normalized() -> None:
     assert line.atf == "1. %n kur"
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf",
     [
         "1. [{(he-pi₂ e]š-šu₂)}",
@@ -169,7 +169,7 @@ def test_text_line_atf_gloss() -> None:
     assert line.atf == f"{line.line_number.atf} {{(mu bu)}}"
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "erasure,expected",
     [
         ([Erasure.open(), Erasure.center(), Erasure.close()], "°\\°"),

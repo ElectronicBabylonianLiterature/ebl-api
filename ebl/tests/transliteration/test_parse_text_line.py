@@ -59,7 +59,7 @@ def test_parser_version(parser, version):
     assert parser("1. kur").parser_version == version
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "line,expected_tokens",
     [
         (
@@ -1167,7 +1167,7 @@ def test_parse_dividers() -> None:
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "code,expected_language",
     [
         ("%ma", Language.AKKADIAN),
@@ -1233,7 +1233,7 @@ def test_parse_normalized_akkadain_shift() -> None:
     assert parse_atf_lark(line).lines == expected.lines
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,line_numbers",
     [
         ("1. x\nthis is not valid", [2]),
@@ -1251,7 +1251,7 @@ def test_invalid_text_line(atf, line_numbers) -> None:
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2])]
 )
 def test_invalid_brackets(atf, line_numbers) -> None:

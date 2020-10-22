@@ -1,5 +1,5 @@
 from hamcrest.core.assert_that import assert_that  # pyre-ignore[21]
-from hamcrest.library import contains_exactly, has_entries
+from hamcrest.library import contains_exactly, has_entries  # pyre-ignore[21]
 
 
 def assert_exception_has_errors(exc_info, line_numbers, description) -> None:

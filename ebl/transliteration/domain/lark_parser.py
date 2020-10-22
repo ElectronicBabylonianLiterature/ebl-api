@@ -1,10 +1,10 @@
 from collections import Counter
 from itertools import dropwhile
-from typing import Callable, Mapping, Sequence, Type, Union
+from typing import Any, Callable, Mapping, Sequence, Tuple, Type, Union
 
-from lark.lark import Lark  # pyre-ignore
-from lark.exceptions import ParseError, UnexpectedInput, VisitError
-from lark.visitors import v_args
+from lark.lark import Lark  # pyre-ignore[21]
+from lark.exceptions import ParseError, UnexpectedInput, VisitError  # pyre-ignore[21]
+from lark.visitors import v_args  # pyre-ignore[21]
 
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
@@ -27,7 +27,12 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 from ebl.transliteration.domain.word_tokens import Word
 
 
-PARSE_ERRORS = (UnexpectedInput, ParseError, VisitError, EnclosureError)
+PARSE_ERRORS: Tuple[Type[Any], ...] = (
+    UnexpectedInput,
+    ParseError,
+    VisitError,
+    EnclosureError,
+)
 
 
 class LineTransformer(

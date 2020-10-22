@@ -94,7 +94,7 @@ class EnclosureSchema(BaseTokenSchema):
     side = NameEnum(Side, required=True)
 
     @abstractmethod
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_token(self, data, **kwargs) -> Token:
         ...
 
@@ -418,7 +418,7 @@ class GlossSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
 
     @abstractmethod
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_token(self, data, **kwargs) -> Gloss:
         ...
 

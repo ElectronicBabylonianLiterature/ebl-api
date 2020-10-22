@@ -53,7 +53,7 @@ class Bibliography:
                 container_query["collection_number"],
             )
         return uniq_with(
-            author_query_result + container_query_result, lambda a, b: a == b
+            [*author_query_result, *container_query_result], lambda a, b: a == b
         )
 
     @staticmethod

@@ -1,5 +1,5 @@
-from marshmallow import fields, Schema  # pyre-ignore
-from marshmallow.validate import Length
+from marshmallow import fields, Schema  # pyre-ignore[21]
+from marshmallow.validate import Length  # pyre-ignore[21]
 
 
 def lemma():
@@ -27,47 +27,47 @@ class VowelSchema(Schema):  # pyre-ignore[11]
     notes = notes()
 
 
-class FormSchema(Schema):  # pyre-ignore[11]
+class FormSchema(Schema):
     lemma = lemma()
     notes = notes()
     attested = attested()
 
 
-class LogogramSchema(Schema):  # pyre-ignore[11]
+class LogogramSchema(Schema):
     logogram = fields.List(fields.String(), required=True, validate=Length(1))
     notes = notes()
 
 
-class DerivedSchema(Schema):  # pyre-ignore[11]
+class DerivedSchema(Schema):
     lemma = lemma()
     notes = notes()
     homonym = homonym()
 
 
-class DerivedFromSchema(Schema):  # pyre-ignore[11]
+class DerivedFromSchema(Schema):
     lemma = fields.List(fields.String(), required=True)
     notes = notes()
     homonym = homonym()
 
 
-class EntrySchema(Schema):  # pyre-ignore[11]
+class EntrySchema(Schema):
     meaning = meaning()
     vowels = fields.Nested(VowelSchema, many=True, required=True)
 
 
-class AmplifiedMeaningSchema(Schema):  # pyre-ignore[11]
+class AmplifiedMeaningSchema(Schema):
     key = fields.String(required=True)
     meaning = meaning()
     vowels = fields.Nested(VowelSchema, many=True, required=True)
     entries = fields.Nested(EntrySchema, many=True, required=True)
 
 
-class OraccWordSchema(Schema):  # pyre-ignore[11]
+class OraccWordSchema(Schema):
     lemma = fields.String(required=True)
     guideWord = fields.String(required=True)
 
 
-class WordSchema(Schema):  # pyre-ignore[11]
+class WordSchema(Schema):
     _id = fields.String(required=True)
     lemma = lemma()
     homonym = homonym()

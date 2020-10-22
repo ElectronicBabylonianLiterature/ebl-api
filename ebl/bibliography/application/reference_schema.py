@@ -12,7 +12,7 @@ class ReferenceSchema(Schema):  # pyre-ignore[11]
     lines_cited = fields.List(fields.String(), required=True, data_key="linesCited")
     document = fields.Mapping(missing=None, load_only=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_reference(self, data, **kwargs) -> Reference:
         data["id"] = BibliographyId(data["id"])
         data["lines_cited"] = tuple(data["lines_cited"])

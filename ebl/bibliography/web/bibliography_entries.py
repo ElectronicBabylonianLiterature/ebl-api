@@ -1,6 +1,6 @@
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 from falcon import Request, Response
-from falcon.media.validators.jsonschema import validate
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.users.web.require_scope import require_scope
@@ -10,13 +10,13 @@ class BibliographyResource:
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "read:bibliography")
+    @falcon.before(require_scope, "read:bibliography")  # pyre-ignore[56]
     def on_get(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response) -> None:  # pyre-ignore[11]
+    @validate(CSL_JSON_SCHEMA)  # pyre-ignore[56]
+    def on_post(self, req: Request, resp: Response) -> None:
         bibliography_entry = req.media
         self._bibliography.create(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
@@ -28,15 +28,13 @@ class BibliographyEntriesResource:
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "read:bibliography")
-    def on_get(self, _req, resp: Response, id_: str) -> None:  # pyre-ignore[11]
+    @falcon.before(require_scope, "read:bibliography")  # pyre-ignore[56]
+    def on_get(self, _req, resp: Response, id_: str) -> None:
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
-    def on_post(
-        self, req: Request, resp: Response, id_: str  # pyre-ignore[11]
-    ) -> None:
+    @validate(CSL_JSON_SCHEMA)  # pyre-ignore[56]
+    def on_post(self, req: Request, resp: Response, id_: str) -> None:
         entry = {**req.media, "id": id_}
         self._bibliography.update(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT

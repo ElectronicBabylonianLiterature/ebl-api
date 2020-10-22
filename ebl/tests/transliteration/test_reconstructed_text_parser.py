@@ -36,7 +36,7 @@ def assert_parse_error(parser, text):
         parser(text)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "text,expected",
     [
         (
@@ -390,7 +390,7 @@ def test_word(text, expected) -> None:
     )
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "text",
     [
         "x",
@@ -435,6 +435,7 @@ def test_invalid_word(text) -> None:
     assert_parse_error(parse_reconstructed_word, text)
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("text,is_uncertain", [("||", False), ("(||)", True)])
 def test_caesura(text, is_uncertain) -> None:
     assert (
@@ -442,6 +443,7 @@ def test_caesura(text, is_uncertain) -> None:
     )
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("text,is_uncertain", [("|", False), ("(|)", True)])
 def test_feet_separator(text, is_uncertain) -> None:
     assert (
@@ -451,6 +453,7 @@ def test_feet_separator(text, is_uncertain) -> None:
     )
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("text", ["|||", "||||", "[|]", "[(|)]", "[||]", "[(||)]"])
 def test_invalid_break(text) -> None:
     assert_parse_error(parse_break, text)
@@ -459,6 +462,7 @@ def test_invalid_break(text) -> None:
 WORD = AkkadianWord.of((ValueToken.of("ibnû"),))
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize(
     "text,expected",
     [
@@ -541,7 +545,7 @@ def test_reconstructed_line(text, expected) -> None:
     )
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "text",
     [
         "|",
@@ -578,6 +582,7 @@ def test_invalid_reconstructed_line(text) -> None:
         parse_reconstructed_line(f"%n {text}")
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize(
     "text",
     [
@@ -607,6 +612,7 @@ def test_validate_invalid(text) -> None:
         validate(line)
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize(
     "text",
     [

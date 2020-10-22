@@ -80,7 +80,7 @@ def test_defaults() -> None:
     assert word.alignment is None
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "language,normalized,unique_lemma",
     [
         (Language.SUMERIAN, False, (WordId("ku II"), WordId("aklu I"))),
@@ -174,12 +174,12 @@ def test_clean_value() -> None:
     assert word.clean_value == "kur-ra/pa{KUR}"
 
 
-@pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)
+@pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)  # pyre-ignore[56]
 def test_lemmatizable(word, expected) -> None:
     assert word.lemmatizable == expected
 
 
-@pytest.mark.parametrize("word,_", LEMMATIZABLE_TEST_WORDS)
+@pytest.mark.parametrize("word,_", LEMMATIZABLE_TEST_WORDS)  # pyre-ignore[56]
 def test_alignable(word, _) -> None:
     assert word.alignable == word.lemmatizable
 
@@ -214,7 +214,7 @@ def test_set_unique_lemma_empty() -> None:
     assert word.set_unique_lemma(lemma) == expected
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "word",
     [
         Word.of([Reading.of_name("mu")]),
@@ -248,7 +248,7 @@ def test_set_alignment_empty() -> None:
     assert word.set_alignment(alignment) == expected
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "word",
     [
         Word.of([Reading.of_name("mu")]),
@@ -266,7 +266,7 @@ def test_set_alignment_invalid(word) -> None:
         word.set_alignment(alignment)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "old,new,expected",
     [
         (
