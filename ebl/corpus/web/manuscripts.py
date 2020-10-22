@@ -1,7 +1,7 @@
 from typing import Sequence
 
 import falcon  # pyre-ignore[21]
-from falcon.media.validators.jsonschema import validate
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.corpus.web.alignments import create_chapter_index
 from ebl.corpus.web.api_serializer import serialize

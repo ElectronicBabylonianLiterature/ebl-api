@@ -5,7 +5,7 @@ from marshmallow import (  # pyre-ignore[21]
     fields,
     post_load,
 )
-from marshmallow.validate import Regexp
+from marshmallow.validate import Regexp  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.schemas import (
@@ -83,11 +83,12 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
     number = fields.Function(_serialize_number, lambda value: value, required=True)
     atf = fields.Function(_serialize_atf, lambda value: value, required=True)
     atfTokens = fields.Function(
+        # pyre-ignore[16]
         lambda manuscript_line: OneOfLineSchema().dump(manuscript_line.line)["content"],
         lambda value: value,
     )
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         has_text_line = len(data["number"]) > 0
         lines = data["atf"].split("\n")
@@ -105,12 +106,12 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
+class RecontsructionTokenSchema(Schema):
     type = fields.Function(lambda token: type(token).__name__)
     value = fields.String()
 
 
-class LineNumberString(fields.String):  # pyre-ignore[11]
+class LineNumberString(fields.String):
     def _serialize(self, value, attr, obj, **kwargs):
         return super()._serialize(
             LineNumberLabel.from_atf(value.atf).to_value(), attr, obj, **kwargs
@@ -148,7 +149,7 @@ class ApiLineSchema(LineSchema):
     )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         [text, *notes] = data["reconstruction"].split("\n")
         return Line(

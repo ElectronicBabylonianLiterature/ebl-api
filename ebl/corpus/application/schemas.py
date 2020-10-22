@@ -88,7 +88,7 @@ class ManuscriptLineSchema(Schema):
         )
 
 
-class LineSchema(Schema):  # pyre-ignore[11]
+class LineSchema(Schema):
     text = fields.Nested(TextLineSchema, required=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     is_second_line_of_parallelism = fields.Boolean(
@@ -110,7 +110,7 @@ class LineSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class ChapterSchema(Schema):  # pyre-ignore[11]
+class ChapterSchema(Schema):
     classification = ValueEnum(Classification, required=True)
     stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
@@ -134,7 +134,7 @@ class ChapterSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class TextSchema(Schema):  # pyre-ignore[11]
+class TextSchema(Schema):
     category = fields.Integer(required=True)
     index = fields.Integer(required=True)
     name = fields.String(required=True)
