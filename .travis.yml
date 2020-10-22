@@ -6,7 +6,7 @@ services:
 env:
   DOCKER_REPOSITORY=jlaasonen/ebl-api
 install:
-- pipenv install --dev
+- pipenv install --dev --deploy
 - yes | pip uninstall numpy
 jobs:
   include:
