@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 from falcon.media.validators.jsonschema import validate
 
 from ebl.corpus.web.alignments import create_chapter_index
@@ -11,6 +11,7 @@ from ebl.corpus.domain.text import Manuscript
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
 from ebl.corpus.web.schemas import ApiManuscriptSchema
+from marshmallow import ValidationError  # pyre-ignore[21]
 
 
 MANUSCRIPTS_DTO_SCHEMA = {
@@ -25,7 +26,7 @@ def deserialize_manuscripts(manuscripts: Sequence[dict]) -> Sequence[Manuscript]
         return tuple(
             ApiManuscriptSchema().load(manuscripts, many=True)  # pyre-ignore[16]
         )
-    except ValueError as error:
+    except (ValidationError, ValueError) as error:
         raise DataError(error)
 
 

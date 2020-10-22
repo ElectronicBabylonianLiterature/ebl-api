@@ -1,4 +1,10 @@
-from marshmallow import EXCLUDE, Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import (  # pyre-ignore[21]
+    EXCLUDE,
+    Schema,
+    ValidationError,
+    fields,
+    post_load,
+)
 from marshmallow.validate import Regexp
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
@@ -29,15 +35,21 @@ from ebl.transliteration.domain.text_line import TextLine
 from typing import cast
 
 
+class MuseumNumberString(fields.String):  # pyre-ignore[11]
+    def _serialize(self, value, attr, obj, **kwargs):
+        return super()._serialize(str(value) if value else "", attr, obj, **kwargs)
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        try:
+            deserialized = super()._deserialize(value, attr, data, **kwargs)
+            return MuseumNumber.of(deserialized) if deserialized else None
+        except ValueError as error:
+            raise ValidationError("Invalid museum number.") from error
+
+
 class ApiManuscriptSchema(ManuscriptSchema):
-    museum_number = fields.Function(
-        lambda manuscript: str(manuscript.museum_number)
-        if manuscript.museum_number
-        else "",
-        lambda value: MuseumNumber.of(value) if value else None,
-        required=True,
-        data_key="museumNumber",
-    )
+    # pyre-ignore[28]
+    museum_number = MuseumNumberString(required=True, data_key="museumNumber")
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
 
 
