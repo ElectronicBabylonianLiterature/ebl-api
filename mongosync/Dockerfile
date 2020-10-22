@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add mongodb-tools bash
+RUN apk add mongodb-tools
 ADD mongosync.sh /etc/periodic/daily/mongosync
 RUN chmod 0744 /etc/periodic/daily/mongosync 
 
