@@ -1,6 +1,6 @@
 services:
   mongosync:
-    build: ""
+    build: .
     environment:
       - MONGO_HOST
       - MONGO_USER
