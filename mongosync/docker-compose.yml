@@ -1,0 +1,10 @@
+services:
+  mongosync:
+    build: ""
+    environment:
+      - MONGO_HOST
+      - MONGO_USER
+      - MONGO_PASSWORD
+      - MONGO_PRODUCTION_DB
+      - MONGO_DEVELOPEMENT_DB
+    restart: always
