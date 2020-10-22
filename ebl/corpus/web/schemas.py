@@ -33,6 +33,7 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
 )
 from ebl.transliteration.domain.text_line import TextLine
 from typing import cast
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 
 
 class MuseumNumberString(fields.String):  # pyre-ignore[11]
@@ -109,16 +110,26 @@ class RecontsructionTokenSchema(Schema):  # pyre-ignore[11]
     value = fields.String()
 
 
+class LineNumberString(fields.String):  # pyre-ignore[11]
+    def _serialize(self, value, attr, obj, **kwargs):
+        return super()._serialize(
+            LineNumberLabel.from_atf(value.atf).to_value(), attr, obj, **kwargs
+        )
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        try:
+            deserialized = super()._deserialize(value, attr, data, **kwargs)
+            return parse_line_number(deserialized)
+        except (ValueError, ParseError, UnexpectedInput) as error:
+            raise ValidationError("Invalid line number.") from error
+
+
 class ApiLineSchema(LineSchema):
     class Meta:
         exclude = ("text", "note")
         unknown = EXCLUDE
 
-    number = fields.Function(
-        lambda line: LineNumberLabel.from_atf(line.number.atf).to_value(),
-        lambda value: parse_line_number(value),
-        required=True,
-    )
+    number = LineNumberString(required=True)  # pyre-ignore[28]
     reconstruction = fields.Function(
         lambda line: "".join(
             [
