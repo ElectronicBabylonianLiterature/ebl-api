@@ -25,7 +25,7 @@ def test_parser_version(parser, version):
     assert parser("1. kur").parser_version == version
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "line,expected_tokens",
     [
         ("", []),
@@ -60,7 +60,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,line_numbers",
     [
         ("invalid", [1]),
@@ -76,7 +76,7 @@ def test_invalid_atf(atf, line_numbers) -> None:
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,line_numbers", [("1. x\n1. x", [2]), ("1. x\n@obverse\n1. x\n1. x", [4])]
 )
 def test_duplicate_labels(atf, line_numbers) -> None:

@@ -6,7 +6,7 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.lark_parser import parse_line
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "text,expected",
     [
         ("ku gid₂ nu ši", ["KU", "BU", "ABZ075", "ABZ207a\\u002F207b\\u0020X"]),

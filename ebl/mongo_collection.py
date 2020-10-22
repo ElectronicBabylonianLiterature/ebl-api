@@ -1,9 +1,9 @@
 from typing import Any
 
-import inflect  # pyre-ignore
-from pymongo.collection import Collection  # pyre-ignore
-from pymongo.database import Database
-from pymongo.errors import DuplicateKeyError
+import inflect  # pyre-ignore[21]
+from pymongo.collection import Collection  # pyre-ignore[21]
+from pymongo.database import Database  # pyre-ignore[21]
+from pymongo.errors import DuplicateKeyError  # pyre-ignore[21]
 
 from ebl.errors import DuplicateError, NotFoundError
 

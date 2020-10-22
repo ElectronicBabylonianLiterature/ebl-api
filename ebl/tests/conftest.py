@@ -243,7 +243,7 @@ def annotations_repository(database):
     return MongoAnnotationsRepository(database)
 
 
-@pytest.fixture
+@pytest.fixture  # pyre-ignore[56]
 def user() -> User:
     return Auth0User(
         {

@@ -35,7 +35,7 @@ class ManuscriptsResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
-    @validate(MANUSCRIPTS_DTO_SCHEMA)
+    @validate(MANUSCRIPTS_DTO_SCHEMA)  # pyre-ignore[56]
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]

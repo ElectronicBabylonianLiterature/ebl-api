@@ -220,7 +220,7 @@ def test_missing_manuscripts_are_invalid():
         )
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "labels",
     [
         (ColumnLabel.from_label("i"), ColumnLabel.from_label("ii")),

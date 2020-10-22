@@ -1,5 +1,6 @@
 import pytest  # pyre-ignore
 
+from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import LINE_PARSER, parse_atf_lark
 from ebl.transliteration.domain.note_line import (
@@ -22,7 +23,7 @@ def expected_language_part(language: Language, transliteration: str) -> Language
     return LanguagePart.of_transliteration(language, parse_text(transliteration))
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,expected_line",
     [
         ("#note: this is a note ", NoteLine([StringPart("this is a note ")])),
@@ -38,12 +39,24 @@ def expected_language_part(language: Language, transliteration: str) -> Language
         ("#note: @es{kur}", NoteLine([expected_language_part(Language.EMESAL, "kur")])),
         (
             "#note: @bib{RN123@x 2-3a}",
-            NoteLine([BibliographyPart.of("RN123", "x 2-3a")]),
+            NoteLine([BibliographyPart.of(BibliographyId("RN123"), "x 2-3a")]),
         ),
-        ("#note: @bib{RN1\\}@2}", NoteLine([BibliographyPart.of("RN1}", "2")])),
-        ("#note: @bib{RN1@1\\}2}", NoteLine([BibliographyPart.of("RN1", "1}2")])),
-        ("#note: @bib{RN12\\@3@3}", NoteLine([BibliographyPart.of("RN12@3", "3")])),
-        ("#note: @bib{RN@1\\}\\@2}", NoteLine([BibliographyPart.of("RN", "1}@2")])),
+        (
+            "#note: @bib{RN1\\}@2}",
+            NoteLine([BibliographyPart.of(BibliographyId("RN1}"), "2")]),
+        ),
+        (
+            "#note: @bib{RN1@1\\}2}",
+            NoteLine([BibliographyPart.of(BibliographyId("RN1"), "1}2")]),
+        ),
+        (
+            "#note: @bib{RN12\\@3@3}",
+            NoteLine([BibliographyPart.of(BibliographyId("RN12@3"), "3")]),
+        ),
+        (
+            "#note: @bib{RN@1\\}\\@2}",
+            NoteLine([BibliographyPart.of(BibliographyId("RN"), "1}@2")]),
+        ),
         (
             ("#note: this is a note " "@i{italic text}@akk{kur}@sux{kur}"),
             NoteLine(

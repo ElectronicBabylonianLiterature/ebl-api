@@ -1,5 +1,5 @@
-import falcon  # pyre-ignore
-from falcon.media.validators.jsonschema import validate
+import falcon  # pyre-ignore[21]
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_chapter_index, create_text_id
@@ -36,7 +36,7 @@ class AlignmentResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
-    @validate(ALIGNMENT_DTO_SCHEMA)
+    @validate(ALIGNMENT_DTO_SCHEMA)  # pyre-ignore[56]
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]

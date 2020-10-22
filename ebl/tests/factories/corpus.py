@@ -58,7 +58,7 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     )
 
 
-class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
+class ManuscriptLineFactory(factory.Factory):
     class Meta:
         model = ManuscriptLine
 
@@ -91,7 +91,7 @@ class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
     paratext = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
 
-class LineFactory(factory.Factory):  # pyre-ignore[11]
+class LineFactory(factory.Factory):
     class Meta:
         model = Line
 
@@ -132,7 +132,7 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
     )
 
 
-class ChapterFactory(factory.Factory):  # pyre-ignore[11]
+class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
 
@@ -150,7 +150,7 @@ class ChapterFactory(factory.Factory):  # pyre-ignore[11]
     parser_version = ""
 
 
-class TextFactory(factory.Factory):  # pyre-ignore[11]
+class TextFactory(factory.Factory):
     class Meta:
         model = Text
 

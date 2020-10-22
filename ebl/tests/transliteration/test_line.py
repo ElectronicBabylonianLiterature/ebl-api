@@ -23,7 +23,7 @@ def test_control_line() -> None:
     assert line.lemmatization == (LemmatizationToken(content),)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "line,lemmatization",
     [
         (ControlLine("#", " a comment"), (LemmatizationToken(" a comment"),)),

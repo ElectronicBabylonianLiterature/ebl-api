@@ -1,6 +1,6 @@
 import falcon  # pyre-ignore[21]
 from apispec import APISpec  # pyre-ignore[21]
-from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec.ext.marshmallow import MarshmallowPlugin  # pyre-ignore[21]
 from falcon_apispec import FalconPlugin  # pyre-ignore[21]
 
 

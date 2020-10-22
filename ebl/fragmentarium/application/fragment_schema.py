@@ -24,7 +24,7 @@ class MeasureSchema(Schema):  # pyre-ignore[11]
         return pydash.omit_by(data, pydash.is_none)
 
 
-class RecordEntrySchema(Schema):  # pyre-ignore[11]
+class RecordEntrySchema(Schema):
     user = fields.String(required=True)
     type = ValueEnum(RecordType, required=True)
     date = fields.String(required=True)
@@ -34,7 +34,7 @@ class RecordEntrySchema(Schema):  # pyre-ignore[11]
         return RecordEntry(**data)
 
 
-class RecordSchema(Schema):  # pyre-ignore[11]
+class RecordSchema(Schema):
     entries = fields.Nested(RecordEntrySchema, many=True, required=True)
 
     @post_load
@@ -42,7 +42,7 @@ class RecordSchema(Schema):  # pyre-ignore[11]
         return Record(tuple(data["entries"]))
 
 
-class FolioSchema(Schema):  # pyre-ignore[11]
+class FolioSchema(Schema):
     name = fields.String(required=True)
     number = fields.String(required=True)
 
@@ -51,7 +51,7 @@ class FolioSchema(Schema):  # pyre-ignore[11]
         return Folio(**data)
 
 
-class FoliosSchema(Schema):  # pyre-ignore[11]
+class FoliosSchema(Schema):
     entries = fields.Nested(FolioSchema, many=True, required=True)
 
     @post_load
@@ -59,7 +59,7 @@ class FoliosSchema(Schema):  # pyre-ignore[11]
         return Folios(tuple(data["entries"]))
 
 
-class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]
+class UncuratedReferenceSchema(Schema):
     document = fields.String(required=True)
     pages = fields.List(fields.Integer(), required=True)
 
@@ -69,7 +69,7 @@ class UncuratedReferenceSchema(Schema):  # pyre-ignore[11]
         return UncuratedReference(**data)
 
 
-class FragmentSchema(Schema):  # pyre-ignore[11]
+class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
     cdli_number = fields.String(required=True, data_key="cdliNumber")

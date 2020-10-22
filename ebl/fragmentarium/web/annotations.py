@@ -11,7 +11,7 @@ class AnnotationResource:
     def __init__(self, annotation_service: AnnotationsService):
         self._annotation_service = annotation_service
 
-    @falcon.before(require_scope, "annotate:fragments")
+    @falcon.before(require_scope, "annotate:fragments")  # pyre-ignore[56]
     @validate(AnnotationsSchema(), AnnotationsSchema())
     def on_post(
         self,
@@ -57,9 +57,9 @@ class AnnotationResource:
         else:
             raise falcon.HTTPUnprocessableEntity("Fragment numbers do not match.")
 
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_scope, "read:fragments")  # pyre-ignore[56]
     @validate(None, AnnotationsSchema())
-    def on_get(self, _, resp: falcon.Response, number: str):  # pyre-ignore[11]
+    def on_get(self, _, resp: falcon.Response, number: str):
         """---
         description: >-
           Retrieves fragment image annotations.

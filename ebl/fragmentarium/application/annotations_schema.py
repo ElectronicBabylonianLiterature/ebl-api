@@ -20,7 +20,7 @@ class GeometrySchema(Schema):  # pyre-ignore[11]
         return Geometry(**data)
 
 
-class AnnotationDataSchema(Schema):  # pyre-ignore[11]
+class AnnotationDataSchema(Schema):
     id = fields.String(required=True)
     value = fields.String(required=True)
     path = fields.List(fields.Int, required=True)
@@ -30,7 +30,7 @@ class AnnotationDataSchema(Schema):  # pyre-ignore[11]
         return AnnotationData(**data)
 
 
-class AnnotationSchema(Schema):  # pyre-ignore[11]
+class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
 
@@ -39,7 +39,7 @@ class AnnotationSchema(Schema):  # pyre-ignore[11]
         return Annotation(**data)
 
 
-class AnnotationsSchema(Schema):  # pyre-ignore[11]
+class AnnotationsSchema(Schema):
     fragment_number = fields.String(requred=True, data_key="fragmentNumber")
     annotations = fields.Nested(AnnotationSchema, many=True, required=True)
 

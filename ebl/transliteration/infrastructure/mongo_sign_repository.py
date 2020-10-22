@@ -21,7 +21,7 @@ class SignListRecordSchema(Schema):  # pyre-ignore[11]
         return SignListRecord(**data)
 
 
-class ValueSchema(Schema):  # pyre-ignore[11]
+class ValueSchema(Schema):
     value = fields.String(required=True)
     sub_index = fields.Int(missing=None, data_key="subIndex")
 
@@ -34,12 +34,12 @@ class ValueSchema(Schema):  # pyre-ignore[11]
         return {key: value for key, value in data.items() if value is not None}
 
 
-class SignSchema(Schema):  # pyre-ignore[11]
+class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_sign(self, data, **kwargs) -> Sign:
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])

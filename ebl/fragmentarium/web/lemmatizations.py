@@ -1,5 +1,5 @@
-import falcon  # pyre-ignore
-from falcon.media.validators.jsonschema import validate
+import falcon  # pyre-ignore[21]
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number

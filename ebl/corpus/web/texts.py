@@ -1,5 +1,5 @@
-import falcon  # pyre-ignore
-from falcon.media.validators.jsonschema import validate
+import falcon  # pyre-ignore[21]
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.bibliography.domain.reference import ReferenceType
 from ebl.corpus.domain.enums import (
@@ -138,7 +138,7 @@ class TextsResource:
         resp.media = [serialize_public(text) for text in texts]
 
     @falcon.before(require_scope, "create:texts")
-    @validate(TEXT_DTO_SCHEMA)
+    @validate(TEXT_DTO_SCHEMA)  # pyre-ignore[56]
     def on_post(
         self, req: falcon.Request, resp: falcon.Response  # pyre-ignore[11]
     ) -> None:
@@ -153,9 +153,7 @@ class TextResource:
     def __init__(self, corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "read:texts")
-    def on_get(
-        self, _, resp: falcon.Response, category: str, index: str  # pyre-ignore[11]
-    ) -> None:
+    @falcon.before(require_scope, "read:texts")  # pyre-ignore[56]
+    def on_get(self, _, resp: falcon.Response, category: str, index: str) -> None:
         text = self._corpus.find(create_text_id(category, index))
         resp.media = serialize(text)

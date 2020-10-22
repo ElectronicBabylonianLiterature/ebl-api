@@ -17,7 +17,7 @@ from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "word,expected",
     [
         (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû"),
@@ -96,7 +96,7 @@ def test_akkadian_word_invalid_modifier() -> None:
         AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "caesura,is_uncertain,value",
     [(Caesura.certain(), False, "||"), (Caesura.uncertain(), True, "(||)")],
 )
@@ -113,7 +113,7 @@ def test_caesura(caesura: Caesura, is_uncertain: bool, value: str) -> None:
     assert_token_serialization(caesura, serialized)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "separator,is_uncertain,value",
     [
         (MetricalFootSeparator.certain(), False, "|"),

@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields  # pyre-ignore
+from marshmallow import Schema, fields  # pyre-ignore[21]
 
 
 class FragmentNumberSchema(Schema):  # pyre-ignore[11]
@@ -6,6 +6,6 @@ class FragmentNumberSchema(Schema):  # pyre-ignore[11]
     folioNumber = fields.String()
 
 
-class FolioPagerInfoSchema(Schema):  # pyre-ignore[11]
+class FolioPagerInfoSchema(Schema):
     previous = fields.Nested(FragmentNumberSchema, required=True)
     next = fields.Nested(FragmentNumberSchema, required=True)

@@ -37,7 +37,7 @@ class BibliographyEntryFactory(factory.Factory):  # pyre-ignore
     ]
 
 
-class ReferenceFactory(factory.Factory):  # pyre-ignore[11]
+class ReferenceFactory(factory.Factory):
     class Meta:
         model = Reference
 

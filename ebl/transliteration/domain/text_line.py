@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Callable, Iterable, Sequence, Type, TypeVar, Union
+from typing import Callable, Iterable, Sequence, Type, TypeVar, Union, cast
 
 import attr
 
@@ -99,7 +99,7 @@ class TextLine(Line):
             return Merger(map_, inner_merge).merge(self.content, other.content)
 
         return (
-            TextLine.of_iterable(other.line_number, merge_tokens())
+            TextLine.of_iterable(cast(TextLine, other).line_number, merge_tokens())
             if isinstance(other, TextLine)
             else other
         )

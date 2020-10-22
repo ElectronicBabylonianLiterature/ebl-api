@@ -82,8 +82,8 @@ class Merger(Generic[T]):
             "  ": lambda state: state.keep(),
             "? ": lambda state: state,
         }
-        self._map: DiffMapping[T] = map_  # pyre-ignore[11]
-        self._merge_strategy: InnerMerge[T] = inner_merge or take_new  # pyre-ignore[11]
+        self._map: DiffMapping[T] = map_
+        self._merge_strategy: InnerMerge[T] = inner_merge or take_new
 
     def _add_entry(self, state: Merge[T]) -> Merge[T]:
         new_entry = self._inner_merge(state.pop_edited(), state.current_new)

@@ -1,4 +1,6 @@
-import pytest  # pyre-ignore
+from typing import List, Tuple
+
+import pytest  # pyre-ignore[21]
 
 from ebl.transliteration.domain.atf import Status, Surface, Object
 from ebl.transliteration.domain.labels import (
@@ -11,7 +13,7 @@ from ebl.transliteration.domain.labels import (
     ObjectLabel,
 )
 
-LABELS = [
+LABELS: List[Tuple[str, str, str, Label]] = [
     ("o", "", "@obverse", SurfaceLabel(tuple(), Surface.OBVERSE)),
     ("r", "", "@reverse", SurfaceLabel(tuple(), Surface.REVERSE)),
     ("b.e.", "", "@bottom", SurfaceLabel(tuple(), Surface.BOTTOM)),
@@ -50,7 +52,7 @@ LABELS = [
 ]
 
 
-UNPARSEABLE_LABELS = [
+UNPARSEABLE_LABELS: List[Tuple[str, str, str, Label]] = [
     ("a", "", "@edge a", SurfaceLabel(tuple(), Surface.EDGE, "a")),
     ("side a", "", "@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
     ("a", "", "@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
@@ -68,26 +70,30 @@ UNPARSEABLE_LABELS = [
 ]
 
 
-@pytest.mark.parametrize("label,status,_,expected", LABELS)
+@pytest.mark.parametrize("label,status,_,expected", LABELS)  # pyre-ignore[56]
 def test_parse_label(label, status, _, expected) -> None:
     assert parse_label(f"{label}{status}") == expected
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("label,status,_,model", LABELS + UNPARSEABLE_LABELS)
 def test_abbreviation(label, status, _, model) -> None:
     assert model.abbreviation == label
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("label,status,_,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_value(label, status, _, model) -> None:
     assert model.to_value() == f"{label}{status}"
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("_, status,atf,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_atf(_, status, atf, model) -> None:
     assert model.to_atf() == f"{atf}{status}"
 
 
+# pyre-ignore[56]
 @pytest.mark.parametrize("number", ["", " ", " 1", "1 ", "1 2", "\t"])
 def test_not_atf_line_number_is_invalid(number) -> None:
     with pytest.raises(ValueError):

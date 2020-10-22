@@ -11,8 +11,9 @@ COLLECTION = "texts"
 MANUSCRIPT_ID = 1
 TEXT = TextFactory.build(  # pyre-ignore[16]
     chapters=(
-        ChapterFactory.build(
+        ChapterFactory.build(  # pyre-ignore[16]
             manuscripts=(
+                # pyre-ignore[16]
                 ManuscriptFactory.build(id=1, references=(ReferenceFactory.build(),)),
             )
         ),

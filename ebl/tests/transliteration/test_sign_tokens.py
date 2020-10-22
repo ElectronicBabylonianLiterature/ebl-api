@@ -118,7 +118,7 @@ def test_unclear_sign_with_flags() -> None:
     assert_token_serialization(sign, serialized)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "name_parts,sub_index,modifiers,flags,sign,expected_value,expected_clean_value,"
     "expected_name",
     [
@@ -152,7 +152,7 @@ def test_unclear_sign_with_flags() -> None:
             1,
             [],
             [],
-            Grapheme.of("KUR"),
+            Grapheme.of(SignName("KUR")),
             "kur(KUR)",
             "kur(KUR)",
             "kur",
@@ -182,7 +182,7 @@ def test_unclear_sign_with_flags() -> None:
             10,
             ["@v"],
             [atf.Flag.CORRECTION],
-            Grapheme.of("KUR"),
+            Grapheme.of(SignName("KUR")),
             "kur₁₀@v!(KUR)",
             "kur₁₀@v(KUR)",
             "kur",
@@ -229,7 +229,7 @@ def test_reading(
     assert_token_serialization(reading, serialized)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "name_parts,sub_index,modifiers,flags,sign,surrogate,expected_value,"
     "expected_clean_value,expected_name",
     [
@@ -265,7 +265,7 @@ def test_reading(
             1,
             [],
             [],
-            Grapheme.of("KUR"),
+            Grapheme.of(SignName("KUR")),
             [],
             "KUR(KUR)",
             "KUR(KUR)",
@@ -309,7 +309,7 @@ def test_reading(
             10,
             ["@v"],
             [atf.Flag.CORRECTION],
-            Grapheme.of("KUR"),
+            Grapheme.of(SignName("KUR")),
             [],
             "KUR₁₀@v!(KUR)",
             "KUR₁₀@v(KUR)",
@@ -360,7 +360,7 @@ def test_logogram(
     assert_token_serialization(logogram, serialized)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "name_parts,modifiers,flags,sign,expected_value,expected_clean_value,expected_name",
     [
         ((ValueToken.of("1"),), [], [], None, "1", "1", "1"),
@@ -382,7 +382,15 @@ def test_logogram(
             "10",
             "10",
         ),
-        ((ValueToken.of("1"),), [], [], Grapheme.of("KUR"), "1(KUR)", "1(KUR)", "1"),
+        (
+            (ValueToken.of("1"),),
+            [],
+            [],
+            Grapheme.of(SignName("KUR")),
+            "1(KUR)",
+            "1(KUR)",
+            "1",
+        ),
         ((ValueToken.of("1"),), ["@v", "@180"], [], None, "1@v@180", "1@v@180", "1"),
         (
             (ValueToken.of("1"),),
@@ -397,7 +405,7 @@ def test_logogram(
             (ValueToken.of("1"),),
             ["@v"],
             [atf.Flag.CORRECTION],
-            Grapheme.of("KUR"),
+            Grapheme.of(SignName("KUR")),
             "1@v!(KUR)",
             "1@v(KUR)",
             "1",
@@ -466,7 +474,7 @@ def test_compound_grapheme() -> None:
     assert_token_serialization(compound, serialized)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "name,modifiers,flags,expected_value,expected_clean_value",
     [
         ("KUR12₁", [], [], "KUR12₁", "KUR12₁"),

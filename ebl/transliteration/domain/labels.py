@@ -6,8 +6,8 @@ from typing import Iterable, Sequence, Tuple, Union
 import attr
 import roman  # pyre-ignore[21]
 from lark.lexer import Token  # pyre-ignore[21]
-from lark.visitors import Transformer, v_args
-from lark.lark import Lark
+from lark.visitors import Transformer, v_args  # pyre-ignore[21]
+from lark.lark import Lark  # pyre-ignore[21]
 
 from ebl.transliteration.domain.atf import Object, Status, Surface
 
@@ -210,25 +210,23 @@ class LineNumberLabel(Label):
 
 
 class LabelTransformer(Transformer):  # pyre-ignore[11]
-    @v_args(inline=True)
+    @v_args(inline=True)  # pyre-ignore[56]
     def line_number_label(self, number: Token) -> LineNumberLabel:  # pyre-ignore[11]
         return LineNumberLabel(number)
 
-    @v_args(inline=True)
-    def column_label(
-        self, numeral: Token, status: Sequence[Status]  # pyre-ignore[11]
-    ) -> ColumnLabel:
+    @v_args(inline=True)  # pyre-ignore[56]
+    def column_label(self, numeral: Token, status: Sequence[Status]) -> ColumnLabel:
         return ColumnLabel.from_label(numeral, status)
 
-    @v_args(inline=True)
+    @v_args(inline=True)  # pyre-ignore[56]
     def surface_label(self, surface: Surface, status: Sequence[Status]) -> SurfaceLabel:
         return SurfaceLabel.from_label(surface, status)
 
-    @v_args(inline=True)
-    def surface(self, surface: Token) -> Surface:  # pyre-ignore[11]
+    @v_args(inline=True)  # pyre-ignore[56]
+    def surface(self, surface: Token) -> Surface:
         return Surface.from_label(surface)
 
-    def status(self, children: Iterable[Token]) -> Sequence[Status]:  # pyre-ignore[11]
+    def status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
 
 

@@ -1,6 +1,6 @@
 import falcon  # pyre-ignore[21]
 from falcon import Request, Response
-from falcon.media.validators.jsonschema import validate
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -22,7 +22,7 @@ class TransliterationResource:
         self._transliteration_factory = transliteration_factory
 
     @falcon.before(require_scope, "transliterate:fragments")
-    @validate(TRANSLITERATION_DTO_SCHEMA)
+    @validate(TRANSLITERATION_DTO_SCHEMA)  # pyre-ignore[56]
     # pyre-ignore[11]
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:

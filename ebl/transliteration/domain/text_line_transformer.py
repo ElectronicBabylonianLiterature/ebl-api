@@ -1,8 +1,8 @@
 from typing import Iterable, Sequence, Type
 
 from lark.lexer import Token  # pyre-ignore[21]
-from lark.tree import Tree
-from lark.visitors import Transformer, v_args
+from lark.tree import Tree  # pyre-ignore[21]
+from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag, sub_index_to_int
@@ -150,7 +150,7 @@ class SignTransformer(Transformer):  # pyre-ignore[11]
         return BrokenAway.open()
 
 
-class EnclosureTransformer(Transformer):  # pyre-ignore[11]
+class EnclosureTransformer(Transformer):
     def ebl_atf_text_line__open_accidental_omission(self, _):
         return AccidentalOmission.open()
 
@@ -170,7 +170,7 @@ class EnclosureTransformer(Transformer):  # pyre-ignore[11]
         return Removal.close()
 
 
-class GlossTransformer(Transformer):  # pyre-ignore[11]
+class GlossTransformer(Transformer):
     @v_args(inline=True)
     def ebl_atf_text_line__determinative(self, tree):
         tokens = _children_to_tokens(tree.children)
@@ -247,12 +247,12 @@ class NormalizedAkkadianTransformer(WordTransformer):
     def ebl_atf_text_line__uncertain_foot_separator(self, _) -> MetricalFootSeparator:
         return MetricalFootSeparator.uncertain()
 
-    @v_args(inline=True)
+    @v_args(inline=True)  # pyre-ignore[56]
     def ebl_atf_text_line__akkadian_word(
         self,
         parts: Tree,  # pyre-ignore[11]
         modifiers: Sequence[Flag],
-        closing_enclosures: Tree,  # pyre-ignore[11]
+        closing_enclosures: Tree,
     ) -> AkkadianWord:
         return AkkadianWord.of(
             tuple(parts.children + closing_enclosures.children), modifiers
@@ -263,14 +263,14 @@ class NormalizedAkkadianTransformer(WordTransformer):
     ) -> Sequence[Flag]:
         return tuple(set(modifiers))
 
-    @v_args(inline=True)
+    @v_args(inline=True)  # pyre-ignore[56]
     def ebl_atf_text_line__normalized_modifier(
         self, modifier: Token  # pyre-ignore[11]
     ) -> Flag:
         return Flag(modifier)
 
     def ebl_atf_text_line__akkadian_string(
-        self, children: Iterable[Token]  # pyre-ignore[11]
+        self, children: Iterable[Token]
     ) -> ValueToken:
         return ValueToken.of("".join(children))
 
