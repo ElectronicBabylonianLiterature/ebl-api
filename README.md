@@ -53,6 +53,21 @@ disabled.
 
 Use type hints in new code and add the to old code when making changes.
 
+### Package dependencies
+
+- Avoid directed package dependency cycles.
+- Domain packages should depend only on other domain packages.
+- Application packages should depend only on application and domain packages.
+- Wed and infrastructure should depend only on application and domain packges.
+- All packages can depend on common modules in the top-level ebl package.
+
+Dependencies can be analyzed with
+[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
+
+```shell script
+pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
+```
+
 ## Running the tests
 
 ```shell script
@@ -251,21 +266,6 @@ docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,
 6) Fix invalid fragments.
 7) Remove fallback logic.
 8) Deploy to production.
-
-## Package dependencies
-
-- Avoid directed package dependency cycles.
-- Domain packages should depend only on other domain packages.
-- Application packages should depend only on application and domain packages.
-- Wed and infrastructure should depend only on application and domain packges.
-- All packages can depend on common modules in the top-level ebl package.
-
-Dependencies can be analyzed with
-[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
-
-```shell script
-pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
-```
 
 ## Acknowledgements
 
