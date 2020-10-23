@@ -23,6 +23,11 @@ pip install pipenv
 pipenv install --dev
 ```
 
+The following services are needed to run application:
+
+- [Auth0](https://auth0.com)
+- [Sentry](https://sentry.io)
+
 ### Gitpod
 
 The project comes with a [Gitpod](https://www.gitpod.io) configuration including
@@ -69,6 +74,34 @@ PULL_DB_DEFAULT_SOURCE_HOST=<source MongoDB host>
 PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
 PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 ```
+
+## Configuring services
+
+### Auth0
+
+An API has to be setup in Auth0 and it needs to have the *Scopes*. *Identifier* and *Client ID* are needed for the environment variables (see below).
+#### Scopes
+
+`write:bibliography`,
+`read:bibliography`,
+`access:beta`,
+`lemmatize:fragments`,
+`transliterate:fragments`,
+`read:fragments`,
+`write:words`,
+`read:words`,
+`read:texts`,
+`write:texts`,
+`create:texts`,
+`annotate:fragments	Annotate`,
+
+Folio scopes need to have the following format. 
+
+`read:<Folio name>-folios`
+
+### Sentry
+
+An organization and project need to be setup in Sentry. *DSN* under *Client Keys* is needed for the for the environment variables (see below).
 
 ## Running the application
 
