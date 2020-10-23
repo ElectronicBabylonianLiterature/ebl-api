@@ -51,6 +51,8 @@ Line length is 88, and bugbear B950 is used instead of E501.
 PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
 disabled.
 
+Use type hints in new code and add the to old code when making changes.
+
 ## Running the tests
 
 ```shell script
@@ -80,6 +82,7 @@ PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 ### Auth0
 
 An API has to be setup in Auth0 and it needs to have the *Scopes*. *Identifier* and *Client ID* are needed for the environment variables (see below).
+
 #### Scopes
 
 `write:bibliography`,
@@ -248,10 +251,6 @@ docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,
 6) Fix invalid fragments.
 7) Remove fallback logic.
 8) Deploy to production.
-
-## Type hints
-
-Use type hints in new code and add the to old code when making changes.
 
 ## Package dependencies
 
