@@ -35,6 +35,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
+from ebl.transliteration.domain.line import EmptyLine
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
@@ -66,21 +67,26 @@ class ManuscriptLineFactory(factory.Factory):
         SurfaceLabel.from_label(Surface.OBVERSE),
         ColumnLabel.from_label("iii", [Status.COLLATION, Status.CORRECTION]),
     )
-    line = TextLine.of_iterable(
-        LineNumber(1),
-        (
-            Word.of(
-                [
-                    Reading.of_name("ku"),
-                    Joiner.hyphen(),
-                    BrokenAway.open(),
-                    Reading.of_name("nu"),
-                    Joiner.hyphen(),
-                    Reading.of_name("ši"),
-                    BrokenAway.close(),
-                ]
+    line = factory.Iterator(
+        [
+            TextLine.of_iterable(
+                LineNumber(1),
+                (
+                    Word.of(
+                        [
+                            Reading.of_name("ku"),
+                            Joiner.hyphen(),
+                            BrokenAway.open(),
+                            Reading.of_name("nu"),
+                            Joiner.hyphen(),
+                            Reading.of_name("ši"),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                ),
             ),
-        ),
+            EmptyLine(),
+        ]
     )
     paratext = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 

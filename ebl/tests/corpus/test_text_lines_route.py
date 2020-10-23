@@ -9,7 +9,7 @@ from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.users.domain.user import Guest
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.corpus.application.schemas import ApiLineSchema
+from ebl.corpus.web.schemas import ApiLineSchema
 
 
 ANY_USER = Guest()
