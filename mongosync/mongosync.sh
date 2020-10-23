@@ -1,7 +1,5 @@
 #!/bin/sh
 
-printenv
-
 DUMP_FOLDER=/tmp/pull-db/
 RESTORE_FOLDER=/tmp/pull-db/ebl
 
