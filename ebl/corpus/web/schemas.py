@@ -20,7 +20,6 @@ from ebl.corpus.domain.text import Line, ManuscriptLine
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.lark_parser import (
     parse_line_number,
     parse_note_line,
@@ -56,9 +55,7 @@ class ApiManuscriptSchema(ManuscriptSchema):
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:
     return (
-        LineNumberLabel.from_atf(
-            cast(TextLine, manuscript_line.line).line_number.atf
-        ).to_value()
+        cast(TextLine, manuscript_line.line).line_number.label
         if isinstance(manuscript_line.line, TextLine)
         else ""
     )
@@ -93,7 +90,7 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         has_text_line = len(data["number"]) > 0
         lines = data["atf"].split("\n")
         text = (
-            parse_text_line(f"{LineNumberLabel(data['number']).to_atf()} {lines[0]}")
+            parse_text_line(f"{data['number']}. {lines[0]}")
             if has_text_line
             else EmptyLine()
         )
@@ -113,9 +110,7 @@ class RecontsructionTokenSchema(Schema):
 
 class LineNumberString(fields.String):
     def _serialize(self, value, attr, obj, **kwargs):
-        return super()._serialize(
-            LineNumberLabel.from_atf(value.atf).to_value(), attr, obj, **kwargs
-        )
+        return super()._serialize(value.label, attr, obj, **kwargs)
 
     def _deserialize(self, value, attr, data, **kwargs):
         try:

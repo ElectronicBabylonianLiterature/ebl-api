@@ -182,6 +182,13 @@ class Chapter:
         if orphans:
             raise ValueError(f"Missing manuscripts: {orphans}.")
 
+    @lines.validator
+    def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
+        counter = collections.Counter(line.text.line_number for line in value)
+        duplicates = [number.label for number in counter if counter[number] > 1]
+        if any(duplicates):
+            raise ValueError(f"Duplicate line numbers: {duplicates}.")
+
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:
             visitor.visit_chapter(self)

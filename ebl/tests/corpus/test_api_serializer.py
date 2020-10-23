@@ -11,7 +11,6 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
@@ -66,7 +65,7 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                 ],
                 "lines": [
                     {
-                        "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
+                        "number": line.number.label,
                         "reconstruction": "".join(
                             [
                                 convert_to_atf(None, line.reconstruction),

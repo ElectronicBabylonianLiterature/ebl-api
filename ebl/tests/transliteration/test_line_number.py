@@ -8,6 +8,7 @@ def test_line_number_simple():
     assert line_number.prefix_modifier is None
     assert line_number.suffix_modifier is None
     assert line_number.atf == "1."
+    assert line_number.label == "1"
 
 
 def test_line_number_complex():
@@ -18,6 +19,7 @@ def test_line_number_complex():
     assert line_number.prefix_modifier == "D"
     assert line_number.suffix_modifier == "a"
     assert line_number.atf == "D+20'a."
+    assert line_number.label == "D+20'a"
 
 
 def test_line_number_range():
@@ -28,3 +30,4 @@ def test_line_number_range():
     assert line_number.start == start
     assert line_number.end == end
     assert line_number.atf == "1-D+20'a."
+    assert line_number.label == "1-D+20'a"

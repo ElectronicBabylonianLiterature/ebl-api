@@ -220,6 +220,11 @@ def test_missing_manuscripts_are_invalid():
         )
 
 
+def test_duplicate_line_numbers_invalid():
+    with pytest.raises(ValueError):
+        Chapter(lines=(LINE, LINE))
+
+
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "labels",
     [

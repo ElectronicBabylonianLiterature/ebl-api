@@ -7,8 +7,12 @@ import attr
 class AbstractLineNumber(ABC):
     @property
     @abstractmethod
-    def atf(self) -> str:
+    def label(self) -> str:
         ...
+
+    @property
+    def atf(self) -> str:
+        return f"{self.label}."
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -19,11 +23,11 @@ class LineNumber(AbstractLineNumber):
     suffix_modifier: Optional[str] = None
 
     @property
-    def atf(self) -> str:
+    def label(self) -> str:
         prefix = f"{self.prefix_modifier}+" if self.prefix_modifier else ""
         prime = "'" if self.has_prime else ""
         suffix = self.suffix_modifier or ""
-        return f"{prefix}{self.number}{prime}{suffix}."
+        return f"{prefix}{self.number}{prime}{suffix}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -32,5 +36,5 @@ class LineNumberRange(AbstractLineNumber):
     end: LineNumber
 
     @property
-    def atf(self) -> str:
-        return f"{self.start.atf[:-1]}-{self.end.atf}"
+    def label(self) -> str:
+        return f"{self.start.label}-{self.end.label}"
