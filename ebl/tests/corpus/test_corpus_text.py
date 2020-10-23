@@ -23,12 +23,7 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import (
-    ColumnLabel,
-    Label,
-    LineNumberLabel,
-    SurfaceLabel,
-)
+from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -234,7 +229,6 @@ def test_duplicate_line_numbers_invalid():
             SurfaceLabel.from_label(Surface.REVERSE),
         ),
         (ColumnLabel.from_label("i"), SurfaceLabel.from_label(Surface.REVERSE)),
-        (LineNumberLabel("1"),),
     ],
 )
 def test_invalid_labels(labels: Sequence[Label]):

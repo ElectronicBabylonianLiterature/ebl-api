@@ -8,7 +8,6 @@ from ebl.transliteration.domain.labels import (
     ColumnLabel,
     Label,
     LabelVisitor,
-    LineNumberLabel,
     SurfaceLabel,
     ObjectLabel,
 )
@@ -46,9 +45,6 @@ LABELS: List[Tuple[str, str, str, Label]] = [
     ("iii", "!", "@column 3", ColumnLabel((Status.CORRECTION,), 3)),
     ("iv", "*", "@column 4", ColumnLabel((Status.COLLATION,), 4)),
     ("v", "'?", "@column 5", ColumnLabel((Status.PRIME, Status.UNCERTAIN), 5)),
-    ("1", "", "1.", LineNumberLabel("1")),
-    ("a+1", "", "a+1.", LineNumberLabel("a+1")),
-    ("2'", "", "2'.", LineNumberLabel("2'")),
 ]
 
 
@@ -91,13 +87,6 @@ def test_label_to_value(label, status, _, model) -> None:
 @pytest.mark.parametrize("_, status,atf,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_atf(_, status, atf, model) -> None:
     assert model.to_atf() == f"{atf}{status}"
-
-
-# pyre-ignore[56]
-@pytest.mark.parametrize("number", ["", " ", " 1", "1 ", "1 2", "\t"])
-def test_not_atf_line_number_is_invalid(number) -> None:
-    with pytest.raises(ValueError):
-        LineNumberLabel(number)
 
 
 def test_duplicate_status_is_invalid() -> None:
