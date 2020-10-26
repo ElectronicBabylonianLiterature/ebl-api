@@ -1,5 +1,5 @@
 import collections
-from typing import Iterable, Optional, Sequence, Set, TypeVar, Union
+from typing import Iterable, Optional, Sequence, Set, Tuple, TypeVar, Union, cast
 
 import attr
 
@@ -23,6 +23,8 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.dollar_line import DollarLine
+from ebl.transliteration.domain.line import EmptyLine
+from ebl.errors import NotFoundError
 
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
@@ -35,6 +37,20 @@ def get_duplicates(collection: Iterable[T]) -> Set[T]:
     return {
         item for item, count in collections.Counter(collection).items() if count > 1
     }
+
+
+Siglum = Tuple[Provenance, Period, ManuscriptType, str]
+
+
+def siglum_to_string(siglum: Siglum) -> str:
+    return "".join(
+        [
+            siglum[0].abbreviation,
+            siglum[1].abbreviation,
+            siglum[2].abbreviation,
+            siglum[3],
+        ]
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -51,12 +67,12 @@ class Manuscript:
     references: Sequence[Reference] = tuple()
 
     @accession.validator
-    def validate_accession(self, _, value):
+    def validate_accession(self, _, value) -> None:
         if self.museum_number and value:
             raise ValueError("Accession given when museum number present.")
 
     @property
-    def siglum(self):
+    def siglum(self) -> Siglum:
         return (self.provenance, self.period, self.type, self.siglum_disambiguator)
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
@@ -76,7 +92,7 @@ def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
 class ManuscriptLine:
     manuscript_id: int
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
-    line: TextLine
+    line: Union[TextLine, EmptyLine]
     paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
@@ -146,6 +162,9 @@ class Line:
         return attr.evolve(self, manuscripts=stripped_manuscripts)
 
 
+ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
@@ -181,6 +200,34 @@ class Chapter:
         if orphans:
             raise ValueError(f"Missing manuscripts: {orphans}.")
 
+    @lines.validator
+    def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
+        counter = collections.Counter(line.text.line_number for line in value)
+        duplicates = [number.label for number in counter if counter[number] > 1]
+        if any(duplicates):
+            raise ValueError(f"Duplicate line numbers: {duplicates}.")
+
+    @lines.validator
+    def _validate_manuscript_line_labels(self, _, value: Sequence[Line]) -> None:
+        counter = collections.Counter(self._manuscript_line_labels)
+        duplicates = [label for label in counter if counter[label] > 1]
+        if duplicates:
+            readable_labels = self._make_labels_readable(duplicates)
+            raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
+
+    @property
+    def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
+        return [
+            (
+                manuscript_line.manuscript_id,
+                manuscript_line.labels,
+                cast(TextLine, manuscript_line.line).line_number,
+            )
+            for line in self.lines
+            for manuscript_line in line.manuscripts
+            if isinstance(manuscript_line.line, TextLine)
+        ]
+
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:
             visitor.visit_chapter(self)
@@ -200,6 +247,26 @@ class Chapter:
 
         merged_lines = Merger(repr, inner_merge).merge(self.lines, other.lines)
         return attr.evolve(other, lines=tuple(merged_lines))
+
+    def _get_manuscript(self, id_: int) -> Manuscript:
+        try:
+            return next(
+                manuscript for manuscript in self.manuscripts if manuscript.id == id_
+            )
+        except StopIteration:
+            raise NotFoundError(f"No manuscripts with id {id_}.")
+
+    def _make_labels_readable(self, labels: Sequence[ManuscriptLineLabel]) -> str:
+        return ", ".join(
+            " ".join(
+                [
+                    siglum_to_string(self._get_manuscript(label[0]).siglum),
+                    *[side.to_value() for side in label[1]],
+                    label[2].label,
+                ]
+            )
+            for label in labels
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

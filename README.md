@@ -23,6 +23,11 @@ pip install pipenv
 pipenv install --dev
 ```
 
+The following services are needed to run application:
+
+- [Auth0](https://auth0.com)
+- [Sentry](https://sentry.io)
+
 ### Gitpod
 
 The project comes with a [Gitpod](https://www.gitpod.io) configuration including
@@ -45,6 +50,23 @@ Use [Black](https://black.readthedocs.io/en/stable/) codestyle.
 Line length is 88, and bugbear B950 is used instead of E501.
 PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
 disabled.
+
+Use type hints in new code and add the to old code when making changes.
+
+### Package dependencies
+
+- Avoid directed package dependency cycles.
+- Domain packages should depend only on other domain packages.
+- Application packages should depend only on application and domain packages.
+- Wed and infrastructure should depend only on application and domain packges.
+- All packages can depend on common modules in the top-level ebl package.
+
+Dependencies can be analyzed with
+[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
+
+```shell script
+pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
+```
 
 ## Running the tests
 
@@ -69,6 +91,35 @@ PULL_DB_DEFAULT_SOURCE_HOST=<source MongoDB host>
 PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
 PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 ```
+
+## Configuring services
+
+### Auth0
+
+An API has to be setup in Auth0 and it needs to have the *Scopes*. *Identifier* and *Client ID* are needed for the environment variables (see below).
+
+#### Scopes
+
+`write:bibliography`,
+`read:bibliography`,
+`access:beta`,
+`lemmatize:fragments`,
+`transliterate:fragments`,
+`read:fragments`,
+`write:words`,
+`read:words`,
+`read:texts`,
+`write:texts`,
+`create:texts`,
+`annotate:fragments	Annotate`,
+
+Folio scopes need to have the following format. 
+
+`read:<Folio name>-folios`
+
+### Sentry
+
+An organization and project need to be setup in Sentry. *DSN* under *Client Keys* is needed for the for the environment variables (see below).
 
 ## Running the application
 
@@ -215,25 +266,6 @@ docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,
 6) Fix invalid fragments.
 7) Remove fallback logic.
 8) Deploy to production.
-
-## Type hints
-
-Use type hints in new code and add the to old code when making changes.
-
-## Package dependencies
-
-- Avoid directed package dependency cycles.
-- Domain packages should depend only on other domain packages.
-- Application packages should depend only on application and domain packages.
-- Wed and infrastructure should depend only on application and domain packges.
-- All packages can depend on common modules in the top-level ebl package.
-
-Dependencies can be analyzed with
-[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
-
-```shell script
-pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
-```
 
 ## Acknowledgements
 
