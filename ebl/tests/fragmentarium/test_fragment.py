@@ -2,6 +2,7 @@ import attr
 import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
+from ebl.fragmentarium.application.line_to_vec_updater import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
@@ -197,6 +198,12 @@ def test_update_transliteration(user):
     assert updated_fragment == expected_fragment
 
 
+def test_update_line_to_vec(user):
+    fragment = TransliteratedFragmentFactory()
+
+
+
+
 def test_update_notes(user):
     fragment = FragmentFactory.build()
     transliteration = TransliterationUpdate(fragment.text, "new notes")
@@ -233,3 +240,10 @@ def test_set_references():
     updated_fragment = fragment.set_references(references)
 
     assert updated_fragment.references == references
+
+
+def test_set_line_to_vec():
+    fragment = TransliteratedFragmentFactory(line_to_vec=[])
+    line_to_vec = create_line_to_vec(fragment.text.lines)
+    updated_fragment = fragment.set_line_to_vec(line_to_vec)
+    assert updated_fragment.line_to_vec == line_to_vec

@@ -111,6 +111,16 @@ class MongoFragmentRepository(FragmentRepository):
             },
         )
 
+    def update_line_to_vec(self, fragment):
+        self._collection.update_one(
+            fragment_is(fragment),
+            {
+                "$set": FragmentSchema(only=("line_to_vec",)).dump(
+                    fragment
+                )
+            },
+        )
+
     def update_genres(self, fragment):
         self._collection.update_one(
             fragment_is(fragment),

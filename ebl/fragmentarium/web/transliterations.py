@@ -3,6 +3,7 @@ from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.application.line_to_vec_updater import create_line_to_vec
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -32,6 +33,7 @@ class TransliterationResource:
                 self._create_transliteration(req.media),
                 user,
             )
+            updated_fragment, has_photo = self._updater.update_line_to_vec(parse_museum_number(number), create_line_to_vec(updated_fragment.text.lines), user)
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

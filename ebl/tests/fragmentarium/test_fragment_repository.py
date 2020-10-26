@@ -152,6 +152,16 @@ def test_update_update_transliteration_not_found(fragment_repository):
         fragment_repository.update_transliteration(transliterated_fragment)
 
 
+def test_update_line_to_vec(fragment_repository):
+    fragment = TransliteratedFragmentFactory(line_to_vec=tuple())
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_line_to_vec((1, 2, 2, 1, 1, 1))
+    fragment_repository.update_line_to_vec(updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
 def test_update_genres(fragment_repository):
     fragment = FragmentFactory.build(genres=tuple())
     fragment_repository.create(fragment)

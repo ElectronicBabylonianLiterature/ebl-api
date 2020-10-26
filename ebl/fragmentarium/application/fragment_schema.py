@@ -96,12 +96,14 @@ class FragmentSchema(Schema):
         missing=None,
     )
     genres = fields.Nested(GenreSchema, many=True, missing=tuple())
+    line_to_vec = fields.List(fields.Integer, missing=tuple(), data_key="lineToVec")
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["joins"] = tuple(data["joins"])
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
+        data["line_to_vec"] = tuple(data["line_to_vec"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)
