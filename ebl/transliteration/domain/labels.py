@@ -29,10 +29,6 @@ class LabelVisitor(ABC):
     def visit_object_label(self, label: "ObjectLabel") -> "LabelVisitor":
         ...
 
-    @abstractmethod
-    def visit_line_number_label(self, label: "LineNumberLabel") -> "LabelVisitor":
-        ...
-
 
 def no_duplicate_status(_instance, _attribute, value) -> None:
     if any(count > 1 for count in Counter(value).values()):
@@ -183,39 +179,11 @@ def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
         )
 
 
-@attr.s(auto_attribs=True, frozen=True, init=False)
-class LineNumberLabel(Label):
-
-    number: str = attr.ib(validator=is_sequence_of_non_space_characters)
-
-    def __init__(self, number: str) -> None:
-        super().__init__(tuple())
-        object.__setattr__(self, "number", number)
-        attr.validate(self)
-
-    @staticmethod
-    def from_atf(atf: str) -> "LineNumberLabel":
-        return LineNumberLabel(atf[:-1])
-
-    @property
-    def abbreviation(self) -> str:
-        return self.number
-
-    @property
-    def _atf(self) -> str:
-        return f"{self.number}."
-
-    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
-        return visitor.visit_line_number_label(self)
-
-
 class LabelTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)  # pyre-ignore[56]
-    def line_number_label(self, number: Token) -> LineNumberLabel:  # pyre-ignore[11]
-        return LineNumberLabel(number)
-
-    @v_args(inline=True)  # pyre-ignore[56]
-    def column_label(self, numeral: Token, status: Sequence[Status]) -> ColumnLabel:
+    def column_label(
+        self, numeral: Token, status: Sequence[Status]  # pyre-ignore[11]
+    ) -> ColumnLabel:
         return ColumnLabel.from_label(numeral, status)
 
     @v_args(inline=True)  # pyre-ignore[56]

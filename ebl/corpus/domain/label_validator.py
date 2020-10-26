@@ -1,7 +1,6 @@
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
     LabelVisitor,
-    LineNumberLabel,
     ObjectLabel,
     SurfaceLabel,
 )
@@ -26,9 +25,5 @@ class LabelValidator(LabelVisitor):
         return self
 
     def visit_object_label(self, label: ObjectLabel) -> "LabelValidator":
-        self.is_valid = False
-        return self
-
-    def visit_line_number_label(self, label: LineNumberLabel) -> "LabelValidator":
         self.is_valid = False
         return self
