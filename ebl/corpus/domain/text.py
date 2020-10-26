@@ -1,5 +1,5 @@
 import collections
-from typing import Iterable, Optional, Sequence, Set, TypeVar, Union
+from typing import Iterable, Optional, Sequence, Set, TypeVar, Union, cast
 
 import attr
 
@@ -188,6 +188,23 @@ class Chapter:
         duplicates = [number.label for number in counter if counter[number] > 1]
         if any(duplicates):
             raise ValueError(f"Duplicate line numbers: {duplicates}.")
+
+    @lines.validator
+    def _validate_manuscript_line_labels(self, _, value: Sequence[Line]) -> None:
+        manuscript_lines: Sequence[ManuscriptLine] = [
+            manuscript_line
+            for line in self.lines
+            for manuscript_line in line.manuscripts
+        ]
+        labels = [
+            (line.manuscript_id, *line.labels, cast(TextLine, line.line).line_number)
+            for line in manuscript_lines
+            if isinstance(line.line, TextLine)
+        ]
+        counter = collections.Counter(labels)
+        duplicates = [label for label in counter if counter[label] > 1]
+        if duplicates:
+            raise ValueError(f"Duplicate manuscript line labels: {duplicates}.")
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:

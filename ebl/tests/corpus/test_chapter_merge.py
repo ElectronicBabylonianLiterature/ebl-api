@@ -315,7 +315,11 @@ ANOTHER_NEW_LINE = Line(
     NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, attr.evolve(NEW_TEXT_LINE, line_number=LineNumber(2))
+        ),
+    ),
 )
 NEW_PARATEXT = Line(
     RECONSTRUCTION,
@@ -333,7 +337,11 @@ OLD_LINE = Line(
     None,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (MANUSCRIPT_LINE,),
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, attr.evolve(TEXT_LINE, line_number=LineNumber(2))
+        ),
+    ),
 )
 
 

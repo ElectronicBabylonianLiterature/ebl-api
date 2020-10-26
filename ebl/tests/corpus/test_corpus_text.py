@@ -1,5 +1,6 @@
 from typing import Sequence
 
+import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.enums import (
@@ -213,6 +214,50 @@ def test_missing_manuscripts_are_invalid():
                 ),
             ),
         )
+
+
+@pytest.mark.parametrize(
+    "make_chapter",
+    [
+        lambda: Chapter(
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    RECONSTRUCTION,
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
+                    (
+                        ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                        ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                    ),
+                ),
+            ),
+        ),
+        lambda: Chapter(
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    RECONSTRUCTION,
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
+                    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                ),
+                Line(
+                    attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
+                    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                ),
+            ),
+        ),
+    ],
+)
+def test_duplicate_manuscript_line_labels_are_invalid(make_chapter):
+    with pytest.raises(ValueError):
+        make_chapter()
 
 
 def test_duplicate_line_numbers_invalid():
