@@ -191,15 +191,15 @@ class Chapter:
 
     @lines.validator
     def _validate_manuscript_line_labels(self, _, value: Sequence[Line]) -> None:
-        manuscript_lines: Sequence[ManuscriptLine] = [
-            manuscript_line
+        labels = [
+            (
+                manuscript_line.manuscript_id,
+                *manuscript_line.labels,
+                cast(TextLine, manuscript_line.line).line_number,
+            )
             for line in self.lines
             for manuscript_line in line.manuscripts
-        ]
-        labels = [
-            (line.manuscript_id, *line.labels, cast(TextLine, line.line).line_number)
-            for line in manuscript_lines
-            if isinstance(line.line, TextLine)
+            if isinstance(manuscript_line.line, TextLine)
         ]
         counter = collections.Counter(labels)
         duplicates = [label for label in counter if counter[label] > 1]
