@@ -47,7 +47,8 @@ def test_update_transliteration(
     assert updated_fragment == (expected_fragment, False)
 
 
-def test_update_line_to_vec( fragment_updater, user, fragment_repository, changelog, when
+def test_update_line_to_vec(
+    fragment_updater, user, fragment_repository, changelog, when
 ):
     line_to_vec = [0, 1, 1, 2, 1, 2, 1]
     transliterated_fragment = TransliteratedFragmentFactory.build(line_to_vec=[])
@@ -65,9 +66,7 @@ def test_update_line_to_vec( fragment_updater, user, fragment_repository, change
         {"_id": str(number), **SCHEMA.dump(expected_fragment)},
     ).thenReturn()
     (when(fragment_repository).update_line_to_vec(expected_fragment).thenReturn())
-    updated_fragment = fragment_updater.update_line_to_vec(
-        number, line_to_vec, user
-    )
+    updated_fragment = fragment_updater.update_line_to_vec(number, line_to_vec, user)
     assert updated_fragment == (expected_fragment, False)
 
 

@@ -77,6 +77,10 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def update_line_to_vec(self, fragment: Fragment) -> None:
+        ...
+
+    @abstractmethod
     def update_genres(self, fragment: Fragment) -> None:
         ...
 

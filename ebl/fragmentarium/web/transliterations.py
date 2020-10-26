@@ -33,7 +33,11 @@ class TransliterationResource:
                 self._create_transliteration(req.media),
                 user,
             )
-            updated_fragment, has_photo = self._updater.update_line_to_vec(parse_museum_number(number), create_line_to_vec(updated_fragment.text.lines), user)
+            updated_fragment, has_photo = self._updater.update_line_to_vec(
+                parse_museum_number(number),
+                create_line_to_vec(updated_fragment.text.lines),
+                user,
+            )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except TransliterationError as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

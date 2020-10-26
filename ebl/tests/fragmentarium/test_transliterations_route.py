@@ -30,7 +30,9 @@ def test_update_transliteration(client, fragmentarium, user, database):
 
     expected_json = {
         **create_response_dto(
-            updated_fragment.set_line_to_vec(create_line_to_vec(updated_fragment.text.lines)),
+            updated_fragment.set_line_to_vec(
+                create_line_to_vec(updated_fragment.text.lines)
+            ),
             user,
             fragment.number == MuseumNumber("K", "1"),
         ),
@@ -68,10 +70,14 @@ def test_update_transliteration_line_to_vec(
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
-    update_lemmatized_fragment = lemmatized_fragment.update_transliteration(updated_transliteration, user)
+    update_lemmatized_fragment = lemmatized_fragment.update_transliteration(
+        updated_transliteration, user
+    )
 
     expected_json = create_response_dto(
-        update_lemmatized_fragment.set_line_to_vec(create_line_to_vec(update_lemmatized_fragment.text.lines)),
+        update_lemmatized_fragment.set_line_to_vec(
+            create_line_to_vec(update_lemmatized_fragment.text.lines)
+        ),
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
@@ -106,15 +112,16 @@ def test_update_transliteration_merge_lemmatization(
         updates["transliteration"], updates["notes"]
     )
     update_lemmatized_fragment = lemmatized_fragment.update_transliteration(
-        updated_transliteration, user)
+        updated_transliteration, user
+    )
 
     expected_json = create_response_dto(
         update_lemmatized_fragment.set_line_to_vec(
-            create_line_to_vec(update_lemmatized_fragment.text.lines)),
+            create_line_to_vec(update_lemmatized_fragment.text.lines)
+        ),
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
-
 
     post_result = client.simulate_post(
         f"/fragments/{lemmatized_fragment.number}/transliteration",

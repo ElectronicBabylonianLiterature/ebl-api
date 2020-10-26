@@ -202,8 +202,6 @@ def test_update_line_to_vec(user):
     fragment = TransliteratedFragmentFactory()
 
 
-
-
 def test_update_notes(user):
     fragment = FragmentFactory.build()
     transliteration = TransliterationUpdate(fragment.text, "new notes")

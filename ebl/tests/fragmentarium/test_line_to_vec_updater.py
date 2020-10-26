@@ -8,4 +8,3 @@ def test_line_to_vec_updater():
     fragment = TransliteratedFragmentFactory()
     line_to_vec = create_line_to_vec(fragment.text.lines)
     assert fragment.line_to_vec == line_to_vec
-
