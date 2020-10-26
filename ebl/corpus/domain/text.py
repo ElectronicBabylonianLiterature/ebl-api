@@ -162,6 +162,9 @@ class Line:
         return attr.evolve(self, manuscripts=stripped_manuscripts)
 
 
+ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
@@ -206,7 +209,15 @@ class Chapter:
 
     @lines.validator
     def _validate_manuscript_line_labels(self, _, value: Sequence[Line]) -> None:
-        labels: Sequence[Tuple[int, Sequence[Label], AbstractLineNumber]] = [
+        counter = collections.Counter(self._manuscript_line_labels)
+        duplicates = [label for label in counter if counter[label] > 1]
+        if duplicates:
+            readable_labels = self._make_labels_readable(duplicates)
+            raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
+
+    @property
+    def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
+        return [
             (
                 manuscript_line.manuscript_id,
                 manuscript_line.labels,
@@ -216,20 +227,6 @@ class Chapter:
             for manuscript_line in line.manuscripts
             if isinstance(manuscript_line.line, TextLine)
         ]
-        counter = collections.Counter(labels)
-        duplicates = [label for label in counter if counter[label] > 1]
-        if duplicates:
-            readable_labels = ", ".join(
-                " ".join(
-                    [
-                        siglum_to_string(self._get_manuscript(label[0]).siglum),
-                        *[side.to_value() for side in label[1]],
-                        label[2].label,
-                    ]
-                )
-                for label in duplicates
-            )
-            raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         if visitor.is_pre_order:
@@ -258,6 +255,18 @@ class Chapter:
             )
         except StopIteration:
             raise NotFoundError(f"No manuscripts with id {id_}.")
+
+    def _make_labels_readable(self, labels: Sequence[ManuscriptLineLabel]) -> str:
+        return ", ".join(
+            " ".join(
+                [
+                    siglum_to_string(self._get_manuscript(label[0]).siglum),
+                    *[side.to_value() for side in label[1]],
+                    label[2].label,
+                ]
+            )
+            for label in labels
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
