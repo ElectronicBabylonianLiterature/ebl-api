@@ -11,7 +11,10 @@ from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.application.transliteration_update_factory import TransliterationUpdateFactory
-from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.app import create_context
+from ebl.users.domain.user import ApiUser
 
 from dotenv import load_dotenv
 
@@ -134,7 +137,6 @@ class ATF_Importer:
         client = MongoClient(os.getenv("MONGODB_URI"))
         db = client.get_database(os.getenv("MONGODB_DB"))
         self.db = db
-
     def get_ebl_transliteration(self,line):
         parsed_atf = parse_atf_lark(line)
         return parsed_atf
@@ -370,13 +372,15 @@ class ATF_Importer:
                             last_alter_lemline_at = line['c_alter_lemline_at']
                             result['transliteration'].append(line['c_line'])
 
+                context = create_context()
+                fragment_repository = context.fragment_repository
+                transliteration_factory = context.get_transliteration_update_factory()
+                updater = context.get_fragment_updater()
 
+                for entry in self.db.get_collection('fragments').find({"_id": "Sm.683"}, {"_id"}):
+                    print(entry)
 
-                for transliteration_line in result['transliteration']:
-                    print(transliteration_line)
-                    sign_rep = SignRepository
-                    t = TransliterationUpdateFactory(sign_rep)
-                    t.create(transliteration_line)
+                insert_translitertions(transliteration_factory,updater,result['transliteration'])
 
                 with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
@@ -390,6 +394,20 @@ class ATF_Importer:
                     outputfile.write(key + "\n")
 
                 self.logger.info(Util.print_frame("conversion of \""+filename+".atf\" finished"))
+
+def insert_translitertions(
+    transliteration_factory: TransliterationUpdateFactory,
+    updater: FragmentUpdater,
+    transliterations
+) -> None:
+    converted_transliteration = "\n".join(transliterations)
+    transliteration = transliteration_factory.create(converted_transliteration, "")
+    user = ApiUser("atf_importer.py")
+
+
+    updater.update_transliteration(parse_museum_number("Sm.683"), transliteration, user)
+
+
 
 if __name__ == '__main__':
     a = ATF_Importer()
