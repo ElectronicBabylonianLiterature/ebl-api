@@ -10,6 +10,8 @@ import argparse
 from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.fragmentarium.application.transliteration_update_factory import TransliterationUpdateFactory
+from ebl.transliteration.application.sign_repository import SignRepository
 
 from dotenv import load_dotenv
 
@@ -366,9 +368,15 @@ class ATF_Importer:
                             last_transliteration_line = line['c_line']
                             last_transliteration = oracc_words
                             last_alter_lemline_at = line['c_alter_lemline_at']
+                            result['transliteration'].append(line['c_line'])
 
-                        result['transliteration'].append(line['c_line'])
 
+
+                for transliteration_line in result['transliteration']:
+                    print(transliteration_line)
+                    sign_rep = SignRepository
+                    t = TransliterationUpdateFactory(sign_rep)
+                    t.create(transliteration_line)
 
                 with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
