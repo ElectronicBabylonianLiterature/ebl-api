@@ -15,7 +15,7 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
-DTO = {"alignment": [[[{"value": "ku-[nu-ši]", "alignment": 0}]]]}
+DTO = {"lemmatization": [[[{"value": "ku-[nu-ši]", "uniqueLemma": ["aklu I"]}]]]}
 
 
 def create_text_dto(text):
@@ -39,7 +39,8 @@ def create_text(client, text):
     assert post_result.status == falcon.HTTP_CREATED
 
 
-def test_updating_alignment(client, bibliography, sign_repository, signs):
+@pytest.mark.xfail
+def test_updating_lemmatization(client, bibliography, sign_repository, signs):
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
@@ -69,7 +70,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=0,
+                                            unique_lemma=["aklu I"],
                                         ),
                                     ),
                                 ),
@@ -84,7 +85,8 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
     expected_text = create_text_dto(updated_text)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/{chapter_index}/alignment",
+        f"/texts/{text.category}/{text.index}"
+        f"/chapters/{chapter_index}/manuscriptLemmatization",
         body=json.dumps(DTO),
     )
 
@@ -105,21 +107,22 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/1/alignment",
+        f"/texts/{text.category}/{text.index}" f"/chapters/1/manuscriptLemmatization",
         body=json.dumps(DTO),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
+@pytest.mark.xfail
 @pytest.mark.parametrize(
     "dto,expected_status",
     [
-        ({"alignment": [[[]]]}, falcon.HTTP_UNPROCESSABLE_ENTITY),
+        ({"lemmatization": [[[]]]}, falcon.HTTP_UNPROCESSABLE_ENTITY),
         ({}, falcon.HTTP_BAD_REQUEST),
     ],
 )
-def test_updating_invalid_alignment(
+def test_updating_invalid_lemmatization(
     dto, expected_status, client, bibliography, sign_repository, signs
 ):
     allow_signs(signs, sign_repository)
@@ -128,7 +131,7 @@ def test_updating_invalid_alignment(
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/0/alignment",
+        f"/texts/{text.category}/{text.index}" f"/chapters/0/manuscriptLemmatization",
         body=json.dumps(dto),
     )
 
