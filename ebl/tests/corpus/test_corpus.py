@@ -1,9 +1,9 @@
 import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.application.text_serializer import TextSerializer
+from ebl.corpus.application.text_serializer import serialize
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.corpus.domain.text import Line, ManuscriptLine, Text
+from ebl.corpus.domain.text import Line, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
@@ -43,10 +43,6 @@ TEXT_WITHOUT_DOCUMENTS = attr.evolve(
     ),
 )
 ANY_USER = Guest()
-
-
-def to_dict(text: Text) -> dict:
-    return TextSerializer.serialize(text)
 
 
 def expect_bibliography(bibliography, when):
@@ -97,8 +93,8 @@ def expect_text_update(
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**to_dict(old_text), "_id": old_text.id},
-        {**to_dict(updated_text), "_id": updated_text.id},
+        {**serialize(old_text), "_id": old_text.id},
+        {**serialize(updated_text), "_id": updated_text.id},
     ).thenReturn()
 
 
@@ -133,7 +129,7 @@ def test_creating_text(
     expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
     when(changelog).create(
-        COLLECTION, user.profile, {"_id": TEXT.id}, {**to_dict(TEXT), "_id": TEXT.id}
+        COLLECTION, user.profile, {"_id": TEXT.id}, {**serialize(TEXT), "_id": TEXT.id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
@@ -352,7 +348,10 @@ def test_updating_lines(
                 lines=(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
-                        number=LineNumber(1, True),
+                        text=attr.evolve(
+                            TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].text,
+                            line_number=LineNumber(1, True),
+                        ),
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
@@ -378,8 +377,9 @@ def test_updating_lines(
 def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
-    number = LineNumber(1)
-    reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    reconstruction = TextLine.of_iterable(
+        LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    )
     is_second_line_of_parallelism = False
     is_beginning_of_section = False
     text_line = TextLine.of_iterable(
@@ -395,8 +395,8 @@ def test_merging_lines(
     )
     manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
     line = Line(
-        number,
         reconstruction,
+        None,
         not is_second_line_of_parallelism,
         not is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line),),
@@ -406,8 +406,8 @@ def test_merging_lines(
         (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ši")])),
     )
     new_line = Line(
-        number,
         reconstruction,
+        None,
         is_second_line_of_parallelism,
         is_beginning_of_section,
         (ManuscriptLine(manuscript_id, tuple(), text_line.merge(new_text_line)),),
@@ -440,8 +440,8 @@ def test_merging_lines(
 
     lines = (
         Line(
-            number,
             reconstruction,
+            None,
             is_second_line_of_parallelism,
             is_beginning_of_section,
             (ManuscriptLine(manuscript_id, tuple(), new_text_line),),

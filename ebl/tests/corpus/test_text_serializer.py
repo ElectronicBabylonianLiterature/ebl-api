@@ -2,7 +2,8 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.text_serializer import TextDeserializer, TextSerializer
+from ebl.corpus.application.text_serializer import serialize, deserialize
+from ebl.corpus.domain.text import Text
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -11,106 +12,123 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
-from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 import attr
 
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
-ManuscriptFactory.build(references=REFERENCES)
-MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
+FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
     manuscript_id=MANUSCRIPT.id
 )
-LINE = LineFactory.build(manuscripts=(MANUSCRIPT_LINE,))  # pyre-ignore[16]
+SECOND_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
+# pyre-ignore[16]
+LINE = LineFactory.build(manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE))
 CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
     manuscripts=(MANUSCRIPT,), lines=(LINE,)
 )
 TEXT = TextFactory.build(chapters=(CHAPTER,))  # pyre-ignore[16]
-TEXT_WITHOUT_DOCUMENTS = attr.evolve(
-    TEXT,
-    chapters=(
-        attr.evolve(
-            CHAPTER,
-            manuscripts=(
-                attr.evolve(
-                    MANUSCRIPT,
-                    references=tuple(
-                        attr.evolve(reference, document=None)
-                        for reference in MANUSCRIPT.references
-                    ),
+
+
+def strip_documents(text: Text) -> Text:
+    return attr.evolve(
+        text,
+        chapters=tuple(
+            attr.evolve(
+                chapter,
+                manuscripts=tuple(
+                    attr.evolve(
+                        manuscript,
+                        references=tuple(
+                            attr.evolve(reference, document=None)
+                            for reference in MANUSCRIPT.references
+                        ),
+                    )
+                    for manuscript in chapter.manuscripts
                 ),
-            ),
+            )
+            for chapter in text.chapters
         ),
-    ),
-)
+    )
 
 
-def to_dict(include_documents=False):
+def to_dict(text: Text, include_documents=False):
     return {
-        "category": TEXT.category,
-        "index": TEXT.index,
-        "name": TEXT.name,
-        "numberOfVerses": TEXT.number_of_verses,
-        "approximateVerses": TEXT.approximate_verses,
+        "category": text.category,
+        "index": text.index,
+        "name": text.name,
+        "numberOfVerses": text.number_of_verses,
+        "approximateVerses": text.approximate_verses,
         "chapters": [
             {
-                "classification": CHAPTER.classification.value,
-                "stage": CHAPTER.stage.value,
-                "version": CHAPTER.version,
-                "name": CHAPTER.name,
-                "order": CHAPTER.order,
-                "parserVersion": CHAPTER.parser_version,
+                "classification": chapter.classification.value,
+                "stage": chapter.stage.value,
+                "version": chapter.version,
+                "name": chapter.name,
+                "order": chapter.order,
+                "parserVersion": chapter.parser_version,
                 "manuscripts": [
                     {
-                        "id": MANUSCRIPT.id,
-                        "siglumDisambiguator": MANUSCRIPT.siglum_disambiguator,
+                        "id": manuscript.id,
+                        "siglumDisambiguator": manuscript.siglum_disambiguator,
                         "museumNumber": (
-                            str(MANUSCRIPT.museum_number)
-                            if MANUSCRIPT.museum_number
-                            else ""
+                            (
+                                str(manuscript.museum_number)
+                                if manuscript.museum_number
+                                else ""
+                            )
                             if include_documents
-                            else MANUSCRIPT.museum_number
-                            and MuseumNumberSchema().dump(MANUSCRIPT.museum_number)
+                            else manuscript.museum_number
+                            # pyre-ignore[16]
+                            and MuseumNumberSchema().dump(manuscript.museum_number)
                         ),
-                        "accession": MANUSCRIPT.accession,
-                        "periodModifier": MANUSCRIPT.period_modifier.value,
-                        "period": MANUSCRIPT.period.long_name,
-                        "provenance": MANUSCRIPT.provenance.long_name,
-                        "type": MANUSCRIPT.type.long_name,
-                        "notes": MANUSCRIPT.notes,
-                        "references": (
+                        "accession": manuscript.accession,
+                        "periodModifier": manuscript.period_modifier.value,
+                        "period": manuscript.period.long_name,
+                        "provenance": manuscript.provenance.long_name,
+                        "type": manuscript.type.long_name,
+                        "notes": manuscript.notes,
+                        "references": (  # pyre-ignore[16]
                             ApiReferenceSchema if include_documents else ReferenceSchema
-                        )().dump(MANUSCRIPT.references, many=True),
+                        )().dump(manuscript.references, many=True),
                     }
+                    for manuscript in chapter.manuscripts
                 ],
                 "lines": [
                     {
-                        "number": OneOfLineNumberSchema().dump(LINE.number),
-                        "reconstruction": convert_to_atf(None, LINE.reconstruction),
-                        "isSecondLineOfParallelism": LINE.is_second_line_of_parallelism,
-                        "isBeginningOfSection": LINE.is_beginning_of_section,
+                        "text": TextLineSchema().dump(line.text),  # pyre-ignore[16]
+                        # pyre-ignore[16]
+                        "note": line.note and NoteLineSchema().dump(line.note),
+                        "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
+                        "isBeginningOfSection": line.is_beginning_of_section,
                         "manuscripts": [
                             {
-                                "manuscriptId": MANUSCRIPT_LINE.manuscript_id,
+                                "manuscriptId": manuscript_line.manuscript_id,
                                 "labels": [
-                                    label.to_value() for label in MANUSCRIPT_LINE.labels
+                                    label.to_value() for label in manuscript_line.labels
                                 ],
-                                "line": TextLineSchema().dump(MANUSCRIPT_LINE.line),
+                                # pyre-ignore[16]
+                                "line": OneOfLineSchema().dump(manuscript_line.line),
+                                "paratext": OneOfLineSchema().dump(
+                                    manuscript_line.paratext, many=True
+                                ),
                             }
+                            for manuscript_line in line.manuscripts
                         ],
                     }
+                    for line in chapter.lines
                 ],
             }
+            for chapter in text.chapters
         ],
     }
 
 
-def test_serializing_to_dict():
-    assert TextSerializer.serialize(TEXT) == to_dict()
+def test_serialize():
+    assert serialize(TEXT) == to_dict(TEXT)
 
 
 def test_deserialize():
-    assert TextDeserializer.deserialize(to_dict()) == TEXT_WITHOUT_DOCUMENTS
+    assert deserialize(to_dict(TEXT)) == strip_documents(TEXT)

@@ -10,7 +10,7 @@ from ebl.users.web.require_scope import require_scope
 
 
 class CdliResource:
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_scope, "read:fragments")  # pyre-ignore[56]
     def on_get(self, req: Request, resp: Response, cdli_number: str):  # pyre-ignore[11]
         """---
         description: Gets URLs for the given CDLI number

@@ -1,6 +1,6 @@
-import pytest  # pyre-ignore
-from lark import ParseError  # pyre-ignore
-from lark.exceptions import UnexpectedInput
+import pytest  # pyre-ignore[21]
+from lark import ParseError  # pyre-ignore[21]
+from lark.exceptions import UnexpectedInput  # pyre-ignore[21]
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -15,6 +15,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.lark_parser import parse_word
+from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Grapheme,
@@ -37,7 +38,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,expected",
     [
         ("...", Word.of([UnknownNumberOfSigns.of()])),
@@ -65,8 +66,14 @@ from ebl.transliteration.domain.word_tokens import (
         ("ʾ", Word.of([Reading.of_name("ʾ")])),
         ("du₁₁", Word.of([Reading.of_name("du", 11)])),
         ("GAL", Word.of([Logogram.of_name("GAL")])),
-        ("kur(GAL)", Word.of([Reading.of_name("kur", sign=Grapheme.of("GAL"))])),
-        ("KUR(GAL)", Word.of([Logogram.of_name("KUR", sign=Grapheme.of("GAL"))])),
+        (
+            "kur(GAL)",
+            Word.of([Reading.of_name("kur", sign=Grapheme.of(SignName("GAL")))]),
+        ),
+        (
+            "KUR(GAL)",
+            Word.of([Logogram.of_name("KUR", sign=Grapheme.of(SignName("GAL")))]),
+        ),
         (
             "kur(|GAL|)",
             Word.of([Reading.of_name("kur", sign=CompoundGrapheme.of(["GAL"]))]),
@@ -735,14 +742,17 @@ from ebl.transliteration.domain.word_tokens import (
         ),
         ("kurₓ", Word.of([Reading.of_name("kur", None)])),
         ("KURₓ", Word.of([Logogram.of_name("KUR", None)])),
-        ("kurₓ(KUR)", Word.of([Reading.of_name("kur", None, sign=Grapheme.of("KUR"))])),
+        (
+            "kurₓ(KUR)",
+            Word.of([Reading.of_name("kur", None, sign=Grapheme.of(SignName("KUR")))]),
+        ),
     ],
 )
 def test_word(atf, expected) -> None:
     assert parse_word(atf) == expected
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,expected",
     [
         (
@@ -830,13 +840,13 @@ def test_lone_determinative(atf, expected) -> None:
     assert parse_word(atf) == expected
 
 
-@pytest.mark.parametrize("atf", ["{udu}?"])
+@pytest.mark.parametrize("atf", ["{udu}?"])  # pyre-ignore[56]
 def test_invalid_lone_determinative(atf) -> None:
     with pytest.raises(UnexpectedInput):
         parse_word(atf)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "invalid_atf",
     [
         "Kur",

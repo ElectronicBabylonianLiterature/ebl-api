@@ -1,15 +1,17 @@
 from typing import Sequence
 
-import falcon  # pyre-ignore
-from falcon.media.validators.jsonschema import validate
+import falcon  # pyre-ignore[21]
+from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.corpus.web.alignments import create_chapter_index
-from ebl.corpus.web.api_serializer import ApiDeserializer, serialize
+from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.corpus.web.texts import MANUSCRIPT_DTO_SCHEMA
 from ebl.corpus.domain.text import Manuscript
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
+from ebl.corpus.web.schemas import ApiManuscriptSchema
+from marshmallow import ValidationError  # pyre-ignore[21]
 
 
 MANUSCRIPTS_DTO_SCHEMA = {
@@ -20,13 +22,11 @@ MANUSCRIPTS_DTO_SCHEMA = {
 
 
 def deserialize_manuscripts(manuscripts: Sequence[dict]) -> Sequence[Manuscript]:
-    deserializer = ApiDeserializer()
     try:
         return tuple(
-            deserializer.deserialize_manuscript(manuscript)
-            for manuscript in manuscripts
+            ApiManuscriptSchema().load(manuscripts, many=True)  # pyre-ignore[16]
         )
-    except ValueError as error:
+    except (ValidationError, ValueError) as error:
         raise DataError(error)
 
 
@@ -35,7 +35,7 @@ class ManuscriptsResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
-    @validate(MANUSCRIPTS_DTO_SCHEMA)
+    @validate(MANUSCRIPTS_DTO_SCHEMA)  # pyre-ignore[56]
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]

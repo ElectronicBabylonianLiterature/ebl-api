@@ -11,9 +11,9 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.application.line_schemas import TextLineSchema
-from ebl.transliteration.domain.labels import LineNumberLabel
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
@@ -22,8 +22,12 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
     )
     manuscript = ManuscriptFactory.build(references=references)  # pyre-ignore[16]
     # pyre-ignore[16]
-    manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
-    line = LineFactory.build(manuscripts=(manuscript_line,))  # pyre-ignore[16]
+    first_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
+    second_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
+    # pyre-ignore[16]
+    line = LineFactory.build(
+        manuscripts=(first_manuscript_line, second_manuscript_line)
+    )
     # pyre-ignore[16]
     chapter = ChapterFactory.build(manuscripts=(manuscript,), lines=(line,))
     text = TextFactory.build(chapters=(chapter,))  # pyre-ignore[16]
@@ -57,11 +61,17 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                         # pyre-ignore[16]
                         "references": ApiReferenceSchema().dump(references, many=True),
                     }
+                    for manuscript in chapter.manuscripts
                 ],
                 "lines": [
                     {
-                        "number": LineNumberLabel.from_atf(line.number.atf).to_value(),
-                        "reconstruction": convert_to_atf(None, line.reconstruction),
+                        "number": line.number.label,
+                        "reconstruction": "".join(
+                            [
+                                convert_to_atf(None, line.reconstruction),
+                                f"\n{line.note.atf}" if line.note else "",
+                            ]
+                        ),
                         "reconstructionTokens": [
                             {"type": "LanguageShift", "value": "%n"},
                             {"type": "AkkadianWord", "value": "buāru"},
@@ -79,23 +89,37 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                 "labels": [
                                     label.to_value() for label in manuscript_line.labels
                                 ],
-                                "number": manuscript_line.line.line_number.atf[:-1],
-                                "atf": (
-                                    manuscript_line.line.atf[
-                                        len(manuscript_line.line.line_number.atf) + 1 :
+                                "number": manuscript_line.line.line_number.atf[:-1]
+                                if isinstance(manuscript_line.line, TextLine)
+                                else "",
+                                "atf": "\n".join(
+                                    [
+                                        manuscript_line.line.atf[
+                                            len(manuscript_line.line.line_number.atf)
+                                            + 1 :
+                                        ]
+                                        if isinstance(manuscript_line.line, TextLine)
+                                        else "",
+                                        *[
+                                            line.atf
+                                            for line in manuscript_line.paratext
+                                        ],
                                     ]
-                                ),
+                                ).strip(),
                                 "atfTokens": (
                                     # pyre-ignore[16]
-                                    TextLineSchema().dump(manuscript_line.line)[
+                                    OneOfLineSchema().dump(manuscript_line.line)[
                                         "content"
                                     ]
                                 ),
                             }
+                            for manuscript_line in line.manuscripts
                         ],
                     }
+                    for line in chapter.lines
                 ],
             }
+            for chapter in text.chapters
         ],
     }
 

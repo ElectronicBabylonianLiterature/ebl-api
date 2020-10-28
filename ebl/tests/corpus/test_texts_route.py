@@ -1,11 +1,13 @@
 import json
 
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
+import pydash  # pyre-ignore[21]
+
 
 ANY_USER = Guest()
 
@@ -103,6 +105,6 @@ def test_listing_texts(client, bibliography, sign_repository, signs):
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == [
-        {**dto, "chapters": []}
+        pydash.omit(dto, "chapters")
         for dto in [create_dto(first_text), create_dto(second_text)]
     ]

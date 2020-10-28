@@ -1,9 +1,9 @@
 from typing import Any
 
-import inflect  # pyre-ignore
-from pymongo.collection import Collection  # pyre-ignore
-from pymongo.database import Database
-from pymongo.errors import DuplicateKeyError
+import inflect  # pyre-ignore[21]
+from pymongo.collection import Collection  # pyre-ignore[21]
+from pymongo.database import Database  # pyre-ignore[21]
+from pymongo.errors import DuplicateKeyError  # pyre-ignore[21]
 
 from ebl.errors import DuplicateError, NotFoundError
 
@@ -27,8 +27,8 @@ class MongoCollection:
     def find_one_by_id(self, id_):
         return self.find_one({"_id": id_})
 
-    def find_one(self, query) -> Any:
-        document = self.__get_collection().find_one(query)
+    def find_one(self, query, *args, **kwargs) -> Any:
+        document = self.__get_collection().find_one(query, *args, **kwargs)
 
         if document is None:
             raise self.__not_found_error(query)

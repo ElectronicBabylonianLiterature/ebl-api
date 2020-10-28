@@ -1,5 +1,6 @@
 from typing import Sequence
 
+import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.enums import (
@@ -21,19 +22,16 @@ from ebl.corpus.domain.text import (
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import (
-    ColumnLabel,
-    Label,
-    LineNumberLabel,
-    SurfaceLabel,
-)
+from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 CATEGORY = 1
 INDEX = 2
@@ -74,13 +72,16 @@ MANUSCRIPT_TEXT = TextLine(
         ),
     ),
 )
+PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
+RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
+NOTE = None
 LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
+    RECONSTRUCTION,
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT),),
 )
 
 TEXT = Text(
@@ -144,8 +145,10 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
+    assert TEXT.chapters[0].lines[0].text == RECONSTRUCTION
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
+    assert TEXT.chapters[0].lines[0].note == NOTE
     assert (
         TEXT.chapters[0].lines[0].is_second_line_of_parallelism
         == IS_SECOND_LINE_OF_PARALLELISM
@@ -203,8 +206,8 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    LINE_NUMBER,
-                    LINE_RECONSTRUCTION,
+                    RECONSTRUCTION,
+                    NOTE,
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                     (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
@@ -214,6 +217,55 @@ def test_missing_manuscripts_are_invalid():
 
 
 @pytest.mark.parametrize(
+    "make_chapter",
+    [
+        lambda: Chapter(
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    RECONSTRUCTION,
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
+                    (
+                        ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                        ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                    ),
+                ),
+            ),
+        ),
+        lambda: Chapter(
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    RECONSTRUCTION,
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
+                    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                ),
+                Line(
+                    attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
+                    NOTE,
+                    IS_SECOND_LINE_OF_PARALLELISM,
+                    IS_BEGINNING_OF_SECTION,
+                    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                ),
+            ),
+        ),
+    ],
+)
+def test_duplicate_manuscript_line_labels_are_invalid(make_chapter):
+    with pytest.raises(ValueError):
+        make_chapter()
+
+
+def test_duplicate_line_numbers_invalid():
+    with pytest.raises(ValueError):
+        Chapter(lines=(LINE, LINE))
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "labels",
     [
         (ColumnLabel.from_label("i"), ColumnLabel.from_label("ii")),
@@ -222,7 +274,6 @@ def test_missing_manuscripts_are_invalid():
             SurfaceLabel.from_label(Surface.REVERSE),
         ),
         (ColumnLabel.from_label("i"), SurfaceLabel.from_label(Surface.REVERSE)),
-        (LineNumberLabel("1"),),
     ],
 )
 def test_invalid_labels(labels: Sequence[Label]):
@@ -233,7 +284,11 @@ def test_invalid_labels(labels: Sequence[Label]):
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
-            LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),), False, False, tuple()
+            TextLine.of_iterable(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),)),
+            NOTE,
+            False,
+            False,
+            tuple(),
         )
 
 

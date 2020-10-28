@@ -12,7 +12,7 @@ class FragmentGenreResource:
     def __init__(self, updater: FragmentUpdater):
         self._updater = updater
 
-    @falcon.before(require_scope, "transliterate:fragments")
+    @falcon.before(require_scope, "transliterate:fragments")  # pyre-ignore[56]
     # pyre-ignore[11]
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:

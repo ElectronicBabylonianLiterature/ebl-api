@@ -6,6 +6,6 @@ class GenreSchema(Schema):  # pyre-ignore[11]
     category = fields.List(fields.String, required=True)
     uncertain = fields.Boolean(required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_genre(self, data, **kwargs) -> Genre:
         return Genre(**data)

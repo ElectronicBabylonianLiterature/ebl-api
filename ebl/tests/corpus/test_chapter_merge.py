@@ -12,6 +12,8 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
+import attr
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)
@@ -48,13 +50,16 @@ def test_merge_manuscript_line(old, new, expected):
     assert old.merge(new) == expected
 
 
-LINE_NUMBER = LineNumber(1)
-LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+RECONSTRUCTION = TextLine.of_iterable(
+    LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
+)
+
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
+NOTE = None
 LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
+    RECONSTRUCTION,
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (MANUSCRIPT_LINE,),
@@ -67,8 +72,8 @@ LINE = Line(
         (LINE, LINE, LINE),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -97,8 +102,10 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumber(2),
-                (AkkadianWord.of((ValueToken.of("kur"),)),),
+                TextLine.of_iterable(
+                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
+                ),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -125,8 +132,10 @@ LINE = Line(
                 ),
             ),
             Line(
-                LineNumber(2),
-                (AkkadianWord.of((ValueToken.of("kur"),)),),
+                TextLine.of_iterable(
+                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
+                ),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -157,22 +166,22 @@ LINE = Line(
         ),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (MANUSCRIPT_LINE,),
             ),
             Line(
-                LineNumber(2),
-                LINE_RECONSTRUCTION,
+                TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
             ),
             Line(
-                LineNumber(2),
-                LINE_RECONSTRUCTION,
+                TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -184,8 +193,8 @@ LINE = Line(
         ),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -215,8 +224,8 @@ LINE = Line(
                 ),
             ),
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -225,8 +234,8 @@ LINE = Line(
                 ),
             ),
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 (
@@ -239,14 +248,37 @@ LINE = Line(
         ),
         (
             Line(
-                LINE_NUMBER,
-                LINE_RECONSTRUCTION,
+                RECONSTRUCTION,
+                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
                 tuple(),
             ),
-            Line(LINE_NUMBER, LINE_RECONSTRUCTION, True, True, tuple()),
-            Line(LINE_NUMBER, LINE_RECONSTRUCTION, True, True, tuple()),
+            Line(RECONSTRUCTION, NOTE, True, True, tuple()),
+            Line(RECONSTRUCTION, NOTE, True, True, tuple()),
+        ),
+        (
+            Line(
+                RECONSTRUCTION,
+                NoteLine((StringPart("a note"),)),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
+            Line(
+                RECONSTRUCTION,
+                NoteLine((StringPart("new note"),)),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
+            Line(
+                RECONSTRUCTION,
+                NoteLine((StringPart("new note"),)),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+                tuple(),
+            ),
         ),
     ],
 )
@@ -270,19 +302,46 @@ NEW_VERSION = "B"
 NEW_CHAPTER_NAME = "II"
 NEW_ORDER = 2
 NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator="b")
+NOTE = NoteLine((StringPart("a note"),))
 NEW_LINE = Line(
-    LINE_NUMBER,
-    LINE_RECONSTRUCTION,
+    RECONSTRUCTION,
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
-OLD_LINE = Line(
-    LINE_NUMBER,
-    tuple(),
+ANOTHER_NEW_LINE = Line(
+    attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
+    NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (MANUSCRIPT_LINE,),
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, attr.evolve(NEW_TEXT_LINE, line_number=LineNumber(2))
+        ),
+    ),
+)
+NEW_PARATEXT = Line(
+    RECONSTRUCTION,
+    NOTE,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, TEXT_LINE, (NoteLine((StringPart("paratext"),)),)
+        ),
+    ),
+)
+OLD_LINE = Line(
+    TextLine.of_iterable(LineNumber(2), tuple()),
+    None,
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, attr.evolve(TEXT_LINE, line_number=LineNumber(2))
+        ),
+    ),
 )
 
 
@@ -336,7 +395,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
-                (NEW_LINE, NEW_LINE),
+                (NEW_LINE, ANOTHER_NEW_LINE),
             ),
             Chapter(
                 CLASSIFICATION,
@@ -345,7 +404,28 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
-                (OLD_LINE.merge(NEW_LINE), LINE.merge(NEW_LINE)),
+                (OLD_LINE.merge(NEW_LINE), LINE.merge(ANOTHER_NEW_LINE)),
+            ),
+        ),
+        (
+            CHAPTER,
+            Chapter(
+                CLASSIFICATION,
+                STAGE,
+                VERSION,
+                CHAPTER_NAME,
+                ORDER,
+                (MANUSCRIPT,),
+                (NEW_PARATEXT,),
+            ),
+            Chapter(
+                CLASSIFICATION,
+                STAGE,
+                VERSION,
+                CHAPTER_NAME,
+                ORDER,
+                (MANUSCRIPT,),
+                (NEW_PARATEXT,),
             ),
         ),
     ],

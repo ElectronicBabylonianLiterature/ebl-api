@@ -10,6 +10,6 @@ class MuseumNumberSchema(Schema):  # pyre-ignore[11]
     )
     suffix = fields.String(required=True, validate=validate.ContainsNoneOf("."))
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def create_museum_number(self, data, **kwargs) -> MuseumNumber:
         return MuseumNumber(**data)

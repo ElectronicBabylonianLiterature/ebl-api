@@ -9,6 +9,8 @@ from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.users.domain.user import Guest
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.corpus.web.schemas import ApiLineSchema
+
 
 ANY_USER = Guest()
 
@@ -48,7 +50,13 @@ def test_updating(client, bibliography, sign_repository, signs):
             attr.evolve(
                 text.chapters[0],
                 lines=(
-                    attr.evolve(text.chapters[0].lines[0], number=LineNumber(1, True)),
+                    attr.evolve(
+                        text.chapters[0].lines[0],
+                        text=attr.evolve(
+                            text.chapters[0].lines[0].text,
+                            line_number=LineNumber(1, True),
+                        ),
+                    ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
             ),
@@ -149,7 +157,20 @@ def test_updating_invalid_chapter_index(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-@pytest.mark.parametrize("lines,expected_status", [[[{}], falcon.HTTP_BAD_REQUEST]])
+TOO_MANY_NOTES = {
+    # pyre-ignore[16]
+    **ApiLineSchema().dump(TextFactory.build().chapters[0].lines[0]),
+    "reconstruction": "kur\n#note: extra note\n#note: extra note",
+}
+
+
+@pytest.mark.parametrize(
+    "lines,expected_status",
+    [
+        [[{}], falcon.HTTP_BAD_REQUEST],
+        [[TOO_MANY_NOTES], falcon.HTTP_UNPROCESSABLE_ENTITY],
+    ],
+)
 def test_update_invalid_entity(
     client, bibliography, lines, expected_status, sign_repository, signs
 ):

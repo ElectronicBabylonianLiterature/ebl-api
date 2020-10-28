@@ -9,7 +9,7 @@ class PhotoResource:
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_scope, "read:fragments")  # pyre-ignore[56]
     def on_get(self, _req, resp: Response, number: str):  # pyre-ignore[11]
         """---
         description: Gets the photo of the fragment.

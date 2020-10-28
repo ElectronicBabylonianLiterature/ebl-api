@@ -11,7 +11,7 @@ class FragmentsResource:
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_scope, "read:fragments")  # pyre-ignore[56]
     def on_get(self, req: Request, resp: Response, number: str):  # pyre-ignore[11]
         """---
         description: Gets the fragment with given number,

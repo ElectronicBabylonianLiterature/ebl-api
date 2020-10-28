@@ -20,7 +20,7 @@ from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Te
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.transliteration.domain.atf import Flag, Status, Surface
+from ebl.transliteration.domain.atf import Flag, Ruling, Status, Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
@@ -33,6 +33,9 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
+from ebl.transliteration.domain.line import EmptyLine
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
@@ -55,7 +58,7 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     )
 
 
-class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
+class ManuscriptLineFactory(factory.Factory):
     class Meta:
         model = ManuscriptLine
 
@@ -64,25 +67,31 @@ class ManuscriptLineFactory(factory.Factory):  # pyre-ignore[11]
         SurfaceLabel.from_label(Surface.OBVERSE),
         ColumnLabel.from_label("iii", [Status.COLLATION, Status.CORRECTION]),
     )
-    line = TextLine.of_iterable(
-        LineNumber(1),
-        (
-            Word.of(
-                [
-                    Reading.of_name("ku"),
-                    Joiner.hyphen(),
-                    BrokenAway.open(),
-                    Reading.of_name("nu"),
-                    Joiner.hyphen(),
-                    Reading.of_name("ši"),
-                    BrokenAway.close(),
-                ]
+    line = factory.Iterator(
+        [
+            TextLine.of_iterable(
+                LineNumber(1),
+                (
+                    Word.of(
+                        [
+                            Reading.of_name("ku"),
+                            Joiner.hyphen(),
+                            BrokenAway.open(),
+                            Reading.of_name("nu"),
+                            Joiner.hyphen(),
+                            Reading.of_name("ši"),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                ),
             ),
-        ),
+            EmptyLine(),
+        ]
     )
+    paratext = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 
 
-class LineFactory(factory.Factory):  # pyre-ignore[11]
+class LineFactory(factory.Factory):
     class Meta:
         model = Line
 
@@ -93,30 +102,37 @@ class LineFactory(factory.Factory):  # pyre-ignore[11]
             manuscript_id=factory.SelfAttribute("..manuscript_id"),
         )
 
-    number = factory.Sequence(lambda n: LineNumber(n))
-    reconstruction = (
-        LanguageShift.normalized_akkadian(),
-        AkkadianWord.of((ValueToken.of("buāru"),)),
-        MetricalFootSeparator.uncertain(),
-        BrokenAway.open(),
-        UnknownNumberOfSigns.of(),
-        Caesura.certain(),
-        AkkadianWord.of(
+    text = factory.Sequence(
+        lambda n: TextLine.of_iterable(
+            LineNumber(n),
             (
+                LanguageShift.normalized_akkadian(),
+                AkkadianWord.of((ValueToken.of("buāru"),)),
+                MetricalFootSeparator.uncertain(),
+                BrokenAway.open(),
                 UnknownNumberOfSigns.of(),
-                BrokenAway.close(),
-                Joiner.hyphen(),
-                ValueToken.of("buāru"),
+                Caesura.certain(),
+                AkkadianWord.of(
+                    (
+                        UnknownNumberOfSigns.of(),
+                        BrokenAway.close(),
+                        Joiner.hyphen(),
+                        ValueToken.of("buāru"),
+                    ),
+                    (Flag.DAMAGE,),
+                ),
             ),
-            (Flag.DAMAGE,),
-        ),
+        )
     )
+    note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
+    is_second_line_of_parallelism = factory.Faker("boolean")
+    is_beginning_of_section = factory.Faker("boolean")
     manuscripts: Sequence[ManuscriptLine] = factory.List(
         [factory.SelfAttribute("..manuscript")], TupleFactory
     )
 
 
-class ChapterFactory(factory.Factory):  # pyre-ignore[11]
+class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
 
@@ -134,7 +150,7 @@ class ChapterFactory(factory.Factory):  # pyre-ignore[11]
     parser_version = ""
 
 
-class TextFactory(factory.Factory):  # pyre-ignore[11]
+class TextFactory(factory.Factory):
     class Meta:
         model = Text
 

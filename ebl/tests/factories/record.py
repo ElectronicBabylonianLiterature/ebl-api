@@ -13,7 +13,7 @@ class RecordEntryFactory(factory.Factory):  # pyre-ignore[11]
     date = factory.Faker("iso8601")
 
 
-class RecordFactory(factory.Factory):  # pyre-ignore[11]
+class RecordFactory(factory.Factory):
     class Meta:
         model = Record
 

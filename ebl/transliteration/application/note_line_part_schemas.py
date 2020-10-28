@@ -18,39 +18,39 @@ from ebl.transliteration.domain.note_line import (
 class StringPartSchema(Schema):  # pyre-ignore[11]
     text = fields.String(required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_part(self, data, **kwargs) -> StringPart:
         return StringPart(data["text"])
 
 
-class EmphasisPartSchema(Schema):  # pyre-ignore[11]
+class EmphasisPartSchema(Schema):
     text = fields.String(required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_part(self, data, **kwargs) -> EmphasisPart:
         return EmphasisPart(data["text"])
 
 
-class LanguagePartSchema(Schema):  # pyre-ignore[11]
+class LanguagePartSchema(Schema):
     language = NameEnum(Language, required=True)
     tokens = fields.Nested(OneOfTokenSchema, many=True, missing=None)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_part(self, data, **kwargs) -> LanguagePart:
         return LanguagePart.of_transliteration(data["language"], data["tokens"])
 
 
-class BibliographyPartSchema(Schema):  # pyre-ignore[11]
+class BibliographyPartSchema(Schema):
     reference = fields.Nested(ReferenceSchema, required=True)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_part(self, data, **kwargs) -> BibliographyPart:
         return BibliographyPart(data["reference"])
 
 
 class OneOfNoteLinePartSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
+    type_schemas: Mapping[str, Type[Schema]] = {
         "StringPart": StringPartSchema,
         "EmphasisPart": EmphasisPartSchema,
         "LanguagePart": LanguagePartSchema,

@@ -1,9 +1,6 @@
 ?start: label
 
-?label: line_number_label | column_label | surface_label
-
-line_number_label.-1: LINE_NUMBER
-LINE_NUMBER: /[^\s]+/
+?label: column_label | surface_label
 
 column_label: ROMAN_NUMERAL status
 ROMAN_NUMERAL: /[ivx]+/

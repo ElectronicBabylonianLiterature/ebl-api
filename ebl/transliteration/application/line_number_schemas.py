@@ -22,7 +22,7 @@ class LineNumberSchema(Schema):  # pyre-ignore[11]
         data_key="suffixModifier",
     )
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line_number(self, data: dict, **kwargs) -> LineNumber:
         return LineNumber(
             data["number"],
@@ -32,18 +32,18 @@ class LineNumberSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class LineNumberRangeSchema(Schema):  # pyre-ignore[11]
+class LineNumberRangeSchema(Schema):
     start = fields.Nested(LineNumberSchema, required=True, unknown=EXCLUDE)
     end = fields.Nested(LineNumberSchema, required=True, unknown=EXCLUDE)
 
-    @post_load
+    @post_load  # pyre-ignore[56]
     def make_line_number_range(self, data: dict, **kwargs) -> LineNumberRange:
         return LineNumberRange(data["start"], data["end"])
 
 
 class OneOfLineNumberSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
+    type_schemas: Mapping[str, Type[Schema]] = {
         "LineNumber": LineNumberSchema,
         "LineNumberRange": LineNumberRangeSchema,
     }

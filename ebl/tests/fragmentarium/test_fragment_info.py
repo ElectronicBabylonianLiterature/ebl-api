@@ -7,7 +7,7 @@ from ebl.tests.factories.fragment import FragmentFactory
 
 FRAGMENT = FragmentFactory.build()  # pyre-ignore[16]
 FRAGMENT_WITH_REFERENCES = FragmentFactory.build(
-    references=(ReferenceFactory.build(), ReferenceFactory.build())
+    references=(ReferenceFactory.build(), ReferenceFactory.build())  # pyre-ignore[16]
 )
 
 

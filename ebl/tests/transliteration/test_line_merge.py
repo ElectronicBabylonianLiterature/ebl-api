@@ -11,7 +11,7 @@ from ebl.transliteration.domain.tokens import Joiner, LanguageShift
 from ebl.transliteration.domain.word_tokens import Word
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "old,new,expected",
     [
         (

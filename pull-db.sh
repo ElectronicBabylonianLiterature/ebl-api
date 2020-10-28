@@ -42,6 +42,7 @@ mongodump -h $sourceHost \
     --excludeCollection=folios.chunks \
     --excludeCollection=photos.files \
     --excludeCollection=photos.chunks \
+    --excludeCollectionsWithPrefix=fragments_backup \
     -u $sourceUser -p $sourcePassword \
     --ssl --sslAllowInvalidCertificates \
     -o $tempFolder
