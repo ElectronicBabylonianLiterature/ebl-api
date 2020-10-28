@@ -1,7 +1,8 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.application.lemmatization_schema import (
+    LemmatizationSchema,
     LemmatizationTokenSchema,
 )
 
@@ -32,3 +33,16 @@ def test_serialize_lemmatization_token(token, serialized):
 )
 def test_deserialize_lemmatization_token(token, serialized):
     assert LemmatizationTokenSchema().load(serialized) == token
+
+
+TOKEN = LemmatizationToken("kur", tuple())
+LEMMATIZATION = Lemmatization(((TOKEN,),))
+SERIALIZED = [[LemmatizationTokenSchema().dump(TOKEN)]]  # pyre-ignore[16]
+
+
+def test_serialize_lemmatization():
+    assert LemmatizationSchema().dump(LEMMATIZATION) == SERIALIZED
+
+
+def test_deserialize_lemmatization():
+    assert LemmatizationSchema().load(SERIALIZED) == LEMMATIZATION
