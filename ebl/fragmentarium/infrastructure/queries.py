@@ -11,7 +11,8 @@ NUMBER_OF_NEEDS_REVISION: int = 20
 
 
 def museum_number_is(number: MuseumNumber) -> dict:
-    return {"museumNumber": MuseumNumberSchema().dump(number)}  # pyre-ignore[16]
+    serialized = MuseumNumberSchema().dump(number)  # pyre-ignore[16]
+    return {f"museumNumber.{key}": value for key, value in serialized.items()}
 
 
 def fragment_is(fragment: Fragment) -> dict:
