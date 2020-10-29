@@ -21,7 +21,6 @@ def create_line_to_vec(lines: Sequence[Line]) -> Sequence[int]:
                 line_to_vec.append(3)
             elif line.number == atf.Ruling.TRIPLE:
                 line_to_vec.append(4)
-        elif isinstance(line, dollar_line.StateDollarLine):
-            if line.extent == atf.Extent.END_OF:
+        elif isinstance(line, dollar_line.StateDollarLine) and line.extent == atf.Extent.END_OF:
                 line_to_vec.append(5)
     return tuple(line_to_vec)
