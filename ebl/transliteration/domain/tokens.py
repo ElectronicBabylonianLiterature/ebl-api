@@ -134,7 +134,9 @@ class Token(ABC):
         if lemma.unique_lemma is None and lemma.value == self.value:
             return self
         else:
-            raise LemmatizationError()
+            raise LemmatizationError(
+                f"Incompatible lemmatization token {lemma} for {self}"
+            )
 
     def set_alignment(self, alignment: AlignmentToken):
         if alignment.alignment is None and alignment.value == self.value:

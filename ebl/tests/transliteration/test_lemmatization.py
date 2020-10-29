@@ -1,21 +1,21 @@
-from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 
 
 def create_token(value, unique_lemma=None):
-    return {"value": value, "uniqueLemma": [] if unique_lemma is None else unique_lemma}
+    return LemmatizationToken(value, tuple() if unique_lemma is None else unique_lemma)
 
 
 def create_lemmatized_token(value):
     return create_token(value, [value])
 
 
-TOKENS = [[create_token("token")]]
+TOKENS = ((create_token("token"),),)
 
 
 def test_equality():
-    lemmatization = Lemmatization.from_list(TOKENS)
-    similar = Lemmatization.from_list(TOKENS)
-    different = Lemmatization.from_list([[create_token("another token")]])
+    lemmatization = Lemmatization(TOKENS)
+    similar = Lemmatization(TOKENS)
+    different = Lemmatization(((create_token("another token"),),))
 
     assert lemmatization == similar
     assert hash(lemmatization) == hash(similar)
@@ -24,7 +24,6 @@ def test_equality():
 
 
 def test_tokens():
-    tokens = (tuple(),)
-    lemmatization = Lemmatization(tokens)
+    lemmatization = Lemmatization(TOKENS)
 
-    assert lemmatization.tokens == tokens
+    assert lemmatization.tokens == TOKENS

@@ -5,32 +5,24 @@ from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationSchema,
     LemmatizationTokenSchema,
 )
+from ebl.dictionary.domain.word import WordId
 
 
-@pytest.mark.parametrize(
-    "token,serialized",
-    [
-        (LemmatizationToken("kur", None), {"value": "kur", "uniqueLemma": []}),
-        (
-            LemmatizationToken("kur", ("aklu I",)),
-            {"value": "kur", "uniqueLemma": ["aklu I"]},
-        ),
-    ],
-)
+TOKENS = [
+    (LemmatizationToken("kur", None), {"value": "kur", "uniqueLemma": None}),
+    (
+        LemmatizationToken("kur", (WordId("aklu I"),)),
+        {"value": "kur", "uniqueLemma": ["aklu I"]},
+    ),
+]
+
+
+@pytest.mark.parametrize("token,serialized", TOKENS)
 def test_serialize_lemmatization_token(token, serialized):
     assert LemmatizationTokenSchema().dump(token) == serialized
 
 
-@pytest.mark.parametrize(
-    "token,serialized",
-    [
-        (LemmatizationToken("kur", None), {"value": "kur"}),
-        (
-            LemmatizationToken("kur", ("aklu I",)),
-            {"value": "kur", "uniqueLemma": ["aklu I"]},
-        ),
-    ],
-)
+@pytest.mark.parametrize("token,serialized", TOKENS)
 def test_deserialize_lemmatization_token(token, serialized):
     assert LemmatizationTokenSchema().load(serialized) == token
 

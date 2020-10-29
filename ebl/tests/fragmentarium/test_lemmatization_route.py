@@ -1,25 +1,26 @@
 import json
 
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
-from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.application.lemmatization_schema import LemmatizationSchema
 
 
 def test_update_lemmatization(client, fragmentarium, user, database):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.text.lemmatization.to_list()
+    schema = LemmatizationSchema()
+    tokens = schema.dump(transliterated_fragment.text.lemmatization)
     tokens[1][3]["uniqueLemma"] = ["aklu I"]
     body = json.dumps({"lemmatization": tokens})
     url = f"/fragments/{transliterated_fragment.number}/lemmatization"
     post_result = client.simulate_post(url, body=body)
 
     expected_json = create_response_dto(
-        transliterated_fragment.update_lemmatization(Lemmatization.from_list(tokens)),
+        transliterated_fragment.update_lemmatization(schema.load(tokens)),
         user,
         transliterated_fragment.number == MuseumNumber("K", "1"),
     )
@@ -83,7 +84,7 @@ def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
 def test_update_lemmatization_atf_change(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.text.lemmatization.to_list()
+    tokens = LemmatizationSchema().dump(transliterated_fragment.text.lemmatization)
     tokens[0][0]["value"] = "ana"
     body = json.dumps({"lemmatization": tokens})
     url = f"/fragments/{transliterated_fragment.number}/lemmatization"
