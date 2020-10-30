@@ -26,7 +26,6 @@ from ebl.transliteration.domain.lemmatization import (
 )
 from ebl.transliteration.domain.text import Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.application.lemmatization_schema import LemmatizationSchema
 
 
 def test_number():
@@ -214,10 +213,9 @@ def test_update_notes(user):
 
 def test_update_lemmatization():
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    schema = LemmatizationSchema()
-    tokens = schema.dump(transliterated_fragment.text.lemmatization)
-    tokens[1][3]["uniqueLemma"] = ["nu I"]
-    lemmatization = schema.load(tokens)
+    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("nu I",))
+    lemmatization = Lemmatization(tokens)
     expected = attr.evolve(
         transliterated_fragment,
         text=transliterated_fragment.text.update_lemmatization(lemmatization),

@@ -10,7 +10,7 @@ from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragment
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.application.lemmatization_schema import LemmatizationSchema
+
 
 SCHEMA = FragmentSchema()
 
@@ -87,10 +87,9 @@ def test_update_lemmatization(
 ):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
-    schema = LemmatizationSchema()
-    tokens = schema.dump(transliterated_fragment.text.lemmatization)
-    tokens[1][3]["uniqueLemma"] = ["aklu I"]
-    lemmatization = schema.load(tokens)
+    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    lemmatization = Lemmatization(tokens)
     expected_fragment = transliterated_fragment.update_lemmatization(lemmatization)
     (
         when(fragment_repository)

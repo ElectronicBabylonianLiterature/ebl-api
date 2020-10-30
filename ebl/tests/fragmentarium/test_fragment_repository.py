@@ -19,7 +19,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     PerhapsBrokenAway,
 )
-from ebl.transliteration.application.lemmatization_schema import LemmatizationSchema
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
@@ -29,6 +28,7 @@ from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 
 COLLECTION = "fragments"
 
@@ -167,10 +167,10 @@ def test_update_genres(fragment_repository):
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
-    schema = LemmatizationSchema()
-    tokens = schema.dump(transliterated_fragment.text.lemmatization)
-    tokens[1][3]["uniqueLemma"] = ["aklu I"]
-    updated_fragment = transliterated_fragment.update_lemmatization(schema.load(tokens))
+    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    lemmatization = Lemmatization(tokens)
+    updated_fragment = transliterated_fragment.update_lemmatization(lemmatization)
 
     fragment_repository.update_lemmatization(updated_fragment)
     result = fragment_repository.query_by_museum_number(transliterated_fragment.number)

@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
@@ -19,7 +19,6 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Label, Text
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.application.lemmatization_schema import LemmatizationSchema
 
 
 LINES: Sequence[Line] = (
@@ -72,10 +71,9 @@ def test_atf() -> None:
 
 
 def test_update_lemmatization() -> None:
-    schema = LemmatizationSchema()
-    tokens = schema.dump(TEXT.lemmatization)  # pyre-ignore[16]
-    tokens[0][0]["uniqueLemma"] = ["nu I"]
-    lemmatization = schema.load(tokens)  # pyre-ignore[16]
+    tokens = [list(line) for line in TEXT.lemmatization.tokens]
+    tokens[0][0] = LemmatizationToken(tokens[0][0].value, (WordId("nu I"),))
+    lemmatization = Lemmatization(tokens)
 
     expected = Text(
         (
@@ -107,9 +105,7 @@ def test_update_lemmatization_incompatible() -> None:
 
 
 def test_update_lemmatization_wrong_lines() -> None:
-    schema = LemmatizationSchema()
-    tokens = [*schema.dump(TEXT.lemmatization), []]  # pyre-ignore[16]
-    lemmatization = schema.load(tokens)  # pyre-ignore[16]
+    lemmatization = Lemmatization((*TEXT.lemmatization.tokens, tuple()))
 
     with pytest.raises(LemmatizationError):
         TEXT.update_lemmatization(lemmatization)
