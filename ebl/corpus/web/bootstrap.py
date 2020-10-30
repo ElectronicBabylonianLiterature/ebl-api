@@ -1,12 +1,16 @@
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
 from ebl.corpus.web.lines import LinesResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
-from ebl.corpus.web.manuscript_lemmatizations import ManuscriptLemmatizationResource
+from ebl.corpus.web.manuscript_lemmatizations import (
+    ManuscriptLemmatizationResource,
+    ManuscriptLemmatizationsSchema,
+)
 from ebl.corpus.web.texts import TextResource, TextsResource
+from ebl.corpus.web.schemas import ApiTextSchema
 
 
 def create_corpus_routes(api: falcon.API, context: Context, spec):  # pyre-ignore[11]
@@ -40,8 +44,14 @@ def create_corpus_routes(api: falcon.API, context: Context, spec):  # pyre-ignor
 
     api.add_route("/texts/{category}/{index}/chapters/{chapter_index}/lines", lines)
 
+    spec.components.schema(
+        "ManuscriptLemmatization", schema=ManuscriptLemmatizationsSchema
+    )
+    spec.components.schema("CorpusText", schema=ApiTextSchema)
+
     spec.path(resource=texts)
     spec.path(resource=text)
     spec.path(resource=alignment)
     spec.path(resource=manuscript)
+    spec.path(resource=manuscript_lemmatization)
     spec.path(resource=lines)

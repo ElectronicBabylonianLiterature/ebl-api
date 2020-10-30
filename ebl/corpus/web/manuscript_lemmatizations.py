@@ -32,6 +32,42 @@ class ManuscriptLemmatizationResource:
         index: str,
         chapter_index: str,
     ) -> None:
+        """---
+        description: Lemmatizes manuscript lines.
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManuscriptLemmatization'
+        responses:
+          200:
+            description: Lemmatization was updated succesfully.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CorpusText'
+          422:
+            description: Invalid lemmatization
+        security:
+        - auth0:
+          - write:texts
+        parameters:
+        - in: path
+          name: category
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: index
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: chapter_index
+          schema:
+            type: integer
+          required: true
+        """
         self._corpus.update_manuscript_lemmatization(
             create_text_id(category, index),
             create_chapter_index(chapter_index),
