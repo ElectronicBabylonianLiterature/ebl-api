@@ -33,7 +33,7 @@ class ManuscriptLemmatizationUpdater(ChapterUpdater):
     def current_alignment(self) -> Sequence[LemmatizationToken]:
         try:
             return self._lemmatization[self.line_index][self.manuscript_line_index]
-        except IndexError:
+        except KeyError:
             raise LemmatizationError()
 
     def visit_line(self, line: Line) -> None:

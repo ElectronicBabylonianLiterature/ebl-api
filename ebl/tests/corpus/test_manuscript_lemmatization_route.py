@@ -39,7 +39,6 @@ def create_text(client, text):
     assert post_result.status == falcon.HTTP_CREATED
 
 
-@pytest.mark.xfail
 def test_updating_lemmatization(client, bibliography, sign_repository, signs):
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
@@ -114,7 +113,6 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize(
     "dto,expected_status",
     [
