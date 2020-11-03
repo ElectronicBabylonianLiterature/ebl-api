@@ -12,6 +12,8 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.application.transliteration_update_factory import TransliterationUpdateFactory
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.transliteration.domain.lemmatization import Lemmatization
+
 from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
 
@@ -253,6 +255,54 @@ class ATF_Importer:
                         cfforms_senses[cfform].append(sense.strip())
         return lemmas_cfforms,cfforms_senses,cfform_guideword
 
+    def insert_translitertions(self,
+            transliteration_factory: TransliterationUpdateFactory,
+            updater: FragmentUpdater,
+            transliterations,
+            museum_number
+    ) -> None:
+        converted_transliteration = "\n".join(transliterations)
+        transliteration = transliteration_factory.create(converted_transliteration, "")
+        user = ApiUser("atf_importer.py")
+        updater.update_transliteration(parse_museum_number(museum_number), transliteration, user)
+
+    def insert_lemmatization(self,updater: FragmentUpdater, lemmatization, museum_number):
+        print(lemmatization)
+        converted_lemmatization = Lemmatization.from_list(lemmatization)
+        print(converted_lemmatization)
+        user = ApiUser("atf_importer.py")
+        updater.update_lemmatization(parse_museum_number(museum_number), converted_lemmatization, user)
+
+    def get_museum_number(self,control_lines):
+        for line in control_lines:
+            linesplit = line['c_line'].split("=")
+            if len(linesplit) > 1:
+                musuemnumber = linesplit[-1].strip()
+
+                numbersplit = musuemnumber.split()
+
+                return linesplit[-1].strip()
+
+        return None
+
+    def get_cdli_number(self,control_lines):
+
+        for line in control_lines:
+            linesplit = line['c_line'].split("=")
+            cdli_number = linesplit[0].strip()
+            cdli_number = cdli_number.replace("&", "")
+
+            return cdli_number.strip()
+
+        return None
+
+    #
+    def get_museum_number_by_cdli_number(self, cdli_number):
+        for entry in self.db.get_collection('fragments').find({"cdliNumber": cdli_number},{"museumNumber"}):
+            return  entry['_id']
+
+        return None
+
     def start(self):
 
         self.logger.info("Atf-Importer started...")
@@ -381,10 +431,13 @@ class ATF_Importer:
                 transliteration_factory = context.get_transliteration_update_factory()
                 updater = context.get_fragment_updater()
 
-                museum_number = get_museum_number(result['control_lines'])
-
-
-                insert_translitertions(transliteration_factory,updater,result['transliteration'],museum_number)
+                #museum_number = self.get_museum_number(result['control_lines'])
+                cdli_number = self.get_cdli_number(result['control_lines'])
+                museum_number = self.get_museum_number_by_cdli_number(cdli_number)
+                # insert transliteration
+                self.insert_translitertions(transliteration_factory,updater,result['transliteration'],museum_number)
+                # insert lemmatization
+                #insert_lemmatization(updater,result['lemmatization'],museum_number)
 
                 with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
@@ -399,24 +452,6 @@ class ATF_Importer:
 
                 self.logger.info(Util.print_frame("conversion of \""+filename+".atf\" finished"))
 
-def insert_translitertions(
-    transliteration_factory: TransliterationUpdateFactory,
-    updater: FragmentUpdater,
-    transliterations,
-    museum_number
-) -> None:
-    converted_transliteration = "\n".join(transliterations)
-    transliteration = transliteration_factory.create(converted_transliteration, "")
-    user = ApiUser("atf_importer.py")
-    updater.update_transliteration(parse_museum_number(museum_number), transliteration, user)
-
-def get_museum_number(control_lines):
-    for line in control_lines:
-        linesplit = line['c_line'].split("=")
-        if len(linesplit) > 1:
-            return linesplit[-1].strip()
-
-    return None
 
 if __name__ == '__main__':
     a = ATF_Importer()
