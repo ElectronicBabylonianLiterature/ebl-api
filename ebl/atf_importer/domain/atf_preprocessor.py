@@ -121,6 +121,12 @@ class Line_Serializer(Visitor):
     self.line+= " " + result
     return result
 
+  def control_line(self, tree):
+    assert tree.data == "control_line"
+    result = DFS().visit_topdown(tree,"")
+    self.line+= " " + result
+    return result
+
 class Get_Line_Number(Visitor):
   nr = ""
 
@@ -271,7 +277,7 @@ class ATF_Preprocessor:
 
 
 
-                else:
+                elif tree.data == "text_line":
                     Convert_Line_Dividers().visit(tree)
                     Convert_Line_Joiner().visit(tree)
 
@@ -304,6 +310,36 @@ class ATF_Preprocessor:
                         #self.logger.error(traceback.print_exc())
 
                     self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
+
+                elif "oracc_atf_at_line__object_with_status" in tree.data:
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
+
+                elif "dollar_line" in tree.data:
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
+
+                elif "note_line" in tree.data:
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
+
+                elif tree.data == "control_line":
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
+
+                elif tree.data == "empty_line":
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
 
             except Exception as e:
 

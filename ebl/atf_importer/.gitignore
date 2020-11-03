@@ -8,3 +8,6 @@ notes.txt
 glossary/
 debug/
 input_test
+/application/Pipfile
+/application/Pipfile.lock
+

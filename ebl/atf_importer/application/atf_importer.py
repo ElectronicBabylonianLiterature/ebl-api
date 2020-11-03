@@ -6,7 +6,6 @@ import json
 from pymongo import MongoClient
 import logging
 import argparse
-
 from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -299,11 +298,15 @@ class ATF_Importer:
                 result = dict()
                 result['transliteration'] = []
                 result['lemmatization'] = []
+                result['control_lines'] = []
 
 
                 for line in converted_lines:
 
-                    if line['c_type'] == "lem_line":
+                    if line['c_type'] == "control_line":
+                        result['control_lines'].append(line)
+
+                    elif line['c_type'] == "lem_line":
 
                         all_unique_lemmas = []
                         lemma_line = []
@@ -372,15 +375,16 @@ class ATF_Importer:
                             last_alter_lemline_at = line['c_alter_lemline_at']
                             result['transliteration'].append(line['c_line'])
 
+                # insert into mongo db
                 context = create_context()
                 fragment_repository = context.fragment_repository
                 transliteration_factory = context.get_transliteration_update_factory()
                 updater = context.get_fragment_updater()
 
-                for entry in self.db.get_collection('fragments').find({"_id": "Sm.683"}, {"_id"}):
-                    print(entry)
+                museum_number = get_museum_number(result['control_lines'])
 
-                insert_translitertions(transliteration_factory,updater,result['transliteration'])
+
+                insert_translitertions(transliteration_factory,updater,result['transliteration'],museum_number)
 
                 with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
                     json.dump(result,outputfile,ensure_ascii=False)
@@ -398,16 +402,21 @@ class ATF_Importer:
 def insert_translitertions(
     transliteration_factory: TransliterationUpdateFactory,
     updater: FragmentUpdater,
-    transliterations
+    transliterations,
+    museum_number
 ) -> None:
     converted_transliteration = "\n".join(transliterations)
     transliteration = transliteration_factory.create(converted_transliteration, "")
     user = ApiUser("atf_importer.py")
+    updater.update_transliteration(parse_museum_number(museum_number), transliteration, user)
 
+def get_museum_number(control_lines):
+    for line in control_lines:
+        linesplit = line['c_line'].split("=")
+        if len(linesplit) > 1:
+            return linesplit[-1].strip()
 
-    updater.update_transliteration(parse_museum_number("Sm.683"), transliteration, user)
-
-
+    return None
 
 if __name__ == '__main__':
     a = ATF_Importer()
