@@ -462,11 +462,16 @@ class LineBreakSchema(BaseTokenSchema):
 class AkkadianWordSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
     modifiers = fields.List(ValueEnum(Flag), required=True)
+    unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", missing=tuple())
+    alignment = fields.Integer(allow_none=True, missing=None)
 
     @post_load
     def make_token(self, data, **kwargs):
         return AkkadianWord.of(
-            tuple(data["parts"]), tuple(data["modifiers"])
+            tuple(data["parts"]),
+            tuple(data["modifiers"]),
+            tuple(data["unique_lemma"]),
+            data["alignment"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 

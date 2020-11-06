@@ -92,6 +92,8 @@ def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
         "parts": OneOfTokenSchema().dump(word.parts, many=True),  # pyre-ignore[16]
         "modifiers": [modifier.value for modifier in word.modifiers],
         "enclosureType": [],
+        "uniqueLemma": [],
+        "alignment": None,
     }
     assert_token_serialization(word, serialized)
 
