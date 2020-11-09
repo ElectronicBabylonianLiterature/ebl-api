@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Tuple
 
 import attr
 
@@ -37,6 +37,26 @@ class Genre:
         if category not in genres:
             raise ValueError(f"'{category}' is not a valid genre")
 
+@attr.s(auto_attribs=True, frozen=True)
+class LineToVec:
+    line_to_vec: Tuple[int] = tuple()
+
+    @property
+    def complexity(self):
+        complexity = 0
+        for i in self.line_to_vec:
+            if i == 0:
+                complexity = complexity + 2
+            if i == 2:
+                complexity = complexity + 1
+            if i == 3:
+                complexity = complexity + 4
+            if i == 4:
+                complexity = complexity + 8
+            if i == 5:
+                complexity = complexity + 2
+        return complexity
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Fragment:
@@ -61,14 +81,13 @@ class Fragment:
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
-    line_to_vec: Sequence[int] = tuple()
+    line_to_vec: Optional[LineToVec] = None
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
-    def set_line_to_vec(self, line_to_vec: Sequence[int]) -> "Fragment":
-
-        return attr.evolve(self, line_to_vec=line_to_vec)
+    def set_line_to_vec(self, line_to_vec: Tuple[int]) -> "Fragment":
+        return attr.evolve(self, line_to_vec=LineToVec(line_to_vec))
 
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User

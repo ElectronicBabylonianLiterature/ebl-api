@@ -3,7 +3,7 @@ from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.application.line_to_vec_updater import create_line_to_vec
+from ebl.fragmentarium.matching_fragments.line_to_vec_updater import create_line_to_vec
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError

@@ -4,7 +4,8 @@ from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
+from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference, \
+    LineToVec
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
@@ -69,6 +70,16 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
+class LineToVecSchema(Schema):
+    line_to_vec = fields.List(fields.Integer, required=True,  data_key="lineToVec")
+    complexity = fields.Int(required=True)
+
+
+    @post_load
+    def make_line_to_vec(self, data, **kwargs):
+        return LineToVec(tuple(data["line_to_vec"]))
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
@@ -96,14 +107,13 @@ class FragmentSchema(Schema):
         missing=None,
     )
     genres = fields.Nested(GenreSchema, many=True, missing=tuple())
-    line_to_vec = fields.List(fields.Integer, missing=tuple(), data_key="lineToVec")
+    line_to_vec = fields.Nested(LineToVecSchema, missing=None, data_key="lineToVec")
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["joins"] = tuple(data["joins"])
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
-        data["line_to_vec"] = tuple(data["line_to_vec"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)
