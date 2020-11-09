@@ -12,7 +12,7 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.application.transliteration_update_factory import TransliterationUpdateFactory
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
-from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.transliteration.domain.lemmatization import Lemmatization,LemmatizationToken
 
 from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
@@ -267,11 +267,12 @@ class ATF_Importer:
         updater.update_transliteration(parse_museum_number(museum_number), transliteration, user)
 
     def insert_lemmatization(self,updater: FragmentUpdater, lemmatization, museum_number):
+        lemmatization = Lemmatization(tuple(lemmatization))
         print(lemmatization)
-        converted_lemmatization = Lemmatization.from_list(lemmatization)
-        print(converted_lemmatization)
+        #converted_lemmatization = Lemmatization.from_list(lemmatization)
+        #print(converted_lemmatization)
         user = ApiUser("atf_importer.py")
-        updater.update_lemmatization(parse_museum_number(museum_number), converted_lemmatization, user)
+        updater.update_lemmatization(parse_museum_number(museum_number),lemmatization , user)
 
     def get_museum_number(self,control_lines):
         for line in control_lines:
@@ -398,18 +399,20 @@ class ATF_Importer:
                         # join ebl transliteration with lemma line:
                         ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
 
-
+                        lemma_tokens = list()
                         for token in ebl_lines.lines[0].content:
 
                             unique_lemma = []
-                            if token.clean_value in oracc_word_ebl_lemmas:
-                                unique_lemma = oracc_word_ebl_lemmas[token.clean_value]
+                            if token.value in oracc_word_ebl_lemmas:
+                                unique_lemma = oracc_word_ebl_lemmas[token.value]
 
-                            lemma_line.append({"value": token.clean_value, "uniqueLemma": unique_lemma })
-
-
-                        result['lemmatization'].append(lemma_line)
-
+                            if len(unique_lemma) == 0:
+                                lemma_line.append(LemmatizationToken(token.value, None))
+                            else:
+                            #lemma_line.append({"value": token.clean_value, "uniqueLemma": unique_lemma })
+                                lemma_line.append(LemmatizationToken(token.value, tuple(unique_lemma)))
+                        #result['lemmatization'].append(lemma_line)
+                        result['lemmatization'].append(tuple(lemma_line))
                     else:
 
                         if line['c_type'] == "text_line":
@@ -436,11 +439,10 @@ class ATF_Importer:
                 museum_number = self.get_museum_number_by_cdli_number(cdli_number)
                 # insert transliteration
                 self.insert_translitertions(transliteration_factory,updater,result['transliteration'],museum_number)
-                # insert lemmatization
-                #insert_lemmatization(updater,result['lemmatization'],museum_number)
+                #insert lemmatization
+                self.insert_lemmatization(updater,result['lemmatization'],museum_number)
 
-                with open(args.output + filename+".json", "w", encoding='utf8') as outputfile:
-                    json.dump(result,outputfile,ensure_ascii=False)
+
 
             with open("../debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
                     for key in not_lemmatized:

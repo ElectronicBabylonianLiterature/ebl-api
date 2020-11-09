@@ -5,6 +5,7 @@ import re
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
 from lark import Visitor
+from lark import lexer
 import logging
 
 
@@ -148,19 +149,21 @@ class Get_Words(Visitor):
 
     def oracc_atf_text_line__word(self, tree):
         assert tree.data == "oracc_atf_text_line__word"
-
         word = ""
         for child in tree.children:
-
             # try to find positions of removals to add placeholders to subsequent lem line
-            if child == "<<" and word == "" :
+            if child == "<<" and word == "":
                 self.removal_open = True
             if child == ">>":
                 if self.removal_open:
                     self.removal_open = False
                     self.alter_lemline_at.append(self.wordcounter)
-            wordpart = DFS().visit_topdown(child,"")
-            word += wordpart
+
+            if isinstance(child,lexer.Token):
+                 word += child
+            else:
+                word += DFS().visit_topdown(child,"")
+
 
 
         self.result.append(word)
@@ -296,7 +299,7 @@ class ATF_Preprocessor:
 
                     words_serializer.visit_topdown(tree)
                     converted_line_array = words_serializer.result
-
+                    print(converted_line_array)
                     try:
                         self.EBL_PARSER.parse(converted_line)
                         self.logger.debug('successfully parsed converted line')
