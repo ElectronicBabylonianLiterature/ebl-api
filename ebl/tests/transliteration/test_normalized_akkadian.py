@@ -94,6 +94,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
         "enclosureType": [],
         "uniqueLemma": [],
         "alignment": None,
+        "lemmatizable": True,
     }
     assert_token_serialization(word, serialized)
 

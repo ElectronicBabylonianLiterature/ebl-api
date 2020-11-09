@@ -464,6 +464,7 @@ class AkkadianWordSchema(BaseTokenSchema):
     modifiers = fields.List(ValueEnum(Flag), required=True)
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", missing=tuple())
     alignment = fields.Integer(allow_none=True, missing=None)
+    lemmatizable = fields.Boolean(missing=True)
 
     @post_load
     def make_token(self, data, **kwargs):
