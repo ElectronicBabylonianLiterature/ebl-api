@@ -21,16 +21,17 @@ from ebl.dictionary.domain.word import WordId
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
-    "word,expected",
+    "word,expected,lemmatizable",
     [
-        (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû"),
+        (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû", True),
         (
             AkkadianWord.of(
                 (ValueToken.of("ibnû"),), (Flag.UNCERTAIN, Flag.DAMAGE, Flag.CORRECTION)
             ),
             "ibnû?#!",
+            True,
         ),
-        (AkkadianWord.of((BrokenAway.open(), ValueToken.of("ibnû"))), "[ibnû"),
+        (AkkadianWord.of((BrokenAway.open(), ValueToken.of("ibnû"))), "[ibnû", True),
         (
             AkkadianWord.of(
                 (
@@ -43,6 +44,7 @@ from ebl.dictionary.domain.word import WordId
                 )
             ),
             "[(ib)nû]",
+            True,
         ),
         (
             AkkadianWord.of(
@@ -58,6 +60,7 @@ from ebl.dictionary.domain.word import WordId
                 )
             ),
             "[(<ib)nû>]",
+            True,
         ),
         (
             AkkadianWord.of(
@@ -65,26 +68,29 @@ from ebl.dictionary.domain.word import WordId
                 (Flag.UNCERTAIN,),
             ),
             "ibnû?)]",
+            True,
         ),
         (
             AkkadianWord.of(
                 (ValueToken.of("ib"), UnknownNumberOfSigns.of(), ValueToken.of("nû"))
             ),
             "ib...nû",
+            False,
         ),
         (
             AkkadianWord.of(
                 (ValueToken.of("ib"), Joiner.hyphen(), ValueToken.of("nû"))
             ),
             "ib-nû",
+            True,
         ),
     ],
 )
-def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
+def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) -> None:
     assert word.value == expected
     assert word.clean_value == expected.translate(str.maketrans("", "", "[]()<>#?!"))
-    assert word.lemmatizable is True
-    assert word.alignable is True
+    assert word.lemmatizable is lemmatizable
+    assert word.alignable is lemmatizable
 
     serialized = {
         "type": "AkkadianWord",
@@ -94,7 +100,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
         "enclosureType": [],
         "uniqueLemma": [],
         "alignment": None,
-        "lemmatizable": True,
+        "lemmatizable": lemmatizable,
     }
     assert_token_serialization(word, serialized)
 

@@ -5,22 +5,16 @@ import attr
 import pydash  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import Enclosure
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
-from ebl.transliteration.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
+from ebl.transliteration.domain.word_tokens import AbstractWord
+from ebl.transliteration.domain.language import Language
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
-class AkkadianWord(Token):
-    _parts: Sequence[Token]
+class AkkadianWord(AbstractWord):
     modifiers: Sequence[Flag] = attr.ib(default=tuple())
-    unique_lemma: Sequence[WordId] = tuple()
-    alignment: Optional[int] = None
 
     @modifiers.validator
     def _validate_modifiers(self, _, value):
@@ -29,12 +23,12 @@ class AkkadianWord(Token):
             raise ValueError(f"Invalid modifiers: {value}")
 
     @property
-    def lemmatizable(self) -> bool:
-        return True
+    def language(self) -> Language:
+        return Language.AKKADIAN
 
     @property
-    def parts(self) -> Sequence[Token]:
-        return self._parts
+    def normalized(self) -> bool:
+        return True
 
     @property
     def value(self) -> str:
@@ -52,22 +46,6 @@ class AkkadianWord(Token):
     def clean_value(self) -> str:
         return "".join(part.clean_value for part in self.parts)
 
-    def set_unique_lemma(self, lemma: LemmatizationToken) -> "AkkadianWord":
-        value_is_compatible = self.value == lemma.value
-        lemma_is_compatible = self.lemmatizable or not lemma.unique_lemma
-        if value_is_compatible and lemma_is_compatible:
-            return attr.evolve(self, unique_lemma=lemma.unique_lemma or tuple())
-        else:
-            raise LemmatizationError(f"Cannot apply {lemma} to {self}.")
-
-    def set_alignment(self, alignment: AlignmentToken) -> "AkkadianWord":
-        if self.value == alignment.value and (
-            self.alignable or alignment.alignment is None
-        ):
-            return attr.evolve(self, alignment=alignment.alignment)
-        else:
-            raise AlignmentError()
-
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_akkadian_word(self)
 
@@ -79,7 +57,7 @@ class AkkadianWord(Token):
         alignment: Optional[int] = None,
     ) -> "AkkadianWord":
         return AkkadianWord(
-            frozenset(), ErasureState.NONE, parts, modifier, unique_lemma, alignment
+            frozenset(), ErasureState.NONE, unique_lemma, alignment, parts, modifier
         )
 
 
