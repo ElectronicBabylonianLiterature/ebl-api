@@ -96,7 +96,10 @@ PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 
 ### Auth0
 
-An API has to be setup in Auth0 and it needs to have the *Scopes*. *Identifier* and *Client ID* are needed for the environment variables (see below).
+An API has to be setup in Auth0 and it needs to have the *Scopes*. API *Identifier*, Application *Domain*
+(or the customdomain if one is used), and Application *Signing Certificate* are needed for the environment
+variables (see below). The whole certificate needs (everything in the field or the downloaded PEM file)
+has to be base64 encoded before being added to the environment variable.
 
 #### Scopes
 
@@ -126,9 +129,9 @@ An organization and project need to be setup in Sentry. *DSN* under *Client Keys
 The application reads the configuration from following environment variables:
 
  ```dotenv
-AUTH0_AUDIENCE=<the Auth0 API identifier>
-AUTH0_ISSUER=<the Auth0 application domain>
-AUTH0_PEM=<base64 encoded PEM certificate from the Auth0 application found under advanced settings>
+AUTH0_AUDIENCE=<the Identifier from Auth0 API Settings>
+AUTH0_ISSUER=<the Domain from Auth Application Setttings, or the custom domain from Branding>
+AUTH0_PEM=<Signing Certificate (PEM) from the Auth0 Application Advanced Settings. The whole certificate needs to be base64 encoded again before adding to environment.>
 MONGODB_URI=<MongoDB connection URI with database>
 MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
 SENTRY_DSN=<Sentry DSN>
