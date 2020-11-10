@@ -462,7 +462,9 @@ class LineBreakSchema(BaseTokenSchema):
 class AkkadianWordSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
     modifiers = fields.List(ValueEnum(Flag), required=True)
-    unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", missing=tuple())
+    language = NameEnum(Language, missing=Language.AKKADIAN)
+    normalized = fields.Boolean(missing=True)
+    unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
     alignment = fields.Integer(allow_none=True, missing=None)
     lemmatizable = fields.Boolean(missing=True)
 

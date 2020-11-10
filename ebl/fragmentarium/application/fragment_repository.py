@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -69,7 +70,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_lemmas(self, word: str) -> List[List[dict]]:
+    def query_lemmas(self, word: str, is_normalized: bool) -> List[List[WordId]]:
         ...
 
     @abstractmethod

@@ -176,7 +176,7 @@ def test_search_transliteration_empty(
 def test_find_lemmas(fragment_finder, dictionary, word, fragment_repository, when):
     query = "GI₆"
     unique_lemma = WordId(word["_id"])
-    when(fragment_repository).query_lemmas(query).thenReturn([[unique_lemma]])
+    when(fragment_repository).query_lemmas(query, False).thenReturn([[unique_lemma]])
     when(dictionary).find(unique_lemma).thenReturn(word)
 
     assert fragment_finder.find_lemmas(query) == [[word]]

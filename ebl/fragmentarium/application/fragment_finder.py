@@ -101,7 +101,7 @@ class FragmentFinder:
     def find_lemmas(self, word: str) -> List[List[dict]]:
         return [
             [self._dictionary.find(unique_lemma) for unique_lemma in result]
-            for result in self._repository.query_lemmas(word)
+            for result in self._repository.query_lemmas(word, False)
         ]
 
     def find_folio(self, folio: Folio) -> File:

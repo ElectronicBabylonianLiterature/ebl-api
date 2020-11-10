@@ -101,6 +101,8 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
         "uniqueLemma": [],
         "alignment": None,
         "lemmatizable": lemmatizable,
+        "normalized": True,
+        "language": "AKKADIAN",
     }
     assert_token_serialization(word, serialized)
 
