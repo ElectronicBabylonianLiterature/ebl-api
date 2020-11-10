@@ -42,9 +42,8 @@ class TestConverter(unittest.TestCase):
         self.assertEqual(converted_line , "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina ud-da-a-ta")
 
         converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line("14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA--<E₂>.AN.NA")
-        self.assertEqual(converted_line , "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA-<E₂>.AN.NA")
+        self.assertEqual(converted_line , "14. [...] x (x) še-e-hu BAD E₂ ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA-<E₂>.AN.NA")
 
-        self.atf_preprocessor.process_line()
 
 
     # Test case for removal of "$" if following sign not a logogram

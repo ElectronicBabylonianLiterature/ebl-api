@@ -296,7 +296,6 @@ class ATF_Preprocessor:
 
                     words_serializer.visit_topdown(tree)
                     converted_line_array = words_serializer.result
-                    print(converted_line_array)
                     try:
                         self.EBL_PARSER.parse(converted_line)
                         self.logger.debug('successfully parsed converted line')
