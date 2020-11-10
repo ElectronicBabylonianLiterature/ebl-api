@@ -1,20 +1,17 @@
 
 import codecs
 import re
-#import traceback
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
 from lark import Visitor
 from lark import lexer
 import logging
 
-
 class ConversionError(Exception):
    pass
 
 class ParseError(Exception):
    pass
-
 
 class Convert_Line_Dividers(Visitor):
 
