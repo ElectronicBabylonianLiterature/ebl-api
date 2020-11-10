@@ -47,11 +47,10 @@ class FragmentFinder:
         fragment_infos = self.search_references(id, pages)
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:
-            references_with_documents = []
-            for reference in fragment_info.references:
-                references_with_documents.append(
-                    reference.set_document(self._bibliography.find(reference.id))
-                )
+            references_with_documents = [
+                reference.set_document(self._bibliography.find(reference.id))
+                for reference in fragment_info.references
+            ]
             fragment_infos_with_documents.append(
                 fragment_info.set_references(references_with_documents)
             )
