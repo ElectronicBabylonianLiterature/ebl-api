@@ -179,7 +179,7 @@ def test_find_lemmas(fragment_finder, dictionary, word, fragment_repository, whe
     when(fragment_repository).query_lemmas(query, False).thenReturn([[unique_lemma]])
     when(dictionary).find(unique_lemma).thenReturn(word)
 
-    assert fragment_finder.find_lemmas(query) == [[word]]
+    assert fragment_finder.find_lemmas(query, False) == [[word]]
 
 
 def test_find_photo(fragment_finder, photo, photo_repository, when):
