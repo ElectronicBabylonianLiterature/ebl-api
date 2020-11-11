@@ -8,7 +8,7 @@ from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.application.transliteration_update_factory import TransliterationUpdateFactory
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.transliteration.domain.lemmatization import Lemmatization,LemmatizationToken
 from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
@@ -175,10 +175,6 @@ class ATF_Importer:
         for line in control_lines:
             linesplit = line['c_line'].split("=")
             if len(linesplit) > 1:
-                musuemnumber = linesplit[-1].strip()
-
-                numbersplit = musuemnumber.split()
-
                 return linesplit[-1].strip()
 
         return None
