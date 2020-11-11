@@ -5,11 +5,15 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The API requires a MongoDB database. See the
-[dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
-and
-[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser)
-or generating the initial data.
+## Table of contents
+
+* [Setup](#setup)
+* [Running the tests](#running-the-tests)
+* [Database](#database)
+* [Configuring services](#configuring-services)
+* [Running the application](#running-the-application)
+* [Updating data](#updating-data)
+* [Acknowledgements](#acknowledgements)
 
 ## Setup
 
@@ -25,6 +29,7 @@ pipenv install --dev
 
 The following services are needed to run application:
 
+- a MongoDB database
 - [Auth0](https://auth0.com)
 - [Sentry](https://sentry.io)
 
@@ -79,7 +84,16 @@ pipenv run test
 
 ## Database
 
-`pull-db.sh` can be used to pull a database from an another MongoDB instance to
+See
+[dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser),
+[proper-name-importer](https://github.com/ElectronicBabylonianLiterature/proper-name-importer),
+[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser), and
+[sign-list-parser](https://github.com/ElectronicBabylonianLiterature/sign-list-parser)
+about generating the initial data. There have been chnages to the database structure since the
+scripts were initally used and they most likely require updates to work with latest version 
+of the API.
+
+`pull-db.sh` script can be used to pull a database from an another MongoDB instance to
 your development MongoDB. It will use `mongodump` and `mongorestore` to get
 all data except `changelog` collection, and `photos` and `folios` buckets.
 
