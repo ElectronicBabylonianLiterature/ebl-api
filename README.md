@@ -20,16 +20,17 @@
 Requirements:
 
 - [PyPy3.6](https://www.pypy.org) & pip
-- Docker (optional for running the application)
+
 
 ```shell script
 pip install pipenv
 pipenv install --dev
 ```
 
-The following services are needed to run application:
+The following are needed to run application:
 
 - a MongoDB database
+- Docker (optional, see [Running the application](#running-the-application))
 - [Auth0](https://auth0.com)
 - [Sentry](https://sentry.io)
 
@@ -51,7 +52,8 @@ can be used locally or in
 
 ## Codestyle
 
-Use [Black](https://black.readthedocs.io/en/stable/) codestyle.
+Use [Black](https://black.readthedocs.io/en/stable/) codestyle and
+[PEP8 naming conventions](https://www.python.org/dev/peps/pep-0008/#naming-conventions).
 Line length is 88, and bugbear B950 is used instead of E501.
 PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
 disabled.
@@ -63,7 +65,7 @@ Use type hints in new code and add the to old code when making changes.
 - Avoid directed package dependency cycles.
 - Domain packages should depend only on other domain packages.
 - Application packages should depend only on application and domain packages.
-- Wed and infrastructure should depend only on application and domain packges.
+- Web, infrastructure, etc. should depend only on application and domain packges.
 - All packages can depend on common modules in the top-level ebl package.
 
 Dependencies can be analyzed with
