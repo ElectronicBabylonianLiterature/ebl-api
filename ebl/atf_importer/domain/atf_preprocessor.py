@@ -151,8 +151,7 @@ class Get_Words(Visitor):
             # try to find positions of removals to add placeholders to subsequent lem line
             if child == "<<" and word == "":
                 self.removal_open = True
-            if child == ">>":
-                if self.removal_open:
+            if child == ">>" and self.removal_open:
                     self.removal_open = False
                     self.alter_lemline_at.append(self.wordcounter)
 
@@ -195,17 +194,15 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
                                 additional_guide_word = ""
                                 if b_child.data == "oracc_atf_lem_line__value_part":
                                     additional_lemma_value = DFS().visit_topdown(b_child, "")
-                                    if acl > 1:
-                                        if a_child.children[j + 1].data == "oracc_atf_lem_line__guide_word":
-                                            additional_guide_word = DFS().visit_topdown(a_child.children[j + 1], "")
+                                    if acl > 1 and a_child.children[j + 1].data == "oracc_atf_lem_line__guide_word":
+                                        additional_guide_word = DFS().visit_topdown(a_child.children[j + 1], "")
                                 if(additional_lemma_value!=""): # to be fixed runs too often
                                  lemmata.append((additional_lemma_value,additional_guide_word))
 
             # find actual lemma and guidewords
             if child.data == "oracc_atf_lem_line__value_part":
                 lemma_value = DFS().visit_topdown(child,"")
-                if cl>1 :
-                    if tree.children[i+1].data== "oracc_atf_lem_line__guide_word":
+                if cl>1 and tree.children[i+1].data== "oracc_atf_lem_line__guide_word":
                         guide_word = DFS().visit_topdown(tree.children[i+1],"")
                 lemmata.append((lemma_value,guide_word))
                 self.result.append(lemmata)
