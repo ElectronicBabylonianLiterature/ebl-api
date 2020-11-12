@@ -1,5 +1,4 @@
 import math
-import os
 from functools import reduce
 from typing import Callable, Iterable, List, Sequence
 
@@ -12,7 +11,6 @@ from ebl.app import create_context
 from ebl.context import Context
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.matching_fragments.line_to_vec_updater import create_line_to_vec
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
@@ -25,17 +23,15 @@ from ebl.transliteration.infrastructure.menoizing_sign_repository import (
 )
 from ebl.users.domain.user import ApiUser
 
-from dotenv import load_dotenv
-load_dotenv()
 
 def update_fragment(
     transliteration_factory: TransliterationUpdateFactory,
     updater: FragmentUpdater,
     fragment: Fragment,
 ) -> None:
-    line_to_vec = create_line_to_vec(fragment.text.lines)
+    transliteration = transliteration_factory.create(fragment.text.atf, fragment.notes)
     user = ApiUser("update_fragments.py")
-    updater.update_line_to_vec(fragment.number, line_to_vec, user)
+    updater.update_transliteration(fragment.number, transliteration, user)
 
 
 def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:
@@ -113,7 +109,6 @@ def update_fragments(
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
-
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         try:
             fragment = fragment_repository.query_by_museum_number(number)
@@ -143,9 +138,9 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 16
+    number_of_jobs = 4
     chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs, prefer="processes")(
+    states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
         delayed(update_fragments)(subset, index, create_context_)
         for index, subset in enumerate(chunks)
     )
@@ -153,7 +148,7 @@ if __name__ == "__main__":
         lambda accumulator, state: accumulator.merge(state), states, State()
     )
 
-    with open("matching_fragments/results/invalid_fragments.tsv", "w", encoding="utf-8") as file:
+    with open("invalid_fragments.tsv", "w", encoding="utf-8") as file:
         file.write(final_state.to_tsv())
 
     print("Update fragments completed!")

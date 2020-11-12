@@ -4,8 +4,12 @@ import factory  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference, Genre, \
-    LineToVec
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    UncuratedReference,
+    Genre,
+    LineToVec,
+)
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (

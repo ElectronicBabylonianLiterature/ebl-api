@@ -33,7 +33,7 @@ class Context:
     bibliography_repository: BibliographyRepository
     text_repository: MongoTextRepository
     annotations_repository: AnnotationsRepository
-    line_to_vec_repository: LineToVecRepository
+    line_to_vec_repository: LineToVecRepository  # pyre-ignore[11]
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

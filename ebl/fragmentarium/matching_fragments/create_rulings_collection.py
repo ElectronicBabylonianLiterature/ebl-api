@@ -2,7 +2,6 @@ import math
 from typing import Callable, Iterable, List, Sequence
 
 import pydash  # pyre-ignore
-from dotenv import load_dotenv
 from joblib import Parallel, delayed  # pyre-ignore
 from tqdm import tqdm  # pyre-ignore
 
@@ -10,8 +9,6 @@ from ebl.app import create_context
 from ebl.context import Context
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-
-load_dotenv()
 
 
 def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:
@@ -57,5 +54,3 @@ if __name__ == "__main__":
     context = create_context_()
 
     context.line_to_vec_repository.insert_all(final_state)
-
-

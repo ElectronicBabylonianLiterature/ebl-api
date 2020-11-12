@@ -8,7 +8,8 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Measure,
     UncuratedReference,
-    Genre, LineToVec,
+    Genre,
+    LineToVec,
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -196,10 +197,6 @@ def test_update_transliteration(user):
     )
 
     assert updated_fragment == expected_fragment
-
-
-def test_update_line_to_vec(user):
-    fragment = TransliteratedFragmentFactory()
 
 
 def test_update_notes(user):

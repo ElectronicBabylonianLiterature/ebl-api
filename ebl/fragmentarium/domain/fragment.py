@@ -37,9 +37,10 @@ class Genre:
         if category not in genres:
             raise ValueError(f"'{category}' is not a valid genre")
 
+
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVec:
-    line_to_vec: Tuple[int] = tuple()
+    line_to_vec: Tuple[int, ...] = tuple()
 
     @property
     def complexity(self):

@@ -71,7 +71,10 @@ def test_create_response_dto(user):
                 {"category": genre.category, "uncertain": genre.uncertain}
                 for genre in lemmatized_fragment.genres
             ],
-            "lineToVec": {"lineToVec": list(lemmatized_fragment.line_to_vec.line_to_vec), "complexity": lemmatized_fragment.line_to_vec.complexity},
+            "lineToVec": {
+                "lineToVec": list(lemmatized_fragment.line_to_vec.line_to_vec),
+                "complexity": lemmatized_fragment.line_to_vec.complexity,
+            },
         },
         pydash.is_none,
     )
