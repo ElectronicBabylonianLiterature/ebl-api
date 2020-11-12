@@ -1,48 +1,47 @@
 import math
-import random
 from typing import Callable, Iterable, List, Sequence
 
 import attr
 import pydash  # pyre-ignore
+from dotenv import load_dotenv
 from joblib import Parallel, delayed  # pyre-ignore
 from tqdm import tqdm  # pyre-ignore
 
 from ebl.app import create_context
 from ebl.context import Context
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.matching_fragments.line_to_vec_updater import \
-    calculate_all_metrics
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.matching_fragments.score import matching_subseq, \
+    matching_subseq_w
 from ebl.transliteration.infrastructure.menoizing_sign_repository import (
     MemoizingSignRepository,
 )
 
-from dotenv import load_dotenv
 load_dotenv()
 
 
-def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:
-    return fragment_repository.query_transliterated_numbers()
+
 
 
 def update_fragments(
-    numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
+    fragmentNumber: str, numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
 ):
+
     context = context_factory()
     fragment_repository = context.fragment_repository
-    dict_of_distances = {}
-    for number_1, number_2 in tqdm(zip(numbers[: len(numbers)//2], numbers[len(numbers)//2:])):
-        fragment_1 = fragment_repository.query_by_museum_number(number_1)
-        fragment_2 = fragment_repository.query_by_museum_number(number_2)
-        metrics_score = calculate_all_metrics("".join(map(str, fragment_1.line_to_vec)),
-                                              "".join(map(str, fragment_2.line_to_vec)))
 
-        for metric in metrics_score.keys():
-            if metric in dict_of_distances:
-                dict_of_distances[metric].append(metrics_score[metric])
-            else:
-                dict_of_distances[metric] = [metrics_score[metric]]
-    return dict_of_distances
+    unweighted_score_results = dict()
+    weighted_score_results = dict()
+    fragment_2 = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(fragmentNumber))
+    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
+        fragment = fragment_repository.query_by_museum_number(number)
+        score = matching_subseq(fragment.line_to_vec.line_to_vec, fragment_2.line_to_vec.line_to_vec)
+        weighted_score = matching_subseq_w(fragment.line_to_vec.line_to_vec, fragment_2.line_to_vec.line_to_vec)
+        unweighted_score_results[str(fragment.number)] = score
+        weighted_score_results[str(fragment.number)] = weighted_score
+
+    return unweighted_score_results, weighted_score_results
 
 
 def create_context_() -> Context:
@@ -53,31 +52,31 @@ def create_context_() -> Context:
     return context
 
 
-def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
-    numbers = find_transliterated(create_context_().fragment_repository)
-    random.Random(4).shuffle(numbers)
-    chunk_size = math.ceil(len(numbers) / number_of_chunks)
-    return pydash.chunk(numbers, chunk_size)
+
 
 
 if __name__ == "__main__":
+    fragmentId = "K.8981"
     number_of_jobs = 16
-    chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs, prefer="processes")(
-        delayed(update_fragments)(subset, index, create_context_)
-        for index, subset in enumerate(chunks)
-    )
-    final_state = states[0]
-    for state in states:
-        for metrics in state.keys():
-            final_state[metrics].extend(state[metrics])
+    context = create_context()
+    line_to_vecs = context.line_to_vec_repository.get_line_to_vec_with_rulings()
+    match_candidate = line_to_vecs[fragmentId]
+    final_unweighted = dict()
+    final_weighted = dict()
+    for k, v in line_to_vecs.items():
+        final_unweighted[k] = matching_subseq(match_candidate.line_to_vec,
+                                              v.line_to_vec)
+        final_weighted[k] = matching_subseq_w(match_candidate.line_to_vec, v.line_to_vec)
 
-    for key, item in final_state.items():
-        final_state[key] = round(sum(item) / len(item), 2)
+    final_unweighted = {k: v for k, v in
+                        sorted(final_unweighted.items(), key=lambda item: -item[1]) if
+                        v != 0}
+    final_weighted = {k: v for k, v in
+                      sorted(final_weighted.items(), key=lambda item: -item[1]) if
+                      v != 0}
 
-    with open("results/distances.tsv", "w", encoding="utf-8") as file:
-        file.write(",".join(map(str, final_state.keys())))
-        file.write("\n")
-        file.write(",".join(map(str, final_state.values())))
-
-    print("Update fragments completed!")
+    with open(f"results/{fragmentId}_scores.tsv", "w", encoding="utf-8") as file:
+        file.write(f"{fragmentId} Score:\t\t\tWeighted Score:\n\n")
+        for k, v in zip(list(final_unweighted.items())[:30], list(final_weighted.items())[:30]):
+            file.write(f"{k[0]},{k[1]}\t\t\t\t")
+            file.write(f"{v[0]},{v[1]}\n")

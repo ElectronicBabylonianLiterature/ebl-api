@@ -27,6 +27,8 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
+from ebl.fragmentarium.matching_fragments.LineToVecRepository import \
+    MongoLineToVecRepository
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
@@ -66,6 +68,7 @@ def create_context():
         bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
+        line_to_vec_repository=MongoLineToVecRepository(database)
     )
     return context
 

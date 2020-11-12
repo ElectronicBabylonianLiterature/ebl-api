@@ -1,2 +1,0 @@
-ArithNCD,BWTRLENCD,BZ2NCD,Bag,Cosine,DamerauLevenshtein,Editex,EntropyNCD,Gotoh,Hamming,Identity,Jaccard,Jaro,JaroWinkler,LCSSeq,LCSStr,LZMANCD,Length,Levenshtein,MLIPNS,MRA,Matrix,MongeElkan,NeedlemanWunsch,Overlap,Postfix,Prefix,RLENCD,RatcliffObershelp,SmithWaterman,Sorensen,SqrtNCD,StrCmp95,Tanimoto,Tversky,ZLIBNCD
-1.36,0.7,0.16,0.47,0.32,0.5,0.14,0.1,0.37,0.59,1.0,0.5,0.23,0.19,0.49,0.61,0.12,0.42,0.5,0.82,0.6,1.0,0.95,0.46,0.09,0.9,0.82,0.83,0.43,0.29,0.36,0.56,0.23,inf,0.5,0.29

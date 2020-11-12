@@ -113,6 +113,7 @@ def update_fragments(
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
+
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         try:
             fragment = fragment_repository.query_by_museum_number(number)
@@ -142,7 +143,6 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    print(os.environ)
     number_of_jobs = 16
     chunks = create_chunks(number_of_jobs)
     states = Parallel(n_jobs=number_of_jobs, prefer="processes")(

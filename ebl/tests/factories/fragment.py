@@ -288,7 +288,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
     )
     folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
     record = factory.SubFactory(RecordFactory)
-    line_to_vec = LineToVec((1, 1, 1, 1, 1, 2))
+    line_to_vec = LineToVec((0, 1, 1, 1, 1, 1, 2))
 
 
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
