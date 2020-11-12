@@ -31,7 +31,8 @@ class MongoLineToVecRepository(LineToVecRepository):
             {
                 "$set": {
                     "lineToVec": {
-                        k: LineToVecSchema().dump(v) for k, v in entries.items()  # pyre-ignore[16]
+                        k: LineToVecSchema().dump(v)
+                        for k, v in entries.items()  # pyre-ignore[16]
                     }
                 }
             },

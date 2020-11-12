@@ -7,6 +7,7 @@ from ebl.transliteration.infrastructure.menoizing_sign_repository import (
     MemoizingSignRepository,
 )
 
+
 def create_context_() -> Context:
     context = create_context()
     context = attr.evolve(
