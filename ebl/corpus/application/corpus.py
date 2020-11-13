@@ -5,9 +5,7 @@ from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
-from ebl.corpus.application.manuscript_lemmatization_updater import (
-    ManuscriptLemmatizationUpdater,
-)
+from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.text_hydrator import TextHydrator
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.application.text_validator import TextValidator
@@ -76,7 +74,7 @@ class Corpus:
         user: User,
     ) -> None:
         self._update_chapter(
-            id_, ManuscriptLemmatizationUpdater(chapter_index, lemmatization), user
+            id_, LemmatizationUpdater(chapter_index, lemmatization), user
         )
 
     def update_manuscripts(

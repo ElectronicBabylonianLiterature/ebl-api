@@ -10,7 +10,7 @@ from ebl.transliteration.domain.lemmatization import (
 )
 
 
-class ManuscriptLemmatizationUpdater(ChapterUpdater):
+class LemmatizationUpdater(ChapterUpdater):
     def __init__(
         self,
         chapter_index: int,
