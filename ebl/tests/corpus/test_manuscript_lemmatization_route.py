@@ -58,7 +58,6 @@ def create_text(client, text):
     assert post_result.status == falcon.HTTP_CREATED
 
 
-@pytest.mark.xfail
 def test_updating_lemmatization(client, bibliography, sign_repository, signs):
     allow_signs(signs, sign_repository)
     text: Text = TextFactory.build()
