@@ -252,7 +252,7 @@ pipenv run python -m ebl.corpus.updte_texts
 , as stand alone container:
 
 ```shell script
-docker build -t ebl/api .
+docker build -t ebl/api .^
 docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.corpus.update_texts
 ```
 
@@ -266,6 +266,29 @@ docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,
 6) Fix invalid fragments.
 7) Remove fallback logic.
 8) Deploy to production.
+
+### Importing .atf files
+
+Importing and conversion of external .atf files which are encoded according to the oracc and c-ATF standards to the eBL-ATF standard.
+* For a description of eBL-ATF see: [eBL-ATF specification](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/docs/ebl-atf.md)
+* For a list of differences between the ATF flavors see: [eBL ATF and other ATF flavors](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/eBL-ATF-and-other-ATF-flavors)
+
+<!-- usage -->
+```sh-session
+$ pipenv run python -m ebl-atf_importer.application.atf_importer.py [-h] -i INPUT [-o OUTPUT] [-t] [-v]
+```
+<!-- usagestop -->
+- ## Command line options
+  * `-h` shows help message and exits the script
+  * `-i` path to the input directory (`required`)
+  * `-g` path to the glossary file (`required`)
+# Testing
+  * run pytest from command line:
+  <!-- testing -->
+ ```sh-session
+ $ pipenv run pytest
+ ```
+ <!-- testing -->
 
 ## Acknowledgements
 
