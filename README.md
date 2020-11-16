@@ -252,7 +252,7 @@ pipenv run python -m ebl.corpus.updte_texts
 , as stand alone container:
 
 ```shell script
-docker build -t ebl/api .^
+docker build -t ebl/api .
 docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.corpus.update_texts
 ```
 
@@ -278,12 +278,12 @@ To run use:
 $ pipenv run python -m ebl-atf_importer.application.atf_importer.py [-h] -i INPUT [-o OUTPUT] [-t] [-v]
 ```
 <!-- usagestop -->
-- #### Command line options
+#### Command line options
   * `-h` shows help message and exits the script
   * `-i` path to the input directory (`required`)
   * `-g` path to the glossary file (`required`)
 #### Testing
-  * run pytest from command line:
+  * run pytest from command line within `atf-importer/application`:
   <!-- testing -->
  ```sh-session
  $ pipenv run pytest
