@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Dict
 
-from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment import Fragment, LineToVec
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
@@ -56,6 +56,10 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_transliterated_numbers(self) -> List[MuseumNumber]:
+        ...
+
+    @abstractmethod
+    def query_transliterated_line_to_vec(self) -> List[Dict[str, LineToVec]]:
         ...
 
     @abstractmethod

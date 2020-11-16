@@ -16,7 +16,6 @@ from ebl.fragmentarium.application.transliteration_query_factory import (
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.matching_fragments import LineToVecRepository
 from ebl.transliteration.application.sign_repository import SignRepository
 
 
@@ -33,7 +32,6 @@ class Context:
     bibliography_repository: BibliographyRepository
     text_repository: MongoTextRepository
     annotations_repository: AnnotationsRepository
-    line_to_vec_repository: LineToVecRepository  # pyre-ignore[11]
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

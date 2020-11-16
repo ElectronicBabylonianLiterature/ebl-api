@@ -356,6 +356,16 @@ def test_find_transliterated(database, fragment_repository):
     ]
 
 
+def test_find_transliterated_line_to_vec(database, fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
+    assert fragment_repository.query_transliterated_line_to_vec() == [
+        {str(transliterated_fragment.number): transliterated_fragment.line_to_vec}
+    ]
+
+
 def test_find_lemmas(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)

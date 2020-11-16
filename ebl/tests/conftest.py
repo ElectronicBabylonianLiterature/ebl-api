@@ -34,9 +34,6 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
-from ebl.fragmentarium.matching_fragments.LineToVecRepository import (
-    MongoLineToVecRepository,
-)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
@@ -108,11 +105,6 @@ def transliteration_factory(sign_repository):
 @pytest.fixture
 def text_repository(database):
     return MongoTextRepository(database)
-
-
-@pytest.fixture
-def line_to_vec_repository(database):
-    return MongoLineToVecRepository(database)
 
 
 @pytest.fixture
@@ -290,7 +282,6 @@ def context(
     bibliography_repository,
     annotations_repository,
     user,
-    line_to_vec_repository,
 ):
     return ebl.context.Context(
         auth_backend=NoneAuthBackend(lambda: user),
@@ -304,7 +295,6 @@ def context(
         bibliography_repository=bibliography_repository,
         text_repository=text_repository,
         annotations_repository=annotations_repository,
-        line_to_vec_repository=line_to_vec_repository,
     )
 
 
