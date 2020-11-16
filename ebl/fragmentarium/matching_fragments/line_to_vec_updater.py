@@ -11,7 +11,7 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[int, ...]:
     for line in lines:
         if isinstance(line, text_line.TextLine):
             if first_line and (
-                line.line_number.has_prime
+                line.line_number.has_prime  # pyre-ignore[16]
                 or line.line_number.prefix_modifier  # pyre-ignore[16]
             ):
                 line_to_vec.append(0)
