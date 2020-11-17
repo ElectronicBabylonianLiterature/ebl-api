@@ -23,6 +23,7 @@ inflect = "*"
 joblib = "*"
 tqdm = "*"
 marshmallow-oneofschema = "*"
+python-dotenv = "*"
 
 [dev-packages]
 pytest = "*"
