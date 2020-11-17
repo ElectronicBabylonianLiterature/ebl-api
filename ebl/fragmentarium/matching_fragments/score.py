@@ -38,18 +38,14 @@ def weight_subsequence(seq_of_seq):
     for seq in seq_of_seq:
         counter = 0
         for i in seq:
-            if i == 0:
+            if i in [0, 5, 2]:
                 counter = counter + 3
             elif i == 1:
                 counter = counter + 1
-            elif i == 2:
-                counter = counter + 3
             elif i == 3:
                 counter = counter + 6
             elif i == 4:
                 counter = counter + 10
-            elif i == 5:
-                counter = counter + 3
             else:
                 raise ValueError(f"{i} not a valiable ruling encoding")
             weighting.append(counter)
