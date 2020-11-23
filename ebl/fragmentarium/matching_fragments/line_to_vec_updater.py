@@ -16,7 +16,7 @@ def line_to_vec(line: Line, _) -> Optional[LineToVecEncoding]:
 
 
 @line_to_vec.register
-def _(line: TextLine, first_line=True):
+def line_to_vec_text_line(line: TextLine, first_line=True):
     if first_line and (line.line_number.has_prime or line.line_number.prefix_modifier):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
@@ -24,7 +24,7 @@ def _(line: TextLine, first_line=True):
 
 
 @line_to_vec.register
-def _(line: RulingDollarLine, _):
+def line_to_vec_rulings(line: RulingDollarLine, _):
     if line.number == atf.Ruling.SINGLE:
         return LineToVecEncoding.SINGLE_RULING
     elif line.number == atf.Ruling.DOUBLE:
@@ -34,7 +34,7 @@ def _(line: RulingDollarLine, _):
 
 
 @line_to_vec.register
-def _(line: StateDollarLine, _):
+def line_to_vec_end_of(line: StateDollarLine, _):
     if line.extent == atf.Extent.END_OF:
         return LineToVecEncoding.END
 

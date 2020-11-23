@@ -20,16 +20,11 @@ def feed_compute_score(seq1, seq2):
 
 
 def compute_score(seq1, seq2):
-    if len(seq1) >= len(seq2):
-        longer_seq = seq1
-        shorter_seq = seq2
-    else:
-        longer_seq = seq2
-        shorter_seq = seq1
+    shorter_seq, longer_seq = sorted((seq1, seq2), key=len)
     matching_subseq = []
     for i in range(1, len(longer_seq) + 1):
         if i >= len(shorter_seq):
-            if longer_seq[i - len(shorter_seq) : i] == shorter_seq[-i:]:
+            if longer_seq[i - len(shorter_seq): i] == shorter_seq[-i:]:
                 matching_subseq.append(shorter_seq[-i:])
         elif longer_seq[:i] == shorter_seq[-i:]:
             matching_subseq.append(shorter_seq[-i:])
