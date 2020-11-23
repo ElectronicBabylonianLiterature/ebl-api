@@ -22,8 +22,6 @@ from ebl.fragmentarium.infrastructure.queries import (
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-
 
 COLLECTION = "fragments"
 
