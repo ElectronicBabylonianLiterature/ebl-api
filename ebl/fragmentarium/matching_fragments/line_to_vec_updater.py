@@ -17,10 +17,7 @@ def line_to_vec(line: Line, _) -> Optional[LineToVecEncoding]:
 
 @line_to_vec.register
 def _(line: TextLine, first_line=True):
-    if first_line and (
-        line.line_number.has_prime
-        or line.line_number.prefix_modifier
-    ):
+    if first_line and (line.line_number.has_prime or line.line_number.prefix_modifier):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
         return LineToVecEncoding.TEXT_LINE
