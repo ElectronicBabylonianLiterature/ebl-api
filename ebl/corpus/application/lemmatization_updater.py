@@ -10,7 +10,7 @@ from ebl.transliteration.domain.lemmatization import (
 )
 
 
-class ManuscriptLemmatizationUpdater(ChapterUpdater):
+class LemmatizationUpdater(ChapterUpdater):
     def __init__(
         self,
         chapter_index: int,
@@ -30,17 +30,26 @@ class ManuscriptLemmatizationUpdater(ChapterUpdater):
         return len(self._manuscript_lines)
 
     @property
-    def current_alignment(self) -> Sequence[LemmatizationToken]:
+    def current_lemmatization(self) -> Sequence[LemmatizationToken]:
         try:
-            return self._lemmatization[self.line_index][self.manuscript_line_index]
-        except KeyError:
-            raise LemmatizationError()
+            return self._lemmatization[self.line_index][self.manuscript_line_index + 1]
+        except IndexError:
+            raise LemmatizationError(
+                f"No lemmatization for line {self.line_index} "
+                f"manuscript {self.manuscript_line_index}."
+            )
 
     def visit_line(self, line: Line) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
-            if len(self._lemmatization[self.line_index]) == len(line.manuscripts):
+            if len(self._lemmatization[self.line_index]) == len(line.manuscripts) + 1:
                 self._lines.append(
-                    attr.evolve(line, manuscripts=tuple(self._manuscript_lines))
+                    attr.evolve(
+                        line,
+                        text=line.text.update_lemmatization(
+                            self._lemmatization[self.line_index][0]
+                        ),
+                        manuscripts=tuple(self._manuscript_lines),
+                    )
                 )
                 self._manuscript_lines = []
             else:
@@ -49,7 +58,7 @@ class ManuscriptLemmatizationUpdater(ChapterUpdater):
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
             updated_line = manuscript_line.line.update_lemmatization(
-                self.current_alignment
+                self.current_lemmatization
             )
             self._manuscript_lines.append(
                 attr.evolve(manuscript_line, line=updated_line)

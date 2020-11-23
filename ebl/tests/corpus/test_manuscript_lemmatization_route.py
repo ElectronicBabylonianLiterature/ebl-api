@@ -4,6 +4,7 @@ import attr
 import falcon  # pyre-ignore[21]
 import pytest  # pyre-ignore[21]
 
+from ebl.corpus.domain.text import Text
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -13,9 +14,27 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.dictionary.domain.word import WordId
+
 
 ANY_USER = Guest()
-DTO = {"lemmatization": [[[{"value": "ku-[nu-ši]", "uniqueLemma": ["aklu I"]}]]]}
+DTO = {
+    "lemmatization": [
+        [
+            [
+                {"value": "%n"},
+                {"value": "buāru", "uniqueLemma": ["aklu I"]},
+                {"value": "(|)"},
+                {"value": "["},
+                {"value": "..."},
+                {"value": "||"},
+                {"value": "...]-buāru#", "uniqueLemma": []},
+            ],
+            [{"value": "ku-[nu-ši]", "uniqueLemma": ["aklu I"]}],
+        ]
+    ]
+}
 
 
 def create_text_dto(text):
@@ -41,7 +60,7 @@ def create_text(client, text):
 
 def test_updating_lemmatization(client, bibliography, sign_repository, signs):
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
+    text: Text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
     chapter_index = 0
@@ -53,6 +72,31 @@ def test_updating_lemmatization(client, bibliography, sign_repository, signs):
                 lines=(
                     attr.evolve(
                         text.chapters[0].lines[0],
+                        text=TextLine.of_iterable(
+                            text.chapters[0].lines[0].text.line_number,
+                            (
+                                text.chapters[0].lines[0].text.content[0],
+                                text.chapters[0]
+                                .lines[0]
+                                .text.content[1]
+                                .set_unique_lemma(
+                                    LemmatizationToken(
+                                        text.chapters[0].lines[0].text.content[1].value,
+                                        (WordId("aklu I"),),
+                                    )
+                                ),
+                                *text.chapters[0].lines[0].text.content[2:6],
+                                text.chapters[0]
+                                .lines[0]
+                                .text.content[6]
+                                .set_unique_lemma(
+                                    LemmatizationToken(
+                                        text.chapters[0].lines[0].text.content[6].value,
+                                        tuple(),
+                                    )
+                                ),
+                            ),
+                        ),
                         manuscripts=(
                             attr.evolve(
                                 text.chapters[0].lines[0].manuscripts[0],
@@ -69,7 +113,7 @@ def test_updating_lemmatization(client, bibliography, sign_repository, signs):
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            unique_lemma=["aklu I"],
+                                            unique_lemma=[WordId("aklu I")],
                                         ),
                                     ),
                                 ),
@@ -85,7 +129,7 @@ def test_updating_lemmatization(client, bibliography, sign_repository, signs):
 
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}"
-        f"/chapters/{chapter_index}/manuscriptLemmatization",
+        f"/chapters/{chapter_index}/lemmatization",
         body=json.dumps(DTO),
     )
 
@@ -106,7 +150,7 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/1/manuscriptLemmatization",
+        f"/texts/{text.category}/{text.index}" f"/chapters/1/lemmatization",
         body=json.dumps(DTO),
     )
 
@@ -129,7 +173,7 @@ def test_updating_invalid_lemmatization(
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/0/manuscriptLemmatization",
+        f"/texts/{text.category}/{text.index}" f"/chapters/0/lemmatization",
         body=json.dumps(dto),
     )
 

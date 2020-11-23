@@ -33,6 +33,7 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
 from ebl.transliteration.domain.text_line import TextLine
 from typing import cast
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
 class MuseumNumberString(fields.String):  # pyre-ignore[11]
@@ -103,11 +104,6 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         )
 
 
-class RecontsructionTokenSchema(Schema):
-    type = fields.Function(lambda token: type(token).__name__)
-    value = fields.String()
-
-
 class LineNumberString(fields.String):
     def _serialize(self, value, attr, obj, **kwargs):
         return super()._serialize(value.label, attr, obj, **kwargs)
@@ -140,7 +136,7 @@ class ApiLineSchema(LineSchema):
         ),
     )
     reconstructionTokens = fields.Nested(
-        RecontsructionTokenSchema, many=True, attribute="reconstruction", dump_only=True
+        OneOfTokenSchema, many=True, attribute="reconstruction", dump_only=True
     )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
 

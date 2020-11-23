@@ -12,18 +12,18 @@ from ebl.transliteration.application.lemmatization_schema import (
 from ebl.users.web.require_scope import require_scope
 
 
-class ManuscriptLemmatizationsSchema(Schema):  # pyre-ignore[11]
+class CorpusLemmatizationsSchema(Schema):  # pyre-ignore[11]
     lemmatization = fields.List(
         fields.List(fields.Nested(LemmatizationTokenSchema, many=True)), required=True
     )
 
 
-class ManuscriptLemmatizationResource:
+class LemmatizationResource:
     def __init__(self, corpus: Corpus) -> None:
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")  # pyre-ignore[56]
-    @validate(ManuscriptLemmatizationsSchema())
+    @validate(CorpusLemmatizationsSchema())
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]
@@ -38,7 +38,7 @@ class ManuscriptLemmatizationResource:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManuscriptLemmatization'
+                $ref: '#/components/schemas/CorpusLemmatizations'
         responses:
           200:
             description: Lemmatization was updated succesfully.
@@ -72,7 +72,7 @@ class ManuscriptLemmatizationResource:
             create_text_id(category, index),
             create_chapter_index(chapter_index),
             # pyre-ignore[16]
-            ManuscriptLemmatizationsSchema().load(req.media)["lemmatization"],
+            CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
             req.context.user,
         )
         updated_text = self._corpus.find(create_text_id(category, index))

@@ -1,17 +1,19 @@
 from abc import abstractmethod
-from typing import Sequence, Type, TypeVar
+from typing import Optional, Sequence, Type, TypeVar
 
 import attr
 import pydash  # pyre-ignore[21]
 
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import Enclosure
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
+from ebl.transliteration.domain.word_tokens import AbstractWord
+from ebl.transliteration.domain.language import Language
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
-class AkkadianWord(Token):
-    _parts: Sequence[Token]
+class AkkadianWord(AbstractWord):
     modifiers: Sequence[Flag] = attr.ib(default=tuple())
 
     @modifiers.validator
@@ -20,12 +22,13 @@ class AkkadianWord(Token):
         if not set(value).issubset(allowed_modifiers):
             raise ValueError(f"Invalid modifiers: {value}")
 
-    def accept(self, visitor: TokenVisitor) -> None:
-        visitor.visit_akkadian_word(self)
+    @property
+    def language(self) -> Language:
+        return Language.AKKADIAN
 
     @property
-    def parts(self) -> Sequence[Token]:
-        return self._parts
+    def normalized(self) -> bool:
+        return True
 
     @property
     def value(self) -> str:
@@ -43,11 +46,19 @@ class AkkadianWord(Token):
     def clean_value(self) -> str:
         return "".join(part.clean_value for part in self.parts)
 
+    def accept(self, visitor: TokenVisitor) -> None:
+        visitor.visit_akkadian_word(self)
+
     @staticmethod
     def of(
-        parts: Sequence[Token], modifier: Sequence[Flag] = tuple()
+        parts: Sequence[Token],
+        modifier: Sequence[Flag] = tuple(),
+        unique_lemma: Sequence[WordId] = tuple(),
+        alignment: Optional[int] = None,
     ) -> "AkkadianWord":
-        return AkkadianWord(frozenset(), ErasureState.NONE, parts, modifier)
+        return AkkadianWord(
+            frozenset(), ErasureState.NONE, unique_lemma, alignment, parts, modifier
+        )
 
 
 T = TypeVar("T", bound="Break")

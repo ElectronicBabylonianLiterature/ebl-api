@@ -262,6 +262,43 @@ def test_updating_manuscript_lemmatization(
                 lines=(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
+                        text=TextLine.of_iterable(
+                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                            .lines[0]
+                            .text.line_number,
+                            (
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[0],
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[1]
+                                .set_unique_lemma(
+                                    LemmatizationToken(
+                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                        .lines[0]
+                                        .text.content[1]
+                                        .value,
+                                        (WordId("aklu I"),),
+                                    )
+                                ),
+                                *TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[2:6],
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[6]
+                                .set_unique_lemma(
+                                    LemmatizationToken(
+                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                        .lines[0]
+                                        .text.content[6]
+                                        .value,
+                                        tuple(),
+                                    )
+                                ),
+                            ),
+                        ),
                         manuscripts=(
                             attr.evolve(
                                 TEXT_WITHOUT_DOCUMENTS.chapters[0]
@@ -303,7 +340,20 @@ def test_updating_manuscript_lemmatization(
         when,
     )
 
-    lemmatization = (((LemmatizationToken("ku-[nu-ši]", ("aklu I",)),),),)
+    lemmatization = (
+        (
+            (
+                LemmatizationToken("%n"),
+                LemmatizationToken("buāru", ("aklu I",)),
+                LemmatizationToken("(|)"),
+                LemmatizationToken("["),
+                LemmatizationToken("..."),
+                LemmatizationToken("||"),
+                LemmatizationToken("...]-buāru#", tuple()),
+            ),
+            (LemmatizationToken("ku-[nu-ši]", ("aklu I",)),),
+        ),
+    )
     corpus.update_manuscript_lemmatization(TEXT.id, 0, lemmatization, user)
 
 

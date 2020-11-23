@@ -1,4 +1,6 @@
-from marshmallow import EXCLUDE  # pyre-ignore
+from typing import List
+
+from marshmallow import EXCLUDE  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -54,8 +56,7 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE).load(data)  # pyre-ignore[16,28]
 
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
-        match = dict()
-        match["references"] = {"$elemMatch": {"id": id_}}
+        match: dict = {"references": {"$elemMatch": {"id": id_}}}
         if pages:
             match["references"]["$elemMatch"]["pages"] = {
                 "$regex": fr".*?(^|[^\d]){pages}([^\d]|$).*?"
@@ -196,8 +197,8 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def query_lemmas(self, word):
-        cursor = self._collection.aggregate(aggregate_lemmas(word))
+    def query_lemmas(self, word: str, is_normalized: bool) -> List[List[WordId]]:
+        cursor = self._collection.aggregate(aggregate_lemmas(word, is_normalized))
         return [
             [WordId(unique_lemma) for unique_lemma in result["_id"]]
             for result in cursor
