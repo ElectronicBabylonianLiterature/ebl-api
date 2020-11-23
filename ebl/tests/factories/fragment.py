@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     UncuratedReference,
     Genre,
-    LineToVec,
+    LineToVecEncoding,
 )
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
@@ -292,7 +292,15 @@ class TransliteratedFragmentFactory(FragmentFactory):
     )
     folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
     record = factory.SubFactory(RecordFactory)
-    line_to_vec = LineToVec((0, 1, 1, 1, 1, 1, 2))
+    line_to_vec = (
+        LineToVecEncoding.START,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.SINGLE_RULING,
+    )
 
 
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):

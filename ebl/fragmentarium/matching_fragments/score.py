@@ -1,3 +1,6 @@
+from ebl.fragmentarium.domain.fragment import LineToVecEncoding
+
+
 def score_weighted(seq1, seq2):
     matching_seq = feed_compute_score(seq1, seq2)
     matching_seq = [seq for seq in matching_seq if list(filter(lambda x: x != 1, seq))]
@@ -33,20 +36,19 @@ def compute_score(seq1, seq2):
     return matching_subseq
 
 
+LineToVecWeighting = {
+    LineToVecEncoding.START: 2,
+    LineToVecEncoding.TEXT_LINE: 0,
+    LineToVecEncoding.SINGLE_RULING: 2,
+    LineToVecEncoding.DOUBLE_RULING: 4,
+    LineToVecEncoding.TRIPLE_RULING: 8,
+    LineToVecEncoding.END: 2,
+}
+
+
 def weight_subsequence(seq_of_seq):
-    weighting = []
-    for seq in seq_of_seq:
-        counter = 0
-        for i in seq:
-            if i in [0, 5, 2]:
-                counter = counter + 3
-            elif i == 1:
-                counter = counter + 1
-            elif i == 3:
-                counter = counter + 6
-            elif i == 4:
-                counter = counter + 10
-            else:
-                raise ValueError(f"{i} not a valiable ruling encoding")
-            weighting.append(counter)
-    return max(weighting)
+    weighting = {0: 3, 1: 1, 2: 3, 3: 6, 4: 10, 5: 3}
+    return max(
+        sum(elem)
+        for elem in [[weighting[number] for number in seq] for seq in seq_of_seq]
+    )

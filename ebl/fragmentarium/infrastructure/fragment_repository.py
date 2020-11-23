@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from marshmallow import EXCLUDE  # pyre-ignore
 
@@ -6,12 +6,9 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.fragment_schema import (
-    FragmentSchema,
-    LineToVecSchema,
-)
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.fragmentarium.domain.fragment import LineToVec
+from ebl.fragmentarium.domain.fragment import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -92,7 +89,9 @@ class MongoFragmentRepository(FragmentRepository):
             fragment["museumNumber"] for fragment in cursor
         )
 
-    def query_transliterated_line_to_vec(self) -> List[Dict[str, LineToVec]]:
+    def query_transliterated_line_to_vec(
+        self
+    ) -> List[Dict[str, Tuple[LineToVecEncoding, ...]]]:
         cursor = self._collection.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
         )
@@ -103,9 +102,7 @@ class MongoFragmentRepository(FragmentRepository):
                     MuseumNumberSchema().load(  # pyre-ignore[16]
                         fragment["museumNumber"]
                     )
-                ): LineToVecSchema().load(  # pyre-ignore[16]
-                    fragment["lineToVec"]
-                )
+                ): tuple(map(LineToVecEncoding, fragment["lineToVec"]))
             }
             for fragment in cursor
         ]

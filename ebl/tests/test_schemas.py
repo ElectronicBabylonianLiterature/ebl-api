@@ -6,39 +6,58 @@ from marshmallow import Schema, ValidationError  # pyre-ignore
 from ebl.schemas import ValueEnum, NameEnum
 
 
-class _TestEnum(Enum):
+class _TestEnumStr(Enum):
     ONE = "one"
     TWO = "two"
 
 
-class _TestSchema(Schema):  # pyre-ignore[11]
-    value = ValueEnum(_TestEnum, required=True, allow_none=True)
-    name = NameEnum(_TestEnum, required=True, allow_none=True)
+class _TestEnumInt(Enum):
+    ONE = 0
+    TWO = 1
 
 
-def test_value_enum():
-    obj = {"value": _TestEnum.ONE, "name": _TestEnum.TWO}
-    obj_deserialized = _TestSchema().dump(obj)
+class _TestSchemaStr(Schema):  # pyre-ignore[11]
+    value = ValueEnum(_TestEnumStr, required=True, allow_none=True)
+    name = NameEnum(_TestEnumStr, required=True, allow_none=True)
+
+
+class _TestSchemaInt(Schema):
+    value = ValueEnum(_TestEnumInt, required=True, allow_none=True)
+    name = NameEnum(_TestEnumInt, required=True, allow_none=True)
+
+
+def test_str_value_enum():
+    obj = {"value": _TestEnumStr.ONE, "name": _TestEnumStr.TWO}
+    obj_deserialized = _TestSchemaStr().dump(obj)
     obj_dict = {"value": "one", "name": "TWO"}
 
     assert obj_deserialized == obj_dict
-    assert _TestSchema().load(obj_dict) == obj
+    assert _TestSchemaStr().load(obj_dict) == obj
+
+
+def test_int_value_enum():
+    obj = {"value": _TestEnumInt.ONE, "name": _TestEnumInt.TWO}
+    obj_deserialized = _TestSchemaInt().dump(obj)
+    obj_dict = {"value": 0, "name": "TWO"}
+
+    assert obj_deserialized == obj_dict
+    assert _TestSchemaInt().load(obj_dict) == obj
 
 
 def test_value_enum_none():
     obj = {"value": None, "name": None}
-    obj_deserialized = _TestSchema().dump(obj)
+    obj_deserialized = _TestSchemaStr().dump(obj)
     obj_dict = {"value": None, "name": None}
 
     assert obj_deserialized == obj_dict
-    assert _TestSchema().load(obj_dict) == obj
+    assert _TestSchemaStr().load(obj_dict) == obj
 
 
 def test_value_enum_exception():
     with pytest.raises(ValidationError):
-        obj = {"value": "not an enum", "name": _TestEnum.TWO}
-        _TestSchema().dump(obj)
+        obj = {"value": "not an enum", "name": _TestEnumStr.TWO}
+        _TestSchemaStr().dump(obj)
 
     with pytest.raises(ValidationError):
         obj_dict = {"value": "invalid value", "name": "TWO"}
-        _TestSchema().load(obj_dict)
+        _TestSchemaStr().load(obj_dict)

@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Optional, Sequence, Tuple
 
 import attr
@@ -38,25 +39,13 @@ class Genre:
             raise ValueError(f"'{category}' is not a valid genre")
 
 
-@attr.s(auto_attribs=True, frozen=True)
-class LineToVec:
-    line_to_vec: Tuple[int, ...] = tuple()
-
-    @property
-    def complexity(self):
-        complexity = 0
-        for i in self.line_to_vec:
-            if i == 0:
-                complexity = complexity + 2
-            if i == 2:
-                complexity = complexity + 1
-            if i == 3:
-                complexity = complexity + 4
-            if i == 4:
-                complexity = complexity + 8
-            if i == 5:
-                complexity = complexity + 2
-        return complexity
+class LineToVecEncoding(Enum):
+    START = 0
+    TEXT_LINE = 1
+    SINGLE_RULING = 2
+    DOUBLE_RULING = 3
+    TRIPLE_RULING = 4
+    END = 5
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -82,13 +71,13 @@ class Fragment:
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
-    line_to_vec: Optional[LineToVec] = None
+    line_to_vec: Optional[Tuple[LineToVecEncoding, ...]] = None
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
-    def set_line_to_vec(self, line_to_vec: Tuple[int]) -> "Fragment":
-        return attr.evolve(self, line_to_vec=LineToVec(line_to_vec))
+    def set_line_to_vec(self, line_to_vec: Tuple[LineToVecEncoding, ...]) -> "Fragment":
+        return attr.evolve(self, line_to_vec=line_to_vec)
 
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User

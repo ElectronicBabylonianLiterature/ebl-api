@@ -4,7 +4,7 @@ import pytest  # pyre-ignore[21]
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Genre
+from ebl.fragmentarium.domain.fragment import Genre, LineToVecEncoding
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -155,7 +155,16 @@ def test_update_update_transliteration_not_found(fragment_repository):
 def test_update_line_to_vec(fragment_repository):
     fragment = TransliteratedFragmentFactory(line_to_vec=tuple())
     fragment_repository.create(fragment)
-    updated_fragment = fragment.set_line_to_vec((1, 2, 2, 1, 1, 1))
+    updated_fragment = fragment.set_line_to_vec(
+        (
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.SINGLE_RULING,
+            LineToVecEncoding.SINGLE_RULING,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+        )
+    )
     fragment_repository.update_line_to_vec(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 

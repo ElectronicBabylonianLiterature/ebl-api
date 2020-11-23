@@ -9,7 +9,6 @@ from ebl.fragmentarium.domain.fragment import (
     Measure,
     UncuratedReference,
     Genre,
-    LineToVec,
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -245,4 +244,4 @@ def test_set_line_to_vec():
     fragment = TransliteratedFragmentFactory(line_to_vec=None)
     line_to_vec = create_line_to_vec(fragment.text.lines)
     updated_fragment = fragment.set_line_to_vec(line_to_vec)
-    assert updated_fragment.line_to_vec == LineToVec(line_to_vec)
+    assert updated_fragment.line_to_vec == line_to_vec
