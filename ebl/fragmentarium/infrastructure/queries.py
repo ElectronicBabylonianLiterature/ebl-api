@@ -37,7 +37,7 @@ def aggregate_random() -> List[dict]:
     return [{"$match": HAS_TRANSLITERATION}, sample_size_one()]
 
 
-def aggregate_lemmas(word: str) -> List[dict]:
+def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
     return [
         {
             "$match": {
@@ -56,6 +56,7 @@ def aggregate_lemmas(word: str) -> List[dict]:
         {
             "$match": {
                 "tokens.cleanValue": word,
+                "tokens.normalized": is_normalized,
                 "tokens.uniqueLemma.0": {"$exists": True},
             }
         },

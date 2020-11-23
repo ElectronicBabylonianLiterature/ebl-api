@@ -55,6 +55,7 @@ from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
     Joiner,
+    LanguageShift,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -62,6 +63,7 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 
 class FragmentFactory(factory.Factory):  # pyre-ignore[11]
@@ -247,6 +249,8 @@ class TransliteratedFragmentFactory(FragmentFactory):
                             )
                         ]
                     ),
+                    LanguageShift.normalized_akkadian(),
+                    AkkadianWord.of([ValueToken.of("kur")]),
                 ),
             ),
             StateDollarLine(
@@ -446,6 +450,10 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                                 Reading.of_name("šu"), CompoundGrapheme.of(["BI×IS"])
                             )
                         ]
+                    ),
+                    LanguageShift.normalized_akkadian(),
+                    AkkadianWord.of(
+                        [ValueToken.of("kur")], unique_lemma=(WordId("normalized I"),)
                     ),
                 ),
             ),

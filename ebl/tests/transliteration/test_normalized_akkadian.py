@@ -15,19 +15,23 @@ from ebl.transliteration.domain.normalized_akkadian import (
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.domain.alignment import AlignmentToken
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.dictionary.domain.word import WordId
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
-    "word,expected",
+    "word,expected,lemmatizable",
     [
-        (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû"),
+        (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû", True),
         (
             AkkadianWord.of(
                 (ValueToken.of("ibnû"),), (Flag.UNCERTAIN, Flag.DAMAGE, Flag.CORRECTION)
             ),
             "ibnû?#!",
+            True,
         ),
-        (AkkadianWord.of((BrokenAway.open(), ValueToken.of("ibnû"))), "[ibnû"),
+        (AkkadianWord.of((BrokenAway.open(), ValueToken.of("ibnû"))), "[ibnû", True),
         (
             AkkadianWord.of(
                 (
@@ -40,6 +44,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
                 )
             ),
             "[(ib)nû]",
+            True,
         ),
         (
             AkkadianWord.of(
@@ -55,6 +60,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
                 )
             ),
             "[(<ib)nû>]",
+            True,
         ),
         (
             AkkadianWord.of(
@@ -62,24 +68,29 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
                 (Flag.UNCERTAIN,),
             ),
             "ibnû?)]",
+            True,
         ),
         (
             AkkadianWord.of(
                 (ValueToken.of("ib"), UnknownNumberOfSigns.of(), ValueToken.of("nû"))
             ),
             "ib...nû",
+            False,
         ),
         (
             AkkadianWord.of(
                 (ValueToken.of("ib"), Joiner.hyphen(), ValueToken.of("nû"))
             ),
             "ib-nû",
+            True,
         ),
     ],
 )
-def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
+def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) -> None:
     assert word.value == expected
     assert word.clean_value == expected.translate(str.maketrans("", "", "[]()<>#?!"))
+    assert word.lemmatizable is lemmatizable
+    assert word.alignable is lemmatizable
 
     serialized = {
         "type": "AkkadianWord",
@@ -87,6 +98,11 @@ def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
         "parts": OneOfTokenSchema().dump(word.parts, many=True),  # pyre-ignore[16]
         "modifiers": [modifier.value for modifier in word.modifiers],
         "enclosureType": [],
+        "uniqueLemma": [],
+        "alignment": None,
+        "lemmatizable": lemmatizable,
+        "normalized": True,
+        "language": "AKKADIAN",
     }
     assert_token_serialization(word, serialized)
 
@@ -94,6 +110,38 @@ def test_akkadian_word(word: AkkadianWord, expected: str) -> None:
 def test_akkadian_word_invalid_modifier() -> None:
     with pytest.raises(ValueError):
         AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
+
+
+def test_set_unique_lemma() -> None:
+    word = AkkadianWord.of((ValueToken.of("bu"),))
+    lemma = LemmatizationToken("bu", (WordId("nu I"),))
+    expected = AkkadianWord.of((ValueToken.of("bu"),), unique_lemma=(WordId("nu I"),))
+
+    assert word.set_unique_lemma(lemma) == expected
+
+
+def test_set_unique_lemma_empty() -> None:
+    word = AkkadianWord.of((ValueToken.of("bu"),), unique_lemma=(WordId("nu I"),))
+    lemma = LemmatizationToken("bu", tuple())
+    expected = AkkadianWord.of((ValueToken.of("bu"),))
+
+    assert word.set_unique_lemma(lemma) == expected
+
+
+def test_set_alignment() -> None:
+    word = AkkadianWord.of((ValueToken.of("bu"),))
+    alignment = AlignmentToken("bu", 1)
+    expected = AkkadianWord.of((ValueToken.of("bu"),), alignment=1)
+
+    assert word.set_alignment(alignment) == expected
+
+
+def test_set_alignment_empty() -> None:
+    word = AkkadianWord.of((ValueToken.of("bu"),), alignment=1)
+    alignment = AlignmentToken("bu", None)
+    expected = AkkadianWord.of((ValueToken.of("bu"),))
+
+    assert word.set_alignment(alignment) == expected
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

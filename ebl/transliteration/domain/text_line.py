@@ -34,7 +34,7 @@ class TextLine(Line):
         return f"{type(self).__name__}⁞{self.atf}⟨{tokens}⟩"
 
     @property
-    def content(self) -> Sequence:
+    def content(self) -> Sequence[Token]:
         return self._content
 
     @staticmethod

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Tuple
 
-from ebl.fragmentarium.domain.fragment import Fragment, LineToVecEncoding
+from ebl.fragmentarium.domain.fragment import LineToVecEncoding
+from ebl.dictionary.domain.word import WordId
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
@@ -75,7 +77,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_lemmas(self, word: str) -> List[List[dict]]:
+    def query_lemmas(self, word: str, is_normalized: bool) -> List[List[WordId]]:
         ...
 
     @abstractmethod

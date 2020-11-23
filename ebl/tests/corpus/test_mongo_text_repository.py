@@ -1,5 +1,5 @@
 import attr
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.domain.text import TextId

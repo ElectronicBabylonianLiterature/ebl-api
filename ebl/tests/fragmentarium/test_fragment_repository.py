@@ -29,6 +29,7 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 COLLECTION = "fragments"
 
@@ -52,6 +53,9 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
                             Reading.of_name("šu"),
                         ],
                         unique_lemma=(WordId("ūsu I"),),
+                    ),
+                    AkkadianWord.of(
+                        [ValueToken.of("ana")], unique_lemma=(WordId("normalized I"),)
                     ),
                 ),
             ),
@@ -379,7 +383,15 @@ def test_find_lemmas(fragment_repository):
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
-    assert fragment_repository.query_lemmas("GI₆") == [["ginâ I"]]
+    assert fragment_repository.query_lemmas("GI₆", False) == [["ginâ I"]]
+
+
+def test_find_lemmas_normalized(fragment_repository):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+
+    assert fragment_repository.query_lemmas("ana", True) == [["normalized I"]]
 
 
 def test_find_lemmas_multiple(fragment_repository):
@@ -387,7 +399,7 @@ def test_find_lemmas_multiple(fragment_repository):
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
-    assert fragment_repository.query_lemmas("ana") == [["ana II"], ["ana I"]]
+    assert fragment_repository.query_lemmas("ana", False) == [["ana II"], ["ana I"]]
 
 
 @pytest.mark.parametrize(
@@ -464,13 +476,14 @@ def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
     )
     fragment_repository.create(fragment)
 
-    assert fragment_repository.query_lemmas("ana") == expected
+    assert fragment_repository.query_lemmas("ana", False) == expected
 
 
-def test_find_lemmas_not_found(fragment_repository):
+@pytest.mark.parametrize("is_normalized", [False, True])
+def test_find_lemmas_not_found(is_normalized, fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
-    assert fragment_repository.query_lemmas("aklu") == []
+    assert fragment_repository.query_lemmas("aklu", is_normalized) == []
 
 
 def test_update_references(fragment_repository):
