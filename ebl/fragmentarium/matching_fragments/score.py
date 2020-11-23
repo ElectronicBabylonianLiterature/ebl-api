@@ -24,7 +24,7 @@ def compute_score(seq1, seq2):
     matching_subseq = []
     for i in range(1, len(longer_seq) + 1):
         if i >= len(shorter_seq):
-            if longer_seq[i - len(shorter_seq): i] == shorter_seq[-i:]:
+            if longer_seq[i - len(shorter_seq) : i] == shorter_seq[-i:]:
                 matching_subseq.append(shorter_seq[-i:])
         elif longer_seq[:i] == shorter_seq[-i:]:
             matching_subseq.append(shorter_seq[-i:])
