@@ -288,7 +288,7 @@ class ATF_Importer:
         cdli_number = self.get_cdli_number(ebl_lines['control_lines'])
         museum_number = self.get_museum_number_by_cdli_number(cdli_number)
 
-        if(museum_number==None):
+        if(museum_number is None):
             failed.append(filename + " could not be imported, museum number not found")
             self.logger.error("museum number not found")
 

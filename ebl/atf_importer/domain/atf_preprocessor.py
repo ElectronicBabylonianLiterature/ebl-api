@@ -170,7 +170,6 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
     result = []
     additional_lemmata = False
 
-
     def oracc_atf_lem_line__lemma(self, tree):
 
 
@@ -245,7 +244,6 @@ class ATF_Preprocessor:
 
         except Exception :
 
-
             atf = re.sub("([\[<])([\*:])(.*)", r"\1 \2\3", atf) # convert [* => [  <* => < *
             atf = re.sub("(\*)([\]>])(.*)", r"\1 \2\3", atf) # convert *] => * ]  ?
 
@@ -272,7 +270,6 @@ class ATF_Preprocessor:
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
                     self.logger.debug("----------------------------------------------------------------------")
                     return atf,lemmas_and_guidewords_array,tree.data,[]
-
 
 
                 elif tree.data == "text_line":
@@ -354,10 +351,9 @@ class ATF_Preprocessor:
 
                 error = "could not convert line"
                 self.logger.error(error+": "+atf)
-                self.logger.error(traceback.print_exc())
+                self.logger.error(traceback.format_exc())
                 self.unparseable_lines.append(atf)
                 return None,None,None,None
-
 
 
     def convert_lines(self,file,filename):
