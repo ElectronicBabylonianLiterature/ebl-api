@@ -130,19 +130,21 @@ class Token(ABC):
         )
         return f"{type(self).__name__}⁝{self.value}{parts}"
 
-    def set_unique_lemma(self, lemma: LemmatizationToken) -> "Token":
+    def set_unique_lemma(self: T, lemma: LemmatizationToken) -> T:
         if lemma.unique_lemma is None and lemma.value == self.value:
             return self
         else:
-            raise LemmatizationError()
+            raise LemmatizationError(
+                f"Incompatible lemmatization token {lemma} for {self}"
+            )
 
-    def set_alignment(self, alignment: AlignmentToken):
+    def set_alignment(self: T, alignment: AlignmentToken) -> T:
         if alignment.alignment is None and alignment.value == self.value:
             return self
         else:
             raise AlignmentError()
 
-    def strip_alignment(self):
+    def strip_alignment(self: T) -> T:
         return self
 
     def set_enclosure_type(self: T, enclosure_type: AbstractSet[EnclosureType]) -> T:
@@ -151,7 +153,7 @@ class Token(ABC):
     def set_erasure(self: T, erasure: ErasureState) -> T:
         return attr.evolve(self, erasure=erasure)
 
-    def merge(self, token: "Token") -> "Token":
+    def merge(self, token: T) -> T:
         return token
 
     def accept(self, visitor: "TokenVisitor") -> None:

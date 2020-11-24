@@ -30,7 +30,7 @@ from ebl.transliteration.domain.word_tokens import (
 
 LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
     (Word.of([Reading.of_name("un")]), True),
-    (Word.of([Reading.of_name("un")], normalized=True), False),
+    (Word.of([Reading.of_name("un")], normalized=True), True),
     (Word.of([Reading.of_name("un")], language=Language.SUMERIAN), False),
     (Word.of([Reading.of_name("un")], language=Language.EMESAL), False),
     (Word.of([Reading.of_name("un"), Joiner.hyphen(), UnclearSign.of()]), False),

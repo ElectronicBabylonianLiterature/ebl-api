@@ -19,7 +19,11 @@ from ebl.tests.factories.fragment import (
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationError
+from ebl.transliteration.domain.lemmatization import (
+    Lemmatization,
+    LemmatizationError,
+    LemmatizationToken,
+)
 from ebl.transliteration.domain.text import Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -209,9 +213,9 @@ def test_update_notes(user):
 
 def test_update_lemmatization():
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][3]["uniqueLemma"] = ["nu I"]
-    lemmatization = Lemmatization.from_list(tokens)
+    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("nu I",))
+    lemmatization = Lemmatization(tokens)
     expected = attr.evolve(
         transliterated_fragment,
         text=transliterated_fragment.text.update_lemmatization(lemmatization),
@@ -222,7 +226,7 @@ def test_update_lemmatization():
 
 def test_update_lemmatization_incompatible():
     fragment = FragmentFactory.build()
-    lemmatization = Lemmatization.from_list([[{"value": "mu", "uniqueLemma": []}]])
+    lemmatization = Lemmatization(((LemmatizationToken("mu", tuple()),),))
     with pytest.raises(LemmatizationError):
         fragment.update_lemmatization(lemmatization)
 

@@ -8,6 +8,7 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
 NUMBER_OF_NEEDS_REVISION: int = 20
+PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 7
 
 
 def museum_number_is(number: MuseumNumber) -> dict:
@@ -36,8 +37,8 @@ def aggregate_random() -> List[dict]:
     return [{"$match": HAS_TRANSLITERATION}, sample_size_one()]
 
 
-def aggregate_lemmas(word: str) -> List[dict]:
-    pipeline = [
+def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
+    return [
         {
             "$match": {
                 "text.lines.content": {
@@ -55,13 +56,13 @@ def aggregate_lemmas(word: str) -> List[dict]:
         {
             "$match": {
                 "tokens.cleanValue": word,
+                "tokens.normalized": is_normalized,
                 "tokens.uniqueLemma.0": {"$exists": True},
             }
         },
         {"$group": {"_id": "$tokens.uniqueLemma", "count": {"$sum": 1}}},
         {"$sort": {"count": -1}},
     ]
-    return pipeline
 
 
 def aggregate_latest() -> List[dict]:
@@ -164,6 +165,9 @@ def aggregate_needs_revision() -> List[dict]:
 
 
 def aggregate_path_of_the_pioneers() -> List[dict]:
+    max_uncurated_reference = (
+        f"uncuratedReferences.{PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES}"
+    )
     return [
         {
             "$match": {
@@ -171,7 +175,7 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
                     {"text.lines": []},
                     {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
                     {"uncuratedReferences": {"$exists": True}},
-                    {"uncuratedReferences.4": {"$exists": False}},
+                    {max_uncurated_reference: {"$exists": False}},
                     {"references.type": {"$ne": "EDITION"}},
                 ]
             }

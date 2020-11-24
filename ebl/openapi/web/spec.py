@@ -4,7 +4,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin  # pyre-ignore[21]
 from falcon_apispec import FalconPlugin  # pyre-ignore[21]
 
 
-API_VERSION = "0.0.5"
+API_VERSION = "0.0.6"
 
 
 def create_spec(

@@ -47,11 +47,10 @@ class FragmentFinder:
         fragment_infos = self.search_references(id, pages)
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:
-            references_with_documents = []
-            for reference in fragment_info.references:
-                references_with_documents.append(
-                    reference.set_document(self._bibliography.find(reference.id))
-                )
+            references_with_documents = [
+                reference.set_document(self._bibliography.find(reference.id))
+                for reference in fragment_info.references
+            ]
             fragment_infos_with_documents.append(
                 fragment_info.set_references(references_with_documents)
             )
@@ -98,10 +97,10 @@ class FragmentFinder:
     def fragment_pager(self, number: MuseumNumber) -> dict:
         return self._repository.query_next_and_previous_fragment(number)
 
-    def find_lemmas(self, word: str) -> List[List[dict]]:
+    def find_lemmas(self, word: str, is_normalized: bool) -> List[List[dict]]:
         return [
             [self._dictionary.find(unique_lemma) for unique_lemma in result]
-            for result in self._repository.query_lemmas(word)
+            for result in self._repository.query_lemmas(word, is_normalized)
         ]
 
     def find_folio(self, folio: Folio) -> File:

@@ -5,26 +5,32 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The API requires a MongoDB database. See the
-[dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser)
-and
-[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser)
-or generating the initial data.
+## Table of contents
+
+* [Setup](#setup)
+* [Running the tests](#running-the-tests)
+* [Database](#database)
+* [Configuring services](#configuring-services)
+* [Running the application](#running-the-application)
+* [Updating data](#updating-data)
+* [Acknowledgements](#acknowledgements)
 
 ## Setup
 
 Requirements:
 
 - [PyPy3.6](https://www.pypy.org) & pip
-- Docker (optional for running the application)
+
 
 ```shell script
 pip install pipenv
 pipenv install --dev
 ```
 
-The following services are needed to run application:
+The following are needed to run application:
 
+- a MongoDB database
+- Docker (optional, see [Running the application](#running-the-application))
 - [Auth0](https://auth0.com)
 - [Sentry](https://sentry.io)
 
@@ -46,7 +52,8 @@ can be used locally or in
 
 ## Codestyle
 
-Use [Black](https://black.readthedocs.io/en/stable/) codestyle.
+Use [Black](https://black.readthedocs.io/en/stable/) codestyle and
+[PEP8 naming conventions](https://www.python.org/dev/peps/pep-0008/#naming-conventions).
 Line length is 88, and bugbear B950 is used instead of E501.
 PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
 disabled.
@@ -58,7 +65,7 @@ Use type hints in new code and add the to old code when making changes.
 - Avoid directed package dependency cycles.
 - Domain packages should depend only on other domain packages.
 - Application packages should depend only on application and domain packages.
-- Wed and infrastructure should depend only on application and domain packges.
+- Web, infrastructure, etc. should depend only on application and domain packges.
 - All packages can depend on common modules in the top-level ebl package.
 
 Dependencies can be analyzed with
@@ -79,7 +86,16 @@ pipenv run test
 
 ## Database
 
-`pull-db.sh` can be used to pull a database from an another MongoDB instance to
+See
+[dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser),
+[proper-name-importer](https://github.com/ElectronicBabylonianLiterature/proper-name-importer),
+[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser), and
+[sign-list-parser](https://github.com/ElectronicBabylonianLiterature/sign-list-parser)
+about generating the initial data. There have been chnages to the database structure since the
+scripts were initally used and they most likely require updates to work with latest version 
+of the API.
+
+`pull-db.sh` script can be used to pull a database from an another MongoDB instance to
 your development MongoDB. It will use `mongodump` and `mongorestore` to get
 all data except `changelog` collection, and `photos` and `folios` buckets.
 
@@ -96,7 +112,11 @@ PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 
 ### Auth0
 
-An API has to be setup in Auth0 and it needs to have the *Scopes*. *Identifier* and *Client ID* are needed for the environment variables (see below).
+An *API* and *Application* have to be setup in Auth0 and it the API needs to have the *Scopes* listed below. 
+
+API *Identifier*, Application *Domain* (or the customdomain if one is used), and Application *Signing Certificate*
+are needed for the environment variables (see below). The whole certificate needs (everything in the field or the downloaded PEM file)
+has to be base64 encoded before being added to the environment variable.
 
 #### Scopes
 
@@ -111,11 +131,53 @@ An API has to be setup in Auth0 and it needs to have the *Scopes*. *Identifier* 
 `read:texts`,
 `write:texts`,
 `create:texts`,
-`annotate:fragments	Annotate`,
+`annotate:fragments`,
 
 Folio scopes need to have the following format. 
 
 `read:<Folio name>-folios`
+
+#### Rules
+
+"Add permissions to the user object" must bet set in Authorization Extension and the rule published.
+The following rules should be added to the *Auth Pipeleine*.
+
+eBL name:
+
+```javascript
+function (user, context, callback) {
+  const namespace = 'https://ebabylon.org/';
+  context.idToken[namespace + 'eblName'] = user.user_metadata.eblName;
+  callback(null, user, context);
+}
+```
+
+Access token scopes (must be after the Authorization Extension's rule):
+
+```javascript
+function (user, context, callback) {
+  const permissions = user.permissions || [];
+  const requestedScopes = context.request.body.scope || context.request.query.scope;
+  context.accessToken.scope = requestedScopes
+    .split(' ')
+    .filter(scope => scope.indexOf(':') < 0)
+    .concat(permissions)
+    .join(' ');
+
+  callback(null, user, context);
+}
+```
+
+
+#### Users
+
+The users should `eblName` property in the `user_metadata`. E.g.:
+
+```json
+{
+  "eblName": "Surname"
+}
+```
 
 ### Sentry
 
@@ -126,9 +188,9 @@ An organization and project need to be setup in Sentry. *DSN* under *Client Keys
 The application reads the configuration from following environment variables:
 
  ```dotenv
-AUTH0_AUDIENCE=<the Auth0 API identifier>
-AUTH0_ISSUER=<the Auth0 application domain>
-AUTH0_PEM=<base64 encoded PEM certificate from the Auth0 application found under advanced settings>
+AUTH0_AUDIENCE=<the Identifier from Auth0 API Settings>
+AUTH0_ISSUER=<the Domain from Auth Application Setttings, or the custom domain from Branding>
+AUTH0_PEM=<Signing Certificate (PEM) from the Auth0 Application Advanced Settings. The whole certificate needs to be base64 encoded again before adding to environment.>
 MONGODB_URI=<MongoDB connection URI with database>
 MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
 SENTRY_DSN=<Sentry DSN>

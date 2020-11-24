@@ -38,11 +38,12 @@ mongodump -h $sourceHost \
     -d $sourceDb \
     --forceTableScan \
     --excludeCollection=changelog \
-    --excludeCollection=folios.files \
-    --excludeCollection=folios.chunks \
-    --excludeCollection=photos.files \
-    --excludeCollection=photos.chunks \
-    --excludeCollectionsWithPrefix=fragments_backup \
+    --excludeCollectionsWithPrefix=folios. \
+    --excludeCollectionsWithPrefix=photos. \
+    --excludeCollectionsWithPrefix=fragments_ \
+    --excludeCollectionsWithPrefix=texts_ \
+    --excludeCollectionsWithPrefix=words_ \
+    --excludeCollectionsWithPrefix=signs_ \
     -u $sourceUser -p $sourcePassword \
     --ssl --sslAllowInvalidCertificates \
     -o $tempFolder

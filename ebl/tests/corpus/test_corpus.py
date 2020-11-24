@@ -20,6 +20,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 COLLECTION = "texts"
 TEXT = TextFactory.build()  # pyre-ignore[16]
@@ -248,6 +249,112 @@ def test_updating_alignment(
 
     alignment = Alignment((((AlignmentToken("ku-[nu-ši]", 0),),),))
     corpus.update_alignment(TEXT.id, 0, alignment, user)
+
+
+def test_updating_manuscript_lemmatization(
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+):
+    updated_text = attr.evolve(
+        TEXT_WITHOUT_DOCUMENTS,
+        chapters=(
+            attr.evolve(
+                TEXT_WITHOUT_DOCUMENTS.chapters[0],
+                lines=(
+                    attr.evolve(
+                        TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
+                        text=TextLine.of_iterable(
+                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                            .lines[0]
+                            .text.line_number,
+                            (
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[0],
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[1]
+                                .set_unique_lemma(
+                                    LemmatizationToken(
+                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                        .lines[0]
+                                        .text.content[1]
+                                        .value,
+                                        (WordId("aklu I"),),
+                                    )
+                                ),
+                                *TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[2:6],
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .text.content[6]
+                                .set_unique_lemma(
+                                    LemmatizationToken(
+                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                        .lines[0]
+                                        .text.content[6]
+                                        .value,
+                                        tuple(),
+                                    )
+                                ),
+                            ),
+                        ),
+                        manuscripts=(
+                            attr.evolve(
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                .lines[0]
+                                .manuscripts[0],
+                                line=TextLine.of_iterable(
+                                    LineNumber(1),
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of_name("ku"),
+                                                Joiner.hyphen(),
+                                                BrokenAway.open(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("ši"),
+                                                BrokenAway.close(),
+                                            ],
+                                            unique_lemma=("aklu I",),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    )
+    expect_text_find_and_update(
+        bibliography,
+        changelog,
+        TEXT_WITHOUT_DOCUMENTS,
+        updated_text,
+        signs,
+        sign_repository,
+        text_repository,
+        user,
+        when,
+    )
+
+    lemmatization = (
+        (
+            (
+                LemmatizationToken("%n"),
+                LemmatizationToken("buāru", ("aklu I",)),
+                LemmatizationToken("(|)"),
+                LemmatizationToken("["),
+                LemmatizationToken("..."),
+                LemmatizationToken("||"),
+                LemmatizationToken("...]-buāru#", tuple()),
+            ),
+            (LemmatizationToken("ku-[nu-ši]", ("aklu I",)),),
+        ),
+    )
+    corpus.update_manuscript_lemmatization(TEXT.id, 0, lemmatization, user)
 
 
 @pytest.mark.parametrize(

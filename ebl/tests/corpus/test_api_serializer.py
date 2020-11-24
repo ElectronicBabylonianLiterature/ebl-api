@@ -14,6 +14,7 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
@@ -72,15 +73,10 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                 f"\n{line.note.atf}" if line.note else "",
                             ]
                         ),
-                        "reconstructionTokens": [
-                            {"type": "LanguageShift", "value": "%n"},
-                            {"type": "AkkadianWord", "value": "buāru"},
-                            {"type": "MetricalFootSeparator", "value": "(|)"},
-                            {"type": "BrokenAway", "value": "["},
-                            {"type": "UnknownNumberOfSigns", "value": "..."},
-                            {"type": "Caesura", "value": "||"},
-                            {"type": "AkkadianWord", "value": "...]-buāru#"},
-                        ],
+                        # pyre-ignore[16]
+                        "reconstructionTokens": OneOfTokenSchema().dump(
+                            line.text.content, many=True
+                        ),
                         "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                         "isBeginningOfSection": line.is_beginning_of_section,
                         "manuscripts": [
