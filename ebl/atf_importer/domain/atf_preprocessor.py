@@ -1,6 +1,7 @@
 
 import codecs
 import re
+import traceback
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
 from lark import Visitor
@@ -313,6 +314,18 @@ class ATF_Preprocessor:
                     converted_line = line_serializer.line.strip(" ")
                     return converted_line, None, tree.data, None
 
+                elif "oracc_atf_at_line__surface_with_status" in tree.data:
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
+
+                elif "oracc_atf_at_line__discourse" in tree.data:
+                    line_serializer = Line_Serializer()
+                    line_serializer.visit_topdown(tree)
+                    converted_line = line_serializer.line.strip(" ")
+                    return converted_line, None, tree.data, None
+
                 elif "dollar_line" in tree.data:
                     line_serializer = Line_Serializer()
                     line_serializer.visit_topdown(tree)
@@ -341,7 +354,7 @@ class ATF_Preprocessor:
 
                 error = "could not convert line"
                 self.logger.error(error+": "+atf)
-                #self.logger.error(traceback.print_exc())
+                self.logger.error(traceback.print_exc())
                 self.unparseable_lines.append(atf)
                 return None,None,None,None
 

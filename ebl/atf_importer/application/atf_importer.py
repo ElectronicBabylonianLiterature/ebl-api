@@ -21,14 +21,14 @@ POS_TAGS  = ["REL" , "DET" , "CNJ" , "MOD" , "PRP" , "SBJ" , "AJ", "AV" , "NU" ,
 
 not_lemmatized = {}
 error_lines = []
-
+success = []
+failed = []
 
 class ATF_Importer:
 
     def __init__(self):
         logging.basicConfig(level=logging.DEBUG)
 
-        self.atf_preprocessor = ATF_Preprocessor()
         self.logger = logging.getLogger("atf-importer")
 
         # connect to eBL-db
@@ -167,7 +167,6 @@ class ATF_Importer:
 
     def insert_lemmatization(self,updater: FragmentUpdater, lemmatization, museum_number):
         lemmatization = Lemmatization(tuple(lemmatization))
-        #print(lemmatization)
         user = ApiUser("atf_importer.py")
         updater.update_lemmatization(parse_museum_number(museum_number),lemmatization , user)
 
@@ -279,7 +278,8 @@ class ATF_Importer:
                     result['transliteration'].append(line['c_line'])
         return result
 
-    def insert_into_db(self,ebl_lines):
+    def insert_into_db(self,ebl_lines,filename):
+
         context = create_context()
         transliteration_factory = context.get_transliteration_update_factory()
         updater = context.get_fragment_updater()
@@ -287,10 +287,23 @@ class ATF_Importer:
         # museum_number = self.get_museum_number(result['control_lines'])
         cdli_number = self.get_cdli_number(ebl_lines['control_lines'])
         museum_number = self.get_museum_number_by_cdli_number(cdli_number)
+
+        if(museum_number==None):
+            failed.append(filename + " could not be imported, museum number not found")
+            self.logger.error("museum number not found")
+
+            self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" failed"))
+            return
+
         # insert transliteration
         self.insert_translitertions(transliteration_factory, updater, ebl_lines['transliteration'], museum_number)
         # insert lemmatization
         self.insert_lemmatization(updater, ebl_lines['lemmatization'], museum_number)
+
+        success.append(filename + " successfully imported")
+        self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" finished"))
+
+
 
     def start(self):
 
@@ -322,12 +335,14 @@ class ATF_Importer:
                 filename = split[-1]
                 filename = filename.split(".")[0]
                 # convert all lines
-                converted_lines =  self.atf_preprocessor.convert_lines(filepath,filename)
+                self.atf_preprocessor = ATF_Preprocessor()
+                converted_lines = self.atf_preprocessor.convert_lines(filepath,filename)
 
-                # insert result into database
-                self.logger.info(Util.print_frame("importing ATF"))
+                self.logger.info(Util.print_frame("Formatting to EBL-ATF of "+ filename + ".atf"))
                 ebl_lines = self.convert_to_ebl_lines(converted_lines,filename)
-                self.insert_into_db(ebl_lines)
+                # insert result into database
+                self.logger.info(Util.print_frame("Inserting converted lines of "+ filename + ".atf into db"))
+                self.insert_into_db(ebl_lines,filename)
 
             with open("../debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
                     for key in not_lemmatized:
@@ -337,8 +352,13 @@ class ATF_Importer:
                 for key in error_lines:
                     outputfile.write(key + "\n")
 
-                self.logger.info(Util.print_frame("conversion of \""+filename+".atf\" finished"))
+            with open("../debug/not_imported.txt", "w", encoding='utf8') as outputfile:
+                for entry in failed:
+                    outputfile.write(entry + "\n")
 
+            with open("../debug/imported.txt", "w", encoding='utf8') as outputfile:
+                for entry in success:
+                    outputfile.write(entry+ "\n")
 
 if __name__ == '__main__':
     a = ATF_Importer()
