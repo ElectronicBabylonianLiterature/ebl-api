@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 'pypy3.6'
+
+      - name: Install
+        id: install
+        run: pipenv install --dev --deploy
+
+      - name: Lint
+        if: steps.install.outcome == 'success'
+        run: pipenv run lint
+     
+      - name: Type Check
+        if: steps.install.outcome == 'success'
+        run: pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
+
+      - name: Unit Tests
+        id: unit_tests
+        if: steps.install.outcome == 'success'
+        env:
+          CI: true
+        run: pipenv run test
+          
+      - uses: paambaati/codeclimate-action@v2.7.4
+        if: steps.unit_tests.outcome == 'success' || steps.unit_tests.outcome == 'failure'
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
