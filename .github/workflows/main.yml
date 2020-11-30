@@ -39,12 +39,11 @@ jobs:
 
       - name: Unit Tests
         id: unit_tests
-        if: success() || steps.install.outcome == 'success'
         env:
           CI: true
         run: pipenv run test
           
       - uses: paambaati/codeclimate-action@v2.7.4
-        if: steps.unit_tests.outcome == 'success' || steps.unit_tests.outcome == 'failure'
+        if: success() || steps.unit_tests.outcome == 'failure'
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
