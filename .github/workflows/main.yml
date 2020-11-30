@@ -21,7 +21,9 @@ jobs:
 
       - name: Install
         id: install
-        run: pipenv install --dev --deploy
+        run: |
+          pip install pipenv
+          pipenv install --dev --deploy
 
       - name: Lint
         if: steps.install.outcome == 'success'
