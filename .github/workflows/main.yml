@@ -26,16 +26,20 @@ jobs:
           pipenv install --dev --deploy
 
       - name: Lint
-        if: steps.install.outcome == 'success'
+        if: success() || steps.install.outcome == 'success'
         run: pipenv run lint
-     
+      
+      - name: Code Style
+        if: success() || steps.install.outcome == 'success'
+        run: pipenv run black ebl --check
+
       - name: Type Check
-        if: steps.install.outcome == 'success'
+        if: success() || steps.install.outcome == 'success'
         run: pipenv run pyre --typeshed "${VIRTUAL_ENV}/lib/pyre_check/typeshed" check
 
       - name: Unit Tests
         id: unit_tests
-        if: steps.install.outcome == 'success'
+        if: success() || steps.install.outcome == 'success'
         env:
           CI: true
         run: pipenv run test
