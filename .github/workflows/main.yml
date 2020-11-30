@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: 'pypy3.6'
+          python-version: 'pypy3'
 
       - name: Install
         id: install
