@@ -2,7 +2,6 @@
 import codecs
 import traceback
 import re
-from pyautogui import typewrite
 
 from ebl.atf_importer.domain.atf_conversions import\
     Convert_Line_Dividers,\
