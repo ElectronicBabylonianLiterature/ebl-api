@@ -69,3 +69,4 @@ jobs:
           push: true
           tags: |
             jlaasonen/ebl-api:test
+            ${{format('jlaasonen/ebl-api:{0}.{1}', github.ref, github.run_number)}}
