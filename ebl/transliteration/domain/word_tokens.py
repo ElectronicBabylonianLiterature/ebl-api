@@ -23,6 +23,7 @@ class AbstractWord(Token):
     unique_lemma: Sequence[WordId] = tuple()
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
+    variant: Optional["AbstractWord"] = None
 
     @property
     @abstractmethod
@@ -68,6 +69,9 @@ class AbstractWord(Token):
         else:
             raise AlignmentError()
 
+    def set_variant(self: A, variant: Optional["AbstractWord"]) -> A:
+        return attr.evolve(self, variant=variant)
+
     def strip_alignment(self: A) -> A:
         return attr.evolve(self, alignment=None)
 
@@ -104,9 +108,17 @@ class Word(AbstractWord):
         unique_lemma: Sequence[WordId] = tuple(),
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
+        variant: Optional[AbstractWord] = None,
     ) -> W:
         return cls(
-            frozenset(), erasure, unique_lemma, alignment, parts, language, normalized
+            frozenset(),
+            erasure,
+            unique_lemma,
+            alignment,
+            parts,
+            variant,
+            language,
+            normalized,
         )
 
     @property

@@ -138,9 +138,9 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 4
+    number_of_jobs = 6
     chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
+    states = Parallel(n_jobs=number_of_jobs)(
         delayed(update_fragments)(subset, index, create_context_)
         for index, subset in enumerate(chunks)
     )

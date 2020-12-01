@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.asserts import assert_token_serialization
@@ -78,6 +78,7 @@ def test_defaults() -> None:
     assert word.unique_lemma == tuple()
     assert word.erasure == ErasureState.NONE
     assert word.alignment is None
+    assert word.variant is None
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -95,16 +96,9 @@ def test_word(language, normalized, unique_lemma) -> None:
     value = "ku"
     parts = [Reading.of_name("ku")]
     erasure = ErasureState.NONE
-    word = Word.of(parts, language, normalized, unique_lemma, erasure)
+    variant = Word.of([Reading.of_name("ra")])
+    word = Word.of(parts, language, normalized, unique_lemma, erasure, None, variant)
 
-    equal = Word.of(parts, language, normalized, unique_lemma)
-    other_language = Word.of(parts, Language.UNKNOWN, normalized, unique_lemma)
-    other_parts = Word.of([Reading.of_name("nu")], language, normalized, unique_lemma)
-    other_unique_lemma = Word.of(parts, language, normalized, (WordId("waklu I"),))
-    other_normalized = Word.of(parts, language, not normalized, unique_lemma)
-    other_erasure = Word.of(
-        parts, language, normalized, unique_lemma, ErasureState.ERASED
-    )
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
     assert word.clean_value == value
@@ -113,6 +107,7 @@ def test_word(language, normalized, unique_lemma) -> None:
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
+    assert word.variant == variant
 
     serialized = {
         "type": "Word",
@@ -125,22 +120,7 @@ def test_word(language, normalized, unique_lemma) -> None:
         "parts": OneOfTokenSchema().dump(parts, many=True),  # pyre-ignore[16]
         "enclosureType": [type.name for type in word.enclosure_type],
     }
-    assert_token_serialization(word, serialized)
-
-    assert word == equal
-    assert hash(word) == hash(equal)
-
-    for not_equal in [
-        other_language,
-        other_parts,
-        other_unique_lemma,
-        other_normalized,
-        other_erasure,
-    ]:
-        assert word != not_equal
-        assert hash(word) != hash(not_equal)
-
-    assert word != ValueToken.of(value)
+    assert_token_serialization(word.set_variant(None), serialized)
 
 
 def test_clean_value() -> None:
@@ -196,6 +176,14 @@ def test_set_language() -> None:
     )
 
     assert word.set_language(language, normalized) == expected_word
+
+
+def test_set_variant() -> None:
+    variant = Word.of([Reading.of_name("ra")])
+    word = Word.of([Reading.of_name("kur")])
+    expected_word = Word.of([Reading.of_name("kur")], variant=variant)
+
+    assert word.set_variant(variant) == expected_word
 
 
 def test_set_unique_lemma() -> None:
