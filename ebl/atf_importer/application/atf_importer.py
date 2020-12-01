@@ -29,7 +29,7 @@ class ATF_Importer:
     def __init__(self):
         logging.basicConfig(level=logging.DEBUG)
 
-        self.logger = logging.getLogger("atf-importer")
+        self.logger = logging.getLogger("Atf-Importer")
 
         # connect to eBL-db
         load_dotenv()
@@ -211,11 +211,6 @@ class ATF_Importer:
                 all_unique_lemmas = []
                 lemma_line = []
 
-                self.logger.debug(
-                    "last transliteration " + str(last_transliteration) + " " + str(len(last_transliteration)))
-
-                self.logger.debug("lem_line: " + str(line['c_array']) + " length " + str(len(line['c_array'])))
-
                 for oracc_lemma_tupel in line['c_array']:
                     # get unique lemmata from ebl database
                     self.get_ebl_lemmata(oracc_lemma_tupel, all_unique_lemmas, filename)
@@ -236,7 +231,7 @@ class ATF_Importer:
                 oracc_word_ebl_lemmas = dict()
                 cnt = 0
                 if len(last_transliteration) != len(all_unique_lemmas):
-                    self.logger.error("ARRAYS DON'T HAVE EQUAL LENGTH!!!")
+                    self.logger.error("Transiteration and Lemmatization don't have equal length!!")
                     error_lines.append(filename + ": transliteration " + str(last_transliteration_line))
 
                 result['last_transliteration'] = last_transliteration
@@ -246,8 +241,6 @@ class ATF_Importer:
                     oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
                     cnt += 1
 
-                self.logger.debug("oracc_word_ebl_lemmas: " + str(oracc_word_ebl_lemmas))
-                self.logger.debug("----------------------------------------------------------------------")
 
                 # join ebl transliteration with lemma line:
                 ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
@@ -288,17 +281,17 @@ class ATF_Importer:
         museum_number = self.get_museum_number_by_cdli_number(cdli_number)
 
         if(museum_number is None):
-            self.logger.warning("no museum number to cdli number'" + cdli_number + "' found. Trying to parse from original file...")
+            self.logger.warning("No museum number to cdli number'" + cdli_number + "' found. Trying to parse from original file...")
             try:
                 museum_number_split = self.get_museum_number(ebl_lines['control_lines'])
                 parse_museum_number(museum_number_split.strip())
                 museum_number = museum_number_split
             except Exception as e:
-                self.logger.error("could not find valid museum number in '"+filename+"'")
+                self.logger.error("Could not find valid museum number in '"+filename+"'")
 
         skip = False
         while museum_number is None:
-            museum_number_input = input("please enter a valid museum number (enter 'skip' to skip this file): ")
+            museum_number_input = input("Please enter a valid museum number (enter 'skip' to skip this file): ")
             try:
                 if museum_number_input == "skip":
                     skip = True
@@ -311,7 +304,7 @@ class ATF_Importer:
 
         if(skip):
             failed.append(filename + " could not be imported, museum number not found")
-            self.logger.error("museum number not found")
+            self.logger.error("Museum number not found")
             self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" failed"))
             return
 
