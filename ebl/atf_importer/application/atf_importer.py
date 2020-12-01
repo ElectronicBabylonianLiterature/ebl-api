@@ -284,14 +284,29 @@ class ATF_Importer:
         transliteration_factory = context.get_transliteration_update_factory()
         updater = context.get_fragment_updater()
 
-        # museum_number = self.get_museum_number(result['control_lines'])
         cdli_number = self.get_cdli_number(ebl_lines['control_lines'])
         museum_number = self.get_museum_number_by_cdli_number(cdli_number)
 
         if(museum_number is None):
+            self.logger.warning("museum number to cdli number'" + cdli_number + "' not found...")
+            try:
+                museum_number_split = self.get_museum_number(ebl_lines['control_lines'])
+                parse_museum_number(museum_number_split)
+            except Exception as e:
+                self.logger.exception(e)
+
+        while museum_number is None:
+            museum_number_input = input("please enter a valid museum number: ")
+            try:
+                parse_museum_number(museum_number_input)
+                museum_number = museum_number_input
+                print(museum_number)
+            except Exception as e:
+                self.logger.exception(e)
+
+        if(museum_number is None):
             failed.append(filename + " could not be imported, museum number not found")
             self.logger.error("museum number not found")
-
             self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" failed"))
             return
 
