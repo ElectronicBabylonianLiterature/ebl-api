@@ -291,21 +291,24 @@ class ATF_Importer:
             self.logger.warning("museum number to cdli number'" + cdli_number + "' not found...")
             try:
                 museum_number_split = self.get_museum_number(ebl_lines['control_lines'])
-                parse_museum_number(museum_number_split)
+                museum_number = parse_museum_number(museum_number_split)
             except Exception as e:
-                self.logger.exception(e)
+                pass
 
+        skip = False
         while museum_number is None:
-            museum_number_input = input("please enter a valid museum number: ")
+            museum_number_input = input("please enter a valid museum number (enter 'skip' to skip this file): ")
             try:
+                if museum_number_input == "skip":
+                    skip = True
+                    break
                 parse_museum_number(museum_number_input)
                 museum_number = museum_number_input
                 self.logger.warning("museum number '" + museum_number + "' is valid!")
-
             except Exception as e:
-                self.logger.exception(e)
+                pass
 
-        if(museum_number is None):
+        if(skip):
             failed.append(filename + " could not be imported, museum number not found")
             self.logger.error("museum number not found")
             self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" failed"))

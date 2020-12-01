@@ -31,6 +31,7 @@ class ATF_Preprocessor:
                                   "control_line",
                                   "empty_line"
                                   ]
+        self.stop_preprocessing = False
 
     def get_empty_conversion(self,tree):
         line_serializer = Line_Serializer()
@@ -121,6 +122,11 @@ class ATF_Preprocessor:
                         self.logger.error(traceback.format_exc())
 
                     self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
+
+                elif "translation" in tree.data:
+                    self.stop_preprocessing = True
+                    return self.get_empty_conversion(tree)
+
                 else:
                     for line in self.unused_lines:
                         if tree.data == line:
@@ -146,6 +152,9 @@ class ATF_Preprocessor:
         processed_lines = []
         for line in lines:
             c_line,c_array,c_type,c_alter_lemline_at = self.process_line(line)
+
+            if self.stop_preprocessing:
+                break
 
             if c_line != None:
                 processed_lines.append({"c_line":c_line,"c_array":c_array,"c_type":c_type,"c_alter_lemline_at":c_alter_lemline_at})
