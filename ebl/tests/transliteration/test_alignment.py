@@ -31,6 +31,17 @@ def test_alignment():
                     }
                 ]
             ],
+            [
+                [
+                    {
+                        "value": "ku]-nu-ši",
+                        "alignment": 1,
+                        "variant": "",
+                        "language": "AKKADIAN",
+                        "isNormalized": False,
+                    }
+                ]
+            ],
         ]
     ) == Alignment(
         (
@@ -50,6 +61,7 @@ def test_alignment():
                     ),
                 ),
             ),
+            ((AlignmentToken("ku]-nu-ši", 1, None),),),
         )
     )
 

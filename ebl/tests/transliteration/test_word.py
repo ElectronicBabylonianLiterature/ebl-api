@@ -120,7 +120,7 @@ def test_word(language, normalized, unique_lemma) -> None:
         "parts": OneOfTokenSchema().dump(parts, many=True),  # pyre-ignore[16]
         "enclosureType": [type.name for type in word.enclosure_type],
     }
-    assert_token_serialization(word.set_variant(None), serialized)
+    assert_token_serialization(word.strip_alignment(), serialized)
 
 
 def test_clean_value() -> None:
@@ -178,14 +178,6 @@ def test_set_language() -> None:
     assert word.set_language(language, normalized) == expected_word
 
 
-def test_set_variant() -> None:
-    variant = Word.of([Reading.of_name("ra")])
-    word = Word.of([Reading.of_name("kur")])
-    expected_word = Word.of([Reading.of_name("kur")], variant=variant)
-
-    assert word.set_variant(variant) == expected_word
-
-
 def test_set_unique_lemma() -> None:
     word = Word.of([Reading.of_name("bu")])
     lemma = LemmatizationToken("bu", (WordId("nu I"),))
@@ -222,8 +214,12 @@ def test_set_unique_lemma_invalid(word) -> None:
 
 def test_set_alignment() -> None:
     word = Word.of([Reading.of_name("bu")])
-    alignment = AlignmentToken("bu", 1)
-    expected = Word.of([Reading.of_name("bu")], alignment=1)
+    alignment_index = 1
+    variant = Word.of([Reading.of_name("ra")])
+    alignment = AlignmentToken(word.value, alignment_index, variant)
+    expected = Word.of(
+        [Reading.of_name("bu")], alignment=alignment_index, variant=variant
+    )
 
     assert word.set_alignment(alignment) == expected
 

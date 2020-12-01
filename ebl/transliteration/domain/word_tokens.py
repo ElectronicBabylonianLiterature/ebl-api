@@ -65,15 +65,14 @@ class AbstractWord(Token):
         if self.value == alignment.value and (
             self.alignable or alignment.alignment is None
         ):
-            return attr.evolve(self, alignment=alignment.alignment)
+            return attr.evolve(
+                self, alignment=alignment.alignment, variant=alignment.variant
+            )
         else:
             raise alignments.AlignmentError()
 
-    def set_variant(self: A, variant: Optional["AbstractWord"]) -> A:
-        return attr.evolve(self, variant=variant)
-
     def strip_alignment(self: A) -> A:
-        return attr.evolve(self, alignment=None)
+        return attr.evolve(self, alignment=None, variant=None)
 
     def merge(self, token: Token) -> Token:
         same_value = self.clean_value == token.clean_value
