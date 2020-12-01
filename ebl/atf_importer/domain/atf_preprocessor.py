@@ -1,7 +1,15 @@
 
 import codecs
 import traceback
-from ebl.atf_importer.domain.atf_conversions import *
+import re
+from ebl.atf_importer.domain.atf_conversions import\
+    Convert_Line_Dividers,\
+    Convert_Line_Joiner,\
+    Convert_Legacy_Grammar_Signs,\
+    Strip_Signs,\
+    Get_Lemma_Values_and_Guidewords,\
+    Get_Words,Line_Serializer
+
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from lark import Lark
 import logging
