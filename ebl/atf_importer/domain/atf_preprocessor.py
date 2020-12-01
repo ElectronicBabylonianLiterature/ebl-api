@@ -26,6 +26,7 @@ class ATF_Preprocessor:
         self.unused_lines = ["oracc_atf_at_line__object_with_status",
                                   "oracc_atf_at_line__surface_with_status",
                                   "oracc_atf_at_line__discourse",
+                                  "oracc_atf_at_line__column",
                                   "dollar_line",
                                   "note_line",
                                   "control_line",
@@ -56,8 +57,8 @@ class ATF_Preprocessor:
             words_serializer.visit_topdown(tree)
             converted_line_array = words_serializer.result
 
-            self.debug.info("line successfully parsed, no conversion needed")
-            self.debug.info("----------------------------------------------------------------------")
+            self.logger.debug.info("line successfully parsed, no conversion needed")
+            self.logger.debug.info("----------------------------------------------------------------------")
             return atf,converted_line_array,tree.data,[]
 
         except Exception :
@@ -120,12 +121,9 @@ class ATF_Preprocessor:
                     except Exception as e:
                         self.logger.error("could not parse converted line")
                         self.logger.error(traceback.format_exc())
+                        return None, None, None, None
 
                     self.logger.debug("converted line as " + tree.data + " --> '" + converted_line + "'")
-
-                elif "translation" in tree.data:
-                    self.stop_preprocessing = True
-                    return self.get_empty_conversion(tree)
 
                 else:
                     for line in self.unused_lines:
@@ -133,6 +131,9 @@ class ATF_Preprocessor:
                            return self.get_empty_conversion(tree)
 
             except Exception as e:
+
+                if "translation" in atf:
+                    self.stop_preprocessing = True
 
                 error = "could not convert line"
                 self.logger.error(error+": "+atf)
