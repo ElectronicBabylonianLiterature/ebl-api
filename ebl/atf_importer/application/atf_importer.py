@@ -300,7 +300,8 @@ class ATF_Importer:
             try:
                 parse_museum_number(museum_number_input)
                 museum_number = museum_number_input
-                print(museum_number)
+                self.logger.warning("museum number '" + museum_number + "' is valid!")
+
             except Exception as e:
                 self.logger.exception(e)
 
