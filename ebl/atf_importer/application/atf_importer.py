@@ -288,12 +288,13 @@ class ATF_Importer:
         museum_number = self.get_museum_number_by_cdli_number(cdli_number)
 
         if(museum_number is None):
-            self.logger.warning("museum number to cdli number'" + cdli_number + "' not found...")
+            self.logger.warning("no museum number to cdli number'" + cdli_number + "' found. Trying to parse from original file...")
             try:
                 museum_number_split = self.get_museum_number(ebl_lines['control_lines'])
-                museum_number = parse_museum_number(museum_number_split)
+                parse_museum_number(museum_number_split.strip())
+                museum_number = museum_number_split
             except Exception as e:
-                pass
+                self.logger.error("could not find valid museum number in '"+filename+"'")
 
         skip = False
         while museum_number is None:
@@ -304,7 +305,7 @@ class ATF_Importer:
                     break
                 parse_museum_number(museum_number_input)
                 museum_number = museum_number_input
-                self.logger.warning("museum number '" + museum_number + "' is valid!")
+                self.logger.info("museum number '" + museum_number + "' is valid!")
             except Exception as e:
                 pass
 
