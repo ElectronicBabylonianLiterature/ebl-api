@@ -10,6 +10,7 @@ on:
 
 env:
   PIPENV_VENV_IN_PROJECT: 1
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   test:
@@ -50,7 +51,20 @@ jobs:
         if: success() || steps.unit_tests.outcome == 'failure'
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          
+      
+      - uses: edge/simple-slack-notify@v1.1.1
+        if: failure()
+        with:
+          channel: '#continuous-integration'
+          status: ${{ job.status }}
+          success_text: 'eBL API  build #${env.GITHUB_RUN_NUMBER} build completed successfully.'
+          failure_text: 'eBL API  build #${env.GITHUB_RUN_NUMBER} failed.'
+          cancelled_text: 'eBL API  build #${env.GITHUB_RUN_NUMBER} build was cancelled.'
+          fields: |
+            [{"title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
+             {"title": "Ref", "value": "${env.GITHUB_REF}", "short": true },
+             {"title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]
+
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [test]
@@ -70,3 +84,16 @@ jobs:
           tags: |
             jlaasonen/ebl-api:master
             ${{format('jlaasonen/ebl-api:master.{0}', github.run_number)}}
+      
+      - uses: edge/simple-slack-notify@v1.1.1
+        if: always()
+        with:
+          channel: '#continuous-integration'
+          status: ${{ job.status }}
+          success_text: 'Building eBL API image #${env.GITHUB_RUN_NUMBER} completed successfully.'
+          failure_text: 'Building eBL API image #${env.GITHUB_RUN_NUMBER} failed.'
+          cancelled_text: 'Building eBL API image #${env.GITHUB_RUN_NUMBER} was cancelled.'
+          fields: |
+            [{"title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
+             {"title": "Ref", "value": "${env.GITHUB_REF}", "short": true },
+             {"title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]
