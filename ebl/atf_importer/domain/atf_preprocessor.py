@@ -62,37 +62,6 @@ class ATF_Preprocessor:
         converted_line_array = words_serializer.result
         return converted_line,converted_line_array,words_serializer.alter_lemline_at
 
-    def manually_correct_textline(self,line):
-
-        skip = False
-
-        while True:
-            print("Please correct the following line (enter 'skip' to skip this line): ")
-            print(line)
-            corrected_line = input()
-
-            try:
-                if corrected_line == "skip":
-                    skip = True
-                    break
-
-                corrected_line = re.sub("([\[<])([\*:])(.*)", r"\1 \2\3", corrected_line)  # convert [* => [  <* => < *
-                corrected_line = re.sub("(\*)([\]>])(.*)", r"\1 \2\3", corrected_line)  # convert *] => * ]  ?
-
-                corrected_line = corrected_line.replace("\t", " ")  # convert tabs to spaces
-                corrected_line = ' '.join(corrected_line.split())  # remove multiple spaces
-                print(corrected_line)
-                tree_corrected = self.EBL_PARSER.parse(corrected_line)
-                converted_line, converted_line_array, alter_lemline_at = self.convert_textline(tree_corrected)
-                self.logger.info("line '" + corrected_line + "' now is valid!")
-                break
-
-            except Exception as e:
-                self.logger.error(e)
-
-            pass
-        return converted_line, converted_line_array, tree_corrected.data, alter_lemline_at,skip
-
     def process_line(self,atf):
         self.logger.debug("Original line: '"+atf+"'")
         original_atf = atf
@@ -157,14 +126,8 @@ class ATF_Preprocessor:
                     except Exception as e:
                         self.logger.error(traceback.format_exc())
                         self.logger.error("Could not parse converted line")
-
-                        converted_line, converted_line_array, data, alter_lemline_at, skip = self.manually_correct_textline(original_atf)
-
-                        if (skip):
-                            self.logger.error(traceback.format_exc())
-                            return None, None, None, None
-                        else:
-                            return converted_line, converted_line_array, data, alter_lemline_at
+                        self.unparseable_lines.append(original_atf)
+                        return None, None, None, None
 
                     self.logger.debug("Converted line as " + tree.data + " --> '" + converted_line + "'")
 
@@ -181,17 +144,10 @@ class ATF_Preprocessor:
 
                 if "translation" in atf:
                     self.stop_preprocessing = True
-                    return None,None,None,None
 
-                else: # convert manually if line cannot be parsed
-                    converted_line, converted_line_array, data, alter_lemline_at, skip = self.manually_correct_textline(original_atf)
+                self.unparseable_lines.append(original_atf)
+                return None,None,None,None
 
-                    if (skip):
-                        self.logger.error(traceback.format_exc())
-                        self.unparseable_lines.append(atf)
-                        return None, None, None, None
-                    else:
-                        return converted_line, converted_line_array, data, alter_lemline_at
 
     def convert_lines(self,file,filename):
         self.logger.info(Util.print_frame("Converting: \""+filename+".atf\""))
