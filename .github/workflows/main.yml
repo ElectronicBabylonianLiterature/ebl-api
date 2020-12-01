@@ -68,5 +68,5 @@ jobs:
         with:
           push: true
           tags: |
-            jlaasonen/ebl-api:latest
+            jlaasonen/ebl-api:master
             ${{format('jlaasonen/ebl-api:master.{0}', github.run_number)}}
