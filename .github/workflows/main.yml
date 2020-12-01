@@ -50,3 +50,22 @@ jobs:
         if: success() || steps.unit_tests.outcome == 'failure'
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-buildx-action@v1
+        
+      - uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            jlaasonen/ebl-api:test
+
+      - run: echo ${{ steps.docker_build.outputs.digest }}
