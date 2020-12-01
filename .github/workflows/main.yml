@@ -40,19 +40,19 @@ jobs:
         if: success() || steps.install.outcome == 'success'
         run: pipenv run pyre check
 
-      #- name: Unit Tests
-      #  id: unit_tests
-      #  env:
-      #    CI: true
-      #  run: pipenv run test
-      #    
-      #- uses: paambaati/codeclimate-action@v2.7.4
-      #  if: success() || steps.unit_tests.outcome == 'failure'
-      #  env:
-      #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      - name: Unit Tests
+        id: unit_tests
+        env:
+          CI: true
+        run: pipenv run test
+          
+      - uses: paambaati/codeclimate-action@v2.7.4
+        if: success() || steps.unit_tests.outcome == 'failure'
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           
   docker:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [test]
     runs-on: ubuntu-latest
     steps:
@@ -68,5 +68,5 @@ jobs:
         with:
           push: true
           tags: |
-            jlaasonen/ebl-api:test
-            ${{format('jlaasonen/ebl-api:{0}.{1}', github.ref, github.run_number)}}
+            jlaasonen/ebl-api:latest
+            ${{format('jlaasonen/ebl-api:master.{0}', github.run_number)}}
