@@ -6,13 +6,12 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
-
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -47,6 +46,13 @@ class LineToVecEncoding(Enum):
     TRIPLE_RULING = 4
     END = 5
 
+    @staticmethod
+    def from_list(sequence: Sequence[int]) -> Tuple["LineToVecEncoding", ...]:
+        return tuple(map(LineToVecEncoding, sequence))
+
+
+LineToVecEncodings = Tuple[LineToVecEncoding, ...]
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class Fragment:
@@ -71,12 +77,12 @@ class Fragment:
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
-    line_to_vec: Optional[Tuple[LineToVecEncoding, ...]] = None
+    line_to_vec: Optional[LineToVecEncodings] = None
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
-    def set_line_to_vec(self, line_to_vec: Tuple[LineToVecEncoding, ...]) -> "Fragment":
+    def set_line_to_vec(self, line_to_vec: LineToVecEncodings) -> "Fragment":
         return attr.evolve(self, line_to_vec=line_to_vec)
 
     def update_transliteration(

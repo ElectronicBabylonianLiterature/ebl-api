@@ -24,6 +24,7 @@ from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
@@ -153,6 +154,11 @@ def fragment_finder(
     return FragmentFinder(
         bibliography, fragment_repository, dictionary, photo_repository, file_repository
     )
+
+
+@pytest.fixture
+def fragment_matcher(fragment_repository):
+    return FragmentMatcher(fragment_repository)
 
 
 @pytest.fixture

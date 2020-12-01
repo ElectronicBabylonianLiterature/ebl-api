@@ -8,9 +8,8 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 
 SCHEMA = FragmentSchema()
 
@@ -51,7 +50,7 @@ def test_update_transliteration(
 def test_update_line_to_vec(
     fragment_updater, user, fragment_repository, changelog, when
 ):
-    line_to_vec = tuple(map(LineToVecEncoding, [0, 1, 1, 2, 1, 2, 1]))
+    line_to_vec = LineToVecEncoding.from_list([0, 1, 1, 2, 1, 2, 1])
     transliterated_fragment = TransliteratedFragmentFactory.build(line_to_vec=None)
     number = transliterated_fragment.number
     expected_fragment = transliterated_fragment.set_line_to_vec(line_to_vec)

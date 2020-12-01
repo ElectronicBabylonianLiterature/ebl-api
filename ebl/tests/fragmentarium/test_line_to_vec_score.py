@@ -1,6 +1,7 @@
 import pytest  # pyre-ignore[16
 
-from ebl.fragmentarium.matching_fragments.score import score, score_weighted
+from ebl.fragmentarium.domain.fragment import LineToVecEncoding
+from ebl.fragmentarium.application.line_to_vec_score import score, score_weighted
 
 
 @pytest.mark.parametrize(
@@ -26,5 +27,7 @@ from ebl.fragmentarium.matching_fragments.score import score, score_weighted
     ],
 )
 def test_matching_subsequence(seq1, seq2, unweighted_score, weighted_score):
+    seq1 = LineToVecEncoding.from_list(seq1)
+    seq2 = LineToVecEncoding.from_list(seq2)
     assert score(seq1, seq2) == unweighted_score
     assert score_weighted(seq1, seq2) == weighted_score

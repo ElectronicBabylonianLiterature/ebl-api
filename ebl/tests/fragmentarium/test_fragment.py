@@ -2,15 +2,17 @@ import attr
 import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
-from ebl.fragmentarium.matching_fragments.line_to_vec_updater import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Measure,
     UncuratedReference,
     Genre,
+    LineToVecEncoding,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
+from ebl.fragmentarium.application.create_line_to_vec import create_line_to_vec
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -26,7 +28,6 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain.text import Text
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def test_number():
@@ -245,3 +246,14 @@ def test_set_line_to_vec():
     line_to_vec = create_line_to_vec(fragment.text.lines)
     updated_fragment = fragment.set_line_to_vec(line_to_vec)
     assert updated_fragment.line_to_vec == line_to_vec
+
+
+def test_line_to_vec_encoding_from_list():
+    assert (
+        LineToVecEncoding(0),
+        LineToVecEncoding(1),
+        LineToVecEncoding(2),
+        LineToVecEncoding(3),
+        LineToVecEncoding(4),
+        LineToVecEncoding(5),
+    ) == LineToVecEncoding.from_list([0, 1, 2, 3, 4, 5])

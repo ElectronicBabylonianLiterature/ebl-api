@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
 from marshmallow import EXCLUDE  # pyre-ignore[21]
 
@@ -8,7 +8,7 @@ from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchem
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.fragmentarium.domain.fragment import LineToVecEncoding
+from ebl.fragmentarium.domain.fragment import LineToVecEncoding, LineToVecEncodings
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -88,23 +88,17 @@ class MongoFragmentRepository(FragmentRepository):
             fragment["museumNumber"] for fragment in cursor
         )
 
-    def query_transliterated_line_to_vec(
-        self
-    ) -> List[Dict[str, Tuple[LineToVecEncoding, ...]]]:
+    def query_transliterated_line_to_vec(self) -> Dict[str, LineToVecEncodings]:
         cursor = self._collection.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
         )
 
-        return [
-            {
-                str(
-                    MuseumNumberSchema().load(  # pyre-ignore[16]
-                        fragment["museumNumber"]
-                    )
-                ): tuple(map(LineToVecEncoding, fragment["lineToVec"]))
-            }
+        return {
+            str(
+                MuseumNumberSchema().load(fragment["museumNumber"])  # pyre-ignore[16]
+            ): LineToVecEncoding.from_list(fragment["lineToVec"])
             for fragment in cursor
-        ]
+        }
 
     def query_by_transliterated_sorted_by_date(self):
         cursor = self._collection.aggregate(aggregate_latest())

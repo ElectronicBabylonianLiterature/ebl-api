@@ -4,7 +4,7 @@ import falcon  # pyre-ignore
 import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
-from ebl.fragmentarium.matching_fragments.line_to_vec_updater import create_line_to_vec
+from ebl.fragmentarium.application.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory

@@ -1,4 +1,6 @@
+import getopt
 import math
+import sys
 from functools import reduce
 from typing import Callable, Iterable, List, Sequence
 
@@ -14,8 +16,9 @@ from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.create_line_to_vec import create_line_to_vec
 from ebl.transliteration.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.infrastructure.menoizing_sign_repository import (
@@ -28,10 +31,17 @@ def update_fragment(
     transliteration_factory: TransliterationUpdateFactory,
     updater: FragmentUpdater,
     fragment: Fragment,
+    line_to_vec: bool,
 ) -> None:
-    transliteration = transliteration_factory.create(fragment.text.atf, fragment.notes)
     user = ApiUser("update_fragments.py")
-    updater.update_transliteration(fragment.number, transliteration, user)
+    if line_to_vec:
+        line_to_vec_encoding = create_line_to_vec(fragment.text.lines)
+        updater.update_line_to_vec(fragment.number, line_to_vec_encoding, user)
+    else:
+        transliteration = transliteration_factory.create(
+            fragment.text.atf, fragment.notes
+        )
+        updater.update_transliteration(fragment.number, transliteration, user)
 
 
 def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:
@@ -102,7 +112,10 @@ class State:
 
 
 def update_fragments(
-    numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
+    numbers: Iterable[MuseumNumber],
+    id_: int,
+    context_factory: Callable[[], Context],
+    line_to_vec: bool,
 ) -> State:
     context = context_factory()
     fragment_repository = context.fragment_repository
@@ -113,7 +126,7 @@ def update_fragments(
         try:
             fragment = fragment_repository.query_by_museum_number(number)
             try:
-                update_fragment(transliteration_factory, updater, fragment)
+                update_fragment(transliteration_factory, updater, fragment, line_to_vec)
                 state.add_updated()
             except Exception as error:
                 state.add_error(error, fragment)
@@ -138,10 +151,19 @@ def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 4
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "l", ["lineToVec"])
+    except getopt.GetoptError as error:
+        print(error)
+        sys.exit(2)
+    line_to_vec = False
+    if opts or args:
+        print("Updating line_to_vec property on fragments")
+        line_to_vec = True
+    number_of_jobs = 16
     chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs, prefer="threads")(
-        delayed(update_fragments)(subset, index, create_context_)
+    states = Parallel(n_jobs=number_of_jobs, prefer="processes")(
+        delayed(update_fragments)(subset, index, create_context_, line_to_vec)
         for index, subset in enumerate(chunks)
     )
     final_state = reduce(

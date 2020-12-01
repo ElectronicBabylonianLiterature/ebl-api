@@ -1,9 +1,9 @@
 from functools import singledispatch
-from typing import Sequence, Tuple, Optional
+from typing import Sequence, Optional
 
 import pydash  # pyre-ignore[21]
 
-from ebl.fragmentarium.domain.fragment import LineToVecEncoding
+from ebl.fragmentarium.domain.fragment import LineToVecEncoding, LineToVecEncodings
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
 from ebl.transliteration.domain.line import Line
@@ -16,10 +16,10 @@ def line_to_vec(line: Line, _) -> Optional[LineToVecEncoding]:
 
 
 @line_to_vec.register
-def _(line: TextLine, first_line=True):
+def _line_to_vec_text(line: TextLine, first_line=True):
     if first_line and (
-        line.line_number.has_prime
-        or line.line_number.prefix_modifier
+        line.line_number.has_prime  # pyre-ignore[16]
+        or line.line_number.prefix_modifier  # pyre-ignore[16]
     ):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
@@ -27,7 +27,7 @@ def _(line: TextLine, first_line=True):
 
 
 @line_to_vec.register
-def _(line: RulingDollarLine, _):
+def _line_to_vec_ruling(line: RulingDollarLine, _):
     if line.number == atf.Ruling.SINGLE:
         return LineToVecEncoding.SINGLE_RULING
     elif line.number == atf.Ruling.DOUBLE:
@@ -37,12 +37,12 @@ def _(line: RulingDollarLine, _):
 
 
 @line_to_vec.register
-def _(line: StateDollarLine, _):
+def _line_to_vec_state(line: StateDollarLine, _):
     if line.extent == atf.Extent.END_OF:
         return LineToVecEncoding.END
 
 
-def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncoding, ...]:
+def create_line_to_vec(lines: Sequence[Line]) -> LineToVecEncodings:
     line_to_vec_result = []
     first_line = True
     for line in lines:

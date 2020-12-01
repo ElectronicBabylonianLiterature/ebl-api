@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.folio_pager_schema import FolioPagerInfoSchema
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_pager_schema import FragmentPagerInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -14,6 +15,7 @@ from ebl.fragmentarium.web.dtos import FragmentDtoSchema
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
+from ebl.fragmentarium.web.fragment_matcher import FragmentMatcherResource
 from ebl.fragmentarium.web.fragment_pager import FragmentPagerResource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsResource
@@ -45,6 +47,10 @@ def create_fragmentarium_routes(
     statistics = StatisticsResource(fragmentarium)
     fragments = FragmentsResource(finder)
     fragment_genre = FragmentGenreResource(updater)
+
+    fragment_matcher = FragmentMatcherResource(
+        FragmentMatcher(context.fragment_repository)
+    )
     fragment_search = FragmentSearch(
         fragmentarium, finder, context.get_transliteration_query_factory()
     )
@@ -62,6 +68,7 @@ def create_fragmentarium_routes(
     folios = FoliosResource(finder)
 
     api.add_route("/fragments", fragment_search)
+    api.add_route("/fragments/{number}/match", fragment_matcher)
     api.add_route("/fragments/{number}/genres", fragment_genre)
     api.add_route("/fragments/{number}", fragments)
     api.add_route("/fragments/{number}/pager", fragment_pager)
