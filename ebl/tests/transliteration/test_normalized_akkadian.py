@@ -100,6 +100,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
         "enclosureType": [],
         "uniqueLemma": [],
         "alignment": None,
+        "variant": None,
         "lemmatizable": lemmatizable,
         "normalized": True,
         "language": "AKKADIAN",

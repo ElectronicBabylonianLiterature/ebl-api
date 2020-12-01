@@ -4,7 +4,10 @@ import pytest  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.application.token_schemas import (
+    OneOfTokenSchema,
+    OneOfWordSchema,
+)
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway, PerhapsBrokenAway
@@ -97,7 +100,10 @@ def test_word(language, normalized, unique_lemma) -> None:
     parts = [Reading.of_name("ku")]
     erasure = ErasureState.NONE
     variant = Word.of([Reading.of_name("ra")])
-    word = Word.of(parts, language, normalized, unique_lemma, erasure, None, variant)
+    alignment = 1
+    word = Word.of(
+        parts, language, normalized, unique_lemma, erasure, alignment, variant
+    )
 
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
@@ -107,20 +113,24 @@ def test_word(language, normalized, unique_lemma) -> None:
     assert word.language == language
     assert word.normalized is normalized
     assert word.unique_lemma == unique_lemma
+    assert word.alignment == alignment
     assert word.variant == variant
 
     serialized = {
         "type": "Word",
         "value": word.value,
-        "uniqueLemma": [*unique_lemma],
+        "uniqueLemma": list(unique_lemma),
         "normalized": normalized,
         "language": word.language.name,
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
         "parts": OneOfTokenSchema().dump(parts, many=True),  # pyre-ignore[16]
         "enclosureType": [type.name for type in word.enclosure_type],
+        "alignment": 1,
+        "variant": OneOfWordSchema().dump(variant),  # pyre-ignore[16]
     }
-    assert_token_serialization(word.strip_alignment(), serialized)
+
+    assert_token_serialization(word, serialized)
 
 
 def test_clean_value() -> None:
