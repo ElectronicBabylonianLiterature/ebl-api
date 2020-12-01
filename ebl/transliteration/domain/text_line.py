@@ -4,7 +4,7 @@ from typing import Callable, Iterable, Sequence, Type, TypeVar, Union, cast
 import attr
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain import alignment as alignments
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
@@ -69,11 +69,13 @@ class TextLine(Line):
 
         return self._update_tokens(lemmatization, updater, LemmatizationError)
 
-    def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "TextLine":
+    def update_alignment(
+        self, alignment: Sequence["alignments.AlignmentToken"]
+    ) -> "TextLine":
         def updater(token, alignment_token):
             return token.set_alignment(alignment_token)
 
-        return self._update_tokens(alignment, updater, AlignmentError)
+        return self._update_tokens(alignment, updater, alignments.AlignmentError)
 
     def _update_tokens(
         self,

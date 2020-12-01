@@ -5,7 +5,7 @@ import attr
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain import alignment as alignments
 from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
@@ -61,13 +61,13 @@ class AbstractWord(Token):
         else:
             raise LemmatizationError(f"Cannot apply {lemma} to {self}.")
 
-    def set_alignment(self: A, alignment: AlignmentToken) -> A:
+    def set_alignment(self: A, alignment: "alignments.AlignmentToken") -> A:
         if self.value == alignment.value and (
             self.alignable or alignment.alignment is None
         ):
             return attr.evolve(self, alignment=alignment.alignment)
         else:
-            raise AlignmentError()
+            raise alignments.AlignmentError()
 
     def set_variant(self: A, variant: Optional["AbstractWord"]) -> A:
         return attr.evolve(self, variant=variant)
@@ -85,7 +85,9 @@ class AbstractWord(Token):
                 LemmatizationToken(token.value, self.unique_lemma)
             )
         if is_compatible and token.alignable:
-            result = result.set_alignment(AlignmentToken(token.value, self.alignment))
+            result = result.set_alignment(
+                alignments.AlignmentToken(token.value, self.alignment, self.variant)
+            )
         return result
 
 

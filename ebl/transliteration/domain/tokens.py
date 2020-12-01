@@ -5,7 +5,7 @@ from typing import AbstractSet, Optional, Sequence, Type, TypeVar
 import attr
 
 import ebl.transliteration.domain.atf as atf
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain import alignment as alignments
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
@@ -138,11 +138,11 @@ class Token(ABC):
                 f"Incompatible lemmatization token {lemma} for {self}"
             )
 
-    def set_alignment(self: T, alignment: AlignmentToken) -> T:
+    def set_alignment(self: T, alignment: "alignments.AlignmentToken") -> T:
         if alignment.alignment is None and alignment.value == self.value:
             return self
         else:
-            raise AlignmentError()
+            raise alignments.AlignmentError()
 
     def strip_alignment(self: T) -> T:
         return self

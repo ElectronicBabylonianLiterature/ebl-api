@@ -2,6 +2,13 @@ from typing import Optional, Sequence
 
 import attr
 
+from ebl.transliteration.domain import word_tokens
+from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.lark_parser import (
+    parse_normalized_akkadian_word,
+    parse_word,
+)
+
 
 class AlignmentError(Exception):
     def __init__(self):
@@ -12,13 +19,27 @@ class AlignmentError(Exception):
 class AlignmentToken:
     value: str
     alignment: Optional[int]
-    variant: str = ""
+    variant: Optional["word_tokens.AbstractWord"] = None
 
     @staticmethod
     def from_dict(data):
         return AlignmentToken(
-            data["value"], data.get("alignment"), data.get("variant") or ""
+            data["value"], data.get("alignment"), AlignmentToken._create_word(data)
         )
+
+    @staticmethod
+    def _create_word(data: dict) -> Optional["word_tokens.AbstractWord"]:
+        variant = data.get("variant")
+        if variant:
+            language = Language[data["language"]]
+            is_normalized = data["isNormalized"]
+
+            if language is Language.AKKADIAN and is_normalized:
+                return parse_normalized_akkadian_word(variant)
+            else:
+                return parse_word(variant).set_language(language, is_normalized)
+        else:
+            return None
 
 
 @attr.s(auto_attribs=True, frozen=True)
