@@ -12,10 +12,13 @@ class AlignmentError(Exception):
 class AlignmentToken:
     value: str
     alignment: Optional[int]
+    variant: str = ""
 
     @staticmethod
     def from_dict(data):
-        return AlignmentToken(data["value"], data.get("alignment"))
+        return AlignmentToken(
+            data["value"], data.get("alignment"), data.get("variant") or ""
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -3,8 +3,8 @@ from ebl.transliteration.domain.alignment import Alignment, AlignmentToken
 
 def test_alignment():
     assert Alignment.from_dict(
-        [[[{"value": "ku]-nu-ši", "alignment": 0}]]]
-    ) == Alignment((((AlignmentToken("ku]-nu-ši", 0),),),))
+        [[[{"value": "ku]-nu-ši", "alignment": 1, "variant": "kunusi"}]]]
+    ) == Alignment((((AlignmentToken("ku]-nu-ši", 1, "kunusi"),),),))
 
 
 def test_number_of_lines():
@@ -30,5 +30,5 @@ def test_number_of_manuscripts():
 
 def test_only_value():
     assert Alignment.from_dict([[[{"value": "ku]-nu-ši"}]]]) == Alignment(
-        (((AlignmentToken("ku]-nu-ši", None),),),)
+        (((AlignmentToken("ku]-nu-ši", None, ""),),),)
     )
