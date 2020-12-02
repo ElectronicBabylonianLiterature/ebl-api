@@ -76,10 +76,9 @@ class AbstractWord(Token):
             return token
 
     def _merge_word(self, token: A) -> A:
-        same_value = self.clean_value == token.clean_value
-        is_compatible = type(token) == type(self) and same_value
-
+        is_compatible = self._is_compatible(token)
         result = token
+
         if is_compatible and token.lemmatizable:
             result = result.set_unique_lemma(
                 LemmatizationToken(token.value, self.unique_lemma)
@@ -88,6 +87,11 @@ class AbstractWord(Token):
             result = result.set_alignment(self.alignment, self.variant)
 
         return result
+
+    def _is_compatible(self, token: Token) -> bool:
+        same_value = self.clean_value == token.clean_value
+        same_type = type(token) == type(self)
+        return same_type and same_value
 
 
 DEFAULT_LANGUAGE: Language = Language.AKKADIAN
