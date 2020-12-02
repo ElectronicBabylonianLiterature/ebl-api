@@ -9,7 +9,6 @@ from ebl.transliteration.application.token_schemas import (
     OneOfWordSchema,
 )
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway, PerhapsBrokenAway
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lemmatization import (
@@ -224,40 +223,11 @@ def test_set_unique_lemma_invalid(word) -> None:
 
 def test_set_alignment() -> None:
     word = Word.of([Reading.of_name("bu")])
-    alignment_index = 1
+    alignment = 1
     variant = Word.of([Reading.of_name("ra")])
-    alignment = AlignmentToken(word.value, alignment_index, variant)
-    expected = Word.of(
-        [Reading.of_name("bu")], alignment=alignment_index, variant=variant
-    )
+    expected = Word.of([Reading.of_name("bu")], alignment=alignment, variant=variant)
 
-    assert word.set_alignment(alignment) == expected
-
-
-def test_set_alignment_empty() -> None:
-    word = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
-    alignment = AlignmentToken("bu", None)
-    expected = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
-
-    assert word.set_alignment(alignment) == expected
-
-
-@pytest.mark.parametrize(  # pyre-ignore[56]
-    "word",
-    [
-        Word.of([Reading.of_name("mu")]),
-        Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-        Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
-        Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]),
-        Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
-        Word.of([Joiner.hyphen(), Reading.of_name("bu")]),
-        Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
-    ],
-)
-def test_set_alignment_invalid(word) -> None:
-    alignment = AlignmentToken("bu", 0)
-    with pytest.raises(AlignmentError):
-        word.set_alignment(alignment)
+    assert word.set_alignment(alignment, variant) == expected
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -337,5 +307,5 @@ def test_set_alignment_invalid(word) -> None:
         ),
     ],
 )
-def test_merge(old, new, expected) -> None:
+def test_merge(old, new: Word, expected: Word) -> None:
     assert old.merge(new) == expected

@@ -123,20 +123,20 @@ def test_set_unique_lemma_no_lemma(token):
 def test_set_alignment_incompatible(token):
     alignment = AlignmentToken("other-value", None)
     with pytest.raises(AlignmentError):
-        token.set_alignment(alignment)
+        alignment.apply(token)
 
 
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_non_empty_alignment(token):
     alignment = AlignmentToken(token.value, 0)
     with pytest.raises(AlignmentError):
-        token.set_alignment(alignment)
+        alignment.apply(token)
 
 
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_alignment_no_alignment(token):
     alignment = AlignmentToken(token.value, None)
-    assert token.set_alignment(alignment) == token
+    assert alignment.apply(token) == token
 
 
 @pytest.mark.parametrize("old", TOKENS)

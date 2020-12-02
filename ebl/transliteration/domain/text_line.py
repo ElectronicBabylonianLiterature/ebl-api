@@ -73,7 +73,7 @@ class TextLine(Line):
         self, alignment: Sequence["alignments.AlignmentToken"]
     ) -> "TextLine":
         def updater(token, alignment_token):
-            return token.set_alignment(alignment_token)
+            return alignment_token.apply(token)
 
         return self._update_tokens(alignment, updater, alignments.AlignmentError)
 
