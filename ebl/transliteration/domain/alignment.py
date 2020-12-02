@@ -34,10 +34,11 @@ class AlignmentToken:
             language = Language[data["language"]]
             is_normalized = data["isNormalized"]
 
-            if language is Language.AKKADIAN and is_normalized:
-                return parse_normalized_akkadian_word(variant)
-            else:
-                return parse_word(variant).set_language(language, is_normalized)
+            return (
+                parse_normalized_akkadian_word(variant)
+                if language is Language.AKKADIAN and is_normalized
+                else parse_word(variant).set_language(language, is_normalized)
+            )
         else:
             return None
 
