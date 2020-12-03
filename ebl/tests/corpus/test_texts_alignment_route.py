@@ -8,14 +8,29 @@ from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
+from ebl.transliteration.domain.language import Language
 
 ANY_USER = Guest()
-DTO = {"alignment": [[[{"value": "ku-[nu-ši]", "alignment": 0}]]]}
+DTO = {
+    "alignment": [
+        [
+            [
+                {
+                    "value": "ku-[nu-ši]",
+                    "alignment": 0,
+                    "variant": "KU",
+                    "language": "SUMERIAN",
+                    "isNormalized": False,
+                }
+            ]
+        ]
+    ]
+}
 
 
 def create_text_dto(text):
@@ -70,6 +85,10 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                                 BrokenAway.close(),
                                             ],
                                             alignment=0,
+                                            variant=Word.of(
+                                                [Logogram.of_name("KU")],
+                                                language=Language.SUMERIAN,
+                                            ),
                                         ),
                                     ),
                                 ),

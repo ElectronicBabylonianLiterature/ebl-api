@@ -5,7 +5,6 @@ import attr
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lemmatization import (
@@ -16,6 +15,7 @@ from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
 
 A = TypeVar("A", bound="AbstractWord")
+T = TypeVar("T", bound=Token)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -23,6 +23,7 @@ class AbstractWord(Token):
     unique_lemma: Sequence[WordId] = tuple()
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
+    variant: Optional["AbstractWord"] = None
 
     @property
     @abstractmethod
@@ -60,29 +61,37 @@ class AbstractWord(Token):
         else:
             raise LemmatizationError(f"Cannot apply {lemma} to {self}.")
 
-    def set_alignment(self: A, alignment: AlignmentToken) -> A:
-        if self.value == alignment.value and (
-            self.alignable or alignment.alignment is None
-        ):
-            return attr.evolve(self, alignment=alignment.alignment)
-        else:
-            raise AlignmentError()
+    def set_alignment(
+        self: A, alignment: Optional[int], variant: Optional["AbstractWord"]
+    ) -> A:
+        return attr.evolve(self, alignment=alignment, variant=variant)
 
     def strip_alignment(self: A) -> A:
-        return attr.evolve(self, alignment=None)
+        return attr.evolve(self, alignment=None, variant=None)
 
-    def merge(self, token: Token) -> Token:
-        same_value = self.clean_value == token.clean_value
-        is_compatible = type(token) == type(self) and same_value
+    def merge(self, token: T) -> T:
+        if isinstance(token, AbstractWord):
+            return self._merge_word(token)
+        else:
+            return token
 
+    def _merge_word(self, token: A) -> A:
+        is_compatible = self._is_compatible(token)
         result = token
+
         if is_compatible and token.lemmatizable:
             result = result.set_unique_lemma(
                 LemmatizationToken(token.value, self.unique_lemma)
             )
         if is_compatible and token.alignable:
-            result = result.set_alignment(AlignmentToken(token.value, self.alignment))
+            result = result.set_alignment(self.alignment, self.variant)
+
         return result
+
+    def _is_compatible(self, token: Token) -> bool:
+        same_value = self.clean_value == token.clean_value
+        same_type = type(token) == type(self)
+        return same_type and same_value
 
 
 DEFAULT_LANGUAGE: Language = Language.AKKADIAN
@@ -104,9 +113,17 @@ class Word(AbstractWord):
         unique_lemma: Sequence[WordId] = tuple(),
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
+        variant: Optional[AbstractWord] = None,
     ) -> W:
         return cls(
-            frozenset(), erasure, unique_lemma, alignment, parts, language, normalized
+            frozenset(),
+            erasure,
+            unique_lemma,
+            alignment,
+            parts,
+            variant,
+            language,
+            normalized,
         )
 
     @property
