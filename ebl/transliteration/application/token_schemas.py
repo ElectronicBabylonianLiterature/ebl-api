@@ -5,7 +5,7 @@ import pydash  # pyre-ignore
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
 from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
-from ebl.schemas import NameEnum, StringValueEnum
+from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -202,7 +202,7 @@ class CommentaryProtocolSchema(BaseTokenSchema):
 class DividerSchema(BaseTokenSchema):
     divider = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(StringValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -226,7 +226,7 @@ class ColumnSchema(BaseTokenSchema):
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
-    flags = fields.List(StringValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -238,7 +238,7 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
 
 class UnclearSignSchema(BaseTokenSchema):
-    flags = fields.List(StringValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -250,7 +250,7 @@ class UnclearSignSchema(BaseTokenSchema):
 
 
 class JoinerSchema(BaseTokenSchema):
-    enum_value = StringValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
+    enum_value = ValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -272,7 +272,7 @@ class NamedSignSchema(BaseTokenSchema):
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(StringValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
     sign = fields.Nested(lambda: OneOfTokenSchema(), allow_none=True)
 
 
@@ -327,14 +327,17 @@ class NumberSchema(NamedSignSchema):
         )
 
 
-class WordSchema(BaseTokenSchema):
+class BaseWordSchema(BaseTokenSchema):
+    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
     language = NameEnum(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
     alignment = fields.Integer(allow_none=True, missing=None)
-    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), missing=tuple())
+    variant = fields.Nested(lambda: OneOfWordSchema(), allow_none=True, missing=None)
 
+
+class WordSchema(BaseWordSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Word.of(
@@ -344,6 +347,7 @@ class WordSchema(BaseTokenSchema):
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
+            data["variant"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -351,15 +355,7 @@ class WordSchema(BaseTokenSchema):
         return pydash.omit_by(data, lambda value: value is None)
 
 
-class LoneDeterminativeSchema(BaseTokenSchema):
-    language = NameEnum(Language, required=True)
-    normalized = fields.Boolean(required=True)
-    lemmatizable = fields.Boolean(required=True)
-    unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
-    erasure = NameEnum(ErasureState, missing=ErasureState.NONE)
-    alignment = fields.Integer(allow_none=True, missing=None)
-    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), missing=tuple())
-
+class LoneDeterminativeSchema(BaseWordSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return LoneDeterminative.of(
@@ -369,6 +365,7 @@ class LoneDeterminativeSchema(BaseTokenSchema):
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
+            data["variant"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -391,7 +388,7 @@ class VariantSchema(BaseTokenSchema):
 class GraphemeSchema(BaseTokenSchema):
     name = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(StringValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -459,14 +456,8 @@ class LineBreakSchema(BaseTokenSchema):
         return LineBreak(frozenset(data["enclosure_type"]), data["erasure"])
 
 
-class AkkadianWordSchema(BaseTokenSchema):
-    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
-    modifiers = fields.List(StringValueEnum(Flag), required=True)
-    language = NameEnum(Language, missing=Language.AKKADIAN)
-    normalized = fields.Boolean(missing=True)
-    unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
-    alignment = fields.Integer(allow_none=True, missing=None)
-    lemmatizable = fields.Boolean(missing=True)
+class AkkadianWordSchema(BaseWordSchema):
+    modifiers = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -475,6 +466,7 @@ class AkkadianWordSchema(BaseTokenSchema):
             tuple(data["modifiers"]),
             tuple(data["unique_lemma"]),
             data["alignment"],
+            data["variant"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
@@ -498,7 +490,16 @@ class MetricalFootSeparatorSchema(Breakchema):
         )
 
 
-class OneOfTokenSchema(OneOfSchema):  # pyre-ignore[11]
+class OneOfWordSchema(OneOfSchema):  # pyre-ignore[11]
+    type_field = "type"
+    type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
+        "Word": WordSchema,
+        "LoneDeterminative": LoneDeterminativeSchema,
+        "AkkadianWord": AkkadianWordSchema,
+    }
+
+
+class OneOfTokenSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
         "Token": ValueTokenSchema,

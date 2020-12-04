@@ -55,13 +55,20 @@ class AkkadianWord(AbstractWord):
         modifier: Sequence[Flag] = tuple(),
         unique_lemma: Sequence[WordId] = tuple(),
         alignment: Optional[int] = None,
+        variant: Optional[AbstractWord] = None,
     ) -> "AkkadianWord":
         return AkkadianWord(
-            frozenset(), ErasureState.NONE, unique_lemma, alignment, parts, modifier
+            frozenset(),
+            ErasureState.NONE,
+            unique_lemma,
+            alignment,
+            parts,
+            variant,
+            modifier,
         )
 
 
-T = TypeVar("T", bound="Break")
+B = TypeVar("B", bound="Break")
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
@@ -82,15 +89,15 @@ class Break(Token):
         return f"({self._symbol})" if self.is_uncertain else self._symbol
 
     @classmethod
-    def of(cls: Type[T], is_uncertain: bool) -> T:
+    def of(cls: Type[B], is_uncertain: bool) -> B:
         return cls(frozenset(), ErasureState.NONE, is_uncertain)
 
     @classmethod
-    def certain(cls: Type[T]) -> T:
+    def certain(cls: Type[B]) -> B:
         return cls(frozenset(), ErasureState.NONE, False)
 
     @classmethod
-    def uncertain(cls: Type[T]) -> T:
+    def uncertain(cls: Type[B]) -> B:
         return cls(frozenset(), ErasureState.NONE, True)
 
 
