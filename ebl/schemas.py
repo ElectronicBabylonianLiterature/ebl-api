@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Type, Optional, Any, List, Union, Sequence, cast
+from typing import Type, Optional, Any, List
 
 from marshmallow import fields  # pyre-ignore
 
@@ -15,7 +15,7 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
         self._enum_class = enum_class
         super().__init__(enum=self._values(), **kwargs)  # pyre-ignore[28]
 
-    def _serialize(self, value, attr, obj, **kwargs) -> Optional[Union[str, int]]:
+    def _serialize(self, value, attr, obj, **kwargs):
         if isinstance(value, Enum) or value is None:
             return super()._serialize(  # pyre-ignore[16]
                 (self._serialize_enum(value) if value is not None else None),
@@ -35,26 +35,26 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
             raise self.make_error("invalid_value") from error  # pyre-ignore[16]
 
     @abstractmethod
-    def _serialize_enum(self, value: Enum) -> Union[int, str]:
+    def _serialize_enum(self, value: Enum):
         ...
 
     @abstractmethod
-    def _deserialize_enum(self, value: Union[int, str]) -> Enum:
+    def _deserialize_enum(self, value) -> Enum:
         ...
 
     @abstractmethod
-    def _values(self) -> Sequence[Union[int, str]]:
+    def _values(self):
         ...
 
 
-class ValueEnum(EnumField):
-    def _serialize_enum(self, value: Enum) -> Union[int, str]:
+class StringValueEnum(EnumField):
+    def _serialize_enum(self, value: Enum) -> str:
         return value.value
 
-    def _deserialize_enum(self, value: Union[int, str]) -> Enum:
+    def _deserialize_enum(self, value: str) -> Enum:
         return self._enum_class(value)
 
-    def _values(self) -> List[Union[int, str]]:
+    def _values(self) -> List[str]:
         return [e.value for e in self._enum_class]
 
 
@@ -62,8 +62,21 @@ class NameEnum(EnumField):
     def _serialize_enum(self, value: Enum) -> str:
         return value.name
 
-    def _deserialize_enum(self, value: Union[int, str]) -> Enum:
-        return self._enum_class[cast(str, value)]
+    def _deserialize_enum(self, value: str) -> Enum:
+        return self._enum_class[value]
 
     def _values(self) -> List[str]:
         return [e.name for e in self._enum_class]
+
+
+class IntValueEnum(EnumField):
+    def _serialize_enum(self, value: Enum) -> int:
+        return value.value
+
+    def _deserialize_enum(self, value: int) -> Enum:
+        return self._enum_class(value)
+
+    def _values(self) -> List[int]:
+        return [e.value for e in self._enum_class]
+
+

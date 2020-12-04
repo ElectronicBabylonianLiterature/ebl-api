@@ -8,7 +8,7 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ValueEnum
+from ebl.schemas import StringValueEnum, IntValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
 
 
@@ -27,7 +27,7 @@ class MeasureSchema(Schema):  # pyre-ignore[11]
 
 class RecordEntrySchema(Schema):
     user = fields.String(required=True)
-    type = ValueEnum(RecordType, required=True)
+    type = StringValueEnum(RecordType, required=True)
     date = fields.String(required=True)
 
     @post_load
@@ -98,7 +98,7 @@ class FragmentSchema(Schema):
     )
     genres = fields.Nested(GenreSchema, many=True, missing=tuple())
     line_to_vec = fields.List(
-        ValueEnum(LineToVecEncoding), missing=None, data_key="lineToVec"
+        IntValueEnum(LineToVecEncoding), missing=None, data_key="lineToVec"
     )
 
     @post_load

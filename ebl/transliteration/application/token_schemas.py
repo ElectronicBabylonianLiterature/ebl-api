@@ -5,7 +5,7 @@ import pydash  # pyre-ignore
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
 from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
-from ebl.schemas import NameEnum, ValueEnum
+from ebl.schemas import NameEnum, StringValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -202,7 +202,7 @@ class CommentaryProtocolSchema(BaseTokenSchema):
 class DividerSchema(BaseTokenSchema):
     divider = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(StringValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -226,7 +226,7 @@ class ColumnSchema(BaseTokenSchema):
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(StringValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -238,7 +238,7 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
 
 class UnclearSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(StringValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -250,7 +250,7 @@ class UnclearSignSchema(BaseTokenSchema):
 
 
 class JoinerSchema(BaseTokenSchema):
-    enum_value = ValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
+    enum_value = StringValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -272,7 +272,7 @@ class NamedSignSchema(BaseTokenSchema):
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(StringValueEnum(Flag), required=True)
     sign = fields.Nested(lambda: OneOfTokenSchema(), allow_none=True)
 
 
@@ -391,7 +391,7 @@ class VariantSchema(BaseTokenSchema):
 class GraphemeSchema(BaseTokenSchema):
     name = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(StringValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -461,7 +461,7 @@ class LineBreakSchema(BaseTokenSchema):
 
 class AkkadianWordSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
-    modifiers = fields.List(ValueEnum(Flag), required=True)
+    modifiers = fields.List(StringValueEnum(Flag), required=True)
     language = NameEnum(Language, missing=Language.AKKADIAN)
     normalized = fields.Boolean(missing=True)
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
