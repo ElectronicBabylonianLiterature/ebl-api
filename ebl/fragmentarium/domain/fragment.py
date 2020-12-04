@@ -1,9 +1,12 @@
-from enum import Enum
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 import attr
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.fragmentarium.application.create_line_to_vec import (
+    create_line_to_vec,
+    LineToVecEncodings,
+)
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -36,22 +39,6 @@ class Genre:
         category = tuple(category)
         if category not in genres:
             raise ValueError(f"'{category}' is not a valid genre")
-
-
-class LineToVecEncoding(Enum):
-    START = 0
-    TEXT_LINE = 1
-    SINGLE_RULING = 2
-    DOUBLE_RULING = 3
-    TRIPLE_RULING = 4
-    END = 5
-
-    @staticmethod
-    def from_list(sequence: Sequence[int]) -> Tuple["LineToVecEncoding", ...]:
-        return tuple(map(LineToVecEncoding, sequence))
-
-
-LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -98,6 +85,7 @@ class Fragment:
             notes=transliteration.notes,
             signs=transliteration.signs,
             record=record,
+            line_to_vec=create_line_to_vec(text.lines),
         )
 
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":

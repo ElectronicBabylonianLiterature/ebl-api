@@ -1,13 +1,29 @@
+from enum import Enum
 from functools import singledispatch
-from typing import Sequence, Optional
+from typing import Sequence, Optional, Tuple
 
 import pydash  # pyre-ignore[21]
 
-from ebl.fragmentarium.domain.fragment import LineToVecEncoding, LineToVecEncodings
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.text_line import TextLine
+
+
+class LineToVecEncoding(Enum):
+    START = 0
+    TEXT_LINE = 1
+    SINGLE_RULING = 2
+    DOUBLE_RULING = 3
+    TRIPLE_RULING = 4
+    END = 5
+
+    @staticmethod
+    def from_list(sequence: Sequence[int]) -> Tuple["LineToVecEncoding", ...]:
+        return tuple(map(LineToVecEncoding, sequence))
+
+
+LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @singledispatch

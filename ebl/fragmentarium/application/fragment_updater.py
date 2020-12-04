@@ -6,7 +6,7 @@ from ebl.changelog import Changelog
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, LineToVecEncodings
+from ebl.fragmentarium.domain.fragment import Fragment, Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
@@ -35,19 +35,8 @@ class FragmentUpdater:
         fragment = self._repository.query_by_museum_number(number)
 
         updated_fragment = fragment.update_transliteration(transliteration, user)
-
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
-
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
-
-    def update_line_to_vec(
-        self, number: MuseumNumber, line_to_vec: LineToVecEncodings, user: User
-    ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number)
-        updated_fragment = fragment.set_line_to_vec(line_to_vec)
-        self._create_changlelog(user, fragment, updated_fragment)
-        self._repository.update_line_to_vec(updated_fragment)
 
         return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
 

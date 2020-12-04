@@ -1,6 +1,9 @@
 from typing import List
 
-from ebl.fragmentarium.domain.fragment import LineToVecEncoding, LineToVecEncodings
+from ebl.fragmentarium.application.create_line_to_vec import (
+    LineToVecEncodings,
+    LineToVecEncoding,
+)
 
 
 def score_weighted(seq1: LineToVecEncodings, seq2: LineToVecEncodings) -> int:

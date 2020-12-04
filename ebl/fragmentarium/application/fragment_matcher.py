@@ -1,10 +1,21 @@
 from functools import singledispatch
-from typing import Tuple, Union, List, Dict
+from typing import Tuple, Union, List
 
+import attr
+
+from ebl.fragmentarium.application.create_line_to_vec import (
+    LineToVecEncoding,
+    LineToVecEncodings,
+)
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.domain.fragment import LineToVecEncoding, LineToVecEncodings
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.application.line_to_vec_score import score, score_weighted
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class LineToVecRanking:
+    score: List[Tuple[str, int]]
+    score_weighted: List[Tuple[str, int]]
 
 
 class FragmentMatcher:
@@ -30,9 +41,9 @@ class FragmentMatcher:
     def _sort_dict_desc(self, score: dict) -> dict:
         return {k: v for k, v in sorted(score.items(), key=lambda item: -item[1])}
 
-    def line_to_vec(
+    def rank_line_to_vec(
         self, candidate: Union[str, Tuple[int, ...]]
-    ) -> Dict[str, List[Tuple[str, str]]]:
+    ) -> LineToVecRanking:
         candidate_line_to_vec = self.parse_candidate(candidate)
         score_results = dict()
         score_weighted_results = dict()
@@ -44,9 +55,9 @@ class FragmentMatcher:
                 candidate_line_to_vec, line_to_vec
             )
 
-        return {
-            "score": list(self._sort_dict_desc(score_results).items())[:15],
-            "score_weighted": list(
-                self._sort_dict_desc(score_weighted_results).items()
-            )[:15],
-        }
+        return LineToVecRanking(
+            score=list(self._sort_dict_desc(score_results).items())[:15],
+            score_weighted=list(self._sort_dict_desc(score_weighted_results).items())[
+                :15
+            ],
+        )

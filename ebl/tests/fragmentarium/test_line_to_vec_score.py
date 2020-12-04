@@ -1,6 +1,6 @@
 import pytest  # pyre-ignore[16
 
-from ebl.fragmentarium.domain.fragment import LineToVecEncoding
+from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.application.line_to_vec_score import score, score_weighted
 
 

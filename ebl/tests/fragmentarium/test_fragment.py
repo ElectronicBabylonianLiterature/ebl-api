@@ -2,17 +2,19 @@ import attr
 import pytest  # pyre-ignore
 from freezegun import freeze_time  # pyre-ignore
 
+from ebl.fragmentarium.application.create_line_to_vec import (
+    create_line_to_vec,
+    LineToVecEncoding,
+)
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Measure,
     UncuratedReference,
     Genre,
-    LineToVecEncoding,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
-from ebl.fragmentarium.application.create_line_to_vec import create_line_to_vec
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -175,7 +177,9 @@ def test_add_transliteration(user):
     record = fragment.record.add_entry("", atf, user)
 
     updated_fragment = fragment.update_transliteration(transliteration, user)
-    expected_fragment = attr.evolve(fragment, text=text, record=record)
+    expected_fragment = attr.evolve(
+        fragment, text=text, record=record, line_to_vec=(LineToVecEncoding.TEXT_LINE,)
+    )
 
     assert updated_fragment == expected_fragment
 
@@ -208,7 +212,9 @@ def test_update_notes(user):
     transliteration = TransliterationUpdate(fragment.text, "new notes")
     updated_fragment = fragment.update_transliteration(transliteration, user)
 
-    expected_fragment = attr.evolve(fragment, notes=transliteration.notes)
+    expected_fragment = attr.evolve(
+        fragment, notes=transliteration.notes, line_to_vec=()
+    )
 
     assert updated_fragment == expected_fragment
 
