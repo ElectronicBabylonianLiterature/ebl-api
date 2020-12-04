@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Type, Optional, Any, List
+from typing import Type, Any, List
 
 from marshmallow import fields  # pyre-ignore
 
@@ -17,14 +17,14 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
 
     def _serialize(self, value, attr, obj, **kwargs):
         if isinstance(value, Enum) or value is None:
-            return super()._serialize(  # pyre-ignore[16]
+            return super()._serialize(
                 (self._serialize_enum(value) if value is not None else None),
                 attr,
                 obj,
                 **kwargs
             )
         else:
-            raise self.make_error("not_enum")  # pyre-ignore[16]
+            raise self.make_error("not_enum")
 
     def _deserialize(self, value, attr, data, **kwargs) -> Any:
         try:
@@ -78,5 +78,3 @@ class IntValueEnum(EnumField):
 
     def _values(self) -> List[int]:
         return [e.value for e in self._enum_class]
-
-

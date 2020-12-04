@@ -250,7 +250,9 @@ class UnclearSignSchema(BaseTokenSchema):
 
 
 class JoinerSchema(BaseTokenSchema):
-    enum_value = StringValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
+    enum_value = StringValueEnum(
+        atf.Joiner, required=True, data_key="value", load_only=True
+    )
 
     @post_load
     def make_token(self, data, **kwargs):
