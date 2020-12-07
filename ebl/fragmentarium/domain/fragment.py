@@ -69,9 +69,6 @@ class Fragment:
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
-    def set_line_to_vec(self, line_to_vec: LineToVecEncodings) -> "Fragment":
-        return attr.evolve(self, line_to_vec=line_to_vec)
-
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":

@@ -1,15 +1,14 @@
 import json
 
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
-from freezegun import freeze_time  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
+from freezegun import freeze_time  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.create_line_to_vec import create_line_to_vec
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -21,17 +20,13 @@ def test_update_transliteration(client, fragmentarium, user, database):
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
 
-    updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(
-            parse_atf_lark(updates["transliteration"]), updates["notes"]
-        ),
-        user,
-    )
-
     expected_json = {
         **create_response_dto(
-            updated_fragment.set_line_to_vec(
-                create_line_to_vec(updated_fragment.text.lines)
+            fragment.update_transliteration(
+                TransliterationUpdate(
+                    parse_atf_lark(updates["transliteration"]), updates["notes"]
+                ),
+                user,
             ),
             user,
             fragment.number == MuseumNumber("K", "1"),
@@ -56,49 +51,17 @@ def test_update_transliteration(client, fragmentarium, user, database):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
-def test_update_transliteration_line_to_vec(
-    client, fragmentarium, signs, sign_repository, transliteration_factory, user
-):
-
-    for sign in signs:
-        sign_repository.create(sign)
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragmentarium.create(lemmatized_fragment)
-    lines = lemmatized_fragment.text.atf.split("\n")
-    lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
-    updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
-    updated_transliteration = transliteration_factory.create(
-        updates["transliteration"], updates["notes"]
-    )
-    update_lemmatized_fragment = lemmatized_fragment.update_transliteration(
-        updated_transliteration, user
-    )
-
-    expected_json = create_response_dto(
-        update_lemmatized_fragment.set_line_to_vec(
-            create_line_to_vec(update_lemmatized_fragment.text.lines)
-        ),
-        user,
-        lemmatized_fragment.number == MuseumNumber("K", "1"),
-    )
-
-    post_result = client.simulate_post(
-        f"/fragments/{lemmatized_fragment.number}/transliteration",
-        body=json.dumps(updates),
-    )
-
-    assert post_result.status == falcon.HTTP_OK
-    assert post_result.json == expected_json
-
-    updated_fragment = client.simulate_get(
-        f"/fragments/{lemmatized_fragment.number}"
-    ).json
-    assert updated_fragment == expected_json
-
-
-@freeze_time("2018-09-07 15:41:24.032")
+@pytest.mark.parametrize(
+    "new_transliteration", ["2'. [...] GI₆ mu u₄-š[u ...]", "$ single ruling"]
+)
 def test_update_transliteration_merge_lemmatization(
-    client, fragmentarium, signs, sign_repository, transliteration_factory, user
+    new_transliteration,
+    client,
+    fragmentarium,
+    signs,
+    sign_repository,
+    transliteration_factory,
+    user,
 ):
 
     for sign in signs:
@@ -106,19 +69,13 @@ def test_update_transliteration_merge_lemmatization(
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
-    lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
+    lines[1] = new_transliteration
     updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
-    update_lemmatized_fragment = lemmatized_fragment.update_transliteration(
-        updated_transliteration, user
-    )
-
     expected_json = create_response_dto(
-        update_lemmatized_fragment.set_line_to_vec(
-            create_line_to_vec(update_lemmatized_fragment.text.lines)
-        ),
+        lemmatized_fragment.update_transliteration(updated_transliteration, user),
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )

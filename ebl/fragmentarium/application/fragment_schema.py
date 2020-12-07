@@ -107,9 +107,7 @@ class FragmentSchema(Schema):
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = (
-            tuple(LineToVecEncoding(line) for line in data["line_to_vec"])
-            if data["line_to_vec"] is not None
-            else None
+            tuple(data["line_to_vec"]) if data["line_to_vec"] is not None else None
         )
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])

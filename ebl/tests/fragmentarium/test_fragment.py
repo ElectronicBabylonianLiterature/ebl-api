@@ -1,11 +1,8 @@
 import attr
-import pytest  # pyre-ignore
-from freezegun import freeze_time  # pyre-ignore
+import pytest  # pyre-ignore[21]
+from freezegun import freeze_time  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.create_line_to_vec import (
-    create_line_to_vec,
-    LineToVecEncoding,
-)
+from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
@@ -245,21 +242,3 @@ def test_set_references():
     updated_fragment = fragment.set_references(references)
 
     assert updated_fragment.references == references
-
-
-def test_set_line_to_vec():
-    fragment = TransliteratedFragmentFactory(line_to_vec=None)
-    line_to_vec = create_line_to_vec(fragment.text.lines)
-    updated_fragment = fragment.set_line_to_vec(line_to_vec)
-    assert updated_fragment.line_to_vec == line_to_vec
-
-
-def test_line_to_vec_encoding_from_list():
-    assert (
-        LineToVecEncoding(0),
-        LineToVecEncoding(1),
-        LineToVecEncoding(2),
-        LineToVecEncoding(3),
-        LineToVecEncoding(4),
-        LineToVecEncoding(5),
-    ) == LineToVecEncoding.from_list([0, 1, 2, 3, 4, 5])

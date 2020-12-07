@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon  # pyre-ignore[21]
 import pytest  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
