@@ -12,34 +12,18 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
     "atf, expected",
     [
         [
+            "1. x [...]\n@colophon\n2. x [...]",
+            (LineToVecEncoding.from_list([0,1, 1]),),
+        ],
+[
             "1'. x [...]\n@colophon\n2'. x [...]",
-            (LineToVecEncoding.from_list([1, 2]),),
+            (LineToVecEncoding.from_list([1, 1]),),
         ],
         [
-            "1'. x [...]\n@column 1\n2'. x [...]",
-            (LineToVecEncoding.from_list([1, 2]),),
+            "1. x [...]\n@column 1\n2. x [...]",
+            (LineToVecEncoding.from_list([0,1, 1]),),
         ],
-        [
-            "1'. x [...]\n@column 2\n1'. x [...]",
-            (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1])),
-        ],
-        [
-            "1'. x [...]\n@obverse\n2'. x [...]",
-            (LineToVecEncoding.from_list([1, 2]),),
-        ],
-        [
-            "1'. x [...]\n@obverse\n1'. x [...]",
-            (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1])),
-        ],
-        [
-            "@obverse\n1'. x [...]\n@reverse\n1'. x [...]\n2'. x [...]\n@edge\n1'. x [...]",
-            (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1, 2]),
-             LineToVecEncoding.from_list([1])),
-        ],
-        [
-            "1. x [...]\n2. x [...]\n$ end of side\n1'. x [...]",
-            (LineToVecEncoding.from_list([1,1, 5]), LineToVecEncoding.from_list([0])),
-        ],
+
     ],
 )
 def test_create_line_to_vec_1(atf, expected, transliteration_factory):

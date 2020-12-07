@@ -34,8 +34,8 @@ def line_to_vec(line: Line, _: bool) -> Optional[LineToVecEncoding]:
 
 
 @line_to_vec.register(TextLine)
-def _line_to_vec_text(line: TextLine, first_line=True):
-    if first_line and (
+def _line_to_vec_text(line: TextLine, first_line=False):
+    if first_line and not(
             line.line_number.has_prime  # pyre-ignore[16]
             or line.line_number.prefix_modifier  # pyre-ignore[16]
     ):
@@ -105,6 +105,6 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
             if line_to_vec_encoding:
                 line_to_vec_intermediate_result.append(line_to_vec_encoding)
             first_line = False
-        line_to_vec_result.append(tuple(line_to_vec_intermediate_result))
+        line_to_vec_result.append(line_to_vec_intermediate_result)
         line_to_vec_intermediate_result = []
-    return tuple(line_to_vec_result)
+    return tuple([tuple(pydash.flatten(encodings)) for encodings in line_to_vec_result])
