@@ -308,14 +308,19 @@ class ATF_Importer:
             self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" failed"))
             return
 
-        # insert transliteration
-        self.insert_translitertions(transliteration_factory, updater, ebl_lines['transliteration'], museum_number)
-        # insert lemmatization
-        self.insert_lemmatization(updater, ebl_lines['lemmatization'], museum_number)
+        try:
 
-        success.append(filename + " successfully imported")
-        self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" finished"))
+            # insert transliteration
+            self.insert_translitertions(transliteration_factory, updater, ebl_lines['transliteration'], museum_number)
+            # insert lemmatization
+            self.insert_lemmatization(updater, ebl_lines['lemmatization'], museum_number)
 
+            success.append(filename + " successfully imported")
+            self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" finished"))
+
+        except Exception as e:
+            self.logger.error(filename + " could not be imported: "+ str(e))
+            failed.append(filename + " could not be imported: "+ str(e))
 
 
     def start(self):
@@ -323,11 +328,12 @@ class ATF_Importer:
         self.logger.info("Atf-Importer started...")
 
         #cli arguments
+
         parser = argparse.ArgumentParser(description='Converts ATF-files to eBL-ATF standard.')
         parser.add_argument('-i', "--input", required=True,
                             help='path of the input directory')
-        parser.add_argument('-o', "--output", required=False,
-                            help='path of the output directory')
+        parser.add_argument('-l', "--logdir", required=True,
+                            help='path of the log files directory')
         parser.add_argument('-g', "--glossary", required=True,
                             help='path to the glossary file')
 
@@ -348,7 +354,7 @@ class ATF_Importer:
                 filename = split[-1]
                 filename = filename.split(".")[0]
                 # convert all lines
-                self.atf_preprocessor = ATF_Preprocessor()
+                self.atf_preprocessor = ATF_Preprocessor(args.logdir)
                 converted_lines = self.atf_preprocessor.convert_lines(filepath,filename)
 
                 self.logger.info(Util.print_frame("Formatting to EBL-ATF of "+ filename + ".atf"))
@@ -357,21 +363,23 @@ class ATF_Importer:
                 self.logger.info(Util.print_frame("Inserting converted lines of "+ filename + ".atf into db"))
                 self.insert_into_db(ebl_lines,filename)
 
-            with open("../debug/not_lemmatized.txt", "w", encoding='utf8') as outputfile:
-                    for key in not_lemmatized:
+            if args.logdir:
+
+                with open(args.logdir+"not_lemmatized.txt", "w", encoding='utf8') as outputfile:
+                        for key in not_lemmatized:
+                            outputfile.write(key + "\n")
+
+                with open(args.logdir+"error_lines.txt", "w", encoding='utf8') as outputfile:
+                    for key in error_lines:
                         outputfile.write(key + "\n")
 
-            with open("../debug/error_lines.txt", "w", encoding='utf8') as outputfile:
-                for key in error_lines:
-                    outputfile.write(key + "\n")
+                with open(args.logdir+"not_imported.txt", "w", encoding='utf8') as outputfile:
+                    for entry in failed:
+                        outputfile.write(entry + "\n")
 
-            with open("../debug/not_imported.txt", "w", encoding='utf8') as outputfile:
-                for entry in failed:
-                    outputfile.write(entry + "\n")
-
-            with open("../debug/imported.txt", "w", encoding='utf8') as outputfile:
-                for entry in success:
-                    outputfile.write(entry+ "\n")
+                with open(args.logdir+"imported.txt", "w", encoding='utf8') as outputfile:
+                    for entry in success:
+                        outputfile.write(entry+ "\n")
 
 if __name__ == '__main__':
     a = ATF_Importer()

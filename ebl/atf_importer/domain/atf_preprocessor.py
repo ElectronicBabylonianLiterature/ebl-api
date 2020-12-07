@@ -17,7 +17,7 @@ import logging
 
 class ATF_Preprocessor:
 
-    def __init__(self):
+    def __init__(self,logdir):
         self.EBL_PARSER = Lark.open("../../transliteration/domain/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
         self.ORACC_PARSER = Lark.open("lark-oracc/oracc_atf.lark", maybe_placeholders=True, rel_to=__file__)
         self.logger = logging.getLogger("Atf-Preprocessor")
@@ -34,6 +34,7 @@ class ATF_Preprocessor:
                                   "empty_line"
                                   ]
         self.stop_preprocessing = False
+        self.logdir = logdir
 
     def get_empty_conversion(self,tree):
         line_serializer = Line_Serializer()
@@ -170,7 +171,7 @@ class ATF_Preprocessor:
 
         self.logger.info(Util.print_frame("Preprocessing finished"))
 
-        with open("../debug/unparseable_lines_"+filename+".txt", "w", encoding='utf8') as outputfile:
+        with open(self.logdir+"unparseable_lines_"+filename+".txt", "w", encoding='utf8') as outputfile:
             for key in self.unparseable_lines:
                 outputfile.write(key + "\n")
 

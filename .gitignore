@@ -120,3 +120,4 @@ run_backend.sh
 invalid_fragments.tsv
 invalid_texts.tsv
 ebl/atf_importer/input_new/
+ebl/atf_importer/logs/
