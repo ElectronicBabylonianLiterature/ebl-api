@@ -38,49 +38,49 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
         ],
         [
             "1. x [...]\n2. x [...]\n$ end of side\n1'. x [...]",
-            (LineToVecEncoding.from_list([1, 5]), LineToVecEncoding.from_list([1])),
+            (LineToVecEncoding.from_list([1,1, 5]), LineToVecEncoding.from_list([0])),
         ],
     ],
 )
 def test_create_line_to_vec_1(atf, expected, transliteration_factory):
-    transliteration = parse_atf_lark(atf)
-    #line_to_vec = create_line_to_vec(transliteration)
-    #assert line_to_vec == line_to_vec
+    lines = parse_atf_lark(atf).lines
+    assert create_line_to_vec(lines) == expected
 
 
 @pytest.mark.parametrize(
     "atf, expected",
     [
-        [
+[
             "1'. x [...]\n@colophon\n2'. x [...]",
-            ["1'. x [...]\n@colophon\n2'. x [...]"],
+            [3,3],
         ],
         [
             "1'. x [...]\n@column 2\n1'. x [...]",
-            ["1'. x [...]\n@column 2", "1. x [...]"],
+            [2,2],
         ],
         [
             "1'. x [...]\n@obverse\n2'. x [...]",
-            ["1'. x [...]\n@obverse\n2'. x [...]"],
+            [3,3],
         ],
         [
             "1'. x [...]\n@obverse\n1'. x [...]",
-            ["1'. x [...]\n@obverse 2", "1. x [...]"],
-        ],
-        [
-            "@obverse\n1'. x [...]\n@reverse\n1'. x [...]\n2'. x [...]\n@edge\n1'. x [...]",
-            ["@obverse\n1'. x [...]\n@reverse", "1'. x [...]\n2'. x [...]\n@edge", "1'. x [...]"],
+            [2, 2],
         ],
         [
             "1. x [...]\n2. x [...]\n$ end of side\n1'. x [...]",
-            ["1. x [...]\n2. x [...]\n$ end of side\n", "1'. x [...]"],
+            [3,3],
         ],
     ],
 )
 def test_split_lines(atf, expected):
-    text = parse_atf_lark(atf)
-    splitted_lines = tuple([parse_atf_lark(atf).lines for atf in expected])
-    assert split_lines(text.lines) == splitted_lines
+    lines = parse_atf_lark(atf).lines
+    splitted_lines = tuple([line for line in [lines[:expected[0]], lines[expected[1]:]] if len(line)])
+    assert split_lines(lines) == splitted_lines
+
+def test_split_multiple_lines():
+    lines = parse_atf_lark("@obverse\n1'. x [...]\n@reverse\n1'. x [...]\n2'. x [...]\n@edge\n1'. x [...]").lines
+    splitted_lines = tuple([lines[:3], lines[3:6], lines[6:]])
+    assert split_lines(lines) == splitted_lines
 
 
 def test_create_line_to_vec():

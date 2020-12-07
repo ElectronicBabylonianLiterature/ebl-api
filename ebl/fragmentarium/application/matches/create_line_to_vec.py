@@ -77,17 +77,17 @@ def _get_line_number_range(line_number: LineNumberRange) -> int:
     return line_number.end.number
 
 
-def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line,...],...]:
+def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line, ...], ...]:
     last_line_number = -1
     splitted_lines = []
     intermediate_result = []
     for line in lines:
         if isinstance(line, TextLine):
-                if last_line_number > get_line_number(line.line_number):
-                    splitted_lines.append(tuple(intermediate_result))
-                    intermediate_result = []
-                else:
-                    intermediate_result.append(line)
+            if last_line_number >= get_line_number(line.line_number):
+                splitted_lines.append(tuple(intermediate_result))
+                intermediate_result = []
+            intermediate_result.append(line)
+            last_line_number = get_line_number(line.line_number)
         else:
             intermediate_result.append(line)
     splitted_lines.append(tuple(intermediate_result))
