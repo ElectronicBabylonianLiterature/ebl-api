@@ -1,4 +1,4 @@
-from ebl.fragmentarium.application.create_line_to_vec import (
+from ebl.fragmentarium.application.matches.create_line_to_vec import (
     create_line_to_vec,
     LineToVecEncoding,
 )

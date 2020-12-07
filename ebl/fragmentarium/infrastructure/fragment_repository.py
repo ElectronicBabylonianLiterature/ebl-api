@@ -4,7 +4,7 @@ from marshmallow import EXCLUDE  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.create_line_to_vec import (
+from ebl.fragmentarium.application.matches.create_line_to_vec import (
     LineToVecEncodings,
     LineToVecEncoding,
 )

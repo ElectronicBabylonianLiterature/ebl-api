@@ -2,7 +2,7 @@ import attr
 import pytest  # pyre-ignore[21]
 from freezegun import freeze_time  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
+from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,

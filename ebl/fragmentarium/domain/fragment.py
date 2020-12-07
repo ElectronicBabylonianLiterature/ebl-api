@@ -3,7 +3,7 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.application.create_line_to_vec import (
+from ebl.fragmentarium.application.matches.create_line_to_vec import (
     create_line_to_vec,
     LineToVecEncodings,
 )

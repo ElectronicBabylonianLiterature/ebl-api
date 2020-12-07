@@ -1,6 +1,6 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
+from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.application.fragment_matcher import LineToVecRanking
 from ebl.fragmentarium.application.line_to_vec_ranking_schema import (
     LineToVecRankingSchema,

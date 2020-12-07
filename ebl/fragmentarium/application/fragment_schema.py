@@ -2,7 +2,7 @@ import pydash  # pyre-ignore
 from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
+from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios

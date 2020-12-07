@@ -4,12 +4,12 @@ from typing import Tuple, Union, List
 import attr
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.create_line_to_vec import (
+from ebl.fragmentarium.application.matches.create_line_to_vec import (
     LineToVecEncoding,
     LineToVecEncodings,
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.line_to_vec_score import score, score_weighted
+from ebl.fragmentarium.application.matches.line_to_vec_score import score, score_weighted
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 

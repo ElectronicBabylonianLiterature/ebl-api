@@ -3,7 +3,7 @@ from typing import Sequence
 import factory  # pyre-ignore
 
 from ebl.dictionary.domain.word import WordId
-from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
+from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference, Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber

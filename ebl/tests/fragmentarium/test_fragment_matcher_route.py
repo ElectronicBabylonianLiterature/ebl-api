@@ -1,7 +1,7 @@
 import falcon  # pyre-ignore[21]
 import pytest  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.create_line_to_vec import LineToVecEncoding
+from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
