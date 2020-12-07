@@ -89,6 +89,7 @@ class ManuscriptLineFactory(factory.Factory):
         ]
     )
     paratext = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
+    omitted_words = (1,)
 
 
 class LineFactory(factory.Factory):
