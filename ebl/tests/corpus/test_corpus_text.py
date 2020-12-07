@@ -17,6 +17,7 @@ from ebl.corpus.domain.text import (
     Line,
     Manuscript,
     ManuscriptLine,
+    Siglum,
     Text,
     TextId,
 )
@@ -131,11 +132,8 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].name == CHAPTER_NAME
     assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].id == MANUSCRIPT_ID
-    assert TEXT.chapters[0].manuscripts[0].siglum == (
-        PROVENANCE,
-        PERIOD,
-        TYPE,
-        SIGLUM_DISAMBIGUATOR,
+    assert TEXT.chapters[0].manuscripts[0].siglum == Siglum(
+        PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
     )
     assert TEXT.chapters[0].manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
