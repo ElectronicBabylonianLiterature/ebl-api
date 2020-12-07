@@ -94,6 +94,7 @@ class ManuscriptLine:
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: Union[TextLine, EmptyLine]
     paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
+    omitted_words: Sequence[int] = tuple()
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript_line(self)
