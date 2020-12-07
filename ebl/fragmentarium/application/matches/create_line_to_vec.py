@@ -56,9 +56,11 @@ def _line_to_vec_ruling(line: RulingDollarLine, _: bool):
 def _line_to_vec_state(line: StateDollarLine, _: bool):
     if line.extent == atf.Extent.END_OF:
         return LineToVecEncoding.END
+    else:
+        return None
 
 
-def create_line_to_vec(lines: Sequence[Line]) -> LineToVecEncodings:
+def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
     line_to_vec_result = []
     first_line = True
     for line in lines:

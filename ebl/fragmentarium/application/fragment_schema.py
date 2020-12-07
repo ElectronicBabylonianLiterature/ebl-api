@@ -98,7 +98,7 @@ class FragmentSchema(Schema):
     )
     genres = fields.Nested(GenreSchema, many=True, missing=tuple())
     line_to_vec = fields.List(
-        IntValueEnum(LineToVecEncoding), missing=None, data_key="lineToVec"
+        fields.List(IntValueEnum(LineToVecEncoding), missing=None, data_key="lineToVec")
     )
 
     @post_load

@@ -1,8 +1,50 @@
+import pytest
+
 from ebl.fragmentarium.application.matches.create_line_to_vec import (
     create_line_to_vec,
     LineToVecEncoding,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
+
+
+@pytest.mark.parametrize(
+    "atf",
+    [
+        [
+            "1'. %es [{d}a]m-an-ki# [...]\n@colophon\n2'. %es [{d}a]m-an-ki# [...]",
+            (LineToVecEncoding.from_list([1, 2]),),
+        ],
+        [
+            "1'. %es [{d}a]m-an-ki# [...]\n@column 1\n2'. %es [{d}a]m-an-ki# [...]",
+            (LineToVecEncoding.from_list([1, 2]),),
+        ],
+        [
+            "1'. %es [{d}a]m-an-ki# [...]\n@column 2\n1'. %es [{d}a]m-an-ki# [...]",
+            (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1])),
+        ],
+        [
+            "1'. %es [{d}a]m-an-ki# [...]\n@obverse\n2'. %es [{d}a]m-an-ki# [...]",
+            (LineToVecEncoding.from_list([1, 2]),),
+        ],
+        [
+            "1'. x [...]\n@obverse1\n'. x [...]",
+            (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1])),
+        ],
+        [
+            "@obverse\n1'. %es [{d}a]m-an-ki# [...]\n@obverse\n1'[...]-ru rak-su\n2'. %es [{d}a]m-an-ki# [...]\n@edge\n1'. %es [{d}a]m-an-ki# [...]",
+            (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1, 2]), LineToVecEncoding.from_list([1])),
+        ],
+        [
+            "1'. %es [{d}a]m-an-ki# [...]\n$ end of side\n1'. %es [{d}a]m-an-ki#",
+            (LineToVecEncoding.from_list([1, 5]), LineToVecEncoding.from_list([1])),
+        ],
+    ],
+)
+def test_create_line_to_vec_1(atf, transliteration_factory):
+    transliteration = parse_atf_lark(atf[0])
+    #line_to_vec = create_line_to_vec(transliteration)
+    #assert line_to_vec == line_to_vec
 
 
 def test_create_line_to_vec():
