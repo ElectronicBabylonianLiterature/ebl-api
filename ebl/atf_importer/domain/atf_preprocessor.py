@@ -93,6 +93,7 @@ class ATF_Preprocessor:
             atf = ' '.join(atf.split()) # remove multiple spaces
 
             try:
+                converted_line = ""
                 tree = self.ORACC_PARSER.parse(atf)
                 self.logger.debug("Converting " + tree.data)
 
@@ -109,7 +110,9 @@ class ATF_Preprocessor:
                     lemmas_and_guidewords_serializer.result = []
                     lemmas_and_guidewords_serializer.visit(tree)
                     lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
+                    self.logger.debug("Converted line as " + tree.data + " --> '" + str(lemmas_and_guidewords_array) + "'")
                     self.logger.debug("----------------------------------------------------------------------")
+
                     return atf,lemmas_and_guidewords_array,tree.data,[]
 
                 elif tree.data == "text_line":
@@ -119,6 +122,7 @@ class ATF_Preprocessor:
                         self.EBL_PARSER.parse(converted_line)
                         self.logger.debug('Successfully parsed converted line')
                         self.logger.debug(converted_line)
+                        self.logger.debug("Converted line as " + tree.data + " --> '" + converted_line + "'")
                         self.logger.debug("----------------------------------------------------------------------")
 
                         return converted_line,converted_line_array,tree.data,alter_lemline_at
@@ -129,12 +133,12 @@ class ATF_Preprocessor:
                         self.unparseable_lines.append(original_atf)
                         return None, None, None, None
 
-                    self.logger.debug("Converted line as " + tree.data + " --> '" + converted_line + "'")
 
                 else:
                     for line in self.unused_lines:
                         if tree.data == line:
                            return self.get_empty_conversion(tree)
+
 
             except Exception as e:
 
