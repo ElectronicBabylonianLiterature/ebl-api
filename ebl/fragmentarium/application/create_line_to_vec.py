@@ -27,11 +27,11 @@ LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @singledispatch
-def line_to_vec(line: Line, _) -> Optional[LineToVecEncoding]:
+def line_to_vec(line: Line, _: bool) -> Optional[LineToVecEncoding]:
     return None
 
 
-@line_to_vec.register
+@line_to_vec.register(TextLine)
 def _line_to_vec_text(line: TextLine, first_line=True):
     if first_line and (
         line.line_number.has_prime  # pyre-ignore[16]
@@ -42,8 +42,8 @@ def _line_to_vec_text(line: TextLine, first_line=True):
         return LineToVecEncoding.TEXT_LINE
 
 
-@line_to_vec.register
-def _line_to_vec_ruling(line: RulingDollarLine, _):
+@line_to_vec.register(RulingDollarLine)
+def _line_to_vec_ruling(line: RulingDollarLine, _: bool):
     if line.number == atf.Ruling.SINGLE:
         return LineToVecEncoding.SINGLE_RULING
     elif line.number == atf.Ruling.DOUBLE:
@@ -52,8 +52,8 @@ def _line_to_vec_ruling(line: RulingDollarLine, _):
         return LineToVecEncoding.TRIPLE_RULING
 
 
-@line_to_vec.register
-def _line_to_vec_state(line: StateDollarLine, _):
+@line_to_vec.register(StateDollarLine)
+def _line_to_vec_state(line: StateDollarLine, _: bool):
     if line.extent == atf.Extent.END_OF:
         return LineToVecEncoding.END
 
