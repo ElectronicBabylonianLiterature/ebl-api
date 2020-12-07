@@ -5,7 +5,7 @@ from marshmallow import ValidationError  # pyre-ignore[21]
 
 from ebl.corpus.domain.text import Line, Text
 from ebl.errors import DataError
-from ebl.corpus.web.schemas import ApiLineSchema, ApiTextSchema
+from ebl.corpus.web.text_schemas import ApiLineSchema, ApiTextSchema
 
 
 def serialize_public(text: Text):

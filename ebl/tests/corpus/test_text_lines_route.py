@@ -1,15 +1,15 @@
 import json
 
 import attr
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.users.domain.user import Guest
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.corpus.web.schemas import ApiLineSchema
+from ebl.corpus.web.text_schemas import ApiLineSchema
 
 
 ANY_USER = Guest()
