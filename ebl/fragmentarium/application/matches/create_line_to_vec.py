@@ -7,6 +7,8 @@ import pydash  # pyre-ignore[21]
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
 from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange, \
+    AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine
 
 
@@ -34,8 +36,8 @@ def line_to_vec(line: Line, _: bool) -> Optional[LineToVecEncoding]:
 @line_to_vec.register(TextLine)
 def _line_to_vec_text(line: TextLine, first_line=True):
     if first_line and (
-        line.line_number.has_prime  # pyre-ignore[16]
-        or line.line_number.prefix_modifier  # pyre-ignore[16]
+            line.line_number.has_prime  # pyre-ignore[16]
+            or line.line_number.prefix_modifier  # pyre-ignore[16]
     ):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
@@ -60,13 +62,49 @@ def _line_to_vec_state(line: StateDollarLine, _: bool):
         return None
 
 
-def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
-    line_to_vec_result = []
-    first_line = True
-    for line in lines:
-        line_to_vec_encoding = line_to_vec(line, first_line)
-        if line_to_vec_encoding:
-            line_to_vec_result.append(line_to_vec_encoding)
-        first_line = False
+@singledispatch
+def get_line_number(line_number: AbstractLineNumber) -> int:
+    raise ValueError("No default for overloading")
 
-    return tuple(pydash.flatten(line_to_vec_result))
+
+@get_line_number.register(LineNumber)
+def _get_line_number(line_number: LineNumber) -> int:
+    return line_number.number
+
+
+@get_line_number.register(LineNumberRange)
+def _get_line_number_range(line_number: LineNumberRange) -> int:
+    return line_number.end.number
+
+
+def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line,...],...]:
+    last_line_number = -1
+    splitted_lines = []
+    intermediate_result = []
+    for line in lines:
+        if isinstance(line, TextLine):
+                if last_line_number > get_line_number(line.line_number):
+                    splitted_lines.append(tuple(intermediate_result))
+                    intermediate_result = []
+                else:
+                    intermediate_result.append(line)
+        else:
+            intermediate_result.append(line)
+    splitted_lines.append(tuple(intermediate_result))
+    return tuple(splitted_lines)
+
+
+def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
+    list_of_lines = split_lines(lines)
+    line_to_vec_result = []
+    line_to_vec_intermediate_result = []
+    first_line = True
+    for lines in list_of_lines:
+        for line in lines:
+            line_to_vec_encoding = line_to_vec(line, first_line)
+            if line_to_vec_encoding:
+                line_to_vec_intermediate_result.append(line_to_vec_encoding)
+            first_line = False
+        line_to_vec_result.append(tuple(line_to_vec_intermediate_result))
+        line_to_vec_intermediate_result = []
+    return tuple(line_to_vec_result)
