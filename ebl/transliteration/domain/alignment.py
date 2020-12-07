@@ -5,11 +5,6 @@ from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import AbstractWord
-from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import (
-    parse_normalized_akkadian_word,
-    parse_word,
-)
 
 
 class AlignmentError(Exception):
@@ -45,27 +40,6 @@ class AlignmentToken:
         else:
             raise AlignmentError(f"Incompatible alignment {self} for word {token}.")
 
-    @staticmethod
-    def from_dict(data):
-        return AlignmentToken(
-            data["value"], data.get("alignment"), AlignmentToken._create_word(data)
-        )
-
-    @staticmethod
-    def _create_word(data: dict) -> Optional[AbstractWord]:
-        variant = data.get("variant")
-        if variant:
-            language = Language[data["language"]]
-            is_normalized = data["isNormalized"]
-
-            return (
-                parse_normalized_akkadian_word(variant)
-                if language is Language.AKKADIAN and is_normalized
-                else parse_word(variant).set_language(language, is_normalized)
-            )
-        else:
-            return None
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class Alignment:
@@ -84,15 +58,3 @@ class Alignment:
 
     def get_number_of_manuscripts(self, line_index: int) -> int:
         return len(self.get_line(line_index))
-
-    @staticmethod
-    def from_dict(data):
-        return Alignment(
-            tuple(
-                tuple(
-                    tuple(AlignmentToken.from_dict(token) for token in manuscript)
-                    for manuscript in line
-                )
-                for line in data
-            )
-        )
