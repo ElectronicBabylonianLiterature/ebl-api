@@ -12,31 +12,31 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
     "atf",
     [
         [
-            "1'. %es [{d}a]m-an-ki# [...]\n@colophon\n2'. %es [{d}a]m-an-ki# [...]",
+            "1'. x [...]\n@colophon\n2'. x [...]",
             (LineToVecEncoding.from_list([1, 2]),),
         ],
         [
-            "1'. %es [{d}a]m-an-ki# [...]\n@column 1\n2'. %es [{d}a]m-an-ki# [...]",
+            "1'. x [...]\n@column 1\n2'. x [...]",
             (LineToVecEncoding.from_list([1, 2]),),
         ],
         [
-            "1'. %es [{d}a]m-an-ki# [...]\n@column 2\n1'. %es [{d}a]m-an-ki# [...]",
+            "1'. x [...]\n@column 2\n1'. x [...]",
             (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1])),
         ],
         [
-            "1'. %es [{d}a]m-an-ki# [...]\n@obverse\n2'. %es [{d}a]m-an-ki# [...]",
+            "1'. x [...]\n@obverse\n2'. x [...]",
             (LineToVecEncoding.from_list([1, 2]),),
         ],
         [
-            "1'. x [...]\n@obverse1\n'. x [...]",
+            "1'. x [...]\n@obverse\n1'. x [...]",
             (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1])),
         ],
         [
-            "@obverse\n1'. %es [{d}a]m-an-ki# [...]\n@obverse\n1'[...]-ru rak-su\n2'. %es [{d}a]m-an-ki# [...]\n@edge\n1'. %es [{d}a]m-an-ki# [...]",
+            "@obverse\n1'. x [...]\n@obverse\n1'. x [...]\n2'. x [...]\n@edge\n1'. x [...]",
             (LineToVecEncoding.from_list([1]), LineToVecEncoding.from_list([1, 2]), LineToVecEncoding.from_list([1])),
         ],
         [
-            "1'. %es [{d}a]m-an-ki# [...]\n$ end of side\n1'. %es [{d}a]m-an-ki#",
+            "1'. x [...]\n$ end of side\n1'. x [...]",
             (LineToVecEncoding.from_list([1, 5]), LineToVecEncoding.from_list([1])),
         ],
     ],
