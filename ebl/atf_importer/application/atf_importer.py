@@ -247,9 +247,7 @@ class ATFImporter:
         )
 
     @staticmethod
-    def insert_lemmatization(
-        updater: FragmentUpdater, lemmatization, museum_number
-    ):
+    def insert_lemmatization(updater: FragmentUpdater, lemmatization, museum_number):
         lemmatization = Lemmatization(tuple(lemmatization))
         user = ApiUser("atf_importer.py")
         updater.update_lemmatization(
