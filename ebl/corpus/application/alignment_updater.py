@@ -4,7 +4,8 @@ import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine
-from ebl.transliteration.domain.alignment import Alignment, AlignmentError
+from ebl.transliteration.domain.alignment import AlignmentError
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 
 
 class AlignmentUpdater(ChapterUpdater):
@@ -15,15 +16,15 @@ class AlignmentUpdater(ChapterUpdater):
         self._manuscript_lines: List[ManuscriptLine] = []
 
     @property
-    def line_index(self):
+    def line_index(self) -> int:
         return len(self._lines)
 
     @property
-    def manuscript_line_index(self):
+    def manuscript_line_index(self) -> int:
         return len(self._manuscript_lines)
 
     @property
-    def current_alignment(self):
+    def current_alignment(self) -> ManuscriptLineAlignment:
         try:
             return self._alignment.get_manuscript_line(
                 self.line_index, self.manuscript_line_index
@@ -45,7 +46,9 @@ class AlignmentUpdater(ChapterUpdater):
 
     def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
-            updated_line = manuscript_line.line.update_alignment(self.current_alignment)
+            updated_line = manuscript_line.line.update_alignment(
+                self.current_alignment.alignment
+            )
             self._manuscript_lines.append(
                 attr.evolve(manuscript_line, line=updated_line)
             )

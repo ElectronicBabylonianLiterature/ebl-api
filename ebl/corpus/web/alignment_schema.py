@@ -9,7 +9,8 @@ from ebl.transliteration.domain.lark_parser import (
     parse_word,
 )
 
-from ebl.transliteration.domain.alignment import Alignment, AlignmentToken
+from ebl.transliteration.domain.alignment import AlignmentToken
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 
 
 class AlignmentTokenSchema(Schema):  # pyre-ignore[11]
@@ -39,18 +40,28 @@ class AlignmentTokenSchema(Schema):  # pyre-ignore[11]
             return None
 
 
+class ManuscriptAlignmentSchema(Schema):
+    alignment = fields.Nested(AlignmentTokenSchema, many=True, required=True)
+    omitted_words = fields.List(
+        fields.Integer(), required=True, data_key="omittedWords"
+    )
+
+    @post_load  # pyre-ignore[56]
+    def make_manuscript_alignment(
+        self, data: dict, **kwargs
+    ) -> ManuscriptLineAlignment:
+        return ManuscriptLineAlignment(
+            tuple(data["alignment"]), tuple(data["omitted_words"])
+        )
+
+
 class AlignmentSchema(Schema):
     lines = fields.List(
-        fields.List(fields.Nested(AlignmentTokenSchema, many=True)),
+        fields.Nested(ManuscriptAlignmentSchema, many=True),
         required=True,
         data_key="alignment",
     )
 
     @post_load  # pyre-ignore[56]
     def make_alignment(self, data: dict, **kwargs) -> Alignment:
-        return Alignment(
-            tuple(
-                tuple(tuple(manuscript) for manuscript in line)
-                for line in data["lines"]
-            )
-        )
+        return Alignment(tuple(tuple(line) for line in data["lines"]))

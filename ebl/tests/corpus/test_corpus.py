@@ -2,25 +2,22 @@ import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import serialize
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.text import Line, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
-from ebl.transliteration.domain.alignment import (
-    Alignment,
-    AlignmentError,
-    AlignmentToken,
-)
+from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 COLLECTION = "texts"
 TEXT = TextFactory.build()  # pyre-ignore[16]
@@ -247,7 +244,9 @@ def test_updating_alignment(
         when,
     )
 
-    alignment = Alignment((((AlignmentToken("ku-[nu-ši]", 0),),),))
+    alignment = Alignment(
+        ((ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),)
+    )
     corpus.update_alignment(TEXT.id, 0, alignment, user)
 
 
@@ -361,21 +360,35 @@ def test_updating_manuscript_lemmatization(
     "alignment",
     [
         Alignment(
-            (((AlignmentToken("ku-[nu-ši]", 0), AlignmentToken("ku-[nu-ši]", 0)),),)
-        ),
-        Alignment(((tuple(),),)),
-        Alignment(
-            (((AlignmentToken("ku-[nu-ši]", 0),), (AlignmentToken("ku-[nu-ši]", 0),)),)
-        ),
-        Alignment((tuple())),
-        Alignment(
             (
-                ((AlignmentToken("ku-[nu-ši]", 0),),),
-                ((AlignmentToken("ku-[nu-ši]", 0),),),
+                (
+                    ManuscriptLineAlignment(
+                        (
+                            AlignmentToken("ku-[nu-ši]", 0),
+                            AlignmentToken("ku-[nu-ši]", 0),
+                        )
+                    ),
+                ),
             )
         ),
+        Alignment(
+            (
+                (
+                    ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),
+                    ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),
+                ),
+            )
+        ),
+        Alignment(
+            (
+                (ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),
+                (ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),
+            )
+        ),
+        Alignment(((ManuscriptLineAlignment(tuple()),),)),
+        Alignment((tuple())),
         Alignment(tuple()),
-        Alignment((((AlignmentToken("invalid value", 0),),),)),
+        Alignment(((ManuscriptLineAlignment((AlignmentToken("invalid value", 0),)),),)),
     ],
 )
 def test_invalid_alignment(alignment, corpus, text_repository, when):

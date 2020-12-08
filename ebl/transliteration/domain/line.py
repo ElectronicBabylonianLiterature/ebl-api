@@ -3,7 +3,7 @@ from typing import Sequence, Tuple, TypeVar
 
 import attr
 
-from ebl.transliteration.domain import alignment as alignments
+from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.tokens import TokenVisitor
@@ -31,9 +31,7 @@ class Line(ABC):
     def update_lemmatization(self: L, lemmatization: Sequence[LemmatizationToken]) -> L:
         return self
 
-    def update_alignment(
-        self: L, alignment: Sequence["alignments.AlignmentToken"]
-    ) -> L:
+    def update_alignment(self: L, alignment: Sequence[AlignmentToken]) -> L:
         return self
 
     def merge(self, other: L) -> L:

@@ -1,4 +1,5 @@
-from ebl.transliteration.domain.alignment import Alignment, AlignmentToken
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word
@@ -12,59 +13,75 @@ def test_alignment():
         {
             "alignment": [
                 [
-                    [
-                        {
-                            "value": "ku]-nu-ši",
-                            "alignment": 1,
-                            "variant": "kunusi",
-                            "language": "AKKADIAN",
-                            "isNormalized": True,
-                        }
-                    ]
+                    {
+                        "alignment": [
+                            {
+                                "value": "ku]-nu-ši",
+                                "alignment": 1,
+                                "variant": "kunusi",
+                                "language": "AKKADIAN",
+                                "isNormalized": True,
+                            }
+                        ],
+                        "omittedWords": [],
+                    }
                 ],
                 [
-                    [
-                        {
-                            "value": "ku]-nu-ši",
-                            "alignment": 1,
-                            "variant": "kur",
-                            "language": "SUMERIAN",
-                            "isNormalized": False,
-                        }
-                    ]
+                    {
+                        "alignment": [
+                            {
+                                "value": "ku]-nu-ši",
+                                "alignment": 1,
+                                "variant": "kur",
+                                "language": "SUMERIAN",
+                                "isNormalized": False,
+                            }
+                        ],
+                        "omittedWords": [1],
+                    }
                 ],
                 [
-                    [
-                        {
-                            "value": "ku]-nu-ši",
-                            "alignment": 1,
-                            "variant": "",
-                            "language": "AKKADIAN",
-                            "isNormalized": False,
-                        }
-                    ]
+                    {
+                        "alignment": [
+                            {
+                                "value": "ku]-nu-ši",
+                                "alignment": 1,
+                                "variant": "",
+                                "language": "AKKADIAN",
+                                "isNormalized": False,
+                            }
+                        ],
+                        "omittedWords": [],
+                    }
                 ],
             ]
         }
     ) == Alignment(
         (
             (
-                (
-                    AlignmentToken(
-                        "ku]-nu-ši", 1, AkkadianWord.of([ValueToken.of("kunusi")])
-                    ),
+                ManuscriptLineAlignment(
+                    (
+                        AlignmentToken(
+                            "ku]-nu-ši", 1, AkkadianWord.of([ValueToken.of("kunusi")])
+                        ),
+                    )
                 ),
             ),
             (
-                (
-                    AlignmentToken(
-                        "ku]-nu-ši",
-                        1,
-                        Word.of([Reading.of_name("kur")], language=Language.SUMERIAN),
+                ManuscriptLineAlignment(
+                    (
+                        AlignmentToken(
+                            "ku]-nu-ši",
+                            1,
+                            Word.of(
+                                [Reading.of_name("kur")], language=Language.SUMERIAN
+                            ),
+                        ),
                     ),
+                    (1,),
                 ),
             ),
-            ((AlignmentToken("ku]-nu-ši", 1, None),),),
+            (ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 1, None),)),),
         )
     )
 
