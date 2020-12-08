@@ -61,7 +61,6 @@ def create_fragmentarium_routes(
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
 
-
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}/genres", fragment_genre)
     api.add_route("/fragments/{number}", fragments)
