@@ -1,6 +1,6 @@
 import os
 import glob
-from pymongo import MongoClient
+from pymongo import MongoClient # pyre-ignore[21]
 import logging
 import argparse
 from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
@@ -12,7 +12,7 @@ from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.transliteration.domain.lemmatization import Lemmatization,LemmatizationToken
 from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
-from dotenv import load_dotenv
+from dotenv import load_dotenv # pyre-ignore[21]
 
 class LemmatizationError(Exception):
    pass
