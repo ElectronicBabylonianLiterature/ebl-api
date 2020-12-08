@@ -293,13 +293,14 @@ class TransliteratedFragmentFactory(FragmentFactory):
     folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
     record = factory.SubFactory(RecordFactory)
     line_to_vec = (
-        LineToVecEncoding.START,
-        LineToVecEncoding.TEXT_LINE,
-        LineToVecEncoding.TEXT_LINE,
-        LineToVecEncoding.TEXT_LINE,
-        LineToVecEncoding.TEXT_LINE,
-        LineToVecEncoding.TEXT_LINE,
-        LineToVecEncoding.SINGLE_RULING,
+        (
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.SINGLE_RULING,
+        ),
     )
 
 

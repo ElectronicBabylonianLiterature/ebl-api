@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from marshmallow import EXCLUDE  # pyre-ignore[21]
 
@@ -91,7 +91,9 @@ class MongoFragmentRepository(FragmentRepository):
             fragment["museumNumber"] for fragment in cursor
         )
 
-    def query_transliterated_line_to_vec(self) -> Dict[str, LineToVecEncodings]:
+    def query_transliterated_line_to_vec(
+        self
+    ) -> Dict[str, Tuple[LineToVecEncodings, ...]]:
         cursor = self._collection.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
         )
@@ -99,7 +101,12 @@ class MongoFragmentRepository(FragmentRepository):
         return {
             str(
                 MuseumNumberSchema().load(fragment["museumNumber"])  # pyre-ignore[16]
-            ): LineToVecEncoding.from_list(fragment["lineToVec"])
+            ): tuple(
+                [
+                    LineToVecEncoding.from_list(line_to_vec)
+                    for line_to_vec in fragment["lineToVec"]
+                ]
+            )
             for fragment in cursor
         }
 

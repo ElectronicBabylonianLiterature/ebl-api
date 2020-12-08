@@ -7,8 +7,11 @@ import pydash  # pyre-ignore[21]
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange, \
-    AbstractLineNumber
+from ebl.transliteration.domain.line_number import (
+    LineNumber,
+    LineNumberRange,
+    AbstractLineNumber,
+)
 from ebl.transliteration.domain.text_line import TextLine
 
 
@@ -34,10 +37,10 @@ def line_to_vec(line: Line, _: bool) -> Optional[LineToVecEncoding]:
 
 
 @line_to_vec.register(TextLine)
-def _line_to_vec_text(line: TextLine, first_line=False):
-    if first_line and not(
-            line.line_number.has_prime  # pyre-ignore[16]
-            or line.line_number.prefix_modifier  # pyre-ignore[16]
+def _line_to_vec_text(line: TextLine, first_line: bool):
+    if first_line and not (
+        line.line_number.has_prime  # pyre-ignore[16]
+        or line.line_number.prefix_modifier  # pyre-ignore[16]
     ):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
@@ -98,8 +101,8 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
     list_of_lines = split_lines(lines)
     line_to_vec_result = []
     line_to_vec_intermediate_result = []
-    first_line = True
     for lines in list_of_lines:
+        first_line = True
         for line in lines:
             line_to_vec_encoding = line_to_vec(line, first_line)
             if line_to_vec_encoding:
@@ -107,4 +110,7 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
             first_line = False
         line_to_vec_result.append(line_to_vec_intermediate_result)
         line_to_vec_intermediate_result = []
-    return tuple([tuple(pydash.flatten(encodings)) for encodings in line_to_vec_result])
+    result = tuple(
+        [tuple(pydash.flatten(encodings)) for encodings in line_to_vec_result]
+    )
+    return result if len(result[0]) else tuple()

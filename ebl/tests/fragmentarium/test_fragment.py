@@ -175,7 +175,10 @@ def test_add_transliteration(user):
 
     updated_fragment = fragment.update_transliteration(transliteration, user)
     expected_fragment = attr.evolve(
-        fragment, text=text, record=record, line_to_vec=(LineToVecEncoding.TEXT_LINE,)
+        fragment,
+        text=text,
+        record=record,
+        line_to_vec=((LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE),),
     )
 
     assert updated_fragment == expected_fragment
