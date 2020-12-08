@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Tuple, Union, List
+from typing import Tuple, Union, List, Dict
 
 import attr
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
@@ -48,6 +48,12 @@ class FragmentMatcher:
     def rank_line_to_vec(
         self, candidate: Union[str, Tuple[int, ...]]
     ) -> LineToVecRanking:
+        def _insert_score(
+            fragment_id: str, score_result: int, score_results: Dict[str, int]
+        ) -> None:
+            if score_result > score_results.get(fragment_id, -1):
+                score_results[fragment_id] = score_result
+
         candidates = self.parse_candidate(candidate)
         score_results = dict()
         score_weighted_results = dict()
@@ -56,14 +62,14 @@ class FragmentMatcher:
         for candidate in candidates:
             for fragment_id, line_to_vecs in fragments.items():
                 for line_to_vec in line_to_vecs:
-                    score_result = score(candidate, line_to_vec)
-                    if score_result > score_results.get(fragment_id, -1):
-                        score_results[fragment_id] = score_result
-                    score_result_weighted = score_weighted(candidate, line_to_vec)
-                    if score_result_weighted > score_weighted_results.get(
-                        fragment_id, -1
-                    ):
-                        score_weighted_results[fragment_id] = score_result_weighted
+                    _insert_score(
+                        fragment_id, score(candidate, line_to_vec), score_results
+                    )
+                    _insert_score(
+                        fragment_id,
+                        score_weighted(candidate, line_to_vec),
+                        score_weighted_results,
+                    )
 
         number_of_results_to_return = 15
         return LineToVecRanking(

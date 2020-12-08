@@ -86,13 +86,12 @@ def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line, ...], ...]:
     intermediate_result = []
     for line in lines:
         if isinstance(line, TextLine):
-            if last_line_number >= get_line_number(line.line_number):
+            current_line_number = get_line_number(line.line_number)
+            if last_line_number >= current_line_number:
                 splitted_lines.append(tuple(intermediate_result))
                 intermediate_result = []
-            intermediate_result.append(line)
-            last_line_number = get_line_number(line.line_number)
-        else:
-            intermediate_result.append(line)
+            last_line_number = current_line_number
+        intermediate_result.append(line)
     splitted_lines.append(tuple(intermediate_result))
     return tuple(splitted_lines)
 
@@ -110,7 +109,6 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
             first_line = False
         line_to_vec_result.append(line_to_vec_intermediate_result)
         line_to_vec_intermediate_result = []
-    result = tuple(
-        [tuple(pydash.flatten(encodings)) for encodings in line_to_vec_result]
-    )
-    return result if len(result[0]) else tuple()
+    result = [tuple(pydash.flatten(encodings)) for encodings in line_to_vec_result]
+
+    return tuple(result) if len(result[0]) else tuple()
