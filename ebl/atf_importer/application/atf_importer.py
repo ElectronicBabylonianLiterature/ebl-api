@@ -3,7 +3,7 @@ import glob
 from pymongo import MongoClient  # pyre-ignore[21]
 import logging
 import argparse
-from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
+from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.application.transliteration_update_factory import (
@@ -64,11 +64,16 @@ success = []
 failed = []
 
 
-class ATF_Importer:
+class ATFImporter:
     def __init__(self):
         logging.basicConfig(level=logging.DEBUG)
 
         self.logger = logging.getLogger("Atf-Importer")
+        self.atf_preprocessor = ATFPreprocessor("../logs")
+
+        self.lemmas_cfforms = None
+        self.cfforms_senses = None
+        self.cfform_guideword = None
 
         # connect to eBL-db
         load_dotenv()
@@ -76,14 +81,17 @@ class ATF_Importer:
         db = client.get_database(os.getenv("MONGODB_DB"))
         self.db = db
 
-    def get_ebl_transliteration(self, line):
+    @staticmethod
+    def get_ebl_transliteration(line):
         parsed_atf = parse_atf_lark(line)
         return parsed_atf
 
-    def get_ebl_lemmata(self, orrac_lemma_tupel, all_unique_lemmas, filename):
+    def get_ebl_lemmata(self, orrac_lemma_tupel, all_unique_lemmas):
 
         try:
             unique_lemmas = []
+            oracc_lemma = None
+            oracc_guideword = None
 
             for pair in orrac_lemma_tupel:
 
@@ -137,7 +145,7 @@ class ATF_Importer:
                             guideword = guideword.split("//")[0]
                         senses = self.cfforms_senses[citation_form]
 
-                        if senses != None and oracc_guideword in senses:
+                        if senses is not None and oracc_guideword in senses:
 
                             for entry in self.db.get_collection("words").find(
                                 {"oraccWords.guideWord": guideword}, {"_id"}
@@ -161,7 +169,7 @@ class ATF_Importer:
                             ):
                                 if entry["_id"] not in unique_lemmas:
                                     unique_lemmas.append(entry["_id"])
-                    except Exception as e:
+                    except Exception:
                         if oracc_lemma not in not_lemmatized:
                             not_lemmatized[oracc_lemma] = True
 
@@ -188,7 +196,8 @@ class ATF_Importer:
         except Exception as e:
             self.logger.exception(e)
 
-    def parse_glossary(self, path):
+    @staticmethod
+    def parse_glossary(path):
 
         lemmas_cfforms = dict()
         cfforms_senses = dict()
@@ -217,14 +226,14 @@ class ATF_Importer:
 
                     split2 = line.split(pos_tag)
                     sense = split2[1].rstrip("\n")
-                    if not cfform in cfforms_senses:
+                    if cfform not in cfforms_senses:
                         cfforms_senses[cfform] = [sense.strip()]
                     else:
                         cfforms_senses[cfform].append(sense.strip())
         return lemmas_cfforms, cfforms_senses, cfform_guideword
 
+    @staticmethod
     def insert_translitertions(
-        self,
         transliteration_factory: TransliterationUpdateFactory,
         updater: FragmentUpdater,
         transliterations,
@@ -237,8 +246,9 @@ class ATF_Importer:
             parse_museum_number(museum_number), transliteration, user
         )
 
+    @staticmethod
     def insert_lemmatization(
-        self, updater: FragmentUpdater, lemmatization, museum_number
+        updater: FragmentUpdater, lemmatization, museum_number
     ):
         lemmatization = Lemmatization(tuple(lemmatization))
         user = ApiUser("atf_importer.py")
@@ -246,7 +256,8 @@ class ATF_Importer:
             parse_museum_number(museum_number), lemmatization, user
         )
 
-    def get_museum_number(self, control_lines):
+    @staticmethod
+    def get_museum_number(control_lines):
         for line in control_lines:
             linesplit = line["c_line"].split("=")
             if len(linesplit) > 1:
@@ -254,7 +265,8 @@ class ATF_Importer:
 
         return None
 
-    def get_cdli_number(self, control_lines):
+    @staticmethod
+    def get_cdli_number(control_lines):
 
         for line in control_lines:
             linesplit = line["c_line"].split("=")
@@ -278,6 +290,9 @@ class ATF_Importer:
         result["transliteration"] = []
         result["lemmatization"] = []
         result["control_lines"] = []
+        last_transliteration_line = ""
+        last_alter_lemline_at = []
+        last_transliteration = []
 
         for line in converted_lines:
 
@@ -291,7 +306,7 @@ class ATF_Importer:
 
                 for oracc_lemma_tupel in line["c_array"]:
                     # get unique lemmata from ebl database
-                    self.get_ebl_lemmata(oracc_lemma_tupel, all_unique_lemmas, filename)
+                    self.get_ebl_lemmata(oracc_lemma_tupel, all_unique_lemmas)
 
                 for alter_pos in last_alter_lemline_at:
                     self.logger.warning(
@@ -386,7 +401,7 @@ class ATF_Importer:
                 museum_number_split = self.get_museum_number(ebl_lines["control_lines"])
                 parse_museum_number(museum_number_split.strip())
                 museum_number = museum_number_split
-            except Exception as e:
+            except Exception:
                 self.logger.error(
                     "Could not find valid museum number in '" + filename + "'"
                 )
@@ -403,7 +418,7 @@ class ATF_Importer:
                 parse_museum_number(museum_number_input)
                 museum_number = museum_number_input
                 self.logger.info("Museum number '" + museum_number + "' is valid!")
-            except Exception as e:
+            except Exception:
                 pass
 
         if skip:
@@ -466,7 +481,7 @@ class ATF_Importer:
         # read atf files from input folder
         for filepath in glob.glob(os.path.join(args.input, "*.atf")):
 
-            with open(filepath, "r") as f:
+            with open(filepath, "r"):
 
                 filepath = filepath.replace("\\", "/")
 
@@ -474,7 +489,7 @@ class ATF_Importer:
                 filename = split[-1]
                 filename = filename.split(".")[0]
                 # convert all lines
-                self.atf_preprocessor = ATF_Preprocessor(args.logdir)
+                self.atf_preprocessor = ATFPreprocessor(args.logdir)
                 converted_lines = self.atf_preprocessor.convert_lines(
                     filepath, filename
                 )
@@ -519,5 +534,5 @@ class ATF_Importer:
 
 
 if __name__ == "__main__":
-    a = ATF_Importer()
+    a = ATFImporter()
     a.start()

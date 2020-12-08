@@ -17,7 +17,7 @@ from lark import Lark  # pyre-ignore[21]
 import logging
 
 
-class ATF_Preprocessor:
+class ATFPreprocessor:
     def __init__(self, logdir):
         self.EBL_PARSER = Lark.open(
             "../../transliteration/domain/ebl_atf.lark",

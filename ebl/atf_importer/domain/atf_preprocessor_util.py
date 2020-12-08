@@ -10,7 +10,7 @@ class Util:
         r += " | " + s + " |\n"
         r += " +-"
 
-        for i in range(len(s)):
+        for _i in range(len(s)):
             r += "-"
 
         r += "-+\n"

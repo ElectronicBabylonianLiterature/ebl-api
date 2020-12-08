@@ -1,6 +1,6 @@
-from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
+from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
-from ebl.atf_importer.application.atf_importer import ATF_Importer
+from ebl.atf_importer.application.atf_importer import ATFImporter
 import unittest
 
 
@@ -8,7 +8,7 @@ class Test_ATF_Importer(unittest.TestCase):
 
     # Test case for insertion of placeholder if "<<"
     def test_placeholder_insert(self):
-        atf_preprocessor = ATF_Preprocessor()
+        atf_preprocessor = ATFPreprocessor("../logs")
         converted_lines = []
         c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
             "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇"
@@ -34,7 +34,7 @@ class Test_ATF_Importer(unittest.TestCase):
         )
 
         # import test lines
-        a = ATF_Importer()
+        a = ATFImporter()
         a.lemmas_cfforms = Util.get_test_lemmas_cfforms()
         a.cfforms_senes = Util.get_test_cfforms_senses()
         a.cfform_guideword = Util.get_test_cfform_guidword()

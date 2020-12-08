@@ -1,13 +1,13 @@
-from ebl.atf_importer.domain.atf_preprocessor import ATF_Preprocessor
+from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 import unittest
 
 
-class Test_ATF_Preprocessor(unittest.TestCase):
+class TestATF_Preprocessor(unittest.TestCase):
 
     # Generic Line Test case for problematic text lines
     def test_lines(self):
-        atf_preprocessor = ATF_Preprocessor()
+        atf_preprocessor = ATFPreprocessor("../logs")
 
         converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line(
             "1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{+di} * AN.GE₆"
@@ -35,7 +35,7 @@ class Test_ATF_Preprocessor(unittest.TestCase):
 
     # Test case for removal of "$" if following sign not a logogram
     def test_following_sign_not_a_logogram(self):
-        atf_preprocessor = ATF_Preprocessor()
+        atf_preprocessor = ATFPreprocessor("../logs")
 
         converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line(
             "5'.	[...] x [...] x-šu₂? : kal : nap-ha-ri : $WA-wa-ru : ia-ar₂-ru"
@@ -47,7 +47,7 @@ class Test_ATF_Preprocessor(unittest.TestCase):
 
     # Test case for conversion of legacy grammar signs
     def test_legacy_grammar(self):
-        atf_preprocessor = ATF_Preprocessor()
+        atf_preprocessor = ATFPreprocessor("../logs")
 
         converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line(
             "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : ANŠE.KUR.RA-MEŠ"
@@ -67,7 +67,7 @@ class Test_ATF_Preprocessor(unittest.TestCase):
 
     # Test case to test if a lem line is parsed as type "lem_line"
     def test_lemmantization(self):
-        atf_preprocessor = ATF_Preprocessor()
+        atf_preprocessor = ATFPreprocessor("../logs")
 
         converted_line, c_array, type, c_alter_lemline_at = atf_preprocessor.process_line(
             "#lem: Sin[1]DN; ina[at]PRP; Nisannu[1]MN; ina[at]PRP; tāmartišu[appearance]N; adir[dark]AJ; ina[in]PRP; aṣîšu[going out]'N; adri[dark]AJ; uṣṣi[go out]V; šarrū[king]N; +šanānu[equal]V$iššannanū-ma"
@@ -121,7 +121,7 @@ class Test_ATF_Preprocessor(unittest.TestCase):
 
     # Batch test case to test if lemma lines are parsed as type "lem_line"
     def test_lemmatization_batch(self):
-        atf_preprocessor = ATF_Preprocessor()
+        atf_preprocessor = ATFPreprocessor("../logs")
 
         lines = [
             "#lem: attallû[eclipse]N; iššakinma[take place]V; enūma[when]SBJ; īrup[cloud over]V; attallû[eclipse]N; iššakinma[take place]V; Adad[1]DN; +rigmu[voice]N$rigimšu; iddi[utter]V; attallû[eclipse]N",
