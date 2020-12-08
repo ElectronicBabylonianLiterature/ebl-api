@@ -34,43 +34,45 @@ LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 @singledispatch
 def line_to_vec(
     line: Line, _: bool
-) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
-    return None
+) -> LineToVecEncodings:
+    return tuple()
 
 
 @line_to_vec.register(TextLine)
 def _line_to_vec_text(
     line: TextLine, first_line: bool
-) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
+) -> LineToVecEncodings:
     if first_line and not (
         line.line_number.has_prime  # pyre-ignore[16]
         or line.line_number.prefix_modifier  # pyre-ignore[16]
     ):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
-        return LineToVecEncoding.TEXT_LINE
+        return LineToVecEncoding.TEXT_LINE,
 
 
 @line_to_vec.register(RulingDollarLine)
 def _line_to_vec_ruling(
     line: RulingDollarLine, _: bool
-) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
+) -> LineToVecEncodings:
     if line.number == atf.Ruling.SINGLE:
-        return LineToVecEncoding.SINGLE_RULING
+        return LineToVecEncoding.SINGLE_RULING,
     elif line.number == atf.Ruling.DOUBLE:
-        return LineToVecEncoding.DOUBLE_RULING
+        return LineToVecEncoding.DOUBLE_RULING,
     elif line.number == atf.Ruling.TRIPLE:
-        return LineToVecEncoding.TRIPLE_RULING
+        return LineToVecEncoding.TRIPLE_RULING,
+    else:
+        return tuple()
 
 
 @line_to_vec.register(StateDollarLine)
 def _line_to_vec_state(
     line: StateDollarLine, _: bool
-) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
+) -> LineToVecEncodings:
     if line.extent == atf.Extent.END_OF:
-        return LineToVecEncoding.END
+        return LineToVecEncoding.END,
     else:
-        return None
+        return tuple()
 
 
 @singledispatch
@@ -111,9 +113,7 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
     for lines in list_of_lines:
         first_line = True
         for line in lines:
-            line_to_vec_encoding = line_to_vec(line, first_line)
-            if line_to_vec_encoding:
-                line_to_vec_intermediate_result.append(line_to_vec_encoding)
+            line_to_vec_intermediate_result.append(line_to_vec(line, first_line))
             first_line = False
         line_to_vec_result.append(
             tuple(pydash.flatten(line_to_vec_intermediate_result))
