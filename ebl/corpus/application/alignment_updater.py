@@ -50,7 +50,11 @@ class AlignmentUpdater(ChapterUpdater):
                 self.current_alignment.alignment
             )
             self._manuscript_lines.append(
-                attr.evolve(manuscript_line, line=updated_line)
+                attr.evolve(
+                    manuscript_line,
+                    line=updated_line,
+                    omitted_words=self.current_alignment.omitted_words,
+                )
             )
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:

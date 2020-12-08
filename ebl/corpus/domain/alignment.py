@@ -3,20 +3,12 @@ from typing import Sequence
 import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
-from ebl.corpus.domain.text import ManuscriptLine
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ManuscriptLineAlignment:
     alignment: Sequence[AlignmentToken]
     omitted_words: Sequence[int] = tuple()
-
-    def apply(self, manuscript_line: ManuscriptLine) -> ManuscriptLine:
-        return attr.evolve(
-            manuscript_line,
-            line=manuscript_line.line.update_alignment(self.alignment),
-            omitted_words=self.omitted_words,
-        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

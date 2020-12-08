@@ -195,6 +195,8 @@ def test_updating_text(
 def test_updating_alignment(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
+    aligmnet = 0
+    omitted_words = (1,)
     updated_text = attr.evolve(
         TEXT_WITHOUT_DOCUMENTS,
         chapters=(
@@ -221,10 +223,11 @@ def test_updating_alignment(
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=0,
+                                            alignment=aligmnet,
                                         ),
                                     ),
                                 ),
+                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
@@ -245,7 +248,13 @@ def test_updating_alignment(
     )
 
     alignment = Alignment(
-        ((ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),)
+        (
+            (
+                ManuscriptLineAlignment(
+                    (AlignmentToken("ku-[nu-ši]", aligmnet),), omitted_words
+                ),
+            ),
+        )
     )
     corpus.update_alignment(TEXT.id, 0, alignment, user)
 

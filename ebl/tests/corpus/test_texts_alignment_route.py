@@ -29,7 +29,7 @@ DTO = {
                         "isNormalized": False,
                     }
                 ],
-                "omittedWords": [],
+                "omittedWords": [1],
             }
         ]
     ]
@@ -63,6 +63,8 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
     allow_references(text, bibliography)
     create_text(client, text)
     chapter_index = 0
+    alignment = 0
+    omitted_words = (1,)
     updated_text = attr.evolve(
         text,
         chapters=(
@@ -87,7 +89,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=0,
+                                            alignment=alignment,
                                             variant=Word.of(
                                                 [Logogram.of_name("KU")],
                                                 language=Language.SUMERIAN,
@@ -95,6 +97,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                         ),
                                     ),
                                 ),
+                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
