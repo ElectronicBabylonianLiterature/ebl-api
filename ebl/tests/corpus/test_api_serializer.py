@@ -108,6 +108,7 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                         "content"
                                     ]
                                 ),
+                                "omittedWords": list(manuscript_line.omitted_words),
                             }
                             for manuscript_line in line.manuscripts
                         ],

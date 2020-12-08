@@ -85,6 +85,9 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
         lambda manuscript_line: OneOfLineSchema().dump(manuscript_line.line)["content"],
         lambda value: value,
     )
+    omitted_words = fields.List(
+        fields.Integer(), required=True, data_key="omittedWords"
+    )
 
     @post_load  # pyre-ignore[56]
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
@@ -101,6 +104,7 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
             tuple(data["labels"]),
             text,
             tuple(parse_paratext(line) for line in paratext),
+            tuple(data["omitted_words"]),
         )
 
 

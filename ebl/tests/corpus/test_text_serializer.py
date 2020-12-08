@@ -114,6 +114,7 @@ def to_dict(text: Text, include_documents=False):
                                 "paratext": OneOfLineSchema().dump(
                                     manuscript_line.paratext, many=True
                                 ),
+                                "omittedWords": list(manuscript_line.omitted_words),
                             }
                             for manuscript_line in line.manuscripts
                         ],

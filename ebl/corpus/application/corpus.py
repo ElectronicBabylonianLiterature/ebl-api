@@ -3,16 +3,17 @@ from typing import List, Sequence
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
+from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
-from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.text_hydrator import TextHydrator
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.application.text_validator import TextValidator
+from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.text import Line, Manuscript, Text, TextId
-from ebl.transliteration.domain.alignment import Alignment
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.users.domain.user import User
+
 
 COLLECTION = "texts"
 

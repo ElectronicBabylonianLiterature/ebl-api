@@ -17,6 +17,7 @@ from ebl.corpus.domain.text import (
     Line,
     Manuscript,
     ManuscriptLine,
+    Siglum,
     Text,
     TextId,
 )
@@ -73,6 +74,7 @@ MANUSCRIPT_TEXT = TextLine(
     ),
 )
 PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
+OMITTED_WORDS = (1,)
 
 RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
 NOTE = None
@@ -81,7 +83,7 @@ LINE = Line(
     NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT),),
+    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
 )
 
 TEXT = Text(
@@ -130,11 +132,8 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].name == CHAPTER_NAME
     assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].id == MANUSCRIPT_ID
-    assert TEXT.chapters[0].manuscripts[0].siglum == (
-        PROVENANCE,
-        PERIOD,
-        TYPE,
-        SIGLUM_DISAMBIGUATOR,
+    assert TEXT.chapters[0].manuscripts[0].siglum == Siglum(
+        PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
     )
     assert TEXT.chapters[0].manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
@@ -157,6 +156,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
     assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
     assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
+    assert TEXT.chapters[0].lines[0].manuscripts[0].omitted_words == OMITTED_WORDS
 
 
 def test_giving_museum_number_and_accession_is_invalid():

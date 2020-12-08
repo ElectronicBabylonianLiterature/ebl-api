@@ -39,18 +39,22 @@ def get_duplicates(collection: Iterable[T]) -> Set[T]:
     }
 
 
-Siglum = Tuple[Provenance, Period, ManuscriptType, str]
+@attr.s(auto_attribs=True, frozen=True)
+class Siglum:
+    provenance: Provenance
+    period: Period
+    type: ManuscriptType
+    disambiquator: str
 
-
-def siglum_to_string(siglum: Siglum) -> str:
-    return "".join(
-        [
-            siglum[0].abbreviation,
-            siglum[1].abbreviation,
-            siglum[2].abbreviation,
-            siglum[3],
-        ]
-    )
+    def __str__(self) -> str:
+        return "".join(
+            [
+                self.provenance.abbreviation,
+                self.period.abbreviation,
+                self.type.abbreviation,
+                self.disambiquator,
+            ]
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -73,7 +77,9 @@ class Manuscript:
 
     @property
     def siglum(self) -> Siglum:
-        return (self.provenance, self.period, self.type, self.siglum_disambiguator)
+        return Siglum(
+            self.provenance, self.period, self.type, self.siglum_disambiguator
+        )
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript(self)
@@ -94,6 +100,7 @@ class ManuscriptLine:
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: Union[TextLine, EmptyLine]
     paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
+    omitted_words: Sequence[int] = tuple()
 
     def accept(self, visitor: text_visitor.TextVisitor) -> None:
         visitor.visit_manuscript_line(self)
@@ -260,7 +267,7 @@ class Chapter:
         return ", ".join(
             " ".join(
                 [
-                    siglum_to_string(self._get_manuscript(label[0]).siglum),
+                    str(self._get_manuscript(label[0]).siglum),
                     *[side.to_value() for side in label[1]],
                     label[2].label,
                 ]
