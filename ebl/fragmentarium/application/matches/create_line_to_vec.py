@@ -1,8 +1,6 @@
 from enum import Enum
 from functools import singledispatch
-from typing import Sequence, Tuple, Union
-
-import pydash  # pyre-ignore[21]
+from typing import Sequence, Tuple
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
@@ -32,45 +30,37 @@ LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @singledispatch
-def line_to_vec(
-    line: Line, _: bool
-) -> LineToVecEncodings:
+def line_to_vec(line: Line, _: bool) -> LineToVecEncodings:
     return tuple()
 
 
 @line_to_vec.register(TextLine)
-def _line_to_vec_text(
-    line: TextLine, first_line: bool
-) -> LineToVecEncodings:
+def _line_to_vec_text(line: TextLine, first_line: bool) -> LineToVecEncodings:
     if first_line and not (
         line.line_number.has_prime  # pyre-ignore[16]
         or line.line_number.prefix_modifier  # pyre-ignore[16]
     ):
         return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
     else:
-        return LineToVecEncoding.TEXT_LINE,
+        return (LineToVecEncoding.TEXT_LINE,)
 
 
 @line_to_vec.register(RulingDollarLine)
-def _line_to_vec_ruling(
-    line: RulingDollarLine, _: bool
-) -> LineToVecEncodings:
+def _line_to_vec_ruling(line: RulingDollarLine, _: bool) -> LineToVecEncodings:
     if line.number == atf.Ruling.SINGLE:
-        return LineToVecEncoding.SINGLE_RULING,
+        return (LineToVecEncoding.SINGLE_RULING,)
     elif line.number == atf.Ruling.DOUBLE:
-        return LineToVecEncoding.DOUBLE_RULING,
+        return (LineToVecEncoding.DOUBLE_RULING,)
     elif line.number == atf.Ruling.TRIPLE:
-        return LineToVecEncoding.TRIPLE_RULING,
+        return (LineToVecEncoding.TRIPLE_RULING,)
     else:
         return tuple()
 
 
 @line_to_vec.register(StateDollarLine)
-def _line_to_vec_state(
-    line: StateDollarLine, _: bool
-) -> LineToVecEncodings:
+def _line_to_vec_state(line: StateDollarLine, _: bool) -> LineToVecEncodings:
     if line.extent == atf.Extent.END_OF:
-        return LineToVecEncoding.END,
+        return (LineToVecEncoding.END,)
     else:
         return tuple()
 
@@ -113,11 +103,9 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
     for lines in list_of_lines:
         first_line = True
         for line in lines:
-            line_to_vec_intermediate_result.append(line_to_vec(line, first_line))
+            line_to_vec_intermediate_result.extend(line_to_vec(line, first_line))
             first_line = False
-        line_to_vec_result.append(
-            tuple(pydash.flatten(line_to_vec_intermediate_result))
-        )
+        line_to_vec_result.append(tuple(line_to_vec_intermediate_result))
         line_to_vec_intermediate_result = []
 
     return tuple(line_to_vec_result) if len(line_to_vec_result[0]) else tuple()
