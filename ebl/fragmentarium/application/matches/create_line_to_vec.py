@@ -107,8 +107,7 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
             if line_to_vec_encoding:
                 line_to_vec_intermediate_result.append(line_to_vec_encoding)
             first_line = False
-        line_to_vec_result.append(line_to_vec_intermediate_result)
+        line_to_vec_result.append(tuple(pydash.flatten(line_to_vec_intermediate_result)))
         line_to_vec_intermediate_result = []
-    result = [tuple(pydash.flatten(encodings)) for encodings in line_to_vec_result]
 
-    return tuple(result) if len(result[0]) else tuple()
+    return tuple(line_to_vec_result) if len(line_to_vec_result[0]) else tuple()
