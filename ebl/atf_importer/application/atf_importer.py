@@ -298,14 +298,14 @@ class ATF_Importer:
                     break
                 parse_museum_number(museum_number_input)
                 museum_number = museum_number_input
-                self.logger.info("museum number '" + museum_number + "' is valid!")
+                self.logger.info("Museum number '" + museum_number + "' is valid!")
             except Exception as e:
                 pass
 
         if(skip):
-            failed.append(filename + " could not be imported, museum number not found")
+            failed.append(filename + " could not be imported: Museum number not found")
             self.logger.error("Museum number not found")
-            self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" failed"))
+            self.logger.info(Util.print_frame("Conversion of \"" + filename + ".atf\" failed"))
             return
 
         try:
@@ -316,7 +316,7 @@ class ATF_Importer:
             self.insert_lemmatization(updater, ebl_lines['lemmatization'], museum_number)
 
             success.append(filename + " successfully imported")
-            self.logger.info(Util.print_frame("conversion of \"" + filename + ".atf\" finished"))
+            self.logger.info(Util.print_frame("Conversion of \"" + filename + ".atf\" finished"))
 
         except Exception as e:
             self.logger.error(filename + " could not be imported: "+ str(e))
