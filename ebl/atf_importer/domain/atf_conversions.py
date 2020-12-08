@@ -1,6 +1,7 @@
 import re
+# pyre-ignore[21]
 from lark import Visitor
-from lark import lexer # pyre-ignore[21]
+from lark import lexer
 
 class Convert_Line_Dividers(Visitor):
 
