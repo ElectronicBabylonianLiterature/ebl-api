@@ -1,6 +1,6 @@
 from enum import Enum
 from functools import singledispatch
-from typing import Sequence, Optional, Tuple
+from typing import Sequence, Tuple, Union
 
 import pydash  # pyre-ignore[21]
 
@@ -32,12 +32,16 @@ LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @singledispatch
-def line_to_vec(line: Line, _: bool) -> Optional[LineToVecEncoding]:
+def line_to_vec(
+    line: Line, _: bool
+) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
     return None
 
 
 @line_to_vec.register(TextLine)
-def _line_to_vec_text(line: TextLine, first_line: bool):
+def _line_to_vec_text(
+    line: TextLine, first_line: bool
+) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
     if first_line and not (
         line.line_number.has_prime  # pyre-ignore[16]
         or line.line_number.prefix_modifier  # pyre-ignore[16]
@@ -48,7 +52,9 @@ def _line_to_vec_text(line: TextLine, first_line: bool):
 
 
 @line_to_vec.register(RulingDollarLine)
-def _line_to_vec_ruling(line: RulingDollarLine, _: bool):
+def _line_to_vec_ruling(
+    line: RulingDollarLine, _: bool
+) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
     if line.number == atf.Ruling.SINGLE:
         return LineToVecEncoding.SINGLE_RULING
     elif line.number == atf.Ruling.DOUBLE:
@@ -58,7 +64,9 @@ def _line_to_vec_ruling(line: RulingDollarLine, _: bool):
 
 
 @line_to_vec.register(StateDollarLine)
-def _line_to_vec_state(line: StateDollarLine, _: bool):
+def _line_to_vec_state(
+    line: StateDollarLine, _: bool
+) -> Union[LineToVecEncoding, LineToVecEncodings, None]:
     if line.extent == atf.Extent.END_OF:
         return LineToVecEncoding.END
     else:
@@ -107,7 +115,9 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
             if line_to_vec_encoding:
                 line_to_vec_intermediate_result.append(line_to_vec_encoding)
             first_line = False
-        line_to_vec_result.append(tuple(pydash.flatten(line_to_vec_intermediate_result)))
+        line_to_vec_result.append(
+            tuple(pydash.flatten(line_to_vec_intermediate_result))
+        )
         line_to_vec_intermediate_result = []
 
     return tuple(line_to_vec_result) if len(line_to_vec_result[0]) else tuple()
