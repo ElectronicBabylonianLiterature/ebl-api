@@ -20,8 +20,9 @@ Scores = List[Tuple[str, int]]
 Results = Dict[str, int]
 
 
-def sort_dict_desc(score: Results) -> OrderedDict:
-    return OrderedDict(sorted(score.items(), key=lambda item: -item[1]))
+def sort_scores_to_list(results: Results) -> Scores:
+    ordered_results = OrderedDict(sorted(results.items(), key=lambda item: -item[1]))
+    return list(ordered_results.items())
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -38,13 +39,13 @@ class LineToVecRanker:
 
     @property
     def score(self) -> Scores:
-        return list(sort_dict_desc(self._score_results).items())[
+        return sort_scores_to_list(self._score_results)[
             : LineToVecRanker.NUMBER_OF_RESULTS_TO_RETURN
         ]
 
     @property
     def score_weighted(self) -> Scores:
-        return list(sort_dict_desc(self._score_weighted_results).items())[
+        return sort_scores_to_list(self._score_weighted_results)[
             : LineToVecRanker.NUMBER_OF_RESULTS_TO_RETURN
         ]
 
