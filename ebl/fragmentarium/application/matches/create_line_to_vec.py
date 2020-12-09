@@ -3,6 +3,7 @@ from functools import reduce, singledispatch
 from typing import Sequence, Tuple
 
 import attr
+from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
@@ -84,34 +85,36 @@ def _get_line_number_range(line_number: LineNumberRange) -> int:
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineSplits:
-    splits: Tuple[Tuple[Line, ...], ...] = (tuple(), )
+    splits: Tuple[Tuple[Line, ...], ...] = (tuple(),)
+    _last_line_number: int = -1
 
-    def open_split(self, line: Line) -> "LineSplits":
-        return LineSplits((*self.splits, (line, )))
+    @singledispatchmethod  # pyre-ignore[56]
+    def add_line(self, line: Line) -> "LineSplits":
+        return LineSplits(self._add_to_split(line), self._last_line_number)
 
-    def add_to_split(self, line: Line) -> "LineSplits":
+    @add_line.register(TextLine)  # pyre-ignore[56]
+    def _(self, line: TextLine) -> "LineSplits":
+        current_line_number = get_line_number(line.line_number)
+        splits = (
+            self._open_split
+            if self._last_line_number >= current_line_number
+            else self._add_to_split
+        )(line)
+        return LineSplits(splits, current_line_number)
+
+    def _open_split(self, line: Line) -> Tuple[Tuple[Line, ...], ...]:
+        return (*self.splits, (line,))
+
+    def _add_to_split(self, line: Line) -> Tuple[Tuple[Line, ...], ...]:
         past_splits = self.splits[:-1]
         current_split = self.splits[-1]
-        return LineSplits((*past_splits, (*current_split, line)))
-
-
-def _split_line(
-    accumulator: Tuple[LineSplits, int], line: Line
-) -> Tuple[LineSplits, int]:
-    split, last_line_number = accumulator
-    if isinstance(line, TextLine):
-        current_line_number = get_line_number(line.line_number)
-        return ((
-            split.open_split
-            if last_line_number >= current_line_number
-            else split.add_to_split
-        )(line), current_line_number)
-    else:
-        return (split.add_to_split(line), last_line_number)
+        return (*past_splits, (*current_split, line))
 
 
 def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line, ...], ...]:
-    return reduce(_split_line, lines, (LineSplits(), -1))[0].splits
+    return reduce(
+        lambda splits, line: splits.add_line(line), lines, LineSplits()
+    ).splits
 
 
 def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
