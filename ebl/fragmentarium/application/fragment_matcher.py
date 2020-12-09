@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Tuple, Union, List, Dict
+from typing import ClassVar, Tuple, Union, List, Dict
 
 import attr
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
@@ -16,13 +16,51 @@ from ebl.fragmentarium.application.matches.line_to_vec_score import (
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
-NUMBER_OF_RESULTS_TO_RETURN: int = 15
+Scores = List[Tuple[str, int]]
+Results = Dict[str, int]
+
+
+def sort_dict_desc(score: Results) -> OrderedDict:
+    return OrderedDict(sorted(score.items(), key=lambda item: -item[1]))
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecRanking:
-    score: List[Tuple[str, int]]
-    score_weighted: List[Tuple[str, int]]
+    score: Scores
+    score_weighted: Scores
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class LineToVecRanker:
+    NUMBER_OF_RESULTS_TO_RETURN: ClassVar[int] = 15
+    _score_results: Results = attr.ib(factory=dict, init=False)
+    _score_weighted_results: Results = attr.ib(factory=dict, init=False)
+
+    @property
+    def score(self) -> Scores:
+        return list(sort_dict_desc(self._score_results).items())[
+            : LineToVecRanker.NUMBER_OF_RESULTS_TO_RETURN
+        ]
+
+    @property
+    def score_weighted(self) -> Scores:
+        return list(sort_dict_desc(self._score_weighted_results).items())[
+            : LineToVecRanker.NUMBER_OF_RESULTS_TO_RETURN
+        ]
+
+    @property
+    def ranking(self) -> LineToVecRanking:
+        return LineToVecRanking(self.score, self.score_weighted)
+
+    def insert_score(self, fragment_id: str, score: int, score_weighted: int) -> None:
+        self._insert_score(fragment_id, score, self._score_results)
+        self._insert_score(fragment_id, score_weighted, self._score_weighted_results)
+
+    def _insert_score(
+        self, fragment_id: str, score_result: int, score_results: Dict[str, int]
+    ) -> None:
+        if score_result > score_results.get(fragment_id, -1):
+            score_results[fragment_id] = score_result
 
 
 class FragmentMatcher:
@@ -44,40 +82,20 @@ class FragmentMatcher:
         else:
             raise ValueError("Fragment has no line to vec")
 
-    def _sort_dict_desc(self, score: dict) -> OrderedDict:
-        return OrderedDict(sorted(score.items(), key=lambda item: -item[1]))
-
     def rank_line_to_vec(
         self, candidate: Union[str, Tuple[int, ...]]
     ) -> LineToVecRanking:
-        def _insert_score(
-            fragment_id: str, score_result: int, score_results: Dict[str, int]
-        ) -> None:
-            if score_result > score_results.get(fragment_id, -1):
-                score_results[fragment_id] = score_result
-
         candidates = self.parse_candidate(candidate)
-        score_results = dict()
-        score_weighted_results = dict()
         fragments = self.fragment_repository.query_transliterated_line_to_vec()
+        ranker = LineToVecRanker()
 
         for candidate in candidates:
             for fragment_id, line_to_vecs in fragments.items():
                 for line_to_vec in line_to_vecs:
-                    _insert_score(
-                        fragment_id, score(candidate, line_to_vec), score_results
-                    )
-                    _insert_score(
+                    ranker.insert_score(
                         fragment_id,
+                        score(candidate, line_to_vec),
                         score_weighted(candidate, line_to_vec),
-                        score_weighted_results,
                     )
 
-        return LineToVecRanking(
-            score=list(self._sort_dict_desc(score_results).items())[
-                :NUMBER_OF_RESULTS_TO_RETURN
-            ],
-            score_weighted=list(self._sort_dict_desc(score_weighted_results).items())[
-                :NUMBER_OF_RESULTS_TO_RETURN
-            ],
-        )
+        return ranker.ranking

@@ -6,6 +6,7 @@ from ebl.fragmentarium.application.line_to_vec_ranking_schema import (
     LineToVecRankingSchema,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.fragment_matcher import sort_dict_desc
 from ebl.tests.factories.fragment import FragmentFactory
 
 
@@ -20,7 +21,7 @@ def test_find(fragment_matcher, fragment_repository, when):
 
 def test_sort_dict_desc(fragment_matcher):
     score = {"FragmentId1": 4, "FragmentId2": 12, "FragmentId3": 2}
-    assert fragment_matcher._sort_dict_desc(score) == {
+    assert sort_dict_desc(score) == {
         "FragmentId2": 12,
         "FragmentId1": 4,
         "FragmentId3": 2,
