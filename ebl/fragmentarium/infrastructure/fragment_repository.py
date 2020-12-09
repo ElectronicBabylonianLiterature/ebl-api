@@ -102,10 +102,8 @@ class MongoFragmentRepository(FragmentRepository):
             str(
                 MuseumNumberSchema().load(fragment["museumNumber"])  # pyre-ignore[16]
             ): tuple(
-                [
-                    LineToVecEncoding.from_list(line_to_vec)
-                    for line_to_vec in fragment["lineToVec"]
-                ]
+                LineToVecEncoding.from_list(line_to_vec)
+                for line_to_vec in fragment["lineToVec"]
             )
             for fragment in cursor
         }
