@@ -26,7 +26,11 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
 
-TextId = collections.namedtuple("TextId", ["category", "index"])
+
+@attr.s(auto_attribs=True, frozen=True)
+class TextId:
+    category: int
+    index: int
 
 
 T = TypeVar("T")

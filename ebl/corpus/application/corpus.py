@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence
+from typing import List, Sequence, Tuple
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
@@ -36,6 +36,10 @@ class TextRepository(ABC):
         ...
 
 
+def text_id_to_tuple(text: Text) -> Tuple[int, int]:
+    return (text.id.category, text.id.index)
+
+
 class Corpus:
     def __init__(
         self,
@@ -52,8 +56,9 @@ class Corpus:
     def create(self, text: Text, user) -> None:
         self._validate_text(text)
         self._repository.create(text)
-        new_dict: dict = {**serialize(text), "_id": text.id}
-        self._changelog.create(COLLECTION, user.profile, {"_id": text.id}, new_dict)
+        text_id = text_id_to_tuple(text)
+        new_dict: dict = {**serialize(text), "_id": text_id}
+        self._changelog.create(COLLECTION, user.profile, {"_id": text_id}, new_dict)
 
     def find(self, id_: TextId) -> Text:
         text = self._repository.find(id_)
@@ -113,6 +118,6 @@ class Corpus:
         return hydrator.text
 
     def _create_changelog(self, old_text, new_text, user) -> None:
-        old_dict: dict = {**serialize(old_text), "_id": old_text.id}
-        new_dict: dict = {**serialize(new_text), "_id": new_text.id}
+        old_dict: dict = {**serialize(old_text), "_id": text_id_to_tuple(old_text)}
+        new_dict: dict = {**serialize(new_text), "_id": text_id_to_tuple(new_text)}
         self._changelog.create(COLLECTION, user.profile, old_dict, new_dict)

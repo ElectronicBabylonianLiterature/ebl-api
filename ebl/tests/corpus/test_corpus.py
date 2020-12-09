@@ -91,8 +91,11 @@ def expect_text_update(
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**serialize(old_text), "_id": old_text.id},
-        {**serialize(updated_text), "_id": updated_text.id},
+        {**serialize(old_text), "_id": (old_text.id.category, old_text.id.index)},
+        {
+            **serialize(updated_text),
+            "_id": (updated_text.id.category, updated_text.id.index),
+        },
     ).thenReturn()
 
 
@@ -126,8 +129,9 @@ def test_creating_text(
 ):
     expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
+    text_id = (TEXT.id.category, TEXT.id.index)
     when(changelog).create(
-        COLLECTION, user.profile, {"_id": TEXT.id}, {**serialize(TEXT), "_id": TEXT.id}
+        COLLECTION, user.profile, {"_id": text_id}, {**serialize(TEXT), "_id": text_id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
