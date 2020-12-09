@@ -59,7 +59,10 @@ class LineToVecRanker:
     def _insert_score(
         self, fragment_id: str, score_result: int, score_results: Dict[str, int]
     ) -> None:
-        if score_result > score_results.get(fragment_id, -1):
+        if (
+            fragment_id not in score_results
+            or score_result > score_results.get[fragment_id]
+        ):
             score_results[fragment_id] = score_result
 
 
