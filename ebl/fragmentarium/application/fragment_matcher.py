@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from typing import ClassVar, Tuple, Union, List, Dict
 
 import attr
@@ -21,8 +20,7 @@ Results = Dict[str, int]
 
 
 def sort_scores_to_list(results: Results) -> Scores:
-    ordered_results = OrderedDict(sorted(results.items(), key=lambda item: -item[1]))
-    return list(ordered_results.items())
+    return sorted(results.items(), key=lambda item: -item[1])
 
 
 @attr.s(auto_attribs=True, frozen=True)
