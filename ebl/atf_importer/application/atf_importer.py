@@ -94,7 +94,6 @@ class ATFImporter:
             oracc_guideword = None
 
             for pair in orrac_lemma_tupel:
-
                 oracc_lemma = pair[0]
                 oracc_guideword = pair[1]
 
@@ -120,58 +119,58 @@ class ATFImporter:
                     all_unique_lemmas.append(unique_lemmas)
                     return
 
-                for entry in self.db.get_collection("words").find(
-                    {"oraccWords.guideWord": oracc_guideword}, {"_id"}
-                ):
-                    unique_lemmas.append(entry["_id"])
+                # for entry in self.db.get_collection("words").find(
+                #     {"oraccWords.guideWord": oracc_guideword}, {"_id"}
+                # ):
+                #     unique_lemmas.append(entry["_id"])
+                #
+                # for entry in self.db.get_collection("words").find(
+                #     {"oraccWords.lemma": oracc_lemma}, {"_id"}
+                # ):
+                #     if entry["_id"] not in unique_lemmas:
+                #         unique_lemmas.append(entry["_id"])
+                #
+                # for entry in self.db.get_collection("words").find(
+                #     {"guideWord": oracc_guideword}, {"_id"}
+                # ):
+                #     if entry["_id"] not in unique_lemmas:
+                #         unique_lemmas.append(entry["_id"])
 
-                for entry in self.db.get_collection("words").find(
-                    {"oraccWords.lemma": oracc_lemma}, {"_id"}
-                ):
-                    if entry["_id"] not in unique_lemmas:
+                try:
+                    citation_form = self.lemmas_cfforms[oracc_lemma]
+                    guideword = self.cfform_guideword[citation_form]
+                    if "//" in guideword:
+                        guideword = guideword.split("//")[0]
+                    senses = self.cfforms_senses[citation_form]
+
+                    #if senses is not None and oracc_guideword in senses:
+
+                    for entry in self.db.get_collection("words").find(
+                        {"oraccWords.guideWord": guideword}, {"_id"}
+                    ):
                         unique_lemmas.append(entry["_id"])
 
-                for entry in self.db.get_collection("words").find(
-                    {"guideWord": oracc_guideword}, {"_id"}
-                ):
-                    if entry["_id"] not in unique_lemmas:
-                        unique_lemmas.append(entry["_id"])
+                    for entry in self.db.get_collection("words").find(
+                        {"oraccWords.lemma": guideword}, {"_id"}
+                    ):
+                        if entry["_id"] not in unique_lemmas:
+                            unique_lemmas.append(entry["_id"])
 
-                if len(unique_lemmas) == 0:
-                    try:
-                        citation_form = self.lemmas_cfforms[oracc_lemma]
-                        guideword = self.cfform_guideword[citation_form]
-                        if "//" in guideword:
-                            guideword = guideword.split("//")[0]
-                        senses = self.cfforms_senses[citation_form]
+                    for entry in self.db.get_collection("words").find(
+                        {"oraccWords.guideWord": citation_form}, {"_id"}
+                    ):
+                        if entry["_id"] not in unique_lemmas:
+                            unique_lemmas.append(entry["_id"])
 
-                        if senses is not None and oracc_guideword in senses:
+                    for entry in self.db.get_collection("words").find(
+                        {"oraccWords.lemma": citation_form}, {"_id"}
+                    ):
+                        if entry["_id"] not in unique_lemmas:
+                            unique_lemmas.append(entry["_id"])
 
-                            for entry in self.db.get_collection("words").find(
-                                {"oraccWords.guideWord": guideword}, {"_id"}
-                            ):
-                                unique_lemmas.append(entry["_id"])
-
-                            for entry in self.db.get_collection("words").find(
-                                {"oraccWords.lemma": citation_form}, {"_id"}
-                            ):
-                                if entry["_id"] not in unique_lemmas:
-                                    unique_lemmas.append(entry["_id"])
-
-                            for entry in self.db.get_collection("words").find(
-                                {"oraccWords.lemma": oracc_lemma}, {"_id"}
-                            ):
-                                if entry["_id"] not in unique_lemmas:
-                                    unique_lemmas.append(entry["_id"])
-
-                            for entry in self.db.get_collection("words").find(
-                                {"guideWord": oracc_guideword}, {"_id"}
-                            ):
-                                if entry["_id"] not in unique_lemmas:
-                                    unique_lemmas.append(entry["_id"])
-                    except Exception:
-                        if oracc_lemma not in not_lemmatized:
-                            not_lemmatized[oracc_lemma] = True
+                except Exception:
+                    if oracc_lemma not in not_lemmatized:
+                        not_lemmatized[oracc_lemma] = True
 
                         self.logger.warning(
                             "Incompatible lemmatization: No citation form found in the glossary for '"
