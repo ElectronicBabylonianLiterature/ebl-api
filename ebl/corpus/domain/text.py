@@ -3,6 +3,7 @@ from typing import Iterable, Optional, Sequence, Set, Tuple, TypeVar, Union, cas
 
 import attr
 
+import ebl.corpus.domain.text_visitor as text_visitor
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.enums import (
@@ -14,18 +15,16 @@ from ebl.corpus.domain.enums import (
     Stage,
 )
 from ebl.corpus.domain.label_validator import LabelValidator
-import ebl.corpus.domain.text_visitor as text_visitor
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.tokens import Token
 from ebl.merger import Merger
+from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.labels import Label
-from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.dollar_line import DollarLine
-from ebl.transliteration.domain.line import EmptyLine
-from ebl.errors import NotFoundError
-
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.tokens import Token
 
 TextId = collections.namedtuple("TextId", ["category", "index"])
 
@@ -110,7 +109,9 @@ class ManuscriptLine:
         return attr.evolve(other, line=merged_line)
 
     def strip_alignments(self) -> "ManuscriptLine":
-        return attr.evolve(self, line=self.line.strip_alignments())
+        return attr.evolve(
+            self, line=self.line.strip_alignments(), omitted_words=tuple()
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

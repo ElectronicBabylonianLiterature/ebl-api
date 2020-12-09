@@ -11,7 +11,6 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.corpus.domain.text import (
     Chapter,
     Line,
@@ -24,15 +23,16 @@ from ebl.corpus.domain.text import (
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
-from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 CATEGORY = 1
 INDEX = 2
@@ -296,3 +296,19 @@ def test_stage():
     periods = [period.long_name for period in Period]
     stages = [stage.value for stage in Stage]
     assert stages == [*periods, "Standard Babylonian"]
+
+
+def test_strip_manuscript_alignment():
+    word = Word.of([Reading.of_name("ku")], alignment=1)
+    manuscript = ManuscriptLine(
+        MANUSCRIPT_ID, LABELS, TextLine(LineNumber(1), (word,)), PARATEXT, OMITTED_WORDS
+    )
+    expected = ManuscriptLine(
+        MANUSCRIPT_ID,
+        LABELS,
+        TextLine(LineNumber(1), (word.set_alignment(None, None),)),
+        PARATEXT,
+        tuple(),
+    )
+
+    assert manuscript.strip_alignments() == expected
