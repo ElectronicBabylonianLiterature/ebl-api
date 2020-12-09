@@ -1,6 +1,8 @@
 from enum import Enum
-from functools import singledispatch
+from functools import reduce, singledispatch
 from typing import Sequence, Tuple
+
+import attr
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
@@ -80,20 +82,36 @@ def _get_line_number_range(line_number: LineNumberRange) -> int:
     return line_number.end.number
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class LineSplits:
+    splits: Tuple[Tuple[Line, ...], ...] = (tuple(), )
+
+    def open_split(self, line: Line) -> "LineSplits":
+        return LineSplits((*self.splits, (line, )))
+
+    def add_to_split(self, line: Line) -> "LineSplits":
+        past_splits = self.splits[:-1]
+        current_split = self.splits[-1]
+        return LineSplits((*past_splits, (*current_split, line)))
+
+
+def _split_line(
+    accumulator: Tuple[LineSplits, int], line: Line
+) -> Tuple[LineSplits, int]:
+    split, last_line_number = accumulator
+    if isinstance(line, TextLine):
+        current_line_number = get_line_number(line.line_number)
+        return ((
+            split.open_split
+            if last_line_number >= current_line_number
+            else split.add_to_split
+        )(line), current_line_number)
+    else:
+        return (split.add_to_split(line), last_line_number)
+
+
 def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line, ...], ...]:
-    last_line_number = -1
-    splitted_lines = []
-    intermediate_result = []
-    for line in lines:
-        if isinstance(line, TextLine):
-            current_line_number = get_line_number(line.line_number)
-            if last_line_number >= current_line_number:
-                splitted_lines.append(tuple(intermediate_result))
-                intermediate_result = []
-            last_line_number = current_line_number
-        intermediate_result.append(line)
-    splitted_lines.append(tuple(intermediate_result))
-    return tuple(splitted_lines)
+    return reduce(_split_line, lines, (LineSplits(), -1))[0].splits
 
 
 def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
