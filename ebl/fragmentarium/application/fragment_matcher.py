@@ -16,6 +16,9 @@ from ebl.fragmentarium.application.matches.line_to_vec_score import (
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
+NUMBER_OF_RESULTS_TO_RETURN: int = 15
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecRanking:
     score: List[Tuple[str, int]]
@@ -24,7 +27,6 @@ class LineToVecRanking:
 
 class FragmentMatcher:
     def __init__(self, fragment_repository: FragmentRepository):
-
         self.fragment_repository = fragment_repository
         self._fragment_repository = fragment_repository
 
@@ -71,12 +73,11 @@ class FragmentMatcher:
                         score_weighted_results,
                     )
 
-        number_of_results_to_return = 15
         return LineToVecRanking(
             score=list(self._sort_dict_desc(score_results).items())[
-                :number_of_results_to_return
+                :NUMBER_OF_RESULTS_TO_RETURN
             ],
             score_weighted=list(self._sort_dict_desc(score_weighted_results).items())[
-                :number_of_results_to_return
+                :NUMBER_OF_RESULTS_TO_RETURN
             ],
         )
