@@ -88,17 +88,20 @@ class FragmentMatcher:
     def rank_line_to_vec(
         self, candidate: Union[str, Tuple[int, ...]]
     ) -> LineToVecRanking:
-        candidates = self.parse_candidate(candidate)
+        candidate_line_to_vecs = self.parse_candidate(candidate)
         fragments = self.fragment_repository.query_transliterated_line_to_vec()
         ranker = LineToVecRanker()
 
-        for candidate, fragment in itertools.product(candidates, fragments.items()):
+        for candidate_line_to_vec, fragment in itertools.product(
+            candidate_line_to_vecs, fragments.items()
+        ):
             fragment_id, line_to_vecs = fragment
-            for line_to_vec in line_to_vecs:
-                ranker.insert_score(
-                    fragment_id,
-                    score(candidate, line_to_vec),
-                    score_weighted(candidate, line_to_vec),
-                )
+            if fragment_id != candidate:
+                for line_to_vec in line_to_vecs:
+                    ranker.insert_score(
+                        fragment_id,
+                        score(candidate_line_to_vec, line_to_vec),
+                        score_weighted(candidate_line_to_vec, line_to_vec),
+                    )
 
         return ranker.ranking

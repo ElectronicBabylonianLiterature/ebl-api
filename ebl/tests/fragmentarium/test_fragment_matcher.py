@@ -37,8 +37,20 @@ def test_line_to_vec_ranking_schema():
     assert schema.load(data) == line_to_vec_ranking
 
 
-@pytest.mark.parametrize("parameters", ["BM.11", [1, 2, 1, 1]])
-def test_line_to_vec(parameters, fragment_matcher, when, fragment_repository):
+@pytest.mark.parametrize(
+    "parameters, expected",
+    [
+        ["BM.11", {"score": [("X.1", 0)], "score_weighted": [("X.1", 0)]}],
+        [
+            [1, 2, 1, 1],
+            {
+                "score": [("BM.11", 0), ("X.1", 0)],
+                "score_weighted": [("BM.11", 0), ("X.1", 0)],
+            },
+        ],
+    ],
+)
+def test_line_to_vec(parameters, expected, fragment_matcher, when, fragment_repository):
     fragment_1_line_to_vec = (LineToVecEncoding.from_list([1, 2, 1, 1]),)
     fragment_2_line_to_vec = (LineToVecEncoding.from_list([2, 1, 1]),)
     fragment_1 = FragmentFactory.build(
@@ -62,6 +74,4 @@ def test_line_to_vec(parameters, fragment_matcher, when, fragment_repository):
             }
         )
     )
-    assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking(
-        score=[("BM.11", 0), ("X.1", 0)], score_weighted=[("BM.11", 0), ("X.1", 0)]
-    )
+    assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking(**expected)
