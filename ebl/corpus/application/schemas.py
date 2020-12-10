@@ -1,19 +1,20 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.enums import (
-    Classification,
+from ebl.corpus.domain.enums import Classification, Stage
+from ebl.corpus.domain.manuscript import (
+    Manuscript,
     ManuscriptType,
     Period,
     PeriodModifier,
     Provenance,
-    Stage,
 )
+from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine, Text
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
-from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.domain.labels import parse_label
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
