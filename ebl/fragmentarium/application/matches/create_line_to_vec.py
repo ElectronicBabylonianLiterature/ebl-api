@@ -33,19 +33,70 @@ LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @singledispatch
+def get_line_number_prime(_: AbstractLineNumber) -> bool:
+    raise ValueError("No default for overloading")
+
+
+@get_line_number_prime.register(LineNumber)
+def _get_line_number_prime(line_number: LineNumber) -> bool:
+    return line_number.has_prime
+
+
+@get_line_number_prime.register(LineNumberRange)
+def _get_line_number_range_prime(line_number: LineNumberRange) -> bool:
+    return line_number.start.has_prime
+
+
+@singledispatch
+def get_line_number_prefix_modifier(_: AbstractLineNumber) -> bool:
+    raise ValueError("No default for overloading")
+
+
+@get_line_number_prefix_modifier.register(LineNumber)
+def get_line_number_prefix_modifier_line_number(line_number: LineNumber) -> bool:
+    return bool(line_number.prefix_modifier)
+
+
+@get_line_number_prefix_modifier.register(LineNumberRange)
+def _get_line_number_prefix_modifier_line_number_range(line_number: LineNumberRange) -> bool:
+    return bool(line_number.start.prefix_modifier)
+
+
+@singledispatch
+def parse_text_line(_: AbstractLineNumber) -> LineToVecEncodings:
+    raise ValueError("No default for overloading")
+
+
+@parse_text_line.register(LineNumber)
+def _parse_text_line(_: LineNumber) -> LineToVecEncodings:
+    return (LineToVecEncoding.TEXT_LINE,)
+
+
+@parse_text_line.register(LineNumberRange)
+def _parse_text_line_line_number_range(line_number: LineNumberRange) -> LineToVecEncodings:
+    return tuple(
+        [
+            LineToVecEncoding.TEXT_LINE
+            for _ in range(line_number.start.number, line_number.end.number + 1)
+        ]
+    )
+
+
+@singledispatch
 def line_to_vec(line: Line, _: bool) -> LineToVecEncodings:
     return tuple()
 
 
 @line_to_vec.register(TextLine)
 def _line_to_vec_text(line: TextLine, first_line: bool) -> LineToVecEncodings:
+    line_number = line.line_number
     if first_line and not (
-        line.line_number.has_prime  # pyre-ignore[16]
-        or line.line_number.prefix_modifier  # pyre-ignore[16]
+        get_line_number_prime(line_number)
+        or get_line_number_prefix_modifier(line_number)
     ):
-        return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
+        return (LineToVecEncoding.START, *parse_text_line(line_number))
     else:
-        return (LineToVecEncoding.TEXT_LINE,)
+        return (*parse_text_line(line_number),)
 
 
 @line_to_vec.register(RulingDollarLine)
@@ -69,7 +120,7 @@ def _line_to_vec_state(line: StateDollarLine, _: bool) -> LineToVecEncodings:
 
 
 @singledispatch
-def get_line_number(line_number: AbstractLineNumber) -> int:
+def get_line_number(_: AbstractLineNumber) -> int:
     raise ValueError("No default for overloading")
 
 

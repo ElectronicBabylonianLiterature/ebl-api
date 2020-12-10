@@ -13,6 +13,18 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
     "atf, expected",
     [
         [
+            "1'-2'. [x x x x x x x x] x na-aš₂-al;-[b]a pu-ti-ka",
+            (LineToVecEncoding.from_list([1, 1]),),
+        ],
+        [
+            "1-2. [x x x x x x x x] x na-aš₂-al;-[b]a pu-ti-ka",
+            (LineToVecEncoding.from_list([0, 1, 1]),),
+        ],
+        [
+            "1-2. [x x x x x x x x] x na-aš₂-al;-[b]a pu-ti-ka\n1'. [...]",
+            (LineToVecEncoding.from_list([0, 1, 1]), LineToVecEncoding.from_list([1])),
+        ],
+        [
             "1. x [...]\n@colophon\n2. x [...]",
             (LineToVecEncoding.from_list([0, 1, 1]),),
         ],
