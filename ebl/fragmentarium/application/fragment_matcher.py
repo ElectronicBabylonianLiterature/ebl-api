@@ -1,5 +1,5 @@
 import itertools
-from typing import ClassVar, Tuple, Union, List, Dict
+from typing import Tuple, Union, List, Dict, Sequence
 
 import attr
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
@@ -32,21 +32,29 @@ class LineToVecRanking:
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecRanker:
-    NUMBER_OF_RESULTS_TO_RETURN: ClassVar[int] = 15
+    NUMBER_OF_RESULTS_TO_RETURN: int = 15
     _score_results: Results = attr.ib(factory=dict, init=False)
     _score_weighted_results: Results = attr.ib(factory=dict, init=False)
 
     @property
     def score(self) -> Scores:
-        return sort_scores_to_list(self._score_results)[
-            : LineToVecRanker.NUMBER_OF_RESULTS_TO_RETURN
-        ]
+        return (
+            sort_scores_to_list(self._score_results)[
+                : self.NUMBER_OF_RESULTS_TO_RETURN
+            ]
+            if self.NUMBER_OF_RESULTS_TO_RETURN
+            else sort_scores_to_list(self._score_results)
+        )
 
     @property
     def score_weighted(self) -> Scores:
-        return sort_scores_to_list(self._score_weighted_results)[
-            : LineToVecRanker.NUMBER_OF_RESULTS_TO_RETURN
-        ]
+        return (
+            sort_scores_to_list(self._score_weighted_results)[
+                : self.NUMBER_OF_RESULTS_TO_RETURN
+            ]
+            if self.NUMBER_OF_RESULTS_TO_RETURN
+            else sort_scores_to_list(self._score_weighted_results)
+        )
 
     @property
     def ranking(self) -> LineToVecRanking:
@@ -64,7 +72,6 @@ class LineToVecRanker:
             or score_result > score_results.get[fragment_id]
         ):
             score_results[fragment_id] = score_result
-
 
 class FragmentMatcher:
     def __init__(self, fragment_repository: FragmentRepository):
@@ -86,22 +93,35 @@ class FragmentMatcher:
             raise ValueError("Fragment has no line to vec")
 
     def rank_line_to_vec(
-        self, candidate: Union[str, Tuple[int, ...]]
+        self,
+        candidate: Union[str, Tuple[int, ...]],
+        weights: Dict[LineToVecEncoding, int] = {
+            LineToVecEncoding.START: 3,
+            LineToVecEncoding.TEXT_LINE: 0,
+            LineToVecEncoding.SINGLE_RULING: 3,
+            LineToVecEncoding.DOUBLE_RULING: 6,
+            LineToVecEncoding.TRIPLE_RULING: 10,
+            LineToVecEncoding.END: 3,
+        },
+        exclude: Sequence[str] = (),
     ) -> LineToVecRanking:
         candidate_line_to_vecs = self.parse_candidate(candidate)
         fragments = self.fragment_repository.query_transliterated_line_to_vec()
-        ranker = LineToVecRanker()
+        ranker = LineToVecRanker(NUMBER_OF_RESULTS_TO_RETURN=-1)
 
         for candidate_line_to_vec, fragment in itertools.product(
             candidate_line_to_vecs, fragments.items()
         ):
             fragment_id, line_to_vecs = fragment
-            if fragment_id != candidate:
+            if candidate not in [*exclude, fragment_id]:
                 for line_to_vec in line_to_vecs:
+                    id = fragment_id
+                    x = score(candidate_line_to_vec, line_to_vec),
+                    y = score_weighted(candidate_line_to_vec, line_to_vec),
                     ranker.insert_score(
                         fragment_id,
                         score(candidate_line_to_vec, line_to_vec),
-                        score_weighted(candidate_line_to_vec, line_to_vec),
+
                     )
 
         return ranker.ranking
