@@ -1,14 +1,13 @@
 from typing import cast, Iterable, List, Optional, Sequence
 
 import attr
+from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.corpus.domain.ordered import Order
-from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import Defect, NotFoundError
 
 
@@ -18,7 +17,6 @@ def invalid_reference(error: Exception) -> Exception:
 
 class TextHydrator(TextVisitor):
     def __init__(self, bibliography: Bibliography):
-        super().__init__(Order.POST)
         self._bibliography: Bibliography = bibliography
         self._text: Optional[Text] = None
         self._chapters: List[Chapter] = []
@@ -31,17 +29,30 @@ class TextHydrator(TextVisitor):
         else:
             return cast(Text, self._text)
 
-    def visit_text(self, text: Text) -> None:
+    @singledispatchmethod  # pyre-ignore[56]
+    def visit(self, item: TextItem) -> None:
+        pass
+
+    @visit.register(Text)  # pyre-ignore[56]
+    def _visit_text(self, text: Text) -> None:
+        for chapter in text.chapters:
+            self.visit(chapter)
+
         self._text = attr.evolve(text, chapters=tuple(self._chapters))
         self._chapters = []
 
-    def visit_chapter(self, chapter: Chapter) -> None:
+    @visit.register(Chapter)  # pyre-ignore[56]
+    def _visit_chapter(self, chapter: Chapter) -> None:
+        for manuscript in chapter.manuscripts:
+            self.visit(manuscript)
+
         self._chapters.append(
             attr.evolve(chapter, manuscripts=tuple(self._manuscripts))
         )
         self._manuscripts = []
 
-    def visit_manuscript(self, manuscript: Manuscript) -> None:
+    @visit.register(Manuscript)  # pyre-ignore[56]
+    def _visit_manuscript(self, manuscript: Manuscript) -> None:
         references = self._hydrate_references(manuscript.references)
         self._manuscripts.append(attr.evolve(manuscript, references=references))
 
