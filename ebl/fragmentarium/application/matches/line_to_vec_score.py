@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from ebl.fragmentarium.application.matches.create_line_to_vec import (
     LineToVecEncodings,
@@ -6,7 +6,11 @@ from ebl.fragmentarium.application.matches.create_line_to_vec import (
 )
 
 
-def score_weighted(seq1: LineToVecEncodings, seq2: LineToVecEncodings, weights: Dict[LineToVecEncoding, int]=None) -> int:
+def score_weighted(
+    seq1: LineToVecEncodings,
+    seq2: LineToVecEncodings,
+    weights: Optional[Dict[LineToVecEncoding, int]] = None,
+) -> int:
     matching_seq = feed_compute_score(seq1, seq2)
     matching_seq = [seq for seq in matching_seq if list(filter(lambda x: x != 1, seq))]
     if len(matching_seq) and all(matching_seq):
@@ -40,7 +44,10 @@ def compute_score(
     return matching_subseq
 
 
-def weight_subsequence(seq_of_seq: List[LineToVecEncodings], weights: Dict[LineToVecEncoding, int]) -> int:
+def weight_subsequence(
+    seq_of_seq: List[LineToVecEncodings],
+    weights: Optional[Dict[LineToVecEncoding, int]] = None,
+) -> int:
     if weights:
         weighting = weights
     else:
