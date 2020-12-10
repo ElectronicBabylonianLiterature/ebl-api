@@ -1,20 +1,26 @@
+import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import Classification, Stage
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Classification,
+    Line,
+    ManuscriptLine,
+    Stage,
+)
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
-import attr
+
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)
