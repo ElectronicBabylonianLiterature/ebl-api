@@ -4,11 +4,13 @@ from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 from ebl.bibliography.domain.reference import ReferenceType
 from ebl.corpus.domain.enums import (
     Classification,
+    Stage,
+)
+from ebl.corpus.domain.manuscript import (
     ManuscriptType,
     Period,
     PeriodModifier,
     Provenance,
-    Stage,
 )
 from ebl.corpus.web.api_serializer import deserialize, serialize, serialize_public
 from ebl.corpus.web.text_utils import create_text_id
