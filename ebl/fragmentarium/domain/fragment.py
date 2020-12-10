@@ -72,17 +72,17 @@ class Fragment:
     def update_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
-        record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
+        #record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
 
-        text = self.text.merge(transliteration.text)
-
+        #text = self.text.merge(transliteration.text)
+        x = create_line_to_vec(self.text.lines),
         return attr.evolve(
             self,
-            text=text,
-            notes=transliteration.notes,
-            signs=transliteration.signs,
-            record=record,
-            line_to_vec=create_line_to_vec(text.lines),
+            #text=text,
+            #notes=transliteration.notes,
+            #signs=transliteration.signs,
+            #record=record,
+            line_to_vec=create_line_to_vec(self.text.lines),
         )
 
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":

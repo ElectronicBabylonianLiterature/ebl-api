@@ -39,13 +39,15 @@ def line_to_vec(line: Line, _: bool) -> LineToVecEncodings:
 
 @line_to_vec.register(TextLine)
 def _line_to_vec_text(line: TextLine, first_line: bool) -> LineToVecEncodings:
-    if first_line and not (
-        line.line_number.has_prime  # pyre-ignore[16]
-        or line.line_number.prefix_modifier  # pyre-ignore[16]
-    ):
-        return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
-    else:
-        return (LineToVecEncoding.TEXT_LINE,)
+        if first_line and not (
+            line.line_number.has_prime  # pyre-ignore[16]
+            or line.line_number.prefix_modifier  # pyre-ignore[16]
+        ):
+            return LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE
+        else:
+            return (LineToVecEncoding.TEXT_LINE,)
+
+
 
 
 @line_to_vec.register(RulingDollarLine)

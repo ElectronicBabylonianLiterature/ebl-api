@@ -97,6 +97,9 @@ class MongoFragmentRepository(FragmentRepository):
         cursor = self._collection.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
         )
+        for fragment in cursor:
+            if not fragment.get("lineToVec",0):
+                print(fragment)
 
         return {
             str(
