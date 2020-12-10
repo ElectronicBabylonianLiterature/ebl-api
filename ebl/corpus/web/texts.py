@@ -2,7 +2,7 @@ import falcon  # pyre-ignore[21]
 from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.bibliography.domain.reference import ReferenceType
-from ebl.corpus.domain.enums import Classification, Stage
+from ebl.corpus.domain.chapter import Classification, Stage
 from ebl.corpus.domain.manuscript import (
     ManuscriptType,
     Period,
@@ -12,7 +12,6 @@ from ebl.corpus.domain.manuscript import (
 from ebl.corpus.web.api_serializer import deserialize, serialize, serialize_public
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.users.web.require_scope import require_scope
-
 
 REFERENCE_DTO_SCHEMA = {
     "type": "object",
