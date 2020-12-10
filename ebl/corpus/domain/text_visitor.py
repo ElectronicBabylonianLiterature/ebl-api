@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+from ebl.corpus.domain import manuscript
 from ebl.corpus.domain import text
 
 
@@ -25,7 +26,7 @@ class TextVisitor:
     def visit_chapter(self, chapter: "text.Chapter") -> None:
         pass
 
-    def visit_manuscript(self, manuscript: "text.Manuscript") -> None:
+    def visit_manuscript(self, manuscript: "manuscript.Manuscript") -> None:
         pass
 
     def visit_line(self, line: "text.Line") -> None:
