@@ -81,12 +81,12 @@ class TextLine(Line):
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
     ) -> "TextLine":
-        if len(self.content) == len(updates):
-            zipped = zip_longest(self.content, updates)
-            content = tuple(updater(pair[0], pair[1]) for pair in zipped)
-            return attr.evolve(self, content=content)
-        else:
+        if len(self.content) != len(updates):
             raise error_class()
+
+        zipped = zip_longest(self.content, updates)
+        content = tuple(updater(pair[0], pair[1]) for pair in zipped)
+        return attr.evolve(self, content=content)
 
     def merge(self, other: L) -> Union["TextLine", L]:
         def merge_tokens():
