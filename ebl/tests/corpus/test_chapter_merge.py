@@ -2,7 +2,8 @@ import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.enums import Classification, Stage
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway

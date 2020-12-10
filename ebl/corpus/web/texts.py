@@ -2,10 +2,7 @@ import falcon  # pyre-ignore[21]
 from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
 from ebl.bibliography.domain.reference import ReferenceType
-from ebl.corpus.domain.enums import (
-    Classification,
-    Stage,
-)
+from ebl.corpus.domain.enums import Classification, Stage
 from ebl.corpus.domain.manuscript import (
     ManuscriptType,
     Period,

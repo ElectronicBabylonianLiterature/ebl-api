@@ -1,7 +1,9 @@
 from typing import Optional
 from collections import Counter
 
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.ordered import Order
 from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
@@ -41,7 +43,7 @@ class AlignmentVisitor(TokenVisitor):
 
 class TextValidator(TextVisitor):
     def __init__(self, bibliography, transliteration_factory):
-        super().__init__(TextVisitor.Order.PRE)
+        super().__init__(Order.PRE)
         self._bibliography = bibliography
         self._transliteration_factory = transliteration_factory
         self._chapter: Optional[Chapter] = None

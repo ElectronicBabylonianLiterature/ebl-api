@@ -3,7 +3,8 @@ from typing import Sequence
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 from marshmallow import ValidationError  # pyre-ignore[21]
 
-from ebl.corpus.domain.text import Line, Text
+from ebl.corpus.domain.chapter import Line
+from ebl.corpus.domain.text import Text
 from ebl.errors import DataError
 from ebl.corpus.web.text_schemas import ApiLineSchema, ApiTextSchema
 

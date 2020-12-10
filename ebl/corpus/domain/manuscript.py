@@ -1,11 +1,17 @@
+from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Optional, Sequence
 
 import attr
 
-import ebl.corpus.domain.text_visitor as text_visitor
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+
+
+class VisitManuscript(ABC):
+    @abstractmethod
+    def visit_manuscript(self, manuscript: "Manuscript") -> None:
+        ...
 
 
 class SiglumEnum(Enum):
@@ -135,5 +141,5 @@ class Manuscript:
             self.provenance, self.period, self.type, self.siglum_disambiguator
         )
 
-    def accept(self, visitor: text_visitor.TextVisitor) -> None:
+    def accept(self, visitor: VisitManuscript) -> None:
         visitor.visit_manuscript(self)
