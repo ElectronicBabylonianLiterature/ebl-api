@@ -3,7 +3,7 @@ from typing import List, Sequence
 import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
-from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
     LemmatizationError,

@@ -9,7 +9,8 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
-from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine, Text
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema

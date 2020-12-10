@@ -3,7 +3,7 @@ from typing import List
 import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
-from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 

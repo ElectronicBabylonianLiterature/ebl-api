@@ -3,7 +3,7 @@ import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
-from ebl.corpus.domain.text import Line, ManuscriptLine
+from ebl.corpus.domain.chapter import Line, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
