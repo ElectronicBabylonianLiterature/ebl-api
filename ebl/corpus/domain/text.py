@@ -1,21 +1,23 @@
-from abc import abstractmethod
-from typing import Sequence
+from typing import Sequence, Union
 
 import attr
 
-from ebl.corpus.domain.chapter import Chapter, VisitChapter
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.manuscript import Manuscript
+
+
+TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
+
+
+class TextVisitor:
+    def visit(self, item: TextItem) -> None:
+        pass
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class TextId:
     category: int
     index: int
-
-
-class VisitText(VisitChapter):
-    @abstractmethod
-    def visit_text(self, text: "Text") -> None:
-        ...
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -30,13 +32,3 @@ class Text:
     @property
     def id(self) -> TextId:
         return TextId(self.category, self.index)
-
-    def accept(self, visitor: VisitText) -> None:
-        if visitor.is_pre_order:
-            visitor.visit_text(self)
-
-        for chapter in self.chapters:
-            chapter.accept(visitor)
-
-        if visitor.is_post_order:
-            visitor.visit_text(self)

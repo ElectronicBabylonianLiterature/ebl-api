@@ -1,4 +1,3 @@
-from abc import abstractmethod
 import collections
 from typing import Iterable, Optional, Sequence, Set, Tuple, TypeVar, Union, cast
 
@@ -7,8 +6,7 @@ import attr
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.enums import Classification, Stage
 from ebl.corpus.domain.label_validator import LabelValidator
-from ebl.corpus.domain.manuscript import Manuscript, VisitManuscript
-from ebl.corpus.domain.ordered import Ordered
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import NotFoundError
 from ebl.merger import Merger
 from ebl.transliteration.domain.dollar_line import DollarLine
@@ -38,20 +36,6 @@ def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
         raise ValueError(f'Invalid labels "{[value.to_value() for value in value]}".')
 
 
-class VisitChapter(VisitManuscript, Ordered):
-    @abstractmethod
-    def visit_manuscript_line(self, manuscript_line: "ManuscriptLine") -> None:
-        ...
-
-    @abstractmethod
-    def visit_line(self, line: "Line") -> None:
-        ...
-
-    @abstractmethod
-    def visit_chapter(self, chapter: "Chapter") -> None:
-        ...
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class ManuscriptLine:
     manuscript_id: int
@@ -59,9 +43,6 @@ class ManuscriptLine:
     line: Union[TextLine, EmptyLine]
     paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
     omitted_words: Sequence[int] = tuple()
-
-    def accept(self, visitor: VisitChapter) -> None:
-        visitor.visit_manuscript_line(self)
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -96,16 +77,6 @@ class Line:
     @property
     def manuscript_ids(self) -> Set[int]:
         return {manuscript.manuscript_id for manuscript in self.manuscripts}
-
-    def accept(self, visitor: VisitChapter) -> None:
-        if visitor.is_pre_order:
-            visitor.visit_line(self)
-
-        for manuscript_line in self.manuscripts:
-            manuscript_line.accept(visitor)
-
-        if visitor.is_post_order:
-            visitor.visit_line(self)
 
     def merge(self, other: "Line") -> "Line":
         def inner_merge(old: ManuscriptLine, new: ManuscriptLine) -> ManuscriptLine:
@@ -194,19 +165,6 @@ class Chapter:
             for manuscript_line in line.manuscripts
             if isinstance(manuscript_line.line, TextLine)
         ]
-
-    def accept(self, visitor: VisitChapter) -> None:
-        if visitor.is_pre_order:
-            visitor.visit_chapter(self)
-
-        for manuscript in self.manuscripts:
-            manuscript.accept(visitor)
-
-        for line in self.lines:
-            line.accept(visitor)
-
-        if visitor.is_post_order:
-            visitor.visit_chapter(self)
 
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
