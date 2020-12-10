@@ -58,7 +58,9 @@ def get_line_number_prefix_modifier_line_number(line_number: LineNumber) -> bool
 
 
 @get_line_number_prefix_modifier.register(LineNumberRange)
-def _get_line_number_prefix_modifier_line_number_range(line_number: LineNumberRange) -> bool:
+def _get_line_number_prefix_modifier_line_number_range(
+    line_number: LineNumberRange
+) -> bool:
     return bool(line_number.start.prefix_modifier)
 
 
@@ -73,7 +75,9 @@ def _parse_text_line(_: LineNumber) -> LineToVecEncodings:
 
 
 @parse_text_line.register(LineNumberRange)
-def _parse_text_line_line_number_range(line_number: LineNumberRange) -> LineToVecEncodings:
+def _parse_text_line_line_number_range(
+    line_number: LineNumberRange
+) -> LineToVecEncodings:
     return tuple(
         [
             LineToVecEncoding.TEXT_LINE
