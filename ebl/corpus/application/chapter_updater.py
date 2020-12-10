@@ -24,11 +24,11 @@ class ChapterUpdater(TextVisitor):
             raise Defect("Result text was not set.")
 
     def visit_text(self, text: Text) -> None:
-        if self._chapter_index_to_align < len(text.chapters):
-            self._text = attr.evolve(text, chapters=tuple(self._chapters))
-            self._chapters = []
-        else:
+        if self._chapter_index_to_align >= len(text.chapters):
             raise NotFoundError(f"Chapter {self._chapter_index_to_align} not found.")
+
+        self._text = attr.evolve(text, chapters=tuple(self._chapters))
+        self._chapters = []
 
     def visit_chapter(self, chapter: Chapter) -> None:
         try:
