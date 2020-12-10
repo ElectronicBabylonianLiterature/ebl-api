@@ -21,11 +21,10 @@ def validate(
 
             result = func(self, req, resp, *args, **kwargs)
 
-            if resp_schema is not None:
-                if resp_schema.validate(resp.media):
-                    raise falcon.HTTPInternalServerError(
-                        "Response data failed validation"
-                    )
+            if resp_schema is not None and resp_schema.validate(resp.media):
+                raise falcon.HTTPInternalServerError(
+                    "Response data failed validation"
+                )
 
             return result
 

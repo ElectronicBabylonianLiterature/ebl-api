@@ -47,7 +47,7 @@ class Bibliography:
 
         container_query_result = []
         container_query = self._parse_container_title_short_and_collection_number(query)
-        if not all(value is None for value in list(container_query.values())):
+        if any(value is not None for value in list(container_query.values())):
             container_query_result = self.search_container_title_and_collection_number(
                 container_query["container_title_short"],
                 container_query["collection_number"],
