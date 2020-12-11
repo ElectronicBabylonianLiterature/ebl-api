@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import cast, Optional
 from collections import Counter
 
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
-from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
@@ -47,21 +47,21 @@ class TextValidator(TextVisitor):
         self._bibliography = bibliography
         self._transliteration_factory = transliteration_factory
         self._chapter: Optional[Chapter] = None
-        self._line: Optional[Line] = None
+        self._variant: Optional[LineVariant] = None
 
     @property
-    def line(self) -> Line:
-        if self._line is None:
-            raise Defect("Trying to access line before a line was visited.")
+    def variant(self) -> LineVariant:
+        if self._variant is None:
+            raise Defect("Trying to access variant before a variant was visited.")
 
-        return self._line  # pyre-ignore[7]
+        return cast(LineVariant, self._variant)
 
     @property
     def chapter(self) -> Chapter:
         if self._chapter is None:
             raise Defect("Trying to access chapter before a chapter was visited.")
 
-        return self._chapter  # pyre-ignore[7]
+        return cast(Chapter, self._chapter)
 
     @singledispatchmethod  # pyre-ignore[56]
     def visit(self, item: TextItem) -> None:
@@ -88,9 +88,14 @@ class TextValidator(TextVisitor):
 
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:
-        self._line = line
+        for variant in line.variants:
+            self.visit(variant)
 
-        for manuscript_line in line.manuscripts:
+    @visit.register(Line)  # pyre-ignore[56]
+    def _visit_line_variant(self, variant: LineVariant) -> None:
+        self._variant = variant
+
+        for manuscript_line in variant.manuscripts:
             self.visit(manuscript_line)
 
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
@@ -99,7 +104,7 @@ class TextValidator(TextVisitor):
             self._transliteration_factory.create(manuscript_line.line.atf)
         except TransliterationError:
             raise invalid_atf(
-                self.chapter, self.line.number, manuscript_line.manuscript_id
+                self.chapter, self.variant.number, manuscript_line.manuscript_id
             )
 
         alignment_validator = AlignmentVisitor()

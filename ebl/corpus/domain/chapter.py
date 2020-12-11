@@ -79,11 +79,9 @@ class ManuscriptLine:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Line:
+class LineVariant:
     text: TextLine = attr.ib()
     note: Optional[NoteLine] = None
-    is_second_line_of_parallelism: bool = False
-    is_beginning_of_section: bool = False
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
     @text.validator
@@ -102,7 +100,7 @@ class Line:
     def manuscript_ids(self) -> Set[int]:
         return {manuscript.manuscript_id for manuscript in self.manuscripts}
 
-    def merge(self, other: "Line") -> "Line":
+    def merge(self, other: "LineVariant") -> "LineVariant":
         def inner_merge(old: ManuscriptLine, new: ManuscriptLine) -> ManuscriptLine:
             return old.merge(new)
 
@@ -117,11 +115,37 @@ class Line:
             else merged
         )
 
-    def strip_alignments(self) -> "Line":
+    def strip_alignments(self) -> "LineVariant":
         stripped_manuscripts = tuple(
             manuscript_line.strip_alignments() for manuscript_line in self.manuscripts
         )
         return attr.evolve(self, manuscripts=stripped_manuscripts)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Line:
+    variants: Sequence[LineVariant]
+    is_second_line_of_parallelism: bool = False
+    is_beginning_of_section: bool = False
+
+    @property
+    def manuscript_ids(self) -> Set[int]:
+        return {
+            manuscript_id
+            for variant in self.variants
+            for manuscript_id in variant.manuscript_ids
+        }
+
+    @property
+    def line_numbers(self) -> Set[AbstractLineNumber]:
+        return {variant.text.line_number for variant in self.variants}
+
+    def merge(self, other: "Line") -> "Line":
+        def inner_merge(old: LineVariant, new: LineVariant) -> LineVariant:
+            return old.merge(new)
+
+        merged_variants = Merger(repr, inner_merge).merge(self.variants, other.variants)
+        return attr.evolve(other, manuscripts=tuple(merged_variants))
 
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
@@ -164,7 +188,9 @@ class Chapter:
 
     @lines.validator
     def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
-        counter = collections.Counter(line.text.line_number for line in value)
+        counter = collections.Counter(
+            line_number for line in value for line_number in line.line_numbers
+        )
         duplicates = [number.label for number in counter if counter[number] > 1]
         if any(duplicates):
             raise ValueError(f"Duplicate line numbers: {duplicates}.")
