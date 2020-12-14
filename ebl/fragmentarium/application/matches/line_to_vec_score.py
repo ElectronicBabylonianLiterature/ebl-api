@@ -30,10 +30,15 @@ def compute_score(
     seq1: LineToVecEncodings, seq2: LineToVecEncodings
 ) -> List[LineToVecEncodings]:
     shorter_seq, longer_seq = sorted((seq1, seq2), key=len)
-    return [shorter_seq[-i:] for i in range(1, len(longer_seq) + 1) if (
+    return [
+        shorter_seq[-i:]
+        for i in range(1, len(longer_seq) + 1)
+        if (
             i >= len(shorter_seq)
             and longer_seq[i - len(shorter_seq) : i] == shorter_seq[-i:]
-        ) or longer_seq[:i] == shorter_seq[-i:]]
+        )
+        or longer_seq[:i] == shorter_seq[-i:]
+    ]
 
 
 def weight_subsequence(seq_of_seq: List[LineToVecEncodings]) -> int:
