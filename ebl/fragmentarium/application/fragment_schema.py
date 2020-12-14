@@ -1,14 +1,15 @@
 import pydash  # pyre-ignore
 from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 
-from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ValueEnum
+from ebl.schemas import StringValueEnum, IntValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 
 class MeasureSchema(Schema):  # pyre-ignore[11]
@@ -26,7 +27,7 @@ class MeasureSchema(Schema):  # pyre-ignore[11]
 
 class RecordEntrySchema(Schema):
     user = fields.String(required=True)
-    type = ValueEnum(RecordType, required=True)
+    type = StringValueEnum(RecordType, required=True)
     date = fields.String(required=True)
 
     @post_load
@@ -96,12 +97,24 @@ class FragmentSchema(Schema):
         missing=None,
     )
     genres = fields.Nested(GenreSchema, many=True, missing=tuple())
+    line_to_vec = fields.List(
+        fields.List(IntValueEnum(LineToVecEncoding)), missing=None, data_key="lineToVec"
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["joins"] = tuple(data["joins"])
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
+        data["line_to_vec"] = (
+            None
+            if data["line_to_vec"] is None
+            else tuple(
+                tuple(line_to_vec_encoding)
+                for line_to_vec_encoding in data["line_to_vec"]
+            )
+        )
+
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)

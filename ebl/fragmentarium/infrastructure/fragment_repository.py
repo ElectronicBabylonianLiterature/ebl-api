@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Tuple
 
 from marshmallow import EXCLUDE  # pyre-ignore[21]
 
@@ -7,6 +7,11 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.line_to_vec_encoding import (
+    LineToVecEncoding,
+    LineToVecEncodings,
+)
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -20,8 +25,6 @@ from ebl.fragmentarium.infrastructure.queries import (
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-
 
 COLLECTION = "fragments"
 
@@ -88,6 +91,23 @@ class MongoFragmentRepository(FragmentRepository):
             fragment["museumNumber"] for fragment in cursor
         )
 
+    def query_transliterated_line_to_vec(
+        self
+    ) -> Dict[MuseumNumber, Tuple[LineToVecEncodings, ...]]:
+        cursor = self._collection.find_many(
+            HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
+        )
+
+        return {
+            MuseumNumberSchema().load(  # pyre-ignore[16]
+                fragment["museumNumber"]
+            ): tuple(
+                LineToVecEncoding.from_list(line_to_vec)
+                for line_to_vec in fragment["lineToVec"]
+            )
+            for fragment in cursor
+        }
+
     def query_by_transliterated_sorted_by_date(self):
         cursor = self._collection.aggregate(aggregate_latest())
         return self._map_fragments(cursor)
@@ -106,9 +126,9 @@ class MongoFragmentRepository(FragmentRepository):
         self._collection.update_one(
             fragment_is(fragment),
             {
-                "$set": FragmentSchema(only=("text", "notes", "signs", "record")).dump(
-                    fragment
-                )
+                "$set": FragmentSchema(
+                    only=("text", "notes", "signs", "record", "line_to_vec")
+                ).dump(fragment)
             },
         )
 

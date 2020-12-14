@@ -71,6 +71,13 @@ def test_create_response_dto(user):
                 {"category": genre.category, "uncertain": genre.uncertain}
                 for genre in lemmatized_fragment.genres
             ],
+            "lineToVec": [
+                [
+                    line_to_vec_encoding.value
+                    for line_to_vec_encoding in line_to_vec_encodings
+                ]
+                for line_to_vec_encodings in lemmatized_fragment.line_to_vec
+            ],
         },
         pydash.is_none,
     )

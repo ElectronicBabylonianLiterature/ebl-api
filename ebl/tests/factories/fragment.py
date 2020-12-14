@@ -5,6 +5,8 @@ import factory  # pyre-ignore
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference, Genre
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
@@ -30,6 +32,7 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import (
     EmphasisPart,
     LanguagePart,
@@ -43,7 +46,6 @@ from ebl.transliteration.domain.sign_tokens import (
     Number,
     Reading,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
@@ -56,9 +58,8 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 
 class FragmentFactory(factory.Factory):  # pyre-ignore[11]
@@ -291,6 +292,16 @@ class TransliteratedFragmentFactory(FragmentFactory):
     )
     folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
     record = factory.SubFactory(RecordFactory)
+    line_to_vec = (
+        (
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.TEXT_LINE,
+            LineToVecEncoding.SINGLE_RULING,
+        ),
+    )
 
 
 class LemmatizedFragmentFactory(TransliteratedFragmentFactory):

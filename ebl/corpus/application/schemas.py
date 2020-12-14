@@ -11,7 +11,7 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.schemas import ValueEnum
+from ebl.schemas import StringValueEnum
 from ebl.transliteration.domain.labels import parse_label
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
@@ -23,7 +23,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
     accession = fields.String(required=True)
-    period_modifier = ValueEnum(
+    period_modifier = StringValueEnum(
         PeriodModifier, required=True, data_key="periodModifier"
     )
     period = fields.Function(
@@ -115,8 +115,8 @@ class LineSchema(Schema):
 
 
 class ChapterSchema(Schema):
-    classification = ValueEnum(Classification, required=True)
-    stage = ValueEnum(Stage, required=True)
+    classification = StringValueEnum(Classification, required=True)
+    stage = StringValueEnum(Stage, required=True)
     version = fields.String(required=True)
     name = fields.String(required=True)
     order = fields.Integer(required=True)
