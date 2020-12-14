@@ -2,7 +2,6 @@ import argparse
 import math
 from functools import reduce
 from typing import Callable, Iterable, List, Sequence
-import os
 
 import attr
 import pydash  # pyre-ignore
@@ -146,7 +145,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     workers = args.workers or 6
-
 
     chunks = create_chunks(workers)
     states = Parallel(n_jobs=workers)(
