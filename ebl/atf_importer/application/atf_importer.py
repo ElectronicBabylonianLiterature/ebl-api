@@ -15,7 +15,7 @@ from ebl.transliteration.domain.lemmatization import Lemmatization, Lemmatizatio
 from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
 from dotenv import load_dotenv  # pyre-ignore[21]
-
+import re
 
 class LemmatizationError(Exception):
     pass
@@ -141,32 +141,21 @@ class ATFImporter:
                     guideword = self.cfform_guideword[citation_form]
                     if "//" in guideword:
                         guideword = guideword.split("//")[0]
-                    senses = self.cfforms_senses[citation_form]
-
+                    #senses = self.cfforms_senses[citation_form]
                     #if senses is not None and oracc_guideword in senses:
 
                     for entry in self.db.get_collection("words").find(
-                        {"oraccWords.guideWord": guideword}, {"_id"}
+                        {"oraccWords.guideWord": guideword,"oraccWords.lemma": citation_form}, {"_id"}
                     ):
                         unique_lemmas.append(entry["_id"])
 
-                    for entry in self.db.get_collection("words").find(
-                        {"oraccWords.lemma": guideword}, {"_id"}
-                    ):
-                        if entry["_id"] not in unique_lemmas:
-                            unique_lemmas.append(entry["_id"])
+                    if len(unique_lemmas) == 0:
+                        for entry in self.db.get_collection("words").find(
+                            {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                        ):
+                            if entry["_id"] not in unique_lemmas:
+                                unique_lemmas.append(entry["_id"])
 
-                    for entry in self.db.get_collection("words").find(
-                        {"oraccWords.guideWord": citation_form}, {"_id"}
-                    ):
-                        if entry["_id"] not in unique_lemmas:
-                            unique_lemmas.append(entry["_id"])
-
-                    for entry in self.db.get_collection("words").find(
-                        {"oraccWords.lemma": citation_form}, {"_id"}
-                    ):
-                        if entry["_id"] not in unique_lemmas:
-                            unique_lemmas.append(entry["_id"])
 
                 except Exception:
                     if oracc_lemma not in not_lemmatized:
@@ -206,9 +195,13 @@ class ATFImporter:
             for line in f.readlines():
 
                 if line.startswith("@entry"):
-                    split = line.split(" ")
+                    split = line.split(" ",2)
                     cfform = split[1]
-                    guidword = split[2].rstrip("]").lstrip("[")
+                    p = re.compile(r'\[(.*)\]')
+                    matches = p.findall(split[2])
+                    guidword = matches[0]
+                    guidword = guidword.rstrip("]").lstrip("[")
+
                     cfform_guideword[cfform] = guidword
 
                 if line.startswith("@form"):
