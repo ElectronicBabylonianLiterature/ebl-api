@@ -1,4 +1,3 @@
-import itertools
 from typing import ClassVar, Tuple, List, Dict
 
 import attr
@@ -85,18 +84,14 @@ class FragmentMatcher:
         fragments = self.fragment_repository.query_transliterated_line_to_vec()
         ranker = LineToVecRanker()
 
-        for candidate_line_to_vec, fragment in itertools.product(
-            candidate_line_to_vecs,
-            list(
-                filter(lambda x: x[0] != MuseumNumber.of(candidate), fragments.items())
-            ),
+        for fragment in filter(
+            lambda x: x[0] != MuseumNumber.of(candidate), fragments.items()
         ):
             fragment_museum_number, line_to_vecs = fragment
-            for line_to_vec in line_to_vecs:
-                ranker.insert_score(
-                    fragment_museum_number,
-                    score(candidate_line_to_vec, line_to_vec),
-                    score_weighted(candidate_line_to_vec, line_to_vec),
-                )
+            ranker.insert_score(
+                fragment_museum_number,
+                score(candidate_line_to_vecs, line_to_vecs),
+                score_weighted(candidate_line_to_vecs, line_to_vecs),
+            )
 
         return ranker.ranking

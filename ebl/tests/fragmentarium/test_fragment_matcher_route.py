@@ -7,7 +7,7 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 def test_fragment_matcher_route(client, fragmentarium, user, database):
     fragment_id = "X.0"
-    expected_score = {"score": [["X.1", 3]], "scoreWeighted": [["X.1", 3]]}
+    expected_score = {"score": [["X.1", 3]], "scoreWeighted": [["X.1", 5]]}
     fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     fragment_2 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.1"),
