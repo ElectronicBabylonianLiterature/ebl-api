@@ -5,6 +5,7 @@ from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
     Line,
+    LineVariant,
     ManuscriptLine,
     Stage,
 )
@@ -65,11 +66,9 @@ IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 NOTE = None
 LINE = Line(
-    RECONSTRUCTION,
-    NOTE,
+    (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (MANUSCRIPT_LINE,),
 )
 
 
@@ -79,12 +78,10 @@ LINE = Line(
         (LINE, LINE, LINE),
         (
             Line(
-                RECONSTRUCTION,
-                NOTE,
-                IS_SECOND_LINE_OF_PARALLELISM,
-                IS_BEGINNING_OF_SECTION,
-                (
-                    ManuscriptLine(
+                (LineVariant(
+                    RECONSTRUCTION,
+                    NOTE,
+                    (ManuscriptLine(
                         MANUSCRIPT_ID,
                         LABELS,
                         TextLine(
@@ -105,18 +102,18 @@ LINE = Line(
                                 ),
                             ),
                         ),
-                    ),
-                ),
-            ),
-            Line(
-                TextLine.of_iterable(
-                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
-                ),
-                NOTE,
+                    ),)
+                ),),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                (
-                    ManuscriptLine(
+            ),
+            Line(
+                (LineVariant(
+                    TextLine.of_iterable(
+                        LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
+                    ),
+                    NOTE,
+                    (ManuscriptLine(
                         MANUSCRIPT_ID,
                         LABELS,
                         TextLine(
@@ -135,8 +132,10 @@ LINE = Line(
                                 ),
                             ),
                         ),
-                    ),
-                ),
+                    ),)
+                ),),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
             ),
             Line(
                 TextLine.of_iterable(
@@ -311,44 +310,67 @@ NEW_ORDER = 2
 NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator="b")
 NOTE = NoteLine((StringPart("a note"),))
 NEW_LINE = Line(
-    RECONSTRUCTION,
-    NOTE,
+    (
+        LineVariant(
+            RECONSTRUCTION,
+            NOTE,
+            (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
+        ),
+    ),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 ANOTHER_NEW_LINE = Line(
-    attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
-    NOTE,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
     (
-        ManuscriptLine(
-            MANUSCRIPT_ID, LABELS, attr.evolve(NEW_TEXT_LINE, line_number=LineNumber(2))
+        LineVariant(
+            attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
+            NOTE,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID,
+                    LABELS,
+                    attr.evolve(NEW_TEXT_LINE, line_number=LineNumber(2)),
+                ),
+            ),
         ),
     ),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
 )
 NEW_PARATEXT = Line(
-    RECONSTRUCTION,
-    NOTE,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
     (
-        ManuscriptLine(
-            MANUSCRIPT_ID, LABELS, TEXT_LINE, (NoteLine((StringPart("paratext"),)),)
+        LineVariant(
+            RECONSTRUCTION,
+            NOTE,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID,
+                    LABELS,
+                    TEXT_LINE,
+                    (NoteLine((StringPart("paratext"),)),),
+                ),
+            ),
         ),
     ),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
 )
 OLD_LINE = Line(
-    TextLine.of_iterable(LineNumber(2), tuple()),
-    None,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
     (
-        ManuscriptLine(
-            MANUSCRIPT_ID, LABELS, attr.evolve(TEXT_LINE, line_number=LineNumber(2))
+        LineVariant(
+            TextLine.of_iterable(LineNumber(2), tuple()),
+            None,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID,
+                    LABELS,
+                    attr.evolve(TEXT_LINE, line_number=LineNumber(2)),
+                ),
+            ),
         ),
     ),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
 )
 
 

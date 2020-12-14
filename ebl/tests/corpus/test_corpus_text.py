@@ -7,6 +7,7 @@ from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
     Line,
+    LineVariant,
     ManuscriptLine,
     Stage,
 )
@@ -79,11 +80,19 @@ OMITTED_WORDS = (1,)
 RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
 NOTE = None
 LINE = Line(
-    RECONSTRUCTION,
-    NOTE,
+    (
+        LineVariant(
+            RECONSTRUCTION,
+            NOTE,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS
+                ),
+            ),
+        ),
+    ),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
 )
 
 TEXT = Text(

@@ -1,10 +1,11 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
     Line,
+    LineVariant,
     ManuscriptLine,
     Stage,
 )
@@ -99,25 +100,33 @@ class ManuscriptLineSchema(Schema):
         )
 
 
-class LineSchema(Schema):
+class LineVariantSchema(Schema):
     text = fields.Nested(TextLineSchema, required=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
+    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
+
+    @post_load  # pyre-ignore[56]
+    def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
+        return LineVariant(data["text"], data["note"], tuple(data["manuscripts"]))
+
+
+class LineSchema(Schema):
+    variants = fields.Nested(
+        LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
+    )
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
 
     @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
-            data["text"],
-            data["note"],
+            tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            tuple(data["manuscripts"]),
         )
 
 

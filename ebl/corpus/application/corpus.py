@@ -78,7 +78,7 @@ class Corpus:
         self,
         id_: TextId,
         chapter_index: int,
-        lemmatization: Sequence[Sequence[Sequence[LemmatizationToken]]],
+        lemmatization: Sequence[Sequence[Sequence[Sequence[LemmatizationToken]]]],
         user: User,
     ) -> None:
         self._update_chapter(

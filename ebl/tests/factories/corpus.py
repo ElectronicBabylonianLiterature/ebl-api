@@ -7,6 +7,7 @@ from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
     Line,
+    LineVariant,
     ManuscriptLine,
     Stage,
 )
@@ -98,9 +99,9 @@ class ManuscriptLineFactory(factory.Factory):
     omitted_words = (1,)
 
 
-class LineFactory(factory.Factory):
+class LineVariantFactory(factory.Factory):
     class Meta:
-        model = Line
+        model = LineVariant
 
     class Params:
         manuscript_id = factory.Sequence(lambda n: n)
@@ -132,11 +133,27 @@ class LineFactory(factory.Factory):
         )
     )
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
-    is_second_line_of_parallelism = factory.Faker("boolean")
-    is_beginning_of_section = factory.Faker("boolean")
     manuscripts: Sequence[ManuscriptLine] = factory.List(
         [factory.SelfAttribute("..manuscript")], TupleFactory
     )
+
+
+class LineFactory(factory.Factory):
+    class Meta:
+        model = Line
+
+    class Params:
+        manuscript_id = factory.Sequence(lambda n: n)
+        variant = factory.SubFactory(
+            LineVariantFactory,
+            manuscript_id=factory.SelfAttribute("..manuscript_id"),
+        )
+
+    variants: Sequence[LineVariant] = factory.List(
+        [factory.SelfAttribute("..variant")], TupleFactory
+    )
+    is_second_line_of_parallelism = factory.Faker("boolean")
+    is_beginning_of_section = factory.Faker("boolean")
 
 
 class ChapterFactory(factory.Factory):
