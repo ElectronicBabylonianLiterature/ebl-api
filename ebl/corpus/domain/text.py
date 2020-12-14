@@ -4,19 +4,11 @@ from typing import Iterable, Optional, Sequence, Set, Tuple, TypeVar, Union, cas
 import attr
 
 import ebl.corpus.domain.text_visitor as text_visitor
-from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.enclosure_validator import validate
-from ebl.corpus.domain.enums import (
-    Classification,
-    ManuscriptType,
-    Period,
-    PeriodModifier,
-    Provenance,
-    Stage,
-)
+from ebl.corpus.domain.enums import Classification, Stage
 from ebl.corpus.domain.label_validator import LabelValidator
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.labels import Label
@@ -40,52 +32,6 @@ def get_duplicates(collection: Iterable[T]) -> Set[T]:
     return {
         item for item, count in collections.Counter(collection).items() if count > 1
     }
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Siglum:
-    provenance: Provenance
-    period: Period
-    type: ManuscriptType
-    disambiquator: str
-
-    def __str__(self) -> str:
-        return "".join(
-            [
-                self.provenance.abbreviation,
-                self.period.abbreviation,
-                self.type.abbreviation,
-                self.disambiquator,
-            ]
-        )
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Manuscript:
-    id: int
-    siglum_disambiguator: str = ""
-    museum_number: Optional[MuseumNumber] = None
-    accession: str = attr.ib(default="")
-    period_modifier: PeriodModifier = PeriodModifier.NONE
-    period: Period = Period.NEO_ASSYRIAN
-    provenance: Provenance = Provenance.NINEVEH
-    type: ManuscriptType = ManuscriptType.LIBRARY
-    notes: str = ""
-    references: Sequence[Reference] = tuple()
-
-    @accession.validator
-    def validate_accession(self, _, value) -> None:
-        if self.museum_number and value:
-            raise ValueError("Accession given when museum number present.")
-
-    @property
-    def siglum(self) -> Siglum:
-        return Siglum(
-            self.provenance, self.period, self.type, self.siglum_disambiguator
-        )
-
-    def accept(self, visitor: text_visitor.TextVisitor) -> None:
-        visitor.visit_manuscript(self)
 
 
 def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
