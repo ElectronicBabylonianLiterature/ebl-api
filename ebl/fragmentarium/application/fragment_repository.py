@@ -3,7 +3,7 @@ from typing import List, Dict, Tuple
 
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.domain.fragment import LineToVecEncodings
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery

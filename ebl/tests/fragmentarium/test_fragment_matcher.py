@@ -1,6 +1,6 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.application.fragment_matcher import LineToVecRanking
 from ebl.fragmentarium.application.line_to_vec_ranking_schema import (
     LineToVecRankingSchema,
@@ -15,8 +15,7 @@ def test_find(fragment_matcher, fragment_repository, when):
     number = MuseumNumber.of("BM.11")
     fragment = FragmentFactory.build(number=number, line_to_vec=line_to_vec)
     (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
-    assert fragment_matcher.parse_candidate("BM.11") == line_to_vec
-    assert fragment_matcher.parse_candidate((1, 2, 1, 1)) == line_to_vec
+    assert fragment_matcher._parse_candidate("BM.11") == line_to_vec
 
 
 def test_sort_scores_to_list(fragment_matcher):
@@ -39,16 +38,7 @@ def test_line_to_vec_ranking_schema():
 
 @pytest.mark.parametrize(
     "parameters, expected",
-    [
-        ["BM.11", {"score": [("X.1", 0)], "score_weighted": [("X.1", 0)]}],
-        [
-            [1, 2, 1, 1],
-            {
-                "score": [("BM.11", 0), ("X.1", 0)],
-                "score_weighted": [("BM.11", 0), ("X.1", 0)],
-            },
-        ],
-    ],
+    [["BM.11", {"score": [("X.1", 0)], "score_weighted": [("X.1", 0)]}]],
 )
 def test_line_to_vec(parameters, expected, fragment_matcher, when, fragment_repository):
     fragment_1_line_to_vec = (LineToVecEncoding.from_list([1, 2, 1, 1]),)

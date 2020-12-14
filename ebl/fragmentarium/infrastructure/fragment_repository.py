@@ -4,14 +4,14 @@ from marshmallow import EXCLUDE  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.matches.create_line_to_vec import (
-    LineToVecEncodings,
-    LineToVecEncoding,
-)
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.line_to_vec_encoding import (
+    LineToVecEncoding,
+    LineToVecEncodings,
+)
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,

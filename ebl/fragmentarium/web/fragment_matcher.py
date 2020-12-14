@@ -16,10 +16,6 @@ class FragmentMatcherResource:
     # pyre-ignore[11]
     def on_get(self, req: Request, resp: Response, number) -> None:
         try:
-            if number.startswith("[") and number.endswith("]"):
-                number = number.replace("[", "").replace("]", "").split(",")
-                number = tuple([int(x.strip()) for x in number])
-
             resp.media = LineToVecRankingSchema().dump(  # pyre-ignore[16]
                 self.fragment_matcher.rank_line_to_vec(number)
             )

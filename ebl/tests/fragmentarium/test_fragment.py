@@ -2,7 +2,6 @@ import attr
 import pytest  # pyre-ignore[21]
 from freezegun import freeze_time  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.matches.create_line_to_vec import LineToVecEncoding
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
@@ -10,6 +9,7 @@ from ebl.fragmentarium.domain.fragment import (
     UncuratedReference,
     Genre,
 )
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory

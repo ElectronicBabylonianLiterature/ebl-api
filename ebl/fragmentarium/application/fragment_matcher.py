@@ -1,20 +1,17 @@
 import itertools
-from typing import ClassVar, Tuple, Union, List, Dict
+from typing import ClassVar, Tuple, List, Dict
 
 import attr
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
-from ebl.fragmentarium.application.matches.create_line_to_vec import (
-    LineToVecEncoding,
-    LineToVecEncodings,
-)
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.matches.line_to_vec_score import (
     score,
     score_weighted,
 )
+from ebl.fragmentarium.domain.line_to_vec_encoding import (
+    LineToVecEncodings,
+)
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-
 
 Scores = List[Tuple[str, int]]
 Results = Dict[str, int]
@@ -61,7 +58,7 @@ class LineToVecRanker:
     ) -> None:
         if (
             fragment_id not in score_results
-            or score_result > score_results.get[fragment_id]
+            or score_result > score_results[fragment_id]
         ):
             score_results[fragment_id] = score_result
 
@@ -71,12 +68,7 @@ class FragmentMatcher:
         self.fragment_repository = fragment_repository
         self._fragment_repository = fragment_repository
 
-    @singledispatchmethod  # pyre-ignore[56]
-    def parse_candidate(self, candidate) -> Tuple[LineToVecEncodings, ...]:
-        return (LineToVecEncoding.from_list(candidate),)
-
-    @parse_candidate.register(str)  # pyre-ignore[56]
-    def _parse_candidate_str(self, candidate: str) -> Tuple[LineToVecEncodings, ...]:
+    def _parse_candidate(self, candidate: str) -> Tuple[LineToVecEncodings, ...]:
         line_to_vec = self.fragment_repository.query_by_museum_number(
             MuseumNumber.of(candidate)
         ).line_to_vec
@@ -85,23 +77,21 @@ class FragmentMatcher:
         else:
             raise ValueError("Fragment has no line to vec")
 
-    def rank_line_to_vec(
-        self, candidate: Union[str, Tuple[int, ...]]
-    ) -> LineToVecRanking:
-        candidate_line_to_vecs = self.parse_candidate(candidate)
+    def rank_line_to_vec(self, candidate: str) -> LineToVecRanking:
+        candidate_line_to_vecs = self._parse_candidate(candidate)
         fragments = self.fragment_repository.query_transliterated_line_to_vec()
         ranker = LineToVecRanker()
 
         for candidate_line_to_vec, fragment in itertools.product(
-            candidate_line_to_vecs, fragments.items()
+            candidate_line_to_vecs,
+            list(filter(lambda x: x[0] != candidate, fragments.items())),
         ):
             fragment_id, line_to_vecs = fragment
-            if fragment_id != candidate:
-                for line_to_vec in line_to_vecs:
-                    ranker.insert_score(
-                        fragment_id,
-                        score(candidate_line_to_vec, line_to_vec),
-                        score_weighted(candidate_line_to_vec, line_to_vec),
-                    )
+            for line_to_vec in line_to_vecs:
+                ranker.insert_score(
+                    fragment_id,
+                    score(candidate_line_to_vec, line_to_vec),
+                    score_weighted(candidate_line_to_vec, line_to_vec),
+                )
 
         return ranker.ranking

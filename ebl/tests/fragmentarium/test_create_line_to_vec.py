@@ -2,9 +2,9 @@ import pytest  # pyre-ignore[21]
 
 from ebl.fragmentarium.application.matches.create_line_to_vec import (
     create_line_to_vec,
-    LineToVecEncoding,
     split_lines,
 )
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 

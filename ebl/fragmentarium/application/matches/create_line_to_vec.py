@@ -1,10 +1,13 @@
-from enum import Enum
 from functools import reduce, singledispatch
 from typing import Sequence, Tuple
 
 import attr
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
+from ebl.fragmentarium.domain.line_to_vec_encoding import (
+    LineToVecEncoding,
+    LineToVecEncodings,
+)
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine, StateDollarLine
 from ebl.transliteration.domain.line import Line
@@ -14,22 +17,6 @@ from ebl.transliteration.domain.line_number import (
     AbstractLineNumber,
 )
 from ebl.transliteration.domain.text_line import TextLine
-
-
-class LineToVecEncoding(Enum):
-    START = 0
-    TEXT_LINE = 1
-    SINGLE_RULING = 2
-    DOUBLE_RULING = 3
-    TRIPLE_RULING = 4
-    END = 5
-
-    @staticmethod
-    def from_list(sequence: Sequence[int]) -> Tuple["LineToVecEncoding", ...]:
-        return tuple(map(LineToVecEncoding, sequence))
-
-
-LineToVecEncodings = Tuple[LineToVecEncoding, ...]
 
 
 @singledispatch

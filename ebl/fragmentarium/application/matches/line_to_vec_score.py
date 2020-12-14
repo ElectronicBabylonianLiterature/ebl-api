@@ -1,8 +1,8 @@
 from typing import List
 
-from ebl.fragmentarium.application.matches.create_line_to_vec import (
-    LineToVecEncodings,
+from ebl.fragmentarium.domain.line_to_vec_encoding import (
     LineToVecEncoding,
+    LineToVecEncodings,
 )
 
 
