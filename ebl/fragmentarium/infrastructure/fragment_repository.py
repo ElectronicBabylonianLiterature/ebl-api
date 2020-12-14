@@ -93,14 +93,14 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_transliterated_line_to_vec(
         self
-    ) -> Dict[str, Tuple[LineToVecEncodings, ...]]:
+    ) -> Dict[MuseumNumber, Tuple[LineToVecEncodings, ...]]:
         cursor = self._collection.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
         )
 
         return {
-            str(
-                MuseumNumberSchema().load(fragment["museumNumber"])  # pyre-ignore[16]
+            MuseumNumberSchema().load(  # pyre-ignore[16]
+                fragment["museumNumber"]
             ): tuple(
                 LineToVecEncoding.from_list(line_to_vec)
                 for line_to_vec in fragment["lineToVec"]

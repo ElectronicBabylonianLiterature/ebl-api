@@ -355,7 +355,7 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
         [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
     )
     assert fragment_repository.query_transliterated_line_to_vec() == {
-        str(transliterated_fragment.number): transliterated_fragment.line_to_vec
+        transliterated_fragment.number: transliterated_fragment.line_to_vec
     }
 
 

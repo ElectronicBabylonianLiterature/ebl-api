@@ -1,12 +1,9 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.application.fragment_matcher import LineToVecRanking
-from ebl.fragmentarium.application.line_to_vec_ranking_schema import (
-    LineToVecRankingSchema,
-)
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.application.fragment_matcher import sort_scores_to_list
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import FragmentFactory
 
 
@@ -27,18 +24,17 @@ def test_sort_scores_to_list(fragment_matcher):
     ]
 
 
-def test_line_to_vec_ranking_schema():
-    line_to_vec_ranking = LineToVecRanking(
-        [("X.0", 2), ("X.1", 1)], [("X.0", 6), ("X.1", 2)]
-    )
-    schema = LineToVecRankingSchema()
-    data = schema.dump(line_to_vec_ranking)
-    assert schema.load(data) == line_to_vec_ranking
-
-
 @pytest.mark.parametrize(
     "parameters, expected",
-    [["BM.11", {"score": [("X.1", 0)], "score_weighted": [("X.1", 0)]}]],
+    [
+        [
+            "BM.11",
+            {
+                "score": [(MuseumNumber.of("X.1"), 0)],
+                "score_weighted": [(MuseumNumber.of("X.1"), 0)],
+            },
+        ]
+    ],
 )
 def test_line_to_vec(parameters, expected, fragment_matcher, when, fragment_repository):
     fragment_1_line_to_vec = (LineToVecEncoding.from_list([1, 2, 1, 1]),)
@@ -49,18 +45,14 @@ def test_line_to_vec(parameters, expected, fragment_matcher, when, fragment_repo
     fragment_2 = FragmentFactory.build(
         number=MuseumNumber.of("X.1"), line_to_vec=fragment_2_line_to_vec
     )
-    fragment_3 = FragmentFactory.build(line_to_vec=None)
-    [
-        fragment_repository.create(fragment)
-        for fragment in [fragment_1, fragment_2, fragment_3]
-    ]
+    [fragment_repository.create(fragment) for fragment in [fragment_1, fragment_2]]
     (
         when(fragment_repository)
         .query_transliterated_line_to_vec()
         .thenReturn(
             {
-                str(fragment_1.number): (fragment_1_line_to_vec,),
-                str(fragment_2.number): (fragment_2_line_to_vec,),
+                fragment_1.number: (fragment_1_line_to_vec,),
+                fragment_2.number: (fragment_2_line_to_vec,),
             }
         )
     )

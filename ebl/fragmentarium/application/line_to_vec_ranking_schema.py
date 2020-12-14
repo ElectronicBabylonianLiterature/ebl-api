@@ -1,16 +1,22 @@
-from marshmallow import Schema, post_load, fields  # pyre-ignore[21]
-
-from ebl.fragmentarium.application.fragment_matcher import LineToVecRanking
+from marshmallow import Schema, fields, pre_dump  # pyre-ignore[21]
 
 
 class LineToVecRankingSchema(Schema):  # pyre-ignore[11]
     score = fields.List(fields.Tuple((fields.String(), fields.Int())), required=True)
     score_weighted = fields.List(
         fields.Tuple((fields.String(), fields.Int())),
-        data_key="scoreWeighted",
         required=True,
+        data_key="scoreWeighted",
     )
 
-    @post_load  # pyre-ignore[56]
-    def make_line_to_vec_ranking(self, data, **kwargs) -> LineToVecRanking:
-        return LineToVecRanking(**data)
+    @pre_dump
+    def make_museum_number_to_str(self, data, **kwargs):
+        return {
+            "score": [
+                (str(museum_number), score) for museum_number, score in data.score
+            ],
+            "score_weighted": [
+                (str(museum_number), score)
+                for museum_number, score in data.score_weighted
+            ],
+        }
