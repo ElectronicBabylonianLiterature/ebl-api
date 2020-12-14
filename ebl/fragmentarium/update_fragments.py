@@ -144,7 +144,7 @@ if __name__ == "__main__":
         "-w", "--workers", type=int, help="Number of threads to perform migration"
     )
     args = parser.parse_args()
-    workers = args.workers if args.workers else 6
+    workers = args.workers or 6
 
     chunks = create_chunks(workers)
     states = Parallel(n_jobs=workers)(
