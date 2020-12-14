@@ -42,6 +42,7 @@ def compute_score_for_all(
     return [compute_score(seq1, seq2) for seq1, seq2 in itertools.product(seqs1, seqs2)]
 
 
+
 def compute_score(
     seq1: LineToVecEncodings, seq2: LineToVecEncodings
 ) -> Tuple[LineToVecEncodings, ...]:
