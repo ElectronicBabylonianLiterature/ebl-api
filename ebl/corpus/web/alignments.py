@@ -1,42 +1,18 @@
 import falcon  # pyre-ignore[21]
-from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
+from ebl.marshmallowschema import validate
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_chapter_index, create_text_id
-from ebl.transliteration.domain.alignment import Alignment
 from ebl.users.web.require_scope import require_scope
-
-ALIGNMENT_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "alignment": {
-            "type": "array",
-            "items": {
-                "type": "array",
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "value": {"type": "string"},
-                            "alignment": {"type": ["integer", "null"], "minimum": 0},
-                        },
-                        "required": ["value"],
-                    },
-                },
-            },
-        }
-    },
-    "required": ["alignment"],
-}
+from ebl.corpus.web.alignment_schema import AlignmentSchema
 
 
 class AlignmentResource:
     def __init__(self, corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "write:texts")
-    @validate(ALIGNMENT_DTO_SCHEMA)  # pyre-ignore[56]
+    @falcon.before(require_scope, "write:texts")  # pyre-ignore[56]
+    @validate(AlignmentSchema())
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]
@@ -48,7 +24,7 @@ class AlignmentResource:
         self._corpus.update_alignment(
             create_text_id(category, index),
             create_chapter_index(chapter_index),
-            Alignment.from_dict(req.media["alignment"]),
+            AlignmentSchema().load(req.media),  # pyre-ignore[16]
             req.context.user,
         )
         updated_text = self._corpus.find(create_text_id(category, index))

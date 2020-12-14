@@ -54,7 +54,7 @@ def create_context():
         os.environ["AUTH0_ISSUER"],
         set_sentry_user,
     )
-    context = Context(
+    return Context(
         auth_backend=auth_backend,
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
@@ -67,7 +67,6 @@ def create_context():
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
     )
-    return context
 
 
 def create_api(context: Context) -> falcon.API:  # pyre-ignore[11]

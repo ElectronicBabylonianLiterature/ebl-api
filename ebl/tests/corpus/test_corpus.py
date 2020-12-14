@@ -2,25 +2,22 @@ import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import serialize
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.text import Line, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.tests.factories.corpus import TextFactory
-from ebl.transliteration.domain.alignment import (
-    Alignment,
-    AlignmentError,
-    AlignmentToken,
-)
+from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 COLLECTION = "texts"
 TEXT = TextFactory.build()  # pyre-ignore[16]
@@ -94,8 +91,11 @@ def expect_text_update(
     when(changelog).create(
         COLLECTION,
         user.profile,
-        {**serialize(old_text), "_id": old_text.id},
-        {**serialize(updated_text), "_id": updated_text.id},
+        {**serialize(old_text), "_id": (old_text.id.category, old_text.id.index)},
+        {
+            **serialize(updated_text),
+            "_id": (updated_text.id.category, updated_text.id.index),
+        },
     ).thenReturn()
 
 
@@ -129,8 +129,9 @@ def test_creating_text(
 ):
     expect_signs(signs, sign_repository)
     expect_validate_references(bibliography, when)
+    text_id = (TEXT.id.category, TEXT.id.index)
     when(changelog).create(
-        COLLECTION, user.profile, {"_id": TEXT.id}, {**serialize(TEXT), "_id": TEXT.id}
+        COLLECTION, user.profile, {"_id": text_id}, {**serialize(TEXT), "_id": text_id}
     ).thenReturn()
     when(text_repository).create(TEXT).thenReturn()
 
@@ -198,6 +199,8 @@ def test_updating_text(
 def test_updating_alignment(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ):
+    aligmnet = 0
+    omitted_words = (1,)
     updated_text = attr.evolve(
         TEXT_WITHOUT_DOCUMENTS,
         chapters=(
@@ -224,10 +227,11 @@ def test_updating_alignment(
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=0,
+                                            alignment=aligmnet,
                                         ),
                                     ),
                                 ),
+                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
@@ -247,7 +251,15 @@ def test_updating_alignment(
         when,
     )
 
-    alignment = Alignment((((AlignmentToken("ku-[nu-ši]", 0),),),))
+    alignment = Alignment(
+        (
+            (
+                ManuscriptLineAlignment(
+                    (AlignmentToken("ku-[nu-ši]", aligmnet),), omitted_words
+                ),
+            ),
+        )
+    )
     corpus.update_alignment(TEXT.id, 0, alignment, user)
 
 
@@ -361,21 +373,35 @@ def test_updating_manuscript_lemmatization(
     "alignment",
     [
         Alignment(
-            (((AlignmentToken("ku-[nu-ši]", 0), AlignmentToken("ku-[nu-ši]", 0)),),)
-        ),
-        Alignment(((tuple(),),)),
-        Alignment(
-            (((AlignmentToken("ku-[nu-ši]", 0),), (AlignmentToken("ku-[nu-ši]", 0),)),)
-        ),
-        Alignment((tuple())),
-        Alignment(
             (
-                ((AlignmentToken("ku-[nu-ši]", 0),),),
-                ((AlignmentToken("ku-[nu-ši]", 0),),),
+                (
+                    ManuscriptLineAlignment(
+                        (
+                            AlignmentToken("ku-[nu-ši]", 0),
+                            AlignmentToken("ku-[nu-ši]", 0),
+                        )
+                    ),
+                ),
             )
         ),
+        Alignment(
+            (
+                (
+                    ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),
+                    ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),
+                ),
+            )
+        ),
+        Alignment(
+            (
+                (ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),
+                (ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),
+            )
+        ),
+        Alignment(((ManuscriptLineAlignment(tuple()),),)),
+        Alignment((tuple())),
         Alignment(tuple()),
-        Alignment((((AlignmentToken("invalid value", 0),),),)),
+        Alignment(((ManuscriptLineAlignment((AlignmentToken("invalid value", 0),)),),)),
     ],
 )
 def test_invalid_alignment(alignment, corpus, text_repository, when):

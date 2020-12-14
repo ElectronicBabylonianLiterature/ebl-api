@@ -11,27 +11,28 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.corpus.domain.text import (
     Chapter,
     Line,
     Manuscript,
     ManuscriptLine,
+    Siglum,
     Text,
     TextId,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
-from ebl.transliteration.domain.dollar_line import RulingDollarLine
 
 CATEGORY = 1
 INDEX = 2
@@ -73,6 +74,7 @@ MANUSCRIPT_TEXT = TextLine(
     ),
 )
 PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
+OMITTED_WORDS = (1,)
 
 RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
 NOTE = None
@@ -81,7 +83,7 @@ LINE = Line(
     NOTE,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT),),
+    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
 )
 
 TEXT = Text(
@@ -130,11 +132,8 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].name == CHAPTER_NAME
     assert TEXT.chapters[0].order == ORDER
     assert TEXT.chapters[0].manuscripts[0].id == MANUSCRIPT_ID
-    assert TEXT.chapters[0].manuscripts[0].siglum == (
-        PROVENANCE,
-        PERIOD,
-        TYPE,
-        SIGLUM_DISAMBIGUATOR,
+    assert TEXT.chapters[0].manuscripts[0].siglum == Siglum(
+        PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
     )
     assert TEXT.chapters[0].manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
     assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
@@ -157,6 +156,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
     assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
     assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
+    assert TEXT.chapters[0].lines[0].manuscripts[0].omitted_words == OMITTED_WORDS
 
 
 def test_giving_museum_number_and_accession_is_invalid():
@@ -296,3 +296,19 @@ def test_stage():
     periods = [period.long_name for period in Period]
     stages = [stage.value for stage in Stage]
     assert stages == [*periods, "Standard Babylonian"]
+
+
+def test_strip_manuscript_alignment():
+    word = Word.of([Reading.of_name("ku")], alignment=1)
+    manuscript = ManuscriptLine(
+        MANUSCRIPT_ID, LABELS, TextLine(LineNumber(1), (word,)), PARATEXT, OMITTED_WORDS
+    )
+    expected = ManuscriptLine(
+        MANUSCRIPT_ID,
+        LABELS,
+        TextLine(LineNumber(1), (word.set_alignment(None, None),)),
+        PARATEXT,
+        tuple(),
+    )
+
+    assert manuscript.strip_alignments() == expected

@@ -19,15 +19,18 @@ ANY_USER = Guest()
 DTO = {
     "alignment": [
         [
-            [
-                {
-                    "value": "ku-[nu-ši]",
-                    "alignment": 0,
-                    "variant": "KU",
-                    "language": "SUMERIAN",
-                    "isNormalized": False,
-                }
-            ]
+            {
+                "alignment": [
+                    {
+                        "value": "ku-[nu-ši]",
+                        "alignment": 0,
+                        "variant": "KU",
+                        "language": "SUMERIAN",
+                        "isNormalized": False,
+                    }
+                ],
+                "omittedWords": [1],
+            }
         ]
     ]
 }
@@ -60,6 +63,8 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
     allow_references(text, bibliography)
     create_text(client, text)
     chapter_index = 0
+    alignment = 0
+    omitted_words = (1,)
     updated_text = attr.evolve(
         text,
         chapters=(
@@ -84,7 +89,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=0,
+                                            alignment=alignment,
                                             variant=Word.of(
                                                 [Logogram.of_name("KU")],
                                                 language=Language.SUMERIAN,
@@ -92,6 +97,7 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                         ),
                                     ),
                                 ),
+                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
@@ -133,10 +139,7 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
 
 @pytest.mark.parametrize(
     "dto,expected_status",
-    [
-        ({"alignment": [[[]]]}, falcon.HTTP_UNPROCESSABLE_ENTITY),
-        ({}, falcon.HTTP_BAD_REQUEST),
-    ],
+    [({"alignment": [[[]]]}, falcon.HTTP_BAD_REQUEST), ({}, falcon.HTTP_BAD_REQUEST)],
 )
 def test_updating_invalid_alignment(
     dto, expected_status, client, bibliography, sign_repository, signs

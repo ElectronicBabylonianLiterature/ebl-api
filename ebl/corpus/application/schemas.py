@@ -77,6 +77,9 @@ class ManuscriptLineSchema(Schema):
     labels = labels()
     line = fields.Nested(OneOfLineSchema, required=True)
     paratext = fields.Nested(OneOfLineSchema, many=True, required=True)
+    omitted_words = fields.List(
+        fields.Integer(), required=True, data_key="omittedWords"
+    )
 
     @post_load  # pyre-ignore[56]
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
@@ -85,6 +88,7 @@ class ManuscriptLineSchema(Schema):
             tuple(data["labels"]),
             data["line"],
             tuple(data["paratext"]),
+            tuple(data["omitted_words"]),
         )
 
 
