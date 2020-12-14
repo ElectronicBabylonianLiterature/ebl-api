@@ -66,10 +66,8 @@ def _parse_text_line_line_number_range(
     line_number: LineNumberRange
 ) -> LineToVecEncodings:
     return tuple(
-        [
-            LineToVecEncoding.TEXT_LINE
-            for _ in range(line_number.start.number, line_number.end.number + 1)
-        ]
+        LineToVecEncoding.TEXT_LINE
+        for _ in range(line_number.start.number, line_number.end.number + 1)
     )
 
 

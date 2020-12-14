@@ -77,8 +77,11 @@ def test_create_line_to_vec_from_atf(atf, expected, transliteration_factory):
 def test_split_lines(atf, expected):
     lines = parse_atf_lark(atf).lines
     splitted_lines = tuple(
-        [line for line in [lines[: expected[0]], lines[expected[1] :]] if len(line)]
+        line
+        for line in [lines[: expected[0]], lines[expected[1] :]]
+        if len(line)
     )
+
     assert split_lines(lines) == splitted_lines
 
 

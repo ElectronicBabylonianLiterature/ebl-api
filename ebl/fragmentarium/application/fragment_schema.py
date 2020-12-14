@@ -110,12 +110,11 @@ class FragmentSchema(Schema):
             None
             if data["line_to_vec"] is None
             else tuple(
-                [
-                    tuple(line_to_vec_encoding)
-                    for line_to_vec_encoding in data["line_to_vec"]
-                ]
+                tuple(line_to_vec_encoding)
+                for line_to_vec_encoding in data["line_to_vec"]
             )
         )
+
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)
