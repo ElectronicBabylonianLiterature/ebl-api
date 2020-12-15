@@ -83,8 +83,7 @@ class ATFImporter:
 
     @staticmethod
     def get_ebl_transliteration(line):
-        parsed_atf = parse_atf_lark(line)
-        return parsed_atf
+        return parse_atf_lark(line)
 
     def get_ebl_lemmata(self, orrac_lemma_tupel, all_unique_lemmas):
 
@@ -110,7 +109,7 @@ class ATFImporter:
                     )
 
                 # if "X" or "u" or "n" then add [] and return
-                if oracc_lemma == "X" or oracc_lemma == "u" or oracc_lemma == "n":
+                if oracc_lemma in ["X", "u", "n"]:
                     self.logger.warning(
                         "Oracc lemma was '"
                         + oracc_lemma
@@ -125,7 +124,7 @@ class ATFImporter:
                     if entry["_id"] not in unique_lemmas:
                         unique_lemmas.append(entry["_id"])
 
-                if len(unique_lemmas) == 0:
+                if not unique_lemmas:
 
                     try:
                         citation_form = self.lemmas_cfforms[oracc_lemma]
@@ -141,7 +140,7 @@ class ATFImporter:
                         ):
                             unique_lemmas.append(entry["_id"])
 
-                        if len(unique_lemmas) == 0:
+                        if not unique_lemmas:
                             for entry in self.db.get_collection("words").find(
                                 {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
                             ):
@@ -165,7 +164,7 @@ class ATFImporter:
                             )
 
             # all attempts to find a ebl lemma failed
-            if len(unique_lemmas) == 0:
+            if not unique_lemmas:
                 if oracc_lemma not in not_lemmatized:
                     not_lemmatized[oracc_lemma] = True
                 self.logger.warning(
@@ -184,8 +183,8 @@ class ATFImporter:
     @staticmethod
     def parse_glossary(path):
 
-        lemmas_cfforms = dict()
-        cfforms_senses = dict()
+        lemmas_cfforms = {}
+        cfforms_senses = {}
         cfform_guideword = dict()
 
         with open(path, "r", encoding="utf8") as f:
@@ -273,10 +272,7 @@ class ATFImporter:
         return None
 
     def convert_to_ebl_lines(self, converted_lines, filename):
-        result = dict()
-        result["transliteration"] = []
-        result["lemmatization"] = []
-        result["control_lines"] = []
+        result = {"transliteration": [], "lemmatization": [], "control_lines": []}
         last_transliteration_line = ""
         last_alter_lemline_at = []
         last_transliteration = []
@@ -320,9 +316,6 @@ class ATFImporter:
                     + str(len(all_unique_lemmas))
                 )
 
-                # join oracc_word with ebl unique lemmata
-                oracc_word_ebl_lemmas = dict()
-                cnt = 0
                 if len(last_transliteration) != len(all_unique_lemmas):
                     self.logger.error(
                         "Transiteration and Lemmatization don't have equal length!!"
@@ -334,18 +327,17 @@ class ATFImporter:
                 result["last_transliteration"] = last_transliteration
                 result["all_unique_lemmas"] = all_unique_lemmas
 
-                for oracc_word in last_transliteration:
-                    oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
-                    cnt += 1
+                # join oracc_word with ebl unique lemmata
+                oracc_word_ebl_lemmas = {
+                    oracc_word: all_unique_lemmas[cnt]
+                    for cnt, oracc_word in enumerate(last_transliteration)
+                }
 
                 # join ebl transliteration with lemma line:
                 ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
 
                 for token in ebl_lines.lines[0].content:
-                    unique_lemma = []
-                    if token.value in oracc_word_ebl_lemmas:
-                        unique_lemma = oracc_word_ebl_lemmas[token.value]
-
+                    unique_lemma = oracc_word_ebl_lemmas.get(token.value, [])
                     if len(unique_lemma) == 0:
                         lemma_line.append(LemmatizationToken(token.value, None))
                     else:
@@ -357,16 +349,11 @@ class ATFImporter:
             elif line["c_type"] == "text_line":
 
                     # skip "DIŠ"
-                    oracc_words = []
-                    for entry in line["c_array"]:
-                        if entry != "DIŠ":
-                            oracc_words.append(entry)
-
-                    last_transliteration_line = line["c_line"]
-                    last_transliteration = oracc_words
-                    last_alter_lemline_at = line["c_alter_lemline_at"]
-                    result["transliteration"].append(line["c_line"])
-
+                oracc_words = [entry for entry in line["c_array"] if entry != "DIŠ"]
+                last_transliteration_line = line["c_line"]
+                last_transliteration = oracc_words
+                last_alter_lemline_at = line["c_alter_lemline_at"]
+                result["transliteration"].append(last_transliteration_line)
             elif line["c_type"] != "empty_line" : # import all other lines
                 result["transliteration"].append(line["c_line"])
                 result["lemmatization"].append(line["c_line"])

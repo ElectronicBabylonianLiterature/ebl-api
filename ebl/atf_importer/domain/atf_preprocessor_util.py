@@ -4,7 +4,7 @@ class Util:
         r = "\n"
         r += " +-"
 
-        for i in range(len(s)):
+        for _ in range(len(s)):
             r += "-"
         r += "-+\n"
         r += " | " + s + " |\n"
