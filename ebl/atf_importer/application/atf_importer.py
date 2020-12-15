@@ -119,53 +119,50 @@ class ATFImporter:
                     all_unique_lemmas.append(unique_lemmas)
                     return
 
-                # for entry in self.db.get_collection("words").find(
-                #     {"oraccWords.guideWord": oracc_guideword}, {"_id"}
-                # ):
-                #     unique_lemmas.append(entry["_id"])
-                #
-                # for entry in self.db.get_collection("words").find(
-                #     {"oraccWords.lemma": oracc_lemma}, {"_id"}
-                # ):
-                #     if entry["_id"] not in unique_lemmas:
-                #         unique_lemmas.append(entry["_id"])
-                #
-                # for entry in self.db.get_collection("words").find(
-                #     {"guideWord": oracc_guideword}, {"_id"}
-                # ):
-                #     if entry["_id"] not in unique_lemmas:
-                #         unique_lemmas.append(entry["_id"])
-
-                try:
-                    citation_form = self.lemmas_cfforms[oracc_lemma]
-                    guideword = self.cfform_guideword[citation_form]
-                    if "//" in guideword:
-                        guideword = guideword.split("//")[0]
-                    #senses = self.cfforms_senses[citation_form]
-                    #if senses is not None and oracc_guideword in senses:
-
-                    for entry in self.db.get_collection("words").find(
-                        {"oraccWords.guideWord": guideword,"oraccWords.lemma": citation_form}, {"_id"}
-                    ):
+                for entry in self.db.get_collection("words").find(
+                        {"oraccWords.lemma": oracc_lemma, "oraccWords.guideWord": oracc_guideword}, {"_id"}
+                ):
+                    if entry["_id"] not in unique_lemmas:
                         unique_lemmas.append(entry["_id"])
 
-                    if len(unique_lemmas) == 0:
+                if len(unique_lemmas) == 0:
+
+                    try:
+                        citation_form = self.lemmas_cfforms[oracc_lemma]
+                        guideword = self.cfform_guideword[citation_form]
+
+                        print(citation_form,guideword)
+                        if "//" in guideword:
+                            guideword = guideword.split("//")[0]
+                        #senses = self.cfforms_senses[citation_form]
+                        #if senses is not None and oracc_guideword in senses:
                         for entry in self.db.get_collection("words").find(
-                            {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                            {"oraccWords.guideWord": guideword,"oraccWords.lemma": citation_form}, {"_id"}
                         ):
-                            if entry["_id"] not in unique_lemmas:
-                                unique_lemmas.append(entry["_id"])
+                            unique_lemmas.append(entry["_id"])
 
+                        if len(unique_lemmas) == 0:
+                            for entry in self.db.get_collection("words").find(
+                                {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                            ):
+                                if entry["_id"] not in unique_lemmas:
+                                    unique_lemmas.append(entry["_id"])
 
-                except Exception:
-                    if oracc_lemma not in not_lemmatized:
-                        not_lemmatized[oracc_lemma] = True
+                            for entry in self.db.get_collection("words").find(
+                                    {"lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                            ):
+                                if entry["_id"] not in unique_lemmas:
+                                    unique_lemmas.append(entry["_id"])
 
-                        self.logger.warning(
-                            "Incompatible lemmatization: No citation form found in the glossary for '"
-                            + oracc_lemma
-                            + "'"
-                        )
+                    except Exception:
+                        if oracc_lemma not in not_lemmatized:
+                            not_lemmatized[oracc_lemma] = True
+
+                            self.logger.warning(
+                                "Incompatible lemmatization: No citation form found in the glossary for '"
+                                + oracc_lemma
+                                + "'"
+                            )
 
             # all attempts to find a ebl lemma failed
             if len(unique_lemmas) == 0:
@@ -356,9 +353,8 @@ class ATFImporter:
                             LemmatizationToken(token.value, tuple(unique_lemma))
                         )
                 result["lemmatization"].append(tuple(lemma_line))
-            else:
 
-                if line["c_type"] == "text_line":
+            elif line["c_type"] == "text_line":
 
                     # skip "DIŠ"
                     oracc_words = []
@@ -370,6 +366,15 @@ class ATFImporter:
                     last_transliteration = oracc_words
                     last_alter_lemline_at = line["c_alter_lemline_at"]
                     result["transliteration"].append(line["c_line"])
+
+            elif line["c_type"] != "empty_line" : # import all other lines
+                result["transliteration"].append(line["c_line"])
+                result["lemmatization"].append(line["c_line"])
+
+
+
+
+
         return result
 
     def insert_into_db(self, ebl_lines, filename):
@@ -467,6 +472,7 @@ class ATFImporter:
         self.lemmas_cfforms, self.cfforms_senses, self.cfform_guideword = self.parse_glossary(
             args.glossary
         )
+
 
         # read atf files from input folder
         for filepath in glob.glob(os.path.join(args.input, "*.atf")):

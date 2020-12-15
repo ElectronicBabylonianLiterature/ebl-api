@@ -89,6 +89,10 @@ class ATFPreprocessor:
             converted_line_array = words_serializer.result
 
             self.logger.info("Line successfully parsed, no conversion needed")
+            self.logger.debug(
+                "Parsed line as "
+                + tree.data
+            )
             self.logger.info(
                 "----------------------------------------------------------------------"
             )
