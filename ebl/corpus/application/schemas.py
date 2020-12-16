@@ -1,8 +1,11 @@
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.enums import (
+from ebl.corpus.domain.chapter import (
+    Chapter,
     Classification,
+    Line,
+    ManuscriptLine,
     Stage,
 )
 from ebl.corpus.domain.manuscript import (
@@ -12,7 +15,6 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
-from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import StringValueEnum

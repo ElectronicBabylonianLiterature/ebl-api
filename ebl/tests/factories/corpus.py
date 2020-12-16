@@ -3,7 +3,13 @@ from typing import Sequence
 import factory.fuzzy  # pyre-ignore[21]
 import pydash  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import Classification, Stage
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Classification,
+    Line,
+    ManuscriptLine,
+    Stage,
+)
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
@@ -11,7 +17,6 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
-from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
