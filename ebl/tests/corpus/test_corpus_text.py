@@ -11,15 +11,8 @@ from ebl.corpus.domain.enums import (
     Provenance,
     Stage,
 )
-from ebl.corpus.domain.text import (
-    Chapter,
-    Line,
-    Manuscript,
-    ManuscriptLine,
-    Siglum,
-    Text,
-    TextId,
-)
+from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine, Text, TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
