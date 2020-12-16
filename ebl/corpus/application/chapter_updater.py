@@ -1,36 +1,49 @@
 from typing import cast, List, Optional
 
 import attr
+from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Chapter
-from ebl.corpus.domain.ordered import Order
-from ebl.corpus.domain.text import Text
-from ebl.corpus.domain.text_visitor import TextVisitor
+from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect, NotFoundError
 
 
 class ChapterUpdater(TextVisitor):
     def __init__(self, chapter_index: int):
-        super().__init__(Order.POST)
         self._chapters: List[Chapter] = []
         self._text: Optional[Text] = None
         self._chapter_index_to_align = chapter_index
 
     def update(self, text: Text) -> Text:
-        text.accept(self)
+        self.visit(text)
         if self._text is not None:
             return cast(Text, self._text)
         else:
             raise Defect("Result text was not set.")
 
-    def visit_text(self, text: Text) -> None:
+    @singledispatchmethod  # pyre-ignore[56]
+    def visit(self, item: TextItem) -> None:
+        pass
+
+    @visit.register(Text)  # pyre-ignore[56]
+    def _visit_text(self, text: Text) -> None:
+        for chapter in text.chapters:
+            self.visit(chapter)
+
         if self._chapter_index_to_align >= len(text.chapters):
             raise NotFoundError(f"Chapter {self._chapter_index_to_align} not found.")
 
         self._text = attr.evolve(text, chapters=tuple(self._chapters))
         self._chapters = []
 
-    def visit_chapter(self, chapter: Chapter) -> None:
+    @visit.register(Chapter)  # pyre-ignore[56]
+    def _visit_chapter(self, chapter: Chapter) -> None:
+        for manuscript in chapter.manuscripts:
+            self.visit(manuscript)
+
+        for line in chapter.lines:
+            self.visit(line)
+
         try:
             updated_chapter = (
                 self._update_chapter(chapter)

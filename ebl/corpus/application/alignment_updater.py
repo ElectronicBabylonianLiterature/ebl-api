@@ -1,10 +1,12 @@
 from typing import List
 
 import attr
+from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.transliteration.domain.alignment import AlignmentError
+from ebl.corpus.domain.text import TextItem
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 
 
@@ -32,7 +34,15 @@ class AlignmentUpdater(ChapterUpdater):
         except IndexError:
             raise AlignmentError()
 
-    def visit_line(self, line: Line) -> None:
+    @singledispatchmethod  # pyre-ignore[56]
+    def visit(self, item: TextItem) -> None:
+        super().visit(item)
+
+    @visit.register(Line)  # pyre-ignore[56]
+    def _visit_line(self, line: Line) -> None:
+        for manuscript_line in line.manuscripts:
+            self.visit(manuscript_line)
+
         if len(self._chapters) == self._chapter_index_to_align:
             if self._alignment.get_number_of_manuscripts(self.line_index) == len(
                 line.manuscripts
@@ -44,7 +54,8 @@ class AlignmentUpdater(ChapterUpdater):
             else:
                 raise AlignmentError()
 
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+    @visit.register(ManuscriptLine)  # pyre-ignore[56]
+    def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
             updated_line = manuscript_line.line.update_alignment(
                 self.current_alignment.alignment

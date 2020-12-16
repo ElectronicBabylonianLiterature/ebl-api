@@ -1,9 +1,11 @@
 from typing import List, Sequence
 
 import attr
+from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.text import TextItem
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationToken,
     LemmatizationError,
@@ -39,7 +41,15 @@ class LemmatizationUpdater(ChapterUpdater):
                 f"manuscript {self.manuscript_line_index}."
             )
 
-    def visit_line(self, line: Line) -> None:
+    @singledispatchmethod  # pyre-ignore[56]
+    def visit(self, item: TextItem) -> None:
+        super().visit(item)
+
+    @visit.register(Line)  # pyre-ignore[56]
+    def _visit_line(self, line: Line) -> None:
+        for manuscript_line in line.manuscripts:
+            self.visit(manuscript_line)
+
         if len(self._chapters) == self._chapter_index_to_align:
             if len(self._lemmatization[self.line_index]) == len(line.manuscripts) + 1:
                 self._lines.append(
@@ -55,7 +65,8 @@ class LemmatizationUpdater(ChapterUpdater):
             else:
                 raise LemmatizationError()
 
-    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
+    @visit.register(ManuscriptLine)  # pyre-ignore[56]
+    def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
             updated_line = manuscript_line.line.update_lemmatization(
                 self.current_lemmatization
