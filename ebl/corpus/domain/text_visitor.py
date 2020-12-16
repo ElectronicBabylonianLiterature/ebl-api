@@ -1,36 +1,20 @@
-from enum import Enum, auto
+from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.text import Text, VisitText
 
-from ebl.corpus.domain import manuscript
-from ebl.corpus.domain import text
 
-
-class TextVisitor:
-    class Order(Enum):
-        PRE = auto()
-        POST = auto()
-
-    def __init__(self, order: "TextVisitor.Order"):
-        self._order = order
-
-    @property
-    def is_post_order(self) -> bool:
-        return self._order == TextVisitor.Order.POST
-
-    @property
-    def is_pre_order(self) -> bool:
-        return self._order == TextVisitor.Order.PRE
-
-    def visit_text(self, text: "text.Text") -> None:
+class TextVisitor(VisitText):
+    def visit_text(self, text: Text) -> None:
         pass
 
-    def visit_chapter(self, chapter: "text.Chapter") -> None:
+    def visit_chapter(self, chapter: Chapter) -> None:
         pass
 
-    def visit_manuscript(self, manuscript: "manuscript.Manuscript") -> None:
+    def visit_manuscript(self, manuscript: Manuscript) -> None:
         pass
 
-    def visit_line(self, line: "text.Line") -> None:
+    def visit_line(self, line: Line) -> None:
         pass
 
-    def visit_manuscript_line(self, manuscript_line: "text.ManuscriptLine") -> None:
+    def visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         pass

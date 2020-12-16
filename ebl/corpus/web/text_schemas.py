@@ -16,7 +16,7 @@ from ebl.corpus.application.schemas import (
     labels,
     manuscript_id,
 )
-from ebl.corpus.domain.text import Line, ManuscriptLine
+from ebl.corpus.domain.chapter import Line, ManuscriptLine
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf

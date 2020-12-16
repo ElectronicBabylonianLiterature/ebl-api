@@ -2,14 +2,16 @@ from typing import cast, List, Optional
 
 import attr
 
-from ebl.corpus.domain.text import Chapter, Text
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.ordered import Order
+from ebl.corpus.domain.text import Text
 from ebl.corpus.domain.text_visitor import TextVisitor
 from ebl.errors import DataError, Defect, NotFoundError
 
 
 class ChapterUpdater(TextVisitor):
     def __init__(self, chapter_index: int):
-        super().__init__(TextVisitor.Order.POST)
+        super().__init__(Order.POST)
         self._chapters: List[Chapter] = []
         self._text: Optional[Text] = None
         self._chapter_index_to_align = chapter_index

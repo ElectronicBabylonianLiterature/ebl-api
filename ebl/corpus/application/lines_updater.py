@@ -3,7 +3,7 @@ from typing import Sequence
 import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
-from ebl.corpus.domain.text import Chapter, Line
+from ebl.corpus.domain.chapter import Chapter, Line
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
