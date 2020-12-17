@@ -3,7 +3,8 @@ from typing import Sequence
 import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
-from ebl.corpus.domain.text import Chapter, Manuscript
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.manuscript import Manuscript
 
 
 class ManuscriptUpdater(ChapterUpdater):

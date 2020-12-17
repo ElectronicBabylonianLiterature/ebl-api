@@ -5,7 +5,10 @@ import attr
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.text_visitor import TextVisitor
-from ebl.corpus.domain.text import Chapter, Manuscript, Text
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.ordered import Order
+from ebl.corpus.domain.text import Text
 from ebl.errors import Defect, NotFoundError
 
 
@@ -15,7 +18,7 @@ def invalid_reference(error: Exception) -> Exception:
 
 class TextHydrator(TextVisitor):
     def __init__(self, bibliography: Bibliography):
-        super().__init__(TextVisitor.Order.POST)
+        super().__init__(Order.POST)
         self._bibliography: Bibliography = bibliography
         self._text: Optional[Text] = None
         self._chapters: List[Chapter] = []

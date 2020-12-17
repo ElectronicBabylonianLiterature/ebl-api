@@ -5,8 +5,12 @@ import falcon  # pyre-ignore[21]
 import pytest  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.manuscript import (ManuscriptType, Period,
-                                          PeriodModifier, Provenance)
+from ebl.corpus.domain.manuscript import (
+    ManuscriptType,
+    Period,
+    PeriodModifier,
+    Provenance,
+)
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import TextFactory
