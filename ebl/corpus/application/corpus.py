@@ -3,6 +3,7 @@ from typing import List, Sequence, Tuple
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
+from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
@@ -13,9 +14,7 @@ from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.users.domain.user import User
-
 
 COLLECTION = "texts"
 
@@ -78,7 +77,7 @@ class Corpus:
         self,
         id_: TextId,
         chapter_index: int,
-        lemmatization: Sequence[Sequence[Sequence[LemmatizationToken]]],
+        lemmatization: ChapterLemmatization,
         user: User,
     ) -> None:
         self._update_chapter(

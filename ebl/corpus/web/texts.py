@@ -1,128 +1,10 @@
 import falcon  # pyre-ignore[21]
-from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
 
-from ebl.bibliography.domain.reference import ReferenceType
-from ebl.corpus.domain.chapter import Classification, Stage
-from ebl.corpus.domain.manuscript import (
-    ManuscriptType,
-    Period,
-    PeriodModifier,
-    Provenance,
-)
 from ebl.corpus.web.api_serializer import deserialize, serialize, serialize_public
+from ebl.corpus.web.text_schemas import ApiTextSchema
 from ebl.corpus.web.text_utils import create_text_id
+from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
-
-REFERENCE_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "id": {"type": "string"},
-        "type": {
-            "type": "string",
-            "enum": [name for name, _ in ReferenceType.__members__.items()],
-        },
-        "pages": {"type": "string"},
-        "notes": {"type": "string"},
-        "linesCited": {"type": "array", "items": {"type": "string"}},
-    },
-    "required": ["id", "type", "pages", "notes", "linesCited"],
-}
-
-MANUSCRIPT_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "id": {"type": "integer", "minimum": 1},
-        "siglumDisambiguator": {"type": "string"},
-        "museumNumber": {"type": "string"},
-        "accession": {"type": "string"},
-        "periodModifier": {
-            "type": "string",
-            "enum": [modifier.value for modifier in PeriodModifier],
-        },
-        "period": {"type": "string", "enum": [period.long_name for period in Period]},
-        "provenance": {
-            "type": "string",
-            "enum": [provenance.long_name for provenance in Provenance],
-        },
-        "type": {
-            "type": "string",
-            "enum": [type_.long_name for type_ in ManuscriptType],
-        },
-        "notes": {"type": "string"},
-        "references": {"type": "array", "items": REFERENCE_DTO_SCHEMA},
-    },
-    "required": [
-        "id",
-        "siglumDisambiguator",
-        "museumNumber",
-        "accession",
-        "periodModifier",
-        "period",
-        "provenance",
-        "type",
-        "notes",
-        "references",
-    ],
-}
-
-MANUSCRIPT_LINE_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "manuscriptId": {"type": "integer", "minimum": 1},
-        "labels": {"type": "array", "items": {"type": "string"}},
-        "number": {"type": "string"},
-        "atf": {"type": "string"},
-    },
-    "required": ["manuscriptId", "labels", "number", "atf"],
-}
-
-LINE_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "number": {"type": "string"},
-        "reconstruction": {"type": "string"},
-        "manuscripts": {"type": "array", "items": MANUSCRIPT_LINE_DTO_SCHEMA},
-    },
-    "required": ["number", "reconstruction", "manuscripts"],
-}
-
-CHAPTER_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "classification": {
-            "type": "string",
-            "enum": [classification.value for classification in Classification],
-        },
-        "stage": {"type": "string", "enum": [stage.value for stage in Stage]},
-        "version": {"type": "string"},
-        "name": {"type": "string", "minLength": 1},
-        "order": {"type": "integer"},
-        "manuscripts": {"type": "array", "items": MANUSCRIPT_DTO_SCHEMA},
-        "lines": {"type": "array", "items": LINE_DTO_SCHEMA},
-        "parserVersion": {"type": "string"},
-    },
-    "required": ["classification", "stage", "name", "order", "manuscripts", "lines"],
-}
-
-TEXT_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "category": {"type": "integer", "minimum": 0},
-        "index": {"type": "integer", "minimum": 0},
-        "name": {"type": "string", "minLength": 1},
-        "numberOfVerses": {"type": "integer", "minimum": 0},
-        "approximateVerses": {"type": "boolean"},
-        "chapters": {"type": "array", "items": CHAPTER_DTO_SCHEMA},
-    },
-    "required": [
-        "category",
-        "index",
-        "name",
-        "numberOfVerses",
-        "approximateVerses",
-        "chapters",
-    ],
-}
 
 
 class TextsResource:
@@ -135,8 +17,8 @@ class TextsResource:
         texts = self._corpus.list()
         resp.media = [serialize_public(text) for text in texts]
 
-    @falcon.before(require_scope, "create:texts")
-    @validate(TEXT_DTO_SCHEMA)  # pyre-ignore[56]
+    @falcon.before(require_scope, "create:texts")  # pyre-ignore[56]
+    @validate(ApiTextSchema())
     def on_post(
         self, req: falcon.Request, resp: falcon.Response  # pyre-ignore[11]
     ) -> None:

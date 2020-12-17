@@ -4,28 +4,30 @@ import attr
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
-from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.application.lemmatization import ChapterLemmatization
+from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.text import TextItem
 from ebl.transliteration.domain.lemmatization import (
-    LemmatizationToken,
     LemmatizationError,
+    LemmatizationToken,
 )
 
 
 class LemmatizationUpdater(ChapterUpdater):
-    def __init__(
-        self,
-        chapter_index: int,
-        lemmatization: Sequence[Sequence[Sequence[LemmatizationToken]]],
-    ):
+    def __init__(self, chapter_index: int, lemmatization: ChapterLemmatization):
         super().__init__(chapter_index)
         self._lemmatization = lemmatization
         self._lines: List[Line] = []
+        self._variants: List[LineVariant] = []
         self._manuscript_lines: List[ManuscriptLine] = []
 
     @property
     def line_index(self) -> int:
         return len(self._lines)
+
+    @property
+    def variant_index(self) -> int:
+        return len(self._variants)
 
     @property
     def manuscript_line_index(self) -> int:
@@ -34,10 +36,13 @@ class LemmatizationUpdater(ChapterUpdater):
     @property
     def current_lemmatization(self) -> Sequence[LemmatizationToken]:
         try:
-            return self._lemmatization[self.line_index][self.manuscript_line_index + 1]
+            return self._lemmatization[self.line_index][self.variant_index].manuscripts[
+                self.manuscript_line_index
+            ]
         except IndexError:
             raise LemmatizationError(
                 f"No lemmatization for line {self.line_index} "
+                f"variant {self.variant_index} "
                 f"manuscript {self.manuscript_line_index}."
             )
 
@@ -45,35 +50,53 @@ class LemmatizationUpdater(ChapterUpdater):
     def visit(self, item: TextItem) -> None:
         super().visit(item)
 
+    @visit.register(Chapter)  # pyre-ignore[56]
+    def _visit_chapter(self, chapter: Chapter) -> None:
+        if len(self._lemmatization) == len(chapter.lines):
+            super()._visit_chapter(chapter)
+        else:
+            raise LemmatizationError()
+
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:
-        for manuscript_line in line.manuscripts:
+        for variant in line.variants:
+            self.visit(variant)
+
+        if len(self._lemmatization[self.line_index]) == len(line.variants):
+            self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
+            self._variants = []
+        else:
+            raise LemmatizationError()
+
+    @visit.register(LineVariant)  # pyre-ignore[56]
+    def _visit_line_variant(self, variant: LineVariant) -> None:
+        for manuscript_line in variant.manuscripts:
             self.visit(manuscript_line)
 
-        if len(self._chapters) == self._chapter_index_to_align:
-            if len(self._lemmatization[self.line_index]) == len(line.manuscripts) + 1:
-                self._lines.append(
-                    attr.evolve(
-                        line,
-                        text=line.text.update_lemmatization(
-                            self._lemmatization[self.line_index][0]
-                        ),
-                        manuscripts=tuple(self._manuscript_lines),
-                    )
+        if len(
+            self._lemmatization[self.line_index][self.variant_index].manuscripts
+        ) == len(variant.manuscripts):
+            self._variants.append(
+                attr.evolve(
+                    variant,
+                    text=variant.text.update_lemmatization(
+                        self._lemmatization[self.line_index][
+                            self.variant_index
+                        ].reconstruction
+                    ),
+                    manuscripts=tuple(self._manuscript_lines),
                 )
-                self._manuscript_lines = []
-            else:
-                raise LemmatizationError()
+            )
+            self._manuscript_lines = []
+        else:
+            raise LemmatizationError()
 
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        if len(self._chapters) == self._chapter_index_to_align:
-            updated_line = manuscript_line.line.update_lemmatization(
-                self.current_lemmatization
-            )
-            self._manuscript_lines.append(
-                attr.evolve(manuscript_line, line=updated_line)
-            )
+        updated_line = manuscript_line.line.update_lemmatization(
+            self.current_lemmatization
+        )
+        self._manuscript_lines.append(attr.evolve(manuscript_line, line=updated_line))
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
         if len(self._lemmatization) == len(chapter.lines):

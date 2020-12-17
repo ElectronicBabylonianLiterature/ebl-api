@@ -6,15 +6,13 @@ from ebl.marshmallowschema import validate
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_chapter_index, create_text_id
-from ebl.transliteration.application.lemmatization_schema import (
-    LemmatizationTokenSchema,
-)
+from ebl.corpus.application.lemmatization_schema import LineVariantLemmatizationSchema
 from ebl.users.web.require_scope import require_scope
 
 
 class CorpusLemmatizationsSchema(Schema):  # pyre-ignore[11]
     lemmatization = fields.List(
-        fields.List(fields.Nested(LemmatizationTokenSchema, many=True)), required=True
+        fields.List(fields.Nested(LineVariantLemmatizationSchema)), required=True
     )
 
 

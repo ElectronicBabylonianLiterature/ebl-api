@@ -1,4 +1,4 @@
-from marshmallow import fields, post_load, Schema  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
