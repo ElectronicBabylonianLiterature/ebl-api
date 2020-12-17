@@ -7,8 +7,10 @@ def test_number_of_lines() -> None:
         Alignment(
             (
                 (
-                    ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
-                    ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
+                    (
+                        ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
+                        ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
+                    ),
                 ),
             )
         ).get_number_of_lines()
@@ -21,11 +23,13 @@ def test_number_of_manuscripts() -> None:
         Alignment(
             (
                 (
-                    ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
-                    ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
+                    (
+                        ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
+                        ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),
+                    ),
                 ),
-                (ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),),
+                ((ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 0),)),),),
             )
-        ).get_number_of_manuscripts(0)
+        ).get_number_of_manuscripts(0, 0)
         == 2
     )

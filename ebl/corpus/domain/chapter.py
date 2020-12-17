@@ -60,6 +60,9 @@ def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
         raise ValueError(f'Invalid labels "{[value.to_value() for value in value]}".')
 
 
+ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class ManuscriptLine:
     manuscript_id: int
@@ -67,6 +70,14 @@ class ManuscriptLine:
     line: Union[TextLine, EmptyLine]
     paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
     omitted_words: Sequence[int] = tuple()
+
+    @property
+    def label(self) -> Optional[ManuscriptLineLabel]:
+        return (
+            (self.manuscript_id, self.labels, cast(TextLine, self.line).line_number)
+            if isinstance(self.line, TextLine)
+            else None
+        )
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -79,11 +90,9 @@ class ManuscriptLine:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Line:
+class LineVariant:
     text: TextLine = attr.ib()
     note: Optional[NoteLine] = None
-    is_second_line_of_parallelism: bool = False
-    is_beginning_of_section: bool = False
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
     @text.validator
@@ -99,10 +108,18 @@ class Line:
         return self.text.content
 
     @property
-    def manuscript_ids(self) -> Set[int]:
-        return {manuscript.manuscript_id for manuscript in self.manuscripts}
+    def manuscript_ids(self) -> Sequence[int]:
+        return [manuscript.manuscript_id for manuscript in self.manuscripts]
 
-    def merge(self, other: "Line") -> "Line":
+    @property
+    def manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
+        return [
+            cast(ManuscriptLineLabel, manuscript_line.label)
+            for manuscript_line in self.manuscripts
+            if manuscript_line.label
+        ]
+
+    def merge(self, other: "LineVariant") -> "LineVariant":
         def inner_merge(old: ManuscriptLine, new: ManuscriptLine) -> ManuscriptLine:
             return old.merge(new)
 
@@ -117,14 +134,45 @@ class Line:
             else merged
         )
 
-    def strip_alignments(self) -> "Line":
+    def strip_alignments(self) -> "LineVariant":
         stripped_manuscripts = tuple(
             manuscript_line.strip_alignments() for manuscript_line in self.manuscripts
         )
         return attr.evolve(self, manuscripts=stripped_manuscripts)
 
 
-ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
+@attr.s(auto_attribs=True, frozen=True)
+class Line:
+    variants: Sequence[LineVariant]
+    is_second_line_of_parallelism: bool = False
+    is_beginning_of_section: bool = False
+
+    @property
+    def manuscript_ids(self) -> Sequence[int]:
+        return [
+            manuscript_id
+            for variant in self.variants
+            for manuscript_id in variant.manuscript_ids
+        ]
+
+    @property
+    def manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
+        return [
+            label
+            for variant in self.variants
+            for label in variant.manuscript_line_labels
+        ]
+
+    @property
+    def line_numbers(self) -> Set[AbstractLineNumber]:
+        return {variant.text.line_number for variant in self.variants}
+
+    def merge(self, other: "Line") -> "Line":
+        def inner_merge(old: LineVariant, new: LineVariant) -> LineVariant:
+            return old.merge(new)
+
+        merged_variants = Merger(repr, inner_merge).merge(self.variants, other.variants)
+        return attr.evolve(other, variants=tuple(merged_variants))
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -164,7 +212,9 @@ class Chapter:
 
     @lines.validator
     def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
-        counter = collections.Counter(line.text.line_number for line in value)
+        counter = collections.Counter(
+            line_number for line in value for line_number in line.line_numbers
+        )
         duplicates = [number.label for number in counter if counter[number] > 1]
         if any(duplicates):
             raise ValueError(f"Duplicate line numbers: {duplicates}.")
@@ -179,16 +229,7 @@ class Chapter:
 
     @property
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
-        return [
-            (
-                manuscript_line.manuscript_id,
-                manuscript_line.labels,
-                cast(TextLine, manuscript_line.line).line_number,
-            )
-            for line in self.lines
-            for manuscript_line in line.manuscripts
-            if isinstance(manuscript_line.line, TextLine)
-        ]
+        return [label for line in self.lines for label in line.manuscript_line_labels]
 
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:

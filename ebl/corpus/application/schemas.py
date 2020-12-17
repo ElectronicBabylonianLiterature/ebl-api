@@ -1,10 +1,11 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
     Line,
+    LineVariant,
     ManuscriptLine,
     Stage,
 )
@@ -68,7 +69,9 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
 
 
 def manuscript_id():
-    return fields.Integer(required=True, data_key="manuscriptId")
+    return fields.Integer(
+        required=True, data_key="manuscriptId", validate=validate.Range(min=1)
+    )
 
 
 def labels():
@@ -99,25 +102,33 @@ class ManuscriptLineSchema(Schema):
         )
 
 
-class LineSchema(Schema):
+class LineVariantSchema(Schema):
     text = fields.Nested(TextLineSchema, required=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
+    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
+
+    @post_load  # pyre-ignore[56]
+    def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
+        return LineVariant(data["text"], data["note"], tuple(data["manuscripts"]))
+
+
+class LineSchema(Schema):
+    variants = fields.Nested(
+        LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
+    )
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
 
     @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
-            data["text"],
-            data["note"],
+            tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            tuple(data["manuscripts"]),
         )
 
 
@@ -125,7 +136,7 @@ class ChapterSchema(Schema):
     classification = StringValueEnum(Classification, required=True)
     stage = StringValueEnum(Stage, required=True)
     version = fields.String(required=True)
-    name = fields.String(required=True)
+    name = fields.String(required=True, validate=validate.Length(min=1))
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
     lines = fields.Nested(LineSchema, many=True, required=True)
@@ -146,10 +157,12 @@ class ChapterSchema(Schema):
 
 
 class TextSchema(Schema):
-    category = fields.Integer(required=True)
-    index = fields.Integer(required=True)
-    name = fields.String(required=True)
-    number_of_verses = fields.Integer(required=True, data_key="numberOfVerses")
+    category = fields.Integer(required=True, validate=validate.Range(min=0))
+    index = fields.Integer(required=True, validate=validate.Range(min=0))
+    name = fields.String(required=True, validate=validate.Length(min=1))
+    number_of_verses = fields.Integer(
+        required=True, data_key="numberOfVerses", validate=validate.Range(min=0)
+    )
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     chapters = fields.Nested(ChapterSchema, many=True, required=True)
 

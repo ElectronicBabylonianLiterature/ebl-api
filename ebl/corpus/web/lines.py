@@ -1,25 +1,24 @@
 import falcon  # pyre-ignore[21]
-from falcon.media.validators.jsonschema import validate  # pyre-ignore[21]
+from marshmallow import Schema, fields  # pyre-ignore[21]
 
+from ebl.corpus.web.text_schemas import ApiLineSchema
+from ebl.marshmallowschema import validate
 from ebl.corpus.web.alignments import create_chapter_index
-from ebl.corpus.web.api_serializer import deserialize_lines, serialize
+from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_text_id
-from ebl.corpus.web.texts import LINE_DTO_SCHEMA
 from ebl.users.web.require_scope import require_scope
 
-LINES_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {"lines": {"type": "array", "items": LINE_DTO_SCHEMA}},
-    "required": ["lines"],
-}
+
+class LinesDtoSchema(Schema):  # pyre-ignore[11]
+    lines = fields.Nested(ApiLineSchema, many=True, required=True)
 
 
 class LinesResource:
     def __init__(self, corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "write:texts")
-    @validate(LINES_DTO_SCHEMA)  # pyre-ignore[56]
+    @falcon.before(require_scope, "write:texts")  # pyre-ignore[56]
+    @validate(LinesDtoSchema())
     def on_post(
         self,
         req: falcon.Request,  # pyre-ignore[11]
@@ -31,7 +30,7 @@ class LinesResource:
         self._corpus.update_lines(
             create_text_id(category, index),
             create_chapter_index(chapter_index),
-            deserialize_lines(req.media["lines"]),
+            LinesDtoSchema().load(req.media)["lines"],  # pyre-ignore[16]
             req.context.user,
         )
         updated_text = self._corpus.find(create_text_id(category, index))

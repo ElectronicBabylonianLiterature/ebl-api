@@ -192,7 +192,7 @@ INVALID_MUSEUM_NUMBER = [
         [[{}], falcon.HTTP_BAD_REQUEST],
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
         [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
-        [INVALID_MUSEUM_NUMBER, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [INVALID_MUSEUM_NUMBER, falcon.HTTP_BAD_REQUEST],
     ],
 )
 def test_update_invalid_entity(

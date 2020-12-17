@@ -2,15 +2,14 @@ from typing import Optional
 
 from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
 
-from ebl.transliteration.domain.word_tokens import AbstractWord
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import (
     parse_normalized_akkadian_word,
     parse_word,
 )
-
-from ebl.transliteration.domain.alignment import AlignmentToken
-from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
 class AlignmentTokenSchema(Schema):  # pyre-ignore[11]
@@ -57,11 +56,13 @@ class ManuscriptAlignmentSchema(Schema):
 
 class AlignmentSchema(Schema):
     lines = fields.List(
-        fields.Nested(ManuscriptAlignmentSchema, many=True),
+        fields.List(fields.Nested(ManuscriptAlignmentSchema, many=True)),
         required=True,
         data_key="alignment",
     )
 
     @post_load  # pyre-ignore[56]
     def make_alignment(self, data: dict, **kwargs) -> Alignment:
-        return Alignment(tuple(tuple(line) for line in data["lines"]))
+        return Alignment(
+            tuple(tuple(tuple(variant) for variant in line) for line in data["lines"])
+        )
