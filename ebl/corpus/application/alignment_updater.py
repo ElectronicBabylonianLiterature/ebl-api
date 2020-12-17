@@ -52,30 +52,30 @@ class AlignmentUpdater(ChapterUpdater):
 
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:
-        if self._alignment.get_number_of_variants(self.variant_index) == len(
+        if self._alignment.get_number_of_variants(self.variant_index) != len(
             line.variants
         ):
-            for variant in line.variants:
-                self.visit(variant)
-            self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
-            self._variants = []
-        else:
             raise AlignmentError()
+
+        for variant in line.variants:
+            self.visit(variant)
+        self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
+        self._variants = []
 
     @visit.register(LineVariant)  # pyre-ignore[56]
     def _visit_line_variant(self, variant: LineVariant) -> None:
         if self._alignment.get_number_of_manuscripts(
             self.line_index, self.variant_index
-        ) == len(variant.manuscripts):
-            for manuscript_line in variant.manuscripts:
-                self.visit(manuscript_line)
-
-            self._variants.append(
-                attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
-            )
-            self._manuscript_lines = []
-        else:
+        ) != len(variant.manuscripts):
             raise AlignmentError()
+
+        for manuscript_line in variant.manuscripts:
+            self.visit(manuscript_line)
+
+        self._variants.append(
+            attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
+        )
+        self._manuscript_lines = []
 
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
