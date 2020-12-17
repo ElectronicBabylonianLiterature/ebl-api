@@ -112,11 +112,11 @@ class Corpus:
         self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
-        text.accept(TextValidator(self._bibliography, self._transliteration_factory))
+        TextValidator(self._bibliography, self._transliteration_factory).visit(text)
 
     def _hydrate_references(self, text: Text) -> Text:
         hydrator = TextHydrator(self._bibliography)
-        text.accept(hydrator)
+        hydrator.visit(text)
         return hydrator.text
 
     def _create_changelog(self, old_text, new_text, user) -> None:
