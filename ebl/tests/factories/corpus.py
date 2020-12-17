@@ -1,41 +1,30 @@
 from typing import Sequence
 
-import factory.fuzzy  # pyre-ignore
-import pydash  # pyre-ignore
+import factory.fuzzy  # pyre-ignore[21]
+import pydash  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import (
-    Classification,
-    ManuscriptType,
-    Period,
-    PeriodModifier,
-    Provenance,
-    Stage,
-)
-from ebl.transliteration.domain.normalized_akkadian import (
-    AkkadianWord,
-    Caesura,
-    MetricalFootSeparator,
-)
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
+from ebl.corpus.domain.enums import Classification, Stage
+from ebl.corpus.domain.manuscript import (Manuscript, ManuscriptType, Period,
+                                          PeriodModifier, Provenance)
+from ebl.corpus.domain.text import (Chapter, Line, ManuscriptLine, Text)
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Flag, Ruling, Status, Surface
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
+from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord, Caesura, MetricalFootSeparator)
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import (
-    Joiner,
-    LanguageShift,
-    UnknownNumberOfSigns,
-    ValueToken,
-)
+from ebl.transliteration.domain.tokens import (Joiner, LanguageShift,
+                                               UnknownNumberOfSigns,
+                                               ValueToken)
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
-from ebl.transliteration.domain.dollar_line import RulingDollarLine
-from ebl.transliteration.domain.line import EmptyLine
 
 
 class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]

@@ -3,15 +3,9 @@ from typing import Sequence
 import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import (
-    Classification,
-    ManuscriptType,
-    Period,
-    PeriodModifier,
-    Provenance,
-    Stage,
-)
-from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.enums import Classification, Stage
+from ebl.corpus.domain.manuscript import (Manuscript, ManuscriptType, Period,
+                                          PeriodModifier, Provenance, Siglum)
 from ebl.corpus.domain.text import Chapter, Line, ManuscriptLine, Text, TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
