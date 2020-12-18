@@ -1,8 +1,8 @@
-import collections
 from enum import Enum, unique
-from typing import Iterable, Optional, Sequence, Set, Tuple, TypeVar, Union, cast
+from typing import Optional, Sequence, Set, Tuple, TypeVar, Union, cast
 
 import attr
+import pydash  # pyre-ignore[21]
 
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.label_validator import LabelValidator
@@ -43,12 +43,6 @@ class Stage(Enum):
 
 
 T = TypeVar("T")
-
-
-def get_duplicates(collection: Iterable[T]) -> Set[T]:
-    return {
-        item for item, count in collections.Counter(collection).items() if count > 1
-    }
 
 
 def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
@@ -188,13 +182,13 @@ class Chapter:
 
     @manuscripts.validator
     def _validate_manuscript_ids(self, _, value: Sequence[Manuscript]) -> None:
-        duplicate_ids = get_duplicates(manuscript.id for manuscript in value)
+        duplicate_ids = pydash.duplicates([manuscript.id for manuscript in value])
         if duplicate_ids:
             raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
 
     @manuscripts.validator
     def _validate_manuscript_sigla(self, _, value: Sequence[Manuscript]) -> None:
-        duplicate_sigla = get_duplicates(manuscript.siglum for manuscript in value)
+        duplicate_sigla = pydash.duplicates([manuscript.siglum for manuscript in value])
         if duplicate_sigla:
             raise ValueError(f"Duplicate sigla: {duplicate_sigla}.")
 
@@ -212,17 +206,15 @@ class Chapter:
 
     @lines.validator
     def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
-        counter = collections.Counter(
-            line_number for line in value for line_number in line.line_numbers
+        duplicates = pydash.duplicates(
+            [line_number for line in value for line_number in line.line_numbers]
         )
-        duplicates = [number.label for number in counter if counter[number] > 1]
         if any(duplicates):
             raise ValueError(f"Duplicate line numbers: {duplicates}.")
 
     @lines.validator
     def _validate_manuscript_line_labels(self, _, value: Sequence[Line]) -> None:
-        counter = collections.Counter(self._manuscript_line_labels)
-        duplicates = [label for label in counter if counter[label] > 1]
+        duplicates = pydash.duplicates(self._manuscript_line_labels)
         if duplicates:
             readable_labels = self._make_labels_readable(duplicates)
             raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")

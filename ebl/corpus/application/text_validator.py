@@ -1,6 +1,6 @@
-from typing import cast, Optional
-from collections import Counter
+from typing import Optional, cast
 
+import pydash  # pyre-ignore[21]
 from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
@@ -38,7 +38,7 @@ class AlignmentVisitor(TokenVisitor):
             self.alignments.append(word.alignment)
 
     def validate(self):
-        if any(count > 1 for _, count in Counter(self.alignments).items()):
+        if pydash.duplicates(self.alignments):
             raise AlignmentError()
 
 

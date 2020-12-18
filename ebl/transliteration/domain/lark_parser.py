@@ -1,9 +1,9 @@
-from collections import Counter
 from itertools import dropwhile
 from typing import Any, Callable, Mapping, Sequence, Tuple, Type, Union
 
-from lark.lark import Lark  # pyre-ignore[21]
+import pydash  # pyre-ignore[21]
 from lark.exceptions import ParseError, UnexpectedInput, VisitError  # pyre-ignore[21]
+from lark.lark import Lark  # pyre-ignore[21]
 from lark.visitors import v_args  # pyre-ignore[21]
 
 from ebl.errors import DataError
@@ -18,14 +18,13 @@ from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
-from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
-
 
 PARSE_ERRORS: Tuple[Type[Any], ...] = (
     UnexpectedInput,
@@ -132,10 +131,10 @@ def parse_atf_lark(atf_):
 
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 
-    if any(count > 1 for count in Counter(text.labels).values()):
+    if pydash.duplicates(text.labels):
         raise DataError("Duplicate labels.")
-
-    return text
+    else:
+        return text
 
 
 def create_transliteration_error_data(error: Exception, line: str, line_number: int):
