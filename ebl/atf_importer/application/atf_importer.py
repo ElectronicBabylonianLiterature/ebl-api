@@ -73,7 +73,7 @@ class ATFImporter:
 
         self.lemmas_cfforms = None
         self.cfforms_senses = None
-        self.cfform_guideword = None
+        self.cfform_and_sense_guideword = None
 
         # connect to eBL-db
         load_dotenv()
@@ -129,37 +129,43 @@ class ATFImporter:
 
                     try:
                         citation_form = self.lemmas_cfforms[oracc_lemma]
-                        guideword = self.cfform_guideword[citation_form]
+                        senses = self.cfforms_senses[citation_form]
+                        if senses is not None and oracc_guideword in senses:
+                            guideword = self.cfform_and_sense_guideword[citation_form+"["+oracc_guideword+"]"] # get glossary guideword by sense and cfform
 
-                        print(citation_form,guideword)
-                        if "//" in guideword:
-                            guideword = guideword.split("//")[0]
-                        #senses = self.cfforms_senses[citation_form]
-                        #if senses is not None and oracc_guideword in senses:
-                        for entry in self.db.get_collection("words").find(
-                            {"oraccWords.guideWord": guideword,"oraccWords.lemma": citation_form}, {"_id"}
-                        ):
-                            unique_lemmas.append(entry["_id"])
+                            self.logger.info(
+                                "Guideword '"
+                                + guideword
+                                + "' found to cf '"+citation_form + "' and sense (original guideword) '" + oracc_guideword+"'"
+                            )
 
-                        if len(unique_lemmas) == 0:
-                            for entry in self.db.get_collection("words").find(
-                                {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
-                            ):
-                                if entry["_id"] not in unique_lemmas:
-                                    unique_lemmas.append(entry["_id"])
+                            if "//" in guideword:
+                                guideword = guideword.split("//")[0]
 
                             for entry in self.db.get_collection("words").find(
-                                    {"lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                                {"oraccWords.lemma": citation_form,"oraccWords.guideWord": guideword}, {"_id"}
                             ):
-                                if entry["_id"] not in unique_lemmas:
-                                    unique_lemmas.append(entry["_id"])
+                                unique_lemmas.append(entry["_id"])
+
+                            if len(unique_lemmas) == 0:
+                                for entry in self.db.get_collection("words").find(
+                                    {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                                ):
+                                    if entry["_id"] not in unique_lemmas:
+                                        unique_lemmas.append(entry["_id"])
+
+                                for entry in self.db.get_collection("words").find(
+                                        {"lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                                ):
+                                    if entry["_id"] not in unique_lemmas:
+                                        unique_lemmas.append(entry["_id"])
 
                     except Exception:
                         if oracc_lemma not in not_lemmatized:
                             not_lemmatized[oracc_lemma] = True
 
                             self.logger.warning(
-                                "Incompatible lemmatization: No citation form found in the glossary for '"
+                                "Incompatible lemmatization: No citation form or guideword (by sense) found in the glossary for '"
                                 + oracc_lemma
                                 + "'"
                             )
@@ -186,7 +192,7 @@ class ATFImporter:
 
         lemmas_cfforms = dict()
         cfforms_senses = dict()
-        cfform_guideword = dict()
+        cfform_and_sense_guideword = dict()
 
         with open(path, "r", encoding="utf8") as f:
             for line in f.readlines():
@@ -196,10 +202,9 @@ class ATFImporter:
                     cfform = split[1]
                     p = re.compile(r'\[(.*)\]')
                     matches = p.findall(split[2])
-                    guidword = matches[0]
-                    guidword = guidword.rstrip("]").lstrip("[")
+                    guideword = matches[0]
+                    guideword = guideword.rstrip("]").lstrip("[")
 
-                    cfform_guideword[cfform] = guidword
 
                 if line.startswith("@form"):
                     split = line.split(" ")
@@ -219,7 +224,9 @@ class ATFImporter:
                         cfforms_senses[cfform] = [sense.strip()]
                     else:
                         cfforms_senses[cfform].append(sense.strip())
-        return lemmas_cfforms, cfforms_senses, cfform_guideword
+                    cfform_and_sense_guideword[cfform+"["+sense.strip()+"]"] = guideword
+
+        return lemmas_cfforms, cfforms_senses, cfform_and_sense_guideword
 
     @staticmethod
     def insert_translitertions(
@@ -469,10 +476,9 @@ class ATFImporter:
         args = parser.parse_args()
 
         # parse glossary
-        self.lemmas_cfforms, self.cfforms_senses, self.cfform_guideword = self.parse_glossary(
+        self.lemmas_cfforms, self.cfforms_senses, self.cfform_and_sense_guideword = self.parse_glossary(
             args.glossary
         )
-
 
         # read atf files from input folder
         for filepath in glob.glob(os.path.join(args.input, "*.atf")):
