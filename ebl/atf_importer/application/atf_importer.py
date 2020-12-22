@@ -96,6 +96,8 @@ class ATFImporter:
             for pair in orrac_lemma_tupel:
                 oracc_lemma = pair[0]
                 oracc_guideword = pair[1]
+                oracc_lemma = oracc_lemma.strip()
+                oracc_guideword = oracc_guideword.strip()
 
                 if "//" in oracc_guideword:
                     oracc_guideword = oracc_guideword.split("//")[0]
@@ -128,11 +130,15 @@ class ATFImporter:
                 if len(unique_lemmas) == 0:
 
                     try:
+                        print("lemma '"+oracc_lemma+"' oracc_guideword '"+oracc_guideword+"'")
                         citation_form = self.lemmas_cfforms[oracc_lemma]
+                        print("CF '"+citation_form+"'")
                         senses = self.cfforms_senses[citation_form]
+                        print(senses)
                         if senses is not None and oracc_guideword in senses:
+                            print(citation_form+"["+oracc_guideword+"]")
                             guideword = self.cfform_and_sense_guideword[citation_form+"["+oracc_guideword+"]"] # get glossary guideword by sense and cfform
-
+                            print("guideword '"+guideword+"'")
                             self.logger.info(
                                 "Guideword '"
                                 + guideword
@@ -200,6 +206,9 @@ class ATFImporter:
                 if line.startswith("@entry"):
                     split = line.split(" ",2)
                     cfform = split[1]
+                    cfform = cfform.replace("ʾ","'")
+                    cfform = cfform.strip()
+
                     p = re.compile(r'\[(.*)\]')
                     matches = p.findall(split[2])
                     guideword = matches[0]
@@ -212,7 +221,7 @@ class ATFImporter:
                     lemmas_cfforms[lemma] = cfform.strip()
 
                 if line.startswith("@sense"):
-                    split = line.split(" ")
+                    split = line.split(" ",2)
 
                     for s in split:
                         if s in POS_TAGS:
@@ -479,6 +488,7 @@ class ATFImporter:
         self.lemmas_cfforms, self.cfforms_senses, self.cfform_and_sense_guideword = self.parse_glossary(
             args.glossary
         )
+
 
         # read atf files from input folder
         for filepath in glob.glob(os.path.join(args.input, "*.atf")):
