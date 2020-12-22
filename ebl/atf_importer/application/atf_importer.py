@@ -124,24 +124,34 @@ class ATFImporter:
 
                 if oracc_lemma[0] == "+":
                     oracc_lemma = oracc_lemma[1:]
+                    print("oracc_lemma'"+oracc_lemma+"' oracc_guideword'"+oracc_guideword+"'")
+
                     for entry in self.db.get_collection("words").find(
                             {"oraccWords.lemma": oracc_lemma, "oraccWords.guideWord": oracc_guideword}, {"_id"}
                     ):
                         if entry["_id"] not in unique_lemmas:
                             unique_lemmas.append(entry["_id"])
 
+                    if len(unique_lemmas) == 0:
+                        for entry in self.db.get_collection("words").find(
+                                {"forms.lemma": [oracc_lemma], "guideWord": oracc_guideword}, {"_id"}
+                        ):
+                            if entry["_id"] not in unique_lemmas:
+                                unique_lemmas.append(entry["_id"])
+
+                        for entry in self.db.get_collection("words").find(
+                                {"lemma": [oracc_lemma], "guideWord": oracc_guideword}, {"_id"}
+                        ):
+                            if entry["_id"] not in unique_lemmas:
+                                unique_lemmas.append(entry["_id"])
+
                 else:
 
                     try:
-                        print("lemma '"+oracc_lemma+"' oracc_guideword '"+oracc_guideword+"'")
                         citation_form = self.lemmas_cfforms[oracc_lemma]
-                        print("CF '"+citation_form+"'")
                         senses = self.cfforms_senses[citation_form]
-                        print(senses)
                         if senses is not None and oracc_guideword in senses:
-                            print(citation_form+"["+oracc_guideword+"]")
                             guideword = self.cfform_and_sense_guideword[citation_form+"["+oracc_guideword+"]"] # get glossary guideword by sense and cfform
-                            print("guideword '"+guideword+"'")
                             self.logger.info(
                                 "Guideword '"
                                 + guideword
