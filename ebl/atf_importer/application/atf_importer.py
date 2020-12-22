@@ -121,13 +121,16 @@ class ATFImporter:
                     all_unique_lemmas.append(unique_lemmas)
                     return
 
-                for entry in self.db.get_collection("words").find(
-                        {"oraccWords.lemma": oracc_lemma, "oraccWords.guideWord": oracc_guideword}, {"_id"}
-                ):
-                    if entry["_id"] not in unique_lemmas:
-                        unique_lemmas.append(entry["_id"])
 
-                if len(unique_lemmas) == 0:
+                if oracc_lemma[0] == "+":
+                    oracc_lemma = oracc_lemma[1:]
+                    for entry in self.db.get_collection("words").find(
+                            {"oraccWords.lemma": oracc_lemma, "oraccWords.guideWord": oracc_guideword}, {"_id"}
+                    ):
+                        if entry["_id"] not in unique_lemmas:
+                            unique_lemmas.append(entry["_id"])
+
+                else:
 
                     try:
                         print("lemma '"+oracc_lemma+"' oracc_guideword '"+oracc_guideword+"'")
