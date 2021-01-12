@@ -44,11 +44,72 @@ class ATFPreprocessor:
         self.stop_preprocessing = False
         self.logdir = logdir
 
+    def do_atf_replacements(self,atf):
+        atf = re.sub(
+            "([\[<])([\*:])(.*)", r"\1 \2\3", atf
+        )  # convert [* => [  <* => < *
+        atf = re.sub("(\*)([\]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
+
+        atf = atf.replace("\t", " ")  # convert tabs to spaces
+        atf = " ".join(atf.split())  # remove multiple spaces
+
+        return atf
+
+    def line_not_converted(self,original_atf,atf):
+        error = "Could not convert line"
+        self.logger.error(error + ": " + atf)
+        self.logger.error(traceback.format_exc())
+
+        if "translation" in atf:
+            self.stop_preprocessing = True
+
+        self.unparseable_lines.append(original_atf)
+        return (None, None, None, None)
+
+    def check_original_line(self,atf):
+        self.EBL_PARSER.parse(atf)
+
+        # words serializer oracc parser
+        tree = self.ORACC_PARSER.parse(atf)
+        words_serializer = Get_Words()
+        words_serializer.result = []
+        words_serializer.visit_topdown(tree)
+        converted_line_array = words_serializer.result
+
+        self.logger.info("Line successfully parsed, no conversion needed")
+        self.logger.debug(
+            "Parsed line as "
+            + tree.data
+        )
+        self.logger.info(
+            "----------------------------------------------------------------------"
+        )
+        return (atf, converted_line_array, tree.data, [])
+
     def get_empty_conversion(self, tree):
         line_serializer = Line_Serializer()
         line_serializer.visit_topdown(tree)
         converted_line = line_serializer.line.strip(" ")
         return (converted_line, None, tree.data, None)
+
+    def convert_line(self,original_atf,atf):
+
+        tree = self.ORACC_PARSER.parse(atf)
+        self.logger.debug("Converting " + tree.data)
+
+        # self.logger.debug((tree.pretty()))
+
+        if tree.data == "lem_line":
+            return self.convert_lemline(atf, tree)
+
+        elif tree.data == "text_line":
+            conversion_result = self.convert_textline(tree)
+            return self.check_converted_line(original_atf, tree, conversion_result)
+
+        else:
+            for line in self.unused_lines:
+                if tree.data == line:
+                    return self.get_empty_conversion(tree)
 
     def convert_textline(self, tree):
         Convert_Line_Dividers().visit(tree)
@@ -135,65 +196,17 @@ class ATFPreprocessor:
                 raise Exception
 
             # try to parse line with ebl-parser
-            self.EBL_PARSER.parse(atf)
-
-            # words serializer oracc parser
-            tree = self.ORACC_PARSER.parse(atf)
-            words_serializer = Get_Words()
-            words_serializer.result = []
-            words_serializer.visit_topdown(tree)
-            converted_line_array = words_serializer.result
-
-            self.logger.info("Line successfully parsed, no conversion needed")
-            self.logger.debug(
-                "Parsed line as "
-                + tree.data
-            )
-            self.logger.info(
-                "----------------------------------------------------------------------"
-            )
-            return (atf, converted_line_array, tree.data, [])
+            return self.check_original_line(atf)
 
         except Exception:
 
-            atf = re.sub(
-                "([\[<])([\*:])(.*)", r"\1 \2\3", atf
-            )  # convert [* => [  <* => < *
-            atf = re.sub("(\*)([\]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
-
-            atf = atf.replace("\t", " ")  # convert tabs to spaces
-            atf = " ".join(atf.split())  # remove multiple spaces
+            atf = self.do_atf_replacements(atf)
 
             try:
-                converted_line = ""
-                tree = self.ORACC_PARSER.parse(atf)
-                self.logger.debug("Converting " + tree.data)
-
-                #self.logger.debug((tree.pretty()))
-
-                if tree.data == "lem_line":
-                    return self.convert_lemline(atf,tree)
-
-                elif tree.data == "text_line":
-                    conversion_result = self.convert_textline(tree)
-                    return self.check_converted_line(original_atf,tree,conversion_result)
-
-                else:
-                    for line in self.unused_lines:
-                        if tree.data == line:
-                            return self.get_empty_conversion(tree)
+                return self.convert_line(original_atf,atf)
 
             except Exception as e:
-
-                error = "Could not convert line"
-                self.logger.error(error + ": " + atf)
-                self.logger.error(traceback.format_exc())
-
-                if "translation" in atf:
-                    self.stop_preprocessing = True
-
-                self.unparseable_lines.append(original_atf)
-                return (None, None, None, None)
+               return self.line_not_converted(original_atf,atf)
 
     def convert_lines(self, file, filename):
         self.logger.info(Util.print_frame('Converting: "' + filename + '.atf"'))
