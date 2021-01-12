@@ -124,7 +124,9 @@ class ATFImporter:
 
                 if oracc_lemma[0] == "+":
                     oracc_lemma = oracc_lemma[1:]
-                    print("oracc_lemma'"+oracc_lemma+"' oracc_guideword'"+oracc_guideword+"'")
+
+                    # replace "ʾ","'" to match db query
+                    oracc_lemma = oracc_lemma.replace("ʾ","'")
 
                     for entry in self.db.get_collection("words").find(
                             {"oraccWords.lemma": oracc_lemma, "oraccWords.guideWord": oracc_guideword}, {"_id"}
@@ -363,17 +365,23 @@ class ATFImporter:
                 result["last_transliteration"] = last_transliteration
                 result["all_unique_lemmas"] = all_unique_lemmas
 
+                oracc_words = []
                 for oracc_word in last_transliteration:
-                    oracc_word_ebl_lemmas[oracc_word] = all_unique_lemmas[cnt]
+                    oracc_word_ebl_lemmas[cnt] = all_unique_lemmas[cnt]
+                    oracc_words.append(oracc_word)
                     cnt += 1
 
                 # join ebl transliteration with lemma line:
                 ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
 
+                word_cnt = 0
+
                 for token in ebl_lines.lines[0].content:
+
                     unique_lemma = []
-                    if token.value in oracc_word_ebl_lemmas:
-                        unique_lemma = oracc_word_ebl_lemmas[token.value]
+                    if token.value in oracc_words:
+                        unique_lemma = oracc_word_ebl_lemmas[word_cnt]
+                        word_cnt = word_cnt +1
 
                     if len(unique_lemma) == 0:
                         lemma_line.append(LemmatizationToken(token.value, None))
