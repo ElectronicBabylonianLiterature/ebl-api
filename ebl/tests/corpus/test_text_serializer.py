@@ -1,9 +1,12 @@
+import attr
+
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.text_serializer import serialize, deserialize
+from ebl.corpus.application.text_serializer import deserialize, serialize
 from ebl.corpus.domain.text import Text
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -13,11 +16,10 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_schemas import NoteLineSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-import attr
-
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
@@ -102,10 +104,14 @@ def to_dict(text: Text, include_documents=False):
                 ],
                 "lines": [
                     {
+                        # pyre-ignore[16]
+                        "number": OneOfLineNumberSchema().dump(line.number),
                         "variants": [
                             {
                                 # pyre-ignore[16]
-                                "text": TextLineSchema().dump(variant.text),
+                                "reconstruction": OneOfTokenSchema().dump(
+                                    variant.reconstruction, many=True
+                                ),
                                 "note": variant.note
                                 # pyre-ignore[16]
                                 and NoteLineSchema().dump(variant.note),

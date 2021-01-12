@@ -76,48 +76,42 @@ def test_updating_lemmatization(client, bibliography, sign_repository, signs):
                         variants=(
                             attr.evolve(
                                 text.chapters[0].lines[0].variants[0],
-                                text=TextLine.of_iterable(
+                                reconstruction=(
                                     text.chapters[0]
                                     .lines[0]
                                     .variants[0]
-                                    .text.line_number,
-                                    (
-                                        text.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[0],
-                                        text.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[1]
-                                        .set_unique_lemma(
-                                            LemmatizationToken(
-                                                text.chapters[0]
-                                                .lines[0]
-                                                .variants[0]
-                                                .text.content[1]
-                                                .value,
-                                                (WordId("aklu I"),),
-                                            )
-                                        ),
-                                        *text.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[2:6],
-                                        text.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[6]
-                                        .set_unique_lemma(
-                                            LemmatizationToken(
-                                                text.chapters[0]
-                                                .lines[0]
-                                                .variants[0]
-                                                .text.content[6]
-                                                .value,
-                                                tuple(),
-                                            )
-                                        ),
+                                    .reconstruction[0],
+                                    text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[1]
+                                    .set_unique_lemma(
+                                        LemmatizationToken(
+                                            text.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .reconstruction[1]
+                                            .value,
+                                            (WordId("aklu I"),),
+                                        )
+                                    ),
+                                    *text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[2:6],
+                                    text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[6]
+                                    .set_unique_lemma(
+                                        LemmatizationToken(
+                                            text.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .reconstruction[6]
+                                            .value,
+                                            tuple(),
+                                        )
                                     ),
                                 ),
                                 manuscripts=(

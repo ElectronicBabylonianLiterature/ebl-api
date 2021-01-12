@@ -1,6 +1,5 @@
 from typing import Sequence
 
-import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import (
@@ -77,14 +76,15 @@ MANUSCRIPT_TEXT = TextLine(
 PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 OMITTED_WORDS = (1,)
 
-RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
 NOTE = None
 LINE_VARIANT = LineVariant(
-    RECONSTRUCTION,
+    LINE_RECONSTRUCTION,
     NOTE,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
 )
-LINE = Line((LINE_VARIANT,), IS_SECOND_LINE_OF_PARALLELISM, IS_BEGINNING_OF_SECTION)
+LINE = Line(
+    LINE_NUMBER, (LINE_VARIANT,), IS_SECOND_LINE_OF_PARALLELISM, IS_BEGINNING_OF_SECTION
+)
 
 TEXT = Text(
     CATEGORY,
@@ -144,8 +144,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
-    assert TEXT.chapters[0].lines[0].variants[0].text == RECONSTRUCTION
-    assert TEXT.chapters[0].lines[0].variants[0].number == LINE_NUMBER
+    assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
     assert TEXT.chapters[0].lines[0].variants[0].note == NOTE
     assert (
@@ -212,9 +211,10 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
+                    LINE_NUMBER,
                     (
                         LineVariant(
-                            RECONSTRUCTION,
+                            LINE_RECONSTRUCTION,
                             NOTE,
                             (
                                 ManuscriptLine(
@@ -237,9 +237,10 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
+                    LINE_NUMBER,
                     (
                         LineVariant(
-                            RECONSTRUCTION,
+                            LINE_RECONSTRUCTION,
                             NOTE,
                             (
                                 ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
@@ -256,9 +257,10 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
+                    LINE_NUMBER,
                     (
                         LineVariant(
-                            RECONSTRUCTION,
+                            LINE_RECONSTRUCTION,
                             NOTE,
                             (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
                         ),
@@ -267,9 +269,10 @@ def test_missing_manuscripts_are_invalid():
                     IS_BEGINNING_OF_SECTION,
                 ),
                 Line(
+                    LineNumber(2),
                     (
                         LineVariant(
-                            attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
+                            LINE_RECONSTRUCTION,
                             NOTE,
                             (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
                         ),
@@ -310,15 +313,8 @@ def test_invalid_labels(labels: Sequence[Label]):
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
-            (
-                LineVariant(
-                    TextLine.of_iterable(
-                        LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),)
-                    ),
-                    NOTE,
-                    tuple(),
-                ),
-            ),
+            LINE_NUMBER,
+            (LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple()),),
             False,
             False,
         )

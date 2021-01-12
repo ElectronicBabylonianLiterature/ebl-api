@@ -11,6 +11,7 @@ from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain.text_line import update_tokens
 
 
 class LemmatizationUpdater(ChapterUpdater):
@@ -72,10 +73,15 @@ class LemmatizationUpdater(ChapterUpdater):
             self._variants.append(
                 attr.evolve(
                     variant,
-                    text=variant.text.update_lemmatization(
+                    reconstruction=update_tokens(
+                        variant.reconstruction,
                         self._lemmatization[self.line_index][
                             self.variant_index
-                        ].reconstruction
+                        ].reconstruction,
+                        lambda token, lemmatization_token: token.set_unique_lemma(
+                            lemmatization_token
+                        ),
+                        LemmatizationError,
                     ),
                     manuscripts=tuple(self._manuscript_lines),
                 )

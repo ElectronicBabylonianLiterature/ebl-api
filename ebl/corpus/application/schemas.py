@@ -19,9 +19,11 @@ from ebl.corpus.domain.manuscript import (
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import StringValueEnum
-from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
-from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_schemas import NoteLineSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.domain.labels import parse_label
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -103,16 +105,19 @@ class ManuscriptLineSchema(Schema):
 
 
 class LineVariantSchema(Schema):
-    text = fields.Nested(TextLineSchema, required=True)
+    reconstruction = fields.Nested(OneOfTokenSchema, required=True, many=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
 
     @post_load  # pyre-ignore[56]
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
-        return LineVariant(data["text"], data["note"], tuple(data["manuscripts"]))
+        return LineVariant(
+            tuple(data["reconstruction"]), data["note"], tuple(data["manuscripts"])
+        )
 
 
 class LineSchema(Schema):
+    number = fields.Nested(OneOfLineNumberSchema, required=True)
     variants = fields.Nested(
         LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
     )
@@ -126,6 +131,7 @@ class LineSchema(Schema):
     @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
+            data["number"],
             tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],

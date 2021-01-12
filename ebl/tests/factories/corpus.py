@@ -106,27 +106,22 @@ class LineVariantFactory(factory.Factory):
             manuscript_id=factory.SelfAttribute("..manuscript_id"),
         )
 
-    text = factory.Sequence(
-        lambda n: TextLine.of_iterable(
-            LineNumber(n),
+    reconstruction = (
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("buāru"),)),
+        MetricalFootSeparator.uncertain(),
+        BrokenAway.open(),
+        UnknownNumberOfSigns.of(),
+        Caesura.certain(),
+        AkkadianWord.of(
             (
-                LanguageShift.normalized_akkadian(),
-                AkkadianWord.of((ValueToken.of("buāru"),)),
-                MetricalFootSeparator.uncertain(),
-                BrokenAway.open(),
                 UnknownNumberOfSigns.of(),
-                Caesura.certain(),
-                AkkadianWord.of(
-                    (
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
-                        Joiner.hyphen(),
-                        ValueToken.of("buāru"),
-                    ),
-                    (Flag.DAMAGE,),
-                ),
+                BrokenAway.close(),
+                Joiner.hyphen(),
+                ValueToken.of("buāru"),
             ),
-        )
+            (Flag.DAMAGE,),
+        ),
     )
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
     manuscripts: Sequence[ManuscriptLine] = factory.List(
@@ -144,6 +139,7 @@ class LineFactory(factory.Factory):
             LineVariantFactory, manuscript_id=factory.SelfAttribute("..manuscript_id")
         )
 
+    number = factory.Sequence(lambda n: LineNumber(n))
     variants: Sequence[LineVariant] = factory.List(
         [factory.SelfAttribute("..variant")], TupleFactory
     )

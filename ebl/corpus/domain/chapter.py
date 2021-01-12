@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Optional, Sequence, Set, Tuple, TypeVar, Union, cast
+from typing import Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
 import pydash  # pyre-ignore[21]
@@ -10,7 +10,9 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import NotFoundError
 from ebl.merger import Merger
 from ebl.transliteration.domain.dollar_line import DollarLine
+from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.labels import Label
+from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
@@ -85,21 +87,15 @@ class ManuscriptLine:
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineVariant:
-    text: TextLine = attr.ib()
+    reconstruction: Sequence[Token] = attr.ib(
+        converter=pydash.flow(set_enclosure_type, set_language)
+    )
     note: Optional[NoteLine] = None
     manuscripts: Sequence[ManuscriptLine] = tuple()
 
-    @text.validator
+    @reconstruction.validator
     def validate_reconstruction(self, _, value):
-        validate(value.content)
-
-    @property
-    def number(self) -> AbstractLineNumber:
-        return self.text.line_number
-
-    @property
-    def reconstruction(self) -> Sequence[Token]:
-        return self.text.content
+        validate(value)
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
@@ -137,6 +133,7 @@ class LineVariant:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Line:
+    number: AbstractLineNumber
     variants: Sequence[LineVariant]
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
@@ -156,10 +153,6 @@ class Line:
             for variant in self.variants
             for label in variant.manuscript_line_labels
         ]
-
-    @property
-    def line_numbers(self) -> Set[AbstractLineNumber]:
-        return {variant.text.line_number for variant in self.variants}
 
     def merge(self, other: "Line") -> "Line":
         def inner_merge(old: LineVariant, new: LineVariant) -> LineVariant:
@@ -206,9 +199,7 @@ class Chapter:
 
     @lines.validator
     def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
-        duplicates = pydash.duplicates(
-            [line_number for line in value for line_number in line.line_numbers]
-        )
+        duplicates = pydash.duplicates([line.number for line in value])
         if any(duplicates):
             raise ValueError(f"Duplicate line numbers: {duplicates}.")
 

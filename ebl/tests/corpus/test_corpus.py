@@ -295,48 +295,42 @@ def test_updating_manuscript_lemmatization(
                         variants=(
                             attr.evolve(
                                 TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].variants[0],
-                                text=TextLine.of_iterable(
+                                reconstruction=(
                                     TEXT_WITHOUT_DOCUMENTS.chapters[0]
                                     .lines[0]
                                     .variants[0]
-                                    .text.line_number,
-                                    (
-                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[0],
-                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[1]
-                                        .set_unique_lemma(
-                                            LemmatizationToken(
-                                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                                .lines[0]
-                                                .variants[0]
-                                                .text.content[1]
-                                                .value,
-                                                (WordId("aklu I"),),
-                                            )
-                                        ),
-                                        *TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[2:6],
-                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .text.content[6]
-                                        .set_unique_lemma(
-                                            LemmatizationToken(
-                                                TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                                .lines[0]
-                                                .variants[0]
-                                                .text.content[6]
-                                                .value,
-                                                tuple(),
-                                            )
-                                        ),
+                                    .reconstruction[0],
+                                    TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[1]
+                                    .set_unique_lemma(
+                                        LemmatizationToken(
+                                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .reconstruction[1]
+                                            .value,
+                                            (WordId("aklu I"),),
+                                        )
+                                    ),
+                                    *TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[2:6],
+                                    TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[6]
+                                    .set_unique_lemma(
+                                        LemmatizationToken(
+                                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .reconstruction[6]
+                                            .value,
+                                            tuple(),
+                                        )
                                     ),
                                 ),
                                 manuscripts=(
@@ -525,18 +519,7 @@ def test_updating_lines(
                 lines=(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
-                        variants=(
-                            attr.evolve(
-                                TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].variants[0],
-                                text=attr.evolve(
-                                    TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                    .lines[0]
-                                    .variants[0]
-                                    .text,
-                                    line_number=LineNumber(1, True),
-                                ),
-                            ),
-                        ),
+                        number=LineNumber(1, True),
                     ),
                 ),
                 parser_version=ATF_PARSER_VERSION,
@@ -562,9 +545,7 @@ def test_updating_lines(
 def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    reconstruction = TextLine.of_iterable(
-        LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
-    )
+    reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
     is_second_line_of_parallelism = False
     is_beginning_of_section = False
     text_line = TextLine.of_iterable(
@@ -580,6 +561,7 @@ def test_merging_lines(
     )
     manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
     line = Line(
+        LineNumber(1),
         (
             LineVariant(
                 reconstruction,
@@ -595,6 +577,7 @@ def test_merging_lines(
         (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ši")])),
     )
     new_line = Line(
+        LineNumber(1),
         (
             LineVariant(
                 reconstruction,
@@ -637,6 +620,7 @@ def test_merging_lines(
 
     lines = (
         Line(
+            LineNumber(1),
             (
                 LineVariant(
                     reconstruction,

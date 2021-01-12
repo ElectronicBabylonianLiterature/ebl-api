@@ -47,14 +47,14 @@ class TextValidator(TextVisitor):
         self._bibliography = bibliography
         self._transliteration_factory = transliteration_factory
         self._chapter: Optional[Chapter] = None
-        self._variant: Optional[LineVariant] = None
+        self._line: Optional[Line] = None
 
     @property
-    def variant(self) -> LineVariant:
-        if self._variant is None:
-            raise Defect("Trying to access variant before a variant was visited.")
+    def line(self) -> Line:
+        if self._line is None:
+            raise Defect("Trying to access line before a line was visited.")
 
-        return cast(LineVariant, self._variant)
+        return cast(Line, self._line)
 
     @property
     def chapter(self) -> Chapter:
@@ -88,13 +88,12 @@ class TextValidator(TextVisitor):
 
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:
+        self._line = line
         for variant in line.variants:
             self.visit(variant)
 
     @visit.register(LineVariant)  # pyre-ignore[56]
     def _visit_line_variant(self, variant: LineVariant) -> None:
-        self._variant = variant
-
         for manuscript_line in variant.manuscripts:
             self.visit(manuscript_line)
 
@@ -104,7 +103,7 @@ class TextValidator(TextVisitor):
             self._transliteration_factory.create(manuscript_line.line.atf)
         except TransliterationError:
             raise invalid_atf(
-                self.chapter, self.variant.number, manuscript_line.manuscript_id
+                self.chapter, self.line.number, manuscript_line.manuscript_id
             )
 
         alignment_validator = AlignmentVisitor()

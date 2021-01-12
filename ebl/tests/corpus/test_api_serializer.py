@@ -70,9 +70,9 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                 ],
                 "lines": [
                     {
+                        "number": line.number.label,
                         "variants": [
                             {
-                                "number": variant.number.label,
                                 "reconstruction": "".join(
                                     [
                                         convert_to_atf(None, variant.reconstruction),
@@ -81,7 +81,7 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                 ),
                                 # pyre-ignore[16]
                                 "reconstructionTokens": OneOfTokenSchema().dump(
-                                    variant.text.content, many=True
+                                    variant.reconstruction, many=True
                                 ),
                                 "manuscripts": [
                                     {
