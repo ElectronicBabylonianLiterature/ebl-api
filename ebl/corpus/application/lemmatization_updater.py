@@ -50,13 +50,6 @@ class LemmatizationUpdater(ChapterUpdater):
     def visit(self, item: TextItem) -> None:
         super().visit(item)
 
-    @visit.register(Chapter)  # pyre-ignore[56]
-    def _visit_chapter(self, chapter: Chapter) -> None:
-        if len(self._lemmatization) == len(chapter.lines):
-            super()._visit_chapter(chapter)
-        else:
-            raise LemmatizationError()
-
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:
         for variant in line.variants:
@@ -98,11 +91,12 @@ class LemmatizationUpdater(ChapterUpdater):
         )
         self._manuscript_lines.append(attr.evolve(manuscript_line, line=updated_line))
 
-    def _update_chapter(self, chapter: Chapter) -> Chapter:
-        if len(self._lemmatization) == len(chapter.lines):
-            return attr.evolve(chapter, lines=tuple(self._lines))
-        else:
+    def _validate_chapter(self, chapter: Chapter) -> None:
+        if len(self._lemmatization) != len(chapter.lines):
             raise LemmatizationError()
+
+    def _update_chapter(self, chapter: Chapter) -> Chapter:
+        return attr.evolve(chapter, lines=tuple(self._lines))
 
     def _after_chapter_update(self) -> None:
         self._lines = []
