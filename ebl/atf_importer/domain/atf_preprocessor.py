@@ -71,6 +71,8 @@ class ATFPreprocessor:
 
         # words serializer oracc parser
         tree = self.ORACC_PARSER.parse(atf)
+        #self.logger.debug((tree.pretty()))
+
         words_serializer = Get_Words()
         words_serializer.result = []
         words_serializer.visit_topdown(tree)
@@ -102,7 +104,7 @@ class ATFPreprocessor:
         tree = self.ORACC_PARSER.parse(atf)
         self.logger.debug("Converting " + tree.data)
 
-        # self.logger.debug((tree.pretty()))
+        #self.logger.debug((tree.pretty()))
 
         if tree.data == "lem_line":
             return self.convert_lemline(atf, tree)

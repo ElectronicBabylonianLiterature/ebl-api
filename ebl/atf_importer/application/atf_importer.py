@@ -375,13 +375,12 @@ class ATFImporter:
                 ebl_lines = self.get_ebl_transliteration(last_transliteration_line)
 
                 word_cnt = 0
-
                 for token in ebl_lines.lines[0].content:
-
                     unique_lemma = []
                     if token.value in oracc_words:
                         unique_lemma = oracc_word_ebl_lemmas[word_cnt]
                         word_cnt = word_cnt +1
+
 
                     if len(unique_lemma) == 0:
                         lemma_line.append(LemmatizationToken(token.value, None))

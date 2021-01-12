@@ -50,9 +50,9 @@ close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
 open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
 
-divider_variant: divider _VARIANT_SEPARATOR divider
-               | divider _VARIANT_SEPARATOR variant_part
-               | variant_part _VARIANT_SEPARATOR divider
+divider_variant: divider VARIANT_SEPARATOR2 divider
+               | divider VARIANT_SEPARATOR2 variant_part
+               | variant_part VARIANT_SEPARATOR2 divider
 
 tabulation: TABULATION
 TABULATION: "($___$)"
@@ -148,7 +148,7 @@ _any_open: (OPEN_ACCIDENTAL_OMISSION | OPEN_INTENTIONAL_OMISSION | OPEN_REMOVAL 
       | surrogate
       | compound_grapheme
       | variant
-variant: variant_part (_VARIANT_SEPARATOR variant_part)+
+variant: variant_part (VARIANT_SEPARATOR2 variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
              | reading
@@ -205,7 +205,7 @@ unidentified_sign: "X" flags
 unclear_sign: UNCLEAR_SIGN flags
 UNCLEAR_SIGN : "x"
 
-_VARIANT_SEPARATOR: VARIANT_SEPARATOR
+VARIANT_SEPARATOR2: VARIANT_SEPARATOR
 VARIANT_SEPARATOR: "/"
 
 flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
