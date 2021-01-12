@@ -86,6 +86,11 @@ class ATFPreprocessor:
         )
         return (atf, converted_line_array, tree.data, [])
 
+    def unused_line(self,tree):
+        for line in self.unused_lines:
+            if tree.data == line:
+                return self.get_empty_conversion(tree)
+
     def get_empty_conversion(self, tree):
         line_serializer = Line_Serializer()
         line_serializer.visit_topdown(tree)
@@ -107,9 +112,7 @@ class ATFPreprocessor:
             return self.check_converted_line(original_atf, tree, conversion_result)
 
         else:
-            for line in self.unused_lines:
-                if tree.data == line:
-                    return self.get_empty_conversion(tree)
+            return self.unused_line(tree)
 
     def convert_textline(self, tree):
         Convert_Line_Dividers().visit(tree)
@@ -208,14 +211,23 @@ class ATFPreprocessor:
             except Exception as e:
                return self.line_not_converted(original_atf,atf)
 
-    def convert_lines(self, file, filename):
-        self.logger.info(Util.print_frame('Converting: "' + filename + '.atf"'))
+    def write_unparsable_lines(self,filename):
+        with open(
+                self.logdir + "unparseable_lines_" + filename + ".txt", "w", encoding="utf8"
+        ) as outputfile:
+            for key in self.unparseable_lines:
+                outputfile.write(key + "\n")
 
+    def read_lines(self,file):
         with codecs.open(file, "r", encoding="utf8") as f:
             atf_ = f.read()
 
-        lines = atf_.split("\n")
+        return atf_.split("\n")
 
+    def convert_lines(self, file, filename):
+        self.logger.info(Util.print_frame('Converting: "' + filename + '.atf"'))
+
+        lines = self.read_lines(file)
         processed_lines = []
         for line in lines:
             (c_line, c_array, c_type, c_alter_lemline_at) = self.process_line(line)
@@ -223,7 +235,7 @@ class ATFPreprocessor:
             if self.stop_preprocessing:
                 break
 
-            if c_line != None:
+            if c_line is not None:
                 processed_lines.append(
                     {
                         "c_line": c_line,
@@ -236,11 +248,6 @@ class ATFPreprocessor:
                 self.skip_next_lem_line = True
 
         self.logger.info(Util.print_frame("Preprocessing finished"))
-
-        with open(
-            self.logdir + "unparseable_lines_" + filename + ".txt", "w", encoding="utf8"
-        ) as outputfile:
-            for key in self.unparseable_lines:
-                outputfile.write(key + "\n")
+        self.write_unparsable_lines(filename)
 
         return processed_lines
