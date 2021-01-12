@@ -48,7 +48,7 @@ class ATFPreprocessor:
         line_serializer = Line_Serializer()
         line_serializer.visit_topdown(tree)
         converted_line = line_serializer.line.strip(" ")
-        return converted_line, None, tree.data, None
+        return (converted_line, None, tree.data, None)
 
     def convert_textline(self, tree):
         Convert_Line_Dividers().visit(tree)
@@ -68,7 +68,63 @@ class ATFPreprocessor:
 
         words_serializer.visit_topdown(tree)
         converted_line_array = words_serializer.result
-        return converted_line, converted_line_array, words_serializer.alter_lemline_at
+        return (converted_line, converted_line_array, words_serializer.alter_lemline_at)
+
+    def check_converted_line(self,original_atf,tree,conversion):
+        try:
+            self.EBL_PARSER.parse(conversion[0])
+            self.logger.debug("Successfully parsed converted line")
+            self.logger.debug(conversion[0])
+            self.logger.debug(
+                "Converted line as "
+                + tree.data
+                + " --> '"
+                + conversion[0]
+                + "'"
+            )
+            self.logger.debug(
+                "----------------------------------------------------------------------"
+            )
+
+            return (
+                conversion[0],
+                conversion[1],
+                tree.data,
+                conversion[2]
+            )
+
+        except Exception as e:
+            self.logger.error(traceback.format_exc())
+            self.logger.error("Could not parse converted line")
+            self.unparseable_lines.append(original_atf)
+            return (None, None, None, None)
+
+    def convert_lemline(self,atf,tree):
+
+        if self.skip_next_lem_line:
+
+            self.logger.warning("Skipping lem line")
+            self.skip_next_lem_line = False
+            return (None, None, "lem_line", None)
+
+        lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
+        lemmas_and_guidewords_serializer.result = []
+        lemmas_and_guidewords_serializer.visit(tree)
+        lemmas_and_guidewords_array = (
+            lemmas_and_guidewords_serializer.result
+        )
+        self.logger.debug(
+            "Converted line as "
+            + tree.data
+            + " --> '"
+            + str(lemmas_and_guidewords_array)
+            + "'"
+        )
+        self.logger.debug(
+            "----------------------------------------------------------------------"
+        )
+
+        return atf, lemmas_and_guidewords_array, tree.data, []
 
     def process_line(self, atf):
         self.logger.debug("Original line: '" + atf + "'")
@@ -96,7 +152,7 @@ class ATFPreprocessor:
             self.logger.info(
                 "----------------------------------------------------------------------"
             )
-            return atf, converted_line_array, tree.data, []
+            return (atf, converted_line_array, tree.data, [])
 
         except Exception:
 
@@ -116,63 +172,11 @@ class ATFPreprocessor:
                 #self.logger.debug((tree.pretty()))
 
                 if tree.data == "lem_line":
-
-                    if self.skip_next_lem_line:
-                        self.logger.warning("Skipping lem line")
-                        self.skip_next_lem_line = False
-                        return None, None, "lem_line", None
-
-                    lemmas_and_guidewords_serializer = Get_Lemma_Values_and_Guidewords()
-                    lemmas_and_guidewords_serializer.result = []
-                    lemmas_and_guidewords_serializer.visit(tree)
-                    lemmas_and_guidewords_array = (
-                        lemmas_and_guidewords_serializer.result
-                    )
-                    self.logger.debug(
-                        "Converted line as "
-                        + tree.data
-                        + " --> '"
-                        + str(lemmas_and_guidewords_array)
-                        + "'"
-                    )
-                    self.logger.debug(
-                        "----------------------------------------------------------------------"
-                    )
-
-                    return atf, lemmas_and_guidewords_array, tree.data, []
+                    return self.convert_lemline(atf,tree)
 
                 elif tree.data == "text_line":
-                    converted_line, converted_line_array, alter_lemline_at = self.convert_textline(
-                        tree
-                    )
-
-                    try:
-                        self.EBL_PARSER.parse(converted_line)
-                        self.logger.debug("Successfully parsed converted line")
-                        self.logger.debug(converted_line)
-                        self.logger.debug(
-                            "Converted line as "
-                            + tree.data
-                            + " --> '"
-                            + converted_line
-                            + "'"
-                        )
-                        self.logger.debug(
-                            "----------------------------------------------------------------------"
-                        )
-
-                        return (
-                            converted_line,
-                            converted_line_array,
-                            tree.data,
-                            alter_lemline_at,
-                        )
-
-                    except Exception as e:
-                        self.logger.error(traceback.format_exc())
-                        self.logger.error("Could not parse converted line")
-                        self.unparseable_lines.append(original_atf)
-                        return None, None, None, None
+                    conversion_result = self.convert_textline(tree)
+                    return self.check_converted_line(original_atf,tree,conversion_result)
 
                 else:
                     for line in self.unused_lines:
@@ -189,7 +193,7 @@ class ATFPreprocessor:
                     self.stop_preprocessing = True
 
                 self.unparseable_lines.append(original_atf)
-                return None, None, None, None
+                return (None, None, None, None)
 
     def convert_lines(self, file, filename):
         self.logger.info(Util.print_frame('Converting: "' + filename + '.atf"'))
@@ -201,7 +205,7 @@ class ATFPreprocessor:
 
         processed_lines = []
         for line in lines:
-            c_line, c_array, c_type, c_alter_lemline_at = self.process_line(line)
+            (c_line, c_array, c_type, c_alter_lemline_at) = self.process_line(line)
 
             if self.stop_preprocessing:
                 break
