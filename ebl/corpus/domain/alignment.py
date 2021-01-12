@@ -2,7 +2,7 @@ from typing import Sequence
 
 import attr
 
-from ebl.transliteration.domain.alignment import AlignmentToken, AlignmentError
+from ebl.transliteration.domain.alignment import AlignmentToken
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -21,10 +21,7 @@ class Alignment:
     def get_variant(
         self, line_index: int, variant_index: int
     ) -> Sequence[ManuscriptLineAlignment]:
-        try:
-            return self.get_line(line_index)[variant_index]
-        except IndexError as error:
-            raise AlignmentError() from error
+        return self.get_line(line_index)[variant_index]
 
     def get_manuscript_line(
         self, line_index: int, variant_index: int, manuscript_index: int

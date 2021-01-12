@@ -37,45 +37,51 @@ class AlignmentUpdater(ChapterUpdater):
                 self.line_index, self.variant_index, self.manuscript_line_index
             )
         except IndexError:
-            raise AlignmentError()
+            alignment_index = [
+                self.line_index,
+                self.variant_index,
+                self.manuscript_line_index,
+            ]
+            raise AlignmentError(f"Invalid alignment index {alignment_index}.")
 
     @singledispatchmethod  # pyre-ignore[56]
     def visit(self, item: TextItem) -> None:
         super().visit(item)
 
-    @visit.register(Chapter)  # pyre-ignore[56]
-    def _visit_chapter(self, chapter: Chapter) -> None:
-        if self._alignment.get_number_of_lines() == len(chapter.lines):
-            super()._visit_chapter(chapter)
-        else:
-            raise AlignmentError()
-
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:
-        if self._alignment.get_number_of_variants(self.variant_index) != len(
-            line.variants
-        ):
-            raise AlignmentError()
-
-        for variant in line.variants:
-            self.visit(variant)
-        self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
-        self._variants = []
+        alignment_variants = self._alignment.get_number_of_variants(self.line_index)
+        line_variants = len(line.variants)
+        if alignment_variants == line_variants:
+            for variant in line.variants:
+                self.visit(variant)
+                self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
+                self._variants = []
+        else:
+            raise AlignmentError(
+                "Invalid number of variants. "
+                f"Got {alignment_variants}, expected {line_variants}."
+            )
 
     @visit.register(LineVariant)  # pyre-ignore[56]
     def _visit_line_variant(self, variant: LineVariant) -> None:
-        if self._alignment.get_number_of_manuscripts(
+        alignment_manuscripts = self._alignment.get_number_of_manuscripts(
             self.line_index, self.variant_index
-        ) != len(variant.manuscripts):
-            raise AlignmentError()
-
-        for manuscript_line in variant.manuscripts:
-            self.visit(manuscript_line)
-
-        self._variants.append(
-            attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
         )
-        self._manuscript_lines = []
+        variant_manuscripts = len(variant.manuscripts)
+        if alignment_manuscripts == variant_manuscripts:
+            for manuscript_line in variant.manuscripts:
+                self.visit(manuscript_line)
+
+                self._variants.append(
+                    attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
+                )
+                self._manuscript_lines = []
+        else:
+            raise AlignmentError(
+                "Invalid number of manuscripts. "
+                f"Got {alignment_manuscripts}, expected {variant_manuscripts}."
+            )
 
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
@@ -90,11 +96,16 @@ class AlignmentUpdater(ChapterUpdater):
             )
         )
 
+    def _validate_chapter(self, chapter: Chapter) -> None:
+        alignment_lines = self._alignment.get_number_of_lines()
+        chapter_lines = len(chapter.lines)
+        if alignment_lines != chapter_lines:
+            raise AlignmentError(
+                f"Invalid number of lines. Got {alignment_lines}, expected {chapter_lines}."
+            )
+
     def _update_chapter(self, chapter: Chapter) -> Chapter:
-        if self._alignment.get_number_of_lines() == len(chapter.lines):
-            return attr.evolve(chapter, lines=tuple(self._lines))
-        else:
-            raise AlignmentError()
+        return attr.evolve(chapter, lines=tuple(self._lines))
 
     def _after_chapter_update(self) -> None:
         self._lines = []

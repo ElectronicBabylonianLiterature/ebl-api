@@ -39,6 +39,7 @@ class ChapterUpdater(TextVisitor):
     @visit.register(Chapter)  # pyre-ignore[56]
     def _visit_chapter(self, chapter: Chapter) -> None:
         if len(self._chapters) == self._chapter_index_to_align:
+            self._validate_chapter(chapter)
             self._visit_manuscripts(chapter)
             self._visit_lines(chapter)
             self._chapters.append(self._try_update_chapter(chapter))
@@ -67,6 +68,9 @@ class ChapterUpdater(TextVisitor):
             )
         except ValueError as error:
             raise DataError(error)
+
+    def _validate_chapter(self, chapter: Chapter) -> None:
+        pass
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
         return chapter
