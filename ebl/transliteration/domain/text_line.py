@@ -4,7 +4,7 @@ from typing import Callable, Iterable, Sequence, Type, TypeVar, Union, cast
 import attr
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.alignment import AlignmentToken, AlignmentError
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
@@ -71,7 +71,7 @@ class TextLine(Line):
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "TextLine":
         def updater(token, alignment_token):
-            return token.set_alignment(alignment_token)
+            return alignment_token.apply(token)
 
         return self._update_tokens(alignment, updater, AlignmentError)
 
@@ -81,12 +81,12 @@ class TextLine(Line):
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
     ) -> "TextLine":
-        if len(self.content) == len(updates):
-            zipped = zip_longest(self.content, updates)
-            content = tuple(updater(pair[0], pair[1]) for pair in zipped)
-            return attr.evolve(self, content=content)
-        else:
+        if len(self.content) != len(updates):
             raise error_class()
+
+        zipped = zip_longest(self.content, updates)
+        content = tuple(updater(pair[0], pair[1]) for pair in zipped)
+        return attr.evolve(self, content=content)
 
     def merge(self, other: L) -> Union["TextLine", L]:
         def merge_tokens():

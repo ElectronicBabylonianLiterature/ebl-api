@@ -1,14 +1,14 @@
 import json
 
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
-from freezegun import freeze_time  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
+from freezegun import freeze_time  # pyre-ignore[21]
 
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -51,8 +51,17 @@ def test_update_transliteration(client, fragmentarium, user, database):
 
 
 @freeze_time("2018-09-07 15:41:24.032")
+@pytest.mark.parametrize(
+    "new_transliteration", ["2'. [...] GI₆ mu u₄-š[u ...]", "$ single ruling"]
+)
 def test_update_transliteration_merge_lemmatization(
-    client, fragmentarium, signs, sign_repository, transliteration_factory, user
+    new_transliteration,
+    client,
+    fragmentarium,
+    signs,
+    sign_repository,
+    transliteration_factory,
+    user,
 ):
 
     for sign in signs:
@@ -60,7 +69,7 @@ def test_update_transliteration_merge_lemmatization(
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
-    lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
+    lines[1] = new_transliteration
     updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]

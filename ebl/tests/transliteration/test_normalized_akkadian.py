@@ -15,7 +15,6 @@ from ebl.transliteration.domain.normalized_akkadian import (
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.dictionary.domain.word import WordId
 
@@ -100,6 +99,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
         "enclosureType": [],
         "uniqueLemma": [],
         "alignment": None,
+        "variant": None,
         "lemmatizable": lemmatizable,
         "normalized": True,
         "language": "AKKADIAN",
@@ -130,18 +130,16 @@ def test_set_unique_lemma_empty() -> None:
 
 def test_set_alignment() -> None:
     word = AkkadianWord.of((ValueToken.of("bu"),))
-    alignment = AlignmentToken("bu", 1)
     expected = AkkadianWord.of((ValueToken.of("bu"),), alignment=1)
 
-    assert word.set_alignment(alignment) == expected
+    assert word.set_alignment(1, None) == expected
 
 
 def test_set_alignment_empty() -> None:
     word = AkkadianWord.of((ValueToken.of("bu"),), alignment=1)
-    alignment = AlignmentToken("bu", None)
     expected = AkkadianWord.of((ValueToken.of("bu"),))
 
-    assert word.set_alignment(alignment) == expected
+    assert word.set_alignment(None, None) == expected
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

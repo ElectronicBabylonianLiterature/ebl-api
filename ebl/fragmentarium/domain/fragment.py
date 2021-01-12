@@ -3,15 +3,16 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
-
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -61,6 +62,7 @@ class Fragment:
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
+    line_to_vec: Optional[Sequence[LineToVecEncodings]] = None
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
@@ -78,6 +80,7 @@ class Fragment:
             notes=transliteration.notes,
             signs=transliteration.signs,
             record=record,
+            line_to_vec=create_line_to_vec(text.lines),
         )
 
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":

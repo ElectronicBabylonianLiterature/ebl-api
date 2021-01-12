@@ -8,14 +8,32 @@ from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
+from ebl.transliteration.domain.language import Language
 
 ANY_USER = Guest()
-DTO = {"alignment": [[[{"value": "ku-[nu-ši]", "alignment": 0}]]]}
+DTO = {
+    "alignment": [
+        [
+            {
+                "alignment": [
+                    {
+                        "value": "ku-[nu-ši]",
+                        "alignment": 0,
+                        "variant": "KU",
+                        "language": "SUMERIAN",
+                        "isNormalized": False,
+                    }
+                ],
+                "omittedWords": [1],
+            }
+        ]
+    ]
+}
 
 
 def create_text_dto(text):
@@ -45,6 +63,8 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
     allow_references(text, bibliography)
     create_text(client, text)
     chapter_index = 0
+    alignment = 0
+    omitted_words = (1,)
     updated_text = attr.evolve(
         text,
         chapters=(
@@ -69,10 +89,15 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=0,
+                                            alignment=alignment,
+                                            variant=Word.of(
+                                                [Logogram.of_name("KU")],
+                                                language=Language.SUMERIAN,
+                                            ),
                                         ),
                                     ),
                                 ),
+                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
@@ -114,10 +139,7 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
 
 @pytest.mark.parametrize(
     "dto,expected_status",
-    [
-        ({"alignment": [[[]]]}, falcon.HTTP_UNPROCESSABLE_ENTITY),
-        ({}, falcon.HTTP_BAD_REQUEST),
-    ],
+    [({"alignment": [[[]]]}, falcon.HTTP_BAD_REQUEST), ({}, falcon.HTTP_BAD_REQUEST)],
 )
 def test_updating_invalid_alignment(
     dto, expected_status, client, bibliography, sign_repository, signs

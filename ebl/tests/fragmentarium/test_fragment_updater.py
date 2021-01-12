@@ -8,9 +8,8 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 
 SCHEMA = FragmentSchema()
 
@@ -19,7 +18,7 @@ SCHEMA = FragmentSchema()
 def test_update_transliteration(
     fragment_updater, user, fragment_repository, changelog, when
 ):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+    transliterated_fragment = TransliteratedFragmentFactory.build(line_to_vec=None)
     number = transliterated_fragment.number
     atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(

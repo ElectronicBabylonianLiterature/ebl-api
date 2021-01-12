@@ -133,9 +133,7 @@ class StateDollarLine(DollarLine):
     def to_atf(column) -> str:
         if isinstance(column, tuple):
             return f"{column[0]}-{column[1]}"
-        elif isinstance(column, Enum):
-            return column.value
-        elif isinstance(column, ScopeContainer):
+        elif isinstance(column, (Enum, ScopeContainer)):
             return column.value
         else:
             return str(column)

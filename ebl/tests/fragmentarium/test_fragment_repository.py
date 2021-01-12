@@ -5,6 +5,7 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Genre
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -19,17 +20,16 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
     PerhapsBrokenAway,
 )
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 COLLECTION = "fragments"
 
@@ -102,8 +102,8 @@ def test_find_random(fragment_repository,):
 
 
 def test_folio_pager_exception(fragment_repository):
-    query = "1841-07-26, 57"
     with pytest.raises(NotFoundError):
+        query = "1841-07-26, 57"
         fragment_repository.query_next_and_previous_fragment(query)
 
 
@@ -347,6 +347,16 @@ def test_find_transliterated(database, fragment_repository):
     assert fragment_repository.query_transliterated_numbers() == [
         transliterated_fragment.number
     ]
+
+
+def test_find_transliterated_line_to_vec(database, fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
+    assert fragment_repository.query_transliterated_line_to_vec() == {
+        transliterated_fragment.number: transliterated_fragment.line_to_vec
+    }
 
 
 def test_find_lemmas(fragment_repository):

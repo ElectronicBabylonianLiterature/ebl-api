@@ -1,6 +1,6 @@
 # Electronic Babylonian Literature API
 
-[![Build Status](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api.svg?branch=master)](https://travis-ci.com/ElectronicBabylonianLiterature/ebl-api)
+![Build Status](https://github.com/ElectronicBabylonianLiterature/ebl-api/workflows/CI/badge.svg?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)

@@ -63,6 +63,11 @@ def parse_word(atf: str) -> Word:
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
+def parse_normalized_akkadian_word(atf: str) -> Word:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__akkadian_word")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
 def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
     return LineTransformer().transform(tree)  # pyre-ignore[16]

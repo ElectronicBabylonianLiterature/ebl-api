@@ -8,7 +8,6 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.users.web.require_scope import require_scope
 
-
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
     "properties": {"transliteration": {"type": "string"}, "notes": {"type": "string"}},

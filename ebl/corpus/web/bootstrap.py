@@ -10,7 +10,7 @@ from ebl.corpus.web.lemmatizations import (
     CorpusLemmatizationsSchema,
 )
 from ebl.corpus.web.texts import TextResource, TextsResource
-from ebl.corpus.web.schemas import ApiTextSchema
+from ebl.corpus.web.text_schemas import ApiTextSchema
 
 
 def create_corpus_routes(api: falcon.API, context: Context, spec):  # pyre-ignore[11]
