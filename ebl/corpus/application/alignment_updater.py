@@ -52,17 +52,17 @@ class AlignmentUpdater(ChapterUpdater):
     def _visit_line(self, line: Line) -> None:
         alignment_variants = self._alignment.get_number_of_variants(self.line_index)
         line_variants = len(line.variants)
-        if alignment_variants == line_variants:
-            for variant in line.variants:
-                self.visit(variant)
-
-            self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
-            self._variants = []
-        else:
+        if alignment_variants != line_variants:
             raise AlignmentError(
                 "Invalid number of variants. "
                 f"Got {alignment_variants}, expected {line_variants}."
             )
+
+        for variant in line.variants:
+            self.visit(variant)
+
+        self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
+        self._variants = []
 
     @visit.register(LineVariant)  # pyre-ignore[56]
     def _visit_line_variant(self, variant: LineVariant) -> None:
@@ -70,19 +70,19 @@ class AlignmentUpdater(ChapterUpdater):
             self.line_index, self.variant_index
         )
         variant_manuscripts = len(variant.manuscripts)
-        if alignment_manuscripts == variant_manuscripts:
-            for manuscript_line in variant.manuscripts:
-                self.visit(manuscript_line)
-
-            self._variants.append(
-                attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
-            )
-            self._manuscript_lines = []
-        else:
+        if alignment_manuscripts != variant_manuscripts:
             raise AlignmentError(
                 "Invalid number of manuscripts. "
                 f"Got {alignment_manuscripts}, expected {variant_manuscripts}."
             )
+
+        for manuscript_line in variant.manuscripts:
+            self.visit(manuscript_line)
+
+        self._variants.append(
+            attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
+        )
+        self._manuscript_lines = []
 
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:

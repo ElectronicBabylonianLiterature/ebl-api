@@ -65,7 +65,7 @@ class Label(ABC):
 
     @property
     def status_string(self) -> str:
-        return "".join([status.value for status in self.status])
+        return "".join(status.value for status in self.status)
 
     @abstractmethod
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
