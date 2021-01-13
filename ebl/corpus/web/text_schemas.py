@@ -4,19 +4,20 @@ from marshmallow import (  # pyre-ignore[21]
     ValidationError,
     fields,
     post_load,
+    validate,
 )
 from marshmallow.validate import Regexp  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
-    LineSchema,
+    LineVariantSchema,
     ManuscriptSchema,
     TextSchema,
     labels,
     manuscript_id,
 )
-from ebl.corpus.domain.text import Line, ManuscriptLine
+from ebl.corpus.domain.chapter import LineVariant, ManuscriptLine, Line
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
@@ -120,12 +121,11 @@ class LineNumberString(fields.String):
             raise ValidationError("Invalid line number.") from error
 
 
-class ApiLineSchema(LineSchema):
+class ApiLineVariantSchema(LineVariantSchema):
     class Meta:
-        exclude = ("text", "note")
+        exclude = ("note",)
         unknown = EXCLUDE
 
-    number = LineNumberString(required=True)  # pyre-ignore[28]
     reconstruction = fields.Function(
         lambda line: "".join(
             [
@@ -145,14 +145,34 @@ class ApiLineSchema(LineSchema):
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
 
     @post_load  # pyre-ignore[56]
-    def make_line(self, data: dict, **kwargs) -> Line:
+    def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
         [text, *notes] = data["reconstruction"].split("\n")
-        return Line(
-            TextLine.of_iterable(data["number"], parse_reconstructed_line(text)),
+        return LineVariant(
+            parse_reconstructed_line(text),
             parse_note_line(notes[0]) if notes else None,
+            tuple(data["manuscripts"]),
+        )
+
+
+class ApiLineSchema(Schema):
+    number = LineNumberString(required=True)  # pyre-ignore[28]
+    variants = fields.Nested(
+        ApiLineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
+    )
+    is_second_line_of_parallelism = fields.Boolean(
+        required=True, data_key="isSecondLineOfParallelism"
+    )
+    is_beginning_of_section = fields.Boolean(
+        required=True, data_key="isBeginningOfSection"
+    )
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data: dict, **kwargs) -> Line:
+        return Line(
+            data["number"],
+            tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            tuple(data["manuscripts"]),
         )
 
 

@@ -1,11 +1,16 @@
 import json
 
 import attr
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
+from ebl.corpus.domain.manuscript import (
+    ManuscriptType,
+    Period,
+    PeriodModifier,
+    Provenance,
+)
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import TextFactory
@@ -187,7 +192,7 @@ INVALID_MUSEUM_NUMBER = [
         [[{}], falcon.HTTP_BAD_REQUEST],
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
         [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
-        [INVALID_MUSEUM_NUMBER, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [INVALID_MUSEUM_NUMBER, falcon.HTTP_BAD_REQUEST],
     ],
 )
 def test_update_invalid_entity(

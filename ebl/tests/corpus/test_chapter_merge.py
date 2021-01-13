@@ -1,19 +1,27 @@
+import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import Classification, Stage
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Classification,
+    Line,
+    LineVariant,
+    ManuscriptLine,
+    Stage,
+)
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
-import attr
+
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)
@@ -50,239 +58,295 @@ def test_merge_manuscript_line(old, new, expected):
     assert old.merge(new) == expected
 
 
-RECONSTRUCTION = TextLine.of_iterable(
-    LineNumber(1), (AkkadianWord.of((ValueToken.of("buāru"),)),)
-)
+RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 NOTE = None
 LINE = Line(
-    RECONSTRUCTION,
-    NOTE,
+    LineNumber(1),
+    (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (MANUSCRIPT_LINE,),
 )
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "old,new,expected",
     [
         (LINE, LINE, LINE),
         (
             Line(
-                RECONSTRUCTION,
-                NOTE,
-                IS_SECOND_LINE_OF_PARALLELISM,
-                IS_BEGINNING_OF_SECTION,
+                LineNumber(1),
                 (
-                    ManuscriptLine(
-                        MANUSCRIPT_ID,
-                        LABELS,
-                        TextLine(
-                            LineNumber(1),
-                            (
-                                Word.of(
-                                    [
-                                        Reading.of(
-                                            [ValueToken.of("ku"), BrokenAway.close()]
+                    LineVariant(
+                        RECONSTRUCTION,
+                        NOTE,
+                        (
+                            ManuscriptLine(
+                                MANUSCRIPT_ID,
+                                LABELS,
+                                TextLine(
+                                    LineNumber(1),
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of(
+                                                    [
+                                                        ValueToken.of("ku"),
+                                                        BrokenAway.close(),
+                                                    ]
+                                                ),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("si"),
+                                            ],
+                                            unique_lemma=(WordId("word"),),
+                                            alignment=0,
                                         ),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("nu"),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("si"),
-                                    ],
-                                    unique_lemma=(WordId("word"),),
-                                    alignment=0,
+                                    ),
                                 ),
                             ),
                         ),
                     ),
                 ),
-            ),
-            Line(
-                TextLine.of_iterable(
-                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
-                ),
-                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
+            ),
+            Line(
+                LineNumber(2),
                 (
-                    ManuscriptLine(
-                        MANUSCRIPT_ID,
-                        LABELS,
-                        TextLine(
-                            LineNumber(1),
-                            (
-                                Word.of(
-                                    [
-                                        Reading.of(
-                                            [ValueToken.of("ku"), BrokenAway.close()]
+                    LineVariant(
+                        (AkkadianWord.of((ValueToken.of("kur"),)),),
+                        NOTE,
+                        (
+                            ManuscriptLine(
+                                MANUSCRIPT_ID,
+                                LABELS,
+                                TextLine(
+                                    LineNumber(1),
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of(
+                                                    [
+                                                        ValueToken.of("ku"),
+                                                        BrokenAway.close(),
+                                                    ]
+                                                ),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("si"),
+                                            ]
                                         ),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("nu"),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("si"),
-                                    ]
+                                    ),
                                 ),
                             ),
                         ),
                     ),
                 ),
-            ),
-            Line(
-                TextLine.of_iterable(
-                    LineNumber(2), (AkkadianWord.of((ValueToken.of("kur"),)),)
-                ),
-                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
+            ),
+            Line(
+                LineNumber(2),
                 (
-                    ManuscriptLine(
-                        MANUSCRIPT_ID,
-                        LABELS,
-                        TextLine(
-                            LineNumber(1),
-                            (
-                                Word.of(
-                                    [
-                                        Reading.of(
-                                            [ValueToken.of("ku"), BrokenAway.close()]
+                    LineVariant(
+                        (AkkadianWord.of((ValueToken.of("kur"),)),),
+                        NOTE,
+                        (
+                            ManuscriptLine(
+                                MANUSCRIPT_ID,
+                                LABELS,
+                                TextLine(
+                                    LineNumber(1),
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of(
+                                                    [
+                                                        ValueToken.of("ku"),
+                                                        BrokenAway.close(),
+                                                    ]
+                                                ),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("si"),
+                                            ],
+                                            unique_lemma=(WordId("word"),),
+                                            alignment=None,
                                         ),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("nu"),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("si"),
-                                    ],
-                                    unique_lemma=(WordId("word"),),
-                                    alignment=None,
+                                    ),
                                 ),
                             ),
                         ),
                     ),
                 ),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
             ),
         ),
         (
             Line(
-                RECONSTRUCTION,
-                NOTE,
+                LineNumber(1),
+                (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                (MANUSCRIPT_LINE,),
             ),
             Line(
-                TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
-                NOTE,
-                IS_SECOND_LINE_OF_PARALLELISM,
-                IS_BEGINNING_OF_SECTION,
-                (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
-            ),
-            Line(
-                TextLine.of_iterable(LineNumber(2), RECONSTRUCTION.content),
-                NOTE,
-                IS_SECOND_LINE_OF_PARALLELISM,
-                IS_BEGINNING_OF_SECTION,
+                LineNumber(2),
                 (
-                    ManuscriptLine(
-                        MANUSCRIPT_ID, LABELS, TEXT_LINE.merge(NEW_TEXT_LINE)
+                    LineVariant(
+                        RECONSTRUCTION,
+                        NOTE,
+                        (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
                     ),
                 ),
-            ),
-        ),
-        (
-            Line(
-                RECONSTRUCTION,
-                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
+            ),
+            Line(
+                LineNumber(2),
                 (
-                    ManuscriptLine(
-                        MANUSCRIPT_ID,
-                        LABELS,
-                        TextLine(
-                            LineNumber(1),
-                            (
-                                Word.of(
-                                    [
-                                        Reading.of(
-                                            [ValueToken.of("ku"), BrokenAway.close()]
-                                        ),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("nu"),
-                                        Joiner.hyphen(),
-                                        Reading.of_name("si"),
-                                    ],
-                                    unique_lemma=(WordId("word"),),
-                                    alignment=0,
-                                ),
+                    LineVariant(
+                        RECONSTRUCTION,
+                        NOTE,
+                        (
+                            ManuscriptLine(
+                                MANUSCRIPT_ID, LABELS, TEXT_LINE.merge(NEW_TEXT_LINE)
                             ),
                         ),
                     ),
-                    MANUSCRIPT_LINE,
                 ),
-            ),
-            Line(
-                RECONSTRUCTION,
-                NOTE,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                (
-                    ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
-                    ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
-                ),
             ),
+        ),
+        (
             Line(
-                RECONSTRUCTION,
-                NOTE,
-                IS_SECOND_LINE_OF_PARALLELISM,
-                IS_BEGINNING_OF_SECTION,
+                LineNumber(1),
                 (
-                    ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
-                    ManuscriptLine(
-                        MANUSCRIPT_ID, LABELS, TEXT_LINE.merge(NEW_TEXT_LINE)
+                    LineVariant(
+                        RECONSTRUCTION,
+                        NOTE,
+                        (
+                            ManuscriptLine(
+                                MANUSCRIPT_ID,
+                                LABELS,
+                                TextLine(
+                                    LineNumber(1),
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of(
+                                                    [
+                                                        ValueToken.of("ku"),
+                                                        BrokenAway.close(),
+                                                    ]
+                                                ),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("si"),
+                                            ],
+                                            unique_lemma=(WordId("word"),),
+                                            alignment=0,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            MANUSCRIPT_LINE,
+                        ),
                     ),
                 ),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        RECONSTRUCTION,
+                        NOTE,
+                        (
+                            ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
+                            ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
+                        ),
+                    ),
+                ),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        RECONSTRUCTION,
+                        NOTE,
+                        (
+                            ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),
+                            ManuscriptLine(
+                                MANUSCRIPT_ID, LABELS, TEXT_LINE.merge(NEW_TEXT_LINE)
+                            ),
+                        ),
+                    ),
+                ),
+                IS_SECOND_LINE_OF_PARALLELISM,
+                IS_BEGINNING_OF_SECTION,
             ),
         ),
         (
             Line(
-                RECONSTRUCTION,
-                NOTE,
+                LineNumber(1),
+                (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                tuple(),
             ),
-            Line(RECONSTRUCTION, NOTE, True, True, tuple()),
-            Line(RECONSTRUCTION, NOTE, True, True, tuple()),
+            Line(
+                LineNumber(1), (LineVariant(RECONSTRUCTION, NOTE, tuple()),), True, True
+            ),
+            Line(
+                LineNumber(1), (LineVariant(RECONSTRUCTION, NOTE, tuple()),), True, True
+            ),
         ),
         (
             Line(
-                RECONSTRUCTION,
-                NoteLine((StringPart("a note"),)),
+                LineNumber(1),
+                (
+                    LineVariant(
+                        RECONSTRUCTION, NoteLine((StringPart("a note"),)), tuple()
+                    ),
+                ),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                tuple(),
             ),
             Line(
-                RECONSTRUCTION,
-                NoteLine((StringPart("new note"),)),
+                LineNumber(1),
+                (
+                    LineVariant(
+                        RECONSTRUCTION, NoteLine((StringPart("new note"),)), tuple()
+                    ),
+                ),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                tuple(),
             ),
             Line(
-                RECONSTRUCTION,
-                NoteLine((StringPart("new note"),)),
+                LineNumber(1),
+                (
+                    LineVariant(
+                        RECONSTRUCTION, NoteLine((StringPart("new note"),)), tuple()
+                    ),
+                ),
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
-                tuple(),
             ),
         ),
     ],
 )
-def test_merge_line(old, new, expected):
+def test_merge_line(old, new, expected) -> None:
     assert old.merge(new) == expected
 
 
@@ -304,44 +368,71 @@ NEW_ORDER = 2
 NEW_MANUSCRIPT = Manuscript(2, siglum_disambiguator="b")
 NOTE = NoteLine((StringPart("a note"),))
 NEW_LINE = Line(
-    RECONSTRUCTION,
-    NOTE,
+    LineNumber(1),
+    (
+        LineVariant(
+            RECONSTRUCTION,
+            NOTE,
+            (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
+        ),
+    ),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
 )
 ANOTHER_NEW_LINE = Line(
-    attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
-    NOTE,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
+    LineNumber(2),
     (
-        ManuscriptLine(
-            MANUSCRIPT_ID, LABELS, attr.evolve(NEW_TEXT_LINE, line_number=LineNumber(2))
+        LineVariant(
+            RECONSTRUCTION,
+            NOTE,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID,
+                    LABELS,
+                    attr.evolve(NEW_TEXT_LINE, line_number=LineNumber(2)),
+                ),
+            ),
         ),
     ),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
 )
 NEW_PARATEXT = Line(
-    RECONSTRUCTION,
-    NOTE,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
+    LineNumber(1),
     (
-        ManuscriptLine(
-            MANUSCRIPT_ID, LABELS, TEXT_LINE, (NoteLine((StringPart("paratext"),)),)
+        LineVariant(
+            RECONSTRUCTION,
+            NOTE,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID,
+                    LABELS,
+                    TEXT_LINE,
+                    (NoteLine((StringPart("paratext"),)),),
+                ),
+            ),
         ),
     ),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
 )
 OLD_LINE = Line(
-    TextLine.of_iterable(LineNumber(2), tuple()),
-    None,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
+    LineNumber(2),
     (
-        ManuscriptLine(
-            MANUSCRIPT_ID, LABELS, attr.evolve(TEXT_LINE, line_number=LineNumber(2))
+        LineVariant(
+            tuple(),
+            None,
+            (
+                ManuscriptLine(
+                    MANUSCRIPT_ID,
+                    LABELS,
+                    attr.evolve(TEXT_LINE, line_number=LineNumber(2)),
+                ),
+            ),
         ),
     ),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
 )
 
 

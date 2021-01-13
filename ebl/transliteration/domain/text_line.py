@@ -2,25 +2,38 @@ from itertools import zip_longest
 from typing import Callable, Iterable, Sequence, Type, TypeVar, Union, cast
 
 import attr
+import pydash  # pyre-ignore[21]
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.alignment import AlignmentToken, AlignmentError
+from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language_visitor import set_language
-from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.tokens import Token, TokenVisitor
-from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
-
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.tokens import Token, TokenVisitor
+from ebl.transliteration.domain.word_tokens import Word
 
 L = TypeVar("L", "TextLine", "Line")
 T = TypeVar("T")
+
+
+def update_tokens(
+    tokens: Sequence[Token],
+    updates: Sequence[T],
+    updater: Callable[[Token, T], Token],
+    error_class: Type[Exception],
+) -> Sequence[Token]:
+    if len(tokens) != len(updates):
+        raise error_class()
+
+    zipped = zip_longest(tokens, updates)
+    return tuple(updater(pair[0], pair[1]) for pair in zipped)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -41,10 +54,9 @@ class TextLine(Line):
     def of_iterable(
         line_number: AbstractLineNumber, content: Iterable[Token]
     ) -> "TextLine":
-        content_with_enclosures = set_enclosure_type(content)
-        content_with_language = set_language(content_with_enclosures)
-
-        return TextLine(line_number, content_with_language)
+        return TextLine(
+            line_number, pydash.flow(set_enclosure_type, set_language)(content)
+        )
 
     @property
     def atf(self) -> Atf:
@@ -81,12 +93,9 @@ class TextLine(Line):
         updater: Callable[[Token, T], Token],
         error_class: Type[Exception],
     ) -> "TextLine":
-        if len(self.content) != len(updates):
-            raise error_class()
-
-        zipped = zip_longest(self.content, updates)
-        content = tuple(updater(pair[0], pair[1]) for pair in zipped)
-        return attr.evolve(self, content=content)
+        return attr.evolve(
+            self, content=update_tokens(self.content, updates, updater, error_class)
+        )
 
     def merge(self, other: L) -> Union["TextLine", L]:
         def merge_tokens():

@@ -3,6 +3,7 @@ from typing import List, Sequence, Tuple
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
+from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
@@ -10,10 +11,10 @@ from ebl.corpus.application.text_hydrator import TextHydrator
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
-from ebl.corpus.domain.text import Line, Manuscript, Text, TextId
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.corpus.domain.chapter import Line
+from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.text import Text, TextId
 from ebl.users.domain.user import User
-
 
 COLLECTION = "texts"
 
@@ -76,7 +77,7 @@ class Corpus:
         self,
         id_: TextId,
         chapter_index: int,
-        lemmatization: Sequence[Sequence[Sequence[LemmatizationToken]]],
+        lemmatization: ChapterLemmatization,
         user: User,
     ) -> None:
         self._update_chapter(
@@ -110,11 +111,11 @@ class Corpus:
         self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
-        text.accept(TextValidator(self._bibliography, self._transliteration_factory))
+        TextValidator(self._bibliography, self._transliteration_factory).visit(text)
 
     def _hydrate_references(self, text: Text) -> Text:
         hydrator = TextHydrator(self._bibliography)
-        text.accept(hydrator)
+        hydrator.visit(text)
         return hydrator.text
 
     def _create_changelog(self, old_text, new_text, user) -> None:

@@ -1,13 +1,13 @@
 import re
 from abc import ABC, abstractmethod
-from collections import Counter
 from typing import Iterable, Sequence, Tuple, Union
 
 import attr
+import pydash  # pyre-ignore[21]
 import roman  # pyre-ignore[21]
+from lark.lark import Lark  # pyre-ignore[21]
 from lark.lexer import Token  # pyre-ignore[21]
 from lark.visitors import Transformer, v_args  # pyre-ignore[21]
-from lark.lark import Lark  # pyre-ignore[21]
 
 from ebl.transliteration.domain.atf import Object, Status, Surface
 
@@ -31,7 +31,7 @@ class LabelVisitor(ABC):
 
 
 def no_duplicate_status(_instance, _attribute, value) -> None:
-    if any(count > 1 for count in Counter(value).values()):
+    if pydash.duplicates(value):
         raise DuplicateStatusError(f'Duplicate status in "{value}".')
 
 
@@ -65,7 +65,7 @@ class Label(ABC):
 
     @property
     def status_string(self) -> str:
-        return "".join([status.value for status in self.status])
+        return "".join(status.value for status in self.status)
 
     @abstractmethod
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:

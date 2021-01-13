@@ -1,22 +1,25 @@
+import attr
+
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.text_serializer import serialize, deserialize
+from ebl.corpus.application.text_serializer import deserialize, serialize
 from ebl.corpus.domain.text import Text
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
+    LineVariantFactory,
     ManuscriptFactory,
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_schemas import NoteLineSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-import attr
-
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
@@ -25,7 +28,10 @@ FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
 )
 SECOND_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
 # pyre-ignore[16]
-LINE = LineFactory.build(manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE))
+LINE_VARIANT = LineVariantFactory.build(
+    manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE)
+)
+LINE = LineFactory.build(variants=(LINE_VARIANT,))  # pyre-ignore[16]
 CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
     manuscripts=(MANUSCRIPT,), lines=(LINE,)
 )
@@ -98,26 +104,42 @@ def to_dict(text: Text, include_documents=False):
                 ],
                 "lines": [
                     {
-                        "text": TextLineSchema().dump(line.text),  # pyre-ignore[16]
                         # pyre-ignore[16]
-                        "note": line.note and NoteLineSchema().dump(line.note),
+                        "number": OneOfLineNumberSchema().dump(line.number),
+                        "variants": [
+                            {
+                                # pyre-ignore[16]
+                                "reconstruction": OneOfTokenSchema().dump(
+                                    variant.reconstruction, many=True
+                                ),
+                                "note": variant.note
+                                # pyre-ignore[16]
+                                and NoteLineSchema().dump(variant.note),
+                                "manuscripts": [
+                                    {
+                                        "manuscriptId": manuscript_line.manuscript_id,
+                                        "labels": [
+                                            label.to_value()
+                                            for label in manuscript_line.labels
+                                        ],
+                                        # pyre-ignore[16]
+                                        "line": OneOfLineSchema().dump(
+                                            manuscript_line.line
+                                        ),
+                                        "paratext": OneOfLineSchema().dump(
+                                            manuscript_line.paratext, many=True
+                                        ),
+                                        "omittedWords": list(
+                                            manuscript_line.omitted_words
+                                        ),
+                                    }
+                                    for manuscript_line in variant.manuscripts
+                                ],
+                            }
+                            for variant in line.variants
+                        ],
                         "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                         "isBeginningOfSection": line.is_beginning_of_section,
-                        "manuscripts": [
-                            {
-                                "manuscriptId": manuscript_line.manuscript_id,
-                                "labels": [
-                                    label.to_value() for label in manuscript_line.labels
-                                ],
-                                # pyre-ignore[16]
-                                "line": OneOfLineSchema().dump(manuscript_line.line),
-                                "paratext": OneOfLineSchema().dump(
-                                    manuscript_line.paratext, many=True
-                                ),
-                                "omittedWords": list(manuscript_line.omitted_words),
-                            }
-                            for manuscript_line in line.manuscripts
-                        ],
                     }
                     for line in chapter.lines
                 ],
