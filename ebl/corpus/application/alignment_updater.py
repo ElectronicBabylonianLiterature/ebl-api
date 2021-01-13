@@ -55,8 +55,9 @@ class AlignmentUpdater(ChapterUpdater):
         if alignment_variants == line_variants:
             for variant in line.variants:
                 self.visit(variant)
-                self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
-                self._variants = []
+
+            self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
+            self._variants = []
         else:
             raise AlignmentError(
                 "Invalid number of variants. "
@@ -73,10 +74,10 @@ class AlignmentUpdater(ChapterUpdater):
             for manuscript_line in variant.manuscripts:
                 self.visit(manuscript_line)
 
-                self._variants.append(
-                    attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
-                )
-                self._manuscript_lines = []
+            self._variants.append(
+                attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
+            )
+            self._manuscript_lines = []
         else:
             raise AlignmentError(
                 "Invalid number of manuscripts. "
