@@ -41,7 +41,7 @@ pyre-check = "==0.0.57"
 black = "==19.3b0"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
 
 [scripts]
 test = "pytest --cov=ebl --cov-report term --cov-report xml"

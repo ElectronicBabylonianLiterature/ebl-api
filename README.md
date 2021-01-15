@@ -19,7 +19,7 @@
 
 Requirements:
 
-- [PyPy3.6](https://www.pypy.org) & pip
+- [PyPy3.7](https://www.pypy.org) & pip
 
 
 ```shell script
