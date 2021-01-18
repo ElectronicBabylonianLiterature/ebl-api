@@ -104,7 +104,8 @@ class ATFPreprocessor:
         tree = self.ORACC_PARSER.parse(atf)
         self.logger.debug("Converting " + tree.data)
 
-        #self.logger.debug((tree.pretty()))
+
+        self.logger.debug((tree.pretty()))
 
         if tree.data == "lem_line":
             return self.convert_lemline(atf, tree)

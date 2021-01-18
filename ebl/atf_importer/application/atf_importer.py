@@ -90,9 +90,9 @@ class ATFImporter:
         self.logger = logging.getLogger("Atf-Importer")
         self.atf_preprocessor = ATFPreprocessor("../logs")
 
-        self.lemmas_cfforms = None
-        self.cfforms_senses = None
-        self.cfform_and_sense_guideword = None
+        self.lemmasgwpos_cfform = None
+        self.forms_senses = None
+        self.lemma_pos_taggw_cfformgw = None
 
         # connect to eBL-db
         load_dotenv()
@@ -172,11 +172,11 @@ class ATFImporter:
                 else:
 
                     try:
-                        citation_form = self.lemmas_cfforms[oracc_lemma]
-                        senses = self.cfforms_senses[citation_form]
-                        print(senses)
-                        if senses is not None and oracc_guideword in senses:
-                            guideword = self.cfform_and_sense_guideword[citation_form+"["+oracc_guideword+"]"] # get glossary guideword by sense and cfform
+                        print(oracc_lemma+oracc_pos_tag + oracc_guideword)
+                        gloss_cf_gw = self.lemma_pos_taggw_cfformgw[oracc_lemma+oracc_pos_tag + oracc_guideword]
+                        if gloss_cf_gw is not None:
+                            citation_form = gloss_cf_gw[0]
+                            guideword = gloss_cf_gw[1]
                             self.logger.info(
                                 "Guideword '"
                                 + guideword
@@ -242,29 +242,34 @@ class ATFImporter:
     @staticmethod
     def parse_glossary(path):
 
-        lemmas_cfforms = dict()
-        cfforms_senses = dict()
-        cfform_and_sense_guideword = dict()
+        lemmasgwpos_cfform = dict()
+        forms_senses = dict()
+        lemma_pos_taggw_cfformgw = dict()
 
         with open(path, "r", encoding="utf8") as f:
             for line in f.readlines():
 
                 if line.startswith("@entry"):
+                    lemmas = []
                     split = line.split(" ",2)
                     cfform = split[1]
                     cfform = cfform.replace("ʾ","'")
                     cfform = cfform.strip()
 
-                    p = re.compile(r'\[(.*)\]')
+                    p = re.compile(r'\[(.*)\] (.*)')
                     matches = p.findall(split[2])
-                    guideword = matches[0]
+                    guideword = matches[0][0]
                     guideword = guideword.rstrip("]").lstrip("[")
+
+                    pos_tag = matches[0][1]
 
 
                 if line.startswith("@form"):
                     split = line.split(" ")
                     lemma = split[2].lstrip("$").rstrip("\n")
-                    lemmas_cfforms[lemma] = cfform.strip()
+                    lemmas.append(lemma)
+                    #lemmasgwpos_cfform[lemma+guideword+pos_tag] = cfform.strip()
+                    lemmasgwpos_cfform[lemma+pos_tag] = cfform.strip()
 
                 if line.startswith("@sense"):
                     split = line.split(" ",2)
@@ -272,16 +277,17 @@ class ATFImporter:
                     for s in split:
                         if s in POS_TAGS:
                             pos_tag = s
-
                     split2 = line.split(pos_tag)
                     sense = split2[1].rstrip("\n")
-                    if cfform not in cfforms_senses:
-                        cfforms_senses[cfform] = [sense.strip()]
-                    else:
-                        cfforms_senses[cfform].append(sense.strip())
-                    cfform_and_sense_guideword[cfform+"["+sense.strip()+"]"] = guideword
 
-        return lemmas_cfforms, cfforms_senses, cfform_and_sense_guideword
+                    for l in lemmas:
+                        if l not in forms_senses:
+                            forms_senses[l] = [pos_tag+sense.strip()]
+                        else:
+                            forms_senses[l].append(pos_tag+sense.strip())
+                        lemma_pos_taggw_cfformgw[l+pos_tag+sense.strip()] = (cfform,guideword)
+
+        return lemmasgwpos_cfform, forms_senses, lemma_pos_taggw_cfformgw
 
     @staticmethod
     def insert_translitertions(
@@ -536,7 +542,7 @@ class ATFImporter:
         args = parser.parse_args()
 
         # parse glossary
-        self.lemmas_cfforms, self.cfforms_senses, self.cfform_and_sense_guideword = self.parse_glossary(
+        self.lemmasgwpos_cfform, self.forms_senses, self.lemma_pos_taggw_cfformgw = self.parse_glossary(
             args.glossary
         )
 
