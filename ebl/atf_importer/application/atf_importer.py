@@ -58,6 +58,25 @@ POS_TAGS = [
     "J",
 ]
 
+NOUN_POS_TAGS = [
+"AN",
+"CN",
+"DN",
+"EN",
+"FN",
+"GN",
+"LN",
+"MN",
+"ON",
+"PN",
+"QN",
+"RN",
+"SN",
+"TN",
+"WN",
+"YN"
+]
+
 not_lemmatized = {}
 error_lines = []
 success = []
@@ -93,9 +112,11 @@ class ATFImporter:
             oracc_lemma = None
             oracc_guideword = None
 
-            for pair in orrac_lemma_tupel:
-                oracc_lemma = pair[0]
-                oracc_guideword = pair[1]
+            for tuple in orrac_lemma_tupel:
+                oracc_lemma = tuple[0]
+                oracc_guideword = tuple[1]
+                oracc_pos_tag = tuple[2]
+
                 oracc_lemma = oracc_lemma.strip()
                 oracc_guideword = oracc_guideword.strip()
 
@@ -147,11 +168,13 @@ class ATFImporter:
                             if entry["_id"] not in unique_lemmas:
                                 unique_lemmas.append(entry["_id"])
 
+
                 else:
 
                     try:
                         citation_form = self.lemmas_cfforms[oracc_lemma]
                         senses = self.cfforms_senses[citation_form]
+                        print(senses)
                         if senses is not None and oracc_guideword in senses:
                             guideword = self.cfform_and_sense_guideword[citation_form+"["+oracc_guideword+"]"] # get glossary guideword by sense and cfform
                             self.logger.info(
@@ -190,6 +213,14 @@ class ATFImporter:
                                 + oracc_lemma
                                 + "'"
                             )
+
+            # set as noun
+            if len(unique_lemmas) == 0 and oracc_pos_tag in NOUN_POS_TAGS:
+
+                for entry in self.db.get_collection("words").find(
+                        {"oraccWords.lemma": oracc_lemma}, {"_id"}
+                ):
+                    unique_lemmas.append(entry["_id"])
 
             # all attempts to find a ebl lemma failed
             if len(unique_lemmas) == 0:
