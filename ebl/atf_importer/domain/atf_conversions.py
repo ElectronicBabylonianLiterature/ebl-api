@@ -4,7 +4,6 @@ import re
 from lark import Visitor
 from lark import lexer
 
-# pyre-ignore[11]
 class Convert_Line_Dividers(Visitor):
     def oracc_atf_text_line__divider(self, tree):
         assert tree.data == "oracc_atf_text_line__divider"
@@ -12,7 +11,6 @@ class Convert_Line_Dividers(Visitor):
             tree.children[0] = "DIŠ"
 
 
-# pyre-ignore[11]
 class Convert_Line_Joiner(Visitor):
     def oracc_atf_text_line__joiner(self, tree):
         assert tree.data == "oracc_atf_text_line__joiner"
@@ -20,7 +18,6 @@ class Convert_Line_Joiner(Visitor):
             tree.children[0] = "-"
 
 
-# pyre-ignore[11]
 class Convert_Legacy_Grammar_Signs(Visitor):
 
     replacement_chars = {
@@ -77,7 +74,6 @@ class Convert_Legacy_Grammar_Signs(Visitor):
             cnt = cnt + 1
 
 
-# pyre-ignore[11]
 class Strip_Signs(Visitor):
     def oracc_atf_text_line__uncertain_sign(self, tree):
         assert tree.data == "oracc_atf_text_line__uncertain_sign"
@@ -85,7 +81,6 @@ class Strip_Signs(Visitor):
             tree.children[0] = ""
 
 
-# pyre-ignore[11]
 class DFS(Visitor):
     def visit_topdown(self, tree, result):
 
@@ -99,7 +94,6 @@ class DFS(Visitor):
         return result
 
 
-# pyre-ignore[11]
 class Line_Serializer(Visitor):
     line = ""
 
@@ -122,7 +116,6 @@ class Line_Serializer(Visitor):
         return result
 
 
-# pyre-ignore[11]
 class Get_Line_Number(Visitor):
     nr = ""
 
@@ -134,7 +127,6 @@ class Get_Line_Number(Visitor):
         return result
 
 
-# pyre-ignore[11]
 class Get_Words(Visitor):
     wordcounter = 0
     result = []
@@ -163,7 +155,6 @@ class Get_Words(Visitor):
         self.wordcounter = self.wordcounter + 1
 
 
-# pyre-ignore[11]
 class Get_Lemma_Values_and_Guidewords(Visitor):
     result = []
     additional_lemmata = False
