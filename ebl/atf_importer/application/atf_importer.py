@@ -5,6 +5,7 @@ import logging
 import argparse
 from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
+from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
@@ -16,6 +17,7 @@ from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
 from dotenv import load_dotenv  # pyre-ignore[21]
 import re
+
 
 class LemmatizationError(Exception):
     pass
@@ -59,22 +61,22 @@ POS_TAGS = [
 ]
 
 NOUN_POS_TAGS = [
-"AN",
-"CN",
-"DN",
-"EN",
-"FN",
-"GN",
-"LN",
-"MN",
-"ON",
-"PN",
-"QN",
-"RN",
-"SN",
-"TN",
-"WN",
-"YN"
+    "AN",
+    "CN",
+    "DN",
+    "EN",
+    "FN",
+    "GN",
+    "LN",
+    "MN",
+    "ON",
+    "PN",
+    "QN",
+    "RN",
+    "SN",
+    "TN",
+    "WN",
+    "YN",
 ]
 
 not_lemmatized = {}
@@ -112,10 +114,10 @@ class ATFImporter:
             oracc_lemma = None
             oracc_guideword = None
 
-            for tuple in orrac_lemma_tupel:
-                oracc_lemma = tuple[0]
-                oracc_guideword = tuple[1]
-                oracc_pos_tag = tuple[2]
+            for ol_tuple in orrac_lemma_tupel:
+                oracc_lemma = ol_tuple[0]
+                oracc_guideword = ol_tuple[1]
+                oracc_pos_tag = ol_tuple[2]
 
                 oracc_lemma = oracc_lemma.strip()
                 oracc_guideword = oracc_guideword.strip()
@@ -142,64 +144,75 @@ class ATFImporter:
                     all_unique_lemmas.append(unique_lemmas)
                     return
 
-
                 if oracc_lemma[0] == "+":
                     oracc_lemma = oracc_lemma[1:]
 
                     # replace "ʾ","'" to match db query
-                    oracc_lemma = oracc_lemma.replace("ʾ","'")
+                    oracc_lemma = oracc_lemma.replace("ʾ", "'")
 
                     for entry in self.db.get_collection("words").find(
-                            {"oraccWords.lemma": oracc_lemma, "oraccWords.guideWord": oracc_guideword}, {"_id"}
+                        {
+                            "oraccWords.lemma": oracc_lemma,
+                            "oraccWords.guideWord": oracc_guideword,
+                        },
+                        {"_id"},
                     ):
                         if entry["_id"] not in unique_lemmas:
                             unique_lemmas.append(entry["_id"])
 
                     if len(unique_lemmas) == 0:
                         for entry in self.db.get_collection("words").find(
-                                {"forms.lemma": [oracc_lemma], "guideWord": oracc_guideword}, {"_id"}
+                            {
+                                "forms.lemma": [oracc_lemma],
+                                "guideWord": oracc_guideword,
+                            },
+                            {"_id"},
                         ):
                             if entry["_id"] not in unique_lemmas:
                                 unique_lemmas.append(entry["_id"])
 
                         for entry in self.db.get_collection("words").find(
-                                {"lemma": [oracc_lemma], "guideWord": oracc_guideword}, {"_id"}
+                            {"lemma": [oracc_lemma], "guideWord": oracc_guideword},
+                            {"_id"},
                         ):
                             if entry["_id"] not in unique_lemmas:
                                 unique_lemmas.append(entry["_id"])
 
-
                 else:
-
                     try:
-                        print(oracc_lemma+oracc_pos_tag + oracc_guideword)
-                        gloss_cf_gw = self.lemma_pos_taggw_cfformgw[oracc_lemma+oracc_pos_tag + oracc_guideword]
+                        gloss_cf_gw = self.lemma_pos_taggw_cfformgw[
+                            oracc_lemma + oracc_pos_tag + oracc_guideword
+                        ]
                         if gloss_cf_gw is not None:
                             citation_form = gloss_cf_gw[0]
                             guideword = gloss_cf_gw[1]
-                            self.logger.info(
-                                "Guideword '"
-                                + guideword
-                                + "' found to cf '"+citation_form + "' and sense (original guideword) '" + oracc_guideword+"'"
-                            )
 
                             if "//" in guideword:
                                 guideword = guideword.split("//")[0]
 
                             for entry in self.db.get_collection("words").find(
-                                {"oraccWords.lemma": citation_form,"oraccWords.guideWord": guideword}, {"_id"}
+                                {
+                                    "oraccWords.lemma": citation_form,
+                                    "oraccWords.guideWord": guideword,
+                                },
+                                {"_id"},
                             ):
                                 unique_lemmas.append(entry["_id"])
 
                             if len(unique_lemmas) == 0:
                                 for entry in self.db.get_collection("words").find(
-                                    {"forms.lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                                    {
+                                        "forms.lemma": [citation_form],
+                                        "guideWord": guideword,
+                                    },
+                                    {"_id"},
                                 ):
                                     if entry["_id"] not in unique_lemmas:
                                         unique_lemmas.append(entry["_id"])
 
                                 for entry in self.db.get_collection("words").find(
-                                        {"lemma": [citation_form], "guideWord": guideword}, {"_id"}
+                                    {"lemma": [citation_form], "guideWord": guideword},
+                                    {"_id"},
                                 ):
                                     if entry["_id"] not in unique_lemmas:
                                         unique_lemmas.append(entry["_id"])
@@ -218,7 +231,7 @@ class ATFImporter:
             if len(unique_lemmas) == 0 and oracc_pos_tag in NOUN_POS_TAGS:
 
                 for entry in self.db.get_collection("words").find(
-                        {"oraccWords.lemma": oracc_lemma}, {"_id"}
+                    {"oraccWords.lemma": oracc_lemma}, {"_id"}
                 ):
                     unique_lemmas.append(entry["_id"])
 
@@ -251,28 +264,27 @@ class ATFImporter:
 
                 if line.startswith("@entry"):
                     lemmas = []
-                    split = line.split(" ",2)
+                    split = line.split(" ", 2)
                     cfform = split[1]
-                    cfform = cfform.replace("ʾ","'")
+                    cfform = cfform.replace("ʾ", "'")
                     cfform = cfform.strip()
 
-                    p = re.compile(r'\[(.*)\] (.*)')
+                    p = re.compile(r"\[(.*)\] (.*)")
                     matches = p.findall(split[2])
                     guideword = matches[0][0]
                     guideword = guideword.rstrip("]").lstrip("[")
 
                     pos_tag = matches[0][1]
 
-
                 if line.startswith("@form"):
                     split = line.split(" ")
                     lemma = split[2].lstrip("$").rstrip("\n")
                     lemmas.append(lemma)
-                    #lemmasgwpos_cfform[lemma+guideword+pos_tag] = cfform.strip()
-                    lemmasgwpos_cfform[lemma+pos_tag] = cfform.strip()
+                    # lemmasgwpos_cfform[lemma+guideword+pos_tag] = cfform.strip()
+                    lemmasgwpos_cfform[lemma + pos_tag] = cfform.strip()
 
                 if line.startswith("@sense"):
-                    split = line.split(" ",2)
+                    split = line.split(" ", 2)
 
                     for s in split:
                         if s in POS_TAGS:
@@ -280,12 +292,16 @@ class ATFImporter:
                     split2 = line.split(pos_tag)
                     sense = split2[1].rstrip("\n")
 
-                    for l in lemmas:
-                        if l not in forms_senses:
-                            forms_senses[l] = [pos_tag+sense.strip()]
+                    for lem in lemmas:
+                        if lem not in forms_senses:
+                            forms_senses[lem] = [pos_tag + sense.strip()]
                         else:
-                            forms_senses[l].append(pos_tag+sense.strip())
-                        lemma_pos_taggw_cfformgw[l+pos_tag+sense.strip()] = (cfform,guideword)
+                            forms_senses[lem].append(pos_tag + sense.strip())
+
+                        lemma_pos_taggw_cfformgw[lem + pos_tag + sense.strip()] = (
+                            cfform,
+                            guideword,
+                        )
 
         return lemmasgwpos_cfform, forms_senses, lemma_pos_taggw_cfformgw
 
@@ -297,7 +313,9 @@ class ATFImporter:
         museum_number,
     ) -> None:
         converted_transliteration = "\n".join(transliterations)
-        transliteration = transliteration_factory.create(converted_transliteration, "")
+        transliteration = transliteration_factory.create(
+            Atf(converted_transliteration), ""
+        )
         user = ApiUser("atf_importer.py")
         updater.update_transliteration(
             parse_museum_number(museum_number), transliteration, user
@@ -416,8 +434,7 @@ class ATFImporter:
                     unique_lemma = []
                     if token.value in oracc_words:
                         unique_lemma = oracc_word_ebl_lemmas[word_cnt]
-                        word_cnt = word_cnt +1
-
+                        word_cnt = word_cnt + 1
 
                     if len(unique_lemma) == 0:
                         lemma_line.append(LemmatizationToken(token.value, None))
@@ -429,24 +446,20 @@ class ATFImporter:
 
             elif line["c_type"] == "text_line":
 
-                    # skip "DIŠ"
-                    oracc_words = []
-                    for entry in line["c_array"]:
-                        if entry != "DIŠ":
-                            oracc_words.append(entry)
+                # skip "DIŠ"
+                oracc_words = []
+                for entry in line["c_array"]:
+                    if entry != "DIŠ":
+                        oracc_words.append(entry)
 
-                    last_transliteration_line = line["c_line"]
-                    last_transliteration = oracc_words
-                    last_alter_lemline_at = line["c_alter_lemline_at"]
-                    result["transliteration"].append(line["c_line"])
+                last_transliteration_line = line["c_line"]
+                last_transliteration = oracc_words
+                last_alter_lemline_at = line["c_alter_lemline_at"]
+                result["transliteration"].append(line["c_line"])
 
-            elif line["c_type"] != "empty_line" : # import all other lines
+            elif line["c_type"] != "empty_line":  # import all other lines
                 result["transliteration"].append(line["c_line"])
                 result["lemmatization"].append(line["c_line"])
-
-
-
-
 
         return result
 
@@ -545,7 +558,6 @@ class ATFImporter:
         self.lemmasgwpos_cfform, self.forms_senses, self.lemma_pos_taggw_cfformgw = self.parse_glossary(
             args.glossary
         )
-
 
         # read atf files from input folder
         for filepath in glob.glob(os.path.join(args.input, "*.atf")):
