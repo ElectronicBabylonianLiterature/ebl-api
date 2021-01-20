@@ -4,6 +4,7 @@ import re
 from lark import Visitor
 from lark import lexer
 
+
 class Convert_Line_Dividers(Visitor):  # pyre-ignore[11]
     def oracc_atf_text_line__divider(self, tree):
         assert tree.data == "oracc_atf_text_line__divider"
