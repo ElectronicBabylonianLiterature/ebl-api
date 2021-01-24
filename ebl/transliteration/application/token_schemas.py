@@ -43,7 +43,8 @@ from ebl.transliteration.domain.tokens import (
     Token,
     UnknownNumberOfSigns,
     ValueToken,
-    Variant, EgyptianMetricalFeetSeparator,
+    Variant,
+    EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (

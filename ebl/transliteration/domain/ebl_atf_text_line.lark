@@ -40,7 +40,6 @@ _have_both: tabulation
          | erasure
          | word
          | lone_determinative
-         | egyptian_metrical_feet_separator
 
 _omit_left.-1: close_broken_away
              | close_perhaps_broken_away
@@ -71,8 +70,6 @@ TABULATION: "($___$)"
 
 column: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
-
-egyptian_metrical_feet_separator: "•"
 
 commentary_protocol: PROTOCOL_QUOTATION
                    | PROTOCOL_BASE_TEXT
@@ -154,6 +151,7 @@ _any_open: (open_accidental_omission | open_intentional_omission | open_removal 
       | surrogate
       | compound_grapheme
       | variant
+
 variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
@@ -181,7 +179,10 @@ logogram_name_part: LOGOGRAM_CHARACTER+
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h"
                | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
                | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
-               | "z" | "ḫ" | "ʾ"
+               | "z" | "ḫ" | "ʾ" | EGYPTIAN_METRICAL_FEET_SEPARATOR
+
+EGYPTIAN_METRICAL_FEET_SEPARATOR : "•"
+
 LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
                    | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
                    | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
