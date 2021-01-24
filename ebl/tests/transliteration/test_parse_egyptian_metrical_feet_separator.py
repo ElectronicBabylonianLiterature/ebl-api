@@ -39,8 +39,10 @@ from ebl.transliteration.domain.word_tokens import Word
             "1. a-<<•>>-a",
             [
                 TextLine.of_iterable(
-                    LineNumber(1), (
-                            Word.of(parts=[
+                    LineNumber(1),
+                    (
+                        Word.of(
+                            parts=[
                                 Reading.of_name("a"),
                                 Joiner.hyphen(),
                                 Removal.open(),
@@ -48,20 +50,20 @@ from ebl.transliteration.domain.word_tokens import Word
                                 Removal.close(),
                                 Joiner.hyphen(),
                                 Reading.of_name("a"),
-                            ]),)
+                            ]
+                        ),
+                    ),
                 )
             ],
         ),
         (
-                "1. •*",
-                [
-                    TextLine.of_iterable(
-                        LineNumber(1),
-                        (
-                                Word.of((Reading.of_name("•", flags=(Flag.COLLATION,)),)),
-                        ),
-                    )
-                ],
+            "1. •*",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (Word.of((Reading.of_name("•", flags=(Flag.COLLATION,)),)),),
+                )
+            ],
         ),
     ],
 )
