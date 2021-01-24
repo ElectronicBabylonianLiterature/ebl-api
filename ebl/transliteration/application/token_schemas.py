@@ -43,7 +43,7 @@ from ebl.transliteration.domain.tokens import (
     Token,
     UnknownNumberOfSigns,
     ValueToken,
-    Variant,
+    Variant, EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
@@ -452,6 +452,14 @@ class LinguisticGlossSchema(GlossSchema):
         )
 
 
+class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return EgyptianMetricalFeetSeparator(
+            frozenset(data["enclosure_type"]), data["erasure"]
+        )
+
+
 class LineBreakSchema(BaseTokenSchema):
     @post_load
     def make_token(self, data, **kwargs):
@@ -535,6 +543,7 @@ class OneOfTokenSchema(OneOfSchema):
         "Determinative": DeterminativeSchema,
         "PhoneticGloss": PhoneticGlossSchema,
         "LinguisticGloss": LinguisticGlossSchema,
+        "EgyptianMetricalFeetSeparator": EgyptianMetricalFeetSeparatorSchema,
         "LineBreak": LineBreakSchema,
         "AkkadianWord": AkkadianWordSchema,
         "Caesura": CaesuraSchema,

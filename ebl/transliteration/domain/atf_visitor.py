@@ -18,7 +18,7 @@ from ebl.transliteration.domain.tokens import (
     LanguageShift,
     LineBreak,
     Token,
-    TokenVisitor,
+    TokenVisitor, EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -133,6 +133,9 @@ class AtfVisitor(TokenVisitor):
 
     def visit_line_break(self, line_break: LineBreak) -> None:
         self._state.append_with_forced_separator(line_break)
+
+    def visit_egyptian_metrical_feet_separator(self, egyptian_metrical_feet_separator: EgyptianMetricalFeetSeparator) -> None:
+        self._state.append_with_forced_separator(egyptian_metrical_feet_separator)
 
     def visit_commentary_protocol(self, protocol: CommentaryProtocol) -> None:
         self._state.append_with_forced_separator(protocol)

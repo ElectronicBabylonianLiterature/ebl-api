@@ -1,6 +1,7 @@
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.tokens import ErasureState, LineBreak
+from ebl.transliteration.domain.tokens import ErasureState, LineBreak, \
+    EgyptianMetricalFeetSeparator
 from ebl.transliteration.domain.word_tokens import InWordNewline
 
 
@@ -19,7 +20,6 @@ def test_in_word_new_line():
         "enclosureType": [type_.name for type_ in newline.enclosure_type],
     }
     assert_token_serialization(newline, serialized)
-
 
 def test_line_break():
     value = "|"

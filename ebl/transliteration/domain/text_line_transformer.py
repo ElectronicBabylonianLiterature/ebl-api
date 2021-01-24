@@ -40,7 +40,7 @@ from ebl.transliteration.domain.tokens import (
     Token as EblToken,
     UnknownNumberOfSigns,
     ValueToken,
-    Variant,
+    Variant, EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
@@ -331,6 +331,9 @@ class TextLineTransformer(NormalizedAkkadianTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__divider(self, value, modifiers, flags):
         return Divider.of(str(value), modifiers, flags)
+
+    def ebl_atf_text_line__egyptian_metrical_feet_separator(self, _):
+        return EgyptianMetricalFeetSeparator.of()
 
     def ebl_atf_text_line__line_break(self, _):
         return LineBreak.of()

@@ -40,6 +40,8 @@ _have_both: tabulation
          | erasure
          | word
          | lone_determinative
+         | egyptian_metrical_feet_separator
+
 _omit_left.-1: close_broken_away
              | close_perhaps_broken_away
              | close_accidental_omission
@@ -69,6 +71,8 @@ TABULATION: "($___$)"
 
 column: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
+
+egyptian_metrical_feet_separator: "•"
 
 commentary_protocol: PROTOCOL_QUOTATION
                    | PROTOCOL_BASE_TEXT

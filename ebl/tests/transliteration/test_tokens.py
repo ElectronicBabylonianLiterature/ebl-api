@@ -21,7 +21,7 @@ from ebl.transliteration.domain.tokens import (
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
-    Variant,
+    Variant, EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED
@@ -288,3 +288,20 @@ def test_joiner(joiner, expected_value):
         "enclosureType": [type.name for type in joiner.enclosure_type],
     }
     assert_token_serialization(joiner, serialized)
+
+
+def test_egyptian_metrical_feet_separator():
+    value = "•"
+    egyptian_metrical_feet_separator = EgyptianMetricalFeetSeparator.of()
+
+    assert egyptian_metrical_feet_separator.value == value
+    assert egyptian_metrical_feet_separator.clean_value == value
+    assert egyptian_metrical_feet_separator.get_key() == f"EgyptianMetricalFeetSeparator⁝{value}"
+    assert egyptian_metrical_feet_separator.lemmatizable is False
+
+    serialized = {
+        "type": "EgyptianMetricalFeetSeparator",
+        "value": value,
+        "enclosureType": [type_.name for type_ in egyptian_metrical_feet_separator.enclosure_type],
+    }
+    assert_token_serialization(egyptian_metrical_feet_separator, serialized)

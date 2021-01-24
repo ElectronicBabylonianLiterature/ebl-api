@@ -50,6 +50,9 @@ class TokenVisitor(ABC):
     def visit_divider(self, divider) -> None:
         self.visit(divider)
 
+    def visit_egyptian_metrical_feet_separator(self, egyptian_metrical_feet_separator) -> None:
+        self.visit(egyptian_metrical_feet_separator)
+
     def visit_line_break(self, line_break) -> None:
         self.visit(line_break)
 
@@ -310,6 +313,24 @@ class Joiner(Token):
     @staticmethod
     def of(joiner: atf.Joiner):
         return Joiner(frozenset(), ErasureState.NONE, joiner)
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class EgyptianMetricalFeetSeparator(Token):
+    @property
+    def value(self) -> str:
+        return atf.EGYPTIAN_METRICAL_FEET_SEPARATOR
+
+    @property
+    def parts(self):
+        return tuple()
+
+    def accept(self, visitor: "TokenVisitor") -> None:
+        visitor.visit_egyptian_metrical_feet_separator(self)
+
+    @staticmethod
+    def of() -> "EgyptianMetricalFeetSeparator":
+        return EgyptianMetricalFeetSeparator(frozenset(), ErasureState.NONE)
 
 
 @attr.s(frozen=True, auto_attribs=True)
