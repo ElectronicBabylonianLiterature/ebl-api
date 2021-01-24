@@ -41,6 +41,7 @@ from ebl.transliteration.domain.word_tokens import (
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "atf,expected",
     [
+        ("•", Word.of([Reading.of_name("•")])),
         ("...", Word.of([UnknownNumberOfSigns.of()])),
         ("x", Word.of([UnclearSign.of()])),
         ("X", Word.of([UnidentifiedSign.of()])),
