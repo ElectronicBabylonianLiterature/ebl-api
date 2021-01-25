@@ -1,6 +1,6 @@
 from typing import List
 
-import pytest
+import pytest  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Line
 from ebl.transliteration.domain.atf import Atf, Flag
@@ -88,7 +88,7 @@ def test_egpytian_feet_metrical_feet_line(
         "1. iṣ-ṣe#-ne₂-eh-hu • šu-nu • a-ma-ta da-mi-iq-ta •",
         "1. a-na# {d}a-ni • i#-qa₂#-ab-bu-u₂ • pa-<<•>>-ni • ba-nu-ti •* ša {d}a-ni •",
     ],
-)  # pyre-ignore[56]
+)
 def test_egpytian_feet_metrical_feet_line_atf(atf: Atf) -> None:
     line = parse_atf_lark(atf)
     assert line.atf == atf
