@@ -12,8 +12,9 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     LineBreak,
     Joiner,
-    EgyptianMetricalFeetSeparator,
 )
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import \
+    EgyptianMetricalFeetSeparator
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -50,7 +51,7 @@ def test_egpytian_feet_metrical_feet_line(
 
 
 @pytest.mark.parametrize("atf,", [
-    "1. a • a",
+    "1. ...",
     "1. •",
     "1. a-na-ku • a-ka-na • ep-še-e-ku • ma-an#-nu • i-lu • še-na • ša i-na (•) ma-a-ti •",
     "1. ha-al-qu₂ • {d}dumu#-zi •* u₃ {d}giz-zi-da • šu-nu • a-ha-mi-iš • ip-pa-la-su₂-ma •",

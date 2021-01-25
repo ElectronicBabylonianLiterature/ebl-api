@@ -44,8 +44,9 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
-    EgyptianMetricalFeetSeparator,
 )
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import \
+    EgyptianMetricalFeetSeparator
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
@@ -184,6 +185,18 @@ class UnknownNumberOfSignsSchema(BaseTokenSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return UnknownNumberOfSigns(frozenset(data["enclosure_type"]), data["erasure"])
+
+
+class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
+    flags = fields.List(StringValueEnum(Flag), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return (
+            EgyptianMetricalFeetSeparator.of(tuple(data["flags"]))
+                .set_enclosure_type(frozenset(data["enclosure_type"]))
+                .set_erasure(data["erasure"])
+        )
 
 
 class TabulationSchema(BaseTokenSchema):
@@ -453,12 +466,6 @@ class LinguisticGlossSchema(GlossSchema):
         )
 
 
-class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
-    @post_load
-    def make_token(self, data, **kwargs):
-        return EgyptianMetricalFeetSeparator(
-            frozenset(data["enclosure_type"]), data["erasure"]
-        )
 
 
 class LineBreakSchema(BaseTokenSchema):

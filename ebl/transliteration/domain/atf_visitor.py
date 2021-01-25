@@ -19,8 +19,9 @@ from ebl.transliteration.domain.tokens import (
     LineBreak,
     Token,
     TokenVisitor,
-    EgyptianMetricalFeetSeparator,
 )
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import \
+    EgyptianMetricalFeetSeparator
 from ebl.transliteration.domain.word_tokens import Word
 
 

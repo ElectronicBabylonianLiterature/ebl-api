@@ -1,10 +1,6 @@
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.tokens import (
-    ErasureState,
-    LineBreak,
-    EgyptianMetricalFeetSeparator,
-)
+from ebl.transliteration.domain.tokens import ErasureState, LineBreak
 from ebl.transliteration.domain.word_tokens import InWordNewline
 
 

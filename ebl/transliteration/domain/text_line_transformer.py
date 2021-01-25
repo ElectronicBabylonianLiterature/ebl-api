@@ -6,6 +6,8 @@ from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag, sub_index_to_int
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import \
+    EgyptianMetricalFeetSeparator
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -41,7 +43,6 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
-    EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
@@ -78,6 +79,10 @@ class SignTransformer(Transformer):  # pyre-ignore[11]
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
         return UnidentifiedSign.of(flags)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__egyptian_metrical_feet_separator(self, flags):
+        return EgyptianMetricalFeetSeparator.of(flags)
 
     @v_args(inline=True)
     def ebl_atf_text_line__unclear_sign(self, flags):

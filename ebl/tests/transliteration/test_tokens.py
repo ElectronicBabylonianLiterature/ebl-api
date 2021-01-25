@@ -22,8 +22,9 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
-    EgyptianMetricalFeetSeparator,
 )
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import \
+    EgyptianMetricalFeetSeparator
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED
 
@@ -166,6 +167,23 @@ def test_unknown_number_of_signs():
     assert_token_serialization(unknown_number_of_signs, serialized)
 
 
+def test_egyptian_metrical_feet_separator():
+    egyptian_metrical_feet_separator = EgyptianMetricalFeetSeparator.of((atf.Flag.UNCERTAIN,))
+    expected_value = "•?"
+    assert egyptian_metrical_feet_separator.value == expected_value
+    assert egyptian_metrical_feet_separator.clean_value == "•"
+    assert egyptian_metrical_feet_separator.get_key() == f"EgyptianMetricalFeetSeparator⁝{expected_value}"
+    assert egyptian_metrical_feet_separator.lemmatizable is False
+
+    serialized = {
+        "type": "EgyptianMetricalFeetSeparator",
+        "value": expected_value,
+        "flags": ["?"],
+        "enclosureType": [type.name for type in egyptian_metrical_feet_separator.enclosure_type],
+    }
+    assert_token_serialization(egyptian_metrical_feet_separator, serialized)
+
+
 def test_tabulation():
     value = "($___$)"
     tabulation = Tabulation.of()
@@ -290,24 +308,3 @@ def test_joiner(joiner, expected_value):
     }
     assert_token_serialization(joiner, serialized)
 
-
-def test_egyptian_metrical_feet_separator():
-    value = "•"
-    egyptian_metrical_feet_separator = EgyptianMetricalFeetSeparator.of()
-
-    assert egyptian_metrical_feet_separator.value == value
-    assert egyptian_metrical_feet_separator.clean_value == value
-    assert (
-        egyptian_metrical_feet_separator.get_key()
-        == f"EgyptianMetricalFeetSeparator⁝{value}"
-    )
-    assert egyptian_metrical_feet_separator.lemmatizable is False
-
-    serialized = {
-        "type": "EgyptianMetricalFeetSeparator",
-        "value": value,
-        "enclosureType": [
-            type_.name for type_ in egyptian_metrical_feet_separator.enclosure_type
-        ],
-    }
-    assert_token_serialization(egyptian_metrical_feet_separator, serialized)
