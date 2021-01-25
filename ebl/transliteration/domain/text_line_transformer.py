@@ -6,8 +6,9 @@ from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag, sub_index_to_int
-from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import \
-    EgyptianMetricalFeetSeparator
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
+    EgyptianMetricalFeetSeparator,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,

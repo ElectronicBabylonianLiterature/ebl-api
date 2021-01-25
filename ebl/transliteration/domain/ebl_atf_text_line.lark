@@ -40,6 +40,7 @@ _have_both: tabulation
          | erasure
          | word
          | lone_determinative
+
 _omit_left.-1: close_broken_away
              | close_perhaps_broken_away
              | close_accidental_omission
@@ -150,6 +151,8 @@ _any_open: (open_accidental_omission | open_intentional_omission | open_removal 
       | surrogate
       | compound_grapheme
       | variant
+      | egyptian_metrical_feet_separator
+
 variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
@@ -158,7 +161,7 @@ variant: variant_part (_VARIANT_SEPARATOR variant_part)+
              | surrogate
              | number
              | compound_grapheme
-             | egyptian_metrical_feet_separator
+
 
 
 egyptian_metrical_feet_separator: "•" flags
