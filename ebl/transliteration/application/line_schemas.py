@@ -20,7 +20,7 @@ class TextLineSchema(LineBaseSchema):
     prefix = fields.Function(lambda obj: obj.line_number.atf, lambda value: value)
     content = fields.Nested(OneOfTokenSchema, many=True, required=True)
     line_number = fields.Nested(
-        OneOfLineNumberSchema, rquired=True, data_key="lineNumber"
+        OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
 
     @post_load  # pyre-ignore[56]

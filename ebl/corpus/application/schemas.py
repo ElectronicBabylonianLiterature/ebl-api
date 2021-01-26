@@ -18,7 +18,7 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.schemas import StringValueEnum
+from ebl.schemas import ValueEnum
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
@@ -33,7 +33,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
     accession = fields.String(required=True)
-    period_modifier = StringValueEnum(
+    period_modifier = ValueEnum(
         PeriodModifier, required=True, data_key="periodModifier"
     )
     period = fields.Function(
@@ -139,8 +139,8 @@ class LineSchema(Schema):
 
 
 class ChapterSchema(Schema):
-    classification = StringValueEnum(Classification, required=True)
-    stage = StringValueEnum(Stage, required=True)
+    classification = ValueEnum(Classification, required=True)
+    stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
     order = fields.Integer(required=True)
