@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Type, Any, List
+from typing import Type, Any
 
-from marshmallow import fields  # pyre-ignore
+from marshmallow import fields  # pyre-ignore[21]
 
 
 class EnumField(fields.Field, ABC):  # pyre-ignore[11]
@@ -35,10 +35,6 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
     def _deserialize_enum(self, value) -> Enum:
         ...
 
-    @abstractmethod
-    def _values(self):
-        ...
-
 
 class StringValueEnum(EnumField):
     def _serialize_enum(self, value: Enum) -> str:
@@ -46,9 +42,6 @@ class StringValueEnum(EnumField):
 
     def _deserialize_enum(self, value: str) -> Enum:
         return self._enum_class(value)
-
-    def _values(self) -> List[str]:
-        return [e.value for e in self._enum_class]
 
 
 class NameEnum(EnumField):
@@ -58,9 +51,6 @@ class NameEnum(EnumField):
     def _deserialize_enum(self, value: str) -> Enum:
         return self._enum_class[value]
 
-    def _values(self) -> List[str]:
-        return [e.name for e in self._enum_class]
-
 
 class IntValueEnum(EnumField):
     def _serialize_enum(self, value: Enum) -> int:
@@ -68,6 +58,3 @@ class IntValueEnum(EnumField):
 
     def _deserialize_enum(self, value: int) -> Enum:
         return self._enum_class(value)
-
-    def _values(self) -> List[int]:
-        return [e.value for e in self._enum_class]
