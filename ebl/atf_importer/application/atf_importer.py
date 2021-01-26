@@ -222,7 +222,8 @@ class ATFImporter:
                             not_lemmatized[oracc_lemma] = True
 
                             self.logger.warning(
-                                "Incompatible lemmatization: No citation form or guideword (by sense) found in the glossary for '"
+                                "Incompatible lemmatization: No citation form or "
+                                "guideword (by sense) found in the glossary for '"
                                 + oracc_lemma
                                 + "'"
                             )
@@ -240,11 +241,8 @@ class ATFImporter:
                 if oracc_lemma not in not_lemmatized:
                     not_lemmatized[oracc_lemma] = True
                 self.logger.warning(
-                    "Incompatible lemmatization: No eBL word found to oracc lemma or guide word ("
-                    + oracc_lemma
-                    + " : "
-                    + oracc_guideword
-                    + ")"
+                    "Incompatible lemmatization: No eBL word found to oracc lemma or "
+                    "guide word (" + oracc_lemma + " : " + oracc_guideword + ")"
                 )
 
             all_unique_lemmas.append(unique_lemmas)
