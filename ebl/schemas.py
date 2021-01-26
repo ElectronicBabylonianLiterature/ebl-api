@@ -36,11 +36,11 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
         ...
 
 
-class StringValueEnum(EnumField):
-    def _serialize_enum(self, value: Enum) -> str:
+class ValueEnum(EnumField):
+    def _serialize_enum(self, value: Enum) -> Any:
         return value.value
 
-    def _deserialize_enum(self, value: str) -> Enum:
+    def _deserialize_enum(self, value: Any) -> Enum:
         return self._enum_class(value)
 
 
@@ -50,11 +50,3 @@ class NameEnum(EnumField):
 
     def _deserialize_enum(self, value: str) -> Enum:
         return self._enum_class[value]
-
-
-class IntValueEnum(EnumField):
-    def _serialize_enum(self, value: Enum) -> int:
-        return value.value
-
-    def _deserialize_enum(self, value: int) -> Enum:
-        return self._enum_class(value)
