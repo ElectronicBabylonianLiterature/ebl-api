@@ -157,6 +157,7 @@ class ChapterSchema(Schema):
             data["name"],
             data["order"],
             tuple(data["manuscripts"]),
+            tuple(),
             tuple(data["lines"]),
             data["parser_version"],
         )

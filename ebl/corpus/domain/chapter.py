@@ -8,6 +8,7 @@ from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.label_validator import LabelValidator
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
@@ -170,6 +171,7 @@ class Chapter:
     name: str = ""
     order: int = 0
     manuscripts: Sequence[Manuscript] = attr.ib(default=tuple())
+    uncertain_fragments: Sequence[MuseumNumber] = tuple()
     lines: Sequence[Line] = attr.ib(default=tuple())
     parser_version: str = ""
 
