@@ -15,7 +15,6 @@ from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.app import create_context
 from ebl.users.domain.user import ApiUser
-from dotenv import load_dotenv  # pyre-ignore[21]
 import re
 
 
@@ -97,7 +96,6 @@ class ATFImporter:
         self.lemposgw_cfgw = None
 
         # connect to eBL-db
-        load_dotenv()
         client = MongoClient(os.getenv("MONGODB_URI"))
         db = client.get_database(os.getenv("MONGODB_DB"))
         self.db = db

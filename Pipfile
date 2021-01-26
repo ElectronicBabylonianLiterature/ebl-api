@@ -24,7 +24,6 @@ joblib = "*"
 tqdm = "*"
 marshmallow-oneofschema = "*"
 singledispatchmethod = "*"
-dotenv = "*"
 
 [dev-packages]
 pytest = "*"
