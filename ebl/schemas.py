@@ -13,7 +13,7 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
 
     def __init__(self, enum_class: Type[Enum], **kwargs):
         self._enum_class = enum_class
-        super().__init__(enum=self._values(), **kwargs)  # pyre-ignore[28]
+        super().__init__(**kwargs)
 
     def _serialize(self, value, attr, obj, **kwargs):
         if isinstance(value, Enum) or value is None:
