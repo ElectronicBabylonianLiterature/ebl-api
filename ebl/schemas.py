@@ -17,20 +17,13 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
 
     def _serialize(self, value, attr, obj, **kwargs):
         if isinstance(value, Enum) or value is None:
-            return super()._serialize(
-                (self._serialize_enum(value) if value is not None else None),
-                attr,
-                obj,
-                **kwargs
-            )
+            return self._serialize_enum(value) if value is not None else None
         else:
             raise self.make_error("not_enum")
 
     def _deserialize(self, value, attr, data, **kwargs) -> Any:
         try:
-            return self._deserialize_enum(
-                super()._deserialize(value, attr, data, **kwargs)  # pyre-ignore[16]
-            )
+            return self._deserialize_enum(value)
         except (KeyError, ValueError) as error:
             raise self.make_error("invalid_value") from error  # pyre-ignore[16]
 
