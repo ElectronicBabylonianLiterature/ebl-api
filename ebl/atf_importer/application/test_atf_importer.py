@@ -11,7 +11,8 @@ class Test_ATF_Importer(unittest.TestCase):
         atf_preprocessor = ATFPreprocessor("../logs")
         converted_lines = []
         c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
-            "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇"
+            "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ "
+            "DINGIR GU₇"
         )
         converted_lines.append(
             {
@@ -22,7 +23,9 @@ class Test_ATF_Importer(unittest.TestCase):
             }
         )
         c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
-            "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin[1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu[god]N; ikkal[eat]V"
+            "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["
+            "1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
+            "god]N; ikkal[eat]V"
         )
         converted_lines.append(
             {
