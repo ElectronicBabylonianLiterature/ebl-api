@@ -178,6 +178,9 @@ class ApiLineSchema(Schema):
 
 class ApiChapterSchema(ChapterSchema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
+    uncertain_fragments = fields.List(
+        MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
+    )
     lines = fields.Nested(ApiLineSchema, many=True, required=True)
 
 

@@ -48,7 +48,7 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     class Meta:
         model = Manuscript
 
-    id = factory.Sequence(lambda n: n)
+    id = factory.Sequence(lambda n: n + 1)
     siglum_disambiguator = factory.Faker("word")
     museum_number = factory.Sequence(
         lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
