@@ -40,7 +40,7 @@ class Convert_Legacy_Grammar_Signs(Visitor):
             pattern = re.compile("[ÁÉÍÙ]")
             matches = pattern.search(child)
 
-            if matches != None:
+            if matches is not None:
 
                 match = matches.group(0)
                 try:
@@ -48,7 +48,7 @@ class Convert_Legacy_Grammar_Signs(Visitor):
                     tree.children[cnt] = self.replacement_chars[match]
                     tree.children[cnt + 1] = next_char + "₃"
 
-                except Exception as e:
+                except Exception:
                     tree.children[cnt] = self.replacement_chars[match] + "₂"
 
             cnt = cnt + 1

@@ -145,7 +145,7 @@ class ATFPreprocessor:
 
             return (conversion[0], conversion[1], tree.data, conversion[2])
 
-        except Exception as e:
+        except Exception:
             self.logger.error(traceback.format_exc())
             self.logger.error("Could not parse converted line")
             self.unparseable_lines.append(original_atf)
@@ -194,7 +194,7 @@ class ATFPreprocessor:
             try:
                 return self.convert_line(original_atf, atf)
 
-            except Exception as e:
+            except Exception:
                 return self.line_not_converted(original_atf, atf)
 
     def write_unparsable_lines(self, filename):
