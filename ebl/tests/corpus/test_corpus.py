@@ -8,6 +8,7 @@ from ebl.corpus.application.lemmatization import (
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.text import ChapterId
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -279,7 +280,7 @@ def test_updating_alignment(
             ),
         )
     )
-    corpus.update_alignment(TEXT.id, 0, alignment, user)
+    corpus.update_alignment(ChapterId(TEXT.id, 0), alignment, user)
 
 
 def test_updating_manuscript_lemmatization(
@@ -398,7 +399,7 @@ def test_updating_manuscript_lemmatization(
             ),
         ),
     )
-    corpus.update_manuscript_lemmatization(TEXT.id, 0, lemmatization, user)
+    corpus.update_manuscript_lemmatization(ChapterId(TEXT.id, 0), lemmatization, user)
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -446,7 +447,7 @@ def test_updating_manuscript_lemmatization(
 def test_invalid_alignment(alignment, corpus, text_repository, when) -> None:
     when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     with pytest.raises(AlignmentError):
-        corpus.update_alignment(TEXT.id, 0, alignment, ANY_USER)
+        corpus.update_alignment(ChapterId(TEXT.id, 0), alignment, ANY_USER)
 
 
 def test_updating_manuscripts(
@@ -481,7 +482,9 @@ def test_updating_manuscripts(
     )
 
     manuscripts = (updated_text.chapters[0].manuscripts[0],)
-    corpus.update_manuscripts(TEXT.id, 0, manuscripts, uncertain_fragments, user)
+    corpus.update_manuscripts(
+        ChapterId(TEXT.id, 0), manuscripts, uncertain_fragments, user
+    )
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -497,7 +500,7 @@ def test_updating_manuscripts(
 def test_invalid_manuscripts(manuscripts, corpus, text_repository, when) -> None:
     when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     with pytest.raises(DataError):
-        corpus.update_manuscripts(TEXT.id, 0, manuscripts, tuple(), ANY_USER)
+        corpus.update_manuscripts(ChapterId(TEXT.id, 0), manuscripts, tuple(), ANY_USER)
 
 
 def test_update_manuscripts_raises_exception_if_invalid_references(
@@ -508,7 +511,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
-        corpus.update_manuscripts(TEXT.id, 0, manuscripts, tuple(), ANY_USER)
+        corpus.update_manuscripts(ChapterId(TEXT.id, 0), manuscripts, tuple(), ANY_USER)
 
 
 def test_updating_lines(
@@ -542,7 +545,7 @@ def test_updating_lines(
     )
 
     lines = updated_text.chapters[0].lines
-    corpus.update_lines(TEXT.id, 0, lines, user)
+    corpus.update_lines(ChapterId(TEXT.id, 0), lines, user)
 
 
 def test_merging_lines(
@@ -635,7 +638,7 @@ def test_merging_lines(
             is_beginning_of_section,
         ),
     )
-    corpus.update_lines(TEXT.id, 0, lines, user)
+    corpus.update_lines(ChapterId(TEXT.id, 0), lines, user)
 
 
 def test_update_lines_raises_exception_if_invalid_signs(
@@ -646,4 +649,4 @@ def test_update_lines_raises_exception_if_invalid_signs(
     allow_validate_references(bibliography, when)
 
     with pytest.raises(DataError):
-        corpus.update_lines(TEXT.id, 0, lines, ANY_USER)
+        corpus.update_lines(ChapterId(TEXT.id, 0), lines, ANY_USER)

@@ -21,6 +21,12 @@ class TextId:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class ChapterId:
+    text_id: TextId
+    index: int
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Text:
     category: int
     index: int

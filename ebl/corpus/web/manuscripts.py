@@ -1,10 +1,9 @@
 import falcon  # pyre-ignore[21]
 from marshmallow import Schema, fields  # pyre-ignore[21]
 
-from ebl.corpus.web.alignments import create_chapter_index
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_schemas import ApiManuscriptSchema, MuseumNumberString
-from ebl.corpus.web.text_utils import create_text_id
+from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
@@ -30,13 +29,13 @@ class ManuscriptsResource:
         index: str,
         chapter_index: str,
     ) -> None:
+        chapter_id = create_chapter_id(category, index, chapter_index)
         dto = ManuscriptDtoSchema().load(req.media)  # pyre-ignore[16]
         self._corpus.update_manuscripts(
-            create_text_id(category, index),
-            create_chapter_index(chapter_index),
+            chapter_id,
             dto["manuscripts"],
             tuple(dto["uncertain_fragments"]),
             req.context.user,
         )
-        updated_text = self._corpus.find(create_text_id(category, index))
+        updated_text = self._corpus.find(chapter_id.text_id)
         resp.media = serialize(updated_text)

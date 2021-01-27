@@ -1,4 +1,4 @@
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.text import ChapterId, TextId
 from ebl.errors import NotFoundError
 
 
@@ -14,3 +14,9 @@ def create_chapter_index(chapter_index: str) -> int:
         return int(chapter_index)
     except ValueError:
         raise NotFoundError(f"Chapter {chapter_index} not found.")
+
+
+def create_chapter_id(category: str, index: str, chapter_index: str) -> ChapterId:
+    return ChapterId(
+        create_text_id(category, index), create_chapter_index(chapter_index)
+    )
