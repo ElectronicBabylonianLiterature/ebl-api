@@ -10,6 +10,7 @@ from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
@@ -451,6 +452,7 @@ def test_invalid_alignment(alignment, corpus, text_repository, when) -> None:
 def test_updating_manuscripts(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
+    uncertain_fragments = (MuseumNumber.of("K.1"),)
     updated_text = attr.evolve(
         TEXT_WITHOUT_DOCUMENTS,
         chapters=(
@@ -462,6 +464,7 @@ def test_updating_manuscripts(
                         notes="Updated manuscript.",
                     ),
                 ),
+                uncertain_fragments=uncertain_fragments,
             ),
         ),
     )
@@ -478,7 +481,7 @@ def test_updating_manuscripts(
     )
 
     manuscripts = (updated_text.chapters[0].manuscripts[0],)
-    corpus.update_manuscripts(TEXT.id, 0, manuscripts, user)
+    corpus.update_manuscripts(TEXT.id, 0, manuscripts, uncertain_fragments, user)
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -494,7 +497,7 @@ def test_updating_manuscripts(
 def test_invalid_manuscripts(manuscripts, corpus, text_repository, when) -> None:
     when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
     with pytest.raises(DataError):
-        corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
+        corpus.update_manuscripts(TEXT.id, 0, manuscripts, tuple(), ANY_USER)
 
 
 def test_update_manuscripts_raises_exception_if_invalid_references(
@@ -505,7 +508,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
-        corpus.update_manuscripts(TEXT.id, 0, manuscripts, ANY_USER)
+        corpus.update_manuscripts(TEXT.id, 0, manuscripts, tuple(), ANY_USER)
 
 
 def test_updating_lines(

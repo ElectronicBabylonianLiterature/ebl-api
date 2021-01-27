@@ -14,6 +14,7 @@ from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
 COLLECTION = "texts"
@@ -89,9 +90,14 @@ class Corpus:
         id_: TextId,
         chapter_index: int,
         manuscripts: Sequence[Manuscript],
+        uncertain_fragments: Sequence[MuseumNumber],
         user: User,
     ) -> None:
-        self._update_chapter(id_, ManuscriptUpdater(chapter_index, manuscripts), user)
+        self._update_chapter(
+            id_,
+            ManuscriptUpdater(chapter_index, manuscripts, uncertain_fragments),
+            user,
+        )
 
     def update_lines(
         self, id_: TextId, chapter_index: int, lines: Sequence[Line], user: User

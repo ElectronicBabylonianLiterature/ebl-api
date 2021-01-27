@@ -34,6 +34,7 @@ class ManuscriptsResource:
             create_text_id(category, index),
             create_chapter_index(chapter_index),
             ManuscriptDtoSchema().load(req.media)["manuscripts"],  # pyre-ignore[16]
+            tuple(),
             req.context.user,
         )
         updated_text = self._corpus.find(create_text_id(category, index))
