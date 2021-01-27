@@ -11,7 +11,7 @@ from ebl.users.web.require_scope import require_scope
 
 class ManuscriptDtoSchema(Schema):  # pyre-ignore[11]
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
-    uncertain_fragmnets = fields.List(
+    uncertain_fragments = fields.List(
         MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
     )
 
@@ -30,11 +30,12 @@ class ManuscriptsResource:
         index: str,
         chapter_index: str,
     ) -> None:
+        dto = ManuscriptDtoSchema().load(req.media)  # pyre-ignore[16]
         self._corpus.update_manuscripts(
             create_text_id(category, index),
             create_chapter_index(chapter_index),
-            ManuscriptDtoSchema().load(req.media)["manuscripts"],  # pyre-ignore[16]
-            tuple(),
+            dto["manuscripts"],
+            tuple(dto["uncertain_fragments"]),
             req.context.user,
         )
         updated_text = self._corpus.find(create_text_id(category, index))

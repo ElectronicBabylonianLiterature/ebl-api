@@ -12,6 +12,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.corpus.web.api_serializer import serialize
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import TextFactory
 from ebl.users.domain.user import Guest
@@ -44,6 +45,7 @@ def create_text(client, text):
 
 
 def test_updating(client, bibliography, sign_repository, signs):
+    uncertain_fragment = MuseumNumber.of("K.1")
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
@@ -60,6 +62,7 @@ def test_updating(client, bibliography, sign_repository, signs):
                         accession="",
                     ),
                 ),
+                uncertain_fragments=(uncertain_fragment,),
             ),
         ),
     )
@@ -69,7 +72,7 @@ def test_updating(client, bibliography, sign_repository, signs):
         body=json.dumps(
             {
                 "manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"],
-                "uncertainFragments": [],
+                "uncertainFragments": [str(uncertain_fragment)],
             }
         ),
     )
@@ -200,6 +203,10 @@ INVALID_MUSEUM_NUMBER = [
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
         [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
         [INVALID_MUSEUM_NUMBER, falcon.HTTP_BAD_REQUEST],
+        [
+            {"manuscripts": [], "uncertainFragments": ["invalid"]},
+            falcon.HTTP_BAD_REQUEST,
+        ],
     ],
 )
 def test_update_invalid_entity(
