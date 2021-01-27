@@ -3,7 +3,7 @@ from marshmallow import Schema, fields  # pyre-ignore[21]
 
 from ebl.corpus.web.alignments import create_chapter_index
 from ebl.corpus.web.api_serializer import serialize
-from ebl.corpus.web.text_schemas import ApiManuscriptSchema
+from ebl.corpus.web.text_schemas import ApiManuscriptSchema, MuseumNumberString
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
@@ -11,6 +11,9 @@ from ebl.users.web.require_scope import require_scope
 
 class ManuscriptDtoSchema(Schema):  # pyre-ignore[11]
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
+    uncertain_fragmnets = fields.List(
+        MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
+    )
 
 
 class ManuscriptsResource:

@@ -67,7 +67,10 @@ def test_updating(client, bibliography, sign_repository, signs):
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
         body=json.dumps(
-            {"manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"]}
+            {
+                "manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"],
+                "uncertainFragments": [],
+            }
         ),
     )
 
@@ -86,7 +89,8 @@ def test_updating(client, bibliography, sign_repository, signs):
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/1/1/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -112,7 +116,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
 
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
-        body=json.dumps({"manuscripts": [manuscript]}),
+        body=json.dumps({"manuscripts": [manuscript], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -120,7 +124,8 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        "/texts/invalid/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/invalid/1/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -128,7 +133,8 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        "/texts/1/invalid/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/1/invalid/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -136,7 +142,8 @@ def test_updating_invalid_id(client):
 
 def test_updating_invalid_chapter_index(client):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/invalid/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/1/1/chapters/invalid/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -205,7 +212,7 @@ def test_update_invalid_entity(
 
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
-        body=json.dumps({"manuscripts": manuscripts}),
+        body=json.dumps({"manuscripts": manuscripts, "uncertainFragments": []}),
     )
 
     assert post_result.status == expected_status
