@@ -189,7 +189,7 @@ class UnknownNumberOfSignsSchema(BaseTokenSchema):
 
 
 class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
-    flags = fields.List(StringValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnum(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
