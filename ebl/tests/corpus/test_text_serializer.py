@@ -7,6 +7,7 @@ from ebl.bibliography.application.reference_schema import (
 from ebl.corpus.application.text_serializer import deserialize, serialize
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -23,6 +24,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
+UNCERTAIN_FRAGMENTS = (MuseumNumber.of("K.1"),)
 FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
     manuscript_id=MANUSCRIPT.id
 )
@@ -33,7 +35,7 @@ LINE_VARIANT = LineVariantFactory.build(
 )
 LINE = LineFactory.build(variants=(LINE_VARIANT,))  # pyre-ignore[16]
 CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
-    manuscripts=(MANUSCRIPT,), lines=(LINE,)
+    manuscripts=(MANUSCRIPT,), uncertain_fragments=UNCERTAIN_FRAGMENTS, lines=(LINE,)
 )
 TEXT = TextFactory.build(chapters=(CHAPTER,))  # pyre-ignore[16]
 
@@ -102,6 +104,9 @@ def to_dict(text: Text, include_documents=False):
                     }
                     for manuscript in chapter.manuscripts
                 ],
+                "uncertainFragments": MuseumNumberSchema().dump(
+                    UNCERTAIN_FRAGMENTS, many=True
+                ),
                 "lines": [
                     {
                         # pyre-ignore[16]

@@ -145,6 +145,9 @@ class ChapterSchema(Schema):
     name = fields.String(required=True, validate=validate.Length(min=1))
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
+    uncertain_fragments = fields.Nested(
+        MuseumNumberSchema, many=True, missing=tuple(), data_key="uncertainFragments"
+    )
     lines = fields.Nested(LineSchema, many=True, required=True)
     parser_version = fields.String(missing="", data_key="parserVersion")
 
@@ -157,6 +160,7 @@ class ChapterSchema(Schema):
             data["name"],
             data["order"],
             tuple(data["manuscripts"]),
+            tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
             data["parser_version"],
         )
