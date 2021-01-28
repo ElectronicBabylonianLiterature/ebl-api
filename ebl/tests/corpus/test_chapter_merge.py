@@ -11,6 +11,7 @@ from ebl.corpus.domain.chapter import (
 )
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.dictionary.domain.word import WordId
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
@@ -356,8 +357,16 @@ VERSION = "A"
 CHAPTER_NAME = "I"
 ORDER = 1
 MANUSCRIPT = Manuscript(MANUSCRIPT_ID)
+MUSEUM_NUMBER = MuseumNumber.of("K.1")
 CHAPTER = Chapter(
-    CLASSIFICATION, STAGE, VERSION, CHAPTER_NAME, ORDER, (MANUSCRIPT,), (LINE,)
+    CLASSIFICATION,
+    STAGE,
+    VERSION,
+    CHAPTER_NAME,
+    ORDER,
+    (MANUSCRIPT,),
+    (MUSEUM_NUMBER,),
+    (LINE,),
 )
 
 NEW_CLASSIFICATION = Classification.MODERN
@@ -448,6 +457,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
+                (MUSEUM_NUMBER,),
                 (LINE,),
             ),
             Chapter(
@@ -457,6 +467,7 @@ OLD_LINE = Line(
                 NEW_CHAPTER_NAME,
                 NEW_ORDER,
                 (MANUSCRIPT, NEW_MANUSCRIPT),
+                (MUSEUM_NUMBER,),
                 (LINE,),
             ),
             Chapter(
@@ -466,6 +477,7 @@ OLD_LINE = Line(
                 NEW_CHAPTER_NAME,
                 NEW_ORDER,
                 (MANUSCRIPT, NEW_MANUSCRIPT),
+                (MUSEUM_NUMBER,),
                 (LINE,),
             ),
         ),
@@ -477,6 +489,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
+                (MUSEUM_NUMBER,),
                 (OLD_LINE, LINE),
             ),
             Chapter(
@@ -486,6 +499,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
+                tuple(),
                 (NEW_LINE, ANOTHER_NEW_LINE),
             ),
             Chapter(
@@ -495,6 +509,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
+                tuple(),
                 (OLD_LINE.merge(NEW_LINE), LINE.merge(ANOTHER_NEW_LINE)),
             ),
         ),
@@ -507,6 +522,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
+                (MUSEUM_NUMBER,),
                 (NEW_PARATEXT,),
             ),
             Chapter(
@@ -516,6 +532,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
+                (MUSEUM_NUMBER,),
                 (NEW_PARATEXT,),
             ),
         ),

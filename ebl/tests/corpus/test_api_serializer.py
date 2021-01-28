@@ -3,6 +3,7 @@ from typing import Tuple
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.domain.text import Text
 from ebl.corpus.web.api_serializer import deserialize, serialize
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -12,10 +13,10 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
     TextFactory,
 )
-from ebl.transliteration.domain.atf_visitor import convert_to_atf
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.text_line import TextLine
 
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
@@ -34,7 +35,11 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
         )
     )
     # pyre-ignore[16]
-    chapter = ChapterFactory.build(manuscripts=(manuscript,), lines=(line,))
+    chapter = ChapterFactory.build(
+        manuscripts=(manuscript,),
+        uncertain_fragments=(MuseumNumber.of("K.1"),),
+        lines=(line,),
+    )
     text = TextFactory.build(chapters=(chapter,))  # pyre-ignore[16]
     dto = {
         "category": text.category,
@@ -67,6 +72,9 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                         "references": ApiReferenceSchema().dump(references, many=True),
                     }
                     for manuscript in chapter.manuscripts
+                ],
+                "uncertainFragments": [
+                    str(number) for number in chapter.uncertain_fragments
                 ],
                 "lines": [
                     {

@@ -41,6 +41,10 @@ class FoliosResource:
           - read:FWG-folios
           - read:EL-folios
           - read:AKG-folios
+          - read:WRM-folios
+          - read:CB-folios
+          - read:JS-folios
+          - read:ARG-folios
         parameters:
         - in: path
           name: name

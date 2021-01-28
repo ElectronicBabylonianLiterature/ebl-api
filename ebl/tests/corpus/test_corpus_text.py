@@ -113,6 +113,7 @@ TEXT = Text(
                     REFERENCES,
                 ),
             ),
+            (MUSEUM_NUMBER,),
             (LINE,),
         ),
     ),
@@ -131,6 +132,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].version == VERSION
     assert TEXT.chapters[0].name == CHAPTER_NAME
     assert TEXT.chapters[0].order == ORDER
+    assert TEXT.chapters[0].uncertain_fragments == (MUSEUM_NUMBER,)
     assert TEXT.chapters[0].manuscripts[0].id == MANUSCRIPT_ID
     assert TEXT.chapters[0].manuscripts[0].siglum == Siglum(
         PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
