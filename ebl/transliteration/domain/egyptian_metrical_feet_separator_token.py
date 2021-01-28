@@ -38,4 +38,4 @@ class EgyptianMetricalFeetSeparator(Token):
         return f'{self._sign}{"".join(self.string_flags)}'
 
     def accept(self, visitor: TokenVisitor) -> None:
-        visitor.visit_unknown_sign(self)
+        visitor.visit_egyptian_metrical_feet_separator(self)
