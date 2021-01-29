@@ -23,6 +23,9 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
+    EgyptianMetricalFeetSeparator,
+)
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED
 
@@ -163,6 +166,30 @@ def test_unknown_number_of_signs():
         "enclosureType": [type.name for type in unknown_number_of_signs.enclosure_type],
     }
     assert_token_serialization(unknown_number_of_signs, serialized)
+
+
+def test_egyptian_metrical_feet_separator():
+    egyptian_metrical_feet_separator = EgyptianMetricalFeetSeparator.of(
+        (atf.Flag.UNCERTAIN,)
+    )
+    expected_value = "•?"
+    assert egyptian_metrical_feet_separator.value == expected_value
+    assert egyptian_metrical_feet_separator.clean_value == "•"
+    assert (
+        egyptian_metrical_feet_separator.get_key()
+        == f"EgyptianMetricalFeetSeparator⁝{expected_value}"
+    )
+    assert egyptian_metrical_feet_separator.lemmatizable is False
+
+    serialized = {
+        "type": "EgyptianMetricalFeetSeparator",
+        "value": expected_value,
+        "flags": ["?"],
+        "enclosureType": [
+            type.name for type in egyptian_metrical_feet_separator.enclosure_type
+        ],
+    }
+    assert_token_serialization(egyptian_metrical_feet_separator, serialized)
 
 
 def test_tabulation():

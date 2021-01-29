@@ -50,6 +50,11 @@ class TokenVisitor(ABC):
     def visit_divider(self, divider) -> None:
         self.visit(divider)
 
+    def visit_egyptian_metrical_feet_separator(
+        self, egyptian_metrical_feet_separator
+    ) -> None:
+        self.visit(egyptian_metrical_feet_separator)
+
     def visit_line_break(self, line_break) -> None:
         self.visit(line_break)
 
