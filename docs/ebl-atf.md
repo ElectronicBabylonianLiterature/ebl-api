@@ -57,6 +57,7 @@ line = empty-line
      | at-line
      | note-line
      | text-line
+     | parallel-line
      | control-line;
 
 empty-line = '';
@@ -140,21 +141,6 @@ dollar-status = '*' | '?' | '!' | '!?';
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
 
-## Text lines
-
-```ebnf
-text-line = line-number, '. ', text;
-
-line-number = line-number-range | single-line-number;
-line-number-range = single-line-number, '-', single-line-number;
-single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
-                     [ word-character ];
-prime = "'" | '′' | '’';
-```
-
-See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
-and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
-
 ## Note lines
 
 ```ebnf
@@ -174,6 +160,21 @@ escaped-text = { ( note-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
 note-text = { note-character };
 note-character = any-character - ( '@' | '{' | '}' );
 ```
+
+## Text lines
+
+```ebnf
+text-line = line-number, '. ', text;
+
+line-number = line-number-range | single-line-number;
+line-number-range = single-line-number, '-', single-line-number;
+single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
+                     [ word-character ];
+prime = "'" | '′' | '’';
+```
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
 
 ## Text
 
