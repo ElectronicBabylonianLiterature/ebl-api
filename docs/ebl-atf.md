@@ -171,7 +171,7 @@ parallel-fragment = museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ], line-
 
 museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 corpus-type = 'L'
-stage = 'Ur3' | 'OA' | 'OB' | 'MB' | 'MA | 'Hit | 'NA' | 'NB' | 'LB' | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
+stage = 'Ur3' | 'OA' | 'OB' | 'MB' | 'MA' | 'Hit' | 'NA' | 'NB' | 'LB' | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
 ```
 
 ## Text lines
