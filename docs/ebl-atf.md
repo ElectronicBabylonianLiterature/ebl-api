@@ -167,7 +167,7 @@ note-character = any-character - ( '@' | '{' | '}' );
 parallel-line = '// ', [ 'cf. ' ], ( parallel-composition | parallel-text | parallel-fragment );
 parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
 parallel-text = 'C ', category, '.', index, ' ', [ stage, ' ', { any-character }-, ' ', ], line-number;
-parallel-fragment = [ '&d ' ], museum-number, ' ', [ surface-label, ' ' ], line-number;
+parallel-fragment = museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ], line-number;
 
 museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 stage = 'Ur3' | 'OA' | 'OB' | 'MB' | 'MA | 'Hit | 'NA' | 'NB' | 'LB' | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
