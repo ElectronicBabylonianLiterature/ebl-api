@@ -7,9 +7,9 @@ from ebl.corpus.domain.chapter import (
     Line,
     LineVariant,
     ManuscriptLine,
-    Stage,
 )
 from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.stage import Stage
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf import Surface
@@ -22,7 +22,6 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)

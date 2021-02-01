@@ -8,7 +8,6 @@ from ebl.corpus.domain.chapter import (
     Line,
     LineVariant,
     ManuscriptLine,
-    Stage,
 )
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -18,6 +17,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
     Siglum,
 )
+from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import Text, TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -32,7 +32,6 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-
 
 CATEGORY = 1
 INDEX = 2

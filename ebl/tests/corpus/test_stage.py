@@ -1,6 +1,6 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.chapter import Stage
+from ebl.corpus.domain.stage import Stage
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

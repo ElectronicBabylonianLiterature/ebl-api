@@ -9,7 +9,6 @@ from ebl.corpus.domain.chapter import (
     Line,
     LineVariant,
     ManuscriptLine,
-    Stage,
 )
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -18,6 +17,7 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
+from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory

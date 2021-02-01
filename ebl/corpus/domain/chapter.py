@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
+from typing import Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
 import pydash  # pyre-ignore[21]
@@ -7,6 +7,7 @@ import pydash  # pyre-ignore[21]
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.label_validator import LabelValidator
 from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.stage import Stage
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
@@ -25,46 +26,6 @@ from ebl.transliteration.domain.tokens import Token
 class Classification(Enum):
     ANCIENT = "Ancient"
     MODERN = "Modern"
-
-
-@unique
-class Stage(Enum):
-    UR_III = "Ur III"
-    OLD_ASSYRIAN = "Old Assyrian"
-    OLD_BABYLONIAN = "Old Babylonian"
-    MIDDLE_BABYLONIAN = "Middle Babylonian"
-    MIDDLE_ASSYRIAN = "Middle Assyrian"
-    HITTITE = "Hittite"
-    NEO_ASSYRIAN = "Neo-Assyrian"
-    NEO_BABYLONIAN = "Neo-Babylonian"
-    LATE_BABYLONIAN = "Late Babylonian"
-    PERSIAN = "Persian"
-    HELLENISTIC = "Hellenistic"
-    PARTHIAN = "Parthian"
-    UNCERTAIN = "Uncertain"
-    STANDARD_BABYLONIAN = "Standard Babylonian"
-
-    @property
-    def abbreviation(self) -> str:
-        return ABBREVIATIONS[self]
-
-
-ABBREVIATIONS: Mapping[Stage, str] = {
-    Stage.UR_III: "Ur3",
-    Stage.OLD_ASSYRIAN: "OA",
-    Stage.OLD_BABYLONIAN: "OB",
-    Stage.MIDDLE_BABYLONIAN: "MB",
-    Stage.MIDDLE_ASSYRIAN: "MA",
-    Stage.HITTITE: "Hit",
-    Stage.NEO_ASSYRIAN: "NA",
-    Stage.NEO_BABYLONIAN: "NB",
-    Stage.LATE_BABYLONIAN: "LB",
-    Stage.PERSIAN: "Per",
-    Stage.HELLENISTIC: "Hel",
-    Stage.PARTHIAN: "Par",
-    Stage.UNCERTAIN: "Unc",
-    Stage.STANDARD_BABYLONIAN: "SB",
-}
 
 
 T = TypeVar("T")

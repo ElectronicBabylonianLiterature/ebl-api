@@ -7,7 +7,6 @@ from ebl.corpus.domain.chapter import (
     Line,
     LineVariant,
     ManuscriptLine,
-    Stage,
 )
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -16,6 +15,7 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
+from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
