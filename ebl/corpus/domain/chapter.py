@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Optional, Sequence, Tuple, TypeVar, Union, cast
+from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
 import pydash  # pyre-ignore[21]
@@ -43,6 +43,28 @@ class Stage(Enum):
     PARTHIAN = "Parthian"
     UNCERTAIN = "Uncertain"
     STANDARD_BABYLONIAN = "Standard Babylonian"
+
+    @property
+    def abbreviation(self) -> str:
+        return ABBREVIATIONS[self]
+
+
+ABBREVIATIONS: Mapping[Stage, str] = {
+    Stage.UR_III: "Ur3",
+    Stage.OLD_ASSYRIAN: "OA",
+    Stage.OLD_BABYLONIAN: "OB",
+    Stage.MIDDLE_BABYLONIAN: "MB",
+    Stage.MIDDLE_ASSYRIAN: "MA",
+    Stage.HITTITE: "Hit",
+    Stage.NEO_ASSYRIAN: "NA",
+    Stage.NEO_BABYLONIAN: "NB",
+    Stage.LATE_BABYLONIAN: "LB",
+    Stage.PERSIAN: "Per",
+    Stage.HELLENISTIC: "Hel",
+    Stage.PARTHIAN: "Par",
+    Stage.UNCERTAIN: "Unc",
+    Stage.STANDARD_BABYLONIAN: "SB",
+}
 
 
 T = TypeVar("T")
