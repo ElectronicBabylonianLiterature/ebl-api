@@ -1,6 +1,7 @@
 from typing import Sequence, Union
 
 import attr
+import roman  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
@@ -18,6 +19,13 @@ class TextVisitor:
 class TextId:
     category: int
     index: int
+
+    def __str__(self) -> str:
+        return (
+            f"{self.category}.{self.index}"
+            if self.category < 1
+            else f"{roman.toRoman(self.category)}.{self.index}"
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
