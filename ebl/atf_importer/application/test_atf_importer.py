@@ -2,6 +2,13 @@ from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.atf_importer.application.atf_importer import ATFImporter
 import unittest
+import mongomock  # pyre-ignore
+import pytest  # pyre-ignore
+
+
+@pytest.fixture
+def database():
+    return mongomock.MongoClient().ebl
 
 
 class Test_ATF_Importer(unittest.TestCase):
@@ -36,13 +43,17 @@ class Test_ATF_Importer(unittest.TestCase):
             }
         )
 
-        # import test lines
-        a = ATFImporter()
+        # reformat test lines
+        a = ATFImporter(database)
         a.lemmas_cfforms = Util.get_test_lemmas_cfforms()
         a.cfforms_senes = Util.get_test_cfforms_senses()
         a.cfform_guideword = Util.get_test_cfform_guidword()
-        ebl_lines = a.convert_to_ebl_lines(converted_lines, "cpp_3_1_16")
-
+        ebl_lines = a.convert_to_ebl_lines(
+            converted_lines,
+            "cpp_3_1_16",
+            True,
+            [[], ["Šabaṭu I"], [], [], [], ["Sin I"], [], [], [], [], []],
+        )
         self.assertEqual(
             len(ebl_lines["last_transliteration"]), len(ebl_lines["all_unique_lemmas"])
         )

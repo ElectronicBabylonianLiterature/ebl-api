@@ -85,7 +85,7 @@ failed = []
 
 
 class ATFImporter:
-    def __init__(self):
+    def __init__(self, db):
         logging.basicConfig(level=logging.DEBUG)
 
         self.logger = logging.getLogger("Atf-Importer")
@@ -94,10 +94,6 @@ class ATFImporter:
         self.lemgwpos_cf = None
         self.forms_senses = None
         self.lemposgw_cfgw = None
-
-        # connect to eBL-db
-        client = MongoClient(os.getenv("MONGODB_URI"))
-        db = client.get_database(os.getenv("MONGODB_DB"))
         self.db = db
 
     @staticmethod
@@ -354,7 +350,9 @@ class ATFImporter:
 
         return None
 
-    def convert_to_ebl_lines(self, converted_lines, filename):
+    def convert_to_ebl_lines(
+        self, converted_lines, filename, test=False, test_lemmata=[]
+    ):
         result = dict()
         result["transliteration"] = []
         result["lemmatization"] = []
@@ -372,10 +370,12 @@ class ATFImporter:
 
                 all_unique_lemmas = []
                 lemma_line = []
-
-                for oracc_lemma_tupel in line["c_array"]:
-                    # get unique lemmata from ebl database
-                    self.get_ebl_lemmata(oracc_lemma_tupel, all_unique_lemmas)
+                if not test:
+                    for oracc_lemma_tupel in line["c_array"]:
+                        # get unique lemmata from ebl database
+                        self.get_ebl_lemmata(oracc_lemma_tupel, all_unique_lemmas)
+                else:
+                    all_unique_lemmas = test_lemmata
 
                 for alter_pos in last_alter_lemline_at:
                     self.logger.warning(
@@ -611,5 +611,8 @@ class ATFImporter:
 
 
 if __name__ == "__main__":
-    a = ATFImporter()
+    # connect to eBL-db
+    client = MongoClient(os.getenv("MONGODB_URI"))
+    db = client.get_database(os.getenv("MONGODB_DB"))
+    a = ATFImporter(db)
     a.start()
