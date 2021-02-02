@@ -230,7 +230,7 @@ class ATFPreprocessor:
                         "c_alter_lemline_at": c_alter_lemline_at,
                     }
                 )
-            elif c_type is None and c_line is None:
+            elif c_type is None:
                 self.skip_next_lem_line = True
 
         self.logger.info(Util.print_frame("Preprocessing finished"))

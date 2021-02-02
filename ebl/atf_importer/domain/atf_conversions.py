@@ -34,8 +34,7 @@ class Convert_Legacy_Grammar_Signs(Visitor):
 
     def oracc_atf_text_line__logogram_name_part(self, tree):
         assert tree.data == "oracc_atf_text_line__logogram_name_part"
-        cnt = 0
-        for child in tree.children:
+        for cnt, child in enumerate(tree.children):
 
             pattern = re.compile("[ÁÉÍÙ]")
             matches = pattern.search(child)
@@ -51,12 +50,9 @@ class Convert_Legacy_Grammar_Signs(Visitor):
                 except Exception:
                     tree.children[cnt] = self.replacement_chars[match] + "₂"
 
-            cnt = cnt + 1
-
     def oracc_atf_text_line__value_name_part(self, tree):
         assert tree.data == "oracc_atf_text_line__value_name_part"
-        cnt = 0
-        for child in tree.children:
+        for cnt, child in enumerate(tree.children):
 
             pattern = re.compile("[áíéú]")
             matches = pattern.search(child)
@@ -71,8 +67,6 @@ class Convert_Legacy_Grammar_Signs(Visitor):
 
                 except Exception:
                     tree.children[cnt] = self.replacement_chars[match] + "₂"
-
-            cnt = cnt + 1
 
 
 class Strip_Signs(Visitor):
@@ -89,7 +83,7 @@ class DFS(Visitor):
             return result
 
         for child in tree.children:
-            if isinstance(child, str) or isinstance(child, int):
+            if isinstance(child, (str, int)):
                 result += child
             result = DFS().visit_topdown(child, result)
         return result
@@ -166,54 +160,54 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
         assert tree.data == "oracc_atf_lem_line__lemma"
         guide_word = ""
         pos_tag = ""
-        i = 0
         cl = len(tree.children)
         lemmata = []
-        for child in tree.children:
+        for i, child in enumerate(tree.children):
 
             # collect additional lemmata and guidwords
             if child.data == "oracc_atf_lem_line__additional_lemmata":
 
                 for a_child in child.children:
-                    if hasattr(a_child, "data"):
-
-                        if a_child.data == "oracc_atf_lem_line__additional_lemma":
-                            acl = len(a_child.children)
-                            j = 0
-                            for b_child in a_child.children:
-                                additional_lemma_value = ""
-                                additional_guide_word = ""
-                                additional_pos_tag = ""
-                                if b_child.data == "oracc_atf_lem_line__value_part":
-                                    additional_lemma_value = DFS().visit_topdown(
-                                        b_child, ""
+                    if (
+                        hasattr(a_child, "data")
+                        and a_child.data == "oracc_atf_lem_line__additional_lemma"
+                    ):
+                        acl = len(a_child.children)
+                        j = 0
+                        for b_child in a_child.children:
+                            additional_lemma_value = ""
+                            additional_guide_word = ""
+                            additional_pos_tag = ""
+                            if b_child.data == "oracc_atf_lem_line__value_part":
+                                additional_lemma_value = DFS().visit_topdown(
+                                    b_child, ""
+                                )
+                                if (
+                                    acl > 1
+                                    and a_child.children[j + 1].data
+                                    == "oracc_atf_lem_line__guide_word"
+                                ):
+                                    additional_guide_word = DFS().visit_topdown(
+                                        a_child.children[j + 1], ""
                                     )
-                                    if (
-                                        acl > 1
-                                        and a_child.children[j + 1].data
-                                        == "oracc_atf_lem_line__guide_word"
-                                    ):
-                                        additional_guide_word = DFS().visit_topdown(
-                                            a_child.children[j + 1], ""
-                                        )
-                                if additional_lemma_value != "":
-                                    # find pos tag
-                                    if (
-                                        tree.children[j + 2]
-                                        and tree.children[j + 2].data
-                                        in self.oracc_pos_tags
-                                    ):
-                                        additional_pos_tag = DFS().visit_topdown(
-                                            tree.children[j + 2], ""
-                                        )
-
-                                    lemmata.append(
-                                        (
-                                            additional_lemma_value,
-                                            additional_guide_word,
-                                            additional_pos_tag,
-                                        )
+                            if additional_lemma_value != "":
+                                # find pos tag
+                                if (
+                                    tree.children[j + 2]
+                                    and tree.children[j + 2].data
+                                    in self.oracc_pos_tags
+                                ):
+                                    additional_pos_tag = DFS().visit_topdown(
+                                        tree.children[j + 2], ""
                                     )
+
+                                lemmata.append(
+                                    (
+                                        additional_lemma_value,
+                                        additional_guide_word,
+                                        additional_pos_tag,
+                                    )
+                                )
 
             # find actual lemma and guidewords
             if child.data == "oracc_atf_lem_line__value_part":
@@ -232,4 +226,3 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
 
                 lemmata.append((lemma_value, guide_word, pos_tag))
                 self.result.append(lemmata)
-            i = i + 1
