@@ -1,13 +1,20 @@
-from marshmallow import fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
 
+from ebl.corpus.domain.chapter import Stage
+from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.parallel_line import (
+    ChapterName,
+    CorpusType,
+    ParallelFragment,
+    ParallelText,
+)
 from ebl.transliteration.domain.tokens import ValueToken
-from ebl.transliteration.domain.parallel_line import ParallelFragment
 
 
 class ParallelLineSchema(LineBaseSchema):
@@ -38,5 +45,42 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["museum_number"],
             data["has_duplicates"],
             data["surface"],
+            data["line_number"],
+        )
+
+
+class TextIdSchema(Schema):  # pyre-ignore[11]
+    category = fields.Integer(required=True, validate=validate.Range(min=0))
+    index = fields.Integer(required=True, validate=validate.Range(min=0))
+
+    @post_load  # pyre-ignore[56]
+    def make_id(self, data, **kwargs) -> TextId:
+        return TextId(data["category"], data["index"])
+
+
+class ChapterNameSchema(Schema):
+    stage = ValueEnum(Stage, required=True)
+    name = fields.String(required=True)
+
+    @post_load  # pyre-ignore[56]
+    def make_id(self, data, **kwargs) -> ChapterName:
+        return ChapterName(data["stage"], data["name"])
+
+
+class ParallelTextSchema(ParallelLineSchema):
+    type = NameEnum(CorpusType, required=True, data_key="corpusType")
+    text = fields.Nested(TextIdSchema, required=True)
+    chapter = fields.Nested(ChapterNameSchema, required=True)
+    line_number = fields.Nested(
+        OneOfLineNumberSchema, required=True, data_key="lineNumber"
+    )
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> ParallelText:
+        return ParallelText(
+            data["has_cf"],
+            data["type"],
+            data["text"],
+            data["chapter"],
             data["line_number"],
         )

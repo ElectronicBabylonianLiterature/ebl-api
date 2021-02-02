@@ -26,7 +26,10 @@ from ebl.transliteration.application.line_schemas import (
     NoteLineSchema,
     TextLineSchema,
 )
-from ebl.transliteration.application.parallel_line_schemas import ParallelFragmentSchema
+from ebl.transliteration.application.parallel_line_schemas import (
+    ParallelFragmentSchema,
+    ParallelTextSchema,
+)
 
 
 class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
@@ -50,4 +53,5 @@ class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
         "CompositeAtLine": CompositeAtLineSchema,
         "NoteLine": NoteLineSchema,
         "ParallelFragment": ParallelFragmentSchema,
+        "ParallelText": ParallelTextSchema,
     }

@@ -2,6 +2,8 @@ import pytest  # pyre-ignore
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
+from ebl.corpus.domain.chapter import Stage
+from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -42,11 +44,17 @@ from ebl.transliteration.domain.note_line import (
     NoteLine,
     StringPart,
 )
-from ebl.transliteration.domain.parallel_line import ParallelFragment
+from ebl.transliteration.domain.parallel_line import (
+    ChapterName,
+    CorpusType,
+    ParallelFragment,
+    ParallelText,
+)
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
+
 
 LINES = [
     (
@@ -535,6 +543,26 @@ LINES = [
             "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
             "hasDuplicates": True,
             "surface": "OBVERSE",
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
+        ParallelText(
+            True,
+            CorpusType.LITERATURE,
+            TextId(1, 1),
+            ChapterName(Stage.OLD_BABYLONIAN, "name"),
+            LineNumber(1),
+        ),
+        {
+            "type": "ParallelText",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. L I.1 OB name 1"))],
+            "displayValue": "cf. L I.1 OB name 1",
+            "hasCf": True,
+            "corpusType": "LITERATURE",
+            "text": {"category": 1, "index": 1},
+            "chapter": {"stage": "Old Babylonian", "name": "name"},
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),
