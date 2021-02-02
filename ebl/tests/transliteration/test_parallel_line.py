@@ -9,6 +9,7 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     CorpusType,
+    ParallelComposition,
     ParallelFragment,
     ParallelText,
 )
@@ -51,6 +52,23 @@ def test_parallel_text(cf, chapter, display_value) -> None:
     assert line.type == corpus_type
     assert line.text == text_id
     assert line.chapter == chapter
+    assert line.line_number == line_number
+
+    assert line.display_value == display_value
+    assert line.atf == Atf(f"// {display_value}")
+    assert line.lemmatization == (LemmatizationToken(display_value),)
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "cf,display_value", [(True, "cf. (my name 1)"), (False, "(my name 1)")]
+)
+def test_parallel_composition(cf, display_value) -> None:
+    name = "my name"
+    line_number = LineNumber(1)
+    line = ParallelComposition(cf, name, line_number)
+
+    assert line.has_cf is cf
+    assert line.name == name
     assert line.line_number == line_number
 
     assert line.display_value == display_value

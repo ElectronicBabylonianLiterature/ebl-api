@@ -77,3 +77,15 @@ class ParallelText(ParallelLine):
         chapter = "" if self.chapter is None else f"{self.chapter} "
         line_number = self.line_number.label
         return f"{cf}{type_} {self.text} {chapter}{line_number}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ParallelComposition(ParallelLine):
+    name: str
+    line_number: AbstractLineNumber
+
+    @property
+    def display_value(self) -> str:
+        cf = "cf. " if self.has_cf else ""
+        line_number = self.line_number.label
+        return f"{cf}({self.name} {line_number})"
