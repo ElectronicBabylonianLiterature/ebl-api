@@ -27,6 +27,7 @@ from ebl.transliteration.application.line_schemas import (
     TextLineSchema,
 )
 from ebl.transliteration.application.parallel_line_schemas import (
+    ParallelCompositionSchema,
     ParallelFragmentSchema,
     ParallelTextSchema,
 )
@@ -54,4 +55,5 @@ class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
         "NoteLine": NoteLineSchema,
         "ParallelFragment": ParallelFragmentSchema,
         "ParallelText": ParallelTextSchema,
+        "ParallelComposition": ParallelCompositionSchema,
     }

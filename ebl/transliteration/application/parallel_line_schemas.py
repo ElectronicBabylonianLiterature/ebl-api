@@ -13,6 +13,7 @@ from ebl.transliteration.domain.parallel_line import (
     CorpusType,
     ParallelFragment,
     ParallelText,
+    ParallelComposition,
 )
 from ebl.transliteration.domain.tokens import ValueToken
 
@@ -84,3 +85,14 @@ class ParallelTextSchema(ParallelLineSchema):
             data["chapter"],
             data["line_number"],
         )
+
+
+class ParallelCompositionSchema(ParallelLineSchema):
+    name = fields.String(required=True)
+    line_number = fields.Nested(
+        OneOfLineNumberSchema, required=True, data_key="lineNumber"
+    )
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> ParallelComposition:
+        return ParallelComposition(data["has_cf"], data["name"], data["line_number"])

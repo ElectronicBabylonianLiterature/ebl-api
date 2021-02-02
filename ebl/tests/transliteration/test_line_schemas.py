@@ -47,6 +47,7 @@ from ebl.transliteration.domain.note_line import (
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     CorpusType,
+    ParallelComposition,
     ParallelFragment,
     ParallelText,
 )
@@ -54,7 +55,6 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
-
 
 LINES = [
     (
@@ -563,6 +563,18 @@ LINES = [
             "corpusType": "LITERATURE",
             "text": {"category": 1, "index": 1},
             "chapter": {"stage": "Old Babylonian", "name": "name"},
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
+        ParallelComposition(True, "name", LineNumber(1)),
+        {
+            "type": "ParallelComposition",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. (name 1)"))],
+            "displayValue": "cf. (name 1)",
+            "hasCf": True,
+            "name": "name",
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),
