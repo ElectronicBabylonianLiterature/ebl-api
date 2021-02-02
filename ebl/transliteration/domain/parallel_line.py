@@ -1,14 +1,30 @@
 from abc import abstractmethod
-from typing import cast, Optional, Tuple
+from enum import Enum, unique
+from typing import Optional, Tuple, cast
 
 import attr
 
-from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.corpus.domain.chapter import Stage
+from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.atf import Atf, Surface
+from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.atf import Surface
+
+
+@unique
+class CorpusType(Enum):
+    LITERATURE = "L"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ChapterName:
+    stage: Stage
+    name: str
+
+    def __str__(self) -> str:
+        return f"{self.stage.abbreviation} {self.name}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -45,3 +61,19 @@ class ParallelFragment(ParallelLine):
         )
         line_number = self.line_number.label
         return f"{cf}{self.museum_number} {duplicates}{surface}{line_number}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ParallelText(ParallelLine):
+    type: CorpusType
+    text: TextId
+    chapter: Optional[ChapterName]
+    line_number: AbstractLineNumber
+
+    @property
+    def display_value(self) -> str:
+        cf = "cf. " if self.has_cf else ""
+        type_ = self.type.value
+        chapter = "" if self.chapter is None else f"{self.chapter} "
+        line_number = self.line_number.label
+        return f"{cf}{type_} {self.text} {chapter}{line_number}"
