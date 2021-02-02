@@ -2,6 +2,8 @@ import pytest  # pyre-ignore
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -40,6 +42,7 @@ from ebl.transliteration.domain.note_line import (
     NoteLine,
     StringPart,
 )
+from ebl.transliteration.domain.parallel_line import ParallelFragment
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, ValueToken
@@ -516,6 +519,23 @@ LINES = [
                 ],
                 many=True,
             ),
+        },
+    ),
+    (
+        ParallelFragment(
+            True, MuseumNumber.of("K.1"), True, atf.Surface.OBVERSE, LineNumber(1)
+        ),
+        {
+            "type": "ParallelFragment",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. K.1 &d o 1"))],
+            "displayValue": "cf. K.1 &d o 1",
+            "hasCf": True,
+            # pyre-ignore[16]
+            "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
+            "hasDuplicates": True,
+            "surface": "OBVERSE",
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),
 ]

@@ -4,28 +4,29 @@ from marshmallow import Schema  # pyre-ignore
 from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
 
 from ebl.transliteration.application.at_line_schemas import (
-    SealAtLineSchema,
-    HeadingAtLineSchema,
     ColumnAtLineSchema,
-    SurfaceAtLineSchema,
-    ObjectAtLineSchema,
+    CompositeAtLineSchema,
     DiscourseAtLineSchema,
     DivisionAtLineSchema,
-    CompositeAtLineSchema,
+    HeadingAtLineSchema,
+    ObjectAtLineSchema,
+    SealAtLineSchema,
+    SurfaceAtLineSchema,
 )
 from ebl.transliteration.application.dollar_line_schemas import (
-    LooseDollarLineSchema,
     ImageDollarLineSchema,
+    LooseDollarLineSchema,
     RulingDollarLineSchema,
     SealDollarLineSchema,
     StateDollarLineSchema,
 )
 from ebl.transliteration.application.line_schemas import (
-    TextLineSchema,
     ControlLineSchema,
     EmptyLineSchema,
     NoteLineSchema,
+    TextLineSchema,
 )
+from ebl.transliteration.application.parallel_line_schemas import ParallelFragmentSchema
 
 
 class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
@@ -48,4 +49,5 @@ class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
         "DivisionAtLine": DivisionAtLineSchema,
         "CompositeAtLine": CompositeAtLineSchema,
         "NoteLine": NoteLineSchema,
+        "ParallelFragment": ParallelFragmentSchema,
     }
