@@ -351,8 +351,10 @@ class ATFImporter:
         return None
 
     def convert_to_ebl_lines(
-        self, converted_lines, filename, test=False, test_lemmata=[]
+        self, converted_lines, filename, test=False, test_lemmata=None
     ):
+        if test_lemmata is None:
+            test_lemmata = []
         result = dict()
         result["transliteration"] = []
         result["lemmatization"] = []
