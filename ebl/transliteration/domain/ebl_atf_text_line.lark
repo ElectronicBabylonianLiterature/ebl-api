@@ -1,6 +1,6 @@
 %import common.INT
 %import common.LETTER
-
+%import .labels (surface_label)
 
 note_line: "#note: " (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
@@ -16,7 +16,6 @@ LANGUAGE: "akk" | "sux" | "es"
 parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [surface_label " "] line_number
 !museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
 DUPLICATES: "&d"
-!surface_label: ( "o" | "r" | "b.e." | "e." | "l.e." | "r.e." | "t.e." ) ["'" | "?" | "!" | "*"]
 parallel_text: PARALLEL_LINE_PREFIX [CF] "L " text_id " "  [chapter_name " "] line_number
 text_id: CATEGORY "." INT
 CATEGORY: "0" | "I" | "II" | "III"

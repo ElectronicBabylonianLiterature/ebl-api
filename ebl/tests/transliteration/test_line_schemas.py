@@ -531,18 +531,27 @@ LINES = [
     ),
     (
         ParallelFragment(
-            True, MuseumNumber.of("K.1"), True, atf.Surface.OBVERSE, LineNumber(1)
+            True,
+            MuseumNumber.of("K.1"),
+            True,
+            SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+            LineNumber(1),
         ),
         {
             "type": "ParallelFragment",
             "prefix": "//",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. K.1 &d o 1"))],
-            "displayValue": "cf. K.1 &d o 1",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. F K.1 &d o! 1"))],
+            "displayValue": "cf. F K.1 &d o! 1",
             "hasCf": True,
             # pyre-ignore[16]
             "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
             "hasDuplicates": True,
-            "surface": "OBVERSE",
+            "surface": {
+                "status": ["CORRECTION"],
+                "surface": "OBVERSE",
+                "abbreviation": "o",
+                "text": "",
+            },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),

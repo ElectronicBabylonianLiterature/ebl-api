@@ -1,10 +1,11 @@
-from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 import roman  # pyre-ignore[21]
+from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.atf import Surface
+from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     CorpusType,
@@ -31,8 +32,11 @@ class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
         return MuseumNumber.of("".join(children))
 
     @v_args(inline=True)  # pyre-ignore[56]
-    def ebl_atf_text_line__surface_label(self, surface, _status) -> Surface:
-        return Surface.from_label(surface)
+    def ebl_atf_text_line__surface_label(self, surface, status) -> SurfaceLabel:
+        return SurfaceLabel.from_label(
+            Surface.from_label("".join(surface.children)),
+            [Status(token) for token in status.children],
+        )
 
     @v_args(inline=True)  # pyre-ignore[56]
     def ebl_atf_text_line__parallel_text(

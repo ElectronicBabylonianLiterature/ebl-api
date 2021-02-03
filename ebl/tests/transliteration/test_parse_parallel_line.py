@@ -4,6 +4,7 @@ from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
@@ -19,9 +20,13 @@ from ebl.transliteration.domain.parallel_line import (
     "line,expected_line",
     [
         (
-            "// cf. F K.1 &d o 1",
+            "// cf. F K.1 &d o! 1",
             ParallelFragment(
-                True, MuseumNumber.of("K.1"), True, atf.Surface.OBVERSE, LineNumber(1)
+                True,
+                MuseumNumber.of("K.1"),
+                True,
+                SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+                LineNumber(1),
             ),
         ),
         (

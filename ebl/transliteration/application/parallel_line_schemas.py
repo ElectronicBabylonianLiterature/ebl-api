@@ -4,16 +4,16 @@ from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import NameEnum, ValueEnum
+from ebl.transliteration.application.label_schemas import SurfaceLabelSchema
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     CorpusType,
+    ParallelComposition,
     ParallelFragment,
     ParallelText,
-    ParallelComposition,
 )
 from ebl.transliteration.domain.tokens import ValueToken
 
@@ -34,7 +34,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
         MuseumNumberSchema, required=True, data_key="museumNumber"
     )
     has_duplicates = fields.Boolean(data_key="hasDuplicates", required=True)
-    surface = NameEnum(atf.Surface, required=True, allow_none=True)
+    surface = fields.Nested(SurfaceLabelSchema, required=True, allow_none=True)
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )

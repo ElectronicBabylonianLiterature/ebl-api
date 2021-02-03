@@ -3,7 +3,8 @@ import pytest  # pyre-ignore[21]
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.atf import Atf, Surface
+from ebl.transliteration.domain.atf import Atf, Status, Surface
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
@@ -17,7 +18,15 @@ from ebl.transliteration.domain.parallel_line import (
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "cf,duplicates,surface,display_value",
-    [(True, True, Surface.OBVERSE, "cf. K.1 &d o 1"), (False, False, None, "K.1 1")],
+    [
+        (
+            True,
+            True,
+            SurfaceLabel((Status.CORRECTION,), Surface.OBVERSE),
+            "cf. F K.1 &d o! 1",
+        ),
+        (False, False, None, "F K.1 1"),
+    ],
 )
 def test_parallel_fragment(cf, duplicates, surface, display_value) -> None:
     museum_number = MuseumNumber.of("K.1")

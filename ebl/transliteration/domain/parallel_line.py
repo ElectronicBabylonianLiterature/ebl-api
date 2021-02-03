@@ -7,7 +7,8 @@ import attr
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.atf import Atf, Surface
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
@@ -49,7 +50,7 @@ class ParallelLine(Line):
 class ParallelFragment(ParallelLine):
     museum_number: MuseumNumber
     has_duplicates: bool
-    surface: Optional[Surface]
+    surface: Optional[SurfaceLabel]
     line_number: AbstractLineNumber
 
     @property
@@ -57,10 +58,12 @@ class ParallelFragment(ParallelLine):
         cf = "cf. " if self.has_cf else ""
         duplicates = "&d " if self.has_duplicates else ""
         surface = (
-            "" if self.surface is None else f"{cast(Surface, self.surface).label} "
+            ""
+            if self.surface is None
+            else f"{cast(SurfaceLabel, self.surface).to_value()} "
         )
         line_number = self.line_number.label
-        return f"{cf}{self.museum_number} {duplicates}{surface}{line_number}"
+        return f"{cf}F {self.museum_number} {duplicates}{surface}{line_number}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
