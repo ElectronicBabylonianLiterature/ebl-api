@@ -12,6 +12,21 @@ note_text: /[^@{}]+/
 LANGUAGE: "akk" | "sux" | "es"
 
 
+?parallel_line: parallel_fragment | parallel_text | parallel_composition
+parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [surface_label " "] line_number
+!museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
+DUPLICATES: "&d"
+!surface_label: ( "o" | "r" | "b.e." | "e." | "l.e." | "r.e." | "t.e." ) ["'" | "?" | "!" | "*"]
+parallel_text: PARALLEL_LINE_PREFIX [CF] "L " text_id " "  [chapter_name " "] line_number
+text_id: CATEGORY "." INT
+CATEGORY: "0" | "I" | "II" | "III"
+chapter_name: STAGE " " /./+
+STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" | "Hel" | "Par" | "Unc" | "SB"
+parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
+CF: "cf. "
+PARALLEL_LINE_PREFIX: "// "
+
+
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 ?line_number: line_number_range | single_line_number
 line_number_range: single_line_number "-" single_line_number

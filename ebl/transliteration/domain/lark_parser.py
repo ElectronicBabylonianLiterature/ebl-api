@@ -18,6 +18,7 @@ from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -25,6 +26,7 @@ from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
+
 
 PARSE_ERRORS: Tuple[Type[Any], ...] = (
     UnexpectedInput,
@@ -35,7 +37,11 @@ PARSE_ERRORS: Tuple[Type[Any], ...] = (
 
 
 class LineTransformer(
-    AtLineTransformer, DollarLineTransfomer, NoteLineTransformer, TextLineTransformer
+    AtLineTransformer,
+    DollarLineTransfomer,
+    NoteLineTransformer,
+    TextLineTransformer,
+    ParallelLineTransformer,
 ):
     def empty_line(self, _):
         return EmptyLine()

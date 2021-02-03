@@ -164,14 +164,18 @@ note-character = any-character - ( '@' | '{' | '}' );
 ## Parallel lines
 
 ```ebnf
-parallel-line = '// ', [ 'cf. ' ], ( parallel-composition | parallel-text | parallel-fragment );
+parallel-line = '// ', [ 'cf. ' ],
+                ( parallel-composition | parallel-text | parallel-fragment );
 parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
-parallel-text = corpus-type, ' ', category, '.', index, ' ', [ stage, ' ', { any-character }-, ' ', ], line-number;
-parallel-fragment = museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ], line-number;
+parallel-text = corpus-type, ' ', category, '.', index, ' ',
+                [ stage, ' ', { any-character }-, ' ', ], line-number;
+parallel-fragment = 'F ', museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ],
+                    line-number;
 
 museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 corpus-type = 'L'
-stage = 'Ur3' | 'OA' | 'OB' | 'MB' | 'MA' | 'Hit' | 'NA' | 'NB' | 'LB' | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
+stage = 'Ur3' | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA'
+      | 'NB'  | 'LB'  | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
 ```
 
 ## Text lines
