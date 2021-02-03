@@ -4,8 +4,8 @@ from typing import Optional, Tuple, cast
 
 import attr
 
-from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.stage import Stage
+from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.labels import SurfaceLabel

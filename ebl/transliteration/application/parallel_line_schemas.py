@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.label_schemas import SurfaceLabelSchema

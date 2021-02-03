@@ -2,7 +2,7 @@ import roman  # pyre-ignore[21]
 from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import SurfaceLabel

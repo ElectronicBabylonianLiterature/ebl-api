@@ -1,7 +1,7 @@
 import pytest  # pyre-ignore
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.labels import SurfaceLabel

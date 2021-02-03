@@ -1,11 +1,10 @@
 from typing import Sequence, Union
 
 import attr
-import roman  # pyre-ignore[21]
 
 from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
-
+from ebl.corpus.domain.text_id import TextId
 
 TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
 
@@ -13,19 +12,6 @@ TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
 class TextVisitor:
     def visit(self, item: TextItem) -> None:
         pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class TextId:
-    category: int
-    index: int
-
-    def __str__(self) -> str:
-        return (
-            f"{self.category}.{self.index}"
-            if self.category < 1
-            else f"{roman.toRoman(self.category)}.{self.index}"
-        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

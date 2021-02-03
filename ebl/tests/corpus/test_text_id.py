@@ -1,6 +1,6 @@
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.text_id import TextId
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

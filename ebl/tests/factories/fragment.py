@@ -2,31 +2,33 @@ from typing import Sequence
 
 import factory  # pyre-ignore
 
+from ebl.corpus.domain.chapter import Stage
+from ebl.corpus.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, UncuratedReference, Genre
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, UncuratedReference
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
-    SealAtLine,
-    HeadingAtLine,
     ColumnAtLine,
-    SurfaceAtLine,
-    ObjectAtLine,
+    CompositeAtLine,
     DiscourseAtLine,
     DivisionAtLine,
-    CompositeAtLine,
+    HeadingAtLine,
+    ObjectAtLine,
+    SealAtLine,
+    SurfaceAtLine,
 )
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.dollar_line import (
-    LooseDollarLine,
     ImageDollarLine,
+    LooseDollarLine,
     RulingDollarLine,
     ScopeContainer,
-    StateDollarLine,
     SealDollarLine,
+    StateDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
@@ -38,6 +40,13 @@ from ebl.transliteration.domain.note_line import (
     LanguagePart,
     NoteLine,
     StringPart,
+)
+from ebl.transliteration.domain.parallel_line import (
+    ChapterName,
+    CorpusType,
+    ParallelComposition,
+    ParallelFragment,
+    ParallelText,
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -281,6 +290,15 @@ class TransliteratedFragmentFactory(FragmentFactory):
                     ),
                 )
             ),
+            ParallelComposition(False, "my name", LineNumber(1)),
+            ParallelText(
+                True,
+                CorpusType.LITERATURE,
+                TextId(1, 1),
+                ChapterName(Stage.OLD_BABYLONIAN, "my name"),
+                LineNumber(1),
+            ),
+            ParallelFragment(False, MuseumNumber.of("K.1"), True, None, LineNumber(1)),
         )
     )
     signs = (
@@ -486,5 +504,14 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                     ),
                 )
             ),
+            ParallelComposition(False, "my name", LineNumber(1)),
+            ParallelText(
+                True,
+                CorpusType.LITERATURE,
+                TextId(1, 1),
+                ChapterName(Stage.OLD_BABYLONIAN, "my name"),
+                LineNumber(1),
+            ),
+            ParallelFragment(False, MuseumNumber.of("K.1"), True, None, LineNumber(1)),
         )
     )
