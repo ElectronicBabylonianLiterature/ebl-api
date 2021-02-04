@@ -49,6 +49,12 @@ from ebl.transliteration.domain.parallel_line import (
                 False, CorpusType.LITERATURE, TextId(1, 1), None, LineNumber(1)
             ),
         ),
+        (
+            "// L 0.0 1",
+            ParallelText(
+                False, CorpusType.LITERATURE, TextId(0, 0), None, LineNumber(1)
+            ),
+        ),
         ("// cf. (name 1)", ParallelComposition(True, "name", LineNumber(1))),
         ("// (name 1)", ParallelComposition(False, "name", LineNumber(1))),
     ],

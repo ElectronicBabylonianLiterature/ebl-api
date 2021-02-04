@@ -48,7 +48,7 @@ class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
 
     @v_args(inline=True)  # pyre-ignore[56]
     def ebl_atf_text_line__text_id(self, category, number) -> TextId:
-        return TextId(roman.fromRoman(category), int(number))
+        return TextId(0 if category == "0" else roman.fromRoman(category), int(number))
 
     def ebl_atf_text_line__chapter_name(self, children) -> ChapterName:
         return ChapterName(
