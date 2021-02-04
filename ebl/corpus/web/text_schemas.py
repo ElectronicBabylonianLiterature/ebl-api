@@ -1,10 +1,10 @@
 from typing import cast
 
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
-from marshmallow import (
+from marshmallow import (  # pyre-ignore[21]
     EXCLUDE,
     Schema,
-    ValidationError,  # pyre-ignore[21]
+    ValidationError,
     fields,
     post_load,
     validate,
