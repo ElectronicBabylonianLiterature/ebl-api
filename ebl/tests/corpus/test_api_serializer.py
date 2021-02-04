@@ -16,6 +16,8 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.text_line import TextLine
 
 
@@ -30,7 +32,8 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
     line = LineFactory.build(  # pyre-ignore[16]
         variants=(
             LineVariantFactory.build(  # pyre-ignore[16]
-                manuscripts=(first_manuscript_line, second_manuscript_line)
+                manuscripts=(first_manuscript_line, second_manuscript_line),
+                parallel_lines=(ParallelComposition(False, "name", LineNumber(1)),),
             ),
         )
     )
@@ -85,6 +88,10 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                     [
                                         convert_to_atf(None, variant.reconstruction),
                                         f"\n{variant.note.atf}" if variant.note else "",
+                                        *[
+                                            f"\n{parallel_line.atf}"
+                                            for parallel_line in variant.parallel_lines
+                                        ],
                                     ]
                                 ),
                                 # pyre-ignore[16]

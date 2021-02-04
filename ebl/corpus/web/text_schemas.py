@@ -6,7 +6,6 @@ from marshmallow import (  # pyre-ignore[21]
     post_load,
     validate,
 )
-from marshmallow.validate import Regexp  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.schemas import (
@@ -24,6 +23,7 @@ from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.lark_parser import (
     parse_line_number,
     parse_note_line,
+    parse_parallel_line,
     parse_paratext,
     parse_text_line,
 )
@@ -131,13 +131,11 @@ class ApiLineVariantSchema(LineVariantSchema):
             [
                 convert_to_atf(None, line.reconstruction),
                 f"\n{line.note.atf}" if line.note else "",
+                *[f"\n{parallel_line.atf}" for parallel_line in line.parallel_lines],
             ]
         ),
         lambda value: value,
         required=True,
-        validate=Regexp(
-            r"^[^\n]*(\n[^\n]*)?$", error="Too many note lines in reconstruction."
-        ),
     )
     reconstructionTokens = fields.Nested(
         OneOfTokenSchema, many=True, attribute="reconstruction", dump_only=True
@@ -146,11 +144,19 @@ class ApiLineVariantSchema(LineVariantSchema):
 
     @post_load  # pyre-ignore[56]
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
-        [text, *notes] = data["reconstruction"].split("\n")
+        [text, *rest] = data["reconstruction"].split("\n")
+        note = None
+        if rest and rest[0].startswith("#note:"):
+            note = parse_note_line(rest[0])
+        parallel_lines = tuple(
+            parse_parallel_line(line) for line in (rest if note is None else rest[1:])
+        )
+
         return LineVariant(
             parse_reconstructed_line(text),
-            parse_note_line(notes[0]) if notes else None,
+            note,
             tuple(data["manuscripts"]),
+            parallel_lines,
         )
 
 
