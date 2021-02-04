@@ -1,7 +1,10 @@
-from marshmallow import (  # pyre-ignore[21]
+from typing import cast
+
+from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
+from marshmallow import (
     EXCLUDE,
     Schema,
-    ValidationError,
+    ValidationError,  # pyre-ignore[21]
     fields,
     post_load,
     validate,
@@ -16,11 +19,14 @@ from ebl.corpus.application.schemas import (
     labels,
     manuscript_id,
 )
-from ebl.corpus.domain.chapter import LineVariant, ManuscriptLine, Line
+from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
+from ebl.errors import DataError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.lark_parser import (
+    PARSE_ERRORS,
     parse_line_number,
     parse_note_line,
     parse_parallel_line,
@@ -32,9 +38,6 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.domain.text_line import TextLine
-from typing import cast
-from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
 class MuseumNumberString(fields.String):  # pyre-ignore[11]
@@ -144,20 +147,24 @@ class ApiLineVariantSchema(LineVariantSchema):
 
     @post_load  # pyre-ignore[56]
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
-        [text, *rest] = data["reconstruction"].split("\n")
-        note = None
-        if rest and rest[0].startswith("#note:"):
-            note = parse_note_line(rest[0])
-        parallel_lines = tuple(
-            parse_parallel_line(line) for line in (rest if note is None else rest[1:])
-        )
+        try:
+            [text, *rest] = data["reconstruction"].split("\n")
+            note = None
+            if rest and rest[0].startswith("#note:"):
+                note = parse_note_line(rest[0])
+            parallel_lines = tuple(
+                parse_parallel_line(line)
+                for line in (rest if note is None else rest[1:])
+            )
 
-        return LineVariant(
-            parse_reconstructed_line(text),
-            note,
-            tuple(data["manuscripts"]),
-            parallel_lines,
-        )
+            return LineVariant(
+                parse_reconstructed_line(text),
+                note,
+                tuple(data["manuscripts"]),
+                parallel_lines,
+            )
+        except PARSE_ERRORS as error:
+            raise DataError(f"Invalid variant: {data['reconstruction']}. {error}")
 
 
 class ApiLineSchema(Schema):
