@@ -19,8 +19,14 @@ from ebl.tests.factories.corpus import (
 )
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema
-from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.one_of_line_schema import (
+    OneOfLineSchema,
+    ParallelLineSchema,
+)
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.parallel_line import ParallelComposition
+
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
@@ -31,7 +37,8 @@ FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
 SECOND_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
 # pyre-ignore[16]
 LINE_VARIANT = LineVariantFactory.build(
-    manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE)
+    manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE),
+    parallel_lines=(ParallelComposition(False, "name", LineNumber(2)),),
 )
 LINE = LineFactory.build(variants=(LINE_VARIANT,))  # pyre-ignore[16]
 CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
@@ -120,6 +127,10 @@ def to_dict(text: Text, include_documents=False):
                                 "note": variant.note
                                 # pyre-ignore[16]
                                 and NoteLineSchema().dump(variant.note),
+                                # pyre-ignore[16]
+                                "parallelLines": ParallelLineSchema().dump(
+                                    variant.parallel_lines, many=True
+                                ),
                                 "manuscripts": [
                                     {
                                         "manuscriptId": manuscript_line.manuscript_id,

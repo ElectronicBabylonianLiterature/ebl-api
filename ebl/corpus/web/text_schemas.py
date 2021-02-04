@@ -123,7 +123,7 @@ class LineNumberString(fields.String):
 
 class ApiLineVariantSchema(LineVariantSchema):
     class Meta:
-        exclude = ("note",)
+        exclude = ("note", "parallel_lines")
         unknown = EXCLUDE
 
     reconstruction = fields.Function(

@@ -21,7 +21,10 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import NoteLineSchema
-from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.one_of_line_schema import (
+    OneOfLineSchema,
+    ParallelLineSchema,
+)
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import parse_label
 
@@ -108,11 +111,17 @@ class LineVariantSchema(Schema):
     reconstruction = fields.Nested(OneOfTokenSchema, required=True, many=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
+    parallel_lines = fields.Nested(
+        ParallelLineSchema, many=True, missing=tuple(), data_key="parallelLines"
+    )
 
     @post_load  # pyre-ignore[56]
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
         return LineVariant(
-            tuple(data["reconstruction"]), data["note"], tuple(data["manuscripts"])
+            tuple(data["reconstruction"]),
+            data["note"],
+            tuple(data["manuscripts"]),
+            tuple(data["parallel_lines"]),
         )
 
 

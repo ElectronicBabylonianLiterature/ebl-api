@@ -33,9 +33,16 @@ from ebl.transliteration.application.parallel_line_schemas import (
 )
 
 
+PARALLEL_LINE_SCHEMAS: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
+    "ParallelFragment": ParallelFragmentSchema,
+    "ParallelText": ParallelTextSchema,
+    "ParallelComposition": ParallelCompositionSchema,
+}
+
+
 class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
+    type_schemas: Mapping[str, Type[Schema]] = {
         "TextLine": TextLineSchema,
         "ControlLine": ControlLineSchema,
         "EmptyLine": EmptyLineSchema,
@@ -53,7 +60,10 @@ class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
         "DivisionAtLine": DivisionAtLineSchema,
         "CompositeAtLine": CompositeAtLineSchema,
         "NoteLine": NoteLineSchema,
-        "ParallelFragment": ParallelFragmentSchema,
-        "ParallelText": ParallelTextSchema,
-        "ParallelComposition": ParallelCompositionSchema,
+        **PARALLEL_LINE_SCHEMAS,
     }
+
+
+class ParallelLineSchema(OneOfSchema):
+    type_field = "type"
+    type_schemas = PARALLEL_LINE_SCHEMAS
