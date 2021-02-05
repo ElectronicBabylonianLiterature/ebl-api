@@ -8,7 +8,6 @@ from ebl.corpus.domain.chapter import (
     Line,
     LineVariant,
     ManuscriptLine,
-    Stage,
 )
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -18,7 +17,9 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
     Siglum,
 )
-from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.domain.stage import Stage
+from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
@@ -28,11 +29,11 @@ from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-
 
 CATEGORY = 1
 INDEX = 2
@@ -77,10 +78,12 @@ PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 OMITTED_WORDS = (1,)
 
 NOTE = None
+PARALLEL_LINES = (ParallelComposition(False, "a composition", LineNumber(7)),)
 LINE_VARIANT = LineVariant(
     LINE_RECONSTRUCTION,
     NOTE,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
+    PARALLEL_LINES,
 )
 LINE = Line(
     LINE_NUMBER, (LINE_VARIANT,), IS_SECOND_LINE_OF_PARALLELISM, IS_BEGINNING_OF_SECTION
@@ -149,6 +152,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
     assert TEXT.chapters[0].lines[0].variants[0].note == NOTE
+    assert TEXT.chapters[0].lines[0].variants[0].parallel_lines == PARALLEL_LINES
     assert (
         TEXT.chapters[0].lines[0].variants[0].manuscripts[0].manuscript_id
         == MANUSCRIPT_ID

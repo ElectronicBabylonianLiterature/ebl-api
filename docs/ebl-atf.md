@@ -161,6 +161,27 @@ note-text = { note-character };
 note-character = any-character - ( '@' | '{' | '}' );
 ```
 
+## Parallel lines
+
+```ebnf
+parallel-line = '// ', [ 'cf. ' ],
+                ( parallel-composition | parallel-text | parallel-fragment );
+
+parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
+
+parallel-text = genre, ' ', category, '.', index, ' ',
+                [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
+genre = 'L'
+stage = 'Ur3' | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA'
+      | 'NB'  | 'LB'  | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
+version  = '"', { any-character }-, '"';
+chapter =  '"', { any-character }-, '"';
+
+parallel-fragment = 'F ', museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ],
+                    line-number;
+museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
+```
+
 ## Text lines
 
 ```ebnf

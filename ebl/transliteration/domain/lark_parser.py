@@ -18,6 +18,8 @@ from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+from ebl.transliteration.domain.parallel_line import ParallelLine
+from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -35,7 +37,11 @@ PARSE_ERRORS: Tuple[Type[Any], ...] = (
 
 
 class LineTransformer(
-    AtLineTransformer, DollarLineTransfomer, NoteLineTransformer, TextLineTransformer
+    AtLineTransformer,
+    DollarLineTransfomer,
+    NoteLineTransformer,
+    TextLineTransformer,
+    ParallelLineTransformer,
 ):
     def empty_line(self, _):
         return EmptyLine()
@@ -50,6 +56,9 @@ WORD_PARSER = Lark.open(
 )
 NOTE_LINE_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
+)
+PARALLEL_LINE_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
 )
 PARATEXT_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
@@ -84,6 +93,11 @@ def parse_line(atf: str) -> Line:
 
 def parse_note_line(atf: str) -> NoteLine:
     tree = NOTE_LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_parallel_line(atf: str) -> ParallelLine:
+    tree = PARALLEL_LINE_PARSER.parse(atf)
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 

@@ -1,6 +1,6 @@
 %import common.INT
 %import common.LETTER
-
+%import .labels (surface_label)
 
 note_line: "#note: " (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
@@ -10,6 +10,21 @@ escaped_text: (/[^@{}\\]/ | ("\\" /[@{}\\]/))+
 string_part: note_text
 note_text: /[^@{}]+/
 LANGUAGE: "akk" | "sux" | "es"
+
+
+?parallel_line: parallel_fragment | parallel_text | parallel_composition
+parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [surface_label " "] line_number
+!museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
+DUPLICATES: "&d"
+parallel_text: PARALLEL_LINE_PREFIX [CF] "L " text_id " "  [chapter_name " "] line_number
+text_id: CATEGORY "." INT
+CATEGORY: "0" | "I" | "II" | "III"
+chapter_name: STAGE " " [quoted_string " "] quoted_string 
+quoted_string: "\"" /./+ "\""
+STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" | "Hel" | "Par" | "Unc" | "SB"
+parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
+CF: "cf. "
+PARALLEL_LINE_PREFIX: "// "
 
 
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*

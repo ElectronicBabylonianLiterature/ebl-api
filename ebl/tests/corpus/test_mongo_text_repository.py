@@ -2,7 +2,7 @@ import attr
 import pytest  # pyre-ignore[21]
 
 from ebl.corpus.application.text_serializer import serialize
-from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory

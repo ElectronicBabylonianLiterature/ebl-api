@@ -2,6 +2,10 @@ import pytest  # pyre-ignore
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
+from ebl.corpus.domain.chapter import Stage
+from ebl.corpus.domain.text_id import TextId
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -39,6 +43,13 @@ from ebl.transliteration.domain.note_line import (
     LanguagePart,
     NoteLine,
     StringPart,
+)
+from ebl.transliteration.domain.parallel_line import (
+    ChapterName,
+    Genre,
+    ParallelComposition,
+    ParallelFragment,
+    ParallelText,
 )
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -516,6 +527,72 @@ LINES = [
                 ],
                 many=True,
             ),
+        },
+    ),
+    (
+        ParallelFragment(
+            True,
+            MuseumNumber.of("K.1"),
+            True,
+            SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+            LineNumber(1),
+        ),
+        {
+            "type": "ParallelFragment",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. F K.1 &d o! 1"))],
+            "displayValue": "cf. F K.1 &d o! 1",
+            "hasCf": True,
+            # pyre-ignore[16]
+            "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
+            "hasDuplicates": True,
+            "surface": {
+                "status": ["CORRECTION"],
+                "surface": "OBVERSE",
+                "abbreviation": "o",
+                "text": "",
+            },
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
+        ParallelText(
+            True,
+            Genre.LITERATURE,
+            TextId(1, 1),
+            ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
+            LineNumber(1),
+        ),
+        {
+            "type": "ParallelText",
+            "prefix": "//",
+            "content": [
+                OneOfTokenSchema().dump(
+                    ValueToken.of('cf. L I.1 OB "version" "name" 1')
+                )
+            ],
+            "displayValue": 'cf. L I.1 OB "version" "name" 1',
+            "hasCf": True,
+            "genre": "LITERATURE",
+            "text": {"category": 1, "index": 1},
+            "chapter": {
+                "stage": "Old Babylonian",
+                "version": "version",
+                "name": "name",
+            },
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
+        ParallelComposition(True, "name", LineNumber(1)),
+        {
+            "type": "ParallelComposition",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. (name 1)"))],
+            "displayValue": "cf. (name 1)",
+            "hasCf": True,
+            "name": "name",
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),
 ]

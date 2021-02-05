@@ -4,7 +4,7 @@ import attr
 
 from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
-
+from ebl.corpus.domain.text_id import TextId
 
 TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
 
@@ -12,12 +12,6 @@ TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
 class TextVisitor:
     def visit(self, item: TextItem) -> None:
         pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class TextId:
-    category: int
-    index: int
 
 
 @attr.s(auto_attribs=True, frozen=True)
