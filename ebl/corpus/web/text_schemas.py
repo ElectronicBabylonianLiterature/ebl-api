@@ -1,4 +1,4 @@
-from typing import cast, Optional, Sequence, Tuple
+from typing import Optional, Sequence, Tuple, cast
 
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 from marshmallow import (  # pyre-ignore[21]
@@ -34,10 +34,13 @@ from ebl.transliteration.domain.lark_parser import (
     parse_text_line,
 )
 from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.tokens import Token
 
 
 class MuseumNumberString(fields.String):  # pyre-ignore[11]
@@ -133,6 +136,20 @@ def _split_reconstruction(
     return text, note, parallel_lines
 
 
+def _parse_recontsruction(
+    reconstruction: str
+) -> Tuple[Sequence[Token], Optional[NoteLine], Sequence[ParallelLine]]:
+    try:
+        text, note, parallel_lines = _split_reconstruction(reconstruction)
+        return (
+            parse_reconstructed_line(text),
+            note and parse_note_line(note),
+            tuple(parse_parallel_line(line) for line in parallel_lines),
+        )
+    except PARSE_ERRORS as error:
+        raise DataError(f"Invalid reconstruction: {reconstruction}. {error}")
+
+
 class ApiLineVariantSchema(LineVariantSchema):
     class Meta:
         exclude = ("note", "parallel_lines")
@@ -156,16 +173,8 @@ class ApiLineVariantSchema(LineVariantSchema):
 
     @post_load  # pyre-ignore[56]
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
-        try:
-            text, note, parallel_lines = _split_reconstruction(data["reconstruction"])
-            return LineVariant(
-                parse_reconstructed_line(text),
-                note and parse_note_line(note),
-                tuple(data["manuscripts"]),
-                tuple(parse_parallel_line(line) for line in parallel_lines),
-            )
-        except PARSE_ERRORS as error:
-            raise DataError(f"Invalid variant: {data['reconstruction']}. {error}")
+        text, note, parallel_lines = _parse_recontsruction(data["reconstruction"])
+        return LineVariant(text, note, tuple(data["manuscripts"]), parallel_lines)
 
 
 class ApiLineSchema(Schema):
