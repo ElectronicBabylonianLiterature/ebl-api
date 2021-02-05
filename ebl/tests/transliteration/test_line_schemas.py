@@ -560,18 +560,26 @@ LINES = [
             True,
             Genre.LITERATURE,
             TextId(1, 1),
-            ChapterName(Stage.OLD_BABYLONIAN, "name"),
+            ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
         ),
         {
             "type": "ParallelText",
             "prefix": "//",
-            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. L I.1 OB name 1"))],
-            "displayValue": "cf. L I.1 OB name 1",
+            "content": [
+                OneOfTokenSchema().dump(
+                    ValueToken.of('cf. L I.1 OB "version" "name" 1')
+                )
+            ],
+            "displayValue": 'cf. L I.1 OB "version" "name" 1',
             "hasCf": True,
             "genre": "LITERATURE",
             "text": {"category": 1, "index": 1},
-            "chapter": {"stage": "Old Babylonian", "name": "name"},
+            "chapter": {
+                "stage": "Old Babylonian",
+                "version": "version",
+                "name": "name",
+            },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),

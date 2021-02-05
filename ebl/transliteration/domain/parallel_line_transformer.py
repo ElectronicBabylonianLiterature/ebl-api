@@ -50,10 +50,14 @@ class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_text_line__text_id(self, category, number) -> TextId:
         return TextId(0 if category == "0" else roman.fromRoman(category), int(number))
 
-    def ebl_atf_text_line__chapter_name(self, children) -> ChapterName:
+    @v_args(inline=True)  # pyre-ignore[56]
+    def ebl_atf_text_line__chapter_name(
+        self, stage_abbreviation, version, name
+    ) -> ChapterName:
         return ChapterName(
-            [stage for stage in Stage if stage.abbreviation == children[0]][0],
-            "".join(children[1:]),
+            [stage for stage in Stage if stage.abbreviation == stage_abbreviation][0],
+            "".join(version.children) if version else "",
+            "".join(name.children),
         )
 
     def ebl_atf_text_line__parallel_composition(self, children) -> ParallelComposition:

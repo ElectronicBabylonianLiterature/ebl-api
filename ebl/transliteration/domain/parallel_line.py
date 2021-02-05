@@ -22,10 +22,13 @@ class Genre(Enum):
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterName:
     stage: Stage
+    version: str
     name: str
 
     def __str__(self) -> str:
-        return f"{self.stage.abbreviation} {self.name}"
+        version = f'"{self.version}" ' if self.version else ""
+        name = f'"{self.name}"'
+        return f"{self.stage.abbreviation} {version}{name}"
 
 
 @attr.s(auto_attribs=True, frozen=True)

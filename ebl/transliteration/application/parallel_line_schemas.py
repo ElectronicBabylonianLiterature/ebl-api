@@ -61,11 +61,12 @@ class TextIdSchema(Schema):  # pyre-ignore[11]
 
 class ChapterNameSchema(Schema):
     stage = ValueEnum(Stage, required=True)
-    name = fields.String(required=True)
+    version = fields.String(required=True)
+    name = fields.String(required=True, validate=validate.Length(min=1))
 
     @post_load  # pyre-ignore[56]
     def make_id(self, data, **kwargs) -> ChapterName:
-        return ChapterName(data["stage"], data["name"])
+        return ChapterName(data["stage"], data["version"], data["name"])
 
 
 class ParallelTextSchema(ParallelLineSchema):

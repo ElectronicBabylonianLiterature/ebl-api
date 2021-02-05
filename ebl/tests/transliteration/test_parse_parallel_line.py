@@ -34,12 +34,22 @@ from ebl.transliteration.domain.parallel_line import (
             ParallelFragment(False, MuseumNumber.of("K.1"), False, None, LineNumber(1)),
         ),
         (
-            "// cf. L I.1 OB my name 1",
+            '// cf. L I.1 OB "my name" 1',
             ParallelText(
                 True,
                 Genre.LITERATURE,
                 TextId(1, 1),
-                ChapterName(Stage.OLD_BABYLONIAN, "my name"),
+                ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
+                LineNumber(1),
+            ),
+        ),
+        (
+            '// cf. L I.1 OB "my version" "my name" 1',
+            ParallelText(
+                True,
+                Genre.LITERATURE,
+                TextId(1, 1),
+                ChapterName(Stage.OLD_BABYLONIAN, "my version", "my name"),
                 LineNumber(1),
             ),
         ),

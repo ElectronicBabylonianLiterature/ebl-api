@@ -19,7 +19,8 @@ DUPLICATES: "&d"
 parallel_text: PARALLEL_LINE_PREFIX [CF] "L " text_id " "  [chapter_name " "] line_number
 text_id: CATEGORY "." INT
 CATEGORY: "0" | "I" | "II" | "III"
-chapter_name: STAGE " " /./+
+chapter_name: STAGE " " [quoted_string " "] quoted_string 
+quoted_string: "\"" /./+ "\""
 STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" | "Hel" | "Par" | "Unc" | "SB"
 parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
 CF: "cf. "

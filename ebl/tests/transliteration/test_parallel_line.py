@@ -47,7 +47,16 @@ def test_parallel_fragment(cf, duplicates, surface, display_value) -> None:
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "cf,chapter,display_value",
     [
-        (True, ChapterName(Stage.OLD_BABYLONIAN, "my name"), "cf. L I.1 OB my name 1"),
+        (
+            True,
+            ChapterName(Stage.OLD_BABYLONIAN, "my version", "my name"),
+            'cf. L I.1 OB "my version" "my name" 1',
+        ),
+        (
+            False,
+            ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
+            'L I.1 OB "my name" 1',
+        ),
         (False, None, "L I.1 1"),
     ],
 )
