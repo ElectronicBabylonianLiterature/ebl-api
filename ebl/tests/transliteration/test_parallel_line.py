@@ -9,7 +9,7 @@ from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    CorpusType,
+    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -52,13 +52,13 @@ def test_parallel_fragment(cf, duplicates, surface, display_value) -> None:
     ],
 )
 def test_parallel_text(cf, chapter, display_value) -> None:
-    corpus_type = CorpusType.LITERATURE
+    genre = Genre.LITERATURE
     text_id = TextId(1, 1)
     line_number = LineNumber(1)
-    line = ParallelText(cf, corpus_type, text_id, chapter, line_number)
+    line = ParallelText(cf, genre, text_id, chapter, line_number)
 
     assert line.has_cf is cf
-    assert line.type == corpus_type
+    assert line.genre == genre
     assert line.text == text_id
     assert line.chapter == chapter
     assert line.line_number == line_number

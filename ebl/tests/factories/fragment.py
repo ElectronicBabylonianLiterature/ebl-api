@@ -43,7 +43,7 @@ from ebl.transliteration.domain.note_line import (
 )
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    CorpusType,
+    Genre as CorpusGenre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -293,7 +293,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ParallelComposition(False, "my name", LineNumber(1)),
             ParallelText(
                 True,
-                CorpusType.LITERATURE,
+                CorpusGenre.LITERATURE,
                 TextId(1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "my name"),
                 LineNumber(1),
@@ -507,7 +507,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ParallelComposition(False, "my name", LineNumber(1)),
             ParallelText(
                 True,
-                CorpusType.LITERATURE,
+                CorpusGenre.LITERATURE,
                 TextId(1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "my name"),
                 LineNumber(1),

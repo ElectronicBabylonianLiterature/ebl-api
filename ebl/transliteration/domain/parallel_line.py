@@ -15,7 +15,7 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 
 
 @unique
-class CorpusType(Enum):
+class Genre(Enum):
     LITERATURE = "L"
 
 
@@ -68,7 +68,7 @@ class ParallelFragment(ParallelLine):
 
 @attr.s(auto_attribs=True, frozen=True)
 class ParallelText(ParallelLine):
-    type: CorpusType
+    genre: Genre
     text: TextId
     chapter: Optional[ChapterName]
     line_number: AbstractLineNumber
@@ -76,10 +76,10 @@ class ParallelText(ParallelLine):
     @property
     def display_value(self) -> str:
         cf = "cf. " if self.has_cf else ""
-        type_ = self.type.value
+        genre = self.genre.value
         chapter = "" if self.chapter is None else f"{self.chapter} "
         line_number = self.line_number.label
-        return f"{cf}{type_} {self.text} {chapter}{line_number}"
+        return f"{cf}{genre} {self.text} {chapter}{line_number}"
 
 
 @attr.s(auto_attribs=True, frozen=True)

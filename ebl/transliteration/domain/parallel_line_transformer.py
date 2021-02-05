@@ -8,7 +8,7 @@ from ebl.transliteration.domain.atf import Status, Surface
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    CorpusType,
+    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -43,7 +43,7 @@ class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
         self, _prefix, cf, text_id, chapter, line_number
     ) -> ParallelText:
         return ParallelText(
-            cf is not None, CorpusType.LITERATURE, text_id, chapter, line_number
+            cf is not None, Genre.LITERATURE, text_id, chapter, line_number
         )
 
     @v_args(inline=True)  # pyre-ignore[56]

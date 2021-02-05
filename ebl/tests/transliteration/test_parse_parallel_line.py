@@ -9,7 +9,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    CorpusType,
+    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -37,7 +37,7 @@ from ebl.transliteration.domain.parallel_line import (
             "// cf. L I.1 OB my name 1",
             ParallelText(
                 True,
-                CorpusType.LITERATURE,
+                Genre.LITERATURE,
                 TextId(1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "my name"),
                 LineNumber(1),
@@ -45,15 +45,11 @@ from ebl.transliteration.domain.parallel_line import (
         ),
         (
             "// L I.1 1",
-            ParallelText(
-                False, CorpusType.LITERATURE, TextId(1, 1), None, LineNumber(1)
-            ),
+            ParallelText(False, Genre.LITERATURE, TextId(1, 1), None, LineNumber(1)),
         ),
         (
             "// L 0.0 1",
-            ParallelText(
-                False, CorpusType.LITERATURE, TextId(0, 0), None, LineNumber(1)
-            ),
+            ParallelText(False, Genre.LITERATURE, TextId(0, 0), None, LineNumber(1)),
         ),
         ("// cf. (name 1)", ParallelComposition(True, "name", LineNumber(1))),
         ("// (name 1)", ParallelComposition(False, "name", LineNumber(1))),

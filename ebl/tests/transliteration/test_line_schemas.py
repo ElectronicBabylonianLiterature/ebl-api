@@ -46,7 +46,7 @@ from ebl.transliteration.domain.note_line import (
 )
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    CorpusType,
+    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -558,7 +558,7 @@ LINES = [
     (
         ParallelText(
             True,
-            CorpusType.LITERATURE,
+            Genre.LITERATURE,
             TextId(1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "name"),
             LineNumber(1),
@@ -569,7 +569,7 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("cf. L I.1 OB name 1"))],
             "displayValue": "cf. L I.1 OB name 1",
             "hasCf": True,
-            "corpusType": "LITERATURE",
+            "genre": "LITERATURE",
             "text": {"category": 1, "index": 1},
             "chapter": {"stage": "Old Babylonian", "name": "name"},
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
