@@ -1,4 +1,4 @@
-from typing import cast
+from typing import cast, Optional, Sequence, Tuple
 
 from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
 from marshmallow import (  # pyre-ignore[21]
@@ -124,6 +124,15 @@ class LineNumberString(fields.String):
             raise ValidationError("Invalid line number.") from error
 
 
+def _split_reconstruction(
+    reconstruction: str
+) -> Tuple[str, Optional[str], Sequence[str]]:
+    [text, *rest] = reconstruction.split("\n")
+    note = rest[0] if rest and rest[0].startswith("#note:") else None
+    parallel_lines = rest if note is None else rest[1:]
+    return text, note, parallel_lines
+
+
 class ApiLineVariantSchema(LineVariantSchema):
     class Meta:
         exclude = ("note", "parallel_lines")
@@ -148,20 +157,12 @@ class ApiLineVariantSchema(LineVariantSchema):
     @post_load  # pyre-ignore[56]
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
         try:
-            [text, *rest] = data["reconstruction"].split("\n")
-            note = None
-            if rest and rest[0].startswith("#note:"):
-                note = parse_note_line(rest[0])
-            parallel_lines = tuple(
-                parse_parallel_line(line)
-                for line in (rest if note is None else rest[1:])
-            )
-
+            text, note, parallel_lines = _split_reconstruction(data["reconstruction"])
             return LineVariant(
                 parse_reconstructed_line(text),
-                note,
+                note and parse_note_line(note),
                 tuple(data["manuscripts"]),
-                parallel_lines,
+                tuple(parse_parallel_line(line) for line in parallel_lines),
             )
         except PARSE_ERRORS as error:
             raise DataError(f"Invalid variant: {data['reconstruction']}. {error}")
