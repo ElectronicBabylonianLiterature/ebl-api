@@ -72,7 +72,7 @@ class ChapterNameSchema(Schema):
 class ParallelTextSchema(ParallelLineSchema):
     genre = NameEnum(Genre, required=True)
     text = fields.Nested(TextIdSchema, required=True)
-    chapter = fields.Nested(ChapterNameSchema, required=True)
+    chapter = fields.Nested(ChapterNameSchema, required=True, allow_none=True)
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
