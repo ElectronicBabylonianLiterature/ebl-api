@@ -319,8 +319,11 @@ erasure-part = ( divider | word | lone-determinative ),
 
 open-intentional-omission = '<(';
 close-intentional-omission = ')>';
+
+accidental-omission = open-accidental-omission | close-accidental-omission;
 open-accidental-omission = '<';
 close-accidental-omission = '>';
+
 open-removal = '<<';
 close-removal = '>>';
 
@@ -557,6 +560,17 @@ akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
                   | 'n' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'w' | 'y' | 'z'
                   | 'É' | 'â' | 'ê' | 'î' | 'û' | 'ā' | 'Ē' | 'ē' | 'ī' | 'Š'
                   | 'š' | 'ū' | 'ṣ' | 'ṭ' | '₄';
+```
+
+### Greek
+
+```ebnf
+greek = greek-word, { word-separator, greek-word }
+greek-word = { greek-letter | accidental-omission | broken-away },
+            greek-letter
+             { greek-letter | accidental-omission | broken-away }
+greek-letter = greek-alphabet, flag;
+greek-alphabet = 
 ```
 
 ## Validation
