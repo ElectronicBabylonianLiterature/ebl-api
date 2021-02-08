@@ -58,6 +58,10 @@ from ebl.transliteration.domain.parallel_line import (
             ParallelText(False, Genre.LITERATURE, TextId(1, 1), None, LineNumber(1)),
         ),
         (
+            "// L III.10 1",
+            ParallelText(False, Genre.LITERATURE, TextId(3, 10), None, LineNumber(1)),
+        ),
+        (
             "// L 0.0 1",
             ParallelText(False, Genre.LITERATURE, TextId(0, 0), None, LineNumber(1)),
         ),
