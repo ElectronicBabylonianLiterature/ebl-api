@@ -243,6 +243,20 @@ normalized-akkadian-shift = '%n';
 shift = '%', { word-character }-;
 ```
 
+### Presence
+
+A presence cannot be nested within itself.
+
+| Presence Type | Open | Close | Scope | Constraint | Semantics |
+| --------------|------|-------|-------|------------|-----------|
+| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
+| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
+| Removal | `<<` | `>>` | Top-level, Word | | |
+| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+
 ### Non-normalized text
 
 Text is a series of tokens separated by a word separator (space). Sometimes
@@ -336,20 +350,6 @@ open-perhaps-broken-away = '(';
 close-perhaps-broken-away = ')';
 
 ```
-
-#### Presence
-
-A presence cannot be nested within itself.
-
-| Presence Type | Open | Close | Scope | Constraint | Semantics |
-| --------------|------|-------|-------|------------|-----------|
-| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
-| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
-| Removal | `<<` | `>>` | Top-level, Word | | |
-| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
-
-See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
 #### Glosses
 
@@ -565,12 +565,16 @@ akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
 ### Greek
 
 ```ebnf
-greek = greek-word, { word-separator, greek-word }
+greek = greek-word, { word-separator, greek-word };
 greek-word = { greek-letter | accidental-omission | broken-away },
-            greek-letter
-             { greek-letter | accidental-omission | broken-away }
+             greek-letter,
+             { greek-letter | accidental-omission | broken-away };
 greek-letter = greek-alphabet, flag;
-greek-alphabet = 
+greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 'ε' | 'Ζ' | 'ζ'
+               | 'Η' | 'η' | 'Θ' | 'θ' | 'Ι' | 'ι' | 'Κ' | 'κ' | 'Λ' | 'λ' | 'Μ' | 'μ'
+               | 'Ν' | 'ν' | 'Ξ' | 'ξ' | 'Ο' | 'ο' | 'Π' | 'π' | 'Ρ' | 'ρ' | 'Σ' | 'σ'
+               | 'ς' | 'Τ' | 'τ' | 'Υ' | 'υ' | 'Φ' | 'φ' | 'Χ' | 'χ' | 'Ψ' | 'ψ' | 'Ω'
+               | 'ω';
 ```
 
 ## Validation
