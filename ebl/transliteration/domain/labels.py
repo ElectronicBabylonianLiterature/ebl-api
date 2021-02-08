@@ -1,33 +1,44 @@
 import re
 from abc import ABC, abstractmethod
-from collections import Counter
-from typing import Iterable, Tuple
+from typing import Iterable, Sequence, Tuple, Union
 
 import attr
-import roman
-from parsy import (char_from, regex, seq, string, string_from)
+import pydash  # pyre-ignore[21]
+import roman  # pyre-ignore[21]
+from lark.lark import Lark  # pyre-ignore[21]
+from lark.lexer import Token  # pyre-ignore[21]
+from lark.visitors import Transformer, v_args  # pyre-ignore[21]
 
-from ebl.transliteration.domain.atf import Status, Surface
+from ebl.transliteration.domain.atf import Object, Status, Surface
+
+
+class DuplicateStatusError(ValueError):
+    pass
 
 
 class LabelVisitor(ABC):
     @abstractmethod
-    def visit_surface_label(self, label: 'SurfaceLabel') -> 'LabelVisitor':
+    def visit_surface_label(self, label: "SurfaceLabel") -> "LabelVisitor":
         ...
 
     @abstractmethod
-    def visit_column_label(self, label: 'ColumnLabel') -> 'LabelVisitor':
+    def visit_column_label(self, label: "ColumnLabel") -> "LabelVisitor":
         ...
 
     @abstractmethod
-    def visit_line_number_label(self,
-                                label: 'LineNumberLabel') -> 'LabelVisitor':
+    def visit_object_label(self, label: "ObjectLabel") -> "LabelVisitor":
         ...
 
 
-def no_duplicate_status(_instance, _attribute, value):
-    if any(count > 1 for _, count in Counter(value).items()):
-        raise ValueError(f'Duplicate status in "{value}".')
+def no_duplicate_status(_instance, _attribute, value) -> None:
+    if pydash.duplicates(value):
+        raise DuplicateStatusError(f'Duplicate status in "{value}".')
+
+
+def convert_status_sequence(
+    status: Union[Iterable[Status], Sequence[Status]]
+) -> Tuple[Status, ...]:
+    return tuple(status)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -37,11 +48,14 @@ class Label(ABC):
     and
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
     """
-    status: Tuple[Status, ...] = attr.ib(validator=no_duplicate_status)
+
+    status: Sequence[Status] = attr.ib(
+        validator=no_duplicate_status, converter=convert_status_sequence
+    )
 
     @property
     @abstractmethod
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         ...
 
     @property
@@ -50,26 +64,18 @@ class Label(ABC):
         ...
 
     @property
-    def _status_string(self) -> str:
-        return ''.join([status.value for status in self.status])
+    def status_string(self) -> str:
+        return "".join(status.value for status in self.status)
 
     @abstractmethod
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         ...
 
-    @staticmethod
-    def parse(label: str) -> 'Label':
-        return LABEL.parse(label)
-
-    @staticmethod
-    def parse_atf(atf: str) -> 'Label':
-        return LABEL_ATF.parse(atf)
-
     def to_value(self) -> str:
-        return f'{self._label}{self._status_string}'
+        return f"{self.abbreviation}{self.status_string}"
 
     def to_atf(self) -> str:
-        return f'{self._atf}{self._status_string}'
+        return f"{self._atf}{self.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -78,22 +84,20 @@ class ColumnLabel(Label):
     column: int
 
     @staticmethod
-    def from_label(column: str,
-                   status: Iterable[Status] = tuple()) -> 'ColumnLabel':
-        return ColumnLabel(tuple(status), roman.fromRoman(column.upper()))
+    def from_label(column: str, status: Iterable[Status] = tuple()) -> "ColumnLabel":
+        return ColumnLabel(status, roman.fromRoman(column.upper()))  # pyre-fixme[6]
 
     @staticmethod
-    def from_int(column: int,
-                 status: Iterable[Status] = tuple()) -> 'ColumnLabel':
-        return ColumnLabel(tuple(status), column)
+    def from_int(column: int, status: Iterable[Status] = tuple()) -> "ColumnLabel":
+        return ColumnLabel(status, column)  # pyre-fixme[6]
 
     @property
-    def _label(self) -> str:
+    def abbreviation(self) -> str:
         return roman.toRoman(self.column).lower()
 
     @property
     def _atf(self) -> str:
-        return f'@column {self.column}'
+        return f"@column {self.column}"
 
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         return visitor.visit_column_label(self)
@@ -103,89 +107,100 @@ class ColumnLabel(Label):
 class SurfaceLabel(Label):
 
     surface: Surface
+    text: str = attr.ib(default="")
+
+    @text.validator
+    def _check_text(self, attribute, value) -> None:
+        if value and self.surface not in [Surface.SURFACE, Surface.FACE, Surface.EDGE]:
+            raise ValueError(
+                "Non-empty text is only allowed for SURFACE, EDGE or FACE."
+            )
 
     @staticmethod
-    def from_label(surface: Surface,
-                   status: Iterable[Status] = tuple()) -> 'SurfaceLabel':
-        return SurfaceLabel(tuple(status), surface)
+    def from_label(
+        surface: Surface, status: Iterable[Status] = tuple(), text: str = ""
+    ) -> "SurfaceLabel":
+        return SurfaceLabel(status, surface, text)  # pyre-fixme[6]
 
     @property
-    def _label(self) -> str:
-        return self.surface.label
+    def abbreviation(self) -> str:
+        return (
+            self.text or self.surface.label or ""
+            if self.surface == Surface.EDGE
+            else self.surface.label or self.text
+        )
 
     @property
     def _atf(self) -> str:
-        return self.surface.atf
+        return f"@{self.surface.atf}"
 
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         return visitor.visit_surface_label(self)
 
-
-LINE_NUMBER_EXPRESSION = r'[^\s]+'
-
-
-def is_sequence_of_non_space_characters(_instance, _attribute, value):
-    if not re.fullmatch(LINE_NUMBER_EXPRESSION, value):
-        raise ValueError(f'Line number "{value}" is not a sequence of '
-                         'non-space characters.')
+    def to_atf(self) -> str:
+        text = f" {self.text}" if self.text else ""
+        return f"{self._atf}{self.status_string}{text}"
 
 
-@attr.s(auto_attribs=True, frozen=True, init=False)
-class LineNumberLabel(Label):
+@attr.s(auto_attribs=True, frozen=True)
+class ObjectLabel(Label):
 
-    number: str = attr.ib(validator=is_sequence_of_non_space_characters)
+    object: Object
+    text: str = attr.ib(default="")
 
-    def __init__(self, number: str):
-        super().__init__(tuple())
-        object.__setattr__(self, 'number', number)
-        attr.validate(self)
-
-    @staticmethod
-    def from_atf(atf: str) -> 'LineNumberLabel':
-        return LineNumberLabel(atf[:-1])
+    @text.validator
+    def _check_text(self, attribute, value) -> None:
+        if value and self.object not in [Object.OBJECT, Object.FRAGMENT]:
+            raise ValueError("Non-empty text is only allowed for OBJECT and FRAGMENT.")
 
     @property
-    def _label(self) -> str:
-        return self.number
+    def abbreviation(self) -> str:
+        return self.text or self.object.value
 
     @property
     def _atf(self) -> str:
-        return f'{self.number}.'
+        return f"@{self.object.value}"
 
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
-        return visitor.visit_line_number_label(self)
+        return visitor.visit_object_label(self)
+
+    def to_atf(self) -> str:
+        text = f" {self.text}" if self.text else ""
+        return f"{self._atf}{self.status_string}{text}"
 
 
-STATUS = char_from(
-    ''.join([status.value for status in Status])
-).map(Status).desc('status')
+LINE_NUMBER_EXPRESSION = r"[^\s]+"
 
-SURFACE_LABEL = seq(
-    string_from(
-        *[surface.label for surface in Surface]
-    ).map(Surface.from_label).desc('surface label'),
-    STATUS.many()
-).combine(SurfaceLabel.from_label)
-COLUMN_LABEL = seq(
-    regex(r'[ivx]+').desc('column label'),
-    STATUS.many()
-).combine(ColumnLabel.from_label)
-LINE_NUMBER_LABEL = regex(LINE_NUMBER_EXPRESSION)\
-    .map(LineNumberLabel)\
-    .desc('line number label')
-LABEL = SURFACE_LABEL | COLUMN_LABEL | LINE_NUMBER_LABEL
 
-SURFACE_ATF = seq(
-    string_from(
-        *[surface.atf for surface in Surface]
-    ).map(Surface.from_atf).desc('surface atf'),
-    STATUS.many()
-).combine(SurfaceLabel.from_label)
-COLUMN_ATF = seq(
-    (string(r'@column ') >> regex(r'\d+').map(int)).desc('column atf'),
-    STATUS.many()
-).combine(ColumnLabel.from_int)
-LINE_NUMBER_ATF = (regex(LINE_NUMBER_EXPRESSION + r'\.')
-                   .map(LineNumberLabel.from_atf)
-                   .desc('line number atf'))
-LABEL_ATF = SURFACE_ATF | COLUMN_ATF | LINE_NUMBER_ATF
+def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
+    if not re.fullmatch(LINE_NUMBER_EXPRESSION, value):
+        raise ValueError(
+            f'Line number "{value}" is not a sequence of ' "non-space characters."
+        )
+
+
+class LabelTransformer(Transformer):  # pyre-ignore[11]
+    @v_args(inline=True)  # pyre-ignore[56]
+    def column_label(
+        self, numeral: Token, status: Sequence[Status]  # pyre-ignore[11]
+    ) -> ColumnLabel:
+        return ColumnLabel.from_label(numeral, status)
+
+    @v_args(inline=True)  # pyre-ignore[56]
+    def surface_label(self, surface: Surface, status: Sequence[Status]) -> SurfaceLabel:
+        return SurfaceLabel.from_label(surface, status)
+
+    @v_args(inline=True)  # pyre-ignore[56]
+    def surface(self, surface: Token) -> Surface:
+        return Surface.from_label(surface)
+
+    def status(self, children: Iterable[Token]) -> Sequence[Status]:
+        return tuple(Status(token) for token in children)
+
+
+LABEL_PARSER = Lark.open("labels.lark", maybe_placeholders=True, rel_to=__file__)
+
+
+def parse_label(label: str) -> Label:
+    tree = LABEL_PARSER.parse(label)
+    return LabelTransformer().transform(tree)  # pyre-ignore[16]

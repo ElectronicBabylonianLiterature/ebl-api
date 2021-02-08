@@ -1,19 +1,16 @@
-from typing import List, Optional
+from typing import Optional
 
-import pydash
+import pydash  # pyre-ignore[21]
 
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign, SignName
-from ebl.transliteration.domain.sign_map import SignKey
 
 
 class MemoizingSignRepository(SignRepository):
-
     def __init__(self, delegate: SignRepository):
         self._create = delegate.create
         self._find = pydash.memoize(delegate.find)
         self._search = pydash.memoize(delegate.search)
-        self._search_many = pydash.memoize(delegate.search_many)
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)
@@ -23,6 +20,3 @@ class MemoizingSignRepository(SignRepository):
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         return self._search(reading, sub_index)
-
-    def search_many(self, readings: List[SignKey]) -> List[Sign]:
-        return self._search_many(readings)

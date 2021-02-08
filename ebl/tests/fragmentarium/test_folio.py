@@ -1,7 +1,7 @@
 from ebl.fragmentarium.domain.folios import Folio
 
-NAME = 'WGL'
-NUMBER = '001'
+NAME = "WGL"
+NUMBER = "001"
 FOLIO = Folio(NAME, NUMBER)
 
 
@@ -14,4 +14,4 @@ def test_number():
 
 
 def test_file_name():
-    assert FOLIO.file_name == f'{NAME}_{NUMBER}.jpg'
+    assert FOLIO.file_name == f"{NAME}_{NUMBER}.jpg"

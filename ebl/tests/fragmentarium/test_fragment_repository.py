@@ -1,40 +1,67 @@
 import attr
-import pytest
+import pytest  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import UncuratedReference
-from ebl.fragmentarium.domain.transliteration_query import \
-    TransliterationQuery
-from ebl.fragmentarium.domain.transliteration_update import \
-    TransliterationUpdate
+from ebl.fragmentarium.domain.fragment import Genre
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
+from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.fragment import (FragmentFactory,
-                                          InterestingFragmentFactory,
-                                          LemmatizedFragmentFactory,
-                                          TransliteratedFragmentFactory)
-from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.lemmatization import Lemmatization
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+from ebl.tests.factories.fragment import (
+    FragmentFactory,
+    LemmatizedFragmentFactory,
+    TransliteratedFragmentFactory,
+)
+from ebl.transliteration.domain.atf import Flag
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    Erasure,
+    PerhapsBrokenAway,
+)
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.transliteration.domain.line import ControlLine, EmptyLine
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import Word, ValueToken
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
+from ebl.transliteration.domain.word_tokens import Word
 
-COLLECTION = 'fragments'
+COLLECTION = "fragments"
 
 
 ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
-    TransliteratedFragmentFactory.build(),
-    text=Text((
-        TextLine("1'.", (
-            Word('GI₆', unique_lemma=(WordId('ginâ I'),)),
-            Word('ana', unique_lemma=(WordId('ana II'),)),
-            Word('ana', unique_lemma=(WordId('ana II'),)),
-            Word('u₄-šu', unique_lemma=(WordId('ūsu I'),))
-        )),
-    )),
-    signs='MI DIŠ DIŠ UD ŠU'
+    TransliteratedFragmentFactory.build(),  # pyre-ignore[16]
+    text=Text(
+        (
+            TextLine(
+                LineNumber(1),
+                (
+                    Word.of(
+                        [Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),)
+                    ),
+                    Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
+                    Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
+                    Word.of(
+                        [
+                            Reading.of_name("u", 4),
+                            Joiner.hyphen(),
+                            Reading.of_name("šu"),
+                        ],
+                        unique_lemma=(WordId("ūsu I"),),
+                    ),
+                    AkkadianWord.of(
+                        [ValueToken.of("ana")], unique_lemma=(WordId("normalized I"),)
+                    ),
+                ),
+            ),
+        )
+    ),
+    signs="MI DIŠ DIŠ UD ŠU",
 )
 
 
@@ -43,24 +70,24 @@ SCHEMA = FragmentSchema()
 
 def test_create(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_id = fragment_repository.create(fragment)
 
-    assert database[COLLECTION].find_one({
-        '_id': fragment_number
-    }) == SCHEMA.dump(fragment)
+    assert fragment_id == str(fragment.number)
+    assert database[COLLECTION].find_one(
+        {"_id": fragment_id}, projection={"_id": False}
+    ) == SCHEMA.dump(fragment)
 
 
-def test_query_by_fragment_number(database, fragment_repository):
+def test_query_by_museum_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
 
-    assert fragment_repository.query_by_fragment_number(fragment.number) ==\
-        fragment
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 
 def test_fragment_not_found(fragment_repository):
     with pytest.raises(NotFoundError):
-        fragment_repository.query_by_fragment_number('unknown id')
+        fragment_repository.query_by_museum_number(MuseumNumber("unknown", "id"))
 
 
 def test_find_random(fragment_repository,):
@@ -69,51 +96,56 @@ def test_find_random(fragment_repository,):
     for a_fragment in fragment, transliterated_fragment:
         fragment_repository.create(a_fragment)
 
-    assert fragment_repository.query_random_by_transliterated() == \
-        [transliterated_fragment]
+    assert fragment_repository.query_random_by_transliterated() == [
+        transliterated_fragment
+    ]
 
 
-def test_find_interesting(fragment_repository):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    interesting_fragment = InterestingFragmentFactory.build()
-    too_many_references = InterestingFragmentFactory.build(
-        uncurated_references=(
-            UncuratedReference('7(0)'),
-            UncuratedReference('CAD 51', (34, 56)),
-            UncuratedReference('7(1)'),
-            UncuratedReference('CAD 53', (1,)),
+def test_folio_pager_exception(fragment_repository):
+    with pytest.raises(NotFoundError):
+        query = "1841-07-26, 57"
+        fragment_repository.query_next_and_previous_fragment(query)
+
+
+FRAGMENTS = ["1841-07-26.54", "1841-07-26.57", "1841-07-26.63"]
+
+
+@pytest.mark.parametrize(
+    "query,  existing,expected",
+    [
+        ("1841-07-26.57", FRAGMENTS, ["1841-07-26.54", "1841-07-26.63"]),
+        ("1841-07-26.63", FRAGMENTS, ["1841-07-26.57", "1841-07-26.54"]),
+        ("1841-07-26.54", FRAGMENTS, ["1841-07-26.63", "1841-07-26.57"]),
+        ("1841-07-26.54", FRAGMENTS[:2], ["1841-07-26.57", "1841-07-26.57"]),
+    ],
+)
+def test_query_next_and_previous_fragment(
+    query, existing, expected, fragment_repository
+):
+    for fragmentNumber in existing:
+        fragment_repository.create(
+            FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
-    )
-    not_kuyunjik = InterestingFragmentFactory.build(
-        collection='Not Kuyunjik'
-    )
 
-    for fragment in [
-            transliterated_fragment,
-            interesting_fragment,
-            too_many_references,
-            not_kuyunjik
-    ]:
-        fragment_repository.create(fragment)
-
-    assert (fragment_repository
-            .query_by_kuyunjik_not_transliterated_joined_or_published()) == \
-        [interesting_fragment]
+    results = list(fragment_repository.query_next_and_previous_fragment(query).values())
+    assert results == expected
 
 
-def test_update_transliteration_with_record(fragment_repository,
-                                            user):
+def test_query_next_and_previous_fragment_exception(fragment_repository):
+    query = MuseumNumber.of("1841-07-26.57")
+    with pytest.raises(NotFoundError):
+        fragment_repository.query_next_and_previous_fragment(query)
+
+
+def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(Atf('$ (the transliteration)'), 'notes'),
-        user
+        TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"), user
     )
 
-    fragment_repository.update_transliteration(
-        updated_fragment
-    )
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    fragment_repository.update_transliteration(updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
 
@@ -121,24 +153,31 @@ def test_update_transliteration_with_record(fragment_repository,
 def test_update_update_transliteration_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_transliteration(
-            transliterated_fragment
-        )
+        fragment_repository.update_transliteration(transliterated_fragment)
+
+
+def test_update_genres(fragment_repository):
+    fragment = FragmentFactory.build(genres=tuple())
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_genres(
+        (Genre(["ARCHIVAL", "Administrative"], False),)
+    )
+    fragment_repository.update_genres(updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
 
 
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragment_repository.create(transliterated_fragment)
-    tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][3]['uniqueLemma'] = ['aklu I']
-    updated_fragment = transliterated_fragment.update_lemmatization(
-        Lemmatization.from_list(tokens)
-    )
+    fragment_repository.create(transliterated_fragment)
+    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    lemmatization = Lemmatization(tokens)
+    updated_fragment = transliterated_fragment.update_lemmatization(lemmatization)
 
-    fragment_repository.update_lemmatization(
-        updated_fragment
-    )
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    fragment_repository.update_lemmatization(updated_fragment)
+    result = fragment_repository.query_by_museum_number(transliterated_fragment.number)
 
     assert result == updated_fragment
 
@@ -146,28 +185,51 @@ def test_update_lemmatization(fragment_repository):
 def test_update_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_lemmatization(
-            transliterated_fragment
-        )
+        fragment_repository.update_lemmatization(transliterated_fragment)
 
 
 def test_statistics(database, fragment_repository):
-    database[COLLECTION].insert_many([
-        SCHEMA.dump(FragmentFactory.build(text=Text((
-            TextLine('1.', (Word('first'), Word('line'))),
-            ControlLine('$', (ValueToken('ignore'), )),
-            EmptyLine()
-        )))),
-        SCHEMA.dump(FragmentFactory.build(text=Text((
-            ControlLine('$', (ValueToken('ignore'), )),
-            TextLine('1.', (Word('second'), )),
-            TextLine('1.', (Word('third'), )),
-            ControlLine('$', (ValueToken('ignore'), )),
-            TextLine('1.', (Word('fourth'), )),
-        )))),
-        SCHEMA.dump(FragmentFactory.build(text=Text()))
-    ])
-
+    database[COLLECTION].insert_many(
+        [
+            SCHEMA.dump(
+                FragmentFactory.build(
+                    text=Text(
+                        (
+                            TextLine(
+                                LineNumber(1),
+                                (
+                                    Word.of([Reading.of_name("first")]),
+                                    Word.of([Reading.of_name("line")]),
+                                ),
+                            ),
+                            ControlLine("#", "ignore"),
+                            EmptyLine(),
+                        )
+                    )
+                )
+            ),
+            SCHEMA.dump(
+                FragmentFactory.build(
+                    text=Text(
+                        (
+                            ControlLine("#", "ignore"),
+                            TextLine(
+                                LineNumber(1), (Word.of([Reading.of_name("second")]),)
+                            ),
+                            TextLine(
+                                LineNumber(2), (Word.of([Reading.of_name("third")]),)
+                            ),
+                            ControlLine("#", "ignore"),
+                            TextLine(
+                                LineNumber(3), (Word.of([Reading.of_name("fourth")]),)
+                            ),
+                        )
+                    )
+                )
+            ),
+            SCHEMA.dump(FragmentFactory.build(text=Text())),
+        ]
+    )
     assert fragment_repository.count_transliterated_fragments() == 2
     assert fragment_repository.count_lines() == 4
 
@@ -179,82 +241,122 @@ def test_statistics_no_fragments(fragment_repository):
 
 def test_search_finds_by_id(database, fragment_repository):
     fragment = FragmentFactory.build()
-    database[COLLECTION].insert_many([
-        SCHEMA.dump(fragment),
-        SCHEMA.dump(FragmentFactory.build())
-    ])
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
 
-    assert (fragment_repository
-            .query_by_fragment_cdli_or_accession_number(fragment.number)) == \
-        [fragment]
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
+    ) == [fragment]
 
 
 def test_search_finds_by_accession(database, fragment_repository):
     fragment = FragmentFactory.build()
-    database[COLLECTION].insert_many([
-        SCHEMA.dump(fragment),
-        SCHEMA.dump(FragmentFactory.build())
-    ])
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
 
-    assert (fragment_repository
-            .query_by_fragment_cdli_or_accession_number(fragment.number)) == \
-        [fragment]
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
+    ) == [fragment]
 
 
 def test_search_finds_by_cdli(database, fragment_repository):
     fragment = FragmentFactory.build()
-    database[COLLECTION].insert_many([
-        SCHEMA.dump(fragment),
-        SCHEMA.dump(FragmentFactory.build())
-    ])
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
 
-    assert (fragment_repository
-            .query_by_fragment_cdli_or_accession_number(fragment.number)) == \
-        [fragment]
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
+    ) == [fragment]
 
 
 def test_search_not_found(fragment_repository):
-    assert (fragment_repository
-            .query_by_fragment_cdli_or_accession_number('K.1')) == \
-        []
+    assert (fragment_repository.query_by_fragment_cdli_or_accession_number("K.1")) == []
+
+
+def test_search_reference_id(database, fragment_repository):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(), ReferenceFactory.build())
+    )
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, None
+        )
+    ) == [fragment]
+
+
+@pytest.mark.parametrize(
+    "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
+)
+def test_search_reference_id_and_pages(pages, database, fragment_repository):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+    )
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, "163"
+        )
+    ) == [fragment]
+
+
+@pytest.mark.parametrize("pages", ["1631", "1163", "116311"])
+def test_empty_result_search_reference_id_and_pages(
+    pages, database, fragment_repository
+):
+    fragment = FragmentFactory.build(
+        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+    )
+    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    assert (
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, "163"
+        )
+    ) == []
 
 
 SEARCH_SIGNS_DATA = [
-    ([['DIŠ', 'UD']], True),
-    ([['KU']], True),
-    ([['UD']], True),
-    ([
-        ['MI', 'DIŠ'],
-        ['ABZ411', 'BA', 'MA']
-    ], True),
-    ([['IGI', 'UD']], False),
+    ([["DIŠ", "UD"]], True),
+    ([["KU"]], True),
+    ([["UD"]], True),
+    ([["MI", "DIŠ"], ["ABZ411", "BA", "MA"]], True),
+    ([["IGI", "UD"]], False),
 ]
 
 
-@pytest.mark.parametrize('signs,is_match', SEARCH_SIGNS_DATA)
-def test_search_signs(signs,
-                      is_match,
-                      fragment_repository):
+@pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
+def test_search_signs(signs, is_match, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
     fragment_repository.create(FragmentFactory.build())
 
-    result = (fragment_repository
-              .query_by_transliteration(TransliterationQuery(signs)))
+    result = fragment_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
     assert result == expected
 
 
-def test_find_transliterated(database,
-                             fragment_repository):
+def test_find_transliterated(database, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    database[COLLECTION].insert_many([
-        SCHEMA.dump(transliterated_fragment),
-        SCHEMA.dump(FragmentFactory.build())
-    ])
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
 
-    assert fragment_repository.find_transliterated() ==\
-        [transliterated_fragment]
+    assert fragment_repository.query_transliterated_numbers() == [
+        transliterated_fragment.number
+    ]
+
+
+def test_find_transliterated_line_to_vec(database, fragment_repository):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
+    assert fragment_repository.query_transliterated_line_to_vec() == {
+        transliterated_fragment.number: transliterated_fragment.line_to_vec
+    }
 
 
 def test_find_lemmas(fragment_repository):
@@ -262,7 +364,15 @@ def test_find_lemmas(fragment_repository):
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
-    assert fragment_repository.query_lemmas('GI₆') == [['ginâ I']]
+    assert fragment_repository.query_lemmas("GI₆", False) == [["ginâ I"]]
+
+
+def test_find_lemmas_normalized(fragment_repository):
+    lemmatized_fragment = LemmatizedFragmentFactory.build()
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+
+    assert fragment_repository.query_lemmas("ana", True) == [["normalized I"]]
 
 
 def test_find_lemmas_multiple(fragment_repository):
@@ -270,58 +380,102 @@ def test_find_lemmas_multiple(fragment_repository):
     fragment_repository.create(lemmatized_fragment)
     fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
-    assert fragment_repository.query_lemmas('ana') == \
-        [['ana II'], ['ana I']]
+    assert fragment_repository.query_lemmas("ana", False) == [["ana II"], ["ana I"]]
 
 
-@pytest.mark.parametrize('value', [
-    '[(a[(n)]a#*?!)]',
-    '°\\ana°'
-])
-def test_find_lemmas_ignores_in_value(value, fragment_repository):
+@pytest.mark.parametrize(
+    "parts,expected",
+    [
+        (
+            [
+                Reading.of(
+                    [ValueToken.of("ana")],
+                    flags=[
+                        Flag.DAMAGE,
+                        Flag.COLLATION,
+                        Flag.UNCERTAIN,
+                        Flag.CORRECTION,
+                    ],
+                )
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                BrokenAway.open(),
+                PerhapsBrokenAway.open(),
+                Reading.of([ValueToken.of("ana")]),
+                PerhapsBrokenAway.close(),
+                BrokenAway.close(),
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                Reading.of(
+                    [
+                        ValueToken.of("a"),
+                        BrokenAway.open(),
+                        ValueToken.of("n"),
+                        PerhapsBrokenAway.close(),
+                        ValueToken.of("a"),
+                    ]
+                )
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                Erasure.open(),
+                Erasure.center(),
+                Reading.of_name("ana").set_erasure(ErasureState.OVER_ERASED),
+                Erasure.close(),
+            ],
+            [["ana I"]],
+        ),
+        (
+            [
+                Erasure.open(),
+                Reading.of_name("ana").set_erasure(ErasureState.ERASED),
+                Erasure.center(),
+                Erasure.close(),
+            ],
+            [],
+        ),
+    ],
+)
+def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
     fragment = FragmentFactory.build(
-        text=Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf("1'."), [
-                Word(value,  unique_lemma=(WordId('ana I'),))
-            ])
-        ]),
-        signs='DIŠ'
+        text=Text.of_iterable(
+            [
+                TextLine.of_iterable(
+                    LineNumber(1), [Word.of(parts, unique_lemma=(WordId("ana I"),))]
+                )
+            ]
+        ),
+        signs="DIŠ",
     )
     fragment_repository.create(fragment)
 
-    assert fragment_repository.query_lemmas('ana') == [['ana I']]
+    assert fragment_repository.query_lemmas("ana", False) == expected
 
 
-@pytest.mark.parametrize('query,expected', [
-    ('[(a)]n[(a*#!?)]', [['ana I']]),
-    ('°ana\\me-e-li°', []),
-    ('°me-e-li\\ana°', [['ana I']]),
-    ('°\\ana°', [['ana I']])
-])
-def test_find_lemmas_ignores_in_query(query,
-                                      expected,
-                                      fragment_repository):
+@pytest.mark.parametrize("is_normalized", [False, True])
+def test_find_lemmas_not_found(is_normalized, fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
-
-    assert fragment_repository.query_lemmas(query) == expected
-
-
-def test_find_lemmas_not_found(fragment_repository):
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    assert fragment_repository.query_lemmas('aklu') == []
+    assert fragment_repository.query_lemmas("aklu", is_normalized) == []
 
 
 def test_update_references(fragment_repository):
     reference = ReferenceFactory.build()
     fragment = FragmentFactory.build()
-    fragment_number = fragment_repository.create(fragment)
+    fragment_repository.create(fragment)
     references = (reference,)
     updated_fragment = fragment.set_references(references)
 
     fragment_repository.update_references(updated_fragment)
-    result = fragment_repository.query_by_fragment_number(fragment_number)
+    result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
 
@@ -329,6 +483,4 @@ def test_update_references(fragment_repository):
 def test_update_update_references(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_references(
-            transliterated_fragment
-        )
+        fragment_repository.update_references(transliterated_fragment)

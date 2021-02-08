@@ -1,11 +1,11 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon import testing
-from falcon_auth import FalconAuthMiddleware, NoneAuthBackend
+from falcon_auth import FalconAuthMiddleware, NoneAuthBackend  # pyre-ignore
 
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.users.web.require_scope import require_scope
 
-SCOPE = 'write:words'
+SCOPE = "write:words"
 
 
 @falcon.before(require_scope, SCOPE)
@@ -16,20 +16,15 @@ class TestResource:
 
 def do_get(scope):
     def user_loader():
-        return Auth0User(
-            {
-                'scope': scope
-            },
-            lambda: {}
-        )
+        return Auth0User({"scope": scope}, lambda: {})
 
     auth_backend = NoneAuthBackend(user_loader)
     auth_middleware = FalconAuthMiddleware(auth_backend)
     api = falcon.API(middleware=[auth_middleware])
-    api.add_route('/test', TestResource())
+    api.add_route("/test", TestResource())
     client = testing.TestClient(api)
 
-    return client.simulate_get('/test')
+    return client.simulate_get("/test")
 
 
 def test_require_scope_present():
@@ -48,9 +43,9 @@ def test_require_scope_no_user():
     auth_backend = NoneAuthBackend(lambda: None)
     auth_middleware = FalconAuthMiddleware(auth_backend)
     api = falcon.API(middleware=[auth_middleware])
-    api.add_route('/test', TestResource())
+    api.add_route("/test", TestResource())
     client = testing.TestClient(api)
 
-    result = client.simulate_get('/test')
+    result = client.simulate_get("/test")
 
     assert result.status == falcon.HTTP_FORBIDDEN

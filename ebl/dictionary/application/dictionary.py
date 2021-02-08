@@ -5,11 +5,10 @@ from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.users.domain.user import User
 
-COLLECTION = 'words'
+COLLECTION = "words"
 
 
 class Dictionary:
-
     def __init__(self, repository: WordRepository, changelog: Changelog):
         self._repository = repository
         self._changelog = changelog
@@ -23,15 +22,10 @@ class Dictionary:
     def search(self, query: str) -> Sequence:
         return self._repository.query_by_lemma_form_or_meaning(query)
 
-    def search_lemma(self, query: str) -> Sequence:
-        return self._repository.query_by_lemma_prefix(query)
+    def search_lemma(self, lemma: str) -> Sequence:
+        return self._repository.query_by_lemma_prefix(lemma)
 
     def update(self, word, user: User) -> None:
-        old_word = self.find(word['_id'])
-        self._changelog.create(
-            COLLECTION,
-            user.profile,
-            old_word,
-            word
-        )
+        old_word = self.find(word["_id"])
+        self._changelog.create(COLLECTION, user.profile, old_word, word)
         self._repository.update(word)

@@ -1,18 +1,19 @@
 import json
 
-import falcon
+import falcon  # pyre-ignore[21]
 
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
-                                        TextFactory)
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
+import pydash  # pyre-ignore[21]
+
 
 ANY_USER = Guest()
 
 
-def create_dto(text, include_documents=False):
-    return serialize(text, include_documents)
+def create_dto(text):
+    return serialize(text)
 
 
 def allow_references(text, bibliography):
@@ -28,25 +29,25 @@ def allow_signs(signs, sign_list):
 
 
 def create_text(client, text):
-    post_result = client.simulate_post(
-        f'/texts',
-        body=json.dumps(create_dto(text))
-    )
+    post_result = client.simulate_post("/texts", body=json.dumps(create_dto(text)))
     assert post_result.status == falcon.HTTP_CREATED
-    assert post_result.headers['Location'] ==\
-        f'/texts/{text.category}/{text.index}'
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert post_result.json == create_dto(text, True)
+    assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert post_result.json == create_dto(text)
 
 
 def test_parse_text():
-    text = TextFactory.build(chapters=(
-        ChapterFactory.build(manuscripts=(
-            ManuscriptFactory.build(references=(
-                ReferenceFactory.build(),
-            )),
-        )),
-    ))
+    text = TextFactory.build(
+        chapters=(
+            ChapterFactory.build(
+                manuscripts=(
+                    ManuscriptFactory.build(
+                        id=1, references=(ReferenceFactory.build(),)
+                    ),
+                )
+            ),
+        )
+    )
     dto = create_dto(text)
 
     assert deserialize(dto) == text
@@ -54,39 +55,38 @@ def test_parse_text():
 
 def test_to_dto():
     text = TextFactory.build()
-    dto = create_dto(text, True)
+    dto = create_dto(text)
 
     assert serialize(text) == dto
 
 
-def test_created_text_can_be_fetched(client, bibliography, sign_repository,
-                                     signs):
+def test_created_text_can_be_fetched(client, bibliography, sign_repository, signs):
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
 
-    get_result = client.simulate_get(f'/texts/{text.category}/{text.index}')
+    get_result = client.simulate_get(f"/texts/{text.category}/{text.index}")
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert get_result.json == create_dto(text, True)
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert get_result.json == create_dto(text)
 
 
 def test_text_not_found(client):
-    result = client.simulate_get('/texts/1/1')
+    result = client.simulate_get("/texts/1/1")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
 def test_invalid_section(client):
-    result = client.simulate_get('/texts/invalid/1')
+    result = client.simulate_get("/texts/invalid/1")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
 def test_invalid_index(client):
-    result = client.simulate_get('/texts/1/invalid')
+    result = client.simulate_get("/texts/1/invalid")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
@@ -100,15 +100,11 @@ def test_listing_texts(client, bibliography, sign_repository, signs):
     create_text(client, first_text)
     create_text(client, second_text)
 
-    get_result = client.simulate_get(f'/texts')
+    get_result = client.simulate_get("/texts")
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == [
-        {**dto, 'chapters': []}
-        for dto
-        in [
-            create_dto(first_text, False),
-            create_dto(second_text, False)
-        ]
+        pydash.omit(dto, "chapters")
+        for dto in [create_dto(first_text), create_dto(second_text)]
     ]

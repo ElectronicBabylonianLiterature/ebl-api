@@ -1,0 +1,32 @@
+%import .ebl_atf_common (INT, LCASE_LETTER)
+%import .ebl_atf_common (free_text)
+%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
+%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (seal, OBJECT, SURFACE, free_text)
+
+?at_line: "@" value
+
+?value:  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
+
+STATUS:  "'" | "?" | "!" | "*"
+
+statuses: STATUS*
+
+surface_with_status : surface " "? statuses
+
+object_with_status : object " "? statuses
+
+column : "column " INT " "? statuses
+
+heading: "h" INT
+
+!discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
+
+divisions: "m=division " free_text [" " INT]
+
+?composite: composite_composite | composite_start | composite_end | composite_milestone
+composite_start: "div " free_text [" " INT]
+composite_end: "end " free_text
+composite_composite: "composite"
+composite_milestone: "m=locator " free_text [" " INT]
+

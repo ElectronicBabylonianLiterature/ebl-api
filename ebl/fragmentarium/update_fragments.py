@@ -1,95 +1,161 @@
+import argparse
+import math
+from functools import reduce
+from typing import Callable, Iterable, List, Sequence
+
 import attr
-from progress.bar import Bar
+import pydash  # pyre-ignore
+from joblib import Parallel, delayed  # pyre-ignore
+from tqdm import tqdm  # pyre-ignore
 
 from ebl.app import create_context
+from ebl.context import Context
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.application.transliteration_update_factory import (
+    TransliterationUpdateFactory,
+)
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.lemmatization import LemmatizationError
-from ebl.transliteration.domain.transliteration_error import \
-    TransliterationError
-from ebl.transliteration.infrastructure.menoizing_sign_repository \
-    import MemoizingSignRepository
+from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.infrastructure.menoizing_sign_repository import (
+    MemoizingSignRepository,
+)
 from ebl.users.domain.user import ApiUser
 
 
-def update_fragment(transliteration_factory, updater, fragment):
-    transliteration = transliteration_factory.create(
-        fragment.text.atf,
-        fragment.notes
-    )
-    user = ApiUser('update_fragments.py')
-    updater.update_transliteration(fragment.number,
-                                   transliteration,
-                                   user)
+def update_fragment(
+    transliteration_factory: TransliterationUpdateFactory,
+    updater: FragmentUpdater,
+    fragment: Fragment,
+) -> None:
+    transliteration = transliteration_factory.create(fragment.text.atf, fragment.notes)
+    user = ApiUser("update_fragments.py")
+    updater.update_transliteration(fragment.number, transliteration, user)
 
 
-def find_transliterated(fragment_repository):
-    return [
-        fragment.number for fragment
-        in fragment_repository.find_transliterated()
-    ]
+def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:
+    return fragment_repository.query_transliterated_numbers()
 
 
+@attr.s(auto_attribs=True)
 class State:
-    def __init__(self):
-        self.invalid_atf = 0
-        self.invalid_lemmas = 0
-        self.updated = 0
-        self.errors = []
+    invalid_atf: int = 0
+    invalid_lemmas: int = 0
+    invalid_fragment_query: int = 0
+    updated: int = 0
+    errors: List[str] = attr.ib(factory=list)
 
-    def add_updated(self):
+    def add_updated(self) -> None:
         self.updated += 1
 
-    def add_lemmatization_error(self, error, fragment):
+    def add_error(self, error: Exception, fragment: Fragment) -> None:
+        if isinstance(error, LemmatizationError):
+            self._add_lemmatization_error(error, fragment)
+        elif isinstance(error, TransliterationError):
+            self._add_transliteration_error(error, fragment)
+        else:
+            self._add_error(error, fragment)
+
+    def add_querying_error(self, error: Exception, number: str) -> None:
+        self.invalid_fragment_query += 1
+        self.errors.append(f"{number}\t\t{error}")
+
+    def _add_lemmatization_error(
+        self, error: LemmatizationError, fragment: Fragment
+    ) -> None:
         self.invalid_lemmas += 1
-        self.errors.append(f'{fragment.number}\t{error}')
+        self.errors.append(f"{fragment.number}\t{error}")
 
-    def add_transliteration_error(self, transliteration_error, fragment):
+    def _add_transliteration_error(
+        self, error: TransliterationError, fragment: Fragment
+    ) -> None:
         self.invalid_atf += 1
-        for index, error in enumerate(transliteration_error.errors):
-            atf = fragment.text.lines[error['lineNumber'] - 1].atf
-            number = (fragment.number
-                      if index == 0 else
-                      len(fragment.number) * ' ')
-            self.errors.append(f'{number}\t{atf}')
+        for index, error in enumerate(error.errors):
+            atf = fragment.text.lines[error["lineNumber"] - 1].atf
+            number = fragment.number if index == 0 else len(str(fragment.number)) * " "
+            self.errors.append(f"{number}\t{atf}\t{error}")
 
-    def to_tsv(self):
-        return '\n'.join([
-            *self.errors,
-            f'# Updated fragments: {self.updated}',
-            f'# Invalid ATF: {self.invalid_atf}',
-            f'# Invalid lemmas: {self.invalid_lemmas}',
-        ])
+    def _add_error(self, error: Exception, fragment: Fragment) -> None:
+        self.invalid_atf += 1
+        self.errors.append(f"{fragment.number}\t\t{error}")
+
+    def to_tsv(self) -> str:
+        return "\n".join(
+            [
+                *self.errors,
+                f"# Updated fragments: {self.updated}",
+                f"# Invalid ATF: {self.invalid_atf}",
+                f"# Invalid lemmas: {self.invalid_lemmas}",
+                f"# Invalid fragment querys: {self.invalid_fragment_query}",
+            ]
+        )
+
+    def merge(self, other: "State") -> "State":
+        return State(
+            self.invalid_atf + other.invalid_atf,
+            self.invalid_lemmas + other.invalid_lemmas,
+            self.invalid_fragment_query + other.invalid_fragment_query,
+            self.updated + other.updated,
+            self.errors + other.errors,
+        )
 
 
-def update_fragments(fragment_repository,
-                     transliteration_factory,
-                     updater):
+def update_fragments(
+    numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
+) -> State:
+    context = context_factory()
+    fragment_repository = context.fragment_repository
+    transliteration_factory = context.get_transliteration_update_factory()
+    updater = context.get_fragment_updater()
     state = State()
-    numbers = find_transliterated(fragment_repository)
-
-    with Bar('Updating', max=len(numbers)) as bar:
-        for number in numbers:
+    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
+        try:
+            fragment = fragment_repository.query_by_museum_number(number)
             try:
-                fragment = fragment_repository.query_by_fragment_number(number)
-                update_fragment(transliteration_factory,
-                                updater,
-                                fragment)
+                update_fragment(transliteration_factory, updater, fragment)
                 state.add_updated()
-            except TransliterationError as error:
-                state.add_transliteration_error(error, fragment)
-            except LemmatizationError as error:
-                state.add_lemmatization_error(error, fragment)
+            except Exception as error:
+                state.add_error(error, fragment)
+        except Exception as error:
+            state.add_querying_error(error, number)
 
-            bar.next()
-
-    with open('invalid_fragments.tsv', 'w', encoding='utf-8') as file:
-        file.write(state.to_tsv())
+    return state
 
 
-if __name__ == '__main__':
+def create_context_() -> Context:
     context = create_context()
-    context = attr.evolve(context, sign_repository=MemoizingSignRepository(
-        context.sign_repository
-    ))
-    update_fragments(context.fragment_repository,
-                     context.get_transliteration_update_factory(),
-                     context.get_fragment_updater())
+    context = attr.evolve(
+        context, sign_repository=MemoizingSignRepository(context.sign_repository)
+    )
+    return context
+
+
+def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
+    numbers = find_transliterated(create_context_().fragment_repository)
+    chunk_size = math.ceil(len(numbers) / number_of_chunks)
+    return pydash.chunk(numbers, chunk_size)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-w", "--workers", type=int, help="Number of threads to perform migration"
+    )
+    args = parser.parse_args()
+    workers = args.workers or 6
+
+    chunks = create_chunks(workers)
+    states = Parallel(n_jobs=workers)(
+        delayed(update_fragments)(subset, index, create_context_)
+        for index, subset in enumerate(chunks)
+    )
+    final_state = reduce(
+        lambda accumulator, state: accumulator.merge(state), states, State()
+    )
+
+    with open("invalid_fragments.tsv", "w", encoding="utf-8") as file:
+        file.write(final_state.to_tsv())
+
+    print("Update fragments completed!")

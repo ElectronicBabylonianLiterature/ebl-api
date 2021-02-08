@@ -1,12 +1,20 @@
+import re
+from itertools import chain, groupby
 from typing import Sequence
 
 import attr
-import pydash
-import regex
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import Lines
-from ebl.transliteration.domain.clean_atf import CleanAtf
+
+
+def create_sign_regexp(sign):
+    return fr"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
+
+
+def create_line_regexp(line):
+    signs_regexp = " ".join(create_sign_regexp(sign) for sign in line)
+    return fr"(?<![^|\s]){signs_regexp}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -15,50 +23,31 @@ class TransliterationQuery:
 
     @property
     def regexp(self):
-        lines_regexp = (
-            pydash.chain(self._signs)
-            .map(lambda row: [
-                fr'([^\s]+/)*{escaped_sign}(/[^\s]+)*'
-                for escaped_sign
-                in (regex.escape(sign) for sign in row)
-            ])
-            .map(' '.join)
-            .map(lambda row: fr'(?<![^|\s]){row}')
-            .join(r'( .*)?\n.*')
-            .value()
+        lines_regexp = r"( .*)?\n.*".join(
+            create_line_regexp(line) for line in self._signs
         )
-        return fr'{lines_regexp}(?![^|\s])'
+
+        return fr"{lines_regexp}(?![^|\s])"
 
     def is_empty(self) -> bool:
-        return ''.join(
-            token for row in self._signs for token in row
-        ).strip() == ''
+        return "".join(token for row in self._signs for token in row).strip() == ""
 
     def get_matching_lines(self, fragment: Fragment) -> Lines:
         signs = fragment.signs
 
         def line_number(position):
-            return (
-                pydash.chain(signs[:position])
-                .chars()
-                .filter_(lambda char: char == '\n')
-                .size()
-                .value()
+            return len(
+                [char for char in chain.from_iterable(signs[:position]) if char == "\n"]
             )
 
-        matches = regex.finditer(self.regexp, signs, overlapped=True)
-        positions = [
-            (match.start(), match.end())
-            for match in matches
-        ]
+        matches = re.finditer(self.regexp, signs)
         line_numbers = [
-            (line_number(position[0]), line_number(position[1]))
-            for position in positions
+            (line_number(match.start()), line_number(match.end())) for match in matches
         ]
 
-        lines = CleanAtf(fragment.text.atf).filtered
+        lines = [line.atf for line in fragment.text.text_lines]
 
         return tuple(
-            tuple(lines[numbers[0]:numbers[1] + 1])
-            for numbers in pydash.uniq(line_numbers)
+            tuple(lines[numbers[0] : numbers[1] + 1])
+            for numbers, _ in groupby(line_numbers)
         )

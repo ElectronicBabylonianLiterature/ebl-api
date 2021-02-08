@@ -1,190 +1,213 @@
-import re
+from typing import List
 
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.transliteration.domain.word_cleaner import IGNORE_REGEX, clean_word
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
-HAS_TRANSLITERATION = {'text.lines.type': {'$exists': True}}
-NUMBER_OF_LATEST_TRANSLITERATIONS = 20
-NUMBER_OF_NEEDS_REVISION = 20
-
-
-def fragment_is(fragment):
-    return {'_id': fragment.number}
+HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
+NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
+NUMBER_OF_NEEDS_REVISION: int = 20
+PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 7
 
 
-def number_is(number):
-    return {
-        '$or': [
-            {'_id': number},
-            {'cdliNumber': number},
-            {'accession': number}
-        ]
-    }
+def museum_number_is(number: MuseumNumber) -> dict:
+    serialized = MuseumNumberSchema().dump(number)  # pyre-ignore[16]
+    return {f"museumNumber.{key}": value for key, value in serialized.items()}
 
 
-def sample_size_one():
-    return {
-        '$sample': {
-            'size': 1
-        }
-    }
+def fragment_is(fragment: Fragment) -> dict:
+    return museum_number_is(fragment.number)
 
 
-def aggregate_random():
+def number_is(number: str) -> dict:
+    or_ = [{"cdliNumber": number}, {"accession": number}]
+    try:
+        or_.append(museum_number_is(MuseumNumber.of(number)))
+    except ValueError:
+        pass
+    return {"$or": or_}
+
+
+def sample_size_one() -> dict:
+    return {"$sample": {"size": 1}}
+
+
+def aggregate_random() -> List[dict]:
+    return [{"$match": HAS_TRANSLITERATION}, sample_size_one()]
+
+
+def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
     return [
-        {'$match': HAS_TRANSLITERATION},
-        sample_size_one()
+        {
+            "$match": {
+                "text.lines.content": {
+                    "$elemMatch": {
+                        "cleanValue": word,
+                        "uniqueLemma.0": {"$exists": True},
+                    }
+                }
+            }
+        },
+        {"$project": {"lines": "$text.lines"}},
+        {"$unwind": "$lines"},
+        {"$project": {"tokens": "$lines.content"}},
+        {"$unwind": "$tokens"},
+        {
+            "$match": {
+                "tokens.cleanValue": word,
+                "tokens.normalized": is_normalized,
+                "tokens.uniqueLemma.0": {"$exists": True},
+            }
+        },
+        {"$group": {"_id": "$tokens.uniqueLemma", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
     ]
 
 
-def aggregate_lemmas(word):
-    cleaned_word = clean_word(word)
-    word_regex = (
-            f'^{IGNORE_REGEX}' +
-            ''.join([
-                f"{re.escape(char)}{IGNORE_REGEX}" for char in cleaned_word
-            ]) +
-            '$'
+def aggregate_latest() -> List[dict]:
+    temp_field_name = "_temp"
+    return [
+        {"$match": {"record.type": RecordType.TRANSLITERATION.value}},
+        {
+            "$addFields": {
+                temp_field_name: {
+                    "$filter": {
+                        "input": "$record",
+                        "as": "entry",
+                        "cond": {
+                            "$eq": ["$$entry.type", RecordType.TRANSLITERATION.value]
+                        },
+                    }
+                }
+            }
+        },
+        {"$sort": {f"{temp_field_name}.date": -1}},
+        {"$limit": NUMBER_OF_LATEST_TRANSLITERATIONS},
+        {"$project": {temp_field_name: 0}},
+    ]
+
+
+def aggregate_needs_revision() -> List[dict]:
+    return [
+        {"$match": {"record.type": "Transliteration"}},
+        {"$unwind": "$record"},
+        {"$sort": {"record.date": 1}},
+        {
+            "$group": {
+                "_id": "$museumNumber",
+                "accession": {"$first": "$accession"},
+                "description": {"$first": "$description"},
+                "script": {"$first": "$script"},
+                "record": {"$push": "$record"},
+            }
+        },
+        {
+            "$addFields": {
+                "transliterations": {
+                    "$filter": {
+                        "input": "$record",
+                        "as": "item",
+                        "cond": {"$eq": ["$$item.type", "Transliteration"]},
+                    }
+                },
+                "revisions": {
+                    "$filter": {
+                        "input": "$record",
+                        "as": "item",
+                        "cond": {"$eq": ["$$item.type", "Revision"]},
+                    }
+                },
+            }
+        },
+        {
+            "$addFields": {
+                "transliterators": {
+                    "$map": {
+                        "input": "$transliterations",
+                        "as": "item",
+                        "in": "$$item.user",
+                    }
+                },
+                "transliterationDates": {
+                    "$map": {
+                        "input": "$transliterations",
+                        "as": "item",
+                        "in": "$$item.date",
+                    }
+                },
+                "revisors": {
+                    "$map": {"input": "$revisions", "as": "item", "in": "$$item.user"}
+                },
+            }
+        },
+        {
+            "$match": {
+                "$expr": {
+                    "$eq": [{"$setDifference": ["$revisors", "$transliterators"]}, []]
+                }
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "number": "$_id",
+                "accession": 1,
+                "description": 1,
+                "script": 1,
+                "editionDate": {"$arrayElemAt": ["$transliterationDates", 0]},
+                "editor": {"$arrayElemAt": ["$transliterators", 0]},
+            }
+        },
+        {"$sort": {"editionDate": 1}},
+        {"$limit": NUMBER_OF_NEEDS_REVISION},
+    ]
+
+
+def aggregate_path_of_the_pioneers() -> List[dict]:
+    max_uncurated_reference = (
+        f"uncuratedReferences.{PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES}"
     )
-    pipeline = [
-        {'$match': {
-            'text.lines.content': {
-                '$elemMatch': {
-                    'value': {'$regex': word_regex},
-                    'uniqueLemma.0': {'$exists': True}
-                }
-            }
-        }},
-        {'$project': {'lines': '$text.lines'}},
-        {'$unwind': '$lines'},
-        {'$project': {'tokens': '$lines.content'}},
-        {'$unwind': '$tokens'},
-        {'$match': {
-            'tokens.value': {'$regex': word_regex},
-            'tokens.uniqueLemma.0': {'$exists': True}
-        }},
-        {'$group': {
-            '_id': '$tokens.uniqueLemma',
-            'count': {'$sum': 1}
-        }},
-        {'$sort': {'count': -1}}
-    ]
-    return pipeline
-
-
-def aggregate_latest():
-    temp_field_name = '_temp'
-    return [
-        {'$match': {'record.type': RecordType.TRANSLITERATION.value}},
-        {'$addFields': {
-            temp_field_name: {
-                '$filter': {
-                    'input': '$record',
-                    'as': 'entry',
-                    'cond': {
-                        '$eq': [
-                            '$$entry.type',
-                            RecordType.TRANSLITERATION.value
-                        ]
-                    }
-                }
-            }
-        }},
-        {'$sort': {f'{temp_field_name}.date': -1}},
-        {'$limit': NUMBER_OF_LATEST_TRANSLITERATIONS},
-        {'$project': {temp_field_name: 0}}
-    ]
-
-
-def aggregate_needs_revision():
-    return [
-        {'$match': {'record.type': 'Transliteration'}},
-        {'$unwind': '$record'},
-        {'$sort': {'record.date': 1}},
-        {'$group': {
-            '_id': '$_id',
-            'accession': {'$first': '$accession'},
-            'description': {'$first': '$description'},
-            'script': {'$first': '$script'},
-            'record': {'$push': '$record'}
-        }},
-        {
-            '$addFields': {
-                'transliterations': {
-                    '$filter': {
-                        'input': '$record',
-                        'as': 'item',
-                        'cond': {'$eq': ['$$item.type', 'Transliteration']}
-                    }
-                },
-                'revisions': {
-                    '$filter': {
-                        'input': '$record',
-                        'as': 'item',
-                        'cond': {'$eq': ['$$item.type', 'Revision']}
-                    }
-                }
-            }
-        },
-        {
-            '$addFields': {
-                'transliterators': {
-                    '$map':
-                        {
-                            'input': '$transliterations',
-                            'as': 'item',
-                            'in': '$$item.user'
-                        }
-                },
-                'transliterationDates': {
-                    '$map':
-                        {
-                            'input': '$transliterations',
-                            'as': 'item',
-                            'in': '$$item.date'
-                        }
-                },
-                'revisors':
-                    {
-                        '$map':
-                            {
-                                'input': '$revisions',
-                                'as': 'item',
-                                'in': '$$item.user'
-                            }
-                    }
-            }
-        },
-        {'$match': {'$expr': {
-            '$eq': [{'$setDifference': ['$revisors', '$transliterators']},
-                    []]}}},
-        {'$project': {'_id': 0, 'number': '$_id', 'accession': 1,
-                      'description': 1, 'script': 1,
-                      'editionDate': {
-                          '$arrayElemAt': ['$transliterationDates', 0]
-                      },
-                      'editor': {
-                          '$arrayElemAt': ['$transliterators', 0]
-                      }
-                      }},
-        {'$sort': {'editionDate': 1}},
-        {'$limit': NUMBER_OF_NEEDS_REVISION}
-    ]
-
-
-def aggregate_interesting():
     return [
         {
-            '$match': {
-                '$and': [
-                    {'text.lines': []},
-                    {'joins': []},
-                    {'publication': ''},
-                    {'collection': 'Kuyunjik'},
-                    {'uncuratedReferences': {'$exists': True}},
-                    {'uncuratedReferences.3': {'$exists': False}}
+            "$match": {
+                "$and": [
+                    {"text.lines": []},
+                    {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
+                    {"uncuratedReferences": {"$exists": True}},
+                    {max_uncurated_reference: {"$exists": False}},
+                    {"references.type": {"$ne": "EDITION"}},
                 ]
             }
         },
-        sample_size_one()
+        {
+            "$addFields": {
+                "filename": {
+                    "$concat": [
+                        "$museumNumber.prefix",
+                        ".",
+                        "$museumNumber.number",
+                        {
+                            "$cond": {
+                                "if": {"$eq": ["$museumNumber.suffix", ""]},
+                                "then": "",
+                                "else": {"$concat": [".", "$museumNumber.suffix"]},
+                            }
+                        },
+                        ".jpg",
+                    ]
+                }
+            }
+        },
+        {
+            "$lookup": {
+                "from": "photos.files",
+                "localField": "filename",
+                "foreignField": "filename",
+                "as": "photos",
+            }
+        },
+        {"$match": {"photos.0": {"$exists": True}}},
+        {"$project": {"photos": 0, "filename": 0}},
+        sample_size_one(),
     ]

@@ -9,8 +9,7 @@ services:
       - AUTH0_ISSUER
       - AUTH0_PEM
       - MONGODB_URI
-      - NEW_RELIC_LICENSE_KEY
-      - NEW_RELIC_CONFIG_FILE
+      - MONGODB_DB
       - SENTRY_DSN
       - SENTRY_ENVIRONMENT
     volumes:

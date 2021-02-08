@@ -1,15 +1,17 @@
-import falcon
+import falcon  # pyre-ignore
 from falcon import Request, Response
 
-from ebl.cdli.infrastructure.cdli_client import get_photo_url, \
-    get_line_art_url, get_detail_line_art_url
+from ebl.cdli.infrastructure.cdli_client import (
+    get_detail_line_art_url,
+    get_line_art_url,
+    get_photo_url,
+)
 from ebl.users.web.require_scope import require_scope
 
 
 class CdliResource:
-
-    @falcon.before(require_scope, 'read:fragments')
-    def on_get(self, req: Request, resp: Response, cdli_number: str):
+    @falcon.before(require_scope, "read:fragments")  # pyre-ignore[56]
+    def on_get(self, req: Request, resp: Response, cdli_number: str):  # pyre-ignore[11]
         """---
         description: Gets URLs for the given CDLI number
         responses:
@@ -41,7 +43,7 @@ class CdliResource:
             type: string
         """
         resp.media = {
-            'photoUrl': get_photo_url(cdli_number),
-            'lineArtUrl': get_line_art_url(cdli_number),
-            'detailLineArtUrl': get_detail_line_art_url(cdli_number)
+            "photoUrl": get_photo_url(cdli_number),
+            "lineArtUrl": get_line_art_url(cdli_number),
+            "detailLineArtUrl": get_detail_line_art_url(cdli_number),
         }

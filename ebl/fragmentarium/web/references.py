@@ -1,38 +1,35 @@
-import falcon
-from falcon.media.validators.jsonschema import validate
+from typing import Sequence
 
-from ebl.bibliography.domain.reference import (REFERENCE_DTO_SCHEMA, Reference)
+import falcon  # pyre-ignore
+from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+
+from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.web.dtos import create_response_dto
+from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
-REFERENCES_DTO_SCHEMA = {
-    'type': 'object',
-    'properties': {
-        'references': {
-            'type': 'array',
-            'items': REFERENCE_DTO_SCHEMA
-        }
-    },
-    'required': ['references']
-}
+
+class ReferencesDtoSchema(Schema):  # pyre-ignore[11]
+    references = fields.Nested(ReferenceSchema, required=True, many=True)
+
+    @post_load  # pyre-ignore[56]
+    def get_references(self, data, **kwargs) -> Sequence[Reference]:
+        return tuple(data["references"])
 
 
 class ReferencesResource:
-
-    def __init__(self, updater: FragmentUpdater):
+    def __init__(self, updater: FragmentUpdater) -> None:
         self._updater = updater
 
-    @falcon.before(require_scope, 'transliterate:fragments')
-    @validate(REFERENCES_DTO_SCHEMA)
-    def on_post(self, req, resp, number):
+    @falcon.before(require_scope, "transliterate:fragments")  # pyre-ignore[56]
+    @validate(ReferencesDtoSchema())
+    def on_post(self, req, resp, number) -> None:
         user = req.context.user
         updated_fragment, has_photo = self._updater.update_references(
-            number,
-            tuple(
-                Reference.from_dict(reference)
-                for reference in req.media['references']
-            ),
-            user
+            parse_museum_number(number),
+            ReferencesDtoSchema().load(req.media),  # pyre-ignore[16]
+            user,
         )
         resp.media = create_response_dto(updated_fragment, user, has_photo)

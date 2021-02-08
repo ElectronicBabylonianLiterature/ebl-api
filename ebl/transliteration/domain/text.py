@@ -1,188 +1,110 @@
-from typing import Callable, Iterable, List, Mapping, Tuple
+from itertools import zip_longest
+from typing import Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
 
 import attr
-import pydash
 
 from ebl.merger import Merger
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf, \
-    DEFAULT_ATF_PARSER_VERSION, Flag
-from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import Lemmatization, \
-    LemmatizationError
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line, \
-    TextLine
-from ebl.transliteration.domain.token import (BrokenAway,
-                                              DocumentOrientedGloss,
-                                              Erasure,
-                                              ErasureState, LanguageShift,
-                                              LineContinuation,
-                                              LoneDeterminative,
-                                              OmissionOrRemoval,
-                                              Partial,
-                                              PerhapsBrokenAway, Side, Token,
-                                              Word, UnknownNumberOfSigns,
-                                              Tabulation, CommentaryProtocol,
-                                              ValueToken, Divider, Column,
-                                              Variant)
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
+from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationError
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.text_line import TextLine
 
 
-def create_tokens(content: List[dict]) -> Tuple[Token, ...]:
-    token_factories: Mapping[str, Callable[[dict], Token]] = {
-        'Token': lambda data: ValueToken(
-            data['value']
-        ),
-        'Word': lambda data: Word(
-            data['value'],
-            Language[data['language']],
-            data['normalized'],
-            tuple(data['uniqueLemma']),
-            ErasureState[data.get('erasure', ErasureState.NONE.name)],
-            data.get('alignment')
-        ),
-        'LanguageShift': lambda data: LanguageShift(
-            data['value']
-        ),
-        'LoneDeterminative': lambda data: LoneDeterminative(
-            data['value'],
-            Language[data['language']],
-            data['normalized'],
-            tuple(data['uniqueLemma']),
-            ErasureState[data.get('erasure', ErasureState.NONE.name)],
-            data.get('alignment'),
-            Partial(*data['partial'])
-        ),
-        'DocumentOrientedGloss': lambda data: DocumentOrientedGloss(
-            data['value']
-        ),
-        'BrokenAway': lambda data: BrokenAway(
-            data['value']
-        ),
-        'PerhapsBrokenAway': lambda data: PerhapsBrokenAway(
-            data['value']
-        ),
-        'OmissionOrRemoval': lambda data: OmissionOrRemoval(
-            data['value']
-        ),
-        'LineContinuation': lambda data: LineContinuation(data['value']),
-        'Erasure': lambda data: Erasure(data['value'],
-                                        Side[data['side']]),
-        'UnknownNumberOfSigns': lambda data: UnknownNumberOfSigns(
-            data['value']
-        ),
-        'Tabulation': lambda data: Tabulation(
-            data['value']
-        ),
-        'CommentaryProtocol': lambda data: CommentaryProtocol(
-            data['value']
-        ),
-        'Divider': lambda data: Divider(
-            data['divider'],
-            tuple(data['modifiers']),
-            tuple(Flag(flag) for flag in data['flags'])
-        ),
-        'Column': lambda data: Column(data['number']),
-        'Variant': lambda data: Variant(tuple(
-            token_factories[inner_token['type']](inner_token)
-            for inner_token in data['tokens']
-        )[:2])
-    }
+@attr.s(auto_attribs=True, frozen=True)
+class Label:
+    column: Optional[ColumnLabel]
+    surface: Optional[SurfaceLabel]
+    object: Optional[ObjectLabel]
+    line_number: Optional[AbstractLineNumber]
 
-    return tuple(
-        token_factories[token['type']](token)
-        for token
-        in content
-    )
+    def set_column(self, column: Optional[ColumnLabel]) -> "Label":
+        return attr.evolve(self, column=column)
+
+    def set_surface(self, surface: Optional[SurfaceLabel]) -> "Label":
+        return attr.evolve(self, surface=surface)
+
+    def set_object(self, object: Optional[ObjectLabel]) -> "Label":
+        return attr.evolve(self, object=object)
+
+    def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "Label":
+        return attr.evolve(self, line_number=line_number)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
-    lines: Tuple[Line, ...] = tuple()
+    lines: Sequence[Line] = tuple()
     parser_version: str = ATF_PARSER_VERSION
 
     @property
+    def number_of_lines(self) -> int:
+        return len(self.text_lines)
+
+    @property
+    def text_lines(self) -> Sequence[TextLine]:
+        return tuple(line for line in self.lines if isinstance(line, TextLine))
+
+    @property
     def lemmatization(self) -> Lemmatization:
-        return Lemmatization.from_list([
-            [
-                (
-                    {
-                        'value': token.value,
-                        'uniqueLemma': list(token.unique_lemma)
-                    }
-                    if isinstance(token, Word)
-                    else {'value': token.value}
-                )
-                for token in line.content
-            ]
-            for line in self.lines
-        ])
+        return Lemmatization(tuple(line.lemmatization for line in self.lines))
 
     @property
     def atf(self) -> Atf:
-        return Atf('\n'.join(line.atf for line in self.lines))
+        return Atf("\n".join(line.atf for line in self.lines))
 
-    def update_lemmatization(self, lemmatization: Lemmatization) -> 'Text':
+    @property
+    def labels(self,) -> Sequence[Label]:
+        current: Label = Label(None, None, None, None)
+        labels: List[Label] = []
+
+        handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
+            TextLine: lambda line: (
+                current,
+                [*labels, current.set_line_number(line.line_number)],
+            ),
+            ColumnAtLine: lambda line: (current.set_column(line.column_label), labels),
+            SurfaceAtLine: lambda line: (
+                current.set_surface(line.surface_label),
+                labels,
+            ),
+            ObjectAtLine: lambda line: (current.set_object(line.label), labels),
+        }
+
+        for line in self.lines:
+            if type(line) in handlers:
+                current, labels = handlers[type(line)](line)
+
+        return labels
+
+    def update_lemmatization(self, lemmatization: Lemmatization) -> "Text":
         if len(self.lines) == len(lemmatization.tokens):
-            zipped = pydash.zip_(list(self.lines), list(lemmatization.tokens))
+            zipped = zip_longest(self.lines, lemmatization.tokens)
             lines = tuple(
-                line.update_lemmatization(lemmas)
-                for [line, lemmas] in zipped
+                line.update_lemmatization(lemmas) for [line, lemmas] in zipped
             )
-            return attr.evolve(
-                self,
-                lines=lines
-            )
+            return attr.evolve(self, lines=lines)
         else:
             raise LemmatizationError()
 
-    def merge(self, other: 'Text') -> 'Text':
+    def merge(self, other: "Text") -> "Text":
         def map_(line: Line) -> str:
-            types = [token.to_dict()['type'] for token in line.content]
-            return '⋮'.join([line.atf] + types)
+            return line.key
 
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
 
-        merged_lines = Merger(
-            map_, inner_merge
-        ).merge(
-            self.lines, other.lines
+        merged_lines = Merger(map_, inner_merge).merge(self.lines, other.lines)
+        return attr.evolve(
+            self, lines=tuple(merged_lines), parser_version=other.parser_version
         )
-        return attr.evolve(self,
-                           lines=tuple(merged_lines),
-                           parser_version=other.parser_version)
 
-    def set_parser_version(self, parser_version: str) -> 'Text':
+    def set_parser_version(self, parser_version: str) -> "Text":
         return attr.evolve(self, parser_version=parser_version)
 
-    def to_dict(self) -> dict:
-        return {
-            'lines': [line.to_dict() for line in self.lines],
-            'parser_version': self.parser_version
-        }
-
     @staticmethod
-    def from_dict(data: dict) -> 'Text':
-        line_factories: Mapping[str, Callable[[str, List[dict]], Line]] = {
-            'ControlLine':
-                lambda prefix, content: ControlLine(
-                    prefix, create_tokens(content)
-                ),
-            'TextLine':
-                lambda prefix, content: TextLine(
-                    prefix, create_tokens(content)
-                ),
-            'EmptyLine':
-                lambda _prefix, _content: EmptyLine()
-        }
-        lines = tuple(
-            line_factories[line['type']](line['prefix'], line['content'])
-            for line
-            in data['lines']
-        )
-        return Text(lines, data.get('parser_version',
-                                    DEFAULT_ATF_PARSER_VERSION))
-
-    @staticmethod
-    def of_iterable(lines: Iterable[Line],
-                    parser_version: str = ATF_PARSER_VERSION) -> 'Text':
+    def of_iterable(
+        lines: Iterable[Line], parser_version: str = ATF_PARSER_VERSION
+    ) -> "Text":
         return Text(tuple(lines), parser_version)

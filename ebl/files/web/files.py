@@ -1,5 +1,5 @@
-from falcon import Response
-from falcon_auth import NoneAuthBackend
+from falcon import Response  # pyre-ignore
+from falcon_auth import NoneAuthBackend  # pyre-ignore
 
 from ebl.files.application.file_repository import FileRepository
 from ebl.users.domain.user import Guest
@@ -7,14 +7,12 @@ from ebl.users.domain.user import Guest
 
 class PublicFilesResource:
 
-    auth = {
-        'backend': NoneAuthBackend(Guest)
-    }
+    auth = {"backend": NoneAuthBackend(Guest)}
 
     def __init__(self, files: FileRepository):
         self._files = files
 
-    def on_get(self, _req, resp: Response, file_name: str):
+    def on_get(self, _req, resp: Response, file_name: str):  # pyre-ignore[11]
         """---
         description: Gets an image.
         responses:

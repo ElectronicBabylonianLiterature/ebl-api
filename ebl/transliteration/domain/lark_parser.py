@@ -1,242 +1,193 @@
-import attr
-import pydash
-from lark.exceptions import UnexpectedInput
-from lark.lark import Lark
-from lark.lexer import Token
-from lark.tree import Tree
-from lark.visitors import Transformer, v_args
+from itertools import dropwhile
+from typing import Any, Callable, Mapping, Sequence, Tuple, Type, Union
 
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Flag
-from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, TextLine
+import pydash  # pyre-ignore[21]
+from lark.exceptions import ParseError, UnexpectedInput, VisitError  # pyre-ignore[21]
+from lark.lark import Lark  # pyre-ignore[21]
+from lark.visitors import v_args  # pyre-ignore[21]
+
+from ebl.errors import DataError
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line_transformer import AtLineTransformer
+from ebl.transliteration.domain.dollar_line import DollarLine
+from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
+from ebl.transliteration.domain.enclosure_error import EnclosureError
+from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
+from ebl.transliteration.domain.labels import DuplicateStatusError
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+from ebl.transliteration.domain.parallel_line import ParallelLine
+from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
+from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.token import BrokenAway, \
-    DocumentOrientedGloss, \
-    Erasure, \
-    ErasureState, LanguageShift, LineContinuation, LoneDeterminative, \
-    OmissionOrRemoval, Partial, PerhapsBrokenAway, Side, ValueToken, \
-    Word, UnknownNumberOfSigns, Tabulation, CommentaryProtocol, Divider, \
-    Column, Variant
-from ebl.transliteration.domain.transliteration_error import \
-    TransliterationError
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
+from ebl.transliteration.domain.tokens import Token as EblToken
+from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.word_tokens import Word
+
+PARSE_ERRORS: Tuple[Type[Any], ...] = (
+    UnexpectedInput,
+    ParseError,
+    VisitError,
+    EnclosureError,
+)
 
 
-class TreeToWord(Transformer):
-    def lone_determinative(self, tokens):
-        return LoneDeterminative(''.join(
-            token.value for token in tokens
-        ))
-
-    def word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
-    def left_partial_word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
-    def right_partial_word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
-    def partial_word(self, tokens):
-        return Word(''.join(
-            token.value for token in tokens
-        ))
-
-
-class TreeToErasure(TreeToWord):
-    def erasure(self, tokens):
-        def set_state(children, state):
-            # TODO: Move to Token
-            return [
-                (attr.evolve(child, erasure=state)
-                 if isinstance(child, Word)
-                 else child)
-                for child in children
-            ]
-        [erased, over_erased] = tokens
-        return [Erasure('°', Side.LEFT),
-                set_state(erased.children, ErasureState.ERASED),
-                Erasure('\\', Side.CENTER),
-                set_state(over_erased.children, ErasureState.OVER_ERASED),
-                Erasure('°', Side.RIGHT)]
-
-
-class TreeToLine(TreeToErasure):
+class LineTransformer(
+    AtLineTransformer,
+    DollarLineTransfomer,
+    NoteLineTransformer,
+    TextLineTransformer,
+    ParallelLineTransformer,
+):
     def empty_line(self, _):
         return EmptyLine()
 
     @v_args(inline=True)
     def control_line(self, prefix, content):
-        return ControlLine.of_single(prefix, ValueToken(content))
-
-    @v_args(inline=True)
-    def text_line(self, prefix, content):
-        return TextLine.of_iterable(LineNumberLabel.from_atf(prefix), content)
-
-    def text(self, children):
-        return (pydash
-                .chain(children)
-                .flat_map_deep(lambda tree: (tree.children
-                                             if isinstance(tree, Tree)
-                                             else tree))
-                .map_(lambda token: (ValueToken(str(token))
-                                     if isinstance(token, Token)
-                                     else token))
-                .value())
-
-    @v_args(inline=True)
-    def broken_away(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def perhaps_broken_away(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def cba(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def cpba(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def oba(self, value):
-        return BrokenAway(str(value))
-
-    @v_args(inline=True)
-    def opba(self, value):
-        return PerhapsBrokenAway(str(value))
-
-    @v_args(inline=True)
-    def omission_or_removal(self, value):
-        return OmissionOrRemoval(str(value))
-
-    @v_args(inline=True)
-    def oo(self, value):
-        return OmissionOrRemoval(str(value))
-
-    @v_args(inline=True)
-    def co(self, value):
-        return OmissionOrRemoval(str(value))
-
-    @v_args(inline=True)
-    def document_oriented_gloss(self, value):
-        return DocumentOrientedGloss(str(value))
-
-    @v_args(inline=True)
-    def odog(self, value):
-        return DocumentOrientedGloss(str(value))
-
-    @v_args(inline=True)
-    def cdog(self, value):
-        return DocumentOrientedGloss(str(value))
-
-    @v_args(inline=True)
-    def language_shift(self, value):
-        return LanguageShift(str(value))
-
-    @v_args(inline=True)
-    def unknown_number_of_signs(self, value):
-        return UnknownNumberOfSigns(str(value))
-
-    @v_args(inline=True)
-    def lone_determinative_complex(self, prefix, lone_determinative, suffix):
-        return pydash.flatten([
-            prefix.children,
-            LoneDeterminative.of_value(
-                lone_determinative.value,
-                Partial(start=len(prefix.children) > 0,
-                        end=len(suffix.children) > 0)),
-            suffix.children
-        ])
-
-    def line_continuation(self, _):
-        return LineContinuation('→')
-
-    @v_args(inline=True)
-    def tabulation(self, value):
-        return Tabulation(value)
-
-    @v_args(inline=True)
-    def commentary_protocol(self, value):
-        return CommentaryProtocol(value)
-
-    @v_args(inline=True)
-    def divider(self, value, modifiers, flags):
-        return Divider(str(value),
-                       tuple(map(str, modifiers.children)),
-                       tuple(map(Flag, flags.children)))
-
-    @v_args(inline=True)
-    def column(self, number):
-        children = number.children
-        return Column(int(''.join(children)) if children else None)
-
-    @v_args(inline=True)
-    def divider_variant(self, first, second):
-        return Variant.of(first, second)
-
-    @v_args(inline=True)
-    def variant_part(self, part):
-        return Word(str(part))
+        return ControlLine(prefix, content)
 
 
-WORD_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__, start='any_word')
-LINE_PARSER = Lark.open('ebl-atf.lark', rel_to=__file__)
+WORD_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
+)
+NOTE_LINE_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
+)
+PARALLEL_LINE_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
+)
+PARATEXT_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
+)
+LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
 
-def parse_word(atf):
+def parse_word(atf: str) -> Word:
     tree = WORD_PARSER.parse(atf)
-    return TreeToWord().transform(tree)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
-def parse_erasure(atf):
-    tree = LINE_PARSER.parse(atf, start='erasure')
-    return TreeToErasure().transform(tree)
+def parse_normalized_akkadian_word(atf: str) -> Word:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__akkadian_word")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
-def parse_line(atf):
+def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_erasure(atf: str) -> Sequence[EblToken]:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__erasure")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
-    return TreeToLine().transform(tree)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 
-def parse_atf_lark(atf):
+def parse_note_line(atf: str) -> NoteLine:
+    tree = NOTE_LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_parallel_line(atf: str) -> ParallelLine:
+    tree = PARALLEL_LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_text_line(atf: str) -> TextLine:
+    tree = LINE_PARSER.parse(atf, start="text_line")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
+    tree = PARATEXT_PARSER.parse(atf)
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_line_number(atf: str) -> AbstractLineNumber:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__line_number")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def validate_line(line: Line) -> None:
+    visitor = EnclosureValidator()
+    line.accept(visitor)
+    visitor.done()
+
+
+def parse_atf_lark(atf_):
     def parse_line_(line: str, line_number: int):
         try:
-            return ((parse_line(line), None)
-                    if line else
-                    (EmptyLine(), None))
-        except UnexpectedInput as ex:
-            description = 'Invalid line: '
-            context = ex.get_context(line, 6).split('\n', 1)
-            return (None,  {
-                'description': (description + context[0] + '\n' +
-                                len(description)*' ' + context[1]),
-                'lineNumber': line_number + 1
-            })
+            parsed_line = parse_line(line) if line else EmptyLine()
+            validate_line(parsed_line)
+            return parsed_line, None
+        except PARSE_ERRORS as ex:
+            return (None, create_transliteration_error_data(ex, line, line_number))
 
     def check_errors(pairs):
-        errors = [
-            error
-            for line, error in pairs
-            if error is not None
-        ]
+        errors = [error for line, error in pairs if error is not None]
         if any(errors):
             raise TransliterationError(errors)
 
-    lines = tuple(pydash
-                  .chain(atf)
-                  .split('\n')
-                  .map(parse_line_)
-                  .tap(check_errors)
-                  .map(lambda pair: pair[0])
-                  .drop_right_while(lambda line: line.prefix == '')
-                  .value())
+    lines = atf_.split("\n")
+    lines = list(dropwhile(lambda line: line == "", reversed(lines)))
+    lines.reverse()
+    lines = [parse_line_(line, number) for number, line in enumerate(lines)]
+    check_errors(lines)
+    lines = tuple(pair[0] for pair in lines)
 
-    return Text(lines, f'{ATF_PARSER_VERSION}')
+    text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
+
+    if pydash.duplicates(text.labels):
+        raise DataError("Duplicate labels.")
+    else:
+        return text
+
+
+def create_transliteration_error_data(error: Exception, line: str, line_number: int):
+    handlers: Mapping[Type, Callable[[Exception, str, int], dict]] = {
+        UnexpectedInput: unexpected_input_error,
+        ParseError: parse_error,
+        EnclosureError: enclosure_error,
+        VisitError: visit_error,
+    }
+    for type_ in handlers:
+        if isinstance(error, type_):
+            return handlers[type_](error, line, line_number)
+
+    raise error
+
+
+def unexpected_input_error(
+    error: UnexpectedInput, line: str, line_number: int  # pyre-ignore[11]
+):
+    description = "Invalid line: "
+    context = error.get_context(line, 6).split("\n", 1)
+    return {
+        "description": (
+            description + context[0] + "\n" + len(description) * " " + context[1]
+        ),
+        "lineNumber": line_number + 1,
+    }
+
+
+def parse_error(error: ParseError, line: str, line_number: int):  # pyre-ignore[11]
+    return {"description": f"Invalid line: {error}", "lineNumber": line_number + 1}
+
+
+def enclosure_error(error: EnclosureError, line: str, line_number: int):
+    return {"description": "Invalid brackets.", "lineNumber": line_number + 1}
+
+
+def visit_error(error: VisitError, line: str, line_number: int):  # pyre-ignore[11]
+    if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
+        return {"description": "Duplicate Status", "lineNumber": line_number + 1}
+    else:
+        raise error

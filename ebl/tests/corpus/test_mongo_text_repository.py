@@ -1,39 +1,37 @@
 import attr
-import pytest
+import pytest  # pyre-ignore[21]
 
-from ebl.corpus.application.text_serializer import TextSerializer
-from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.application.text_serializer import serialize
+from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (ChapterFactory, ManuscriptFactory,
-                                        TextFactory)
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 
-COLLECTION = 'texts'
-TEXT = TextFactory.build(
-    chapters=(ChapterFactory.build(
-        manuscripts=(ManuscriptFactory.build(
-            references=(ReferenceFactory.build(),)
-        ),)
-    ),)
+COLLECTION = "texts"
+MANUSCRIPT_ID = 1
+TEXT = TextFactory.build(  # pyre-ignore[16]
+    chapters=(
+        ChapterFactory.build(  # pyre-ignore[16]
+            manuscripts=(
+                # pyre-ignore[16]
+                ManuscriptFactory.build(id=1, references=(ReferenceFactory.build(),)),
+            )
+        ),
+    )
 )
 
 
-def to_dict(text: Text) -> dict:
-    return TextSerializer.serialize(text, False)
-
-
 def when_text_in_collection(database, text=TEXT):
-    database[COLLECTION].insert_one(to_dict(text))
+    database[COLLECTION].insert_one(serialize(text))
 
 
 def test_creating_text(database, text_repository):
     text_repository.create(TEXT)
 
-    inserted_text = database[COLLECTION].find_one({
-        'category': TEXT.category,
-        'index': TEXT.index
-    }, projection={'_id': False})
-    assert inserted_text == to_dict(TEXT)
+    inserted_text = database[COLLECTION].find_one(
+        {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False}
+    )
+    assert inserted_text == serialize(TEXT)
 
 
 def test_it_is_not_possible_to_create_duplicates(text_repository):
@@ -65,7 +63,7 @@ def test_listing_texts(database, text_repository):
 
 
 def test_updating_text(database, text_repository):
-    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name='New Name')
+    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name="New Name")
     when_text_in_collection(database)
 
     text_repository.update(TEXT.id, updated_text)

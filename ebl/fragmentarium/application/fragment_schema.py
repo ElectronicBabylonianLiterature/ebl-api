@@ -1,85 +1,18 @@
-from abc import abstractmethod, ABC
-from enum import Enum
-from typing import Type, Optional, Any, List
+import pydash  # pyre-ignore
+from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
 
-import pydash
-from marshmallow import Schema, fields, post_load, post_dump
-
-from ebl.bibliography.domain.reference import BibliographyId, Reference, \
-    ReferenceType
+from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import (Fragment, FragmentNumber,
-                                               Measure,
-                                               UncuratedReference)
-from ebl.fragmentarium.domain.record import (Record, RecordEntry, RecordType)
-from ebl.transliteration.domain.text import Text
+from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
+from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
+from ebl.schemas import ValueEnum
+from ebl.transliteration.application.text_schema import TextSchema
 
 
-class EnumField(fields.String, ABC):
-    default_error_messages = {
-        'invalid_value': 'Invalid value.',
-        'not_enum': 'Not a valid Enum.'
-    }
-
-    def __init__(self, enum_class: Type[Enum], **kwargs):
-        self._enum_class = enum_class
-        super().__init__(enum=self._values(), **kwargs)
-
-    def _serialize(self, value, attr, obj, **kwargs) -> Optional[str]:
-        if isinstance(value, Enum):
-            return super()._serialize((self._serialize_enum(value)
-                                       if value is not None
-                                       else None),
-                                      attr,
-                                      obj,
-                                      **kwargs)
-        else:
-            raise self.make_error('not_enum')
-
-    def _deserialize(self, value, attr, data, **kwargs) -> Any:
-        try:
-            return self._deserialize_enum(
-                super()._deserialize(value, attr, data, **kwargs)
-            )
-        except (KeyError, ValueError) as error:
-            raise self.make_error('invalid_value') from error
-
-    @abstractmethod
-    def _serialize_enum(self, value: Enum) -> str:
-        ...
-
-    @abstractmethod
-    def _deserialize_enum(self, value: str) -> Enum:
-        ...
-
-    @abstractmethod
-    def _values(self) -> List[str]:
-        ...
-
-
-class ValueEnum(EnumField):
-    def _serialize_enum(self, value: Enum) -> str:
-        return value.value
-
-    def _deserialize_enum(self, value: str) -> Enum:
-        return self._enum_class(value)
-
-    def _values(self) -> List[str]:
-        return [e.value for e in self._enum_class]
-
-
-class NameEnum(EnumField):
-    def _serialize_enum(self, value: Enum) -> str:
-        return value.name
-
-    def _deserialize_enum(self, value: str) -> Enum:
-        return self._enum_class[value]
-
-    def _values(self) -> List[str]:
-        return [e.name for e in self._enum_class]
-
-
-class MeasureSchema(Schema):
+class MeasureSchema(Schema):  # pyre-ignore[11]
     value = fields.Float(missing=None)
     note = fields.String(missing=None)
 
@@ -107,7 +40,7 @@ class RecordSchema(Schema):
 
     @post_load
     def make_record(self, data, **kwargs):
-        return Record(tuple(data['entries']))
+        return Record(tuple(data["entries"]))
 
 
 class FolioSchema(Schema):
@@ -124,24 +57,7 @@ class FoliosSchema(Schema):
 
     @post_load
     def make_folio(self, data, **kwargs):
-        return Folios(tuple(data['entries']))
-
-
-class ReferenceSchema(Schema):
-    id = fields.String(required=True)
-    type = NameEnum(ReferenceType, required=True)
-    pages = fields.String(required=True)
-    notes = fields.String(required=True)
-    lines_cited = fields.List(fields.String(),
-                              required=True,
-                              data_key='linesCited')
-    document = fields.Mapping(missing=None, load_only=True)
-
-    @post_load
-    def make_reference(self, data, **kwargs):
-        data['id'] = BibliographyId(data['id'])
-        data['lines_cited'] = tuple(data['lines_cited'])
-        return Reference(**data)
+        return Folios(tuple(data["entries"]))
 
 
 class UncuratedReferenceSchema(Schema):
@@ -150,15 +66,15 @@ class UncuratedReferenceSchema(Schema):
 
     @post_load
     def make_uncurated_reference(self, data, **kwargs):
-        data['pages'] = tuple(data['pages'])
+        data["pages"] = tuple(data["pages"])
         return UncuratedReference(**data)
 
 
 class FragmentSchema(Schema):
-    number = fields.String(required=True, data_key='_id')
+    number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
-    cdli_number = fields.String(required=True, data_key='cdliNumber')
-    bm_id_number = fields.String(required=True, data_key='bmIdNumber')
+    cdli_number = fields.String(required=True, data_key="cdliNumber")
+    bm_id_number = fields.String(required=True, data_key="bmIdNumber")
     publication = fields.String(required=True)
     description = fields.String(required=True)
     collection = fields.String(required=True)
@@ -168,29 +84,39 @@ class FragmentSchema(Schema):
     length = fields.Nested(MeasureSchema, required=True)
     thickness = fields.Nested(MeasureSchema, required=True)
     joins = fields.List(fields.String(), required=True)
-    record = fields.Pluck(RecordSchema, 'entries')
-    folios: fields.Field = fields.Pluck(FoliosSchema, 'entries')
-    text = fields.Function(
-        lambda fragment: fragment.text.to_dict(),
-        lambda text: Text.from_dict(text)
-    )
-    signs = fields.String(missing=None)
+    record = fields.Pluck(RecordSchema, "entries")
+    folios = fields.Pluck(FoliosSchema, "entries")
+    text = fields.Nested(TextSchema)
+    signs = fields.String(missing="")
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)
-    uncurated_references = fields.Nested(UncuratedReferenceSchema,
-                                         many=True,
-                                         data_key='uncuratedReferences',
-                                         missing=None)
+    uncurated_references = fields.Nested(
+        UncuratedReferenceSchema,
+        many=True,
+        data_key="uncuratedReferences",
+        missing=None,
+    )
+    genres = fields.Nested(GenreSchema, many=True, missing=tuple())
+    line_to_vec = fields.List(
+        fields.List(ValueEnum(LineToVecEncoding)), missing=None, data_key="lineToVec"
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):
-        data['number'] = FragmentNumber(data['number'])
-        data['joins'] = tuple(data['joins'])
-        data['record'] = data['record']
-        data['folios'] = data['folios']
-        data['references'] = tuple(data['references'])
-        if data['uncurated_references'] is not None:
-            data['uncurated_references'] = tuple(data['uncurated_references'])
+        data["joins"] = tuple(data["joins"])
+        data["references"] = tuple(data["references"])
+        data["genres"] = tuple(data["genres"])
+        data["line_to_vec"] = (
+            None
+            if data["line_to_vec"] is None
+            else tuple(
+                tuple(line_to_vec_encoding)
+                for line_to_vec_encoding in data["line_to_vec"]
+            )
+        )
+
+        if data["uncurated_references"] is not None:
+            data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)
 
     @post_dump

@@ -1,12 +1,18 @@
 import json
 
 import attr
-import falcon
-import pytest
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, \
-    Provenance
+from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.corpus.domain.manuscript import (
+    ManuscriptType,
+    Period,
+    PeriodModifier,
+    Provenance,
+)
 from ebl.corpus.web.api_serializer import serialize
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import TextFactory
 from ebl.users.domain.user import Guest
@@ -14,8 +20,8 @@ from ebl.users.domain.user import Guest
 ANY_USER = Guest()
 
 
-def create_dto(text, include_documents=False):
-    return serialize(text, include_documents)
+def create_dto(text):
+    return serialize(text)
 
 
 def allow_references(text, bibliography):
@@ -31,86 +37,89 @@ def allow_signs(signs, sign_list):
 
 
 def create_text(client, text):
-    post_result = client.simulate_post(
-        f'/texts',
-        body=json.dumps(create_dto(text))
-    )
+    post_result = client.simulate_post("/texts", body=json.dumps(create_dto(text)))
     assert post_result.status == falcon.HTTP_CREATED
-    assert post_result.headers['Location'] == \
-        f'/texts/{text.category}/{text.index}'
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert post_result.json == create_dto(text, True)
+    assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert post_result.json == create_dto(text)
 
 
 def test_updating(client, bibliography, sign_repository, signs):
+    uncertain_fragment = MuseumNumber.of("K.1")
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
-    updated_text = attr.evolve(text, chapters=(
-        attr.evolve(text.chapters[0], manuscripts=(
-            attr.evolve(text.chapters[0].manuscripts[0],
-                        museum_number='new number'),
-        )),
-    ))
+    updated_text = attr.evolve(
+        text,
+        chapters=(
+            attr.evolve(
+                text.chapters[0],
+                manuscripts=(
+                    attr.evolve(
+                        text.chapters[0].manuscripts[0],
+                        museum_number="new.number",
+                        accession="",
+                    ),
+                ),
+                uncertain_fragments=(uncertain_fragment,),
+            ),
+        ),
+    )
 
     post_result = client.simulate_post(
-        f'/texts/{text.category}/{text.index}/chapters/0/manuscripts',
-        body=json.dumps({
-            'manuscripts': create_dto(
-                updated_text
-            )['chapters'][0]['manuscripts']
-        })
+        f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
+        body=json.dumps(
+            {
+                "manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"],
+                "uncertainFragments": [str(uncertain_fragment)],
+            }
+        ),
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert post_result.json == create_dto(updated_text, True)
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert post_result.json == create_dto(updated_text)
 
     get_result = client.simulate_get(
-        f'/texts/{updated_text.category}/{updated_text.index}'
+        f"/texts/{updated_text.category}/{updated_text.index}"
     )
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers['Access-Control-Allow-Origin'] == '*'
-    assert get_result.json == create_dto(updated_text, True)
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert get_result.json == create_dto(updated_text)
 
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        f'/texts/1/1/chapters/0/manuscripts',
-        body=json.dumps({'manuscripts': []})
+        "/texts/1/1/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_invalid_reference(client,
-                                    bibliography,
-                                    sign_repository,
-                                    signs):
+def test_updating_invalid_reference(client, bibliography, sign_repository, signs):
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
     manuscript = {
-        'id': text.chapters[0].manuscripts[0].id,
-        'siglumDisambiguator': '1c',
-        'museumNumber': 'X.1',
-        'accession': '',
-        'periodModifier': PeriodModifier.NONE.value,
-        'period': Period.OLD_ASSYRIAN.long_name,
-        'provenance': Provenance.BABYLON.long_name,
-        'type': ManuscriptType.SCHOOL.long_name,
-        'notes': '',
-        'references': [
-            ReferenceFactory.build().to_dict()
-        ]
+        "id": text.chapters[0].manuscripts[0].id,
+        "siglumDisambiguator": "1c",
+        "museumNumber": "X.1",
+        "accession": "",
+        "periodModifier": PeriodModifier.NONE.value,
+        "period": Period.OLD_ASSYRIAN.long_name,
+        "provenance": Provenance.BABYLON.long_name,
+        "type": ManuscriptType.SCHOOL.long_name,
+        "notes": "",
+        "references": [ReferenceSchema().dump(ReferenceFactory.build())],
     }
 
     post_result = client.simulate_post(
-        f'/texts/{text.category}/{text.index}/chapters/0/manuscripts',
-        body=json.dumps({'manuscripts': [manuscript]})
+        f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [manuscript], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -118,8 +127,8 @@ def test_updating_invalid_reference(client,
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        f'/texts/invalid/1/chapters/0/manuscripts',
-        body=json.dumps({'manuscripts': []})
+        "/texts/invalid/1/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -127,8 +136,8 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        f'/texts/1/invalid/chapters/0/manuscripts',
-        body=json.dumps({'manuscripts': []})
+        "/texts/1/invalid/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -136,8 +145,8 @@ def test_updating_invalid_id(client):
 
 def test_updating_invalid_chapter_index(client):
     post_result = client.simulate_post(
-        f'/texts/1/1/chapters/invalid/manuscripts',
-        body=json.dumps({'manuscripts': []})
+        "/texts/1/1/chapters/invalid/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -145,51 +154,72 @@ def test_updating_invalid_chapter_index(client):
 
 AMBIGUOUS_MANUSCRIPTS = [
     {
-        'id': 1,
-        'siglumDisambiguator': '1c',
-        'museumNumber': 'X.1',
-        'accession': '',
-        'periodModifier': PeriodModifier.NONE.value,
-        'period': Period.OLD_ASSYRIAN.long_name,
-        'provenance': Provenance.BABYLON.long_name,
-        'type': ManuscriptType.SCHOOL.long_name,
-        'notes': '',
-        'references': []
+        "id": 1,
+        "siglumDisambiguator": "1c",
+        "museumNumber": "X.1",
+        "accession": "",
+        "periodModifier": PeriodModifier.NONE.value,
+        "period": Period.OLD_ASSYRIAN.long_name,
+        "provenance": Provenance.BABYLON.long_name,
+        "type": ManuscriptType.SCHOOL.long_name,
+        "notes": "",
+        "references": [],
     },
     {
-        'id': 2,
-        'siglumDisambiguator': '1c',
-        'museumNumber': 'X.2',
-        'accession': '',
-        'periodModifier': PeriodModifier.NONE.value,
-        'period': Period.OLD_ASSYRIAN.long_name,
-        'provenance': Provenance.BABYLON.long_name,
-        'type': ManuscriptType.SCHOOL.long_name,
-        'notes': '',
-        'references': []
+        "id": 2,
+        "siglumDisambiguator": "1c",
+        "museumNumber": "X.2",
+        "accession": "",
+        "periodModifier": PeriodModifier.NONE.value,
+        "period": Period.OLD_ASSYRIAN.long_name,
+        "provenance": Provenance.BABYLON.long_name,
+        "type": ManuscriptType.SCHOOL.long_name,
+        "notes": "",
+        "references": [],
+    },
+]
+
+
+INVALID_MUSEUM_NUMBER = [
+    {
+        "id": 1,
+        "siglumDisambiguator": "1c",
+        "museumNumber": "invalid",
+        "accession": "",
+        "periodModifier": PeriodModifier.NONE.value,
+        "period": Period.OLD_ASSYRIAN.long_name,
+        "provenance": Provenance.BABYLON.long_name,
+        "type": ManuscriptType.SCHOOL.long_name,
+        "notes": "",
+        "references": [],
     }
 ]
 
 
-@pytest.mark.parametrize('manuscripts,expected_status', [
-    [[{}], falcon.HTTP_BAD_REQUEST],
-    [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
-    [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY]
-])
-def test_update_invalid_entity(client,
-                               bibliography,
-                               manuscripts,
-                               expected_status,
-                               sign_repository,
-                               signs):
+@pytest.mark.parametrize(
+    "manuscripts,expected_status",
+    [
+        [[{}], falcon.HTTP_BAD_REQUEST],
+        [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [INVALID_MUSEUM_NUMBER, falcon.HTTP_BAD_REQUEST],
+        [
+            {"manuscripts": [], "uncertainFragments": ["invalid"]},
+            falcon.HTTP_BAD_REQUEST,
+        ],
+    ],
+)
+def test_update_invalid_entity(
+    client, bibliography, manuscripts, expected_status, sign_repository, signs
+):
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f'/texts/{text.category}/{text.index}/chapters/0/manuscripts',
-        body=json.dumps({'manuscripts': manuscripts})
+        f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": manuscripts, "uncertainFragments": []}),
     )
 
     assert post_result.status == expected_status

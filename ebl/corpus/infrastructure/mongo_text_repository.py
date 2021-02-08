@@ -1,6 +1,6 @@
 from typing import List
 
-import pymongo
+import pymongo  # pyre-ignore
 
 from ebl.corpus.application.corpus import COLLECTION, TextRepository
 from ebl.corpus.application.text_serializer import deserialize, serialize
@@ -10,7 +10,7 @@ from ebl.mongo_collection import MongoCollection
 
 
 def text_not_found(id_: TextId) -> Exception:
-    return NotFoundError(f'Text {id_.category}.{id_.index} not found.')
+    return NotFoundError(f"Text {id_.category}.{id_.index} not found.")
 
 
 class MongoTextRepository(TextRepository):
@@ -18,31 +18,30 @@ class MongoTextRepository(TextRepository):
         self._collection = MongoCollection(database, COLLECTION)
 
     def create_indexes(self) -> None:
-        self._collection.create_index([
-            ('category', pymongo.ASCENDING),
-            ('index', pymongo.ASCENDING)
-        ], unique=True)
+        self._collection.create_index(
+            [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
+        )
 
     def create(self, text: Text) -> None:
         self._collection.insert_one(serialize(text))
 
     def find(self, id_: TextId) -> Text:
         try:
-            mongo_text = self._collection.find_one({
-                'category': id_.category,
-                'index': id_.index
-            })
+            mongo_text = self._collection.find_one(
+                {"category": id_.category, "index": id_.index},
+                projection={"_id": False},
+            )
             return deserialize(mongo_text)
         except NotFoundError:
             raise text_not_found(id_)
 
     def list(self) -> List[Text]:
-        return [deserialize(mongo_text)
-                for mongo_text
-                in self._collection.find_many({})]
+        return [
+            deserialize(mongo_text)
+            for mongo_text in self._collection.find_many({}, projection={"_id": False})
+        ]
 
     def update(self, id_: TextId, text: Text) -> None:
         self._collection.update_one(
-            {'category': id_.category, 'index': id_.index},
-            {'$set': serialize(text)}
+            {"category": id_.category, "index": id_.index}, {"$set": serialize(text)}
         )

@@ -1,74 +1,98 @@
 import json
 
-import falcon
-import pytest
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.fragment import (
-    FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.web.lemmatizations import LemmatizationSchema
+from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.transliteration.application.lemmatization_schema import (
+    LemmatizationTokenSchema,
 )
-from ebl.transliteration.domain.lemmatization import Lemmatization
 
 
-def test_update_lemmatization(client,
-                              fragmentarium,
-                              user,
-                              database):
+TOKEN = LemmatizationToken("kur", tuple())
+LEMMATIZATION = Lemmatization(((TOKEN,),))
+# pyre-ignore[16]
+SERIALIZED = {"lemmatization": [[LemmatizationTokenSchema().dump(TOKEN)]]}
+
+
+def test_serialize_lemmatization():
+    assert LemmatizationSchema().dump(LEMMATIZATION) == SERIALIZED
+
+
+def test_deserialize_lemmatization():
+    assert LemmatizationSchema().load(SERIALIZED) == LEMMATIZATION
+
+
+def test_update_lemmatization(client, fragmentarium, user, database):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[1][3]['uniqueLemma'] = ['aklu I']
-    body = json.dumps({'lemmatization': tokens})
-    url = f'/fragments/{fragment_number}/lemmatization'
+    fragmentarium.create(transliterated_fragment)
+    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    lemmatization = Lemmatization(tokens)
+    body = LemmatizationSchema().dumps(lemmatization)
+    url = f"/fragments/{transliterated_fragment.number}/lemmatization"
     post_result = client.simulate_post(url, body=body)
 
     expected_json = create_response_dto(
-        transliterated_fragment.update_lemmatization(
-            Lemmatization.from_list(tokens)
-        ),
+        transliterated_fragment.update_lemmatization(lemmatization),
         user,
-        transliterated_fragment.number == 'K.1'
+        transliterated_fragment.number == MuseumNumber("K", "1"),
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers['Access-Control-Allow-Origin'] == '*'
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == expected_json
 
-    get_result = client.simulate_get(f'/fragments/{fragment_number}')
+    get_result = client.simulate_get(f"/fragments/{transliterated_fragment.number}")
     assert get_result.json == expected_json
 
-    assert database['changelog'].find_one({
-        'resource_id': fragment_number,
-        'resource_type': 'fragments',
-        'user_profile.name': user.profile['name']
-    })
+    assert database["changelog"].find_one(
+        {
+            "resource_id": str(transliterated_fragment.number),
+            "resource_type": "fragments",
+            "user_profile.name": user.profile["name"],
+        }
+    )
 
 
 def test_update_lemmatization_not_found(client):
-    url = '/fragments/unknown.fragment/lemmatization'
-    body = json.dumps({'lemmatization': []})
+    url = "/fragments/unknown.fragment/lemmatization"
+    body = json.dumps({"lemmatization": []})
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-@pytest.mark.parametrize("body", [
-    'lemmatization',
-    '"lemmatization"',
-    json.dumps([[{'value': 'u₄-šu', 'uniqueLemma': []}]]),
-    json.dumps({'lemmatization': [{'value': 'u₄-šu', 'uniqueLemma': []}]}),
-    json.dumps({'lemmatization': [['u₄-šu']]}),
-    json.dumps({'lemmatization': [[{'value': 1, 'uniqueLemma': []}]]}),
-    json.dumps({'lemmatization': [[{'value': 'u₄-šu', 'uniqueLemma': 1}]]}),
-    json.dumps({'lemmatization': [[{'value': 'u₄-šu', 'uniqueLemma': [1]}]]}),
-    json.dumps({'lemmatization': [[{'value': None, 'uniqueLemma': []}]]})
-])
-def test_update_lemmatization_invalid_entity(client,
-                                             fragmentarium,
-                                             body):
+def test_update_lemmatization_invalid_number(client):
+    url = "/fragments/invalid/lemmatization"
+    body = json.dumps({"lemmatization": []})
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "lemmatization",
+        '"lemmatization"',
+        json.dumps([[{"value": "u₄-šu", "uniqueLemma": []}]]),
+        json.dumps({"lemmatization": [{"value": "u₄-šu", "uniqueLemma": []}]}),
+        json.dumps({"lemmatization": [["u₄-šu"]]}),
+        json.dumps({"lemmatization": [[{"value": 1, "uniqueLemma": []}]]}),
+        json.dumps({"lemmatization": [[{"value": "u₄-šu", "uniqueLemma": 1}]]}),
+        json.dumps({"lemmatization": [[{"value": "u₄-šu", "uniqueLemma": [1]}]]}),
+        json.dumps({"lemmatization": [[{"value": None, "uniqueLemma": []}]]}),
+    ],
+)
+def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    url = f'/fragments/{fragment_number}/lemmatization'
+    fragmentarium.create(fragment)
+    url = f"/fragments/{fragment.number}/lemmatization"
 
     post_result = client.simulate_post(url, body=body)
 
@@ -77,11 +101,10 @@ def test_update_lemmatization_invalid_entity(client,
 
 def test_update_lemmatization_atf_change(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_number = fragmentarium.create(transliterated_fragment)
-    tokens = transliterated_fragment.text.lemmatization.to_list()
-    tokens[0][0]['value'] = 'ana'
-    body = json.dumps({'lemmatization': tokens})
-    url = f'/fragments/{fragment_number}/lemmatization'
-    post_result = client.simulate_post(url, body=body)
+    fragmentarium.create(transliterated_fragment)
+    dto = LemmatizationSchema().dump(transliterated_fragment.text.lemmatization)
+    dto["lemmatization"][0][0]["value"] = "ana"
+    url = f"/fragments/{transliterated_fragment.number}/lemmatization"
+    post_result = client.simulate_post(url, body=json.dumps(dto))
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

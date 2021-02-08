@@ -1,6 +1,6 @@
 import datetime
 from enum import Enum
-from typing import Tuple
+from typing import Sequence
 
 import attr
 
@@ -12,10 +12,10 @@ def now() -> str:
 
 
 class RecordType(Enum):
-    TRANSLITERATION = 'Transliteration'
-    REVISION = 'Revision'
-    HISTORICAL_TRANSLITERATION = 'HistoricalTransliteration'
-    COLLATION = 'Collation'
+    TRANSLITERATION = "Transliteration"
+    REVISION = "Revision"
+    HISTORICAL_TRANSLITERATION = "HistoricalTransliteration"
+    COLLATION = "Collation"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -25,32 +25,32 @@ class RecordEntry:
     date: str = attr.ib(factory=now)
 
     @staticmethod
-    def transliteration(user: str) -> 'RecordEntry':
+    def transliteration(user: str) -> "RecordEntry":
         return RecordEntry(user, RecordType.TRANSLITERATION)
 
     @staticmethod
-    def revision(user: str) -> 'RecordEntry':
+    def revision(user: str) -> "RecordEntry":
         return RecordEntry(user, RecordType.REVISION)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Record:
-    entries: Tuple[RecordEntry, ...] = tuple()
+    entries: Sequence[RecordEntry] = tuple()
 
-    def add_entry(self,
-                  old_transliteration: str,
-                  new_transliteration: str,
-                  user: User) -> 'Record':
+    def add_entry(
+        self, old_transliteration: str, new_transliteration: str, user: User
+    ) -> "Record":
         if new_transliteration != old_transliteration:
-            return Record((
-                *self.entries,
-                self._create_entry(old_transliteration, user.ebl_name)
-            ))
+            return Record(
+                (*self.entries, self._create_entry(old_transliteration, user.ebl_name))
+            )
         else:
             return self
 
     @staticmethod
     def _create_entry(old_transliteration: str, user: str) -> RecordEntry:
-        return (RecordEntry.revision(user)
-                if old_transliteration
-                else RecordEntry.transliteration(user))
+        return (
+            RecordEntry.revision(user)
+            if old_transliteration
+            else RecordEntry.transliteration(user)
+        )

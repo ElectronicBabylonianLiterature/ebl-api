@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  updater:
+    build: .
+    environment:
+      - AUTH0_AUDIENCE
+      - AUTH0_ISSUER
+      - AUTH0_PEM
+      - MONGODB_URI
+      - SENTRY_DSN
+      - SENTRY_ENVIRONMENT=production
+    volumes:
+      - ./:/usr/src/ebl/
+    command: ["pipenv", "run", "python", "-m", "ebl.fragmentarium.update_fragments"]
+    restart: "no"

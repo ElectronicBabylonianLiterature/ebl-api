@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Sequence
 
 import attr
 
@@ -10,17 +10,15 @@ class Folio:
 
     @property
     def file_name(self):
-        return f'{self.name}_{self.number}.jpg'
+        return f"{self.name}_{self.number}.jpg"
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Folios:
-    entries: Tuple[Folio, ...] = tuple()
+    entries: Sequence[Folio] = tuple()
 
-    def filter(self, user) -> 'Folios':
+    def filter(self, user) -> "Folios":
         folios = tuple(
-            folio
-            for folio in self.entries
-            if user.can_read_folio(folio.name)
+            folio for folio in self.entries if user.can_read_folio(folio.name)
         )
         return Folios(folios)

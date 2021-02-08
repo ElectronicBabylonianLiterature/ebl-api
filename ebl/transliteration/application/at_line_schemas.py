@@ -1,0 +1,109 @@
+from marshmallow import fields, post_load  # pyre-ignore[21]
+
+from ebl.schemas import NameEnum
+from ebl.transliteration.application.label_schemas import (
+    ColumnLabelSchema,
+    ObjectLabelSchema,
+    SurfaceLabelSchema,
+)
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.application.line_schemas import LineBaseSchema
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import (
+    ColumnAtLine,
+    CompositeAtLine,
+    DiscourseAtLine,
+    DivisionAtLine,
+    HeadingAtLine,
+    ObjectAtLine,
+    SealAtLine,
+    SurfaceAtLine,
+)
+from ebl.transliteration.domain.tokens import ValueToken
+
+
+class AtLineSchema(LineBaseSchema):
+    prefix = fields.Constant("@")
+    content = fields.Function(
+        # pyre-ignore[16]
+        lambda obj: [OneOfTokenSchema().dump(ValueToken.of(obj.display_value))],
+        lambda value: value,
+    )
+
+
+class SealAtLineSchema(AtLineSchema):
+    number = fields.Int(required=True)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> SealAtLine:
+        return SealAtLine(data["number"])
+
+
+class HeadingAtLineSchema(AtLineSchema):
+    number = fields.Int(required=True)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> HeadingAtLine:
+        return HeadingAtLine(data["number"])
+
+
+class ColumnAtLineSchema(AtLineSchema):
+    column_label = fields.Nested(ColumnLabelSchema, required=True)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> ColumnAtLine:
+        return ColumnAtLine(data["column_label"])
+
+
+class DiscourseAtLineSchema(AtLineSchema):
+    discourse_label = NameEnum(atf.Discourse, required=True)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> DiscourseAtLine:
+        return DiscourseAtLine(data["discourse_label"])
+
+
+class SurfaceAtLineSchema(AtLineSchema):
+    surface_label = fields.Nested(SurfaceLabelSchema, required=True)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> SurfaceAtLine:
+        return SurfaceAtLine(data["surface_label"])
+
+
+class ObjectAtLineSchema(AtLineSchema):
+    status = fields.List(NameEnum(atf.Status), load_only=True)
+    object_label = NameEnum(atf.Object, load_only=True)
+    text = fields.String(default="", load_only=True)
+    label = fields.Nested(ObjectLabelSchema)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> ObjectAtLine:
+        return ObjectAtLine(data["label"])
+
+
+class DivisionAtLineSchema(AtLineSchema):
+    text = fields.String(required=True)
+    number = fields.Int(required=False, allow_none=True, default=None)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> DivisionAtLine:
+        return DivisionAtLine(data["text"], data["number"])
+
+
+class CompositeAtLineSchema(AtLineSchema):
+    composite = NameEnum(atf.Composite, required=True)
+    text = fields.String(required=True)
+    number = fields.Int(required=False, allow_none=True, default=None)
+    display_value = fields.String(data_key="displayValue")
+
+    @post_load  # pyre-ignore[56]
+    def make_line(self, data, **kwargs) -> CompositeAtLine:
+        return CompositeAtLine(data["composite"], data["text"], data["number"])

@@ -103,12 +103,22 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# pyoracc
-parselog.txt
-
 # IDEs
 .vscode/
 .idea/
 
 # Docker
 docker-entrypoint-initdb.d/
+
+# Pyre 
+.pyre/
+
+# Run backend locally
+run_backend.sh
+
+# Migration script output
+invalid_fragments.tsv
+invalid_texts.tsv
+
+# Line To Vec Scores
+line_to_vec_ranking_results

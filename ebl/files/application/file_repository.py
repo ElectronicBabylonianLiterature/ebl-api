@@ -30,8 +30,8 @@ class File(ABC):
         ...
 
     def can_be_read_by(self, user: User):
-        scope = self.metadata.get('scope')
-        return not scope or user.has_scope(f'read:{scope}')
+        scope = self.metadata.get("scope")
+        return not scope or user.has_scope(f"read:{scope}")
 
 
 class FileRepository(ABC):

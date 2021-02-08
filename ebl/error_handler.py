@@ -1,6 +1,6 @@
 import logging
 
-import falcon
+import falcon  # pyre-ignore[21]
 
 from ebl.dispatcher import DispatchError
 from ebl.errors import DataError, DuplicateError, NotFoundError
@@ -13,7 +13,7 @@ def http_error(_req, _resp, ex, _params):
 
 
 def unexpected_error(_req, _resp, _ex, _params):
-    logging.exception('Unexpected Exception')
+    logging.exception("Unexpected Exception")
     raise falcon.HTTPInternalServerError()
 
 

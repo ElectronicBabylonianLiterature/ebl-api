@@ -1,221 +1,132 @@
-from typing import Tuple
+from typing import Sequence
 
-import pytest
+import pytest  # pyre-ignore[21]
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
-from ebl.transliteration.domain.labels import LineNumberLabel
-from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import (Lemmatization,
-                                                      LemmatizationError,
-                                                      LemmatizationToken)
-from ebl.transliteration.domain.line import (ControlLine, EmptyLine, Line,
-                                             TextLine)
-from ebl.transliteration.domain.text import LanguageShift, LoneDeterminative, \
-    Partial, \
-    Text
-from ebl.transliteration.domain.token import BrokenAway, Erasure, \
-    LineContinuation, \
-    PerhapsBrokenAway, Side, Word, ValueToken
-
-LINES: Tuple[Line, ...] = (
-    TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [Word('ha-am')]),
-    ControlLine.of_single('$', ValueToken(' single ruling'))
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
+from ebl.transliteration.domain.lemmatization import (
+    Lemmatization,
+    LemmatizationError,
+    LemmatizationToken,
 )
-PARSER_VERSION = '1.0.0'
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Label, Text
+from ebl.transliteration.domain.tokens import Joiner
+from ebl.transliteration.domain.word_tokens import Word
+
+
+LINES: Sequence[Line] = (
+    TextLine(
+        LineNumber(1),
+        (Word.of([Reading.of_name("ha"), Joiner.hyphen(), Reading.of_name("am")]),),
+    ),
+    RulingDollarLine(atf.Ruling.SINGLE),
+)
+PARSER_VERSION = "1.0.0"
 TEXT: Text = Text(LINES, PARSER_VERSION)
 
 
-def test_of_iterable():
-    assert Text.of_iterable(LINES) == Text(LINES, ATF_PARSER_VERSION)
+def test_of_iterable() -> None:
+    assert Text.of_iterable(LINES) == Text(LINES, atf.ATF_PARSER_VERSION)
 
 
-def test_lines():
+def test_lines() -> None:
     assert TEXT.lines == LINES
 
 
-def test_version():
+def test_text_lines() -> None:
+    assert TEXT.text_lines == LINES[:1]
+
+
+def test_number_of_lines() -> None:
+    assert TEXT.number_of_lines == 1
+
+
+def test_version() -> None:
     assert TEXT.parser_version == PARSER_VERSION
 
 
-def test_set_version():
-    new_version = '2.0.0'
+def test_set_version() -> None:
+    new_version = "2.0.0"
     assert TEXT.set_parser_version(new_version).parser_version == new_version
 
 
-def test_to_dict():
-    assert TEXT.to_dict() == {
-        'lines': [line.to_dict() for line in LINES],
-        'parser_version': TEXT.parser_version
-    }
-
-
-def test_lemmatization():
-    assert TEXT.lemmatization == Lemmatization((
-        (LemmatizationToken('ha-am', tuple()), ),
-        (LemmatizationToken(' single ruling'), ),
-    ))
-
-
-def test_atf():
-    assert TEXT.atf == Atf(
-        '1. ha-am\n'
-        '$ single ruling'
+def test_lemmatization() -> None:
+    assert TEXT.lemmatization == Lemmatization(
+        (
+            (LemmatizationToken("ha-am", tuple()),),
+            (LemmatizationToken(" single ruling"),),
+        )
     )
 
 
-def test_update_lemmatization():
-    tokens = TEXT.lemmatization.to_list()
-    tokens[0][0]['uniqueLemma'] = ['nu I']
-    lemmatization = Lemmatization.from_list(tokens)
+def test_atf() -> None:
+    assert TEXT.atf == atf.Atf("1. ha-am\n" "$ single ruling")
 
-    expected = Text((
-        TextLine('1.', (
-            Word('ha-am', unique_lemma=(WordId('nu I'),)),
-        )),
-        ControlLine('$', (ValueToken(' single ruling'), )),
-    ), TEXT.parser_version)
+
+def test_update_lemmatization() -> None:
+    tokens = [list(line) for line in TEXT.lemmatization.tokens]
+    tokens[0][0] = LemmatizationToken(tokens[0][0].value, (WordId("nu I"),))
+    lemmatization = Lemmatization(tokens)
+
+    expected = Text(
+        (
+            TextLine(
+                LineNumber(1),
+                (
+                    Word.of(
+                        unique_lemma=(WordId("nu I"),),
+                        parts=[
+                            Reading.of_name("ha"),
+                            Joiner.hyphen(),
+                            Reading.of_name("am"),
+                        ],
+                    ),
+                ),
+            ),
+            RulingDollarLine(atf.Ruling.SINGLE),
+        ),
+        TEXT.parser_version,
+    )
 
     assert TEXT.update_lemmatization(lemmatization) == expected
 
 
-def test_update_lemmatization_incompatible():
-    lemmatization = Lemmatization(
-        ((LemmatizationToken('mu', tuple()), ), )
-    )
+def test_update_lemmatization_incompatible() -> None:
+    lemmatization = Lemmatization(((LemmatizationToken("mu", tuple()),),))
     with pytest.raises(LemmatizationError):
         TEXT.update_lemmatization(lemmatization)
 
 
-def test_update_lemmatization_wrong_lines():
-    tokens = [
-        *TEXT.lemmatization.to_list(),
-        []
-    ]
-    lemmatization = Lemmatization.from_list(tokens)
+def test_update_lemmatization_wrong_lines() -> None:
+    lemmatization = Lemmatization((*TEXT.lemmatization.tokens, tuple()))
 
     with pytest.raises(LemmatizationError):
         TEXT.update_lemmatization(lemmatization)
 
 
-@pytest.mark.parametrize('old,new,expected', [
-    (
-        Text.of_iterable(LINES),
-        Text.of_iterable(LINES),
-        Text.of_iterable(LINES)
-    ), (
-        Text.of_iterable([EmptyLine()]),
-        Text.of_iterable([
-            ControlLine.of_single('$', ValueToken(' single ruling'))
-        ]),
-        Text.of_iterable([
-            ControlLine.of_single('$', ValueToken(' single ruling'))
-        ])
-    ), (
-        Text.of_iterable([
-            ControlLine.of_single('$', ValueToken(' double ruling')),
-            ControlLine.of_single('$', ValueToken(' single ruling')),
-            EmptyLine()
-        ]),
-        Text.of_iterable([
-            ControlLine.of_single('$', ValueToken(' double ruling')),
-            EmptyLine()
-        ]),
-        Text.of_iterable([
-            ControlLine.of_single('$', ValueToken(' double ruling')),
-            EmptyLine()
-        ]),
-    ), (
-        Text.of_iterable([
-            EmptyLine(),
-            ControlLine.of_single('$', ValueToken(' double ruling')),
-        ]),
-        Text.of_iterable([
-            EmptyLine(),
-            ControlLine.of_single('$', ValueToken(' single ruling')),
-            ControlLine.of_single('$', ValueToken(' double ruling')),
-        ]),
-        Text.of_iterable([
-            EmptyLine(),
-            ControlLine.of_single('$', ValueToken(' single ruling')),
-            ControlLine.of_single('$', ValueToken(' double ruling')),
-        ]),
-    ), (
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('nu', unique_lemma=(WordId('nu I'),)),
-                Word('nu', unique_lemma=(WordId('nu I'),))
-            ])
-        ]),
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu'), Word('nu')
-            ])
-        ]),
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('mu'),
-                Word('nu', unique_lemma=(WordId('nu I'),))
-            ])
-        ])
-    ), (
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                Word('[ku-(nu)]',
-                     unique_lemma=(WordId('kunu I'),),
-                     alignment=4),
-            ]),
-        ]),
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                BrokenAway('['),
-                Word('ku-(nu'),
-                PerhapsBrokenAway(')'),
-                BrokenAway(']')
-            ]),
-        ]),
-        Text.of_iterable([
-            TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-                BrokenAway('['),
-                Word('ku-(nu',
-                     unique_lemma=(WordId('kunu I'),),
-                     alignment=4),
-                PerhapsBrokenAway(')'),
-                BrokenAway(']')
-            ])
-        ])
+def test_labels() -> None:
+    text = Text.of_iterable(
+        [
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
+            ColumnAtLine(ColumnLabel.from_int(1)),
+            SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")),
+            ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "Stone wig")),
+            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
+        ]
     )
-])
-def test_merge(old: Text, new: Text, expected: Text) -> None:
-    new_version = f'{old.parser_version}-test'
-    assert old.merge(
-        new.set_parser_version(new_version)
-    ).to_dict() == expected.set_parser_version(new_version).to_dict()
-
-
-@pytest.mark.parametrize('lines', [
-    [EmptyLine()],
-    [ControlLine.of_single('$', ValueToken(' single ruling'))],
-    [
-        TextLine.of_iterable(LineNumberLabel.from_atf('1.'), [
-            Word('nu', unique_lemma=(WordId('nu I'),)),
-            Word('nu', alignment=1),
-            LanguageShift('%sux'),
-            LoneDeterminative(
-                '{nu}',
-                language=Language.SUMERIAN,
-                partial=Partial(False, True)
-            ),
-            Erasure('°', Side.LEFT),
-            Erasure('\\', Side.CENTER),
-            Erasure('°', Side.RIGHT),
-            LineContinuation('→')
-        ])
+    assert text.labels == [
+        Label(None, None, None, LineNumber(1)),
+        Label(
+            ColumnLabel.from_int(1),
+            SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
+            ObjectLabel([], atf.Object.OBJECT, "Stone wig"),
+            LineNumber(2),
+        ),
     ]
-])
-def test_from_dict(lines):
-    parser_version = '2.3.1'
-    assert Text.from_dict({
-        'lines': [line.to_dict() for line in lines],
-        'parser_version': '2.3.1'
-    }) == Text.of_iterable(lines).set_parser_version(parser_version)

@@ -1,12 +1,16 @@
 FROM gitpod/workspace-mongodb
 
-USER root
-
 # Install custom tools, runtime, etc. using apt-get
-# For example, the command below would install "bastet" - a command line tetris clone:
-#
-# RUN apt-get update \
-#    && apt-get install -y bastet \
-#    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-#
-# More information: https://www.gitpod.io/docs/42_config_docker/
+# More information: https://www.gitpod.io/docs/config-docker/
+RUN sudo apt-get update \
+    && sudo apt-get install -y \
+        mongo-tools \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+ARG PYTHON_VERSION=pypy3.7-7.3.3
+RUN pyenv install $PYTHON_VERSION
+RUN pyenv global $PYTHON_VERSION
+RUN python -m ensurepip
+RUN python -m pip install --upgrade pip pipenv
+
+ENV NODE_OPTIONS=--experimental-worker
