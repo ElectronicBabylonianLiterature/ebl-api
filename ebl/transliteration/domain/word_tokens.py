@@ -40,6 +40,14 @@ class AbstractWord(Token):
         return self._parts
 
     @property
+    def clean_value(self) -> str:
+        return "".join(
+            part.clean_value
+            for part in self.parts
+            if part.erasure != ErasureState.ERASED
+        )
+
+    @property
     def lemmatizable(self) -> bool:
         non_lemmatizables = [
             atf.VARIANT_SEPARATOR,
@@ -137,14 +145,6 @@ class Word(AbstractWord):
     @property
     def value(self) -> str:
         return "".join(part.value for part in self.parts)
-
-    @property
-    def clean_value(self) -> str:
-        return "".join(
-            part.clean_value
-            for part in self.parts
-            if part.erasure != ErasureState.ERASED
-        )
 
     def set_language(self, language: Language, normalized: bool) -> "Word":
         return attr.evolve(self, language=language, normalized=normalized)
