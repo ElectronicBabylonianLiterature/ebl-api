@@ -124,7 +124,6 @@ def test_word(language, normalized, unique_lemma) -> None:
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
         "parts": OneOfTokenSchema().dump(parts, many=True),  # pyre-ignore[16]
-        "enclosureType": [type.name for type in word.enclosure_type],
         "alignment": 1,
         "variant": OneOfWordSchema().dump(variant),  # pyre-ignore[16]
     }

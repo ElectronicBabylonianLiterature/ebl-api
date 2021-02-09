@@ -35,7 +35,6 @@ def test_divider() -> None:
         "divider": value,
         "modifiers": list(modifiers),
         "flags": ["?"],
-        "enclosureType": [type.name for type in divider.enclosure_type],
     }
     assert_token_serialization(divider, serialized)
 
@@ -54,7 +53,6 @@ def test_unidentified_sign() -> None:
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": [],
-        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -74,7 +72,6 @@ def test_unidentified_sign_with_flags() -> None:
         "type": "UnidentifiedSign",
         "value": expected_value,
         "flags": ["#"],
-        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -93,7 +90,6 @@ def test_unclear_sign() -> None:
         "type": "UnclearSign",
         "value": expected_value,
         "flags": [],
-        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -113,7 +109,6 @@ def test_unclear_sign_with_flags() -> None:
         "type": "UnclearSign",
         "value": expected_value,
         "flags": ["!"],
-        "enclosureType": [type.name for type in sign.enclosure_type],
     }
     assert_token_serialization(sign, serialized)
 
@@ -224,7 +219,6 @@ def test_reading(
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
         "sign": sign and OneOfTokenSchema().dump(sign),
-        "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
 
@@ -355,7 +349,6 @@ def test_logogram(
         "flags": [flag.value for flag in flags],
         "surrogate": OneOfTokenSchema().dump(surrogate, many=True),
         "sign": sign and OneOfTokenSchema().dump(sign),
-        "enclosureType": [type.name for type in logogram.enclosure_type],
     }
     assert_token_serialization(logogram, serialized)
 
@@ -448,7 +441,6 @@ def test_number(
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
         "sign": sign and OneOfTokenSchema().dump(sign),
-        "enclosureType": [type.name for type in number.enclosure_type],
     }
     assert_token_serialization(number, serialized)
 
@@ -468,7 +460,6 @@ def test_compound_grapheme() -> None:
     serialized = {
         "type": "CompoundGrapheme",
         "value": expected_value,
-        "enclosureType": [type.name for type in compound.enclosure_type],
         "compound_parts": ["BI", "IS"],
     }
     assert_token_serialization(compound, serialized)
@@ -503,6 +494,5 @@ def test_grapheme(name, modifiers, flags, expected_value, expected_clean_value) 
         "name": name,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
-        "enclosureType": [type.name for type in grapheme.enclosure_type],
     }
     assert_token_serialization(grapheme, serialized)

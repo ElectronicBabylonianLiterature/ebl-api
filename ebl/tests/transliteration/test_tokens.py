@@ -51,7 +51,6 @@ def test_value_token():
     serialized = {
         "type": "ValueToken",
         "value": token.value,
-        "enclosureType": [type.name for type in token.enclosure_type],
     }
     assert_token_serialization(token, serialized)
 
@@ -89,7 +88,6 @@ def test_language_shift(value, expected_language, normalized):
         "value": shift.value,
         "normalized": normalized,
         "language": shift.language.name,
-        "enclosureType": [type.name for type in shift.enclosure_type],
     }
     assert_token_serialization(shift, serialized)
 
@@ -163,7 +161,6 @@ def test_unknown_number_of_signs():
     serialized = {
         "type": "UnknownNumberOfSigns",
         "value": expected_value,
-        "enclosureType": [type.name for type in unknown_number_of_signs.enclosure_type],
     }
     assert_token_serialization(unknown_number_of_signs, serialized)
 
@@ -185,9 +182,6 @@ def test_egyptian_metrical_feet_separator():
         "type": "EgyptianMetricalFeetSeparator",
         "value": expected_value,
         "flags": ["?"],
-        "enclosureType": [
-            type.name for type in egyptian_metrical_feet_separator.enclosure_type
-        ],
     }
     assert_token_serialization(egyptian_metrical_feet_separator, serialized)
 
@@ -204,7 +198,6 @@ def test_tabulation():
     serialized = {
         "type": "Tabulation",
         "value": value,
-        "enclosureType": [type.name for type in tabulation.enclosure_type],
     }
     assert_token_serialization(tabulation, serialized)
 
@@ -223,7 +216,6 @@ def test_commentary_protocol(protocol_enum):
     serialized = {
         "type": "CommentaryProtocol",
         "value": value,
-        "enclosureType": [type.name for type in protocol.enclosure_type],
     }
     assert_token_serialization(protocol, serialized)
 
@@ -241,7 +233,6 @@ def test_column():
         "type": "Column",
         "value": expected_value,
         "number": None,
-        "enclosureType": [type.name for type in column.enclosure_type],
     }
     assert_token_serialization(column, serialized)
 
@@ -259,7 +250,6 @@ def test_column_with_number():
         "type": "Column",
         "value": expected_value,
         "number": 1,
-        "enclosureType": [type.name for type in column.enclosure_type],
     }
     assert_token_serialization(column, serialized)
 
@@ -289,7 +279,6 @@ def test_variant():
         "type": "Variant",
         "value": expected_value,
         "tokens": OneOfTokenSchema().dump([reading, divider], many=True),
-        "enclosureType": [type.name for type in variant.enclosure_type],
     }
     assert_token_serialization(variant, serialized)
 
@@ -312,6 +301,5 @@ def test_joiner(joiner, expected_value):
     serialized = {
         "type": "Joiner",
         "value": expected_value,
-        "enclosureType": [type.name for type in joiner.enclosure_type],
     }
     assert_token_serialization(joiner, serialized)

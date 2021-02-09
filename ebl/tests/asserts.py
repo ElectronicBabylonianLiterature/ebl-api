@@ -6,6 +6,7 @@ def assert_token_serialization(token: Token, serialized: dict) -> None:
     with_clean_value = {
         "erasure": ErasureState.NONE.name,
         "cleanValue": token.clean_value,
+        "enclosureType": [type_.name for type_ in token.enclosure_type],
         **serialized,
     }
     assert OneOfTokenSchema().dump(token) == with_clean_value  # pyre-ignore[16]

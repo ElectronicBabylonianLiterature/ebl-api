@@ -16,7 +16,6 @@ def test_in_word_new_line():
     serialized = {
         "type": "InWordNewline",
         "value": expected_value,
-        "enclosureType": [type_.name for type_ in newline.enclosure_type],
     }
     assert_token_serialization(newline, serialized)
 
@@ -33,6 +32,5 @@ def test_line_break():
     serialized = {
         "type": "LineBreak",
         "value": value,
-        "enclosureType": [type_.name for type_ in line_break.enclosure_type],
     }
     assert_token_serialization(line_break, serialized)

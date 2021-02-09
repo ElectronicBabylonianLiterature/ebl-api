@@ -54,7 +54,6 @@ def test_enclosure(enclosure_class, type_, sides, side):
         "type": type_,
         "value": enclosure.value,
         "side": side.name,
-        "enclosureType": [type.name for type in enclosure.enclosure_type],
     }
     assert_token_serialization(enclosure, serialized)
 
@@ -76,7 +75,6 @@ def test_determinative():
         "type": "Determinative",
         "value": determinative.value,
         "parts": OneOfTokenSchema().dump(parts, many=True),
-        "enclosureType": [type.name for type in determinative.enclosure_type],
     }
     assert_token_serialization(determinative, serialized)
 
@@ -98,7 +96,6 @@ def test_phonetic_gloss():
         "type": "PhoneticGloss",
         "value": gloss.value,
         "parts": OneOfTokenSchema().dump(parts, many=True),
-        "enclosureType": [type.name for type in gloss.enclosure_type],
     }
     assert_token_serialization(gloss, serialized)
 
@@ -120,6 +117,5 @@ def test_linguistic_gloss():
         "type": "LinguisticGloss",
         "value": gloss.value,
         "parts": OneOfTokenSchema().dump(parts, many=True),
-        "enclosureType": [type.name for type in gloss.enclosure_type],
     }
     assert_token_serialization(gloss, serialized)
