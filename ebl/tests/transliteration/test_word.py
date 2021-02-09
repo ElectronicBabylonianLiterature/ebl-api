@@ -24,15 +24,10 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.word_tokens import (
-    DEFAULT_NORMALIZED,
-    ErasureState,
-    Word,
-)
+from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
 LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
     (Word.of([Reading.of_name("un")]), True),
-    (Word.of([Reading.of_name("un")], normalized=True), True),
     (Word.of([Reading.of_name("un")], language=Language.SUMERIAN), False),
     (Word.of([Reading.of_name("un")], language=Language.EMESAL), False),
     (Word.of([Reading.of_name("un"), Joiner.hyphen(), UnclearSign.of()]), False),
@@ -61,10 +56,6 @@ LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
 ]
 
 
-def test_default_normalized() -> None:
-    assert DEFAULT_NORMALIZED is False
-
-
 def test_defaults() -> None:
     value = "value"
     reading = Reading.of_name(value)
@@ -76,7 +67,7 @@ def test_defaults() -> None:
     assert word.parts == (reading,)
     assert word.lemmatizable is True
     assert word.language == DEFAULT_LANGUAGE
-    assert word.normalized is DEFAULT_NORMALIZED
+    assert word.normalized is False
     assert word.unique_lemma == tuple()
     assert word.erasure == ErasureState.NONE
     assert word.alignment is None
@@ -84,25 +75,20 @@ def test_defaults() -> None:
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
-    "language,normalized,unique_lemma",
+    "language,unique_lemma",
     [
-        (Language.SUMERIAN, False, (WordId("ku II"), WordId("aklu I"))),
-        (Language.SUMERIAN, True, tuple()),
-        (Language.EMESAL, False, tuple()),
-        (Language.EMESAL, True, tuple()),
-        (Language.AKKADIAN, False, (WordId("aklu I"),)),
-        (Language.AKKADIAN, True, tuple()),
+        (Language.SUMERIAN, (WordId("ku II"), WordId("aklu I"))),
+        (Language.EMESAL, tuple()),
+        (Language.AKKADIAN, (WordId("aklu I"),)),
     ],
 )
-def test_word(language, normalized, unique_lemma) -> None:
+def test_word(language, unique_lemma) -> None:
     value = "ku"
     parts = [Reading.of_name("ku")]
     erasure = ErasureState.NONE
     variant = Word.of([Reading.of_name("ra")])
     alignment = 1
-    word = Word.of(
-        parts, language, normalized, unique_lemma, erasure, alignment, variant
-    )
+    word = Word.of(parts, language, unique_lemma, erasure, alignment, variant)
 
     expected_parts = f"⟨{'⁚'.join(part.get_key() for part in parts)}⟩" if parts else ""
     assert word.value == value
@@ -110,7 +96,7 @@ def test_word(language, normalized, unique_lemma) -> None:
     assert word.get_key() == f"Word⁝{value}{expected_parts}"
     assert word.parts == tuple(parts)
     assert word.language == language
-    assert word.normalized is normalized
+    assert word.normalized is False
     assert word.unique_lemma == unique_lemma
     assert word.alignment == alignment
     assert word.variant == variant
@@ -118,7 +104,7 @@ def test_word(language, normalized, unique_lemma) -> None:
     serialized = {
         "type": "Word",
         "uniqueLemma": list(unique_lemma),
-        "normalized": normalized,
+        "normalized": False,
         "language": word.language.name,
         "lemmatizable": word.lemmatizable,
         "erasure": erasure.name,
@@ -174,15 +160,10 @@ def test_alignable(word, _) -> None:
 def test_set_language() -> None:
     unique_lemma = (WordId("aklu I"),)
     language = Language.SUMERIAN
-    normalized = False
-    word = Word.of(
-        [Reading.of_name("kur")], Language.AKKADIAN, not normalized, unique_lemma
-    )
-    expected_word = Word.of(
-        [Reading.of_name("kur")], language, normalized, unique_lemma
-    )
+    word = Word.of([Reading.of_name("kur")], Language.AKKADIAN, unique_lemma)
+    expected_word = Word.of([Reading.of_name("kur")], language, unique_lemma)
 
-    assert word.set_language(language, normalized) == expected_word
+    assert word.set_language(language) == expected_word
 
 
 def test_set_unique_lemma() -> None:

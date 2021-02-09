@@ -366,7 +366,6 @@ class WordSchema(BaseWordSchema):
         return Word.of(
             data["parts"],
             data["language"],
-            data["normalized"],
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
@@ -384,7 +383,6 @@ class LoneDeterminativeSchema(BaseWordSchema):
         return LoneDeterminative.of(
             data["parts"],
             data["language"],
-            data["normalized"],
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],

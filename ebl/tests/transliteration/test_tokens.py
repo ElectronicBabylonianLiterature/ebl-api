@@ -27,7 +27,6 @@ from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
     EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED
 
 
 TOKENS = [
@@ -61,11 +60,11 @@ def test_value_token():
 @pytest.mark.parametrize(
     "value,expected_language,normalized",
     [
-        (r"%sux", Language.SUMERIAN, DEFAULT_NORMALIZED),
-        (r"%es", Language.EMESAL, DEFAULT_NORMALIZED),
-        (r"%sb", Language.AKKADIAN, DEFAULT_NORMALIZED),
+        (r"%sux", Language.SUMERIAN, False),
+        (r"%es", Language.EMESAL, False),
+        (r"%sb", Language.AKKADIAN, False),
         (r"%n", Language.AKKADIAN, True),
-        (r"%foo", Language.UNKNOWN, DEFAULT_NORMALIZED),
+        (r"%foo", Language.UNKNOWN, False),
     ],
 )
 def test_language_shift(value, expected_language, normalized):

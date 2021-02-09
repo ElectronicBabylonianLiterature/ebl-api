@@ -103,35 +103,25 @@ class AbstractWord(Token):
 
 
 DEFAULT_LANGUAGE: Language = Language.AKKADIAN
-DEFAULT_NORMALIZED = False
 W = TypeVar("W", bound="Word")
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Word(AbstractWord):
     _language: Language = DEFAULT_LANGUAGE
-    _normalized: bool = DEFAULT_NORMALIZED
 
     @classmethod
     def of(
         cls: Type[W],
         parts: Sequence[Token],
         language: Language = DEFAULT_LANGUAGE,
-        normalized: bool = DEFAULT_NORMALIZED,
         unique_lemma: Sequence[WordId] = tuple(),
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
     ) -> W:
         return cls(
-            frozenset(),
-            erasure,
-            unique_lemma,
-            alignment,
-            parts,
-            variant,
-            language,
-            normalized,
+            frozenset(), erasure, unique_lemma, alignment, parts, variant, language
         )
 
     @property
@@ -140,14 +130,14 @@ class Word(AbstractWord):
 
     @property
     def normalized(self) -> bool:
-        return self._normalized
+        return False
 
     @property
     def value(self) -> str:
         return "".join(part.value for part in self.parts)
 
-    def set_language(self, language: Language, normalized: bool) -> "Word":
-        return attr.evolve(self, language=language, normalized=normalized)
+    def set_language(self, language: Language) -> "Word":
+        return attr.evolve(self, language=language)
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_word(self)

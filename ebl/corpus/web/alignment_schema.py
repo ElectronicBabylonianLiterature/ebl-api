@@ -33,7 +33,7 @@ class AlignmentTokenSchema(Schema):  # pyre-ignore[11]
             return (
                 parse_normalized_akkadian_word(variant)
                 if language is Language.AKKADIAN and is_normalized
-                else parse_word(variant).set_language(language, is_normalized)
+                else parse_word(variant).set_language(language)
             )
         else:
             return None
