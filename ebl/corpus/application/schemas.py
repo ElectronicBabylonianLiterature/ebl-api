@@ -1,19 +1,32 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
-from ebl.corpus.domain.text import Chapter, Line, Manuscript, ManuscriptLine, Text
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.application.line_schemas import NoteLineSchema, TextLineSchema
+from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
+
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.enums import (
+from ebl.corpus.domain.chapter import (
+    Chapter,
     Classification,
+    Line,
+    LineVariant,
+    ManuscriptLine,
+)
+from ebl.corpus.domain.manuscript import (
+    Manuscript,
     ManuscriptType,
     Period,
     PeriodModifier,
     Provenance,
-    Stage,
 )
-from ebl.schemas import StringValueEnum
+from ebl.corpus.domain.stage import Stage
+from ebl.corpus.domain.text import Text
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.schemas import ValueEnum
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_schemas import NoteLineSchema
+from ebl.transliteration.application.one_of_line_schema import (
+    OneOfLineSchema,
+    ParallelLineSchema,
+)
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import parse_label
-from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 
 class ManuscriptSchema(Schema):  # pyre-ignore[11]
@@ -23,7 +36,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
     accession = fields.String(required=True)
-    period_modifier = StringValueEnum(
+    period_modifier = ValueEnum(
         PeriodModifier, required=True, data_key="periodModifier"
     )
     period = fields.Function(
@@ -61,7 +74,9 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
 
 
 def manuscript_id():
-    return fields.Integer(required=True, data_key="manuscriptId")
+    return fields.Integer(
+        required=True, data_key="manuscriptId", validate=validate.Range(min=1)
+    )
 
 
 def labels():
@@ -92,35 +107,56 @@ class ManuscriptLineSchema(Schema):
         )
 
 
-class LineSchema(Schema):
-    text = fields.Nested(TextLineSchema, required=True)
+class LineVariantSchema(Schema):
+    reconstruction = fields.Nested(OneOfTokenSchema, required=True, many=True)
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
+    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
+    parallel_lines = fields.Nested(
+        ParallelLineSchema, many=True, missing=tuple(), data_key="parallelLines"
+    )
+
+    @post_load  # pyre-ignore[56]
+    def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
+        return LineVariant(
+            tuple(data["reconstruction"]),
+            data["note"],
+            tuple(data["manuscripts"]),
+            tuple(data["parallel_lines"]),
+        )
+
+
+class LineSchema(Schema):
+    number = fields.Nested(OneOfLineNumberSchema, required=True)
+    variants = fields.Nested(
+        LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
+    )
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
 
     @post_load  # pyre-ignore[56]
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
-            data["text"],
-            data["note"],
+            data["number"],
+            tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            tuple(data["manuscripts"]),
         )
 
 
 class ChapterSchema(Schema):
-    classification = StringValueEnum(Classification, required=True)
-    stage = StringValueEnum(Stage, required=True)
+    classification = ValueEnum(Classification, required=True)
+    stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
-    name = fields.String(required=True)
+    name = fields.String(required=True, validate=validate.Length(min=1))
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
+    uncertain_fragments = fields.Nested(
+        MuseumNumberSchema, many=True, missing=tuple(), data_key="uncertainFragments"
+    )
     lines = fields.Nested(LineSchema, many=True, required=True)
     parser_version = fields.String(missing="", data_key="parserVersion")
 
@@ -133,16 +169,19 @@ class ChapterSchema(Schema):
             data["name"],
             data["order"],
             tuple(data["manuscripts"]),
+            tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
             data["parser_version"],
         )
 
 
 class TextSchema(Schema):
-    category = fields.Integer(required=True)
-    index = fields.Integer(required=True)
-    name = fields.String(required=True)
-    number_of_verses = fields.Integer(required=True, data_key="numberOfVerses")
+    category = fields.Integer(required=True, validate=validate.Range(min=0))
+    index = fields.Integer(required=True, validate=validate.Range(min=0))
+    name = fields.String(required=True, validate=validate.Length(min=1))
+    number_of_verses = fields.Integer(
+        required=True, data_key="numberOfVerses", validate=validate.Range(min=0)
+    )
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     chapters = fields.Nested(ChapterSchema, many=True, required=True)
 

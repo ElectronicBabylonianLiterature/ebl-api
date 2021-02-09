@@ -8,7 +8,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "3.0.1"
+ATF_PARSER_VERSION = "4.0.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -189,6 +189,7 @@ UNIDENTIFIED_SIGN = "X"
 IN_WORD_NEWLINE = ";"
 TABULATION = "($___$)"
 LINE_BREAK = "|"
+EGYPTIAN_METRICAL_FEET_SEPARATOR = "•"
 
 ERASURE_BOUNDARY = "°"
 ERASURE: Mapping[Side, str] = {

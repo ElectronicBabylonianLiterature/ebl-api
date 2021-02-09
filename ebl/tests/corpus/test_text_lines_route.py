@@ -50,13 +50,7 @@ def test_updating(client, bibliography, sign_repository, signs):
             attr.evolve(
                 text.chapters[0],
                 lines=(
-                    attr.evolve(
-                        text.chapters[0].lines[0],
-                        text=attr.evolve(
-                            text.chapters[0].lines[0].text,
-                            line_number=LineNumber(1, True),
-                        ),
-                    ),
+                    attr.evolve(text.chapters[0].lines[0], number=LineNumber(1, True)),
                 ),
                 parser_version=ATF_PARSER_VERSION,
             ),
@@ -166,10 +160,7 @@ TOO_MANY_NOTES = {
 
 @pytest.mark.parametrize(
     "lines,expected_status",
-    [
-        [[{}], falcon.HTTP_BAD_REQUEST],
-        [[TOO_MANY_NOTES], falcon.HTTP_UNPROCESSABLE_ENTITY],
-    ],
+    [[[{}], falcon.HTTP_BAD_REQUEST], [[TOO_MANY_NOTES], falcon.HTTP_BAD_REQUEST]],
 )
 def test_update_invalid_entity(
     client, bibliography, lines, expected_status, sign_repository, signs

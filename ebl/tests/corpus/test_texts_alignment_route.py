@@ -7,30 +7,31 @@ import pytest  # pyre-ignore[21]
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
-from ebl.transliteration.domain.language import Language
 
 ANY_USER = Guest()
 DTO = {
     "alignment": [
         [
-            {
-                "alignment": [
-                    {
-                        "value": "ku-[nu-ši]",
-                        "alignment": 0,
-                        "variant": "KU",
-                        "language": "SUMERIAN",
-                        "isNormalized": False,
-                    }
-                ],
-                "omittedWords": [1],
-            }
+            [
+                {
+                    "alignment": [
+                        {
+                            "value": "ku-[nu-ši]",
+                            "alignment": 0,
+                            "variant": "KU",
+                            "language": "SUMERIAN",
+                            "isNormalized": False,
+                        }
+                    ],
+                    "omittedWords": [1],
+                }
+            ]
         ]
     ]
 }
@@ -73,31 +74,43 @@ def test_updating_alignment(client, bibliography, sign_repository, signs):
                 lines=(
                     attr.evolve(
                         text.chapters[0].lines[0],
-                        manuscripts=(
+                        variants=(
                             attr.evolve(
-                                text.chapters[0].lines[0].manuscripts[0],
-                                line=TextLine.of_iterable(
-                                    LineNumber(1),
-                                    (
-                                        Word.of(
-                                            [
-                                                Reading.of_name("ku"),
-                                                Joiner.hyphen(),
-                                                BrokenAway.open(),
-                                                Reading.of_name("nu"),
-                                                Joiner.hyphen(),
-                                                Reading.of_name("ši"),
-                                                BrokenAway.close(),
-                                            ],
-                                            alignment=alignment,
-                                            variant=Word.of(
-                                                [Logogram.of_name("KU")],
-                                                language=Language.SUMERIAN,
+                                text.chapters[0].lines[0].variants[0],
+                                manuscripts=(
+                                    attr.evolve(
+                                        text.chapters[0]
+                                        .lines[0]
+                                        .variants[0]
+                                        .manuscripts[0],
+                                        line=TextLine.of_iterable(
+                                            text.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .manuscripts[0]
+                                            .line.line_number,
+                                            (
+                                                Word.of(
+                                                    [
+                                                        Reading.of_name("ku"),
+                                                        Joiner.hyphen(),
+                                                        BrokenAway.open(),
+                                                        Reading.of_name("nu"),
+                                                        Joiner.hyphen(),
+                                                        Reading.of_name("ši"),
+                                                        BrokenAway.close(),
+                                                    ],
+                                                    alignment=alignment,
+                                                    variant=Word.of(
+                                                        [Logogram.of_name("KU")],
+                                                        language=Language.SUMERIAN,
+                                                    ),
+                                                ),
                                             ),
                                         ),
+                                        omitted_words=omitted_words,
                                     ),
                                 ),
-                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
@@ -139,7 +152,10 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
 
 @pytest.mark.parametrize(
     "dto,expected_status",
-    [({"alignment": [[[]]]}, falcon.HTTP_BAD_REQUEST), ({}, falcon.HTTP_BAD_REQUEST)],
+    [
+        ({"alignment": [[[]]]}, falcon.HTTP_UNPROCESSABLE_ENTITY),
+        ({}, falcon.HTTP_BAD_REQUEST),
+    ],
 )
 def test_updating_invalid_alignment(
     dto, expected_status, client, bibliography, sign_repository, signs

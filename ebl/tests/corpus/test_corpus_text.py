@@ -1,25 +1,25 @@
 from typing import Sequence
 
-import attr
 import pytest  # pyre-ignore[21]
 
-from ebl.corpus.domain.enums import (
+from ebl.corpus.domain.chapter import (
+    Chapter,
     Classification,
+    Line,
+    LineVariant,
+    ManuscriptLine,
+)
+from ebl.corpus.domain.manuscript import (
+    Manuscript,
     ManuscriptType,
     Period,
     PeriodModifier,
     Provenance,
-    Stage,
-)
-from ebl.corpus.domain.text import (
-    Chapter,
-    Line,
-    Manuscript,
-    ManuscriptLine,
     Siglum,
-    Text,
-    TextId,
 )
+from ebl.corpus.domain.stage import Stage
+from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
@@ -29,6 +29,7 @@ from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
@@ -76,14 +77,16 @@ MANUSCRIPT_TEXT = TextLine(
 PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 OMITTED_WORDS = (1,)
 
-RECONSTRUCTION = TextLine.of_iterable(LINE_NUMBER, LINE_RECONSTRUCTION)
 NOTE = None
-LINE = Line(
-    RECONSTRUCTION,
+PARALLEL_LINES = (ParallelComposition(False, "a composition", LineNumber(7)),)
+LINE_VARIANT = LineVariant(
+    LINE_RECONSTRUCTION,
     NOTE,
-    IS_SECOND_LINE_OF_PARALLELISM,
-    IS_BEGINNING_OF_SECTION,
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
+    PARALLEL_LINES,
+)
+LINE = Line(
+    LINE_NUMBER, (LINE_VARIANT,), IS_SECOND_LINE_OF_PARALLELISM, IS_BEGINNING_OF_SECTION
 )
 
 TEXT = Text(
@@ -113,6 +116,7 @@ TEXT = Text(
                     REFERENCES,
                 ),
             ),
+            (MUSEUM_NUMBER,),
             (LINE,),
         ),
     ),
@@ -131,6 +135,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].version == VERSION
     assert TEXT.chapters[0].name == CHAPTER_NAME
     assert TEXT.chapters[0].order == ORDER
+    assert TEXT.chapters[0].uncertain_fragments == (MUSEUM_NUMBER,)
     assert TEXT.chapters[0].manuscripts[0].id == MANUSCRIPT_ID
     assert TEXT.chapters[0].manuscripts[0].siglum == Siglum(
         PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
@@ -144,19 +149,25 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
-    assert TEXT.chapters[0].lines[0].text == RECONSTRUCTION
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
-    assert TEXT.chapters[0].lines[0].reconstruction == LINE_RECONSTRUCTION
-    assert TEXT.chapters[0].lines[0].note == NOTE
+    assert TEXT.chapters[0].lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
+    assert TEXT.chapters[0].lines[0].variants[0].note == NOTE
+    assert TEXT.chapters[0].lines[0].variants[0].parallel_lines == PARALLEL_LINES
+    assert (
+        TEXT.chapters[0].lines[0].variants[0].manuscripts[0].manuscript_id
+        == MANUSCRIPT_ID
+    )
+    assert TEXT.chapters[0].lines[0].variants[0].manuscripts[0].labels == LABELS
+    assert TEXT.chapters[0].lines[0].variants[0].manuscripts[0].line == MANUSCRIPT_TEXT
+    assert (
+        TEXT.chapters[0].lines[0].variants[0].manuscripts[0].omitted_words
+        == OMITTED_WORDS
+    )
     assert (
         TEXT.chapters[0].lines[0].is_second_line_of_parallelism
         == IS_SECOND_LINE_OF_PARALLELISM
     )
     assert TEXT.chapters[0].lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
-    assert TEXT.chapters[0].lines[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
-    assert TEXT.chapters[0].lines[0].manuscripts[0].labels == LABELS
-    assert TEXT.chapters[0].lines[0].manuscripts[0].line == MANUSCRIPT_TEXT
-    assert TEXT.chapters[0].lines[0].manuscripts[0].omitted_words == OMITTED_WORDS
 
 
 def test_giving_museum_number_and_accession_is_invalid():
@@ -206,11 +217,20 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    RECONSTRUCTION,
-                    NOTE,
+                    LINE_NUMBER,
+                    (
+                        LineVariant(
+                            LINE_RECONSTRUCTION,
+                            NOTE,
+                            (
+                                ManuscriptLine(
+                                    MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT
+                                ),
+                            ),
+                        ),
+                    ),
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
-                    (ManuscriptLine(MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT),),
                 ),
             ),
         )
@@ -223,14 +243,19 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    RECONSTRUCTION,
-                    NOTE,
+                    LINE_NUMBER,
+                    (
+                        LineVariant(
+                            LINE_RECONSTRUCTION,
+                            NOTE,
+                            (
+                                ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                                ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                            ),
+                        ),
+                    ),
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
-                    (
-                        ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
-                        ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
-                    ),
                 ),
             ),
         ),
@@ -238,18 +263,28 @@ def test_missing_manuscripts_are_invalid():
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
-                    RECONSTRUCTION,
-                    NOTE,
+                    LINE_NUMBER,
+                    (
+                        LineVariant(
+                            LINE_RECONSTRUCTION,
+                            NOTE,
+                            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                        ),
+                    ),
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
-                    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
                 ),
                 Line(
-                    attr.evolve(RECONSTRUCTION, line_number=LineNumber(2)),
-                    NOTE,
+                    LineNumber(2),
+                    (
+                        LineVariant(
+                            LINE_RECONSTRUCTION,
+                            NOTE,
+                            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                        ),
+                    ),
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
-                    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
                 ),
             ),
         ),
@@ -284,11 +319,10 @@ def test_invalid_labels(labels: Sequence[Label]):
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
-            TextLine.of_iterable(LINE_NUMBER, (AkkadianWord.of((BrokenAway.open(),)),)),
-            NOTE,
+            LINE_NUMBER,
+            (LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple()),),
             False,
             False,
-            tuple(),
         )
 
 

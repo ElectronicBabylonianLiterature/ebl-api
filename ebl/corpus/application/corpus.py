@@ -3,6 +3,7 @@ from typing import List, Sequence, Tuple
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_updater import ChapterUpdater
+from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
@@ -10,10 +11,11 @@ from ebl.corpus.application.text_hydrator import TextHydrator
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
-from ebl.corpus.domain.text import Line, Manuscript, Text, TextId
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.corpus.domain.chapter import Line
+from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.text import Text, TextId, ChapterId
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
-
 
 COLLECTION = "texts"
 
@@ -68,34 +70,32 @@ class Corpus:
         return self._repository.list()
 
     def update_alignment(
-        self, id_: TextId, chapter_index: int, alignment: Alignment, user: User
+        self, id_: ChapterId, alignment: Alignment, user: User
     ) -> None:
-        self._update_chapter(id_, AlignmentUpdater(chapter_index, alignment), user)
+        self._update_chapter(id_.text_id, AlignmentUpdater(id_.index, alignment), user)
 
     def update_manuscript_lemmatization(
-        self,
-        id_: TextId,
-        chapter_index: int,
-        lemmatization: Sequence[Sequence[Sequence[LemmatizationToken]]],
-        user: User,
+        self, id_: ChapterId, lemmatization: ChapterLemmatization, user: User
     ) -> None:
         self._update_chapter(
-            id_, LemmatizationUpdater(chapter_index, lemmatization), user
+            id_.text_id, LemmatizationUpdater(id_.index, lemmatization), user
         )
 
     def update_manuscripts(
         self,
-        id_: TextId,
-        chapter_index: int,
+        id_: ChapterId,
         manuscripts: Sequence[Manuscript],
+        uncertain_fragments: Sequence[MuseumNumber],
         user: User,
     ) -> None:
-        self._update_chapter(id_, ManuscriptUpdater(chapter_index, manuscripts), user)
+        self._update_chapter(
+            id_.text_id,
+            ManuscriptUpdater(id_.index, manuscripts, uncertain_fragments),
+            user,
+        )
 
-    def update_lines(
-        self, id_: TextId, chapter_index: int, lines: Sequence[Line], user: User
-    ) -> None:
-        self._update_chapter(id_, LinesUpdater(chapter_index, lines), user)
+    def update_lines(self, id_: ChapterId, lines: Sequence[Line], user: User) -> None:
+        self._update_chapter(id_.text_id, LinesUpdater(id_.index, lines), user)
 
     def _update_chapter(self, id_: TextId, updater: ChapterUpdater, user: User) -> None:
         old_text = self._repository.find(id_)
@@ -110,11 +110,11 @@ class Corpus:
         self._repository.update(id_, updated_text)
 
     def _validate_text(self, text: Text) -> None:
-        text.accept(TextValidator(self._bibliography, self._transliteration_factory))
+        TextValidator(self._bibliography, self._transliteration_factory).visit(text)
 
     def _hydrate_references(self, text: Text) -> Text:
         hydrator = TextHydrator(self._bibliography)
-        text.accept(hydrator)
+        hydrator.visit(text)
         return hydrator.text
 
     def _create_changelog(self, old_text, new_text, user) -> None:

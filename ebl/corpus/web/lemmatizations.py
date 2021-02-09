@@ -5,16 +5,14 @@ from marshmallow import fields, Schema  # pyre-ignore[21]
 from ebl.marshmallowschema import validate
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.api_serializer import serialize
-from ebl.corpus.web.text_utils import create_chapter_index, create_text_id
-from ebl.transliteration.application.lemmatization_schema import (
-    LemmatizationTokenSchema,
-)
+from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.corpus.application.lemmatization_schema import LineVariantLemmatizationSchema
 from ebl.users.web.require_scope import require_scope
 
 
 class CorpusLemmatizationsSchema(Schema):  # pyre-ignore[11]
     lemmatization = fields.List(
-        fields.List(fields.Nested(LemmatizationTokenSchema, many=True)), required=True
+        fields.List(fields.Nested(LineVariantLemmatizationSchema)), required=True
     )
 
 
@@ -68,12 +66,12 @@ class LemmatizationResource:
             type: integer
           required: true
         """
+        chapter_id = create_chapter_id(category, index, chapter_index)
         self._corpus.update_manuscript_lemmatization(
-            create_text_id(category, index),
-            create_chapter_index(chapter_index),
+            chapter_id,
             # pyre-ignore[16]
             CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
             req.context.user,
         )
-        updated_text = self._corpus.find(create_text_id(category, index))
+        updated_text = self._corpus.find(chapter_id.text_id)
         resp.media = serialize(updated_text)

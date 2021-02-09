@@ -8,7 +8,6 @@ from ebl.corpus.domain.text import Text
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
@@ -22,16 +21,18 @@ ANY_USER = Guest()
 DTO = {
     "lemmatization": [
         [
-            [
-                {"value": "%n"},
-                {"value": "buāru", "uniqueLemma": ["aklu I"]},
-                {"value": "(|)"},
-                {"value": "["},
-                {"value": "..."},
-                {"value": "||"},
-                {"value": "...]-buāru#", "uniqueLemma": []},
-            ],
-            [{"value": "ku-[nu-ši]", "uniqueLemma": ["aklu I"]}],
+            {
+                "reconstruction": [
+                    {"value": "%n"},
+                    {"value": "buāru", "uniqueLemma": ["aklu I"]},
+                    {"value": "(|)"},
+                    {"value": "["},
+                    {"value": "..."},
+                    {"value": "||"},
+                    {"value": "...]-buāru#", "uniqueLemma": []},
+                ],
+                "manuscripts": [[{"value": "ku-[nu-ši]", "uniqueLemma": ["aklu I"]}]],
+            }
         ]
     ]
 }
@@ -72,48 +73,73 @@ def test_updating_lemmatization(client, bibliography, sign_repository, signs):
                 lines=(
                     attr.evolve(
                         text.chapters[0].lines[0],
-                        text=TextLine.of_iterable(
-                            text.chapters[0].lines[0].text.line_number,
-                            (
-                                text.chapters[0].lines[0].text.content[0],
-                                text.chapters[0]
-                                .lines[0]
-                                .text.content[1]
-                                .set_unique_lemma(
-                                    LemmatizationToken(
-                                        text.chapters[0].lines[0].text.content[1].value,
-                                        (WordId("aklu I"),),
-                                    )
-                                ),
-                                *text.chapters[0].lines[0].text.content[2:6],
-                                text.chapters[0]
-                                .lines[0]
-                                .text.content[6]
-                                .set_unique_lemma(
-                                    LemmatizationToken(
-                                        text.chapters[0].lines[0].text.content[6].value,
-                                        tuple(),
-                                    )
-                                ),
-                            ),
-                        ),
-                        manuscripts=(
+                        variants=(
                             attr.evolve(
-                                text.chapters[0].lines[0].manuscripts[0],
-                                line=TextLine.of_iterable(
-                                    LineNumber(1),
-                                    (
-                                        Word.of(
-                                            [
-                                                Reading.of_name("ku"),
-                                                Joiner.hyphen(),
-                                                BrokenAway.open(),
-                                                Reading.of_name("nu"),
-                                                Joiner.hyphen(),
-                                                Reading.of_name("ši"),
-                                                BrokenAway.close(),
-                                            ],
-                                            unique_lemma=[WordId("aklu I")],
+                                text.chapters[0].lines[0].variants[0],
+                                reconstruction=(
+                                    text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[0],
+                                    text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[1]
+                                    .set_unique_lemma(
+                                        LemmatizationToken(
+                                            text.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .reconstruction[1]
+                                            .value,
+                                            (WordId("aklu I"),),
+                                        )
+                                    ),
+                                    *text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[2:6],
+                                    text.chapters[0]
+                                    .lines[0]
+                                    .variants[0]
+                                    .reconstruction[6]
+                                    .set_unique_lemma(
+                                        LemmatizationToken(
+                                            text.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .reconstruction[6]
+                                            .value,
+                                            tuple(),
+                                        )
+                                    ),
+                                ),
+                                manuscripts=(
+                                    attr.evolve(
+                                        text.chapters[0]
+                                        .lines[0]
+                                        .variants[0]
+                                        .manuscripts[0],
+                                        line=TextLine.of_iterable(
+                                            text.chapters[0]
+                                            .lines[0]
+                                            .variants[0]
+                                            .manuscripts[0]
+                                            .line.line_number,
+                                            (
+                                                Word.of(
+                                                    [
+                                                        Reading.of_name("ku"),
+                                                        Joiner.hyphen(),
+                                                        BrokenAway.open(),
+                                                        Reading.of_name("nu"),
+                                                        Joiner.hyphen(),
+                                                        Reading.of_name("ši"),
+                                                        BrokenAway.close(),
+                                                    ],
+                                                    unique_lemma=[WordId("aklu I")],
+                                                ),
+                                            ),
                                         ),
                                     ),
                                 ),
@@ -160,7 +186,7 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
 @pytest.mark.parametrize(
     "dto,expected_status",
     [
-        ({"lemmatization": [[[]]]}, falcon.HTTP_UNPROCESSABLE_ENTITY),
+        ({"lemmatization": [[[]]]}, falcon.HTTP_BAD_REQUEST),
         ({}, falcon.HTTP_BAD_REQUEST),
     ],
 )

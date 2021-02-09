@@ -1,12 +1,18 @@
 import json
 
 import attr
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.enums import ManuscriptType, Period, PeriodModifier, Provenance
+from ebl.corpus.domain.manuscript import (
+    ManuscriptType,
+    Period,
+    PeriodModifier,
+    Provenance,
+)
 from ebl.corpus.web.api_serializer import serialize
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import TextFactory
 from ebl.users.domain.user import Guest
@@ -39,6 +45,7 @@ def create_text(client, text):
 
 
 def test_updating(client, bibliography, sign_repository, signs):
+    uncertain_fragment = MuseumNumber.of("K.1")
     allow_signs(signs, sign_repository)
     text = TextFactory.build()
     allow_references(text, bibliography)
@@ -55,6 +62,7 @@ def test_updating(client, bibliography, sign_repository, signs):
                         accession="",
                     ),
                 ),
+                uncertain_fragments=(uncertain_fragment,),
             ),
         ),
     )
@@ -62,7 +70,10 @@ def test_updating(client, bibliography, sign_repository, signs):
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
         body=json.dumps(
-            {"manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"]}
+            {
+                "manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"],
+                "uncertainFragments": [str(uncertain_fragment)],
+            }
         ),
     )
 
@@ -81,7 +92,8 @@ def test_updating(client, bibliography, sign_repository, signs):
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/1/1/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -107,7 +119,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
 
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
-        body=json.dumps({"manuscripts": [manuscript]}),
+        body=json.dumps({"manuscripts": [manuscript], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -115,7 +127,8 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        "/texts/invalid/1/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/invalid/1/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -123,7 +136,8 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        "/texts/1/invalid/chapters/0/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/1/invalid/chapters/0/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -131,7 +145,8 @@ def test_updating_invalid_id(client):
 
 def test_updating_invalid_chapter_index(client):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/invalid/manuscripts", body=json.dumps({"manuscripts": []})
+        "/texts/1/1/chapters/invalid/manuscripts",
+        body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -187,7 +202,11 @@ INVALID_MUSEUM_NUMBER = [
         [[{}], falcon.HTTP_BAD_REQUEST],
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
         [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
-        [INVALID_MUSEUM_NUMBER, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [INVALID_MUSEUM_NUMBER, falcon.HTTP_BAD_REQUEST],
+        [
+            {"manuscripts": [], "uncertainFragments": ["invalid"]},
+            falcon.HTTP_BAD_REQUEST,
+        ],
     ],
 )
 def test_update_invalid_entity(
@@ -200,7 +219,7 @@ def test_update_invalid_entity(
 
     post_result = client.simulate_post(
         f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
-        body=json.dumps({"manuscripts": manuscripts}),
+        body=json.dumps({"manuscripts": manuscripts, "uncertainFragments": []}),
     )
 
     assert post_result.status == expected_status

@@ -1,6 +1,6 @@
 %import common.INT
 %import common.LETTER
-
+%import .labels (surface_label)
 
 note_line: "#note: " (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
@@ -10,6 +10,21 @@ escaped_text: (/[^@{}\\]/ | ("\\" /[@{}\\]/))+
 string_part: note_text
 note_text: /[^@{}]+/
 LANGUAGE: "akk" | "sux" | "es"
+
+
+?parallel_line: parallel_fragment | parallel_text | parallel_composition
+parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [surface_label " "] line_number
+!museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
+DUPLICATES: "&d"
+parallel_text: PARALLEL_LINE_PREFIX [CF] "L " text_id " "  [chapter_name " "] line_number
+text_id: CATEGORY "." INT
+CATEGORY: "0" | /I{1,3}/
+chapter_name: STAGE " " [quoted_string " "] quoted_string 
+quoted_string: "\"" /./+ "\""
+STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" | "Hel" | "Par" | "Unc" | "SB"
+parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
+CF: "cf. "
+PARALLEL_LINE_PREFIX: "// "
 
 
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
@@ -40,6 +55,7 @@ _have_both: tabulation
          | erasure
          | word
          | lone_determinative
+
 _omit_left.-1: close_broken_away
              | close_perhaps_broken_away
              | close_accidental_omission
@@ -150,6 +166,8 @@ _any_open: (open_accidental_omission | open_intentional_omission | open_removal 
       | surrogate
       | compound_grapheme
       | variant
+      | egyptian_metrical_feet_separator
+
 variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
@@ -159,6 +177,9 @@ variant: variant_part (_VARIANT_SEPARATOR variant_part)+
              | number
              | compound_grapheme
 
+
+
+egyptian_metrical_feet_separator: "•" flags
 
 number: number_name modifiers flags ["(" any_grapheme ")"]
 reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]

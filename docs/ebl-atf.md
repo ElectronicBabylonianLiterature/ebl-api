@@ -6,7 +6,7 @@ encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki
 ([ISO/IEC 14977 : 1996(E)](https://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip)).
 
 The EBNF grammar below is an idealized representation of the eBL-ATF as it does
-not deal with ambiguities and implentattional details necessary to create the
+not deal with ambiguities and implementation details necessary to create the
 domain model in practice. A fully functional grammar is defined in
 [ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/text/ebl-atf.lark).
 The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark).
@@ -57,6 +57,7 @@ line = empty-line
      | at-line
      | note-line
      | text-line
+     | parallel-line
      | control-line;
 
 empty-line = '';
@@ -140,21 +141,6 @@ dollar-status = '*' | '?' | '!' | '!?';
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
 
-## Text lines
-
-```ebnf
-text-line = line-number, '. ', text;
-
-line-number = line-number-range | single-line-number;
-line-number-range = single-line-number, '-', single-line-number;
-single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
-                     [ word-character ];
-prime = "'" | '′' | '’';
-```
-
-See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
-and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
-
 ## Note lines
 
 ```ebnf
@@ -174,6 +160,42 @@ escaped-text = { ( note-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
 note-text = { note-character };
 note-character = any-character - ( '@' | '{' | '}' );
 ```
+
+## Parallel lines
+
+```ebnf
+parallel-line = '// ', [ 'cf. ' ],
+                ( parallel-composition | parallel-text | parallel-fragment );
+
+parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
+
+parallel-text = genre, ' ', category, '.', index, ' ',
+                [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
+genre = 'L'
+stage = 'Ur3' | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA'
+      | 'NB'  | 'LB'  | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
+version  = '"', { any-character }-, '"';
+chapter =  '"', { any-character }-, '"';
+
+parallel-fragment = 'F ', museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ],
+                    line-number;
+museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
+```
+
+## Text lines
+
+```ebnf
+text-line = line-number, '. ', text;
+
+line-number = line-number-range | single-line-number;
+line-number-range = single-line-number, '-', single-line-number;
+single-line-number = [ word-character, '+' ], { decimal-digit }-, [ prime ],
+                     [ word-character ];
+prime = "'" | '′' | '’';
+```
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+and [ATF Quick Reference](http://oracc.museum.upenn.edu/doc/help/editinginatf/quickreference/index.html)
 
 ## Text
 
@@ -229,6 +251,7 @@ the separator is ignored (see Word below) or can be omitted.
 | Tabulation   | `($___$)` | No | No | |
 | Column       | `&` or `&` followed by numbers | No | No | Single `&` is a column separator. `&` followed by a number means that the following column spans the number of columns. If the first column spans multiple columns `&`+number can be put in the beginning of the line. If `&` is at the beginning the first column will be empty. |
 | Divider      | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
+| Egyptian Metrical Feet Separator | `•` | No | No | Can be within a word or standing alone between words. Can be followed by flags and surrounded with broken away and presence indicators . |
 | Line Break   | `\|` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | See  Commentary Protocols below. |
 | Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
@@ -249,6 +272,7 @@ non-normalized-text = token, { [ word-separator ], token };
 token = commentary-protocol
       | divider
       | divider-variant
+      | egyptian-metrical-feet-separator
       | line-break
       | tabulation
       | column
@@ -276,6 +300,8 @@ divider-variant = ( variant-part | divider ), variant-separator,
                   ( variant-part | divider );
 divider = divider-symbol, modifier, flag;
 divider-symbol = ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
+
+egyptian-metrical-feet-separator = "•", flag; 
 
 line-break: '|';
 
