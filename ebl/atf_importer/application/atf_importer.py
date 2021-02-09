@@ -14,7 +14,7 @@ from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.app import create_context
-from ebl.users.domain.user import ApiUser
+from ebl.users.domain.user import AtfImporterUser
 import re
 
 
@@ -107,6 +107,7 @@ class ATFImporter:
             unique_lemmas = []
             oracc_lemma = None
             oracc_guideword = None
+            oracc_pos_tag = None
 
             for ol_tuple in orrac_lemma_tupel:
                 oracc_lemma = ol_tuple[0]
@@ -297,8 +298,8 @@ class ATFImporter:
 
         return lemgwpos_cf, forms_senses, lemposgw_cfgw
 
-    @staticmethod
     def insert_translitertions(
+        self,
         transliteration_factory: TransliterationUpdateFactory,
         updater: FragmentUpdater,
         transliterations,
@@ -308,15 +309,16 @@ class ATFImporter:
         transliteration = transliteration_factory.create(
             Atf(converted_transliteration), ""
         )
-        user = ApiUser("atf_importer.py")
+        user = AtfImporterUser(self.username)
         updater.update_transliteration(
             parse_museum_number(museum_number), transliteration, user
         )
 
-    @staticmethod
-    def insert_lemmatization(updater: FragmentUpdater, lemmatization, museum_number):
+    def insert_lemmatization(
+        self, updater: FragmentUpdater, lemmatization, museum_number
+    ):
         lemmatization = Lemmatization(tuple(lemmatization))
-        user = ApiUser("atf_importer.py")
+        user = AtfImporterUser(self.username)
         updater.update_lemmatization(
             parse_museum_number(museum_number), lemmatization, user
         )
@@ -541,16 +543,25 @@ class ATFImporter:
             description="Converts ATF-files to eBL-ATF standard."
         )
         parser.add_argument(
-            "-i", "--input", required=True, help="path of the input directory"
+            "-i", "--input", required=True, help="Path of the input directory."
         )
         parser.add_argument(
-            "-l", "--logdir", required=True, help="path of the log files directory"
+            "-l", "--logdir", required=True, help="Path of the log files directory."
         )
         parser.add_argument(
-            "-g", "--glossary", required=True, help="path to the glossary file"
+            "-g", "--glossary", required=True, help="Path to the glossary file."
+        )
+
+        parser.add_argument(
+            "-a",
+            "--author",
+            required=False,
+            help="name of the author of the imported fragements. \n If not specified a name needs to be entered manually for every fragment.",
         )
 
         args = parser.parse_args()
+
+        self.username = args.author
 
         # parse glossary
         self.lemgwpos_cf, self.forms_senses, self.lemposgw_cfgw = self.parse_glossary(
@@ -567,6 +578,13 @@ class ATFImporter:
                 split = filepath.split("/")
                 filename = split[-1]
                 filename = filename.split(".")[0]
+
+                self.logger.info(Util.print_frame("Importing " + filename + ".atf"))
+                if args.author is None:
+                    self.username = input(
+                        "Please enter the fragments author to import " + filename + ": "
+                    )
+
                 # convert all lines
                 self.atf_preprocessor = ATFPreprocessor(args.logdir)
                 converted_lines = self.atf_preprocessor.convert_lines(

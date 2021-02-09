@@ -41,3 +41,16 @@ class ApiUser(User):
     @property
     def ebl_name(self):
         return "Script"
+
+
+class AtfImporterUser(User):
+    def __init__(self, name: str):
+        self.name = name
+
+    @property
+    def profile(self):
+        return {"name": self.name}
+
+    @property
+    def ebl_name(self):
+        return self.name
