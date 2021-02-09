@@ -7,9 +7,12 @@ from ebl.transliteration.domain.converters import convert_flag_sequence
 from ebl.transliteration.domain.tokens import ErasureState, Token
 
 
+GREEK_LETTERS: str = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω"
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class GreekLetter(Token):
-    letter: str = attr.ib(validator=attr.validators.in_("abc"))
+    letter: str = attr.ib(validator=attr.validators.in_(GREEK_LETTERS))
     flags: Sequence[atf.Flag] = attr.ib(converter=convert_flag_sequence)
 
     @property

@@ -1,13 +1,23 @@
 from abc import abstractmethod
 from typing import Mapping, Type
 
-import pydash  # pyre-ignore
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
-from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
+import pydash  # pyre-ignore[21]
+from marshmallow import (  # pyre-ignore[21]
+    EXCLUDE,
+    Schema,
+    fields,
+    post_dump,
+    post_load,
+    validate,
+)
+from marshmallow_oneofschema import OneOfSchema  # pyre-ignore[21]
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
+    EgyptianMetricalFeetSeparator,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -23,7 +33,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.greek_tokens import GreekLetter
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
+)
 from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -45,20 +61,12 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
-    EgyptianMetricalFeetSeparator,
-)
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
     LoneDeterminative,
     Word,
-)
-from ebl.transliteration.domain.normalized_akkadian import (
-    AkkadianWord,
-    Caesura,
-    MetricalFootSeparator,
 )
 
 
@@ -505,6 +513,20 @@ class MetricalFootSeparatorSchema(BreakSchema):
         )
 
 
+class GreekLetterSchema(BaseTokenSchema):
+    letter = fields.String(required=True, validate=validate.Length(1, 1))
+    flags = fields.List(ValueEnum(Flag), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return GreekLetter(
+            frozenset(data["enclosure_type"]),
+            data["erasure"],
+            data["letter"],
+            data["flags"],
+        )
+
+
 class OneOfWordSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
@@ -553,4 +575,5 @@ class OneOfTokenSchema(OneOfSchema):
         "AkkadianWord": AkkadianWordSchema,
         "Caesura": CaesuraSchema,
         "MetricalFootSeparator": MetricalFootSeparatorSchema,
+        "GreekLetter": GreekLetterSchema,
     }
