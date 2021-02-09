@@ -485,11 +485,11 @@ class AkkadianWordSchema(BaseWordSchema):
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class Breakchema(BaseTokenSchema):
+class BreakSchema(BaseTokenSchema):
     is_uncertain = fields.Boolean(data_key="isUncertain", required=True)
 
 
-class CaesuraSchema(Breakchema):
+class CaesuraSchema(BreakSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Caesura.of(data["is_uncertain"]).set_enclosure_type(
@@ -497,7 +497,7 @@ class CaesuraSchema(Breakchema):
         )
 
 
-class MetricalFootSeparatorSchema(Breakchema):
+class MetricalFootSeparatorSchema(BreakSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return MetricalFootSeparator.of(data["is_uncertain"]).set_enclosure_type(
