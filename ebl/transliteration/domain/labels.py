@@ -43,7 +43,7 @@ def convert_status_sequence(
 
 @attr.s(auto_attribs=True, frozen=True)
 class Label(ABC):
-    """ A label as defined in
+    """A label as defined in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html
     and
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html

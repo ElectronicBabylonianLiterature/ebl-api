@@ -41,7 +41,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_path_of_the_pioneers(self,) -> List[Fragment]:
+    def query_path_of_the_pioneers(
+        self,
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
@@ -49,7 +51,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_transliterated_not_revised_by_other(self,) -> List[FragmentInfo]:
+    def query_by_transliterated_not_revised_by_other(
+        self,
+    ) -> List[FragmentInfo]:
         ...
 
     @abstractmethod
@@ -62,7 +66,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_transliterated_line_to_vec(
-        self
+        self,
     ) -> Dict[MuseumNumber, Tuple[LineToVecEncodings, ...]]:
         ...
 

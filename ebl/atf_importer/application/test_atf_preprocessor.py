@@ -8,7 +8,12 @@ class TestATF_Preprocessor(unittest.TestCase):
     def test_lines(self):
         atf_preprocessor = ATFPreprocessor("../logs")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{"
             "+di} * AN.GE₆"
         )
@@ -18,7 +23,12 @@ class TestATF_Preprocessor(unittest.TestCase):
             "ŠUB{+di} DIŠ AN.GE₆",
         )
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "8. KAR <:> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina "
             "ud-da-a-ta"
         )
@@ -28,7 +38,12 @@ class TestATF_Preprocessor(unittest.TestCase):
             "ud-da-a-ta",
         )
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {"
             "d}INANA--<E₂>.AN.NA"
         )
@@ -42,7 +57,12 @@ class TestATF_Preprocessor(unittest.TestCase):
     def test_following_sign_not_a_logogram(self):
         atf_preprocessor = ATFPreprocessor("../logs")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "5'.	[...] x [...] x-šu₂? : kal : nap-ha-ri : $WA-wa-ru : ia-ar₂-ru"
         )
         self.assertTrue(
@@ -54,7 +74,12 @@ class TestATF_Preprocessor(unittest.TestCase):
     def test_legacy_grammar(self):
         atf_preprocessor = ATFPreprocessor("../logs")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : "
             "ANŠE.KUR.RA-MEŠ"
         )
@@ -64,7 +89,12 @@ class TestATF_Preprocessor(unittest.TestCase):
             "ANŠE.KUR.RA-MEŠ",
         )
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* ÁM.GAL : "
             "ANŠE.KUR.RA-MEŠ"
         )
@@ -78,7 +108,12 @@ class TestATF_Preprocessor(unittest.TestCase):
     def test_lemmantization(self):
         atf_preprocessor = ATFPreprocessor("../logs")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: Sin[1]DN; ina[at]PRP; Nisannu[1]MN; ina[at]PRP; tāmartišu["
             "appearance]N; adir[dark]AJ; ina[in]PRP; "
             "aṣîšu[going out]'N; adri[dark]AJ; uṣṣi[go out]V; šarrū[king]N; "
@@ -87,46 +122,79 @@ class TestATF_Preprocessor(unittest.TestCase):
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: iššannanū-ma[equal]V; +šanānu[equal]V$iššannanū-ma; umma["
             "saying]PRP; +šarru[king]N$; mala[as "
             "many]PRP; +šarru[king]N$šarri; +maṣû[correspond]V$imaṣṣû"
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: +adrūssu[darkly]AV$; īrub[enter]V; +arītu[pregnant ("
             "woman)]N$arâtu; ša[of]DET; libbašina[belly]N; "
             "ittadûni[contain]V; ina[in]PRP; +Zuqiqīpu[Scorpius]CN$"
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: šatti[year]N; n; +Artaxerxes[]RN$artakšatsu; šar[king]N; pālih["
             "reverent one]N; Nabu[1]DN; lā["
             "not]MOD; itabbal[disappear]V; maʾdiš[greatly]N; lišāqir[value]V"
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: +arāmu[cover]V$īrim-ma; ana[according to]PRP; birṣu[(a luminous "
             "phenomenon)]N; itârma[turn]V; adi["
             "until]PRP; šāt[who(m)]DET&urri[daytime]N; illakma[flow]V"
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
-            "#lem: u; eššu[new]AJ; u +."
-        )
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line("#lem: u; eššu[new]AJ; u +.")
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: u; ubû[unit]N; n; n; qû[unit]N; ubû[unit]N; +Ištar[]DN$; Ištar["
             "1]DN +.; +saparru[cart]N$; u"
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: !+māru[son]N$; !+māru[son]N$māri; târu[turning back]'N; +našû["
             "lift//carrying]V'N$ +.; u; "
             "+narkabtu[chariot]N$narkabta; īmur[see]V; marṣu[patient]N; šū["
@@ -135,7 +203,12 @@ class TestATF_Preprocessor(unittest.TestCase):
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line(
             "#lem: +burmāmu[(an animal)//porcupine?]N$; +burmāmu[(an "
             "animal)//porcupine?]N$buriyāmu; ša[whose]REL; "
             "+zumru[body]N$zumuršu; kīma[like]PRP; +ṭīmu[yarn]N$ṭime; +eṣēru["
@@ -143,9 +216,12 @@ class TestATF_Preprocessor(unittest.TestCase):
         )
         self.assertEqual(c_type, "lem_line")
 
-        converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
-            "#lem: u; +appāru[reed-bed]N$"
-        )
+        (
+            converted_line,
+            c_array,
+            c_type,
+            c_alter_lemline_at,
+        ) = atf_preprocessor.process_line("#lem: u; +appāru[reed-bed]N$")
         self.assertEqual(c_type, "lem_line")
 
     # Batch test case to test if lemma lines are parsed as c_type "lem_line"
@@ -642,7 +718,10 @@ class TestATF_Preprocessor(unittest.TestCase):
         ]
 
         for line in lines:
-            converted_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
-                line
-            )
+            (
+                converted_line,
+                c_array,
+                c_type,
+                c_alter_lemline_at,
+            ) = atf_preprocessor.process_line(line)
             self.assertEqual(c_type, "lem_line")

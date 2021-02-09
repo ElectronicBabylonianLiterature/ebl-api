@@ -545,8 +545,9 @@ class ATFImporter:
             "-a",
             "--author",
             required=False,
-            help="name of the author of the imported fragements. \n"+
-            "If not specified a name needs to be entered manually for every fragment."
+            help="name of the author of the imported fragements. \nIf not specified a "
+            "name needs to be entered manually for every "
+            "fragment.",
         )
 
         args = parser.parse_args()
