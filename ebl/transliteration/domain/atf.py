@@ -7,7 +7,6 @@ from ebl.transliteration.domain.side import Side
 
 Atf = NewType("Atf", str)
 
-
 ATF_PARSER_VERSION = "4.0.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
@@ -18,7 +17,8 @@ class Surface(Enum):
     See "Surface" in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
     and "Surfaces" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial
+    /index.html#d2e17947
     """
 
     OBVERSE = ("obverse", "o")
@@ -47,7 +47,8 @@ class Surface(Enum):
 @unique
 class Status(Enum):
     """See "Status" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial
+    /index.html
     """
 
     PRIME = "'"
@@ -214,7 +215,6 @@ FLAGS: Mapping[str, str] = {
     "damage": re.escape(Flag.DAMAGE.value),
     "correction": re.escape(Flag.CORRECTION.value),
 }
-
 
 _SUB_SCRIPT: Mapping[str, str] = {
     "1": "₁",
