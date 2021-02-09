@@ -194,8 +194,7 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
                                 # find pos tag
                                 if (
                                     tree.children[j + 2]
-                                    and tree.children[j + 2].data
-                                    in self.oracc_pos_tags
+                                    and tree.children[j + 2].data in self.oracc_pos_tags
                                 ):
                                     additional_pos_tag = DFS().visit_topdown(
                                         tree.children[j + 2], ""
