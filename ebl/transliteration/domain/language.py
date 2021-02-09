@@ -6,6 +6,7 @@ class Language(Enum):
     AKKADIAN = auto()
     SUMERIAN = auto()
     EMESAL = auto()
+    GREEK = auto()
 
     @property
     def lemmatizable(self) -> bool:
@@ -31,6 +32,9 @@ class Language(Enum):
             "%es": Language.EMESAL,
             "%e": Language.EMESAL,
             "%n": Language.AKKADIAN,
+            "%akkgrc": Language.AKKADIAN,
+            "%suxgrc": Language.SUMERIAN,
+            "%grc": Language.GREEK,
         }
         return codes.get(code, cls.UNKNOWN)
 
