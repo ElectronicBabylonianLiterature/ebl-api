@@ -117,7 +117,6 @@ def test_word(language, normalized, unique_lemma) -> None:
 
     serialized = {
         "type": "Word",
-        "value": word.value,
         "uniqueLemma": list(unique_lemma),
         "normalized": normalized,
         "language": word.language.name,

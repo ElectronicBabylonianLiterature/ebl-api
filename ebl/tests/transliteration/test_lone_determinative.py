@@ -49,7 +49,6 @@ def test_lone_determinative(language, normalized):
 
     serialized = {
         "type": "LoneDeterminative",
-        "value": lone_determinative.value,
         "uniqueLemma": [],
         "normalized": normalized,
         "language": lone_determinative.language.name,

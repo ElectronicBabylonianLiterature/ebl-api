@@ -31,7 +31,6 @@ def test_divider() -> None:
 
     serialized = {
         "type": "Divider",
-        "value": expected_value,
         "divider": value,
         "modifiers": list(modifiers),
         "flags": ["?"],
@@ -49,11 +48,7 @@ def test_unidentified_sign() -> None:
     assert sign.flags == tuple()
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnidentifiedSign",
-        "value": expected_value,
-        "flags": [],
-    }
+    serialized = {"type": "UnidentifiedSign", "flags": []}
     assert_token_serialization(sign, serialized)
 
 
@@ -68,11 +63,7 @@ def test_unidentified_sign_with_flags() -> None:
     assert sign.flags == tuple(flags)
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnidentifiedSign",
-        "value": expected_value,
-        "flags": ["#"],
-    }
+    serialized = {"type": "UnidentifiedSign", "flags": ["#"]}
     assert_token_serialization(sign, serialized)
 
 
@@ -86,11 +77,7 @@ def test_unclear_sign() -> None:
     assert sign.flags == tuple()
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnclearSign",
-        "value": expected_value,
-        "flags": [],
-    }
+    serialized = {"type": "UnclearSign", "flags": []}
     assert_token_serialization(sign, serialized)
 
 
@@ -105,11 +92,7 @@ def test_unclear_sign_with_flags() -> None:
     assert sign.flags == tuple(flags)
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnclearSign",
-        "value": expected_value,
-        "flags": ["!"],
-    }
+    serialized = {"type": "UnclearSign", "flags": ["!"]}
     assert_token_serialization(sign, serialized)
 
 
@@ -212,7 +195,6 @@ def test_reading(
 
     serialized = {
         "type": "Reading",
-        "value": expected_value,
         "name": expected_name,
         "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "subIndex": sub_index,
@@ -341,7 +323,6 @@ def test_logogram(
 
     serialized = {
         "type": "Logogram",
-        "value": expected_value,
         "name": expected_name,
         "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "subIndex": sub_index,
@@ -434,7 +415,6 @@ def test_number(
 
     serialized = {
         "type": "Number",
-        "value": expected_value,
         "name": expected_name,
         "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "modifiers": modifiers,
@@ -457,11 +437,7 @@ def test_compound_grapheme() -> None:
         == f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
     )
 
-    serialized = {
-        "type": "CompoundGrapheme",
-        "value": expected_value,
-        "compound_parts": ["BI", "IS"],
-    }
+    serialized = {"type": "CompoundGrapheme", "compound_parts": ["BI", "IS"]}
     assert_token_serialization(compound, serialized)
 
 
@@ -490,7 +466,6 @@ def test_grapheme(name, modifiers, flags, expected_value, expected_clean_value) 
 
     serialized = {
         "type": "Grapheme",
-        "value": expected_value,
         "name": name,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
