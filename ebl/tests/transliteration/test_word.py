@@ -107,6 +107,7 @@ def test_word(language, unique_lemma) -> None:
         "normalized": False,
         "language": word.language.name,
         "lemmatizable": word.lemmatizable,
+        "alignable": word.lemmatizable,
         "erasure": erasure.name,
         "parts": OneOfTokenSchema().dump(parts, many=True),  # pyre-ignore[16]
         "alignment": 1,

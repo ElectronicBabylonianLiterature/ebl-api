@@ -46,6 +46,7 @@ def test_lone_determinative(language):
         "normalized": False,
         "language": lone_determinative.language.name,
         "lemmatizable": lone_determinative.lemmatizable,
+        "alignable": lone_determinative.lemmatizable,
         "erasure": ErasureState.NONE.name,
         "parts": OneOfTokenSchema().dump(parts, many=True),
     }

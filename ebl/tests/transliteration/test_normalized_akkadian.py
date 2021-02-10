@@ -99,6 +99,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
         "alignment": None,
         "variant": None,
         "lemmatizable": lemmatizable,
+        "alignable": lemmatizable,
         "normalized": True,
         "language": "AKKADIAN",
     }

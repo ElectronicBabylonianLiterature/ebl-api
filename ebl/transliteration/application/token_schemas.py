@@ -355,6 +355,7 @@ class BaseWordSchema(BaseTokenSchema):
     language = NameEnum(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
+    alignable = fields.Boolean()
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
     alignment = fields.Integer(allow_none=True, missing=None)
     variant = fields.Nested(lambda: OneOfWordSchema(), allow_none=True, missing=None)
