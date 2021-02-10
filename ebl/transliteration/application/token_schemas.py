@@ -33,7 +33,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.greek_tokens import GreekLetter
+from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
@@ -526,6 +526,19 @@ class GreekLetterSchema(BaseTokenSchema):
         )
 
 
+class GreeknWordSchema(BaseWordSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return GreekWord.of(
+            tuple(data["parts"]),
+            data["language"],
+            tuple(data["unique_lemma"]),
+            data["alignment"],
+            data["variant"],
+            data["erasure"],
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+
+
 class OneOfWordSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
@@ -575,4 +588,5 @@ class OneOfTokenSchema(OneOfSchema):
         "Caesura": CaesuraSchema,
         "MetricalFootSeparator": MetricalFootSeparatorSchema,
         "GreekLetter": GreekLetterSchema,
+        "GreekWord": GreeknWordSchema,
     }
