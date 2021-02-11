@@ -299,12 +299,12 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
                  | "š" | "ū" | "ṣ" | "ṭ" | "₄"
 
-_greek: _greek_word (_WORD_SEPARATOR _greek_word)*
-_greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosure | greek_word_part)*
+_greek: greek_word (_WORD_SEPARATOR greek_word)*
+greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosure | greek_word_part)*
 ?greek_word_part: greek_letter
-               | unidentified_sign
-               | unclear_sign
-               | unknown_number_of_signs
+                | unidentified_sign
+                | unclear_sign
+                | unknown_number_of_signs
 ?greek_enclosure: _any_open | _any_close
 greek_letter: GREEK_ALPHABET flags
 GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"

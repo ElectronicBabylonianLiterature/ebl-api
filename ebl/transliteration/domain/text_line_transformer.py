@@ -23,7 +23,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.erasure_visitor import set_erasure_state
+from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
+)
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -40,22 +46,15 @@ from ebl.transliteration.domain.tokens import (
     LanguageShift,
     LineBreak,
     Tabulation,
-    Token as EblToken,
-    UnknownNumberOfSigns,
-    ValueToken,
-    Variant,
 )
+from ebl.transliteration.domain.tokens import Token as EblToken
+from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken, Variant
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
     LoneDeterminative,
     Word,
-)
-from ebl.transliteration.domain.normalized_akkadian import (
-    AkkadianWord,
-    Caesura,
-    MetricalFootSeparator,
 )
 
 
@@ -291,7 +290,18 @@ class NormalizedAkkadianTransformer(WordTransformer):
         return Emendation.close()
 
 
-class TextLineTransformer(NormalizedAkkadianTransformer):
+class GreekTransformer(EnclosureTransformer, SignTransformer):
+    def ebl_atf_text_line__greek_word(self, children) -> GreekWord:
+        return GreekWord.of(
+            children.children if isinstance(children, Tree) else children
+        )
+
+    @v_args(inline=True)  # pyre-ignore[56]
+    def ebl_atf_text_line__greek_letter(self, alphabet, flags) -> GreekLetter:
+        return GreekLetter.of(alphabet.value, flags)
+
+
+class TextLineTransformer(NormalizedAkkadianTransformer, GreekTransformer):
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
@@ -325,6 +335,10 @@ class TextLineTransformer(NormalizedAkkadianTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__normalized_akkadian_shift(self, value):
+        return LanguageShift.of(str(value))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__greek_shift(self, value):
         return LanguageShift.of(str(value))
 
     @v_args(inline=True)
