@@ -35,6 +35,7 @@ PRIME: "'" | "′" | "’"
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
+             | greek_shift _WORD_SEPARATOR+ _greek
              | language_shift _WORD_SEPARATOR+ _non_normalized_text
 
 _non_normalized_text: _head _tail*
@@ -75,6 +76,7 @@ close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
 open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
 language_shift: SHIFT
 normalized_akkadian_shift: NORMALIZED_SHIFT
+greek_shift: GREEK_SHIFT
 
 divider_variant: divider _VARIANT_SEPARATOR divider
                | divider _VARIANT_SEPARATOR variant_part
@@ -101,6 +103,7 @@ OPEN_DOCUMENT_ORIENTED_GLOSS: "{("
 CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
 
 NORMALIZED_SHIFT: "%n"
+GREEK_SHIFT.1: "%grc" | "%akkgrc" | "%suxgrc"
 SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9") ("a".."z" | "A".."Z" | "0".."9")+
      | "%" ("a".."m" | "o".."z" | "A".."Z" | "0".."9") 
 
@@ -295,3 +298,17 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
                  | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
                  | "š" | "ū" | "ṣ" | "ṭ" | "₄"
+
+_greek: _greek_word (_WORD_SEPARATOR _greek_word)*
+_greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosure | greek_word_part)*
+?greek_word_part: greek_letter
+               | unidentified_sign
+               | unclear_sign
+               | unknown_number_of_signs
+?greek_enclosure: _any_open | _any_close
+greek_letter: GREEK_ALPHABET flags
+GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"
+              | "Ζ" | "ζ" | "Η" | "η" | "Θ" | "θ" | "Ι" | "ι" | "Κ" | "κ"
+              | "Λ" | "λ" | "Μ" | "μ" | "Ν" | "ν" | "Ξ" | "ξ" | "Ο" | "ο"
+              | "Π" | "π" | "Ρ" | "ρ" | "Σ" | "σ" | "ς" | "Τ" | "τ" | "Υ"
+              | "υ" | "Φ" | "φ" | "Χ" | "χ" | "Ψ" | "ψ" | "Ω" | "ω"
