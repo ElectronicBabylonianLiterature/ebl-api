@@ -150,12 +150,6 @@ class SignTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_text_line__compound_grapheme(self, children):
         return CompoundGrapheme.of([part.value for part in children])
 
-    def ebl_atf_text_line__close_broken_away(self, _):
-        return BrokenAway.close()
-
-    def ebl_atf_text_line__open_broken_away(self, _):
-        return BrokenAway.open()
-
 
 class EnclosureTransformer(Transformer):
     def ebl_atf_text_line__open_accidental_omission(self, _):
@@ -175,6 +169,18 @@ class EnclosureTransformer(Transformer):
 
     def ebl_atf_text_line__close_removal(self, _):
         return Removal.close()
+
+    def ebl_atf_text_line__close_broken_away(self, _):
+        return BrokenAway.close()
+
+    def ebl_atf_text_line__open_broken_away(self, _):
+        return BrokenAway.open()
+
+    def ebl_atf_text_line__close_perhaps_broken_away(self, _):
+        return PerhapsBrokenAway.close()
+
+    def ebl_atf_text_line__open_perhaps_broken_away(self, _):
+        return PerhapsBrokenAway.open()
 
 
 class GlossTransformer(Transformer):
@@ -230,12 +236,6 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__inline_erasure(self, erased, over_erased):
         return self._transform_erasure(erased, over_erased)
-
-    def ebl_atf_text_line__close_perhaps_broken_away(self, _):
-        return PerhapsBrokenAway.close()
-
-    def ebl_atf_text_line__open_perhaps_broken_away(self, _):
-        return PerhapsBrokenAway.open()
 
 
 class NormalizedAkkadianTransformer(WordTransformer):
