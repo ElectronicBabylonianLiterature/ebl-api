@@ -526,7 +526,7 @@ class GreekLetterSchema(BaseTokenSchema):
         )
 
 
-class GreeknWordSchema(BaseWordSchema):
+class GreekWordSchema(BaseWordSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return GreekWord.of(
@@ -539,23 +539,26 @@ class GreeknWordSchema(BaseWordSchema):
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
+WORD_SCHEMAS: Mapping[str, Type[BaseWordSchema]] = {
+    "Word": WordSchema,
+    "LoneDeterminative": LoneDeterminativeSchema,
+    "AkkadianWord": AkkadianWordSchema,
+    "GreekWord": GreekWordSchema,
+}
+
+
 class OneOfWordSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
-        "Word": WordSchema,
-        "LoneDeterminative": LoneDeterminativeSchema,
-        "AkkadianWord": AkkadianWordSchema,
-    }
+    type_schemas: Mapping[str, Type[BaseWordSchema]] = WORD_SCHEMAS
 
 
 class OneOfTokenSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
+        **WORD_SCHEMAS,
         "Token": ValueTokenSchema,
         "ValueToken": ValueTokenSchema,
-        "Word": WordSchema,
         "LanguageShift": LanguageShiftSchema,
-        "LoneDeterminative": LoneDeterminativeSchema,
         "DocumentOrientedGloss": DocumentOrientedGlossSchema,
         "BrokenAway": BrokenAwaySchema,
         "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
@@ -584,9 +587,7 @@ class OneOfTokenSchema(OneOfSchema):
         "LinguisticGloss": LinguisticGlossSchema,
         "EgyptianMetricalFeetSeparator": EgyptianMetricalFeetSeparatorSchema,
         "LineBreak": LineBreakSchema,
-        "AkkadianWord": AkkadianWordSchema,
         "Caesura": CaesuraSchema,
         "MetricalFootSeparator": MetricalFootSeparatorSchema,
         "GreekLetter": GreekLetterSchema,
-        "GreekWord": GreeknWordSchema,
     }
