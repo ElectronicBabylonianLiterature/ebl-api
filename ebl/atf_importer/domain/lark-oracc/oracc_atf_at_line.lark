@@ -1,8 +1,8 @@
-%import .ebl_atf_common (INT, LCASE_LETTER)
-%import .ebl_atf_common (free_text)
-%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
-%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
-%import .ebl_atf_common (seal, OBJECT, SURFACE, free_text)
+%import .oracc_atf_common (INT, LCASE_LETTER)
+%import .oracc_atf_common (free_text)
+%import .oracc_atf_common (object, OBJECT, generic_object, fragment)
+%import .oracc_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .oracc_atf_common (seal, OBJECT, SURFACE, free_text)
 
 ?at_line: "@" value
 

@@ -27,6 +27,7 @@ class ATFPreprocessor:
         self.ORACC_PARSER = Lark.open(
             "lark-oracc/oracc_atf.lark", maybe_placeholders=True, rel_to=__file__
         )
+
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(10)
         self.skip_next_lem_line = False
@@ -120,7 +121,6 @@ class ATFPreprocessor:
             atf = self.replace_special_characters(atf)
 
             atfsplit = re.split(r"([⌈⸢])(.*)?([⌉⸣])", atf)
-            print(atfsplit)
             opening = ["⌈", "⸢"]
             closing = ["⌉", "⸣"]
 

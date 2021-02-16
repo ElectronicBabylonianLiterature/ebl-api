@@ -508,9 +508,7 @@ class ATFImporter:
                 ebl_lines["transliteration"],
                 museum_number,
             )
-            # print(ebl_lines["lemmatization"])
             # insert lemmatization
-            print(museum_number)
             self.insert_lemmatization(
                 updater, ebl_lines["lemmatization"], museum_number
             )

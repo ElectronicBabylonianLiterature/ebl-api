@@ -55,7 +55,7 @@ class TestATF_Preprocessor(unittest.TestCase):
 
     # Test case for removal of "$" if following sign not a logogram
     def test_following_sign_not_a_logogram(self):
-        atf_preprocessor = ATFPreprocessor("../logs")
+        atf_preprocessor = ATFPreprocessor("../logs", "oracc")
 
         (
             converted_line,
@@ -72,7 +72,7 @@ class TestATF_Preprocessor(unittest.TestCase):
 
     # Test case for conversion of legacy grammar signs
     def test_legacy_grammar(self):
-        atf_preprocessor = ATFPreprocessor("../logs")
+        atf_preprocessor = ATFPreprocessor("../logs", "oracc")
 
         (
             converted_line,
@@ -106,7 +106,7 @@ class TestATF_Preprocessor(unittest.TestCase):
 
     # Test case to test if a lem line is parsed as c_type "lem_line"
     def test_lemmantization(self):
-        atf_preprocessor = ATFPreprocessor("../logs")
+        atf_preprocessor = ATFPreprocessor("../logs", "oracc")
 
         (
             converted_line,
@@ -226,7 +226,7 @@ class TestATF_Preprocessor(unittest.TestCase):
 
     # Batch test case to test if lemma lines are parsed as c_type "lem_line"
     def test_lemmatization_batch(self):
-        atf_preprocessor = ATFPreprocessor("../logs")
+        atf_preprocessor = ATFPreprocessor("../logs", "oracc")
 
         lines = [
             "#lem: attallû[eclipse]N; iššakinma[take place]V; enūma[when]SBJ; īrup["
