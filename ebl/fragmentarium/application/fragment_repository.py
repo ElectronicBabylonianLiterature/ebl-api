@@ -41,9 +41,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_path_of_the_pioneers(
-        self,
-    ) -> List[Fragment]:
+    def query_path_of_the_pioneers(self,) -> List[Fragment]:
         ...
 
     @abstractmethod
@@ -51,9 +49,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_transliterated_not_revised_by_other(
-        self,
-    ) -> List[FragmentInfo]:
+    def query_by_transliterated_not_revised_by_other(self,) -> List[FragmentInfo]:
         ...
 
     @abstractmethod
