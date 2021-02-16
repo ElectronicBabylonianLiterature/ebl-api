@@ -1,11 +1,12 @@
 from typing import Optional
 
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, ValidationError  # pyre-ignore[21]
 
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import (
+    PARSE_ERRORS,
     parse_greek_word,
     parse_normalized_akkadian_word,
     parse_word,
@@ -39,11 +40,16 @@ class AlignmentTokenSchema(Schema):  # pyre-ignore[11]
 
     @staticmethod
     def _create_word(atf: str, type_: str, language: Language) -> AbstractWord:
-        return {
-            "Word": lambda: parse_word(atf).set_language(language),
-            "AkkadianWord": lambda: parse_normalized_akkadian_word(atf),
-            "GreekWord": lambda: parse_greek_word(atf).set_language(language),
-        }[type_]()
+        try:
+            return {
+                "Word": lambda: parse_word(atf).set_language(language),
+                "AkkadianWord": lambda: parse_normalized_akkadian_word(atf),
+                "GreekWord": lambda: parse_greek_word(atf).set_language(language),
+            }[type_]()
+        except PARSE_ERRORS as error:
+            raise ValidationError(
+                f"Invalid value {atf} for {type_}.", "variant"
+            ) from error
 
 
 class ManuscriptAlignmentSchema(Schema):
