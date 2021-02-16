@@ -89,7 +89,7 @@ class ATFImporter:
         logging.basicConfig(level=logging.DEBUG)
 
         self.logger = logging.getLogger("Atf-Importer")
-        self.atf_preprocessor = ATFPreprocessor("../logs")
+        self.atf_preprocessor = ATFPreprocessor("../logs", "oracc")
 
         self.lemgwpos_cf = None
         self.forms_senses = None
@@ -508,7 +508,9 @@ class ATFImporter:
                 ebl_lines["transliteration"],
                 museum_number,
             )
+            # print(ebl_lines["lemmatization"])
             # insert lemmatization
+            print(museum_number)
             self.insert_lemmatization(
                 updater, ebl_lines["lemmatization"], museum_number
             )
@@ -545,9 +547,17 @@ class ATFImporter:
             "-a",
             "--author",
             required=False,
-            help="name of the author of the imported fragements. \nIf not specified a "
+            help="Name of the author of the imported fragements. \nIf not specified a "
             "name needs to be entered manually for every "
             "fragment.",
+        )
+
+        parser.add_argument(
+            "-s",
+            "--style",
+            required=False,
+            help="Specify import style by entering one of the following: oracc|cdli. "
+            "If omitted defaulting to oracc.",
         )
 
         args = parser.parse_args()
@@ -575,9 +585,8 @@ class ATFImporter:
                     self.username = input(
                         "Please enter the fragments author to import " + filename + ": "
                     )
-
                 # convert all lines
-                self.atf_preprocessor = ATFPreprocessor(args.logdir)
+                self.atf_preprocessor = ATFPreprocessor(args.logdir, args.style)
                 converted_lines = self.atf_preprocessor.convert_lines(
                     filepath, filename
                 )

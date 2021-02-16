@@ -6,7 +6,7 @@ class TestATF_Preprocessor(unittest.TestCase):
 
     # Generic Line Test case for problematic text lines
     def test_lines(self):
-        atf_preprocessor = ATFPreprocessor("../logs")
+        atf_preprocessor = ATFPreprocessor("../logs", "oracc")
 
         (
             converted_line,

@@ -18,7 +18,7 @@ import logging
 
 
 class ATFPreprocessor:
-    def __init__(self, logdir):
+    def __init__(self, logdir, style):
         self.EBL_PARSER = Lark.open(
             "../../transliteration/domain/ebl_atf.lark",
             maybe_placeholders=True,
@@ -43,13 +43,121 @@ class ATFPreprocessor:
         ]
         self.stop_preprocessing = False
         self.logdir = logdir
+        self.style = style
 
-    def do_atf_replacements(self, atf):
+    def do_oracc_replacements(self, atf):
         atf = re.sub(r"([[<])([*:])(.*)", r"\1 \2\3", atf)  # convert [* => [  <* => < *
         atf = re.sub(r"(\*)([]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
 
         atf = atf.replace("\t", " ")  # convert tabs to spaces
         atf = " ".join(atf.split())  # remove multiple spaces
+
+        return atf
+
+    def normalize_numbers(self, digits):
+        result = ""
+        numbers = {
+            "0": "₀",
+            "1": "₁",
+            "2": "₂",
+            "3": "₃",
+            "4": "₄",
+            "5": "₅",
+            "6": "₆",
+            "7": "₇",
+            "8": "₈",
+            "9": "₉",
+        }
+
+        for digit in digits:
+            result += numbers[digit]
+
+        return result
+
+    def replace_special_characters(self, string):
+        special_chars = {
+            "c": "š",
+            "sz": "š",
+            "s,": "ṣ",
+            "ş": "ṣ",
+            "t,": "ṭ",
+            "ḫ": "h",
+            "j": "g",
+            "ŋ": "g",
+            "ĝ": "g",
+            "g̃": "g",
+            "C": "Š",
+            "SZ": "Š",
+            "S,": "Ṣ",
+            "Ş": "Ṣ",
+            "T,": "Ṭ",
+            "Ḫ": "H",
+            "J": "G",
+            "Ŋ": "G",
+            "G̃": "G",
+            "Ĝ": "G",
+            # "'": 'ʾ'
+        }
+
+        for char in special_chars:
+            string = string.replace(char, special_chars[char])
+
+        return string
+
+    def do_cdli_replacements(self, atf):
+
+        if atf[0].isdigit():
+
+            atf = atf.replace("–", "-")
+
+            callback_normalize = (
+                lambda pat: pat.group(1)
+                + pat.group(2)
+                + self.normalize_numbers(pat.group(3))
+            )  # convert subscripts
+            atf = re.sub(r"(.*?)([A-z])(\d+)", callback_normalize, atf)
+
+            atf = self.replace_special_characters(atf)
+
+            atfsplit = re.split(r"([⌈⸢])(.*)?([⌉⸣])", atf)
+            print(atfsplit)
+            opening = ["⌈", "⸢"]
+            closing = ["⌉", "⸣"]
+
+            open_found = False
+            new_atf = ""
+            for part in atfsplit:
+
+                if open_found:
+                    atf_part = part.replace("-", "#.")  # convert "-" to "."
+                    atf_part = atf_part.replace("–", "#.")  # convert "-" to "."
+                    atf_part = atf_part.replace(" ", "# ")  # convert " " to "#"
+                    if not (atf_part in opening or atf_part in closing):
+                        atf_part += "#"
+                        new_atf += atf_part
+                elif not (part in opening or part in closing):
+                    new_atf += part
+
+                if part in opening:
+                    open_found = True
+                elif part in closing:
+                    open_found = False
+
+            atf = new_atf
+
+            callback_upper = lambda pat: pat.group(1).upper().replace("-", ".")
+            atf = re.sub(r"_(.*?)_", callback_upper, atf)  # convert "_xx_" to "XX"
+
+            callback_lower = lambda pat: pat.group(1).lower()  # lower {..} again
+            atf = re.sub(r"({.*?})", callback_lower, atf)
+
+            atf = re.sub(r"\(\$.*\$\)", r"($___$)", atf)
+
+            atf = atf.replace("\t", " ")  # convert tabs to spaces
+            atf = " ".join(atf.split())  # remove multiple spaces
+
+        elif atf == "$ rest broken":
+            atf = "$ rest of side broken"
 
         return atf
 
@@ -66,6 +174,11 @@ class ATFPreprocessor:
 
     def check_original_line(self, atf):
         self.EBL_PARSER.parse(atf)
+
+        # special case convert note lines in cdli
+        if self.style == "cdli":
+            if atf[0] == "#" and atf[1] == " ":
+                atf = atf.replace("#", "#note:")
 
         # words serializer oracc parser
         tree = self.ORACC_PARSER.parse(atf)
@@ -154,7 +267,6 @@ class ATFPreprocessor:
     def convert_lemline(self, atf, tree):
 
         if self.skip_next_lem_line:
-
             self.logger.warning("Skipping lem line")
             self.skip_next_lem_line = False
             return (None, None, "lem_line", None)
@@ -189,7 +301,10 @@ class ATFPreprocessor:
 
         except Exception:
 
-            atf = self.do_atf_replacements(atf)
+            if self.style == "cdli":
+                atf = self.do_cdli_replacements(atf)
+            else:
+                atf = self.do_oracc_replacements(atf)
 
             try:
                 return self.convert_line(original_atf, atf)
