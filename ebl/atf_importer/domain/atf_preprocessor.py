@@ -145,10 +145,14 @@ class ATFPreprocessor:
 
             atf = new_atf
 
-            callback_upper = lambda pat: pat.group(1).upper().replace("-", ".")
+            def callback_upper(pat):
+                return pat.group(1).upper().replace("-", ".")
+
             atf = re.sub(r"_(.*?)_", callback_upper, atf)  # convert "_xx_" to "XX"
 
-            callback_lower = lambda pat: pat.group(1).lower()  # lower {..} again
+            def callback_lower(pat):
+                return pat.group(1).lower()  # lower {..} again
+
             atf = re.sub(r"({.*?})", callback_lower, atf)
 
             atf = re.sub(r"\(\$.*\$\)", r"($___$)", atf)
