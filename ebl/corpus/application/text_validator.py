@@ -8,6 +8,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
+from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -34,6 +35,10 @@ class AlignmentVisitor(TokenVisitor):
         self.alignments = []
 
     def visit_word(self, word: Word) -> None:
+        if word.alignment is not None:
+            self.alignments.append(word.alignment)
+
+    def visit_greek_word(self, word: GreekWord) -> None:
         if word.alignment is not None:
             self.alignments.append(word.alignment)
 

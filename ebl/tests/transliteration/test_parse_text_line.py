@@ -48,6 +48,7 @@ from ebl.transliteration.domain.word_tokens import (
     Word,
 )
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
@@ -1135,6 +1136,50 @@ def test_parser_version(parser, version):
                                 Reading.of_name("ad"),
                             )
                         ),
+                    ),
+                )
+            ],
+        ),
+        (
+            "1. %grc ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (
+                        LanguageShift.of("%grc"),
+                        GreekWord.of(
+                            [
+                                GreekLetter.of(letter)
+                                for letter in (
+                                    "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμ"
+                                    "ΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω"
+                                )
+                            ]
+                        ),
+                    ),
+                )
+            ],
+        ),
+        (
+            "1. %akkgrc α",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (
+                        LanguageShift.of("%akkgrc"),
+                        GreekWord.of([GreekLetter.of("α")], Language.AKKADIAN),
+                    ),
+                )
+            ],
+        ),
+        (
+            "1. %suxgrc ε",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (
+                        LanguageShift.of("%suxgrc"),
+                        GreekWord.of([GreekLetter.of("ε")], Language.SUMERIAN),
                     ),
                 )
             ],

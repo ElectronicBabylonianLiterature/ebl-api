@@ -42,10 +42,6 @@ class AkkadianWord(AbstractWord):
             + [part.value for part in last_parts]
         )
 
-    @property
-    def clean_value(self) -> str:
-        return "".join(part.clean_value for part in self.parts)
-
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_akkadian_word(self)
 

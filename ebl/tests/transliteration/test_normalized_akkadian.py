@@ -93,14 +93,13 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
 
     serialized = {
         "type": "AkkadianWord",
-        "value": expected,
         "parts": OneOfTokenSchema().dump(word.parts, many=True),  # pyre-ignore[16]
         "modifiers": [modifier.value for modifier in word.modifiers],
-        "enclosureType": [],
         "uniqueLemma": [],
         "alignment": None,
         "variant": None,
         "lemmatizable": lemmatizable,
+        "alignable": lemmatizable,
         "normalized": True,
         "language": "AKKADIAN",
     }
@@ -150,12 +149,7 @@ def test_caesura(caesura: Caesura, is_uncertain: bool, value: str) -> None:
     assert caesura.value == value
     assert caesura.is_uncertain == is_uncertain
 
-    serialized = {
-        "type": "Caesura",
-        "value": value,
-        "isUncertain": is_uncertain,
-        "enclosureType": [],
-    }
+    serialized = {"type": "Caesura", "isUncertain": is_uncertain}
     assert_token_serialization(caesura, serialized)
 
 
@@ -172,10 +166,5 @@ def test_metrical_foot_separator(
     assert separator.value == value
     assert separator.is_uncertain == is_uncertain
 
-    serialized = {
-        "type": "MetricalFootSeparator",
-        "value": value,
-        "isUncertain": is_uncertain,
-        "enclosureType": [],
-    }
+    serialized = {"type": "MetricalFootSeparator", "isUncertain": is_uncertain}
     assert_token_serialization(separator, serialized)

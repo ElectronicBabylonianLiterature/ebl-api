@@ -25,8 +25,8 @@ DTO = {
                             "value": "ku-[nu-ši]",
                             "alignment": 0,
                             "variant": "KU",
+                            "type": "Word",
                             "language": "SUMERIAN",
-                            "isNormalized": False,
                         }
                     ],
                     "omittedWords": [1],

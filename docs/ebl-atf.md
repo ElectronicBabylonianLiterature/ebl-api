@@ -212,25 +212,28 @@ Shifts change the language and normalization of the subsequent words until
 another shift or the end of the line. Shifts are marked with `%` followed by a language
 code. If no shifts are present *Akkadian* is used as the default language.
 
-| Shift | Language | Dialect | Normalized |
-| ------|----------|---------|------------|
-| `%n` | Akkadian | | Yes |
-| `%ma` | Akkadian | Middle Assyrian | No |
-| `%mb` | Akkadian | Middle Babylonian | No |
-| `%na` | Akkadian | Neo-Assyrian | No |
-| `%nb` | Akkadian | Neo-Babylonian | No |
-| `%lb` | Akkadian | Late Babylonian | No |
-| `%sb` | Akkadian | Standard Babylonian | No |
-| `%a` | Akkadian | | No |
-| `%akk` | Akkadian | | No |
-| `%eakk` | Akkadian | Early Akkadian | No |
-| `%oakk` | Akkadian | Old Akkadian | No |
-| `%ur3akk` | Akkadian | Ur III Akkadian | No |
-| `%oa` | Akkadian | Old Assyrian | No |
-| `%ob` | Akkadian | Old Babylonian | No |
-| `%sux` | Sumerian | | No |
-| `%es` | Sumerian | Emesal | No |
-| `%e` | Sumerian | Emesal | No |
+| Shift | Language | Variety | Normalized | Parsed to standard signs |
+| ------|----------|---------|------------|--------------------------|
+| `%n` | Akkadian | | Yes | No |
+| `%ma` | Akkadian | Middle Assyrian | No | Yes |
+| `%mb` | Akkadian | Middle Babylonian | No | Yes |
+| `%na` | Akkadian | Neo-Assyrian | No | Yes |
+| `%nb` | Akkadian | Neo-Babylonian | No | Yes |
+| `%lb` | Akkadian | Late Babylonian | No | Yes |
+| `%sb` | Akkadian | Standard Babylonian | No | Yes |
+| `%a` | Akkadian | | No | Yes |
+| `%akk` | Akkadian | | No | Yes |
+| `%eakk` | Akkadian | Early Akkadian | No | Yes |
+| `%oakk` | Akkadian | Old Akkadian | No | Yes |
+| `%ur3akk` | Akkadian | Ur III Akkadian | No | Yes |
+| `%oa` | Akkadian | Old Assyrian | No | Yes |
+| `%ob` | Akkadian | Old Babylonian | No | Yes |
+| `%sux` | Sumerian | | No | Yes |
+| `%es` | Sumerian | Emesal | No | Yes |
+| `%e` | Sumerian | Emesal | No | Yes |
+| `%grc` | Greek | | No | No |
+| `%akkgrc` | Akkadian | In Greek characters | No | No |
+| `%suxgrc` | Sumerian | In Greek characters | No | No |
 
 Any other shifts are considered valid and have language *Unknown*. *Akkadian*
 and *Unknown* are lemmatizable.
@@ -241,13 +244,58 @@ normalized-akkadian-shift = '%n';
 shift = '%', { word-character }-;
 ```
 
+### Presence
+
+A presence cannot be nested within itself.
+
+| Presence Type | Open | Close | Scope | Constraint | Semantics |
+| --------------|------|-------|-------|------------|-----------|
+| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
+| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
+| Removal | `<<` | `>>` | Top-level, Word | | |
+| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
+
+See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
+
+```ebnf
+open_presence = { open-broken-away
+                | open-perhaps-away
+                | open-intentional-omission
+                | open-accidental-omission
+                | open-removal }+;
+close_presence = { close-broken-away
+                 | close-perhaps-away
+                 | close-intentional-omission
+                 | close-accidental-omission
+                 | close-removal }+;
+
+open-intentional-omission = '<(';
+close-intentional-omission = ')>';
+
+accidental-omission = open-accidental-omission | close-accidental-omission;
+open-accidental-omission = '<';
+close-accidental-omission = '>';
+
+open-removal = '<<';
+close-removal = '>>';
+
+broken-away = open-broken-away-open | close-broken-away;
+open-broken-away = '[';
+close-broken-away = ']';
+
+perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
+open-perhaps-broken-away = '(';
+close-perhaps-broken-away = ')';
+```
+
 ### Non-normalized text
 
 Text is a series of tokens separated by a word separator (space). Sometimes
 the separator is ignored (see Word below) or can be omitted.
 
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
-| -------------|------------|--------------|-----------|-------|
+|--------------|------------|--------------|-----------|-------|
 | Tabulation   | `($___$)` | No | No | |
 | Column       | `&` or `&` followed by numbers | No | No | Single `&` is a column separator. `&` followed by a number means that the following column spans the number of columns. If the first column spans multiple columns `&`+number can be put in the beginning of the line. If `&` is at the beginning the first column will be empty. |
 | Divider      | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
@@ -258,10 +306,7 @@ the separator is ignored (see Word below) or can be omitted.
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
 | Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
 | Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
-| Removal | `<<`, `>>` | No | No | See Presence below. |
-| Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
-| Broken Away | `[` or `]`| No | No | See Presence below. |
-| Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
+| Presence | `<<`, `>>`,  `<(`, `<`, `)>`, `>`, `[`, `]`, `(` or `)` | No | No | See Presence above. |
 
 ```ebnf
 non-normalized-text = token, { [ word-separator ], token };
@@ -301,7 +346,7 @@ divider-variant = ( variant-part | divider ), variant-separator,
 divider = divider-symbol, modifier, flag;
 divider-symbol = ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
-egyptian-metrical-feet-separator = "•", flag; 
+egyptian-metrical-feet-separator = "•", flag;
 
 line-break: '|';
 
@@ -314,37 +359,7 @@ shift = '%', { word-character }-;
 erasure = '°', [ erasure-part ] '\', [ erasure-part ], '°';
 erasure-part = ( divider | word | lone-determinative ),
                { word-separator, ( divider | word | lone-determinative ) };
-
-open-intentional-omission = '<(';
-close-intentional-omission = ')>';
-open-accidental-omission = '<';
-close-accidental-omission = '>';
-open-removal = '<<';
-close-removal = '>>';
-
-broken-away = open-broken-away-open | close-broken-away;
-open-broken-away = '[';
-close-broken-away = ']';
-
-perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
-open-perhaps-broken-away = '(';
-close-perhaps-broken-away = ')';
-
 ```
-
-#### Presence
-
-A presence cannot be nested within itself.
-
-| Presence Type | Open | Close | Scope | Constraint | Semantics |
-| --------------|------|-------|-------|------------|-----------|
-| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
-| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
-| Removal | `<<` | `>>` | Top-level, Word | | |
-| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
-
-See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
 #### Glosses
 
@@ -413,20 +428,11 @@ gloss-body = { open-intentional-omission | open-accidental-omission
              { close-intentional-omission | close-accidental-omission
              | close-removal };
 
-part-joiner = [ inword-newline ], [ close_any ], [ joiner ], [ open_any ];
+part-joiner = [ inword-newline ], [ close_presence ], [ joiner ],
+              [ open_presence ];
               (* The joiner can be omitted next to determinative,
                  phonetic-gloss, or linguistic gloss. *)
 
-open_any = { open-broken-away
-             | open-perhaps-away
-             | open-intentional-omission
-             | open-accidental-omission
-             | open-removal }+;
-close_any = { close-broken-away
-             | close-perhaps-away
-             | close-intentional-omission
-             | close-accidental-omission
-             | close-removal }+;
 joiner = { word-separator } ( '-' | '+' | '.' | ':' ) { word-separator };
 inword-newline = ';';
 
@@ -555,6 +561,25 @@ akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
                   | 'n' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'w' | 'y' | 'z'
                   | 'É' | 'â' | 'ê' | 'î' | 'û' | 'ā' | 'Ē' | 'ē' | 'ī' | 'Š'
                   | 'š' | 'ū' | 'ṣ' | 'ṭ' | '₄';
+```
+
+### Greek
+
+```ebnf
+greek = greek-word, { word-separator, greek-word };
+greek-word = { greek-writing | greek-presence },
+             greek-writing,
+             { greek-writing |  greek-presence };
+greek-presence = open_presence | close_presence;
+greek-writing = greek-letter
+              | unknown-number-of-signs
+              | unknown;
+greek-letter = greek-alphabet, flag
+greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 'ε'
+               | 'Ζ' | 'ζ' | 'Η' | 'η' | 'Θ' | 'θ' | 'Ι' | 'ι' | 'Κ' | 'κ'
+               | 'Λ' | 'λ' | 'Μ' | 'μ' | 'Ν' | 'ν' | 'Ξ' | 'ξ' | 'Ο' | 'ο'
+               | 'Π' | 'π' | 'Ρ' | 'ρ' | 'Σ' | 'σ' | 'ς' | 'Τ' | 'τ' | 'Υ'
+               | 'υ' | 'Φ' | 'φ' | 'Χ' | 'χ' | 'Ψ' | 'ψ' | 'Ω' | 'ω';
 ```
 
 ## Validation

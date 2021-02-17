@@ -17,7 +17,7 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
 )
-from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED, Word
+from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
@@ -33,7 +33,7 @@ EXPECTED_ATF = "bu %es [kur ...]"
 
 def expected_transliteration(language: Language) -> Sequence[Token]:
     return (
-        Word.of([Reading.of_name("bu")], language, DEFAULT_NORMALIZED),
+        Word.of([Reading.of_name("bu")], language),
         LanguageShift.of("%es"),
         Word.of(
             [
@@ -49,7 +49,6 @@ def expected_transliteration(language: Language) -> Sequence[Token]:
                 ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
             ],
             Language.EMESAL,
-            DEFAULT_NORMALIZED,
         ),
         UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),
         BrokenAway.close().set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),

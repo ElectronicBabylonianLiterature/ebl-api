@@ -27,7 +27,6 @@ from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
     EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.word_tokens import DEFAULT_NORMALIZED
 
 
 TOKENS = [
@@ -48,11 +47,7 @@ def test_value_token():
     assert token.get_key() == f"ValueToken⁝{value}"
     assert token.lemmatizable is False
 
-    serialized = {
-        "type": "ValueToken",
-        "value": token.value,
-        "enclosureType": [type.name for type in token.enclosure_type],
-    }
+    serialized = {"type": "ValueToken"}
     assert_token_serialization(token, serialized)
 
     assert token == equal
@@ -65,11 +60,11 @@ def test_value_token():
 @pytest.mark.parametrize(
     "value,expected_language,normalized",
     [
-        (r"%sux", Language.SUMERIAN, DEFAULT_NORMALIZED),
-        (r"%es", Language.EMESAL, DEFAULT_NORMALIZED),
-        (r"%sb", Language.AKKADIAN, DEFAULT_NORMALIZED),
+        (r"%sux", Language.SUMERIAN, False),
+        (r"%es", Language.EMESAL, False),
+        (r"%sb", Language.AKKADIAN, False),
         (r"%n", Language.AKKADIAN, True),
-        (r"%foo", Language.UNKNOWN, DEFAULT_NORMALIZED),
+        (r"%foo", Language.UNKNOWN, False),
     ],
 )
 def test_language_shift(value, expected_language, normalized):
@@ -86,10 +81,8 @@ def test_language_shift(value, expected_language, normalized):
 
     serialized = {
         "type": "LanguageShift",
-        "value": shift.value,
         "normalized": normalized,
         "language": shift.language.name,
-        "enclosureType": [type.name for type in shift.enclosure_type],
     }
     assert_token_serialization(shift, serialized)
 
@@ -160,11 +153,7 @@ def test_unknown_number_of_signs():
     assert unknown_number_of_signs.get_key() == f"UnknownNumberOfSigns⁝{expected_value}"
     assert unknown_number_of_signs.lemmatizable is False
 
-    serialized = {
-        "type": "UnknownNumberOfSigns",
-        "value": expected_value,
-        "enclosureType": [type.name for type in unknown_number_of_signs.enclosure_type],
-    }
+    serialized = {"type": "UnknownNumberOfSigns"}
     assert_token_serialization(unknown_number_of_signs, serialized)
 
 
@@ -181,14 +170,7 @@ def test_egyptian_metrical_feet_separator():
     )
     assert egyptian_metrical_feet_separator.lemmatizable is False
 
-    serialized = {
-        "type": "EgyptianMetricalFeetSeparator",
-        "value": expected_value,
-        "flags": ["?"],
-        "enclosureType": [
-            type.name for type in egyptian_metrical_feet_separator.enclosure_type
-        ],
-    }
+    serialized = {"type": "EgyptianMetricalFeetSeparator", "flags": ["?"]}
     assert_token_serialization(egyptian_metrical_feet_separator, serialized)
 
 
@@ -201,11 +183,7 @@ def test_tabulation():
     assert tabulation.get_key() == f"Tabulation⁝{value}"
     assert tabulation.lemmatizable is False
 
-    serialized = {
-        "type": "Tabulation",
-        "value": value,
-        "enclosureType": [type.name for type in tabulation.enclosure_type],
-    }
+    serialized = {"type": "Tabulation"}
     assert_token_serialization(tabulation, serialized)
 
 
@@ -220,11 +198,7 @@ def test_commentary_protocol(protocol_enum):
     assert protocol.lemmatizable is False
     assert protocol.protocol == protocol_enum
 
-    serialized = {
-        "type": "CommentaryProtocol",
-        "value": value,
-        "enclosureType": [type.name for type in protocol.enclosure_type],
-    }
+    serialized = {"type": "CommentaryProtocol"}
     assert_token_serialization(protocol, serialized)
 
 
@@ -237,12 +211,7 @@ def test_column():
     assert column.get_key() == f"Column⁝{expected_value}"
     assert column.lemmatizable is False
 
-    serialized = {
-        "type": "Column",
-        "value": expected_value,
-        "number": None,
-        "enclosureType": [type.name for type in column.enclosure_type],
-    }
+    serialized = {"type": "Column", "number": None}
     assert_token_serialization(column, serialized)
 
 
@@ -255,12 +224,7 @@ def test_column_with_number():
     assert column.get_key() == f"Column⁝{expected_value}"
     assert column.lemmatizable is False
 
-    serialized = {
-        "type": "Column",
-        "value": expected_value,
-        "number": 1,
-        "enclosureType": [type.name for type in column.enclosure_type],
-    }
+    serialized = {"type": "Column", "number": 1}
     assert_token_serialization(column, serialized)
 
 
@@ -287,9 +251,7 @@ def test_variant():
 
     serialized = {
         "type": "Variant",
-        "value": expected_value,
         "tokens": OneOfTokenSchema().dump([reading, divider], many=True),
-        "enclosureType": [type.name for type in variant.enclosure_type],
     }
     assert_token_serialization(variant, serialized)
 
@@ -309,9 +271,5 @@ def test_joiner(joiner, expected_value):
     assert joiner.get_key() == f"Joiner⁝{expected_value}"
     assert joiner.lemmatizable is False
 
-    serialized = {
-        "type": "Joiner",
-        "value": expected_value,
-        "enclosureType": [type.name for type in joiner.enclosure_type],
-    }
+    serialized = {"type": "Joiner"}
     assert_token_serialization(joiner, serialized)

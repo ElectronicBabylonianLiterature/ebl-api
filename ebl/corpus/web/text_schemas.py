@@ -20,7 +20,6 @@ from ebl.corpus.application.schemas import (
     manuscript_id,
 )
 from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
-from ebl.errors import DataError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -52,7 +51,7 @@ class MuseumNumberString(fields.String):  # pyre-ignore[11]
             deserialized = super()._deserialize(value, attr, data, **kwargs)
             return MuseumNumber.of(deserialized) if deserialized else None
         except ValueError as error:
-            raise ValidationError("Invalid museum number.") from error
+            raise ValidationError("Invalid museum number.", attr) from error
 
 
 class ApiManuscriptSchema(ManuscriptSchema):
@@ -100,19 +99,24 @@ class ApiManuscriptLineSchema(Schema):  # pyre-ignore[11]
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         has_text_line = len(data["number"]) > 0
         lines = data["atf"].split("\n")
-        text = (
-            parse_text_line(f"{data['number']}. {lines[0]}")
-            if has_text_line
-            else EmptyLine()
-        )
-        paratext = lines[1:] if has_text_line else lines
-        return ManuscriptLine(
-            data["manuscript_id"],
-            tuple(data["labels"]),
-            text,
-            tuple(parse_paratext(line) for line in paratext),
-            tuple(data["omitted_words"]),
-        )
+        try:
+            text = (
+                parse_text_line(f"{data['number']}. {lines[0]}")
+                if has_text_line
+                else EmptyLine()
+            )
+            paratext = lines[1:] if has_text_line else lines
+            return ManuscriptLine(
+                data["manuscript_id"],
+                tuple(data["labels"]),
+                text,
+                tuple(parse_paratext(line) for line in paratext),
+                tuple(data["omitted_words"]),
+            )
+        except PARSE_ERRORS as error:
+            raise ValidationError(
+                f"Invalid manuscript line: {data['atf']}.", "atf"
+            ) from error
 
 
 class LineNumberString(fields.String):
@@ -124,7 +128,7 @@ class LineNumberString(fields.String):
             deserialized = super()._deserialize(value, attr, data, **kwargs)
             return parse_line_number(deserialized)
         except (ValueError, ParseError, UnexpectedInput) as error:
-            raise ValidationError("Invalid line number.") from error
+            raise ValidationError("Invalid line number.", attr) from error
 
 
 def _split_reconstruction(
@@ -147,7 +151,7 @@ def _parse_recontsruction(
             tuple(parse_parallel_line(line) for line in parallel_lines),
         )
     except PARSE_ERRORS as error:
-        raise DataError(f"Invalid reconstruction: {reconstruction}. {error}")
+        raise ValidationError(f"Invalid reconstruction: {reconstruction}. {error}")
 
 
 class ApiLineVariantSchema(LineVariantSchema):

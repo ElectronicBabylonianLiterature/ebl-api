@@ -1,5 +1,6 @@
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.transliteration.domain.alignment import AlignmentToken
+from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word
@@ -20,8 +21,8 @@ def test_alignment() -> None:
                                     "value": "ku]-nu-ši",
                                     "alignment": 1,
                                     "variant": "kunusi",
+                                    "type": "AkkadianWord",
                                     "language": "AKKADIAN",
-                                    "isNormalized": True,
                                 }
                             ],
                             "omittedWords": [],
@@ -34,8 +35,8 @@ def test_alignment() -> None:
                                     "value": "ku]-nu-ši",
                                     "alignment": 1,
                                     "variant": "kur",
+                                    "type": "Word",
                                     "language": "SUMERIAN",
-                                    "isNormalized": False,
                                 }
                             ],
                             "omittedWords": [1],
@@ -48,8 +49,22 @@ def test_alignment() -> None:
                                     "value": "ku]-nu-ši",
                                     "alignment": 1,
                                     "variant": "",
+                                    "type": "",
+                                    "language": "",
+                                }
+                            ],
+                            "omittedWords": [],
+                        }
+                    ],
+                    [
+                        {
+                            "alignment": [
+                                {
+                                    "value": "ku]-nu-ši",
+                                    "alignment": 1,
+                                    "variant": "β",
+                                    "type": "GreekWord",
                                     "language": "AKKADIAN",
-                                    "isNormalized": False,
                                 }
                             ],
                             "omittedWords": [],
@@ -87,6 +102,19 @@ def test_alignment() -> None:
                     ),
                 ),
                 (ManuscriptLineAlignment((AlignmentToken("ku]-nu-ši", 1, None),)),),
+                (
+                    ManuscriptLineAlignment(
+                        (
+                            AlignmentToken(
+                                "ku]-nu-ši",
+                                1,
+                                GreekWord.of(
+                                    [GreekLetter.of("β")], language=Language.AKKADIAN
+                                ),
+                            ),
+                        )
+                    ),
+                ),
             ),
         )
     )
