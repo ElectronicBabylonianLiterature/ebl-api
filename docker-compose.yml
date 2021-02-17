@@ -48,4 +48,4 @@ volumes:
     driver: local
 secrets:
   mongo_users:
-    file: .\docker-entrypoint-initdb.d\create-users.js
+    file: ./docker-entrypoint-initdb.d/create-users.js

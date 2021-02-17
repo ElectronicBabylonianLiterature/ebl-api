@@ -122,3 +122,13 @@ invalid_texts.tsv
 
 # Line To Vec Scores
 line_to_vec_ranking_results
+
+# Atf-Importer
+
+test-files/
+__pycache__
+input/
+glossary/
+logs/
+input_test/
+
