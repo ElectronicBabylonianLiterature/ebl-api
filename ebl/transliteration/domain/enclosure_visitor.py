@@ -2,7 +2,6 @@ from typing import FrozenSet, Iterable, List, Sequence, Union
 
 import attr
 
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -16,6 +15,8 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.greek_tokens import GreekWord
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import NamedSign
 from ebl.transliteration.domain.tokens import Token, TokenVisitor, Variant
 from ebl.transliteration.domain.word_tokens import Word
@@ -102,6 +103,10 @@ class EnclosureValidator(TokenVisitor):
         for part in word.parts:
             part.accept(self)
 
+    def visit_greek_word(self, word: GreekWord) -> None:
+        for part in word.parts:
+            part.accept(self)
+
     def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         self._update_state(omission, EnclosureType.ACCIDENTAL_OMISSION)
 
@@ -180,6 +185,11 @@ class EnclosureUpdater(TokenVisitor):
         self._append_token(attr.evolve(new_token, name_parts=visited_parts))
 
     def visit_akkadian_word(self, word: AkkadianWord) -> None:
+        new_token = self._set_enclosure_type(word)
+        visited_parts: Sequence = self._visit_parts(word.parts)
+        self._append_token(attr.evolve(new_token, parts=visited_parts))
+
+    def visit_greek_word(self, word: GreekWord) -> None:
         new_token = self._set_enclosure_type(word)
         visited_parts: Sequence = self._visit_parts(word.parts)
         self._append_token(attr.evolve(new_token, parts=visited_parts))

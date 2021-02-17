@@ -49,6 +49,9 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("<{+ši>-ku} {+ku-<ši}>", ["KU", "KU"]),
         ("<{{ši>-ku}} {{ku-<ši}}>", ["KU", "KU"]),
         ("{(ku)}", ["KU"]),
+        ("%grc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
+        ("%akkgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
+        ("%suxgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
     ],
 )
 def test_signs_visitor(text: str, expected: Sequence[str], sign_repository, signs):

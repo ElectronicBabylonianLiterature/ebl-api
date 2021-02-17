@@ -1,10 +1,10 @@
 from itertools import dropwhile
 from typing import Any, Callable, Mapping, Sequence, Tuple, Type, Union
 
-import pydash  # pyre-ignore[21]
 from lark.exceptions import ParseError, UnexpectedInput, VisitError  # pyre-ignore[21]
 from lark.lark import Lark  # pyre-ignore[21]
 from lark.visitors import v_args  # pyre-ignore[21]
+import pydash  # pyre-ignore[21]
 
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
@@ -13,6 +13,7 @@ from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
+from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
@@ -27,6 +28,7 @@ from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
+
 
 PARSE_ERRORS: Tuple[Type[Any], ...] = (
     UnexpectedInput,
@@ -73,6 +75,11 @@ def parse_word(atf: str) -> Word:
 
 def parse_normalized_akkadian_word(atf: str) -> Word:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__akkadian_word")
+    return LineTransformer().transform(tree)  # pyre-ignore[16]
+
+
+def parse_greek_word(atf: str) -> GreekWord:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__greek_word")
     return LineTransformer().transform(tree)  # pyre-ignore[16]
 
 

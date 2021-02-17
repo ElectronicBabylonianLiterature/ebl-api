@@ -24,38 +24,34 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
 )
-from ebl.transliteration.domain.word_tokens import (
-    DEFAULT_NORMALIZED,
-    LoneDeterminative,
-    Word,
-)
+from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 LINE_NUMBER = LineNumber(1)
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
-    "code,language,normalized",
+    "code,language",
     [
-        ("%ma", Language.AKKADIAN, False),
-        ("%mb", Language.AKKADIAN, False),
-        ("%na", Language.AKKADIAN, False),
-        ("%nb", Language.AKKADIAN, False),
-        ("%lb", Language.AKKADIAN, False),
-        ("%sb", Language.AKKADIAN, False),
-        ("%a", Language.AKKADIAN, False),
-        ("%akk", Language.AKKADIAN, False),
-        ("%eakk", Language.AKKADIAN, False),
-        ("%oakk", Language.AKKADIAN, False),
-        ("%ur3akk", Language.AKKADIAN, False),
-        ("%oa", Language.AKKADIAN, False),
-        ("%ob", Language.AKKADIAN, False),
-        ("%sux", Language.SUMERIAN, False),
-        ("%es", Language.EMESAL, False),
-        ("%foo", DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
+        ("%ma", Language.AKKADIAN),
+        ("%mb", Language.AKKADIAN),
+        ("%na", Language.AKKADIAN),
+        ("%nb", Language.AKKADIAN),
+        ("%lb", Language.AKKADIAN),
+        ("%sb", Language.AKKADIAN),
+        ("%a", Language.AKKADIAN),
+        ("%akk", Language.AKKADIAN),
+        ("%eakk", Language.AKKADIAN),
+        ("%oakk", Language.AKKADIAN),
+        ("%ur3akk", Language.AKKADIAN),
+        ("%oa", Language.AKKADIAN),
+        ("%ob", Language.AKKADIAN),
+        ("%sux", Language.SUMERIAN),
+        ("%es", Language.EMESAL),
+        ("%foo", DEFAULT_LANGUAGE),
     ],
 )
-def test_text_line_of_iterable(code: str, language: Language, normalized: bool) -> None:
+def test_text_line_of_iterable(code: str, language: Language) -> None:
     tokens = [
         Word.of([Reading.of_name("first")]),
         LanguageShift.of(code),
@@ -67,12 +63,12 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
         BrokenAway.close(),
     ]
     expected_tokens = (
-        Word.of([Reading.of_name("first")], DEFAULT_LANGUAGE, DEFAULT_NORMALIZED),
+        Word.of([Reading.of_name("first")], DEFAULT_LANGUAGE),
         LanguageShift.of(code),
-        Word.of([Reading.of_name("second")], language, normalized),
+        Word.of([Reading.of_name("second")], language),
         LanguageShift.of("%sb"),
         LoneDeterminative.of(
-            [Determinative.of([Reading.of_name("third")])], Language.AKKADIAN, False
+            [Determinative.of([Reading.of_name("third")])], Language.AKKADIAN
         ),
         Word.of(
             [
@@ -88,7 +84,6 @@ def test_text_line_of_iterable(code: str, language: Language, normalized: bool) 
                 ).set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),
             ],
             DEFAULT_LANGUAGE,
-            DEFAULT_NORMALIZED,
         ),
         UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),
         BrokenAway.close().set_enclosure_type(frozenset({EnclosureType.BROKEN_AWAY})),

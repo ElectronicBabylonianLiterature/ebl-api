@@ -1,13 +1,23 @@
 from abc import abstractmethod
 from typing import Mapping, Type
 
-import pydash  # pyre-ignore
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load  # pyre-ignore
-from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
+import pydash  # pyre-ignore[21]
+from marshmallow import (  # pyre-ignore[21]
+    EXCLUDE,
+    Schema,
+    fields,
+    post_dump,
+    post_load,
+    validate,
+)
+from marshmallow_oneofschema import OneOfSchema  # pyre-ignore[21]
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
+    EgyptianMetricalFeetSeparator,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -23,7 +33,13 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
+)
 from ebl.transliteration.domain.side import Side
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -45,20 +61,12 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
-    EgyptianMetricalFeetSeparator,
-)
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,
     LoneDeterminative,
     Word,
-)
-from ebl.transliteration.domain.normalized_akkadian import (
-    AkkadianWord,
-    Caesura,
-    MetricalFootSeparator,
 )
 
 
@@ -347,6 +355,7 @@ class BaseWordSchema(BaseTokenSchema):
     language = NameEnum(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
+    alignable = fields.Boolean()
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
     alignment = fields.Integer(allow_none=True, missing=None)
     variant = fields.Nested(lambda: OneOfWordSchema(), allow_none=True, missing=None)
@@ -358,7 +367,6 @@ class WordSchema(BaseWordSchema):
         return Word.of(
             data["parts"],
             data["language"],
-            data["normalized"],
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
@@ -376,7 +384,6 @@ class LoneDeterminativeSchema(BaseWordSchema):
         return LoneDeterminative.of(
             data["parts"],
             data["language"],
-            data["normalized"],
             tuple(data["unique_lemma"]),
             data["erasure"],
             data["alignment"],
@@ -485,11 +492,11 @@ class AkkadianWordSchema(BaseWordSchema):
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
-class Breakchema(BaseTokenSchema):
+class BreakSchema(BaseTokenSchema):
     is_uncertain = fields.Boolean(data_key="isUncertain", required=True)
 
 
-class CaesuraSchema(Breakchema):
+class CaesuraSchema(BreakSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Caesura.of(data["is_uncertain"]).set_enclosure_type(
@@ -497,7 +504,7 @@ class CaesuraSchema(Breakchema):
         )
 
 
-class MetricalFootSeparatorSchema(Breakchema):
+class MetricalFootSeparatorSchema(BreakSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return MetricalFootSeparator.of(data["is_uncertain"]).set_enclosure_type(
@@ -505,23 +512,53 @@ class MetricalFootSeparatorSchema(Breakchema):
         )
 
 
+class GreekLetterSchema(BaseTokenSchema):
+    letter = fields.String(required=True, validate=validate.Length(1, 1))
+    flags = fields.List(ValueEnum(Flag), required=True)
+
+    @post_load
+    def make_token(self, data, **kwargs):
+        return GreekLetter(
+            frozenset(data["enclosure_type"]),
+            data["erasure"],
+            data["letter"],
+            data["flags"],
+        )
+
+
+class GreekWordSchema(BaseWordSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return GreekWord.of(
+            tuple(data["parts"]),
+            data["language"],
+            tuple(data["unique_lemma"]),
+            data["alignment"],
+            data["variant"],
+            data["erasure"],
+        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+
+
+WORD_SCHEMAS: Mapping[str, Type[BaseWordSchema]] = {
+    "Word": WordSchema,
+    "LoneDeterminative": LoneDeterminativeSchema,
+    "AkkadianWord": AkkadianWordSchema,
+    "GreekWord": GreekWordSchema,
+}
+
+
 class OneOfWordSchema(OneOfSchema):  # pyre-ignore[11]
     type_field = "type"
-    type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
-        "Word": WordSchema,
-        "LoneDeterminative": LoneDeterminativeSchema,
-        "AkkadianWord": AkkadianWordSchema,
-    }
+    type_schemas: Mapping[str, Type[BaseWordSchema]] = WORD_SCHEMAS
 
 
 class OneOfTokenSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
+        **WORD_SCHEMAS,
         "Token": ValueTokenSchema,
         "ValueToken": ValueTokenSchema,
-        "Word": WordSchema,
         "LanguageShift": LanguageShiftSchema,
-        "LoneDeterminative": LoneDeterminativeSchema,
         "DocumentOrientedGloss": DocumentOrientedGlossSchema,
         "BrokenAway": BrokenAwaySchema,
         "PerhapsBrokenAway": PerhapsBrokenAwaySchema,
@@ -550,7 +587,7 @@ class OneOfTokenSchema(OneOfSchema):
         "LinguisticGloss": LinguisticGlossSchema,
         "EgyptianMetricalFeetSeparator": EgyptianMetricalFeetSeparatorSchema,
         "LineBreak": LineBreakSchema,
-        "AkkadianWord": AkkadianWordSchema,
         "Caesura": CaesuraSchema,
         "MetricalFootSeparator": MetricalFootSeparatorSchema,
+        "GreekLetter": GreekLetterSchema,
     }

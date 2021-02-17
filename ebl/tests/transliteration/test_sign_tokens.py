@@ -31,11 +31,9 @@ def test_divider() -> None:
 
     serialized = {
         "type": "Divider",
-        "value": expected_value,
         "divider": value,
         "modifiers": list(modifiers),
         "flags": ["?"],
-        "enclosureType": [type.name for type in divider.enclosure_type],
     }
     assert_token_serialization(divider, serialized)
 
@@ -50,12 +48,7 @@ def test_unidentified_sign() -> None:
     assert sign.flags == tuple()
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnidentifiedSign",
-        "value": expected_value,
-        "flags": [],
-        "enclosureType": [type.name for type in sign.enclosure_type],
-    }
+    serialized = {"type": "UnidentifiedSign", "flags": []}
     assert_token_serialization(sign, serialized)
 
 
@@ -70,12 +63,7 @@ def test_unidentified_sign_with_flags() -> None:
     assert sign.flags == tuple(flags)
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnidentifiedSign",
-        "value": expected_value,
-        "flags": ["#"],
-        "enclosureType": [type.name for type in sign.enclosure_type],
-    }
+    serialized = {"type": "UnidentifiedSign", "flags": ["#"]}
     assert_token_serialization(sign, serialized)
 
 
@@ -89,12 +77,7 @@ def test_unclear_sign() -> None:
     assert sign.flags == tuple()
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnclearSign",
-        "value": expected_value,
-        "flags": [],
-        "enclosureType": [type.name for type in sign.enclosure_type],
-    }
+    serialized = {"type": "UnclearSign", "flags": []}
     assert_token_serialization(sign, serialized)
 
 
@@ -109,12 +92,7 @@ def test_unclear_sign_with_flags() -> None:
     assert sign.flags == tuple(flags)
     assert sign.lemmatizable is False
 
-    serialized = {
-        "type": "UnclearSign",
-        "value": expected_value,
-        "flags": ["!"],
-        "enclosureType": [type.name for type in sign.enclosure_type],
-    }
+    serialized = {"type": "UnclearSign", "flags": ["!"]}
     assert_token_serialization(sign, serialized)
 
 
@@ -217,14 +195,12 @@ def test_reading(
 
     serialized = {
         "type": "Reading",
-        "value": expected_value,
         "name": expected_name,
         "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
         "sign": sign and OneOfTokenSchema().dump(sign),
-        "enclosureType": [type.name for type in reading.enclosure_type],
     }
     assert_token_serialization(reading, serialized)
 
@@ -347,7 +323,6 @@ def test_logogram(
 
     serialized = {
         "type": "Logogram",
-        "value": expected_value,
         "name": expected_name,
         "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "subIndex": sub_index,
@@ -355,7 +330,6 @@ def test_logogram(
         "flags": [flag.value for flag in flags],
         "surrogate": OneOfTokenSchema().dump(surrogate, many=True),
         "sign": sign and OneOfTokenSchema().dump(sign),
-        "enclosureType": [type.name for type in logogram.enclosure_type],
     }
     assert_token_serialization(logogram, serialized)
 
@@ -441,14 +415,12 @@ def test_number(
 
     serialized = {
         "type": "Number",
-        "value": expected_value,
         "name": expected_name,
         "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],
         "sign": sign and OneOfTokenSchema().dump(sign),
-        "enclosureType": [type.name for type in number.enclosure_type],
     }
     assert_token_serialization(number, serialized)
 
@@ -465,12 +437,7 @@ def test_compound_grapheme() -> None:
         == f"CompoundGrapheme⁝{expected_value}⟨ValueToken⁝BI⁚ValueToken⁝IS⟩"
     )
 
-    serialized = {
-        "type": "CompoundGrapheme",
-        "value": expected_value,
-        "enclosureType": [type.name for type in compound.enclosure_type],
-        "compound_parts": ["BI", "IS"],
-    }
+    serialized = {"type": "CompoundGrapheme", "compound_parts": ["BI", "IS"]}
     assert_token_serialization(compound, serialized)
 
 
@@ -499,10 +466,8 @@ def test_grapheme(name, modifiers, flags, expected_value, expected_clean_value) 
 
     serialized = {
         "type": "Grapheme",
-        "value": expected_value,
         "name": name,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
-        "enclosureType": [type.name for type in grapheme.enclosure_type],
     }
     assert_token_serialization(grapheme, serialized)

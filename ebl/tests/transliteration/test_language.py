@@ -1,13 +1,19 @@
-import pytest  # pyre-ignore
+import pytest  # pyre-ignore[21]
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 
 
-def test_lemmatizable():
-    assert Language.UNKNOWN.lemmatizable is True
-    assert Language.AKKADIAN.lemmatizable is True
-    assert Language.EMESAL.lemmatizable is False
-    assert Language.SUMERIAN.lemmatizable is False
+@pytest.mark.parametrize(
+    "language,expected",
+    [
+        (Language.UNKNOWN, True),
+        (Language.AKKADIAN, True),
+        (Language.EMESAL, False),
+        (Language.SUMERIAN, False),
+    ],
+)
+def test_lemmatizable(language, expected):
+    assert language.lemmatizable is expected
 
 
 @pytest.mark.parametrize(
@@ -30,6 +36,9 @@ def test_lemmatizable():
         ("%es", Language.EMESAL),
         ("%e", Language.EMESAL),
         ("%n", Language.AKKADIAN),
+        ("%akkgrc", Language.AKKADIAN),
+        ("%suxgrc", Language.SUMERIAN),
+        ("%grc", Language.GREEK),
     ],
 )
 def test_of_atf(atf, expected):

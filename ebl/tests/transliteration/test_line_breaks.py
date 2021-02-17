@@ -13,11 +13,7 @@ def test_in_word_new_line():
     assert newline.get_key() == f"InWordNewline⁝{expected_value}"
     assert newline.lemmatizable is False
 
-    serialized = {
-        "type": "InWordNewline",
-        "value": expected_value,
-        "enclosureType": [type_.name for type_ in newline.enclosure_type],
-    }
+    serialized = {"type": "InWordNewline"}
     assert_token_serialization(newline, serialized)
 
 
@@ -30,9 +26,5 @@ def test_line_break():
     assert line_break.get_key() == f"LineBreak⁝{value}"
     assert line_break.lemmatizable is False
 
-    serialized = {
-        "type": "LineBreak",
-        "value": value,
-        "enclosureType": [type_.name for type_ in line_break.enclosure_type],
-    }
+    serialized = {"type": "LineBreak"}
     assert_token_serialization(line_break, serialized)
