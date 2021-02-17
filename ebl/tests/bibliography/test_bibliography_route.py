@@ -1,8 +1,8 @@
 import json
 
-import falcon  # pyre-ignore
-import pydash  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon
+import pydash
+import pytest
 
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 

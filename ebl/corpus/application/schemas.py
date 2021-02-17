@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.chapter import (
@@ -29,7 +29,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import parse_label
 
 
-class ManuscriptSchema(Schema):  # pyre-ignore[11]
+class ManuscriptSchema(Schema):
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
     museum_number = fields.Nested(
@@ -57,7 +57,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_manuscript(self, data: dict, **kwargs) -> Manuscript:
         return Manuscript(
             data["id"],
@@ -96,7 +96,7 @@ class ManuscriptLineSchema(Schema):
         fields.Integer(), required=True, data_key="omittedWords"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         return ManuscriptLine(
             data["manuscript_id"],
@@ -115,7 +115,7 @@ class LineVariantSchema(Schema):
         ParallelLineSchema, many=True, missing=tuple(), data_key="parallelLines"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
         return LineVariant(
             tuple(data["reconstruction"]),
@@ -137,7 +137,7 @@ class LineSchema(Schema):
         required=True, data_key="isBeginningOfSection"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
             data["number"],
@@ -160,7 +160,7 @@ class ChapterSchema(Schema):
     lines = fields.Nested(LineSchema, many=True, required=True)
     parser_version = fields.String(missing="", data_key="parserVersion")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
         return Chapter(
             Classification(data["classification"]),
@@ -185,7 +185,7 @@ class TextSchema(Schema):
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     chapters = fields.Nested(ChapterSchema, many=True, required=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_text(self, data: dict, **kwargs) -> Text:
         return Text(
             data["category"],

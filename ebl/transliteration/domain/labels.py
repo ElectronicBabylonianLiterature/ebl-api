@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 from typing import Iterable, Sequence, Tuple, Union
 
 import attr
-import pydash  # pyre-ignore[21]
-import roman  # pyre-ignore[21]
-from lark.lark import Lark  # pyre-ignore[21]
-from lark.lexer import Token  # pyre-ignore[21]
-from lark.visitors import Transformer, v_args  # pyre-ignore[21]
+import pydash
+import roman
+from lark.lark import Lark
+from lark.lexer import Token
+from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain.atf import Object, Status, Surface
 
@@ -179,20 +179,18 @@ def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
         )
 
 
-class LabelTransformer(Transformer):  # pyre-ignore[11]
-    @v_args(inline=True)  # pyre-ignore[56]
-    def column_label(
-        self, numeral: Token, status: Sequence[Status]  # pyre-ignore[11]
-    ) -> ColumnLabel:
-        return ColumnLabel.from_label(numeral, status)
+class LabelTransformer(Transformer):
+    @v_args(inline=True)
+    def column_label(self, numeral: Token, status: Sequence[Status]) -> ColumnLabel:
+        return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def surface_label(self, surface: Surface, status: Sequence[Status]) -> SurfaceLabel:
         return SurfaceLabel.from_label(surface, status)
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def surface(self, surface: Token) -> Surface:
-        return Surface.from_label(surface)
+        return Surface.from_label(surface)  # pyre-ignore[6]
 
     def status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
@@ -203,4 +201,4 @@ LABEL_PARSER = Lark.open("labels.lark", maybe_placeholders=True, rel_to=__file__
 
 def parse_label(label: str) -> Label:
     tree = LABEL_PARSER.parse(label)
-    return LabelTransformer().transform(tree)  # pyre-ignore[16]
+    return LabelTransformer().transform(tree)

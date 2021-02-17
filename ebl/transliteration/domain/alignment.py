@@ -1,7 +1,7 @@
 from typing import Optional, TypeVar
 
 import attr
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
+from singledispatchmethod import singledispatchmethod
 
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import AbstractWord
@@ -22,7 +22,7 @@ class AlignmentToken:
     alignment: Optional[int]
     variant: Optional[AbstractWord] = None
 
-    @singledispatchmethod  # pyre-ignore[56]
+    @singledispatchmethod
     def apply(self, token: T) -> T:
         if (
             token.value == self.value

@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf

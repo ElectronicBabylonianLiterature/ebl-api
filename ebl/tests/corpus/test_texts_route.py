@@ -1,12 +1,12 @@
 import json
 
-import falcon  # pyre-ignore[21]
+import falcon
 
 from ebl.corpus.web.api_serializer import deserialize, serialize
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
-import pydash  # pyre-ignore[21]
+import pydash
 
 
 ANY_USER = Guest()

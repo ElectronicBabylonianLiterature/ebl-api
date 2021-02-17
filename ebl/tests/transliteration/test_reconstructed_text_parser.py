@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_break,
@@ -23,7 +23,7 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
 )
-from lark.exceptions import ParseError, UnexpectedInput  # pyre-ignore[21]
+from lark.exceptions import ParseError, UnexpectedInput
 import re
 
 
@@ -390,7 +390,7 @@ def test_word(text, expected) -> None:
     )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "text",
     [
         "x",
@@ -435,7 +435,6 @@ def test_invalid_word(text) -> None:
     assert_parse_error(parse_reconstructed_word, text)
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize("text,is_uncertain", [("||", False), ("(||)", True)])
 def test_caesura(text, is_uncertain) -> None:
     assert (
@@ -443,7 +442,6 @@ def test_caesura(text, is_uncertain) -> None:
     )
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize("text,is_uncertain", [("|", False), ("(|)", True)])
 def test_feet_separator(text, is_uncertain) -> None:
     assert (
@@ -453,7 +451,6 @@ def test_feet_separator(text, is_uncertain) -> None:
     )
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize("text", ["|||", "||||", "[|]", "[(|)]", "[||]", "[(||)]"])
 def test_invalid_break(text) -> None:
     assert_parse_error(parse_break, text)
@@ -545,7 +542,7 @@ def test_reconstructed_line(text, expected) -> None:
     )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "text",
     [
         "|",
@@ -582,7 +579,6 @@ def test_invalid_reconstructed_line(text) -> None:
         parse_reconstructed_line(f"%n {text}")
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize(
     "text",
     [
@@ -612,7 +608,6 @@ def test_validate_invalid(text) -> None:
         validate(line)
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize(
     "text",
     [

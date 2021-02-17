@@ -12,7 +12,7 @@ PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 7
 
 
 def museum_number_is(number: MuseumNumber) -> dict:
-    serialized = MuseumNumberSchema().dump(number)  # pyre-ignore[16]
+    serialized = MuseumNumberSchema().dump(number)
     return {f"museumNumber.{key}": value for key, value in serialized.items()}
 
 

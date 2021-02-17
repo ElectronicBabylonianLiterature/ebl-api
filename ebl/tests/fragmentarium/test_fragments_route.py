@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory

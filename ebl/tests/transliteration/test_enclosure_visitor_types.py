@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,

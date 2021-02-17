@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator

@@ -1,6 +1,6 @@
 import logging
 
-import falcon  # pyre-ignore[21]
+import falcon
 
 from ebl.dispatcher import DispatchError
 from ebl.errors import DataError, DuplicateError, NotFoundError

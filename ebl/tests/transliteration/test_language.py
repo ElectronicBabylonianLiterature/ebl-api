@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 

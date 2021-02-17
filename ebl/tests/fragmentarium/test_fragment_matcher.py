@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.fragmentarium.application.fragment_matcher import LineToVecRanking
 from ebl.fragmentarium.application.fragment_matcher import sort_scores_to_list

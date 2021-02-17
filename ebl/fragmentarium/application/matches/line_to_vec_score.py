@@ -1,7 +1,7 @@
 import itertools
 from typing import List, Tuple
 
-import pydash  # pyre-ignore[21]
+import pydash
 
 from ebl.fragmentarium.domain.line_to_vec_encoding import (
     LineToVecEncoding,
@@ -26,8 +26,8 @@ def score_weighted(
 def list_of_overalps(
     seqs1: Tuple[LineToVecEncodings, ...], seqs2: Tuple[LineToVecEncodings, ...]
 ) -> List[LineToVecEncodings]:
-    seqs1_backwards = tuple([seq[::-1] for seq in seqs1])
-    seqs2_backwards = tuple([seq[::-1] for seq in seqs2])
+    seqs1_backwards = tuple(seq[::-1] for seq in seqs1)
+    seqs2_backwards = tuple(seq[::-1] for seq in seqs2)
     return pydash.flatten(
         [
             *compute_score_for_all(seqs1, seqs2),

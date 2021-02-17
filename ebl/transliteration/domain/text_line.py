@@ -2,7 +2,7 @@ from itertools import zip_longest
 from typing import Callable, Iterable, Sequence, Type, TypeVar, Union, cast
 
 import attr
-import pydash  # pyre-ignore[21]
+import pydash
 
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken

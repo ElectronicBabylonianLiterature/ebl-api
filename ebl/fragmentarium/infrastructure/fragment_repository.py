@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-from marshmallow import EXCLUDE  # pyre-ignore[21]
+from marshmallow import EXCLUDE
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -56,7 +56,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_by_museum_number(self, number: MuseumNumber):
         data = self._collection.find_one(museum_number_is(number))
-        return FragmentSchema(unknown=EXCLUDE).load(data)  # pyre-ignore[16,28]
+        return FragmentSchema(unknown=EXCLUDE).load(data)
 
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}
@@ -99,9 +99,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
         return {
-            MuseumNumberSchema().load(  # pyre-ignore[16]
-                fragment["museumNumber"]
-            ): tuple(
+            MuseumNumberSchema().load(fragment["museumNumber"]): tuple(
                 LineToVecEncoding.from_list(line_to_vec)
                 for line_to_vec in fragment["lineToVec"]
             )

@@ -1,5 +1,5 @@
-import roman  # pyre-ignore[21]
-from lark.visitors import Transformer, v_args  # pyre-ignore[21]
+import roman
+from lark.visitors import Transformer, v_args
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
@@ -15,8 +15,8 @@ from ebl.transliteration.domain.parallel_line import (
 )
 
 
-class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
-    @v_args(inline=True)  # pyre-ignore[56]
+class ParallelLineTransformer(Transformer):
+    @v_args(inline=True)
     def ebl_atf_text_line__parallel_fragment(
         self, _prefix, cf, museum_number, duplicates, surface_label, line_number
     ) -> ParallelFragment:
@@ -31,14 +31,14 @@ class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_text_line__museum_number(self, children) -> MuseumNumber:
         return MuseumNumber.of("".join(children))
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_text_line__surface_label(self, surface, status) -> SurfaceLabel:
         return SurfaceLabel.from_label(
             Surface.from_label("".join(surface.children)),
             [Status(token) for token in status.children],
         )
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_text_line__parallel_text(
         self, _prefix, cf, text_id, chapter, line_number
     ) -> ParallelText:
@@ -46,11 +46,11 @@ class ParallelLineTransformer(Transformer):  # pyre-ignore[11]
             cf is not None, Genre.LITERATURE, text_id, chapter, line_number
         )
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_text_line__text_id(self, category, number) -> TextId:
         return TextId(0 if category == "0" else roman.fromRoman(category), int(number))
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_text_line__chapter_name(
         self, stage_abbreviation, version, name
     ) -> ChapterName:

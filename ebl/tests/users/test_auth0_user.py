@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.users.infrastructure.auth0 import Auth0User
 

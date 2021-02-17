@@ -22,28 +22,26 @@ from ebl.transliteration.domain.text_line import TextLine
 
 
 def create(include_documents: bool) -> Tuple[Text, dict]:
-    references = (
-        ReferenceFactory.build(with_document=include_documents),  # pyre-ignore[16]
-    )
-    manuscript = ManuscriptFactory.build(references=references)  # pyre-ignore[16]
-    # pyre-ignore[16]
+    references = (ReferenceFactory.build(with_document=include_documents),)
+    manuscript = ManuscriptFactory.build(references=references)
+
     first_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
     second_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
-    line = LineFactory.build(  # pyre-ignore[16]
+    line = LineFactory.build(
         variants=(
-            LineVariantFactory.build(  # pyre-ignore[16]
+            LineVariantFactory.build(
                 manuscripts=(first_manuscript_line, second_manuscript_line),
                 parallel_lines=(ParallelComposition(False, "name", LineNumber(1)),),
             ),
         )
     )
-    # pyre-ignore[16]
+
     chapter = ChapterFactory.build(
         manuscripts=(manuscript,),
         uncertain_fragments=(MuseumNumber.of("K.1"),),
         lines=(line,),
     )
-    text = TextFactory.build(chapters=(chapter,))  # pyre-ignore[16]
+    text = TextFactory.build(chapters=(chapter,))
     dto = {
         "category": text.category,
         "index": text.index,
@@ -71,7 +69,6 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                         "provenance": manuscript.provenance.long_name,
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
-                        # pyre-ignore[16]
                         "references": ApiReferenceSchema().dump(references, many=True),
                     }
                     for manuscript in chapter.manuscripts
@@ -94,7 +91,6 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                         ],
                                     ]
                                 ),
-                                # pyre-ignore[16]
                                 "reconstructionTokens": OneOfTokenSchema().dump(
                                     variant.reconstruction, many=True
                                 ),
@@ -129,7 +125,6 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                                             ]
                                         ).strip(),
                                         "atfTokens": (
-                                            # pyre-ignore[16]
                                             OneOfLineSchema().dump(
                                                 manuscript_line.line
                                             )["content"]

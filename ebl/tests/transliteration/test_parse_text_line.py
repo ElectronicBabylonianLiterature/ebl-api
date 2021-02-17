@@ -1,7 +1,7 @@
 from typing import List
 
-import pytest  # pyre-ignore[21]
-from hamcrest import starts_with  # pyre-ignore[21]
+import pytest
+from hamcrest import starts_with
 
 from ebl.tests.assertions import assert_exception_has_errors
 from ebl.transliteration.domain import atf
@@ -1278,7 +1278,7 @@ def test_parse_normalized_akkadain_shift() -> None:
     assert parse_atf_lark(line).lines == expected.lines
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,line_numbers",
     [
         ("1. x\nthis is not valid", [2]),
@@ -1296,7 +1296,7 @@ def test_invalid_text_line(atf, line_numbers) -> None:
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2])]
 )
 def test_invalid_brackets(atf, line_numbers) -> None:

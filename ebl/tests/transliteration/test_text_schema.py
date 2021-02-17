@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema

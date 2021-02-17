@@ -1,7 +1,7 @@
-from marshmallow import Schema, fields  # pyre-ignore[21]
+from marshmallow import Schema, fields
 
 
-class FragmentNumberSchema(Schema):  # pyre-ignore[11]
+class FragmentNumberSchema(Schema):
     fragmentNumber = fields.String()
     folioNumber = fields.String()
 

@@ -2,7 +2,7 @@ from enum import Enum, unique
 from typing import Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
-import pydash  # pyre-ignore[21]
+import pydash
 
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.label_validator import LabelValidator

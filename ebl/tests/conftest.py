@@ -4,12 +4,12 @@ import json
 from typing import Any, Dict, Mapping, Union
 
 import attr
-import mongomock  # pyre-ignore
-import pydash  # pyre-ignore
-import pytest  # pyre-ignore
-from dictdiffer import diff  # pyre-ignore
-from falcon import testing  # pyre-ignore
-from falcon_auth import NoneAuthBackend  # pyre-ignore
+import mongomock
+import pydash
+import pytest
+from dictdiffer import diff
+from falcon import testing
+from falcon_auth import NoneAuthBackend
 
 import ebl.app
 import ebl.context
@@ -249,7 +249,7 @@ def annotations_repository(database):
     return MongoAnnotationsRepository(database)
 
 
-@pytest.fixture  # pyre-ignore[56]
+@pytest.fixture
 def user() -> User:
     return Auth0User(
         {
@@ -409,7 +409,7 @@ def signs():
 def create_mongo_bibliography_entry():
     def _from_bibliography_entry(bibliography_entry: Union[dict, None] = None) -> dict:
         if not bibliography_entry:
-            bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
+            bibliography_entry = BibliographyEntryFactory.build()
         return pydash.map_keys(
             bibliography_entry, lambda _, key: "_id" if key == "id" else key
         )

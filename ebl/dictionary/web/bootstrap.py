@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 from ebl.context import Context
 from ebl.dictionary.application.dictionary import Dictionary
@@ -6,9 +6,7 @@ from ebl.dictionary.web.word_search import WordSearch
 from ebl.dictionary.web.words import WordsResource
 
 
-def create_dictionary_routes(
-    api: falcon.API, context: Context, spec  # pyre-ignore[11]
-):
+def create_dictionary_routes(api: falcon.API, context: Context, spec):
     dictionary = Dictionary(context.word_repository, context.changelog)
     words = WordsResource(dictionary)
     word_search = WordSearch(dictionary)

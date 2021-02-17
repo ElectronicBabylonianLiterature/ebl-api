@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 
 def test_get_photo(client, photo):

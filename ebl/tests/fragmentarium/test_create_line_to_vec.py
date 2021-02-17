@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.fragmentarium.application.matches.create_line_to_vec import (
     create_line_to_vec,

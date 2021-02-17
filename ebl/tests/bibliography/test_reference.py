@@ -29,7 +29,7 @@ def create_reference_with_document(bibliography_entry) -> Reference:
 
 
 def test_reference() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
+    bibliography_entry = BibliographyEntryFactory.build()
     reference_with_document = create_reference_with_document(bibliography_entry)
 
     assert reference_with_document.id == bibliography_entry["id"]
@@ -50,10 +50,9 @@ def test_defaults() -> None:
 
 
 def test_to_dict() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
+    bibliography_entry = BibliographyEntryFactory.build()
     reference_with_document = create_reference_with_document(bibliography_entry)
 
-    # pyre-ignore-nextline[16]
     assert ReferenceSchema().dump(reference_with_document) == {
         **SERIALIZED_REFERENCE,
         "id": reference_with_document.id,
@@ -61,10 +60,9 @@ def test_to_dict() -> None:
 
 
 def test_to_dict_with_document() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
+    bibliography_entry = BibliographyEntryFactory.build()
     reference_with_document = create_reference_with_document(bibliography_entry)
 
-    # pyre-ignore-nextline[16]
     assert ApiReferenceSchema().dump(reference_with_document) == {
         **SERIALIZED_REFERENCE,
         "id": reference_with_document.id,
@@ -73,14 +71,14 @@ def test_to_dict_with_document() -> None:
 
 
 def test_from_dict() -> None:
-    assert ReferenceSchema().load(SERIALIZED_REFERENCE) == REFERENCE  # pyre-ignore[16]
+    assert ReferenceSchema().load(SERIALIZED_REFERENCE) == REFERENCE
 
 
 def test_from_dict_with_document() -> None:
-    bibliography_entry = BibliographyEntryFactory.build()  # pyre-ignore[16]
+    bibliography_entry = BibliographyEntryFactory.build()
     reference_with_document = create_reference_with_document(bibliography_entry)
 
-    result = ReferenceSchema().load(  # pyre-ignore[16]
+    result = ReferenceSchema().load(
         {
             **SERIALIZED_REFERENCE,
             "id": reference_with_document.id,

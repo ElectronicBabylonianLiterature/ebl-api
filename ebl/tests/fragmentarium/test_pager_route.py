@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.fragmentarium.domain.museum_number import MuseumNumber

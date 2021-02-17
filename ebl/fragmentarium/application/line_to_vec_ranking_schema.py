@@ -1,7 +1,7 @@
-from marshmallow import Schema, fields, pre_dump  # pyre-ignore[21]
+from marshmallow import Schema, fields, pre_dump
 
 
-class LineToVecRankingSchema(Schema):  # pyre-ignore[11]
+class LineToVecRankingSchema(Schema):
     score = fields.List(fields.Tuple((fields.String(), fields.Int())), required=True)
     score_weighted = fields.List(
         fields.Tuple((fields.String(), fields.Int())),

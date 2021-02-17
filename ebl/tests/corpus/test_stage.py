@@ -1,9 +1,9 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.domain.stage import Stage
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "value,abbreviation",
     [
         ("Ur III", "Ur3"),

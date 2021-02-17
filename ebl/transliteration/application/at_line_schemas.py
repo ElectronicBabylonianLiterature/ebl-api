@@ -1,4 +1,4 @@
-from marshmallow import fields, post_load  # pyre-ignore[21]
+from marshmallow import fields, post_load
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.label_schemas import (
@@ -25,7 +25,6 @@ from ebl.transliteration.domain.tokens import ValueToken
 class AtLineSchema(LineBaseSchema):
     prefix = fields.Constant("@")
     content = fields.Function(
-        # pyre-ignore[16]
         lambda obj: [OneOfTokenSchema().dump(ValueToken.of(obj.display_value))],
         lambda value: value,
     )
@@ -35,7 +34,7 @@ class SealAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> SealAtLine:
         return SealAtLine(data["number"])
 
@@ -44,7 +43,7 @@ class HeadingAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> HeadingAtLine:
         return HeadingAtLine(data["number"])
 
@@ -53,7 +52,7 @@ class ColumnAtLineSchema(AtLineSchema):
     column_label = fields.Nested(ColumnLabelSchema, required=True)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> ColumnAtLine:
         return ColumnAtLine(data["column_label"])
 
@@ -62,7 +61,7 @@ class DiscourseAtLineSchema(AtLineSchema):
     discourse_label = NameEnum(atf.Discourse, required=True)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> DiscourseAtLine:
         return DiscourseAtLine(data["discourse_label"])
 
@@ -71,7 +70,7 @@ class SurfaceAtLineSchema(AtLineSchema):
     surface_label = fields.Nested(SurfaceLabelSchema, required=True)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> SurfaceAtLine:
         return SurfaceAtLine(data["surface_label"])
 
@@ -83,7 +82,7 @@ class ObjectAtLineSchema(AtLineSchema):
     label = fields.Nested(ObjectLabelSchema)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> ObjectAtLine:
         return ObjectAtLine(data["label"])
 
@@ -93,7 +92,7 @@ class DivisionAtLineSchema(AtLineSchema):
     number = fields.Int(required=False, allow_none=True, default=None)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> DivisionAtLine:
         return DivisionAtLine(data["text"], data["number"])
 
@@ -104,6 +103,6 @@ class CompositeAtLineSchema(AtLineSchema):
     number = fields.Int(required=False, allow_none=True, default=None)
     display_value = fields.String(data_key="displayValue")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> CompositeAtLine:
         return CompositeAtLine(data["composite"], data["text"], data["number"])

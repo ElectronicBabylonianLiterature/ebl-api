@@ -1,7 +1,7 @@
 import json
 
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon
+import pytest
 
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment import Genre

@@ -1,7 +1,7 @@
 from typing import Optional, cast
 
-import pydash  # pyre-ignore[21]
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
+import pydash
+from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
@@ -68,7 +68,7 @@ class TextValidator(TextVisitor):
 
         return cast(Chapter, self._chapter)
 
-    @singledispatchmethod  # pyre-ignore[56]
+    @singledispatchmethod
     def visit(self, item: TextItem) -> None:
         pass
 

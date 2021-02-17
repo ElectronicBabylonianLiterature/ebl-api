@@ -1,6 +1,6 @@
-import pytest  # pyre-ignore[21]
-from lark import ParseError  # pyre-ignore[21]
-from lark.exceptions import UnexpectedInput  # pyre-ignore[21]
+import pytest
+from lark import ParseError
+from lark.exceptions import UnexpectedInput
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -840,13 +840,13 @@ def test_lone_determinative(atf, expected) -> None:
     assert parse_word(atf) == expected
 
 
-@pytest.mark.parametrize("atf", ["{udu}?"])  # pyre-ignore[56]
+@pytest.mark.parametrize("atf", ["{udu}?"])
 def test_invalid_lone_determinative(atf) -> None:
     with pytest.raises(UnexpectedInput):
         parse_word(atf)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "invalid_atf",
     [
         "Kur",

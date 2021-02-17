@@ -1,10 +1,10 @@
-import factory.fuzzy  # pyre-ignore  # pyre-ignore
+import factory.fuzzy
 
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.collections import TupleFactory
 
 
-class RecordEntryFactory(factory.Factory):  # pyre-ignore[11]
+class RecordEntryFactory(factory.Factory):
     class Meta:
         model = RecordEntry
 

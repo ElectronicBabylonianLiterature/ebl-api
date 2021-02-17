@@ -1,6 +1,6 @@
 import json
 
-import falcon  # pyre-ignore[21]
+import falcon
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations

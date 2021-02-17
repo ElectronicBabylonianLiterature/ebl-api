@@ -1,5 +1,5 @@
-import pydash  # pyre-ignore
-from marshmallow import Schema, fields, post_dump, post_load  # pyre-ignore
+import pydash
+from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -12,7 +12,7 @@ from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
 
 
-class MeasureSchema(Schema):  # pyre-ignore[11]
+class MeasureSchema(Schema):
     value = fields.Float(missing=None)
     note = fields.String(missing=None)
 

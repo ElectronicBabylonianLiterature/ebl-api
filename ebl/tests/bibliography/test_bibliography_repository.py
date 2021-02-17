@@ -1,5 +1,5 @@
-import pydash  # pyre-ignore
-import pytest  # pyre-ignore
+import pydash
+import pytest
 
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
