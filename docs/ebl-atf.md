@@ -318,7 +318,7 @@ divider-variant = ( variant-part | divider ), variant-separator,
 divider = divider-symbol, modifier, flag;
 divider-symbol = ":'" | ':"' | ':.' | '::' | ':?' | ':' | ';' | '/';
 
-egyptian-metrical-feet-separator = "•", flag; 
+egyptian-metrical-feet-separator = "•", flag;
 
 line-break: '|';
 
@@ -575,11 +575,11 @@ greek-writing = greek-letter
               | unknown-number-of-signs
               | unknown;
 greek-letter = greek-alphabet, flag
-greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 'ε' | 'Ζ' | 'ζ'
-               | 'Η' | 'η' | 'Θ' | 'θ' | 'Ι' | 'ι' | 'Κ' | 'κ' | 'Λ' | 'λ' | 'Μ' | 'μ'
-               | 'Ν' | 'ν' | 'Ξ' | 'ξ' | 'Ο' | 'ο' | 'Π' | 'π' | 'Ρ' | 'ρ' | 'Σ' | 'σ'
-               | 'ς' | 'Τ' | 'τ' | 'Υ' | 'υ' | 'Φ' | 'φ' | 'Χ' | 'χ' | 'Ψ' | 'ψ' | 'Ω'
-               | 'ω';
+greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 'ε'
+               | 'Ζ' | 'ζ' | 'Η' | 'η' | 'Θ' | 'θ' | 'Ι' | 'ι' | 'Κ' | 'κ'
+               | 'Λ' | 'λ' | 'Μ' | 'μ' | 'Ν' | 'ν' | 'Ξ' | 'ξ' | 'Ο' | 'ο'
+               | 'Π' | 'π' | 'Ρ' | 'ρ' | 'Σ' | 'σ' | 'ς' | 'Τ' | 'τ' | 'Υ'
+               | 'υ' | 'Φ' | 'φ' | 'Χ' | 'χ' | 'Ψ' | 'ψ' | 'Ω' | 'ω';
 ```
 
 ## Validation
