@@ -258,6 +258,37 @@ A presence cannot be nested within itself.
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
+```ebnf
+open_presence = { open-broken-away
+                | open-perhaps-away
+                | open-intentional-omission
+                | open-accidental-omission
+                | open-removal }+;
+close_presence = { close-broken-away
+                 | close-perhaps-away
+                 | close-intentional-omission
+                 | close-accidental-omission
+                 | close-removal }+;
+
+open-intentional-omission = '<(';
+close-intentional-omission = ')>';
+
+accidental-omission = open-accidental-omission | close-accidental-omission;
+open-accidental-omission = '<';
+close-accidental-omission = '>';
+
+open-removal = '<<';
+close-removal = '>>';
+
+broken-away = open-broken-away-open | close-broken-away;
+open-broken-away = '[';
+close-broken-away = ']';
+
+perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
+open-perhaps-broken-away = '(';
+close-perhaps-broken-away = ')';
+```
+
 ### Non-normalized text
 
 Text is a series of tokens separated by a word separator (space). Sometimes
@@ -275,10 +306,7 @@ the separator is ignored (see Word below) or can be omitted.
 | Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
 | Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
 | Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
-| Removal | `<<`, `>>` | No | No | See Presence below. |
-| Omission| `<(`, `<`, `)>`, or `>` | No | No | See Presence below. |
-| Broken Away | `[` or `]`| No | No | See Presence below. |
-| Perhaps Broken Away | `(` or `)` | No | No | See Presence below. |
+| Presence | `<<`, `>>`,  `<(`, `<`, `)>`, `>`, `[`, `]`, `(` or `)` | No | No | See Presence above. |
 
 ```ebnf
 non-normalized-text = token, { [ word-separator ], token };
@@ -331,25 +359,6 @@ shift = '%', { word-character }-;
 erasure = '°', [ erasure-part ] '\', [ erasure-part ], '°';
 erasure-part = ( divider | word | lone-determinative ),
                { word-separator, ( divider | word | lone-determinative ) };
-
-open-intentional-omission = '<(';
-close-intentional-omission = ')>';
-
-accidental-omission = open-accidental-omission | close-accidental-omission;
-open-accidental-omission = '<';
-close-accidental-omission = '>';
-
-open-removal = '<<';
-close-removal = '>>';
-
-broken-away = open-broken-away-open | close-broken-away;
-open-broken-away = '[';
-close-broken-away = ']';
-
-perhaps-broken-away = open-perhaps-broken-away | close-perhaps-broken-away;
-open-perhaps-broken-away = '(';
-close-perhaps-broken-away = ')';
-
 ```
 
 #### Glosses
@@ -419,20 +428,10 @@ gloss-body = { open-intentional-omission | open-accidental-omission
              { close-intentional-omission | close-accidental-omission
              | close-removal };
 
-part-joiner = [ inword-newline ], [ close_any ], [ joiner ], [ open_any ];
+part-joiner = [ inword-newline ], [ close_presence ], [ joiner ], [ open_presence ];
               (* The joiner can be omitted next to determinative,
                  phonetic-gloss, or linguistic gloss. *)
 
-open_any = { open-broken-away
-             | open-perhaps-away
-             | open-intentional-omission
-             | open-accidental-omission
-             | open-removal }+;
-close_any = { close-broken-away
-             | close-perhaps-away
-             | close-intentional-omission
-             | close-accidental-omission
-             | close-removal }+;
 joiner = { word-separator } ( '-' | '+' | '.' | ':' ) { word-separator };
 inword-newline = ';';
 
@@ -570,7 +569,7 @@ greek = greek-word, { word-separator, greek-word };
 greek-word = { greek-writing | greek-presence },
              greek-writing,
              { greek-writing |  greek-presence };
-greek-presence = accidental-omission | broken-away;
+greek-presence = open_presence | close_presence;
 greek-writing = greek-letter
               | unknown-number-of-signs
               | unknown;
