@@ -1,5 +1,5 @@
 import attr
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.application.lemmatization import (
     ChapterLemmatization,
@@ -26,7 +26,7 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 
 COLLECTION = "texts"
-TEXT = TextFactory.build()  # pyre-ignore[16]
+TEXT = TextFactory.build()
 TEXT_WITHOUT_DOCUMENTS = attr.evolve(
     TEXT,
     chapters=tuple(
@@ -402,7 +402,7 @@ def test_updating_manuscript_lemmatization(
     corpus.update_manuscript_lemmatization(ChapterId(TEXT.id, 0), lemmatization, user)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "alignment",
     [
         Alignment(

@@ -1,7 +1,7 @@
 from typing import List, Sequence
 
 import attr
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
+from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
@@ -47,7 +47,7 @@ class LemmatizationUpdater(ChapterUpdater):
                 f"manuscript {self.manuscript_line_index}."
             )
 
-    @singledispatchmethod  # pyre-ignore[56]
+    @singledispatchmethod
     def visit(self, item: TextItem) -> None:
         super().visit(item)
 

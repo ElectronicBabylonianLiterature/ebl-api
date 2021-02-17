@@ -28,23 +28,21 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 
 
-REFERENCES = (ReferenceFactory.build(with_document=True),)  # pyre-ignore[16]
-MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)  # pyre-ignore[16]
+REFERENCES = (ReferenceFactory.build(with_document=True),)
+MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
 UNCERTAIN_FRAGMENTS = (MuseumNumber.of("K.1"),)
-FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(  # pyre-ignore[16]
-    manuscript_id=MANUSCRIPT.id
-)
+FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
 SECOND_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
-# pyre-ignore[16]
+
 LINE_VARIANT = LineVariantFactory.build(
     manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE),
     parallel_lines=(ParallelComposition(False, "name", LineNumber(2)),),
 )
-LINE = LineFactory.build(variants=(LINE_VARIANT,))  # pyre-ignore[16]
-CHAPTER = ChapterFactory.build(  # pyre-ignore[16]
+LINE = LineFactory.build(variants=(LINE_VARIANT,))
+CHAPTER = ChapterFactory.build(
     manuscripts=(MANUSCRIPT,), uncertain_fragments=UNCERTAIN_FRAGMENTS, lines=(LINE,)
 )
-TEXT = TextFactory.build(chapters=(CHAPTER,))  # pyre-ignore[16]
+TEXT = TextFactory.build(chapters=(CHAPTER,))
 
 
 def strip_documents(text: Text) -> Text:
@@ -96,7 +94,6 @@ def to_dict(text: Text, include_documents=False):
                             )
                             if include_documents
                             else manuscript.museum_number
-                            # pyre-ignore[16]
                             and MuseumNumberSchema().dump(manuscript.museum_number)
                         ),
                         "accession": manuscript.accession,
@@ -105,7 +102,7 @@ def to_dict(text: Text, include_documents=False):
                         "provenance": manuscript.provenance.long_name,
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
-                        "references": (  # pyre-ignore[16]
+                        "references": (
                             ApiReferenceSchema if include_documents else ReferenceSchema
                         )().dump(manuscript.references, many=True),
                     }
@@ -116,18 +113,14 @@ def to_dict(text: Text, include_documents=False):
                 ),
                 "lines": [
                     {
-                        # pyre-ignore[16]
                         "number": OneOfLineNumberSchema().dump(line.number),
                         "variants": [
                             {
-                                # pyre-ignore[16]
                                 "reconstruction": OneOfTokenSchema().dump(
                                     variant.reconstruction, many=True
                                 ),
                                 "note": variant.note
-                                # pyre-ignore[16]
                                 and NoteLineSchema().dump(variant.note),
-                                # pyre-ignore[16]
                                 "parallelLines": ParallelLineSchema().dump(
                                     variant.parallel_lines, many=True
                                 ),
@@ -138,7 +131,6 @@ def to_dict(text: Text, include_documents=False):
                                             label.to_value()
                                             for label in manuscript_line.labels
                                         ],
-                                        # pyre-ignore[16]
                                         "line": OneOfLineSchema().dump(
                                             manuscript_line.line
                                         ),

@@ -1,10 +1,10 @@
-import factory.fuzzy  # pyre-ignore
+import factory.fuzzy
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.tests.factories.collections import TupleFactory
 
 
-class BibliographyEntryFactory(factory.Factory):  # pyre-ignore
+class BibliographyEntryFactory(factory.Factory):
     class Meta:
         model = dict
         rename = {

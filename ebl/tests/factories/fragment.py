@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import factory  # pyre-ignore
+import factory
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
@@ -71,7 +71,7 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 
 
-class FragmentFactory(factory.Factory):  # pyre-ignore[11]
+class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
 
@@ -97,8 +97,8 @@ class FragmentFactory(factory.Factory):  # pyre-ignore[11]
 
 
 class InterestingFragmentFactory(FragmentFactory):
-    collection = "Kuyunjik"
-    publication = ""
+    collection = "Kuyunjik"  # pyre-ignore[15]
+    publication = ""  # pyre-ignore[15]
     joins: Sequence[str] = tuple()
     text = Text()
     uncurated_references = (

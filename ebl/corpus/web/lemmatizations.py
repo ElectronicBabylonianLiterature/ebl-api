@@ -1,6 +1,6 @@
-import falcon  # pyre-ignore[21]
+import falcon
 
-from marshmallow import fields, Schema  # pyre-ignore[21]
+from marshmallow import fields, Schema
 
 from ebl.marshmallowschema import validate
 from ebl.corpus.application.corpus import Corpus
@@ -10,7 +10,7 @@ from ebl.corpus.application.lemmatization_schema import LineVariantLemmatization
 from ebl.users.web.require_scope import require_scope
 
 
-class CorpusLemmatizationsSchema(Schema):  # pyre-ignore[11]
+class CorpusLemmatizationsSchema(Schema):
     lemmatization = fields.List(
         fields.List(fields.Nested(LineVariantLemmatizationSchema)), required=True
     )
@@ -20,12 +20,12 @@ class LemmatizationResource:
     def __init__(self, corpus: Corpus) -> None:
         self._corpus = corpus
 
-    @falcon.before(require_scope, "write:texts")  # pyre-ignore[56]
+    @falcon.before(require_scope, "write:texts")
     @validate(CorpusLemmatizationsSchema())
     def on_post(
         self,
-        req: falcon.Request,  # pyre-ignore[11]
-        resp: falcon.Response,  # pyre-ignore[11]
+        req: falcon.Request,
+        resp: falcon.Response,
         category: str,
         index: str,
         chapter_index: str,
@@ -69,7 +69,6 @@ class LemmatizationResource:
         chapter_id = create_chapter_id(category, index, chapter_index)
         self._corpus.update_manuscript_lemmatization(
             chapter_id,
-            # pyre-ignore[16]
             CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
             req.context.user,
         )

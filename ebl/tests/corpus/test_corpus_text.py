@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -54,7 +54,7 @@ PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 NOTES = "some notes"
-REFERENCES = (ReferenceFactory.build(),)  # pyre-ignore[16]
+REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True

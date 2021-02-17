@@ -1,7 +1,7 @@
 from typing import Mapping, Type
 
-from marshmallow import Schema  # pyre-ignore
-from marshmallow_oneofschema import OneOfSchema  # pyre-ignore
+from marshmallow import Schema
+from marshmallow_oneofschema import OneOfSchema
 
 from ebl.transliteration.application.at_line_schemas import (
     ColumnAtLineSchema,
@@ -33,14 +33,14 @@ from ebl.transliteration.application.parallel_line_schemas import (
 )
 
 
-PARALLEL_LINE_SCHEMAS: Mapping[str, Type[Schema]] = {  # pyre-ignore[11]
+PARALLEL_LINE_SCHEMAS: Mapping[str, Type[Schema]] = {
     "ParallelFragment": ParallelFragmentSchema,
     "ParallelText": ParallelTextSchema,
     "ParallelComposition": ParallelCompositionSchema,
 }
 
 
-class OneOfLineSchema(OneOfSchema):  # pyre-ignore[11]
+class OneOfLineSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[Schema]] = {
         "TextLine": TextLineSchema,

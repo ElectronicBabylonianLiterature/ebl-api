@@ -1,5 +1,5 @@
 import attr
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.domain.text_id import TextId
@@ -9,11 +9,10 @@ from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFa
 
 COLLECTION = "texts"
 MANUSCRIPT_ID = 1
-TEXT = TextFactory.build(  # pyre-ignore[16]
+TEXT = TextFactory.build(
     chapters=(
-        ChapterFactory.build(  # pyre-ignore[16]
+        ChapterFactory.build(
             manuscripts=(
-                # pyre-ignore[16]
                 ManuscriptFactory.build(id=1, references=(ReferenceFactory.build(),)),
             )
         ),

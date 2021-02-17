@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.dispatcher import DispatchError, create_dispatcher
 

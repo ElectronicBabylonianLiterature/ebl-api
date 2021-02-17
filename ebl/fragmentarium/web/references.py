@@ -1,7 +1,7 @@
 from typing import Sequence
 
-import falcon  # pyre-ignore
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+import falcon
+from marshmallow import Schema, fields, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import Reference
@@ -11,10 +11,10 @@ from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
 
-class ReferencesDtoSchema(Schema):  # pyre-ignore[11]
+class ReferencesDtoSchema(Schema):
     references = fields.Nested(ReferenceSchema, required=True, many=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def get_references(self, data, **kwargs) -> Sequence[Reference]:
         return tuple(data["references"])
 
@@ -23,13 +23,11 @@ class ReferencesResource:
     def __init__(self, updater: FragmentUpdater) -> None:
         self._updater = updater
 
-    @falcon.before(require_scope, "transliterate:fragments")  # pyre-ignore[56]
+    @falcon.before(require_scope, "transliterate:fragments")
     @validate(ReferencesDtoSchema())
     def on_post(self, req, resp, number) -> None:
         user = req.context.user
         updated_fragment, has_photo = self._updater.update_references(
-            parse_museum_number(number),
-            ReferencesDtoSchema().load(req.media),  # pyre-ignore[16]
-            user,
+            parse_museum_number(number), ReferencesDtoSchema().load(req.media), user
         )
         resp.media = create_response_dto(updated_fragment, user, has_photo)

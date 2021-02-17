@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.application.lemmatization_schema import (

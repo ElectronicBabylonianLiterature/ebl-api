@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore[21]
+import falcon
 
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber

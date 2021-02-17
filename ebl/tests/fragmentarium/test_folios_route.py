@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 
 def test_get_folio(client, folio_with_allowed_scope):

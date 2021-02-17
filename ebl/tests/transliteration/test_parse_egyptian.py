@@ -1,6 +1,6 @@
 from typing import List
 
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.transliteration.domain.atf import Atf, Flag
 from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
@@ -95,7 +95,7 @@ def test_egpytian_feet_metrical_feet_line(
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,",
     [
         "1. a-(•*)-a",

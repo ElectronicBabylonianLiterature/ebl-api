@@ -1,4 +1,4 @@
-from lark.visitors import Transformer, v_args  # pyre-ignore
+from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
@@ -11,7 +11,7 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class DollarLineTransfomer(Transformer):  # pyre-ignore[11]
+class DollarLineTransfomer(Transformer):
     def ebl_atf_dollar_line__free_text(self, content):
         return "".join(content)
 

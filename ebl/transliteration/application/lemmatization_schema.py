@@ -1,9 +1,9 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load
 
 from ebl.transliteration.domain.lemmatization import LemmatizationToken
 
 
-class LemmatizationTokenSchema(Schema):  # pyre-ignore[11]
+class LemmatizationTokenSchema(Schema):
     value = fields.String(required=True)
     unique_lemma = fields.List(fields.String, missing=None, data_key="uniqueLemma")
 

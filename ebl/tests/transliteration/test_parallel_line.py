@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
@@ -77,7 +77,7 @@ def test_parallel_text(cf, chapter, display_value) -> None:
     assert line.lemmatization == (LemmatizationToken(display_value),)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "cf,display_value", [(True, "cf. (my name 1)"), (False, "(my name 1)")]
 )
 def test_parallel_composition(cf, display_value) -> None:

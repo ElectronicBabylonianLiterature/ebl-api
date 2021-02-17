@@ -1,7 +1,7 @@
 import itertools
 from typing import List, Tuple
 
-import pydash  # pyre-ignore[21]
+import pydash
 
 from ebl.fragmentarium.domain.line_to_vec_encoding import (
     LineToVecEncoding,

@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId

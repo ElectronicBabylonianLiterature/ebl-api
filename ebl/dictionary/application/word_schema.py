@@ -1,5 +1,5 @@
-from marshmallow import fields, Schema  # pyre-ignore[21]
-from marshmallow.validate import Length  # pyre-ignore[21]
+from marshmallow import fields, Schema
+from marshmallow.validate import Length
 
 
 def lemma():
@@ -22,7 +22,7 @@ def notes():
     return fields.List(fields.String(), required=True)
 
 
-class VowelSchema(Schema):  # pyre-ignore[11]
+class VowelSchema(Schema):
     value = fields.List(fields.String(), required=True)
     notes = notes()
 

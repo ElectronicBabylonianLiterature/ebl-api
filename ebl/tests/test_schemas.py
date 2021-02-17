@@ -1,7 +1,7 @@
 from enum import Enum
 
-import pytest  # pyre-ignore
-from marshmallow import Schema, ValidationError  # pyre-ignore
+import pytest
+from marshmallow import Schema, ValidationError
 
 from ebl.schemas import ValueEnum, NameEnum
 
@@ -16,7 +16,7 @@ class _TestEnumInt(Enum):
     TWO = 1
 
 
-class _TestSchemaStr(Schema):  # pyre-ignore[11]
+class _TestSchemaStr(Schema):
     value = ValueEnum(_TestEnumStr, required=True, allow_none=True)
     name = NameEnum(_TestEnumStr, required=True, allow_none=True)
 

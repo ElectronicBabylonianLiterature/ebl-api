@@ -1,7 +1,5 @@
-from typing import Sequence
-
-import factory.fuzzy  # pyre-ignore[21]
-import pydash  # pyre-ignore[21]
+import factory.fuzzy
+import pydash
 
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -44,7 +42,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import Word
 
 
-class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
+class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
 
@@ -124,9 +122,7 @@ class LineVariantFactory(factory.Factory):
         ),
     )
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
-    manuscripts: Sequence[ManuscriptLine] = factory.List(
-        [factory.SelfAttribute("..manuscript")], TupleFactory
-    )
+    manuscripts = factory.List([factory.SelfAttribute("..manuscript")], TupleFactory)
 
 
 class LineFactory(factory.Factory):
@@ -140,9 +136,7 @@ class LineFactory(factory.Factory):
         )
 
     number = factory.Sequence(lambda n: LineNumber(n))
-    variants: Sequence[LineVariant] = factory.List(
-        [factory.SelfAttribute("..variant")], TupleFactory
-    )
+    variants = factory.List([factory.SelfAttribute("..variant")], TupleFactory)
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")
 

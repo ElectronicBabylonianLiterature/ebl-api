@@ -1,5 +1,5 @@
 import attr
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -35,7 +35,7 @@ COLLECTION = "fragments"
 
 
 ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
-    TransliteratedFragmentFactory.build(),  # pyre-ignore[16]
+    TransliteratedFragmentFactory.build(),
     text=Text(
         (
             TextLine(

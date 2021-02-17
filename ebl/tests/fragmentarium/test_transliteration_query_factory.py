@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.fragmentarium.application.transliteration_query_factory import (
     TransliterationQueryFactory,

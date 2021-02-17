@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore[21]
+import falcon
 
 from ebl.bibliography.web.bibliography_entries import (
     BibliographyEntriesResource,
@@ -7,9 +7,7 @@ from ebl.bibliography.web.bibliography_entries import (
 from ebl.context import Context
 
 
-def create_bibliography_routes(
-    api: falcon.API, context: Context, spec  # pyre-ignore[11]
-):
+def create_bibliography_routes(api: falcon.API, context: Context, spec):
     bibliography = context.get_bibliography()
     bibliography_resource = BibliographyResource(bibliography)
     bibliography_entries = BibliographyEntriesResource(bibliography)

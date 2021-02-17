@@ -1,7 +1,7 @@
 import re
 from typing import Optional, Sequence
 
-from pydash import uniq_with  # pyre-ignore
+from pydash import uniq_with
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry

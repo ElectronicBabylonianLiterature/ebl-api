@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
@@ -21,7 +21,6 @@ from ebl.transliteration.domain.tokens import ValueToken
 class ParallelLineSchema(LineBaseSchema):
     prefix = fields.Constant("//")
     content = fields.Function(
-        # pyre-ignore[16]
         lambda obj: [OneOfTokenSchema().dump(ValueToken.of(obj.display_value))],
         lambda value: value,
     )
@@ -39,7 +38,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> ParallelFragment:
         return ParallelFragment(
             data["has_cf"],
@@ -50,11 +49,11 @@ class ParallelFragmentSchema(ParallelLineSchema):
         )
 
 
-class TextIdSchema(Schema):  # pyre-ignore[11]
+class TextIdSchema(Schema):
     category = fields.Integer(required=True, validate=validate.Range(min=0))
     index = fields.Integer(required=True, validate=validate.Range(min=0))
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_id(self, data, **kwargs) -> TextId:
         return TextId(data["category"], data["index"])
 
@@ -64,7 +63,7 @@ class ChapterNameSchema(Schema):
     version = fields.String(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_id(self, data, **kwargs) -> ChapterName:
         return ChapterName(data["stage"], data["version"], data["name"])
 
@@ -77,7 +76,7 @@ class ParallelTextSchema(ParallelLineSchema):
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> ParallelText:
         return ParallelText(
             data["has_cf"],
@@ -94,6 +93,6 @@ class ParallelCompositionSchema(ParallelLineSchema):
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> ParallelComposition:
         return ParallelComposition(data["has_cf"], data["name"], data["line_number"])

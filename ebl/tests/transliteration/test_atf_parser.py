@@ -1,7 +1,7 @@
 from typing import List
 
-import pytest  # pyre-ignore[21]
-from hamcrest.library import starts_with  # pyre-ignore[21]
+import pytest
+from hamcrest.library import starts_with
 
 from ebl.errors import DataError
 from ebl.tests.assertions import assert_exception_has_errors
@@ -60,7 +60,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,line_numbers",
     [
         ("invalid", [1]),
@@ -76,7 +76,7 @@ def test_invalid_atf(atf, line_numbers) -> None:
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n1. x", [2]), ("1. x\n@obverse\n1. x\n1. x", [4])]
 )
 def test_duplicate_labels(atf, line_numbers) -> None:

@@ -1,9 +1,7 @@
-from typing import List
-
 import attr
 
-from lark import Token  # pyre-ignore[21]
-from lark.visitors import Transformer, v_args  # pyre-ignore[21]
+from lark import Token
+from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
@@ -25,8 +23,8 @@ class ObjectData:
     text: str = ""
 
 
-class AtLineTransformer(Transformer):  # pyre-ignore[11]
-    def ebl_atf_at_line__free_text(self, content: List[Token]):  # pyre-ignore[11]
+class AtLineTransformer(Transformer):
+    def ebl_atf_at_line__free_text(self, content):
         return "".join(content)
 
     @v_args(inline=True)
@@ -57,41 +55,41 @@ class AtLineTransformer(Transformer):  # pyre-ignore[11]
     def ebl_atf_at_line__heading(self, number):
         return HeadingAtLine(number)
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__OBJECT(self, object_: Token):
         return ObjectData(atf.Object(object_))
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__generic_object(self, text: str):
         return ObjectData(atf.Object.OBJECT, text)
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__fragment(self, text: str):
         return ObjectData(atf.Object.FRAGMENT, text)
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__SURFACE(self, surface: Token):
-        return SurfaceLabel.from_label(atf.Surface.from_atf(surface))
+        return SurfaceLabel.from_label(atf.Surface.from_atf(surface))  # pyre-ignore[6]
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__generic_surface(self, text: str):
         return SurfaceLabel.from_label(atf.Surface.SURFACE, text=text)
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__face(self, text: Token):
         return SurfaceLabel.from_label(atf.Surface.FACE, text=str(text))
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__edge(self, text: str = ""):
         return SurfaceLabel.from_label(atf.Surface.EDGE, text=text)
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__surface_with_status(self, surface: SurfaceLabel, statuses):
         return SurfaceAtLine(
             SurfaceLabel(statuses.children, surface.surface, surface.text)
         )
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_at_line__object_with_status(self, object_: ObjectData, statuses):
         return ObjectAtLine(
             ObjectLabel(statuses.children, object_.object, object_.text)

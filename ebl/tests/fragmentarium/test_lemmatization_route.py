@@ -1,7 +1,7 @@
 import json
 
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import falcon
+import pytest
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -15,7 +15,7 @@ from ebl.transliteration.application.lemmatization_schema import (
 
 TOKEN = LemmatizationToken("kur", tuple())
 LEMMATIZATION = Lemmatization(((TOKEN,),))
-# pyre-ignore[16]
+
 SERIALIZED = {"lemmatization": [[LemmatizationTokenSchema().dump(TOKEN)]]}
 
 

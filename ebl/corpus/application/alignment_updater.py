@@ -1,7 +1,7 @@
 from typing import List
 
 import attr
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
+from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
@@ -44,7 +44,7 @@ class AlignmentUpdater(ChapterUpdater):
             ]
             raise AlignmentError(f"Invalid alignment index {alignment_index}.")
 
-    @singledispatchmethod  # pyre-ignore[56]
+    @singledispatchmethod
     def visit(self, item: TextItem) -> None:
         super().visit(item)
 

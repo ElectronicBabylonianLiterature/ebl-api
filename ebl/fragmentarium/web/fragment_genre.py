@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore[21]
+import falcon
 from falcon import Response, Request
 
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -12,14 +12,13 @@ class FragmentGenreResource:
     def __init__(self, updater: FragmentUpdater):
         self._updater = updater
 
-    @falcon.before(require_scope, "transliterate:fragments")  # pyre-ignore[56]
-    # pyre-ignore[11]
+    @falcon.before(require_scope, "transliterate:fragments")
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_genres(
                 parse_museum_number(number),
-                GenreSchema().load(req.media["genres"], many=True),  # pyre-ignore[16]
+                GenreSchema().load(req.media["genres"], many=True),
                 user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)

@@ -1,8 +1,8 @@
 import json
 
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
-from freezegun import freeze_time  # pyre-ignore[21]
+import falcon
+import pytest
+from freezegun import freeze_time
 
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate

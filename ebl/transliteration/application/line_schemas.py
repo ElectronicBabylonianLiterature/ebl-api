@@ -1,4 +1,4 @@
-from marshmallow import EXCLUDE, Schema, fields, post_load  # pyre-ignore
+from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.note_line_part_schemas import (
@@ -11,7 +11,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 
 
-class LineBaseSchema(Schema):  # pyre-ignore[11]
+class LineBaseSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
@@ -23,7 +23,7 @@ class TextLineSchema(LineBaseSchema):
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> TextLine:
         return TextLine.of_iterable(data["line_number"], data["content"])
 
@@ -31,13 +31,12 @@ class TextLineSchema(LineBaseSchema):
 class ControlLineSchema(LineBaseSchema):
     prefix = fields.String(required=True)
     content = fields.Function(
-        # pyre-ignore[16]
         lambda obj: [OneOfTokenSchema().dump(ValueToken.of(obj.content))],
-        lambda value: OneOfTokenSchema().load(value, many=True),  # pyre-ignore[16]
+        lambda value: OneOfTokenSchema().load(value, many=True),
         required=True,
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> ControlLine:
         return ControlLine(
             data["prefix"], " ".join(token.value for token in data["content"])
@@ -48,7 +47,7 @@ class EmptyLineSchema(LineBaseSchema):
     prefix = fields.Constant("")
     content = fields.Constant([])
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> EmptyLine:
         return EmptyLine()
 
@@ -56,7 +55,6 @@ class EmptyLineSchema(LineBaseSchema):
 class NoteLineSchema(LineBaseSchema):
     prefix = fields.Constant("#note: ")
     content = fields.Function(
-        # pyre-ignore[16]
         lambda obj: OneOfTokenSchema().dump(
             [ValueToken.of(part.value) for part in obj.parts], many=True
         ),
@@ -64,6 +62,6 @@ class NoteLineSchema(LineBaseSchema):
     )
     parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data, **kwargs) -> NoteLine:
         return NoteLine(data["parts"])

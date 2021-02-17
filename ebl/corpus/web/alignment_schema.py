@@ -1,6 +1,6 @@
 from typing import Optional
 
-from marshmallow import Schema, fields, post_load, ValidationError  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, ValidationError
 
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.transliteration.domain.alignment import AlignmentToken
@@ -14,14 +14,14 @@ from ebl.transliteration.domain.lark_parser import (
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
-class AlignmentTokenSchema(Schema):  # pyre-ignore[11]
+class AlignmentTokenSchema(Schema):
     value = fields.String(required=True)
     alignment = fields.Integer(missing=None)
     variant = fields.String(missing="", load_only=True)
     type = fields.String(missing="", load_only=True)
     language = fields.String(missing="", load_only=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_alignment_token(self, data: dict, **kwargs) -> AlignmentToken:
         return AlignmentToken(
             data["value"], data["alignment"], self._create_variant(data)
@@ -58,7 +58,7 @@ class ManuscriptAlignmentSchema(Schema):
         fields.Integer(), required=True, data_key="omittedWords"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_manuscript_alignment(
         self, data: dict, **kwargs
     ) -> ManuscriptLineAlignment:
@@ -74,7 +74,7 @@ class AlignmentSchema(Schema):
         data_key="alignment",
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_alignment(self, data: dict, **kwargs) -> Alignment:
         return Alignment(
             tuple(tuple(tuple(variant) for variant in line) for line in data["lines"])

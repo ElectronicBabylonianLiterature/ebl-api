@@ -1,8 +1,8 @@
 import json
 
 import attr
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import falcon
+import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.manuscript import (
