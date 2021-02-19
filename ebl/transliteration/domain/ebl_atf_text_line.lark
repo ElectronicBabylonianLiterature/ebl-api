@@ -299,7 +299,9 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
                  | "š" | "ū" | "ṣ" | "ṭ" | "₄"
 
-_greek: greek_word (_WORD_SEPARATOR greek_word)*
+_greek: greek_token (_WORD_SEPARATOR greek_token)*
+?greek_token: greek_word
+            | column
 greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosure | greek_word_part)*
 ?greek_word_part: greek_letter
                 | unidentified_sign
