@@ -575,7 +575,8 @@ akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
 ### Greek
 
 ```ebnf
-greek = greek-word, { word-separator, greek-word };
+greek = greek-token, { word-separator, greek-token };
+greek-token: greek-word | column;
 greek-word = { greek-writing | greek-presence },
              greek-writing,
              { greek-writing |  greek-presence };
