@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 falcon = "~=2.0.0"
 falcon-auth = "*"
-cryptography = "==3.3.2"
 pymongo = "*"
 pydash = "*"
 requests = "*"
@@ -24,6 +23,7 @@ joblib = "*"
 tqdm = "*"
 marshmallow-oneofschema = "*"
 singledispatchmethod = "*"
+pycryptodomex = "*"
 
 [dev-packages]
 pytest = "*"
