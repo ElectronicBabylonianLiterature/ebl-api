@@ -576,7 +576,7 @@ akkadian-alphabet = 'ʾ' | 'A' | 'B' | 'D' | 'E' | 'G' | 'H' | 'I' | 'K' | 'L'
 
 ```ebnf
 greek = greek-token, { word-separator, greek-token };
-greek-token: greek-word | column;
+greek-token = greek-word | column;
 greek-word = { greek-writing | greek-presence },
              greek-writing,
              { greek-writing |  greek-presence };
@@ -584,7 +584,7 @@ greek-presence = open_presence | close_presence;
 greek-writing = greek-letter
               | unknown-number-of-signs
               | unknown;
-greek-letter = greek-alphabet, flag
+greek-letter = greek-alphabet, flag;
 greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 'ε'
                | 'Ζ' | 'ζ' | 'Η' | 'η' | 'Θ' | 'θ' | 'Ι' | 'ι' | 'Κ' | 'κ'
                | 'Λ' | 'λ' | 'Μ' | 'μ' | 'Ν' | 'ν' | 'Ξ' | 'ξ' | 'Ο' | 'ο'
