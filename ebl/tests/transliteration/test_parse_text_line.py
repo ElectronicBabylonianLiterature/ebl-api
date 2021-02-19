@@ -1184,6 +1184,21 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
+        (
+            "1. %grc &2 α & ε",
+            [
+                TextLine.of_iterable(
+                    LineNumber(1),
+                    (
+                        LanguageShift.of("%grc"),
+                        Column.of(2),
+                        GreekWord.of([GreekLetter.of("α")]),
+                        Column.of(),
+                        GreekWord.of([GreekLetter.of("ε")]),
+                    ),
+                )
+            ],
+        ),
     ],
 )
 def test_parse_text_line(line: str, expected_tokens: List[Line]) -> None:
