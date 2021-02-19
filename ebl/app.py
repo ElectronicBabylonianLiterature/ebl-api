@@ -3,11 +3,12 @@ from base64 import b64decode
 
 import falcon
 import sentry_sdk
+from cryptography.hazmat.backends import default_backend
+from cryptography.x509 import load_pem_x509_certificate
 from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
-from Cryptodome.PublicKey import RSA
 
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
@@ -34,8 +35,9 @@ from ebl.users.infrastructure.auth0 import Auth0Backend
 
 
 def decode_certificate(encoded_certificate):
-    certificate = b64decode(encoded_certificate).decode()
-    return RSA.import_key(certificate).exportKey("PEM")
+    certificate = b64decode(encoded_certificate)
+    cert_obj = load_pem_x509_certificate(certificate, default_backend())
+    return cert_obj.public_key()
 
 
 def set_sentry_user(id_: str) -> None:
