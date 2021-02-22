@@ -51,8 +51,8 @@ class MuseumNumberString(fields.String):
 class ApiManuscriptSchema(ManuscriptSchema):
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
     colophon = fields.Function(
-        lambda manuscript: "\n".join(line.atf for line in manuscript.colophon),
-        lambda value: parse_atf_lark(value).lines,
+        lambda manuscript: manuscript.colophon.atf,
+        lambda value: parse_atf_lark(value),
         required=True,
     )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)

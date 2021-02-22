@@ -25,8 +25,12 @@ from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
     ParallelLineSchema,
 )
+from ebl.transliteration.application.text_schema import (
+    TextSchema as TransliterationSchema,
+)
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.domain.text import Text as Transliteration
 
 
 class ManuscriptSchema(Schema):
@@ -55,7 +59,9 @@ class ManuscriptSchema(Schema):
         required=True,
     )
     notes = fields.String(required=True)
-    colophon: fields.Field = fields.Nested(OneOfLineSchema, many=True, missing=tuple())
+    colophon: fields.Field = fields.Nested(
+        TransliterationSchema, missing=Transliteration()
+    )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
     @post_load
@@ -70,7 +76,7 @@ class ManuscriptSchema(Schema):
             data["provenance"],
             data["type"],
             data["notes"],
-            tuple(data["colophon"]),
+            data["colophon"],
             tuple(data["references"]),
         )
 

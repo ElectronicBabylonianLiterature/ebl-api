@@ -5,7 +5,7 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.text import Text
 
 
 class SiglumEnum(Enum):
@@ -122,7 +122,7 @@ class Manuscript:
     provenance: Provenance = Provenance.NINEVEH
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
-    colophon: Sequence[Line] = tuple()
+    colophon: Text = Text()
     references: Sequence[Reference] = tuple()
 
     @accession.validator
