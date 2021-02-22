@@ -29,7 +29,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD
     secrets:
       - source: mongo_users
-        target: \docker-entrypoint-initdb.d\create-users.js
+        target: /docker-entrypoint-initdb.d/create-users.js
   mongo-express:
     image: mongo-express
     restart: always

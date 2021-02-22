@@ -78,6 +78,8 @@ NOUN_POS_TAGS = [
     "YN",
 ]
 
+STYLES = {"Oracc ATF": 0, "Oracc C-ATF": 1, "CDLI": 2}
+
 not_lemmatized = {}
 error_lines = []
 success = []
@@ -500,7 +502,6 @@ class ATFImporter:
             return
 
         try:
-
             # insert transliteration
             self.insert_translitertions(
                 transliteration_factory,
@@ -515,7 +516,13 @@ class ATFImporter:
 
             success.append(filename + " successfully imported")
             self.logger.info(
-                Util.print_frame('Conversion of "' + filename + '.atf" finished')
+                Util.print_frame(
+                    'Conversion of "'
+                    + filename
+                    + '.atf" finished (mueseum number"'
+                    + museum_number
+                    + '")'
+                )
             )
 
         except Exception as e:
@@ -554,13 +561,19 @@ class ATFImporter:
             "-s",
             "--style",
             required=False,
-            help="Specify import style by entering one of the following: oracc|cdli. "
+            help="Specify import style by entering one of the following: |Oracc "
+            "ATF|Oracc C-ATF|CDLI"
             "If omitted defaulting to oracc.",
         )
 
         args = parser.parse_args()
 
         self.username = args.author
+
+        if args.style in STYLES:
+            style = STYLES[args.style]
+        else:
+            style = 0
 
         # parse glossary
         self.lemgwpos_cf, self.forms_senses, self.lemposgw_cfgw = self.parse_glossary(
@@ -578,13 +591,15 @@ class ATFImporter:
                 filename = split[-1]
                 filename = filename.split(".")[0]
 
-                self.logger.info(Util.print_frame("Importing " + filename + ".atf"))
+                self.logger.info(
+                    Util.print_frame("Importing " + filename + ".atf as: " + args.style)
+                )
                 if args.author is None:
                     self.username = input(
                         "Please enter the fragments author to import " + filename + ": "
                     )
                 # convert all lines
-                self.atf_preprocessor = ATFPreprocessor(args.logdir, args.style)
+                self.atf_preprocessor = ATFPreprocessor(args.logdir, style)
                 converted_lines = self.atf_preprocessor.convert_lines(
                     filepath, filename
                 )

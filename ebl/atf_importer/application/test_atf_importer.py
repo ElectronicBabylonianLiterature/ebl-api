@@ -15,7 +15,7 @@ class Test_ATF_Importer(unittest.TestCase):
 
     # Test case for insertion of placeholder if "<<"
     def test_placeholder_insert(self):
-        atf_preprocessor = ATFPreprocessor("../logs", "oracc")
+        atf_preprocessor = ATFPreprocessor("../logs", 0)
         converted_lines = []
         c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
             "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ "
@@ -45,9 +45,7 @@ class Test_ATF_Importer(unittest.TestCase):
 
         # reformat test lines
         a = ATFImporter(database)
-        a.lemmas_cfforms = Util.get_test_lemmas_cfforms()
-        a.cfforms_senes = Util.get_test_cfforms_senses()
-        a.cfform_guideword = Util.get_test_cfform_guidword()
+
         ebl_lines = a.convert_to_ebl_lines(
             converted_lines,
             "cpp_3_1_16",

@@ -50,6 +50,8 @@ class ATFPreprocessor:
         atf = re.sub(r"([[<])([*:])(.*)", r"\1 \2\3", atf)  # convert [* => [  <* => < *
         atf = re.sub(r"(\*)([]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
 
+        atf = atf.replace("--", "-")  # new rule 22.02.2021
+
         atf = atf.replace("\t", " ")  # convert tabs to spaces
         atf = " ".join(atf.split())  # remove multiple spaces
 
@@ -110,6 +112,7 @@ class ATFPreprocessor:
         if atf[0].isdigit():
 
             atf = atf.replace("–", "-")
+            atf = atf.replace("--", "-")  # new rule 22.02.2021
 
             callback_normalize = (
                 lambda pat: pat.group(1)
@@ -165,6 +168,60 @@ class ATFPreprocessor:
 
         return atf
 
+    def do_c_atf_replacements(self, atf):
+
+        if atf[0].isdigit():
+
+            atf = atf.replace("–", "-")
+            atf = atf.replace("--", "-")  # new rule 22.02.2021
+
+            callback_normalize = (
+                lambda pat: pat.group(1)
+                + pat.group(2)
+                + self.normalize_numbers(pat.group(3))
+            )  # convert subscripts
+            atf = re.sub(r"(.*?)([A-z])(\d+)", callback_normalize, atf)
+
+            atf = self.replace_special_characters(atf)
+
+            atfsplit = re.split(r"([⌈⸢])(.*)?([⌉⸣])", atf)
+            opening = ["⌈", "⸢"]
+            closing = ["⌉", "⸣"]
+
+            open_found = False
+            new_atf = ""
+            for part in atfsplit:
+
+                if open_found:
+                    atf_part = part.replace("-", "#.")  # convert "-" to "."
+                    atf_part = atf_part.replace("–", "#.")  # convert "-" to "."
+                    atf_part = atf_part.replace(" ", "# ")  # convert " " to "#"
+                    if not (atf_part in opening or atf_part in closing):
+                        atf_part += "#"
+                        new_atf += atf_part
+                elif not (part in opening or part in closing):
+                    new_atf += part
+
+                if part in opening:
+                    open_found = True
+                elif part in closing:
+                    open_found = False
+
+            atf = new_atf
+
+            def callback_upper(pat):
+                return pat.group(1).upper().replace("-", ".")
+
+            atf = re.sub(r"\(\$.*\$\)", r"($___$)", atf)
+
+            atf = atf.replace("\t", " ")  # convert tabs to spaces
+            atf = " ".join(atf.split())  # remove multiple spaces
+
+        elif atf == "$ rest broken":
+            atf = "$ rest of side broken"
+
+        return atf
+
     def line_not_converted(self, original_atf, atf):
         error = "Could not convert line"
         self.logger.error(error + ": " + atf)
@@ -179,8 +236,8 @@ class ATFPreprocessor:
     def check_original_line(self, atf):
         self.EBL_PARSER.parse(atf)
 
-        # special case convert note lines in cdli
-        if self.style == "cdli":
+        # special case convert note lines in cdli atf
+        if self.style == 2:
             if atf[0] == "#" and atf[1] == " ":
                 atf = atf.replace("#", "#note:")
 
@@ -305,7 +362,9 @@ class ATFPreprocessor:
 
         except Exception:
 
-            if self.style == "cdli":
+            if self.style == 1:
+                atf = self.do_c_atf_replacements(atf)
+            elif self.style == 2:
                 atf = self.do_cdli_replacements(atf)
             else:
                 atf = self.do_oracc_replacements(atf)
