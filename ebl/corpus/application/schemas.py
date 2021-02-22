@@ -69,7 +69,7 @@ class ManuscriptSchema(Schema):
             data["provenance"],
             data["type"],
             data["notes"],
-            tuple(data["references"]),
+            references=tuple(data["references"]),
         )
 
 

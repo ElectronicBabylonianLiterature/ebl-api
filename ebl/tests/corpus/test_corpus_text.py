@@ -54,6 +54,7 @@ PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 NOTES = "some notes"
+COLOPHON = (TextLine(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),)),)
 REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
@@ -113,6 +114,7 @@ TEXT = Text(
                     PROVENANCE,
                     TYPE,
                     NOTES,
+                    COLOPHON,
                     REFERENCES,
                 ),
             ),
@@ -148,6 +150,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
+    assert TEXT.chapters[0].manuscripts[0].colophon == COLOPHON
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
