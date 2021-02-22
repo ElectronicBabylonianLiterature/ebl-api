@@ -49,9 +49,8 @@ class MuseumNumberString(fields.String):
 
 
 class ApiManuscriptSchema(ManuscriptSchema):
-    # pyre-fixme[15]
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
-    colophon: fields.Field = fields.Function(
+    colophon = fields.Function(
         lambda manuscript: "\n".join(line.atf for line in manuscript.colophon),
         lambda value: parse_atf_lark(value).lines,
         required=True,
@@ -157,7 +156,6 @@ class ApiLineVariantSchema(LineVariantSchema):
         exclude = ("note", "parallel_lines")
         unknown = EXCLUDE
 
-    # pyre-fixme[15]
     reconstruction = fields.Function(
         lambda line: "".join(
             [
@@ -204,7 +202,6 @@ class ApiLineSchema(Schema):
 
 class ApiChapterSchema(ChapterSchema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
-    # pyre-fixme[15]
     uncertain_fragments = fields.List(
         MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
     )
