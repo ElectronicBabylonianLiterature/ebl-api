@@ -23,6 +23,7 @@ from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
     ParallelLineSchema,
 )
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
@@ -102,6 +103,7 @@ def to_dict(text: Text, include_documents=False):
                         "provenance": manuscript.provenance.long_name,
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
+                        "colophon": TextSchema().dump(manuscript.colophon),
                         "references": (
                             ApiReferenceSchema if include_documents else ReferenceSchema
                         )().dump(manuscript.references, many=True),
@@ -162,4 +164,5 @@ def test_serialize():
 
 
 def test_deserialize():
-    assert deserialize(to_dict(TEXT)) == strip_documents(TEXT)
+    d = to_dict(TEXT)
+    assert deserialize(d) == strip_documents(TEXT)

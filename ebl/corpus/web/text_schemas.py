@@ -19,11 +19,13 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.lark_parser import (
     PARSE_ERRORS,
+    parse_atf_lark,
     parse_line_number,
     parse_note_line,
     parse_parallel_line,
     parse_paratext,
     parse_text_line,
+    TransliterationError,
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
@@ -47,9 +49,18 @@ class MuseumNumberString(fields.String):
             raise ValidationError("Invalid museum number.", attr) from error
 
 
+def _deserialize_colophon(value):
+    try:
+        return parse_atf_lark(value)
+    except TransliterationError as error:
+        raise ValidationError(f"Invalid colophon: {value}.", "colophon") from error
+
+
 class ApiManuscriptSchema(ManuscriptSchema):
-    # pyre-fixme[15]
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
+    colophon = fields.Function(
+        lambda manuscript: manuscript.colophon.atf, _deserialize_colophon, required=True
+    )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
 
 
@@ -151,7 +162,6 @@ class ApiLineVariantSchema(LineVariantSchema):
         exclude = ("note", "parallel_lines")
         unknown = EXCLUDE
 
-    # pyre-fixme[15]
     reconstruction = fields.Function(
         lambda line: "".join(
             [
@@ -198,7 +208,6 @@ class ApiLineSchema(Schema):
 
 class ApiChapterSchema(ChapterSchema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
-    # pyre-fixme[15]
     uncertain_fragments = fields.List(
         MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
     )

@@ -32,6 +32,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 )
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Joiner,
@@ -57,6 +58,9 @@ class ManuscriptFactory(factory.Factory):
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
     notes = factory.Faker("sentence")
+    colophon = Transliteration.of_iterable(
+        [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
+    )
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )
