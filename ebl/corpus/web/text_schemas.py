@@ -19,6 +19,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.lark_parser import (
     PARSE_ERRORS,
+    parse_atf_lark,
     parse_line_number,
     parse_note_line,
     parse_parallel_line,
@@ -50,6 +51,11 @@ class MuseumNumberString(fields.String):
 class ApiManuscriptSchema(ManuscriptSchema):
     # pyre-fixme[15]
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
+    colophon: fields.Field = fields.Function(
+        lambda manuscript: "\n".join(line.atf for line in manuscript.colophon),
+        lambda value: parse_atf_lark(value).lines,
+        required=True,
+    )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
 
 

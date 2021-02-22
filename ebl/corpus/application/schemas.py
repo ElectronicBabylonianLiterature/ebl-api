@@ -55,6 +55,7 @@ class ManuscriptSchema(Schema):
         required=True,
     )
     notes = fields.String(required=True)
+    colophon: fields.Field = fields.Nested(OneOfLineSchema, many=True, missing=tuple())
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
     @post_load
@@ -69,7 +70,8 @@ class ManuscriptSchema(Schema):
             data["provenance"],
             data["type"],
             data["notes"],
-            references=tuple(data["references"]),
+            tuple(data["colophon"]),
+            tuple(data["references"]),
         )
 
 

@@ -69,6 +69,7 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                         "provenance": manuscript.provenance.long_name,
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
+                        "colophon": "\n".join(line.atf for line in manuscript.colophon),
                         "references": ApiReferenceSchema().dump(references, many=True),
                     }
                     for manuscript in chapter.manuscripts

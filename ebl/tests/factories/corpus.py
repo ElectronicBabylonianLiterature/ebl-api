@@ -57,6 +57,9 @@ class ManuscriptFactory(factory.Factory):
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
     notes = factory.Faker("sentence")
+    colophon = (
+        TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),)),
+    )
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )

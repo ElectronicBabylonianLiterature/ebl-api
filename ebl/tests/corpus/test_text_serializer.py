@@ -102,6 +102,9 @@ def to_dict(text: Text, include_documents=False):
                         "provenance": manuscript.provenance.long_name,
                         "type": manuscript.type.long_name,
                         "notes": manuscript.notes,
+                        "colophon": OneOfLineSchema().dump(
+                            manuscript.colophon, many=True
+                        ),
                         "references": (
                             ApiReferenceSchema if include_documents else ReferenceSchema
                         )().dump(manuscript.references, many=True),
