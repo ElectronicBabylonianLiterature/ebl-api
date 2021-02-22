@@ -1,8 +1,8 @@
 from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.application.atf_importer import ATFImporter
 import unittest
-import mongomock
-import pytest 
+import mongomock  # pyre-ignore[21]
+import pytest  # pyre-ignore[21]
 
 
 @pytest.fixture
