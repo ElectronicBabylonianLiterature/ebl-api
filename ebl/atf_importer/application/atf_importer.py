@@ -570,11 +570,7 @@ class ATFImporter:
 
         self.username = args.author
 
-        if args.style in STYLES:
-            style = STYLES[args.style]
-        else:
-            style = 0
-
+        style = STYLES[args.style] if args.style in STYLES else 0
         # parse glossary
         self.lemgwpos_cf, self.forms_senses, self.lemposgw_cfgw = self.parse_glossary(
             args.glossary

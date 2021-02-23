@@ -58,7 +58,6 @@ class ATFPreprocessor:
         return atf
 
     def normalize_numbers(self, digits):
-        result = ""
         numbers = {
             "0": "₀",
             "1": "₁",
@@ -72,10 +71,7 @@ class ATFPreprocessor:
             "9": "₉",
         }
 
-        for digit in digits:
-            result += numbers[digit]
-
-        return result
+        return "".join(numbers[digit] for digit in digits)
 
     def replace_special_characters(self, string):
         special_chars = {
@@ -237,9 +233,8 @@ class ATFPreprocessor:
         self.EBL_PARSER.parse(atf)
 
         # special case convert note lines in cdli atf
-        if self.style == 2:
-            if atf[0] == "#" and atf[1] == " ":
-                atf = atf.replace("#", "#note:")
+        if self.style == 2 and atf[0] == "#" and atf[1] == " ":
+            atf = atf.replace("#", "#note:")
 
         # words serializer oracc parser
         tree = self.ORACC_PARSER.parse(atf)
