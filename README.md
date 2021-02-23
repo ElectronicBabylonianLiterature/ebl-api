@@ -338,13 +338,29 @@ Importing and conversion of external .atf files which are encoded according to t
 To run use:
 <!-- usage -->
 ```sh-session
-$ pipenv run python -m ebl-atf_importer.application.atf_importer.py [-h] -i INPUT [-o OUTPUT] [-t] [-v]
+$ pipenv run python -m ebl-atf_importer.application.atf_importer.py [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
+
 ```
 <!-- usagestop -->
 #### Command line options
-  * `-h` shows help message and exits the script
-  * `-i` path to the input directory (`required`)
-  * `-g` path to the glossary file (`required`)
+  * `-h` shows help message and exits the script.
+  * `-i` INPUT, `--input` INPUT : Path of the input directory (`required`).
+  * `-l` LOGDIR, `--logdir` LOGDIR : Path of the log files directory (`required`).
+  * `-g` GLOSSARY, `--glossary` GLOSSARY : Path to the glossary file (`required`).
+  * `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported fragements. If not specified a name needs to be entered manually for every fragment. `optional`).
+  * `-s` STYLE, `--style` STYLE : Specify import style by entering one of the following:|Oracc ATF|Oracc C-ATF|CDLI| If omitted defaulting to Oracc ATF. `optional`).
+
+* The importer always tries to import all .atf files from one given input `-i` folder. To every imported folder a glossary file must be specified via `-g`. The import style can be set via the `-s` option, which is not mandatory. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment. 
+
+Example calls:
+
+```sh-session
+$ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "atf_importer"
+$ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_cdli_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "CDLI"
+$ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
+```
+
+
 #### Testing
   * run pytest from command line within `atf-importer/application`:
   <!-- testing -->
