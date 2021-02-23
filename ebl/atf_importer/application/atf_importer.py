@@ -571,11 +571,7 @@ class ATFImporter:
         self.username = args.author
 
         style = STYLES[args.style] if args.style in STYLES else 0
-        if args.style is None:
-            import_style = "Oracc ATF"
-        else:
-            import_style = args.style
-
+        import_style = "Oracc ATF" if args.style is None else args.style
         # parse glossary
         self.lemgwpos_cf, self.forms_senses, self.lemposgw_cfgw = self.parse_glossary(
             args.glossary
