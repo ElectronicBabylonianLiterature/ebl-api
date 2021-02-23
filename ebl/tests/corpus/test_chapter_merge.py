@@ -1,5 +1,5 @@
 import attr
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.domain.chapter import (
     Chapter,

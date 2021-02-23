@@ -1,6 +1,6 @@
 import re
 
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.tests.factories.fragment import FragmentFactory

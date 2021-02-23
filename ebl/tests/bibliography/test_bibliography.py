@@ -1,5 +1,5 @@
-import pytest  # pyre-ignore
-from mockito import verify  # pyre-ignore
+import pytest
+from mockito import verify
 
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory

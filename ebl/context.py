@@ -1,5 +1,5 @@
 import attr
-from falcon_auth.backends import AuthBackend  # pyre-ignore
+from falcon_auth.backends import AuthBackend
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
@@ -21,7 +21,7 @@ from ebl.transliteration.application.sign_repository import SignRepository
 
 @attr.s(auto_attribs=True, frozen=True)
 class Context:
-    auth_backend: AuthBackend  # pyre-ignore[11]
+    auth_backend: AuthBackend
     word_repository: WordRepository
     sign_repository: SignRepository
     public_file_repository: FileRepository

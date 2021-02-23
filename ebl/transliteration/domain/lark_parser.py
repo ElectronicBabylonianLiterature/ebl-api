@@ -1,10 +1,10 @@
 from itertools import dropwhile
-from typing import Any, Callable, Mapping, Sequence, Tuple, Type, Union
+from typing import Any, Sequence, Tuple, Type, Union
 
-from lark.exceptions import ParseError, UnexpectedInput, VisitError  # pyre-ignore[21]
-from lark.lark import Lark  # pyre-ignore[21]
-from lark.visitors import v_args  # pyre-ignore[21]
-import pydash  # pyre-ignore[21]
+from lark.exceptions import ParseError, UnexpectedInput, VisitError
+from lark.lark import Lark
+from lark.visitors import v_args
+import pydash
 
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
@@ -70,57 +70,57 @@ LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__
 
 def parse_word(atf: str) -> Word:
     tree = WORD_PARSER.parse(atf)
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_normalized_akkadian_word(atf: str) -> Word:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__akkadian_word")
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_greek_word(atf: str) -> GreekWord:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__greek_word")
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_erasure(atf: str) -> Sequence[EblToken]:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__erasure")
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_note_line(atf: str) -> NoteLine:
     tree = NOTE_LINE_PARSER.parse(atf)
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_parallel_line(atf: str) -> ParallelLine:
     tree = PARALLEL_LINE_PARSER.parse(atf)
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_text_line(atf: str) -> TextLine:
     tree = LINE_PARSER.parse(atf, start="text_line")
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
     tree = PARATEXT_PARSER.parse(atf)
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def parse_line_number(atf: str) -> AbstractLineNumber:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__line_number")
-    return LineTransformer().transform(tree)  # pyre-ignore[16]
+    return LineTransformer().transform(tree)
 
 
 def validate_line(line: Line) -> None:
@@ -159,22 +159,20 @@ def parse_atf_lark(atf_):
 
 
 def create_transliteration_error_data(error: Exception, line: str, line_number: int):
-    handlers: Mapping[Type, Callable[[Exception, str, int], dict]] = {
+    handlers = {
         UnexpectedInput: unexpected_input_error,
         ParseError: parse_error,
         EnclosureError: enclosure_error,
         VisitError: visit_error,
     }
-    for type_ in handlers:
+    for type_, handler in handlers.items():
         if isinstance(error, type_):
-            return handlers[type_](error, line, line_number)
+            return handler(error, line, line_number)  # pyre-ignore[6]
 
     raise error
 
 
-def unexpected_input_error(
-    error: UnexpectedInput, line: str, line_number: int  # pyre-ignore[11]
-):
+def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
     return {
@@ -185,7 +183,7 @@ def unexpected_input_error(
     }
 
 
-def parse_error(error: ParseError, line: str, line_number: int):  # pyre-ignore[11]
+def parse_error(error: ParseError, line: str, line_number: int):
     return {"description": f"Invalid line: {error}", "lineNumber": line_number + 1}
 
 
@@ -193,8 +191,8 @@ def enclosure_error(error: EnclosureError, line: str, line_number: int):
     return {"description": "Invalid brackets.", "lineNumber": line_number + 1}
 
 
-def visit_error(error: VisitError, line: str, line_number: int):  # pyre-ignore[11]
-    if isinstance(error.orig_exc, DuplicateStatusError):  # type: ignore
+def visit_error(error: VisitError, line: str, line_number: int):
+    if isinstance(error.orig_exc, DuplicateStatusError):
         return {"description": "Duplicate Status", "lineNumber": line_number + 1}
     else:
         raise error

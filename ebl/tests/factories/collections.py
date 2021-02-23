@@ -1,6 +1,6 @@
-import factory  # pyre-ignore
+import factory
 
 
-class TupleFactory(factory.BaseListFactory):  # pyre-ignore[11]
+class TupleFactory(factory.BaseListFactory):
     class Meta:
         model = tuple

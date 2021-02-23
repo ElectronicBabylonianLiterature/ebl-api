@@ -1,6 +1,6 @@
 import attr
-import pytest  # pyre-ignore[21]
-from freezegun import freeze_time  # pyre-ignore[21]
+import pytest
+from freezegun import freeze_time
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (

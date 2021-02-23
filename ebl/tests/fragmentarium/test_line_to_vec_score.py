@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[16
+import pytest
 
 from ebl.fragmentarium.application.matches.line_to_vec_score import (
     score,

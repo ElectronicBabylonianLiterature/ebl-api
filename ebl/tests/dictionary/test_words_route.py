@@ -1,8 +1,8 @@
 import json
 from urllib import parse
 
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon
+import pytest
 
 
 @pytest.fixture

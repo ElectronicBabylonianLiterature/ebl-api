@@ -1,7 +1,7 @@
 import json
 
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon
+import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.web.dtos import create_response_dto

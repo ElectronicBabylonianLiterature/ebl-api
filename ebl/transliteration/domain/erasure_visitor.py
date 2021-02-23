@@ -1,6 +1,6 @@
 from typing import MutableSequence, Sequence
 
-from lark.tree import Tree  # pyre-ignore[21]
+from lark.tree import Tree
 
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import ErasureState
@@ -19,9 +19,7 @@ class ErasureVisitor(TokenVisitor):
         self._tokens.append(token.set_erasure(self._state))
 
 
-def set_erasure_state(
-    tree: Tree, state: ErasureState  # pyre-ignore[11]
-) -> Sequence[Token]:
+def set_erasure_state(tree: Tree, state: ErasureState) -> Sequence[Token]:
     visitor = ErasureVisitor(state)
     for child in tree.children:
         visitor.visit(child)

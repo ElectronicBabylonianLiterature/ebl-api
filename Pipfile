@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 falcon = "~=2.0.0"
 falcon-auth = "*"
-cryptography = "*"
+cryptography = "==3.3.2"
 pymongo = "*"
 pydash = "*"
 requests = "*"
@@ -37,7 +37,7 @@ flake8 = "*"
 pyhamcrest = "*"
 flake8-bugbear = "*"
 httpretty = "*"
-pyre-check = "==0.0.57"
+pyre-check = "==0.0.59"
 black = "==19.3b0"
 
 [requires]

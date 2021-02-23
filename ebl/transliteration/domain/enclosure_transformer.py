@@ -1,4 +1,4 @@
-from lark.visitors import Transformer, v_args  # pyre-ignore[21]
+from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -17,7 +17,7 @@ from ebl.transliteration.domain.lark import tokens_to_value_tokens
 from ebl.transliteration.domain.tokens import ErasureState
 
 
-class EnclosureTransformer(Transformer):  # pyre-ignore[11]
+class EnclosureTransformer(Transformer):
     def ebl_atf_text_line__open_accidental_omission(self, _):
         return AccidentalOmission.open()
 

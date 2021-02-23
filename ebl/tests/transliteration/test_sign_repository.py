@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.errors import NotFoundError
 from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value

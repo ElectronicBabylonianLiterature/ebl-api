@@ -1,6 +1,6 @@
 import datetime
 
-import dictdiffer  # pyre-ignore
+import dictdiffer
 
 from ebl.mongo_collection import MongoCollection
 

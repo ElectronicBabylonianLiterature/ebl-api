@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.transliteration.domain.atf import to_sub_index, sub_index_to_int
 

@@ -1,15 +1,13 @@
-import falcon  # pyre-ignore[21]
-from apispec import APISpec  # pyre-ignore[21]
-from apispec.ext.marshmallow import MarshmallowPlugin  # pyre-ignore[21]
-from falcon_apispec import FalconPlugin  # pyre-ignore[21]
+import falcon
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
+from falcon_apispec import FalconPlugin
 
 
 API_VERSION = "0.0.6"
 
 
-def create_spec(
-    api: falcon.API, issuer: str, audience: str  # pyre-ignore[11]
-) -> APISpec:  # pyre-ignore[11]
+def create_spec(api: falcon.API, issuer: str, audience: str) -> APISpec:
     spec = APISpec(
         title="Electronic Babylonian Literature",
         version=API_VERSION,

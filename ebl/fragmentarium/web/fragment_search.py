@@ -1,7 +1,7 @@
 from typing import Union
 from typing import Tuple
 
-import falcon  # pyre-ignore
+import falcon
 
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
@@ -56,10 +56,8 @@ class FragmentSearch:
         else:
             return id, ""
 
-    @falcon.before(require_scope, "read:fragments")  # pyre-ignore[56]
-    def on_get(
-        self, req: falcon.Request, resp: falcon.Response  # pyre-ignore[11]
-    ) -> None:
+    @falcon.before(require_scope, "read:fragments")
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """---
         description: >-
           Finds fragments matching the given query.
@@ -106,6 +104,6 @@ class FragmentSearch:
             type: string
         """
         infos = self._dispatch(req.params)
-        resp.media = ApiFragmentInfoSchema(many=True).dump(infos)  # pyre-ignore[16,28]
+        resp.media = ApiFragmentInfoSchema(many=True).dump(infos)
         if req.params.keys() <= CACHED_COMMANDS:
             resp.cache_control = ["private", "max-age=600"]

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Optional, Sequence, Type, TypeVar
 
 import attr
-import pydash  # pyre-ignore[21]
+import pydash
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.atf import Flag

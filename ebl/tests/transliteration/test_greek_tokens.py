@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.tests.asserts import assert_token_serialization
@@ -67,7 +67,7 @@ def test_akkadian_word(
 
     serialized = {
         "type": "GreekWord",
-        "parts": OneOfTokenSchema().dump(word.parts, many=True),  # pyre-ignore[16]
+        "parts": OneOfTokenSchema().dump(word.parts, many=True),
         "uniqueLemma": [],
         "alignment": None,
         "variant": None,

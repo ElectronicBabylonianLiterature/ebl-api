@@ -1,8 +1,8 @@
 from typing import Iterable, Sequence, Type
 
-from lark.lexer import Token  # pyre-ignore[21]
-from lark.tree import Tree  # pyre-ignore[21]
-from lark.visitors import v_args  # pyre-ignore[21]
+from lark.lexer import Token
+from lark.tree import Tree
+from lark.visitors import v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
@@ -84,12 +84,9 @@ class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
     def ebl_atf_text_line__uncertain_foot_separator(self, _) -> MetricalFootSeparator:
         return MetricalFootSeparator.uncertain()
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_text_line__akkadian_word(
-        self,
-        parts: Tree,  # pyre-ignore[11]
-        modifiers: Sequence[Flag],
-        closing_enclosures: Tree,
+        self, parts: Tree, modifiers: Sequence[Flag], closing_enclosures: Tree
     ) -> AkkadianWord:
         return AkkadianWord.of(
             tuple(parts.children + closing_enclosures.children), modifiers
@@ -100,16 +97,14 @@ class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
     ) -> Sequence[Flag]:
         return tuple(set(modifiers))
 
-    @v_args(inline=True)  # pyre-ignore[56]
-    def ebl_atf_text_line__normalized_modifier(
-        self, modifier: Token  # pyre-ignore[11]
-    ) -> Flag:
+    @v_args(inline=True)
+    def ebl_atf_text_line__normalized_modifier(self, modifier: Token) -> Flag:
         return Flag(modifier)
 
     def ebl_atf_text_line__akkadian_string(
         self, children: Iterable[Token]
     ) -> ValueToken:
-        return ValueToken.of("".join(children))
+        return ValueToken.of("".join(children))  # pyre-ignore[6]
 
     def ebl_atf_text_line__separator(self, _) -> Joiner:
         return Joiner.hyphen()
@@ -127,7 +122,7 @@ class GreekTransformer(EnclosureTransformer, SignTransformer):
             children.children if isinstance(children, Tree) else children
         )
 
-    @v_args(inline=True)  # pyre-ignore[56]
+    @v_args(inline=True)
     def ebl_atf_text_line__greek_letter(self, alphabet, flags) -> GreekLetter:
         return GreekLetter.of(alphabet.value, flags)
 

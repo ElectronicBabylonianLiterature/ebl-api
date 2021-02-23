@@ -1,7 +1,7 @@
 from typing import cast, Iterable, List, Optional, Sequence
 
 import attr
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
+from singledispatchmethod import singledispatchmethod
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
@@ -29,7 +29,7 @@ class TextHydrator(TextVisitor):
         else:
             return cast(Text, self._text)
 
-    @singledispatchmethod  # pyre-ignore[56]
+    @singledispatchmethod
     def visit(self, item: TextItem) -> None:
         pass
 

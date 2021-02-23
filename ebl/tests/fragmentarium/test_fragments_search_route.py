@@ -1,5 +1,5 @@
-import falcon  # pyre-ignore
-import pytest  # pyre-ignore
+import falcon
+import pytest
 
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo

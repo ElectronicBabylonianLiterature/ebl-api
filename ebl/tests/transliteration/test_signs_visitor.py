@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.lark_parser import parse_line

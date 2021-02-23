@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
@@ -61,9 +61,7 @@ LINES = [
         CompositeAtLine(atf.Composite.MILESTONE, "o"),
         {
             "prefix": "@",
-            "content": [
-                OneOfTokenSchema().dump(ValueToken.of("m=locator o"))  # pyre-ignore[16]
-            ],
+            "content": [OneOfTokenSchema().dump(ValueToken.of("m=locator o"))],
             "type": "CompositeAtLine",
             "composite": "MILESTONE",
             "text": "o",
@@ -358,9 +356,7 @@ LINES = [
         {
             "type": "TextLine",
             "prefix": "1.",
-            "lineNumber": OneOfLineNumberSchema().dump(  # pyre-ignore[16]
-                LineNumber(1)
-            ),
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
             "content": OneOfTokenSchema().dump(
                 [
                     DocumentOrientedGloss.open(),
@@ -513,7 +509,7 @@ LINES = [
                 },
                 {
                     "type": "BibliographyPart",
-                    "reference": ReferenceSchema().dump(  # pyre-ignore[16]
+                    "reference": ReferenceSchema().dump(
                         Reference(BibliographyId("A"), ReferenceType.DISCUSSION, "1-4")
                     ),
                 },
@@ -543,7 +539,6 @@ LINES = [
             "content": [OneOfTokenSchema().dump(ValueToken.of("cf. F K.1 &d o! 1"))],
             "displayValue": "cf. F K.1 &d o! 1",
             "hasCf": True,
-            # pyre-ignore[16]
             "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
             "hasDuplicates": True,
             "surface": {

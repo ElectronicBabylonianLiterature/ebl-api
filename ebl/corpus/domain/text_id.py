@@ -1,5 +1,5 @@
 import attr
-import roman  # pyre-ignore[21]
+import roman
 
 
 @attr.s(auto_attribs=True, frozen=True)

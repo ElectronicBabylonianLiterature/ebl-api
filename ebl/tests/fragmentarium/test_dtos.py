@@ -1,6 +1,6 @@
 import attr
-import pydash  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import pydash
+import pytest
 
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo

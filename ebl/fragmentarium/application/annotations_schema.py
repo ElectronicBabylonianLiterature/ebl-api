@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load
 
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
@@ -9,7 +9,7 @@ from ebl.fragmentarium.domain.annotation import (
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
-class GeometrySchema(Schema):  # pyre-ignore[11]
+class GeometrySchema(Schema):
     x = fields.Float(required=True)
     y = fields.Float(required=True)
     width = fields.Float(required=True)

@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_pager_schema import FragmentPagerInfoSchema

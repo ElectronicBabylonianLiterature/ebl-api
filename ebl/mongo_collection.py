@@ -1,15 +1,15 @@
 from typing import Any
 
-import inflect  # pyre-ignore[21]
-from pymongo.collection import Collection  # pyre-ignore[21]
-from pymongo.database import Database  # pyre-ignore[21]
-from pymongo.errors import DuplicateKeyError  # pyre-ignore[21]
+import inflect
+from pymongo.collection import Collection
+from pymongo.database import Database
+from pymongo.errors import DuplicateKeyError
 
 from ebl.errors import DuplicateError, NotFoundError
 
 
 class MongoCollection:
-    def __init__(self, database: Database, collection: str):  # pyre-ignore[11]
+    def __init__(self, database: Database, collection: str):
         self.__database = database
         self.__collection = collection
         self.__resource_noun = (
@@ -66,5 +66,5 @@ class MongoCollection:
     def __not_found_error(self, query):
         return NotFoundError(f"{self.__resource_noun} {query} not found.")
 
-    def __get_collection(self) -> Collection:  # pyre-ignore[11]
+    def __get_collection(self) -> Collection:
         return self.__database[self.__collection]

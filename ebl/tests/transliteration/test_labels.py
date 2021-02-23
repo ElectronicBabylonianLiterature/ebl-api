@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.transliteration.domain.atf import Status, Surface, Object
 from ebl.transliteration.domain.labels import (
@@ -66,7 +66,7 @@ UNPARSEABLE_LABELS: List[Tuple[str, str, str, Label]] = [
 ]
 
 
-@pytest.mark.parametrize("label,status,_,expected", LABELS)  # pyre-ignore[56]
+@pytest.mark.parametrize("label,status,_,expected", LABELS)
 def test_parse_label(label, status, _, expected) -> None:
     assert parse_label(f"{label}{status}") == expected
 

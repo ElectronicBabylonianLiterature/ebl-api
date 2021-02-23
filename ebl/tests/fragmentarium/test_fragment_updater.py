@@ -1,5 +1,5 @@
-import pytest  # pyre-ignore
-from freezegun import freeze_time  # pyre-ignore
+import pytest
+from freezegun import freeze_time
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema

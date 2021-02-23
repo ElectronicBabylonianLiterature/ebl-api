@@ -1,7 +1,7 @@
 from typing import List, Optional, cast
 
 import attr
-from singledispatchmethod import singledispatchmethod  # pyre-ignore[21]
+from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
@@ -21,7 +21,7 @@ class ChapterUpdater(TextVisitor):
         else:
             raise Defect("Result text was not set.")
 
-    @singledispatchmethod  # pyre-ignore[56]
+    @singledispatchmethod
     def visit(self, item: TextItem) -> None:
         pass
 

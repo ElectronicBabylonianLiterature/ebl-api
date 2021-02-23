@@ -3,9 +3,9 @@ from functools import reduce
 from typing import Iterable, List
 
 import attr
-import pydash  # pyre-ignore
-from joblib import Parallel, delayed  # pyre-ignore
-from tqdm import tqdm  # pyre-ignore
+import pydash
+from joblib import Parallel, delayed
+from tqdm import tqdm
 
 from ebl.app import create_context
 

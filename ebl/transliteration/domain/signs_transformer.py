@@ -1,4 +1,4 @@
-from lark.visitors import Transformer, v_args  # pyre-ignore[21]
+from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int
@@ -17,7 +17,7 @@ from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 
 
-class SignTransformer(Transformer):  # pyre-ignore[11]
+class SignTransformer(Transformer):
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
         return UnidentifiedSign.of(flags)

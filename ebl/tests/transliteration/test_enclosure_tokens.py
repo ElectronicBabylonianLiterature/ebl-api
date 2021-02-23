@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema

@@ -1,7 +1,5 @@
-from typing import Sequence
-
-import factory.fuzzy  # pyre-ignore[21]
-import pydash  # pyre-ignore[21]
+import factory.fuzzy
+import pydash
 
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -34,6 +32,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 )
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Joiner,
@@ -44,7 +43,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import Word
 
 
-class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
+class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
 
@@ -59,6 +58,9 @@ class ManuscriptFactory(factory.Factory):  # pyre-ignore[11]
     provenance = factory.fuzzy.FuzzyChoice(Provenance)
     type = factory.fuzzy.FuzzyChoice(ManuscriptType)
     notes = factory.Faker("sentence")
+    colophon = Transliteration.of_iterable(
+        [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
+    )
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )
@@ -124,9 +126,7 @@ class LineVariantFactory(factory.Factory):
         ),
     )
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
-    manuscripts: Sequence[ManuscriptLine] = factory.List(
-        [factory.SelfAttribute("..manuscript")], TupleFactory
-    )
+    manuscripts = factory.List([factory.SelfAttribute("..manuscript")], TupleFactory)
 
 
 class LineFactory(factory.Factory):
@@ -140,9 +140,7 @@ class LineFactory(factory.Factory):
         )
 
     number = factory.Sequence(lambda n: LineNumber(n))
-    variants: Sequence[LineVariant] = factory.List(
-        [factory.SelfAttribute("..variant")], TupleFactory
-    )
+    variants = factory.List([factory.SelfAttribute("..variant")], TupleFactory)
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")
 

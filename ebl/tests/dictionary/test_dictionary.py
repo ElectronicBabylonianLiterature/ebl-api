@@ -1,6 +1,6 @@
-import pydash  # pyre-ignore
-import pytest  # pyre-ignore
-from freezegun import freeze_time  # pyre-ignore
+import pydash
+import pytest
+from freezegun import freeze_time
 
 from ebl.errors import NotFoundError
 

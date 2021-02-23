@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Type, Any
 
-from marshmallow import fields  # pyre-ignore[21]
+from marshmallow import fields
 
 
-class EnumField(fields.Field, ABC):  # pyre-ignore[11]
+class EnumField(fields.Field, ABC):
     default_error_messages = {
         "invalid_value": "Invalid value.",
         "not_enum": "Not a valid Enum.",
@@ -25,7 +25,7 @@ class EnumField(fields.Field, ABC):  # pyre-ignore[11]
         try:
             return self._deserialize_enum(value)
         except (KeyError, ValueError) as error:
-            raise self.make_error("invalid_value") from error  # pyre-ignore[16]
+            raise self.make_error("invalid_value") from error
 
     @abstractmethod
     def _serialize_enum(self, value: Enum):

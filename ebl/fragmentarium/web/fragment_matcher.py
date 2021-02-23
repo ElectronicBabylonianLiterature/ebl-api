@@ -1,4 +1,4 @@
-from falcon import Request, Response, falcon  # pyre-ignore[21]
+from falcon import Request, Response, falcon
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
@@ -12,11 +12,10 @@ class FragmentMatcherResource:
     def __init__(self, fragment_matcher: FragmentMatcher):
         self.fragment_matcher = fragment_matcher
 
-    @falcon.before(require_scope, "transliterate:fragments")  # pyre-ignore[56]
-    # pyre-ignore[11]
+    @falcon.before(require_scope, "transliterate:fragments")
     def on_get(self, req: Request, resp: Response, number) -> None:
         try:
-            resp.media = LineToVecRankingSchema().dump(  # pyre-ignore[16]
+            resp.media = LineToVecRankingSchema().dump(
                 self.fragment_matcher.rank_line_to_vec(number)
             )
         except (ValueError, NotFoundError) as error:

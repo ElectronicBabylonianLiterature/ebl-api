@@ -10,7 +10,7 @@ from ebl.corpus.web.alignment_schema import AlignmentSchema, AlignmentTokenSchem
 
 
 def test_alignment() -> None:
-    assert AlignmentSchema().load(  # pyre-ignore[16]
+    assert AlignmentSchema().load(
         {
             "alignment": [
                 [

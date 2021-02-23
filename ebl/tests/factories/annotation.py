@@ -1,4 +1,4 @@
-import factory.fuzzy  # pyre-ignore
+import factory.fuzzy
 
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
@@ -9,7 +9,7 @@ from ebl.fragmentarium.domain.annotation import (
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
-class GeometryFactory(factory.Factory):  # pyre-ignore[11]
+class GeometryFactory(factory.Factory):
     class Meta:
         model = Geometry
 

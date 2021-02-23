@@ -1,8 +1,8 @@
 import json
 
 import attr
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import falcon
+import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.manuscript import (
@@ -114,6 +114,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
         "provenance": Provenance.BABYLON.long_name,
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
+        "colophon": "",
         "references": [ReferenceSchema().dump(ReferenceFactory.build())],
     }
 
@@ -163,6 +164,7 @@ AMBIGUOUS_MANUSCRIPTS = [
         "provenance": Provenance.BABYLON.long_name,
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
+        "colophon": "",
         "references": [],
     },
     {
@@ -175,6 +177,7 @@ AMBIGUOUS_MANUSCRIPTS = [
         "provenance": Provenance.BABYLON.long_name,
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
+        "colophon": "",
         "references": [],
     },
 ]
@@ -191,6 +194,7 @@ INVALID_MUSEUM_NUMBER = [
         "provenance": Provenance.BABYLON.long_name,
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
+        "colophon": "",
         "references": [],
     }
 ]

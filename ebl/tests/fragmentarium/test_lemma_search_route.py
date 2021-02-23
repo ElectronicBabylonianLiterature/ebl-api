@@ -1,5 +1,5 @@
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import falcon
+import pytest
 
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 

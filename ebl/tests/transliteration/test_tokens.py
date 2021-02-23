@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 import ebl.transliteration.domain.atf as atf
 from ebl.tests.asserts import assert_token_serialization

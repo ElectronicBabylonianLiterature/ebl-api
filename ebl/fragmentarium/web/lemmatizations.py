@@ -1,5 +1,5 @@
-import falcon  # pyre-ignore[21]
-from marshmallow import Schema, post_load  # pyre-ignore[21]
+import falcon
+from marshmallow import Schema, post_load
 
 from ebl.marshmallowschema import validate
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
@@ -12,7 +12,7 @@ from marshmallow import fields
 from ebl.transliteration.domain.lemmatization import Lemmatization
 
 
-class LemmatizationSchema(Schema):  # pyre-ignore[11]
+class LemmatizationSchema(Schema):
     tokens = fields.List(
         fields.Nested(LemmatizationTokenSchema, many=True),
         required=True,

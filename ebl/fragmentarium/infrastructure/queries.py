@@ -8,11 +8,11 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
 NUMBER_OF_NEEDS_REVISION: int = 20
-PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 7
+PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 10
 
 
 def museum_number_is(number: MuseumNumber) -> dict:
-    serialized = MuseumNumberSchema().dump(number)  # pyre-ignore[16]
+    serialized = MuseumNumberSchema().dump(number)
     return {f"museumNumber.{key}": value for key, value in serialized.items()}
 
 
@@ -90,7 +90,7 @@ def aggregate_latest() -> List[dict]:
 
 def aggregate_needs_revision() -> List[dict]:
     return [
-        {"$match": {"record.type": "Transliteration"}},
+        {"$match": {"record.type": "Transliteration", **HAS_TRANSLITERATION}},
         {"$unwind": "$record"},
         {"$sort": {"record.date": 1}},
         {
@@ -173,6 +173,7 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
             "$match": {
                 "$and": [
                     {"text.lines": []},
+                    {"notes": ""},
                     {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
                     {"uncuratedReferences": {"$exists": True}},
                     {max_uncurated_reference: {"$exists": False}},

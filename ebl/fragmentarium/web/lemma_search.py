@@ -1,6 +1,6 @@
 from typing import Tuple
 
-import falcon  # pyre-ignore[21]
+import falcon
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.users.web.require_scope import require_scope

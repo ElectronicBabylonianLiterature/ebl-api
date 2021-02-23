@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -196,7 +196,7 @@ def test_reading(
     serialized = {
         "type": "Reading",
         "name": expected_name,
-        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
@@ -324,7 +324,7 @@ def test_logogram(
     serialized = {
         "type": "Logogram",
         "name": expected_name,
-        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
         "subIndex": sub_index,
         "modifiers": modifiers,
         "flags": [flag.value for flag in flags],
@@ -416,7 +416,7 @@ def test_number(
     serialized = {
         "type": "Number",
         "name": expected_name,
-        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),  # pyre-ignore[16]
+        "nameParts": OneOfTokenSchema().dump(name_parts, many=True),
         "modifiers": modifiers,
         "subIndex": expected_sub_index,
         "flags": [flag.value for flag in flags],

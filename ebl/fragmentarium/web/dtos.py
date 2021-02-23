@@ -1,5 +1,5 @@
 import attr
-from marshmallow import fields, pre_dump  # pyre-ignore
+from marshmallow import fields, pre_dump
 
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -20,9 +20,9 @@ class FragmentDtoSchema(FragmentSchema):
 
 
 def create_response_dto(fragment: Fragment, user: User, has_photo: bool):
-    return FragmentDtoSchema(  # pyre-ignore[16,28]
-        context={"user": user, "has_photo": has_photo}
-    ).dump(fragment)
+    return FragmentDtoSchema(context={"user": user, "has_photo": has_photo}).dump(
+        fragment
+    )
 
 
 def parse_museum_number(number: str) -> MuseumNumber:

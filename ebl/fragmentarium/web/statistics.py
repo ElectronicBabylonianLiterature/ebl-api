@@ -1,4 +1,4 @@
-import falcon  # pyre-ignore
+import falcon
 
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 
@@ -10,6 +10,6 @@ class StatisticsResource:
     def __init__(self, fragmentarium: Fragmentarium):
         self._fragmentarium = fragmentarium
 
-    def on_get(self, _req, resp: falcon.Response) -> None:  # pyre-ignore[11]
+    def on_get(self, _req, resp: falcon.Response) -> None:
         resp.media = self._fragmentarium.statistics()
         resp.cache_control = ["public", "max-age=600"]

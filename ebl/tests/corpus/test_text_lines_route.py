@@ -1,8 +1,8 @@
 import json
 
 import attr
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import falcon
+import pytest
 
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory
@@ -152,7 +152,6 @@ def test_updating_invalid_chapter_index(client):
 
 
 TOO_MANY_NOTES = {
-    # pyre-ignore[16]
     **ApiLineSchema().dump(TextFactory.build().chapters[0].lines[0]),
     "reconstruction": "kur\n#note: extra note\n#note: extra note",
 }

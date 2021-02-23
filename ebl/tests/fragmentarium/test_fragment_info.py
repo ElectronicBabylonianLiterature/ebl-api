@@ -5,9 +5,9 @@ from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
 
-FRAGMENT = FragmentFactory.build()  # pyre-ignore[16]
+FRAGMENT = FragmentFactory.build()
 FRAGMENT_WITH_REFERENCES = FragmentFactory.build(
-    references=(ReferenceFactory.build(), ReferenceFactory.build())  # pyre-ignore[16]
+    references=(ReferenceFactory.build(), ReferenceFactory.build())
 )
 
 

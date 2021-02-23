@@ -1,16 +1,9 @@
 from abc import abstractmethod
 from typing import Mapping, Type
 
-import pydash  # pyre-ignore[21]
-from marshmallow import (  # pyre-ignore[21]
-    EXCLUDE,
-    Schema,
-    fields,
-    post_dump,
-    post_load,
-    validate,
-)
-from marshmallow_oneofschema import OneOfSchema  # pyre-ignore[21]
+import pydash
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load, validate
+from marshmallow_oneofschema import OneOfSchema
 
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.domain import atf
@@ -70,7 +63,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-class BaseTokenSchema(Schema):  # pyre-ignore[11]
+class BaseTokenSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
@@ -105,7 +98,7 @@ class EnclosureSchema(BaseTokenSchema):
     side = NameEnum(Side, required=True)
 
     @abstractmethod
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_token(self, data, **kwargs) -> Token:
         ...
 
@@ -437,7 +430,7 @@ class GlossSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
 
     @abstractmethod
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_token(self, data, **kwargs) -> Gloss:
         ...
 
@@ -547,7 +540,7 @@ WORD_SCHEMAS: Mapping[str, Type[BaseWordSchema]] = {
 }
 
 
-class OneOfWordSchema(OneOfSchema):  # pyre-ignore[11]
+class OneOfWordSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[BaseWordSchema]] = WORD_SCHEMAS
 

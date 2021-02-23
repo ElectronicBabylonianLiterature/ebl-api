@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore[21]
+import pytest
 
 
 from ebl.transliteration.domain.atf import Flag
@@ -93,7 +93,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
 
     serialized = {
         "type": "AkkadianWord",
-        "parts": OneOfTokenSchema().dump(word.parts, many=True),  # pyre-ignore[16]
+        "parts": OneOfTokenSchema().dump(word.parts, many=True),
         "modifiers": [modifier.value for modifier in word.modifiers],
         "uniqueLemma": [],
         "alignment": None,

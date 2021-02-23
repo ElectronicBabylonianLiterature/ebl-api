@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.asserts import assert_token_serialization
@@ -109,9 +109,9 @@ def test_word(language, unique_lemma) -> None:
         "lemmatizable": word.lemmatizable,
         "alignable": word.lemmatizable,
         "erasure": erasure.name,
-        "parts": OneOfTokenSchema().dump(parts, many=True),  # pyre-ignore[16]
+        "parts": OneOfTokenSchema().dump(parts, many=True),
         "alignment": 1,
-        "variant": OneOfWordSchema().dump(variant),  # pyre-ignore[16]
+        "variant": OneOfWordSchema().dump(variant),
     }
 
     assert_token_serialization(word, serialized)
@@ -148,12 +148,12 @@ def test_clean_value() -> None:
     assert word.clean_value == "kur-ra/pa{KUR}"
 
 
-@pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)  # pyre-ignore[56]
+@pytest.mark.parametrize("word,expected", LEMMATIZABLE_TEST_WORDS)
 def test_lemmatizable(word, expected) -> None:
     assert word.lemmatizable == expected
 
 
-@pytest.mark.parametrize("word,_", LEMMATIZABLE_TEST_WORDS)  # pyre-ignore[56]
+@pytest.mark.parametrize("word,_", LEMMATIZABLE_TEST_WORDS)
 def test_alignable(word, _) -> None:
     assert word.alignable == word.lemmatizable
 

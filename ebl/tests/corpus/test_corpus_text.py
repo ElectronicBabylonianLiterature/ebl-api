@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import pytest  # pyre-ignore[21]
+import pytest
 
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -31,6 +31,7 @@ from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
@@ -54,7 +55,10 @@ PERIOD = Period.OLD_BABYLONIAN
 PROVENANCE = Provenance.NINEVEH
 TYPE = ManuscriptType.LIBRARY
 NOTES = "some notes"
-REFERENCES = (ReferenceFactory.build(),)  # pyre-ignore[16]
+COLOPHON = Transliteration.of_iterable(
+    [TextLine(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
+)
+REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
@@ -113,6 +117,7 @@ TEXT = Text(
                     PROVENANCE,
                     TYPE,
                     NOTES,
+                    COLOPHON,
                     REFERENCES,
                 ),
             ),
@@ -148,6 +153,7 @@ def test_constructor_sets_correct_fields():
     assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
     assert TEXT.chapters[0].manuscripts[0].type == TYPE
     assert TEXT.chapters[0].manuscripts[0].notes == NOTES
+    assert TEXT.chapters[0].manuscripts[0].colophon == COLOPHON
     assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
     assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
     assert TEXT.chapters[0].lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION

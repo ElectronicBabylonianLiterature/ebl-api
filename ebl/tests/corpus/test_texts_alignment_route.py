@@ -1,8 +1,8 @@
 import json
 
 import attr
-import falcon  # pyre-ignore[21]
-import pytest  # pyre-ignore[21]
+import falcon
+import pytest
 
 from ebl.corpus.web.api_serializer import serialize
 from ebl.tests.factories.corpus import TextFactory

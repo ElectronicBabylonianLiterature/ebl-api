@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
@@ -16,14 +16,14 @@ from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 
 def parse_text(atf: str):
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__text")
-    return TextLineTransformer().transform(tree)  # pyre-ignore[16]
+    return TextLineTransformer().transform(tree)
 
 
 def expected_language_part(language: Language, transliteration: str) -> LanguagePart:
     return LanguagePart.of_transliteration(language, parse_text(transliteration))
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,expected_line",
     [
         ("#note: this is a note ", NoteLine([StringPart("this is a note ")])),

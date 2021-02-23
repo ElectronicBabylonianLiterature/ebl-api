@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validate  # pyre-ignore[21]
+from marshmallow import Schema, fields, post_load, validate
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.chapter import (
@@ -25,14 +25,18 @@ from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
     ParallelLineSchema,
 )
+from ebl.transliteration.application.text_schema import (
+    TextSchema as TransliterationSchema,
+)
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.domain.text import Text as Transliteration
 
 
-class ManuscriptSchema(Schema):  # pyre-ignore[11]
+class ManuscriptSchema(Schema):
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
-    museum_number = fields.Nested(
+    museum_number: fields.Field = fields.Nested(
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
     accession = fields.String(required=True)
@@ -55,9 +59,12 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
         required=True,
     )
     notes = fields.String(required=True)
+    colophon: fields.Field = fields.Nested(
+        TransliterationSchema, missing=Transliteration()
+    )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_manuscript(self, data: dict, **kwargs) -> Manuscript:
         return Manuscript(
             data["id"],
@@ -69,6 +76,7 @@ class ManuscriptSchema(Schema):  # pyre-ignore[11]
             data["provenance"],
             data["type"],
             data["notes"],
+            data["colophon"],
             tuple(data["references"]),
         )
 
@@ -96,7 +104,7 @@ class ManuscriptLineSchema(Schema):
         fields.Integer(), required=True, data_key="omittedWords"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         return ManuscriptLine(
             data["manuscript_id"],
@@ -108,14 +116,16 @@ class ManuscriptLineSchema(Schema):
 
 
 class LineVariantSchema(Schema):
-    reconstruction = fields.Nested(OneOfTokenSchema, required=True, many=True)
+    reconstruction: fields.Field = fields.Nested(
+        OneOfTokenSchema, required=True, many=True
+    )
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
     parallel_lines = fields.Nested(
         ParallelLineSchema, many=True, missing=tuple(), data_key="parallelLines"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
         return LineVariant(
             tuple(data["reconstruction"]),
@@ -137,7 +147,7 @@ class LineSchema(Schema):
         required=True, data_key="isBeginningOfSection"
     )
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
         return Line(
             data["number"],
@@ -154,13 +164,13 @@ class ChapterSchema(Schema):
     name = fields.String(required=True, validate=validate.Length(min=1))
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
-    uncertain_fragments = fields.Nested(
+    uncertain_fragments: fields.Field = fields.Nested(
         MuseumNumberSchema, many=True, missing=tuple(), data_key="uncertainFragments"
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
     parser_version = fields.String(missing="", data_key="parserVersion")
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
         return Chapter(
             Classification(data["classification"]),
@@ -185,7 +195,7 @@ class TextSchema(Schema):
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     chapters = fields.Nested(ChapterSchema, many=True, required=True)
 
-    @post_load  # pyre-ignore[56]
+    @post_load
     def make_text(self, data: dict, **kwargs) -> Text:
         return Text(
             data["category"],

@@ -1,4 +1,4 @@
-import pytest  # pyre-ignore
+import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -119,7 +119,7 @@ def test_text_line_of_iterable_normalized() -> None:
     assert line.atf == "1. %n kur"
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf",
     [
         "1. [{(he-pi₂ e]š-šu₂)}",

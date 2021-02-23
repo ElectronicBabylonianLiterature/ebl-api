@@ -1,8 +1,8 @@
 from typing import Any, Mapping
 
 import attr
-from gridfs import GridFS, GridOut  # pyre-ignore
-from pymongo.database import Database  # pyre-ignore
+from gridfs import GridFS, GridOut
+from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.files.application.file_repository import File, FileRepository
@@ -10,7 +10,7 @@ from ebl.files.application.file_repository import File, FileRepository
 
 @attr.s(auto_attribs=True, frozen=True)
 class GridFsFile(File):
-    _grid_out: GridOut  # pyre-ignore[11]
+    _grid_out: GridOut
 
     @property
     def metadata(self) -> Mapping[str, Any]:
@@ -32,7 +32,7 @@ class GridFsFile(File):
 
 
 class GridFsFileRepository(FileRepository):
-    def __init__(self, database: Database, collection: str):  # pyre-ignore[11]
+    def __init__(self, database: Database, collection: str):
         self._fs = GridFS(database, collection)
 
     def query_by_file_name(self, file_name: str) -> File:
@@ -41,4 +41,4 @@ class GridFsFileRepository(FileRepository):
         if grid_out is None:
             raise NotFoundError(f"File {file_name} not found.")
         else:
-            return GridFsFile(grid_out)  # pyre-ignore[19]
+            return GridFsFile(grid_out)
