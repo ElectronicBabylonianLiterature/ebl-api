@@ -1,6 +1,6 @@
 import os
 import glob
-from pymongo import MongoClient  # pyre-ignore[21]
+from pymongo import MongoClient  # pyre-ignore
 import logging
 import argparse
 from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
