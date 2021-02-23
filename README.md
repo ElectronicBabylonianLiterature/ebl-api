@@ -348,7 +348,7 @@ $ pipenv run python -m ebl-atf_importer.application.atf_importer.py [-h] -i INPU
  * `-l` LOGDIR, `--logdir` LOGDIR : Path of the log files directory (`required`).
  * `-g` GLOSSARY, `--glossary` GLOSSARY : Path to the glossary file (`required`).
  * `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported fragements. If not specified a name needs to be entered manually for every fragment (`optional`).
- * `-s` STYLE, `--style` STYLE : Specify import style by entering one of the following:|Oracc ATF|Oracc C-ATF|CDLI| If omitted defaulting to Oracc ATF (`optional`).
+ * `-s` STYLE, `--style` STYLE : Specify import style by entering one of the following: (`Oracc ATF`|`Oracc C-ATF`|`CDLI`). If omitted defaulting to Oracc ATF (`optional`).
 
 * The importer always tries to import all .atf files from one given input `-i` folder. To every imported folder a glossary file must be specified via `-g`. The import style can be set via the `-s` option, which is not mandatory. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment. 
 
@@ -360,6 +360,10 @@ $ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_imp
 $ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
 ```
 
+#### Troubleshooting
+
+If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparseale_lines_[fragment_file].txt`, `not_imported.txt`) and see which lines could not be parsed.
+If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `not_lemmatized.txt`.
 
 #### Testing
   * run pytest from command line within `atf-importer/application`:
