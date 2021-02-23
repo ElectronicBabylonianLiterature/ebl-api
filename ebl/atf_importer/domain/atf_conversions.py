@@ -1,11 +1,10 @@
 import re
 
-# pyre-ignore[21]
 from lark import Visitor
 from lark import lexer
 
 
-class Convert_Line_Dividers(Visitor):  # pyre-ignore[11]
+class Convert_Line_Dividers(Visitor):
     def oracc_atf_text_line__divider(self, tree):
         assert tree.data == "oracc_atf_text_line__divider"
         if tree.children[0] == "*":
