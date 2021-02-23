@@ -90,7 +90,7 @@ def aggregate_latest() -> List[dict]:
 
 def aggregate_needs_revision() -> List[dict]:
     return [
-        {"$match": {"record.type": "Transliteration"}},
+        {"$match": {"record.type": "Transliteration", **HAS_TRANSLITERATION}},
         {"$unwind": "$record"},
         {"$sort": {"record.date": 1}},
         {
