@@ -519,7 +519,7 @@ class ATFImporter:
                 Util.print_frame(
                     'Conversion of "'
                     + filename
-                    + '.atf" finished (mueseum number"'
+                    + '.atf" finished (museum number "'
                     + museum_number
                     + '")'
                 )
@@ -571,6 +571,11 @@ class ATFImporter:
         self.username = args.author
 
         style = STYLES[args.style] if args.style in STYLES else 0
+        if args.style is None:
+            import_style = "Oracc ATF"
+        else:
+            import_style = args.style
+
         # parse glossary
         self.lemgwpos_cf, self.forms_senses, self.lemposgw_cfgw = self.parse_glossary(
             args.glossary
@@ -588,7 +593,9 @@ class ATFImporter:
                 filename = filename.split(".")[0]
 
                 self.logger.info(
-                    Util.print_frame("Importing " + filename + ".atf as: " + args.style)
+                    Util.print_frame(
+                        "Importing " + filename + ".atf as: " + import_style
+                    )
                 )
                 if args.author is None:
                     self.username = input(
