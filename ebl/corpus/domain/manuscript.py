@@ -34,6 +34,8 @@ class ManuscriptType(SiglumEnum):
     VARIA = ("Varia", "Var")
     COMMENTARY = ("Commentary", "Com")
     QUOTATION = ("Quotation", "Quo")
+    EXCERPT = ("Excerpt", "Ex")
+    PARALLEL = ("Parallel", "Par")
 
 
 class Provenance(SiglumEnumWithParent):
