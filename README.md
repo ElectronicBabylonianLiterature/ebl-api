@@ -19,8 +19,7 @@
 
 Requirements:
 
-- [PyPy3.7](https://www.pypy.org) & pip
-
+* [PyPy3.7](https://www.pypy.org) & pip
 
 ```shell script
 pip install pipenv
@@ -29,10 +28,10 @@ pipenv install --dev
 
 The following are needed to run application:
 
-- a MongoDB database
-- Docker (optional, see [Running the application](#running-the-application))
-- [Auth0](https://auth0.com)
-- [Sentry](https://sentry.io)
+* a MongoDB database
+* Docker (optional, see [Running the application](#running-the-application))
+* [Auth0](https://auth0.com)
+* [Sentry](https://sentry.io)
 
 ### Gitpod
 
@@ -62,11 +61,11 @@ Use type hints in new code and add the to old code when making changes.
 
 ### Package dependencies
 
-- Avoid directed package dependency cycles.
-- Domain packages should depend only on other domain packages.
-- Application packages should depend only on application and domain packages.
-- Web, infrastructure, etc. should depend only on application and domain packges.
-- All packages can depend on common modules in the top-level ebl package.
+* Avoid directed package dependency cycles.
+* Domain packages should depend only on other domain packages.
+* Application packages should depend only on application and domain packages.
+* Web, infrastructure, etc. should depend only on application and domain packges.
+* All packages can depend on common modules in the top-level ebl package.
 
 Dependencies can be analyzed with
 [pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
@@ -92,7 +91,7 @@ See
 [fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser), and
 [sign-list-parser](https://github.com/ElectronicBabylonianLiterature/sign-list-parser)
 about generating the initial data. There have been chnages to the database structure since the
-scripts were initally used and they most likely require updates to work with latest version 
+scripts were initally used and they most likely require updates to work with latest version
 of the API.
 
 `pull-db.sh` script can be used to pull a database from an another MongoDB instance to
@@ -112,7 +111,7 @@ PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 
 ### Auth0
 
-An *API* and *Application* have to be setup in Auth0 and it the API needs to have the *Scopes* listed below. 
+An *API* and *Application* have to be setup in Auth0 and it the API needs to have the *Scopes* listed below.
 
 API *Identifier*, Application *Domain* (or the customdomain if one is used), and Application *Signing Certificate*
 are needed for the environment variables (see below). The whole certificate needs (everything in the field or the downloaded PEM file)
@@ -133,7 +132,7 @@ has to be base64 encoded before being added to the environment variable.
 `create:texts`,
 `annotate:fragments`,
 
-Folio scopes need to have the following format. 
+Folio scopes need to have the following format.
 
 `read:<Folio name>-folios`
 
@@ -167,7 +166,6 @@ function (user, context, callback) {
   callback(null, user, context);
 }
 ```
-
 
 #### Users
 
