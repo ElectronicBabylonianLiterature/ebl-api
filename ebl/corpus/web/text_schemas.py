@@ -135,7 +135,7 @@ class LineNumberString(fields.String):
 
 
 def _split_reconstruction(
-    reconstruction: str
+    reconstruction: str,
 ) -> Tuple[str, Optional[str], Sequence[str]]:
     [text, *rest] = reconstruction.split("\n")
     note = rest[0] if rest and rest[0].startswith("#note:") else None
@@ -144,7 +144,7 @@ def _split_reconstruction(
 
 
 def _parse_recontsruction(
-    reconstruction: str
+    reconstruction: str,
 ) -> Tuple[Sequence[Token], Optional[NoteLine], Sequence[ParallelLine]]:
     try:
         text, note, parallel_lines = _split_reconstruction(reconstruction)

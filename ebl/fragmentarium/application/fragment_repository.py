@@ -62,7 +62,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_transliterated_line_to_vec(
-        self
+        self,
     ) -> Dict[MuseumNumber, Tuple[LineToVecEncodings, ...]]:
         ...
 
