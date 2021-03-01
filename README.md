@@ -336,7 +336,7 @@ Importing and conversion of external .atf files which are encoded according to t
 To run use:
 <!-- usage -->
 ```sh-session
-$ pipenv run python -m ebl-atf_importer.application.atf_importer.py [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
+$ pipenv run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
 
 ```
 <!-- usagestop -->
