@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 
 import inflect
 from pymongo.collection import Collection
@@ -8,13 +8,16 @@ from pymongo.errors import DuplicateKeyError
 from ebl.errors import DuplicateError, NotFoundError
 
 
+def singlar(noun: str) -> str:
+    inflected = inflect.engine().singular_noun(noun)
+    return noun if inflected is False else cast(str, inflected)
+
+
 class MongoCollection:
     def __init__(self, database: Database, collection: str):
         self.__database = database
         self.__collection = collection
-        self.__resource_noun = (
-            inflect.engine().singular_noun(collection) or collection
-        ).title()
+        self.__resource_noun = singlar(collection)
 
     def insert_one(self, document):
         try:
