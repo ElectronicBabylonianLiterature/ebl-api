@@ -104,3 +104,55 @@ def parse_reconstruction(atf):
 def test_parse_reconstruction(lines, expected) -> None:
     atf = "\n".join(lines)
     assert parse_reconstruction(atf) == expected
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "lines,expected",
+    [
+        (
+            ["1. kur", "NinNA o iii 1. kur"],
+            (
+                (parse_text_line("1. kur"), None, tuple()),
+                (parse_manuscript("NinNA o iii 1. kur"),),
+            ),
+        ),
+        (
+            ["1. kur", "NinNA o iii 1. kur", "NinNA o iii 2. kur"],
+            (
+                (parse_text_line("1. kur"), None, tuple()),
+                (
+                    parse_manuscript("NinNA o iii 1. kur"),
+                    parse_manuscript("NinNA o iii 2. kur"),
+                ),
+            ),
+        ),
+        (
+            [
+                "1. kur",
+                "#note: a note",
+                "// (parallel line 1)",
+                "NinNA o iii 1. kur",
+                "NinNA o iii 2. kur",
+                "#note: a note",
+                "$ single ruling",
+            ],
+            (
+                (
+                    parse_text_line("1. kur"),
+                    parse_note_line("#note: a note"),
+                    (parse_parallel_line("// (parallel line 1)"),),
+                ),
+                (
+                    parse_manuscript("NinNA o iii 1. kur"),
+                    parse_manuscript(
+                        "NinNA o iii 2. kur\n#note: a note\n$ single ruling"
+                    ),
+                ),
+            ),
+        ),
+    ],
+)
+def test_parse_line_variant(lines, expected) -> None:
+    atf = "\n".join(lines)
+    tree = CHAPTER_PARSER.parse(atf, start="line_variant")
+    assert ChapterTransformer().transform(tree) == expected

@@ -39,3 +39,7 @@ class ChapterTransformer(
     @v_args(inline=True)
     def reconstruction(self, line, note, *parallels):
         return (line, note, tuple(parallels))
+
+    @v_args(inline=True)
+    def line_variant(self, reconstruction, *manuscripts):
+        return (reconstruction, tuple(manuscripts))
