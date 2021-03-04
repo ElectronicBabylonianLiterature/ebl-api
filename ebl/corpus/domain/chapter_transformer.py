@@ -1,0 +1,23 @@
+from lark.visitors import v_args
+
+from ebl.corpus.domain.manuscript import Period, Provenance, ManuscriptType, Siglum
+from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
+from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
+from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
+
+
+class ChapterTransformer(
+    DollarLineTransfomer,
+    NoteLineTransformer,
+    TextLineTransformer,
+    ParallelLineTransformer,
+):
+    @v_args(inline=True)
+    def siglum(self, provenance, period, type_, disambiquator):
+        return Siglum(
+            Provenance.from_abbreviation(provenance or ""),
+            Period.from_abbreviation(period),
+            ManuscriptType.from_abbreviation(type_ or ""),
+            disambiquator or "",
+        )

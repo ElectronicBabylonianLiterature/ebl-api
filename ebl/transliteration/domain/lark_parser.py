@@ -65,6 +65,9 @@ PARALLEL_LINE_PARSER = Lark.open(
 PARATEXT_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
 )
+CHAPTER_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="siglum"
+)
 LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
 
 
