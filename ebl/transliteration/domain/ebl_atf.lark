@@ -21,7 +21,9 @@ empty_line: /\s+/?
 
 ?paratext: note_line | dollar_line
 
-?chapter: manuscript_line | siglum
+?chapter: reconstruction | manuscript_line | siglum
+
+reconstruction: text_line [_NEWLINE note_line] (_NEWLINE parallel_line)*
 
 manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
 ?manuscript_text: " " text_line | empty_line

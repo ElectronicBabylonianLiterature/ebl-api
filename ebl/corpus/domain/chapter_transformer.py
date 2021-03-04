@@ -35,3 +35,7 @@ class ChapterTransformer(
 
     def empty_line(self, _):
         return EmptyLine()
+
+    @v_args(inline=True)
+    def reconstruction(self, line, note, *parallels):
+        return (line, note, tuple(parallels))

@@ -8,6 +8,8 @@ from ebl.transliteration.domain.lark_parser import (
     CHAPTER_PARSER,
     parse_paratext,
     parse_text_line,
+    parse_parallel_line,
+    parse_note_line,
 )
 from ebl.transliteration.domain.line import EmptyLine
 
@@ -63,3 +65,42 @@ def parse_manuscript(atf):
 def test_parse_manuscript(lines, expected) -> None:
     atf = "\n".join(lines)
     assert parse_manuscript(atf) == expected
+
+
+def parse_reconstruction(atf):
+    tree = CHAPTER_PARSER.parse(atf, start="reconstruction")
+    return ChapterTransformer().transform(tree)
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "lines,expected",
+    [
+        (["1. kur"], (parse_text_line("1. kur"), None, tuple())),
+        (
+            ["1. kur", "#note: a note"],
+            (parse_text_line("1. kur"), parse_note_line("#note: a note"), tuple()),
+        ),
+        (
+            ["1. kur", "// (parallel line 1)"],
+            (
+                parse_text_line("1. kur"),
+                None,
+                (parse_parallel_line("// (parallel line 1)"),),
+            ),
+        ),
+        (
+            ["1. kur", "#note: a note", "// (parallel line 1)", "// (parallel line 1)"],
+            (
+                parse_text_line("1. kur"),
+                parse_note_line("#note: a note"),
+                (
+                    parse_parallel_line("// (parallel line 1)"),
+                    parse_parallel_line("// (parallel line 1)"),
+                ),
+            ),
+        ),
+    ],
+)
+def test_parse_reconstruction(lines, expected) -> None:
+    atf = "\n".join(lines)
+    assert parse_reconstruction(atf) == expected
