@@ -597,24 +597,16 @@ greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 
 See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/Editorial-conventions-(Corpus)).
 
 ```ebnf
-chapter = chapter-line, { eol, manuscript-line },
-          { eol, eol, chapter-line { eol, manuscript-line } };
+chapter = chapter-line, { eol, eol, chapter-line };
 
-chapter-line = line-number, [ '.' ], ' ', reconstruction
-             | line-number, [ '.' ], ' ', apparatus-text, { ' ', apparatus-entry }-,  [ ' ', note-line ], { ' ', parallel-line }
-             | line-number, [ '.' ], ' ', apparatus, reconstruction, ' ', reconstruction-variant;
-reconstruction-variant = apparatus, siglum-list, ' ', reconstruction;
-reconstruction = text, [ ' ', note-line ], { ' ', parallel-line };
-apparatus-text = ? text where any word can be appended with word-apparatus ?;
-apparatus-entry = word-apparatus, ' ', siglum-list, ' ', ( word, normalized-word, greek-word );
-word-apparatus = apparatus, { decimal-digit };
-apparatus = '†';
-siglum-list = siglum, { ' & ', siglum };
+chapter-line = line-variant, {eol line-variant };
+line-variant = reconstruction, { eol, manuscript-line };
+reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
 
-manuscript-line = { white-space }, siglum, ' ' , manuscript-line-label, ' ', text, paratext;
-paratext = { ' ', dollar-line }, { eol, { white-space }, note-line };
+manuscript-line = { white-space }, siglum, ' ' , manuscript-label, [ text-line ], paratext;
+paratext = { eol, { white-space },  ( dollar-line | note-line ) };
+manuscript-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 white-space = ? space or tab ?;
-manuscript-line-label = [ surface-label, ' ' ],  [ colum-label, ' ' ], line-number, '.';
 
 siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol )];
 provenance = 'Assa'
