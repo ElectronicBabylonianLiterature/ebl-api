@@ -6,9 +6,9 @@ note_line: "#note: " (emphasis_part | language_part | bibliography_part | string
 language_part: "@" LANGUAGE "{" text "}"
 emphasis_part: "@i{" note_text "}"
 bibliography_part: "@bib{" escaped_text "@" escaped_text "}"
-escaped_text: (/[^@{}\\]/ | ("\\" /[@{}\\]/))+
+escaped_text: (/[^@{}\\\n\r]/ | ("\\" /[@{}\\]/))+
 string_part: note_text
-note_text: /[^@{}]+/
+note_text: /[^@{}\n\r]+/
 LANGUAGE: "akk" | "sux" | "es"
 
 
