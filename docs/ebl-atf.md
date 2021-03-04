@@ -664,7 +664,9 @@ period = 'Ur3'
 type = 'Sch'
      | 'Com'
      | 'Quo'
-     | 'Var';
+     | 'Var'
+     | 'Ex'
+     | 'Par';
 ```
 
 ## Validation
