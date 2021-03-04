@@ -604,8 +604,8 @@ chapter-line = reconstruction, [ ' ', note-line ], { ' ', parallel-line };
 
 reconstruction = line-number, [ '.' ], ' ', text
                | line-number, [ '.' ], ' ', apparatus-text, { ' ', apparatus-entry }-
-               | line-number, [ '.' ], ' ', apparatus-marker, text, ' ', reconstruction-variant;
-reconstruction-variant = apparatus-marker, siglum-list, ' ', text;
+               | line-number, [ '.' ], ' ', apparatus, text, ' ', reconstruction-variant;
+reconstruction-variant = apparatus, siglum-list, ' ', text;
 apparatus-text = ? text where any word can be appended with word-apparatus ?;
 apparatus-entry = word-apparatus, ' ', siglum-list, ' ', ( word, normalized-word, greek-word );
 word-apparatus = apparatus, { decimal-digit };
