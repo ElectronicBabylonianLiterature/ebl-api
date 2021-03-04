@@ -603,7 +603,7 @@ chapter = chapter-line, { eol, manuscript-line },
 chapter-line = reconstruction, [ ' ', note-line ], { ' ', parallel-line };
 
 reconstruction = line-number, [ '.' ], ' ', text
-               | line-number, [ '.' ], ' ', apparatus-text, { ' ', word-apparatus }-
+               | line-number, [ '.' ], ' ', apparatus-text, { ' ', apparatus-entry }-
                | line-number, [ '.' ], ' ', apparatus-marker, text, ' ', reconstruction-variant;
 reconstruction-variant = apparatus-marker, siglum-list, ' ', text;
 apparatus-text = ? text where any word can be appended with word-apparatus ?;
