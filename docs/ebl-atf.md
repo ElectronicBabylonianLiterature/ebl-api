@@ -599,7 +599,7 @@ See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLite
 ```ebnf
 chapter = chapter-line, { eol, eol, chapter-line };
 
-chapter-line = line-variant, {eol line-variant };
+chapter-line = line-variant, { eol line-variant };
 line-variant = reconstruction, { eol, manuscript-line };
 reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
 
@@ -608,7 +608,7 @@ paratext = { eol, { white-space },  ( dollar-line | note-line ) };
 manuscript-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 white-space = ? space or tab ?;
 
-siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol )];
+siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol ) ];
 provenance = 'Assa'
            | 'Ašš'
            | 'Huz'
