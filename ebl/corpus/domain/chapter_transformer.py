@@ -9,7 +9,7 @@ from ebl.corpus.domain.manuscript import (
     ManuscriptType,
     Siglum,
 )
-from ebl.corpus.domain.chapter import LineVariant, ManuscriptLine
+from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
@@ -62,3 +62,8 @@ class ChapterTransformer(
             text_line.line_number,
             LineVariant(text_line.content, notes, tuple(manuscripts), parallel_lines),
         )
+
+    @v_args(inline=True)
+    def chapter_line(self, head, *tail):
+        line_number, main_variant = head
+        return Line(line_number, (main_variant, *[variant for _, variant in tail]))

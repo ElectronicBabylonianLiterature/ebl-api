@@ -21,7 +21,9 @@ empty_line: /\s+/?
 
 ?paratext: note_line | dollar_line
 
-?chapter: line_variant
+?chapter: chapter_line
+
+chapter_line: line_variant (_NEWLINE line_variant)*
 
 line_variant: reconstruction (_NEWLINE manuscript_line)*
 

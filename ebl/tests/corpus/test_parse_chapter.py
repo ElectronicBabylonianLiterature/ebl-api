@@ -2,7 +2,7 @@ from typing import Sequence
 
 import pytest
 
-from ebl.corpus.domain.chapter import LineVariant, ManuscriptLine
+from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.chapter_transformer import ChapterTransformer
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -139,6 +139,11 @@ def test_parse_reconstruction(lines, expected) -> None:
     assert parse_reconstruction(atf) == expected
 
 
+def parse_line_variant(atf):
+    tree = CHAPTER_PARSER.parse(atf, start="line_variant")
+    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+
+
 @pytest.mark.parametrize(
     "lines,expected",
     [
@@ -194,5 +199,33 @@ def test_parse_reconstruction(lines, expected) -> None:
 )
 def test_parse_line_variant(lines, expected) -> None:
     atf = "\n".join(lines)
-    tree = CHAPTER_PARSER.parse(atf, start="line_variant")
-    assert ChapterTransformer(MANUSCRIPTS).transform(tree) == (LineNumber(1), expected)
+    assert parse_line_variant(atf) == (LineNumber(1), expected)
+
+
+@pytest.mark.parametrize(
+    "lines,expected",
+    [
+        (["1. kur"], Line(LineNumber(1), (parse_line_variant("1. kur")[1],))),
+        (
+            ["1. kur", "1. ra"],
+            Line(
+                LineNumber(1),
+                (parse_line_variant("1. kur")[1], parse_line_variant("1. ra")[1]),
+            ),
+        ),
+        (
+            [f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur", "1. ra"],
+            Line(
+                LineNumber(1),
+                (
+                    parse_line_variant(f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur")[1],
+                    parse_line_variant("1. ra")[1],
+                ),
+            ),
+        ),
+    ],
+)
+def test_parse_chapter_line(lines, expected) -> None:
+    atf = "\n".join(lines)
+    tree = CHAPTER_PARSER.parse(atf, start="chapter_line")
+    assert ChapterTransformer(MANUSCRIPTS).transform(tree) == expected
