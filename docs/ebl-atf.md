@@ -592,6 +592,79 @@ greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 
                | 'υ' | 'Φ' | 'φ' | 'Χ' | 'χ' | 'Ψ' | 'ψ' | 'Ω' | 'ω';
 ```
 
+## Chapters
+
+See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/Editorial-conventions-(Corpus)).
+
+```ebnf
+chapter-line = reconstruction, [ ' ', note-line ], { ' ', parallel-line };
+
+reconstruction = line-number, [ '. ' ], text
+               | line-number, [ '. ' ], apparatus-text, { ' ', word-apparatus }-
+               | line-number, [ '. ' ], apparatus-marker, text, ' ', reconstruction-variant;
+reconstruction-variant = apparatus-marker, siglum-list, ' ', text;
+apparatus-text = ? text where any word can be appended with word-apparatus ?;
+apparatus-entry = word-apparatus, ' ', siglum-list, ' ', ( word, normalized-word, greek-word );
+word-apparatus = apparatus, { decimal-digit };
+apparatus = '†';
+siglum-list = siglum, { ' & ', siglum };
+
+manuscript-line = { white-space }, siglum, ' ' , manuscript-line-label, ' ', text, paratext;
+paratext = { ' ', dollar-line }, { eol, { white-space }, note-line };
+white-space = ? space or tab ?;
+manuscript-line-label = [ surface-label, ' ' ],  [ colum-label, ' ' ], line-number, '.';
+
+siglum = [ provenance ], period, [ type ];
+provenance = 'Assa'
+           | 'Ašš'
+           | 'Huz'
+           | 'Kal'
+           | 'Kho'
+           | 'Nin'
+           | 'Tar'
+           | 'Baba'
+           | 'Bab'
+           | 'Bor'
+           | 'Cut'
+           | 'Dil'
+           | 'Isn'
+           | 'Kiš'
+           | 'Lar'
+           | 'Met'
+           | 'Nēr'
+           | 'Nip'
+           | 'Sip'
+           | 'Šad'
+           | 'Ur'
+           | 'Urk'
+           | 'Ala'
+           | 'Ama'
+           | 'Emr'
+           | 'Hat'
+           | 'Mar'
+           | 'Meg'
+           | 'Sus'
+           | 'Uga'
+           | 'Unc';
+period = 'Ur3'
+       | 'OA'
+       | 'OB'
+       | 'MB'
+       | 'MA'
+       | 'Hit'
+       | 'NA'
+       | 'NB'
+       | 'LB'
+       | 'Per'
+       | 'Hel'
+       | 'Par'
+       | 'Unc';
+type = 'Sch'
+     | 'Com'
+     | 'Quo'
+     | 'Var';
+```
+
 ## Validation
 
 The ATF should be parseable using the specification above. In addition,
