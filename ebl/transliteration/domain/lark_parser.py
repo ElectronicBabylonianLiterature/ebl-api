@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import Any, Sequence, Tuple, Type, Union
+from typing import Sequence, Tuple, Type, Union
 
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark
@@ -30,7 +30,7 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 from ebl.transliteration.domain.word_tokens import Word
 
 
-PARSE_ERRORS: Tuple[Type[Any], ...] = (
+PARSE_ERRORS: Tuple[Type[Exception], ...] = (
     UnexpectedInput,
     ParseError,
     VisitError,

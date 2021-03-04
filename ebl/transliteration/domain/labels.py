@@ -180,7 +180,7 @@ def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
 
 
 class LabelTransformer(Transformer):
-    def labels(self, children) -> Sequence[Status]:
+    def labels(self, children) -> Sequence[Label]:
         return tuple(children)
 
     @v_args(inline=True)
@@ -204,10 +204,10 @@ class LabelTransformer(Transformer):
 
 
 LABEL_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="label"
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="labels"
 )
 
 
-def parse_label(label: str) -> Label:
+def parse_labels(label: str) -> Sequence[Label]:
     tree = LABEL_PARSER.parse(label)
     return LabelTransformer().transform(tree)

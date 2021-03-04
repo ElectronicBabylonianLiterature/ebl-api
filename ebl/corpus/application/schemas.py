@@ -29,7 +29,7 @@ from ebl.transliteration.application.text_schema import (
     TextSchema as TransliterationSchema,
 )
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.domain.labels import parse_label
+from ebl.transliteration.domain.labels import parse_labels
 from ebl.transliteration.domain.text import Text as Transliteration
 
 
@@ -90,7 +90,7 @@ def manuscript_id():
 def labels():
     return fields.Function(
         lambda manuscript_line: [label.to_value() for label in manuscript_line.labels],
-        lambda value: [parse_label(label) for label in value],
+        lambda value: parse_labels(" ".join(value)),
         required=True,
     )
 

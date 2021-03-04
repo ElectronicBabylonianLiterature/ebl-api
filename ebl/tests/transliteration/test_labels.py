@@ -4,13 +4,14 @@ import pytest
 
 from ebl.transliteration.domain.atf import Status, Surface, Object
 from ebl.transliteration.domain.labels import (
-    parse_label,
+    parse_labels,
     ColumnLabel,
     Label,
     LabelVisitor,
     SurfaceLabel,
     ObjectLabel,
 )
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
 
 LABELS: List[Tuple[str, str, str, Label]] = [
     ("o", "", "@obverse", SurfaceLabel(tuple(), Surface.OBVERSE)),
@@ -67,8 +68,19 @@ UNPARSEABLE_LABELS: List[Tuple[str, str, str, Label]] = [
 
 
 @pytest.mark.parametrize("label,status,_,expected", LABELS)
-def test_parse_label(label, status, _, expected) -> None:
-    assert parse_label(f"{label}{status}") == expected
+def test_parse_labels(label, status, _, expected) -> None:
+    assert parse_labels(f"{label}{status}") == (expected,)
+
+
+def test_parse_labels_multiple() -> None:
+    labels = (SurfaceLabel.from_label(Surface.OBVERSE), ColumnLabel.from_int(3))
+    assert parse_labels(" ".join(label.to_value() for label in labels)) == labels
+
+
+@pytest.mark.parametrize("labels", ["o r", "i iii", "i o"])
+def test_parse_labels_invalud(labels) -> None:
+    with pytest.raises(PARSE_ERRORS):
+        parse_labels(labels)
 
 
 # pyre-ignore[56]
