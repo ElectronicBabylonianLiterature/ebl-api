@@ -616,7 +616,7 @@ paratext = { ' ', dollar-line }, { eol, { white-space }, note-line };
 white-space = ? space or tab ?;
 manuscript-line-label = [ surface-label, ' ' ],  [ colum-label, ' ' ], line-number, '.';
 
-siglum = [ provenance ], period, [ type ];
+siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol )];
 provenance = 'Assa'
            | 'Ašš'
            | 'Huz'
