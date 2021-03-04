@@ -76,6 +76,14 @@ def parse_manuscript(atf):
             ManuscriptLine(MANUSCRIPTS[0].id, tuple(), parse_text_line("1. kur")),
         ),
         (
+            [f"    {MANUSCRIPTS[0].siglum} 1. kur"],
+            ManuscriptLine(MANUSCRIPTS[0].id, tuple(), parse_text_line("1. kur")),
+        ),
+        (
+            [f" {MANUSCRIPTS[0].siglum} 1. kur"],
+            ManuscriptLine(MANUSCRIPTS[0].id, tuple(), parse_text_line("1. kur")),
+        ),
+        (
             [f"{MANUSCRIPTS[0].siglum} o iii", "#note: a note", "$ single ruling"],
             ManuscriptLine(
                 MANUSCRIPTS[0].id,
@@ -202,6 +210,11 @@ def test_parse_line_variant(lines, expected) -> None:
     assert parse_line_variant(atf) == (LineNumber(1), expected)
 
 
+def parse_chapter_line(atf):
+    tree = CHAPTER_PARSER.parse(atf, start="chapter_line")
+    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+
+
 @pytest.mark.parametrize(
     "lines,expected",
     [
@@ -227,5 +240,21 @@ def test_parse_line_variant(lines, expected) -> None:
 )
 def test_parse_chapter_line(lines, expected) -> None:
     atf = "\n".join(lines)
-    tree = CHAPTER_PARSER.parse(atf, start="chapter_line")
+    assert parse_chapter_line(atf) == expected
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "lines,expected",
+    [
+        (["1. kur"], (parse_chapter_line("1. kur"),)),
+        (["1. kur\n1. ra"], (parse_chapter_line("1. kur\n1. ra"),)),
+        (
+            ["1. kur", "2. ra"],
+            (parse_chapter_line("1. kur"), parse_chapter_line("2. ra")),
+        ),
+    ],
+)
+def test_parse_chapter(lines, expected) -> None:
+    atf = "\n\n\n".join(lines)
+    tree = CHAPTER_PARSER.parse(atf)
     assert ChapterTransformer(MANUSCRIPTS).transform(tree) == expected

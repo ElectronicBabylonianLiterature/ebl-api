@@ -1,4 +1,5 @@
-%import common.NEWLINE
+%import common.CR
+%import common.LF
 %import common.WS_INLINE
 %import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line)
 %import .ebl_atf_dollar_line (dollar_line)
@@ -21,7 +22,7 @@ empty_line: /\s+/?
 
 ?paratext: note_line | dollar_line
 
-?chapter: chapter_line
+chapter: chapter_line (_NEWLINE _NEWLINE _NEWLINE chapter_line)*
 
 chapter_line: line_variant (_NEWLINE line_variant)*
 
@@ -32,8 +33,8 @@ reconstruction: text_line [_NEWLINE note_line] (_NEWLINE parallel_line)*
 manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
 ?manuscript_text: " " text_line | empty_line
 ?paratext_line: _NEWLINE _WHITE_SPACE? paratext
-_WHITE_SPACE: WS_INLINE+
-_NEWLINE: NEWLINE
+_WHITE_SPACE: WS_INLINE
+_NEWLINE: (CR? LF) 
 
 siglum: [PROVENACE] PERIOD [TYPE] [DISAMBIQUATOR]
 PROVENACE: "Assa"

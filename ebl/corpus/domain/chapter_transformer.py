@@ -67,3 +67,6 @@ class ChapterTransformer(
     def chapter_line(self, head, *tail):
         line_number, main_variant = head
         return Line(line_number, (main_variant, *[variant for _, variant in tail]))
+
+    def chapter(self, lines):
+        return tuple(lines)
