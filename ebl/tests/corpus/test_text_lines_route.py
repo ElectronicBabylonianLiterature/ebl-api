@@ -217,7 +217,7 @@ def test_importing(client, bibliography, sign_repository, signs):
     [
         [{}, falcon.HTTP_BAD_REQUEST],
         [{"atf": ""}, falcon.HTTP_UNPROCESSABLE_ENTITY],
-        [{"atf": "invalid atf"}, falcon.HTTP_UNPROCESSABLE_ENTITY]
+        [{"atf": "invalid atf"}, falcon.HTTP_UNPROCESSABLE_ENTITY],
     ],
 )
 def test_import_invalid_entity(
@@ -229,8 +229,7 @@ def test_import_invalid_entity(
     create_text(client, text)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}/chapters/0/import",
-        body=json.dumps(body),
+        f"/texts/{text.category}/{text.index}/chapters/0/import", body=json.dumps(body)
     )
 
     assert post_result.status == expected_status

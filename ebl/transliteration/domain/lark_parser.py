@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import Sequence, Tuple, Type, Union
+from typing import Sequence, Tuple, Type
 
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark
@@ -9,7 +9,7 @@ import pydash
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line_transformer import AtLineTransformer
-from ebl.transliteration.domain.dollar_line import DollarLine
+
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
@@ -113,11 +113,6 @@ def parse_parallel_line(atf: str) -> ParallelLine:
 
 def parse_text_line(atf: str) -> TextLine:
     tree = LINE_PARSER.parse(atf, start="text_line")
-    return LineTransformer().transform(tree)
-
-
-def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
-    tree = PARATEXT_PARSER.parse(atf)
     return LineTransformer().transform(tree)
 
 

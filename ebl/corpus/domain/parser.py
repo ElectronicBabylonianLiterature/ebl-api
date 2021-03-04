@@ -1,10 +1,12 @@
-from typing import Iterable, Optional, Sequence
+from typing import Iterable, Optional, Sequence, Union
 
 from ebl.corpus.domain.chapter import Line
 from ebl.corpus.domain.chapter_transformer import ChapterTransformer
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import DataError
+from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.lark_parser import CHAPTER_PARSER, PARSE_ERRORS
+from ebl.transliteration.domain.note_line import NoteLine
 
 
 def parse_chapter(
@@ -15,3 +17,8 @@ def parse_chapter(
         return ChapterTransformer(manuscripts).transform(tree)
     except PARSE_ERRORS as error:
         raise DataError(error) from error
+
+
+def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
+    tree = CHAPTER_PARSER.parse(atf, start="paratext")
+    return ChapterTransformer(tuple()).transform(tree)

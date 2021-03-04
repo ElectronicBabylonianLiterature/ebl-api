@@ -10,14 +10,13 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
     Siglum,
 )
-from ebl.corpus.domain.parser import parse_chapter
+from ebl.corpus.domain.parser import parse_chapter, parse_paratext
+from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
 from ebl.transliteration.domain.labels import parse_labels
 from ebl.transliteration.domain.lark_parser import (
-    PARSE_ERRORS,
     parse_note_line,
     parse_parallel_line,
-    parse_paratext,
     parse_text_line,
 )
 from ebl.transliteration.domain.line import EmptyLine
@@ -103,7 +102,7 @@ def test_parse_manuscript(lines, expected) -> None:
 
 
 def test_parse_manuscript_invalid() -> None:
-    with pytest.raises(PARSE_ERRORS):
+    with pytest.raises(DataError):
         parse_manuscript(f"{UNKNOWN_MANUSCRIPT.siglum} o iii 1. kur")
 
 

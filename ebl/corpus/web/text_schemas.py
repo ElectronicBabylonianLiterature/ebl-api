@@ -13,6 +13,7 @@ from ebl.corpus.application.schemas import (
     manuscript_id,
 )
 from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.parser import parse_paratext
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -23,7 +24,6 @@ from ebl.transliteration.domain.lark_parser import (
     parse_line_number,
     parse_note_line,
     parse_parallel_line,
-    parse_paratext,
     parse_text_line,
     TransliterationError,
 )
