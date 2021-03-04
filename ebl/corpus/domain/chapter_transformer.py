@@ -5,6 +5,7 @@ from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfo
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
+from ebl.transliteration.domain.labels import LabelTransformer
 
 
 class ChapterTransformer(
@@ -12,7 +13,11 @@ class ChapterTransformer(
     NoteLineTransformer,
     TextLineTransformer,
     ParallelLineTransformer,
+    LabelTransformer,
 ):
+    def manuscript_label(self, children):
+        return children
+
     @v_args(inline=True)
     def siglum(self, provenance, period, type_, disambiquator):
         return Siglum(

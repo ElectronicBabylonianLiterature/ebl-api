@@ -1,8 +1,12 @@
+from typing import List
+
 import pytest
 
 from ebl.corpus.domain.manuscript import Period, Provenance, ManuscriptType, Siglum
 from ebl.corpus.domain.chapter_transformer import ChapterTransformer
+from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.lark_parser import CHAPTER_PARSER
+from ebl.transliteration.domain.labels import Label, ColumnLabel, SurfaceLabel
 
 
 def parse_siglum(siglum):
@@ -21,3 +25,20 @@ def test_parse_siglum(
     assert parse_siglum(
         f"{provenance.abbreviation}{period.abbreviation}{type_.abbreviation}{disambiquator}"
     ) == Siglum(provenance, period, type_, disambiquator)
+
+
+def parse_label(labels):
+    tree = CHAPTER_PARSER.parse(labels, start="labels")
+    return ChapterTransformer().transform(tree)
+
+
+@pytest.mark.parametrize(
+    "labels",
+    [
+        (ColumnLabel.from_int(3),),
+        (SurfaceLabel.from_label(Surface.OBVERSE),),
+        (SurfaceLabel.from_label(Surface.OBVERSE), ColumnLabel.from_int(3)),
+    ],
+)
+def test_parse_label(labels: List[Label]) -> None:
+    assert parse_label(" ".join(label.to_value() for label in labels)) == labels

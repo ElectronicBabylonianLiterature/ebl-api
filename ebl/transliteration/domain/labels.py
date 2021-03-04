@@ -180,23 +180,32 @@ def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
 
 
 class LabelTransformer(Transformer):
+    def labels(self, children) -> Sequence[Status]:
+        return tuple(children)
+
     @v_args(inline=True)
-    def column_label(self, numeral: Token, status: Sequence[Status]) -> ColumnLabel:
+    def labels__column_label(
+        self, numeral: Token, status: Sequence[Status]
+    ) -> ColumnLabel:
         return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
 
     @v_args(inline=True)
-    def surface_label(self, surface: Surface, status: Sequence[Status]) -> SurfaceLabel:
+    def labels__surface_label(
+        self, surface: Surface, status: Sequence[Status]
+    ) -> SurfaceLabel:
         return SurfaceLabel.from_label(surface, status)
 
     @v_args(inline=True)
-    def surface(self, surface: Token) -> Surface:
+    def labels__surface(self, surface: Token) -> Surface:
         return Surface.from_label(surface)  # pyre-ignore[6]
 
-    def status(self, children: Iterable[Token]) -> Sequence[Status]:
+    def labels__status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
 
 
-LABEL_PARSER = Lark.open("labels.lark", maybe_placeholders=True, rel_to=__file__)
+LABEL_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="label"
+)
 
 
 def parse_label(label: str) -> Label:
