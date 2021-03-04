@@ -603,7 +603,8 @@ chapter-line = line-variant, { eol line-variant };
 line-variant = reconstruction, { eol, manuscript-line };
 reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
 
-manuscript-line = { white-space }, siglum, ' ' , manuscript-label, [ text-line ], paratext;
+manuscript-line = { white-space }, siglum, ' ' , manuscript-label, [ text-line ],
+                  paratext;
 paratext = { eol, { white-space },  ( dollar-line | note-line ) };
 manuscript-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 white-space = ? space or tab ?;
