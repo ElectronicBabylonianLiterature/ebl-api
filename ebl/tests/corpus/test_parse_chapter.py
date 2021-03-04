@@ -3,7 +3,6 @@ from typing import Sequence
 import pytest
 
 from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
-from ebl.corpus.domain.chapter_transformer import ChapterTransformer
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
@@ -11,10 +10,10 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
     Siglum,
 )
+from ebl.corpus.domain.parser import parse_chapter
 from ebl.tests.factories.corpus import ManuscriptFactory
 from ebl.transliteration.domain.labels import parse_labels
 from ebl.transliteration.domain.lark_parser import (
-    CHAPTER_PARSER,
     PARSE_ERRORS,
     parse_note_line,
     parse_parallel_line,
@@ -33,8 +32,7 @@ MANUSCRIPTS: Sequence[Manuscript] = (
 
 
 def parse_siglum(siglum):
-    tree = CHAPTER_PARSER.parse(siglum, start="siglum")
-    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+    return parse_chapter(siglum, MANUSCRIPTS, "siglum")
 
 
 @pytest.mark.parametrize("period", [Period.NEO_ASSYRIAN])
@@ -51,8 +49,7 @@ def test_parse_siglum(
 
 
 def parse_manuscript(atf):
-    tree = CHAPTER_PARSER.parse(atf, start="manuscript_line")
-    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+    return parse_chapter(atf, MANUSCRIPTS, "manuscript_line")
 
 
 @pytest.mark.parametrize(
@@ -109,8 +106,7 @@ def test_parse_manuscript_invalid() -> None:
 
 
 def parse_reconstruction(atf):
-    tree = CHAPTER_PARSER.parse(atf, start="reconstruction")
-    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+    return parse_chapter(atf, MANUSCRIPTS, "reconstruction")
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -148,8 +144,7 @@ def test_parse_reconstruction(lines, expected) -> None:
 
 
 def parse_line_variant(atf):
-    tree = CHAPTER_PARSER.parse(atf, start="line_variant")
-    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+    return parse_chapter(atf, MANUSCRIPTS, "line_variant")
 
 
 @pytest.mark.parametrize(
@@ -211,8 +206,7 @@ def test_parse_line_variant(lines, expected) -> None:
 
 
 def parse_chapter_line(atf):
-    tree = CHAPTER_PARSER.parse(atf, start="chapter_line")
-    return ChapterTransformer(MANUSCRIPTS).transform(tree)
+    return parse_chapter(atf, MANUSCRIPTS, "chapter_line")
 
 
 @pytest.mark.parametrize(
@@ -255,6 +249,5 @@ def test_parse_chapter_line(lines, expected) -> None:
     ],
 )
 def test_parse_chapter(lines, expected) -> None:
-    atf = "\n\n\n".join(lines)
-    tree = CHAPTER_PARSER.parse(atf)
-    assert ChapterTransformer(MANUSCRIPTS).transform(tree) == expected
+    atf = "\n\n".join(lines)
+    assert parse_chapter(atf, MANUSCRIPTS) == expected
