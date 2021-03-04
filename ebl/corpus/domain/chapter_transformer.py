@@ -1,6 +1,14 @@
+from typing import Iterable
+
 from lark.visitors import v_args
 
-from ebl.corpus.domain.manuscript import Period, Provenance, ManuscriptType, Siglum
+from ebl.corpus.domain.manuscript import (
+    Manuscript,
+    Period,
+    Provenance,
+    ManuscriptType,
+    Siglum,
+)
 from ebl.corpus.domain.chapter import ManuscriptLine
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
@@ -17,6 +25,11 @@ class ChapterTransformer(
     ParallelLineTransformer,
     LabelTransformer,
 ):
+    def __init__(self, manuscripts: Iterable[Manuscript]):
+        self._manuscripts = {
+            manuscript.siglum: manuscript.id for manuscript in manuscripts
+        }
+
     def manuscript_label(self, children):
         return children
 
@@ -31,7 +44,9 @@ class ChapterTransformer(
 
     @v_args(inline=True)
     def manuscript_line(self, siglum, labels, line, *paratext):
-        return ManuscriptLine(0, labels or tuple(), line, tuple(paratext))
+        return ManuscriptLine(
+            self._manuscripts[siglum], labels or tuple(), line, tuple(paratext)
+        )
 
     def empty_line(self, _):
         return EmptyLine()
