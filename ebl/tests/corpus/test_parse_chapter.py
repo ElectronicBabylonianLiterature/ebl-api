@@ -1,4 +1,4 @@
-from typing import List
+from typing import Iterable
 
 import pytest
 
@@ -32,7 +32,7 @@ def parse_label(labels):
     return ChapterTransformer().transform(tree)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # pyre-ignore[56]
     "labels",
     [
         (ColumnLabel.from_int(3),),
@@ -40,5 +40,5 @@ def parse_label(labels):
         (SurfaceLabel.from_label(Surface.OBVERSE), ColumnLabel.from_int(3)),
     ],
 )
-def test_parse_label(labels: List[Label]) -> None:
+def test_parse_label(labels: Iterable[Label]) -> None:
     assert parse_label(" ".join(label.to_value() for label in labels)) == labels
