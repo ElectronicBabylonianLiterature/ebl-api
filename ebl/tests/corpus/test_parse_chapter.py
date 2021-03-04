@@ -36,7 +36,9 @@ def parse_siglum(siglum):
 
 
 @pytest.mark.parametrize("period", [Period.NEO_ASSYRIAN])
-@pytest.mark.parametrize("provenance", [Provenance.DILBAT, Provenance.PERIPHERY])
+@pytest.mark.parametrize(
+    "provenance", [Provenance.URUK, Provenance.UR, Provenance.PERIPHERY]
+)
 #  pyre-ignore[56]
 @pytest.mark.parametrize("type_", [ManuscriptType.SCHOOL, ManuscriptType.LIBRARY])
 @pytest.mark.parametrize("disambiquator", ["", "a"])
