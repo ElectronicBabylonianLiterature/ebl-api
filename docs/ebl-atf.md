@@ -597,6 +597,8 @@ greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 
 See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/Editorial-conventions-(Corpus)).
 
 ```ebnf
+chapter = chapter-line, { eol, eol, chapter-line };
+
 chapter-line = reconstruction, [ ' ', note-line ], { ' ', parallel-line };
 
 reconstruction = line-number, [ '. ' ], text
