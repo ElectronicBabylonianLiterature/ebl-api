@@ -210,3 +210,27 @@ def test_importing(client, bibliography, sign_repository, signs):
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_dto(updated_text)
+
+
+@pytest.mark.parametrize(
+    "body,expected_status",
+    [
+        [{}, falcon.HTTP_BAD_REQUEST],
+        [{"atf": ""}, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [{"atf": "invalid atf"}, falcon.HTTP_UNPROCESSABLE_ENTITY]
+    ],
+)
+def test_import_invalid_entity(
+    client, bibliography, body, expected_status, sign_repository, signs
+):
+    allow_signs(signs, sign_repository)
+    text = TextFactory.build()
+    allow_references(text, bibliography)
+    create_text(client, text)
+
+    post_result = client.simulate_post(
+        f"/texts/{text.category}/{text.index}/chapters/0/import",
+        body=json.dumps(body),
+    )
+
+    assert post_result.status == expected_status
