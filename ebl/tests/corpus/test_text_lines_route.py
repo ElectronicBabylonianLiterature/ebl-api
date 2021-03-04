@@ -10,7 +10,7 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.users.domain.user import Guest
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.corpus.web.text_schemas import ApiLineSchema
-
+from ebl.corpus.domain.parser import parse_chapter
 
 ANY_USER = Guest()
 
@@ -175,3 +175,38 @@ def test_update_invalid_entity(
     )
 
     assert post_result.status == expected_status
+
+
+def test_importing(client, bibliography, sign_repository, signs):
+    allow_signs(signs, sign_repository)
+    text = TextFactory.build()
+    allow_references(text, bibliography)
+    create_text(client, text)
+    atf = "1. kur"
+    updated_text = attr.evolve(
+        text,
+        chapters=(
+            attr.evolve(
+                text.chapters[0],
+                lines=parse_chapter(atf, text.chapters[0].manuscripts),
+                parser_version=ATF_PARSER_VERSION,
+            ),
+        ),
+    )
+
+    body = {"atf": atf}
+    post_result = client.simulate_post(
+        f"/texts/{text.category}/{text.index}/chapters/0/import", body=json.dumps(body)
+    )
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert post_result.json == create_dto(updated_text)
+
+    get_result = client.simulate_get(
+        f"/texts/{updated_text.category}/{updated_text.index}"
+    )
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert get_result.json == create_dto(updated_text)
