@@ -2,7 +2,7 @@ from typing import Sequence
 
 import pytest
 
-from ebl.corpus.domain.chapter import ManuscriptLine
+from ebl.corpus.domain.chapter import LineVariant, ManuscriptLine
 from ebl.corpus.domain.chapter_transformer import ChapterTransformer
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -22,6 +22,7 @@ from ebl.transliteration.domain.lark_parser import (
     parse_text_line,
 )
 from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.line_number import LineNumber
 
 UNKNOWN_MANUSCRIPT: Manuscript = ManuscriptFactory.build()
 MANUSCRIPTS: Sequence[Manuscript] = (
@@ -138,14 +139,16 @@ def test_parse_reconstruction(lines, expected) -> None:
     assert parse_reconstruction(atf) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "lines,expected",
     [
         (
             ["1. kur", f"{MANUSCRIPTS[0].siglum} o iii 1. kur"],
-            (
-                (parse_text_line("1. kur"), None, tuple()),
+            LineVariant(
+                parse_text_line("1. kur").content,
+                None,
                 (parse_manuscript(f"{MANUSCRIPTS[0].siglum} o iii 1. kur"),),
+                tuple(),
             ),
         ),
         (
@@ -154,12 +157,14 @@ def test_parse_reconstruction(lines, expected) -> None:
                 f"{MANUSCRIPTS[0].siglum} o iii 1. kur",
                 f"{MANUSCRIPTS[1].siglum} o iii 2. kur",
             ],
-            (
-                (parse_text_line("1. kur"), None, tuple()),
+            LineVariant(
+                parse_text_line("1. kur").content,
+                None,
                 (
                     parse_manuscript(f"{MANUSCRIPTS[0].siglum} o iii 1. kur"),
                     parse_manuscript(f"{MANUSCRIPTS[1].siglum} o iii 2. kur"),
                 ),
+                tuple(),
             ),
         ),
         (
@@ -172,18 +177,17 @@ def test_parse_reconstruction(lines, expected) -> None:
                 "#note: a note",
                 "$ single ruling",
             ],
-            (
-                (
-                    parse_text_line("1. kur"),
-                    parse_note_line("#note: a note"),
-                    (parse_parallel_line("// (parallel line 1)"),),
-                ),
+            LineVariant(
+                parse_text_line("1. kur").content,
+                parse_note_line("#note: a note"),
                 (
                     parse_manuscript(f"{MANUSCRIPTS[1].siglum} o iii 1. kur"),
                     parse_manuscript(
-                        f"{MANUSCRIPTS[2].siglum} o iii 2. kur\n#note: a note\n$ single ruling"
+                        f"{MANUSCRIPTS[2].siglum} o iii 2. kur\n"
+                        "#note: a note\n$ single ruling"
                     ),
                 ),
+                (parse_parallel_line("// (parallel line 1)"),),
             ),
         ),
     ],
@@ -191,4 +195,4 @@ def test_parse_reconstruction(lines, expected) -> None:
 def test_parse_line_variant(lines, expected) -> None:
     atf = "\n".join(lines)
     tree = CHAPTER_PARSER.parse(atf, start="line_variant")
-    assert ChapterTransformer(MANUSCRIPTS).transform(tree) == expected
+    assert ChapterTransformer(MANUSCRIPTS).transform(tree) == (LineNumber(1), expected)
