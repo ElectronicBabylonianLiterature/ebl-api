@@ -1,6 +1,6 @@
 %import common.INT
 %import common.LETTER
-%import .labels (surface_label)
+%import .ebl_atf_labels (surface_label)
 
 note_line: "#note: " (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
