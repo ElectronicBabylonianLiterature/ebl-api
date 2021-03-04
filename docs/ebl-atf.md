@@ -600,11 +600,9 @@ See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLite
 chapter = chapter-line, { eol, manuscript-line },
           { eol, eol, chapter-line { eol, manuscript-line } };
 
-chapter-line = reconstruction, [ ' ', note-line ], { ' ', parallel-line };
-
-reconstruction = line-number, [ '.' ], ' ', text
-               | line-number, [ '.' ], ' ', apparatus-text, { ' ', apparatus-entry }-
-               | line-number, [ '.' ], ' ', apparatus, text, ' ', reconstruction-variant;
+chapter-line = line-number, [ '.' ], ' ', text,  [ ' ', note-line ], { ' ', parallel-line }
+             | line-number, [ '.' ], ' ', apparatus-text, { ' ', apparatus-entry }-,  [ ' ', note-line ], { ' ', parallel-line }
+             | line-number, [ '.' ], ' ', apparatus, text,  [ ' ', note-line ], { ' ', parallel-line }, ' ', reconstruction-variant, [ ' ', note-line ], { ' ', parallel-line };
 reconstruction-variant = apparatus, siglum-list, ' ', text;
 apparatus-text = ? text where any word can be appended with word-apparatus ?;
 apparatus-entry = word-apparatus, ' ', siglum-list, ' ', ( word, normalized-word, greek-word );
