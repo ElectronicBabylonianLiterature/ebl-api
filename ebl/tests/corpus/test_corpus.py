@@ -24,6 +24,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
+from ebl.corpus.domain.parser import parse_chapter
 
 COLLECTION = "texts"
 TEXT = TextFactory.build()
@@ -546,6 +547,37 @@ def test_updating_lines(
 
     lines = updated_text.chapters[0].lines
     corpus.update_lines(ChapterId(TEXT.id, 0), lines, user)
+
+
+def test_importing_lines(
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+) -> None:
+    atf = "1. kur"
+    updated_text = attr.evolve(
+        TEXT_WITHOUT_DOCUMENTS,
+        chapters=(
+            attr.evolve(
+                TEXT_WITHOUT_DOCUMENTS.chapters[0],
+                lines=parse_chapter(
+                    "1. kur", TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts
+                ),
+                parser_version=ATF_PARSER_VERSION,
+            ),
+        ),
+    )
+    expect_text_find_and_update(
+        bibliography,
+        changelog,
+        TEXT_WITHOUT_DOCUMENTS,
+        updated_text,
+        signs,
+        sign_repository,
+        text_repository,
+        user,
+        when,
+    )
+
+    corpus.import_lines(ChapterId(TEXT.id, 0), atf, user)
 
 
 def test_merging_lines(

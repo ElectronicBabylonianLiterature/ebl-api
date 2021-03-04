@@ -6,7 +6,6 @@ from ebl.marshmallowschema import validate
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
-from ebl.corpus.domain.parser import parse_chapter
 
 
 class LinesDtoSchema(Schema):
@@ -54,9 +53,6 @@ class LinesImportResource:
         chapter_index: str,
     ) -> None:
         chapter_id = create_chapter_id(category, index, chapter_index)
-        atf = req.media["atf"]
-        chapter = self._corpus.find(chapter_id.text_id).chapters[chapter_id.index]
-        lines = parse_chapter(atf, chapter.manuscripts)
-        self._corpus.update_lines(chapter_id, lines, req.context.user)
+        self._corpus.import_lines(chapter_id, req.media["atf"], req.context.user)
         updated_text = self._corpus.find(chapter_id.text_id)
         resp.media = serialize(updated_text)
