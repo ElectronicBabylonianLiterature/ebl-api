@@ -209,5 +209,8 @@ LABEL_PARSER = Lark.open(
 
 
 def parse_labels(label: str) -> Sequence[Label]:
-    tree = LABEL_PARSER.parse(label)
-    return LabelTransformer().transform(tree)
+    if label:
+        tree = LABEL_PARSER.parse(label)
+        return LabelTransformer().transform(tree)
+    else:
+        return tuple()

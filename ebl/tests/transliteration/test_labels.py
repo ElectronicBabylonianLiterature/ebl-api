@@ -77,6 +77,10 @@ def test_parse_labels_multiple() -> None:
     assert parse_labels(" ".join(label.to_value() for label in labels)) == labels
 
 
+def test_parse_labels_empty() -> None:
+    assert parse_labels("") == tuple()
+
+
 @pytest.mark.parametrize("labels", ["o r", "i iii", "i o"])
 def test_parse_labels_invalud(labels) -> None:
     with pytest.raises(PARSE_ERRORS):
