@@ -1,8 +1,6 @@
 from typing import Optional, cast
 
 import pydash
-from singledispatchmethod import singledispatchmethod
-
 from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
@@ -13,21 +11,21 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
+from singledispatchmethod import singledispatchmethod
 
 
-def invalid_atf(
-    chapter: Chapter, line_number: AbstractLineNumber, manuscript_id: int
+def data_error(
+    source: Exception,
+    chapter: Chapter,
+    line_number: AbstractLineNumber,
+    manuscript_id: int,
 ) -> Exception:
     siglum = [
         manuscript.siglum
         for manuscript in chapter.manuscripts
         if manuscript.id == manuscript_id
     ][0]
-    return DataError(
-        f"Invalid transliteration on"
-        f" line {line_number.atf}"
-        f" manuscript {siglum}."
-    )
+    return DataError(f"Invalid line {line_number.atf} {siglum}. {source}")
 
 
 class AlignmentVisitor(TokenVisitor):
@@ -43,8 +41,9 @@ class AlignmentVisitor(TokenVisitor):
             self.alignments.append(word.alignment)
 
     def validate(self):
-        if pydash.duplicates(self.alignments):
-            raise AlignmentError()
+        duplicates = pydash.duplicates(self.alignments)
+        if duplicates:
+            raise AlignmentError(duplicates)
 
 
 class TextValidator(TextVisitor):
@@ -106,11 +105,10 @@ class TextValidator(TextVisitor):
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         try:
             self._transliteration_factory.create(manuscript_line.line.atf)
-        except TransliterationError:
-            raise invalid_atf(
-                self.chapter, self.line.number, manuscript_line.manuscript_id
-            )
-
-        alignment_validator = AlignmentVisitor()
-        manuscript_line.line.accept(alignment_validator)
-        alignment_validator.validate()
+            alignment_validator = AlignmentVisitor()
+            manuscript_line.line.accept(alignment_validator)
+            alignment_validator.validate()
+        except (TransliterationError, AlignmentError) as error:
+            raise data_error(
+                error, self.chapter, self.line.number, manuscript_line.manuscript_id
+            ) from error
