@@ -1,3 +1,11 @@
+%import common.CR
+%import common.LF
+%import common.WS_INLINE
+%import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line)
+%import .ebl_atf_dollar_line (dollar_line)
+%import .ebl_atf_at_line (at_line)
+%import .ebl_atf_labels (labels)
+
 ?start: line
 
 ?line: empty_line
@@ -8,12 +16,75 @@
      | control_line
      | parallel_line
 
-?paratext: note_line | dollar_line
-
 empty_line: /\s+/?
-
 !control_line.-2: ("=:" | "&" | "#") /.+/?
 
-%import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line)
-%import .ebl_atf_dollar_line (dollar_line)
-%import .ebl_atf_at_line (at_line)
+
+?paratext: note_line | dollar_line
+
+chapter: chapter_line (_NEWLINE _NEWLINE+ chapter_line)*
+
+chapter_line: line_variant (_NEWLINE line_variant)*
+
+line_variant: reconstruction (_NEWLINE manuscript_line)*
+
+reconstruction: text_line [_NEWLINE note_line] (_NEWLINE parallel_line)*
+
+manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
+?manuscript_text: " " text_line | empty_line
+?paratext_line: _NEWLINE _WHITE_SPACE? paratext
+_WHITE_SPACE: WS_INLINE
+_NEWLINE: (CR? LF) 
+
+siglum: [PROVENACE] PERIOD [TYPE] [DISAMBIQUATOR]
+PROVENACE: "Assa"
+         | "Baba"
+         | "Ašš"
+         | "Huz"
+         | "Kal"
+         | "Kho"
+         | "Nin"
+         | "Tar"
+         | "Bab"
+         | "Bor"
+         | "Cut"
+         | "Dil"
+         | "Isn"
+         | "Kiš"
+         | "Lar"
+         | "Met"
+         | "Nēr"
+         | "Nip"
+         | "Sip"
+         | "Šad"
+         | "Urk"
+         | "Ala"
+         | "Ama"
+         | "Emr"
+         | "Hat"
+         | "Mar"
+         | "Meg"
+         | "Sus"
+         | "Uga"
+         | "Unc"
+         | "Ur"
+PERIOD: "Ur3"
+      | "Hit"
+      | "Per"
+      | "Hel"
+      | "Par"
+      | "Unc"
+      | "OA"
+      | "OB"
+      | "MB"
+      | "MA"
+      | "NA"
+      | "NB"
+      | "LB"
+TYPE: "Sch"
+    | "Com"
+    | "Quo"
+    | "Var"
+    | "Par"
+    | "Ex"
+DISAMBIQUATOR: /[\S]+/

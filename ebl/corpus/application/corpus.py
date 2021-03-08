@@ -13,6 +13,7 @@ from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Line
 from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId, ChapterId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
@@ -93,6 +94,11 @@ class Corpus:
             ManuscriptUpdater(id_.index, manuscripts, uncertain_fragments),
             user,
         )
+
+    def import_lines(self, id_: ChapterId, atf: str, user: User) -> None:
+        chapter = self._repository.find(id_.text_id).chapters[id_.index]
+        lines = parse_chapter(atf, chapter.manuscripts)
+        self.update_lines(id_, lines, user)
 
     def update_lines(self, id_: ChapterId, lines: Sequence[Line], user: User) -> None:
         self._update_chapter(id_.text_id, LinesUpdater(id_.index, lines), user)

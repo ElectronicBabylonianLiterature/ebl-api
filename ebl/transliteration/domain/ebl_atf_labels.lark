@@ -1,7 +1,6 @@
-?start: label
-
-?label: column_label | surface_label
-
+labels: surface_label " " column_label
+      | surface_label
+      | column_label
 column_label: ROMAN_NUMERAL status
 ROMAN_NUMERAL: /[ivx]+/
 

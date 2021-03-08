@@ -592,6 +592,76 @@ greek-alphabet = 'Α' | 'α' | 'Β' | 'β' | 'Γ' | 'γ' | 'Δ' | 'δ' | 'Ε' | 
                | 'υ' | 'Φ' | 'φ' | 'Χ' | 'χ' | 'Ψ' | 'ψ' | 'Ω' | 'ω';
 ```
 
+## Chapters
+
+See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/Editorial-conventions-(Corpus)).
+
+```ebnf
+chapter = chapter-line, { eol, eol, chapter-line };
+
+chapter-line = line-variant, { eol line-variant };
+line-variant = reconstruction, { eol, manuscript-line };
+reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
+
+manuscript-line = { white-space }, siglum, ' ' , manuscript-label, [ text-line ],
+                  paratext;
+paratext = { eol, { white-space },  ( dollar-line | note-line ) };
+manuscript-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
+white-space = ? space or tab ?;
+
+siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol ) ];
+provenance = 'Assa'
+           | 'Ašš'
+           | 'Huz'
+           | 'Kal'
+           | 'Kho'
+           | 'Nin'
+           | 'Tar'
+           | 'Baba'
+           | 'Bab'
+           | 'Bor'
+           | 'Cut'
+           | 'Dil'
+           | 'Isn'
+           | 'Kiš'
+           | 'Lar'
+           | 'Met'
+           | 'Nēr'
+           | 'Nip'
+           | 'Sip'
+           | 'Šad'
+           | 'Ur'
+           | 'Urk'
+           | 'Ala'
+           | 'Ama'
+           | 'Emr'
+           | 'Hat'
+           | 'Mar'
+           | 'Meg'
+           | 'Sus'
+           | 'Uga'
+           | 'Unc';
+period = 'Ur3'
+       | 'OA'
+       | 'OB'
+       | 'MB'
+       | 'MA'
+       | 'Hit'
+       | 'NA'
+       | 'NB'
+       | 'LB'
+       | 'Per'
+       | 'Hel'
+       | 'Par'
+       | 'Unc';
+type = 'Sch'
+     | 'Com'
+     | 'Quo'
+     | 'Var'
+     | 'Ex'
+     | 'Par';
+```
+
 ## Validation
 
 The ATF should be parseable using the specification above. In addition,

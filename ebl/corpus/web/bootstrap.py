@@ -3,7 +3,7 @@ import falcon
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
-from ebl.corpus.web.lines import LinesResource
+from ebl.corpus.web.lines import LinesImportResource, LinesResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.lemmatizations import (
     LemmatizationResource,
@@ -28,6 +28,7 @@ def create_corpus_routes(api: falcon.API, context: Context, spec):
     manuscript_lemmatization = LemmatizationResource(corpus)
     manuscript = ManuscriptsResource(corpus)
     lines = LinesResource(corpus)
+    lines_import = LinesImportResource(corpus)
 
     api.add_route("/texts", texts)
     api.add_route("/texts/{category}/{index}", text)
@@ -43,6 +44,9 @@ def create_corpus_routes(api: falcon.API, context: Context, spec):
     )
 
     api.add_route("/texts/{category}/{index}/chapters/{chapter_index}/lines", lines)
+    api.add_route(
+        "/texts/{category}/{index}/chapters/{chapter_index}/import", lines_import
+    )
 
     spec.components.schema("CorpusLemmatizations", schema=CorpusLemmatizationsSchema)
     spec.components.schema("CorpusText", schema=ApiTextSchema)
