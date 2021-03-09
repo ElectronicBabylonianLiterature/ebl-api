@@ -1,7 +1,11 @@
 import pytest
 
-from ebl.fragmentarium.application.fragment_matcher import LineToVecRanking
-from ebl.fragmentarium.application.fragment_matcher import sort_scores_to_list
+
+from ebl.fragmentarium.application.fragment_matcher import (
+    sort_scores_to_list,
+    LineToVecRanking,
+)
+from ebl.fragmentarium.application.line_to_vec import LineToVecScore, LineToVecEntry
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import FragmentFactory
@@ -16,24 +20,29 @@ def test_find(fragment_matcher, fragment_repository, when):
 
 
 def test_sort_scores_to_list(fragment_matcher):
-    score = {"FragmentId1": 4, "FragmentId2": 12, "FragmentId3": 2}
+    score = [
+        LineToVecScore(MuseumNumber.of("X.1"), "N/A", 4),
+        LineToVecScore(MuseumNumber.of("X.2"), "N/A", 12),
+        LineToVecScore(MuseumNumber.of("X.3"), "N/A", 2),
+    ]
+
     assert sort_scores_to_list(score) == [
-        ("FragmentId2", 12),
-        ("FragmentId1", 4),
-        ("FragmentId3", 2),
+        LineToVecScore(MuseumNumber.of("X.2"), "N/A", 12),
+        LineToVecScore(MuseumNumber.of("X.1"), "N/A", 4),
+        LineToVecScore(MuseumNumber.of("X.3"), "N/A", 2),
     ]
 
 
 @pytest.mark.parametrize(
     "parameters, expected",
     [
-        [
+        (
             "BM.11",
-            {
-                "score": [(MuseumNumber.of("X.1"), 0)],
-                "score_weighted": [(MuseumNumber.of("X.1"), 0)],
-            },
-        ]
+            LineToVecRanking(
+                [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 4)],
+                [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 6)],
+            ),
+        )
     ],
 )
 def test_line_to_vec(parameters, expected, fragment_matcher, when, fragment_repository):
@@ -50,10 +59,10 @@ def test_line_to_vec(parameters, expected, fragment_matcher, when, fragment_repo
         when(fragment_repository)
         .query_transliterated_line_to_vec()
         .thenReturn(
-            {
-                fragment_1.number: (fragment_1_line_to_vec,),
-                fragment_2.number: (fragment_2_line_to_vec,),
-            }
+            [
+                LineToVecEntry(fragment_1.number, "N/A", fragment_1_line_to_vec),
+                LineToVecEntry(fragment_2.number, "N/A", fragment_1_line_to_vec),
+            ]
         )
     )
-    assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking(**expected)
+    assert fragment_matcher.rank_line_to_vec(parameters) == expected

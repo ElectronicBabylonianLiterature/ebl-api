@@ -4,6 +4,7 @@ import pytest
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
@@ -354,9 +355,13 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
     database[COLLECTION].insert_many(
         [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
     )
-    assert fragment_repository.query_transliterated_line_to_vec() == {
-        transliterated_fragment.number: transliterated_fragment.line_to_vec
-    }
+    assert fragment_repository.query_transliterated_line_to_vec() == [
+        LineToVecEntry(
+            transliterated_fragment.number,
+            transliterated_fragment.script,
+            transliterated_fragment.line_to_vec,
+        )
+    ]
 
 
 def test_find_lemmas(fragment_repository):
