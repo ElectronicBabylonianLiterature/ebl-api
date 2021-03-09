@@ -58,7 +58,7 @@ class LineToVecRanker:
     ) -> None:
         previous_score = pydash.find(score_results, line_to_vec_score.id)
         if line_to_vec_score not in score_results or line_to_vec_score.score > (
-            previous_score if previous_score else -1
+            previous_score.score if previous_score else -1
         ):
             score_results.append(line_to_vec_score)
 
