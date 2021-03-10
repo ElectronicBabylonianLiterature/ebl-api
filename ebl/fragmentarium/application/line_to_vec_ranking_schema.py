@@ -17,7 +17,7 @@ class LineToVecScoreSchema(Schema):
         }
 
 
-class LineToVecRankingSchema(Schema):
+class  LineToVecRankingSchema(Schema):
     score = fields.Nested(LineToVecScoreSchema, many=True)
     score_weighted = fields.Nested(
         LineToVecScoreSchema, many=True, required=True, data_key="scoreWeighted"
