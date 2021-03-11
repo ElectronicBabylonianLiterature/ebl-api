@@ -5,17 +5,19 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
-def test_fragment_matcher_route(client, fragmentarium, user, database):
-    fragment_id = "X.0"
+def test_fragment_matcher_route(client, fragmentarium, user):
+    fragment_id = "X.15"
 
-    fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
+    fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.15"))
     fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.1"),
+        number=MuseumNumber.of("X.326"),
         line_to_vec=(LineToVecEncoding.from_list([1, 1, 2]),),
     )
     expected_score = {
-        "score": [{"id": "X.1", "script": fragment_2.script, "score": 3}],
-        "scoreWeighted": [{"id": "X.1", "script": fragment_2.script, "score": 5}],
+        "score": [{"museumNumber": "X.326", "script": fragment_2.script, "score": 3}],
+        "scoreWeighted": [
+            {"museumNumber": "X.326", "script": fragment_2.script, "score": 5}
+        ],
     }
     fragmentarium.create(fragment_1)
     fragmentarium.create(fragment_2)
@@ -25,7 +27,7 @@ def test_fragment_matcher_route(client, fragmentarium, user, database):
     assert get_result.json == expected_score
 
 
-def test_fragment_matcher_route_error(client, fragmentarium, user, database):
+def test_fragment_matcher_route_error(client, fragmentarium, user):
     faulty_fragment_id = "X.-1"
     fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     fragment_2 = TransliteratedFragmentFactory.build(

@@ -8,13 +8,13 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecEntry:
-    id: MuseumNumber
+    museum_number: MuseumNumber
     script: str
     line_to_vec: Tuple[LineToVecEncodings, ...]
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecScore:
-    id: MuseumNumber
+    museum_number: MuseumNumber
     script: str
     score: int

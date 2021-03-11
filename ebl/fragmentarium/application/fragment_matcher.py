@@ -26,8 +26,8 @@ class LineToVecRanking:
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecRanker:
     NUMBER_OF_RESULTS_TO_RETURN: ClassVar[int] = 15
-    _score_results: List[LineToVecScore] = []
-    _score_weighted_results: List[LineToVecScore] = []
+    _score_results: List[LineToVecScore] = attr.ib(factory=list, init=False)
+    _score_weighted_results: List[LineToVecScore] = attr.ib(factory=list, init=False)
 
     @property
     def score(self) -> List[LineToVecScore]:
@@ -56,20 +56,17 @@ class LineToVecRanker:
     def _insert_score(
         self, line_to_vec_score: LineToVecScore, score_results: List[LineToVecScore]
     ) -> None:
-        previous_score = pydash.find(score_results, line_to_vec_score.id)
-        if line_to_vec_score.score > (
-            previous_score.score if previous_score else -1
-        ):
+        previous_score = pydash.find(score_results, line_to_vec_score.museum_number)
+        if line_to_vec_score.score > (previous_score.score if previous_score else -1):
             score_results.append(line_to_vec_score)
 
 
 class FragmentMatcher:
     def __init__(self, fragment_repository: FragmentRepository):
-        self.fragment_repository = fragment_repository
         self._fragment_repository = fragment_repository
 
     def _parse_candidate(self, candidate: str) -> Tuple[LineToVecEncodings, ...]:
-        line_to_vec = self.fragment_repository.query_by_museum_number(
+        line_to_vec = self._fragment_repository.query_by_museum_number(
             MuseumNumber.of(candidate)
         ).line_to_vec
         if line_to_vec:
@@ -80,18 +77,22 @@ class FragmentMatcher:
     def rank_line_to_vec(self, candidate: str) -> LineToVecRanking:
         candidate_line_to_vecs = self._parse_candidate(candidate)
         line_to_vec_entries = (
-            self.fragment_repository.query_transliterated_line_to_vec()
+            self._fragment_repository.query_transliterated_line_to_vec()
         )
         ranker = LineToVecRanker()
 
         for entry in filter(
-            lambda x: x.id != MuseumNumber.of(candidate), line_to_vec_entries
+            lambda line_to_vec_entry: line_to_vec_entry.museum_number
+            != MuseumNumber.of(candidate),
+            line_to_vec_entries,
         ):
             line_to_vec_score = LineToVecScore(
-                entry.id, entry.script, score(candidate_line_to_vecs, entry.line_to_vec)
+                entry.museum_number,
+                entry.script,
+                score(candidate_line_to_vecs, entry.line_to_vec),
             )
             line_to_vec_weighted_score = LineToVecScore(
-                entry.id,
+                entry.museum_number,
                 entry.script,
                 score_weighted(candidate_line_to_vecs, entry.line_to_vec),
             )
