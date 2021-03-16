@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Tuple
+from typing import List
 
 from ebl.dictionary.domain.word import WordId
+from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
+
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
@@ -61,9 +62,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_transliterated_line_to_vec(
-        self,
-    ) -> Dict[MuseumNumber, Tuple[LineToVecEncodings, ...]]:
+    def query_transliterated_line_to_vec(self,) -> List[LineToVecEntry]:
         ...
 
     @abstractmethod

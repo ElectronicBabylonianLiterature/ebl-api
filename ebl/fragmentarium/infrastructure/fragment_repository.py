@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List
 
 from marshmallow import EXCLUDE
 
@@ -7,11 +7,9 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.fragmentarium.domain.line_to_vec_encoding import (
-    LineToVecEncoding,
-    LineToVecEncodings,
-)
+from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -91,20 +89,21 @@ class MongoFragmentRepository(FragmentRepository):
             fragment["museumNumber"] for fragment in cursor
         )
 
-    def query_transliterated_line_to_vec(
-        self,
-    ) -> Dict[MuseumNumber, Tuple[LineToVecEncodings, ...]]:
+    def query_transliterated_line_to_vec(self,) -> List[LineToVecEntry]:
         cursor = self._collection.find_many(
-            HAS_TRANSLITERATION, projection=["museumNumber", "lineToVec"]
+            HAS_TRANSLITERATION, projection=["museumNumber", "script", "lineToVec"]
         )
-
-        return {
-            MuseumNumberSchema().load(fragment["museumNumber"]): tuple(
-                LineToVecEncoding.from_list(line_to_vec)
-                for line_to_vec in fragment["lineToVec"]
+        return [
+            LineToVecEntry(
+                MuseumNumberSchema().load(fragment["museumNumber"]),
+                fragment["script"],
+                tuple(
+                    LineToVecEncoding.from_list(line_to_vec)
+                    for line_to_vec in fragment["lineToVec"]
+                ),
             )
             for fragment in cursor
-        }
+        ]
 
     def query_by_transliterated_sorted_by_date(self):
         cursor = self._collection.aggregate(aggregate_latest())
