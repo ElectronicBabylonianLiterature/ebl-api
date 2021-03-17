@@ -36,6 +36,16 @@ def update_tokens(
     return tuple(updater(pair[0], pair[1]) for pair in zipped)
 
 
+def merge_tokens(old: Sequence[Token], new:  Sequence[Token]) ->  Sequence[Token]:
+    def map_(token):
+        return token.get_key()
+
+    def inner_merge(old: Token, new: Token) -> Token:
+        return old.merge(new)
+
+    return Merger(map_, inner_merge).merge(old, new)
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
     line_number: AbstractLineNumber
@@ -98,17 +108,8 @@ class TextLine(Line):
         )
 
     def merge(self, other: L) -> Union["TextLine", L]:
-        def merge_tokens():
-            def map_(token):
-                return token.get_key()
-
-            def inner_merge(old: Token, new: Token) -> Token:
-                return old.merge(new)
-
-            return Merger(map_, inner_merge).merge(self.content, other.content)
-
         return (
-            TextLine.of_iterable(cast(TextLine, other).line_number, merge_tokens())
+            TextLine.of_iterable(cast(TextLine, other).line_number, merge_tokens(self.content, other.content))
             if isinstance(other, TextLine)
             else other
         )
