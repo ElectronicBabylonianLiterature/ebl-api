@@ -36,7 +36,7 @@ def update_tokens(
     return tuple(updater(pair[0], pair[1]) for pair in zipped)
 
 
-def merge_tokens(old: Sequence[Token], new:  Sequence[Token]) ->  Sequence[Token]:
+def merge_tokens(old: Sequence[Token], new: Sequence[Token]) -> Sequence[Token]:
     def map_(token):
         return token.get_key()
 
@@ -108,10 +108,13 @@ class TextLine(Line):
         )
 
     def merge(self, other: L) -> Union["TextLine", L]:
-        return (
-            TextLine.of_iterable(cast(TextLine, other).line_number, merge_tokens(self.content, other.content))
-            if isinstance(other, TextLine)
-            else other
+        if not isinstance(other, TextLine):
+            return other
+
+        other_text_line = cast(TextLine, other)
+        return TextLine.of_iterable(
+            other_text_line.line_number,
+            merge_tokens(self.content, other_text_line.content),
         )
 
     def strip_alignments(self) -> "TextLine":
