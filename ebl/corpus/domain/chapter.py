@@ -19,7 +19,7 @@ from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
-from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.text_line import TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
 
 
@@ -96,13 +96,19 @@ class LineVariant:
         ]
 
     def merge(self, other: "LineVariant") -> "LineVariant":
-        def inner_merge(old: ManuscriptLine, new: ManuscriptLine) -> ManuscriptLine:
+        def merge_manuscript(
+            old: ManuscriptLine, new: ManuscriptLine
+        ) -> ManuscriptLine:
             return old.merge(new)
 
-        merged_manuscripts = Merger(repr, inner_merge).merge(
+        merged_manuscripts = Merger(repr, merge_manuscript).merge(
             self.manuscripts, other.manuscripts
         )
-        merged = attr.evolve(other, manuscripts=tuple(merged_manuscripts))
+        merged = attr.evolve(
+            other,
+            reconstruction=merge_tokens(self.reconstruction, other.reconstruction),
+            manuscripts=tuple(merged_manuscripts),
+        )
 
         return (
             merged.strip_alignments()

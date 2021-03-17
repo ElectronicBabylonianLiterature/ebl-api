@@ -58,7 +58,10 @@ def test_merge_manuscript_line(old, new, expected):
     assert old.merge(new) == expected
 
 
-RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+RECONSTRUCTION = (
+    AkkadianWord.of((ValueToken.of("buāru"),), unique_lemma=(WordId("buāru I"),)),
+)
+RECONSTRUCTION_WITHOUT_LEMMA = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
@@ -343,6 +346,11 @@ LINE = Line(
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
+        ),
+        (
+            Line(LineNumber(1), (LineVariant(RECONSTRUCTION),)),
+            Line(LineNumber(1), (LineVariant(RECONSTRUCTION_WITHOUT_LEMMA),)),
+            Line(LineNumber(1), (LineVariant(RECONSTRUCTION),)),
         ),
     ],
 )
