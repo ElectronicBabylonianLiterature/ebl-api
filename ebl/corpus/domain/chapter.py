@@ -21,6 +21,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
 @unique
@@ -110,11 +111,10 @@ class LineVariant:
             manuscripts=tuple(merged_manuscripts),
         )
 
-        return (
-            merged.strip_alignments()
-            if self.reconstruction != other.reconstruction
-            else merged
-        )
+        should_strip = [
+            isinstance(token, AbstractWord) for token in self.reconstruction
+        ] != [isinstance(token, AbstractWord) for token in merged.reconstruction]
+        return merged.strip_alignments() if should_strip else merged
 
     def strip_alignments(self) -> "LineVariant":
         stripped_manuscripts = tuple(

@@ -121,7 +121,10 @@ LINE = Line(
                 LineNumber(2),
                 (
                     LineVariant(
-                        (AkkadianWord.of((ValueToken.of("kur"),)),),
+                        (
+                            AkkadianWord.of((ValueToken.of("kur"),)),
+                            AkkadianWord.of((ValueToken.of("ra"),)),
+                        ),
                         NOTE,
                         (
                             ManuscriptLine(
@@ -157,7 +160,10 @@ LINE = Line(
                 LineNumber(2),
                 (
                     LineVariant(
-                        (AkkadianWord.of((ValueToken.of("kur"),)),),
+                        (
+                            AkkadianWord.of((ValueToken.of("kur"),)),
+                            AkkadianWord.of((ValueToken.of("ra"),)),
+                        ),
                         NOTE,
                         (
                             ManuscriptLine(
@@ -351,6 +357,24 @@ LINE = Line(
             Line(LineNumber(1), (LineVariant(RECONSTRUCTION),)),
             Line(LineNumber(1), (LineVariant(RECONSTRUCTION_WITHOUT_LEMMA),)),
             Line(LineNumber(1), (LineVariant(RECONSTRUCTION),)),
+        ),
+        (
+            Line(
+                LineNumber(1), (LineVariant(RECONSTRUCTION, None, (MANUSCRIPT_LINE,)),)
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        RECONSTRUCTION_WITHOUT_LEMMA,
+                        None,
+                        (MANUSCRIPT_LINE.strip_alignments(),),
+                    ),
+                ),
+            ),
+            Line(
+                LineNumber(1), (LineVariant(RECONSTRUCTION, None, (MANUSCRIPT_LINE,)),)
+            ),
         ),
     ],
 )
