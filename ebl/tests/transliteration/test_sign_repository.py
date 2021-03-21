@@ -1,8 +1,11 @@
 import pytest
 
 from ebl.errors import NotFoundError
-from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import SignSchema
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value, \
+    Logogram
+from ebl.transliteration.infrastructure.mongo_sign_repository import SignSchema, \
+    LogogramSchema
 
 COLLECTION = "signs"
 
@@ -96,6 +99,17 @@ def sign_si(mongo_sign_si):
         ),
     )
 
+def test_logogram_load():
+    data = {
+        "logogram": "AŠ-IKU",
+        "atf": "AŠ-IKU",
+        "wordId": ["ikû I"],
+        "schrammLogogram": "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
+    }
+    logogram = Logogram("AŠ-IKU", "AŠ-IKU", tuple("ikû I"),
+                        "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)")
+
+    assert LogogramSchema().load(data) == logogram
 
 def test_load():
     data = {
