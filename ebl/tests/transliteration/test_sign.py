@@ -15,7 +15,7 @@ def test_logogram():
     assert logogram.logogram == "AŠ-IKU"
     assert logogram.atf == Atf("AŠ-IKU")
     assert logogram.word_id == ["ikû I"]
-    assert logogram.schramm_logogram == "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
+    assert logogram.schramm_logogramme == "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
 
 
 def test_sign():

@@ -24,7 +24,7 @@ class Logogram:
     logogram: str = ""
     atf: Atf = Atf("")
     word_id: Sequence[str] = tuple()
-    schramm_logogram: str = ""
+    schramm_logogramme: str = ""
 
 
 @attr.s(frozen=True, auto_attribs=True)

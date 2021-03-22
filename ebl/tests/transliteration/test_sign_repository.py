@@ -140,13 +140,13 @@ def mongo_sign_si_2():
                 "logogram": "AŠ-IKU",
                 "atf": "AŠ-IKU",
                 "wordId": ["ikû I"],
-                "schrammLogogram": "AŠ-IKU; *ikû* (ein Flächenmaß); ME 43 CD 126b ZL 290",
+                "schrammLogogramme": "AŠ-IKU; *ikû* (ein Flächenmaß); ME 43 CD 126b ZL 290",
             },
             {
                 "logogram": "<sup>mul</sup>AŠ-IKU",
                 "atf": "{mul}AŠ-IKU",
                 "wordId": ["ikû I"],
-                "schrammLogogram": "<sup>mul</sup>AŠ-IKU; *ikû* (Sternbild Pegasus); ME 43 CD 126b ZL 290",
+                "schrammLogogramme": "<sup>mul</sup>AŠ-IKU; *ikû* (Sternbild Pegasus); ME 43 CD 126b ZL 290",
             },
         ],
     }
@@ -175,7 +175,7 @@ def test_logogram_schema():
         "logogram": "AŠ-IKU",
         "atf": "AŠ-IKU",
         "wordId": ["ikû I"],
-        "schrammLogogram": "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)",
+        "schrammLogogramme": "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)",
     }
     logogram = Logogram(
         "AŠ-IKU", Atf("AŠ-IKU"), ("ikû I",), "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
