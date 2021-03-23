@@ -37,7 +37,7 @@ class Line(ABC):
     def merge(self, other: L) -> L:
         return other
 
-    def strip_alignments(self: L) -> L:
+    def update_alignments(self: L, alignment_map) -> L:
         return self
 
     def accept(self, visitor: TokenVisitor) -> None:

@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Optional, Sequence, Type, TypeVar
+from typing import Optional, Sequence, Type, TypeVar, cast
 
 import attr
 
@@ -74,8 +74,18 @@ class AbstractWord(Token):
     ) -> A:
         return attr.evolve(self, alignment=alignment, variant=variant)
 
-    def strip_alignment(self: A) -> A:
-        return attr.evolve(self, alignment=None, variant=None)
+    def update_alignment(self: A, alignment_map) -> A:
+        new_alignment = (
+            alignment_map[self.alignment]
+            if self.alignment is not None
+            and cast(int, self.alignment) < len(alignment_map)
+            else None
+        )
+        return attr.evolve(
+            self,
+            alignment=new_alignment,
+            variant=None if new_alignment is None else self.variant,
+        )
 
     def merge(self, token: T) -> T:
         if isinstance(token, AbstractWord):

@@ -1,9 +1,9 @@
-from typing import List, Optional
+from typing import List
 
 import pytest
 
 from ebl.transliteration.domain.tokens import ValueToken
-from ebl.corpus.domain.create_alignment_map import create_alignment_map
+from ebl.corpus.domain.create_alignment_map import AlignmentMap, create_alignment_map
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -27,7 +27,7 @@ from ebl.corpus.domain.create_alignment_map import create_alignment_map
     ],
 )
 def test_create_alignment_map(
-    old: List[str], new: List[str], expected: List[Optional[int]]
+    old: List[str], new: List[str], expected: AlignmentMap
 ) -> None:
     assert (
         create_alignment_map(

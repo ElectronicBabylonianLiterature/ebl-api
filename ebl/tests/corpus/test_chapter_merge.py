@@ -29,7 +29,9 @@ TEXT_LINE = TextLine(
     LineNumber(1),
     (
         Word.of([Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0),
-        Word.of([Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1),
+        Word.of(
+            [Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=None
+        ),
     ),
 )
 
@@ -186,7 +188,7 @@ LINE = Line(
                                                 Reading.of_name("si"),
                                             ],
                                             unique_lemma=(WordId("word"),),
-                                            alignment=None,
+                                            alignment=0,
                                         ),
                                     ),
                                 ),
@@ -368,7 +370,7 @@ LINE = Line(
                     LineVariant(
                         RECONSTRUCTION_WITHOUT_LEMMA,
                         None,
-                        (MANUSCRIPT_LINE.strip_alignments(),),
+                        (MANUSCRIPT_LINE.update_alignments([]),),
                     ),
                 ),
             ),

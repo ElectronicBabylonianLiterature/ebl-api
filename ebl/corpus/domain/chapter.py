@@ -19,9 +19,9 @@ from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
-from ebl.transliteration.domain.text_line import TextLine, merge_tokens
+from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.word_tokens import AbstractWord
+from ebl.corpus.domain.create_alignment_map import create_alignment_map
 
 
 @unique
@@ -65,9 +65,9 @@ class ManuscriptLine:
         merged_line = self.line.merge(other.line)
         return attr.evolve(other, line=merged_line)
 
-    def strip_alignments(self) -> "ManuscriptLine":
+    def update_alignments(self, aligment_map: AlignmentMap) -> "ManuscriptLine":
         return attr.evolve(
-            self, line=self.line.strip_alignments(), omitted_words=tuple()
+            self, line=self.line.update_alignments(aligment_map), omitted_words=tuple()
         )
 
 
@@ -97,30 +97,22 @@ class LineVariant:
         ]
 
     def merge(self, other: "LineVariant") -> "LineVariant":
+        merged_reconstruction = merge_tokens(self.reconstruction, other.reconstruction)
+        alignment_map = create_alignment_map(self.reconstruction, merged_reconstruction)
+
         def merge_manuscript(
             old: ManuscriptLine, new: ManuscriptLine
         ) -> ManuscriptLine:
-            return old.merge(new)
+            return old.merge(new).update_alignments(alignment_map)
 
         merged_manuscripts = Merger(repr, merge_manuscript).merge(
             self.manuscripts, other.manuscripts
         )
-        merged = attr.evolve(
+        return attr.evolve(
             other,
-            reconstruction=merge_tokens(self.reconstruction, other.reconstruction),
+            reconstruction=merged_reconstruction,
             manuscripts=tuple(merged_manuscripts),
         )
-
-        should_strip = [
-            isinstance(token, AbstractWord) for token in self.reconstruction
-        ] != [isinstance(token, AbstractWord) for token in merged.reconstruction]
-        return merged.strip_alignments() if should_strip else merged
-
-    def strip_alignments(self) -> "LineVariant":
-        stripped_manuscripts = tuple(
-            manuscript_line.strip_alignments() for manuscript_line in self.manuscripts
-        )
-        return attr.evolve(self, manuscripts=stripped_manuscripts)
 
 
 @attr.s(auto_attribs=True, frozen=True)

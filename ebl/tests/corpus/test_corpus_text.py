@@ -338,17 +338,19 @@ def test_stage():
     assert stages == [*periods, "Standard Babylonian"]
 
 
-def test_strip_manuscript_alignment():
-    word = Word.of([Reading.of_name("ku")], alignment=1)
+def test_update_manuscript_alignment():
+    word = Word.of(
+        [Reading.of_name("ku")], alignment=1, variant=Word.of([Reading.of_name("uk")])
+    )
     manuscript = ManuscriptLine(
         MANUSCRIPT_ID, LABELS, TextLine(LineNumber(1), (word,)), PARATEXT, OMITTED_WORDS
     )
     expected = ManuscriptLine(
         MANUSCRIPT_ID,
         LABELS,
-        TextLine(LineNumber(1), (word.set_alignment(None, None),)),
+        TextLine(LineNumber(1), (word.set_alignment(0, word.variant),)),
         PARATEXT,
         tuple(),
     )
 
-    assert manuscript.strip_alignments() == expected
+    assert manuscript.update_alignments([None, 0]) == expected
