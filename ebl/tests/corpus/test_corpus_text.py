@@ -339,18 +339,35 @@ def test_stage():
 
 
 def test_update_manuscript_alignment():
-    word = Word.of(
-        [Reading.of_name("ku")], alignment=1, variant=Word.of([Reading.of_name("uk")])
+    word1 = Word.of(
+        [Reading.of_name("ku")], alignment=0, variant=Word.of([Reading.of_name("uk")])
+    )
+    word2 = Word.of(
+        [Reading.of_name("ra")], alignment=1, variant=Word.of([Reading.of_name("ar")])
+    )
+    word3 = Word.of(
+        [Reading.of_name("pa")], alignment=2, variant=Word.of([Reading.of_name("ap")])
     )
     manuscript = ManuscriptLine(
-        MANUSCRIPT_ID, LABELS, TextLine(LineNumber(1), (word,)), PARATEXT, OMITTED_WORDS
+        MANUSCRIPT_ID,
+        LABELS,
+        TextLine(LineNumber(1), (word1, word2, word3)),
+        PARATEXT,
+        (1, 3),
     )
     expected = ManuscriptLine(
         MANUSCRIPT_ID,
         LABELS,
-        TextLine(LineNumber(1), (word.set_alignment(0, word.variant),)),
+        TextLine(
+            LineNumber(1),
+            (
+                word1.set_alignment(None, None),
+                word2.set_alignment(0, word2.variant),
+                word3.set_alignment(None, None),
+            ),
+        ),
         PARATEXT,
-        tuple(),
+        (0,),
     )
 
     assert manuscript.update_alignments([None, 0]) == expected
