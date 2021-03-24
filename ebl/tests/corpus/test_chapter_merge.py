@@ -16,7 +16,7 @@ from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Caesura
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -29,7 +29,9 @@ TEXT_LINE = TextLine(
     LineNumber(1),
     (
         Word.of([Reading.of_name("kur")], unique_lemma=(WordId("word1"),), alignment=0),
-        Word.of([Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=1),
+        Word.of(
+            [Reading.of_name("ra")], unique_lemma=(WordId("word2"),), alignment=None
+        ),
     ),
 )
 
@@ -186,7 +188,7 @@ LINE = Line(
                                                 Reading.of_name("si"),
                                             ],
                                             unique_lemma=(WordId("word"),),
-                                            alignment=None,
+                                            alignment=0,
                                         ),
                                     ),
                                 ),
@@ -368,7 +370,7 @@ LINE = Line(
                     LineVariant(
                         RECONSTRUCTION_WITHOUT_LEMMA,
                         None,
-                        (MANUSCRIPT_LINE.strip_alignments(),),
+                        (MANUSCRIPT_LINE.update_alignments([]),),
                     ),
                 ),
             ),
@@ -376,9 +378,34 @@ LINE = Line(
                 LineNumber(1), (LineVariant(RECONSTRUCTION, None, (MANUSCRIPT_LINE,)),)
             ),
         ),
+        (
+            Line(
+                LineNumber(1), (LineVariant(RECONSTRUCTION, None, (MANUSCRIPT_LINE,)),)
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        (Caesura.certain(),),
+                        None,
+                        (MANUSCRIPT_LINE.update_alignments([]),),
+                    ),
+                ),
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        (Caesura.certain(),),
+                        None,
+                        (MANUSCRIPT_LINE.update_alignments([None]),),
+                    ),
+                ),
+            ),
+        ),
     ],
 )
-def test_merge_line(old, new, expected) -> None:
+def test_merge_line(old: Line, new: Line, expected: Line) -> None:
     assert old.merge(new) == expected
 
 
