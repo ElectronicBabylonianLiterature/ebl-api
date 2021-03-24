@@ -1,16 +1,17 @@
-from typing import Iterable
+from typing import Sequence
 
 import difflib
 
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.text_line import AlignmentMap
+from ebl.transliteration.domain.word_tokens import AbstractWord
 
 UNCHANGED: str = " "
 REMOVED: str = "-"
 ADDED: str = "+"
 
 
-def create_alignment_map(old: Iterable[Token], new: Iterable[Token]) -> AlignmentMap:
+def create_alignment_map(old: Sequence[Token], new: Sequence[Token]) -> AlignmentMap:
     diff = difflib.ndiff([token.value for token in old], [token.value for token in new])
     alignment = 0
     removals = 0
@@ -26,7 +27,9 @@ def create_alignment_map(old: Iterable[Token], new: Iterable[Token]) -> Alignmen
             removals += 1
         elif delta.startswith(ADDED):
             if removals > 0:
-                result[-removals] = alignment
+                result[-removals] = (
+                    alignment if isinstance(new[alignment], AbstractWord) else None
+                )
                 removals -= 1
             alignment += 1
 

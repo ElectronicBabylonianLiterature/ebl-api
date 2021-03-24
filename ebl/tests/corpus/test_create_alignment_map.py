@@ -2,8 +2,13 @@ from typing import List
 
 import pytest
 
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.tokens import Token, ValueToken
 from ebl.corpus.domain.create_alignment_map import AlignmentMap, create_alignment_map
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Caesura
+
+
+def _make_sequence(values: List[str]) -> List[Token]:
+    return [AkkadianWord.of((ValueToken.of(value),)) for value in values]
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -29,10 +34,8 @@ from ebl.corpus.domain.create_alignment_map import AlignmentMap, create_alignmen
 def test_create_alignment_map(
     old: List[str], new: List[str], expected: AlignmentMap
 ) -> None:
-    assert (
-        create_alignment_map(
-            [ValueToken.of(value) for value in old],
-            [ValueToken.of(value) for value in new],
-        )
-        == expected
-    )
+    assert create_alignment_map(_make_sequence(old), _make_sequence(new)) == expected
+
+
+def test_create_alignment_map_remove_unalignable() -> None:
+    assert create_alignment_map(_make_sequence(["kur"]), [Caesura.certain()]) == [None]

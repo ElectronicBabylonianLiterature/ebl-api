@@ -16,7 +16,7 @@ from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Caesura
 from ebl.transliteration.domain.note_line import NoteLine, StringPart
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -378,9 +378,34 @@ LINE = Line(
                 LineNumber(1), (LineVariant(RECONSTRUCTION, None, (MANUSCRIPT_LINE,)),)
             ),
         ),
+        (
+            Line(
+                LineNumber(1), (LineVariant(RECONSTRUCTION, None, (MANUSCRIPT_LINE,)),)
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        (Caesura.certain(),),
+                        None,
+                        (MANUSCRIPT_LINE.update_alignments([]),),
+                    ),
+                ),
+            ),
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        (Caesura.certain(),),
+                        None,
+                        (MANUSCRIPT_LINE.update_alignments([None]),),
+                    ),
+                ),
+            ),
+        ),
     ],
 )
-def test_merge_line(old, new, expected) -> None:
+def test_merge_line(old: Line, new: Line, expected: Line) -> None:
     assert old.merge(new) == expected
 
 
