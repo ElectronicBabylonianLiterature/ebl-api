@@ -11,7 +11,7 @@ from ebl.transliteration.application.token_schemas import (
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway, PerhapsBrokenAway
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )

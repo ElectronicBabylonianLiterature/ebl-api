@@ -10,7 +10,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language_visitor import set_language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )

@@ -7,7 +7,7 @@ from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.lemmatizations import LemmatizationSchema
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )

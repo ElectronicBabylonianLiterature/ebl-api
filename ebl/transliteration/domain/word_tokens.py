@@ -7,7 +7,7 @@ from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )

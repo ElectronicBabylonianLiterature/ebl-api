@@ -21,7 +21,7 @@ from ebl.tests.factories.fragment import (
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
     LemmatizationToken,

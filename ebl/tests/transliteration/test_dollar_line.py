@@ -8,7 +8,7 @@ from ebl.transliteration.domain.dollar_line import (
     ScopeContainer,
     StateDollarLine,
 )
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 def test_loose_dollar_line() -> None:

@@ -22,7 +22,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
 )
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord

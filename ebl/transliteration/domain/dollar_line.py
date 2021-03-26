@@ -6,7 +6,7 @@ import attr
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 Atf = atf.Atf

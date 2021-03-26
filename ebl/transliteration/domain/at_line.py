@@ -6,7 +6,7 @@ import attr
 from ebl.transliteration.domain.atf import Atf, Composite, Discourse
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 @attr.s(auto_attribs=True, frozen=True)

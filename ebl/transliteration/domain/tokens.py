@@ -7,7 +7,7 @@ import attr
 import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )

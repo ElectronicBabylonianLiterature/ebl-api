@@ -7,7 +7,7 @@ from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
     LemmatizationToken,

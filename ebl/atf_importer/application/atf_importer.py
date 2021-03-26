@@ -12,7 +12,7 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import parse_museum_number
-from ebl.transliteration.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.app import create_context
 from ebl.users.domain.user import AtfImporterUser
 import re
