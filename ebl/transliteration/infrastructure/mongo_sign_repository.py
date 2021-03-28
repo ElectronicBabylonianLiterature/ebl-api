@@ -55,15 +55,14 @@ class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
-    logograms = fields.Nested(LogogramSchema, many=True)
-    mes_zl = fields.String(data_key="mesZl")
+    logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
+    mes_zl = fields.String(data_key="mesZl", missing="")
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])
-        if data.get("logograms") is not None:
-            data["logograms"] = tuple(data["logograms"])
+        data["logograms"] = tuple(data["logograms"])
         return Sign(**data)
 
 
