@@ -68,6 +68,22 @@ def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
             }
         },
         {
+            "$unionWith": {
+                "coll": "texts",
+                "pipeline": [
+                    {"$unwind": "$chapters"},
+                    {"$project": {"lines": "$chapters.lines"}},
+                    {"$unwind": "$lines"},
+                    {"$project": {"variants": "$lines.variants"}},
+                    {"$unwind": "$variants"},
+                    {"$project": {"manuscripts": "$variants.manuscripts"}},
+                    {"$unwind": "$manuscripts"},
+                    {"$project": {"tokens": "$manuscripts.line.content"}},
+                    {"$unwind": "$tokens"},
+                ],
+            }
+        },
+        {
             "$match": {
                 "tokens.cleanValue": word,
                 "tokens.normalized": is_normalized,
