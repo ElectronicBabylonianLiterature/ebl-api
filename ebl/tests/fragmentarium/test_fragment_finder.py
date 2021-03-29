@@ -1,7 +1,6 @@
 import pytest
 from mockito import spy2, unstub, verifyZeroInteractions
 
-from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
@@ -171,15 +170,6 @@ def test_search_transliteration_empty(
     verifyZeroInteractions(fragment_repository)
     assert test_result == expected
     unstub()
-
-
-def test_find_lemmas(fragment_finder, dictionary, word, fragment_repository, when):
-    query = "GI₆"
-    unique_lemma = WordId(word["_id"])
-    when(fragment_repository).query_lemmas(query, False).thenReturn([[unique_lemma]])
-    when(dictionary).find(unique_lemma).thenReturn(word)
-
-    assert fragment_finder.find_lemmas(query, False) == [[word]]
 
 
 def test_find_photo(fragment_finder, photo, photo_repository, when):

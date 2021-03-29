@@ -32,6 +32,9 @@ from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.infrastructure.auth0 import Auth0Backend
+from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
+    MongoLemmaRepository,
+)
 
 
 def decode_certificate(encoded_certificate):
@@ -65,6 +68,7 @@ def create_context():
         bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
+        lemma_repository=MongoLemmaRepository(database),
     )
 
 

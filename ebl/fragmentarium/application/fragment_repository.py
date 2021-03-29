@@ -6,7 +6,6 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
-from ebl.lemmatization.domain.lemmatization import Lemma
 
 
 class FragmentRepository(ABC):
@@ -72,10 +71,6 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_next_and_previous_fragment(self, number: MuseumNumber) -> dict:
-        ...
-
-    @abstractmethod
-    def query_lemmas(self, word: str, is_normalized: bool) -> List[Lemma]:
         ...
 
     @abstractmethod

@@ -15,12 +15,6 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.transliteration.domain.atf import Flag
-from ebl.transliteration.domain.enclosure_tokens import (
-    BrokenAway,
-    Erasure,
-    PerhapsBrokenAway,
-)
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
@@ -29,8 +23,8 @@ from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import ErasureState, Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.tokens import Joiner, ValueToken
 
 COLLECTION = "fragments"
 
@@ -362,119 +356,6 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
             transliterated_fragment.line_to_vec,
         )
     ]
-
-
-@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
-def test_find_lemmas(fragment_repository):
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
-
-    assert fragment_repository.query_lemmas("GI₆", False) == [["ginâ I"]]
-
-
-@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
-def test_find_lemmas_normalized(fragment_repository):
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
-
-    assert fragment_repository.query_lemmas("ana", True) == [["normalized I"]]
-
-
-@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
-def test_find_lemmas_multiple(fragment_repository):
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
-
-    assert fragment_repository.query_lemmas("ana", False) == [["ana II"], ["ana I"]]
-
-
-@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
-@pytest.mark.parametrize(
-    "parts,expected",
-    [
-        (
-            [
-                Reading.of(
-                    [ValueToken.of("ana")],
-                    flags=[
-                        Flag.DAMAGE,
-                        Flag.COLLATION,
-                        Flag.UNCERTAIN,
-                        Flag.CORRECTION,
-                    ],
-                )
-            ],
-            [["ana I"]],
-        ),
-        (
-            [
-                BrokenAway.open(),
-                PerhapsBrokenAway.open(),
-                Reading.of([ValueToken.of("ana")]),
-                PerhapsBrokenAway.close(),
-                BrokenAway.close(),
-            ],
-            [["ana I"]],
-        ),
-        (
-            [
-                Reading.of(
-                    [
-                        ValueToken.of("a"),
-                        BrokenAway.open(),
-                        ValueToken.of("n"),
-                        PerhapsBrokenAway.close(),
-                        ValueToken.of("a"),
-                    ]
-                )
-            ],
-            [["ana I"]],
-        ),
-        (
-            [
-                Erasure.open(),
-                Erasure.center(),
-                Reading.of_name("ana").set_erasure(ErasureState.OVER_ERASED),
-                Erasure.close(),
-            ],
-            [["ana I"]],
-        ),
-        (
-            [
-                Erasure.open(),
-                Reading.of_name("ana").set_erasure(ErasureState.ERASED),
-                Erasure.center(),
-                Erasure.close(),
-            ],
-            [],
-        ),
-    ],
-)
-def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
-    fragment = FragmentFactory.build(
-        text=Text.of_iterable(
-            [
-                TextLine.of_iterable(
-                    LineNumber(1), [Word.of(parts, unique_lemma=(WordId("ana I"),))]
-                )
-            ]
-        ),
-        signs="DIŠ",
-    )
-    fragment_repository.create(fragment)
-
-    assert fragment_repository.query_lemmas("ana", False) == expected
-
-
-@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
-@pytest.mark.parametrize("is_normalized", [False, True])
-def test_find_lemmas_not_found(is_normalized, fragment_repository):
-    lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    assert fragment_repository.query_lemmas("aklu", is_normalized) == []
 
 
 def test_update_references(fragment_repository):
