@@ -115,19 +115,14 @@ class StateDollarLine(DollarLine):
 
     @property
     def display_value(self) -> str:
-        return " ".join(
-            [
-                StateDollarLine.to_atf(x)
-                for x in [
-                    self.qualification,
-                    self.extent,
-                    self.scope,
-                    self.state,
-                    self.status,
-                ]
-                if x
-            ]
-        )
+        return " ".join(StateDollarLine.to_atf(x) for x in [
+                        self.qualification,
+                        self.extent,
+                        self.scope,
+                        self.state,
+                        self.status,
+                    ]
+                    if x)
 
     @staticmethod
     def to_atf(column) -> str:
