@@ -364,6 +364,7 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
     ]
 
 
+@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 def test_find_lemmas(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
@@ -372,6 +373,7 @@ def test_find_lemmas(fragment_repository):
     assert fragment_repository.query_lemmas("GI₆", False) == [["ginâ I"]]
 
 
+@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 def test_find_lemmas_normalized(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
@@ -380,6 +382,7 @@ def test_find_lemmas_normalized(fragment_repository):
     assert fragment_repository.query_lemmas("ana", True) == [["normalized I"]]
 
 
+@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 def test_find_lemmas_multiple(fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(lemmatized_fragment)
@@ -388,6 +391,7 @@ def test_find_lemmas_multiple(fragment_repository):
     assert fragment_repository.query_lemmas("ana", False) == [["ana II"], ["ana I"]]
 
 
+@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 @pytest.mark.parametrize(
     "parts,expected",
     [
@@ -465,6 +469,7 @@ def test_find_lemmas_ignores_in_value(parts, expected, fragment_repository):
     assert fragment_repository.query_lemmas("ana", False) == expected
 
 
+@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 @pytest.mark.parametrize("is_normalized", [False, True])
 def test_find_lemmas_not_found(is_normalized, fragment_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()

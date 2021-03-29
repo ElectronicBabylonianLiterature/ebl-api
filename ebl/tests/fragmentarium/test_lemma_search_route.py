@@ -4,6 +4,7 @@ import pytest
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 
 
+@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 @pytest.mark.parametrize(
     "query_word,lemma,is_normalized",
     [("GI₆", "ginâ I", False), ("kur", "normalized I", True)],
