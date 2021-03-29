@@ -4,12 +4,12 @@ from typing import Optional, Sequence, Type, TypeVar
 import attr
 import pydash
 
-from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import Enclosure
+from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import AbstractWord
-from ebl.transliteration.domain.language import Language
 
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
@@ -49,7 +49,7 @@ class AkkadianWord(AbstractWord):
     def of(
         parts: Sequence[Token],
         modifier: Sequence[Flag] = tuple(),
-        unique_lemma: Sequence[WordId] = tuple(),
+        unique_lemma: Lemma = tuple(),
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
     ) -> "AkkadianWord":

@@ -22,6 +22,7 @@ from ebl.fragmentarium.infrastructure.queries import (
     museum_number_is,
     number_is,
 )
+from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "fragments"
@@ -214,7 +215,7 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def query_lemmas(self, word: str, is_normalized: bool) -> List[List[WordId]]:
+    def query_lemmas(self, word: str, is_normalized: bool) -> List[Lemma]:
         cursor = self._collection.aggregate(aggregate_lemmas(word, is_normalized))
         return [
             [WordId(unique_lemma) for unique_lemma in result["_id"]]
