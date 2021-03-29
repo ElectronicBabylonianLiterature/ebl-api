@@ -1,10 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
-
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
@@ -73,10 +71,6 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_next_and_previous_fragment(self, number: MuseumNumber) -> dict:
-        ...
-
-    @abstractmethod
-    def query_lemmas(self, word: str, is_normalized: bool) -> List[List[WordId]]:
         ...
 
     @abstractmethod

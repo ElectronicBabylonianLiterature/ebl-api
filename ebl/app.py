@@ -27,10 +27,14 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
+from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.infrastructure.auth0 import Auth0Backend
+from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
+    MongoLemmaRepository,
+)
 
 
 def decode_certificate(encoded_certificate):
@@ -64,6 +68,7 @@ def create_context():
         bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
+        lemma_repository=MongoLemmaRepository(database),
     )
 
 
@@ -84,6 +89,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_dictionary_routes(api, context, spec)
     create_files_route(api, context, spec)
     create_fragmentarium_routes(api, context, spec)
+    create_lemmatization_routes(api, context, spec)
     create_open_api_route(api, spec)
 
     return api

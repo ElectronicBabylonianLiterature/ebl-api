@@ -10,7 +10,7 @@ from ebl.transliteration.domain.at_line import (
     HeadingAtLine,
 )
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 def test_at_line_heading() -> None:

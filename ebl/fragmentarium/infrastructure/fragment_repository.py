@@ -2,7 +2,6 @@ from typing import List
 
 from marshmallow import EXCLUDE
 
-from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -14,7 +13,6 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
-    aggregate_lemmas,
     aggregate_needs_revision,
     aggregate_path_of_the_pioneers,
     aggregate_random,
@@ -213,13 +211,6 @@ class MongoFragmentRepository(FragmentRepository):
             raise NotFoundError("Could not retrieve any fragments")
         else:
             return result
-
-    def query_lemmas(self, word: str, is_normalized: bool) -> List[List[WordId]]:
-        cursor = self._collection.aggregate(aggregate_lemmas(word, is_normalized))
-        return [
-            [WordId(unique_lemma) for unique_lemma in result["_id"]]
-            for result in cursor
-        ]
 
     def update_references(self, fragment):
         self._collection.update_one(

@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 
 

@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, post_load
 
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 class LemmatizationTokenSchema(Schema):

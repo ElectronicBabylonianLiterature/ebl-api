@@ -3,16 +3,15 @@ from typing import Optional, Sequence, Type, TypeVar, cast
 
 import attr
 
-from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain import atf as atf
-from ebl.transliteration.domain.converters import convert_token_sequence
-from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
+    Lemma,
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain import atf as atf
+from ebl.transliteration.domain.converters import convert_token_sequence
+from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
-
 
 A = TypeVar("A", bound="AbstractWord")
 T = TypeVar("T", bound=Token)
@@ -20,7 +19,7 @@ T = TypeVar("T", bound=Token)
 
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractWord(Token):
-    unique_lemma: Sequence[WordId] = tuple()
+    unique_lemma: Lemma = tuple()
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
     variant: Optional["AbstractWord"] = None
@@ -125,7 +124,7 @@ class Word(AbstractWord):
         cls: Type[W],
         parts: Sequence[Token],
         language: Language = DEFAULT_LANGUAGE,
-        unique_lemma: Sequence[WordId] = tuple(),
+        unique_lemma: Lemma = tuple(),
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,

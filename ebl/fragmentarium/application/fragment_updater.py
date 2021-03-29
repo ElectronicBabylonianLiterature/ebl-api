@@ -9,7 +9,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment, Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
-from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
 
 COLLECTION = "fragments"

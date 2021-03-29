@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Dict, Mapping, Union
+from typing import Any, Dict, Mapping, Sequence, Union
 
 import attr
 import mongomock
@@ -35,11 +35,16 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
+from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
+from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
+    MongoLemmaRepository,
+)
+from ebl.dictionary.domain.word import WordId
 
 
 @pytest.fixture
@@ -249,6 +254,17 @@ def annotations_repository(database):
     return MongoAnnotationsRepository(database)
 
 
+class TestLemmaRepository(MongoLemmaRepository):
+    # Mongomock does not support $unionWith so we need to stub the methods using it.
+    def query_lemmas(self, word: str, is_normalized: bool) -> Sequence[Lemma]:
+        return [[WordId("part1 part2 I")]]
+
+
+@pytest.fixture
+def lemma_repository(database):
+    return TestLemmaRepository(database)
+
+
 @pytest.fixture
 def user() -> User:
     return Auth0User(
@@ -287,6 +303,8 @@ def context(
     changelog,
     bibliography_repository,
     annotations_repository,
+    lemma_repository,
+    database,
     user,
 ):
     return ebl.context.Context(
@@ -301,6 +319,7 @@ def context(
         bibliography_repository=bibliography_repository,
         text_repository=text_repository,
         annotations_repository=annotations_repository,
+        lemma_repository=lemma_repository,
     )
 
 

@@ -18,7 +18,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 TRANSLITERATION: Sequence[Token] = (

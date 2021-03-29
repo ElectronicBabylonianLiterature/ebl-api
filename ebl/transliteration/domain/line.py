@@ -5,7 +5,7 @@ import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.tokens import TokenVisitor
 
 

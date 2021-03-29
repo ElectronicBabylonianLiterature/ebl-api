@@ -1,0 +1,16 @@
+import falcon
+
+from ebl.context import Context
+from ebl.lemmatization.web.lemma_search import LemmaSearch
+from ebl.lemmatization.application.suggestion_finder import SuggestionFinder
+from ebl.dictionary.application.dictionary import Dictionary
+
+
+def create_lemmatization_routes(api: falcon.API, context: Context, spec):
+    dictionary = Dictionary(context.word_repository, context.changelog)
+    finder = SuggestionFinder(dictionary, context.lemma_repository)
+    lemma_search = LemmaSearch(finder)
+
+    api.add_route("/lemmas", lemma_search)
+
+    spec.path(resource=lemma_search)
