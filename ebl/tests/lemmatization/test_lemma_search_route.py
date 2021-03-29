@@ -4,7 +4,6 @@ import pytest
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 
 
-@pytest.mark.xfail(reason="$unionWith is not implemented in mongomock")
 @pytest.mark.parametrize(
     "query_word,lemma,is_normalized",
     [("GI₆", "ginâ I", False), ("kur", "normalized I", True)],
@@ -13,17 +12,14 @@ def test_search_fragment(
     query_word, lemma, is_normalized, client, fragmentarium, dictionary, word
 ):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    matching_word = {**word, "_id": lemma}
-    dictionary.create(word)
-    dictionary.create(matching_word)
     fragmentarium.create(lemmatized_fragment)
-
+    dictionary.create(word)
     result = client.simulate_get(
         "/lemmas", params={"word": query_word, "isNormalized": is_normalized}
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [[matching_word]]
+    assert result.json == [[word]]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 

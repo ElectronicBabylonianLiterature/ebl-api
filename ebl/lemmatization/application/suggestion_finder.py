@@ -11,9 +11,7 @@ class LemmaRepository(ABC):
 
 
 class SuggestionFinder:
-    def __init__(
-        self, dictionary: Dictionary, repository: LemmaRepository
-    ) -> None:
+    def __init__(self, dictionary: Dictionary, repository: LemmaRepository) -> None:
         self._repository = repository
         self._dictionary = dictionary
 
