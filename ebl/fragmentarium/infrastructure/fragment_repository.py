@@ -88,9 +88,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_transliterated_line_to_vec(self,) -> List[LineToVecEntry]:
-        cursor = self._collection.find_many(
-            HAS_TRANSLITERATION, projection=["museumNumber", "script", "lineToVec"]
-        )
+        cursor = self._collection.find_many(HAS_TRANSLITERATION, {"text": False})
         return [
             LineToVecEntry(
                 MuseumNumberSchema().load(fragment["museumNumber"]),
