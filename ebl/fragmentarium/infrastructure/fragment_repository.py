@@ -108,7 +108,9 @@ class MongoFragmentRepository(FragmentRepository):
         return self._map_fragments(cursor)
 
     def query_by_transliterated_not_revised_by_other(self):
-        cursor = self._collection.aggregate(aggregate_needs_revision())
+        cursor = self._collection.aggregate(
+            aggregate_needs_revision(), allowDiskUse=True
+        )
         return FragmentInfoSchema(many=True).load(cursor)
 
     def query_by_transliteration(self, query):
