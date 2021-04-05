@@ -29,6 +29,7 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
+from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.infrastructure.auth0 import Auth0Backend
 
@@ -78,6 +79,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     api = create_api(context)
     spec = create_spec(api, issuer, audience)
 
+    create_signs_routes(api, context, spec)
     create_bibliography_routes(api, context, spec)
     create_cdli_routes(api, spec)
     create_corpus_routes(api, context, spec)

@@ -16,6 +16,7 @@ class MemoizingSignRepository(SignRepository):
         return self._create(sign)
 
     def find(self, name: SignName) -> Sign:
+        print(name)
         return self._find(name)
 
     def search(self, reading, sub_index) -> Optional[Sign]:
