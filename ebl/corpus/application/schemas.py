@@ -168,6 +168,7 @@ class ChapterSchema(Schema):
         MuseumNumberSchema, many=True, missing=tuple(), data_key="uncertainFragments"
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
+    signs = fields.List(fields.String(), missing=tuple())
     parser_version = fields.String(missing="", data_key="parserVersion")
 
     @post_load
@@ -181,6 +182,7 @@ class ChapterSchema(Schema):
             tuple(data["manuscripts"]),
             tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
+            tuple(data["signs"]),
             data["parser_version"],
         )
 

@@ -181,6 +181,7 @@ class Chapter:
     manuscripts: Sequence[Manuscript] = attr.ib(default=tuple())
     uncertain_fragments: Sequence[MuseumNumber] = tuple()
     lines: Sequence[Line] = attr.ib(default=tuple())
+    signs: Sequence[str] = tuple()
     parser_version: str = ""
 
     @manuscripts.validator

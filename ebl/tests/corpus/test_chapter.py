@@ -47,10 +47,16 @@ LINE_VARIANT_3 = LineVariant(
 )
 LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
+SIGNS = ("FOO BAR",)
 CHAPTER = Chapter(
     manuscripts=(Manuscript(MANUSCRIPT_ID, colophon=COLOPHON),),
     lines=(LINE_1, LINE_2, LINE_3),
+    signs=SIGNS,
 )
+
+
+def test_signs() -> None:
+    assert CHAPTER.signs == SIGNS
 
 
 def test_manuscript_text_lines() -> None:
