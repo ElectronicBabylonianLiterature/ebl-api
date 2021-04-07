@@ -6,6 +6,7 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
 
 
 class SiglumEnum(Enum):
@@ -131,6 +132,10 @@ class Manuscript:
     def validate_accession(self, _, value) -> None:
         if self.museum_number and value:
             raise ValueError("Accession given when museum number present.")
+
+    @property
+    def colophon_text_lines(self) -> Sequence[TextLine]:
+        return self.colophon.text_lines
 
     @property
     def siglum(self) -> Siglum:

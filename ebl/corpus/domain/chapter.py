@@ -102,6 +102,16 @@ class LineVariant:
             if manuscript_line.label
         ]
 
+    def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
+        return (
+            pydash.chain(self.manuscripts)
+            .filter(lambda manuscript: manuscript.manuscript_id == manuscript_id)
+            .map_(lambda manuscript: manuscript.line)
+            .filter(lambda line: isinstance(line, TextLine))
+            .head()
+            .value()
+        )
+
     def merge(self, other: "LineVariant") -> "LineVariant":
         merged_reconstruction = merge_tokens(self.reconstruction, other.reconstruction)
         alignment_map = create_alignment_map(self.reconstruction, merged_reconstruction)
@@ -143,6 +153,15 @@ class Line:
             for variant in self.variants
             for label in variant.manuscript_line_labels
         ]
+
+    def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
+        return (
+            pydash.chain(self.variants)
+            .map_(lambda variant: variant.get_manuscript_text_line(manuscript_id))
+            .reject(pydash.is_none)
+            .head()
+            .value()
+        )
 
     def merge(self, other: "Line") -> "Line":
         def inner_merge(old: LineVariant, new: LineVariant) -> LineVariant:
@@ -204,6 +223,17 @@ class Chapter:
     @property
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
+
+    def get_manuscript_text_lines(self, index: int) -> Sequence[TextLine]:
+        manuscript = self.manuscripts[index]
+        manuscript_id = manuscript.id
+        return (
+            pydash.chain(self.lines)
+            .map_(lambda line: line.get_manuscript_text_line(manuscript_id))
+            .reject(pydash.is_none)
+            .concat(manuscript.colophon_text_lines)
+            .value()
+        )
 
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
