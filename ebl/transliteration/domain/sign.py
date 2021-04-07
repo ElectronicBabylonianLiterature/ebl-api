@@ -2,6 +2,8 @@ from typing import NewType, Optional, Sequence
 
 import attr
 
+from ebl.transliteration.domain.atf import Atf
+
 SignName = NewType("SignName", str)
 
 
@@ -18,10 +20,20 @@ class Value:
 
 
 @attr.s(frozen=True, auto_attribs=True)
+class Logogram:
+    logogram: str = ""
+    atf: Atf = Atf("")
+    word_id: Sequence[str] = tuple()
+    schramm_logogramme: str = ""
+
+
+@attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
     lists: Sequence[SignListRecord] = tuple()
     values: Sequence[Value] = tuple()
+    mes_zl: str = ""
+    logograms: Sequence[Logogram] = tuple()
 
     @property
     def standardization(self):

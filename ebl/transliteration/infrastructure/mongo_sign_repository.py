@@ -6,8 +6,13 @@ from pymongo.database import Database
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName, Value
-
+from ebl.transliteration.domain.sign import (
+    Sign,
+    SignListRecord,
+    SignName,
+    Value,
+    Logogram,
+)
 
 COLLECTION = "signs"
 
@@ -34,15 +39,30 @@ class ValueSchema(Schema):
         return {key: value for key, value in data.items() if value is not None}
 
 
+class LogogramSchema(Schema):
+    logogram = fields.String(required=True)
+    atf = fields.String(required=True)
+    word_id = fields.List(fields.String(), required=True, data_key="wordId")
+    schramm_logogramme = fields.String(required=True, data_key="schrammLogogramme")
+
+    @post_load
+    def make_logogram(self, data, **kwargs) -> Logogram:
+        data["word_id"] = tuple(data["word_id"])
+        return Logogram(**data)
+
+
 class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
+    logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
+    mes_zl = fields.String(data_key="mesZl", missing="")
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])
+        data["logograms"] = tuple(data["logograms"])
         return Sign(**data)
 
 
