@@ -32,7 +32,7 @@ class Sign:
     name: SignName
     lists: Sequence[SignListRecord] = tuple()
     values: Sequence[Value] = tuple()
-    mes_zl: str = ""
+    mes_zl: Optional[str] = None
     logograms: Sequence[Logogram] = tuple()
 
     @property

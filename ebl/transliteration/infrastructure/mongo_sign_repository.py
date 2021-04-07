@@ -1,4 +1,5 @@
-from typing import Optional, cast
+import re
+from typing import Optional, cast, Sequence
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
@@ -56,7 +57,7 @@ class SignSchema(Schema):
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
-    mes_zl = fields.String(data_key="mesZl", missing="")
+    mes_zl = fields.String(data_key="mesZl", missing=None)
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
@@ -76,6 +77,12 @@ class MongoSignRepository(SignRepository):
     def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
+
+    def query(self, query: str) -> Sequence[Sign]:
+        cursor = self._collection.aggregate([
+            {"$match": {"_id": {"$regex": re.escape(query), "$options": "i"}}}
+        ])
+        return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index

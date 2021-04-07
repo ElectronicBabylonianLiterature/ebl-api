@@ -10,6 +10,6 @@ class SignsSearch:
 
     @falcon.before(require_scope, "read:words")
     def on_get(self, req, resp):
-        x = SignSchema().dump(self.signs.find(req.params["query"]))
+        x = SignSchema().dump(self.signs.query(req.params["query"]), many=True)
         print(x)
-        resp.media = SignSchema().dump(self.signs.find(req.params["query"]))
+        resp.media = x
