@@ -10,7 +10,7 @@ from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
-from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
 

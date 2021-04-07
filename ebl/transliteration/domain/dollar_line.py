@@ -6,7 +6,7 @@ import attr
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 Atf = atf.Atf
@@ -116,17 +116,15 @@ class StateDollarLine(DollarLine):
     @property
     def display_value(self) -> str:
         return " ".join(
-            [
-                StateDollarLine.to_atf(x)
-                for x in [
-                    self.qualification,
-                    self.extent,
-                    self.scope,
-                    self.state,
-                    self.status,
-                ]
-                if x
+            StateDollarLine.to_atf(x)
+            for x in [
+                self.qualification,
+                self.extent,
+                self.scope,
+                self.state,
+                self.status,
             ]
+            if x
         )
 
     @staticmethod

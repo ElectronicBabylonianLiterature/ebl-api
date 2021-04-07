@@ -5,7 +5,7 @@ import attr
 
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.tokens import TokenVisitor
 
 
@@ -37,7 +37,7 @@ class Line(ABC):
     def merge(self, other: L) -> L:
         return other
 
-    def strip_alignments(self: L) -> L:
+    def update_alignments(self: L, alignment_map) -> L:
         return self
 
     def accept(self, visitor: TokenVisitor) -> None:

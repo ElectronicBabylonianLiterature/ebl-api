@@ -97,12 +97,6 @@ class FragmentFinder:
     def fragment_pager(self, number: MuseumNumber) -> dict:
         return self._repository.query_next_and_previous_fragment(number)
 
-    def find_lemmas(self, word: str, is_normalized: bool) -> List[List[dict]]:
-        return [
-            [self._dictionary.find(unique_lemma) for unique_lemma in result]
-            for result in self._repository.query_lemmas(word, is_normalized)
-        ]
-
     def find_folio(self, folio: Folio) -> File:
         file_name = folio.file_name
         return self._folios.query_by_file_name(file_name)

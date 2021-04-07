@@ -17,7 +17,7 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.lemmatization import LemmatizationError
+from ebl.lemmatization.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.infrastructure.menoizing_sign_repository import (
     MemoizingSignRepository,

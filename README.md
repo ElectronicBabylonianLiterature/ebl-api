@@ -28,7 +28,7 @@ pipenv install --dev
 
 The following are needed to run application:
 
-* a MongoDB database
+* MongoDB 4.4.4
 * Docker (optional, see [Running the application](#running-the-application))
 * [Auth0](https://auth0.com)
 * [Sentry](https://sentry.io)

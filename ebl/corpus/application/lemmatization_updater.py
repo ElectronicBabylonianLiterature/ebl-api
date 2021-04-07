@@ -7,7 +7,7 @@ from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.text import TextItem
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )

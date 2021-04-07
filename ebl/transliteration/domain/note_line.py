@@ -12,7 +12,7 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 SPECIAL_CHARACTERS: Pattern[str] = re.compile(r"[@{}\\]")

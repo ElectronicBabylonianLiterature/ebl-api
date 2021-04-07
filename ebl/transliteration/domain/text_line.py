@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Callable, Iterable, Sequence, Type, TypeVar, Union, cast
+from typing import Callable, Iterable, Optional, Sequence, Type, TypeVar, Union, cast
 
 import attr
 import pydash
@@ -10,7 +10,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language_visitor import set_language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
@@ -44,6 +44,9 @@ def merge_tokens(old: Sequence[Token], new: Sequence[Token]) -> Sequence[Token]:
         return old.merge(new)
 
     return Merger(map_, inner_merge).merge(old, new)
+
+
+AlignmentMap = Sequence[Optional[int]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -117,9 +120,11 @@ class TextLine(Line):
             merge_tokens(self.content, other_text_line.content),
         )
 
-    def strip_alignments(self) -> "TextLine":
-        stripped_content = tuple(token.strip_alignment() for token in self.content)
-        return attr.evolve(self, content=stripped_content)
+    def update_alignments(self, alignment_map: AlignmentMap) -> "TextLine":
+        updated_content = tuple(
+            token.update_alignment(alignment_map) for token in self.content
+        )
+        return attr.evolve(self, content=updated_content)
 
     def accept(self, visitor: TokenVisitor) -> None:
         for token in self.content:

@@ -2,7 +2,7 @@ from typing import Sequence
 
 import attr
 
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 @attr.s(auto_attribs=True, frozen=True)

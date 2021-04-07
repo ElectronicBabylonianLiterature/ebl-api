@@ -1,14 +1,12 @@
 from typing import Optional, Sequence
 
 import attr
-
 import ebl.transliteration.domain.atf as atf
-from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.transliteration.domain.converters import convert_flag_sequence
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import AbstractWord
-
 
 GREEK_LETTERS: str = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω"
 
@@ -66,7 +64,7 @@ class GreekWord(AbstractWord):
     def of(
         parts: Sequence[Token],
         language: Language = Language.GREEK,
-        unique_lemma: Sequence[WordId] = tuple(),
+        unique_lemma: Lemma = tuple(),
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
         erasure: ErasureState = ErasureState.NONE,

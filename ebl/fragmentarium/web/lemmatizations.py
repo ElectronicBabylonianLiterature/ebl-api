@@ -9,7 +9,7 @@ from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )
 from marshmallow import fields
-from ebl.transliteration.domain.lemmatization import Lemmatization
+from ebl.lemmatization.domain.lemmatization import Lemmatization
 
 
 class LemmatizationSchema(Schema):

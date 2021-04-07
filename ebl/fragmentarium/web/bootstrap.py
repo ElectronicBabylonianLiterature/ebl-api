@@ -20,7 +20,6 @@ from ebl.fragmentarium.web.fragment_pager import FragmentPagerResource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsResource
 from ebl.fragmentarium.web.genres import GenresResource
-from ebl.fragmentarium.web.lemma_search import LemmaSearch
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
@@ -61,7 +60,6 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     annotations = AnnotationResource(annotations_service)
     fragment_pager = FragmentPagerResource(finder)
     folio_pager = FolioPagerResource(finder)
-    lemma_search = LemmaSearch(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
 
@@ -76,7 +74,6 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     api.add_route("/fragments/{number}/annotations", annotations)
     api.add_route("/fragments/{number}/photo", photo)
     api.add_route("/genres", genres)
-    api.add_route("/lemmas", lemma_search)
     api.add_route("/statistics", statistics)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
     api.add_route("/folios/{name}/{number}", folios)
@@ -95,7 +92,6 @@ def create_fragmentarium_routes(api: falcon.API, context: Context, spec):
     spec.path(resource=transliteration)
     spec.path(resource=annotations)
     spec.path(resource=photo)
-    spec.path(resource=lemma_search)
     spec.path(resource=statistics)
     spec.path(resource=folio_pager)
     spec.path(resource=fragment_pager)

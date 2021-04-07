@@ -7,7 +7,7 @@ import attr
 import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lemmatization import (
+from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
@@ -145,7 +145,7 @@ class Token(ABC):
                 f"Incompatible lemmatization token {lemma} for {self}"
             )
 
-    def strip_alignment(self: T) -> T:
+    def update_alignment(self: T, alignment_map) -> T:
         return self
 
     def set_enclosure_type(self: T, enclosure_type: AbstractSet[EnclosureType]) -> T:

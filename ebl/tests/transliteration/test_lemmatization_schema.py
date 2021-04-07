@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.transliteration.domain.lemmatization import LemmatizationToken
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )

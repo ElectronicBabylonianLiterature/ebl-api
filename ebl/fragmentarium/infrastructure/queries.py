@@ -37,34 +37,6 @@ def aggregate_random() -> List[dict]:
     return [{"$match": HAS_TRANSLITERATION}, sample_size_one()]
 
 
-def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
-    return [
-        {
-            "$match": {
-                "text.lines.content": {
-                    "$elemMatch": {
-                        "cleanValue": word,
-                        "uniqueLemma.0": {"$exists": True},
-                    }
-                }
-            }
-        },
-        {"$project": {"lines": "$text.lines"}},
-        {"$unwind": "$lines"},
-        {"$project": {"tokens": "$lines.content"}},
-        {"$unwind": "$tokens"},
-        {
-            "$match": {
-                "tokens.cleanValue": word,
-                "tokens.normalized": is_normalized,
-                "tokens.uniqueLemma.0": {"$exists": True},
-            }
-        },
-        {"$group": {"_id": "$tokens.uniqueLemma", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}},
-    ]
-
-
 def aggregate_latest() -> List[dict]:
     temp_field_name = "_temp"
     return [
