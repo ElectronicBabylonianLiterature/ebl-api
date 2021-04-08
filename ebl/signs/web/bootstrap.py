@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.context import Context
-from ebl.signs.web.word_search import SignsSearch
+from ebl.signs.web.sign_search import SignsSearch
 
 from ebl.transliteration.infrastructure.menoizing_sign_repository import \
     MemoizingSignRepository

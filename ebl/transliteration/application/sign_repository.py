@@ -14,7 +14,15 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
-    def query(self, query: str) -> Sequence[Sign]:
+    def search_by_id(self, query: str) -> Sequence[Sign]:
+        ...
+
+    @abstractmethod
+    def search_all(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
+        ...
+
+    @abstractmethod
+    def search_composite_signs(self, reading, sub_index) -> Sequence[Sign]:
         ...
 
     @abstractmethod

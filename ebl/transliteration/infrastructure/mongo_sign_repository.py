@@ -78,11 +78,32 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
-    def query(self, query: str) -> Sequence[Sign]:
+    def search_by_id(self, query: str) -> Sequence[Sign]:
         cursor = self._collection.aggregate([
             {"$match": {"_id": {"$regex": re.escape(query), "$options": "i"}}}
         ])
         return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
+
+    def search_all(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
+        nested_query = {"value": reading}
+        if sub_index:
+            nested_query["subIndex"] = sub_index
+
+            cursor = self._collection.find_many(
+                {
+                    "values": {
+                        "$elemMatch": nested_query
+                    }
+                }
+            )
+            return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
+
+    def search_composite_signs(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
+        intermediate_results = self.search_all(reading, sub_index)
+        results = []
+        for result in intermediate_results:
+            results.append(self.search_by_id(result.name))
+        return results
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
