@@ -85,10 +85,8 @@ class MongoSignRepository(SignRepository):
         return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
 
     def search_all(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
-        nested_query = {"value": reading}
         if sub_index:
-            nested_query["subIndex"] = sub_index
-
+            nested_query = {"value": reading, "subIndex": sub_index}
             cursor = self._collection.find_many(
                 {
                     "values": {
@@ -100,10 +98,7 @@ class MongoSignRepository(SignRepository):
 
     def search_composite_signs(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
         intermediate_results = self.search_all(reading, sub_index)
-        results = []
-        for result in intermediate_results:
-            results.append(self.search_by_id(result.name))
-        return results
+        return [self.search_by_id(result.name) for result in intermediate_results]
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
