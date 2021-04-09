@@ -225,12 +225,10 @@ class Chapter:
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
 
-    def get_manuscript_text_lines(self, index: int) -> Sequence[TextLine]:
-        manuscript = self.manuscripts[index]
-        manuscript_id = manuscript.id
+    def get_manuscript_text_lines(self, manuscript: Manuscript) -> Sequence[TextLine]:
         return (
             pydash.chain(self.lines)
-            .map_(lambda line: line.get_manuscript_text_line(manuscript_id))
+            .map_(lambda line: line.get_manuscript_text_line(manuscript.id))
             .reject(pydash.is_none)
             .concat(manuscript.colophon_text_lines)
             .value()

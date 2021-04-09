@@ -60,7 +60,7 @@ def test_signs() -> None:
 
 
 def test_manuscript_text_lines() -> None:
-    assert CHAPTER.get_manuscript_text_lines(0) == [
+    assert CHAPTER.get_manuscript_text_lines(CHAPTER.manuscripts[0]) == [
         LINE_VARIANT_1.manuscripts[0].line,
         LINE_VARIANT_3.manuscripts[0].line,
         *COLOPHON.text_lines,

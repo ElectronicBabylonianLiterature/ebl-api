@@ -189,6 +189,7 @@ def test_importing(client, bibliography, sign_repository, signs):
             attr.evolve(
                 text.chapters[0],
                 lines=parse_chapter(atf, text.chapters[0].manuscripts),
+                signs=("KU",),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),

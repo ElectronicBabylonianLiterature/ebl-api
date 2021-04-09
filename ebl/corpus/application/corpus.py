@@ -16,6 +16,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId, ChapterId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.users.domain.user import User
 
 COLLECTION = "texts"
@@ -50,11 +51,13 @@ class Corpus:
         bibliography,
         changelog,
         transliteration_factory,
+        sign_repository: SignRepository,
     ):
         self._repository: TextRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
         self._transliteration_factory = transliteration_factory
+        self._sign_repository = sign_repository
 
     def create(self, text: Text, user) -> None:
         self._validate_text(text)
@@ -101,7 +104,9 @@ class Corpus:
         self.update_lines(id_, lines, user)
 
     def update_lines(self, id_: ChapterId, lines: Sequence[Line], user: User) -> None:
-        self._update_chapter(id_.text_id, LinesUpdater(id_.index, lines), user)
+        self._update_chapter(
+            id_.text_id, LinesUpdater(id_.index, lines, self._sign_repository), user
+        )
 
     def _update_chapter(self, id_: TextId, updater: ChapterUpdater, user: User) -> None:
         old_text = self._repository.find(id_)
