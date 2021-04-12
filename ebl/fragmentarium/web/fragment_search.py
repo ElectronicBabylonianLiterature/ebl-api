@@ -1,14 +1,12 @@
-from typing import Union
-from typing import Tuple
+from typing import Tuple, Union
 
 import falcon
-
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
-from ebl.fragmentarium.application.transliteration_query_factory import (
+from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from ebl.users.web.require_scope import require_scope

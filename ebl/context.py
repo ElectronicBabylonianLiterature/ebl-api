@@ -10,14 +10,14 @@ from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.application.transliteration_query_factory import (
-    TransliterationQueryFactory,
-)
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
 from ebl.lemmatization.application.suggestion_finder import LemmaRepository
 from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.application.transliteration_query_factory import (
+    TransliterationQueryFactory,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)

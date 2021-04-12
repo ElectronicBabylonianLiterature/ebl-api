@@ -2,10 +2,10 @@ import re
 
 import pytest
 
-from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 ATF = Atf(
     "1'. [...-ku]-nu-ši [...]\n"

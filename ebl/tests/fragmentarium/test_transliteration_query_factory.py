@@ -1,10 +1,10 @@
 import pytest
 
-from ebl.fragmentarium.application.transliteration_query_factory import (
+from ebl.errors import DataError
+from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
-from ebl.errors import DataError
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 def test_create_query(sign_repository, signs):
