@@ -94,7 +94,9 @@ class Corpus:
     ) -> None:
         self._update_chapter(
             id_.text_id,
-            ManuscriptUpdater(id_.index, manuscripts, uncertain_fragments),
+            ManuscriptUpdater(
+                id_.index, manuscripts, uncertain_fragments, self._sign_repository
+            ),
             user,
         )
 

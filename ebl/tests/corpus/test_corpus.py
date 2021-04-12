@@ -20,6 +20,7 @@ from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
@@ -463,10 +464,19 @@ def test_updating_manuscripts(
                 manuscripts=(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
+                        colophon=Transliteration.of_iterable(
+                            [
+                                TextLine.of_iterable(
+                                    LineNumber(1, True),
+                                    (Word.of([Reading.of_name("ba")]),),
+                                )
+                            ]
+                        ),
                         notes="Updated manuscript.",
                     ),
                 ),
                 uncertain_fragments=uncertain_fragments,
+                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA",),
             ),
         ),
     )
