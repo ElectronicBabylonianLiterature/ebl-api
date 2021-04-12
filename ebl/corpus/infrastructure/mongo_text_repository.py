@@ -7,6 +7,7 @@ from ebl.corpus.application.text_serializer import deserialize, serialize
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -21,6 +22,7 @@ class MongoTextRepository(TextRepository):
         self._collection.create_index(
             [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
         )
+        self._collection.create_index([("chapters.signs", pymongo.ASCENDING)])
 
     def create(self, text: Text) -> None:
         self._collection.insert_one(serialize(text))
@@ -45,3 +47,13 @@ class MongoTextRepository(TextRepository):
         self._collection.update_one(
             {"category": id_.category, "index": id_.index}, {"$set": serialize(text)}
         )
+
+    def query_by_transliteration(self, query: TransliterationQuery) -> List[Text]:
+        return [
+            deserialize(mongo_text)
+            for mongo_text in self._collection.find_many(
+                {"chapters.signs": {"$regex": query.regexp}},
+                projection={"_id": False},
+                limit=100,
+            )
+        ]
