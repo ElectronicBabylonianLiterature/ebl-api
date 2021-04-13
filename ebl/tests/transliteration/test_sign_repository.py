@@ -200,6 +200,8 @@ def test_sign_schema():
         (SignListRecord("ABZ", "03+53"),),
         (Value("kur", 3), Value("ruk")),
     )
+    x = SignSchema().dump(sign)
+    x["name"] = x.pop("_id")
     assert SignSchema().load(data) == sign
     assert SignSchema().dump(sign) == data
 
