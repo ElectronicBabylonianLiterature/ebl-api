@@ -12,9 +12,14 @@ class SignsSearch:
     def on_get(self, req, resp):
         sign_query = req.params
         if sign_query["isIncludeHomophones"] == "true":
-            resp.media = SignSchema().dump(self.signs.search_all(sign_query["value"]))
+            resp.media = SignSchema().dump(self.signs.search_all_sorted_by_sub_index(sign_query["value"]))
         elif sign_query["isComposite"] == "true":
-            resp.media = SignSchema().dump(self.signs.search_composite_signs(sign_query["value"]))
+            resp.media = SignSchema().dump(
+                self.signs.search_composite_signs(sign_query["value"])
+            )
         else:
-            resp.media = SignSchema().dump(self.signs.search_all(sign_query["value"], sign_query["subIndex"] if sign_query["subIndex"] != "" else None))
-
+            resp.media = SignSchema().dump(
+                self.signs.search_all(
+                    sign_query["value"], sign_query.get("subIndex", None)
+                )
+            )

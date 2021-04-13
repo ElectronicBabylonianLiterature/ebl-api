@@ -18,11 +18,17 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
-    def search_all(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
+    def search_all(
+        self, reading: str, sub_index: Optional[str] = None
+    ) -> Sequence[Sign]:
         ...
 
     @abstractmethod
     def search_composite_signs(self, reading, sub_index) -> Sequence[Sign]:
+        ...
+
+    @abstractmethod
+    def search_all_sorted_by_sub_index(self, reading: str) -> Sequence[Sign]:
         ...
 
     @abstractmethod

@@ -79,33 +79,94 @@ class MongoSignRepository(SignRepository):
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
     def search_by_id(self, query: str) -> Sequence[Sign]:
-        cursor = self._collection.aggregate([
-            {"$match": {"_id": {"$regex": re.escape(query), "$options": "i"}}}
-        ])
-        return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
+        cursor = self._collection.aggregate(
+            [{"$match": {"_id": {"$regex": re.escape(query), "$options": "i"}}}]
+        )
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
-    def search_all(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
+    def search_all(
+        self, reading: str, sub_index: Optional[int] = None
+    ) -> Sequence[Sign]:
         nested_query = {"value": reading}
         if sub_index:
             nested_query["subIndex"] = sub_index
 
-            cursor = self._collection.find_many(
+        cursor = self._collection.find_many({"values": {"$elemMatch": nested_query}})
+        return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
+
+    def search_all_sorted_by_sub_index(self, reading: str) -> Sequence[Sign]:
+        cursor = self._collection.aggregate(
+            [
+                {"$match": {"values.value": reading}},
+                {"$unwind": "$values"},
                 {
-                    "values": {
-                        "$elemMatch": nested_query
+                    "$addFields": {
+                        "subIndexCopy": {
+                            "$cond": [
+                                {"$eq": ["$values.value", reading]},
+                                {"$ifNull": ["$values.subIndex", float("inf")]},
+                                float("inf"),
+                            ]
+                        }
                     }
-                }
-            )
-            return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
+                },
+                {
+                    "$group": {
+                        "_id": "$_id",
+                        "lists": {"$first": "$lists"},
+                        "unicode": {"$first": "$unicode"},
+                        "mesZl": {"$first": "$mesZl"},
+                        "Logograms": {"$push": "$Logograms"},
+                        "values": {"$push": "$values"},
+                        "subIndexCopy": {"$min": "$subIndexCopy"},
+                    }
+                },
+                {"$sort": {"subIndexCopy": 1}},
+            ]
+        )
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
-    def search_composite_signs(self, reading: str, sub_index: Optional[str] = None) -> Sequence[Sign]:
-        intermediate_results = self.search_all(reading, sub_index)
-        results = []
-        for result in intermediate_results:
-            results.append(self.search_by_id(result.name))
-        return results
+    def search_composite_signs(
+        self, reading: str, sub_index: Optional[int] = None
+    ) -> Sequence[Sign]:
+        elem_match = {"value": reading}
+        if sub_index:
+            elem_match["subIndex"] = sub_index
+        cursor = self._collection.aggregate(
+            [
+                {"$match": {"values": {"$elemMatch": elem_match}}},
+                {
+                    "$lookup": {
+                        "from": "signs",
+                        "let": {"leftId": "$_id"},
+                        "pipeline": [
+                            {
+                                "$match": {
+                                    "$expr": {
+                                        "$regexMatch": {
+                                            "input": "$_id",
+                                            "regex": {
+                                                "$concat": [
+                                                    r".*(^|[\.\+×&%@x|\(\)])",
+                                                    "$$leftId",
+                                                    r"($|[\.\+×&%@x|\(\)])",
+                                                ]
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "as": "joined",
+                    }
+                },
+                {"$unwind": "$joined"},
+                {"$replaceRoot": {"newRoot": "$joined"}},
+            ]
+        )
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
-    def search(self, reading, sub_index) -> Optional[Sign]:
+    def search(self, reading: str, sub_index: int) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
         try:
             data = self._collection.find_one(
