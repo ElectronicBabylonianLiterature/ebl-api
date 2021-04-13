@@ -73,7 +73,7 @@ class FragmentFinder:
             return []
         else:
             return [
-                FragmentInfo.of(fragment, query.get_matching_lines(fragment))
+                FragmentInfo.of(fragment, fragment.get_matching_lines(query))
                 for fragment in self._repository.query_by_transliteration(query)
             ]
 

@@ -12,7 +12,13 @@ from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
+from itertools import chain, groupby
+import re
+
+
+Lines = Sequence[Sequence[str]]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -89,3 +95,25 @@ class Fragment:
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)
+
+    def get_matching_lines(self, query: TransliterationQuery) -> Lines:
+        def line_number(position):
+            return len(
+                [
+                    char
+                    for char in chain.from_iterable(self.signs[:position])
+                    if char == "\n"
+                ]
+            )
+
+        matches = re.finditer(query.regexp, self.signs)
+        line_numbers = [
+            (line_number(match.start()), line_number(match.end())) for match in matches
+        ]
+
+        lines = [line.atf for line in self.text.text_lines]
+
+        return tuple(
+            tuple(lines[numbers[0] : numbers[1] + 1])
+            for numbers, _ in groupby(line_numbers)
+        )
