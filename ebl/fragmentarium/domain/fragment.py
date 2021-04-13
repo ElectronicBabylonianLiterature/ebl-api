@@ -14,8 +14,7 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
-from itertools import chain, groupby
-import re
+from itertools import groupby
 
 
 Lines = Sequence[Sequence[str]]
@@ -97,20 +96,7 @@ class Fragment:
         return attr.evolve(self, text=text)
 
     def get_matching_lines(self, query: TransliterationQuery) -> Lines:
-        def line_number(position):
-            return len(
-                [
-                    char
-                    for char in chain.from_iterable(self.signs[:position])
-                    if char == "\n"
-                ]
-            )
-
-        matches = re.finditer(query.regexp, self.signs)
-        line_numbers = [
-            (line_number(match.start()), line_number(match.end())) for match in matches
-        ]
-
+        line_numbers = query.match(self.signs)
         lines = [line.atf for line in self.text.text_lines]
 
         return tuple(
