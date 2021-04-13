@@ -14,17 +14,16 @@ class MemoizingSignRepository(SignRepository):
         self._search_by_id = pydash.memoize(delegate.search_by_id)
         self._search_all = pydash.memoize(delegate.search_all)
         self._search_composite_signs = pydash.memoize(delegate.search_composite_signs)
-        #self._search_all_sorted_by_sub_index = pydash.memoize(delegate.search_all_sorted_by_sub_index)
+        self._search_include_homophones = pydash.memoize(delegate.search_include_homophones)
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)
 
     def find(self, name: SignName) -> Sign:
         return self._find(name)
-    """
-    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
-        return self._search_all_sorted_by_sub_index(reading)
-        """
+
+    def search_include_homophones(self, reading) -> Sequence[Sign]:
+        return self._search_include_homophones(reading)
 
     def search_composite_signs(
         self, reading: str, sub_index: Optional[int] = None

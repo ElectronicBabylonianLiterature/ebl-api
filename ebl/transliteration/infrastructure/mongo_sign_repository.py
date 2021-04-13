@@ -94,7 +94,7 @@ class MongoSignRepository(SignRepository):
         cursor = self._collection.find_many({"values": {"$elemMatch": nested_query}})
         return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
 
-    def search_all_sorted_by_sub_index(self, reading: str) -> Sequence[Sign]:
+    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
         cursor = self._collection.aggregate(
             [
                 {"$match": {"values.value": reading}},

@@ -28,7 +28,7 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
-    def search_all_sorted_by_sub_index(self, reading: str) -> Sequence[Sign]:
+    def search_include_homophones(self, reading) -> Sequence[Sign]:
         ...
 
     @abstractmethod
