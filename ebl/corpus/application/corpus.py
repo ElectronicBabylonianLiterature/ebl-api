@@ -15,8 +15,10 @@ from ebl.corpus.domain.chapter import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId, ChapterId
+from ebl.corpus.domain.text_info import TextInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
 
 COLLECTION = "texts"
@@ -37,6 +39,10 @@ class TextRepository(ABC):
 
     @abstractmethod
     def update(self, id_: TextId, text: Text) -> None:
+        ...
+
+    @abstractmethod
+    def query_by_transliteration(self, query: TransliterationQuery) -> List[Text]:
         ...
 
 
@@ -69,6 +75,16 @@ class Corpus:
     def find(self, id_: TextId) -> Text:
         text = self._repository.find(id_)
         return self._hydrate_references(text)
+
+    def search_transliteration(self, query: TransliterationQuery) -> List[TextInfo]:
+        return (
+            []
+            if query.is_empty()
+            else [
+                TextInfo.of(text, query)
+                for text in self._repository.query_by_transliteration(query)
+            ]
+        )
 
     def list(self) -> List[Text]:
         return self._repository.list()
