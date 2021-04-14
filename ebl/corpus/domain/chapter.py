@@ -172,6 +172,12 @@ class Line:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class TextLineEntry:
+    line: TextLine
+    source: Optional[Line] = None
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     classification: Classification = Classification.ANCIENT
     stage: Stage = Stage.NEO_ASSYRIAN
@@ -225,12 +231,20 @@ class Chapter:
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
 
-    def get_manuscript_text_lines(self, manuscript: Manuscript) -> Sequence[TextLine]:
+    def get_manuscript_text_lines(
+        self, manuscript: Manuscript
+    ) -> Sequence[TextLineEntry]:
+        def create_entry(line: Line) -> Optional[TextLineEntry]:
+            text_line = line.get_manuscript_text_line(manuscript.id)
+            return text_line and TextLineEntry(text_line, line)
+
         return (
             pydash.chain(self.lines)
-            .map_(lambda line: line.get_manuscript_text_line(manuscript.id))
+            .map_(create_entry)
             .reject(pydash.is_none)
-            .concat(manuscript.colophon_text_lines)
+            .concat(
+                [TextLineEntry(line, None) for line in manuscript.colophon_text_lines]
+            )
             .value()
         )
 

@@ -21,7 +21,9 @@ class SignsUpdater:
 
     def _create_signs(self, chapter: Chapter) -> Sequence[str]:
         return tuple(
-            self._map_lines(chapter.get_manuscript_text_lines(manuscript))
+            self._map_lines(
+                [entry.line for entry in chapter.get_manuscript_text_lines(manuscript)]
+            )
             for manuscript in chapter.manuscripts
         )
 

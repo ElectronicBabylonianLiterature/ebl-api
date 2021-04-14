@@ -1,5 +1,11 @@
 import attr
-from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Line,
+    LineVariant,
+    ManuscriptLine,
+    TextLineEntry,
+)
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.labels import SurfaceLabel
@@ -18,14 +24,14 @@ COLOPHON = Transliteration.of_iterable(
 )
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
-MANUSCRIPT_TEXT = TextLine(
+MANUSCRIPT_TEXT_1 = TextLine(
     LineNumber(1), (Word.of([Reading.of([ValueToken.of("ku")])]),)
 )
 
 LINE_VARIANT_1 = LineVariant(
     LINE_RECONSTRUCTION,
     None,
-    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT),),
+    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_1),),
 )
 LINE_1 = Line(LineNumber(1), (LINE_VARIANT_1,))
 
@@ -34,16 +40,11 @@ LINE_VARIANT_2 = LineVariant(
 )
 LINE_2 = Line(LineNumber(2), (LINE_VARIANT_2,))
 
+MANUSCRIPT_TEXT_3 = attr.evolve(MANUSCRIPT_TEXT_1, line_number=LineNumber(3))
 LINE_VARIANT_3 = LineVariant(
     LINE_RECONSTRUCTION,
     None,
-    (
-        ManuscriptLine(
-            MANUSCRIPT_ID,
-            tuple(),
-            attr.evolve(MANUSCRIPT_TEXT, line_number=LineNumber(3)),
-        ),
-    ),
+    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_3),),
 )
 LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
@@ -61,7 +62,7 @@ def test_signs() -> None:
 
 def test_manuscript_text_lines() -> None:
     assert CHAPTER.get_manuscript_text_lines(CHAPTER.manuscripts[0]) == [
-        LINE_VARIANT_1.manuscripts[0].line,
-        LINE_VARIANT_3.manuscripts[0].line,
-        *COLOPHON.text_lines,
+        TextLineEntry(MANUSCRIPT_TEXT_1, LINE_1),
+        TextLineEntry(MANUSCRIPT_TEXT_3, LINE_3),
+        *[TextLineEntry(line, None) for line in COLOPHON.text_lines],
     ]
