@@ -174,7 +174,7 @@ class Line:
 @attr.s(auto_attribs=True, frozen=True)
 class TextLineEntry:
     line: TextLine
-    source: Optional[Line] = None
+    source: Optional[int] = None
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -234,9 +234,9 @@ class Chapter:
     def get_manuscript_text_lines(
         self, manuscript: Manuscript
     ) -> Sequence[TextLineEntry]:
-        def create_entry(line: Line) -> Optional[TextLineEntry]:
+        def create_entry(line: Line, index: int) -> Optional[TextLineEntry]:
             text_line = line.get_manuscript_text_line(manuscript.id)
-            return text_line and TextLineEntry(text_line, line)
+            return text_line and TextLineEntry(text_line, index)
 
         return (
             pydash.chain(self.lines)

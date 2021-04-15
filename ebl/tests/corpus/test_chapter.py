@@ -62,7 +62,7 @@ def test_signs() -> None:
 
 def test_manuscript_text_lines() -> None:
     assert CHAPTER.get_manuscript_text_lines(CHAPTER.manuscripts[0]) == [
-        TextLineEntry(MANUSCRIPT_TEXT_1, LINE_1),
-        TextLineEntry(MANUSCRIPT_TEXT_3, LINE_3),
+        TextLineEntry(MANUSCRIPT_TEXT_1, 0),
+        TextLineEntry(MANUSCRIPT_TEXT_3, 2),
         *[TextLineEntry(line, None) for line in COLOPHON.text_lines],
     ]

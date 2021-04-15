@@ -1,4 +1,4 @@
-from typing import List, Sequence, Tuple, Union
+from typing import List, Sequence, Tuple, cast
 
 import attr
 
@@ -20,7 +20,8 @@ class ChapterId:
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterInfo:
     id_: ChapterId
-    matching_lines: Sequence[Sequence[Union[Line, TextLine]]]
+    matching_lines: Sequence[Line]
+    matching_colophon_lines: Sequence[Sequence[TextLine]]
 
     @staticmethod
     def of(chapter: Chapter, query: TransliterationQuery) -> "ChapterInfo":
@@ -31,17 +32,31 @@ class ChapterInfo:
             chapter.get_manuscript_text_lines(manuscript)
             for manuscript in chapter.manuscripts
         ]
-        matching_lines: List[List[Union[TextLine, Line]]] = [
+        matching_lines: List[Line] = [
+            chapter.lines[index]
+            for index in sorted(
+                {
+                    cast(int, line.source)
+                    for index, numbers in enumerate(line_numbers)
+                    for start, end in numbers
+                    for line in text_lines[index][start:end]
+                    if line.source is not None
+                }
+            )
+        ]
+        matching_colophon_lines: List[List[TextLine]] = [
             [
-                line.source or line.line
+                line.line
                 for start, end in numbers
                 for line in text_lines[index][start:end]
+                if line.source is None
             ]
             for index, numbers in enumerate(line_numbers)
         ]
         return ChapterInfo(
             ChapterId(chapter.classification, chapter.stage, chapter.name),
             matching_lines,
+            matching_colophon_lines,
         )
 
 
