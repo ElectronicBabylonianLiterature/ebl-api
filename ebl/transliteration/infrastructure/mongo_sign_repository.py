@@ -1,6 +1,7 @@
 import re
 from typing import Optional, cast, Sequence
 
+import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
@@ -58,13 +59,19 @@ class SignSchema(Schema):
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
     mes_zl = fields.String(data_key="mesZl", missing=None)
+    unicode = fields.List(fields.Int(), missing=tuple())
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])
         data["logograms"] = tuple(data["logograms"])
+        data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
 
 
 class MongoSignRepository(SignRepository):
@@ -92,7 +99,7 @@ class MongoSignRepository(SignRepository):
             nested_query["subIndex"] = sub_index
 
         cursor = self._collection.find_many({"values": {"$elemMatch": nested_query}})
-        return [SignSchema().load(sign, unknown=EXCLUDE) for sign in cursor]
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_include_homophones(self, reading: str) -> Sequence[Sign]:
         cursor = self._collection.aggregate(

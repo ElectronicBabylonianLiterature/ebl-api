@@ -193,12 +193,31 @@ def test_sign_schema():
         "lists": [{"name": "ABZ", "number": "03+53"}],
         "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
         "logograms": [],
-        "mesZl": "",
     }
     sign = Sign(
         SignName("KUR"),
         (SignListRecord("ABZ", "03+53"),),
         (Value("kur", 3), Value("ruk")),
+    )
+    sign_dumped = SignSchema().dump(sign)
+    sign_dumped["name"] = sign_dumped.pop("_id")
+    assert SignSchema().load(data) == sign
+    assert SignSchema().dump(sign) == data
+
+
+def test_sign_schema_include_homophones():
+    data = {
+        "_id": "KUR",
+        "lists": [{"name": "ABZ", "number": "03+53"}],
+        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
+        "logograms": [],
+        "unicode": [73799]
+    }
+    sign = Sign(
+        SignName("KUR"),
+        (SignListRecord("ABZ", "03+53"),),
+        (Value("kur", 3), Value("ruk")),
+        unicode=(73799,)
     )
     x = SignSchema().dump(sign)
     x["name"] = x.pop("_id")
