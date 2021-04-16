@@ -7,6 +7,9 @@ from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.users.domain.user import Guest
 import pydash
+from ebl.corpus.domain.text_info import TextInfo
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.corpus.web.text_info_schema import TextInfoSchema
 
 
 ANY_USER = Guest()
@@ -107,4 +110,19 @@ def test_listing_texts(client, bibliography, sign_repository, signs):
     assert get_result.json == [
         pydash.omit(dto, "chapters")
         for dto in [create_dto(first_text), create_dto(second_text)]
+    ]
+
+
+def test_searching_texts(client, bibliography, sign_repository, signs):
+    allow_signs(signs, sign_repository)
+    text = TextFactory.build()
+    allow_references(text, bibliography)
+    create_text(client, text)
+
+    get_result = client.simulate_get("/textsearch?transliteration=ku")
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert get_result.json == [
+        TextInfoSchema().dump(TextInfo.of(text, TransliterationQuery([["KU"]])))
     ]

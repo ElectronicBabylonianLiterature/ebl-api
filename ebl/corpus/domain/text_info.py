@@ -1,7 +1,9 @@
-from typing import List, Sequence, Tuple, cast
+from typing import List, Mapping, Sequence, Tuple, cast
 
 import attr
+import pydash
 
+from ebl.corpus.domain.manuscript import Siglum
 from ebl.corpus.domain.text import Text
 from ebl.corpus.domain.text_id import TextId
 from ebl.corpus.domain.chapter import Chapter, Classification, Line, TextLineEntry
@@ -20,8 +22,9 @@ class ChapterId:
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterInfo:
     id_: ChapterId
+    siglums: Mapping[int, Siglum]
     matching_lines: Sequence[Line]
-    matching_colophon_lines: Sequence[Sequence[TextLine]]
+    matching_colophon_lines: Mapping[int, Sequence[TextLine]]
 
     @staticmethod
     def of(chapter: Chapter, query: TransliterationQuery) -> "ChapterInfo":
@@ -32,6 +35,7 @@ class ChapterInfo:
             chapter.get_manuscript_text_lines(manuscript)
             for manuscript in chapter.manuscripts
         ]
+
         matching_lines: List[Line] = [
             chapter.lines[index]
             for index in sorted(
@@ -39,22 +43,27 @@ class ChapterInfo:
                     cast(int, line.source)
                     for index, numbers in enumerate(line_numbers)
                     for start, end in numbers
-                    for line in text_lines[index][start:end]
+                    for line in text_lines[index][start : end + 1]
                     if line.source is not None
                 }
             )
         ]
-        matching_colophon_lines: List[List[TextLine]] = [
-            [
-                line.line
-                for start, end in numbers
-                for line in text_lines[index][start:end]
-                if line.source is None
-            ]
-            for index, numbers in enumerate(line_numbers)
-        ]
+        matching_colophon_lines: Mapping[int, List[TextLine]] = pydash.omit_by(
+            {
+                chapter.manuscripts[index].id: [
+                    line.line
+                    for start, end in numbers
+                    for line in text_lines[index][start : end + 1]
+                    if line.source is None
+                ]
+                for index, numbers in enumerate(line_numbers)
+            },
+            pydash.is_empty,
+        )
+
         return ChapterInfo(
             ChapterId(chapter.classification, chapter.stage, chapter.name),
+            {manuscript.id: manuscript.siglum for manuscript in chapter.manuscripts},
             matching_lines,
             matching_colophon_lines,
         )
@@ -67,6 +76,14 @@ class TextInfo:
 
     @staticmethod
     def of(text: Text, query: TransliterationQuery) -> "TextInfo":
-        return TextInfo(
-            text.id, [ChapterInfo.of(chapter, query) for chapter in text.chapters]
+        result = TextInfo(
+            text.id,
+            [
+                chapter_info
+                for chapter_info in [
+                    ChapterInfo.of(chapter, query) for chapter in text.chapters
+                ]
+                if chapter_info.matching_lines or chapter_info.matching_colophon_lines
+            ],
         )
+        return result

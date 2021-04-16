@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load, validate
 
+from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.label_schemas import SurfaceLabelSchema
@@ -47,15 +47,6 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["surface"],
             data["line_number"],
         )
-
-
-class TextIdSchema(Schema):
-    category = fields.Integer(required=True, validate=validate.Range(min=0))
-    index = fields.Integer(required=True, validate=validate.Range(min=0))
-
-    @post_load
-    def make_id(self, data, **kwargs) -> TextId:
-        return TextId(data["category"], data["index"])
 
 
 class ChapterNameSchema(Schema):
