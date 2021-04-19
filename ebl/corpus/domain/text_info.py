@@ -76,7 +76,7 @@ class TextInfo:
 
     @staticmethod
     def of(text: Text, query: TransliterationQuery) -> "TextInfo":
-        result = TextInfo(
+        return TextInfo(
             text.id,
             [
                 chapter_info
@@ -86,4 +86,3 @@ class TextInfo:
                 if chapter_info.matching_lines or chapter_info.matching_colophon_lines
             ],
         )
-        return result
