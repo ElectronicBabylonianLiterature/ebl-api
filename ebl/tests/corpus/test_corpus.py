@@ -146,11 +146,28 @@ def test_creating_text(
     corpus.create(TEXT, user)
 
 
-def test_create_raises_exception_if_invalid_signs(corpus, bibliography, when) -> None:
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "text",
+    [
+        attr.evolve(
+            TEXT, chapters=[attr.evolve(TEXT.chapters[0], signs=("KU ABZ075 ?\nKU",))]
+        ),
+        attr.evolve(
+            TEXT,
+            chapters=[
+                attr.evolve(
+                    TEXT.chapters[0], signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n?",)
+                )
+            ],
+        ),
+    ],
+)
+def test_create_raises_exception_if_invalid_signs(
+    text, corpus, bibliography, when
+) -> None:
     allow_validate_references(bibliography, when)
-
     with pytest.raises(DataError):
-        corpus.create(TEXT, ANY_USER)
+        corpus.create(text, ANY_USER)
 
 
 def test_create_raises_exception_if_invalid_references(

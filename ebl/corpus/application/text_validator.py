@@ -1,7 +1,13 @@
-from typing import Optional, cast
+from typing import List, Optional, cast, Sequence
 
 import pydash
-from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Line,
+    LineVariant,
+    ManuscriptLine,
+    TextLineEntry,
+)
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
@@ -9,7 +15,6 @@ from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import TokenVisitor
-from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 from singledispatchmethod import singledispatchmethod
 
@@ -47,9 +52,8 @@ class AlignmentVisitor(TokenVisitor):
 
 
 class TextValidator(TextVisitor):
-    def __init__(self, bibliography, transliteration_factory):
+    def __init__(self, bibliography):
         self._bibliography = bibliography
-        self._transliteration_factory = transliteration_factory
         self._chapter: Optional[Chapter] = None
         self._line: Optional[Line] = None
 
@@ -86,6 +90,41 @@ class TextValidator(TextVisitor):
         for line in chapter.lines:
             self.visit(line)
 
+        line_numbers: List[List[int]] = [
+            [
+                line_number
+                for line_number, line in enumerate(signs.split("\n"))
+                if "?" in line
+            ]
+            for signs in chapter.signs
+        ]
+        text_lines: Sequence[Sequence[TextLineEntry]] = [
+            chapter.get_manuscript_text_lines(manuscript)
+            for manuscript in chapter.manuscripts
+        ]
+
+        invalid_lines: Sequence[str] = [
+            (
+                f"{chapter.lines[cast(int, text_lines[index][number].source)].number.atf}"
+                f" {chapter.manuscripts[index].siglum} {text_lines[index][number].line.atf}"
+            )
+            for index, numbers in enumerate(line_numbers)
+            for number in numbers
+            if text_lines[index][number].source is not None
+        ]
+
+        invalid_colophon_lines: Sequence[str] = [
+            f"{chapter.manuscripts[index].siglum} colophon {text_lines[index][number].line.atf}"
+            for index, numbers in enumerate(line_numbers)
+            for number in numbers
+            if text_lines[index][number].source is None
+        ]
+
+        if invalid_lines or invalid_colophon_lines:
+            raise DataError(
+                f"Invalid sings on lines: {', '.join(invalid_lines + invalid_colophon_lines)}."
+            )
+
     @visit.register(Manuscript)  # pyre-ignore[56]
     def _visit_manuscript(self, manuscript: Manuscript) -> None:
         self._bibliography.validate_references(manuscript.references)
@@ -104,11 +143,10 @@ class TextValidator(TextVisitor):
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         try:
-            self._transliteration_factory.create(manuscript_line.line.atf)
             alignment_validator = AlignmentVisitor()
             manuscript_line.line.accept(alignment_validator)
             alignment_validator.validate()
-        except (TransliterationError, AlignmentError) as error:
+        except AlignmentError as error:
             raise data_error(
                 error, self.chapter, self.line.number, manuscript_line.manuscript_id
             ) from error
