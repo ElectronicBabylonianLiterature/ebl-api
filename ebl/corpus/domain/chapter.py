@@ -6,7 +6,7 @@ import pydash
 
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.label_validator import LabelValidator
-from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.stage import Stage
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -228,10 +228,34 @@ class Chapter:
             raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
 
     @property
+    def text_lines(self) -> Sequence[Sequence[TextLineEntry]]:
+        return [
+            self._get_manuscript_text_lines(manuscript)
+            for manuscript in self.manuscripts
+        ]
+
+    @property
+    def invalid_lines(self) -> Sequence[Tuple[Siglum, TextLineEntry]]:
+        text_lines = self.text_lines
+        return [
+            (self.manuscripts[index].siglum, text_lines[index][number])
+            for index, signs in enumerate(self.signs)
+            for number, line in enumerate(signs.split("\n"))
+            if "?" in line
+        ]
+
+    @property
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
 
-    def get_manuscript_text_lines(
+    def merge(self, other: "Chapter") -> "Chapter":
+        def inner_merge(old: Line, new: Line) -> Line:
+            return old.merge(new)
+
+        merged_lines = Merger(repr, inner_merge).merge(self.lines, other.lines)
+        return attr.evolve(other, lines=tuple(merged_lines))
+
+    def _get_manuscript_text_lines(
         self, manuscript: Manuscript
     ) -> Sequence[TextLineEntry]:
         def create_entry(line: Line, index: int) -> Optional[TextLineEntry]:
@@ -247,13 +271,6 @@ class Chapter:
             )
             .value()
         )
-
-    def merge(self, other: "Chapter") -> "Chapter":
-        def inner_merge(old: Line, new: Line) -> Line:
-            return old.merge(new)
-
-        merged_lines = Merger(repr, inner_merge).merge(self.lines, other.lines)
-        return attr.evolve(other, lines=tuple(merged_lines))
 
     def _get_manuscript(self, id_: int) -> Manuscript:
         try:

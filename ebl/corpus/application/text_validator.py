@@ -1,4 +1,4 @@
-from typing import List, Optional, cast, Sequence
+from typing import Optional, cast, Sequence
 
 import pydash
 from ebl.corpus.domain.chapter import (
@@ -8,7 +8,7 @@ from ebl.corpus.domain.chapter import (
     ManuscriptLine,
     TextLineEntry,
 )
-from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
@@ -51,6 +51,17 @@ class AlignmentVisitor(TokenVisitor):
             raise AlignmentError(duplicates)
 
 
+def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter) -> str:
+    return (
+        f"{siglum} colophon {entry.line.atf}"
+        if entry.source is None
+        else (
+            f"{chapter.lines[cast(int, entry.source)].number.atf}"
+            f" {siglum} {entry.line.atf}"
+        )
+    )
+
+
 class TextValidator(TextVisitor):
     def __init__(self, bibliography):
         self._bibliography = bibliography
@@ -90,40 +101,13 @@ class TextValidator(TextVisitor):
         for line in chapter.lines:
             self.visit(line)
 
-        line_numbers: List[List[int]] = [
-            [
-                line_number
-                for line_number, line in enumerate(signs.split("\n"))
-                if "?" in line
-            ]
-            for signs in chapter.signs
-        ]
-        text_lines: Sequence[Sequence[TextLineEntry]] = [
-            chapter.get_manuscript_text_lines(manuscript)
-            for manuscript in chapter.manuscripts
-        ]
-
         invalid_lines: Sequence[str] = [
-            (
-                f"{chapter.lines[cast(int, text_lines[index][number].source)].number.atf}"
-                f" {chapter.manuscripts[index].siglum} {text_lines[index][number].line.atf}"
-            )
-            for index, numbers in enumerate(line_numbers)
-            for number in numbers
-            if text_lines[index][number].source is not None
+            create_error_message(siglum, entry, chapter)
+            for siglum, entry in chapter.invalid_lines
         ]
 
-        invalid_colophon_lines: Sequence[str] = [
-            f"{chapter.manuscripts[index].siglum} colophon {text_lines[index][number].line.atf}"
-            for index, numbers in enumerate(line_numbers)
-            for number in numbers
-            if text_lines[index][number].source is None
-        ]
-
-        if invalid_lines or invalid_colophon_lines:
-            raise DataError(
-                f"Invalid sings on lines: {', '.join(invalid_lines + invalid_colophon_lines)}."
-            )
+        if invalid_lines:
+            raise DataError(f"Invalid signs on lines: {', '.join(invalid_lines)}.")
 
     @visit.register(Manuscript)  # pyre-ignore[56]
     def _visit_manuscript(self, manuscript: Manuscript) -> None:

@@ -31,10 +31,7 @@ class ChapterInfo:
         line_numbers: List[Sequence[Tuple[int, int]]] = [
             query.match(signs) for signs in chapter.signs
         ]
-        text_lines: Sequence[Sequence[TextLineEntry]] = [
-            chapter.get_manuscript_text_lines(manuscript)
-            for manuscript in chapter.manuscripts
-        ]
+        text_lines: Sequence[Sequence[TextLineEntry]] = chapter.text_lines
 
         matching_lines: List[Line] = [
             chapter.lines[index]
