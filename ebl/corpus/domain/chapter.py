@@ -102,18 +102,14 @@ class Chapter:
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines
-        return [
-            self.lines[index]
-            for index in sorted(
-                {
-                    cast(int, line.source)
-                    for index, numbers in enumerate(self._match(query))
-                    for start, end in numbers
-                    for line in text_lines[index][start : end + 1]
-                    if line.source is not None
-                }
-            )
-        ]
+        matching_indices = {
+            cast(int, line.source)
+            for index, numbers in enumerate(self._match(query))
+            for start, end in numbers
+            for line in text_lines[index][start : end + 1]
+            if line.source is not None
+        }
+        return [self.lines[index] for index in sorted(matching_indices)]
 
     def get_matching_colophon_lines(
         self, query: TransliterationQuery
