@@ -1,13 +1,8 @@
 import attr
 import pytest
 
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.stage import Stage
 from ebl.dictionary.domain.word import WordId

@@ -82,6 +82,7 @@ def to_dict(text: Text, include_documents=False):
                 "version": chapter.version,
                 "name": chapter.name,
                 "order": chapter.order,
+                "signs": list(chapter.signs),
                 "parserVersion": chapter.parser_version,
                 "manuscripts": [
                     {
@@ -164,5 +165,4 @@ def test_serialize():
 
 
 def test_deserialize():
-    d = to_dict(TEXT)
-    assert deserialize(d) == strip_documents(TEXT)
+    assert deserialize(to_dict(TEXT)) == strip_documents(TEXT)

@@ -52,7 +52,7 @@ def update_texts(numbers: Iterable[TextId], id_: int) -> State:
         context.text_repository,
         context.get_bibliography(),
         context.changelog,
-        context.get_transliteration_update_factory(),
+        context.sign_repository,
     )
     state = State()
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
@@ -72,7 +72,7 @@ def create_chunks(number_of_chunks) -> Iterable[Iterable[TextId]]:
         context.text_repository,
         context.get_bibliography(),
         context.changelog,
-        context.get_transliteration_update_factory(),
+        context.sign_repository,
     )
     numbers = [text.id for text in corpus.list()]
     chunk_size = math.ceil(len(numbers) / number_of_chunks)

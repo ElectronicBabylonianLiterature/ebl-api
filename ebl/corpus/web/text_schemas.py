@@ -12,7 +12,7 @@ from ebl.corpus.application.schemas import (
     labels,
     manuscript_id,
 )
-from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.parser import parse_paratext
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema

@@ -1,13 +1,8 @@
 from marshmallow import Schema, fields, post_load, validate
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
@@ -168,6 +163,7 @@ class ChapterSchema(Schema):
         MuseumNumberSchema, many=True, missing=tuple(), data_key="uncertainFragments"
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
+    signs = fields.List(fields.String(), missing=tuple())
     parser_version = fields.String(missing="", data_key="parserVersion")
 
     @post_load
@@ -181,6 +177,7 @@ class ChapterSchema(Schema):
             tuple(data["manuscripts"]),
             tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
+            tuple(data["signs"]),
             data["parser_version"],
         )
 

@@ -1,6 +1,6 @@
 from typing import Iterable, Optional, Sequence, Union
 
-from ebl.corpus.domain.chapter import Line
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.chapter_transformer import ChapterTransformer
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import DataError
