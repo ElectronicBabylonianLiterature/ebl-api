@@ -1,12 +1,11 @@
-from typing import List, Mapping, Sequence, Tuple, cast
+from typing import Mapping, Sequence
 
 import attr
-import pydash
 
 from ebl.corpus.domain.manuscript import Siglum
 from ebl.corpus.domain.text import Text
 from ebl.corpus.domain.text_id import TextId
-from ebl.corpus.domain.chapter import Chapter, Classification, Line, TextLineEntry
+from ebl.corpus.domain.chapter import Chapter, Classification, Line
 from ebl.corpus.domain.stage import Stage
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.text_line import TextLine
@@ -28,35 +27,8 @@ class ChapterInfo:
 
     @staticmethod
     def of(chapter: Chapter, query: TransliterationQuery) -> "ChapterInfo":
-        line_numbers: List[Sequence[Tuple[int, int]]] = [
-            query.match(signs) for signs in chapter.signs
-        ]
-        text_lines: Sequence[Sequence[TextLineEntry]] = chapter.text_lines
-
-        matching_lines: List[Line] = [
-            chapter.lines[index]
-            for index in sorted(
-                {
-                    cast(int, line.source)
-                    for index, numbers in enumerate(line_numbers)
-                    for start, end in numbers
-                    for line in text_lines[index][start : end + 1]
-                    if line.source is not None
-                }
-            )
-        ]
-        matching_colophon_lines: Mapping[int, List[TextLine]] = pydash.omit_by(
-            {
-                chapter.manuscripts[index].id: [
-                    line.line
-                    for start, end in numbers
-                    for line in text_lines[index][start : end + 1]
-                    if line.source is None
-                ]
-                for index, numbers in enumerate(line_numbers)
-            },
-            pydash.is_empty,
-        )
+        matching_lines = chapter.get_matching_lines(query)
+        matching_colophon_lines = chapter.get_matching_colophon_lines(query)
 
         return ChapterInfo(
             ChapterId(chapter.classification, chapter.stage, chapter.name),

@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Optional, Sequence, Tuple, TypeVar, Union, cast
+from typing import Optional, Sequence, Tuple, TypeVar, Union, cast, Mapping
 
 import attr
 import pydash
@@ -21,6 +21,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.domain.create_alignment_map import create_alignment_map
 
 
@@ -248,6 +249,39 @@ class Chapter:
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
 
+    def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
+        text_lines = self.text_lines
+        return [
+            self.lines[index]
+            for index in sorted(
+                {
+                    cast(int, line.source)
+                    for index, numbers in enumerate(self._match(query))
+                    for start, end in numbers
+                    for line in text_lines[index][start : end + 1]
+                    if line.source is not None
+                }
+            )
+        ]
+
+    def get_matching_colophon_lines(
+        self, query: TransliterationQuery
+    ) -> Mapping[int, Sequence[TextLine]]:
+        text_lines = self.text_lines
+
+        return pydash.omit_by(
+            {
+                self.manuscripts[index].id: [
+                    line.line
+                    for start, end in numbers
+                    for line in text_lines[index][start : end + 1]
+                    if line.source is None
+                ]
+                for index, numbers in enumerate(self._match(query))
+            },
+            pydash.is_empty,
+        )
+
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
@@ -291,3 +325,8 @@ class Chapter:
             )
             for label in labels
         )
+
+    def _match(
+        self, query: TransliterationQuery
+    ) -> Sequence[Sequence[Tuple[int, int]]]:
+        return [query.match(signs) for signs in self.signs]
