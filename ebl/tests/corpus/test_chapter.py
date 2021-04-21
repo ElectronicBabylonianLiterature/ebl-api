@@ -1,11 +1,6 @@
 import attr
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-    TextLineEntry,
-)
+from ebl.corpus.domain.chapter import Chapter, TextLineEntry
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.labels import SurfaceLabel

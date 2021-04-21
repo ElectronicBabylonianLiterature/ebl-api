@@ -1,13 +1,8 @@
 from marshmallow import Schema, fields, post_load, validate
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,

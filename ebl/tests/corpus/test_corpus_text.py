@@ -2,13 +2,8 @@ from typing import Sequence
 
 import pytest
 
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,

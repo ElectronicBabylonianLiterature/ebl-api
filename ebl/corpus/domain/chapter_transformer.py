@@ -9,7 +9,7 @@ from ebl.corpus.domain.manuscript import (
     ManuscriptType,
     Siglum,
 )
-from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer

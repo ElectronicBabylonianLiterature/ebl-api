@@ -1,13 +1,8 @@
 from typing import Optional, cast, Sequence
 
 import pydash
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-    TextLineEntry,
-)
+from ebl.corpus.domain.chapter import Chapter, TextLineEntry
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
