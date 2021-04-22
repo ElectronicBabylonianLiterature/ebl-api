@@ -11,14 +11,16 @@ from tqdm import tqdm
 from ebl.app import create_context
 
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.domain.text import ChapterId, Text, TextId
 
 from ebl.users.domain.user import ApiUser
 
 
 def update_text(corpus: Corpus, text: Text) -> None:
     user = ApiUser("update_texts.py")
-    corpus.update_text(text.id, text, text, user)
+    for index, chapter in enumerate(text.chapters):
+        chapter_id = ChapterId(text.id, index)
+        corpus.update_lines(chapter_id, chapter.lines, user)
 
 
 @attr.s(auto_attribs=True)
