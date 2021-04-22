@@ -22,7 +22,6 @@ class MongoTextRepository(TextRepository):
         self._collection.create_index(
             [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
         )
-        self._collection.create_index([("chapters.signs", pymongo.ASCENDING)])
 
     def create(self, text: Text) -> None:
         self._collection.insert_one(serialize(text))
