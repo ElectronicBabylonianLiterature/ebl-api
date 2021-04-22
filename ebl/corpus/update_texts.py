@@ -1,3 +1,4 @@
+import argparse
 import math
 from functools import reduce
 from typing import Iterable, List
@@ -80,9 +81,25 @@ def create_chunks(number_of_chunks) -> Iterable[Iterable[TextId]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 4
-    chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs)(
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-w",
+        "--workers",
+        type=int,
+        help="number of parallel workers to perform migration",
+    )
+    parser.add_argument(
+        "-t",
+        "--threads",
+        action="store_true",
+        help="use threads instead of processes for workers",
+    )
+    args = parser.parse_args()
+    workers = args.workers or 4
+    prefer = "threads" if args.threads else None
+
+    chunks = create_chunks(workers)
+    states = Parallel(n_jobs=workers, prefer=prefer)(
         delayed(update_texts)(subset, index) for index, subset in enumerate(chunks)
     )
     final_state = reduce(
