@@ -31,7 +31,7 @@ eol = ? end of line ?;
 Common grammar used in multiple places.
 
 ```ebnf
-
+seal = 'seal', number;
 surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
         | face | generic-surface | edge;
 face = 'face', ' ', lower-case-letter;
@@ -111,7 +111,7 @@ proper.
 
 ```ebnf
 dollar-line = '$', [ ' ' ], ( strict | '(', strict, ')' | loose );
-strict = state | ruling | image
+strict = state | ruling | image | seal
 
 state = [ qualification ], [' ', extend ], [' ', scope ], [ ' ', state-name ],
         [ ' ', dollar-status ]; (* At least one column is required. *)
