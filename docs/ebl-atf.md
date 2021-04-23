@@ -111,7 +111,7 @@ proper.
 
 ```ebnf
 dollar-line = '$', [ ' ' ], ( strict | '(', strict, ')' | loose );
-strict = state | ruling | image
+strict = state | ruling | image | seal
 
 state = [ qualification ], [' ', extend ], [' ', scope ], [ ' ', state-name ],
         [ ' ', dollar-status ]; (* At least one column is required. *)
