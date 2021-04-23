@@ -69,10 +69,6 @@ class SignSchema(Schema):
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
 
-    @post_dump
-    def filter_none(self, data, **kwargs):
-        return pydash.omit_by(data, pydash.is_none)
-
 
 class MongoSignRepository(SignRepository):
     def __init__(self, database: Database):

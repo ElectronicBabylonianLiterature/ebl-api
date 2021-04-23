@@ -1,4 +1,5 @@
 import pytest
+from marshmallow import EXCLUDE
 
 from ebl.errors import NotFoundError
 from ebl.transliteration.domain.atf import Atf
@@ -50,20 +51,6 @@ def mongo_sign_igi():
 
 
 @pytest.fixture
-def sign_igi(mongo_sign_igi):
-    return Sign(
-        mongo_sign_igi["_id"],
-        tuple(map(lambda data: SignListRecord(**data), mongo_sign_igi["lists"])),
-        tuple(
-            map(
-                lambda data: Value(data["value"], data["subIndex"]),
-                mongo_sign_igi["values"],
-            )
-        ),
-    )
-
-
-@pytest.fixture
 def mongo_sign_si():
     return {
         "_id": "SI",
@@ -91,20 +78,6 @@ def mongo_sign_si():
         ],
         "forms": [],
     }
-
-
-@pytest.fixture
-def sign_si(mongo_sign_si):
-    return Sign(
-        mongo_sign_si["_id"],
-        tuple(map(lambda data: SignListRecord(**data), mongo_sign_si["lists"])),
-        tuple(
-            map(
-                lambda data: Value(data["value"], data.get("subIndex")),
-                mongo_sign_si["values"],
-            )
-        ),
-    )
 
 
 @pytest.fixture
@@ -154,24 +127,6 @@ def mongo_sign_si_2():
     }
 
 
-@pytest.fixture
-def sign_si_2(mongo_sign_si_2):
-    return Sign(
-        mongo_sign_si_2["_id"],
-        tuple(map(lambda data: SignListRecord(**data), mongo_sign_si_2["lists"])),
-        tuple(
-            map(
-                lambda data: Value(data["value"], data.get("subIndex")),
-                mongo_sign_si_2["values"],
-            )
-        ),
-        mes_zl=mongo_sign_si_2["mesZl"],
-        logograms=tuple(
-            LogogramSchema().load(data) for data in mongo_sign_si_2["logograms"]
-        ),
-    )
-
-
 def test_logogram_schema():
     data = {
         "logogram": "AŠ-IKU",
@@ -192,6 +147,8 @@ def test_sign_schema():
         "_id": "KUR",
         "lists": [{"name": "ABZ", "number": "03+53"}],
         "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
+        'mesZl': None,
+        'unicode': [],
         "logograms": [],
     }
     sign = Sign(
@@ -201,8 +158,17 @@ def test_sign_schema():
     )
     sign_dumped = SignSchema().dump(sign)
     sign_dumped["name"] = sign_dumped.pop("_id")
-    assert SignSchema().load(data) == sign
+    assert SignSchema(unknown=EXCLUDE).load(data) == sign
     assert SignSchema().dump(sign) == data
+
+
+def test_sign_schema_2(mongo_sign_igi):
+    assert SignSchema().load(mongo_sign_igi) == Sign(
+        SignName("IGI"),
+        (SignListRecord("HZL", "288"),),
+        (Value("ši", 1), Value("panu", 1)),
+        unicode=(74054,),
+    )
 
 
 def test_sign_schema_include_homophones():
@@ -211,6 +177,7 @@ def test_sign_schema_include_homophones():
         "lists": [{"name": "ABZ", "number": "03+53"}],
         "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
         "logograms": [],
+        'mesZl': None,
         "unicode": [73799]
     }
     sign = Sign(
@@ -225,35 +192,19 @@ def test_sign_schema_include_homophones():
     assert SignSchema().dump(sign) == data
 
 
-def test_sign_schema_without_required():
-    data = {
-        "_id": "KUR",
-        "lists": [{"name": "ABZ", "number": "03+53"}],
-        "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
-    }
-    sign = Sign(
-        SignName("KUR"),
-        (SignListRecord("ABZ", "03+53"),),
-        (Value("kur", 3), Value("ruk")),
-    )
-    assert SignSchema().load(data) == sign
-    data["logograms"] = []
-    data["mesZl"] = None
-    assert SignSchema().dump(sign) == data
-
-
-def test_create(database, sign_repository, sign_igi):
+def test_create(database, sign_repository, mongo_sign_igi):
+    sign_igi = SignSchema(unknown=EXCLUDE).load(mongo_sign_igi)
     sign_name = sign_repository.create(sign_igi)
 
-    assert database[COLLECTION].find_one({"_id": sign_name}) == SignSchema().dump(
-        sign_igi
-    )
+    assert database[COLLECTION].find_one({"_id": sign_name}) == SignSchema().dump(sign_igi)
 
 
-def test_find(database, sign_repository, sign_igi, mongo_sign_igi):
+
+def test_find(database, sign_repository, mongo_sign_igi):
+    sign_igi = SignSchema(unknown=EXCLUDE).load(mongo_sign_igi)
     database[COLLECTION].insert_one(mongo_sign_igi)
 
-    assert sign_repository.find(mongo_sign_igi["_id"]) == sign_igi
+    assert sign_repository.find(mongo_sign_igi["_id"]) == SignSchema().dump(sign_igi)
 
 
 def test_sign_not_found(sign_repository):
