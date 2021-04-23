@@ -81,6 +81,20 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
+    def search(self, reading: str, sub_index: int) -> Optional[Sign]:
+        sub_index_query = {"$exists": False} if sub_index is None else sub_index
+        try:
+            data = self._collection.find_one(
+                {
+                    "values": {
+                        "$elemMatch": {"value": reading, "subIndex": sub_index_query}
+                    }
+                }
+            )
+            return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
+        except NotFoundError:
+            return None
+
     def search_by_id(self, query: str) -> Sequence[Sign]:
         cursor = self._collection.aggregate(
             [{"$match": {"_id": {"$regex": re.escape(query), "$options": "i"}}}]
@@ -168,17 +182,3 @@ class MongoSignRepository(SignRepository):
             ]
         )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
-
-    def search(self, reading: str, sub_index: int) -> Optional[Sign]:
-        sub_index_query = {"$exists": False} if sub_index is None else sub_index
-        try:
-            data = self._collection.find_one(
-                {
-                    "values": {
-                        "$elemMatch": {"value": reading, "subIndex": sub_index_query}
-                    }
-                }
-            )
-            return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
-        except NotFoundError:
-            return None

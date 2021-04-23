@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Dict, Mapping, Sequence, Union
+from typing import Any, Dict, Mapping, Sequence, Union, Optional
 
 import attr
 import mongomock
@@ -88,6 +88,18 @@ class TestBibliographyRepository(MongoBibliographyRepository):
         return [create_object_entry(self._collection.find_one({}))]
 
 
+class TestSignRepository(MongoSignRepository):
+    # Mongomock does not support $let so we need to
+    # stub the methods using them.
+    def search_composite_signs(
+        self, reading: str, sub_index: Optional[int] = None
+    ) -> Sequence[Sign]:
+        return self.search_all(reading, sub_index)
+
+    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
+        return self.search_all(reading)
+
+
 @pytest.fixture
 def bibliography_repository(database):
     return TestBibliographyRepository(database)
@@ -100,7 +112,7 @@ def bibliography(bibliography_repository, changelog):
 
 @pytest.fixture
 def sign_repository(database):
-    return MongoSignRepository(database)
+    return TestSignRepository(database)
 
 
 @pytest.fixture
@@ -406,7 +418,7 @@ def signs():
             ("DU", [("du", 1)], []),
             ("U", [("u", 1), ("10", 1)], [("ABZ", "411")]),
             ("|U.U|", [("20", 1)], [("ABZ", "471")]),
-            ("BA", [("ba", 1)], []),
+            ("BA", [("ba", 1), ("ku", 1)], []),
             ("MA", [("ma", 1)], []),
             ("TI", [("ti", 1)], []),
             ("MU", [("mu", 1)], []),

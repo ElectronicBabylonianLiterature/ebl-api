@@ -19,16 +19,20 @@ class SignsSearch:
     def on_get(self, req, resp):
         sign_query = req.params
         if sign_query["isIncludeHomophones"] == "true":
-            sign_dumped = SignSchema().dump(self.signs.search_include_homophones(sign_query["value"]), many=True)
-        elif sign_query["isComposite"] == "true":
             sign_dumped = SignSchema().dump(
-                self.signs.search_composite_signs(sign_query["value"], sign_query.get("subIndex", None), many=True)
+                self.signs.search_include_homophones(sign_query["value"]), many=True
             )
+        elif sign_query["isComposite"] == "true":
+            x = self.signs.search_composite_signs(
+                sign_query["value"], sign_query.get("subIndex", None)
+            )
+            sign_dumped = SignSchema().dump(x, many=True)
         else:
             sign_dumped = SignSchema().dump(
                 self.signs.search_all(
                     sign_query["value"], sign_query.get("subIndex", None)
-                ), many=True
+                ),
+                many=True,
             )
 
         resp.media = list(map(self.replace_id, sign_dumped))
