@@ -1,7 +1,6 @@
 import falcon
 import pytest
 
-from ebl.transliteration.domain.sign import Sign, SignName, SignListRecord
 from ebl.transliteration.infrastructure.menoizing_sign_repository import (
     MemoizingSignRepository,
 )
