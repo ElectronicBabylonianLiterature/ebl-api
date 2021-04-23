@@ -31,7 +31,7 @@ eol = ? end of line ?;
 Common grammar used in multiple places.
 
 ```ebnf
-seal = 'seal', number; 
+seal = 'seal', number;
 surface = 'obverse' | 'reverse' | 'left' | 'right' | 'top' | 'bottom'
         | face | generic-surface | edge;
 face = 'face', ' ', lower-case-letter;
