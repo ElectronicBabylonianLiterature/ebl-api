@@ -129,9 +129,7 @@ def sign_si(mongo_sign_si):
 def mongo_sign_si_2():
     return {
         "_id": "SI_2",
-        "lists": [
-            {"name": "HZL", "number": "13a"},
-        ],
+        "lists": [{"name": "HZL", "number": "13a"}],
         "unicode": [],
         "notes": [],
         "internalNotes": [],

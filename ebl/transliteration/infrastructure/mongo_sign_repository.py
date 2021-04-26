@@ -1,7 +1,6 @@
 import re
 from typing import Optional, cast, Sequence
 
-import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
 
@@ -101,14 +100,16 @@ class MongoSignRepository(SignRepository):
         )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
-    def search_all(
-        self, reading: str, sub_index: int
-    ) -> Sequence[Sign]:
-        cursor = self._collection.find_many({"values": {"$elemMatch": {"value": reading, "subIndex": sub_index}}})
+    def search_all(self, reading: str, sub_index: int) -> Sequence[Sign]:
+        cursor = self._collection.find_many(
+            {"values": {"$elemMatch": {"value": reading, "subIndex": sub_index}}}
+        )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
-        cursor = self._collection.find_many({"lists": {"$elemMatch": {"name": name, "number": number}}})
+        cursor = self._collection.find_many(
+            {"lists": {"$elemMatch": {"name": name, "number": number}}}
+        )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_include_homophones(self, reading: str) -> Sequence[Sign]:
@@ -143,12 +144,16 @@ class MongoSignRepository(SignRepository):
         )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
-    def search_composite_signs(
-        self, reading: str, sub_index: int
-    ) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         cursor = self._collection.aggregate(
             [
-                {"$match": {"values": {"$elemMatch": {"value": reading, "subIndex": sub_index}}}},
+                {
+                    "$match": {
+                        "values": {
+                            "$elemMatch": {"value": reading, "subIndex": sub_index}
+                        }
+                    }
+                },
                 {
                     "$lookup": {
                         "from": "signs",

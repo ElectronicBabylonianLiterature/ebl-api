@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Dict, Mapping, Sequence, Union, Optional
+from typing import Any, Dict, Mapping, Sequence, Union
 
 import attr
 import mongomock
@@ -39,7 +39,10 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository, SignSchema
+from ebl.transliteration.infrastructure.mongo_sign_repository import (
+    MongoSignRepository,
+    SignSchema,
+)
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
@@ -92,9 +95,7 @@ class TestBibliographyRepository(MongoBibliographyRepository):
 class TestSignRepository(MongoSignRepository):
     # Mongomock does not support $let so we need to
     # stub the methods using them.
-    def search_composite_signs(
-        self, reading: str, sub_index: int
-    ) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
 
     def search_include_homophones(self, reading: str) -> Sequence[Sign]:

@@ -25,9 +25,7 @@ class MemoizingSignRepository(SignRepository):
     def find(self, name: SignName) -> Sign:
         return self._find(name)
 
-    def search_by_lists_name(
-            self, name: str, number: str
-    ) -> Sequence[Sign]:
+    def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
         return self._search_by_lists_name(name, number)
 
     def search_include_homophones(self, reading) -> Sequence[Sign]:
@@ -41,9 +39,7 @@ class MemoizingSignRepository(SignRepository):
     def search_by_id(self, query: str) -> Sequence[Sign]:
         return self._search_by_id(query)
 
-    def search_all(
-        self, reading: str, sub_index: int
-    ) -> Sequence[Sign]:
+    def search_all(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return self._search_all(reading, sub_index)
 
     def search(self, reading, sub_index) -> Optional[Sign]:

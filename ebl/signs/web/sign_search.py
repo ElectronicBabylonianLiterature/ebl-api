@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict
 
 import falcon
 
@@ -12,10 +12,22 @@ class SignsSearch:
     def __init__(self, signs):
         self._dispatch = create_dispatcher(
             {
-                frozenset(["listsName", "listsNumber"]): lambda params: signs.search_by_lists_name(params["listsName"], params["listsNumber"]),
-                frozenset(["value", "subIndex"]): lambda params: signs.search_all(params["value"], params["subIndex"]),
-                frozenset(["value", "includeHomophones"]): lambda params: signs.search_include_homophones(params["value"]),
-                frozenset(["value", "subIndex", "isComposite"]): lambda params: signs.search_composite_signs(params["value"], params["subIndex"])
+                frozenset(
+                    ["listsName", "listsNumber"]
+                ): lambda params: signs.search_by_lists_name(
+                    params["listsName"], params["listsNumber"]
+                ),
+                frozenset(["value", "subIndex"]): lambda params: signs.search_all(
+                    params["value"], params["subIndex"]
+                ),
+                frozenset(
+                    ["value", "isIncludeHomophones", "subIndex"]
+                ): lambda params: signs.search_include_homophones(params["value"]),
+                frozenset(
+                    ["value", "subIndex", "isComposite"]
+                ): lambda params: signs.search_composite_signs(
+                    params["value"], params["subIndex"]
+                ),
             }
         )
 
@@ -25,7 +37,9 @@ class SignsSearch:
             try:
                 params["subIndex"] = int(params["subIndex"])
             except ValueError:
-                raise DataError(f"""subIndex '{params["subIndex"]}' has to be a number""")
+                raise DataError(
+                    f"""subIndex '{params["subIndex"]}' has to be a number"""
+                )
         return params
 
     @staticmethod
@@ -36,6 +50,13 @@ class SignsSearch:
     @falcon.before(require_scope, "read:words")
     def on_get(self, req, resp):
         try:
-            resp.media = list(map(self._replace_id, SignSchema().dump(self._dispatch(self._parse_params(req.params)), many=True)))
+            resp.media = list(
+                map(
+                    self._replace_id,
+                    SignSchema().dump(
+                        self._dispatch(self._parse_params(req.params)), many=True
+                    ),
+                )
+            )
         except Exception as e:
             print(e)
