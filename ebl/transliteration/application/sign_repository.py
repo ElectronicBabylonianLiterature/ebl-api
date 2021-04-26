@@ -19,7 +19,7 @@ class SignRepository(ABC):
 
     @abstractmethod
     def search_all(
-        self, reading: str, sub_index: Optional[str] = None
+        self, reading: str, sub_index: int
     ) -> Sequence[Sign]:
         ...
 
@@ -31,13 +31,13 @@ class SignRepository(ABC):
 
 
     @abstractmethod
-    def search_composite_signs(self, reading, sub_index) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         ...
 
     @abstractmethod
-    def search_include_homophones(self, reading) -> Sequence[Sign]:
+    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
         ...
 
     @abstractmethod
-    def search(self, reading, sub_index) -> Optional[Sign]:
+    def search(self, reading: str, sub_index: int) -> Optional[Sign]:
         ...

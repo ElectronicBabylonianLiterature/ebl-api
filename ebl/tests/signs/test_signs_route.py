@@ -10,7 +10,20 @@ from ebl.transliteration.infrastructure.menoizing_sign_repository import (
     "params, expected",
     [
         (
-            {"value": ":", "isIncludeHomophones": "false", "isComposite": "false"},
+                {"listsName": "ABZ", "listsNumber": "377n1"},
+                [
+                    {
+                        "lists": [{"name": "ABZ", "number": "377n1"}],
+                        "logograms": [],
+                        "mesZl": None,
+                        "name": "P₂",
+                        "unicode": [],
+                        "values": [{"subIndex": 1, "value": ":"}],
+                    }
+                ],
+        ),
+        (
+            {"value": ":", "subIndex": "1", },
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
@@ -23,7 +36,7 @@ from ebl.transliteration.infrastructure.menoizing_sign_repository import (
             ],
         ),
         (
-            {"value": ":", "isIncludeHomophones": "true", "isComposite": "false"},
+            {"value": "bu", "includeHomophones": "true"},
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
@@ -36,27 +49,16 @@ from ebl.transliteration.infrastructure.menoizing_sign_repository import (
             ],
         ),
         (
-            {"value": "ku", "isIncludeHomophones": "false", "isComposite": "true"},
+            {"value": "ku", "subIndex": "1", "isComposite": "true"},
             [
                 {
-                    "lists": [{"name": "KWU", "number": "869"}],
+                    "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
                     "mesZl": None,
-                    "name": "KU",
+                    "name": "P₂",
                     "unicode": [],
-                    "values": [{"subIndex": 1, "value": "ku"}],
-                },
-                {
-                    "lists": [],
-                    "logograms": [],
-                    "mesZl": None,
-                    "name": "BA",
-                    "unicode": [],
-                    "values": [
-                        {"subIndex": 1, "value": "ba"},
-                        {"subIndex": 1, "value": "ku"},
-                    ],
-                },
+                    "values": [{"subIndex": 1, "value": ":"}],
+                }
             ],
         ),
     ],

@@ -10,6 +10,7 @@ import pytest
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
+from marshmallow import EXCLUDE
 
 import ebl.app
 import ebl.context
@@ -38,7 +39,7 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
+from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository, SignSchema
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
@@ -92,12 +93,12 @@ class TestSignRepository(MongoSignRepository):
     # Mongomock does not support $let so we need to
     # stub the methods using them.
     def search_composite_signs(
-        self, reading: str, sub_index: Optional[int] = None
+        self, reading: str, sub_index: int
     ) -> Sequence[Sign]:
-        return self.search_all(reading, sub_index)
+        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
 
     def search_include_homophones(self, reading: str) -> Sequence[Sign]:
-        return self.search_all(reading)
+        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
 
 
 @pytest.fixture

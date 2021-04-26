@@ -21,7 +21,7 @@ def test_search_memoization(sign_repository, signs):
     sub_index = sign.values[0].sub_index
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
-    memoizing_sign_repository.create(sign)
+    [memoizing_sign_repository.create(sign) for sign in signs]
 
     first = memoizing_sign_repository.search(value, sub_index)
     second = memoizing_sign_repository.search(value, sub_index)
@@ -35,11 +35,12 @@ def test_search_by_lists_name_memoization(sign_repository, signs):
     number = sign.lists[0].number
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
-    memoizing_sign_repository.create(sign)
+    [memoizing_sign_repository.create(sign) for sign in signs]
 
-    first = memoizing_sign_repository.search(name, number)
-    second = memoizing_sign_repository.search(name, number)
+    first = memoizing_sign_repository.search_by_lists_name(name, number)
+    second = memoizing_sign_repository.search_by_lists_name(name, number)
 
+    assert [sign] == first
     assert first is second
 
 
@@ -52,6 +53,7 @@ def test_search_include_homophones(sign_repository, signs):
 
     first = memoizing_sign_repository.search_include_homophones(value)
     second = memoizing_sign_repository.search_include_homophones(value)
+    assert [sign] == first
     assert first is second
 
 
@@ -65,18 +67,20 @@ def test_search_composite_signs(sign_repository, signs):
 
     first = memoizing_sign_repository.search_composite_signs(value, sub_index)
     second = memoizing_sign_repository.search_composite_signs(value, sub_index)
+    assert [sign] == first
     assert first is second
 
 
 def test_search_by_id(sign_repository, signs):
     sign = signs[0]
-    value = sign.values[0].value
+    name = sign.name
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
     memoizing_sign_repository.create(sign)
 
-    first = memoizing_sign_repository.search_by_id(value)
-    second = memoizing_sign_repository.search_by_id(value)
+    first = memoizing_sign_repository.search_by_id(name)
+    second = memoizing_sign_repository.search_by_id(name)
+    assert [sign] == first
     assert first is second
 
 
@@ -90,4 +94,5 @@ def test_search_all(sign_repository, signs):
 
     first = memoizing_sign_repository.search_all(value, sub_index)
     second = memoizing_sign_repository.search_all(value, sub_index)
+    assert [sign] == first
     assert first is second

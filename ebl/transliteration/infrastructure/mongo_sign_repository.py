@@ -81,7 +81,7 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
-    def search(self, reading: str, sub_index: int) -> Optional[Sign]:
+    def search(self, reading: str, sub_index: Optional[int] = None) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
         try:
             data = self._collection.find_one(
@@ -102,12 +102,9 @@ class MongoSignRepository(SignRepository):
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_all(
-        self, reading: str, sub_index: Optional[int] = None
+        self, reading: str, sub_index: int
     ) -> Sequence[Sign]:
-        nested_query = {"value": reading}
-        if sub_index:
-            nested_query["subIndex"] = sub_index
-        cursor = self._collection.find_many({"values": {"$elemMatch": nested_query}})
+        cursor = self._collection.find_many({"values": {"$elemMatch": {"value": reading, "subIndex": sub_index}}})
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
@@ -147,14 +144,11 @@ class MongoSignRepository(SignRepository):
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_composite_signs(
-        self, reading: str, sub_index: Optional[int] = None
+        self, reading: str, sub_index: int
     ) -> Sequence[Sign]:
-        elem_match = {"value": reading}
-        if sub_index:
-            elem_match["subIndex"] = sub_index
         cursor = self._collection.aggregate(
             [
-                {"$match": {"values": {"$elemMatch": elem_match}}},
+                {"$match": {"values": {"$elemMatch": {"value": reading, "subIndex": sub_index}}}},
                 {
                     "$lookup": {
                         "from": "signs",

@@ -225,9 +225,8 @@ def test_search_all(
     mongo_sign_si_2,
 ):
     database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si, mongo_sign_si_2])
-    assert sign_repository.search_all("ši", None) == [sign_igi, sign_si]
-    assert sign_repository.search_all("panu", 1) == [sign_igi]
-    assert sign_repository.search_all("none") == []
+    assert sign_repository.search_all("ši", 1) == [sign_igi]
+    assert sign_repository.search_all("none", 1) == []
 
 
 def test_search_by_id(
@@ -246,7 +245,7 @@ def test_search_by_id(
     assert sign_repository.search_by_id("none") == []
 
 
-def test_search_by_id(
+def test_search_by_lists_name(
     database,
     sign_repository,
     sign_igi,
@@ -275,8 +274,8 @@ def test_sign_schema_include_homophones(
     sign_si_2,
     mongo_sign_si_2,
 ):
-    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si, mongo_sign_si_2])
-    assert sign_repository.search_include_homophones("hu") == [sign_si]
+    database[COLLECTION].insert_many([mongo_sign_igi])
+    assert sign_repository.search_include_homophones("ši") == [sign_igi]
 
 
 def test_search_composite_signs(
@@ -289,5 +288,5 @@ def test_search_composite_signs(
     sign_si_2,
     mongo_sign_si_2,
 ):
-    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si, mongo_sign_si_2])
-    assert sign_repository.search_composite_signs("hu") == [sign_si]
+    database[COLLECTION].insert_many([mongo_sign_igi])
+    assert sign_repository.search_composite_signs("ši", 1) == [sign_igi]
