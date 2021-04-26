@@ -107,8 +107,11 @@ class MongoSignRepository(SignRepository):
         nested_query = {"value": reading}
         if sub_index:
             nested_query["subIndex"] = sub_index
-
         cursor = self._collection.find_many({"values": {"$elemMatch": nested_query}})
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+
+    def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
+        cursor = self._collection.find_many({"lists": {"$elemMatch": {"name": name, "number": number}}})
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search_include_homophones(self, reading: str) -> Sequence[Sign]:

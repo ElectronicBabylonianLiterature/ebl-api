@@ -129,7 +129,9 @@ def sign_si(mongo_sign_si):
 def mongo_sign_si_2():
     return {
         "_id": "SI_2",
-        "lists": [],
+        "lists": [
+            {"name": "HZL", "number": "13a"},
+        ],
         "unicode": [],
         "notes": [],
         "internalNotes": [],
@@ -242,6 +244,21 @@ def test_search_by_id(
 
     assert sign_repository.search_by_id("SI") == [sign_si, sign_si_2]
     assert sign_repository.search_by_id("none") == []
+
+
+def test_search_by_id(
+    database,
+    sign_repository,
+    sign_igi,
+    mongo_sign_igi,
+    sign_si,
+    mongo_sign_si,
+    sign_si_2,
+    mongo_sign_si_2,
+):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si, mongo_sign_si_2])
+
+    assert sign_repository.search_by_lists_name("HZL", "13a") == [sign_si_2]
 
 
 def test_search_not_found(sign_repository):

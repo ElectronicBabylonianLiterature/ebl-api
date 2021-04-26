@@ -24,6 +24,13 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
+    def search_by_lists_name(
+            self, name: str, number: str
+    ) -> Sequence[Sign]:
+        ...
+
+
+    @abstractmethod
     def search_composite_signs(self, reading, sub_index) -> Sequence[Sign]:
         ...
 

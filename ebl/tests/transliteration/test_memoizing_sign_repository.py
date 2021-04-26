@@ -29,6 +29,20 @@ def test_search_memoization(sign_repository, signs):
     assert first is second
 
 
+def test_search_by_lists_name_memoization(sign_repository, signs):
+    sign = signs[0]
+    name = sign.lists[0].name
+    number = sign.lists[0].number
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+    memoizing_sign_repository.create(sign)
+
+    first = memoizing_sign_repository.search(name, number)
+    second = memoizing_sign_repository.search(name, number)
+
+    assert first is second
+
+
 def test_search_include_homophones(sign_repository, signs):
     sign = signs[0]
     value = sign.values[0].value
