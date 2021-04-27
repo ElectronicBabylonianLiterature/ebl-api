@@ -117,7 +117,7 @@ class Corpus:
     def import_lines(self, id_: ChapterId, atf: str, user: User) -> None:
         chapter = self._repository.find(id_.text_id).chapters[id_.index]
         lines = parse_chapter(atf, chapter.manuscripts)
-        self.update_lines(id_, lines, user)
+        self.update_lines(id_, [*chapter.lines, *lines], user)
 
     def update_lines(self, id_: ChapterId, lines: Sequence[Line], user: User) -> None:
         self._update_chapter(

@@ -616,10 +616,11 @@ def test_importing_lines(
         chapters=(
             attr.evolve(
                 TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=parse_chapter(
-                    atf, TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts
+                lines=(
+                    *TEXT_WITHOUT_DOCUMENTS.chapters[0].lines,
+                    *parse_chapter(atf, TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts),
                 ),
-                signs=("BA\nKU",),
+                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),
