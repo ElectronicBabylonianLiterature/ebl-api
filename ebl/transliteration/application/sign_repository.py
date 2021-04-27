@@ -34,5 +34,5 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
-    def search(self, reading: str, sub_index: int) -> Optional[Sign]:
+    def search(self, reading: str, sub_index: Optional[int]) -> Optional[Sign]:
         ...
