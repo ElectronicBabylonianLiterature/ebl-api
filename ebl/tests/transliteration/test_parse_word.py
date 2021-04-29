@@ -23,13 +23,13 @@ from ebl.transliteration.domain.sign_tokens import (
     Number,
     Reading,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import (
     Joiner,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import (
     ErasureState,
     InWordNewline,

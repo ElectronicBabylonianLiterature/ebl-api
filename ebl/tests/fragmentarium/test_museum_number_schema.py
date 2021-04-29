@@ -3,7 +3,6 @@ import pytest
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
-
 MUSEUM_NUMBER = MuseumNumber("K", "1", "a")
 SERIALIZED = {"prefix": "K", "number": "1", "suffix": "a"}
 

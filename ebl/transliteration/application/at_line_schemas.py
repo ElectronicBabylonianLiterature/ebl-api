@@ -6,8 +6,8 @@ from ebl.transliteration.application.label_schemas import (
     ObjectLabelSchema,
     SurfaceLabelSchema,
 )
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.application.line_schemas import LineBaseSchema
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     ColumnAtLine,

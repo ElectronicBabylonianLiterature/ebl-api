@@ -2,7 +2,6 @@ import pytest
 
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
-
 PREFIX = "K"
 NUMBER = "1"
 SUFFIX = "a"

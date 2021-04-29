@@ -1,7 +1,7 @@
 import falcon
 
-from ebl.tests.factories.fragment import FragmentFactory
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 def test_get_fragment_pager(client, fragmentarium):

@@ -1,6 +1,9 @@
 import codecs
-import traceback
+import logging
 import re
+import traceback
+
+from lark import Lark
 
 from ebl.atf_importer.domain.atf_conversions import (
     Convert_Line_Dividers,
@@ -11,10 +14,7 @@ from ebl.atf_importer.domain.atf_conversions import (
     Get_Words,
     Line_Serializer,
 )
-
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
-from lark import Lark
-import logging
 
 
 class ATFPreprocessor:

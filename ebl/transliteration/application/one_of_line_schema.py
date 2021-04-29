@@ -32,7 +32,6 @@ from ebl.transliteration.application.parallel_line_schemas import (
     ParallelTextSchema,
 )
 
-
 PARALLEL_LINE_SCHEMAS: Mapping[str, Type[Schema]] = {
     "ParallelFragment": ParallelFragmentSchema,
     "ParallelText": ParallelTextSchema,

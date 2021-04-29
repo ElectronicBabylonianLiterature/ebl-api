@@ -1,10 +1,10 @@
+import difflib
 from typing import Callable, Sequence
 
-import difflib
 import pydash
 
-from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.text_line import AlignmentMap
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 UNCHANGED: str = " "

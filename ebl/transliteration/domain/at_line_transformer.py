@@ -1,5 +1,4 @@
 import attr
-
 from lark import Token
 from lark.visitors import Transformer, v_args
 

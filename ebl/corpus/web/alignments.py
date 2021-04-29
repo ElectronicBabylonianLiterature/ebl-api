@@ -1,10 +1,10 @@
 import falcon
 
-from ebl.marshmallowschema import validate
+from ebl.corpus.web.alignment_schema import AlignmentSchema
 from ebl.corpus.web.api_serializer import serialize
 from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
-from ebl.corpus.web.alignment_schema import AlignmentSchema
 
 
 class AlignmentResource:

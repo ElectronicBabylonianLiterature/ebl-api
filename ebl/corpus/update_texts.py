@@ -9,10 +9,8 @@ from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from ebl.app import create_context
-
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.text import ChapterId, Text, TextId
-
 from ebl.users.domain.user import ApiUser
 
 

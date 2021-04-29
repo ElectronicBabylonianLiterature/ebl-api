@@ -1,6 +1,7 @@
 from typing import Optional, Sequence
 
 import attr
+
 import ebl.transliteration.domain.atf as atf
 from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.transliteration.domain.converters import convert_flag_sequence

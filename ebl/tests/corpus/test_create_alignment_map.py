@@ -2,9 +2,9 @@ from typing import List
 
 import pytest
 
-from ebl.transliteration.domain.tokens import Token, ValueToken
 from ebl.corpus.domain.create_alignment_map import AlignmentMap, create_alignment_map
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Caesura
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 
 def _make_sequence(values: List[str]) -> List[Token]:

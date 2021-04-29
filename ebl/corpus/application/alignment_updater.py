@@ -4,11 +4,11 @@ import attr
 from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
+from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
-from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.corpus.domain.text import TextItem
-from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.transliteration.domain.alignment import AlignmentError
 
 
 class AlignmentUpdater(ChapterUpdater):

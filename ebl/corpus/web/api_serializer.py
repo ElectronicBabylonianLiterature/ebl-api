@@ -2,8 +2,8 @@ from lark.exceptions import ParseError, UnexpectedInput
 from marshmallow import ValidationError
 
 from ebl.corpus.domain.text import Text
-from ebl.errors import DataError
 from ebl.corpus.web.text_schemas import ApiTextSchema
+from ebl.errors import DataError
 
 
 def serialize_public(text: Text):

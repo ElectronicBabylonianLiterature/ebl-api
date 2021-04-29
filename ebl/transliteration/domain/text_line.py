@@ -4,16 +4,16 @@ from typing import Callable, Iterable, Optional, Sequence, Type, TypeVar, Union,
 import attr
 import pydash
 
+from ebl.lemmatization.domain.lemmatization import (
+    LemmatizationError,
+    LemmatizationToken,
+)
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language_visitor import set_language
-from ebl.lemmatization.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token, TokenVisitor

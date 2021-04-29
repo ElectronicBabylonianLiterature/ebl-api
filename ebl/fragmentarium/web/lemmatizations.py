@@ -1,15 +1,15 @@
 import falcon
 from marshmallow import Schema, post_load
+from marshmallow import fields
 
-from ebl.marshmallowschema import validate
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
-from ebl.users.web.require_scope import require_scope
+from ebl.lemmatization.domain.lemmatization import Lemmatization
+from ebl.marshmallowschema import validate
 from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )
-from marshmallow import fields
-from ebl.lemmatization.domain.lemmatization import Lemmatization
+from ebl.users.web.require_scope import require_scope
 
 
 class LemmatizationSchema(Schema):

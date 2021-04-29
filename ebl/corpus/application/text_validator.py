@@ -1,6 +1,8 @@
 from typing import Optional, cast, Sequence
 
 import pydash
+from singledispatchmethod import singledispatchmethod
+
 from ebl.corpus.domain.chapter import Chapter, TextLineEntry
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
@@ -11,7 +13,6 @@ from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.domain.word_tokens import Word
-from singledispatchmethod import singledispatchmethod
 
 
 def data_error(

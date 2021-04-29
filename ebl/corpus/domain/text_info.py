@@ -2,14 +2,14 @@ from typing import Mapping, Sequence
 
 import attr
 
-from ebl.corpus.domain.manuscript import Siglum
-from ebl.corpus.domain.text import Text
-from ebl.corpus.domain.text_id import TextId
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript import Siglum
 from ebl.corpus.domain.stage import Stage
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 @attr.s(auto_attribs=True, frozen=True)

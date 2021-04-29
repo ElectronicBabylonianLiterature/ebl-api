@@ -1,8 +1,10 @@
-from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
-from ebl.atf_importer.application.atf_importer import ATFImporter
 import unittest
+
 import mongomock
 import pytest
+
+from ebl.atf_importer.application.atf_importer import ATFImporter
+from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 
 
 @pytest.fixture

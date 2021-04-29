@@ -2,14 +2,14 @@ import attr
 import pydash
 import pytest
 
+from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.errors import DataError
 
 
 def test_create_response_dto(user):

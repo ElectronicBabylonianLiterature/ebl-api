@@ -1,6 +1,7 @@
 from typing import Tuple, Union
 
 import falcon
+
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder

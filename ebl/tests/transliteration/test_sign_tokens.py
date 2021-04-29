@@ -13,8 +13,8 @@ from ebl.transliteration.domain.sign_tokens import (
     Number,
     Reading,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 
 
 def test_divider() -> None:

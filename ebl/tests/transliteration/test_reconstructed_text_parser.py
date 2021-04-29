@@ -1,21 +1,24 @@
-import pytest
+import re
 
-from ebl.transliteration.domain.reconstructed_text_parser import (
-    parse_break,
-    parse_reconstructed_line,
-    parse_reconstructed_word,
-)
+import pytest
+from lark.exceptions import ParseError, UnexpectedInput
+
 from ebl.corpus.domain.enclosure_validator import validate
-from ebl.transliteration.domain.normalized_akkadian import (
-    AkkadianWord,
-    Caesura,
-    MetricalFootSeparator,
-)
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Emendation,
     PerhapsBrokenAway,
+)
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
+)
+from ebl.transliteration.domain.reconstructed_text_parser import (
+    parse_break,
+    parse_reconstructed_line,
+    parse_reconstructed_word,
 )
 from ebl.transliteration.domain.tokens import (
     Joiner,
@@ -23,8 +26,6 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
 )
-from lark.exceptions import ParseError, UnexpectedInput
-import re
 
 
 def assert_parse(parser, expected, text):

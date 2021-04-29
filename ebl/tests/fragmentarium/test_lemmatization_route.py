@@ -3,15 +3,14 @@ import json
 import falcon
 import pytest
 
-from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.fragmentarium.web.lemmatizations import LemmatizationSchema
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )
-
 
 TOKEN = LemmatizationToken("kur", tuple())
 LEMMATIZATION = Lemmatization(((TOKEN,),))

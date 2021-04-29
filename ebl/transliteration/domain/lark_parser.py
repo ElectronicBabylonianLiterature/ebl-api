@@ -1,15 +1,14 @@
 from itertools import dropwhile
 from typing import Sequence, Tuple, Type
 
+import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark
 from lark.visitors import v_args
-import pydash
 
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line_transformer import AtLineTransformer
-
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
@@ -28,7 +27,6 @@ from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
-
 
 PARSE_ERRORS: Tuple[Type[Exception], ...] = (
     UnexpectedInput,

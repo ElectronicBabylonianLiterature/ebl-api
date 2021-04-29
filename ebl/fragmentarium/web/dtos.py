@@ -1,11 +1,11 @@
 import attr
 from marshmallow import fields, pre_dump
 
+from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.users.domain.user import User
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.errors import DataError
+from ebl.users.domain.user import User
 
 
 class FragmentDtoSchema(FragmentSchema):

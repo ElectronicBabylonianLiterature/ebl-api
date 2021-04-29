@@ -3,14 +3,14 @@ import falcon
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
-from ebl.corpus.web.lines import LinesImportResource, LinesResource
-from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.lemmatizations import (
     LemmatizationResource,
     CorpusLemmatizationsSchema,
 )
-from ebl.corpus.web.texts import TextResource, TextsResource, TextSearchResource
+from ebl.corpus.web.lines import LinesImportResource, LinesResource
+from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.text_schemas import ApiTextSchema
+from ebl.corpus.web.texts import TextResource, TextsResource, TextSearchResource
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )

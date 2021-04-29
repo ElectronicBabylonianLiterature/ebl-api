@@ -3,7 +3,6 @@ import pytest
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.domain.note_line import BibliographyPart
 
-
 BIBLIOGRAPHY_ID = BibliographyId("ABC")
 
 

@@ -3,11 +3,11 @@ from base64 import b64decode
 
 import falcon
 import sentry_sdk
+from Cryptodome.PublicKey import RSA
 from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
-from Cryptodome.PublicKey import RSA
 
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
@@ -27,14 +27,14 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
+from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
+    MongoLemmaRepository,
+)
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.infrastructure.auth0 import Auth0Backend
-from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
-    MongoLemmaRepository,
-)
 
 
 def decode_certificate(encoded_certificate):

@@ -3,11 +3,11 @@ from typing import Callable, Iterable, List, Mapping, Optional, Sequence, Tuple,
 
 import attr
 
-from ebl.merger import Merger
-from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
-from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
+from ebl.merger import Merger
+from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine

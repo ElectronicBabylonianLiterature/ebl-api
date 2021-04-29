@@ -1,5 +1,6 @@
 import pytest
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     DiscourseAtLine,
@@ -10,7 +11,6 @@ from ebl.transliteration.domain.at_line import (
     HeadingAtLine,
 )
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 def test_at_line_heading() -> None:

@@ -4,7 +4,6 @@ import attr
 
 from ebl.dictionary.domain.word import WordId
 
-
 Lemma = Sequence[WordId]
 
 

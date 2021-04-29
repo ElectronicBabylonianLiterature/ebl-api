@@ -5,12 +5,12 @@ from typing import AbstractSet, Optional, Sequence, Type, TypeVar
 import attr
 
 import ebl.transliteration.domain.atf as atf
-from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.language import Language
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.language import Language
 
 
 class TokenVisitor(ABC):

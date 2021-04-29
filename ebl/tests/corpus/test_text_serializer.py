@@ -28,7 +28,6 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 
-
 REFERENCES = (ReferenceFactory.build(with_document=True),)
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
 UNCERTAIN_FRAGMENTS = (MuseumNumber.of("K.1"),)

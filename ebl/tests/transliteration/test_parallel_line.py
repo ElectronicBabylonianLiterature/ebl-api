@@ -3,9 +3,9 @@ import pytest
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf, Status, Surface
 from ebl.transliteration.domain.labels import SurfaceLabel
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
