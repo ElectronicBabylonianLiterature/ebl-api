@@ -7,7 +7,7 @@ from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.atf import WORD_SEPARATOR
 from ebl.transliteration.domain.text import TextLine
-from ebl.transliteration.infrastructure.menoizing_sign_repository import (
+from ebl.signs.infrastructure.menoizing_sign_repository import (
     MemoizingSignRepository,
 )
 
