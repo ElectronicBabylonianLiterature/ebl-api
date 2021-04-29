@@ -2,14 +2,6 @@ import pytest
 from marshmallow import EXCLUDE
 
 from ebl.errors import NotFoundError
-from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.sign import (
-    Sign,
-    SignListRecord,
-    SignName,
-    Value,
-    Logogram,
-)
 from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
 
 COLLECTION = "signs"
