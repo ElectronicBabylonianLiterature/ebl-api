@@ -57,7 +57,7 @@ class SignSchema(Schema):
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
-    mes_zl = fields.String(data_key="mesZl", missing="")
+    mes_zl = fields.String(data_key="mesZl", missing="", allow_none=True)
     unicode = fields.List(fields.Int(), missing=tuple())
 
     @post_load

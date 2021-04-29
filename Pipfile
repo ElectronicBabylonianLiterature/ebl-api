@@ -49,6 +49,8 @@ test = "pytest --cov=ebl --cov-report term --cov-report xml"
 test-watch = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
 start = "waitress-serve --port=8000 --call ebl.app:get_app"
 lint = "flake8 ebl"
+format  = "black ebl"
+type = "pyre check"
 
 [pipenv]
 allow_prereleases = true
