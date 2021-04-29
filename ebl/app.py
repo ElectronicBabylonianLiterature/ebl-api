@@ -30,8 +30,9 @@ from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.openapi.web.bootstrap import create_open_api_route
 from ebl.openapi.web.spec import create_spec
+from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
-from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
+
 from ebl.users.infrastructure.auth0 import Auth0Backend
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,

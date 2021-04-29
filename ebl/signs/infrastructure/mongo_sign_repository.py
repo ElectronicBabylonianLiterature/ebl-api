@@ -1,5 +1,5 @@
 import re
-from typing import Optional, cast, Sequence
+from typing import Optional, cast, Sequence, Dict
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
@@ -57,7 +57,7 @@ class SignSchema(Schema):
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
-    mes_zl = fields.String(data_key="mesZl", missing=None)
+    mes_zl = fields.String(data_key="mesZl", missing="")
     unicode = fields.List(fields.Int(), missing=tuple())
 
     @post_load
@@ -67,6 +67,13 @@ class SignSchema(Schema):
         data["logograms"] = tuple(data["logograms"])
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
+
+
+class SignDtoSchema(SignSchema):
+    @post_dump
+    def make_sign_dto(self, data, **kwargs) -> Dict:
+        data["name"] = data.pop("_id")
+        return data
 
 
 class MongoSignRepository(SignRepository):

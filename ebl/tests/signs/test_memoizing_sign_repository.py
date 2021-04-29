@@ -1,9 +1,7 @@
-from ebl.transliteration.infrastructure.menoizing_sign_repository import (
-    MemoizingSignRepository,
-)
+from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepository
 
 
-def test_find_memoization(sign_repository, signs):
+def test_find_memoization(sign_repository, signs, when):
     sign = signs[0]
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
@@ -21,11 +19,12 @@ def test_search_memoization(sign_repository, signs):
     sub_index = sign.values[0].sub_index
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
-    [memoizing_sign_repository.create(sign) for sign in signs]
+    memoizing_sign_repository.create(sign)
 
     first = memoizing_sign_repository.search(value, sub_index)
     second = memoizing_sign_repository.search(value, sub_index)
 
+    assert first == sign
     assert first is second
 
 
@@ -35,7 +34,7 @@ def test_search_by_lists_name_memoization(sign_repository, signs):
     number = sign.lists[0].number
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
-    [memoizing_sign_repository.create(sign) for sign in signs]
+    memoizing_sign_repository.create(sign)
 
     first = memoizing_sign_repository.search_by_lists_name(name, number)
     second = memoizing_sign_repository.search_by_lists_name(name, number)

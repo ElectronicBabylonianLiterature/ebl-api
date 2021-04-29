@@ -4,7 +4,7 @@ import falcon
 
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
-from ebl.transliteration.infrastructure.mongo_sign_repository import SignSchema
+from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.users.web.require_scope import require_scope
 
 
@@ -32,31 +32,19 @@ class SignsSearch:
         )
 
     @staticmethod
-    def _parse_params(params):
-        if "subIndex" in params.keys():
+    def _parse_sub_index(params: Dict) -> Dict:
+        params_copy = params.copy()
+        if "subIndex" in params_copy.keys():
             try:
-                params["subIndex"] = int(params["subIndex"])
+                params_copy["subIndex"] = int(params_copy["subIndex"])
             except ValueError:
                 raise DataError(
-                    f"""subIndex '{params["subIndex"]}' has to be a number"""
+                    f"""subIndex '{params_copy["subIndex"]}' has to be a number"""
                 )
-        return params
-
-    @staticmethod
-    def _replace_id(sign) -> Dict:
-        sign["name"] = sign.pop("_id")
-        return sign
+        return params_copy
 
     @falcon.before(require_scope, "read:words")
     def on_get(self, req, resp):
-        try:
-            resp.media = list(
-                map(
-                    self._replace_id,
-                    SignSchema().dump(
-                        self._dispatch(self._parse_params(req.params)), many=True
-                    ),
-                )
-            )
-        except Exception as e:
-            print(e)
+        resp.media = SignDtoSchema().dump(
+            self._dispatch(self._parse_sub_index(req.params)), many=True
+        )

@@ -39,7 +39,7 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import (
+from ebl.signs.infrastructure.mongo_sign_repository import (
     MongoSignRepository,
     SignSchema,
 )
