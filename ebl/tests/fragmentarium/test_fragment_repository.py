@@ -1,14 +1,13 @@
 import attr
 import pytest
-
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -16,15 +15,15 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
 )
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.word_tokens import Word
 
 COLLECTION = "fragments"
 

@@ -2,7 +2,8 @@ from typing import Sequence, Union
 
 import attr
 
-from ebl.corpus.domain.chapter import Chapter, Line, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.line import Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text_id import TextId
 

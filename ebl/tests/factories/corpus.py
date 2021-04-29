@@ -1,13 +1,8 @@
 import factory.fuzzy
 import pydash
 
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-    Line,
-    LineVariant,
-    ManuscriptLine,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
@@ -160,6 +155,7 @@ class ChapterFactory(factory.Factory):
     lines = factory.List(
         [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
     )
+    signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU",)
     parser_version = ""
 
 

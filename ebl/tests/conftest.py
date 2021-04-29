@@ -128,8 +128,10 @@ def text_repository(database):
 
 
 @pytest.fixture
-def corpus(text_repository, bibliography, changelog, transliteration_factory):
-    return Corpus(text_repository, bibliography, changelog, transliteration_factory)
+def corpus(
+    text_repository, bibliography, changelog, transliteration_factory, sign_repository
+):
+    return Corpus(text_repository, bibliography, changelog, sign_repository)
 
 
 class TestFragmentRepository(MongoFragmentRepository):

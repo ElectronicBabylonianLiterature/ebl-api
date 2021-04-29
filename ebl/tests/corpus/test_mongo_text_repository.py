@@ -6,6 +6,7 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 COLLECTION = "texts"
 MANUSCRIPT_ID = 1
@@ -73,3 +74,15 @@ def test_updating_text(database, text_repository):
 def test_updating_non_existing_text_raises_exception(text_repository):
     with pytest.raises(NotFoundError):
         text_repository.update(TEXT.id, TEXT)
+
+
+@pytest.mark.parametrize(
+    "signs,is_match",
+    [([["KU"]], True), ([["ABZ075"], ["KU"]], True), ([["UD"]], False)],
+)
+def test_query_by_transliteration(signs, is_match, text_repository):
+    text_repository.create(TEXT)
+
+    result = text_repository.query_by_transliteration(TransliterationQuery(signs))
+    expected = [TEXT] if is_match else []
+    assert result == expected

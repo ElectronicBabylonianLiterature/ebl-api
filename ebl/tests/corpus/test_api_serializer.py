@@ -55,6 +55,7 @@ def create(include_documents: bool) -> Tuple[Text, dict]:
                 "version": chapter.version,
                 "name": chapter.name,
                 "order": chapter.order,
+                "signs": list(chapter.signs),
                 "parserVersion": chapter.parser_version,
                 "manuscripts": [
                     {

@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentFinder:
@@ -73,7 +73,7 @@ class FragmentFinder:
             return []
         else:
             return [
-                FragmentInfo.of(fragment, query.get_matching_lines(fragment))
+                FragmentInfo.of(fragment, fragment.get_matching_lines(query))
                 for fragment in self._repository.query_by_transliteration(query)
             ]
 

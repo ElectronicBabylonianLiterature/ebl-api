@@ -5,7 +5,8 @@ from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
-from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.text import TextItem
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,

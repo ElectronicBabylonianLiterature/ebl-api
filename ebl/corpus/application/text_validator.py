@@ -1,15 +1,15 @@
-from typing import Optional, cast
+from typing import Optional, cast, Sequence
 
 import pydash
-from ebl.corpus.domain.chapter import Chapter, Line, LineVariant, ManuscriptLine
-from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.chapter import Chapter, TextLineEntry
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import TokenVisitor
-from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 from singledispatchmethod import singledispatchmethod
 
@@ -46,10 +46,20 @@ class AlignmentVisitor(TokenVisitor):
             raise AlignmentError(duplicates)
 
 
+def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter) -> str:
+    return (
+        f"{siglum} colophon {entry.line.atf}"
+        if entry.source is None
+        else (
+            f"{chapter.lines[cast(int, entry.source)].number.atf}"
+            f" {siglum} {entry.line.atf}"
+        )
+    )
+
+
 class TextValidator(TextVisitor):
-    def __init__(self, bibliography, transliteration_factory):
+    def __init__(self, bibliography):
         self._bibliography = bibliography
-        self._transliteration_factory = transliteration_factory
         self._chapter: Optional[Chapter] = None
         self._line: Optional[Line] = None
 
@@ -86,6 +96,14 @@ class TextValidator(TextVisitor):
         for line in chapter.lines:
             self.visit(line)
 
+        invalid_lines: Sequence[str] = [
+            create_error_message(siglum, entry, chapter)
+            for siglum, entry in chapter.invalid_lines
+        ]
+
+        if invalid_lines:
+            raise DataError(f"Invalid signs on lines: {', '.join(invalid_lines)}.")
+
     @visit.register(Manuscript)  # pyre-ignore[56]
     def _visit_manuscript(self, manuscript: Manuscript) -> None:
         self._bibliography.validate_references(manuscript.references)
@@ -104,11 +122,10 @@ class TextValidator(TextVisitor):
     @visit.register(ManuscriptLine)  # pyre-ignore[56]
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         try:
-            self._transliteration_factory.create(manuscript_line.line.atf)
             alignment_validator = AlignmentVisitor()
             manuscript_line.line.accept(alignment_validator)
             alignment_validator.validate()
-        except (TransliterationError, AlignmentError) as error:
+        except AlignmentError as error:
             raise data_error(
                 error, self.chapter, self.line.number, manuscript_line.manuscript_id
             ) from error

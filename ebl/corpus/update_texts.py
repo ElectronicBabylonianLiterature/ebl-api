@@ -1,3 +1,4 @@
+import argparse
 import math
 from functools import reduce
 from typing import Iterable, List
@@ -10,14 +11,16 @@ from tqdm import tqdm
 from ebl.app import create_context
 
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.domain.text import ChapterId, Text, TextId
 
 from ebl.users.domain.user import ApiUser
 
 
 def update_text(corpus: Corpus, text: Text) -> None:
     user = ApiUser("update_texts.py")
-    corpus.update_text(text.id, text, text, user)
+    for index, chapter in enumerate(text.chapters):
+        chapter_id = ChapterId(text.id, index)
+        corpus.update_lines(chapter_id, chapter.lines, user)
 
 
 @attr.s(auto_attribs=True)
@@ -52,7 +55,7 @@ def update_texts(numbers: Iterable[TextId], id_: int) -> State:
         context.text_repository,
         context.get_bibliography(),
         context.changelog,
-        context.get_transliteration_update_factory(),
+        context.sign_repository,
     )
     state = State()
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
@@ -72,7 +75,7 @@ def create_chunks(number_of_chunks) -> Iterable[Iterable[TextId]]:
         context.text_repository,
         context.get_bibliography(),
         context.changelog,
-        context.get_transliteration_update_factory(),
+        context.sign_repository,
     )
     numbers = [text.id for text in corpus.list()]
     chunk_size = math.ceil(len(numbers) / number_of_chunks)
@@ -80,9 +83,25 @@ def create_chunks(number_of_chunks) -> Iterable[Iterable[TextId]]:
 
 
 if __name__ == "__main__":
-    number_of_jobs = 4
-    chunks = create_chunks(number_of_jobs)
-    states = Parallel(n_jobs=number_of_jobs)(
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-w",
+        "--workers",
+        type=int,
+        help="number of parallel workers to perform migration",
+    )
+    parser.add_argument(
+        "-t",
+        "--threads",
+        action="store_true",
+        help="use threads instead of processes for workers",
+    )
+    args = parser.parse_args()
+    workers = args.workers or 4
+    prefer = "threads" if args.threads else None
+
+    chunks = create_chunks(workers)
+    states = Parallel(n_jobs=workers, prefer=prefer)(
         delayed(update_texts)(subset, index) for index, subset in enumerate(chunks)
     )
     final_state = reduce(

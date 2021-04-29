@@ -7,7 +7,7 @@ from ebl.corpus.application.lemmatization import (
 )
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
-from ebl.corpus.domain.chapter import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.text import ChapterId
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
@@ -20,8 +20,9 @@ from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
 from ebl.corpus.domain.parser import parse_chapter
@@ -145,11 +146,28 @@ def test_creating_text(
     corpus.create(TEXT, user)
 
 
-def test_create_raises_exception_if_invalid_signs(corpus, bibliography, when) -> None:
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "text",
+    [
+        attr.evolve(
+            TEXT, chapters=[attr.evolve(TEXT.chapters[0], signs=("KU ABZ075 ?\nKU",))]
+        ),
+        attr.evolve(
+            TEXT,
+            chapters=[
+                attr.evolve(
+                    TEXT.chapters[0], signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n?",)
+                )
+            ],
+        ),
+    ],
+)
+def test_create_raises_exception_if_invalid_signs(
+    text, corpus, bibliography, when
+) -> None:
     allow_validate_references(bibliography, when)
-
     with pytest.raises(DataError):
-        corpus.create(TEXT, ANY_USER)
+        corpus.create(text, ANY_USER)
 
 
 def test_create_raises_exception_if_invalid_references(
@@ -463,10 +481,19 @@ def test_updating_manuscripts(
                 manuscripts=(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
+                        colophon=Transliteration.of_iterable(
+                            [
+                                TextLine.of_iterable(
+                                    LineNumber(1, True),
+                                    (Word.of([Reading.of_name("ba")]),),
+                                )
+                            ]
+                        ),
                         notes="Updated manuscript.",
                     ),
                 ),
                 uncertain_fragments=uncertain_fragments,
+                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA",),
             ),
         ),
     )
@@ -527,8 +554,38 @@ def test_updating_lines(
                     attr.evolve(
                         TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
                         number=LineNumber(1, True),
+                        variants=(
+                            attr.evolve(
+                                TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].variants[0],
+                                manuscripts=(
+                                    attr.evolve(
+                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
+                                        .lines[0]
+                                        .variants[0]
+                                        .manuscripts[0],
+                                        line=TextLine.of_iterable(
+                                            LineNumber(1, True),
+                                            (
+                                                Word.of(
+                                                    [
+                                                        Reading.of_name("nu"),
+                                                        Joiner.hyphen(),
+                                                        BrokenAway.open(),
+                                                        Reading.of_name("ku"),
+                                                        Joiner.hyphen(),
+                                                        Reading.of_name("ši"),
+                                                        BrokenAway.close(),
+                                                    ]
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
                 ),
+                signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU",),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),
@@ -552,15 +609,18 @@ def test_updating_lines(
 def test_importing_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    atf = "1. kur"
+    siglum = str(TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].siglum)
+    atf = f"1. kur\n{siglum} 1. ba"
     updated_text = attr.evolve(
         TEXT_WITHOUT_DOCUMENTS,
         chapters=(
             attr.evolve(
                 TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=parse_chapter(
-                    "1. kur", TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts
+                lines=(
+                    *TEXT_WITHOUT_DOCUMENTS.chapters[0].lines,
+                    *parse_chapter(atf, TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts),
                 ),
+                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),
@@ -583,7 +643,10 @@ def test_importing_lines(
 def test_merging_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    reconstruction = (AkkadianWord.of((ValueToken.of("buāru"),)),)
+    reconstruction = (
+        LanguageShift.normalized_akkadian(),
+        AkkadianWord.of((ValueToken.of("buāru"),)),
+    )
     is_second_line_of_parallelism = False
     is_beginning_of_section = False
     text_line = TextLine.of_iterable(
@@ -612,7 +675,7 @@ def test_merging_lines(
     )
     new_text_line = TextLine.of_iterable(
         LineNumber(1),
-        (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ši")])),
+        (Word.of([Reading.of_name("ku")]), Word.of([Reading.of_name("ba")])),
     )
     new_line = Line(
         LineNumber(1),
@@ -640,6 +703,7 @@ def test_merging_lines(
             attr.evolve(
                 TEXT_WITHOUT_DOCUMENTS.chapters[0],
                 lines=(new_line,),
+                signs=("KU BA\nKU",),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),

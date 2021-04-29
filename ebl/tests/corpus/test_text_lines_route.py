@@ -11,6 +11,8 @@ from ebl.users.domain.user import Guest
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.corpus.web.text_schemas import ApiLineSchema
 from ebl.corpus.domain.parser import parse_chapter
+from ebl.transliteration.domain.text_line import TextLine
+from typing import cast
 
 ANY_USER = Guest()
 
@@ -182,13 +184,27 @@ def test_importing(client, bibliography, sign_repository, signs):
     text = TextFactory.build()
     allow_references(text, bibliography)
     create_text(client, text)
-    atf = "1. kur"
+    next_line_mumber = (
+        cast(
+            TextLine, text.chapters[0].lines[0].variants[0].manuscripts[0].line
+        ).line_number.number
+        + 1
+    )
+    atf = (
+        f"{text.chapters[0].lines[0].number.number+1}. bu\n"
+        f"{str(text.chapters[0].manuscripts[0].siglum)} {next_line_mumber}. ..."
+    )
+
     updated_text = attr.evolve(
         text,
         chapters=(
             attr.evolve(
                 text.chapters[0],
-                lines=parse_chapter(atf, text.chapters[0].manuscripts),
+                lines=(
+                    *text.chapters[0].lines,
+                    *parse_chapter(atf, text.chapters[0].manuscripts),
+                ),
+                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU",),
                 parser_version=ATF_PARSER_VERSION,
             ),
         ),
