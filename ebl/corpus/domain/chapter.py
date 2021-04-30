@@ -1,10 +1,10 @@
 from enum import Enum, unique
-from typing import Mapping, Optional, Sequence, Tuple, TypeVar, cast
+from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
 import pydash
 
-from ebl.corpus.domain.line import Line, ManuscriptLineLabel
+from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.stage import Stage
 from ebl.errors import NotFoundError
@@ -12,6 +12,15 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.corpus.domain.text_id import TextId
+
+
+ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
+
+
+class ChapterVisitor:
+    def visit(self, item: ChapterItem) -> None:
+        pass
 
 
 @unique
@@ -30,7 +39,21 @@ class TextLineEntry:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class ChapterId:
+    text_id: TextId
+    stage: Stage
+    name: str
+
+    def to_tuple(self) -> Tuple[int, int, str, str]:
+        return (self.text_id.category, self.text_id.index, self.stage.value, self.name)
+
+    def __str__(self) -> str:
+        return f"{self.text_id} {self.stage} {self.name}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Chapter:
+    text_id: TextId
     classification: Classification = Classification.ANCIENT
     stage: Stage = Stage.NEO_ASSYRIAN
     version: str = ""
@@ -78,6 +101,10 @@ class Chapter:
         if duplicates:
             readable_labels = self._make_labels_readable(duplicates)
             raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
+
+    @property
+    def id_(self) -> ChapterId:
+        return ChapterId(self.text_id, self.stage, self.name)
 
     @property
     def text_lines(self) -> Sequence[Sequence[TextLineEntry]]:

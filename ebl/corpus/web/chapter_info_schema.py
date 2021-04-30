@@ -1,14 +1,17 @@
 from marshmallow import Schema, fields
 
-from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.corpus.domain.chapter import Classification
 from ebl.corpus.domain.stage import Stage
-from ebl.corpus.web.text_schemas import ApiLineSchema
+from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.schemas import ValueEnum
 
 
+class TextIdSchema(Schema):
+    category = fields.Integer()
+    index = fields.Integer()
+
+
 class ChapterIdSchema(Schema):
-    classification = ValueEnum(Classification)
+    text_id = fields.Nested(TextIdSchema, data_key="textId")
     stage = ValueEnum(Stage)
     name = fields.String()
 
@@ -25,11 +28,4 @@ class ChapterInfoSchema(Schema):
         fields.String(),
         fields.Pluck(LineSchema, "atf", many=True),
         data_key="matchingColophonLines",
-    )
-
-
-class TextInfoSchema(Schema):
-    id_ = fields.Nested(TextIdSchema, data_key="id")
-    matching_chapters = fields.Nested(
-        ChapterInfoSchema, many=True, data_key="matchingChapters"
     )

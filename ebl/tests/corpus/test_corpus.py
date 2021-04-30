@@ -5,16 +5,16 @@ from ebl.corpus.application.lemmatization import (
     ChapterLemmatization,
     LineVariantLemmatization,
 )
-from ebl.corpus.application.text_serializer import serialize
+from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.parser import parse_chapter
-from ebl.corpus.domain.text import ChapterId
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-from ebl.tests.factories.corpus import TextFactory
+from ebl.tests.corpus.support import ANY_USER
+from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -25,44 +25,34 @@ from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.users.domain.user import Guest
 
-COLLECTION = "texts"
+CHAPTERS_COLLECTION = "chapters"
 TEXT = TextFactory.build()
-TEXT_WITHOUT_DOCUMENTS = attr.evolve(
-    TEXT,
-    chapters=tuple(
+CHAPTER = ChapterFactory.build(text_id=TEXT.id)
+CHAPTER_WITHOUT_DOCUMENTS = attr.evolve(
+    CHAPTER,
+    manuscripts=tuple(
         attr.evolve(
-            chapter,
-            manuscripts=tuple(
-                attr.evolve(
-                    manuscript,
-                    references=tuple(
-                        attr.evolve(reference, document=None)
-                        for reference in manuscript.references
-                    ),
-                )
-                for manuscript in chapter.manuscripts
+            manuscript,
+            references=tuple(
+                attr.evolve(reference, document=None)
+                for reference in manuscript.references
             ),
         )
-        for chapter in TEXT.chapters
+        for manuscript in CHAPTER.manuscripts
     ),
 )
-ANY_USER = Guest()
 
 
 def expect_bibliography(bibliography, when) -> None:
-    for chapter in TEXT.chapters:
-        for manuscript in chapter.manuscripts:
-            for reference in manuscript.references:
-                (when(bibliography).find(reference.id).thenReturn(reference.document))
+    for manuscript in CHAPTER.manuscripts:
+        for reference in manuscript.references:
+            (when(bibliography).find(reference.id).thenReturn(reference.document))
 
 
-def expect_validate_references(bibliography, when, text=TEXT) -> None:
+def expect_validate_references(bibliography, when, chapter=CHAPTER) -> None:
     manuscript_references = [
-        manuscript.references
-        for chapter in text.chapters
-        for manuscript in chapter.manuscripts
+        manuscript.references for manuscript in chapter.manuscripts
     ]
 
     for references in manuscript_references:
@@ -82,11 +72,11 @@ def expect_signs(signs, sign_repository) -> None:
         sign_repository.create(sign)
 
 
-def expect_text_update(
+def expect_chapter_update(
     bibliography,
     changelog,
-    old_text,
-    updated_text,
+    old_chapter,
+    updated_chapter,
     signs,
     sign_repository,
     text_repository,
@@ -94,36 +84,38 @@ def expect_text_update(
     when,
 ) -> None:
     expect_signs(signs, sign_repository)
-    expect_validate_references(bibliography, when, old_text)
-    when(text_repository).update(TEXT.id, updated_text).thenReturn(updated_text)
+    expect_validate_references(bibliography, when, old_chapter)
+    when(text_repository).update(CHAPTER.id_, updated_chapter).thenReturn(
+        updated_chapter
+    )
     when(changelog).create(
-        COLLECTION,
+        CHAPTERS_COLLECTION,
         user.profile,
-        {**serialize(old_text), "_id": (old_text.id.category, old_text.id.index)},
+        {**ChapterSchema().dump(old_chapter), "_id": old_chapter.id_.to_tuple()},
         {
-            **serialize(updated_text),
-            "_id": (updated_text.id.category, updated_text.id.index),
+            **ChapterSchema().dump(updated_chapter),
+            "_id": updated_chapter.id_.to_tuple(),
         },
     ).thenReturn()
 
 
-def expect_text_find_and_update(
+def expect_find_and_update_chapter(
     bibliography,
     changelog,
-    old_text,
-    updated_text,
+    old_chapter,
+    updated_chapter,
     signs,
     sign_repository,
     text_repository,
     user,
     when,
 ) -> None:
-    when(text_repository).find(TEXT.id).thenReturn(old_text)
-    expect_text_update(
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(old_chapter)
+    expect_chapter_update(
         bibliography,
         changelog,
-        old_text,
-        updated_text,
+        old_chapter,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -132,85 +124,48 @@ def expect_text_find_and_update(
     )
 
 
-def test_creating_text(
-    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
-) -> None:
-    expect_signs(signs, sign_repository)
-    expect_validate_references(bibliography, when)
-    text_id = (TEXT.id.category, TEXT.id.index)
-    when(changelog).create(
-        COLLECTION, user.profile, {"_id": text_id}, {**serialize(TEXT), "_id": text_id}
-    ).thenReturn()
-    when(text_repository).create(TEXT).thenReturn()
-
-    corpus.create(TEXT, user)
-
-
-@pytest.mark.parametrize(  # pyre-ignore[56]
-    "text",
-    [
-        attr.evolve(
-            TEXT, chapters=[attr.evolve(TEXT.chapters[0], signs=("KU ABZ075 ?\nKU",))]
-        ),
-        attr.evolve(
-            TEXT,
-            chapters=[
-                attr.evolve(
-                    TEXT.chapters[0], signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n?",)
-                )
-            ],
-        ),
-    ],
-)
-def test_create_raises_exception_if_invalid_signs(
-    text, corpus, bibliography, when
-) -> None:
-    allow_validate_references(bibliography, when)
-    with pytest.raises(DataError):
-        corpus.create(text, ANY_USER)
-
-
-def test_create_raises_exception_if_invalid_references(
-    corpus, bibliography, when
-) -> None:
-    expect_invalid_references(bibliography, when)
-
-    with pytest.raises(DataError):
-        corpus.create(TEXT, ANY_USER)
-
-
-def test_finding_text(corpus, text_repository, bibliography, when) -> None:
-    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
-    expect_bibliography(bibliography, when)
+def test_find_text(corpus, text_repository, bibliography, when) -> None:
+    when(text_repository).find(TEXT.id).thenReturn(TEXT)
 
     assert corpus.find(TEXT.id) == TEXT
 
 
 def test_listing_texts(corpus, text_repository, when) -> None:
-    when(text_repository).list().thenReturn([TEXT_WITHOUT_DOCUMENTS])
+    when(text_repository).list().thenReturn([TEXT])
 
-    assert corpus.list() == [TEXT_WITHOUT_DOCUMENTS]
+    assert corpus.list() == [TEXT]
 
 
-def test_find_raises_exception_if_references_not_found(
+def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS
+    )
+    expect_bibliography(bibliography, when)
+
+    assert corpus.find_chapter(CHAPTER.id_) == CHAPTER
+
+
+def test_find_chapter_raises_exception_if_references_not_found(
     corpus, text_repository, bibliography, when
 ) -> None:
-    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS
+    )
     when(bibliography).find(...).thenRaise(NotFoundError())
 
     with pytest.raises(Defect):
-        corpus.find(TEXT.id)
+        corpus.find_chapter(CHAPTER.id_)
 
 
-def test_updating_text(
+def test_update_chapter(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    updated_text = attr.evolve(TEXT_WITHOUT_DOCUMENTS, name="New Name")
-    expect_text_update(
+    updated_chapter = attr.evolve(CHAPTER_WITHOUT_DOCUMENTS, version="New Version")
+    expect_chapter_update(
         bibliography,
         changelog,
-        TEXT_WITHOUT_DOCUMENTS,
-        updated_text,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -218,8 +173,8 @@ def test_updating_text(
         when,
     )
 
-    corpus.update_text(
-        TEXT_WITHOUT_DOCUMENTS.id, TEXT_WITHOUT_DOCUMENTS, updated_text, user
+    corpus.update_chapter(
+        CHAPTER_WITHOUT_DOCUMENTS.id_, CHAPTER_WITHOUT_DOCUMENTS, updated_chapter, user
     )
 
 
@@ -228,47 +183,40 @@ def test_updating_alignment(
 ) -> None:
     aligmnet = 0
     omitted_words = (1,)
-    updated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(
+    updated_chapter = attr.evolve(
+        CHAPTER_WITHOUT_DOCUMENTS,
+        lines=(
             attr.evolve(
-                TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=(
+                CHAPTER_WITHOUT_DOCUMENTS.lines[0],
+                variants=(
                     attr.evolve(
-                        TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
-                        variants=(
+                        CHAPTER_WITHOUT_DOCUMENTS.lines[0].variants[0],
+                        manuscripts=(
                             attr.evolve(
-                                TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].variants[0],
-                                manuscripts=(
-                                    attr.evolve(
-                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .manuscripts[0],
-                                        line=TextLine.of_iterable(
-                                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .manuscripts[0]
-                                            .line.line_number,
-                                            (
-                                                Word.of(
-                                                    [
-                                                        Reading.of_name("ku"),
-                                                        Joiner.hyphen(),
-                                                        BrokenAway.open(),
-                                                        Reading.of_name("nu"),
-                                                        Joiner.hyphen(),
-                                                        Reading.of_name("ši"),
-                                                        BrokenAway.close(),
-                                                    ],
-                                                    alignment=aligmnet,
-                                                ),
-                                            ),
+                                CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                .variants[0]
+                                .manuscripts[0],
+                                line=TextLine.of_iterable(
+                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                    .variants[0]
+                                    .manuscripts[0]
+                                    .line.line_number,
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of_name("ku"),
+                                                Joiner.hyphen(),
+                                                BrokenAway.open(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("ši"),
+                                                BrokenAway.close(),
+                                            ],
+                                            alignment=aligmnet,
                                         ),
-                                        omitted_words=omitted_words,
                                     ),
                                 ),
+                                omitted_words=omitted_words,
                             ),
                         ),
                     ),
@@ -276,11 +224,11 @@ def test_updating_alignment(
             ),
         ),
     )
-    expect_text_find_and_update(
+    expect_find_and_update_chapter(
         bibliography,
         changelog,
-        TEXT_WITHOUT_DOCUMENTS,
-        updated_text,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -299,87 +247,74 @@ def test_updating_alignment(
             ),
         )
     )
-    corpus.update_alignment(ChapterId(TEXT.id, 0), alignment, user)
+    corpus.update_alignment(CHAPTER.id_, alignment, user)
 
 
 def test_updating_manuscript_lemmatization(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    updated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(
+    updated_chapter = attr.evolve(
+        CHAPTER_WITHOUT_DOCUMENTS,
+        lines=(
             attr.evolve(
-                TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=(
+                CHAPTER_WITHOUT_DOCUMENTS.lines[0],
+                variants=(
                     attr.evolve(
-                        TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
-                        variants=(
-                            attr.evolve(
-                                TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].variants[0],
-                                reconstruction=(
-                                    TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                    .lines[0]
-                                    .variants[0]
-                                    .reconstruction[0],
-                                    TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                    .lines[0]
+                        CHAPTER_WITHOUT_DOCUMENTS.lines[0].variants[0],
+                        reconstruction=(
+                            CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                            .variants[0]
+                            .reconstruction[0],
+                            CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                            .variants[0]
+                            .reconstruction[1]
+                            .set_unique_lemma(
+                                LemmatizationToken(
+                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
                                     .variants[0]
                                     .reconstruction[1]
-                                    .set_unique_lemma(
-                                        LemmatizationToken(
-                                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .reconstruction[1]
-                                            .value,
-                                            (WordId("aklu I"),),
-                                        )
-                                    ),
-                                    *TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                    .lines[0]
-                                    .variants[0]
-                                    .reconstruction[2:6],
-                                    TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                    .lines[0]
+                                    .value,
+                                    (WordId("aklu I"),),
+                                )
+                            ),
+                            *CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                            .variants[0]
+                            .reconstruction[2:6],
+                            CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                            .variants[0]
+                            .reconstruction[6]
+                            .set_unique_lemma(
+                                LemmatizationToken(
+                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
                                     .variants[0]
                                     .reconstruction[6]
-                                    .set_unique_lemma(
-                                        LemmatizationToken(
-                                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .reconstruction[6]
-                                            .value,
-                                            tuple(),
-                                        )
-                                    ),
-                                ),
-                                manuscripts=(
-                                    attr.evolve(
-                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .manuscripts[0],
-                                        line=TextLine.of_iterable(
-                                            TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .manuscripts[0]
-                                            .line.line_number,
-                                            (
-                                                Word.of(
-                                                    [
-                                                        Reading.of_name("ku"),
-                                                        Joiner.hyphen(),
-                                                        BrokenAway.open(),
-                                                        Reading.of_name("nu"),
-                                                        Joiner.hyphen(),
-                                                        Reading.of_name("ši"),
-                                                        BrokenAway.close(),
-                                                    ],
-                                                    unique_lemma=(WordId("aklu I"),),
-                                                ),
-                                            ),
+                                    .value,
+                                    tuple(),
+                                )
+                            ),
+                        ),
+                        manuscripts=(
+                            attr.evolve(
+                                CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                .variants[0]
+                                .manuscripts[0],
+                                line=TextLine.of_iterable(
+                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                    .variants[0]
+                                    .manuscripts[0]
+                                    .line.line_number,
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of_name("ku"),
+                                                Joiner.hyphen(),
+                                                BrokenAway.open(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("ši"),
+                                                BrokenAway.close(),
+                                            ],
+                                            unique_lemma=(WordId("aklu I"),),
                                         ),
                                     ),
                                 ),
@@ -390,11 +325,11 @@ def test_updating_manuscript_lemmatization(
             ),
         ),
     )
-    expect_text_find_and_update(
+    expect_find_and_update_chapter(
         bibliography,
         changelog,
-        TEXT_WITHOUT_DOCUMENTS,
-        updated_text,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -418,7 +353,7 @@ def test_updating_manuscript_lemmatization(
             ),
         ),
     )
-    corpus.update_manuscript_lemmatization(ChapterId(TEXT.id, 0), lemmatization, user)
+    corpus.update_manuscript_lemmatization(CHAPTER.id_, lemmatization, user)
 
 
 @pytest.mark.parametrize(
@@ -464,44 +399,40 @@ def test_updating_manuscript_lemmatization(
     ],
 )
 def test_invalid_alignment(alignment, corpus, text_repository, when) -> None:
-    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS
+    )
     with pytest.raises(AlignmentError):
-        corpus.update_alignment(ChapterId(TEXT.id, 0), alignment, ANY_USER)
+        corpus.update_alignment(CHAPTER.id_, alignment, ANY_USER)
 
 
 def test_updating_manuscripts(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
     uncertain_fragments = (MuseumNumber.of("K.1"),)
-    updated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(
+    updated_chapter = attr.evolve(
+        CHAPTER_WITHOUT_DOCUMENTS,
+        manuscripts=(
             attr.evolve(
-                TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                manuscripts=(
-                    attr.evolve(
-                        TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
-                        colophon=Transliteration.of_iterable(
-                            [
-                                TextLine.of_iterable(
-                                    LineNumber(1, True),
-                                    (Word.of([Reading.of_name("ba")]),),
-                                )
-                            ]
-                        ),
-                        notes="Updated manuscript.",
-                    ),
+                CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
+                colophon=Transliteration.of_iterable(
+                    [
+                        TextLine.of_iterable(
+                            LineNumber(1, True), (Word.of([Reading.of_name("ba")]),)
+                        )
+                    ]
                 ),
-                uncertain_fragments=uncertain_fragments,
-                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA",),
+                notes="Updated manuscript.",
             ),
         ),
+        uncertain_fragments=uncertain_fragments,
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA",),
     )
-    expect_text_find_and_update(
+    expect_find_and_update_chapter(
         bibliography,
         changelog,
-        TEXT_WITHOUT_DOCUMENTS,
-        updated_text,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -509,10 +440,8 @@ def test_updating_manuscripts(
         when,
     )
 
-    manuscripts = (updated_text.chapters[0].manuscripts[0],)
-    corpus.update_manuscripts(
-        ChapterId(TEXT.id, 0), manuscripts, uncertain_fragments, user
-    )
+    manuscripts = (updated_chapter.manuscripts[0],)
+    corpus.update_manuscripts(CHAPTER.id_, manuscripts, uncertain_fragments, user)
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -520,64 +449,62 @@ def test_updating_manuscripts(
     [
         tuple(),
         (
-            TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
-            TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0],
+            CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
+            CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
         ),
     ],
 )
 def test_invalid_manuscripts(manuscripts, corpus, text_repository, when) -> None:
-    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS
+    )
     with pytest.raises(DataError):
-        corpus.update_manuscripts(ChapterId(TEXT.id, 0), manuscripts, tuple(), ANY_USER)
+        corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
 
 
 def test_update_manuscripts_raises_exception_if_invalid_references(
     corpus, text_repository, bibliography, when
 ) -> None:
-    manuscripts = TEXT.chapters[0].manuscripts
-    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
+    manuscripts = CHAPTER.manuscripts
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS
+    )
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
-        corpus.update_manuscripts(ChapterId(TEXT.id, 0), manuscripts, tuple(), ANY_USER)
+        corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
 
 
 def test_updating_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    updated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(
+    updated_chapter = attr.evolve(
+        CHAPTER_WITHOUT_DOCUMENTS,
+        lines=(
             attr.evolve(
-                TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=(
+                CHAPTER_WITHOUT_DOCUMENTS.lines[0],
+                number=LineNumber(1, True),
+                variants=(
                     attr.evolve(
-                        TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0],
-                        number=LineNumber(1, True),
-                        variants=(
+                        CHAPTER_WITHOUT_DOCUMENTS.lines[0].variants[0],
+                        manuscripts=(
                             attr.evolve(
-                                TEXT_WITHOUT_DOCUMENTS.chapters[0].lines[0].variants[0],
-                                manuscripts=(
-                                    attr.evolve(
-                                        TEXT_WITHOUT_DOCUMENTS.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .manuscripts[0],
-                                        line=TextLine.of_iterable(
-                                            LineNumber(1, True),
-                                            (
-                                                Word.of(
-                                                    [
-                                                        Reading.of_name("nu"),
-                                                        Joiner.hyphen(),
-                                                        BrokenAway.open(),
-                                                        Reading.of_name("ku"),
-                                                        Joiner.hyphen(),
-                                                        Reading.of_name("ši"),
-                                                        BrokenAway.close(),
-                                                    ]
-                                                ),
-                                            ),
+                                CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                .variants[0]
+                                .manuscripts[0],
+                                line=TextLine.of_iterable(
+                                    LineNumber(1, True),
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                BrokenAway.open(),
+                                                Reading.of_name("ku"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("ši"),
+                                                BrokenAway.close(),
+                                            ]
                                         ),
                                     ),
                                 ),
@@ -585,16 +512,16 @@ def test_updating_lines(
                         ),
                     ),
                 ),
-                signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU",),
-                parser_version=ATF_PARSER_VERSION,
             ),
         ),
+        signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU",),
+        parser_version=ATF_PARSER_VERSION,
     )
-    expect_text_find_and_update(
+    expect_find_and_update_chapter(
         bibliography,
         changelog,
-        TEXT_WITHOUT_DOCUMENTS,
-        updated_text,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -602,34 +529,30 @@ def test_updating_lines(
         when,
     )
 
-    lines = updated_text.chapters[0].lines
-    corpus.update_lines(ChapterId(TEXT.id, 0), lines, user)
+    lines = updated_chapter.lines
+    corpus.update_lines(CHAPTER.id_, lines, user)
 
 
 def test_importing_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    siglum = str(TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].siglum)
-    atf = f"1. kur\n{siglum} 1. ba"
-    updated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(
-            attr.evolve(
-                TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=(
-                    *TEXT_WITHOUT_DOCUMENTS.chapters[0].lines,
-                    *parse_chapter(atf, TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts),
-                ),
-                signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
-                parser_version=ATF_PARSER_VERSION,
-            ),
+    line_number = CHAPTER_WITHOUT_DOCUMENTS.lines[-1].number.number + 1
+    siglum = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].siglum
+    atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
+    updated_chapter = attr.evolve(
+        CHAPTER_WITHOUT_DOCUMENTS,
+        lines=(
+            *CHAPTER_WITHOUT_DOCUMENTS.lines,
+            *parse_chapter(atf, CHAPTER_WITHOUT_DOCUMENTS.manuscripts),
         ),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
+        parser_version=ATF_PARSER_VERSION,
     )
-    expect_text_find_and_update(
+    expect_find_and_update_chapter(
         bibliography,
         changelog,
-        TEXT_WITHOUT_DOCUMENTS,
-        updated_text,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -637,7 +560,7 @@ def test_importing_lines(
         when,
     )
 
-    corpus.import_lines(ChapterId(TEXT.id, 0), atf, user)
+    corpus.import_lines(CHAPTER.id_, atf, user)
 
 
 def test_merging_lines(
@@ -660,7 +583,7 @@ def test_merging_lines(
             ),
         ),
     )
-    manuscript_id = TEXT_WITHOUT_DOCUMENTS.chapters[0].manuscripts[0].id
+    manuscript_id = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].id
     line = Line(
         LineNumber(1),
         (
@@ -693,26 +616,18 @@ def test_merging_lines(
         is_second_line_of_parallelism,
         is_beginning_of_section,
     )
-    dehydrated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(attr.evolve(TEXT_WITHOUT_DOCUMENTS.chapters[0], lines=(line,)),),
+    old_chapter = attr.evolve(CHAPTER_WITHOUT_DOCUMENTS, lines=(line,))
+    updated_chapter = attr.evolve(
+        CHAPTER_WITHOUT_DOCUMENTS,
+        lines=(new_line,),
+        signs=("KU BA\nKU",),
+        parser_version=ATF_PARSER_VERSION,
     )
-    updated_text = attr.evolve(
-        TEXT_WITHOUT_DOCUMENTS,
-        chapters=(
-            attr.evolve(
-                TEXT_WITHOUT_DOCUMENTS.chapters[0],
-                lines=(new_line,),
-                signs=("KU BA\nKU",),
-                parser_version=ATF_PARSER_VERSION,
-            ),
-        ),
-    )
-    expect_text_find_and_update(
+    expect_find_and_update_chapter(
         bibliography,
         changelog,
-        dehydrated_text,
-        updated_text,
+        old_chapter,
+        updated_chapter,
         signs,
         sign_repository,
         text_repository,
@@ -734,15 +649,17 @@ def test_merging_lines(
             is_beginning_of_section,
         ),
     )
-    corpus.update_lines(ChapterId(TEXT.id, 0), lines, user)
+    corpus.update_lines(CHAPTER.id_, lines, user)
 
 
 def test_update_lines_raises_exception_if_invalid_signs(
     corpus, text_repository, bibliography, when
 ) -> None:
-    lines = TEXT.chapters[0].lines
-    when(text_repository).find(TEXT.id).thenReturn(TEXT_WITHOUT_DOCUMENTS)
+    lines = CHAPTER.lines
+    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS
+    )
     allow_validate_references(bibliography, when)
 
     with pytest.raises(DataError):
-        corpus.update_lines(ChapterId(TEXT.id, 0), lines, ANY_USER)
+        corpus.update_lines(CHAPTER.id_, lines, ANY_USER)

@@ -1,72 +1,20 @@
-import json
-
 import falcon
-import pydash
 
-from ebl.corpus.domain.text_info import TextInfo
-from ebl.corpus.web.api_serializer import deserialize, serialize
-from ebl.corpus.web.text_info_schema import TextInfoSchema
-from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
+from ebl.corpus.application.schemas import TextSchema
+from ebl.corpus.domain.chapter_info import ChapterInfo
+from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
+from ebl.tests.corpus.support import allow_references, allow_signs
+from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.users.domain.user import Guest
-
-ANY_USER = Guest()
 
 
 def create_dto(text):
-    return serialize(text)
+    return TextSchema().dump(text)
 
 
-def allow_references(text, bibliography):
-    for chapter in text.chapters:
-        for manuscript in chapter.manuscripts:
-            for reference in manuscript.references:
-                bibliography.create(reference.document, ANY_USER)
-
-
-def allow_signs(signs, sign_list):
-    for sign in signs:
-        sign_list.create(sign)
-
-
-def create_text(client, text):
-    post_result = client.simulate_post("/texts", body=json.dumps(create_dto(text)))
-    assert post_result.status == falcon.HTTP_CREATED
-    assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(text)
-
-
-def test_parse_text():
-    text = TextFactory.build(
-        chapters=(
-            ChapterFactory.build(
-                manuscripts=(
-                    ManuscriptFactory.build(
-                        id=1, references=(ReferenceFactory.build(),)
-                    ),
-                )
-            ),
-        )
-    )
-    dto = create_dto(text)
-
-    assert deserialize(dto) == text
-
-
-def test_to_dto():
-    text = TextFactory.build()
-    dto = create_dto(text)
-
-    assert serialize(text) == dto
-
-
-def test_created_text_can_be_fetched(client, bibliography, sign_repository, signs):
-    allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
+def test_get_text(client, bibliography, sign_repository, signs, text_repository):
+    text = TextFactory.build(chapters=tuple())
+    text_repository.create(text)
 
     get_result = client.simulate_get(f"/texts/{text.category}/{text.index}")
 
@@ -93,35 +41,31 @@ def test_invalid_index(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_listing_texts(client, bibliography, sign_repository, signs):
-    allow_signs(signs, sign_repository)
-    first_text = TextFactory.build()
-    second_text = TextFactory.build()
-    allow_references(first_text, bibliography)
-    allow_references(second_text, bibliography)
-    create_text(client, first_text)
-    create_text(client, second_text)
+def test_listing_texts(client, bibliography, sign_repository, signs, text_repository):
+    first_text = TextFactory.build(chapters=tuple())
+    second_text = TextFactory.build(chapters=tuple())
+    text_repository.create(first_text)
+    text_repository.create(second_text)
 
     get_result = client.simulate_get("/texts")
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert get_result.json == [
-        pydash.omit(dto, "chapters")
-        for dto in [create_dto(first_text), create_dto(second_text)]
-    ]
+    assert get_result.json == [create_dto(first_text), create_dto(second_text)]
 
 
-def test_searching_texts(client, bibliography, sign_repository, signs):
+def test_searching_texts(client, bibliography, sign_repository, signs, text_repository):
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
 
     get_result = client.simulate_get("/textsearch?transliteration=ku")
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == [
-        TextInfoSchema().dump(TextInfo.of(text, TransliterationQuery([["KU"]])))
+        ChapterInfoSchema().dump(
+            ChapterInfo.of(chapter, TransliterationQuery([["KU"]]))
+        )
     ]

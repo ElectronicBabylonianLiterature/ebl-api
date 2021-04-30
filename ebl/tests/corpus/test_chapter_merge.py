@@ -1,6 +1,7 @@
 import attr
 import pytest
 
+from ebl.corpus.domain.text_id import TextId
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
@@ -404,6 +405,7 @@ def test_merge_line(old: Line, new: Line, expected: Line) -> None:
     assert old.merge(new) == expected
 
 
+TEXT_ID = TextId(0, 0)
 CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 VERSION = "A"
@@ -412,6 +414,7 @@ ORDER = 1
 MANUSCRIPT = Manuscript(MANUSCRIPT_ID)
 MUSEUM_NUMBER = MuseumNumber.of("K.1")
 CHAPTER = Chapter(
+    TEXT_ID,
     CLASSIFICATION,
     STAGE,
     VERSION,
@@ -504,6 +507,7 @@ OLD_LINE = Line(
         (CHAPTER, CHAPTER, CHAPTER),
         (
             Chapter(
+                TEXT_ID,
                 CLASSIFICATION,
                 STAGE,
                 VERSION,
@@ -514,6 +518,7 @@ OLD_LINE = Line(
                 (LINE,),
             ),
             Chapter(
+                TEXT_ID,
                 NEW_CLASSIFICATION,
                 NEW_STAGE,
                 NEW_VERSION,
@@ -524,6 +529,7 @@ OLD_LINE = Line(
                 (LINE,),
             ),
             Chapter(
+                TEXT_ID,
                 NEW_CLASSIFICATION,
                 NEW_STAGE,
                 NEW_VERSION,
@@ -536,6 +542,7 @@ OLD_LINE = Line(
         ),
         (
             Chapter(
+                TEXT_ID,
                 CLASSIFICATION,
                 STAGE,
                 VERSION,
@@ -546,6 +553,7 @@ OLD_LINE = Line(
                 (OLD_LINE, LINE),
             ),
             Chapter(
+                TEXT_ID,
                 CLASSIFICATION,
                 STAGE,
                 VERSION,
@@ -556,6 +564,7 @@ OLD_LINE = Line(
                 (NEW_LINE, ANOTHER_NEW_LINE),
             ),
             Chapter(
+                TEXT_ID,
                 CLASSIFICATION,
                 STAGE,
                 VERSION,
@@ -569,6 +578,7 @@ OLD_LINE = Line(
         (
             CHAPTER,
             Chapter(
+                TEXT_ID,
                 CLASSIFICATION,
                 STAGE,
                 VERSION,
@@ -579,6 +589,7 @@ OLD_LINE = Line(
                 (NEW_PARATEXT,),
             ),
             Chapter(
+                TEXT_ID,
                 CLASSIFICATION,
                 STAGE,
                 VERSION,

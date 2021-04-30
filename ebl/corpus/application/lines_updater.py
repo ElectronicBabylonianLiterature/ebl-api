@@ -11,10 +11,8 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
 class LinesUpdater(ChapterUpdater):
-    def __init__(
-        self, chapter_index: int, lines: Sequence[Line], sing_repository: SignRepository
-    ):
-        super().__init__(chapter_index)
+    def __init__(self, lines: Sequence[Line], sing_repository: SignRepository):
+        super().__init__()
         self._lines = lines
         self._sing_updater = SignsUpdater(sing_repository)
 
