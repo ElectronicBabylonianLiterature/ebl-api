@@ -1,6 +1,6 @@
+import re
 import unicodedata
 from enum import Enum, unique
-import re
 from typing import Mapping, NewType, Optional
 
 from ebl.transliteration.domain.side import Side

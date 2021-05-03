@@ -1,6 +1,9 @@
 from typing import Callable, List, Optional, Sequence
 
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
+    EgyptianMetricalFeetSeparator,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -19,9 +22,6 @@ from ebl.transliteration.domain.tokens import (
     LineBreak,
     Token,
     TokenVisitor,
-)
-from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
-    EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.word_tokens import Word
 

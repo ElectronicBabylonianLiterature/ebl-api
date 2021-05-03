@@ -8,15 +8,16 @@ from ebl.corpus.application.lemmatization import (
 from ebl.corpus.application.text_serializer import serialize
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import ChapterId
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
@@ -25,7 +26,6 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
-from ebl.corpus.domain.parser import parse_chapter
 
 COLLECTION = "texts"
 TEXT = TextFactory.build()

@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import attr
+
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.signs_updater import SignsUpdater
 from ebl.corpus.domain.chapter import Chapter

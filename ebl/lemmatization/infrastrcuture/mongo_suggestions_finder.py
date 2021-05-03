@@ -5,7 +5,6 @@ from ebl.lemmatization.application.suggestion_finder import LemmaRepository
 from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.mongo_collection import MongoCollection
 
-
 COLLECTION = "fragments"
 
 

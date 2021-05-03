@@ -20,6 +20,7 @@ from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.domain.word import WordId
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
 from ebl.files.application.file_repository import File, FileRepository
@@ -36,15 +37,14 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
 from ebl.lemmatization.domain.lemmatization import Lemma
+from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
+    MongoLemmaRepository,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
-from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
-    MongoLemmaRepository,
-)
-from ebl.dictionary.domain.word import WordId
 
 
 @pytest.fixture

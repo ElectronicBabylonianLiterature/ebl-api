@@ -3,11 +3,13 @@ from typing import Callable, MutableSequence, Optional, Sequence, TypeVar
 
 import attr
 
+from ebl.errors import NotFoundError
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
 from ebl.transliteration.domain.enclosure_tokens import Gloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
+from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -15,17 +17,15 @@ from ebl.transliteration.domain.sign_tokens import (
     NamedSign,
     Number,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
-from ebl.transliteration.domain.sign import Sign, SignName
-from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor, Variant
 from ebl.transliteration.domain.standardization import (
     INVALID,
     is_splittable,
     Standardization,
     UNKNOWN,
 )
+from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor, Variant
+from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.errors import NotFoundError
 
 
 def strip_flags(name: str) -> str:

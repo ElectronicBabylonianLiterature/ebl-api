@@ -2,12 +2,12 @@ import attr
 import pytest
 
 from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.application.suggestion_finder import SuggestionFinder
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.lemmatization.application.suggestion_finder import SuggestionFinder
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,

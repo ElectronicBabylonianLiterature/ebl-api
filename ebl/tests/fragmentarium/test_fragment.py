@@ -1,6 +1,6 @@
 import attr
-from freezegun import freeze_time
 import pytest
+from freezegun import freeze_time
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (

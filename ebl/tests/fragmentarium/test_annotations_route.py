@@ -4,8 +4,8 @@ import falcon
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.tests.factories.annotation import AnnotationsFactory
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.factories.annotation import AnnotationsFactory
 
 
 def test_find_annotations(client):

@@ -5,8 +5,8 @@ from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway, PerhapsBrokenAway
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift
 from ebl.transliteration.domain.word_tokens import Word
 

@@ -1,8 +1,8 @@
 import falcon
 
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def test_get(client, fragmentarium, user):

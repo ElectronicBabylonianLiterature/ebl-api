@@ -1,11 +1,10 @@
 import pytest
 
+from ebl.dictionary.domain.word import WordId
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )
-from ebl.dictionary.domain.word import WordId
-
 
 TOKENS = [
     (LemmatizationToken("kur", None), {"value": "kur", "uniqueLemma": None}),

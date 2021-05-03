@@ -3,23 +3,22 @@ from typing import Sequence
 import pytest
 
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
-from ebl.transliteration.domain.dollar_line import RulingDollarLine
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.lemmatization.domain.lemmatization import (
     Lemmatization,
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
+from ebl.transliteration.domain.dollar_line import RulingDollarLine
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Label, Text
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
-
 
 LINES: Sequence[Line] = (
     TextLine(

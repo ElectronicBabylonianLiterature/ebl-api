@@ -1,11 +1,12 @@
 import pytest
+
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
 def test_create(sign_repository, signs):

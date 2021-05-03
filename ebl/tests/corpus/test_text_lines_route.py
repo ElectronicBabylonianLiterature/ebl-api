@@ -1,18 +1,18 @@
 import json
+from typing import cast
 
 import attr
 import falcon
 import pytest
 
+from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.web.api_serializer import serialize
+from ebl.corpus.web.text_schemas import ApiLineSchema
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
-from ebl.users.domain.user import Guest
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.corpus.web.text_schemas import ApiLineSchema
-from ebl.corpus.domain.parser import parse_chapter
 from ebl.transliteration.domain.text_line import TextLine
-from typing import cast
+from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
 

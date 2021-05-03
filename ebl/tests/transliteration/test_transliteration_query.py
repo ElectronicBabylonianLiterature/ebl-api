@@ -4,7 +4,6 @@ import pytest
 
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
-
 REGEXP_DATA = [
     ([["DU", "U"]], True),
     ([["KU"]], True),

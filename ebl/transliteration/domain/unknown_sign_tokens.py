@@ -7,7 +7,6 @@ from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.converters import convert_flag_sequence
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
-
 T = TypeVar("T", bound="UnknownSign")
 
 

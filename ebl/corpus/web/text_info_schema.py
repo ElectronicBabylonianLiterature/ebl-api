@@ -1,10 +1,10 @@
 from marshmallow import Schema, fields
 
 from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.schemas import ValueEnum
 from ebl.corpus.domain.chapter import Classification
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.web.text_schemas import ApiLineSchema
+from ebl.schemas import ValueEnum
 
 
 class ChapterIdSchema(Schema):

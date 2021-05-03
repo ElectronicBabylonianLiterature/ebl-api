@@ -4,8 +4,8 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.fragment import Fragment, Lines
-from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 
 
 @attr.s(frozen=True, auto_attribs=True)

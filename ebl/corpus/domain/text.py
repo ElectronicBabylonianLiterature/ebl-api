@@ -7,7 +7,6 @@ from ebl.corpus.domain.line import Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text_id import TextId
 
-
 TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
 
 

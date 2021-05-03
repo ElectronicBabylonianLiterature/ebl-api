@@ -2,8 +2,8 @@ import falcon
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_pager_schema import FragmentPagerInfoSchema
-from ebl.users.web.require_scope import require_scope
 from ebl.fragmentarium.web.dtos import parse_museum_number
+from ebl.users.web.require_scope import require_scope
 
 
 class FragmentPagerResource:

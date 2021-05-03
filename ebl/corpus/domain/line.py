@@ -3,6 +3,7 @@ from typing import Optional, Sequence, Tuple, Union, cast
 import attr
 import pydash
 
+from ebl.corpus.domain.create_alignment_map import create_alignment_map
 from ebl.corpus.domain.enclosure_validator import validate
 from ebl.corpus.domain.label_validator import LabelValidator
 from ebl.merger import Merger
@@ -16,7 +17,6 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-from ebl.corpus.domain.create_alignment_map import create_alignment_map
 
 
 def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:

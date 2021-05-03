@@ -1,5 +1,6 @@
-from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 import unittest
+
+from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 
 
 class TestATF_Preprocessor(unittest.TestCase):

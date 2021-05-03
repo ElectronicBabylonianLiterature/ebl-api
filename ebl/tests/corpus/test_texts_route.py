@@ -1,16 +1,15 @@
 import json
 
 import falcon
+import pydash
 
+from ebl.corpus.domain.text_info import TextInfo
 from ebl.corpus.web.api_serializer import deserialize, serialize
+from ebl.corpus.web.text_info_schema import TextInfoSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
-from ebl.users.domain.user import Guest
-import pydash
-from ebl.corpus.domain.text_info import TextInfo
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.corpus.web.text_info_schema import TextInfoSchema
-
+from ebl.users.domain.user import Guest
 
 ANY_USER = Guest()
 

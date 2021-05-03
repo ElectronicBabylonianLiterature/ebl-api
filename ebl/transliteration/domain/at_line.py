@@ -3,10 +3,10 @@ from typing import Optional, Tuple
 
 import attr
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf, Composite, Discourse
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 @attr.s(auto_attribs=True, frozen=True)

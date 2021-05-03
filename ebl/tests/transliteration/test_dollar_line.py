@@ -1,5 +1,6 @@
 import pytest
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
@@ -8,7 +9,6 @@ from ebl.transliteration.domain.dollar_line import (
     ScopeContainer,
     StateDollarLine,
 )
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
 def test_loose_dollar_line() -> None:

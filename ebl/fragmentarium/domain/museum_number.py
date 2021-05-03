@@ -1,5 +1,6 @@
-import attr
 import re
+
+import attr
 
 
 def _is_not_empty(_, attribute: attr.Attribute, value: str) -> None:

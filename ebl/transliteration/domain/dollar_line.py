@@ -4,10 +4,9 @@ from typing import Optional, Union, Tuple
 
 import attr
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.line import Line
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-
 
 Atf = atf.Atf
 

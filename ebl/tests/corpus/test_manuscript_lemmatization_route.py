@@ -6,6 +6,8 @@ import pytest
 
 from ebl.corpus.domain.text import Text
 from ebl.corpus.web.api_serializer import serialize
+from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.sign_tokens import Reading
@@ -13,9 +15,6 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import Guest
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-from ebl.dictionary.domain.word import WordId
-
 
 ANY_USER = Guest()
 DTO = {

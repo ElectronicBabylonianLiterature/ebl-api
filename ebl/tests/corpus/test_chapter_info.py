@@ -1,9 +1,10 @@
+from typing import cast
+
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.text_info import ChapterId, ChapterInfo
 from ebl.tests.factories.corpus import ChapterFactory
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from typing import cast
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 def test_of() -> None:
