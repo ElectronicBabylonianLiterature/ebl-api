@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5df79a0c7246599a78946da63e10d4f300cc28a534c417d4744c10151b159287"
+            "sha256": "bb2001df1d784b4a9c087a7575987a42a675f4c05cef548d9f6d02068e535abb"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -214,6 +214,23 @@
             ],
             "index": "pypi",
             "version": "==2.1.0"
+        },
+        "newrelic": {
+            "hashes": [
+                "sha256:242a5e901d684f7ffdd621bc58da8fe9a85d5545b4b63e1070589f5ab45c9e1e",
+                "sha256:3dec4647de67609570c4e305f2b6432a00e0a0940a7ac69660ee92268b49d6e7",
+                "sha256:489e5a450aae1a5ecf7ca488739bd274296b19049bb7927c7ef71953ad5ad437",
+                "sha256:503e5dfcbf215fe68e4349ea452b5b00234010122ca72d80b64c73270654916c",
+                "sha256:5b0a04f7acf4dafe8d3935ac8688143bc0a0c61e15e2a779b152afcc3c88ee45",
+                "sha256:6a87cd6102aba7c9619a6e4b9e1aa6322ef81367b1a8f24ad996a07333313c8c",
+                "sha256:90d2bab0a08001d84499bf11c62c49d1fc6f2835c05d12994b5a931cad48f120",
+                "sha256:a3b928a052be318cb0cdb56977c630f1ded1d8e391c876ed5ae4442aa7ad499a",
+                "sha256:adc748f633bd64e295b403448daa8416961b0f99af6787b857009d737c5e8af3",
+                "sha256:e767af29572a9457a5e5f13481fe735c1a9ae2d1683b7b35c8757f9df275a538",
+                "sha256:fede816248d0a1e5e11487ecc122f24c9d33e08a6ac1f882044ac6f3b2c90ae0"
+            ],
+            "index": "pypi",
+            "version": "==6.2.0.156"
         },
         "pycryptodomex": {
             "hashes": [
