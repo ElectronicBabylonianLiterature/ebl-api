@@ -1,12 +1,16 @@
-from typing import Optional, cast, Sequence
+from typing import Optional, Sequence, cast
 
 import pydash
 from singledispatchmethod import singledispatchmethod
 
-from ebl.corpus.domain.chapter import Chapter, TextLineEntry
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    ChapterItem,
+    ChapterVisitor,
+    TextLineEntry,
+)
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
-from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.greek_tokens import GreekWord
@@ -58,7 +62,7 @@ def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter)
     )
 
 
-class TextValidator(TextVisitor):
+class TextValidator(ChapterVisitor):
     def __init__(self, bibliography):
         self._bibliography = bibliography
         self._chapter: Optional[Chapter] = None
@@ -79,13 +83,8 @@ class TextValidator(TextVisitor):
         return cast(Chapter, self._chapter)
 
     @singledispatchmethod
-    def visit(self, item: TextItem) -> None:
+    def visit(self, item: ChapterItem) -> None:
         pass
-
-    @visit.register(Text)  # pyre-ignore[56]
-    def _visit_text(self, text: Text) -> None:
-        for chapter in text.chapters:
-            self.visit(chapter)
 
     @visit.register(Chapter)  # pyre-ignore[56]
     def _visit_chapter(self, chapter: Chapter) -> None:

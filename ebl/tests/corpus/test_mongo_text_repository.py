@@ -1,40 +1,57 @@
 import attr
 import pytest
 
-from ebl.corpus.application.text_serializer import serialize
+from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
-from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
-COLLECTION = "texts"
+TEXTS_COLLECTION = "texts"
+CHAPTERS_COLLECTION = "chapters"
 MANUSCRIPT_ID = 1
-TEXT = TextFactory.build(
-    chapters=(
-        ChapterFactory.build(
-            manuscripts=(
-                ManuscriptFactory.build(id=1, references=(ReferenceFactory.build(),)),
-            )
-        ),
-    )
+TEXT = TextFactory.build()
+CHAPTER = ChapterFactory.build(
+    text_id=TEXT.id,
+    stage=TEXT.chapters[0].stage,
+    name=TEXT.chapters[0].name,
+    manuscripts=(ManuscriptFactory.build(id=1, references=tuple()),),
 )
 
 
 def when_text_in_collection(database, text=TEXT):
-    database[COLLECTION].insert_one(serialize(text))
+    database[TEXTS_COLLECTION].insert_one(TextSchema(exclude=["chapters"]).dump(text))
+
+
+def when_chapter_in_collection(database, chapter=CHAPTER):
+    database[CHAPTERS_COLLECTION].insert_one(ChapterSchema().dump(chapter))
 
 
 def test_creating_text(database, text_repository):
     text_repository.create(TEXT)
 
-    inserted_text = database[COLLECTION].find_one(
+    inserted_text = database[TEXTS_COLLECTION].find_one(
         {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False}
     )
-    assert inserted_text == serialize(TEXT)
+    assert inserted_text == TextSchema(exclude=["chapters"]).dump(TEXT)
 
 
-def test_it_is_not_possible_to_create_duplicates(text_repository):
+def test_creating_chapter(database, text_repository):
+    text_repository.create_chapter(CHAPTER)
+
+    inserted_chapter = database[CHAPTERS_COLLECTION].find_one(
+        {
+            "textId.category": CHAPTER.text_id.category,
+            "textId.index": CHAPTER.text_id.index,
+            "stage": CHAPTER.stage.value,
+            "name": CHAPTER.name,
+        },
+        projection={"_id": False},
+    )
+    assert inserted_chapter == ChapterSchema().dump(CHAPTER)
+
+
+def test_it_is_not_possible_to_create_duplicate_texts(text_repository):
     text_repository.create_indexes()
     text_repository.create(TEXT)
 
@@ -42,8 +59,18 @@ def test_it_is_not_possible_to_create_duplicates(text_repository):
         text_repository.create(TEXT)
 
 
+def test_it_is_not_possible_to_create_duplicate_chapters(text_repository):
+    text_repository.create_indexes()
+    text_repository.create(CHAPTER)
+
+    with pytest.raises(DuplicateError):
+        text_repository.create(CHAPTER)
+
+
+@pytest.mark.xfail(reason="pymongo does not support $let")
 def test_finding_text(database, text_repository):
     when_text_in_collection(database)
+    when_chapter_in_collection(database)
 
     assert text_repository.find(TEXT.id) == TEXT
 
@@ -53,27 +80,38 @@ def test_find_raises_exception_if_text_not_found(text_repository):
         text_repository.find(TextId(1, 1))
 
 
+@pytest.mark.xfail(reason="pymongo does not support $let")
 def test_listing_texts(database, text_repository):
     another_text = attr.evolve(TEXT, index=2)
+    another_chapter = attr.evolve(
+        CHAPTER,
+        text_id=another_text.id,
+        stage=another_text.chapters[0].stage,
+        name=another_text.chapters[0].name,
+    )
 
     when_text_in_collection(database)
     when_text_in_collection(database, another_text)
+    when_chapter_in_collection(database)
+    when_chapter_in_collection(database, another_chapter)
 
     assert text_repository.list() == [TEXT, another_text]
 
 
-def test_updating_text(database, text_repository):
-    updated_text = attr.evolve(TEXT, index=TEXT.index + 1, name="New Name")
-    when_text_in_collection(database)
+def test_updating_chapter(database, text_repository):
+    updated_chapter = attr.evolve(
+        CHAPTER, lines=tuple(), manuscripts=tuple(), signs=tuple()
+    )
+    when_chapter_in_collection(database)
 
-    text_repository.update(TEXT.id, updated_text)
+    text_repository.update(CHAPTER.id_, updated_chapter)
 
-    assert text_repository.find(updated_text.id) == updated_text
+    assert text_repository.find_chapter(CHAPTER.id_) == updated_chapter
 
 
 def test_updating_non_existing_text_raises_exception(text_repository):
     with pytest.raises(NotFoundError):
-        text_repository.update(TEXT.id, TEXT)
+        text_repository.update(CHAPTER.id_, CHAPTER)
 
 
 @pytest.mark.parametrize(
@@ -81,8 +119,8 @@ def test_updating_non_existing_text_raises_exception(text_repository):
     [([["KU"]], True), ([["ABZ075"], ["KU"]], True), ([["UD"]], False)],
 )
 def test_query_by_transliteration(signs, is_match, text_repository):
-    text_repository.create(TEXT)
+    text_repository.create_chapter(CHAPTER)
 
     result = text_repository.query_by_transliteration(TransliterationQuery(signs))
-    expected = [TEXT] if is_match else []
+    expected = [CHAPTER] if is_match else []
     assert result == expected

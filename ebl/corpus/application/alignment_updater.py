@@ -5,15 +5,14 @@ from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
-from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.chapter import Chapter, ChapterItem
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
-from ebl.corpus.domain.text import TextItem
 from ebl.transliteration.domain.alignment import AlignmentError
 
 
 class AlignmentUpdater(ChapterUpdater):
-    def __init__(self, chapter_index: int, alignment: Alignment):
-        super().__init__(chapter_index)
+    def __init__(self, alignment: Alignment):
+        super().__init__()
         self._alignment = alignment
         self._lines: List[Line] = []
         self._variants: List[LineVariant] = []
@@ -46,7 +45,7 @@ class AlignmentUpdater(ChapterUpdater):
             raise AlignmentError(f"Invalid alignment index {alignment_index}.")
 
     @singledispatchmethod
-    def visit(self, item: TextItem) -> None:
+    def visit(self, item: ChapterItem) -> None:
         super().visit(item)
 
     @visit.register(Line)  # pyre-ignore[56]

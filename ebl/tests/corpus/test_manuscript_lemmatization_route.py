@@ -4,19 +4,23 @@ import attr
 import falcon
 import pytest
 
-from ebl.corpus.domain.text import Text
-from ebl.corpus.web.api_serializer import serialize
+from ebl.corpus.domain.chapter import Chapter
 from ebl.dictionary.domain.word import WordId
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-from ebl.tests.factories.corpus import TextFactory
+from ebl.tests.corpus.support import (
+    allow_references,
+    allow_signs,
+    create_chapter_dto,
+    create_chapter_url,
+)
+from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.users.domain.user import Guest
 
-ANY_USER = Guest()
+
 DTO = {
     "lemmatization": [
         [
@@ -37,108 +41,69 @@ DTO = {
 }
 
 
-def create_text_dto(text):
-    return serialize(text)
-
-
-def allow_references(text, bibliography):
-    for chapter in text.chapters:
-        for manuscript in chapter.manuscripts:
-            for reference in manuscript.references:
-                bibliography.create(reference.document, ANY_USER)
-
-
-def allow_signs(signs, sign_list):
-    for sign in signs:
-        sign_list.create(sign)
-
-
-def create_text(client, text):
-    post_result = client.simulate_post("/texts", body=json.dumps(create_text_dto(text)))
-    assert post_result.status == falcon.HTTP_CREATED
-
-
-def test_updating_lemmatization(client, bibliography, sign_repository, signs):
+def test_updating_lemmatization(
+    client, bibliography, sign_repository, signs, text_repository
+):
     allow_signs(signs, sign_repository)
-    text: Text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
-    chapter_index = 0
-    updated_text = attr.evolve(
-        text,
-        chapters=(
+    chapter: Chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
+    updated_chapter = attr.evolve(
+        chapter,
+        lines=(
             attr.evolve(
-                text.chapters[chapter_index],
-                lines=(
+                chapter.lines[0],
+                variants=(
                     attr.evolve(
-                        text.chapters[0].lines[0],
-                        variants=(
-                            attr.evolve(
-                                text.chapters[0].lines[0].variants[0],
-                                reconstruction=(
-                                    text.chapters[0]
-                                    .lines[0]
-                                    .variants[0]
-                                    .reconstruction[0],
-                                    text.chapters[0]
-                                    .lines[0]
+                        chapter.lines[0].variants[0],
+                        reconstruction=(
+                            chapter.lines[0].variants[0].reconstruction[0],
+                            chapter.lines[0]
+                            .variants[0]
+                            .reconstruction[1]
+                            .set_unique_lemma(
+                                LemmatizationToken(
+                                    chapter.lines[0]
                                     .variants[0]
                                     .reconstruction[1]
-                                    .set_unique_lemma(
-                                        LemmatizationToken(
-                                            text.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .reconstruction[1]
-                                            .value,
-                                            (WordId("aklu I"),),
-                                        )
-                                    ),
-                                    *text.chapters[0]
-                                    .lines[0]
-                                    .variants[0]
-                                    .reconstruction[2:6],
-                                    text.chapters[0]
-                                    .lines[0]
+                                    .value,
+                                    (WordId("aklu I"),),
+                                )
+                            ),
+                            *chapter.lines[0].variants[0].reconstruction[2:6],
+                            chapter.lines[0]
+                            .variants[0]
+                            .reconstruction[6]
+                            .set_unique_lemma(
+                                LemmatizationToken(
+                                    chapter.lines[0]
                                     .variants[0]
                                     .reconstruction[6]
-                                    .set_unique_lemma(
-                                        LemmatizationToken(
-                                            text.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .reconstruction[6]
-                                            .value,
-                                            tuple(),
-                                        )
-                                    ),
-                                ),
-                                manuscripts=(
-                                    attr.evolve(
-                                        text.chapters[0]
-                                        .lines[0]
-                                        .variants[0]
-                                        .manuscripts[0],
-                                        line=TextLine.of_iterable(
-                                            text.chapters[0]
-                                            .lines[0]
-                                            .variants[0]
-                                            .manuscripts[0]
-                                            .line.line_number,
-                                            (
-                                                Word.of(
-                                                    [
-                                                        Reading.of_name("ku"),
-                                                        Joiner.hyphen(),
-                                                        BrokenAway.open(),
-                                                        Reading.of_name("nu"),
-                                                        Joiner.hyphen(),
-                                                        Reading.of_name("ši"),
-                                                        BrokenAway.close(),
-                                                    ],
-                                                    unique_lemma=[WordId("aklu I")],
-                                                ),
-                                            ),
+                                    .value,
+                                    tuple(),
+                                )
+                            ),
+                        ),
+                        manuscripts=(
+                            attr.evolve(
+                                chapter.lines[0].variants[0].manuscripts[0],
+                                line=TextLine.of_iterable(
+                                    chapter.lines[0]
+                                    .variants[0]
+                                    .manuscripts[0]
+                                    .line.line_number,
+                                    (
+                                        Word.of(
+                                            [
+                                                Reading.of_name("ku"),
+                                                Joiner.hyphen(),
+                                                BrokenAway.open(),
+                                                Reading.of_name("nu"),
+                                                Joiner.hyphen(),
+                                                Reading.of_name("ši"),
+                                                BrokenAway.close(),
+                                            ],
+                                            unique_lemma=[WordId("aklu I")],
                                         ),
                                     ),
                                 ),
@@ -150,32 +115,33 @@ def test_updating_lemmatization(client, bibliography, sign_repository, signs):
         ),
     )
 
-    expected_text = create_text_dto(updated_text)
+    expected = create_chapter_dto(updated_chapter)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}"
-        f"/chapters/{chapter_index}/lemmatization",
-        body=json.dumps(DTO),
+        create_chapter_url(chapter, "/lemmatization"), body=json.dumps(DTO)
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == expected_text
+    assert post_result.json == expected
 
-    get_result = client.simulate_get(f"/texts/{text.category}/{text.index}")
+    get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == expected_text
+    assert get_result.json == expected
 
 
-def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
+def test_updating_invalid_stage(
+    client, bibliography, sign_repository, signs, text_repository
+):
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/1/lemmatization",
+        f"/texts/{chapter.text_id.category}/{chapter.text_id.index}"
+        "/chapters/invalid/any/lemmatization",
         body=json.dumps(DTO),
     )
 
@@ -190,16 +156,14 @@ def test_updating_invalid_chapter(client, bibliography, sign_repository, signs):
     ],
 )
 def test_updating_invalid_lemmatization(
-    dto, expected_status, client, bibliography, sign_repository, signs
+    dto, expected_status, client, bibliography, sign_repository, signs, text_repository
 ):
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
-
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}" f"/chapters/0/lemmatization",
-        body=json.dumps(dto),
+        create_chapter_url(chapter, "/lemmatization"), body=json.dumps(dto)
     )
 
     assert post_result.status == expected_status

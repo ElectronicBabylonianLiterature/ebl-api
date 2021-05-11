@@ -1,11 +1,13 @@
 import falcon
-from marshmallow import Schema, fields
-
-from ebl.corpus.web.api_serializer import serialize
-from ebl.corpus.web.text_schemas import ApiManuscriptSchema, MuseumNumberString
+from ebl.corpus.web.chapter_schemas import (
+    ApiChapterSchema,
+    ApiManuscriptSchema,
+    MuseumNumberString,
+)
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
+from marshmallow import Schema, fields
 
 
 class ManuscriptDtoSchema(Schema):
@@ -27,9 +29,10 @@ class ManuscriptsResource:
         resp: falcon.Response,
         category: str,
         index: str,
-        chapter_index: str,
+        stage: str,
+        name: str,
     ) -> None:
-        chapter_id = create_chapter_id(category, index, chapter_index)
+        chapter_id = create_chapter_id(category, index, stage, name)
         dto = ManuscriptDtoSchema().load(req.media)
         self._corpus.update_manuscripts(
             chapter_id,
@@ -37,5 +40,5 @@ class ManuscriptsResource:
             tuple(dto["uncertain_fragments"]),
             req.context.user,
         )
-        updated_text = self._corpus.find(chapter_id.text_id)
-        resp.media = serialize(updated_text)
+        updated_chapter = self._corpus.find_chapter(chapter_id)
+        resp.media = ApiChapterSchema().dump(updated_chapter)

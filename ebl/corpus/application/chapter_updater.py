@@ -1,50 +1,37 @@
-from typing import List, Optional, cast
+from abc import ABC, abstractmethod
+from typing import Optional, cast
 
-import attr
 from singledispatchmethod import singledispatchmethod
 
-from ebl.corpus.domain.chapter import Chapter
-from ebl.corpus.domain.text import Text, TextItem, TextVisitor
-from ebl.errors import DataError, Defect, NotFoundError
+from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
+from ebl.errors import DataError, Defect
 
 
-class ChapterUpdater(TextVisitor):
-    def __init__(self, chapter_index: int):
-        self._chapters: List[Chapter] = []
-        self._text: Optional[Text] = None
-        self._chapter_index_to_align = chapter_index
+class ChapterUpdater(ABC, ChapterVisitor):
+    def __init__(self):
+        self._chapter: Optional[Chapter] = None
 
-    def update(self, text: Text) -> Text:
-        self.visit(text)
-        if self._text is not None:
-            return cast(Text, self._text)
+    def update(self, chapter: Chapter) -> Chapter:
+        self.visit(chapter)
+        if self._chapter is not None:
+            return cast(Chapter, self._chapter)
         else:
-            raise Defect("Result text was not set.")
+            raise Defect("Result chapter was not set.")
+
+    @abstractmethod
+    def _update_chapter(self, chapter: Chapter) -> Chapter:
+        return chapter
 
     @singledispatchmethod
-    def visit(self, item: TextItem) -> None:
+    def visit(self, item: ChapterItem) -> None:
         pass
-
-    @visit.register(Text)  # pyre-ignore[56]
-    def _visit_text(self, text: Text) -> None:
-        for chapter in text.chapters:
-            self.visit(chapter)
-
-        if self._chapter_index_to_align >= len(text.chapters):
-            raise NotFoundError(f"Chapter {self._chapter_index_to_align} not found.")
-
-        self._text = attr.evolve(text, chapters=tuple(self._chapters))
-        self._chapters = []
 
     @visit.register(Chapter)  # pyre-ignore[56]
     def _visit_chapter(self, chapter: Chapter) -> None:
-        if len(self._chapters) == self._chapter_index_to_align:
-            self._validate_chapter(chapter)
-            self._visit_manuscripts(chapter)
-            self._visit_lines(chapter)
-            self._chapters.append(self._try_update_chapter(chapter))
-        else:
-            self._chapters.append(chapter)
+        self._validate_chapter(chapter)
+        self._visit_manuscripts(chapter)
+        self._visit_lines(chapter)
+        self._chapter = self._try_update_chapter(chapter)
 
         self._after_chapter_update()
 
@@ -61,20 +48,9 @@ class ChapterUpdater(TextVisitor):
 
     def _try_update_chapter(self, chapter: Chapter) -> Chapter:
         try:
-            return (
-                self._update_chapter(chapter)
-                if self._current_chapter_index == self._chapter_index_to_align
-                else chapter
-            )
+            return self._update_chapter(chapter)
         except ValueError as error:
             raise DataError(error)
 
     def _validate_chapter(self, chapter: Chapter) -> None:
         pass
-
-    def _update_chapter(self, chapter: Chapter) -> Chapter:
-        return chapter
-
-    @property
-    def _current_chapter_index(self):
-        return len(self._chapters)
