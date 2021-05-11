@@ -25,6 +25,7 @@ marshmallow-oneofschema = "*"
 singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
+newrelic = "*"
 
 [dev-packages]
 pytest = "*"
