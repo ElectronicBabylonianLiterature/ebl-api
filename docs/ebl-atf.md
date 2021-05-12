@@ -76,6 +76,7 @@ line = empty-line
      | note-line
      | text-line
      | parallel-line
+     | translation-line
      | control-line;
 
 empty-line = '';
