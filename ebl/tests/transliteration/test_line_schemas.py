@@ -37,13 +37,13 @@ from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceL
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.note_line import (
+from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
     LanguagePart,
-    NoteLine,
     StringPart,
 )
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     Genre,

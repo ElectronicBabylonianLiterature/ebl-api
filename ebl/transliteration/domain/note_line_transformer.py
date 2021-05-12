@@ -5,19 +5,19 @@ from lark.visitors import Transformer, v_args
 
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.note_line import (
+from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
     LanguagePart,
-    NoteLine,
-    NotePart,
+    MarkupPart,
     StringPart,
 )
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.tokens import Token as EblToken
 
 
 class NoteLineTransformer(Transformer):
-    def note_line(self, children: Sequence[NotePart]) -> NoteLine:
+    def note_line(self, children: Sequence[MarkupPart]) -> NoteLine:
         return NoteLine(children)
 
     @v_args(inline=True)
