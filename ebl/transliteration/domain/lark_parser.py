@@ -26,6 +26,9 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.translation_line_transformer import (
+    TranslationLineTransformer,
+)
 from ebl.transliteration.domain.word_tokens import Word
 
 PARSE_ERRORS: Tuple[Type[Exception], ...] = (
@@ -42,6 +45,7 @@ class LineTransformer(
     NoteLineTransformer,
     TextLineTransformer,
     ParallelLineTransformer,
+    TranslationLineTransformer,
 ):
     def empty_line(self, _):
         return EmptyLine()

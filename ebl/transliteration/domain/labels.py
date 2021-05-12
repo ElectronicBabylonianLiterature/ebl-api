@@ -184,22 +184,22 @@ class LabelTransformer(Transformer):
         return tuple(children)
 
     @v_args(inline=True)
-    def ebl_atf_labels__column_label(
+    def ebl_atf_text_line__column_label(
         self, numeral: Token, status: Sequence[Status]
     ) -> ColumnLabel:
         return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
 
     @v_args(inline=True)
-    def ebl_atf_labels__surface_label(
+    def ebl_atf_text_line__surface_label(
         self, surface: Surface, status: Sequence[Status]
     ) -> SurfaceLabel:
         return SurfaceLabel.from_label(surface, status)
 
     @v_args(inline=True)
-    def ebl_atf_labels__surface(self, surface: Token) -> Surface:
+    def ebl_atf_text_line__surface(self, surface: Token) -> Surface:
         return Surface.from_label(surface)  # pyre-ignore[6]
 
-    def ebl_atf_labels__status(self, children: Iterable[Token]) -> Sequence[Status]:
+    def ebl_atf_text_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
 
 

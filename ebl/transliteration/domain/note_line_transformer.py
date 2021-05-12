@@ -16,10 +16,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.tokens import Token as EblToken
 
 
-class NoteLineTransformer(Transformer):
-    def note_line(self, children: Sequence[MarkupPart]) -> NoteLine:
-        return NoteLine(children)
-
+class MarkupTransformer(Transformer):
     @v_args(inline=True)
     def ebl_atf_text_line__language_part(
         self, language: Token, transliteration: Sequence[EblToken]
@@ -44,3 +41,8 @@ class NoteLineTransformer(Transformer):
 
     def ebl_atf_text_line__note_text(self, children) -> str:
         return "".join(children)
+
+
+class NoteLineTransformer(MarkupTransformer):
+    def note_line(self, children: Sequence[MarkupPart]) -> NoteLine:
+        return NoteLine(children)
