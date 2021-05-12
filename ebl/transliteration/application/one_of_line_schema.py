@@ -20,12 +20,7 @@ from ebl.transliteration.application.dollar_line_schemas import (
     SealDollarLineSchema,
     StateDollarLineSchema,
 )
-from ebl.transliteration.application.line_schemas import (
-    ControlLineSchema,
-    EmptyLineSchema,
-    NoteLineSchema,
-    TextLineSchema,
-)
+from ebl.transliteration.application.line_schemas import ControlLineSchema, EmptyLineSchema, NoteLineSchema, TextLineSchema, TranslationLineSchema
 from ebl.transliteration.application.parallel_line_schemas import (
     ParallelCompositionSchema,
     ParallelFragmentSchema,
@@ -59,6 +54,7 @@ class OneOfLineSchema(OneOfSchema):
         "DivisionAtLine": DivisionAtLineSchema,
         "CompositeAtLine": CompositeAtLineSchema,
         "NoteLine": NoteLineSchema,
+        "TranslationLine": TranslationLineSchema,
         **PARALLEL_LINE_SCHEMAS,
     }
 

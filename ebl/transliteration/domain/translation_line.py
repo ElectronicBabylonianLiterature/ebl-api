@@ -38,9 +38,13 @@ class TranslationLine(Line):
         return "".join(part.value for part in self.parts)
 
     @property
-    def atf(self) -> Atf:
+    def prefix(self) -> str:
         extent = f".({self.extent})" if self.extent else ""
-        return Atf(f"#tr.{self.language}{extent}: {self.translation}")
+        return f"#tr.{self.language}{extent}:"
+
+    @property
+    def atf(self) -> Atf:
+        return Atf(f"{self.prefix} {self.translation}")
 
     @property
     def lemmatization(self) -> Sequence[LemmatizationToken]:

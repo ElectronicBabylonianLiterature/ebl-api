@@ -2,7 +2,15 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel, parse_labels
+
+
+def labels():
+    return fields.Function(
+        lambda manuscript_line: [label.to_value() for label in manuscript_line.labels],
+        lambda value: parse_labels(" ".join(value)),
+        required=True,
+    )
 
 
 class LabelSchema(Schema):
