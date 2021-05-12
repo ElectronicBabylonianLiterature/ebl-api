@@ -23,7 +23,7 @@ word-character = ? A-Za-z ?;
 lower-case-letter = ? a-z ?;
 any-character = ? any UTF-8 character ?;
 decimal-digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
-number = { decimal-digit };
+number = { decimal-digit }-;
 
 eol = ? end of line ?;
 ```
@@ -59,6 +59,8 @@ bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
 escaped-text = { ( markup-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
 markup-text = { markup-character };
 markup-character = any-character - ( '@' | '{' | '}' );
+
+label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 ```
 
 ## Lines
@@ -183,6 +185,40 @@ parallel-fragment = 'F ', museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ],
                     line-number;
 museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 ```
+
+## Translation lines
+
+```ebnf
+translation-line = '#tr', [ '.', language-code ], [ '.', translation-extent ], ': ', paragraph;
+lang = ? ISO 639-1 language code ?;
+translation-extent = '(', [ label, ' ' ] , line-number, ')';
+
+paragraph = translation, [ { eol, translation }-, eol ];
+translation = { translation-part }-;
+translation-part = markup
+                 | supplied
+                 | literal
+                 | foreign
+                 | uncertain
+                 | untranslateable
+                 | broken
+                 | note-marker;
+
+supplied = '(', markup , ')';
+literal =  '@"', markup, '"@';
+foreign = '@', translation-word;
+uncertain = '@?', markup ,'?@';
+untranslateable = '...' | '....';
+broken = '[', { markup | untranslateable }- ,']';
+note-marker = '^', number, { ',', number }, '^';
+
+translation-word = any-character - ('@' | ' ' | '{');
+```
+
+See:
+
+- [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+- [Translations](http://oracc.museum.upenn.edu/doc/help/editinginatf/translations/index.html)
 
 ## Text lines
 
@@ -605,10 +641,9 @@ chapter-line = line-variant, { eol line-variant };
 line-variant = reconstruction, { eol, manuscript-line };
 reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
 
-manuscript-line = { white-space }, siglum, ' ' , manuscript-label, [ text-line ],
+manuscript-line = { white-space }, siglum, ' ' , label, [ text-line ],
                   paratext;
 paratext = { eol, { white-space },  ( dollar-line | note-line ) };
-manuscript-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 white-space = ? space or tab ?;
 
 siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol ) ];
