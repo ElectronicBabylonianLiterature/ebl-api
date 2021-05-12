@@ -1,0 +1,47 @@
+from typing import Optional, Sequence
+
+import attr
+
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.label_validator import validate_labels
+from ebl.transliteration.domain.labels import Label
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.markup import MarkupPart, convert_part_sequence
+
+DEFAULT_LANGUAGE = "en"
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class Extent:
+    number: AbstractLineNumber
+    labels: Sequence[Label] = attr.ib(default=tuple(), validator=validate_labels)
+
+    def __str__(self) -> str:
+        labels = (
+            f"{' '.join(label.to_value() for label in self.labels)} "
+            if self.labels
+            else ""
+        )
+        return f"{labels}{self.number.label}"
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class TranslationLine(Line):
+    parts: Sequence[MarkupPart] = attr.ib(converter=convert_part_sequence)
+    language: str = DEFAULT_LANGUAGE
+    extent: Optional[Extent] = None
+
+    @property
+    def translation(self) -> str:
+        return "".join(part.value for part in self.parts)
+
+    @property
+    def atf(self) -> Atf:
+        extent = f".({self.extent})" if self.extent else ""
+        return Atf(f"#tr.{self.language}{extent}: {self.translation}")
+
+    @property
+    def lemmatization(self) -> Sequence[LemmatizationToken]:
+        return (LemmatizationToken(self.translation),)
