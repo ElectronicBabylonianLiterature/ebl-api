@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import re
-from typing import Pattern, Sequence
+from typing import Iterable, Pattern, Sequence, Tuple
 
 import attr
 
@@ -108,3 +108,7 @@ class BibliographyPart(MarkupPart):
     @staticmethod
     def of(id: BibliographyId, pages: str) -> "BibliographyPart":
         return BibliographyPart(Reference(id, ReferenceType.DISCUSSION, pages))
+
+
+def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
+    return tuple(parts)

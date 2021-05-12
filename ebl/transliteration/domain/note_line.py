@@ -1,15 +1,11 @@
-from typing import Iterable, Sequence, Tuple
+from typing import Sequence
 
 import attr
 
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.markup import MarkupPart
-
-
-def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
-    return tuple(parts)
+from ebl.transliteration.domain.markup import MarkupPart, convert_part_sequence
 
 
 @attr.s(frozen=True, auto_attribs=True)
