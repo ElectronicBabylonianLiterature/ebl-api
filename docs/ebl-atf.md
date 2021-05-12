@@ -691,7 +691,7 @@ saving them results in an error until the syntax is corrected.
 ## Labels
 
 ```ebnf
-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
+label = [ surface-label, ' ' ],  [ column-label, ' ' ];
 
 column-label = roman-numeral, { status };
 roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
