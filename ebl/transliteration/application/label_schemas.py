@@ -2,7 +2,12 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel, parse_labels
+from ebl.transliteration.domain.labels import (
+    ColumnLabel,
+    ObjectLabel,
+    SurfaceLabel,
+    parse_labels,
+)
 
 
 def labels():

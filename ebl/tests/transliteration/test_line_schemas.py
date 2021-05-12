@@ -55,6 +55,8 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.atf import Surface
 
 LINES = [
     (
@@ -588,6 +590,41 @@ LINES = [
             "hasCf": True,
             "name": "name",
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
+        TranslationLine((StringPart("foo"), EmphasisPart("bar")), "en", None),
+        {
+            "type": "TranslationLine",
+            "prefix": "#tr.en: ",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("foo@i{bar}"))],
+            "parts": [
+                {"type": "StringPart", "text": "foo"},
+                {"type": "EmphasisPart", "text": "bar"},
+            ],
+            "language": "en",
+            "extent": None,
+        },
+    ),
+    (
+        TranslationLine(
+            (StringPart("foo"),),
+            "ar",
+            Extent(
+                LineNumber(1),
+                (SurfaceLabel(tuple(), Surface.OBVERSE), ColumnLabel(tuple(), 2)),
+            ),
+        ),
+        {
+            "type": "TranslationLine",
+            "prefix": "#tr.ar.(o ii 1): ",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("foo"))],
+            "parts": [{"type": "StringPart", "text": "foo"}],
+            "language": "ar",
+            "extent": {
+                "number": OneOfLineNumberSchema().dump(LineNumber(1)),
+                "labels": ["o", "ii"],
+            },
         },
     ),
 ]

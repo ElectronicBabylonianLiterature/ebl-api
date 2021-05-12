@@ -74,16 +74,18 @@ class ExtentSchema(Schema):
     labels = labels()
 
     @post_load
-    def make_extent(self, data, **kwargs) -> NoteLine:
+    def make_extent(self, data, **kwargs) -> Extent:
         return Extent(data["number"], data["labels"])
 
 
 class TranslationLineSchema(LineBaseSchema):
     prefix = fields.String()
     content = fields.Function(
-        lambda obj: OneOfTokenSchema().dump(
-            [ValueToken.of(part.value) for part in obj.parts], many=True
-        ),
+        lambda obj: [
+            OneOfTokenSchema().dump(
+                ValueToken.of("".join(part.value for part in obj.parts))
+            )
+        ],
         lambda value: value,
     )
 
@@ -92,5 +94,5 @@ class TranslationLineSchema(LineBaseSchema):
     extent = fields.Nested(ExtentSchema, required=True, allow_none=True)
 
     @post_load
-    def make_line(self, data, **kwargs) -> NoteLine:
+    def make_line(self, data, **kwargs) -> TranslationLine:
         return TranslationLine(data["parts"], data["language"], data["extent"])
