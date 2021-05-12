@@ -189,6 +189,7 @@ museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 
 ```ebnf
 translation-line = '#tr', [ '.', language-code ], [ '.', translation-extent ], ': ', paragraph;
+                   (* If omitted the language-code is en. *)
 language-code = ? ISO 639-1 language code ?;
 translation-extent = '(', [ label, ' ' ] , line-number, ')';
 
