@@ -5,11 +5,11 @@ import pydash
 
 from ebl.corpus.domain.create_alignment_map import create_alignment_map
 from ebl.corpus.domain.enclosure_validator import validate
-from ebl.corpus.domain.label_validator import LabelValidator
 from ebl.merger import Merger
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.labels import Label
+from ebl.transliteration.domain.label_validator import validate_labels
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
@@ -17,15 +17,6 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-
-
-def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
-    validator = LabelValidator()
-    for label in value:
-        label.accept(validator)
-
-    if not validator.is_valid:
-        raise ValueError(f'Invalid labels "{[value.to_value() for value in value]}".')
 
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]

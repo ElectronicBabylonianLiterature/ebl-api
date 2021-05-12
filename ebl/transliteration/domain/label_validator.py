@@ -1,5 +1,8 @@
+from typing import Sequence
+
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
+    Label,
     LabelVisitor,
     ObjectLabel,
     SurfaceLabel,
@@ -27,3 +30,12 @@ class LabelValidator(LabelVisitor):
     def visit_object_label(self, label: ObjectLabel) -> "LabelValidator":
         self.is_valid = False
         return self
+
+
+def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
+    validator = LabelValidator()
+    for label in value:
+        label.accept(validator)
+
+    if not validator.is_valid:
+        raise ValueError(f'Invalid labels "{[value.to_value() for value in value]}".')
