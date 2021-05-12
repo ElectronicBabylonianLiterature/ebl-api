@@ -8,8 +8,8 @@ from ebl.corpus.domain.enclosure_validator import validate
 from ebl.merger import Merger
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
-from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.label_validator import validate_labels
+from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
@@ -17,7 +17,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
 
@@ -114,6 +114,7 @@ class Line:
     variants: Sequence[LineVariant]
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
+    translation: Sequence[TranslationLine] = tuple()
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
