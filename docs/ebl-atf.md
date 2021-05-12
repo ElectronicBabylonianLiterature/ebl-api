@@ -43,6 +43,22 @@ fragment = 'fragment', ' ', free-text;
 generic-object = 'object', ' ', free-text;
 
 status = "'" | '?' | '!' | '*';
+
+markup = { markup-part }-;
+markup-part = emphasis
+            | akkadian
+            | sumerian
+            | emesal
+            | note-text
+            | bibliography;
+emphasis = '@i{', note-text, '}';
+akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
+sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
+emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
+bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
+escaped-text = { ( markup-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
+markup-text = { markup-character };
+markup-character = any-character - ( '@' | '{' | '}' );
 ```
 
 ## Lines
@@ -144,21 +160,7 @@ See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginat
 ## Note lines
 
 ```ebnf
-note-line = '#note: ', { note-line-part }-;
-note-line-part = emphasis
-               | akkadian
-               | sumerian
-               | emesal
-               | note-text
-               | bibliography;
-emphasis = '@i{', note-text, '}';
-akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
-sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
-emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
-bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
-escaped-text = { ( note-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
-note-text = { note-character };
-note-character = any-character - ( '@' | '{' | '}' );
+note-line = '#note: ', markup;
 ```
 
 ## Parallel lines
