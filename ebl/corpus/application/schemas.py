@@ -15,7 +15,10 @@ from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
-from ebl.transliteration.application.line_schemas import NoteLineSchema
+from ebl.transliteration.application.line_schemas import (
+    NoteLineSchema,
+    TranslationLineSchema,
+)
 from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
     ParallelLineSchema,
@@ -134,6 +137,7 @@ class LineSchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
+    translation = fields.Nested(TranslationLineSchema, many=True, missing=tuple())
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
@@ -142,6 +146,7 @@ class LineSchema(Schema):
             tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
+            tuple(data["translation"]),
         )
 
 

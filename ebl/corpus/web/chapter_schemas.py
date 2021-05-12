@@ -19,12 +19,13 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.lark_parser import (
     PARSE_ERRORS,
+    TransliterationError,
     parse_atf_lark,
     parse_line_number,
     parse_note_line,
     parse_parallel_line,
     parse_text_line,
-    TransliterationError,
+    parse_translation_line,
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
@@ -194,6 +195,11 @@ class ApiLineSchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
+    translation = fields.Function(
+        lambda line: "".join(translation.atf for translation in line.translation),
+        lambda value: tuple(parse_translation_line(line) for line in value.split("\n")),
+        required=True,
+    )
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
@@ -202,6 +208,7 @@ class ApiLineSchema(Schema):
             tuple(data["variants"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
+            data["translation"],
         )
 
 

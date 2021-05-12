@@ -17,7 +17,10 @@ from ebl.tests.factories.corpus import (
     ManuscriptLineFactory,
 )
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
-from ebl.transliteration.application.line_schemas import NoteLineSchema
+from ebl.transliteration.application.line_schemas import (
+    NoteLineSchema,
+    TranslationLineSchema,
+)
 from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
     ParallelLineSchema,
@@ -26,6 +29,8 @@ from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
+from ebl.transliteration.domain.translation_line import TranslationLine
+from ebl.transliteration.domain.markup import StringPart
 
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
@@ -38,7 +43,8 @@ LINE_VARIANT = LineVariantFactory.build(
     manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE),
     parallel_lines=(ParallelComposition(False, "name", LineNumber(2)),),
 )
-LINE = LineFactory.build(variants=(LINE_VARIANT,))
+TRANSLATION_LINE = TranslationLine((StringPart("foo"),), "en", None)
+LINE = LineFactory.build(variants=(LINE_VARIANT,), translation=(TRANSLATION_LINE,))
 CHAPTER = ChapterFactory.build(
     manuscripts=(MANUSCRIPT,), uncertain_fragments=UNCERTAIN_FRAGMENTS, lines=(LINE,)
 )
@@ -128,6 +134,9 @@ def to_dict(chapter: Chapter, include_documents=False):
                 ],
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
+                "translation": TranslationLineSchema().dump(
+                    line.translation, many=True
+                ),
             }
             for line in chapter.lines
         ],

@@ -64,6 +64,9 @@ NOTE_LINE_PARSER = Lark.open(
 PARALLEL_LINE_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
 )
+TRANSLATION_LINE_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="translation_line"
+)
 PARATEXT_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
 )
@@ -110,6 +113,11 @@ def parse_note_line(atf: str) -> NoteLine:
 
 def parse_parallel_line(atf: str) -> ParallelLine:
     tree = PARALLEL_LINE_PARSER.parse(atf)
+    return LineTransformer().transform(tree)
+
+
+def parse_translation_line(atf: str) -> ParallelLine:
+    tree = TRANSLATION_LINE_PARSER.parse(atf)
     return LineTransformer().transform(tree)
 
 

@@ -38,6 +38,7 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 
 class ManuscriptFactory(factory.Factory):
@@ -140,6 +141,7 @@ class LineFactory(factory.Factory):
     variants = factory.List([factory.SelfAttribute("..variant")], TupleFactory)
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")
+    translation = (TranslationLine((StringPart("foo"),), "en", None),)
 
 
 class TextIdFactory(factory.Factory):
