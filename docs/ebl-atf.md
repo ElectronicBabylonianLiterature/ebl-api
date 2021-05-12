@@ -100,7 +100,7 @@ object-with-status = object, [ ' ' ], { status };
 
 column = 'column ', number, [ ' ' ], { status };
 
-heading = 'h', number;
+heading = 'h', number, [ ' ', translation ];
 
 discourse = 'catchline' | 'colophon' | 'date' | 'signature' | 'signatures'
           | 'summary'  | 'witnesses';
