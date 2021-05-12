@@ -192,7 +192,7 @@ translation-line = '#tr', [ '.', language-code ], [ '.', translation-extent ], '
 language-code = ? ISO 639-1 language code ?;
 translation-extent = '(', [ label, ' ' ] , line-number, ')';
 
-paragraph = markup, [ { eol, { word-separator }- markup }-, eol ];
+paragraph = markup, [ { eol, { word-separator }- markup }- ];
 ```
 
 See:
