@@ -49,9 +49,9 @@ markup-part = emphasis
             | akkadian
             | sumerian
             | emesal
-            | note-text
+            | markup-text
             | bibliography;
-emphasis = '@i{', note-text, '}';
+emphasis = '@i{', markup-text, '}';
 akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
 sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
 emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
@@ -59,8 +59,6 @@ bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
 escaped-text = { ( markup-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
 markup-text = { markup-character };
 markup-character = any-character - ( '@' | '{' | '}' );
-
-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 ```
 
 ## Lines
@@ -101,7 +99,7 @@ object-with-status = object, [ ' ' ], { status };
 
 column = 'column ', number, [ ' ' ], { status };
 
-heading = 'h', number, [ ' ', translation ];
+heading = 'h', number, [ ' ', markup ];
 
 discourse = 'catchline' | 'colophon' | 'date' | 'signature' | 'signatures'
           | 'summary'  | 'witnesses';
@@ -191,29 +189,10 @@ museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 
 ```ebnf
 translation-line = '#tr', [ '.', language-code ], [ '.', translation-extent ], ': ', paragraph;
-lang = ? ISO 639-1 language code ?;
+language-code = ? ISO 639-1 language code ?;
 translation-extent = '(', [ label, ' ' ] , line-number, ')';
 
-paragraph = translation, [ { eol, translation }-, eol ];
-translation = { translation-part }-;
-translation-part = markup
-                 | supplied
-                 | literal
-                 | foreign
-                 | uncertain
-                 | untranslateable
-                 | broken
-                 | note-marker;
-
-supplied = '(', markup , ')';
-literal =  '@"', markup, '"@';
-foreign = '@', translation-word;
-uncertain = '@?', markup ,'?@';
-untranslateable = '...' | '....';
-broken = '[', { markup | untranslateable }- ,']';
-note-marker = '^', number, { ',', number }, '^';
-
-translation-word = any-character - ('@' | ' ' | '{');
+paragraph = markup, [ { eol, { word-separator }- markup }-, eol ];
 ```
 
 See:
@@ -711,8 +690,7 @@ saving them results in an error until the syntax is corrected.
 ## Labels
 
 ```ebnf
-
-line-number-label = { not-space }-;
+label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 
 column-label = roman-numeral, { status };
 roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
@@ -720,7 +698,6 @@ roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
 
 surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ),
                 { status };
-
 ```
 
 See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html)
