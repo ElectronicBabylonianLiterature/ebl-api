@@ -227,6 +227,18 @@ LINES = [
             "type": "HeadingAtLine",
             "number": 1,
             "displayValue": "h1",
+            "parts": [],
+        },
+    ),
+    (
+        HeadingAtLine(2, (StringPart("foo"),)),
+        {
+            "prefix": "@",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("h2 foo"))],
+            "type": "HeadingAtLine",
+            "number": 2,
+            "displayValue": "h2 foo",
+            "parts": [{"type": "StringPart", "text": "foo"}],
         },
     ),
     (
@@ -688,6 +700,16 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
             "displayValue": "double ruling",
+        },
+    ),
+    (
+        HeadingAtLine(1),
+        {
+            "prefix": "@",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("h1"))],
+            "type": "HeadingAtLine",
+            "number": 1,
+            "displayValue": "h1",
         },
     ),
 ]
