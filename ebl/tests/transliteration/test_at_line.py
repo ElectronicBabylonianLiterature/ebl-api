@@ -11,13 +11,19 @@ from ebl.transliteration.domain.at_line import (
     HeadingAtLine,
 )
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
+from ebl.transliteration.domain.markup import StringPart
+from ebl.transliteration.domain.atf import Atf
 
 
-def test_at_line_heading() -> None:
-    at_line = HeadingAtLine(1)
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "parts,parts_text", [(tuple(), ""), ((StringPart("a"), StringPart("b c")), " ab c")]
+)
+def test_at_line_heading(parts, parts_text) -> None:
+    at_line = HeadingAtLine(1, parts)
 
-    assert at_line.lemmatization == (LemmatizationToken("h1"),)
-    assert at_line.display_value == "h1"
+    assert at_line.atf == Atf(f"@h1{parts_text}")
+    assert at_line.lemmatization == (LemmatizationToken(f"h1{parts_text}"),)
+    assert at_line.display_value == f"h1{parts_text}"
 
 
 def test_at_line_column() -> None:
