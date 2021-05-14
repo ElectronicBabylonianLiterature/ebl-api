@@ -17,7 +17,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.translation_line import TranslationLine
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
 
@@ -114,7 +114,12 @@ class Line:
     variants: Sequence[LineVariant]
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
-    translation: Sequence[TranslationLine] = tuple()
+    translation: Sequence[TranslationLine] = attr.ib(default=tuple())
+
+    @translation.validator
+    def _validate_translations(self, _, value: Sequence[TranslationLine]) -> None:
+        if any(line.extent and cast(Extent, line.extent).labels for line in value):
+            raise ValueError("Labels are not allowed in line translations.")
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
