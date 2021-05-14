@@ -26,10 +26,8 @@ def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
         {"$unwind": "$tokens"},
         {
             "$unionWith": {
-                "coll": "texts",
+                "coll": "chapters",
                 "pipeline": [
-                    {"$unwind": "$chapters"},
-                    {"$project": {"lines": "$chapters.lines"}},
                     {"$unwind": "$lines"},
                     {"$project": {"variants": "$lines.variants"}},
                     {"$unwind": "$variants"},
@@ -40,10 +38,8 @@ def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
         },
         {
             "$unionWith": {
-                "coll": "texts",
+                "coll": "chapters",
                 "pipeline": [
-                    {"$unwind": "$chapters"},
-                    {"$project": {"lines": "$chapters.lines"}},
                     {"$unwind": "$lines"},
                     {"$project": {"variants": "$lines.variants"}},
                     {"$unwind": "$variants"},
