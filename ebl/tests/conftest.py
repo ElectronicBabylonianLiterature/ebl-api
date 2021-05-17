@@ -10,6 +10,7 @@ import pytest
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
+from marshmallow import EXCLUDE
 
 import ebl.app
 import ebl.context
@@ -45,7 +46,10 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
+from ebl.signs.infrastructure.mongo_sign_repository import (
+    MongoSignRepository,
+    SignSchema,
+)
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -91,6 +95,16 @@ class TestBibliographyRepository(MongoBibliographyRepository):
         return [create_object_entry(self._collection.find_one({}))]
 
 
+class TestSignRepository(MongoSignRepository):
+    # Mongomock does not support $let so we need to
+    # stub the methods using them.
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
+        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+
+    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
+        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+
+
 @pytest.fixture
 def bibliography_repository(database):
     return TestBibliographyRepository(database)
@@ -103,7 +117,7 @@ def bibliography(bibliography_repository, changelog):
 
 @pytest.fixture
 def sign_repository(database):
-    return MongoSignRepository(database)
+    return TestSignRepository(database)
 
 
 @pytest.fixture
@@ -446,7 +460,7 @@ def signs():
             ("DU", [("du", 1)], []),
             ("U", [("u", 1), ("10", 1)], [("ABZ", "411")]),
             ("|U.U|", [("20", 1)], [("ABZ", "471")]),
-            ("BA", [("ba", 1)], []),
+            ("BA", [("ba", 1), ("ku", 1)], []),
             ("MA", [("ma", 1)], []),
             ("TI", [("ti", 1)], []),
             ("MU", [("mu", 1)], []),

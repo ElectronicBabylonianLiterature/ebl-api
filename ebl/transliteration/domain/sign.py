@@ -34,6 +34,7 @@ class Sign:
     values: Sequence[Value] = tuple()
     mes_zl: str = ""
     logograms: Sequence[Logogram] = tuple()
+    unicode: Sequence[int] = tuple()
 
     @property
     def standardization(self):
