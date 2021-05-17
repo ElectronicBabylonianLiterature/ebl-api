@@ -38,4 +38,3 @@ def test_fragment_matcher_route_error(client, fragmentarium, user):
     fragmentarium.create(fragment_2)
     get_result = client.simulate_get(f"/fragments/{faulty_fragment_id}/match")
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-

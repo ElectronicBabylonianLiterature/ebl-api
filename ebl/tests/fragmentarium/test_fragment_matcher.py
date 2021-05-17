@@ -1,5 +1,3 @@
-import pytest
-
 from ebl.fragmentarium.application.fragment_matcher import (
     sort_scores_to_list,
     LineToVecRanking,
@@ -59,9 +57,9 @@ def test_line_to_vec(fragment_matcher, when):
         )
     )
     assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking(
-                [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 3)],
-                [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 5)],
-            )
+        [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 3)],
+        [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 5)],
+    )
 
 
 def test_empty_line_to_vec(fragment_matcher, when):
