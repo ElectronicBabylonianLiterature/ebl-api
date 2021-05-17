@@ -38,3 +38,11 @@ def test_fragment_matcher_route_error(client, fragmentarium, user):
     fragmentarium.create(fragment_2)
     get_result = client.simulate_get(f"/fragments/{faulty_fragment_id}/match")
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_fragment_matcher_route_no_line_to_vec_error(client, fragmentarium, user):
+    fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"), line_to_vec=None)
+    fragmentarium.create(fragment_1)
+    get_result = client.simulate_get(f"/fragments/X.0/match")
+    assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert get_result.text == '{"title": "422 Unprocessable Entity", "description": "Fragment has no line to vec"}'
