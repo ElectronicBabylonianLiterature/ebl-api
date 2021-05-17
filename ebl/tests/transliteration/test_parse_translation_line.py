@@ -17,6 +17,12 @@ from ebl.transliteration.domain.atf import Surface
             TranslationLine((StringPart("translation"),), "en", None),
         ),
         (
+            "#tr.ar.(2): translation",
+            TranslationLine(
+                (StringPart("translation"),), "ar", Extent(LineNumber(2), tuple())
+            ),
+        ),
+        (
             "#tr.de.(o iii 1): translation",
             TranslationLine(
                 (StringPart("translation"),),

@@ -196,8 +196,10 @@ class ApiLineSchema(Schema):
         required=True, data_key="isBeginningOfSection"
     )
     translation = fields.Function(
-        lambda line: "".join(translation.atf for translation in line.translation),
-        lambda value: tuple(parse_translation_line(line) for line in value.split("\n")),
+        lambda line: "\n".join(translation.atf for translation in line.translation),
+        lambda value: tuple(parse_translation_line(line) for line in value.split("\n"))
+        if value
+        else tuple(),
         required=True,
     )
 
