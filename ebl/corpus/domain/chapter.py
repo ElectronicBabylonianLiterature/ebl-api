@@ -13,6 +13,7 @@ from ebl.merger import Merger
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.translation_line import Extent
 
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
@@ -101,6 +102,20 @@ class Chapter:
         if duplicates:
             readable_labels = self._make_labels_readable(duplicates)
             raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
+
+    @lines.validator
+    def _validate_extents(self, _, value: Sequence[Line]) -> None:
+        line_numbers = {line.number for line in value}
+        errors = [
+            f"Invalid extent {translation.extent} in line {line.number}."
+            for line in value
+            for translation in line.translation
+            if translation.extent
+            and (cast(Extent, translation.extent).number not in line_numbers)
+        ]
+
+        if errors:
+            raise ValueError(" ".join(errors))
 
     @property
     def id_(self) -> ChapterId:

@@ -70,11 +70,18 @@ def test_text_lines() -> None:
     ]
 
 
-def text_invalid_extent() -> None:
-    with pytest.raises(
-        ValueError, match="Labels are not allowed in line translations."
-    ):
-        TranslationLine(
-            tuple(),
-            extent=Extent(LineNumber(1), (SurfaceLabel(tuple(), Surface.OBVERSE),)),
+def test_invalid_extent() -> None:
+    with pytest.raises(ValueError):
+        Chapter(
+            TextId(0, 0),
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    LineNumber(1),
+                    (LINE_VARIANT_1,),
+                    translation=(
+                        TranslationLine(tuple(), extent=Extent(LineNumber(2))),
+                    ),
+                ),
+            ),
         )
