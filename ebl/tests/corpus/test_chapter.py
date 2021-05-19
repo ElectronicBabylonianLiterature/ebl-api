@@ -85,3 +85,21 @@ def test_invalid_extent() -> None:
                 ),
             ),
         )
+
+
+def test_extent_before_translation() -> None:
+    with pytest.raises(ValueError):
+        Chapter(
+            TextId(0, 0),
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(LineNumber(1), (LINE_VARIANT_1,)),
+                Line(
+                    LineNumber(2),
+                    (LINE_VARIANT_2,),
+                    translation=(
+                        TranslationLine(tuple(), extent=Extent(LineNumber(1))),
+                    ),
+                ),
+            ),
+        )

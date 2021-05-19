@@ -105,13 +105,13 @@ class Chapter:
 
     @lines.validator
     def _validate_extents(self, _, value: Sequence[Line]) -> None:
-        line_numbers = {line.number for line in value}
+        line_numbers = {line.number: index for index, line in enumerate(value)}
         errors = [
             f"Invalid extent {translation.extent} in line {line.number}."
-            for line in value
+            for index, line in enumerate(value)
             for translation in line.translation
             if translation.extent
-            and (cast(Extent, translation.extent).number not in line_numbers)
+            and line_numbers.get(cast(Extent, translation.extent).number, -1) < index
         ]
 
         if errors:
