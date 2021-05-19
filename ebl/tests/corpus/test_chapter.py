@@ -103,3 +103,44 @@ def test_extent_before_translation() -> None:
                 ),
             ),
         )
+
+
+def test_overlapping() -> None:
+    with pytest.raises(ValueError):
+        Chapter(
+            TextId(0, 0),
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    LineNumber(1),
+                    (LINE_VARIANT_1,),
+                    translation=(
+                        TranslationLine(tuple(), extent=Extent(LineNumber(2))),
+                    ),
+                ),
+                Line(
+                    LineNumber(2),
+                    (LINE_VARIANT_2,),
+                    translation=(TranslationLine(tuple()),),
+                ),
+            ),
+        )
+
+
+def test_overlapping_languages() -> None:
+    Chapter(
+        TextId(0, 0),
+        manuscripts=(Manuscript(MANUSCRIPT_ID),),
+        lines=(
+            Line(
+                LineNumber(1),
+                (LINE_VARIANT_1,),
+                translation=(TranslationLine(tuple(), "en", Extent(LineNumber(2))),),
+            ),
+            Line(
+                LineNumber(2),
+                (LINE_VARIANT_2,),
+                translation=(TranslationLine(tuple(), "de"),),
+            ),
+        ),
+    )

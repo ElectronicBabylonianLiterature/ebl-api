@@ -1,4 +1,5 @@
 from enum import Enum, unique
+import itertools
 from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
@@ -116,6 +117,39 @@ class Chapter:
 
         if errors:
             raise ValueError(" ".join(errors))
+
+        ranges = itertools.groupby(
+            [
+                (
+                    translation.language,
+                    set(
+                        range(
+                            index,
+                            (
+                                translation.extent
+                                and line_numbers[
+                                    cast(Extent, translation.extent).number
+                                ]
+                                or index
+                            )
+                            + 1,
+                        )
+                    ),
+                )
+                for index, line in enumerate(value)
+                for translation in line.translation
+            ],
+            lambda pair: pair[0],
+        )
+
+        range_errors = [
+            f"Overlapping extents for language {group}."
+            for key, group in ranges
+            if any(pair[0][1] & pair[1][1] for pair in itertools.combinations(group, 2))
+        ]
+
+        if range_errors:
+            raise ValueError(" ".join(range_errors))
 
     @property
     def id_(self) -> ChapterId:
