@@ -1,4 +1,4 @@
-from typing import ClassVar, Tuple, List
+from typing import ClassVar, List, Tuple
 
 import attr
 import pydash
@@ -69,13 +69,9 @@ class FragmentMatcher:
         self._fragment_repository = fragment_repository
 
     def _parse_candidate(self, candidate: str) -> Tuple[LineToVecEncodings, ...]:
-        line_to_vec = self._fragment_repository.query_by_museum_number(
+        return self._fragment_repository.query_by_museum_number(
             MuseumNumber.of(candidate)
         ).line_to_vec
-        if line_to_vec:
-            return tuple(line_to_vec)
-        else:
-            raise ValueError("Fragment has no line to vec")
 
     def rank_line_to_vec(self, candidate: str) -> LineToVecRanking:
         candidate_line_to_vecs = self._parse_candidate(candidate)
@@ -83,7 +79,7 @@ class FragmentMatcher:
             self._fragment_repository.query_transliterated_line_to_vec()
         )
         ranker = LineToVecRanker()
-        if candidate_line_to_vecs[0]:
+        if candidate_line_to_vecs:
             for entry in filter(
                 lambda line_to_vec_entry: line_to_vec_entry.museum_number
                 != MuseumNumber.of(candidate),

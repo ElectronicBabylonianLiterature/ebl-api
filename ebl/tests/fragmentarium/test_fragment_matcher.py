@@ -64,11 +64,8 @@ def test_line_to_vec(fragment_matcher, when):
 
 def test_empty_line_to_vec(fragment_matcher, when):
     parameters = "BM.11"
-    fragment_1_line_to_vec = (LineToVecEncoding.from_list([]),)
     fragment_2_line_to_vec = (LineToVecEncoding.from_list([2, 1, 1]),)
-    fragment_1 = FragmentFactory.build(
-        number=MuseumNumber.of("BM.11"), line_to_vec=fragment_1_line_to_vec
-    )
+    fragment_1 = FragmentFactory.build(number=MuseumNumber.of("BM.11"))
     fragment_2 = FragmentFactory.build(
         number=MuseumNumber.of("X.1"), line_to_vec=fragment_2_line_to_vec
     )
@@ -86,7 +83,7 @@ def test_empty_line_to_vec(fragment_matcher, when):
         .query_transliterated_line_to_vec()
         .thenReturn(
             [
-                LineToVecEntry(fragment_1.number, "N/A", fragment_1_line_to_vec),
+                LineToVecEntry(fragment_1.number, "N/A", tuple()),
                 LineToVecEntry(fragment_2.number, "N/A", fragment_2_line_to_vec),
                 LineToVecEntry(fragment_3.number, "N/A", fragment_2_line_to_vec),
             ]
