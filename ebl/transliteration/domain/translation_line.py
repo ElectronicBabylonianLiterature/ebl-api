@@ -1,11 +1,12 @@
 from typing import Optional, Sequence
 
 import attr
+import pydash
 
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.label_validator import validate_labels
-from ebl.transliteration.domain.labels import Label
+from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart, convert_part_sequence
@@ -17,6 +18,18 @@ DEFAULT_LANGUAGE = "en"
 class Extent:
     number: AbstractLineNumber
     labels: Sequence[Label] = attr.ib(default=tuple(), validator=validate_labels)
+
+    @property
+    def column(self) -> Optional[ColumnLabel]:
+        return pydash.head(
+            [label for label in self.labels if isinstance(label, ColumnLabel)]
+        )
+
+    @property
+    def surface(self) -> Optional[SurfaceLabel]:
+        return pydash.head(
+            [label for label in self.labels if isinstance(label, SurfaceLabel)]
+        )
 
     def __str__(self) -> str:
         labels = (

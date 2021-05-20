@@ -9,15 +9,16 @@ from ebl.lemmatization.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
+from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.text import Label, Text
+from ebl.transliteration.domain.text import LineLabel, Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 
 LINES: Sequence[Line] = (
@@ -121,11 +122,38 @@ def test_labels() -> None:
         ]
     )
     assert text.labels == [
-        Label(None, None, None, LineNumber(1)),
-        Label(
+        LineLabel(None, None, None, LineNumber(1)),
+        LineLabel(
             ColumnLabel.from_int(1),
             SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
             ObjectLabel([], atf.Object.OBJECT, "Stone wig"),
             LineNumber(2),
         ),
     ]
+
+
+def test_translation_berofe_text() -> None:
+    with pytest.raises(ValueError):
+        Text.of_iterable([TranslationLine(tuple()), *LINES])
+
+
+def test_invalid_extent() -> None:
+    with pytest.raises(ValueError):
+        Text.of_iterable(
+            [
+                TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
+                TranslationLine(tuple(), "en", Extent(LineNumber(3))),
+                TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
+            ]
+        )
+
+
+def test_extent_before_translation() -> None:
+    with pytest.raises(ValueError):
+        Text.of_iterable(
+            [
+                TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
+                TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
+                TranslationLine(tuple(), "en", Extent(LineNumber(1))),
+            ]
+        )

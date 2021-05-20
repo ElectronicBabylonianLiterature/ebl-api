@@ -1,8 +1,7 @@
 import pytest
 
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.lark_parser import parse_translation_line
 from ebl.transliteration.domain.markup import StringPart
-from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
@@ -36,4 +35,4 @@ from ebl.transliteration.domain.atf import Surface
     ],
 )
 def test_parse_translation_line(atf, expected_line) -> None:
-    assert parse_atf_lark(atf).lines == Text.of_iterable([expected_line]).lines
+    assert parse_translation_line(atf) == expected_line

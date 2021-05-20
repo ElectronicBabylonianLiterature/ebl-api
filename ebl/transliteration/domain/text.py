@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
+from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, cast
 
 import attr
 
@@ -7,36 +7,42 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationE
 from ebl.merger import Merger
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Label:
-    column: Optional[ColumnLabel]
-    surface: Optional[SurfaceLabel]
-    object: Optional[ObjectLabel]
-    line_number: Optional[AbstractLineNumber]
-
-    def set_column(self, column: Optional[ColumnLabel]) -> "Label":
-        return attr.evolve(self, column=column)
-
-    def set_surface(self, surface: Optional[SurfaceLabel]) -> "Label":
-        return attr.evolve(self, surface=surface)
-
-    def set_object(self, object: Optional[ObjectLabel]) -> "Label":
-        return attr.evolve(self, object=object)
-
-    def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "Label":
-        return attr.evolve(self, line_number=line_number)
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
-    lines: Sequence[Line] = tuple()
+    lines: Sequence[Line] = attr.ib(default=tuple())
     parser_version: str = ATF_PARSER_VERSION
+
+    @lines.validator
+    def _validate_extents(self, _, value: Sequence[Line]) -> None:
+        labels = [
+            (label.column, label.surface, label.line_number) for label in self.labels
+        ]
+        index = -1
+        errors = []
+
+        for line in value:
+            if isinstance(line, TextLine):
+                index += 1
+            elif isinstance(line, TranslationLine):
+                if index < 0:
+                    errors.append('Translation "{line.atf}" before any text line.')
+
+                if line.extent:
+                    extent: Extent = cast(Extent, line.extent)
+                    if (
+                        labels.index((extent.column, extent.surface, extent.number))
+                        <= index
+                    ):
+                        errors.append(f"Extent ${extent} before translation.")
+
+        if errors:
+            raise ValueError(" ".join(errors))
 
     @property
     def number_of_lines(self) -> int:
@@ -55,11 +61,13 @@ class Text:
         return Atf("\n".join(line.atf for line in self.lines))
 
     @property
-    def labels(self,) -> Sequence[Label]:
-        current: Label = Label(None, None, None, None)
-        labels: List[Label] = []
+    def labels(self,) -> Sequence[LineLabel]:
+        current: LineLabel = LineLabel(None, None, None, None)
+        labels: List[LineLabel] = []
 
-        handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
+        handlers: Mapping[
+            Type[Line], Callable[[Line], Tuple[LineLabel, List[LineLabel]]]
+        ] = {
             TextLine: lambda line: (
                 current,
                 [*labels, current.set_line_number(line.line_number)],
