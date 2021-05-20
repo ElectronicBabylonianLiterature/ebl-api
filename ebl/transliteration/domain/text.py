@@ -1,4 +1,4 @@
-from itertools import zip_longest
+from itertools import combinations, groupby, zip_longest
 from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, cast
 
 import attr
@@ -25,6 +25,7 @@ class Text:
         ]
         index = -1
         errors = []
+        ranges = []
 
         for line in value:
             if isinstance(line, TextLine):
@@ -35,11 +36,23 @@ class Text:
 
                 if line.extent:
                     extent: Extent = cast(Extent, line.extent)
-                    if (
-                        labels.index((extent.column, extent.surface, extent.number))
-                        <= index
-                    ):
-                        errors.append(f"Extent ${extent} before translation.")
+                    try:
+                        end = labels.index(
+                            (extent.column, extent.surface, extent.number)
+                        )
+                        if end <= index:
+                            errors.append(f"Extent ${extent} before translation.")
+                        ranges.append((line.language, set(range(index, end + 1))))
+                    except ValueError:
+                        errors.append(f"Extent ${extent} does not exist.")
+                else:
+                    ranges.append((line.language, set(range(index, index + 1))))
+
+        errors.extend(
+            f"Overlapping extents for language {group}."
+            for key, group in groupby(ranges, lambda pair: pair[0])
+            if any(pair[0][1] & pair[1][1] for pair in combinations(group, 2))
+        )
 
         if errors:
             raise ValueError(" ".join(errors))

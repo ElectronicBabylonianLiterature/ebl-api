@@ -157,3 +157,26 @@ def test_extent_before_translation() -> None:
                 TranslationLine(tuple(), "en", Extent(LineNumber(1))),
             ]
         )
+
+
+def test_exent_overlapping() -> None:
+    with pytest.raises(ValueError):
+        Text.of_iterable(
+            [
+                TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
+                TranslationLine(tuple(), extent=Extent(LineNumber(2))),
+                TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
+                TranslationLine(tuple()),
+            ]
+        )
+
+
+def test_extent_overlapping_languages() -> None:
+    Text.of_iterable(
+        [
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
+            TranslationLine(tuple(), "en", Extent(LineNumber(2))),
+            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
+            TranslationLine(tuple(), "de"),
+        ]
+    )
