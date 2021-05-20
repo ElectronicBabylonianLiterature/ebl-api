@@ -1,7 +1,7 @@
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 
 
 def test_serialization_and_deserialization():

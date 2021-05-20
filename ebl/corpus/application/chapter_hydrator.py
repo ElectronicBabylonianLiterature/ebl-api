@@ -5,9 +5,8 @@ from singledispatchmethod import singledispatchmethod
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.corpus.domain.text import Text, TextItem, TextVisitor
 from ebl.errors import Defect, NotFoundError
 
 
@@ -15,40 +14,29 @@ def invalid_reference(error: Exception) -> Exception:
     return Defect(f'Invalid manuscript references: "{error}"')
 
 
-class TextHydrator(TextVisitor):
+class ChapterHydartor(ChapterVisitor):
     def __init__(self, bibliography: Bibliography):
         self._bibliography: Bibliography = bibliography
-        self._text: Optional[Text] = None
-        self._chapters: List[Chapter] = []
+        self._chapter: Optional[Chapter] = None
         self._manuscripts: List[Manuscript] = []
 
     @property
-    def text(self) -> Text:
-        if self._text is None:
-            raise Defect("Trying to access text before a text was visited.")
+    def chapter(self) -> Chapter:
+        if self._chapter is None:
+            raise Defect("Trying to access chapter before a chapter was visited.")
         else:
-            return cast(Text, self._text)
+            return cast(Chapter, self._chapter)
 
     @singledispatchmethod
-    def visit(self, item: TextItem) -> None:
+    def visit(self, item: ChapterItem) -> None:
         pass
-
-    @visit.register(Text)  # pyre-ignore[56]
-    def _visit_text(self, text: Text) -> None:
-        for chapter in text.chapters:
-            self.visit(chapter)
-
-        self._text = attr.evolve(text, chapters=tuple(self._chapters))
-        self._chapters = []
 
     @visit.register(Chapter)  # pyre-ignore[56]
     def _visit_chapter(self, chapter: Chapter) -> None:
         for manuscript in chapter.manuscripts:
             self.visit(manuscript)
 
-        self._chapters.append(
-            attr.evolve(chapter, manuscripts=tuple(self._manuscripts))
-        )
+        self._chapter = attr.evolve(chapter, manuscripts=tuple(self._manuscripts))
         self._manuscripts = []
 
     @visit.register(Manuscript)  # pyre-ignore[56]

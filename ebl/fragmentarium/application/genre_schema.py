@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, post_load
+
 from ebl.fragmentarium.domain.fragment import Genre
 
 

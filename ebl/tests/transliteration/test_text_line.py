@@ -1,6 +1,10 @@
 import pytest
 
 from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.domain.lemmatization import (
+    LemmatizationError,
+    LemmatizationToken,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     Determinative,
@@ -8,13 +12,10 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Erasure,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
 from ebl.transliteration.domain.lark_parser import parse_line
-from ebl.lemmatization.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
@@ -25,7 +26,6 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 
 LINE_NUMBER = LineNumber(1)
 

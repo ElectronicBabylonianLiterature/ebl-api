@@ -9,17 +9,17 @@ from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from ebl.app import create_context
-
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.domain.text import ChapterId, Text, TextId
-
+from ebl.corpus.domain.chapter import ChapterId
+from ebl.corpus.domain.text import Text, TextId
 from ebl.users.domain.user import ApiUser
 
 
 def update_text(corpus: Corpus, text: Text) -> None:
     user = ApiUser("update_texts.py")
-    for index, chapter in enumerate(text.chapters):
-        chapter_id = ChapterId(text.id, index)
+    for chapter_listing in text.chapters:
+        chapter_id = ChapterId(text.id, chapter_listing.stage, chapter_listing.name)
+        chapter = corpus.find_chapter(chapter_id)
         corpus.update_lines(chapter_id, chapter.lines, user)
 
 

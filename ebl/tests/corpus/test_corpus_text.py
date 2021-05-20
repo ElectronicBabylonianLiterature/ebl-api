@@ -13,7 +13,7 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -89,86 +89,82 @@ LINE = Line(
 )
 
 TEXT = Text(
-    CATEGORY,
-    INDEX,
-    NAME,
-    VERSES,
-    APPROXIMATE,
+    CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (ChapterListing(STAGE, CHAPTER_NAME),)
+)
+
+TEXT_ID = TextId(CATEGORY, INDEX)
+CHAPTER = Chapter(
+    TEXT_ID,
+    CLASSIFICATION,
+    STAGE,
+    VERSION,
+    CHAPTER_NAME,
+    ORDER,
     (
-        Chapter(
-            CLASSIFICATION,
-            STAGE,
-            VERSION,
-            CHAPTER_NAME,
-            ORDER,
-            (
-                Manuscript(
-                    MANUSCRIPT_ID,
-                    SIGLUM_DISAMBIGUATOR,
-                    MUSEUM_NUMBER,
-                    ACCESSION,
-                    PERIOD_MODIFIER,
-                    PERIOD,
-                    PROVENANCE,
-                    TYPE,
-                    NOTES,
-                    COLOPHON,
-                    REFERENCES,
-                ),
-            ),
-            (MUSEUM_NUMBER,),
-            (LINE,),
+        Manuscript(
+            MANUSCRIPT_ID,
+            SIGLUM_DISAMBIGUATOR,
+            MUSEUM_NUMBER,
+            ACCESSION,
+            PERIOD_MODIFIER,
+            PERIOD,
+            PROVENANCE,
+            TYPE,
+            NOTES,
+            COLOPHON,
+            REFERENCES,
         ),
     ),
+    (MUSEUM_NUMBER,),
+    (LINE,),
 )
 
 
-def test_constructor_sets_correct_fields():
+def test_text_constructor_sets_correct_fields():
     assert TEXT.id == TextId(CATEGORY, INDEX)
     assert TEXT.category == CATEGORY
     assert TEXT.index == INDEX
     assert TEXT.name == NAME
     assert TEXT.number_of_verses == VERSES
     assert TEXT.approximate_verses == APPROXIMATE
-    assert TEXT.chapters[0].classification == CLASSIFICATION
     assert TEXT.chapters[0].stage == STAGE
-    assert TEXT.chapters[0].version == VERSION
     assert TEXT.chapters[0].name == CHAPTER_NAME
-    assert TEXT.chapters[0].order == ORDER
-    assert TEXT.chapters[0].uncertain_fragments == (MUSEUM_NUMBER,)
-    assert TEXT.chapters[0].manuscripts[0].id == MANUSCRIPT_ID
-    assert TEXT.chapters[0].manuscripts[0].siglum == Siglum(
+
+
+def test_constructor_sets_correct_fields():
+    assert CHAPTER.text_id == TextId(CATEGORY, INDEX)
+    assert CHAPTER.classification == CLASSIFICATION
+    assert CHAPTER.stage == STAGE
+    assert CHAPTER.version == VERSION
+    assert CHAPTER.name == CHAPTER_NAME
+    assert CHAPTER.order == ORDER
+    assert CHAPTER.uncertain_fragments == (MUSEUM_NUMBER,)
+    assert CHAPTER.manuscripts[0].id == MANUSCRIPT_ID
+    assert CHAPTER.manuscripts[0].siglum == Siglum(
         PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
     )
-    assert TEXT.chapters[0].manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
-    assert TEXT.chapters[0].manuscripts[0].museum_number == MUSEUM_NUMBER
-    assert TEXT.chapters[0].manuscripts[0].accession == ACCESSION
-    assert TEXT.chapters[0].manuscripts[0].period_modifier == PERIOD_MODIFIER
-    assert TEXT.chapters[0].manuscripts[0].period == PERIOD
-    assert TEXT.chapters[0].manuscripts[0].provenance == PROVENANCE
-    assert TEXT.chapters[0].manuscripts[0].type == TYPE
-    assert TEXT.chapters[0].manuscripts[0].notes == NOTES
-    assert TEXT.chapters[0].manuscripts[0].colophon == COLOPHON
-    assert TEXT.chapters[0].manuscripts[0].references == REFERENCES
-    assert TEXT.chapters[0].lines[0].number == LINE_NUMBER
-    assert TEXT.chapters[0].lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
-    assert TEXT.chapters[0].lines[0].variants[0].note == NOTE
-    assert TEXT.chapters[0].lines[0].variants[0].parallel_lines == PARALLEL_LINES
+    assert CHAPTER.manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
+    assert CHAPTER.manuscripts[0].museum_number == MUSEUM_NUMBER
+    assert CHAPTER.manuscripts[0].accession == ACCESSION
+    assert CHAPTER.manuscripts[0].period_modifier == PERIOD_MODIFIER
+    assert CHAPTER.manuscripts[0].period == PERIOD
+    assert CHAPTER.manuscripts[0].provenance == PROVENANCE
+    assert CHAPTER.manuscripts[0].type == TYPE
+    assert CHAPTER.manuscripts[0].notes == NOTES
+    assert CHAPTER.manuscripts[0].colophon == COLOPHON
+    assert CHAPTER.manuscripts[0].references == REFERENCES
+    assert CHAPTER.lines[0].number == LINE_NUMBER
+    assert CHAPTER.lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
+    assert CHAPTER.lines[0].variants[0].note == NOTE
+    assert CHAPTER.lines[0].variants[0].parallel_lines == PARALLEL_LINES
+    assert CHAPTER.lines[0].variants[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
+    assert CHAPTER.lines[0].variants[0].manuscripts[0].labels == LABELS
+    assert CHAPTER.lines[0].variants[0].manuscripts[0].line == MANUSCRIPT_TEXT
+    assert CHAPTER.lines[0].variants[0].manuscripts[0].omitted_words == OMITTED_WORDS
     assert (
-        TEXT.chapters[0].lines[0].variants[0].manuscripts[0].manuscript_id
-        == MANUSCRIPT_ID
+        CHAPTER.lines[0].is_second_line_of_parallelism == IS_SECOND_LINE_OF_PARALLELISM
     )
-    assert TEXT.chapters[0].lines[0].variants[0].manuscripts[0].labels == LABELS
-    assert TEXT.chapters[0].lines[0].variants[0].manuscripts[0].line == MANUSCRIPT_TEXT
-    assert (
-        TEXT.chapters[0].lines[0].variants[0].manuscripts[0].omitted_words
-        == OMITTED_WORDS
-    )
-    assert (
-        TEXT.chapters[0].lines[0].is_second_line_of_parallelism
-        == IS_SECOND_LINE_OF_PARALLELISM
-    )
-    assert TEXT.chapters[0].lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
+    assert CHAPTER.lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
 
 
 def test_giving_museum_number_and_accession_is_invalid():
@@ -183,16 +179,18 @@ def test_giving_museum_number_and_accession_is_invalid():
 def test_duplicate_ids_are_invalid():
     with pytest.raises(ValueError):
         Chapter(
+            TEXT_ID,
             manuscripts=(
                 Manuscript(MANUSCRIPT_ID, siglum_disambiguator="a"),
                 Manuscript(MANUSCRIPT_ID, siglum_disambiguator="b"),
-            )
+            ),
         )
 
 
 def test_duplicate_sigla_are_invalid():
     with pytest.raises(ValueError):
         Chapter(
+            TEXT_ID,
             manuscripts=(
                 Manuscript(
                     MANUSCRIPT_ID,
@@ -208,13 +206,14 @@ def test_duplicate_sigla_are_invalid():
                     provenance=PROVENANCE,
                     type=TYPE,
                 ),
-            )
+            ),
         )
 
 
 def test_missing_manuscripts_are_invalid():
     with pytest.raises(ValueError):
         Chapter(
+            TEXT_ID,
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
@@ -241,6 +240,7 @@ def test_missing_manuscripts_are_invalid():
     "make_chapter",
     [
         lambda: Chapter(
+            TEXT_ID,
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
@@ -261,6 +261,7 @@ def test_missing_manuscripts_are_invalid():
             ),
         ),
         lambda: Chapter(
+            TEXT_ID,
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
@@ -298,7 +299,7 @@ def test_duplicate_manuscript_line_labels_are_invalid(make_chapter):
 
 def test_duplicate_line_numbers_invalid():
     with pytest.raises(ValueError):
-        Chapter(lines=(LINE, LINE))
+        Chapter(TEXT_ID, lines=(LINE, LINE))
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

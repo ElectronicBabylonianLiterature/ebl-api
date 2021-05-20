@@ -1,7 +1,9 @@
 import attr
+
 from ebl.corpus.domain.chapter import Chapter, TextLineEntry
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.atf import Surface
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line import EmptyLine
@@ -45,6 +47,7 @@ LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
 SIGNS = ("FOO BAR",)
 CHAPTER = Chapter(
+    TextId(0, 0),
     manuscripts=(Manuscript(MANUSCRIPT_ID, colophon=COLOPHON),),
     lines=(LINE_1, LINE_2, LINE_3),
     signs=SIGNS,

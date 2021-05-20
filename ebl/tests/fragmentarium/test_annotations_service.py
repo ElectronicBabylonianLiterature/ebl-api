@@ -1,8 +1,7 @@
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
-from ebl.tests.factories.annotation import AnnotationsFactory
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-
+from ebl.tests.factories.annotation import AnnotationsFactory
 
 SCHEMA = AnnotationsSchema()
 

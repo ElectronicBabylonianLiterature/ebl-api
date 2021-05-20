@@ -1,3 +1,4 @@
+from itertools import groupby
 from typing import Optional, Sequence, Tuple
 
 import attr
@@ -14,8 +15,6 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
-from itertools import groupby
-
 
 Lines = Sequence[Sequence[str]]
 

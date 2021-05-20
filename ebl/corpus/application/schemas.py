@@ -11,7 +11,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -26,6 +26,7 @@ from ebl.transliteration.application.text_schema import (
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.labels import parse_labels
 from ebl.transliteration.domain.text import Text as Transliteration
+from ebl.corpus.domain.text_id import TextId
 
 
 class ManuscriptSchema(Schema):
@@ -152,7 +153,17 @@ class LineSchema(Schema):
         )
 
 
+class TextIdSchema(Schema):
+    category = fields.Integer(required=True, validate=validate.Range(min=0))
+    index = fields.Integer(required=True, validate=validate.Range(min=0))
+
+    @post_load
+    def make_text_id(self, data: dict, **kwargs) -> TextId:
+        return TextId(data["category"], data["index"])
+
+
 class ChapterSchema(Schema):
+    text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnum(Classification, required=True)
     stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
@@ -169,6 +180,7 @@ class ChapterSchema(Schema):
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
         return Chapter(
+            data["text_id"],
             Classification(data["classification"]),
             Stage(data["stage"]),
             data["version"],
@@ -182,6 +194,15 @@ class ChapterSchema(Schema):
         )
 
 
+class ChapterListingSchema(Schema):
+    stage = ValueEnum(Stage, required=True)
+    name = fields.String(required=True, validate=validate.Length(min=1))
+
+    @post_load
+    def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
+        return ChapterListing(Stage(data["stage"]), data["name"])
+
+
 class TextSchema(Schema):
     category = fields.Integer(required=True, validate=validate.Range(min=0))
     index = fields.Integer(required=True, validate=validate.Range(min=0))
@@ -190,7 +211,7 @@ class TextSchema(Schema):
         required=True, data_key="numberOfVerses", validate=validate.Range(min=0)
     )
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
-    chapters = fields.Nested(ChapterSchema, many=True, required=True)
+    chapters = fields.Nested(ChapterListingSchema, many=True, required=True)
 
     @post_load
     def make_text(self, data: dict, **kwargs) -> Text:

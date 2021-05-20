@@ -1,16 +1,20 @@
 import pytest
 
 import ebl.transliteration.domain.atf as atf
-from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
-from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
-from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.language import Language
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
+    EgyptianMetricalFeetSeparator,
+)
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.enclosure_tokens import DocumentOrientedGloss
+from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
 from ebl.transliteration.domain.tokens import (
     Column,
@@ -23,11 +27,6 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
-    EgyptianMetricalFeetSeparator,
-)
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-
 
 TOKENS = [
     UnknownNumberOfSigns(frozenset({EnclosureType.BROKEN_AWAY}), ErasureState.NONE),

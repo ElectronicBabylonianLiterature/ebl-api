@@ -1,5 +1,6 @@
 import attr
 import pytest
+
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema

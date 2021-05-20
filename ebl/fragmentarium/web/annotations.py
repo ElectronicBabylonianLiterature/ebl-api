@@ -2,9 +2,9 @@ import falcon
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
+from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
-from ebl.fragmentarium.web.dtos import parse_museum_number
 
 
 class AnnotationResource:

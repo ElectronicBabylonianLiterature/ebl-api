@@ -1,25 +1,15 @@
-from typing import Sequence, Union
+from typing import Sequence
 
 import attr
 
-from ebl.corpus.domain.chapter import Chapter
-from ebl.corpus.domain.line import Line, ManuscriptLine
-from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 
 
-TextItem = Union["Text", Chapter, Manuscript, Line, ManuscriptLine]
-
-
-class TextVisitor:
-    def visit(self, item: TextItem) -> None:
-        pass
-
-
 @attr.s(auto_attribs=True, frozen=True)
-class ChapterId:
-    text_id: TextId
-    index: int
+class ChapterListing:
+    stage: Stage
+    name: str
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -29,7 +19,7 @@ class Text:
     name: str
     number_of_verses: int
     approximate_verses: bool
-    chapters: Sequence[Chapter] = tuple()
+    chapters: Sequence[ChapterListing] = tuple()
 
     @property
     def id(self) -> TextId:

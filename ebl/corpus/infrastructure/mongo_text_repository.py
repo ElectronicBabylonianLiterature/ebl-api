@@ -2,57 +2,150 @@ from typing import List
 
 import pymongo
 
-from ebl.corpus.application.corpus import COLLECTION, TextRepository
-from ebl.corpus.application.text_serializer import deserialize, serialize
+from ebl.corpus.application.corpus import TextRepository
+from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.corpus.application.schemas import ChapterSchema, TextSchema
+
+
+TEXTS_COLLECTION = "texts"
+CHAPTERS_COLLECTION = "chapters"
 
 
 def text_not_found(id_: TextId) -> Exception:
-    return NotFoundError(f"Text {id_.category}.{id_.index} not found.")
+    return NotFoundError(f"Text {id_} not found.")
+
+
+def chapter_not_found(id_: ChapterId) -> Exception:
+    return NotFoundError(f"Chapter {id_} not found.")
+
+
+def chapter_id_query(id_: ChapterId) -> dict:
+    return {
+        "textId.category": id_.text_id.category,
+        "textId.index": id_.text_id.index,
+        "stage": id_.stage.value,
+        "name": id_.name,
+    }
+
+
+def text_pipeline() -> List[dict]:
+    return [
+        {
+            "$lookup": {
+                "from": CHAPTERS_COLLECTION,
+                "let": {"category": "$category", "index": "$index"},
+                "pipeline": [
+                    {
+                        "$match": {
+                            "$expr": {
+                                "$and": [
+                                    {"$eq": ["$textId.category", "$$category"]},
+                                    {"$eq": ["$textId.index", "$$index"]},
+                                ]
+                            }
+                        }
+                    },
+                    {"$sort": {"order": 1}},
+                    {"$project": {"_id": 0, "stage": 1, "name": 1}},
+                ],
+                "as": "chapters",
+            }
+        },
+        {"$project": {"_id": 0}},
+    ]
 
 
 class MongoTextRepository(TextRepository):
     def __init__(self, database):
-        self._collection = MongoCollection(database, COLLECTION)
+        self._texts = MongoCollection(database, TEXTS_COLLECTION)
+        self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
 
     def create_indexes(self) -> None:
-        self._collection.create_index(
+        self._texts.create_index(
             [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
+        )
+        self._chapters.create_index(
+            [
+                ("textId.category", pymongo.ASCENDING),
+                ("textId.index", pymongo.ASCENDING),
+            ]
+        )
+        self._chapters.create_index(
+            [
+                ("textId.category", pymongo.ASCENDING),
+                ("textId.index", pymongo.ASCENDING),
+                ("order", pymongo.ASCENDING),
+            ]
+        )
+        self._chapters.create_index(
+            [
+                ("textId.category", pymongo.ASCENDING),
+                ("textId.index", pymongo.ASCENDING),
+                ("stage", pymongo.ASCENDING),
+                ("name", pymongo.ASCENDING),
+            ],
+            unique=True,
         )
 
     def create(self, text: Text) -> None:
-        self._collection.insert_one(serialize(text))
+        self._texts.insert_one(TextSchema(exclude=["chapters"]).dump(text))
+
+    def create_chapter(self, chapter: Chapter) -> None:
+        self._chapters.insert_one(ChapterSchema().dump(chapter))
 
     def find(self, id_: TextId) -> Text:
         try:
-            mongo_text = self._collection.find_one(
-                {"category": id_.category, "index": id_.index},
-                projection={"_id": False},
+            mongo_text = next(
+                self._texts.aggregate(
+                    [
+                        {"$match": {"category": id_.category, "index": id_.index}},
+                        *text_pipeline(),
+                        {"$limit": 1},
+                    ]
+                )
             )
-            return deserialize(mongo_text)
-        except NotFoundError:
+            return TextSchema().load(mongo_text)
+        except StopIteration:
             raise text_not_found(id_)
 
-    def list(self) -> List[Text]:
-        return [
-            deserialize(mongo_text)
-            for mongo_text in self._collection.find_many({}, projection={"_id": False})
-        ]
+    def find_chapter(self, id_: ChapterId) -> Chapter:
+        try:
+            chapter = self._chapters.find_one(
+                chapter_id_query(id_), projection={"_id": False}
+            )
+            return ChapterSchema().load(chapter)
+        except NotFoundError:
+            raise chapter_not_found(id_)
 
-    def update(self, id_: TextId, text: Text) -> None:
-        self._collection.update_one(
-            {"category": id_.category, "index": id_.index}, {"$set": serialize(text)}
+    def list(self) -> List[Text]:
+        return TextSchema().load(self._texts.aggregate(text_pipeline()), many=True)
+
+    def update(self, id_: ChapterId, chapter: Chapter) -> None:
+        self._chapters.update_one(
+            chapter_id_query(id_),
+            {
+                "$set": ChapterSchema(
+                    only=[
+                        "manuscripts",
+                        "uncertain_fragments",
+                        "lines",
+                        "signs",
+                        "parser_version",
+                    ]
+                ).dump(chapter)
+            },
         )
 
-    def query_by_transliteration(self, query: TransliterationQuery) -> List[Text]:
-        return [
-            deserialize(mongo_text)
-            for mongo_text in self._collection.find_many(
-                {"chapters.signs": {"$regex": query.regexp}},
+    def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
+        return ChapterSchema().load(
+            self._chapters.find_many(
+                {"signs": {"$regex": query.regexp}},
                 projection={"_id": False},
                 limit=100,
-            )
-        ]
+            ),
+            many=True,
+        )

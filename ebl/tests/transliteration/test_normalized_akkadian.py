@@ -1,6 +1,9 @@
 import pytest
 
-
+from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
+from ebl.tests.asserts import assert_token_serialization
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
@@ -13,10 +16,6 @@ from ebl.transliteration.domain.normalized_akkadian import (
     MetricalFootSeparator,
 )
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
-from ebl.tests.asserts import assert_token_serialization
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-from ebl.dictionary.domain.word import WordId
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

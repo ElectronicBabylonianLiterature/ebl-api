@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import attr
+
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.signs_updater import SignsUpdater
 from ebl.corpus.domain.chapter import Chapter
@@ -12,12 +13,11 @@ from ebl.transliteration.application.sign_repository import SignRepository
 class ManuscriptUpdater(ChapterUpdater):
     def __init__(
         self,
-        chapter_index: int,
         manuscripts: Sequence[Manuscript],
         uncertain_fragments: Sequence[MuseumNumber],
         sing_repository: SignRepository,
     ):
-        super().__init__(chapter_index)
+        super().__init__()
         self._manuscripts = manuscripts
         self._uncertain_fragments = uncertain_fragments
         self._sing_updater = SignsUpdater(sing_repository)

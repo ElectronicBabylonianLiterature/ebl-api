@@ -1,11 +1,11 @@
 import pytest
 
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
-from ebl.transliteration.domain.tokens import Joiner, Variant
-from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.tokens import Joiner, Variant
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
+from ebl.transliteration.domain.word_tokens import Word
 
 
 def test_apply() -> None:

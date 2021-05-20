@@ -1,12 +1,11 @@
 import falcon
+from marshmallow import Schema, fields
 
-from marshmallow import fields, Schema
-
-from ebl.marshmallowschema import validate
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.web.api_serializer import serialize
-from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.corpus.application.lemmatization_schema import LineVariantLemmatizationSchema
+from ebl.corpus.web.chapter_schemas import ApiChapterSchema
+from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
 
@@ -28,7 +27,8 @@ class LemmatizationResource:
         resp: falcon.Response,
         category: str,
         index: str,
-        chapter_index: str,
+        stage: str,
+        name: str,
     ) -> None:
         """---
         description: Lemmatizes manuscript lines.
@@ -61,16 +61,21 @@ class LemmatizationResource:
             type: integer
           required: true
         - in: path
-          name: chapter_index
+          name: stage
           schema:
-            type: integer
+            type: string
+          required: true
+        - in: path
+          name: name
+          schema:
+            type: string
           required: true
         """
-        chapter_id = create_chapter_id(category, index, chapter_index)
+        chapter_id = create_chapter_id(category, index, stage, name)
         self._corpus.update_manuscript_lemmatization(
             chapter_id,
             CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
             req.context.user,
         )
-        updated_text = self._corpus.find(chapter_id.text_id)
-        resp.media = serialize(updated_text)
+        updated_chapter = self._corpus.find_chapter(chapter_id)
+        resp.media = ApiChapterSchema().dump(updated_chapter)

@@ -15,10 +15,12 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PerhapsBrokenAway,
     Removal,
 )
+from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Divider,
@@ -47,8 +49,6 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 

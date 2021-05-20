@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Dict, Mapping, Sequence, Union
+from typing import Any, Dict, Mapping, Sequence, Union, List
 
 import attr
 import mongomock
@@ -10,9 +10,13 @@ import pytest
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
+from marshmallow import EXCLUDE
 
 import ebl.app
 import ebl.context
+from ebl.corpus.domain.text_id import TextId
+from ebl.corpus.domain.text import Text
+from ebl.corpus.application.schemas import TextSchema
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
@@ -20,6 +24,7 @@ from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.domain.word import WordId
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
 from ebl.files.application.file_repository import File, FileRepository
@@ -36,15 +41,17 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
 from ebl.lemmatization.domain.lemmatization import Lemma
-from ebl.tests.factories.bibliography import BibliographyEntryFactory
-from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
-from ebl.transliteration.infrastructure.mongo_sign_repository import MongoSignRepository
-from ebl.users.domain.user import User
-from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
-from ebl.dictionary.domain.word import WordId
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
+from ebl.signs.infrastructure.mongo_sign_repository import (
+    MongoSignRepository,
+    SignSchema,
+)
+from ebl.users.domain.user import User
+from ebl.users.infrastructure.auth0 import Auth0User
 
 
 @pytest.fixture
@@ -88,6 +95,16 @@ class TestBibliographyRepository(MongoBibliographyRepository):
         return [create_object_entry(self._collection.find_one({}))]
 
 
+class TestSignRepository(MongoSignRepository):
+    # Mongomock does not support $let so we need to
+    # stub the methods using them.
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
+        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+
+    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
+        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+
+
 @pytest.fixture
 def bibliography_repository(database):
     return TestBibliographyRepository(database)
@@ -100,7 +117,7 @@ def bibliography(bibliography_repository, changelog):
 
 @pytest.fixture
 def sign_repository(database):
-    return MongoSignRepository(database)
+    return TestSignRepository(database)
 
 
 @pytest.fixture
@@ -108,9 +125,44 @@ def transliteration_factory(sign_repository):
     return TransliterationUpdateFactory(sign_repository)
 
 
+class TestTextRepository(MongoTextRepository):
+    # Mongomock does not support $let so we need to
+    # stub the methods using them.
+    # https://github.com/mongomock/mongomock/pull/698
+
+    def find(self, id_: TextId) -> Text:
+        text = self._texts.find_one(
+            {"category": id_.category, "index": id_.index}, projection={"_id": False}
+        )
+        chapters = self._chapters.find_many(
+            {"textId.category": id_.category, "textId.index": id_.index},
+            projection={"_id": False, "stage": True, "name": True},
+        )
+        return TextSchema().load({**text, "chapters": chapters})
+
+    def list(self) -> List[Text]:
+        texts = self._texts.find_many({}, projection={"_id": False})
+        return TextSchema().load(
+            [
+                {
+                    **text,
+                    "chapters": self._chapters.find_many(
+                        {
+                            "textId.category": text["category"],
+                            "textId.index": text["index"],
+                        },
+                        projection={"_id": False, "stage": True, "name": True},
+                    ),
+                }
+                for text in texts
+            ],
+            many=True,
+        )
+
+
 @pytest.fixture
 def text_repository(database):
-    return MongoTextRepository(database)
+    return TestTextRepository(database)
 
 
 @pytest.fixture
@@ -408,7 +460,7 @@ def signs():
             ("DU", [("du", 1)], []),
             ("U", [("u", 1), ("10", 1)], [("ABZ", "411")]),
             ("|U.U|", [("20", 1)], [("ABZ", "471")]),
-            ("BA", [("ba", 1)], []),
+            ("BA", [("ba", 1), ("ku", 1)], []),
             ("MA", [("ma", 1)], []),
             ("TI", [("ti", 1)], []),
             ("MU", [("mu", 1)], []),

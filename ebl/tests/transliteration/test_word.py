@@ -3,6 +3,10 @@ from typing import List, Tuple
 import pytest
 
 from ebl.dictionary.domain.word import WordId
+from ebl.lemmatization.domain.lemmatization import (
+    LemmatizationError,
+    LemmatizationToken,
+)
 from ebl.tests.asserts import assert_token_serialization
 from ebl.transliteration.application.token_schemas import (
     OneOfTokenSchema,
@@ -10,20 +14,16 @@ from ebl.transliteration.application.token_schemas import (
 )
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway, PerhapsBrokenAway
-from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
-from ebl.lemmatization.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
-from ebl.transliteration.domain.sign_tokens import Logogram, Reading
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.enclosure_tokens import Determinative, Erasure
+from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
+from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.tokens import (
     Joiner,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import ErasureState, Word
 
 LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [

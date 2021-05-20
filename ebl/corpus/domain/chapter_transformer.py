@@ -2,6 +2,7 @@ from typing import Iterable
 
 from lark.visitors import v_args
 
+from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     Period,
@@ -9,13 +10,12 @@ from ebl.corpus.domain.manuscript import (
     ManuscriptType,
     Siglum,
 )
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
+from ebl.transliteration.domain.labels import LabelTransformer
+from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
-from ebl.transliteration.domain.labels import LabelTransformer
-from ebl.transliteration.domain.line import EmptyLine
 
 
 class ChapterTransformer(

@@ -8,7 +8,6 @@ from ebl.corpus.application.schemas import (
     ChapterSchema,
     LineVariantSchema,
     ManuscriptSchema,
-    TextSchema,
     labels,
     manuscript_id,
 )
@@ -212,7 +211,3 @@ class ApiChapterSchema(ChapterSchema):
         MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
     )
     lines = fields.Nested(ApiLineSchema, many=True, required=True)
-
-
-class ApiTextSchema(TextSchema):
-    chapters = fields.Nested(ApiChapterSchema, many=True, required=True)

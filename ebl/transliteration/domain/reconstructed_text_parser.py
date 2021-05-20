@@ -1,12 +1,11 @@
 from typing import Sequence
 
-from lark.lark import Lark
 from lark.exceptions import ParseError, UnexpectedInput
+from lark.lark import Lark
 
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Break
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token
-
 
 RECONSTRUCTED_LINE_PARSER = Lark.open(
     "ebl_atf.lark",

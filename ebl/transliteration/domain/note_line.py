@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
 import re
+from abc import ABC, abstractmethod
 from typing import Iterable, Pattern, Sequence, Tuple
 
 import attr
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
@@ -12,8 +13,6 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.tokens import Token
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-
 
 SPECIAL_CHARACTERS: Pattern[str] = re.compile(r"[@{}\\]")
 

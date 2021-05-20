@@ -16,4 +16,6 @@ COPY ./ebl ./ebl
 COPY ./docs ./docs
 RUN chmod -R a-wx ./docs
 
+COPY newrelic.ini ./
+
 CMD ["pipenv", "run", "start"]

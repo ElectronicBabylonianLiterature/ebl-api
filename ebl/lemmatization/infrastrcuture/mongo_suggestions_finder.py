@@ -5,7 +5,6 @@ from ebl.lemmatization.application.suggestion_finder import LemmaRepository
 from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.mongo_collection import MongoCollection
 
-
 COLLECTION = "fragments"
 
 
@@ -27,10 +26,8 @@ def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
         {"$unwind": "$tokens"},
         {
             "$unionWith": {
-                "coll": "texts",
+                "coll": "chapters",
                 "pipeline": [
-                    {"$unwind": "$chapters"},
-                    {"$project": {"lines": "$chapters.lines"}},
                     {"$unwind": "$lines"},
                     {"$project": {"variants": "$lines.variants"}},
                     {"$unwind": "$variants"},
@@ -41,10 +38,8 @@ def aggregate_lemmas(word: str, is_normalized: bool) -> List[dict]:
         },
         {
             "$unionWith": {
-                "coll": "texts",
+                "coll": "chapters",
                 "pipeline": [
-                    {"$unwind": "$chapters"},
-                    {"$project": {"lines": "$chapters.lines"}},
                     {"$unwind": "$lines"},
                     {"$project": {"variants": "$lines.variants"}},
                     {"$unwind": "$variants"},

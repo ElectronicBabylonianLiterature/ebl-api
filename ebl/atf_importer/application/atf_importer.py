@@ -1,21 +1,23 @@
-import os
-import glob
-from pymongo import MongoClient
-import logging
 import argparse
+import glob
+import logging
+import os
+import re
+
+from pymongo import MongoClient
+
+from ebl.app import create_context
 from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
-from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
-from ebl.app import create_context
+from ebl.transliteration.domain.atf import Atf
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.users.domain.user import AtfImporterUser
-import re
 
 
 class LemmatizationError(Exception):

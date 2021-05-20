@@ -5,11 +5,11 @@ from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 
 SCHEMA = FragmentSchema()
 

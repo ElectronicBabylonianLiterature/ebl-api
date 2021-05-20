@@ -1,12 +1,12 @@
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.corpus.web.alignment_schema import AlignmentSchema, AlignmentTokenSchema
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
+from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.language import Language
-from ebl.corpus.web.alignment_schema import AlignmentSchema, AlignmentTokenSchema
 
 
 def test_alignment() -> None:

@@ -1,5 +1,6 @@
 from typing import Sequence
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.note_line import (
@@ -18,8 +19,6 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-
 
 TRANSLITERATION: Sequence[Token] = (
     Word.of([Reading.of_name("bu")]),

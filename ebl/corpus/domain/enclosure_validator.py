@@ -1,8 +1,8 @@
 from typing import Iterable
 
-from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
+from ebl.transliteration.domain.tokens import Token
 
 
 def validate(line: Iterable[Token]):

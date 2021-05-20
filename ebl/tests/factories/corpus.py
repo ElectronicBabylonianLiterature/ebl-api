@@ -11,7 +11,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
@@ -36,6 +36,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.corpus.domain.text_id import TextId
 
 
 class ManuscriptFactory(factory.Factory):
@@ -140,10 +141,19 @@ class LineFactory(factory.Factory):
     is_beginning_of_section = factory.Faker("boolean")
 
 
+class TextIdFactory(factory.Factory):
+    class Meta:
+        model = TextId
+
+    category = factory.Sequence(lambda n: n)
+    index = factory.Sequence(lambda n: n)
+
+
 class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
 
+    text_id = factory.SubFactory(TextIdFactory)
     classification = factory.fuzzy.FuzzyChoice(Classification)
     stage = factory.fuzzy.FuzzyChoice(Stage)
     version = factory.Faker("word")
@@ -159,6 +169,14 @@ class ChapterFactory(factory.Factory):
     parser_version = ""
 
 
+class ChapterListingFactory(factory.Factory):
+    class Meta:
+        model = ChapterListing
+
+    stage = factory.fuzzy.FuzzyChoice(Stage)
+    name = factory.Faker("sentence")
+
+
 class TextFactory(factory.Factory):
     class Meta:
         model = Text
@@ -168,4 +186,4 @@ class TextFactory(factory.Factory):
     name = factory.Faker("sentence")
     number_of_verses = factory.fuzzy.FuzzyInteger(1, 10000)
     approximate_verses = factory.Iterator([True, False])
-    chapters = factory.List([factory.SubFactory(ChapterFactory)], TupleFactory)
+    chapters = factory.List([factory.SubFactory(ChapterListingFactory)], TupleFactory)

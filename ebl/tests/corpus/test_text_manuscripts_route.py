@@ -11,67 +11,39 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
-from ebl.corpus.web.api_serializer import serialize
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import TextFactory
-from ebl.users.domain.user import Guest
-
-ANY_USER = Guest()
-
-
-def create_dto(text):
-    return serialize(text)
-
-
-def allow_references(text, bibliography):
-    for chapter in text.chapters:
-        for manuscript in chapter.manuscripts:
-            for reference in manuscript.references:
-                bibliography.create(reference.document, ANY_USER)
+from ebl.tests.factories.corpus import ChapterFactory
+from ebl.corpus.domain.stage import Stage
+from ebl.tests.corpus.support import (
+    allow_references,
+    allow_signs,
+    create_chapter_dto,
+    create_chapter_url,
+)
 
 
-def allow_signs(signs, sign_list):
-    for sign in signs:
-        sign_list.create(sign)
-
-
-def create_text(client, text):
-    post_result = client.simulate_post("/texts", body=json.dumps(create_dto(text)))
-    assert post_result.status == falcon.HTTP_CREATED
-    assert post_result.headers["Location"] == f"/texts/{text.category}/{text.index}"
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(text)
-
-
-def test_updating(client, bibliography, sign_repository, signs):
+def test_updating(client, bibliography, sign_repository, signs, text_repository):
     uncertain_fragment = MuseumNumber.of("K.1")
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
-    updated_text = attr.evolve(
-        text,
-        chapters=(
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
+    updated_chapter = attr.evolve(
+        chapter,
+        manuscripts=(
             attr.evolve(
-                text.chapters[0],
-                manuscripts=(
-                    attr.evolve(
-                        text.chapters[0].manuscripts[0],
-                        museum_number="new.number",
-                        accession="",
-                    ),
-                ),
-                uncertain_fragments=(uncertain_fragment,),
+                chapter.manuscripts[0], museum_number="new.number", accession=""
             ),
         ),
+        uncertain_fragments=(uncertain_fragment,),
     )
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
+        create_chapter_url(chapter, "/manuscripts"),
         body=json.dumps(
             {
-                "manuscripts": create_dto(updated_text)["chapters"][0]["manuscripts"],
+                "manuscripts": create_chapter_dto(updated_chapter)["manuscripts"],
                 "uncertainFragments": [str(uncertain_fragment)],
             }
         ),
@@ -79,33 +51,33 @@ def test_updating(client, bibliography, sign_repository, signs):
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_dto(updated_text)
+    assert post_result.json == create_chapter_dto(updated_chapter)
 
-    get_result = client.simulate_get(
-        f"/texts/{updated_text.category}/{updated_text.index}"
-    )
+    get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert get_result.json == create_dto(updated_text)
+    assert get_result.json == create_chapter_dto(updated_chapter)
 
 
 def test_updating_text_not_found(client, bibliography):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/0/manuscripts",
+        f"/texts/1/1/chapters/{Stage.STANDARD_BABYLONIAN.value}/unknown/manuscripts",
         body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_invalid_reference(client, bibliography, sign_repository, signs):
+def test_updating_invalid_reference(
+    client, bibliography, sign_repository, signs, text_repository
+):
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
     manuscript = {
-        "id": text.chapters[0].manuscripts[0].id,
+        "id": chapter.manuscripts[0].id,
         "siglumDisambiguator": "1c",
         "museumNumber": "X.1",
         "accession": "",
@@ -119,7 +91,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
     }
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
+        create_chapter_url(chapter, "/manuscripts"),
         body=json.dumps({"manuscripts": [manuscript], "uncertainFragments": []}),
     )
 
@@ -128,7 +100,7 @@ def test_updating_invalid_reference(client, bibliography, sign_repository, signs
 
 def test_updating_text_category(client):
     post_result = client.simulate_post(
-        "/texts/invalid/1/chapters/0/manuscripts",
+        f"/texts/invalid/1/chapters/{Stage.STANDARD_BABYLONIAN.value}/unknown/manuscripts",
         body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
@@ -137,16 +109,16 @@ def test_updating_text_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        "/texts/1/invalid/chapters/0/manuscripts",
+        f"/texts/1/invalid/chapters/{Stage.STANDARD_BABYLONIAN.value}/unknown/manuscripts",
         body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_updating_invalid_chapter_index(client):
+def test_updating_invalid_stage(client):
     post_result = client.simulate_post(
-        "/texts/1/1/chapters/invalid/manuscripts",
+        "/texts/1/1/chapters/invalid/unknown/manuscripts",
         body=json.dumps({"manuscripts": [], "uncertainFragments": []}),
     )
 
@@ -214,15 +186,21 @@ INVALID_MUSEUM_NUMBER = [
     ],
 )
 def test_update_invalid_entity(
-    client, bibliography, manuscripts, expected_status, sign_repository, signs
+    client,
+    bibliography,
+    manuscripts,
+    expected_status,
+    sign_repository,
+    signs,
+    text_repository,
 ):
     allow_signs(signs, sign_repository)
-    text = TextFactory.build()
-    allow_references(text, bibliography)
-    create_text(client, text)
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
 
     post_result = client.simulate_post(
-        f"/texts/{text.category}/{text.index}/chapters/0/manuscripts",
+        create_chapter_url(chapter, "/manuscripts"),
         body=json.dumps({"manuscripts": manuscripts, "uncertainFragments": []}),
     )
 

@@ -5,9 +5,8 @@ from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
-from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.chapter import Chapter, ChapterItem
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
-from ebl.corpus.domain.text import TextItem
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -16,8 +15,8 @@ from ebl.transliteration.domain.text_line import update_tokens
 
 
 class LemmatizationUpdater(ChapterUpdater):
-    def __init__(self, chapter_index: int, lemmatization: ChapterLemmatization):
-        super().__init__(chapter_index)
+    def __init__(self, lemmatization: ChapterLemmatization):
+        super().__init__()
         self._lemmatization = lemmatization
         self._lines: List[Line] = []
         self._variants: List[LineVariant] = []
@@ -49,7 +48,7 @@ class LemmatizationUpdater(ChapterUpdater):
             )
 
     @singledispatchmethod
-    def visit(self, item: TextItem) -> None:
+    def visit(self, item: ChapterItem) -> None:
         super().visit(item)
 
     @visit.register(Line)  # pyre-ignore[56]

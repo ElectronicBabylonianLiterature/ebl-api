@@ -21,7 +21,6 @@ from ebl.transliteration.domain.normalized_akkadian import (
     MetricalFootSeparator,
 )
 from ebl.transliteration.domain.sign_tokens import Reading, Number
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.tokens import (
     ErasureState,
     LanguageShift,
@@ -31,6 +30,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
     Joiner,
 )
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import Word
 
 

@@ -3,11 +3,10 @@ from typing import Sequence, Tuple, TypeVar
 
 import attr
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.tokens import TokenVisitor
-
 
 L = TypeVar("L", bound="Line")
 
