@@ -7,6 +7,7 @@ from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.users.web.require_scope import require_scope
+from ebl.errors import DataError
 
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
@@ -40,6 +41,9 @@ class TransliterationResource:
             }
 
     def _create_transliteration(self, media):
-        return self._transliteration_factory.create(
-            Atf(media["transliteration"]), media["notes"]
-        )
+        try:
+            return self._transliteration_factory.create(
+                Atf(media["transliteration"]), media["notes"]
+            )
+        except ValueError as error:
+            raise DataError(error) from error

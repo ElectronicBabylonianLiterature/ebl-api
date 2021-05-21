@@ -41,15 +41,15 @@ class Text:
                             (extent.column, extent.surface, extent.number)
                         )
                         if end <= index:
-                            errors.append(f"Extent ${extent} before translation.")
+                            errors.append(f"Extent {extent} before translation.")
                         ranges.append((line.language, set(range(index, end + 1))))
                     except ValueError:
-                        errors.append(f"Extent ${extent} does not exist.")
+                        errors.append(f"Extent {extent} does not exist.")
                 else:
                     ranges.append((line.language, set(range(index, index + 1))))
 
         errors.extend(
-            f"Overlapping extents for language {group}."
+            f"Overlapping extents for language {key}."
             for key, group in groupby(ranges, lambda pair: pair[0])
             if any(pair[0][1] & pair[1][1] for pair in combinations(group, 2))
         )
