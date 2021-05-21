@@ -66,7 +66,7 @@ class Fragment:
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
-    line_to_vec: Tuple[LineToVecEncodings] = tuple()
+    line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
