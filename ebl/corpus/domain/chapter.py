@@ -108,7 +108,7 @@ class Chapter:
     def _validate_extents(self, _, value: Sequence[Line]) -> None:
         line_numbers = {line.number: index for index, line in enumerate(value)}
         errors = [
-            f"Invalid extent {translation.extent} in line {line.number}."
+            f"Invalid extent {translation.extent} in line {line.number.label}."
             for index, line in enumerate(value)
             for translation in line.translation
             if translation.extent
@@ -119,33 +119,39 @@ class Chapter:
             raise ValueError(" ".join(errors))
 
         ranges = itertools.groupby(
-            [
+            sorted(
                 (
-                    translation.language,
-                    set(
-                        range(
-                            index,
-                            (
-                                translation.extent
-                                and line_numbers[
-                                    cast(Extent, translation.extent).number
-                                ]
-                                or index
+                    (
+                        translation.language,
+                        set(
+                            range(
+                                index,
+                                (
+                                    translation.extent
+                                    and line_numbers[
+                                        cast(Extent, translation.extent).number
+                                    ]
+                                    or index
+                                )
+                                + 1,
                             )
-                            + 1,
-                        )
-                    ),
-                )
-                for index, line in enumerate(value)
-                for translation in line.translation
-            ],
+                        ),
+                    )
+                    for index, line in enumerate(value)
+                    for translation in line.translation
+                ),
+                key=lambda pair: pair[0],
+            ),
             lambda pair: pair[0],
         )
 
         range_errors = [
-            f"Overlapping extents for language {group}."
+            f"Overlapping extents for language {key}."
             for key, group in ranges
-            if any(pair[0][1] & pair[1][1] for pair in itertools.combinations(group, 2))
+            if any(
+                pair[0][1] & pair[1][1]
+                for pair in itertools.combinations(list(group), 2)
+            )
         ]
 
         if range_errors:
