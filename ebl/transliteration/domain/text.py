@@ -48,10 +48,11 @@ class Text:
                 else:
                     ranges.append((line.language, set(range(index, index + 1))))
 
+        ranges = sorted(ranges, key=lambda pair: pair[0])
         errors.extend(
             f"Overlapping extents for language {key}."
             for key, group in groupby(ranges, lambda pair: pair[0])
-            if any(pair[0][1] & pair[1][1] for pair in combinations(group, 2))
+            if any(pair[0][1] & pair[1][1] for pair in combinations(list(group), 2))
         )
 
         if errors:
