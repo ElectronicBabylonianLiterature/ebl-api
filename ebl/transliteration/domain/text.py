@@ -65,8 +65,8 @@ class LabelsValidator:
             )
 
     def _validate_extent(self, line: TranslationLine, extent: Extent) -> None:
-        end = self._get_index(extent)
         try:
+            end = self._get_index(extent)
             if end <= self._index:
                 self._errors.append(f"Extent {extent} before translation.")
             self._ranges.append((line.language, set(range(self._index, end + 1))))
