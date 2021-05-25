@@ -31,8 +31,6 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
-from ebl.openapi.web.bootstrap import create_open_api_route
-from ebl.openapi.web.spec import create_spec
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
 
@@ -83,17 +81,15 @@ def create_api(context: Context) -> falcon.API:
 
 def create_app(context: Context, issuer: str = "", audience: str = ""):
     api = create_api(context)
-    spec = create_spec(api, issuer, audience)
 
-    create_signs_routes(api, context, spec)
-    create_bibliography_routes(api, context, spec)
-    create_cdli_routes(api, spec)
-    create_corpus_routes(api, context, spec)
-    create_dictionary_routes(api, context, spec)
-    create_files_route(api, context, spec)
-    create_fragmentarium_routes(api, context, spec)
-    create_lemmatization_routes(api, context, spec)
-    create_open_api_route(api, spec)
+    create_signs_routes(api, context)
+    create_bibliography_routes(api, context)
+    create_cdli_routes(api)
+    create_corpus_routes(api, context)
+    create_dictionary_routes(api, context)
+    create_files_route(api, context)
+    create_fragmentarium_routes(api, context)
+    create_lemmatization_routes(api, context)
 
     return api
 
