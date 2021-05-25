@@ -34,13 +34,9 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.markup import EmphasisPart, LanguagePart, StringPart
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.transliteration.domain.note_line import (
-    EmphasisPart,
-    LanguagePart,
-    NoteLine,
-    StringPart,
-)
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     Genre as CorpusGenre,

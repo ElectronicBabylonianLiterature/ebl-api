@@ -3,13 +3,13 @@ import pytest
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import LINE_PARSER, parse_atf_lark
-from ebl.transliteration.domain.note_line import (
+from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
     LanguagePart,
-    NoteLine,
     StringPart,
 )
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 

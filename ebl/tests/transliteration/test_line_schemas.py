@@ -37,13 +37,13 @@ from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceL
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.note_line import (
+from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
     LanguagePart,
-    NoteLine,
     StringPart,
 )
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     Genre,
@@ -55,6 +55,8 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ErasureState, ValueToken
 from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.atf import Surface
 
 LINES = [
     (
@@ -225,6 +227,18 @@ LINES = [
             "type": "HeadingAtLine",
             "number": 1,
             "displayValue": "h1",
+            "parts": [],
+        },
+    ),
+    (
+        HeadingAtLine(2, (StringPart("foo"),)),
+        {
+            "prefix": "@",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("h2 foo"))],
+            "type": "HeadingAtLine",
+            "number": 2,
+            "displayValue": "h2 foo",
+            "parts": [{"type": "StringPart", "text": "foo"}],
         },
     ),
     (
@@ -590,6 +604,41 @@ LINES = [
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),
+    (
+        TranslationLine((StringPart("foo"), EmphasisPart("bar")), "en", None),
+        {
+            "type": "TranslationLine",
+            "prefix": "#tr.en: ",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("foo@i{bar}"))],
+            "parts": [
+                {"type": "StringPart", "text": "foo"},
+                {"type": "EmphasisPart", "text": "bar"},
+            ],
+            "language": "en",
+            "extent": None,
+        },
+    ),
+    (
+        TranslationLine(
+            (StringPart("foo"),),
+            "ar",
+            Extent(
+                LineNumber(1),
+                (SurfaceLabel(tuple(), Surface.OBVERSE), ColumnLabel(tuple(), 2)),
+            ),
+        ),
+        {
+            "type": "TranslationLine",
+            "prefix": "#tr.ar.(o ii 1): ",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("foo"))],
+            "parts": [{"type": "StringPart", "text": "foo"}],
+            "language": "ar",
+            "extent": {
+                "number": OneOfLineNumberSchema().dump(LineNumber(1)),
+                "labels": ["o", "ii"],
+            },
+        },
+    ),
 ]
 
 
@@ -651,6 +700,16 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "content": [OneOfTokenSchema().dump(ValueToken.of(" double ruling"))],
             "number": "SINGLE",
             "displayValue": "double ruling",
+        },
+    ),
+    (
+        HeadingAtLine(1),
+        {
+            "prefix": "@",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("h1"))],
+            "type": "HeadingAtLine",
+            "number": 1,
+            "displayValue": "h1",
         },
     ),
 ]

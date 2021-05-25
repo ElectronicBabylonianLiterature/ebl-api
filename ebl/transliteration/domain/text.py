@@ -1,42 +1,89 @@
-from itertools import zip_longest
-from typing import Callable, Iterable, List, Mapping, Optional, Sequence, Tuple, Type
+from itertools import combinations, groupby, zip_longest
+from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, cast
 
 import attr
+from singledispatchmethod import singledispatchmethod
 
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.merger import Merger
 from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
-from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 
-@attr.s(auto_attribs=True, frozen=True)
-class Label:
-    column: Optional[ColumnLabel]
-    surface: Optional[SurfaceLabel]
-    object: Optional[ObjectLabel]
-    line_number: Optional[AbstractLineNumber]
+class LabelsValidator:
+    def __init__(self, text: "Text") -> None:
+        self._index = -1
+        self._ranges = []
+        self._errors = []
+        self._labels = [
+            (label.column, label.surface, label.line_number) for label in text.labels
+        ]
 
-    def set_column(self, column: Optional[ColumnLabel]) -> "Label":
-        return attr.evolve(self, column=column)
+    def get_errors(self, lines: Sequence[Line]) -> List[str]:
+        self._index = -1
+        self._ranges = []
+        self._errors = []
 
-    def set_surface(self, surface: Optional[SurfaceLabel]) -> "Label":
-        return attr.evolve(self, surface=surface)
+        for line in lines:
+            self._validate_line(line)
 
-    def set_object(self, object: Optional[ObjectLabel]) -> "Label":
-        return attr.evolve(self, object=object)
+        return [*self._errors, *self._get_overlaps()]
 
-    def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "Label":
-        return attr.evolve(self, line_number=line_number)
+    def _get_overlaps(self) -> List[str]:
+        sorted_ranges = sorted(self._ranges, key=lambda pair: pair[0])
+        return [
+            f"Overlapping extents for language {key}."
+            for key, group in groupby(sorted_ranges, lambda pair: pair[0])
+            if any(pair[0][1] & pair[1][1] for pair in combinations(list(group), 2))
+        ]
+
+    def _get_index(self, extent: Extent) -> int:
+        return self._labels.index((extent.column, extent.surface, extent.number))
+
+    @singledispatchmethod
+    def _validate_line(self, line: Line) -> None:
+        pass
+
+    @_validate_line.register(TextLine)
+    def _(self, line: TextLine) -> None:
+        self._index += 1
+
+    @_validate_line.register(TranslationLine)  # pyre-ignore[56]
+    def _(self, line: TranslationLine) -> None:
+        if self._index < 0:
+            self._errors.append('Translation "{line.atf}" before any text line.')
+
+        if line.extent:
+            self._validate_extent(line, cast(Extent, line.extent))
+        else:
+            self._ranges.append(
+                (line.language, set(range(self._index, self._index + 1)))
+            )
+
+    def _validate_extent(self, line: TranslationLine, extent: Extent) -> None:
+        try:
+            end = self._get_index(extent)
+            if end <= self._index:
+                self._errors.append(f"Extent {extent} before translation.")
+            self._ranges.append((line.language, set(range(self._index, end + 1))))
+        except ValueError:
+            self._errors.append(f"Extent {extent} does not exist.")
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
-    lines: Sequence[Line] = tuple()
+    lines: Sequence[Line] = attr.ib(default=tuple())
     parser_version: str = ATF_PARSER_VERSION
+
+    @lines.validator
+    def _validate_extents(self, _, value: Sequence[Line]) -> None:
+        errors = LabelsValidator(self).get_errors(value)
+        if errors:
+            raise ValueError(" ".join(errors))
 
     @property
     def number_of_lines(self) -> int:
@@ -55,11 +102,13 @@ class Text:
         return Atf("\n".join(line.atf for line in self.lines))
 
     @property
-    def labels(self,) -> Sequence[Label]:
-        current: Label = Label(None, None, None, None)
-        labels: List[Label] = []
+    def labels(self,) -> Sequence[LineLabel]:
+        current: LineLabel = LineLabel(None, None, None, None)
+        labels: List[LineLabel] = []
 
-        handlers: Mapping[Type[Line], Callable[[Line], Tuple[Label, List[Label]]]] = {
+        handlers: Mapping[
+            Type[Line], Callable[[Line], Tuple[LineLabel, List[LineLabel]]]
+        ] = {
             TextLine: lambda line: (
                 current,
                 [*labels, current.set_line_number(line.line_number)],

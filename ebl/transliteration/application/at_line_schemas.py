@@ -20,6 +20,9 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
 )
 from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.application.note_line_part_schemas import (
+    OneOfNoteLinePartSchema,
+)
 
 
 class AtLineSchema(LineBaseSchema):
@@ -42,10 +45,11 @@ class SealAtLineSchema(AtLineSchema):
 class HeadingAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), missing=tuple())
 
     @post_load
     def make_line(self, data, **kwargs) -> HeadingAtLine:
-        return HeadingAtLine(data["number"])
+        return HeadingAtLine(data["number"], tuple(data["parts"]))
 
 
 class ColumnAtLineSchema(AtLineSchema):

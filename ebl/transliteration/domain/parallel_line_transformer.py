@@ -1,11 +1,10 @@
+from lark.visitors import v_args
 import roman
-from lark.visitors import Transformer, v_args
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.atf import Status, Surface
-from ebl.transliteration.domain.labels import SurfaceLabel
+from ebl.transliteration.domain.labels import LabelTransformer
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     Genre,
@@ -15,7 +14,7 @@ from ebl.transliteration.domain.parallel_line import (
 )
 
 
-class ParallelLineTransformer(Transformer):
+class ParallelLineTransformer(LabelTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__parallel_fragment(
         self, _prefix, cf, museum_number, duplicates, surface_label, line_number
@@ -30,13 +29,6 @@ class ParallelLineTransformer(Transformer):
 
     def ebl_atf_text_line__museum_number(self, children) -> MuseumNumber:
         return MuseumNumber.of("".join(children))
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__surface_label(self, surface, status) -> SurfaceLabel:
-        return SurfaceLabel.from_label(
-            Surface.from_label("".join(surface.children)),
-            [Status(token) for token in status.children],
-        )
 
     @v_args(inline=True)
     def ebl_atf_text_line__parallel_text(

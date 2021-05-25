@@ -7,7 +7,7 @@ from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.schemas import NameEnum
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.note_line import (
+from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
     LanguagePart,

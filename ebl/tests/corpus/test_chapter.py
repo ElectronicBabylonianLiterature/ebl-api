@@ -1,4 +1,5 @@
 import attr
+import pytest
 
 from ebl.corpus.domain.chapter import Chapter, TextLineEntry
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
@@ -14,6 +15,7 @@ from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 MANUSCRIPT_ID = 9001
 COLOPHON = Transliteration.of_iterable(
@@ -66,3 +68,79 @@ def test_text_lines() -> None:
             *[TextLineEntry(line, None) for line in COLOPHON.text_lines],
         ]
     ]
+
+
+def test_invalid_extent() -> None:
+    with pytest.raises(ValueError):
+        Chapter(
+            TextId(0, 0),
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    LineNumber(1),
+                    (LINE_VARIANT_1,),
+                    translation=(
+                        TranslationLine(tuple(), extent=Extent(LineNumber(2))),
+                    ),
+                ),
+            ),
+        )
+
+
+def test_extent_before_translation() -> None:
+    with pytest.raises(ValueError):
+        Chapter(
+            TextId(0, 0),
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(LineNumber(1), (LINE_VARIANT_1,)),
+                Line(
+                    LineNumber(2),
+                    (LINE_VARIANT_2,),
+                    translation=(
+                        TranslationLine(tuple(), extent=Extent(LineNumber(1))),
+                    ),
+                ),
+            ),
+        )
+
+
+def test_overlapping() -> None:
+    with pytest.raises(ValueError):
+        Chapter(
+            TextId(0, 0),
+            manuscripts=(Manuscript(MANUSCRIPT_ID),),
+            lines=(
+                Line(
+                    LineNumber(1),
+                    (LINE_VARIANT_1,),
+                    translation=(
+                        TranslationLine(tuple(), extent=Extent(LineNumber(2))),
+                    ),
+                ),
+                Line(
+                    LineNumber(2),
+                    (LINE_VARIANT_2,),
+                    translation=(TranslationLine(tuple()),),
+                ),
+            ),
+        )
+
+
+def test_overlapping_languages() -> None:
+    Chapter(
+        TextId(0, 0),
+        manuscripts=(Manuscript(MANUSCRIPT_ID),),
+        lines=(
+            Line(
+                LineNumber(1),
+                (LINE_VARIANT_1,),
+                translation=(TranslationLine(tuple(), "en", Extent(LineNumber(2))),),
+            ),
+            Line(
+                LineNumber(2),
+                (LINE_VARIANT_2,),
+                translation=(TranslationLine(tuple(), "de"),),
+            ),
+        ),
+    )

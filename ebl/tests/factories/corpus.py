@@ -20,12 +20,13 @@ from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
     MetricalFootSeparator,
 )
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
@@ -37,6 +38,7 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 
 class ManuscriptFactory(factory.Factory):
@@ -139,6 +141,7 @@ class LineFactory(factory.Factory):
     variants = factory.List([factory.SelfAttribute("..variant")], TupleFactory)
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")
+    translation = (TranslationLine((StringPart("foo"),), "en", None),)
 
 
 class TextIdFactory(factory.Factory):

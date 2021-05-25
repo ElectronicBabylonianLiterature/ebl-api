@@ -22,13 +22,15 @@ from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.transliteration.domain.note_line import NoteLine, StringPart
+from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 
 CATEGORY = 1
@@ -84,8 +86,13 @@ LINE_VARIANT = LineVariant(
     (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
     PARALLEL_LINES,
 )
+TRANSLATION = (TranslationLine((StringPart("foo"),), "en", None),)
 LINE = Line(
-    LINE_NUMBER, (LINE_VARIANT,), IS_SECOND_LINE_OF_PARALLELISM, IS_BEGINNING_OF_SECTION
+    LINE_NUMBER,
+    (LINE_VARIANT,),
+    IS_SECOND_LINE_OF_PARALLELISM,
+    IS_BEGINNING_OF_SECTION,
+    TRANSLATION,
 )
 
 TEXT = Text(
@@ -165,6 +172,7 @@ def test_constructor_sets_correct_fields():
         CHAPTER.lines[0].is_second_line_of_parallelism == IS_SECOND_LINE_OF_PARALLELISM
     )
     assert CHAPTER.lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
+    assert CHAPTER.lines[0].translation == TRANSLATION
 
 
 def test_giving_museum_number_and_accession_is_invalid():

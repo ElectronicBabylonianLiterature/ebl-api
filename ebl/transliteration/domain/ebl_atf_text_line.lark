@@ -1,8 +1,9 @@
 %import common.INT
 %import common.LETTER
-%import .ebl_atf_labels (surface_label)
+%import common.LCASE_LETTER
 
-note_line: "#note: " (emphasis_part | language_part | bibliography_part | string_part)+
+note_line: "#note: " _markup
+_markup: (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
 emphasis_part: "@i{" note_text "}"
 bibliography_part: "@bib{" escaped_text "@" escaped_text "}"
@@ -27,11 +28,16 @@ CF: "cf. "
 PARALLEL_LINE_PREFIX: "// "
 
 
+translation_line: "#tr." TRANSLATION_LANGUAGE [".(" translation_extent ")"] ": " _markup
+TRANSLATION_LANGUAGE: LCASE_LETTER~2
+translation_extent: [labels " "] line_number
+
+
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 ?line_number: line_number_range | single_line_number
 line_number_range: single_line_number "-" single_line_number
-single_line_number: [LETTER "+"] INT [PRIME] [LETTER]
-PRIME: "'" | "′" | "’" 
+single_line_number: [LETTER "+"] INT [ANY_PRIME] [LETTER]
+ANY_PRIME: PRIME | "′" | "’" 
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
@@ -235,9 +241,6 @@ VARIANT_SEPARATOR: "/"
 
 flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
 FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
-UNCERTAIN: "?"
-CORRECTION: "!"
-COLLATION: "*"
 DAMAGE: "#"
 
 modifiers: MODIFIER*
@@ -314,3 +317,26 @@ GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "
               | "Λ" | "λ" | "Μ" | "μ" | "Ν" | "ν" | "Ξ" | "ξ" | "Ο" | "ο"
               | "Π" | "π" | "Ρ" | "ρ" | "Σ" | "σ" | "ς" | "Τ" | "τ" | "Υ"
               | "υ" | "Φ" | "φ" | "Χ" | "χ" | "Ψ" | "ψ" | "Ω" | "ω"
+
+
+labels: surface_label " " column_label
+      | surface_label
+      | column_label
+column_label: ROMAN_NUMERAL status
+ROMAN_NUMERAL: /[ivx]+/
+
+surface_label: surface status
+surface: OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP
+OBVERSE: "o"
+REVERSE:"r"
+BOTTOM: "b.e."
+EDGE: "e."
+LEFT: "l.e."
+RIGHT: "r.e."
+TOP: "t.e."
+
+status: (PRIME | UNCERTAIN | CORRECTION | COLLATION)*
+PRIME: "'"
+UNCERTAIN: "?"
+CORRECTION: "!"
+COLLATION: "*"

@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Optional, Tuple
+from typing import Optional, Sequence, Tuple
 
 import attr
 
@@ -7,6 +7,7 @@ from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf, Composite, Discourse
 from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
 from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.markup import convert_part_sequence, MarkupPart
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -37,10 +38,14 @@ class SealAtLine(AtLine):
 @attr.s(auto_attribs=True, frozen=True)
 class HeadingAtLine(AtLine):
     number: int
+    parts: Sequence[MarkupPart] = attr.ib(
+        converter=convert_part_sequence, default=tuple()
+    )
 
     @property
     def display_value(self) -> str:
-        return f"h{self.number}"
+        parts = f" {''.join(part.value for part in self.parts)}" if self.parts else ""
+        return f"h{self.number}{parts}"
 
 
 @attr.s(auto_attribs=True, frozen=True)

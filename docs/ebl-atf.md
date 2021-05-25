@@ -23,7 +23,7 @@ word-character = ? A-Za-z ?;
 lower-case-letter = ? a-z ?;
 any-character = ? any UTF-8 character ?;
 decimal-digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
-number = { decimal-digit };
+number = { decimal-digit }-;
 
 eol = ? end of line ?;
 ```
@@ -43,6 +43,22 @@ fragment = 'fragment', ' ', free-text;
 generic-object = 'object', ' ', free-text;
 
 status = "'" | '?' | '!' | '*';
+
+markup = { markup-part }-;
+markup-part = emphasis
+            | akkadian
+            | sumerian
+            | emesal
+            | markup-text
+            | bibliography;
+emphasis = '@i{', markup-text, '}';
+akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
+sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
+emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
+bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
+escaped-text = { ( markup-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
+markup-text = { markup-character };
+markup-character = any-character - ( '@' | '{' | '}' );
 ```
 
 ## Lines
@@ -58,6 +74,7 @@ line = empty-line
      | note-line
      | text-line
      | parallel-line
+     | translation-line
      | control-line;
 
 empty-line = '';
@@ -82,7 +99,7 @@ object-with-status = object, [ ' ' ], { status };
 
 column = 'column ', number, [ ' ' ], { status };
 
-heading = 'h', number;
+heading = 'h', number, [ ' ', markup ];
 
 discourse = 'catchline' | 'colophon' | 'date' | 'signature' | 'signatures'
           | 'summary'  | 'witnesses';
@@ -144,21 +161,7 @@ See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginat
 ## Note lines
 
 ```ebnf
-note-line = '#note: ', { note-line-part }-;
-note-line-part = emphasis
-               | akkadian
-               | sumerian
-               | emesal
-               | note-text
-               | bibliography;
-emphasis = '@i{', note-text, '}';
-akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
-sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
-emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
-bibliography = '@bib{', escaped-text, '@', escaped-text, '}';
-escaped-text = { ( note-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
-note-text = { note-character };
-note-character = any-character - ( '@' | '{' | '}' );
+note-line = '#note: ', markup;
 ```
 
 ## Parallel lines
@@ -181,6 +184,23 @@ parallel-fragment = 'F ', museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ],
                     line-number;
 museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 ```
+
+## Translation lines
+
+```ebnf
+translation-line = '#tr', [ '.', language-code ],
+                   [ '.', translation-extent ], ': ', paragraph;
+                   (* If omitted the language-code is en. *)
+language-code = ? ISO 639-1 language code ?;
+translation-extent = '(', [ label, ' ' ] , line-number, ')';
+
+paragraph = markup, [ { eol, { word-separator }- markup }- ];
+```
+
+See:
+
+- [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+- [Translations](http://oracc.museum.upenn.edu/doc/help/editinginatf/translations/index.html)
 
 ## Text lines
 
@@ -603,10 +623,9 @@ chapter-line = line-variant, { eol line-variant };
 line-variant = reconstruction, { eol, manuscript-line };
 reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
 
-manuscript-line = { white-space }, siglum, ' ' , manuscript-label, [ text-line ],
+manuscript-line = { white-space }, siglum, ' ' , label, [ text-line ],
                   paratext;
 paratext = { eol, { white-space },  ( dollar-line | note-line ) };
-manuscript-label = [ surface-label, ' ' ],  [ colum-label, ' ' ];
 white-space = ? space or tab ?;
 
 siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol ) ];
@@ -673,8 +692,7 @@ saving them results in an error until the syntax is corrected.
 ## Labels
 
 ```ebnf
-
-line-number-label = { not-space }-;
+label = [ surface-label, ' ' ],  [ column-label, ' ' ];
 
 column-label = roman-numeral, { status };
 roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
@@ -682,7 +700,6 @@ roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
 
 surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ),
                 { status };
-
 ```
 
 See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html)
