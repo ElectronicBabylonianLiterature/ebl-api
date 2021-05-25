@@ -98,7 +98,7 @@ class FragmentSchema(Schema):
     )
     genres = fields.Nested(GenreSchema, many=True, missing=tuple())
     line_to_vec = fields.List(
-        fields.List(ValueEnum(LineToVecEncoding)), missing=None, data_key="lineToVec"
+        fields.List(ValueEnum(LineToVecEncoding)), missing=tuple(), data_key="lineToVec"
     )
 
     @post_load
@@ -106,15 +106,7 @@ class FragmentSchema(Schema):
         data["joins"] = tuple(data["joins"])
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
-        data["line_to_vec"] = (
-            None
-            if data["line_to_vec"] is None
-            else tuple(
-                tuple(line_to_vec_encoding)
-                for line_to_vec_encoding in data["line_to_vec"]
-            )
-        )
-
+        data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         return Fragment(**data)

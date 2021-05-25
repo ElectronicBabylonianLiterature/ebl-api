@@ -1,5 +1,3 @@
-import pytest
-
 from ebl.fragmentarium.application.fragment_matcher import (
     sort_scores_to_list,
     LineToVecRanking,
@@ -32,19 +30,8 @@ def test_sort_scores_to_list():
     ]
 
 
-@pytest.mark.parametrize(
-    "parameters, expected",
-    [
-        (
-            "BM.11",
-            LineToVecRanking(
-                [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 4)],
-                [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 6)],
-            ),
-        )
-    ],
-)
-def test_line_to_vec(parameters, expected, fragment_matcher, when):
+def test_line_to_vec(fragment_matcher, when):
+    parameters = "BM.11"
     fragment_1_line_to_vec = (LineToVecEncoding.from_list([1, 2, 1, 1]),)
     fragment_2_line_to_vec = (LineToVecEncoding.from_list([2, 1, 1]),)
     fragment_1 = FragmentFactory.build(
@@ -65,8 +52,41 @@ def test_line_to_vec(parameters, expected, fragment_matcher, when):
         .thenReturn(
             [
                 LineToVecEntry(fragment_1.number, "N/A", fragment_1_line_to_vec),
-                LineToVecEntry(fragment_2.number, "N/A", fragment_1_line_to_vec),
+                LineToVecEntry(fragment_2.number, "N/A", fragment_2_line_to_vec),
             ]
         )
     )
-    assert fragment_matcher.rank_line_to_vec(parameters) == expected
+    assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking(
+        [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 3)],
+        [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 5)],
+    )
+
+
+def test_empty_line_to_vec(fragment_matcher, when):
+    parameters = "BM.11"
+    fragment_2_line_to_vec = (LineToVecEncoding.from_list([2, 1, 1]),)
+    fragment_1 = FragmentFactory.build(number=MuseumNumber.of("BM.11"))
+    fragment_2 = FragmentFactory.build(
+        number=MuseumNumber.of("X.1"), line_to_vec=fragment_2_line_to_vec
+    )
+    fragment_3 = FragmentFactory.build(
+        number=MuseumNumber.of("X.2"), line_to_vec=fragment_2_line_to_vec
+    )
+
+    (
+        when(fragment_matcher._fragment_repository)
+        .query_by_museum_number(MuseumNumber.of(parameters))
+        .thenReturn(fragment_1)
+    )
+    (
+        when(fragment_matcher._fragment_repository)
+        .query_transliterated_line_to_vec()
+        .thenReturn(
+            [
+                LineToVecEntry(fragment_1.number, "N/A", tuple()),
+                LineToVecEntry(fragment_2.number, "N/A", fragment_2_line_to_vec),
+                LineToVecEntry(fragment_3.number, "N/A", fragment_2_line_to_vec),
+            ]
+        )
+    )
+    assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking([], [])
