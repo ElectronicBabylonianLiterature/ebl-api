@@ -105,8 +105,12 @@ class Chapter:
             raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
 
     @lines.validator
-    def _validate_extents(self, _, value: Sequence[Line]) -> None:
+    def _validate_translations(self, _, value: Sequence[Line]) -> None:
         line_numbers = {line.number: index for index, line in enumerate(value)}
+        self._validate_extents(line_numbers, value)
+        self._validate_extent_ranges(line_numbers, value)
+
+    def _validate_extents(self, line_numbers, value: Sequence[Line]) -> None:
         errors = [
             f"Invalid extent {translation.extent} in line {line.number.label}."
             for index, line in enumerate(value)
@@ -118,6 +122,7 @@ class Chapter:
         if errors:
             raise ValueError(" ".join(errors))
 
+    def _validate_extent_ranges(self, line_numbers, value: Sequence[Line]) -> None:
         ranges = itertools.groupby(
             sorted(
                 (

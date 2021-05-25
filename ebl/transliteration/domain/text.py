@@ -1,4 +1,3 @@
-from functools import reduce
 from itertools import combinations, groupby, zip_longest
 from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, cast
 
@@ -17,7 +16,10 @@ from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 class LabelsValidator:
     def __init__(self, text: "Text") -> None:
-        self.labels = [
+        self._index = -1
+        self._ranges = []
+        self._errors = []
+        self._labels = [
             (label.column, label.surface, label.line_number) for label in text.labels
         ]
 
@@ -40,7 +42,7 @@ class LabelsValidator:
         ]
 
     def _get_index(self, extent: Extent) -> int:
-        return self.labels.index((extent.column, extent.surface, extent.number))
+        return self._labels.index((extent.column, extent.surface, extent.number))
 
     @singledispatchmethod
     def _validate_line(self, line: Line) -> None:
@@ -50,7 +52,7 @@ class LabelsValidator:
     def _(self, line: TextLine) -> None:
         self._index += 1
 
-    @_validate_line.register(TranslationLine)
+    @_validate_line.register(TranslationLine)  # pyre-ignore[56]
     def _(self, line: TranslationLine) -> None:
         if self._index < 0:
             self._errors.append('Translation "{line.atf}" before any text line.')
