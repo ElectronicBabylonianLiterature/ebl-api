@@ -116,7 +116,7 @@ class Chapter:
             for index, line in enumerate(value)
             for translation in line.translation
             if translation.extent
-            and line_numbers.get(cast(Extent, translation.extent).number, -1) < index
+            and line_numbers.get(cast(Extent, translation.extent).number, -1) <= index
         ]
 
         if errors:
