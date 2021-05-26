@@ -6,7 +6,7 @@ import attr
 
 
 def create_sign_regexp(sign):
-    return fr"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
+    return r"[^\s]+" if sign == "*" else fr"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
 
 
 def create_line_regexp(line):

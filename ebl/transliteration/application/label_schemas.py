@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, ValidationError, fields, post_load
 
 from ebl.schemas import NameEnum
 from ebl.transliteration.domain import atf
@@ -8,12 +8,20 @@ from ebl.transliteration.domain.labels import (
     SurfaceLabel,
     parse_labels,
 )
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
+
+
+def try_parse_labels(value):
+    try:
+        return parse_labels(" ".join(value))
+    except PARSE_ERRORS as error:
+        raise ValidationError(str(error)) from error
 
 
 def labels():
     return fields.Function(
         lambda manuscript_line: [label.to_value() for label in manuscript_line.labels],
-        lambda value: parse_labels(" ".join(value)),
+        try_parse_labels,
         required=True,
     )
 
