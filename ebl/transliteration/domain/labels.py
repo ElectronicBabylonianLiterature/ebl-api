@@ -193,11 +193,8 @@ class LabelTransformer(Transformer):
     def ebl_atf_text_line__surface_label(
         self, surface: Surface, status: Sequence[Status]
     ) -> SurfaceLabel:
+        surface = Surface.from_label(surface)  # pyre-ignore[6]
         return SurfaceLabel.from_label(surface, status)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__surface(self, surface: Token) -> Surface:
-        return Surface.from_label(surface)  # pyre-ignore[6]
 
     def ebl_atf_text_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)

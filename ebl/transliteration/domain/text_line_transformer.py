@@ -177,7 +177,7 @@ class TextLineTransformer(
         return LineBreak.of()
 
     @v_args(inline=True)
-    def ebl_atf_text_line__column(self, number):
+    def ebl_atf_text_line__column_token(self, number):
         return Column.of(number and int(number))
 
     @v_args(inline=True)

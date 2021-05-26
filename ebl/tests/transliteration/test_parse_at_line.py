@@ -14,6 +14,7 @@ from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceL
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.markup import StringPart
 
 
 @pytest.mark.parametrize(
@@ -58,7 +59,8 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
         ("@fragment 1", [ObjectAtLine(ObjectLabel([], atf.Object.FRAGMENT, "1"))]),
         ("@edge a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.EDGE, "a"))]),
         ("@face a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.FACE, "a"))]),
-        ("@h1", [HeadingAtLine(1)]),
+        ("@h1", [HeadingAtLine(1, tuple())]),
+        ("@h1 foo", [HeadingAtLine(1, (StringPart("foo"),))]),
         ("@column 1", [ColumnAtLine(ColumnLabel.from_int(1))]),
         (
             "@column 1!",

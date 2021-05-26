@@ -1,6 +1,10 @@
 %import common.INT
 %import common.LETTER
 %import common.LCASE_LETTER
+%import .ebl_atf_common (free_text)
+%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
+%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (seal, _markup)
 
 note_line: "#note: " _markup
 _markup: (emphasis_part | language_part | bibliography_part | string_part)+
@@ -58,7 +62,7 @@ _require_both: commentary_protocol
              | divider
              | line_break
 _have_both: tabulation
-         | column
+         | column_token
          | erasure
          | word
          | lone_determinative
@@ -91,7 +95,7 @@ divider_variant: divider _VARIANT_SEPARATOR divider
 tabulation: TABULATION
 TABULATION: "($___$)"
 
-column: "&" [COLUMN_NUMBER]
+column_token: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
 
 commentary_protocol: PROTOCOL_QUOTATION
@@ -304,7 +308,7 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
 
 _greek: greek_token (_WORD_SEPARATOR greek_token)*
 ?greek_token: greek_word
-            | column
+            | column_token
 greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosure | greek_word_part)*
 ?greek_word_part: greek_letter
                 | unidentified_sign
@@ -325,8 +329,7 @@ labels: surface_label " " column_label
 column_label: ROMAN_NUMERAL status
 ROMAN_NUMERAL: /[ivx]+/
 
-surface_label: surface status
-surface: OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP
+surface_label: (OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP) status
 OBVERSE: "o"
 REVERSE:"r"
 BOTTOM: "b.e."
@@ -334,6 +337,30 @@ EDGE: "e."
 LEFT: "l.e."
 RIGHT: "r.e."
 TOP: "t.e."
+
+
+?at_line: "@" at_line_value
+
+?at_line_value:  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
+
+surface_with_status: surface " "? status
+
+object_with_status: object " "? status
+
+column: "column " INT " "? status
+
+heading: "h" INT [ " " _markup ]
+
+!discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
+
+divisions: "m=division " free_text [" " INT]
+
+?composite: composite_composite | composite_start | composite_end | composite_milestone
+composite_start: "div " free_text [" " INT]
+composite_end: "end " free_text
+composite_composite: "composite"
+composite_milestone: "m=locator " free_text [" " INT]
+
 
 status: (PRIME | UNCERTAIN | CORRECTION | COLLATION)*
 PRIME: "'"

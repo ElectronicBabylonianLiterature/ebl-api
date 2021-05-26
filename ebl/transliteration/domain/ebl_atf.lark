@@ -3,7 +3,7 @@
 %import common.WS_INLINE
 %import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels)
 %import .ebl_atf_dollar_line (dollar_line)
-%import .ebl_atf_at_line (at_line)
+%import .ebl_atf_text_line (at_line)
 
 ?start: line
 
