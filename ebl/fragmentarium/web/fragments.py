@@ -13,29 +13,6 @@ class FragmentsResource:
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
-        """---
-        description: Gets the fragment with given number,
-        responses:
-          200:
-            description: The fragment
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Fragment'
-          404:
-            description: Fragment not found
-          422:
-            description: Invalid museum number
-        security:
-        - auth0:
-          - read:fragments
-        parameters:
-        - in: path
-          name: number
-          schema:
-            type: string
-            pattern: '^.+?\\.[^.]+(\\.[^.]+)?$'
-        """
         user: User = req.context.user
         fragment, has_photo = self._finder.find(parse_museum_number(number))
         resp.media = create_response_dto(fragment, user, has_photo)

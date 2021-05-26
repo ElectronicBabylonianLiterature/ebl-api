@@ -19,44 +19,6 @@ class FoliosResource:
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, name: str, number: str):
-        """---
-        description: Gets the folio image.
-        responses:
-          200:
-            description: The folio image
-            content:
-              image/jpeg:
-                schema:
-                  type: string
-                  format: binary
-          404:
-            description: The image does not exists
-        security:
-        - auth0:
-          - read:fragments
-          - read:MJG-folios
-          - read:WGL-folios
-          - read:FWG-folios
-          - read:EL-folios
-          - read:AKG-folios
-          - read:WRM-folios
-          - read:CB-folios
-          - read:JS-folios
-          - read:ARG-folios
-        parameters:
-        - in: path
-          name: name
-          description: Folio author abbreviation
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: number
-          description: Folio number
-          required: true
-          schema:
-            type: string
-        """
         check_folio_scope(req.context.user, name)
         file = self._finder.find_folio(Folio(name, number))
 

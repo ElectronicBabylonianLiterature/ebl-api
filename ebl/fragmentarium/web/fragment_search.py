@@ -57,51 +57,6 @@ class FragmentSearch:
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        """---
-        description: >-
-          Finds fragments matching the given query.
-          Exactly one query parameter must be given.
-
-        responses:
-          200:
-            description: Fragments matching the query
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/FragmentInfo'
-          422:
-            description: Incorrect number of query parameters
-        security:
-        - auth0:
-          - read:fragments
-        parameters:
-        - in: query
-          name: number
-          schema:
-            type: string
-        - in: query
-          name: random
-          schema:
-            type: boolean
-        - in: query
-          name: interesting
-          schema:
-            type: boolean
-        - in: query
-          name: latest
-          schema:
-            type: boolean
-        - in: query
-          name: needsRevision
-          schema:
-            type: boolean
-        - in: query
-          name: transliteration
-          schema:
-            type: string
-        """
         infos = self._dispatch(req.params)
         resp.media = ApiFragmentInfoSchema(many=True).dump(infos)
         if req.params.keys() <= CACHED_COMMANDS:
