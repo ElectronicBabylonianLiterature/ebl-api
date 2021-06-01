@@ -1,7 +1,6 @@
 from typing import ClassVar, List, Tuple
 
 import attr
-import pydash
 
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.line_to_vec import LineToVecScore
@@ -56,9 +55,13 @@ class LineToVecRanker:
     def _insert_score(
         self, line_to_vec_score: LineToVecScore, score_results: List[LineToVecScore]
     ) -> None:
-        previous_score = pydash.find(
-            score_results,
-            lambda elem: elem.museum_number == line_to_vec_score.museum_number,
+        previous_score = next(
+            (
+                elem
+                for elem in score_results
+                if elem.museum_number == line_to_vec_score.museum_number
+            ),
+            None,
         )
         if line_to_vec_score.score > (previous_score.score if previous_score else -1):
             score_results.append(line_to_vec_score)
