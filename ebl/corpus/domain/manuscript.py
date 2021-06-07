@@ -37,6 +37,7 @@ class ManuscriptType(SiglumEnum):
     QUOTATION = ("Quotation", "Quo")
     EXCERPT = ("Excerpt", "Ex")
     PARALLEL = ("Parallel", "Par")
+    NONE = ("None", "")
 
 
 class Provenance(SiglumEnumWithParent):
@@ -94,6 +95,7 @@ class Period(SiglumEnumWithParent):
     HELLENISTIC = ("Hellenistic", "Hel", "Late Babylonian")
     PARTHIAN = ("Parthian", "Par", "Late Babylonian")
     UNCERTAIN = ("Uncertain", "Unc", None)
+    NONE = ("None", "", None)
 
 
 @attr.s(auto_attribs=True, frozen=True)

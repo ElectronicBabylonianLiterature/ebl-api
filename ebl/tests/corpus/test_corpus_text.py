@@ -337,7 +337,7 @@ def test_invalid_reconstruction():
 
 
 def test_stage():
-    periods = [period.long_name for period in Period]
+    periods = [period.long_name for period in Period if period is not Period.NONE]
     stages = [stage.value for stage in Stage]
     assert stages == [*periods, "Standard Babylonian"]
 
