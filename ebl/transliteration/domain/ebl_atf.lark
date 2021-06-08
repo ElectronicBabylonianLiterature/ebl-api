@@ -37,6 +37,7 @@ _WHITE_SPACE: WS_INLINE
 _NEWLINE: (CR? LF) 
 
 siglum: [PROVENACE] PERIOD [TYPE] [DISAMBIQUATOR]
+      | "Std" [DISAMBIQUATOR] -> standard_text_siglum
 PROVENACE: "Assa"
          | "Baba"
          | "Ašš"

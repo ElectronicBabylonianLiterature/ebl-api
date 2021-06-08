@@ -628,8 +628,9 @@ manuscript-line = { white-space }, siglum, ' ' , label, [ text-line ],
 paratext = { eol, { white-space },  ( dollar-line | note-line ) };
 white-space = ? space or tab ?;
 
-siglum = [ provenance ], period, [ type ], [ free-text - ( white-space | eol ) ];
-provenance = 'Assa'
+siglum = [ provenance ], period, [ type ], [ siglum_disambiquator ]
+       | 'Std', [ siglum_disambiquator ];
+provenance | 'Assa'
            | 'Ašš'
            | 'Huz'
            | 'Kal'
@@ -679,6 +680,7 @@ type = 'Sch'
      | 'Var'
      | 'Ex'
      | 'Par';
+siglum_disambiquator = free-text - ( white-space | eol );
 ```
 
 ## Validation

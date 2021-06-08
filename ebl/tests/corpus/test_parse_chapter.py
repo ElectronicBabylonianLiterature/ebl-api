@@ -42,11 +42,20 @@ def parse_siglum(siglum):
 @pytest.mark.parametrize("type_", [ManuscriptType.SCHOOL, ManuscriptType.LIBRARY])
 @pytest.mark.parametrize("disambiquator", ["", "a"])
 def test_parse_siglum(
-    period: Period, provenance: Provenance, type_: ManuscriptType, disambiquator
+    period: Period, provenance: Provenance, type_: ManuscriptType, disambiquator: str
 ) -> None:
     assert parse_siglum(
         f"{provenance.abbreviation}{period.abbreviation}{type_.abbreviation}{disambiquator}"
     ) == Siglum(provenance, period, type_, disambiquator)
+
+
+@pytest.mark.parametrize("disambiquator", ["", "a"])
+def test_parse_siglum_standard_text(disambiquator: str) -> None:
+    assert parse_siglum(
+        f"{Provenance.STANDARD_TEXT.abbreviation}{disambiquator}"
+    ) == Siglum(
+        Provenance.STANDARD_TEXT, Period.NONE, ManuscriptType.NONE, disambiquator
+    )
 
 
 def parse_manuscript(atf):
