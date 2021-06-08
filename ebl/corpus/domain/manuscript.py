@@ -41,6 +41,7 @@ class ManuscriptType(SiglumEnum):
 
 
 class Provenance(SiglumEnumWithParent):
+    STANDARD_TEXT = ("Standard Text", "Std", None)
     ASSYRIA = ("Assyria", "Assa", None)
     ASSUR = ("Aššur", "Ašš", "Assyria")
     HUZIRINA = ("Ḫuzirina", "Huz", "Assyria")
