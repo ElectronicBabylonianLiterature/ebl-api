@@ -125,7 +125,7 @@ class Manuscript:
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
     period: Period = Period.NEO_ASSYRIAN
-    provenance: Provenance = Provenance.NINEVEH
+    provenance: Provenance = attr.ib(default=Provenance.NINEVEH)
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
     colophon: Text = Text()
@@ -135,6 +135,21 @@ class Manuscript:
     def validate_accession(self, _, value) -> None:
         if self.museum_number and value:
             raise ValueError("Accession given when museum number present.")
+
+    @provenance.validator
+    def validate_provenance(self, _, value) -> None:
+        if value is Provenance.STANDARD_TEXT and (
+            self.period is not Period.NONE or self.type is not ManuscriptType.NONE
+        ):
+            raise ValueError(
+                "Manuscript must not have period and type when provenance is Standard Text."
+            )
+        elif value is not Provenance.STANDARD_TEXT and (
+            self.period is Period.NONE or self.type is ManuscriptType.NONE
+        ):
+            raise ValueError(
+                "Manuscript must have period and type unless provenance is Standard Text."
+            )
 
     @property
     def colophon_text_lines(self) -> Sequence[TextLine]:
