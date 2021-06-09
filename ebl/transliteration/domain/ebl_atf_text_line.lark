@@ -21,7 +21,8 @@ LANGUAGE: "akk" | "sux" | "es"
 parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [surface_label " "] line_number
 !museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
 DUPLICATES: "&d"
-parallel_text: PARALLEL_LINE_PREFIX [CF] "L " text_id " "  [chapter_name " "] line_number
+parallel_text: PARALLEL_LINE_PREFIX [CF] GENRE " " text_id " "  [chapter_name " "] line_number
+GENRE: "Lex" | "L" | "D"
 text_id: CATEGORY "." INT
 CATEGORY: "0" | /I{1,3}/
 chapter_name: STAGE " " [quoted_string " "] quoted_string 

@@ -65,6 +65,14 @@ from ebl.transliteration.domain.parallel_line import (
             "// L 0.0 1",
             ParallelText(False, Genre.LITERATURE, TextId(0, 0), None, LineNumber(1)),
         ),
+        (
+            "// D I.1 1",
+            ParallelText(False, Genre.DIVINATION, TextId(1, 1), None, LineNumber(1)),
+        ),
+        (
+            "// Lex I.1 1",
+            ParallelText(False, Genre.LEXICOGRAPHY, TextId(1, 1), None, LineNumber(1)),
+        ),
         ("// cf. (name 1)", ParallelComposition(True, "name", LineNumber(1))),
         ("// (name 1)", ParallelComposition(False, "name", LineNumber(1))),
     ],
