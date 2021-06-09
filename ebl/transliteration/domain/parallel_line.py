@@ -17,6 +17,8 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 @unique
 class Genre(Enum):
     LITERATURE = "L"
+    DIVINATION = "D"
+    LEXICOGRAPHY = "Lex"
 
 
 @attr.s(auto_attribs=True, frozen=True)
