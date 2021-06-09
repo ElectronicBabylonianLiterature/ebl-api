@@ -42,6 +42,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
     )
     dto = {
         "textId": {
+            "genre": chapter.text_id.genre.value,
             "category": chapter.text_id.category,
             "index": chapter.text_id.index,
         },

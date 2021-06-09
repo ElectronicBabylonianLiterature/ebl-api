@@ -10,12 +10,12 @@ from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
 )
 from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.genre import Genre
 
 
 class ParallelLineSchema(LineBaseSchema):
@@ -60,7 +60,7 @@ class ChapterNameSchema(Schema):
 
 
 class ParallelTextSchema(ParallelLineSchema):
-    genre = NameEnum(Genre, required=True)
+    genre = NameEnum(Genre, load_only=True)
     text = fields.Nested(TextIdSchema, required=True)
     chapter = fields.Nested(ChapterNameSchema, required=True, allow_none=True)
     line_number = fields.Nested(
@@ -71,7 +71,7 @@ class ParallelTextSchema(ParallelLineSchema):
     def make_line(self, data, **kwargs) -> ParallelText:
         return ParallelText(
             data["has_cf"],
-            data["genre"],
+            data["text"].genre,
             data["text"],
             data["chapter"],
             data["line_number"],

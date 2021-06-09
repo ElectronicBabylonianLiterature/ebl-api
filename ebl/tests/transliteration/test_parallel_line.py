@@ -62,7 +62,7 @@ def test_parallel_fragment(cf, duplicates, surface, display_value) -> None:
 )
 def test_parallel_text(cf, chapter, display_value) -> None:
     genre = Genre.LITERATURE
-    text_id = TextId(1, 1)
+    text_id = TextId(Genre.LITERATURE, 1, 1)
     line_number = LineNumber(1)
     line = ParallelText(cf, genre, text_id, chapter, line_number)
 

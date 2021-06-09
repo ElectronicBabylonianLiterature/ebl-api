@@ -46,8 +46,14 @@ class ChapterId:
     stage: Stage
     name: str
 
-    def to_tuple(self) -> Tuple[int, int, str, str]:
-        return (self.text_id.category, self.text_id.index, self.stage.value, self.name)
+    def to_tuple(self) -> Tuple[str, int, int, str, str]:
+        return (
+            self.text_id.genre.value,
+            self.text_id.category,
+            self.text_id.index,
+            self.stage.value,
+            self.name,
+        )
 
     def __str__(self) -> str:
         return f"{self.text_id} {self.stage} {self.name}"

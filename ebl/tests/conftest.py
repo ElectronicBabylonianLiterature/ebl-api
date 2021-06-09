@@ -135,7 +135,11 @@ class TestTextRepository(MongoTextRepository):
             {"category": id_.category, "index": id_.index}, projection={"_id": False}
         )
         chapters = self._chapters.find_many(
-            {"textId.category": id_.category, "textId.index": id_.index},
+            {
+                "textId.genre": id_.genre.value,
+                "textId.category": id_.category,
+                "textId.index": id_.index,
+            },
             projection={"_id": False, "stage": True, "name": True},
         )
         return TextSchema().load({**text, "chapters": chapters})

@@ -149,6 +149,7 @@ class TextIdFactory(factory.Factory):
     class Meta:
         model = TextId
 
+    genre = factory.fuzzy.FuzzyChoice(Genre)
     category = factory.Sequence(lambda n: n)
     index = factory.Sequence(lambda n: n)
 

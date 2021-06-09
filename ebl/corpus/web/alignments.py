@@ -17,12 +17,13 @@ class AlignmentResource:
         self,
         req: falcon.Request,
         resp: falcon.Response,
+        genre: str,
         category: str,
         index: str,
         stage: str,
         name: str,
     ) -> None:
-        chapter_id = create_chapter_id(category, index, stage, name)
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
         self._corpus.update_alignment(
             chapter_id, AlignmentSchema().load(req.media), req.context.user
         )

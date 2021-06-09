@@ -12,8 +12,15 @@ class ChaptersResource:
 
     @falcon.before(require_scope, "read:texts")
     def on_get(
-        self, _, resp: falcon.Response, category: str, index: str, stage: str, name: str
+        self,
+        _,
+        resp: falcon.Response,
+        genre: str,
+        category: str,
+        index: str,
+        stage: str,
+        name: str,
     ) -> None:
-        chapter_id = create_chapter_id(category, index, stage, name)
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
         chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(chapter)

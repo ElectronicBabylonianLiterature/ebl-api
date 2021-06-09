@@ -16,7 +16,9 @@ def test_get_text(client, bibliography, sign_repository, signs, text_repository)
     text = TextFactory.build(chapters=tuple())
     text_repository.create(text)
 
-    get_result = client.simulate_get(f"/texts/{text.category}/{text.index}")
+    get_result = client.simulate_get(
+        f"/texts/{text.genre.value}/{text.category}/{text.index}"
+    )
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"

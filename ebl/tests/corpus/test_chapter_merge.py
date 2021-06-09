@@ -19,6 +19,7 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.genre import Genre
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)
@@ -406,7 +407,7 @@ def test_merge_line(old: Line, new: Line, expected: Line) -> None:
     assert old.merge(new) == expected
 
 
-TEXT_ID = TextId(0, 0)
+TEXT_ID = TextId(Genre.LITERATURE, 0, 0)
 CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 VERSION = "A"

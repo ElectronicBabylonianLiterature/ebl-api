@@ -25,12 +25,13 @@ class LinesResource:
         self,
         req: falcon.Request,
         resp: falcon.Response,
+        genre: str,
         category: str,
         index: str,
         stage: str,
         name: str,
     ) -> None:
-        chapter_id = create_chapter_id(category, index, stage, name)
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
         self._corpus.update_lines(
             chapter_id, LinesDtoSchema().load(req.media)["lines"], req.context.user
         )
@@ -48,12 +49,13 @@ class LinesImportResource:
         self,
         req: falcon.Request,
         resp: falcon.Response,
+        genre: str,
         category: str,
         index: str,
         stage: str,
         name: str,
     ) -> None:
-        chapter_id = create_chapter_id(category, index, stage, name)
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
         self._corpus.import_lines(chapter_id, req.media["atf"], req.context.user)
         updated_chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(updated_chapter)

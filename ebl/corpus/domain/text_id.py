@@ -1,15 +1,17 @@
 import attr
 import roman
+from ebl.transliteration.domain.genre import Genre
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class TextId:
+    genre: Genre
     category: int
     index: int
 
     def __str__(self) -> str:
         return (
-            f"{self.category}.{self.index}"
+            f"{self.genre.value} {self.category}.{self.index}"
             if self.category < 1
-            else f"{roman.toRoman(self.category)}.{self.index}"
+            else f"{self.genre.value} {roman.toRoman(self.category)}.{self.index}"
         )

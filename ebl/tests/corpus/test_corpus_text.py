@@ -107,7 +107,7 @@ TEXT = Text(
     (ChapterListing(STAGE, CHAPTER_NAME),),
 )
 
-TEXT_ID = TextId(CATEGORY, INDEX)
+TEXT_ID = TextId(GENRE, CATEGORY, INDEX)
 CHAPTER = Chapter(
     TEXT_ID,
     CLASSIFICATION,
@@ -136,7 +136,7 @@ CHAPTER = Chapter(
 
 
 def test_text_constructor_sets_correct_fields():
-    assert TEXT.id == TextId(CATEGORY, INDEX)
+    assert TEXT.id == TextId(GENRE, CATEGORY, INDEX)
     assert TEXT.genre == GENRE
     assert TEXT.category == CATEGORY
     assert TEXT.index == INDEX
@@ -148,7 +148,7 @@ def test_text_constructor_sets_correct_fields():
 
 
 def test_constructor_sets_correct_fields():
-    assert CHAPTER.text_id == TextId(CATEGORY, INDEX)
+    assert CHAPTER.text_id == TextId(GENRE, CATEGORY, INDEX)
     assert CHAPTER.classification == CLASSIFICATION
     assert CHAPTER.stage == STAGE
     assert CHAPTER.version == VERSION

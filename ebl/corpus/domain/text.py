@@ -25,4 +25,4 @@ class Text:
 
     @property
     def id(self) -> TextId:
-        return TextId(self.category, self.index)
+        return TextId(self.genre, self.category, self.index)

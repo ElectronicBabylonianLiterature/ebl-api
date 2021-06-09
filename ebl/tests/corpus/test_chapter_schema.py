@@ -69,6 +69,7 @@ def strip_documents(chapter: Chapter) -> Chapter:
 def to_dict(chapter: Chapter, include_documents=False):
     return {
         "textId": {
+            "genre": chapter.text_id.genre.value,
             "category": chapter.text_id.category,
             "index": chapter.text_id.index,
         },
