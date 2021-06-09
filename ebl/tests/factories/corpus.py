@@ -39,6 +39,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.translation_line import TranslationLine
+from ebl.transliteration.domain.genre import Genre
 
 
 class ManuscriptFactory(factory.Factory):
@@ -184,6 +185,7 @@ class TextFactory(factory.Factory):
     class Meta:
         model = Text
 
+    genre = factory.fuzzy.FuzzyChoice(Genre)
     category = factory.Sequence(lambda n: n)
     index = factory.Sequence(lambda n: n)
     name = factory.Faker("sentence")

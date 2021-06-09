@@ -22,7 +22,7 @@ from ebl.corpus.domain.manuscript import (
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.schemas import ValueEnum
+from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
     NoteLineSchema,
@@ -37,6 +37,7 @@ from ebl.transliteration.application.text_schema import (
 )
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.application.label_schemas import labels
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.corpus.domain.text_id import TextId
 
@@ -224,6 +225,7 @@ class ChapterListingSchema(Schema):
 
 
 class TextSchema(Schema):
+    genre = NameEnum(Genre, missing=Genre.LITERATURE)
     category = fields.Integer(required=True, validate=validate.Range(min=0))
     index = fields.Integer(required=True, validate=validate.Range(min=0))
     name = fields.String(required=True, validate=validate.Length(min=1))
@@ -236,6 +238,7 @@ class TextSchema(Schema):
     @post_load
     def make_text(self, data: dict, **kwargs) -> Text:
         return Text(
+            data["genre"],
             data["category"],
             data["index"],
             data["name"],
