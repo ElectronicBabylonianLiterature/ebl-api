@@ -53,7 +53,7 @@ class ManuscriptFactory(factory.Factory):
     accession = factory.Sequence(lambda n: f"A.{n}" if pydash.is_even(n) else "")
     period_modifier = factory.fuzzy.FuzzyChoice(PeriodModifier)
     period = factory.fuzzy.FuzzyChoice(set(Period) - {Period.NONE})
-    provenance = factory.fuzzy.FuzzyChoice(Provenance)
+    provenance = factory.fuzzy.FuzzyChoice(set(Provenance) - {Provenance.STANDARD_TEXT})
     type = factory.fuzzy.FuzzyChoice(set(ManuscriptType) - {ManuscriptType.NONE})
     notes = factory.Faker("sentence")
     colophon = Transliteration.of_iterable(

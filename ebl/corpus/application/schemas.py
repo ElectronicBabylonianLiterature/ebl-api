@@ -1,4 +1,11 @@
-from marshmallow import Schema, fields, post_load, validate
+from marshmallow import (
+    Schema,
+    validates_schema,
+    ValidationError,
+    fields,
+    post_load,
+    validate,
+)
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.domain.chapter import Chapter, Classification
@@ -9,6 +16,8 @@ from ebl.corpus.domain.manuscript import (
     Period,
     PeriodModifier,
     Provenance,
+    is_invalid_non_standard_text,
+    is_invalid_standard_text,
 )
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
@@ -62,6 +71,20 @@ class ManuscriptSchema(Schema):
         TransliterationSchema, missing=Transliteration()
     )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
+
+    @validates_schema
+    def validate_provenance(self, data, **kwargs):
+        provenace = data["provenance"]
+        period = data["period"]
+        type_ = data["type"]
+        if is_invalid_standard_text(provenace, period, type_):
+            raise ValidationError(
+                "period and type must be None if provenance is Standard Text"
+            )
+        elif is_invalid_non_standard_text(provenace, period, type_):
+            raise ValidationError(
+                "period and type must not be None if provenance is not Standard Text"
+            )
 
     @post_load
     def make_manuscript(self, data: dict, **kwargs) -> Manuscript:

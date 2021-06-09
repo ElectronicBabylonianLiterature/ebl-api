@@ -125,51 +125,77 @@ def test_updating_invalid_stage(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
-AMBIGUOUS_MANUSCRIPTS = [
-    {
-        "id": 1,
-        "siglumDisambiguator": "1c",
-        "museumNumber": "X.1",
-        "accession": "",
-        "periodModifier": PeriodModifier.NONE.value,
-        "period": Period.OLD_ASSYRIAN.long_name,
-        "provenance": Provenance.BABYLON.long_name,
-        "type": ManuscriptType.SCHOOL.long_name,
-        "notes": "",
-        "colophon": "",
-        "references": [],
-    },
-    {
-        "id": 2,
-        "siglumDisambiguator": "1c",
-        "museumNumber": "X.2",
-        "accession": "",
-        "periodModifier": PeriodModifier.NONE.value,
-        "period": Period.OLD_ASSYRIAN.long_name,
-        "provenance": Provenance.BABYLON.long_name,
-        "type": ManuscriptType.SCHOOL.long_name,
-        "notes": "",
-        "colophon": "",
-        "references": [],
-    },
-]
+AMBIGUOUS_MANUSCRIPTS = {
+    "manuscripts": [
+        {
+            "id": 1,
+            "siglumDisambiguator": "1c",
+            "museumNumber": "X.1",
+            "accession": "",
+            "periodModifier": PeriodModifier.NONE.value,
+            "period": Period.OLD_ASSYRIAN.long_name,
+            "provenance": Provenance.BABYLON.long_name,
+            "type": ManuscriptType.SCHOOL.long_name,
+            "notes": "",
+            "colophon": "",
+            "references": [],
+        },
+        {
+            "id": 2,
+            "siglumDisambiguator": "1c",
+            "museumNumber": "X.2",
+            "accession": "",
+            "periodModifier": PeriodModifier.NONE.value,
+            "period": Period.OLD_ASSYRIAN.long_name,
+            "provenance": Provenance.BABYLON.long_name,
+            "type": ManuscriptType.SCHOOL.long_name,
+            "notes": "",
+            "colophon": "",
+            "references": [],
+        },
+    ],
+    "uncertainFragments": [],
+}
 
 
-INVALID_MUSEUM_NUMBER = [
-    {
-        "id": 1,
-        "siglumDisambiguator": "1c",
-        "museumNumber": "invalid",
-        "accession": "",
-        "periodModifier": PeriodModifier.NONE.value,
-        "period": Period.OLD_ASSYRIAN.long_name,
-        "provenance": Provenance.BABYLON.long_name,
-        "type": ManuscriptType.SCHOOL.long_name,
-        "notes": "",
-        "colophon": "",
-        "references": [],
-    }
-]
+INVALID_MUSEUM_NUMBER = {
+    "manuscripts": [
+        {
+            "id": 1,
+            "siglumDisambiguator": "1c",
+            "museumNumber": "invalid",
+            "accession": "",
+            "periodModifier": PeriodModifier.NONE.value,
+            "period": Period.OLD_ASSYRIAN.long_name,
+            "provenance": Provenance.BABYLON.long_name,
+            "type": ManuscriptType.SCHOOL.long_name,
+            "notes": "",
+            "colophon": "",
+            "references": [],
+        }
+    ],
+    "uncertainFragments": [],
+}
+
+
+INVALID_PROVENANCE = {
+    "manuscripts": [
+        {
+            "id": 1,
+            "siglumDisambiguator": "1c",
+            "museumNumber": "invalid",
+            "accession": "",
+            "periodModifier": PeriodModifier.NONE.value,
+            "period": Period.OLD_ASSYRIAN.long_name,
+            "provenance": Provenance.STANDARD_TEXT.long_name,
+            "type": ManuscriptType.NONE.long_name,
+            "notes": "",
+            "colophon": "",
+            "references": [],
+        }
+    ],
+    "uncertainFragments": [],
+}
 
 
 @pytest.mark.parametrize(
@@ -177,8 +203,9 @@ INVALID_MUSEUM_NUMBER = [
     [
         [[{}], falcon.HTTP_BAD_REQUEST],
         [[], falcon.HTTP_UNPROCESSABLE_ENTITY],
-        [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_UNPROCESSABLE_ENTITY],
+        [AMBIGUOUS_MANUSCRIPTS, falcon.HTTP_BAD_REQUEST],
         [INVALID_MUSEUM_NUMBER, falcon.HTTP_BAD_REQUEST],
+        [INVALID_PROVENANCE, falcon.HTTP_BAD_REQUEST],
         [
             {"manuscripts": [], "uncertainFragments": ["invalid"]},
             falcon.HTTP_BAD_REQUEST,

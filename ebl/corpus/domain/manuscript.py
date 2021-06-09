@@ -117,6 +117,18 @@ class Siglum:
         )
 
 
+def is_invalid_standard_text(provenance, period, type_) -> bool:
+    return provenance is Provenance.STANDARD_TEXT and (
+        period is not Period.NONE or type_ is not ManuscriptType.NONE
+    )
+
+
+def is_invalid_non_standard_text(provenance, period, type_) -> bool:
+    return provenance is not Provenance.STANDARD_TEXT and (
+        period is Period.NONE or type_ is ManuscriptType.NONE
+    )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
     id: int
@@ -138,15 +150,11 @@ class Manuscript:
 
     @provenance.validator
     def validate_provenance(self, _, value) -> None:
-        if value is Provenance.STANDARD_TEXT and (
-            self.period is not Period.NONE or self.type is not ManuscriptType.NONE
-        ):
+        if is_invalid_standard_text(value, self.period, self.type):
             raise ValueError(
                 "Manuscript must not have period and type when provenance is Standard Text."
             )
-        elif value is not Provenance.STANDARD_TEXT and (
-            self.period is Period.NONE or self.type is ManuscriptType.NONE
-        ):
+        elif is_invalid_non_standard_text(value, self.period, self.type):
             raise ValueError(
                 "Manuscript must have period and type unless provenance is Standard Text."
             )
