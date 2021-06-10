@@ -70,11 +70,7 @@ class ParallelTextSchema(ParallelLineSchema):
     @post_load
     def make_line(self, data, **kwargs) -> ParallelText:
         return ParallelText(
-            data["has_cf"],
-            data["text"].genre,
-            data["text"],
-            data["chapter"],
-            data["line_number"],
+            data["has_cf"], data["text"], data["chapter"], data["line_number"]
         )
 
 

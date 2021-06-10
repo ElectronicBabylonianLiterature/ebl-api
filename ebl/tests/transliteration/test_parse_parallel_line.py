@@ -4,12 +4,12 @@ from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -37,7 +37,6 @@ from ebl.transliteration.domain.parallel_line import (
             '// cf. L I.1 OB "my name" 1',
             ParallelText(
                 True,
-                Genre.LITERATURE,
                 TextId(Genre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
@@ -47,7 +46,6 @@ from ebl.transliteration.domain.parallel_line import (
             '// cf. L I.1 OB "my version" "my name" 1',
             ParallelText(
                 True,
-                Genre.LITERATURE,
                 TextId(Genre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "my version", "my name"),
                 LineNumber(1),
@@ -55,53 +53,23 @@ from ebl.transliteration.domain.parallel_line import (
         ),
         (
             "// L I.1 1",
-            ParallelText(
-                False,
-                Genre.LITERATURE,
-                TextId(Genre.LITERATURE, 1, 1),
-                None,
-                LineNumber(1),
-            ),
+            ParallelText(False, TextId(Genre.LITERATURE, 1, 1), None, LineNumber(1)),
         ),
         (
             "// L III.10 1",
-            ParallelText(
-                False,
-                Genre.LITERATURE,
-                TextId(Genre.LITERATURE, 3, 10),
-                None,
-                LineNumber(1),
-            ),
+            ParallelText(False, TextId(Genre.LITERATURE, 3, 10), None, LineNumber(1)),
         ),
         (
             "// L 0.0 1",
-            ParallelText(
-                False,
-                Genre.LITERATURE,
-                TextId(Genre.LITERATURE, 0, 0),
-                None,
-                LineNumber(1),
-            ),
+            ParallelText(False, TextId(Genre.LITERATURE, 0, 0), None, LineNumber(1)),
         ),
         (
             "// D I.1 1",
-            ParallelText(
-                False,
-                Genre.DIVINATION,
-                TextId(Genre.DIVINATION, 1, 1),
-                None,
-                LineNumber(1),
-            ),
+            ParallelText(False, TextId(Genre.DIVINATION, 1, 1), None, LineNumber(1)),
         ),
         (
             "// Lex I.1 1",
-            ParallelText(
-                False,
-                Genre.LEXICOGRAPHY,
-                TextId(Genre.LEXICOGRAPHY, 1, 1),
-                None,
-                LineNumber(1),
-            ),
+            ParallelText(False, TextId(Genre.LEXICOGRAPHY, 1, 1), None, LineNumber(1)),
         ),
         ("// cf. (name 1)", ParallelComposition(True, "name", LineNumber(1))),
         ("// (name 1)", ParallelComposition(False, "name", LineNumber(1))),

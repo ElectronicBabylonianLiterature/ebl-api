@@ -33,6 +33,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
@@ -46,7 +47,6 @@ from ebl.transliteration.domain.markup import (
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -567,7 +567,6 @@ LINES = [
     (
         ParallelText(
             True,
-            Genre.LITERATURE,
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
@@ -714,7 +713,6 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
     (
         ParallelText(
             True,
-            Genre.LITERATURE,
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
