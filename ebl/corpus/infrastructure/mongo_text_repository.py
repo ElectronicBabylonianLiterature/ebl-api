@@ -68,16 +68,23 @@ class MongoTextRepository(TextRepository):
 
     def create_indexes(self) -> None:
         self._texts.create_index(
-            [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
+            [
+                ("genre", pymongo.ASCENDING),
+                ("category", pymongo.ASCENDING),
+                ("index", pymongo.ASCENDING),
+            ],
+            unique=True,
         )
         self._chapters.create_index(
             [
+                ("textId.genre", pymongo.ASCENDING),
                 ("textId.category", pymongo.ASCENDING),
                 ("textId.index", pymongo.ASCENDING),
             ]
         )
         self._chapters.create_index(
             [
+                ("textId.genre", pymongo.ASCENDING),
                 ("textId.category", pymongo.ASCENDING),
                 ("textId.index", pymongo.ASCENDING),
                 ("order", pymongo.ASCENDING),
@@ -85,6 +92,7 @@ class MongoTextRepository(TextRepository):
         )
         self._chapters.create_index(
             [
+                ("textId.genre", pymongo.ASCENDING),
                 ("textId.category", pymongo.ASCENDING),
                 ("textId.index", pymongo.ASCENDING),
                 ("stage", pymongo.ASCENDING),
