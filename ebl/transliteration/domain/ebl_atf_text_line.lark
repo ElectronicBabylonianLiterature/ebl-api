@@ -32,7 +32,7 @@ CF: "cf. "
 PARALLEL_LINE_PREFIX: "// "
 
 
-translation_line: "#tr." TRANSLATION_LANGUAGE [".(" translation_extent ")"] ": " _markup
+translation_line: "#tr" [ "." TRANSLATION_LANGUAGE ] [".(" translation_extent ")"] ": " _markup
 TRANSLATION_LANGUAGE: LCASE_LETTER~2
 translation_extent: [labels " "] line_number
 

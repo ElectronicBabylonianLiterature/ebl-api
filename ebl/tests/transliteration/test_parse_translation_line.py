@@ -11,6 +11,7 @@ from ebl.transliteration.domain.atf import Surface
 @pytest.mark.parametrize(
     "atf,expected_line",
     [
+        ("#tr: translation", TranslationLine((StringPart("translation"),), "en", None)),
         (
             "#tr.en: translation",
             TranslationLine((StringPart("translation"),), "en", None),
@@ -19,6 +20,12 @@ from ebl.transliteration.domain.atf import Surface
             "#tr.ar.(2): translation",
             TranslationLine(
                 (StringPart("translation"),), "ar", Extent(LineNumber(2), tuple())
+            ),
+        ),
+        (
+            "#tr.(2): translation",
+            TranslationLine(
+                (StringPart("translation"),), "en", Extent(LineNumber(2), tuple())
             ),
         ),
         (

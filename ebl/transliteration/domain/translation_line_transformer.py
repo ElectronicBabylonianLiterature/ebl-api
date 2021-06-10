@@ -11,7 +11,9 @@ class TranslationLineTransformer(LabelTransformer, MarkupTransformer):
     def translation_line(
         self, language, extent, *markup: MarkupPart
     ) -> TranslationLine:
-        return TranslationLine(tuple(markup), language.value, extent)
+        return TranslationLine(
+            tuple(markup), language.value if language else "en", extent
+        )
 
     @v_args(inline=True)
     def ebl_atf_text_line__translation_extent(self, labels, line_number) -> Extent:
