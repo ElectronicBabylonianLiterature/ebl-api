@@ -100,6 +100,7 @@ class ManuscriptSchema(Schema):
             data["type"],
             data["notes"],
             data["colophon"],
+            Transliteration(),
             tuple(data["references"]),
         )
 

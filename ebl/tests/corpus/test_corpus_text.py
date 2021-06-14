@@ -57,6 +57,9 @@ NOTES = "some notes"
 COLOPHON = Transliteration.of_iterable(
     [TextLine(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
 )
+UNPLACED_LINES = Transliteration.of_iterable(
+    [TextLine(LineNumber(4, True), (Word.of([Reading.of_name("bu")]),))]
+)
 REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumber(1)
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
@@ -127,6 +130,7 @@ CHAPTER = Chapter(
             TYPE,
             NOTES,
             COLOPHON,
+            UNPLACED_LINES,
             REFERENCES,
         ),
     ),
@@ -168,6 +172,7 @@ def test_constructor_sets_correct_fields():
     assert CHAPTER.manuscripts[0].type == TYPE
     assert CHAPTER.manuscripts[0].notes == NOTES
     assert CHAPTER.manuscripts[0].colophon == COLOPHON
+    assert CHAPTER.manuscripts[0].unplaced_lines == UNPLACED_LINES
     assert CHAPTER.manuscripts[0].references == REFERENCES
     assert CHAPTER.lines[0].number == LINE_NUMBER
     assert CHAPTER.lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION

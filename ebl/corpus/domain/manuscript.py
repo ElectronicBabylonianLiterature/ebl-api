@@ -141,6 +141,7 @@ class Manuscript:
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
     colophon: Text = Text()
+    unplaced_lines: Text = Text()
     references: Sequence[Reference] = tuple()
 
     @accession.validator
