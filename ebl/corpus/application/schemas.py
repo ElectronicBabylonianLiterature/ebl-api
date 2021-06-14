@@ -1,13 +1,14 @@
 from marshmallow import (
     Schema,
-    validates_schema,
     ValidationError,
     fields,
     post_load,
     validate,
+    validates_schema,
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
@@ -23,6 +24,7 @@ from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
+from ebl.transliteration.application.label_schemas import labels
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
     NoteLineSchema,
@@ -36,10 +38,8 @@ from ebl.transliteration.application.text_schema import (
     TextSchema as TransliterationSchema,
 )
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.application.label_schemas import labels
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
-from ebl.corpus.domain.text_id import TextId
 
 
 class ManuscriptSchema(Schema):
@@ -172,16 +172,6 @@ class LineSchema(Schema):
             data["is_beginning_of_section"],
             tuple(data["translation"]),
         )
-
-
-class TextIdSchema(Schema):
-    genre = ValueEnum(Genre, missing=Genre.LITERATURE)
-    category = fields.Integer(required=True, validate=validate.Range(min=0))
-    index = fields.Integer(required=True, validate=validate.Range(min=0))
-
-    @post_load
-    def make_text_id(self, data: dict, **kwargs) -> TextId:
-        return TextId(data["genre"], data["category"], data["index"])
 
 
 class ChapterSchema(Schema):
