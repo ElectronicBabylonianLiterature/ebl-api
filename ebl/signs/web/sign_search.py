@@ -4,7 +4,6 @@ import falcon
 
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
-from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepository
 from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.users.web.require_scope import require_scope
