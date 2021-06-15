@@ -60,6 +60,9 @@ class ManuscriptFactory(factory.Factory):
     colophon = Transliteration.of_iterable(
         [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
     )
+    unplaced_lines = Transliteration.of_iterable(
+        [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("bu")]),))]
+    )
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )

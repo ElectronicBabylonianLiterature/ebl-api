@@ -71,6 +71,9 @@ class ManuscriptSchema(Schema):
     colophon: fields.Field = fields.Nested(
         TransliterationSchema, missing=Transliteration()
     )
+    unplaced_lines: fields.Field = fields.Nested(
+        TransliterationSchema, missing=Transliteration(), data_key="unplacedLines"
+    )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
 
     @validates_schema
@@ -100,7 +103,7 @@ class ManuscriptSchema(Schema):
             data["type"],
             data["notes"],
             data["colophon"],
-            Transliteration(),
+            data["unplaced_lines"],
             tuple(data["references"]),
         )
 

@@ -97,6 +97,7 @@ def to_dict(chapter: Chapter, include_documents=False):
                 "type": manuscript.type.long_name,
                 "notes": manuscript.notes,
                 "colophon": TextSchema().dump(manuscript.colophon),
+                "unplacedLines": TextSchema().dump(manuscript.unplaced_lines),
                 "references": (
                     ApiReferenceSchema if include_documents else ReferenceSchema
                 )().dump(manuscript.references, many=True),

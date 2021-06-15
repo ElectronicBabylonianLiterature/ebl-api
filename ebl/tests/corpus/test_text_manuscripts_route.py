@@ -87,6 +87,7 @@ def test_updating_invalid_reference(
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
         "colophon": "",
+        "unplacedLines": "",
         "references": [ReferenceSchema().dump(ReferenceFactory.build())],
     }
 
@@ -138,6 +139,7 @@ AMBIGUOUS_MANUSCRIPTS = {
             "type": ManuscriptType.SCHOOL.long_name,
             "notes": "",
             "colophon": "",
+            "unplacedLines": "",
             "references": [],
         },
         {
@@ -151,6 +153,7 @@ AMBIGUOUS_MANUSCRIPTS = {
             "type": ManuscriptType.SCHOOL.long_name,
             "notes": "",
             "colophon": "",
+            "unplacedLines": "",
             "references": [],
         },
     ],
@@ -171,6 +174,7 @@ INVALID_MUSEUM_NUMBER = {
             "type": ManuscriptType.SCHOOL.long_name,
             "notes": "",
             "colophon": "",
+            "unplacedLines": "",
             "references": [],
         }
     ],
@@ -191,6 +195,7 @@ INVALID_PROVENANCE = {
             "type": ManuscriptType.NONE.long_name,
             "notes": "",
             "colophon": "",
+            "unplacedLines": "",
             "references": [],
         }
     ],

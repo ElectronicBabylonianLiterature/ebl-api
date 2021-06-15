@@ -49,7 +49,7 @@ class MuseumNumberString(fields.String):
             raise ValidationError("Invalid museum number.", attr) from error
 
 
-def _deserialize_colophon(value):
+def _deserialize_transliteration(value):
     try:
         return parse_atf_lark(value)
     except TransliterationError as error:
@@ -59,7 +59,15 @@ def _deserialize_colophon(value):
 class ApiManuscriptSchema(ManuscriptSchema):
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
     colophon = fields.Function(
-        lambda manuscript: manuscript.colophon.atf, _deserialize_colophon, required=True
+        lambda manuscript: manuscript.colophon.atf,
+        _deserialize_transliteration,
+        required=True,
+    )
+    unplaced_lines = fields.Function(
+        lambda manuscript: manuscript.unplaced_lines.atf,
+        _deserialize_transliteration,
+        required=True,
+        data_key="unplacedLines",
     )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
 
