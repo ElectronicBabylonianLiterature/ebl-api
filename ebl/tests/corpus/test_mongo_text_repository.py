@@ -6,6 +6,7 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.genre import Genre
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -77,7 +78,7 @@ def test_finding_text(database, text_repository):
 
 def test_find_raises_exception_if_text_not_found(text_repository):
     with pytest.raises(NotFoundError):
-        text_repository.find(TextId(1, 1))
+        text_repository.find(TextId(Genre.LITERATURE, 1, 1))
 
 
 @pytest.mark.xfail(reason="pymongo does not support $let")

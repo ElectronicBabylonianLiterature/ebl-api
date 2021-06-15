@@ -25,6 +25,7 @@ def chapter_not_found(id_: ChapterId) -> Exception:
 
 def chapter_id_query(id_: ChapterId) -> dict:
     return {
+        "textId.genre": id_.text_id.genre.value,
         "textId.category": id_.text_id.category,
         "textId.index": id_.text_id.index,
         "stage": id_.stage.value,
@@ -37,12 +38,13 @@ def text_pipeline() -> List[dict]:
         {
             "$lookup": {
                 "from": CHAPTERS_COLLECTION,
-                "let": {"category": "$category", "index": "$index"},
+                "let": {"genre": "$genre", "category": "$category", "index": "$index"},
                 "pipeline": [
                     {
                         "$match": {
                             "$expr": {
                                 "$and": [
+                                    {"$eq": ["$textId.genre", "$$genre"]},
                                     {"$eq": ["$textId.category", "$$category"]},
                                     {"$eq": ["$textId.index", "$$index"]},
                                 ]
@@ -66,16 +68,23 @@ class MongoTextRepository(TextRepository):
 
     def create_indexes(self) -> None:
         self._texts.create_index(
-            [("category", pymongo.ASCENDING), ("index", pymongo.ASCENDING)], unique=True
+            [
+                ("genre", pymongo.ASCENDING),
+                ("category", pymongo.ASCENDING),
+                ("index", pymongo.ASCENDING),
+            ],
+            unique=True,
         )
         self._chapters.create_index(
             [
+                ("textId.genre", pymongo.ASCENDING),
                 ("textId.category", pymongo.ASCENDING),
                 ("textId.index", pymongo.ASCENDING),
             ]
         )
         self._chapters.create_index(
             [
+                ("textId.genre", pymongo.ASCENDING),
                 ("textId.category", pymongo.ASCENDING),
                 ("textId.index", pymongo.ASCENDING),
                 ("order", pymongo.ASCENDING),
@@ -83,6 +92,7 @@ class MongoTextRepository(TextRepository):
         )
         self._chapters.create_index(
             [
+                ("textId.genre", pymongo.ASCENDING),
                 ("textId.category", pymongo.ASCENDING),
                 ("textId.index", pymongo.ASCENDING),
                 ("stage", pymongo.ASCENDING),

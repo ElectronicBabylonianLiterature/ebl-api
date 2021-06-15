@@ -1,13 +1,9 @@
 from marshmallow import Schema, fields
 
+from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.schemas import ValueEnum
-
-
-class TextIdSchema(Schema):
-    category = fields.Integer()
-    index = fields.Integer()
 
 
 class ChapterIdSchema(Schema):

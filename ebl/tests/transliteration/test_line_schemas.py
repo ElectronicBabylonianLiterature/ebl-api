@@ -33,6 +33,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     DocumentOrientedGloss,
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
@@ -46,7 +47,6 @@ from ebl.transliteration.domain.markup import (
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -567,8 +567,7 @@ LINES = [
     (
         ParallelText(
             True,
-            Genre.LITERATURE,
-            TextId(1, 1),
+            TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
         ),
@@ -582,8 +581,7 @@ LINES = [
             ],
             "displayValue": 'cf. L I.1 OB "version" "name" 1',
             "hasCf": True,
-            "genre": "LITERATURE",
-            "text": {"category": 1, "index": 1},
+            "text": {"genre": "L", "category": 1, "index": 1},
             "chapter": {
                 "stage": "Old Babylonian",
                 "version": "version",
@@ -710,6 +708,33 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             "type": "HeadingAtLine",
             "number": 1,
             "displayValue": "h1",
+        },
+    ),
+    (
+        ParallelText(
+            True,
+            TextId(Genre.LITERATURE, 1, 1),
+            ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
+            LineNumber(1),
+        ),
+        {
+            "type": "ParallelText",
+            "prefix": "//",
+            "content": [
+                OneOfTokenSchema().dump(
+                    ValueToken.of('cf. L I.1 OB "version" "name" 1')
+                )
+            ],
+            "displayValue": 'cf. L I.1 OB "version" "name" 1',
+            "hasCf": True,
+            "genre": "LITERATURE",
+            "text": {"category": 1, "index": 1},
+            "chapter": {
+                "stage": "Old Babylonian",
+                "version": "version",
+                "name": "name",
+            },
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
     ),
 ]

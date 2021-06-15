@@ -16,7 +16,10 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.genre import Genre
 
+
+GENRE = Genre.LITERATURE
 MANUSCRIPT_ID = 9001
 COLOPHON = Transliteration.of_iterable(
     [EmptyLine(), TextLine(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
@@ -49,7 +52,7 @@ LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
 SIGNS = ("FOO BAR",)
 CHAPTER = Chapter(
-    TextId(0, 0),
+    TextId(GENRE, 0, 0),
     manuscripts=(Manuscript(MANUSCRIPT_ID, colophon=COLOPHON),),
     lines=(LINE_1, LINE_2, LINE_3),
     signs=SIGNS,
@@ -73,7 +76,7 @@ def test_text_lines() -> None:
 def test_invalid_extent() -> None:
     with pytest.raises(ValueError):
         Chapter(
-            TextId(0, 0),
+            TextId(GENRE, 0, 0),
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
@@ -90,7 +93,7 @@ def test_invalid_extent() -> None:
 def test_extent_before_translation() -> None:
     with pytest.raises(ValueError):
         Chapter(
-            TextId(0, 0),
+            TextId(GENRE, 0, 0),
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(LineNumber(1), (LINE_VARIANT_1,)),
@@ -108,7 +111,7 @@ def test_extent_before_translation() -> None:
 def test_overlapping() -> None:
     with pytest.raises(ValueError):
         Chapter(
-            TextId(0, 0),
+            TextId(GENRE, 0, 0),
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
             lines=(
                 Line(
@@ -129,7 +132,7 @@ def test_overlapping() -> None:
 
 def test_overlapping_languages() -> None:
     Chapter(
-        TextId(0, 0),
+        TextId(GENRE, 0, 0),
         manuscripts=(Manuscript(MANUSCRIPT_ID),),
         lines=(
             Line(

@@ -4,10 +4,10 @@ import roman
 from ebl.corpus.domain.chapter import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import LabelTransformer
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -34,13 +34,15 @@ class ParallelLineTransformer(LabelTransformer):
     def ebl_atf_text_line__parallel_text(
         self, _prefix, cf, text_id, chapter, line_number
     ) -> ParallelText:
-        return ParallelText(
-            cf is not None, Genre.LITERATURE, text_id, chapter, line_number
-        )
+        return ParallelText(cf is not None, text_id, chapter, line_number)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__text_id(self, category, number) -> TextId:
-        return TextId(0 if category == "0" else roman.fromRoman(category), int(number))
+    def ebl_atf_text_line__text_id(self, genre, category, number) -> TextId:
+        return TextId(
+            Genre(genre),
+            0 if category == "0" else roman.fromRoman(category),
+            int(number),
+        )
 
     @v_args(inline=True)
     def ebl_atf_text_line__chapter_name(

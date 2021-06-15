@@ -31,6 +31,7 @@ from ebl.transliteration.domain.dollar_line import (
     StateDollarLine,
 )
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.genre import Genre as CorpusGenre
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line_number import LineNumber
@@ -39,7 +40,6 @@ from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre as CorpusGenre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -289,8 +289,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             ParallelComposition(False, "my name", LineNumber(1)),
             ParallelText(
                 True,
-                CorpusGenre.LITERATURE,
-                TextId(1, 1),
+                TextId(CorpusGenre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
             ),
@@ -503,8 +502,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
             ParallelComposition(False, "my name", LineNumber(1)),
             ParallelText(
                 True,
-                CorpusGenre.LITERATURE,
-                TextId(1, 1),
+                TextId(CorpusGenre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
             ),
