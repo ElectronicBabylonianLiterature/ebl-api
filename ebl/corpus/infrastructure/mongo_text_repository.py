@@ -112,7 +112,13 @@ class MongoTextRepository(TextRepository):
             mongo_text = next(
                 self._texts.aggregate(
                     [
-                        {"$match": {"category": id_.category, "index": id_.index}},
+                        {
+                            "$match": {
+                                "genre": id_.genre.value,
+                                "category": id_.category,
+                                "index": id_.index,
+                            }
+                        },
                         *text_pipeline(),
                         {"$limit": 1},
                     ]
