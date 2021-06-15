@@ -189,15 +189,6 @@ def test_constructor_sets_correct_fields():
     assert CHAPTER.lines[0].translation == TRANSLATION
 
 
-def test_giving_museum_number_and_accession_is_invalid():
-    with pytest.raises(ValueError):
-        Manuscript(
-            MANUSCRIPT_ID,
-            museum_number=MUSEUM_NUMBER,
-            accession="accession not allowed",
-        )
-
-
 def test_duplicate_ids_are_invalid():
     with pytest.raises(ValueError):
         Chapter(
