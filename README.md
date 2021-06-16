@@ -306,7 +306,7 @@ as is. Transliterations are not reparsed.
 The script can be run locally:
 
 ```shell script
-pipenv run python -m ebl.corpus.updte_texts
+pipenv run python -m ebl.corpus.update_texts
 ```
 
 , as stand alone container:

@@ -43,6 +43,15 @@ class ChapterTransformer(
         )
 
     @v_args(inline=True)
+    def standard_text_siglum(self, disambiquator):
+        return Siglum(
+            Provenance.STANDARD_TEXT,
+            Period.NONE,
+            ManuscriptType.NONE,
+            disambiquator or "",
+        )
+
+    @v_args(inline=True)
     def manuscript_line(self, siglum, labels, line, *paratext):
         return ManuscriptLine(
             self._manuscripts[siglum], labels or tuple(), line, tuple(paratext)

@@ -115,7 +115,8 @@ def test_updating_invalid_stage(
     text_repository.create_chapter(chapter)
 
     post_result = client.simulate_post(
-        f"/texts/{chapter.text_id.category}/{chapter.text_id.index}/"
+        f"/texts/{chapter.text_id.genre.value}/"
+        f"{chapter.text_id.category}/{chapter.text_id.index}/"
         f"chapters/invalid/unknown/alignment",
         body=json.dumps(DTO),
     )

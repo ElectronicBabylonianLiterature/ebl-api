@@ -5,11 +5,11 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf, Status, Surface
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
-    Genre,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -61,13 +61,11 @@ def test_parallel_fragment(cf, duplicates, surface, display_value) -> None:
     ],
 )
 def test_parallel_text(cf, chapter, display_value) -> None:
-    genre = Genre.LITERATURE
-    text_id = TextId(1, 1)
+    text_id = TextId(Genre.LITERATURE, 1, 1)
     line_number = LineNumber(1)
-    line = ParallelText(cf, genre, text_id, chapter, line_number)
+    line = ParallelText(cf, text_id, chapter, line_number)
 
     assert line.has_cf is cf
-    assert line.genre == genre
     assert line.text == text_id
     assert line.chapter == chapter
     assert line.line_number == line_number

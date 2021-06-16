@@ -41,6 +41,7 @@ class ManuscriptType(SiglumEnum):
 
 
 class Provenance(SiglumEnumWithParent):
+    STANDARD_TEXT = ("Standard Text", "Std", None)
     ASSYRIA = ("Assyria", "Assa", None)
     ASSUR = ("Aššur", "Ašš", "Assyria")
     HUZIRINA = ("Ḫuzirina", "Huz", "Assyria")
@@ -116,6 +117,18 @@ class Siglum:
         )
 
 
+def is_invalid_standard_text(provenance, period, type_) -> bool:
+    return provenance is Provenance.STANDARD_TEXT and (
+        period is not Period.NONE or type_ is not ManuscriptType.NONE
+    )
+
+
+def is_invalid_non_standard_text(provenance, period, type_) -> bool:
+    return provenance is not Provenance.STANDARD_TEXT and (
+        period is Period.NONE or type_ is ManuscriptType.NONE
+    )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Manuscript:
     id: int
@@ -124,7 +137,7 @@ class Manuscript:
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
     period: Period = Period.NEO_ASSYRIAN
-    provenance: Provenance = Provenance.NINEVEH
+    provenance: Provenance = attr.ib(default=Provenance.NINEVEH)
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
     colophon: Text = Text()
@@ -134,6 +147,17 @@ class Manuscript:
     def validate_accession(self, _, value) -> None:
         if self.museum_number and value:
             raise ValueError("Accession given when museum number present.")
+
+    @provenance.validator
+    def validate_provenance(self, _, value) -> None:
+        if is_invalid_standard_text(value, self.period, self.type):
+            raise ValueError(
+                "Manuscript must not have period and type when provenance is Standard Text."
+            )
+        elif is_invalid_non_standard_text(value, self.period, self.type):
+            raise ValueError(
+                "Manuscript must have period and type unless provenance is Standard Text."
+            )
 
     @property
     def colophon_text_lines(self) -> Sequence[TextLine]:

@@ -32,7 +32,9 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.genre import Genre
 
+GENRE = Genre.LITERATURE
 CATEGORY = 1
 INDEX = 2
 NAME = "Palm & Vine"
@@ -96,10 +98,16 @@ LINE = Line(
 )
 
 TEXT = Text(
-    CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, (ChapterListing(STAGE, CHAPTER_NAME),)
+    GENRE,
+    CATEGORY,
+    INDEX,
+    NAME,
+    VERSES,
+    APPROXIMATE,
+    (ChapterListing(STAGE, CHAPTER_NAME),),
 )
 
-TEXT_ID = TextId(CATEGORY, INDEX)
+TEXT_ID = TextId(GENRE, CATEGORY, INDEX)
 CHAPTER = Chapter(
     TEXT_ID,
     CLASSIFICATION,
@@ -128,7 +136,8 @@ CHAPTER = Chapter(
 
 
 def test_text_constructor_sets_correct_fields():
-    assert TEXT.id == TextId(CATEGORY, INDEX)
+    assert TEXT.id == TextId(GENRE, CATEGORY, INDEX)
+    assert TEXT.genre == GENRE
     assert TEXT.category == CATEGORY
     assert TEXT.index == INDEX
     assert TEXT.name == NAME
@@ -139,7 +148,7 @@ def test_text_constructor_sets_correct_fields():
 
 
 def test_constructor_sets_correct_fields():
-    assert CHAPTER.text_id == TextId(CATEGORY, INDEX)
+    assert CHAPTER.text_id == TextId(GENRE, CATEGORY, INDEX)
     assert CHAPTER.classification == CLASSIFICATION
     assert CHAPTER.stage == STAGE
     assert CHAPTER.version == VERSION

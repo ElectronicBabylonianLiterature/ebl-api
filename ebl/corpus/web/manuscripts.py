@@ -27,12 +27,13 @@ class ManuscriptsResource:
         self,
         req: falcon.Request,
         resp: falcon.Response,
+        genre: str,
         category: str,
         index: str,
         stage: str,
         name: str,
     ) -> None:
-        chapter_id = create_chapter_id(category, index, stage, name)
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
         dto = ManuscriptDtoSchema().load(req.media)
         self._corpus.update_manuscripts(
             chapter_id,

@@ -4,6 +4,7 @@ import attr
 
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.genre import Genre
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -14,6 +15,7 @@ class ChapterListing:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
+    genre: Genre
     category: int
     index: int
     name: str
@@ -23,4 +25,4 @@ class Text:
 
     @property
     def id(self) -> TextId:
-        return TextId(self.category, self.index)
+        return TextId(self.genre, self.category, self.index)
