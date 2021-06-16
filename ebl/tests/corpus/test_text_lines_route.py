@@ -162,7 +162,7 @@ def test_importing(client, bibliography, sign_repository, signs, text_repository
     updated_chapter = attr.evolve(
         chapter,
         lines=(*chapter.lines, *parse_chapter(atf, chapter.manuscripts)),
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
 

@@ -240,9 +240,7 @@ class Chapter:
             pydash.chain(self.lines)
             .map_(create_entry)
             .reject(pydash.is_none)
-            .concat(
-                [TextLineEntry(line, None) for line in manuscript.colophon_text_lines]
-            )
+            .concat([TextLineEntry(line, None) for line in manuscript.text_lines])
             .value()
         )
 

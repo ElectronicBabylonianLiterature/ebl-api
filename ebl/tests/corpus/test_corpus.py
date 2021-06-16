@@ -422,11 +422,18 @@ def test_updating_manuscripts(
                         )
                     ]
                 ),
+                unplaced_lines=Transliteration.of_iterable(
+                    [
+                        TextLine.of_iterable(
+                            LineNumber(1, True), (Word.of([Reading.of_name("ku")]),)
+                        )
+                    ]
+                ),
                 notes="Updated manuscript.",
             ),
         ),
         uncertain_fragments=uncertain_fragments,
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
     )
     expect_find_and_update_chapter(
         bibliography,
@@ -514,7 +521,7 @@ def test_updating_lines(
                 ),
             ),
         ),
-        signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU",),
+        signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(
@@ -545,7 +552,7 @@ def test_importing_lines(
             *CHAPTER_WITHOUT_DOCUMENTS.lines,
             *parse_chapter(atf, CHAPTER_WITHOUT_DOCUMENTS.manuscripts),
         ),
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(
@@ -620,7 +627,7 @@ def test_merging_lines(
     updated_chapter = attr.evolve(
         CHAPTER_WITHOUT_DOCUMENTS,
         lines=(new_line,),
-        signs=("KU BA\nKU",),
+        signs=("KU BA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(

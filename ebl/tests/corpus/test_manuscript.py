@@ -22,7 +22,5 @@ def test_invalid_siglum(provenance, period, type_) -> None:
 def test_giving_museum_number_and_accession_is_invalid():
     with pytest.raises(ValueError):
         Manuscript(
-            1,
-            museum_number=MuseumNumber("BM", "x"),
-            accession="accession not allowed",
+            1, museum_number=MuseumNumber("BM", "x"), accession="accession not allowed"
         )

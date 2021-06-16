@@ -61,7 +61,7 @@ class ManuscriptFactory(factory.Factory):
         [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("ku")]),))]
     )
     unplaced_lines = Transliteration.of_iterable(
-        [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("bu")]),))]
+        [TextLine.of_iterable(LineNumber(1, True), (Word.of([Reading.of_name("nu")]),))]
     )
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
@@ -173,7 +173,7 @@ class ChapterFactory(factory.Factory):
     lines = factory.List(
         [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
     )
-    signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU",)
+    signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",)
     parser_version = ""
 
 
