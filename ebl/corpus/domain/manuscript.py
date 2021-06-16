@@ -141,6 +141,7 @@ class Manuscript:
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
     colophon: Text = Text()
+    unplaced_lines: Text = Text()
     references: Sequence[Reference] = tuple()
 
     @accession.validator
@@ -160,8 +161,8 @@ class Manuscript:
             )
 
     @property
-    def colophon_text_lines(self) -> Sequence[TextLine]:
-        return self.colophon.text_lines
+    def text_lines(self) -> Sequence[TextLine]:
+        return [*self.colophon.text_lines, *self.unplaced_lines.text_lines]
 
     @property
     def siglum(self) -> Siglum:

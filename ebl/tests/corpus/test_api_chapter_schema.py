@@ -67,6 +67,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                 "type": manuscript.type.long_name,
                 "notes": manuscript.notes,
                 "colophon": manuscript.colophon.atf,
+                "unplacedLines": manuscript.unplaced_lines.atf,
                 "references": ApiReferenceSchema().dump(references, many=True),
             }
             for manuscript in chapter.manuscripts
