@@ -9,4 +9,4 @@ def create_signs_routes(api: falcon.API, context: Context):
     signs_search = SignsSearch(context.sign_repository)
     signs = SignsResource(context.sign_repository)
     api.add_route("/signs", signs_search)
-    api.add_route("/signs/{object_id}", signs)
+    api.add_route("/signs/{sign_name}", signs)
