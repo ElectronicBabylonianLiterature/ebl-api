@@ -12,6 +12,7 @@ VERSES = 100
 APPROXIMATE = True
 CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
+INTRO = "**Intro**"
 CHAPTER_NAME = "I"
 
 TEXT = Text(
@@ -21,6 +22,7 @@ TEXT = Text(
     NAME,
     VERSES,
     APPROXIMATE,
+    INTRO,
     (ChapterListing(STAGE, CHAPTER_NAME),),
 )
 
@@ -33,5 +35,6 @@ def test_text_constructor_sets_correct_fields():
     assert TEXT.name == NAME
     assert TEXT.number_of_verses == VERSES
     assert TEXT.approximate_verses == APPROXIMATE
+    assert TEXT.intro == INTRO
     assert TEXT.chapters[0].stage == STAGE
     assert TEXT.chapters[0].name == CHAPTER_NAME

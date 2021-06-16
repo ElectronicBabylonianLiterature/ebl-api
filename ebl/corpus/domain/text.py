@@ -21,6 +21,7 @@ class Text:
     name: str
     number_of_verses: int
     approximate_verses: bool
+    intro: str
     chapters: Sequence[ChapterListing] = tuple()
 
     @property

@@ -239,5 +239,6 @@ class TextSchema(Schema):
             data["name"],
             data["number_of_verses"],
             data["approximate_verses"],
+            "",
             tuple(data["chapters"]),
         )
