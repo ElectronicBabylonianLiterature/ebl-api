@@ -10,5 +10,5 @@ class SignsResource:
         self._signs = signs
 
     @falcon.before(require_scope, "read:words")
-    def on_get(self, _req, resp, object_id):
-        resp.media = SignDtoSchema().dump(self._signs.find(object_id))
+    def on_get(self, _req, resp, sign_name):
+        resp.media = SignDtoSchema().dump(self._signs.find(sign_name))
