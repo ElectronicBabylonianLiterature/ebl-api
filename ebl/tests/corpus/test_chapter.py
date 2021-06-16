@@ -31,7 +31,7 @@ from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner, ValueToken
+from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -68,40 +68,48 @@ LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 LABELS = (SurfaceLabel.from_label(Surface.OBVERSE),)
-MANUSCRIPT_TEXT = TextLine(
-    LineNumber(1),
-    (
-        Word.of(
-            [
-                Reading.of([ValueToken.of("ku"), BrokenAway.close()]),
-                Joiner.hyphen(),
-                Reading.of_name("nu"),
-                Joiner.hyphen(),
-                Reading.of_name("si"),
-            ]
-        ),
-    ),
-)
 PARATEXT = (NoteLine((StringPart("note"),)), RulingDollarLine(Ruling.SINGLE))
 OMITTED_WORDS = (1,)
 
 NOTE = None
 PARALLEL_LINES = (ParallelComposition(False, "a composition", LineNumber(7)),)
-LINE_VARIANT = LineVariant(
+TRANSLATION = (TranslationLine((StringPart("foo"),), "en", None),)
+SIGNS = ("FOO BAR",)
+
+MANUSCRIPT_TEXT_1 = TextLine(
+    LineNumber(1), (Word.of([Reading.of([ValueToken.of("ku")])]),)
+)
+
+LINE_VARIANT_1 = LineVariant(
     LINE_RECONSTRUCTION,
     NOTE,
-    (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT, PARATEXT, OMITTED_WORDS),),
+    (
+        ManuscriptLine(
+            MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1, PARATEXT, OMITTED_WORDS
+        ),
+    ),
     PARALLEL_LINES,
 )
-TRANSLATION = (TranslationLine((StringPart("foo"),), "en", None),)
-LINE = Line(
+LINE_1 = Line(
     LINE_NUMBER,
-    (LINE_VARIANT,),
+    (LINE_VARIANT_1,),
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     TRANSLATION,
 )
-SIGNS = ("FOO BAR",)
+
+LINE_VARIANT_2 = LineVariant(
+    LINE_RECONSTRUCTION, None, (ManuscriptLine(MANUSCRIPT_ID, tuple(), EmptyLine()),)
+)
+LINE_2 = Line(LineNumber(2), (LINE_VARIANT_2,))
+
+MANUSCRIPT_TEXT_3 = attr.evolve(MANUSCRIPT_TEXT_1, line_number=LineNumber(3))
+LINE_VARIANT_3 = LineVariant(
+    LINE_RECONSTRUCTION,
+    None,
+    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_3),),
+)
+LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
 TEXT_ID = TextId(GENRE, CATEGORY, INDEX)
 CHAPTER = Chapter(
@@ -127,43 +135,6 @@ CHAPTER = Chapter(
             REFERENCES,
         ),
     ),
-    (MUSEUM_NUMBER,),
-    (LINE,),
-    SIGNS,
-)
-
-MANUSCRIPT_TEXT_1 = TextLine(
-    LineNumber(1), (Word.of([Reading.of([ValueToken.of("ku")])]),)
-)
-
-LINE_VARIANT_1 = LineVariant(
-    LINE_RECONSTRUCTION,
-    None,
-    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_1),),
-)
-LINE_1 = Line(LineNumber(1), (LINE_VARIANT_1,))
-
-LINE_VARIANT_2 = LineVariant(
-    LINE_RECONSTRUCTION, None, (ManuscriptLine(MANUSCRIPT_ID, tuple(), EmptyLine()),)
-)
-LINE_2 = Line(LineNumber(2), (LINE_VARIANT_2,))
-
-MANUSCRIPT_TEXT_3 = attr.evolve(MANUSCRIPT_TEXT_1, line_number=LineNumber(3))
-LINE_VARIANT_3 = LineVariant(
-    LINE_RECONSTRUCTION,
-    None,
-    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_3),),
-)
-LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
-
-CHAPTER = Chapter(
-    TextId(GENRE, CATEGORY, INDEX),
-    CLASSIFICATION,
-    STAGE,
-    VERSION,
-    CHAPTER_NAME,
-    ORDER,
-    (Manuscript(MANUSCRIPT_ID, colophon=COLOPHON),),
     (MUSEUM_NUMBER,),
     (LINE_1, LINE_2, LINE_3),
     SIGNS,
@@ -199,7 +170,8 @@ def test_constructor_sets_correct_fields():
     assert CHAPTER.lines[0].variants[0].parallel_lines == PARALLEL_LINES
     assert CHAPTER.lines[0].variants[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
     assert CHAPTER.lines[0].variants[0].manuscripts[0].labels == LABELS
-    assert CHAPTER.lines[0].variants[0].manuscripts[0].line == MANUSCRIPT_TEXT
+    assert CHAPTER.lines[0].variants[0].manuscripts[0].line == MANUSCRIPT_TEXT_1
+    assert CHAPTER.lines[0].variants[0].manuscripts[0].paratext == PARATEXT
     assert CHAPTER.lines[0].variants[0].manuscripts[0].omitted_words == OMITTED_WORDS
     assert (
         CHAPTER.lines[0].is_second_line_of_parallelism == IS_SECOND_LINE_OF_PARALLELISM
@@ -257,7 +229,7 @@ def test_missing_manuscripts_are_invalid():
                             NOTE,
                             (
                                 ManuscriptLine(
-                                    MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT
+                                    MANUSCRIPT_ID + 1, LABELS, MANUSCRIPT_TEXT_1
                                 ),
                             ),
                         ),
@@ -283,8 +255,12 @@ def test_missing_manuscripts_are_invalid():
                             LINE_RECONSTRUCTION,
                             NOTE,
                             (
-                                ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
-                                ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),
+                                ManuscriptLine(
+                                    MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1
+                                ),
+                                ManuscriptLine(
+                                    MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1
+                                ),
                             ),
                         ),
                     ),
@@ -303,7 +279,7 @@ def test_missing_manuscripts_are_invalid():
                         LineVariant(
                             LINE_RECONSTRUCTION,
                             NOTE,
-                            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1),),
                         ),
                     ),
                     IS_SECOND_LINE_OF_PARALLELISM,
@@ -315,7 +291,7 @@ def test_missing_manuscripts_are_invalid():
                         LineVariant(
                             LINE_RECONSTRUCTION,
                             NOTE,
-                            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT),),
+                            (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1),),
                         ),
                     ),
                     IS_SECOND_LINE_OF_PARALLELISM,
@@ -332,7 +308,7 @@ def test_duplicate_manuscript_line_labels_are_invalid(make_chapter):
 
 def test_duplicate_line_numbers_invalid():
     with pytest.raises(ValueError):
-        Chapter(TEXT_ID, lines=(LINE, LINE))
+        Chapter(TEXT_ID, lines=(LINE_1, LINE_1))
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -408,6 +384,7 @@ def test_text_lines() -> None:
             TextLineEntry(MANUSCRIPT_TEXT_1, 0),
             TextLineEntry(MANUSCRIPT_TEXT_3, 2),
             *[TextLineEntry(line, None) for line in COLOPHON.text_lines],
+            *[TextLineEntry(line, None) for line in UNPLACED_LINES.text_lines],
         ]
     ]
 
