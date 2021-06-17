@@ -228,6 +228,7 @@ class TextSchema(Schema):
         required=True, data_key="numberOfVerses", validate=validate.Range(min=0)
     )
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
+    intro = fields.String(missing="")
     chapters = fields.Nested(ChapterListingSchema, many=True, required=True)
 
     @post_load
@@ -239,6 +240,6 @@ class TextSchema(Schema):
             data["name"],
             data["number_of_verses"],
             data["approximate_verses"],
-            "",
+            data["intro"],
             tuple(data["chapters"]),
         )
