@@ -11,6 +11,7 @@ class ReferenceType(Enum):
     DISCUSSION = auto()
     COPY = auto()
     PHOTO = auto()
+    TRANSLATION = auto()
 
 
 @attr.s(auto_attribs=True, frozen=True)
