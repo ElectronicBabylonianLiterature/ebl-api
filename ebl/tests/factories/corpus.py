@@ -195,4 +195,5 @@ class TextFactory(factory.Factory):
     name = factory.Faker("sentence")
     number_of_verses = factory.fuzzy.FuzzyInteger(1, 10000)
     approximate_verses = factory.Iterator([True, False])
+    intro = factory.Faker("sentence")
     chapters = factory.List([factory.SubFactory(ChapterListingFactory)], TupleFactory)
