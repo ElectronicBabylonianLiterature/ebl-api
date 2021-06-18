@@ -119,6 +119,55 @@ class MongoTextRepository(TextRepository):
                                 "index": id_.index,
                             }
                         },
+                        {
+                            "$unwind": {
+                                "path": "$references",
+                                "preserveNullAndEmptyArrays": True,
+                            }
+                        },
+                        {
+                            "$lookup": {
+                                "from": "bibliography",
+                                "localField": "references.id",
+                                "foreignField": "_id",
+                                "as": "references.document",
+                            }
+                        },
+                        {
+                            "$set": {
+                                "references.document": {
+                                    "$arrayElemAt": ["$references.document", 0]
+                                }
+                            }
+                        },
+                        {
+                            "$group": {
+                                "_id": "$_id",
+                                "references": {"$push": "$references"},
+                                "root": {"$first": "$$ROOT"},
+                            }
+                        },
+                        {
+                            "$replaceRoot": {
+                                "newRoot": {
+                                    "$mergeObjects": [
+                                        "$root",
+                                        {"references": "$references"},
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "$set": {
+                                "references": {
+                                    "$filter": {
+                                        "input": "$references",
+                                        "as": "reference",
+                                        "cond": {"$ne": ["$$reference", {}]},
+                                    }
+                                }
+                            }
+                        },
                         *text_pipeline(),
                         {"$limit": 1},
                     ]
