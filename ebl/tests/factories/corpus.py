@@ -197,3 +197,6 @@ class TextFactory(factory.Factory):
     approximate_verses = factory.Iterator([True, False])
     intro = factory.Faker("sentence")
     chapters = factory.List([factory.SubFactory(ChapterListingFactory)], TupleFactory)
+    references = factory.List(
+        [factory.SubFactory(ReferenceFactory, with_document=True)]
+    )
