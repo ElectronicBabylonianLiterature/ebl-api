@@ -2,11 +2,10 @@ import attr
 import pytest
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
-from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.transliteration.domain.genre import Genre
+
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -18,10 +17,6 @@ CHAPTER = ChapterFactory.build(
     name=TEXT.chapters[0].name,
     manuscripts=(ManuscriptFactory.build(id=1, references=tuple()),),
 )
-
-
-def when_text_in_collection(database, text=TEXT):
-    database[TEXTS_COLLECTION].insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
 
 def when_chapter_in_collection(database, chapter=CHAPTER):
@@ -68,37 +63,6 @@ def test_it_is_not_possible_to_create_duplicate_chapters(text_repository):
         text_repository.create(CHAPTER)
 
 
-@pytest.mark.xfail(reason="pymongo does not support $let")
-def test_finding_text(database, text_repository):
-    when_text_in_collection(database)
-    when_chapter_in_collection(database)
-
-    assert text_repository.find(TEXT.id) == TEXT
-
-
-def test_find_raises_exception_if_text_not_found(text_repository):
-    with pytest.raises(NotFoundError):
-        text_repository.find(TextId(Genre.LITERATURE, 1, 1))
-
-
-@pytest.mark.xfail(reason="pymongo does not support $let")
-def test_listing_texts(database, text_repository):
-    another_text = attr.evolve(TEXT, index=2)
-    another_chapter = attr.evolve(
-        CHAPTER,
-        text_id=another_text.id,
-        stage=another_text.chapters[0].stage,
-        name=another_text.chapters[0].name,
-    )
-
-    when_text_in_collection(database)
-    when_text_in_collection(database, another_text)
-    when_chapter_in_collection(database)
-    when_chapter_in_collection(database, another_chapter)
-
-    assert text_repository.list() == [TEXT, another_text]
-
-
 def test_updating_chapter(database, text_repository):
     updated_chapter = attr.evolve(
         CHAPTER, lines=tuple(), manuscripts=tuple(), signs=tuple()
@@ -110,7 +74,7 @@ def test_updating_chapter(database, text_repository):
     assert text_repository.find_chapter(CHAPTER.id_) == updated_chapter
 
 
-def test_updating_non_existing_text_raises_exception(text_repository):
+def test_updating_non_existing_chapter_raises_exception(text_repository):
     with pytest.raises(NotFoundError):
         text_repository.update(CHAPTER.id_, CHAPTER)
 
