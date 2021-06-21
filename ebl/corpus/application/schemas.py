@@ -230,6 +230,7 @@ class TextSchema(Schema):
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     intro = fields.String(missing="")
     chapters = fields.Nested(ChapterListingSchema, many=True, required=True)
+    references = fields.Nested(ReferenceSchema, many=True, missing=tuple())
 
     @post_load
     def make_text(self, data: dict, **kwargs) -> Text:
@@ -242,4 +243,5 @@ class TextSchema(Schema):
             data["approximate_verses"],
             data["intro"],
             tuple(data["chapters"]),
+            tuple(data["references"]),
         )

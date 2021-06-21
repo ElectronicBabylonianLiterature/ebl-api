@@ -2,6 +2,7 @@ from typing import Sequence
 
 import attr
 
+from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.genre import Genre
@@ -23,6 +24,7 @@ class Text:
     approximate_verses: bool
     intro: str
     chapters: Sequence[ChapterListing] = tuple()
+    references: Sequence[Reference] = tuple()
 
     @property
     def id(self) -> TextId:

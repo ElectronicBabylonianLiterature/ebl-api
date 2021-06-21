@@ -1,7 +1,7 @@
 import falcon
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.application.schemas import TextSchema
 from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
+from ebl.corpus.web.text_schema import ApiTextSchema
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
@@ -16,7 +16,7 @@ class TextsResource:
         self._corpus = corpus
 
     def on_get(self, _, resp: falcon.Response) -> None:
-        resp.media = TextSchema().dump(self._corpus.list(), many=True)
+        resp.media = ApiTextSchema().dump(self._corpus.list(), many=True)
 
 
 class TextResource:
@@ -28,7 +28,7 @@ class TextResource:
         self, _, resp: falcon.Response, genre: str, category: str, index: str
     ) -> None:
         text = self._corpus.find(create_text_id(genre, category, index))
-        resp.media = TextSchema().dump(text)
+        resp.media = ApiTextSchema().dump(text)
 
 
 class TextSearchResource:
