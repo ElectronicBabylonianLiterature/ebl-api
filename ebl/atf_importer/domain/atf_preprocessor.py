@@ -41,7 +41,7 @@ class ATFPreprocessor:
             "note_line",
             "control_line",
             "empty_line",
-            "translation_line"
+            "translation_line",
         ]
         self.stop_preprocessing = False
         self.logdir = logdir
