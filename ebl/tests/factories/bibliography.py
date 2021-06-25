@@ -14,10 +14,7 @@ class BibliographyEntryFactory(factory.Factory):
         }
 
     id = "Q30000000"
-    title = (
-        "The Synergistic Activity of Thyroid Transcription Factor 1 "
-        "and Pax 8 Relies on the Promoter/Enhancer Interplay"
-    )
+    title = "The Synergistic Activity of Thyroid Transcription Factor 1"
     type = "article-journal"
     DOI = "10.1210/MEND.16.4.0808"
     issued = {"date-parts": [[2002, 1, 1]]}

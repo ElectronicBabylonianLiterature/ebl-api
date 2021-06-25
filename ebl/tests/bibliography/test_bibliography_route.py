@@ -111,11 +111,12 @@ def test_update_entry_invalid(transform, client, saved_entry):
 @pytest.mark.parametrize(
     "params",
     [
-        {"query": "Author"},
-        {"query": "Title"},
-        {"query": "Author 2019 Title"},
-        {"query": "Author 1"},
-        {"query": "Container-Title-Short"},
+        {"query": "Miccadei"},
+        {
+            "query": "Miccadei 2002 The Synergistic Activity of Thyroid Transcription Factor 1"
+        },
+        {"query": "ME 1"},
+        {"query": "ME"},
     ],
 )
 def test_search(client, saved_entry, params):

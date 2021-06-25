@@ -65,8 +65,8 @@ def changelog(database):
 
 
 class TestWordRepository(MongoWordRepository):
-    # Mongomock does not support $addFields so we need to
-    # stub the methods using them.
+    # Mongomock does not support $substrCP so we need to
+    # stub the methods using it.
     def query_by_lemma_prefix(self, _):
         return [self._collection.find_one({})]
 
@@ -82,26 +82,20 @@ def dictionary(word_repository, changelog):
 
 
 class TestBibliographyRepository(MongoBibliographyRepository):
-    # Mongomock does not support $addFields so we need to
-    # stub the methods using them.
+    # Mongomock does not support $substrCP so we need to
+    # stub the methods using it.
     def query_by_author_year_and_title(
         self, _author=None, _year=None, _title=None, _greater_than=False
     ):
         return [create_object_entry(self._collection.find_one({}))]
 
-    def query_by_container_title_and_collection_number(
-        self, _container_title_short=None, _collection_number=None
-    ):
-        return [create_object_entry(self._collection.find_one({}))]
-
 
 class TestSignRepository(MongoSignRepository):
-    # Mongomock does not support $let so we need to
-    # stub the methods using them.
-    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
-        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+    # Mongomock does not support $let in lookup so we need to
+    # stub the methods using it.
+    # https://github.com/mongomock/mongomock/issues/536
 
-    def search_include_homophones(self, reading: str) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
 
 
@@ -126,10 +120,9 @@ def transliteration_factory(sign_repository):
 
 
 class TestTextRepository(MongoTextRepository):
-    # Mongomock does not support $let so we need to
-    # stub the methods using them.
-    # https://github.com/mongomock/mongomock/pull/698
-
+    # Mongomock does not support '.' in the 'as' parameters for the lookup stage
+    # of the aggregation pipeline so we need to stub the methods using it.
+    # https://github.com/mongomock/mongomock/issues/536
     def find(self, id_: TextId) -> Text:
         text = self._texts.find_one(
             {"category": id_.category, "index": id_.index}, projection={"_id": False}
@@ -144,6 +137,9 @@ class TestTextRepository(MongoTextRepository):
         )
         return TextSchema().load({**text, "chapters": chapters})
 
+    # Mongomock does not support $let in lookup so we need to
+    # stub the methods using it.
+    # https://github.com/mongomock/mongomock/issues/536
     def list(self) -> List[Text]:
         texts = self._texts.find_many({}, projection={"_id": False})
         return TextSchema().load(

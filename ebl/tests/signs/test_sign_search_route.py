@@ -52,7 +52,7 @@ def test_signs_not_found(client):
             ],
         ),
         (
-            {"value": "bu", "isIncludeHomophones": "true", "subIndex": "1"},
+            {"value": ":", "isIncludeHomophones": "true", "subIndex": "2"},
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
