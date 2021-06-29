@@ -29,7 +29,6 @@ newrelic = "*"
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
-mongomock = "*"
 freezegun = "*"
 pytest-watch = "*"
 pytest-mockito = "*"

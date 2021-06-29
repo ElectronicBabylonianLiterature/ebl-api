@@ -1,4 +1,3 @@
-import mongomock
 import pytest
 
 from ebl.errors import DuplicateError, NotFoundError
@@ -6,8 +5,8 @@ from ebl.mongo_collection import MongoCollection
 
 
 @pytest.fixture
-def collection():
-    return MongoCollection(mongomock.MongoClient().ebl, "collection")
+def collection(database):
+    return MongoCollection(database, "collection")
 
 
 def test_create_and_find_by_id(collection):

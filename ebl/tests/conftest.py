@@ -2,15 +2,16 @@ import datetime
 import io
 import json
 from typing import Any, Dict, Mapping, Sequence, Union, List
+import uuid
 
 import attr
-import mongomock
 import pydash
 import pytest
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 from marshmallow import EXCLUDE
+from pymongo_inmemory import MongoClient
 
 import ebl.app
 import ebl.context
@@ -54,9 +55,16 @@ from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
 
+@pytest.fixture(scope="session")
+def mongo_client() -> MongoClient:
+    return MongoClient()
+
+
 @pytest.fixture
-def database():
-    return mongomock.MongoClient().ebl
+def database(mongo_client: MongoClient):
+    database = str(uuid.uuid4())
+    yield mongo_client[database]
+    mongo_client.drop_database(database)
 
 
 @pytest.fixture
@@ -183,13 +191,6 @@ class TestFragmentRepository(MongoFragmentRepository):
             FragmentInfo.of(fragment)
             for fragment in self._map_fragments(self._collection.find_many({}))
         ]
-
-    # Mongomock does not support $concat so we need to stub the methods using it.
-    def query_next_and_previous_folio(self, _folio_name, _folio_number, _number):
-        return {
-            "previous": {"fragmentNumber": _number, "folioNumber": _folio_number},
-            "next": {"fragmentNumber": _number, "folioNumber": _folio_number},
-        }
 
     # Mongomock does not support $let so we need to stub the methods using it.
     def query_path_of_the_pioneers(self):
