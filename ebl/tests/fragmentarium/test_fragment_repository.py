@@ -1,5 +1,9 @@
+import uuid
+
 import attr
+from pymongo_inmemory import MongoClient
 import pytest
+
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -25,6 +29,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 
 COLLECTION = "fragments"
 
@@ -61,6 +66,23 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
 
 
 SCHEMA = FragmentSchema()
+
+
+@pytest.fixture(scope="session")
+def mongo_client() -> MongoClient:
+    return MongoClient()
+
+
+@pytest.fixture
+def database(mongo_client: MongoClient):
+    database = str(uuid.uuid4())
+    yield mongo_client[database]
+    mongo_client.drop_database(database)
+
+
+@pytest.fixture
+def fragment_repository(database):
+    return MongoFragmentRepository(database)
 
 
 def test_create(database, fragment_repository):

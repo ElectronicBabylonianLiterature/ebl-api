@@ -161,10 +161,10 @@ class MongoFragmentRepository(FragmentRepository):
 
         def get_numbers(pipeline):
             cursor = self._collection.aggregate(pipeline)
-            if cursor.alive:
+            try:
                 entry = next(cursor)
                 return {"fragmentNumber": entry["_id"], "folioNumber": entry["number"]}
-            else:
+            except StopIteration:
                 return None
 
         first = create_pipeline(sort_ascending)
@@ -199,7 +199,10 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
         def get_numbers(cursor):
-            return next(cursor)["_id"] if cursor.alive else None
+            try:
+                return next(cursor)["_id"]
+            except StopIteration:
+                return None
 
         first = self._collection.find_many({}).sort("_id", 1).limit(1)
         last = self._collection.find_many({}).sort("_id", -1).limit(1)

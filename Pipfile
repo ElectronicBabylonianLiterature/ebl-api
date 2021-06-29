@@ -40,6 +40,7 @@ flake8-bugbear = "*"
 httpretty = "*"
 pyre-check = "==0.0.60"
 black = "==19.3b0"
+pymongo-inmemory = "*"
 
 [requires]
 python_version = "3.7"
