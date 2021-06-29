@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Dict, Mapping, Sequence, Union, List
+from typing import Any, Mapping, Sequence, Union, List
 import uuid
 
 import attr
@@ -26,8 +26,8 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
-from ebl.errors import NotFoundError
-from ebl.files.application.file_repository import File, FileRepository
+from ebl.files.application.file_repository import File
+from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
@@ -253,18 +253,16 @@ class FakeFile(File):
         return self._file.read(size)
 
 
-class TestFilesRepository(FileRepository):
-    def __init__(self, *files):
-        self._files: Dict[str, File] = {file.filename: file for file in files}
-
-    def create(self, file: FakeFile):
-        self._files[file.filename] = file
-
-    def query_by_file_name(self, file_name: str) -> File:
-        try:
-            return self._files[file_name]
-        except KeyError:
-            raise NotFoundError()
+class TestFilesRepository(GridFsFileRepository):
+    def __init__(self, database, *files: FakeFile):
+        super().__init__(database, str(uuid.uuid4()))
+        for file in files:
+            self._fs.put(
+                file,
+                filename=file.filename,
+                contentType=file.content_type,
+                metadata=file.metadata,
+            )
 
 
 @pytest.fixture
@@ -273,8 +271,8 @@ def file():
 
 
 @pytest.fixture
-def file_repository(file):
-    return TestFilesRepository(file)
+def file_repository(database, file):
+    return TestFilesRepository(database, file)
 
 
 @pytest.fixture
@@ -288,8 +286,10 @@ def folio_with_restricted_scope():
 
 
 @pytest.fixture
-def folio_repository(folio_with_allowed_scope, folio_with_restricted_scope):
-    return TestFilesRepository(folio_with_allowed_scope, folio_with_restricted_scope)
+def folio_repository(database, folio_with_allowed_scope, folio_with_restricted_scope):
+    return TestFilesRepository(
+        database, folio_with_allowed_scope, folio_with_restricted_scope
+    )
 
 
 @pytest.fixture
@@ -298,8 +298,8 @@ def photo():
 
 
 @pytest.fixture
-def photo_repository(photo):
-    return TestFilesRepository(photo)
+def photo_repository(database, photo):
+    return TestFilesRepository(database, photo)
 
 
 @pytest.fixture
