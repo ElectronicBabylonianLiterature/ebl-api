@@ -107,6 +107,10 @@ PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
 PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 ```
 
+The test use [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory) for tests.
+Depending on your OS it might be necessary to configure it in order to get the correct version
+of MongoDB.
+
 ## Configuring services
 
 ### Auth0
