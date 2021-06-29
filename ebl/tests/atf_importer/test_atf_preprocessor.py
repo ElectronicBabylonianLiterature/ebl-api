@@ -1,110 +1,57 @@
+import pytest
+
 from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
 
 
-# Generic Line Test case for problematic text lines
-def test_lines():
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
-
+PROBLEMATIC_TEXT_LINES = [
     (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
         "1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{"
-        "+di} * AN.GE₆"
-    )
-    assert (
-        converted_line
-        == "1. [ DIŠ ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ "
-        "ŠUB{+di} DIŠ AN.GE₆"
-    )
-
+        "+di} * AN.GE₆",
+        "1. [ DIŠ ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ "
+        "ŠUB{+di} DIŠ AN.GE₆",
+    ),
     (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
         "8. KAR <:> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina "
-        "ud-da-a-ta"
-    )
-    assert (
-        converted_line
-        == "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina "
-        "ud-da-a-ta"
-    )
-
+        "ud-da-a-ta",
+        "8. KAR < :> e-ṭe-ri :* KAR : e-ke-mu : LUGAL ina di-bi-ri : LUGAL ina "
+        "ud-da-a-ta",
+    ),
     (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
         "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {"
-        "d}INANA--<E₂>.AN.NA"
-    )
-    assert (
-        converted_line == "14. [...] x (x) še-e-hu BAD E₂ ME : ina GAŠAN-ia₅ {d}SUEN {"
-        "d}INANA-<E₂>.AN.NA"
-    )
+        "d}INANA--<E₂>.AN.NA",
+        "14. [...] x (x) še-e-hu BAD E₂ ME : ina GAŠAN-ia₅ {d}SUEN {"
+        "d}INANA-<E₂>.AN.NA",
+    ),
+]
 
 
-# Test case for removal of "$" if following sign not a logogram
-def test_following_sign_not_a_logogram():
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
+FOLLOWING_SIGN_IS_NOT_A_LOGOGRAM = (
+    "5'.	[...] x [...] x-šu₂? : kal : nap-ha-ri : $WA-wa-ru : ia-ar₂-ru",
+    "5'. [...] x [...] x-šu₂? : kal : nap-ha-ri : WA-wa-ru : ia-ar₂-ru",
+)
 
+
+LEGACY_GRAMMAR_SIGNS = [
     (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
-        "5'.	[...] x [...] x-šu₂? : kal : nap-ha-ri : $WA-wa-ru : ia-ar₂-ru"
-    )
-    assert (
-        converted_line
-        == "5'. [...] x [...] x-šu₂? : kal : nap-ha-ri : WA-wa-ru : ia-ar₂-ru"
-    )
-
-
-# Test case for conversion of legacy grammar signs
-def test_legacy_grammar():
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
         "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : "
-        "ANŠE.KUR.RA-MEŠ"
-    )
-    assert (
-        converted_line
-        == "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* E₂.GAL : "
-        "ANŠE.KUR.RA-MEŠ"
-    )
-
+        "ANŠE.KUR.RA-MEŠ",
+        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* E₂.GAL : "
+        "ANŠE.KUR.RA-MEŠ",
+    ),
     (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
         "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* ÁM.GAL : "
-        "ANŠE.KUR.RA-MEŠ"
-    )
-    assert (
-        converted_line
-        == "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL : "
-        "ANŠE.KUR.RA-MEŠ"
-    )
+        "ANŠE.KUR.RA-MEŠ",
+        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL : "
+        "ANŠE.KUR.RA-MEŠ",
+    ),
+]
 
 
-# Test case to test if a lem line is parsed as c_type "lem_line"
-def test_lemmantization():
+@pytest.mark.parametrize(
+    "line,expected",
+    [*PROBLEMATIC_TEXT_LINES, FOLLOWING_SIGN_IS_NOT_A_LOGOGRAM, *LEGACY_GRAMMAR_SIGNS],
+)
+def test_text_lines(line, expected):
     atf_preprocessor = ATFPreprocessor("../logs", 0)
 
     (
@@ -112,123 +59,43 @@ def test_lemmantization():
         c_array,
         c_type,
         c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+    ) = atf_preprocessor.process_line(line)
+    assert converted_line == expected
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
         "#lem: Sin[1]DN; ina[at]PRP; Nisannu[1]MN; ina[at]PRP; tāmartišu["
         "appearance]N; adir[dark]AJ; ina[in]PRP; "
         "aṣîšu[going out]'N; adri[dark]AJ; uṣṣi[go out]V; šarrū[king]N; "
         "+šanānu["
-        "equal]V$iššannanū-ma"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "equal]V$iššannanū-ma",
         "#lem: iššannanū-ma[equal]V; +šanānu[equal]V$iššannanū-ma; umma["
         "saying]PRP; +šarru[king]N$; mala[as "
-        "many]PRP; +šarru[king]N$šarri; +maṣû[correspond]V$imaṣṣû"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "many]PRP; +šarru[king]N$šarri; +maṣû[correspond]V$imaṣṣû",
         "#lem: +adrūssu[darkly]AV$; īrub[enter]V; +arītu[pregnant ("
         "woman)]N$arâtu; ša[of]DET; libbašina[belly]N; "
-        "ittadûni[contain]V; ina[in]PRP; +Zuqiqīpu[Scorpius]CN$"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "ittadûni[contain]V; ina[in]PRP; +Zuqiqīpu[Scorpius]CN$",
         "#lem: šatti[year]N; n; +Artaxerxes[]RN$artakšatsu; šar[king]N; pālih["
         "reverent one]N; Nabu[1]DN; lā["
-        "not]MOD; itabbal[disappear]V; maʾdiš[greatly]N; lišāqir[value]V"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "not]MOD; itabbal[disappear]V; maʾdiš[greatly]N; lišāqir[value]V",
         "#lem: +arāmu[cover]V$īrim-ma; ana[according to]PRP; birṣu[(a luminous "
         "phenomenon)]N; itârma[turn]V; adi["
-        "until]PRP; šāt[who(m)]DET&urri[daytime]N; illakma[flow]V"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line("#lem: u; eššu[new]AJ; u +.")
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "until]PRP; šāt[who(m)]DET&urri[daytime]N; illakma[flow]V",
+        "#lem: u; eššu[new]AJ; u +.",
         "#lem: u; ubû[unit]N; n; n; qû[unit]N; ubû[unit]N; +Ištar[]DN$; Ištar["
-        "1]DN +.; +saparru[cart]N$; u"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "1]DN +.; +saparru[cart]N$; u",
         "#lem: !+māru[son]N$; !+māru[son]N$māri; târu[turning back]'N; +našû["
         "lift//carrying]V'N$ +.; u; "
         "+narkabtu[chariot]N$narkabta; īmur[see]V; marṣu[patient]N; šū["
         "that]IP; "
-        "qāt[hand]N; Ištar[1]DN; u"
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line(
+        "qāt[hand]N; Ištar[1]DN; u",
         "#lem: +burmāmu[(an animal)//porcupine?]N$; +burmāmu[(an "
         "animal)//porcupine?]N$buriyāmu; ša[whose]REL; "
         "+zumru[body]N$zumuršu; kīma[like]PRP; +ṭīmu[yarn]N$ṭime; +eṣēru["
-        "draw//mark]V$uṣṣuru +."
-    )
-    assert c_type == "lem_line"
-
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lemline_at,
-    ) = atf_preprocessor.process_line("#lem: u; +appāru[reed-bed]N$")
-    assert c_type == "lem_line"
-
-
-# Batch test case to test if lemma lines are parsed as c_type "lem_line"
-def test_lemmatization_batch():
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
-
-    lines = [
+        "draw//mark]V$uṣṣuru +.",
+        "#lem: u; +appāru[reed-bed]N$",
         "#lem: attallû[eclipse]N; iššakinma[take place]V; enūma[when]SBJ; īrup["
         "cloud over]V; attallû[eclipse]N; "
         "iššakinma[take place]V; Adad[1]DN; +rigmu[voice]N$rigimšu; iddi[utter]V; "
@@ -715,13 +582,16 @@ def test_lemmatization_batch():
         "#lem: u; u; hīpi[broken place]N; ša[which]REL; n; +umāmu[animal]N$umāma; "
         "ṣandū[yoked]AJ; u",
         "#lem: u; eššu[new]AJ; u +.",
-    ]
+    ],
+)
+def test_lemma_line_c_type_is_lem_line(line):
+    atf_preprocessor = ATFPreprocessor("../logs", 0)
 
-    for line in lines:
-        (
-            converted_line,
-            c_array,
-            c_type,
-            c_alter_lemline_at,
-        ) = atf_preprocessor.process_line(line)
-        assert c_type == "lem_line"
+    (
+        converted_line,
+        c_array,
+        c_type,
+        c_alter_lemline_at,
+    ) = atf_preprocessor.process_line(line)
+
+    assert c_type == "lem_line"
