@@ -11,15 +11,16 @@ from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 def test_search_fragment(
     query_word, lemma, is_normalized, client, fragmentarium, dictionary, word
 ):
+    expected_word = {**word, "_id": lemma}
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragmentarium.create(lemmatized_fragment)
-    dictionary.create(word)
+    dictionary.create(expected_word)
     result = client.simulate_get(
         "/lemmas", params={"word": query_word, "isNormalized": is_normalized}
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [[word]]
+    assert result.json == [[expected_word]]
     assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 

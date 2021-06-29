@@ -25,7 +25,6 @@ from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
-from ebl.dictionary.domain.word import WordId
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.errors import NotFoundError
 from ebl.files.application.file_repository import File, FileRepository
@@ -41,7 +40,6 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
-from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
@@ -309,15 +307,9 @@ def annotations_repository(database):
     return MongoAnnotationsRepository(database)
 
 
-class TestLemmaRepository(MongoLemmaRepository):
-    # Mongomock does not support $unionWith so we need to stub the methods using it.
-    def query_lemmas(self, word: str, is_normalized: bool) -> Sequence[Lemma]:
-        return [[WordId("part1 part2 I")]]
-
-
 @pytest.fixture
 def lemma_repository(database):
-    return TestLemmaRepository(database)
+    return MongoLemmaRepository(database)
 
 
 @pytest.fixture
