@@ -18,3 +18,4 @@ vscode:
     - ms-python.python
     - mongodb.mongodb-vscode
     - davidanson.vscode-markdownlint
+    - ms-azuretools.vscode-docker
