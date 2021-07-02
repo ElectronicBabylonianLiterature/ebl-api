@@ -1,6 +1,7 @@
 import attr
 from marshmallow import fields, pre_dump
 
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -13,6 +14,7 @@ class FragmentDtoSchema(FragmentSchema):
     has_photo = fields.Function(
         lambda _, context: context["has_photo"], data_key="hasPhoto"
     )
+    references = fields.Nested(ApiReferenceSchema, many=True)
 
     @pre_dump
     def filter_folios(self, data, **kwargs):

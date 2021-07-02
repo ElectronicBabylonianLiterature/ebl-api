@@ -92,6 +92,16 @@ def test_query_by_museum_number_joins(database, fragment_repository):
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 
+def test_query_by_museum_number_references(
+    database, fragment_repository, bibliography_repository
+):
+    reference = ReferenceFactory.build(with_document=True)
+    fragment = LemmatizedFragmentFactory.build(references=(reference,))
+    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    bibliography_repository.create(reference.document)
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+
+
 def test_fragment_not_found(fragment_repository):
     with pytest.raises(NotFoundError):
         fragment_repository.query_by_museum_number(MuseumNumber("unknown", "id"))

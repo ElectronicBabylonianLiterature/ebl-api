@@ -21,6 +21,7 @@ from ebl.fragmentarium.infrastructure.queries import (
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
+from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 
 FRAGMENTS_COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
@@ -58,6 +59,7 @@ class MongoFragmentRepository(FragmentRepository):
         data = self._collection.aggregate(
             [
                 {"$match": museum_number_is(number)},
+                *join_reference_documents(),
                 {
                     "$lookup": {
                         "from": JOINS_COLLECTION,

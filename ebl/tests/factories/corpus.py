@@ -198,5 +198,5 @@ class TextFactory(factory.Factory):
     intro = factory.Faker("sentence")
     chapters = factory.List([factory.SubFactory(ChapterListingFactory)], TupleFactory)
     references = factory.List(
-        [factory.SubFactory(ReferenceFactory, with_document=True)]
+        [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )

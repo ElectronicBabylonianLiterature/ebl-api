@@ -2,6 +2,7 @@ from typing import List
 
 import pymongo
 
+from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.text import Text, TextId
@@ -33,7 +34,7 @@ def chapter_id_query(id_: ChapterId) -> dict:
     }
 
 
-def text_pipeline() -> List[dict]:
+def join_chapters() -> List[dict]:
     return [
         {
             "$lookup": {
@@ -119,56 +120,8 @@ class MongoTextRepository(TextRepository):
                                 "index": id_.index,
                             }
                         },
-                        {
-                            "$unwind": {
-                                "path": "$references",
-                                "preserveNullAndEmptyArrays": True,
-                            }
-                        },
-                        {
-                            "$lookup": {
-                                "from": "bibliography",
-                                "localField": "references.id",
-                                "foreignField": "_id",
-                                "as": "references.document",
-                            }
-                        },
-                        {
-                            "$set": {
-                                "references.document": {
-                                    "$arrayElemAt": ["$references.document", 0]
-                                }
-                            }
-                        },
-                        {
-                            "$group": {
-                                "_id": "$_id",
-                                "references": {"$push": "$references"},
-                                "root": {"$first": "$$ROOT"},
-                            }
-                        },
-                        {
-                            "$replaceRoot": {
-                                "newRoot": {
-                                    "$mergeObjects": [
-                                        "$root",
-                                        {"references": "$references"},
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "$set": {
-                                "references": {
-                                    "$filter": {
-                                        "input": "$references",
-                                        "as": "reference",
-                                        "cond": {"$ne": ["$$reference", {}]},
-                                    }
-                                }
-                            }
-                        },
-                        *text_pipeline(),
+                        *join_reference_documents(),
+                        *join_chapters(),
                         {"$limit": 1},
                     ]
                 )
@@ -187,7 +140,21 @@ class MongoTextRepository(TextRepository):
             raise chapter_not_found(id_)
 
     def list(self) -> List[Text]:
-        return TextSchema().load(self._texts.aggregate(text_pipeline()), many=True)
+        return TextSchema().load(
+            self._texts.aggregate(
+                [
+                    *join_reference_documents(),
+                    *join_chapters(),
+                    {
+                        "$sort": {
+                            "category": pymongo.ASCENDING,
+                            "index": pymongo.ASCENDING,
+                        }
+                    },
+                ]
+            ),
+            many=True,
+        )
 
     def update(self, id_: ChapterId, chapter: Chapter) -> None:
         self._chapters.update_one(

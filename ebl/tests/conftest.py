@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Mapping, Sequence, Union, List
+from typing import Any, Mapping, Sequence, Union
 import uuid
 
 import attr
@@ -15,9 +15,6 @@ from pymongo_inmemory import MongoClient
 
 import ebl.app
 import ebl.context
-from ebl.corpus.domain.text_id import TextId
-from ebl.corpus.domain.text import Text
-from ebl.corpus.application.schemas import TextSchema
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
@@ -125,50 +122,9 @@ def transliteration_factory(sign_repository):
     return TransliterationUpdateFactory(sign_repository)
 
 
-class TestTextRepository(MongoTextRepository):
-    # Mongomock does not support '.' in the 'as' parameters for the lookup stage
-    # of the aggregation pipeline so we need to stub the methods using it.
-    # https://github.com/mongomock/mongomock/issues/536
-    def find(self, id_: TextId) -> Text:
-        text = self._texts.find_one(
-            {"category": id_.category, "index": id_.index}, projection={"_id": False}
-        )
-        chapters = self._chapters.find_many(
-            {
-                "textId.genre": id_.genre.value,
-                "textId.category": id_.category,
-                "textId.index": id_.index,
-            },
-            projection={"_id": False, "stage": True, "name": True},
-        )
-        return TextSchema().load({**text, "chapters": chapters})
-
-    # Mongomock does not support $let in lookup so we need to
-    # stub the methods using it.
-    # https://github.com/mongomock/mongomock/issues/536
-    def list(self) -> List[Text]:
-        texts = self._texts.find_many({}, projection={"_id": False})
-        return TextSchema().load(
-            [
-                {
-                    **text,
-                    "chapters": self._chapters.find_many(
-                        {
-                            "textId.category": text["category"],
-                            "textId.index": text["index"],
-                        },
-                        projection={"_id": False, "stage": True, "name": True},
-                    ),
-                }
-                for text in texts
-            ],
-            many=True,
-        )
-
-
 @pytest.fixture
 def text_repository(database):
-    return TestTextRepository(database)
+    return MongoTextRepository(database)
 
 
 @pytest.fixture
