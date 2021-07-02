@@ -47,7 +47,10 @@ class MongoFragmentRepository(FragmentRepository):
 
     def create(self, fragment):
         return self._collection.insert_one(
-            {"_id": str(fragment.number), **FragmentSchema().dump(fragment)}
+            {
+                "_id": str(fragment.number),
+                **FragmentSchema(exclude=["joins"]).dump(fragment),
+            }
         )
 
     def query_by_museum_number(self, number: MuseumNumber):

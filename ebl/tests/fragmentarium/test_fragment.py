@@ -28,6 +28,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.fragmentarium.domain.joins import Join
 
 
 def test_number():
@@ -92,8 +93,9 @@ def test_thickness():
 
 
 def test_joins():
-    fragment = FragmentFactory.build()
-    assert fragment.joins == tuple()
+    joins = ((Join(MuseumNumber("K", "1")), Join(MuseumNumber("K", "2"))),)
+    fragment = FragmentFactory.build(joins=joins)
+    assert fragment.joins == joins
 
 
 def test_notes():

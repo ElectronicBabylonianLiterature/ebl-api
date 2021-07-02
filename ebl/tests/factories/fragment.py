@@ -65,6 +65,19 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
+from ebl.fragmentarium.domain.joins import Join
+
+
+class JoinFactory(factory.Factory):
+    class Meta:
+        model = Join
+
+    museum_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
+    is_checked = factory.Faker("boolean")
+    joined_by = factory.Faker("last_name")
+    date = factory.Faker("sentence")
+    note = factory.Faker("sentence")
+    legacy_data = factory.Faker("sentence")
 
 
 class FragmentFactory(factory.Factory):

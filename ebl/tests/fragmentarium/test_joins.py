@@ -4,18 +4,28 @@ from ebl.fragmentarium.domain.joins import Join
 
 
 def test_join() -> None:
-    properties = {
-        "museum_number": MuseumNumber("X", "1"),
-        "is_checked": True,
-        "joined_by": "Test User",
-        "date": "today",
-        "note": "test join",
-        "legacy_data": "old stuff",
-    }
+    museum_number = MuseumNumber("X", "1")
+    is_checked = True
+    joined_by = "Test User"
+    date = "today"
+    note = "test join"
+    legacy_data = "old stuff"
 
-    join = Join(**properties)
+    join = Join(museum_number, is_checked, joined_by, date, note, legacy_data)
 
-    assert_that(join, has_properties(properties))
+    assert_that(
+        join,
+        has_properties(
+            {
+                "museum_number": museum_number,
+                "is_checked": is_checked,
+                "joined_by": joined_by,
+                "date": date,
+                "note": note,
+                "legacy_data": legacy_data,
+            }
+        ),
+    )
 
 
 def test_join_default() -> None:

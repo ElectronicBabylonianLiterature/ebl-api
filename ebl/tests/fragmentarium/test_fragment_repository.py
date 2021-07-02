@@ -71,12 +71,12 @@ def test_create(database, fragment_repository):
     assert fragment_id == str(fragment.number)
     assert database[COLLECTION].find_one(
         {"_id": fragment_id}, projection={"_id": False}
-    ) == SCHEMA.dump(fragment)
+    ) == FragmentSchema(exclude=["joins"]).dump(fragment)
 
 
 def test_query_by_museum_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
 
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 

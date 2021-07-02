@@ -7,6 +7,7 @@ from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
+from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
@@ -57,7 +58,7 @@ class Fragment:
     width: Measure = Measure()
     length: Measure = Measure()
     thickness: Measure = Measure()
-    joins: Sequence[str] = tuple()
+    joins: Sequence[Sequence[Join]] = tuple()
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()

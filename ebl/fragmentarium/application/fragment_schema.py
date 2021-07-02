@@ -10,6 +10,7 @@ from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
+from ebl.fragmentarium.domain.joins import Join
 
 
 class MeasureSchema(Schema):
@@ -70,6 +71,21 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
+class JoinSchema(Schema):
+    museum_number = fields.Nested(
+        MuseumNumberSchema, required=True, data_key="museumNumber"
+    )
+    is_checked = fields.Boolean(required=True, data_key="isChecked")
+    joined_by = fields.String(required=True, data_key="joinedBy")
+    date = fields.String(required=True)
+    note = fields.String(required=True)
+    legacy_data = fields.String(required=True, data_key="legacyData")
+
+    @post_load
+    def make_join(self, data, **kwargs):
+        return Join(**data)
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
@@ -83,7 +99,7 @@ class FragmentSchema(Schema):
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
     thickness = fields.Nested(MeasureSchema, required=True)
-    joins = fields.List(fields.String(), required=True)
+    joins = fields.List(fields.List(fields.Nested(JoinSchema)), missing=tuple())
     record = fields.Pluck(RecordSchema, "entries")
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
@@ -103,7 +119,7 @@ class FragmentSchema(Schema):
 
     @post_load
     def make_fragment(self, data, **kwargs):
-        data["joins"] = tuple(data["joins"])
+        data["joins"] = tuple(map(tuple, data["joins"]))
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
