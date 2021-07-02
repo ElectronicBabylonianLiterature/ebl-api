@@ -4,7 +4,7 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema, JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -26,8 +26,10 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.fragmentarium.domain.joins import Join
 
 COLLECTION = "fragments"
+JOINS_COLLECTION = "joins"
 
 
 ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
@@ -78,6 +80,15 @@ def test_query_by_museum_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
     database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
 
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+
+
+def test_query_by_museum_number_joins(database, fragment_repository):
+    museum_number = MuseumNumber("X", "1")
+    join = Join(museum_number)
+    fragment = LemmatizedFragmentFactory.build(number=museum_number, joins=((join,),))
+    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    database[JOINS_COLLECTION].insert_one({"fragments": [[JoinSchema().dump(join)]]})
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 

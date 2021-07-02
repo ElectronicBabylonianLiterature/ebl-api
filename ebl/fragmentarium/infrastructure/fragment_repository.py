@@ -22,7 +22,8 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 
-COLLECTION = "fragments"
+FRAGMENTS_COLLECTION = "fragments"
+JOINS_COLLECTION = "joins"
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -31,7 +32,7 @@ def has_none_values(dictionary: dict) -> bool:
 
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
-        self._collection = MongoCollection(database, COLLECTION)
+        self._collection = MongoCollection(database, FRAGMENTS_COLLECTION)
 
     def count_transliterated_fragments(self):
         return self._collection.count_documents(HAS_TRANSLITERATION)
@@ -54,8 +55,35 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_by_museum_number(self, number: MuseumNumber):
-        data = self._collection.find_one(museum_number_is(number))
-        return FragmentSchema(unknown=EXCLUDE).load(data)
+        data = self._collection.aggregate(
+            [
+                {"$match": museum_number_is(number)},
+                {
+                    "$lookup": {
+                        "from": JOINS_COLLECTION,
+                        "pipeline": [
+                            {
+                                "$match": {
+                                    "fragments": {
+                                        "$elemMatch": {
+                                            "$elemMatch": museum_number_is(number)
+                                        }
+                                    }
+                                }
+                            },
+                            {"$limit": 1},
+                        ],
+                        "as": "joins",
+                    }
+                },
+                {"$set": {"joins": {"$first": "$joins"}}},
+                {"$set": {"joins": "$joins.fragments"}},
+            ]
+        )
+        try:
+            return FragmentSchema(unknown=EXCLUDE).load(next(data))
+        except StopIteration as error:
+            raise NotFoundError(f"Fragment {number} not found.") from error
 
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}
