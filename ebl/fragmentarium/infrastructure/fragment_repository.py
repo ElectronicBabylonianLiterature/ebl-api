@@ -1,6 +1,7 @@
 from typing import List
 
 from marshmallow import EXCLUDE
+import pymongo
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
@@ -34,6 +35,34 @@ def has_none_values(dictionary: dict) -> bool:
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, FRAGMENTS_COLLECTION)
+
+    def create_indexes(self) -> None:
+        self._collection.create_index(
+            [
+                ("museumNumber.prefix", pymongo.ASCENDING),
+                ("museumNumber.number", pymongo.ASCENDING),
+                ("museumNumber.suffix", pymongo.ASCENDING),
+            ],
+            unique=True,
+        )
+        self._collection.create_index([("accession", pymongo.ASCENDING)])
+        self._collection.create_index([("cdliNumber", pymongo.ASCENDING)])
+        self._collection.create_index([("folios.name", pymongo.ASCENDING)])
+        self._collection.create_index(
+            [
+                ("text.lines.content.value", pymongo.ASCENDING),
+                ("text.lines.content.uniqueLemma.0", pymongo.ASCENDING),
+            ]
+        )
+        self._collection.create_index([("text.lines.type", pymongo.ASCENDING)])
+        self._collection.create_index([("record.type", pymongo.ASCENDING)])
+        self._collection.create_index(
+            [
+                ("publication", pymongo.ASCENDING),
+                ("joins", pymongo.ASCENDING),
+                ("collection", pymongo.ASCENDING),
+            ]
+        )
 
     def count_transliterated_fragments(self):
         return self._collection.count_documents(HAS_TRANSLITERATION)

@@ -23,6 +23,7 @@ from ebl.fragmentarium.web.transliterations import TransliterationResource
 
 
 def create_fragmentarium_routes(api: falcon.API, context: Context):
+    context.fragment_repository.create_indexes()
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.get_bibliography(),

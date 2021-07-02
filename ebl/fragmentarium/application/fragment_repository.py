@@ -10,6 +10,10 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 
 class FragmentRepository(ABC):
     @abstractmethod
+    def create_indexes(self) -> None:
+        ...
+
+    @abstractmethod
     def create(self, fragment: Fragment) -> str:
         ...
 
