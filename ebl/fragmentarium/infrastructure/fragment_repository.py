@@ -32,6 +32,31 @@ def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
+def join_joins(number: MuseumNumber):
+    return [
+        {
+            "$lookup": {
+                "from": JOINS_COLLECTION,
+                "pipeline": [
+                    {
+                        "$match": {
+                            "fragments": {
+                                "$elemMatch": {
+                                    "$elemMatch": museum_number_is(number)
+                                }
+                            }
+                        }
+                    },
+                    {"$limit": 1},
+                ],
+                "as": "joins",
+            }
+        },
+        {"$set": {"joins": {"$first": "$joins"}}},
+        {"$set": {"joins": "$joins.fragments"}}
+    ]
+
+
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, FRAGMENTS_COLLECTION)
@@ -89,26 +114,7 @@ class MongoFragmentRepository(FragmentRepository):
             [
                 {"$match": museum_number_is(number)},
                 *join_reference_documents(),
-                {
-                    "$lookup": {
-                        "from": JOINS_COLLECTION,
-                        "pipeline": [
-                            {
-                                "$match": {
-                                    "fragments": {
-                                        "$elemMatch": {
-                                            "$elemMatch": museum_number_is(number)
-                                        }
-                                    }
-                                }
-                            },
-                            {"$limit": 1},
-                        ],
-                        "as": "joins",
-                    }
-                },
-                {"$set": {"joins": {"$first": "$joins"}}},
-                {"$set": {"joins": "$joins.fragments"}},
+                *join_joins(number),
             ]
         )
         try:
