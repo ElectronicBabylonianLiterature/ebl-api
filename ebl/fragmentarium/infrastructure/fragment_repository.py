@@ -32,20 +32,24 @@ def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
-def join_joins(number: MuseumNumber):
+def join_joins(number: MuseumNumber) -> List[dict]:
     return [
         {
             "$lookup": {
                 "from": JOINS_COLLECTION,
                 "pipeline": [
+                    {"$match": {"fragments": {"$elemMatch": museum_number_is(number)}}},
+                    {"$limit": 1},
+                    {"$unwind": "$fragments"},
                     {
-                        "$match": {
-                            "fragments": {
-                                "$elemMatch": {"$elemMatch": museum_number_is(number)}
-                            }
+                        "$group": {
+                            "_id": "$fragments.group",
+                            "fragments": {"$push": "$fragments"},
                         }
                     },
-                    {"$limit": 1},
+                    {"$unset": "fragments.group"},
+                    {"$sort": {"_id": 1}},
+                    {"$group": {"_id": None, "fragments": {"$push": "$fragments"}}},
                 ],
                 "as": "joins",
             }

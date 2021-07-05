@@ -85,10 +85,20 @@ def test_query_by_museum_number(database, fragment_repository):
 
 def test_query_by_museum_number_joins(database, fragment_repository):
     museum_number = MuseumNumber("X", "1")
-    join = Join(museum_number)
-    fragment = LemmatizedFragmentFactory.build(number=museum_number, joins=((join,),))
+    first_join = Join(museum_number)
+    second_join = Join(MuseumNumber("X", "2"))
+    fragment = LemmatizedFragmentFactory.build(
+        number=museum_number, joins=((first_join,), (second_join,))
+    )
     database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
-    database[JOINS_COLLECTION].insert_one({"fragments": [[JoinSchema().dump(join)]]})
+    database[JOINS_COLLECTION].insert_one(
+        {
+            "fragments": [
+                {**JoinSchema().dump(first_join), "group": 0},
+                {**JoinSchema().dump(second_join), "group": 1},
+            ]
+        }
+    )
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 
