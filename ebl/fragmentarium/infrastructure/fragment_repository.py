@@ -41,9 +41,7 @@ def join_joins(number: MuseumNumber):
                     {
                         "$match": {
                             "fragments": {
-                                "$elemMatch": {
-                                    "$elemMatch": museum_number_is(number)
-                                }
+                                "$elemMatch": {"$elemMatch": museum_number_is(number)}
                             }
                         }
                     },
@@ -53,7 +51,7 @@ def join_joins(number: MuseumNumber):
             }
         },
         {"$set": {"joins": {"$first": "$joins"}}},
-        {"$set": {"joins": "$joins.fragments"}}
+        {"$set": {"joins": "$joins.fragments"}},
     ]
 
 
@@ -128,21 +126,27 @@ class MongoFragmentRepository(FragmentRepository):
             match["references"]["$elemMatch"]["pages"] = {
                 "$regex": fr".*?(^|[^\d]){pages}([^\d]|$).*?"
             }
-        cursor = self._collection.find_many(match)
+        cursor = self._collection.find_many(match, projection={"joins": False})
         return self._map_fragments(cursor)
 
     def query_by_fragment_cdli_or_accession_number(self, number):
-        cursor = self._collection.find_many(number_is(number))
+        cursor = self._collection.find_many(
+            number_is(number), projection={"joins": False}
+        )
 
         return self._map_fragments(cursor)
 
     def query_random_by_transliterated(self):
-        cursor = self._collection.aggregate(aggregate_random())
+        cursor = self._collection.aggregate(
+            [*aggregate_random(), {"$project": {"joins": False}}]
+        )
 
         return self._map_fragments(cursor)
 
     def query_path_of_the_pioneers(self):
-        cursor = self._collection.aggregate(aggregate_path_of_the_pioneers())
+        cursor = self._collection.aggregate(
+            [*aggregate_path_of_the_pioneers(), {"$project": {"joins": False}}]
+        )
 
         return self._map_fragments(cursor)
 
@@ -170,18 +174,21 @@ class MongoFragmentRepository(FragmentRepository):
         ]
 
     def query_by_transliterated_sorted_by_date(self):
-        cursor = self._collection.aggregate(aggregate_latest())
+        cursor = self._collection.aggregate(
+            [*aggregate_latest(), {"$project": {"joins": False}}]
+        )
         return self._map_fragments(cursor)
 
     def query_by_transliterated_not_revised_by_other(self):
         cursor = self._collection.aggregate(
-            aggregate_needs_revision(), allowDiskUse=True
+            [*aggregate_needs_revision(), {"$project": {"joins": False}}],
+            allowDiskUse=True,
         )
         return FragmentInfoSchema(many=True).load(cursor)
 
     def query_by_transliteration(self, query):
         cursor = self._collection.find_many(
-            {"signs": {"$regex": query.regexp}}, limit=100
+            {"signs": {"$regex": query.regexp}}, limit=100, projection={"joins": False}
         )
         return self._map_fragments(cursor)
 
