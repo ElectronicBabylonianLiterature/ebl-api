@@ -1,4 +1,6 @@
+import functools
 import re
+from typing import Mapping
 
 import attr
 
@@ -20,17 +22,51 @@ def _require_suffix_if_contains_period(
         raise ValueError("If {attribute} contains period suffix cannot be empty.")
 
 
-@attr.s(auto_attribs=True, frozen=True)
+PREFIX_ORER: Mapping[str, int] = {
+    "K": 1,
+    "Sm": 2,
+    "DT": 3,
+    "Rm": 4,
+    "Rm-II": 5,
+    "BM": 7,
+    "CBS": 8,
+    "UM": 9,
+    "N": 10,
+}
+NUMBER_PREFIX_ORDER: int = 6
+DEFAULT_PREFIX_ORDER: int = 11
+
+
+@functools.total_ordering
+@attr.s(auto_attribs=True, frozen=True, order=False)
 class MuseumNumber:
     prefix: str = attr.ib(validator=[_is_not_empty, _require_suffix_if_contains_period])
     number: str = attr.ib(validator=[_is_not_empty, _does_not_contain_period])
     suffix: str = attr.ib(default="", validator=_does_not_contain_period)
+
+    def __lt__(self, other):
+        if not isinstance(other, MuseumNumber):
+            return NotImplemented
+        return (self.prefix_order, self.prefix, self.number, self.suffix) < (
+            other.prefix_order,
+            other.prefix,
+            other.number,
+            other.suffix,
+        )
 
     def __str__(self) -> str:
         if self.suffix:
             return f"{self.prefix}.{self.number}.{self.suffix}"
         else:
             return f"{self.prefix}.{self.number}"
+
+    @property
+    def prefix_order(self) -> int:
+        return (
+            NUMBER_PREFIX_ORDER
+            if self.prefix.isnumeric()
+            else PREFIX_ORER.get(self.prefix, DEFAULT_PREFIX_ORDER)
+        )
 
     @staticmethod
     def of(source: str) -> "MuseumNumber":
