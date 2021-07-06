@@ -9,7 +9,6 @@ from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, UncuratedReference
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     ColumnAtLine,
@@ -66,6 +65,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 from ebl.fragmentarium.domain.joins import Join
+from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 
 
 class JoinFactory(factory.Factory):
@@ -110,11 +110,13 @@ class InterestingFragmentFactory(FragmentFactory):
     publication = ""  # pyre-ignore[15]
     joins: Sequence[str] = tuple()
     text = Text()
+    notes = ""
     uncurated_references = (
         UncuratedReference("7(0)"),
         UncuratedReference("CAD 51", (34, 56)),
         UncuratedReference("7(1)"),
     )
+    references = tuple()
 
 
 class TransliteratedFragmentFactory(FragmentFactory):
@@ -317,7 +319,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         "ŠU/|BI×IS|"
     )
     folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
-    record = factory.SubFactory(RecordFactory)
+    record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
     line_to_vec = (
         (
             LineToVecEncoding.TEXT_LINE,

@@ -32,7 +32,6 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
@@ -134,26 +133,9 @@ def corpus(
     return Corpus(text_repository, bibliography, changelog, sign_repository)
 
 
-class TestFragmentRepository(MongoFragmentRepository):
-    # Mongomock does not support $addFields so we need to stub the methods using it.
-    def query_by_transliterated_sorted_by_date(self):
-        return self._map_fragments(self._fragments.find_many({}))
-
-    # Mongomock does not support $addFields so we need to stub the methods using it.
-    def query_by_transliterated_not_revised_by_other(self):
-        return [
-            FragmentInfo.of(fragment)
-            for fragment in self._map_fragments(self._fragments.find_many({}))
-        ]
-
-    # Mongomock does not support $let so we need to stub the methods using it.
-    def query_path_of_the_pioneers(self):
-        return self._map_fragments(self._fragments.find_many({}))[:1]
-
-
 @pytest.fixture
 def fragment_repository(database):
-    return TestFragmentRepository(database)
+    return MongoFragmentRepository(database)
 
 
 @pytest.fixture
@@ -210,15 +192,18 @@ class FakeFile(File):
 
 
 class TestFilesRepository(GridFsFileRepository):
-    def __init__(self, database, *files: FakeFile):
-        super().__init__(database, str(uuid.uuid4()))
+    def __init__(self, database, bucket: str, *files: FakeFile):
+        super().__init__(database, bucket)
         for file in files:
-            self._fs.put(
-                file,
-                filename=file.filename,
-                contentType=file.content_type,
-                metadata=file.metadata,
-            )
+            self._create(file)
+
+    def _create(self, file: FakeFile) -> None:
+        self._fs.put(
+            file,
+            filename=file.filename,
+            contentType=file.content_type,
+            metadata=file.metadata,
+        )
 
 
 @pytest.fixture
@@ -228,7 +213,7 @@ def file():
 
 @pytest.fixture
 def file_repository(database, file):
-    return TestFilesRepository(database, file)
+    return TestFilesRepository(database, "fs", file)
 
 
 @pytest.fixture
@@ -244,7 +229,7 @@ def folio_with_restricted_scope():
 @pytest.fixture
 def folio_repository(database, folio_with_allowed_scope, folio_with_restricted_scope):
     return TestFilesRepository(
-        database, folio_with_allowed_scope, folio_with_restricted_scope
+        database, "folios", folio_with_allowed_scope, folio_with_restricted_scope
     )
 
 
@@ -255,7 +240,7 @@ def photo():
 
 @pytest.fixture
 def photo_repository(database, photo):
-    return TestFilesRepository(database, photo)
+    return TestFilesRepository(database, "photos", photo)
 
 
 @pytest.fixture
