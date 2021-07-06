@@ -61,10 +61,11 @@ def join_joins(number: MuseumNumber) -> List[dict]:
 
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
-        self._collection = MongoCollection(database, FRAGMENTS_COLLECTION)
+        self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
+        self._joins = MongoCollection(database, JOINS_COLLECTION)
 
     def create_indexes(self) -> None:
-        self._collection.create_index(
+        self._fragments.create_index(
             [
                 ("museumNumber.prefix", pymongo.ASCENDING),
                 ("museumNumber.number", pymongo.ASCENDING),
@@ -72,30 +73,37 @@ class MongoFragmentRepository(FragmentRepository):
             ],
             unique=True,
         )
-        self._collection.create_index([("accession", pymongo.ASCENDING)])
-        self._collection.create_index([("cdliNumber", pymongo.ASCENDING)])
-        self._collection.create_index([("folios.name", pymongo.ASCENDING)])
-        self._collection.create_index(
+        self._fragments.create_index([("accession", pymongo.ASCENDING)])
+        self._fragments.create_index([("cdliNumber", pymongo.ASCENDING)])
+        self._fragments.create_index([("folios.name", pymongo.ASCENDING)])
+        self._fragments.create_index(
             [
                 ("text.lines.content.value", pymongo.ASCENDING),
                 ("text.lines.content.uniqueLemma.0", pymongo.ASCENDING),
             ]
         )
-        self._collection.create_index([("text.lines.type", pymongo.ASCENDING)])
-        self._collection.create_index([("record.type", pymongo.ASCENDING)])
-        self._collection.create_index(
+        self._fragments.create_index([("text.lines.type", pymongo.ASCENDING)])
+        self._fragments.create_index([("record.type", pymongo.ASCENDING)])
+        self._fragments.create_index(
             [
                 ("publication", pymongo.ASCENDING),
                 ("joins", pymongo.ASCENDING),
                 ("collection", pymongo.ASCENDING),
             ]
         )
+        self._joins.create_index(
+            [
+                ("fragments.museumNumber.prefix", pymongo.ASCENDING),
+                ("fragments.museumNumber.number", pymongo.ASCENDING),
+                ("fragments.museumNumber.suffix", pymongo.ASCENDING),
+            ]
+        )
 
     def count_transliterated_fragments(self):
-        return self._collection.count_documents(HAS_TRANSLITERATION)
+        return self._fragments.count_documents(HAS_TRANSLITERATION)
 
     def count_lines(self):
-        result = self._collection.aggregate(
+        result = self._fragments.aggregate(
             [{"$group": {"_id": None, "total": {"$sum": "$text.numberOfLines"}}}]
         )
         try:
@@ -104,7 +112,7 @@ class MongoFragmentRepository(FragmentRepository):
             return 0
 
     def create(self, fragment):
-        return self._collection.insert_one(
+        return self._fragments.insert_one(
             {
                 "_id": str(fragment.number),
                 **FragmentSchema(exclude=["joins"]).dump(fragment),
@@ -112,7 +120,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_by_museum_number(self, number: MuseumNumber):
-        data = self._collection.aggregate(
+        data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
                 *join_reference_documents(),
@@ -130,32 +138,32 @@ class MongoFragmentRepository(FragmentRepository):
             match["references"]["$elemMatch"]["pages"] = {
                 "$regex": fr".*?(^|[^\d]){pages}([^\d]|$).*?"
             }
-        cursor = self._collection.find_many(match, projection={"joins": False})
+        cursor = self._fragments.find_many(match, projection={"joins": False})
         return self._map_fragments(cursor)
 
     def query_by_fragment_cdli_or_accession_number(self, number):
-        cursor = self._collection.find_many(
+        cursor = self._fragments.find_many(
             number_is(number), projection={"joins": False}
         )
 
         return self._map_fragments(cursor)
 
     def query_random_by_transliterated(self):
-        cursor = self._collection.aggregate(
+        cursor = self._fragments.aggregate(
             [*aggregate_random(), {"$project": {"joins": False}}]
         )
 
         return self._map_fragments(cursor)
 
     def query_path_of_the_pioneers(self):
-        cursor = self._collection.aggregate(
+        cursor = self._fragments.aggregate(
             [*aggregate_path_of_the_pioneers(), {"$project": {"joins": False}}]
         )
 
         return self._map_fragments(cursor)
 
     def query_transliterated_numbers(self):
-        cursor = self._collection.find_many(
+        cursor = self._fragments.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber"]
         )
 
@@ -164,7 +172,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_transliterated_line_to_vec(self,) -> List[LineToVecEntry]:
-        cursor = self._collection.find_many(HAS_TRANSLITERATION, {"text": False})
+        cursor = self._fragments.find_many(HAS_TRANSLITERATION, {"text": False})
         return [
             LineToVecEntry(
                 MuseumNumberSchema().load(fragment["museumNumber"]),
@@ -178,26 +186,26 @@ class MongoFragmentRepository(FragmentRepository):
         ]
 
     def query_by_transliterated_sorted_by_date(self):
-        cursor = self._collection.aggregate(
+        cursor = self._fragments.aggregate(
             [*aggregate_latest(), {"$project": {"joins": False}}]
         )
         return self._map_fragments(cursor)
 
     def query_by_transliterated_not_revised_by_other(self):
-        cursor = self._collection.aggregate(
+        cursor = self._fragments.aggregate(
             [*aggregate_needs_revision(), {"$project": {"joins": False}}],
             allowDiskUse=True,
         )
         return FragmentInfoSchema(many=True).load(cursor)
 
     def query_by_transliteration(self, query):
-        cursor = self._collection.find_many(
+        cursor = self._fragments.find_many(
             {"signs": {"$regex": query.regexp}}, limit=100, projection={"joins": False}
         )
         return self._map_fragments(cursor)
 
     def update_transliteration(self, fragment):
-        self._collection.update_one(
+        self._fragments.update_one(
             fragment_is(fragment),
             {
                 "$set": FragmentSchema(
@@ -207,13 +215,13 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def update_genres(self, fragment):
-        self._collection.update_one(
+        self._fragments.update_one(
             fragment_is(fragment),
             {"$set": FragmentSchema(only=("genres",)).dump(fragment)},
         )
 
     def update_lemmatization(self, fragment):
-        self._collection.update_one(
+        self._fragments.update_one(
             fragment_is(fragment),
             {"$set": FragmentSchema(only=("text",)).dump(fragment)},
         )
@@ -239,7 +247,7 @@ class MongoFragmentRepository(FragmentRepository):
             ]
 
         def get_numbers(pipeline):
-            cursor = self._collection.aggregate(pipeline)
+            cursor = self._fragments.aggregate(pipeline)
             try:
                 entry = next(cursor)
                 return {"fragmentNumber": entry["_id"], "folioNumber": entry["number"]}
@@ -267,12 +275,12 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_next_and_previous_fragment(self, number: MuseumNumber):
         next_ = (
-            self._collection.find_many({"_id": {"$gt": f"{str(number)}"}})
+            self._fragments.find_many({"_id": {"$gt": f"{str(number)}"}})
             .sort("_id", 1)
             .limit(1)
         )
         previous = (
-            self._collection.find_many({"_id": {"$lt": f"{str(number)}"}})
+            self._fragments.find_many({"_id": {"$lt": f"{str(number)}"}})
             .sort("_id", -1)
             .limit(1)
         )
@@ -283,8 +291,8 @@ class MongoFragmentRepository(FragmentRepository):
             except StopIteration:
                 return None
 
-        first = self._collection.find_many({}).sort("_id", 1).limit(1)
-        last = self._collection.find_many({}).sort("_id", -1).limit(1)
+        first = self._fragments.find_many({}).sort("_id", 1).limit(1)
+        last = self._fragments.find_many({}).sort("_id", -1).limit(1)
         result = {
             "previous": get_numbers(previous) or get_numbers(last),
             "next": get_numbers(next_) or get_numbers(first),
@@ -295,7 +303,7 @@ class MongoFragmentRepository(FragmentRepository):
             return result
 
     def update_references(self, fragment):
-        self._collection.update_one(
+        self._fragments.update_one(
             fragment_is(fragment),
             {"$set": FragmentSchema(only=("references",)).dump(fragment)},
         )

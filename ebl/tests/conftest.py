@@ -137,18 +137,18 @@ def corpus(
 class TestFragmentRepository(MongoFragmentRepository):
     # Mongomock does not support $addFields so we need to stub the methods using it.
     def query_by_transliterated_sorted_by_date(self):
-        return self._map_fragments(self._collection.find_many({}))
+        return self._map_fragments(self._fragments.find_many({}))
 
     # Mongomock does not support $addFields so we need to stub the methods using it.
     def query_by_transliterated_not_revised_by_other(self):
         return [
             FragmentInfo.of(fragment)
-            for fragment in self._map_fragments(self._collection.find_many({}))
+            for fragment in self._map_fragments(self._fragments.find_many({}))
         ]
 
     # Mongomock does not support $let so we need to stub the methods using it.
     def query_path_of_the_pioneers(self):
-        return self._map_fragments(self._collection.find_many({}))[:1]
+        return self._map_fragments(self._fragments.find_many({}))[:1]
 
 
 @pytest.fixture
