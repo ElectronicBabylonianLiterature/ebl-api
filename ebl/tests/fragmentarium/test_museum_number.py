@@ -75,10 +75,11 @@ PREFIXES = [
     "DT",
     "Rm",
     "Rm-II",
+    "0",
     "1",
-    "11",
     "2",
-    "999",
+    "11",
+    "9999999",
     "BM",
     "CBS",
     "UM",
@@ -89,6 +90,17 @@ PREFIXES = [
     "a",
     "zz",
 ]
+NUMBERS_AND_SUFFIXES = ["0", "1", "2", "11", "9999999", "A", "AA", "BB", "Z", "a", "z"]
+
+
+def test_order_equal() -> None:
+    prefix = "X"
+    number = "B"
+    suffix = "C"
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        equal_to(MuseumNumber(prefix, number, suffix)),
+    )
 
 
 @pytest.mark.parametrize("prefix", PREFIXES)
@@ -111,21 +123,54 @@ def test_order_prefix(prefix: str) -> None:
                     for another in smaller
                 ),
                 equal_to(MuseumNumber(prefix, number, suffix)),
-                less_than(MuseumNumber(prefix, "a", suffix)),
-                less_than(MuseumNumber(prefix, "b", suffix)),
-                less_than(MuseumNumber(prefix, "z", suffix)),
-                less_than(MuseumNumber(prefix, "BB", suffix)),
-                less_than(MuseumNumber(prefix, "Z", suffix)),
-                greater_than(MuseumNumber(prefix, "1", suffix)),
-                greater_than(MuseumNumber(prefix, "999", suffix)),
-                greater_than(MuseumNumber(prefix, "A", suffix)),
-                less_than(MuseumNumber(prefix, number, "CC")),
-                less_than(MuseumNumber(prefix, number, "D")),
-                less_than(MuseumNumber(prefix, number, "c")),
-                less_than(MuseumNumber(prefix, number, "z")),
-                greater_than(MuseumNumber(prefix, number, "1")),
-                greater_than(MuseumNumber(prefix, number, "999")),
-                greater_than(MuseumNumber(prefix, number, "B")),
+            )
+        ),
+    )
+
+
+@pytest.mark.parametrize("number", NUMBERS_AND_SUFFIXES)
+def test_order_number(number: str) -> None:
+    prefix = "X"
+    suffix = ""
+    index = NUMBERS_AND_SUFFIXES.index(number)
+    larger = NUMBERS_AND_SUFFIXES[index + 1 :]
+    smaller = NUMBERS_AND_SUFFIXES[:index]
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        all_of(
+            *(
+                *(
+                    less_than(MuseumNumber(prefix, another, suffix))
+                    for another in larger
+                ),
+                *(
+                    greater_than(MuseumNumber(prefix, another, suffix))
+                    for another in smaller
+                ),
+            )
+        ),
+    )
+
+
+@pytest.mark.parametrize("suffix", NUMBERS_AND_SUFFIXES)
+def test_order_suffix(suffix: str) -> None:
+    prefix = "X"
+    number = "1"
+    index = NUMBERS_AND_SUFFIXES.index(suffix)
+    larger = NUMBERS_AND_SUFFIXES[index + 1 :]
+    smaller = NUMBERS_AND_SUFFIXES[:index]
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        all_of(
+            *(
+                *(
+                    less_than(MuseumNumber(prefix, number, another))
+                    for another in larger
+                ),
+                *(
+                    greater_than(MuseumNumber(prefix, number, another))
+                    for another in smaller
+                ),
             )
         ),
     )

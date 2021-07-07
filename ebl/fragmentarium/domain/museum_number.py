@@ -1,6 +1,7 @@
 import functools
+import math
 import re
-from typing import Mapping
+from typing import Mapping, Tuple
 
 import attr
 
@@ -45,13 +46,11 @@ class MuseumNumber:
     suffix: str = attr.ib(default="", validator=_does_not_contain_period)
 
     def __lt__(self, other):
-        if not isinstance(other, MuseumNumber):
-            return NotImplemented
-        return (self.prefix_order, self.prefix, self.number, self.suffix) < (
-            other.prefix_order,
-            other.prefix,
-            other.number,
-            other.suffix,
+        return (
+            (*self._prefix_order, *self._number_order, *self._suffix_order)
+            < (*other._prefix_order, *other._number_order, *other._suffix_order)
+            if isinstance(other, MuseumNumber)
+            else NotImplemented
         )
 
     def __str__(self) -> str:
@@ -61,12 +60,22 @@ class MuseumNumber:
             return f"{self.prefix}.{self.number}"
 
     @property
-    def prefix_order(self) -> int:
+    def _prefix_order(self) -> Tuple[int, int, str]:
         return (
             NUMBER_PREFIX_ORDER
             if self.prefix.isnumeric()
-            else PREFIX_ORER.get(self.prefix, DEFAULT_PREFIX_ORDER)
+            else PREFIX_ORER.get(self.prefix, DEFAULT_PREFIX_ORDER),
+            int(self.prefix) if self.prefix.isnumeric() else 0,
+            self.prefix,
         )
+
+    @property
+    def _number_order(self) -> Tuple[float, str]:
+        return (int(self.number) if self.number.isnumeric() else math.inf, self.number)
+
+    @property
+    def _suffix_order(self) -> Tuple[float, str]:
+        return (int(self.suffix) if self.suffix.isnumeric() else math.inf, self.suffix)
 
     @staticmethod
     def of(source: str) -> "MuseumNumber":
