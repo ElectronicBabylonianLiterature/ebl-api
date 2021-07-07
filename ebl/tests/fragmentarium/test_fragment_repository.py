@@ -85,8 +85,8 @@ def test_query_by_museum_number(database, fragment_repository):
 
 def test_query_by_museum_number_joins(database, fragment_repository):
     museum_number = MuseumNumber("X", "1")
-    first_join = Join(museum_number)
-    second_join = Join(MuseumNumber("X", "2"))
+    first_join = Join(museum_number, is_in_fragmentarium=True)
+    second_join = Join(MuseumNumber("X", "2"), is_in_fragmentarium=False)
     fragment = LemmatizedFragmentFactory.build(
         number=museum_number, joins=((first_join,), (second_join,))
     )
@@ -94,8 +94,14 @@ def test_query_by_museum_number_joins(database, fragment_repository):
     database[JOINS_COLLECTION].insert_one(
         {
             "fragments": [
-                {**JoinSchema().dump(first_join), "group": 0},
-                {**JoinSchema().dump(second_join), "group": 1},
+                {
+                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(first_join),
+                    "group": 0,
+                },
+                {
+                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(second_join),
+                    "group": 1,
+                },
             ]
         }
     )

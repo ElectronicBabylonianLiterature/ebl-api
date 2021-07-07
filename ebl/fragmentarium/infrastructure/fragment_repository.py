@@ -42,6 +42,21 @@ def join_joins(number: MuseumNumber) -> List[dict]:
                     {"$limit": 1},
                     {"$unwind": "$fragments"},
                     {
+                        "$lookup": {
+                            "from": FRAGMENTS_COLLECTION,
+                            "localField": "fragments.museumNumber",
+                            "foreignField": "museumNumber",
+                            "as": "fragments.isInFragmentarium",
+                        }
+                    },
+                    {
+                        "$set": {
+                            "fragments.isInFragmentarium": {
+                                "$anyElementTrue": "$fragments.isInFragmentarium"
+                            }
+                        }
+                    },
+                    {
                         "$group": {
                             "_id": "$fragments.group",
                             "fragments": {"$push": "$fragments"},

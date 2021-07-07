@@ -10,3 +10,4 @@ class Join:
     date: str = ""
     note: str = ""
     legacy_data: str = ""
+    is_in_fragmentarium: bool = False
