@@ -58,7 +58,7 @@ class Fragment:
     width: Measure = Measure()
     length: Measure = Measure()
     thickness: Measure = Measure()
-    joins: Sequence[Sequence[Join]] = tuple()
+    _joins: Sequence[Sequence[Join]] = tuple()
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()
@@ -68,6 +68,13 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
+
+    @property
+    def joins(self) -> Sequence[Sequence[Join]]:
+        return sorted(
+            (sorted(group) for group in self._joins),
+            key=lambda group: min(join.museum_number for join in group),
+        )
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)

@@ -1,6 +1,8 @@
 import attr
-import pytest
 from freezegun import freeze_time
+from hamcrest.core.assert_that import assert_that
+from hamcrest.library import contains
+import pytest
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
@@ -93,9 +95,20 @@ def test_thickness():
 
 
 def test_joins():
-    joins = ((Join(MuseumNumber("K", "1")), Join(MuseumNumber("K", "2"))),)
-    fragment = FragmentFactory.build(joins=joins)
-    assert fragment.joins == joins
+    fragment = FragmentFactory.build(
+        joins=(
+            (Join(MuseumNumber("B", "2")), Join(MuseumNumber("B", "1"))),
+            (Join(MuseumNumber("Z", "0")), Join(MuseumNumber("A", "3"))),
+        )
+    )
+
+    assert_that(
+        fragment.joins,
+        contains(
+            contains(Join(MuseumNumber("A", "3")), Join(MuseumNumber("Z", "0"))),
+            contains(Join(MuseumNumber("B", "1")), Join(MuseumNumber("B", "2"))),
+        ),
+    )
 
 
 def test_notes():
