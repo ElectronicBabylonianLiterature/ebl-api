@@ -13,6 +13,7 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationT
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
+    JoinFactory,
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
@@ -74,6 +75,26 @@ def test_create(database, fragment_repository):
     assert database[COLLECTION].find_one(
         {"_id": fragment_id}, projection={"_id": False}
     ) == FragmentSchema(exclude=["joins"]).dump(fragment)
+
+
+def test_create_join(database, fragment_repository):
+    first_join = JoinFactory.build()
+    second_join = JoinFactory.build()
+
+    fragment_repository.create_join([[first_join], [second_join]])
+
+    assert database[JOINS_COLLECTION].find_one({}, projection={"_id": False}) == {
+        "fragments": [
+            {
+                **JoinSchema(exclude=["is_in_fragmentarium"]).dump(first_join),
+                "group": 0,
+            },
+            {
+                **JoinSchema(exclude=["is_in_fragmentarium"]).dump(second_join),
+                "group": 1,
+            },
+        ]
+    }
 
 
 def test_query_by_museum_number(database, fragment_repository):

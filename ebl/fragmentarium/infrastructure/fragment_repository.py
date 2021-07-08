@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Sequence
 
 from marshmallow import EXCLUDE
 import pymongo
@@ -6,9 +6,10 @@ import pymongo
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema, JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure import collections
@@ -88,6 +89,20 @@ class MongoFragmentRepository(FragmentRepository):
             {
                 "_id": str(fragment.number),
                 **FragmentSchema(exclude=["joins"]).dump(fragment),
+            }
+        )
+
+    def create_join(self, joins: Sequence[Sequence[Join]]) -> None:
+        self._joins.insert_one(
+            {
+                "fragments": [
+                    {
+                        **JoinSchema(exclude=["is_in_fragmentarium"]).dump(join),
+                        "group": index,
+                    }
+                    for index, group in enumerate(joins)
+                    for join in group
+                ]
             }
         )
 

@@ -9,6 +9,7 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.fragmentarium.domain.joins import Join
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -97,6 +98,25 @@ def test_update_transliteration_merge_lemmatization(
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
+    updates = {"transliteration": "1. kururu", "notes": ""}
+    body = json.dumps(updates)
+    url = f"/fragments/{fragment.number}/transliteration"
+    post_result = client.simulate_post(url, body=body)
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert post_result.json == {
+        "title": "422 Unprocessable Entity",
+        "description": "Invalid transliteration",
+        "errors": [{"description": "Invalid value", "lineNumber": 1}],
+    }
+
+
+def test_update_transliteration_not_lowest_join(
+    client, fragmentarium, fragment_repository
+) -> None:
+    number = MuseumNumber("X", "2")
+    fragment = FragmentFactory.build(number=number)
+    fragment_repository.create_join([[Join(number)], [Join(MuseumNumber("X", "1"))]])
     updates = {"transliteration": "1. kururu", "notes": ""}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
