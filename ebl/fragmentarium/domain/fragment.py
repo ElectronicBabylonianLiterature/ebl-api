@@ -93,7 +93,6 @@ class Fragment:
             .value()
             or self.number
         )
-        print(lowest, flush=True)
         return lowest == self.number
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
