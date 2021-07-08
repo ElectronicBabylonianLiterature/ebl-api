@@ -1,7 +1,7 @@
 import attr
 from freezegun import freeze_time
 from hamcrest.core.assert_that import assert_that
-from hamcrest.library import contains
+from hamcrest.library import contains_exactly
 import pytest
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -104,9 +104,13 @@ def test_joins():
 
     assert_that(
         fragment.joins,
-        contains(
-            contains(Join(MuseumNumber("A", "3")), Join(MuseumNumber("Z", "0"))),
-            contains(Join(MuseumNumber("B", "1")), Join(MuseumNumber("B", "2"))),
+        contains_exactly(
+            contains_exactly(
+                Join(MuseumNumber("A", "3")), Join(MuseumNumber("Z", "0"))
+            ),
+            contains_exactly(
+                Join(MuseumNumber("B", "1")), Join(MuseumNumber("B", "2"))
+            ),
         ),
     )
 
