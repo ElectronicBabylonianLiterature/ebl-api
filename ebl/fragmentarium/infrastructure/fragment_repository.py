@@ -11,6 +11,7 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.infrastructure import collections
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -18,66 +19,22 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_path_of_the_pioneers,
     aggregate_random,
     fragment_is,
+    join_joins,
     museum_number_is,
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 
-FRAGMENTS_COLLECTION = "fragments"
-JOINS_COLLECTION = "joins"
-
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
-def join_joins(number: MuseumNumber) -> List[dict]:
-    return [
-        {
-            "$lookup": {
-                "from": JOINS_COLLECTION,
-                "pipeline": [
-                    {"$match": {"fragments": {"$elemMatch": museum_number_is(number)}}},
-                    {"$limit": 1},
-                    {"$unwind": "$fragments"},
-                    {
-                        "$lookup": {
-                            "from": FRAGMENTS_COLLECTION,
-                            "localField": "fragments.museumNumber",
-                            "foreignField": "museumNumber",
-                            "as": "fragments.isInFragmentarium",
-                        }
-                    },
-                    {
-                        "$set": {
-                            "fragments.isInFragmentarium": {
-                                "$anyElementTrue": "$fragments.isInFragmentarium"
-                            }
-                        }
-                    },
-                    {
-                        "$group": {
-                            "_id": "$fragments.group",
-                            "fragments": {"$push": "$fragments"},
-                        }
-                    },
-                    {"$unset": "fragments.group"},
-                    {"$sort": {"_id": 1}},
-                    {"$group": {"_id": None, "fragments": {"$push": "$fragments"}}},
-                ],
-                "as": "joins",
-            }
-        },
-        {"$set": {"joins": {"$first": "$joins"}}},
-        {"$set": {"joins": "$joins.fragments"}},
-    ]
-
-
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
-        self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
-        self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self._fragments = MongoCollection(database, collections.FRAGMENTS_COLLECTION)
+        self._joins = MongoCollection(database, collections.JOINS_COLLECTION)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
