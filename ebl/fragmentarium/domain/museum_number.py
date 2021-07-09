@@ -1,4 +1,7 @@
+import functools
+import math
 import re
+from typing import Mapping, Tuple
 
 import attr
 
@@ -20,17 +23,59 @@ def _require_suffix_if_contains_period(
         raise ValueError("If {attribute} contains period suffix cannot be empty.")
 
 
-@attr.s(auto_attribs=True, frozen=True)
+PREFIX_ORER: Mapping[str, int] = {
+    "K": 1,
+    "Sm": 2,
+    "DT": 3,
+    "Rm": 4,
+    "Rm-II": 5,
+    "BM": 7,
+    "CBS": 8,
+    "UM": 9,
+    "N": 10,
+}
+NUMBER_PREFIX_ORDER: int = 6
+DEFAULT_PREFIX_ORDER: int = 11
+
+
+@functools.total_ordering
+@attr.s(auto_attribs=True, frozen=True, order=False)
 class MuseumNumber:
     prefix: str = attr.ib(validator=[_is_not_empty, _require_suffix_if_contains_period])
     number: str = attr.ib(validator=[_is_not_empty, _does_not_contain_period])
     suffix: str = attr.ib(default="", validator=_does_not_contain_period)
+
+    def __lt__(self, other):
+        return (
+            (*self._prefix_order, *self._number_order, *self._suffix_order)
+            < (*other._prefix_order, *other._number_order, *other._suffix_order)
+            if isinstance(other, MuseumNumber)
+            else NotImplemented
+        )
 
     def __str__(self) -> str:
         if self.suffix:
             return f"{self.prefix}.{self.number}.{self.suffix}"
         else:
             return f"{self.prefix}.{self.number}"
+
+    @property
+    def _prefix_order(self) -> Tuple[int, int, str]:
+        return (
+            NUMBER_PREFIX_ORDER
+            if self.prefix.isnumeric()
+            else PREFIX_ORER.get(self.prefix, DEFAULT_PREFIX_ORDER),
+            int(self.prefix) if self.prefix.isnumeric() else 0,
+            self.prefix,
+        )
+
+    @property
+    def _number_order(self) -> Tuple[float, str]:
+        return (int(self.number) if self.number.isnumeric() else math.inf, self.number)
+
+    @property
+    def _suffix_order(self) -> Tuple[float, str]:
+        return (int(self.suffix) if self.suffix.isnumeric() else math.inf, self.suffix)
 
     @staticmethod
     def of(source: str) -> "MuseumNumber":

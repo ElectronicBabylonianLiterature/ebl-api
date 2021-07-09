@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields, post_load
 
+from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.schemas import NameEnum
 
@@ -16,6 +17,7 @@ class ReferenceSchema(Schema):
     def make_reference(self, data, **kwargs) -> Reference:
         data["id"] = BibliographyId(data["id"])
         data["lines_cited"] = tuple(data["lines_cited"])
+        data["document"] = data["document"] and create_object_entry(data["document"])
         return Reference(**data)
 
 

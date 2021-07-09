@@ -1,6 +1,8 @@
 import attr
-import pytest
 from freezegun import freeze_time
+from hamcrest.core.assert_that import assert_that
+from hamcrest.library import contains_exactly
+import pytest
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
@@ -28,6 +30,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.fragmentarium.domain.joins import Join
 
 
 def test_number():
@@ -92,8 +95,24 @@ def test_thickness():
 
 
 def test_joins():
-    fragment = FragmentFactory.build()
-    assert fragment.joins == tuple()
+    fragment = FragmentFactory.build(
+        joins=(
+            (Join(MuseumNumber("B", "2")), Join(MuseumNumber("B", "1"))),
+            (Join(MuseumNumber("Z", "0")), Join(MuseumNumber("A", "3"))),
+        )
+    )
+
+    assert_that(
+        fragment.joins,
+        contains_exactly(
+            contains_exactly(
+                Join(MuseumNumber("A", "3")), Join(MuseumNumber("Z", "0"))
+            ),
+            contains_exactly(
+                Join(MuseumNumber("B", "1")), Join(MuseumNumber("B", "2"))
+            ),
+        ),
+    )
 
 
 def test_notes():

@@ -127,6 +127,10 @@ class Text:
 
         return labels
 
+    @property
+    def is_empty(self) -> bool:
+        return len(self.lines) == 0
+
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Text":
         if len(self.lines) == len(lemmatization.tokens):
             zipped = zip_longest(self.lines, lemmatization.tokens)

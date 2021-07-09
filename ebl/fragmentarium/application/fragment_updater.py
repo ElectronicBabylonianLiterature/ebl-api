@@ -73,7 +73,10 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_references(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return (
+            self._repository.query_by_museum_number(number),
+            self._photos.query_if_file_exists(f"{number}.jpg"),
+        )
 
     def _create_changlelog(
         self, user: User, fragment: Fragment, updated_fragment: Fragment

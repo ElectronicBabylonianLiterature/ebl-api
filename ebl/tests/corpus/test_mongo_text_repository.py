@@ -5,6 +5,8 @@ from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.genre import Genre
+from ebl.corpus.domain.text_id import TextId
 
 
 TEXTS_COLLECTION = "texts"
@@ -17,6 +19,10 @@ CHAPTER = ChapterFactory.build(
     name=TEXT.chapters[0].name,
     manuscripts=(ManuscriptFactory.build(id=1, references=tuple()),),
 )
+
+
+def when_text_in_collection(database, text=TEXT):
+    database[TEXTS_COLLECTION].insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
 
 def when_chapter_in_collection(database, chapter=CHAPTER):
@@ -61,6 +67,39 @@ def test_it_is_not_possible_to_create_duplicate_chapters(text_repository):
 
     with pytest.raises(DuplicateError):
         text_repository.create(CHAPTER)
+
+
+def test_finding_text(database, text_repository, bibliography_repository):
+    when_text_in_collection(database)
+    when_chapter_in_collection(database)
+    for reference in TEXT.references:
+        bibliography_repository.create(reference.document)
+
+    assert text_repository.find(TEXT.id) == TEXT
+
+
+def test_find_raises_exception_if_text_not_found(text_repository):
+    with pytest.raises(NotFoundError):
+        text_repository.find(TextId(Genre.LITERATURE, 1, 1))
+
+
+def test_listing_texts(database, text_repository, bibliography_repository):
+    another_text = attr.evolve(TEXT, index=2)
+    another_chapter = attr.evolve(
+        CHAPTER,
+        text_id=another_text.id,
+        stage=another_text.chapters[0].stage,
+        name=another_text.chapters[0].name,
+    )
+
+    when_text_in_collection(database)
+    when_text_in_collection(database, another_text)
+    when_chapter_in_collection(database)
+    when_chapter_in_collection(database, another_chapter)
+    for reference in TEXT.references:
+        bibliography_repository.create(reference.document)
+
+    assert text_repository.list() == [TEXT, another_text]
 
 
 def test_updating_chapter(database, text_repository):

@@ -131,7 +131,12 @@ def test_update_references(
     references = (reference,)
     expected_fragment = fragment.set_references(references)
     when(bibliography).find(reference.id).thenReturn(reference)
-    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(fragment)
+        .thenReturn(expected_fragment)
+    )
     when(fragment_repository).update_references(expected_fragment).thenReturn()
     when(changelog).create(
         "fragments",

@@ -1,3 +1,5 @@
+from hamcrest.core import assert_that, all_of
+from hamcrest.library import equal_to, greater_than, less_than
 import pytest
 
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -65,3 +67,110 @@ def test_of_long_prefix() -> None:
 def test_of_invalid() -> None:
     with pytest.raises(ValueError):
         MuseumNumber.of("K.")
+
+
+PREFIXES = [
+    "K",
+    "Sm",
+    "DT",
+    "Rm",
+    "Rm-II",
+    "0",
+    "1",
+    "2",
+    "11",
+    "9999999",
+    "BM",
+    "CBS",
+    "UM",
+    "N",
+    "A",
+    "AA",
+    "Z",
+    "a",
+    "zz",
+]
+NUMBERS_AND_SUFFIXES = ["0", "1", "2", "11", "9999999", "A", "AA", "BB", "Z", "a", "z"]
+
+
+def test_order_equal() -> None:
+    prefix = "X"
+    number = "B"
+    suffix = "C"
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        equal_to(MuseumNumber(prefix, number, suffix)),
+    )
+
+
+@pytest.mark.parametrize("prefix", PREFIXES)
+def test_order_prefix(prefix: str) -> None:
+    number = "B"
+    suffix = "C"
+    index = PREFIXES.index(prefix)
+    larger = PREFIXES[index + 1 :]
+    smaller = PREFIXES[:index]
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        all_of(
+            *(
+                *(
+                    less_than(MuseumNumber(another, number, suffix))
+                    for another in larger
+                ),
+                *(
+                    greater_than(MuseumNumber(another, number, suffix))
+                    for another in smaller
+                ),
+                equal_to(MuseumNumber(prefix, number, suffix)),
+            )
+        ),
+    )
+
+
+@pytest.mark.parametrize("number", NUMBERS_AND_SUFFIXES)
+def test_order_number(number: str) -> None:
+    prefix = "X"
+    suffix = ""
+    index = NUMBERS_AND_SUFFIXES.index(number)
+    larger = NUMBERS_AND_SUFFIXES[index + 1 :]
+    smaller = NUMBERS_AND_SUFFIXES[:index]
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        all_of(
+            *(
+                *(
+                    less_than(MuseumNumber(prefix, another, suffix))
+                    for another in larger
+                ),
+                *(
+                    greater_than(MuseumNumber(prefix, another, suffix))
+                    for another in smaller
+                ),
+            )
+        ),
+    )
+
+
+@pytest.mark.parametrize("suffix", NUMBERS_AND_SUFFIXES)
+def test_order_suffix(suffix: str) -> None:
+    prefix = "X"
+    number = "1"
+    index = NUMBERS_AND_SUFFIXES.index(suffix)
+    larger = NUMBERS_AND_SUFFIXES[index + 1 :]
+    smaller = NUMBERS_AND_SUFFIXES[:index]
+    assert_that(
+        MuseumNumber(prefix, number, suffix),
+        all_of(
+            *(
+                *(
+                    less_than(MuseumNumber(prefix, number, another))
+                    for another in larger
+                ),
+                *(
+                    greater_than(MuseumNumber(prefix, number, another))
+                    for another in smaller
+                ),
+            )
+        ),
+    )

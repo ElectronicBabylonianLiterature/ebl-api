@@ -4,7 +4,7 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema, JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -13,6 +13,7 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationT
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
+    JoinFactory,
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
@@ -26,8 +27,10 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.fragmentarium.domain.joins import Join
 
 COLLECTION = "fragments"
+JOINS_COLLECTION = "joins"
 
 
 ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
@@ -71,13 +74,68 @@ def test_create(database, fragment_repository):
     assert fragment_id == str(fragment.number)
     assert database[COLLECTION].find_one(
         {"_id": fragment_id}, projection={"_id": False}
-    ) == SCHEMA.dump(fragment)
+    ) == FragmentSchema(exclude=["joins"]).dump(fragment)
+
+
+def test_create_join(database, fragment_repository):
+    first_join = JoinFactory.build()
+    second_join = JoinFactory.build()
+
+    fragment_repository.create_join([[first_join], [second_join]])
+
+    assert database[JOINS_COLLECTION].find_one({}, projection={"_id": False}) == {
+        "fragments": [
+            {
+                **JoinSchema(exclude=["is_in_fragmentarium"]).dump(first_join),
+                "group": 0,
+            },
+            {
+                **JoinSchema(exclude=["is_in_fragmentarium"]).dump(second_join),
+                "group": 1,
+            },
+        ]
+    }
 
 
 def test_query_by_museum_number(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
 
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+
+
+def test_query_by_museum_number_joins(database, fragment_repository):
+    museum_number = MuseumNumber("X", "1")
+    first_join = Join(museum_number, is_in_fragmentarium=True)
+    second_join = Join(MuseumNumber("X", "2"), is_in_fragmentarium=False)
+    fragment = LemmatizedFragmentFactory.build(
+        number=museum_number, joins=((first_join,), (second_join,))
+    )
+    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    database[JOINS_COLLECTION].insert_one(
+        {
+            "fragments": [
+                {
+                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(first_join),
+                    "group": 0,
+                },
+                {
+                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(second_join),
+                    "group": 1,
+                },
+            ]
+        }
+    )
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+
+
+def test_query_by_museum_number_references(
+    database, fragment_repository, bibliography_repository
+):
+    reference = ReferenceFactory.build(with_document=True)
+    fragment = LemmatizedFragmentFactory.build(references=(reference,))
+    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    bibliography_repository.create(reference.document)
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 

@@ -9,6 +9,7 @@ from ebl.tests.factories.fragment import (
     InterestingFragmentFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def expected_fragment_info_dto(fragment, lines=tuple()):
@@ -125,7 +126,9 @@ def test_random(client, fragmentarium):
 
 
 def test_interesting(client, fragmentarium):
-    interesting_fragment = InterestingFragmentFactory.build()
+    interesting_fragment = InterestingFragmentFactory.build(
+        number=MuseumNumber("K", "1")
+    )
     fragmentarium.create(interesting_fragment)
 
     result = client.simulate_get("/fragments", params={"interesting": True})

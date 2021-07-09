@@ -1,7 +1,7 @@
 import datetime
 import io
 import json
-from typing import Any, Mapping, Sequence, Union, List
+from typing import Any, Mapping, Sequence, Union
 import uuid
 
 import attr
@@ -15,9 +15,6 @@ from pymongo_inmemory import MongoClient
 
 import ebl.app
 import ebl.context
-from ebl.corpus.domain.text_id import TextId
-from ebl.corpus.domain.text import Text
-from ebl.corpus.application.schemas import TextSchema
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
@@ -35,7 +32,6 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
@@ -125,50 +121,9 @@ def transliteration_factory(sign_repository):
     return TransliterationUpdateFactory(sign_repository)
 
 
-class TestTextRepository(MongoTextRepository):
-    # Mongomock does not support '.' in the 'as' parameters for the lookup stage
-    # of the aggregation pipeline so we need to stub the methods using it.
-    # https://github.com/mongomock/mongomock/issues/536
-    def find(self, id_: TextId) -> Text:
-        text = self._texts.find_one(
-            {"category": id_.category, "index": id_.index}, projection={"_id": False}
-        )
-        chapters = self._chapters.find_many(
-            {
-                "textId.genre": id_.genre.value,
-                "textId.category": id_.category,
-                "textId.index": id_.index,
-            },
-            projection={"_id": False, "stage": True, "name": True},
-        )
-        return TextSchema().load({**text, "chapters": chapters})
-
-    # Mongomock does not support $let in lookup so we need to
-    # stub the methods using it.
-    # https://github.com/mongomock/mongomock/issues/536
-    def list(self) -> List[Text]:
-        texts = self._texts.find_many({}, projection={"_id": False})
-        return TextSchema().load(
-            [
-                {
-                    **text,
-                    "chapters": self._chapters.find_many(
-                        {
-                            "textId.category": text["category"],
-                            "textId.index": text["index"],
-                        },
-                        projection={"_id": False, "stage": True, "name": True},
-                    ),
-                }
-                for text in texts
-            ],
-            many=True,
-        )
-
-
 @pytest.fixture
 def text_repository(database):
-    return TestTextRepository(database)
+    return MongoTextRepository(database)
 
 
 @pytest.fixture
@@ -178,26 +133,9 @@ def corpus(
     return Corpus(text_repository, bibliography, changelog, sign_repository)
 
 
-class TestFragmentRepository(MongoFragmentRepository):
-    # Mongomock does not support $addFields so we need to stub the methods using it.
-    def query_by_transliterated_sorted_by_date(self):
-        return self._map_fragments(self._collection.find_many({}))
-
-    # Mongomock does not support $addFields so we need to stub the methods using it.
-    def query_by_transliterated_not_revised_by_other(self):
-        return [
-            FragmentInfo.of(fragment)
-            for fragment in self._map_fragments(self._collection.find_many({}))
-        ]
-
-    # Mongomock does not support $let so we need to stub the methods using it.
-    def query_path_of_the_pioneers(self):
-        return self._map_fragments(self._collection.find_many({}))[:1]
-
-
 @pytest.fixture
 def fragment_repository(database):
-    return TestFragmentRepository(database)
+    return MongoFragmentRepository(database)
 
 
 @pytest.fixture
@@ -254,15 +192,18 @@ class FakeFile(File):
 
 
 class TestFilesRepository(GridFsFileRepository):
-    def __init__(self, database, *files: FakeFile):
-        super().__init__(database, str(uuid.uuid4()))
+    def __init__(self, database, bucket: str, *files: FakeFile):
+        super().__init__(database, bucket)
         for file in files:
-            self._fs.put(
-                file,
-                filename=file.filename,
-                contentType=file.content_type,
-                metadata=file.metadata,
-            )
+            self._create(file)
+
+    def _create(self, file: FakeFile) -> None:
+        self._fs.put(
+            file,
+            filename=file.filename,
+            contentType=file.content_type,
+            metadata=file.metadata,
+        )
 
 
 @pytest.fixture
@@ -272,7 +213,7 @@ def file():
 
 @pytest.fixture
 def file_repository(database, file):
-    return TestFilesRepository(database, file)
+    return TestFilesRepository(database, "fs", file)
 
 
 @pytest.fixture
@@ -288,7 +229,7 @@ def folio_with_restricted_scope():
 @pytest.fixture
 def folio_repository(database, folio_with_allowed_scope, folio_with_restricted_scope):
     return TestFilesRepository(
-        database, folio_with_allowed_scope, folio_with_restricted_scope
+        database, "folios", folio_with_allowed_scope, folio_with_restricted_scope
     )
 
 
@@ -299,7 +240,7 @@ def photo():
 
 @pytest.fixture
 def photo_repository(database, photo):
-    return TestFilesRepository(database, photo)
+    return TestFilesRepository(database, "photos", photo)
 
 
 @pytest.fixture

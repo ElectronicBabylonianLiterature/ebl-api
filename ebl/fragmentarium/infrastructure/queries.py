@@ -4,6 +4,8 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
+from ebl.fragmentarium.infrastructure import collections
+
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
@@ -183,4 +185,46 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
         {"$match": {"photos.0": {"$exists": True}}},
         {"$project": {"photos": 0, "filename": 0}},
         sample_size_one(),
+    ]
+
+
+def join_joins(number: MuseumNumber) -> List[dict]:
+    return [
+        {
+            "$lookup": {
+                "from": collections.JOINS_COLLECTION,
+                "pipeline": [
+                    {"$match": {"fragments": {"$elemMatch": museum_number_is(number)}}},
+                    {"$limit": 1},
+                    {"$unwind": "$fragments"},
+                    {
+                        "$lookup": {
+                            "from": collections.FRAGMENTS_COLLECTION,
+                            "localField": "fragments.museumNumber",
+                            "foreignField": "museumNumber",
+                            "as": "fragments.isInFragmentarium",
+                        }
+                    },
+                    {
+                        "$set": {
+                            "fragments.isInFragmentarium": {
+                                "$anyElementTrue": "$fragments.isInFragmentarium"
+                            }
+                        }
+                    },
+                    {
+                        "$group": {
+                            "_id": "$fragments.group",
+                            "fragments": {"$push": "$fragments"},
+                        }
+                    },
+                    {"$unset": "fragments.group"},
+                    {"$sort": {"_id": 1}},
+                    {"$group": {"_id": None, "fragments": {"$push": "$fragments"}}},
+                ],
+                "as": "joins",
+            }
+        },
+        {"$set": {"joins": {"$first": "$joins"}}},
+        {"$set": {"joins": "$joins.fragments"}},
     ]

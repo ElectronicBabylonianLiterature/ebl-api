@@ -8,6 +8,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
+from ebl.fragmentarium.domain.fragment import NotLowestJoinError
 
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
@@ -39,6 +40,8 @@ class TransliterationResource:
                 "description": str(error),
                 "errors": error.errors,
             }
+        except NotLowestJoinError as error:
+            raise DataError(error) from error
 
     def _create_transliteration(self, media):
         try:
