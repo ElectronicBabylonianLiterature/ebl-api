@@ -25,6 +25,7 @@ from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.corpus.domain.lines_update import LinesUpdate
 
 CHAPTERS_COLLECTION = "chapters"
 TEXT = TextFactory.build()
@@ -536,8 +537,9 @@ def test_updating_lines(
         when,
     )
 
-    lines = updated_chapter.lines
-    corpus.update_lines(CHAPTER.id_, lines, user)
+    corpus.update_lines(
+        CHAPTER.id_, LinesUpdate([], set(), {0: updated_chapter.lines[0]}), user
+    )
 
 
 def test_importing_lines(
@@ -642,27 +644,36 @@ def test_merging_lines(
         when,
     )
 
-    lines = (
-        Line(
-            LineNumber(1),
-            (
-                LineVariant(
-                    reconstruction,
-                    None,
-                    (ManuscriptLine(manuscript_id, tuple(), new_text_line),),
-                ),
-            ),
-            is_second_line_of_parallelism,
-            is_beginning_of_section,
+    corpus.update_lines(
+        CHAPTER.id_,
+        LinesUpdate(
+            [],
+            set(),
+            {
+                0: Line(
+                    LineNumber(1),
+                    (
+                        LineVariant(
+                            reconstruction,
+                            None,
+                            (ManuscriptLine(manuscript_id, tuple(), new_text_line),),
+                        ),
+                    ),
+                    is_second_line_of_parallelism,
+                    is_beginning_of_section,
+                )
+            },
         ),
+        user,
     )
-    corpus.update_lines(CHAPTER.id_, lines, user)
 
 
 def test_update_lines_raises_exception_if_invalid_signs(
     corpus, text_repository, bibliography, when
 ) -> None:
-    lines = CHAPTER.lines
+    lines = LinesUpdate(
+        [], set(), {index: line for index, line in enumerate(CHAPTER.lines)}
+    )
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )

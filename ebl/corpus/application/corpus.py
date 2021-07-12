@@ -13,7 +13,7 @@ from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_info import ChapterInfo
-from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
@@ -114,9 +114,9 @@ class Corpus:
     def import_lines(self, id_: ChapterId, atf: str, user: User) -> None:
         chapter = self._repository.find_chapter(id_)
         lines = parse_chapter(atf, chapter.manuscripts)
-        self.update_lines(id_, [*chapter.lines, *lines], user)
+        self.update_lines(id_, LinesUpdate(lines, set(), {}), user)
 
-    def update_lines(self, id_: ChapterId, lines: Sequence[Line], user: User) -> None:
+    def update_lines(self, id_: ChapterId, lines: LinesUpdate, user: User) -> None:
         self._update_chapter(id_, LinesUpdater(lines, self._sign_repository), user)
 
     def _update_chapter(

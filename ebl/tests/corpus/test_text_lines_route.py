@@ -20,6 +20,9 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
 
 
+EMPTY_EDIT_DTO = {"new": [], "deleted": [], "edited": []}
+
+
 def test_updating(
     client, bibliography, sign_repository, signs, text_repository
 ) -> None:
@@ -33,7 +36,14 @@ def test_updating(
         parser_version=ATF_PARSER_VERSION,
     )
 
-    body = {"lines": create_chapter_dto(updated_chapter)["lines"]}
+    body = {
+        "new": [],
+        "deleted": [],
+        "edited": [
+            {"index": index, "line": line}
+            for index, line in enumerate(create_chapter_dto(updated_chapter)["lines"])
+        ],
+    }
     post_result = client.simulate_post(
         create_chapter_url(chapter, "/lines"), body=json.dumps(body)
     )
@@ -56,7 +66,7 @@ def test_updating_strophic_information(
     chapter = ChapterFactory.build()
     allow_references(chapter, bibliography)
     text_repository.create_chapter(chapter)
-    updated_text = attr.evolve(
+    updated_chapter = attr.evolve(
         chapter,
         lines=(
             attr.evolve(
@@ -70,26 +80,33 @@ def test_updating_strophic_information(
         parser_version=ATF_PARSER_VERSION,
     )
 
-    body = {"lines": create_chapter_dto(updated_text)["lines"]}
+    body = {
+        "new": [],
+        "deleted": [],
+        "edited": [
+            {"index": index, "line": line}
+            for index, line in enumerate(create_chapter_dto(updated_chapter)["lines"])
+        ],
+    }
     post_result = client.simulate_post(
         create_chapter_url(chapter, "/lines"), body=json.dumps(body)
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert post_result.json == create_chapter_dto(updated_text)
+    assert post_result.json == create_chapter_dto(updated_chapter)
 
     get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert get_result.json == create_chapter_dto(updated_text)
+    assert get_result.json == create_chapter_dto(updated_chapter)
 
 
 def test_updating_chapter_not_found(client, bibliography):
     post_result = client.simulate_post(
         f"/texts/1/1/chapters/{Stage.STANDARD_BABYLONIAN.value}/any/lines",
-        body=json.dumps({"lines": []}),
+        body=json.dumps(EMPTY_EDIT_DTO),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -98,7 +115,7 @@ def test_updating_chapter_not_found(client, bibliography):
 def test_updating_invalid_category(client):
     post_result = client.simulate_post(
         f"/texts/invalid/1/chapters/{Stage.STANDARD_BABYLONIAN.value}/any/lines",
-        body=json.dumps({"lines": []}),
+        body=json.dumps(EMPTY_EDIT_DTO),
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -106,7 +123,7 @@ def test_updating_invalid_category(client):
 
 def test_updating_invalid_id(client):
     post_result = client.simulate_post(
-        "/texts/1/invalid/chapters/any/any/lines", body=json.dumps({"lines": []})
+        "/texts/1/invalid/chapters/any/any/lines", body=json.dumps(EMPTY_EDIT_DTO)
     )
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -119,17 +136,22 @@ TOO_MANY_NOTES = {
 
 
 @pytest.mark.parametrize(
-    "lines,expected_status",
-    [[[{}], falcon.HTTP_BAD_REQUEST], [[TOO_MANY_NOTES], falcon.HTTP_BAD_REQUEST]],
+    "dto,expected_status",
+    [
+        [[], falcon.HTTP_BAD_REQUEST],
+        [{}, falcon.HTTP_BAD_REQUEST],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": TOO_MANY_NOTES}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+    ],
 )
 def test_update_invalid_entity(
-    client,
-    bibliography,
-    lines,
-    expected_status,
-    sign_repository,
-    signs,
-    text_repository,
+    client, bibliography, dto, expected_status, sign_repository, signs, text_repository
 ):
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
@@ -137,7 +159,7 @@ def test_update_invalid_entity(
     text_repository.create_chapter(chapter)
 
     post_result = client.simulate_post(
-        create_chapter_url(chapter, "/lines"), body=json.dumps({"lines": lines})
+        create_chapter_url(chapter, "/lines"), body=json.dumps(dto)
     )
 
     assert post_result.status == expected_status
