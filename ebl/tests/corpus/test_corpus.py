@@ -471,7 +471,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
         corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
 
 
-def test_updating_lines(
+def test_updating_lines_edit(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
     updated_chapter = attr.evolve(
@@ -526,6 +526,82 @@ def test_updating_lines(
     assert (
         corpus.update_lines(
             CHAPTER.id_, LinesUpdate([], set(), {0: updated_chapter.lines[0]}), user
+        )
+        == updated_chapter
+    )
+
+
+def test_updating_lines_delete(
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+) -> None:
+    updated_chapter = attr.evolve(
+        CHAPTER,
+        lines=CHAPTER.lines[1:],
+        signs=("KU\nABZ075",),
+        parser_version=ATF_PARSER_VERSION,
+    )
+    expect_find_and_update_chapter(
+        bibliography,
+        changelog,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
+        signs,
+        sign_repository,
+        text_repository,
+        user,
+        when,
+    )
+
+    assert (
+        corpus.update_lines(CHAPTER.id_, LinesUpdate([], {0}, {}), user)
+        == updated_chapter
+    )
+
+
+def test_updating_lines_add(
+    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+) -> None:
+    updated_chapter = attr.evolve(
+        CHAPTER,
+        lines=(
+            CHAPTER.lines[0],
+            attr.evolve(
+                CHAPTER.lines[0],
+                number=LineNumber(2, True),
+                variants=(
+                    attr.evolve(
+                        CHAPTER.lines[0].variants[0],
+                        manuscripts=(
+                            attr.evolve(
+                                CHAPTER.lines[0].variants[0].manuscripts[0],
+                                line=TextLine.of_iterable(
+                                    LineNumber(2, True),
+                                    (Word.of([Reading.of_name("nu")]),),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nABZ075\nKU\nABZ075",),
+        parser_version=ATF_PARSER_VERSION,
+    )
+    expect_find_and_update_chapter(
+        bibliography,
+        changelog,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
+        signs,
+        sign_repository,
+        text_repository,
+        user,
+        when,
+    )
+
+    assert (
+        corpus.update_lines(
+            CHAPTER.id_, LinesUpdate([updated_chapter.lines[1]], set(), {}), user
         )
         == updated_chapter
     )
