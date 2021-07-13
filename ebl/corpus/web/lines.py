@@ -1,14 +1,33 @@
-import falcon
-from marshmallow import Schema, fields
+from typing import Tuple
 
+import falcon
+from marshmallow import Schema, fields, post_load
+
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiLineSchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
 
-class LinesDtoSchema(Schema):
-    lines = fields.Nested(ApiLineSchema, many=True, required=True)
+class LineEditSchema(Schema):
+    index = fields.Integer(required=True)
+    line = fields.Nested(ApiLineSchema, required=True)
+
+    @post_load
+    def make_line_edit(self, data: dict, **kwargs) -> Tuple[int, Line]:
+        return data["index"], data["line"]
+
+
+class LinesUpdateSchema(Schema):
+    new = fields.Nested(ApiLineSchema, many=True, required=True)
+    deleted = fields.List(fields.Integer, required=True)
+    edited = fields.Nested(LineEditSchema, many=True, required=True)
+
+    @post_load
+    def make_lines_update(self, data: dict, **kwargs) -> LinesUpdate:
+        return LinesUpdate(data["new"], set(data["deleted"]), dict(data["edited"]))
 
 
 class LinesImportSchema(Schema):
@@ -20,7 +39,7 @@ class LinesResource:
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
-    @validate(LinesDtoSchema())
+    @validate(LinesUpdateSchema())
     def on_post(
         self,
         req: falcon.Request,
@@ -32,10 +51,9 @@ class LinesResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._corpus.update_lines(
-            chapter_id, LinesDtoSchema().load(req.media)["lines"], req.context.user
+        updated_chapter = self._corpus.update_lines(
+            chapter_id, LinesUpdateSchema().load(req.media), req.context.user
         )
-        updated_chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(updated_chapter)
 
 
@@ -56,6 +74,7 @@ class LinesImportResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._corpus.import_lines(chapter_id, req.media["atf"], req.context.user)
-        updated_chapter = self._corpus.find_chapter(chapter_id)
+        updated_chapter = self._corpus.import_lines(
+            chapter_id, req.media["atf"], req.context.user
+        )
         resp.media = ApiChapterSchema().dump(updated_chapter)

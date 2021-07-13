@@ -7,11 +7,7 @@ from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.errors import Defect, NotFoundError
-
-
-def invalid_reference(error: Exception) -> Exception:
-    return Defect(f'Invalid manuscript references: "{error}"')
+from ebl.errors import Defect
 
 
 class ChapterHydartor(ChapterVisitor):
@@ -41,8 +37,11 @@ class ChapterHydartor(ChapterVisitor):
 
     @visit.register(Manuscript)  # pyre-ignore[56]
     def _visit_manuscript(self, manuscript: Manuscript) -> None:
+        self._manuscripts.append(self.hydrate_manuscript(manuscript))
+
+    def hydrate_manuscript(self, manuscript: Manuscript) -> Manuscript:
         references = self._hydrate_references(manuscript.references)
-        self._manuscripts.append(attr.evolve(manuscript, references=references))
+        return attr.evolve(manuscript, references=references)
 
     def _hydrate_references(
         self, references: Iterable[Reference]
@@ -50,8 +49,5 @@ class ChapterHydartor(ChapterVisitor):
         return tuple(self._hydrate_reference(reference) for reference in references)
 
     def _hydrate_reference(self, reference: Reference) -> Reference:
-        try:
-            document = self._bibliography.find(reference.id)
-            return attr.evolve(reference, document=document)
-        except NotFoundError as error:
-            raise invalid_reference(error)
+        document = self._bibliography.find(reference.id)
+        return attr.evolve(reference, document=document)

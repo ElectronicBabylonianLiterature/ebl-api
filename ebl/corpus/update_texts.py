@@ -13,6 +13,7 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.text import Text, TextId
 from ebl.users.domain.user import ApiUser
+from ebl.corpus.domain.lines_update import LinesUpdate
 
 
 def update_text(corpus: Corpus, text: Text) -> None:
@@ -20,7 +21,13 @@ def update_text(corpus: Corpus, text: Text) -> None:
     for chapter_listing in text.chapters:
         chapter_id = ChapterId(text.id, chapter_listing.stage, chapter_listing.name)
         chapter = corpus.find_chapter(chapter_id)
-        corpus.update_lines(chapter_id, chapter.lines, user)
+        corpus.update_lines(
+            chapter_id,
+            LinesUpdate(
+                [], set(), {index: line for index, line in enumerate(chapter.lines)}
+            ),
+            user,
+        )
 
 
 @attr.s(auto_attribs=True)

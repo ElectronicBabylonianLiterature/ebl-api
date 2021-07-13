@@ -32,10 +32,9 @@ class LemmatizationResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._corpus.update_manuscript_lemmatization(
+        updated_chapter = self._corpus.update_manuscript_lemmatization(
             chapter_id,
             CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
             req.context.user,
         )
-        updated_chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(updated_chapter)
