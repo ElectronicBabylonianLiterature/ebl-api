@@ -17,6 +17,7 @@ from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
+from ebl.errors import Defect, NotFoundError, DataError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
@@ -90,13 +91,13 @@ class Corpus:
 
     def update_alignment(
         self, id_: ChapterId, alignment: Alignment, user: User
-    ) -> None:
-        self._update_chapter(id_, AlignmentUpdater(alignment), user)
+    ) -> Chapter:
+        return self._update_chapter(id_, AlignmentUpdater(alignment), user)
 
     def update_manuscript_lemmatization(
         self, id_: ChapterId, lemmatization: ChapterLemmatization, user: User
-    ) -> None:
-        self._update_chapter(id_, LemmatizationUpdater(lemmatization), user)
+    ) -> Chapter:
+        return self._update_chapter(id_, LemmatizationUpdater(lemmatization), user)
 
     def update_manuscripts(
         self,
@@ -104,27 +105,38 @@ class Corpus:
         manuscripts: Sequence[Manuscript],
         uncertain_fragments: Sequence[MuseumNumber],
         user: User,
-    ) -> None:
-        self._update_chapter(
+    ) -> Chapter:
+        try:
+            hydrator = ChapterHydartor(self._bibliography)
+            manuscripts = tuple(
+                hydrator.hydrate_manuscript(manuscript) for manuscript in manuscripts
+            )
+        except NotFoundError as error:
+            raise DataError(error) from error
+
+        return self._update_chapter(
             id_,
             ManuscriptUpdater(manuscripts, uncertain_fragments, self._sign_repository),
             user,
         )
 
-    def import_lines(self, id_: ChapterId, atf: str, user: User) -> None:
-        chapter = self._repository.find_chapter(id_)
+    def import_lines(self, id_: ChapterId, atf: str, user: User) -> Chapter:
+        chapter = self.find_chapter(id_)
         lines = parse_chapter(atf, chapter.manuscripts)
-        self.update_lines(id_, LinesUpdate(lines, set(), {}), user)
+        return self.update_lines(id_, LinesUpdate(lines, set(), {}), user)
 
-    def update_lines(self, id_: ChapterId, lines: LinesUpdate, user: User) -> None:
-        self._update_chapter(id_, LinesUpdater(lines, self._sign_repository), user)
+    def update_lines(self, id_: ChapterId, lines: LinesUpdate, user: User) -> Chapter:
+        return self._update_chapter(
+            id_, LinesUpdater(lines, self._sign_repository), user
+        )
 
     def _update_chapter(
         self, id_: ChapterId, updater: ChapterUpdater, user: User
-    ) -> None:
-        old_chapter = self._repository.find_chapter(id_)
+    ) -> Chapter:
+        old_chapter = self.find_chapter(id_)
         updated_chapter = updater.update(old_chapter)
         self.update_chapter(id_, old_chapter, updated_chapter, user)
+        return updated_chapter
 
     def update_chapter(
         self, id_: ChapterId, old: Chapter, updated: Chapter, user: User
@@ -134,12 +146,15 @@ class Corpus:
         self._repository.update(id_, updated)
 
     def _validate_chapter(self, chapter: Chapter) -> None:
-        TextValidator(self._bibliography).visit(chapter)
+        TextValidator().visit(chapter)
 
     def _hydrate_references(self, chapter: Chapter) -> Chapter:
-        hydrator = ChapterHydartor(self._bibliography)
-        hydrator.visit(chapter)
-        return hydrator.chapter
+        try:
+            hydrator = ChapterHydartor(self._bibliography)
+            hydrator.visit(chapter)
+            return hydrator.chapter
+        except NotFoundError as error:
+            raise Defect(error) from error
 
     def _create_changelog(self, old: Chapter, new: Chapter, user: User) -> None:
         old_dict: dict = {**ChapterSchema().dump(old), "_id": old.id_.to_tuple()}

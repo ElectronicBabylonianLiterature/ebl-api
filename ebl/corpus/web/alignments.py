@@ -24,8 +24,7 @@ class AlignmentResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._corpus.update_alignment(
+        updated_chapter = self._corpus.update_alignment(
             chapter_id, AlignmentSchema().load(req.media), req.context.user
         )
-        updated_chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(updated_chapter)

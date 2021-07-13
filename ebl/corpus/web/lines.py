@@ -51,10 +51,9 @@ class LinesResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._corpus.update_lines(
+        updated_chapter = self._corpus.update_lines(
             chapter_id, LinesUpdateSchema().load(req.media), req.context.user
         )
-        updated_chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(updated_chapter)
 
 
@@ -75,6 +74,7 @@ class LinesImportResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._corpus.import_lines(chapter_id, req.media["atf"], req.context.user)
-        updated_chapter = self._corpus.find_chapter(chapter_id)
+        updated_chapter = self._corpus.import_lines(
+            chapter_id, req.media["atf"], req.context.user
+        )
         resp.media = ApiChapterSchema().dump(updated_chapter)

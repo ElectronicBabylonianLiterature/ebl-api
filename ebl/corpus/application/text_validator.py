@@ -10,7 +10,7 @@ from ebl.corpus.domain.chapter import (
     TextLineEntry,
 )
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
-from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.manuscript import Siglum
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.greek_tokens import GreekWord
@@ -63,8 +63,7 @@ def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter)
 
 
 class TextValidator(ChapterVisitor):
-    def __init__(self, bibliography):
-        self._bibliography = bibliography
+    def __init__(self):
         self._chapter: Optional[Chapter] = None
         self._line: Optional[Line] = None
 
@@ -103,10 +102,6 @@ class TextValidator(ChapterVisitor):
 
         if invalid_lines:
             raise DataError(f"Invalid signs on lines: {', '.join(invalid_lines)}.")
-
-    @visit.register(Manuscript)  # pyre-ignore[56]
-    def _visit_manuscript(self, manuscript: Manuscript) -> None:
-        self._bibliography.validate_references(manuscript.references)
 
     @visit.register(Line)  # pyre-ignore[56]
     def _visit_line(self, line: Line) -> None:

@@ -35,11 +35,10 @@ class ManuscriptsResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         dto = ManuscriptDtoSchema().load(req.media)
-        self._corpus.update_manuscripts(
+        updated_chapter = self._corpus.update_manuscripts(
             chapter_id,
             dto["manuscripts"],
             tuple(dto["uncertain_fragments"]),
             req.context.user,
         )
-        updated_chapter = self._corpus.find_chapter(chapter_id)
         resp.media = ApiChapterSchema().dump(updated_chapter)

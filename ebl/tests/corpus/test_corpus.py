@@ -51,21 +51,8 @@ def expect_bibliography(bibliography, when) -> None:
             (when(bibliography).find(reference.id).thenReturn(reference.document))
 
 
-def expect_validate_references(bibliography, when, chapter=CHAPTER) -> None:
-    manuscript_references = [
-        manuscript.references for manuscript in chapter.manuscripts
-    ]
-
-    for references in manuscript_references:
-        when(bibliography).validate_references(references).thenReturn()
-
-
-def allow_validate_references(bibliography, when) -> None:
-    when(bibliography).validate_references(...).thenReturn()
-
-
 def expect_invalid_references(bibliography, when) -> None:
-    when(bibliography).validate_references(...).thenRaise(DataError())
+    when(bibliography).find(...).thenRaise(NotFoundError())
 
 
 def expect_signs(signs, sign_repository) -> None:
@@ -85,7 +72,6 @@ def expect_chapter_update(
     when,
 ) -> None:
     expect_signs(signs, sign_repository)
-    expect_validate_references(bibliography, when, old_chapter)
     when(text_repository).update(CHAPTER.id_, updated_chapter).thenReturn(
         updated_chapter
     )
@@ -112,6 +98,7 @@ def expect_find_and_update_chapter(
     when,
 ) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(old_chapter)
+    expect_bibliography(bibliography, when)
     expect_chapter_update(
         bibliography,
         changelog,
@@ -161,7 +148,7 @@ def test_find_chapter_raises_exception_if_references_not_found(
 def test_update_chapter(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
-    updated_chapter = attr.evolve(CHAPTER_WITHOUT_DOCUMENTS, version="New Version")
+    updated_chapter = attr.evolve(CHAPTER, version="New Version")
     expect_chapter_update(
         bibliography,
         changelog,
@@ -185,20 +172,18 @@ def test_updating_alignment(
     aligmnet = 0
     omitted_words = (1,)
     updated_chapter = attr.evolve(
-        CHAPTER_WITHOUT_DOCUMENTS,
+        CHAPTER,
         lines=(
             attr.evolve(
-                CHAPTER_WITHOUT_DOCUMENTS.lines[0],
+                CHAPTER.lines[0],
                 variants=(
                     attr.evolve(
-                        CHAPTER_WITHOUT_DOCUMENTS.lines[0].variants[0],
+                        CHAPTER.lines[0].variants[0],
                         manuscripts=(
                             attr.evolve(
-                                CHAPTER_WITHOUT_DOCUMENTS.lines[0]
-                                .variants[0]
-                                .manuscripts[0],
+                                CHAPTER.lines[0].variants[0].manuscripts[0],
                                 line=TextLine.of_iterable(
-                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                    CHAPTER.lines[0]
                                     .variants[0]
                                     .manuscripts[0]
                                     .line.line_number,
@@ -248,25 +233,23 @@ def test_updating_alignment(
             ),
         )
     )
-    corpus.update_alignment(CHAPTER.id_, alignment, user)
+    assert corpus.update_alignment(CHAPTER.id_, alignment, user) == updated_chapter
 
 
 def test_updating_manuscript_lemmatization(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
     updated_chapter = attr.evolve(
-        CHAPTER_WITHOUT_DOCUMENTS,
+        CHAPTER,
         lines=(
             attr.evolve(
-                CHAPTER_WITHOUT_DOCUMENTS.lines[0],
+                CHAPTER.lines[0],
                 variants=(
                     attr.evolve(
-                        CHAPTER_WITHOUT_DOCUMENTS.lines[0].variants[0],
+                        CHAPTER.lines[0].variants[0],
                         reconstruction=(
-                            CHAPTER_WITHOUT_DOCUMENTS.lines[0]
-                            .variants[0]
-                            .reconstruction[0],
-                            CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                            CHAPTER.lines[0].variants[0].reconstruction[0],
+                            CHAPTER.lines[0]
                             .variants[0]
                             .reconstruction[1]
                             .set_unique_lemma(
@@ -278,15 +261,13 @@ def test_updating_manuscript_lemmatization(
                                     (WordId("aklu I"),),
                                 )
                             ),
-                            *CHAPTER_WITHOUT_DOCUMENTS.lines[0]
-                            .variants[0]
-                            .reconstruction[2:6],
-                            CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                            *CHAPTER.lines[0].variants[0].reconstruction[2:6],
+                            CHAPTER.lines[0]
                             .variants[0]
                             .reconstruction[6]
                             .set_unique_lemma(
                                 LemmatizationToken(
-                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                    CHAPTER.lines[0]
                                     .variants[0]
                                     .reconstruction[6]
                                     .value,
@@ -296,11 +277,9 @@ def test_updating_manuscript_lemmatization(
                         ),
                         manuscripts=(
                             attr.evolve(
-                                CHAPTER_WITHOUT_DOCUMENTS.lines[0]
-                                .variants[0]
-                                .manuscripts[0],
+                                CHAPTER.lines[0].variants[0].manuscripts[0],
                                 line=TextLine.of_iterable(
-                                    CHAPTER_WITHOUT_DOCUMENTS.lines[0]
+                                    CHAPTER.lines[0]
                                     .variants[0]
                                     .manuscripts[0]
                                     .line.line_number,
@@ -354,7 +333,10 @@ def test_updating_manuscript_lemmatization(
             ),
         ),
     )
-    corpus.update_manuscript_lemmatization(CHAPTER.id_, lemmatization, user)
+    assert (
+        corpus.update_manuscript_lemmatization(CHAPTER.id_, lemmatization, user)
+        == updated_chapter
+    )
 
 
 @pytest.mark.parametrize(
@@ -399,10 +381,13 @@ def test_updating_manuscript_lemmatization(
         ),
     ],
 )
-def test_invalid_alignment(alignment, corpus, text_repository, when) -> None:
+def test_invalid_alignment(
+    alignment, corpus, text_repository, bibliography, when
+) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
+    expect_bibliography(bibliography, when)
     with pytest.raises(AlignmentError):
         corpus.update_alignment(CHAPTER.id_, alignment, ANY_USER)
 
@@ -412,10 +397,10 @@ def test_updating_manuscripts(
 ) -> None:
     uncertain_fragments = (MuseumNumber.of("K.1"),)
     updated_chapter = attr.evolve(
-        CHAPTER_WITHOUT_DOCUMENTS,
+        CHAPTER,
         manuscripts=(
             attr.evolve(
-                CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
+                CHAPTER.manuscripts[0],
                 colophon=Transliteration.of_iterable(
                     [
                         TextLine.of_iterable(
@@ -449,7 +434,10 @@ def test_updating_manuscripts(
     )
 
     manuscripts = (updated_chapter.manuscripts[0],)
-    corpus.update_manuscripts(CHAPTER.id_, manuscripts, uncertain_fragments, user)
+    assert (
+        corpus.update_manuscripts(CHAPTER.id_, manuscripts, uncertain_fragments, user)
+        == updated_chapter
+    )
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
@@ -462,10 +450,13 @@ def test_updating_manuscripts(
         ),
     ],
 )
-def test_invalid_manuscripts(manuscripts, corpus, text_repository, when) -> None:
+def test_invalid_manuscripts(
+    manuscripts, corpus, text_repository, bibliography, when
+) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
+    expect_bibliography(bibliography, when)
     with pytest.raises(DataError):
         corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
 
@@ -474,9 +465,6 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
     corpus, text_repository, bibliography, when
 ) -> None:
     manuscripts = CHAPTER.manuscripts
-    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
-        CHAPTER_WITHOUT_DOCUMENTS
-    )
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):
@@ -487,19 +475,17 @@ def test_updating_lines(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
     updated_chapter = attr.evolve(
-        CHAPTER_WITHOUT_DOCUMENTS,
+        CHAPTER,
         lines=(
             attr.evolve(
-                CHAPTER_WITHOUT_DOCUMENTS.lines[0],
+                CHAPTER.lines[0],
                 number=LineNumber(1, True),
                 variants=(
                     attr.evolve(
-                        CHAPTER_WITHOUT_DOCUMENTS.lines[0].variants[0],
+                        CHAPTER.lines[0].variants[0],
                         manuscripts=(
                             attr.evolve(
-                                CHAPTER_WITHOUT_DOCUMENTS.lines[0]
-                                .variants[0]
-                                .manuscripts[0],
+                                CHAPTER.lines[0].variants[0].manuscripts[0],
                                 line=TextLine.of_iterable(
                                     LineNumber(1, True),
                                     (
@@ -537,8 +523,11 @@ def test_updating_lines(
         when,
     )
 
-    corpus.update_lines(
-        CHAPTER.id_, LinesUpdate([], set(), {0: updated_chapter.lines[0]}), user
+    assert (
+        corpus.update_lines(
+            CHAPTER.id_, LinesUpdate([], set(), {0: updated_chapter.lines[0]}), user
+        )
+        == updated_chapter
     )
 
 
@@ -549,11 +538,8 @@ def test_importing_lines(
     siglum = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].siglum
     atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
     updated_chapter = attr.evolve(
-        CHAPTER_WITHOUT_DOCUMENTS,
-        lines=(
-            *CHAPTER_WITHOUT_DOCUMENTS.lines,
-            *parse_chapter(atf, CHAPTER_WITHOUT_DOCUMENTS.manuscripts),
-        ),
+        CHAPTER,
+        lines=(*CHAPTER.lines, *parse_chapter(atf, CHAPTER.manuscripts)),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
@@ -569,7 +555,7 @@ def test_importing_lines(
         when,
     )
 
-    corpus.import_lines(CHAPTER.id_, atf, user)
+    assert corpus.import_lines(CHAPTER.id_, atf, user) == updated_chapter
 
 
 def test_merging_lines(
@@ -627,7 +613,7 @@ def test_merging_lines(
     )
     old_chapter = attr.evolve(CHAPTER_WITHOUT_DOCUMENTS, lines=(line,))
     updated_chapter = attr.evolve(
-        CHAPTER_WITHOUT_DOCUMENTS,
+        CHAPTER,
         lines=(new_line,),
         signs=("KU BA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
@@ -644,27 +630,34 @@ def test_merging_lines(
         when,
     )
 
-    corpus.update_lines(
-        CHAPTER.id_,
-        LinesUpdate(
-            [],
-            set(),
-            {
-                0: Line(
-                    LineNumber(1),
-                    (
-                        LineVariant(
-                            reconstruction,
-                            None,
-                            (ManuscriptLine(manuscript_id, tuple(), new_text_line),),
+    assert (
+        corpus.update_lines(
+            CHAPTER.id_,
+            LinesUpdate(
+                [],
+                set(),
+                {
+                    0: Line(
+                        LineNumber(1),
+                        (
+                            LineVariant(
+                                reconstruction,
+                                None,
+                                (
+                                    ManuscriptLine(
+                                        manuscript_id, tuple(), new_text_line
+                                    ),
+                                ),
+                            ),
                         ),
-                    ),
-                    is_second_line_of_parallelism,
-                    is_beginning_of_section,
-                )
-            },
-        ),
-        user,
+                        is_second_line_of_parallelism,
+                        is_beginning_of_section,
+                    )
+                },
+            ),
+            user,
+        )
+        == updated_chapter
     )
 
 
@@ -677,7 +670,7 @@ def test_update_lines_raises_exception_if_invalid_signs(
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
-    allow_validate_references(bibliography, when)
+    expect_bibliography(bibliography, when)
 
     with pytest.raises(DataError):
         corpus.update_lines(CHAPTER.id_, lines, ANY_USER)
