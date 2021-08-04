@@ -5,6 +5,7 @@ import pymongo
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -181,3 +182,6 @@ class MongoTextRepository(TextRepository):
             ),
             many=True,
         )
+
+    def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
+        return []
