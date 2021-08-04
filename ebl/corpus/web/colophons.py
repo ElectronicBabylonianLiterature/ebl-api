@@ -28,5 +28,9 @@ class ColophonsResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        manuscripts = self._corpus.find_manuscripts(chapter_id)
+        manuscripts = [
+            manuscript
+            for manuscript in self._corpus.find_manuscripts(chapter_id)
+            if not manuscript.colophon.is_empty
+        ]
         resp.media = ColophonSchema().dump(manuscripts, many=True)

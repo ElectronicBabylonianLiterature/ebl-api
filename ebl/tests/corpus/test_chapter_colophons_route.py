@@ -3,11 +3,17 @@ import falcon
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
 from ebl.tests.corpus.support import create_chapter_url
 from ebl.transliteration.application.text_schema import TextSchema
+from ebl.transliteration.domain.text import Text
 
 
 def test_get(client, text_repository):
     chapter = ChapterFactory.build(
-        manuscripts=(ManuscriptFactory.build(), ManuscriptFactory.build())
+        lines=tuple(),
+        manuscripts=(
+            ManuscriptFactory.build(),
+            ManuscriptFactory.build(colophon=Text()),
+            ManuscriptFactory.build(),
+        ),
     )
     text_repository.create_chapter(chapter)
 
@@ -21,4 +27,5 @@ def test_get(client, text_repository):
             "text": TextSchema().dump(manuscript.colophon),
         }
         for manuscript in chapter.manuscripts
+        if not manuscript.colophon.is_empty
     ]
