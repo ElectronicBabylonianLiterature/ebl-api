@@ -80,7 +80,7 @@ class Corpus:
         chapter = self._repository.find_chapter(id_)
         return self._hydrate_references(chapter)
 
-    def find_manuscripts(self, id_: ChapterId) -> Chapter:
+    def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
         return self._repository.query_manuscripts_by_chapter(id_)
 
     def search_transliteration(self, query: TransliterationQuery) -> List[ChapterInfo]:

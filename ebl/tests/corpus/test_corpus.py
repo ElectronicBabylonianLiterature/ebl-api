@@ -134,9 +134,7 @@ def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
 
 
 def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
-    manuscripts = [
-        ManuscriptFactory.build()
-    ]
+    manuscripts = [ManuscriptFactory.build()]
     when(text_repository).query_manuscripts_by_chapter(CHAPTER.id_).thenReturn(
         manuscripts
     )
