@@ -55,6 +55,10 @@ class TextRepository(ABC):
     def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
         ...
 
+    @abstractmethod
+    def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]:
+        ...
+
 
 class Corpus:
     def __init__(
@@ -75,6 +79,9 @@ class Corpus:
     def find_chapter(self, id_: ChapterId) -> Chapter:
         chapter = self._repository.find_chapter(id_)
         return self._hydrate_references(chapter)
+
+    def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
+        return self._repository.query_manuscripts_by_chapter(id_)
 
     def search_transliteration(self, query: TransliterationQuery) -> List[ChapterInfo]:
         return (

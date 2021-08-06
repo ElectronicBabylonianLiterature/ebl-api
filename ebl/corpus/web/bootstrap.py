@@ -4,6 +4,7 @@ from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
 from ebl.corpus.web.chapters import ChaptersResource
+from ebl.corpus.web.colophons import ColophonsResource
 from ebl.corpus.web.lemmatizations import LemmatizationResource
 from ebl.corpus.web.lines import LinesImportResource, LinesResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
@@ -33,6 +34,7 @@ def create_corpus_routes(api: falcon.API, context: Context):
     manuscript = ManuscriptsResource(corpus)
     lines = LinesResource(corpus)
     lines_import = LinesImportResource(corpus)
+    colophons = ColophonsResource(corpus)
 
     api.add_route("/texts", texts)
     api.add_route("/textsearch", text_search)
@@ -55,4 +57,7 @@ def create_corpus_routes(api: falcon.API, context: Context):
     )
     api.add_route(
         "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/import", lines_import
+    )
+    api.add_route(
+        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/colophons", colophons
     )
