@@ -15,8 +15,7 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 
 
 def create_context_() -> Context:
-    context = create_context()
-    return context
+    return create_context()
 
 def retrieve_annotations(context: Context):
     annotation_repository = context.annotations_repository
@@ -108,19 +107,19 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if None in (args.output_annotations, args.output_imgs):
-        if args.output_annotations is None and args.output_imgs is None:
-            create_directory("annotations")
-            create_directory("annotations/annotations")
-            create_directory("annotations/imgs")
-            args.output_annotations = "annotations/annotations"
-            args.output_imgs = "annotations/imgs"
-        load_dotenv()
-        context = create_context()
-        annotation_collection = retrieve_annotations(context)
-        create_annotations(annotation_collection, args.output_annotations, args.output_imgs, context.fragment_repository, context.photo_repository)
-        print("Done")
-    else:
+    if None not in (args.output_annotations, args.output_imgs):
         raise argparse.ArgumentError(None, message="Either specify both argument options or none at all")
+
+    if args.output_annotations is None and args.output_imgs is None:
+        create_directory("annotations")
+        create_directory("annotations/annotations")
+        create_directory("annotations/imgs")
+        args.output_annotations = "annotations/annotations"
+        args.output_imgs = "annotations/imgs"
+    load_dotenv()
+    context = create_context()
+    annotation_collection = retrieve_annotations(context)
+    create_annotations(annotation_collection, args.output_annotations, args.output_imgs, context.fragment_repository, context.photo_repository)
+    print("Done")
 
 
