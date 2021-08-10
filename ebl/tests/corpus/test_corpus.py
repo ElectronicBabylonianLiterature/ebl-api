@@ -14,7 +14,7 @@ from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.tests.corpus.support import ANY_USER
-from ebl.tests.factories.corpus import ChapterFactory, TextFactory
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -131,6 +131,15 @@ def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
     expect_bibliography(bibliography, when)
 
     assert corpus.find_chapter(CHAPTER.id_) == CHAPTER
+
+
+def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
+    manuscripts = [ManuscriptFactory.build()]
+    when(text_repository).query_manuscripts_by_chapter(CHAPTER.id_).thenReturn(
+        manuscripts
+    )
+
+    assert corpus.find_manuscripts(CHAPTER.id_) == manuscripts
 
 
 def test_find_chapter_raises_exception_if_references_not_found(

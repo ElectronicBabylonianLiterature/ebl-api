@@ -5,11 +5,12 @@ import pymongo
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.corpus.application.schemas import ChapterSchema, TextSchema
+from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
 
 
 TEXTS_COLLECTION = "texts"
@@ -181,3 +182,14 @@ class MongoTextRepository(TextRepository):
             ),
             many=True,
         )
+
+    def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
+        try:
+            return ManuscriptSchema().load(
+                self._chapters.find_one(
+                    chapter_id_query(id_), projection={"manuscripts": True}
+                )["manuscripts"],
+                many=True,
+            )
+        except NotFoundError:
+            raise chapter_not_found(id_)

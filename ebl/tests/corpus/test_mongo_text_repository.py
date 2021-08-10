@@ -128,3 +128,16 @@ def test_query_by_transliteration(signs, is_match, text_repository):
     result = text_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [CHAPTER] if is_match else []
     assert result == expected
+
+
+def test_query_manuscripts_by_chapter(database, text_repository):
+    when_chapter_in_collection(database)
+
+    assert text_repository.query_manuscripts_by_chapter(CHAPTER.id_) == list(
+        CHAPTER.manuscripts
+    )
+
+
+def test_query_manuscripts_by_chapter_not_found(database, text_repository):
+    with pytest.raises(NotFoundError):
+        assert text_repository.query_manuscripts_by_chapter(CHAPTER.id_)
