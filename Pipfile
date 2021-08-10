@@ -27,6 +27,7 @@ cryptography = "==3.3.2"
 newrelic = "*"
 
 [dev-packages]
+Pillow = "*"
 pytest = "*"
 pytest-cov = "*"
 freezegun = "*"

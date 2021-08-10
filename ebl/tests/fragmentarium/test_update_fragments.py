@@ -4,7 +4,7 @@ from ebl.fragmentarium.update_fragments import update_fragments
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
-def test_update_fragments(context, signs, when):
+def test_update_fragments(context, signs):
     fragment_repository = context.fragment_repository
     sign_repository = context.sign_repository
     transliterated_fragment = TransliteratedFragmentFactory.build()
