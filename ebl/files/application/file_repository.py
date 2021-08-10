@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 from ebl.errors import NotFoundError
 from ebl.users.domain.user import User
@@ -22,7 +22,7 @@ class File(ABC):
         ...
 
     @abstractmethod
-    def read(self, size: int) -> bytes:
+    def read(self, size=-1) -> bytes:
         ...
 
     @abstractmethod
