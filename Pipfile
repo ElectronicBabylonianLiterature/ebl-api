@@ -25,6 +25,7 @@ singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
 newrelic = "*"
+pillow = "*"
 
 [dev-packages]
 pytest = "*"

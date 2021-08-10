@@ -6,7 +6,6 @@ from os.path import join
 from urllib.request import urlopen
 
 from PIL import Image
-from dotenv import load_dotenv
 
 from ebl.app import create_context
 from ebl.context import Context
@@ -116,7 +115,7 @@ if __name__ == "__main__":
         create_directory("annotations/imgs")
         args.output_annotations = "annotations/annotations"
         args.output_imgs = "annotations/imgs"
-    load_dotenv()
+
     context = create_context()
     annotation_collection = retrieve_annotations(context)
     create_annotations(annotation_collection, args.output_annotations, args.output_imgs, context.fragment_repository, context.photo_repository)
