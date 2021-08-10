@@ -14,6 +14,7 @@ CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 INTRO = "**Intro**"
 CHAPTER_NAME = "I"
+TRANSLATION = tuple()
 
 TEXT = Text(
     GENRE,
@@ -23,7 +24,7 @@ TEXT = Text(
     VERSES,
     APPROXIMATE,
     INTRO,
-    (ChapterListing(STAGE, CHAPTER_NAME),),
+    (ChapterListing(STAGE, CHAPTER_NAME, TRANSLATION),),
 )
 
 
@@ -38,3 +39,4 @@ def test_text_constructor_sets_correct_fields():
     assert TEXT.intro == INTRO
     assert TEXT.chapters[0].stage == STAGE
     assert TEXT.chapters[0].name == CHAPTER_NAME
+    assert TEXT.chapters[0].translation == TRANSLATION

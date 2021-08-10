@@ -183,6 +183,7 @@ class ChapterListingFactory(factory.Factory):
 
     stage = factory.fuzzy.FuzzyChoice(Stage)
     name = factory.Faker("sentence")
+    translation = (TranslationLine((StringPart("foo"),), "en", None),)
 
 
 class TextFactory(factory.Factory):

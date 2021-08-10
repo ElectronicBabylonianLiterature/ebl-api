@@ -54,7 +54,15 @@ def join_chapters() -> List[dict]:
                         }
                     },
                     {"$sort": {"order": 1}},
-                    {"$project": {"_id": 0, "stage": 1, "name": 1}},
+                    {"$addFields": {"firstLine": {"$first": "$lines"}}},
+                    {
+                        "$project": {
+                            "_id": 0,
+                            "stage": 1,
+                            "name": 1,
+                            "translation": "$firstLine.translation",
+                        }
+                    },
                 ],
                 "as": "chapters",
             }

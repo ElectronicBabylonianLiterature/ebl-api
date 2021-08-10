@@ -6,12 +6,14 @@ from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterListing:
     stage: Stage
     name: str
+    translation: Sequence[TranslationLine]
 
 
 @attr.s(auto_attribs=True, frozen=True)
