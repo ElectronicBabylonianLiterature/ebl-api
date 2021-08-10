@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Mapping, Optional
+from typing import Any, Mapping
 
 from ebl.errors import NotFoundError
 from ebl.users.domain.user import User
