@@ -174,7 +174,7 @@ class MongoSignRepository(SignRepository):
                                             "regex": {
                                                 "$concat": [
                                                     r".*(^|[\.\+×&%@x|\(\)])",
-                                                    "$$leftId",
+                                                    {"$trim": {"input": "$$leftId", "chars": "|"}},
                                                     r"($|[\.\+×&%@x|\(\)])",
                                                 ]
                                             },
