@@ -217,7 +217,9 @@ class ChapterListingSchema(Schema):
 
     @post_load
     def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
-        return ChapterListing(Stage(data["stage"]), data["name"])
+        return ChapterListing(
+            Stage(data["stage"]), data["name"], tuple(data["translation"])
+        )
 
 
 class TextSchema(Schema):

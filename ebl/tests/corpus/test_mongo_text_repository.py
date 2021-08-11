@@ -3,12 +3,15 @@ import pytest
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.errors import DuplicateError, NotFoundError
-from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
+from ebl.tests.factories.corpus import (
+    ChapterFactory,
+    LineFactory,
+    ManuscriptFactory,
+    TextFactory,
+)
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.text_id import TextId
-from ebl.corpus.domain.line import Line
-from ebl.transliteration.domain.line_number import LineNumber
 
 
 TEXTS_COLLECTION = "texts"
@@ -20,7 +23,9 @@ CHAPTER = ChapterFactory.build(
     stage=TEXT.chapters[0].stage,
     name=TEXT.chapters[0].name,
     manuscripts=(ManuscriptFactory.build(id=1, references=tuple()),),
-    lines=(Line(number=LineNumber(1), variants=tuple(), translation=(TEXT.chapters[0].translation,)),)
+    lines=(
+        LineFactory.build(manuscript_id=1, translation=TEXT.chapters[0].translation),
+    ),
 )
 
 
