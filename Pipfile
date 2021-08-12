@@ -25,7 +25,6 @@ singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
 newrelic = "*"
-pillow = "*"
 
 [dev-packages]
 pytest = "*"
@@ -41,6 +40,7 @@ httpretty = "*"
 pyre-check = "==0.0.60"
 black = "==19.3b0"
 pymongo-inmemory = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
