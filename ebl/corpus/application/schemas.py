@@ -213,10 +213,13 @@ class ChapterSchema(Schema):
 class ChapterListingSchema(Schema):
     stage = ValueEnum(Stage, required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
+    translation = fields.Nested(TranslationLineSchema, many=True, missing=tuple())
 
     @post_load
     def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
-        return ChapterListing(Stage(data["stage"]), data["name"])
+        return ChapterListing(
+            Stage(data["stage"]), data["name"], tuple(data["translation"])
+        )
 
 
 class TextSchema(Schema):
