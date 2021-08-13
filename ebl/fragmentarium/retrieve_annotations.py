@@ -3,7 +3,7 @@ import os
 import shutil
 from io import BytesIO
 from os.path import join
-from typing import Sequence, Tuple, NewType
+from typing import Sequence, Tuple
 from urllib.request import urlopen
 
 from PIL import Image
@@ -13,8 +13,6 @@ from ebl.context import Context
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.domain.annotation import Annotations, Annotation
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-
-BBox = NewType("BBox", Tuple[float, float, float, float, float, float, float, float])
 
 
 def create_context_() -> Context:
@@ -93,7 +91,9 @@ def create_annotations(
 
 
 def write_annotations(
-    output_folder_annotations: str, file_name: str, bboxes: Tuple[Tuple[float, ...]]
+    output_folder_annotations: str,
+    file_name: str,
+    bboxes: Tuple[Tuple[float, ...], ...],
 ) -> None:
     txt_file = join(output_folder_annotations, file_name)
     with open(txt_file, "w+") as file:
