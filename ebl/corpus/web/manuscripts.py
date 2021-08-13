@@ -34,8 +34,8 @@ class ManuscriptsResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        chapter = self._corpus.find_chapter(chapter_id)
-        resp.media = ApiManuscriptSchema().dump(chapter.manuscripts, many=True)
+        manuscripts = self._corpus.find_manuscripts(chapter_id)
+        resp.media = ApiManuscriptSchema().dump(manuscripts, many=True)
 
     @falcon.before(require_scope, "write:texts")
     @validate(ManuscriptDtoSchema())
