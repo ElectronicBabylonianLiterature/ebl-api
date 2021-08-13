@@ -23,6 +23,18 @@ from ebl.tests.corpus.support import (
 )
 
 
+def test_get(client, bibliography, text_repository):
+    chapter = ChapterFactory.build()
+    allow_references(chapter, bibliography)
+    text_repository.create_chapter(chapter)
+
+    get_result = client.simulate_get(create_chapter_url(chapter, "/manuscripts"))
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
+    assert get_result.json == create_chapter_dto(chapter)["manuscripts"]
+
+
 def test_updating(client, bibliography, sign_repository, signs, text_repository):
     uncertain_fragment = MuseumNumber.of("K.1")
     allow_signs(signs, sign_repository)
