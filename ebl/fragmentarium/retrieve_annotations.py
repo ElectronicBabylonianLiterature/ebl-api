@@ -55,6 +55,7 @@ def create_annotations(
     creates icdar style annotations.
     Bounding boxes specified by x1,y1,x2,y2,x3,y3,x4,y4 clockwise vertices starting
     from top left.
+    Output 0,0 is top left
     Original format from react-annotation tool is bottom left vertex and height and
     width values between 0 - 100 relative to image size.
     We compare number of annotations to transliteration so we can exclude annotations
