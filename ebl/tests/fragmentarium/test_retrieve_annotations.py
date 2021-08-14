@@ -1,4 +1,5 @@
 import ebl.fragmentarium.retrieve_annotations as retrieve_annotations
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.retrieve_annotations import create_annotations
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
@@ -11,8 +12,10 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 def test_create_annotations(context, when):
     annotation_repository = context.annotations_repository
     fragment_repository = context.fragment_repository
-    annotation = AnnotationsFactory.build()
-    fragment = TransliteratedFragmentFactory.build()
+    annotation = AnnotationsFactory.build(fragment_number=MuseumNumber.of("X.0"))
+    fragment = TransliteratedFragmentFactory.build(
+        fragment_number=MuseumNumber.of("X.0")
+    )
 
     fragment_repository.create(fragment)
     annotation_repository.create_or_update(annotation)
