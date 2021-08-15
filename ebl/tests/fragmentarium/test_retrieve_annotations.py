@@ -13,9 +13,7 @@ def test_create_annotations(context, when):
     annotation_repository = context.annotations_repository
     fragment_repository = context.fragment_repository
     annotation = AnnotationsFactory.build(fragment_number=MuseumNumber.of("X.0"))
-    fragment = TransliteratedFragmentFactory.build(
-       number=MuseumNumber.of("X.0")
-    )
+    fragment = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
 
     fragment_repository.create(fragment)
     annotation_repository.create_or_update(annotation)
