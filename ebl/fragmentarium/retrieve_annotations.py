@@ -19,11 +19,6 @@ def create_context_() -> Context:
     return create_context()
 
 
-def retrieve_annotations(context: Context):
-    annotation_repository = context.annotations_repository
-    return annotation_repository.retrieve_all()
-
-
 def calculate_bbox_coordinates(
     x: float, y: float, width: float, height: float
 ) -> Tuple[float, ...]:
@@ -159,7 +154,7 @@ if __name__ == "__main__":
         args.output_imgs = "annotations/imgs"
 
     context = create_context()
-    annotation_collection = retrieve_annotations(context)
+    annotation_collection = context.annotations_repository.retrieve_all()
     create_annotations(
         annotation_collection, args.output_annotations, args.output_imgs, context
     )

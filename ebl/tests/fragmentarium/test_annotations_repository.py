@@ -13,7 +13,6 @@ def test_retrieve_all(database, annotations_repository):
     assert annotations_repository.retrieve_all() == annotations
 
 
-
 def test_create(database, annotations_repository):
     annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number
