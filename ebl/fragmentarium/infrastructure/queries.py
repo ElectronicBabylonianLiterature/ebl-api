@@ -188,13 +188,29 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
     ]
 
 
-def join_joins(number: MuseumNumber) -> List[dict]:
+def join_joins() -> List[dict]:
     return [
         {
             "$lookup": {
                 "from": collections.JOINS_COLLECTION,
+                "let": {"number": "$museumNumber"},
                 "pipeline": [
-                    {"$match": {"fragments": {"$elemMatch": museum_number_is(number)}}},
+                    {
+                        "$match": {
+                            "$expr": {
+                                "$in": [
+                                    "$$number",
+                                    {
+                                        "$map": {
+                                            "input": "$fragments",
+                                            "as": "fragment",
+                                            "in": "$$fragment.museumNumber",
+                                        }
+                                    },
+                                ]
+                            }
+                        }
+                    },
                     {"$limit": 1},
                     {"$unwind": "$fragments"},
                     {

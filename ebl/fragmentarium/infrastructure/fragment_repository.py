@@ -111,7 +111,7 @@ class MongoFragmentRepository(FragmentRepository):
             [
                 {"$match": museum_number_is(number)},
                 *join_reference_documents(),
-                *join_joins(number),
+                *join_joins(),
             ]
         )
         try:
