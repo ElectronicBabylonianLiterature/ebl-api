@@ -14,7 +14,7 @@ def test_create_annotations(context, when, photo):
     annotation = AnnotationsFactory.build(fragment_number=MuseumNumber.of("X.0"))
     fragment = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
 
-    image = mock({"save": lambda _: None, "size": (1, 1, 1)})
+    image = mock({"save": lambda _: None, "size": (640, 480, 3)})
     fragment_repository.create(fragment)
     annotation_repository.create_or_update(annotation)
     when(context.photo_repository).query_by_file_name(...).thenReturn(photo)
