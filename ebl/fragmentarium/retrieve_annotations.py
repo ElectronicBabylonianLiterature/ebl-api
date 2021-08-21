@@ -62,10 +62,8 @@ def convert_bboxes(
     x_shape: int, y_shape: int, annotations: Sequence[Annotation]
 ) -> Sequence[BBox]:
     return tuple(
-        [
-            BBox.from_geometry(annotation.geometry, x_shape, y_shape)
-            for annotation in annotations
-        ]
+        BBox.from_geometry(annotation.geometry, x_shape, y_shape)
+        for annotation in annotations
     )
 
 
