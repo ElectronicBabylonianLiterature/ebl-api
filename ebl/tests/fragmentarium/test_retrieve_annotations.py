@@ -19,7 +19,6 @@ def test_create_annotations(context, when, photo):
     annotation_repository.create_or_update(annotation)
     when(context.photo_repository).query_by_file_name(...).thenReturn(photo)
     when(Image).open(...).thenReturn(image)
-
     when(retrieve_annotations).write_annotations(...).thenReturn(None)
 
     create_annotations([annotation], "", "", context)
