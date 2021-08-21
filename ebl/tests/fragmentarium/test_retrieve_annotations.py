@@ -1,35 +1,34 @@
+from PIL import Image
+from mockito import mock, verify
+
 import ebl.fragmentarium.retrieve_annotations as retrieve_annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.retrieve_annotations import create_annotations
-from ebl.tests.factories.annotation import (
-    AnnotationsFactory,
-    AnnotationFactory,
-    GeometryFactory,
-)
+from ebl.fragmentarium.retrieve_annotations import create_annotations, BBox, Point
+from ebl.tests.factories.annotation import AnnotationsFactory, GeometryFactory
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
-def test_create_annotations(context, when):
+def test_create_annotations(context, when, photo):
     annotation_repository = context.annotations_repository
     fragment_repository = context.fragment_repository
     annotation = AnnotationsFactory.build(fragment_number=MuseumNumber.of("X.0"))
     fragment = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
 
+    image = mock({"save": lambda _: None, "size": (1, 1, 1)})
     fragment_repository.create(fragment)
     annotation_repository.create_or_update(annotation)
+    when(context.photo_repository).query_by_file_name(...).thenReturn(photo)
+    when(Image).open(...).thenReturn(image)
 
-    when(retrieve_annotations).save_image(...).thenReturn(
-        (str(fragment.number), (640, 480))
-    )
     when(retrieve_annotations).write_annotations(...).thenReturn(None)
 
-    assert create_annotations([annotation], "", "", context) is None
+    create_annotations([annotation], "", "", context)
+    verify(image).save(f"{fragment.number}.jpg")
 
 
-def test_convert_bboxes():
+def test_bbox_from_geometry():
     geometry = GeometryFactory.build(x=0, y=0, width=100, height=100)
-    annotation = AnnotationFactory.build(geometry=geometry)
     shape = (640, 480)
-    assert retrieve_annotations.convert_bboxes(shape, [annotation]) == (
-        (0, 0, 640, 0, 640, 480, 0, 480),
-    )
+    assert BBox.from_geometry(
+        x_shape=shape[0], y_shape=shape[1], geometry=geometry
+    ) == (BBox(Point(0, 0), Point(640, 0), Point(640, 480), Point(0, 480)))

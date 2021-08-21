@@ -4,40 +4,69 @@ import shutil
 from io import BytesIO
 from os.path import join
 from typing import Sequence, Tuple
-from urllib.request import urlopen
 
+import attr
 from PIL import Image
 
 from ebl.app import create_context
 from ebl.context import Context
-from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.domain.annotation import Annotations, Annotation
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
-def create_context_() -> Context:
-    return create_context()
+@attr.attrs(auto_attribs=True, frozen=True)
+class Point:
+    x: float
+    y: float
 
 
-def calculate_bbox_coordinates(
-    x: float, y: float, width: float, height: float
-) -> Tuple[float, ...]:
-    return (x, y, x + width, y, x + width, y + height, x, y + height)
+@attr.attrs(auto_attribs=True, frozen=True)
+class BBox:
+    top_left: Point
+    top_right: Point
+    bottom_right: Point
+    bottom_left: Point
+
+    @staticmethod
+    def from_geometry(geometry, x_shape, y_shape) -> "BBox":
+        new_x = int(round(geometry.x / 100 * x_shape))
+        new_y = int(round(geometry.y / 100 * y_shape))
+        new_width = int(round(geometry.width / 100 * x_shape))
+        new_height = int(round(geometry.height / 100 * y_shape))
+        return BBox.from_rectange(new_x, new_y, new_width, new_height)
+
+    @staticmethod
+    def from_rectange(x: float, y: float, width: float, height: float) -> "BBox":
+        return BBox(
+            Point(x, y),
+            Point(x + width, y),
+            Point(x + width, y + height),
+            Point(x, y + height),
+        )
+
+    def to_tuple_counterclockwise(
+        self
+    ) -> Tuple[float, float, float, float, float, float, float, float]:
+        return (
+            self.top_left.x,
+            self.top_left.y,
+            self.top_right.x,
+            self.top_right.y,
+            self.bottom_right.x,
+            self.bottom_right.y,
+            self.bottom_left.x,
+            self.bottom_right.y,
+        )
 
 
 def convert_bboxes(
-    shape: Tuple[int, ...], annotations: Sequence[Annotation]
-) -> Tuple[Tuple[float, ...], ...]:
-    x_size = shape[0]
-    y_size = shape[1]
-    bboxes = []
-    for bbox in annotations:
-        new_x = int(round(bbox.geometry.x / 100 * x_size))
-        new_y = int(round(bbox.geometry.y / 100 * y_size))
-        new_width = int(round(bbox.geometry.width / 100 * x_size))
-        new_height = int(round(bbox.geometry.height / 100 * y_size))
-        bboxes.append(calculate_bbox_coordinates(new_x, new_y, new_width, new_height))
-    return tuple(bboxes)
+    x_shape: int, y_shape: int, annotations: Sequence[Annotation]
+) -> Sequence[BBox]:
+    return tuple(
+        [
+            BBox.from_geometry(annotation.geometry, x_shape, y_shape)
+            for annotation in annotations
+        ]
+    )
 
 
 def create_annotations(
@@ -47,78 +76,40 @@ def create_annotations(
     context: Context,
 ) -> None:
     """
-    creates icdar style annotations.
-    Bounding boxes specified by x1,y1,x2,y2,x3,y3,x4,y4 clockwise vertices starting
-    from top left.
-    Output 0,0 is top left
     Original format from react-annotation tool is bottom left vertex and height and
     width values between 0 - 100 relative to image size.
-    We compare number of annotations to transliteration so we can exclude annotations
-    which aren't complete.
+    We get image size to calculate absolute coordinates.
     """
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
-        fragment = context.fragment_repository.query_by_museum_number(
-            single_annotation.fragment_number
+
+        image_filename = f"{fragment_number}.jpg"
+        fragment_image = context.photo_repository.query_by_file_name(image_filename)
+        image_bytes = fragment_image.read()
+        image = Image.open(BytesIO(image_bytes), mode="r")
+        image.save(join(output_folder_images, image_filename))
+
+        bboxes = convert_bboxes(
+            image.size[0], image.size[1], single_annotation.annotations
         )
-        signs_count = len(
-            list(filter(lambda sign: "X" not in sign, fragment.signs.split()))
+        write_annotations(
+            output_folder_annotations, f"gt_{fragment_number}.txt", bboxes
         )
-        annotations_count = len(single_annotation.annotations)
         print(
-            "{:>20}".format(f"{fragment_number}/{fragment.cdli_number}"),
+            "{:>20}".format(f"{fragment_number}"),
             "{:>4}".format(f" {counter} of"),
             "{:>4}".format(len(annotation_collection)),
-            " signs count:",
-            "{:>5}".format(signs_count),
-            " annotations_count",
-            "{:>5}".format(annotations_count),
         )
-
-        file_name_id, shape = save_image(
-            fragment_number,
-            fragment.cdli_number,
-            output_folder_images,
-            context.photo_repository,
-        )
-
-        bboxes = convert_bboxes(shape, single_annotation.annotations)
-        write_annotations(output_folder_annotations, f"gt_{file_name_id}.txt", bboxes)
 
 
 def write_annotations(
-    output_folder_annotations: str,
-    file_name: str,
-    bboxes: Tuple[Tuple[float, ...], ...],
+    output_folder_annotations: str, file_name: str, bboxes: Sequence[BBox]
 ) -> None:
     txt_file = join(output_folder_annotations, file_name)
     with open(txt_file, "w+") as file:
         for bbox in bboxes:
-            vertices = ",".join(map(str, bbox))
+            vertices = ",".join(map(str, bbox.to_tuple_counterclockwise()))
             file.write(vertices + "\n")
-
-
-def save_image(
-    fragment_number: MuseumNumber,
-    cdli_number: str,
-    output_folder: str,
-    photo_repository: FileRepository,
-) -> Tuple[str, Tuple[int, ...]]:
-    """
-    Some images are in our database, some aren't so we have to retrieve them from CDLI.
-    """
-    image_filename = f"{fragment_number}.jpg"
-    if photo_repository.query_if_file_exists(image_filename):
-        file_name_id = str(fragment_number)
-        fragment_image = photo_repository.query_by_file_name(image_filename)
-        image_bytes = fragment_image.read()
-        image = Image.open(BytesIO(image_bytes), mode="r")
-    else:
-        file_name_id = cdli_number
-        image_filename = f"{cdli_number}.jpg"
-        image = Image.open(urlopen(f"https://cdli.ucla.edu/dl/photo/{image_filename}"))
-    image.save(join(output_folder, image_filename))
-    return file_name_id, image.size
 
 
 def create_directory(path: str) -> None:
