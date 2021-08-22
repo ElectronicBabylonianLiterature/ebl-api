@@ -16,6 +16,7 @@ class Geometry:
 @attr.attrs(auto_attribs=True, frozen=True)
 class AnnotationData:
     id: str
+    sign_name: str
     value: str
     path: Sequence[int]
 

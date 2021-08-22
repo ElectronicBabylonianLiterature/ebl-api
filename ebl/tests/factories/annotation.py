@@ -24,6 +24,7 @@ class AnnotationDataFactory(factory.Factory):
         model = AnnotationData
 
     id = factory.Sequence(lambda n: f"annotation-{n}")
+    sign_name = factory.fuzzy.FuzzyChoice(["P₂", "KU", "NU", "IGI", "DIŠ", "UD"])
     value = factory.Faker("word")
     path = factory.List(
         [

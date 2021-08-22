@@ -15,7 +15,8 @@ GEOMETRY = Geometry(X, Y, WIDTH, HEIGHT)
 PATH = [2, 3]
 VALUE = "kur"
 ID = "1234"
-DATA = AnnotationData(ID, VALUE, PATH)
+SIGN_NAME = "kur"
+DATA = AnnotationData(ID, VALUE, SIGN_NAME, PATH)
 
 ANNOTATION = Annotation(GEOMETRY, DATA)
 
