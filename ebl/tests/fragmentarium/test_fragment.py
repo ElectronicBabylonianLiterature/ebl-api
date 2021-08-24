@@ -30,7 +30,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.domain.joins import Join
+from ebl.fragmentarium.domain.joins import Join, Joins
 
 
 def test_number():
@@ -96,14 +96,16 @@ def test_thickness():
 
 def test_joins():
     fragment = FragmentFactory.build(
-        joins=(
-            (Join(MuseumNumber("B", "2")), Join(MuseumNumber("B", "1"))),
-            (Join(MuseumNumber("Z", "0")), Join(MuseumNumber("A", "3"))),
+        joins=Joins(
+            (
+                (Join(MuseumNumber("B", "2")), Join(MuseumNumber("B", "1"))),
+                (Join(MuseumNumber("Z", "0")), Join(MuseumNumber("A", "3"))),
+            )
         )
     )
 
     assert_that(
-        fragment.joins,
+        fragment.joins.fragments,
         contains_exactly(
             contains_exactly(
                 Join(MuseumNumber("A", "3")), Join(MuseumNumber("Z", "0"))

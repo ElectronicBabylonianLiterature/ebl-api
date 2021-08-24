@@ -10,12 +10,13 @@ from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.tests.factories.fragment import JoinFactory, LemmatizedFragmentFactory
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.application.fragment_schema import JoinSchema
+from ebl.fragmentarium.application.fragment_schema import JoinsSchema
+from ebl.fragmentarium.domain.joins import Joins
 
 
 def test_create_response_dto(user):
     lemmatized_fragment = LemmatizedFragmentFactory.build(
-        joins=((JoinFactory.build(),),)
+        joins=Joins(((JoinFactory.build(),),))
     )
     has_photo = True
     assert create_response_dto(lemmatized_fragment, user, has_photo) == pydash.omit_by(
@@ -26,10 +27,7 @@ def test_create_response_dto(user):
             "bmIdNumber": lemmatized_fragment.bm_id_number,
             "publication": lemmatized_fragment.publication,
             "description": lemmatized_fragment.description,
-            "joins": [
-                JoinSchema().dump(group, many=True)
-                for group in lemmatized_fragment.joins
-            ],
+            "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
             "length": attr.asdict(
                 lemmatized_fragment.length, filter=lambda _, value: value is not None
             ),
