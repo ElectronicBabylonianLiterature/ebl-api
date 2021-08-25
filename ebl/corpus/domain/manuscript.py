@@ -4,6 +4,7 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -143,6 +144,7 @@ class Manuscript:
     colophon: Text = Text()
     unplaced_lines: Text = Text()
     references: Sequence[Reference] = tuple()
+    joins: Joins = Joins()
 
     @accession.validator
     def validate_accession(self, _, value) -> None:

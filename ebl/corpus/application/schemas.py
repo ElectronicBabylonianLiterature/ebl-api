@@ -22,6 +22,7 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.label_schemas import labels
@@ -40,6 +41,7 @@ from ebl.transliteration.application.text_schema import (
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
+from ebl.fragmentarium.domain.joins import Joins
 
 
 class ManuscriptSchema(Schema):
@@ -75,6 +77,7 @@ class ManuscriptSchema(Schema):
         TransliterationSchema, missing=Transliteration(), data_key="unplacedLines"
     )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
+    joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins(), load_only=True)
 
     @validates_schema
     def validate_provenance(self, data, **kwargs):
@@ -105,6 +108,7 @@ class ManuscriptSchema(Schema):
             data["colophon"],
             data["unplaced_lines"],
             tuple(data["references"]),
+            data["joins"],
         )
 
 

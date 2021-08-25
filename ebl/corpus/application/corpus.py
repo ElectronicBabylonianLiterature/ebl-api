@@ -59,6 +59,12 @@ class TextRepository(ABC):
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]:
         ...
 
+    @abstractmethod
+    def query_manuscripts_with_joins_by_chapter(
+        self, id_: ChapterId
+    ) -> Sequence[Manuscript]:
+        ...
+
 
 class Corpus:
     def __init__(

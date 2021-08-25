@@ -35,6 +35,8 @@ from ebl.transliteration.domain.reconstructed_text_parser import (
 )
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
+from ebl.fragmentarium.domain.joins import Joins
 
 
 class MuseumNumberString(fields.String):
@@ -70,6 +72,7 @@ class ApiManuscriptSchema(ManuscriptSchema):
         data_key="unplacedLines",
     )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
+    joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins())
 
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:

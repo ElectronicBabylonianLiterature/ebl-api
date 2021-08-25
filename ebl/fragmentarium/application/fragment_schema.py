@@ -10,7 +10,8 @@ from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
+from ebl.fragmentarium.domain.joins import Joins
 
 
 class MeasureSchema(Schema):
@@ -69,30 +70,6 @@ class UncuratedReferenceSchema(Schema):
     def make_uncurated_reference(self, data, **kwargs):
         data["pages"] = tuple(data["pages"])
         return UncuratedReference(**data)
-
-
-class JoinSchema(Schema):
-    museum_number = fields.Nested(
-        MuseumNumberSchema, required=True, data_key="museumNumber"
-    )
-    is_checked = fields.Boolean(required=True, data_key="isChecked")
-    joined_by = fields.String(required=True, data_key="joinedBy")
-    date = fields.String(required=True)
-    note = fields.String(required=True)
-    legacy_data = fields.String(required=True, data_key="legacyData")
-    is_in_fragmentarium = fields.Boolean(missing=False, data_key="isInFragmentarium")
-
-    @post_load
-    def make_join(self, data, **kwargs):
-        return Join(**data)
-
-
-class JoinsSchema(Schema):
-    fragments = fields.List(fields.List(fields.Nested(JoinSchema)))
-
-    @post_load
-    def make_joins(self, data, **kwargs):
-        return Joins(tuple(map(tuple, data["fragments"])))
 
 
 class FragmentSchema(Schema):
