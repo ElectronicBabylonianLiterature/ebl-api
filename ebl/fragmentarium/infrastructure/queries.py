@@ -188,6 +188,20 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
     ]
 
 
+def is_in_fragmentarium(local_field: str, as_: str) -> List[dict]:
+    return [
+        {
+            "$lookup": {
+                "from": collections.FRAGMENTS_COLLECTION,
+                "localField": local_field,
+                "foreignField": "museumNumber",
+                "as": as_,
+            }
+        },
+        {"$set": {as_: {"$anyElementTrue": f"${as_}"}}},
+    ]
+
+
 def join_joins() -> List[dict]:
     return [
         {
@@ -213,21 +227,9 @@ def join_joins() -> List[dict]:
                     },
                     {"$limit": 1},
                     {"$unwind": "$fragments"},
-                    {
-                        "$lookup": {
-                            "from": collections.FRAGMENTS_COLLECTION,
-                            "localField": "fragments.museumNumber",
-                            "foreignField": "museumNumber",
-                            "as": "fragments.isInFragmentarium",
-                        }
-                    },
-                    {
-                        "$set": {
-                            "fragments.isInFragmentarium": {
-                                "$anyElementTrue": "$fragments.isInFragmentarium"
-                            }
-                        }
-                    },
+                    *is_in_fragmentarium(
+                        "fragments.museumNumber", "fragments.isInFragmentarium"
+                    ),
                     {
                         "$group": {
                             "_id": "$fragments.group",
