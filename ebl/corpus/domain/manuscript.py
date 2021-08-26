@@ -145,6 +145,7 @@ class Manuscript:
     unplaced_lines: Text = Text()
     references: Sequence[Reference] = tuple()
     joins: Joins = Joins()
+    is_in_fragmentarium: bool = False
 
     @accession.validator
     def validate_accession(self, _, value) -> None:

@@ -15,6 +15,7 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.tests.factories.fragment import FragmentFactory
 
 
 TEXTS_COLLECTION = "texts"
@@ -168,6 +169,17 @@ def test_query_manuscripts_with_joins_by_chapter_no_joins(
     assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == list(
         CHAPTER.manuscripts
     )
+
+
+def test_query_manuscripts_with_joins_is_in_fragmentarium(
+    database, text_repository, fragment_repository
+) -> None:
+    fragment_repository.create(FragmentFactory.build(number=MUSEUM_NUMBER))
+    when_chapter_in_collection(database)
+
+    assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == [
+        attr.evolve(CHAPTER.manuscripts[0], is_in_fragmentarium=True)
+    ]
 
 
 def test_query_manuscripts_with_joins_by_chapter(database, text_repository) -> None:

@@ -11,7 +11,7 @@ from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
-from ebl.fragmentarium.infrastructure.queries import join_joins
+from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 
 
 TEXTS_COLLECTION = "texts"
@@ -215,6 +215,7 @@ class MongoTextRepository(TextRepository):
                         {"$unwind": "$manuscripts"},
                         {"$replaceRoot": {"newRoot": "$manuscripts"}},
                         *join_joins(),
+                        *is_in_fragmentarium("museumNumber", "isInFragmentarium"),
                     ]
                 ),
                 many=True,

@@ -78,6 +78,9 @@ class ManuscriptSchema(Schema):
     )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins(), load_only=True)
+    is_in_fragmentarium = fields.Boolean(
+        missing=False, data_key="isInFragmentarium", load_only=True
+    )
 
     @validates_schema
     def validate_provenance(self, data, **kwargs):
@@ -109,6 +112,7 @@ class ManuscriptSchema(Schema):
             data["unplaced_lines"],
             tuple(data["references"]),
             data["joins"],
+            data["is_in_fragmentarium"],
         )
 
 
