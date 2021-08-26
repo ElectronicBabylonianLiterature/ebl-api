@@ -30,16 +30,12 @@ def test_invalid_params(parameters):
         DISPATCH(parameters)
 
 
-@pytest.mark.parametrize(
-    "parameters", [{}, {"invalid": "parameter"}, {"a": "a", "b": "b"}]
-)
-def test_key_error(parameters):
-    def raise_key_error(value):
-        raise KeyError(value)
+def test_key_error_from_command():
+    parameter = "parameter"
+    message = "An error occurred in the command."
 
-    parameter = "fail"
-    message = "key error"
+    def raise_error(_):
+        raise KeyError(message)
+
     with pytest.raises(KeyError, match=message):
-        create_dispatcher({frozenset([parameter]): raise_key_error})(
-            {parameter: message}
-        )
+        create_dispatcher({frozenset({parameter}): raise_error})({parameter: "value"})
