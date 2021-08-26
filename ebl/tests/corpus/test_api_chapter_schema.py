@@ -143,6 +143,7 @@ def test_serialize_manuscript() -> None:
         "unplacedLines": manuscript.unplaced_lines.atf,
         "references": ApiReferenceSchema().dump(manuscript.references, many=True),
         "joins": JoinsSchema().dump(manuscript.joins)["fragments"],
+        "isInFragmentarium": manuscript.is_in_fragmentarium,
     }
 
 

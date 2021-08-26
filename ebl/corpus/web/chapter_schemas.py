@@ -73,6 +73,7 @@ class ApiManuscriptSchema(ManuscriptSchema):
     )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
     joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins())
+    is_in_fragmentarium = fields.Boolean(missing=False, data_key="isInFragmentarium")
 
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:
