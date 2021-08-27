@@ -6,7 +6,8 @@ import pymongo
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema, JoinSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Join
@@ -111,7 +112,7 @@ class MongoFragmentRepository(FragmentRepository):
             [
                 {"$match": museum_number_is(number)},
                 *join_reference_documents(),
-                *join_joins(number),
+                *join_joins(),
             ]
         )
         try:

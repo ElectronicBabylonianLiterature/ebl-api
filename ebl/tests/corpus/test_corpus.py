@@ -139,7 +139,18 @@ def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
         CHAPTER.manuscripts
     )
 
-    assert corpus.find_manuscripts(CHAPTER.id_) == list(CHAPTER.manuscripts)
+    assert corpus.find_manuscripts(CHAPTER.id_) == CHAPTER.manuscripts
+
+
+def test_find_manuscripts_with_joins(
+    corpus, text_repository, bibliography, when
+) -> None:
+    expect_bibliography(bibliography, when)
+    when(text_repository).query_manuscripts_with_joins_by_chapter(
+        CHAPTER.id_
+    ).thenReturn(CHAPTER.manuscripts)
+
+    assert corpus.find_manuscripts_with_joins(CHAPTER.id_) == CHAPTER.manuscripts
 
 
 def test_find_chapter_raises_exception_if_references_not_found(

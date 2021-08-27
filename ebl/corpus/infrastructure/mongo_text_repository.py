@@ -11,6 +11,7 @@ from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
+from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 
 
 TEXTS_COLLECTION = "texts"
@@ -197,6 +198,26 @@ class MongoTextRepository(TextRepository):
                 self._chapters.find_one(
                     chapter_id_query(id_), projection={"manuscripts": True}
                 )["manuscripts"],
+                many=True,
+            )
+        except NotFoundError:
+            raise chapter_not_found(id_)
+
+    def query_manuscripts_with_joins_by_chapter(
+        self, id_: ChapterId
+    ) -> List[Manuscript]:
+        try:
+            return ManuscriptSchema().load(
+                self._chapters.aggregate(
+                    [
+                        {"$match": chapter_id_query(id_)},
+                        {"$project": {"manuscripts": True}},
+                        {"$unwind": "$manuscripts"},
+                        {"$replaceRoot": {"newRoot": "$manuscripts"}},
+                        *join_joins(),
+                        *is_in_fragmentarium("museumNumber", "isInFragmentarium"),
+                    ]
+                ),
                 many=True,
             )
         except NotFoundError:

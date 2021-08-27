@@ -188,30 +188,48 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
     ]
 
 
-def join_joins(number: MuseumNumber) -> List[dict]:
+def is_in_fragmentarium(local_field: str, as_: str) -> List[dict]:
+    return [
+        {
+            "$lookup": {
+                "from": collections.FRAGMENTS_COLLECTION,
+                "localField": local_field,
+                "foreignField": "museumNumber",
+                "as": as_,
+            }
+        },
+        {"$set": {as_: {"$anyElementTrue": f"${as_}"}}},
+    ]
+
+
+def join_joins() -> List[dict]:
     return [
         {
             "$lookup": {
                 "from": collections.JOINS_COLLECTION,
+                "let": {"number": "$museumNumber"},
                 "pipeline": [
-                    {"$match": {"fragments": {"$elemMatch": museum_number_is(number)}}},
-                    {"$limit": 1},
-                    {"$unwind": "$fragments"},
                     {
-                        "$lookup": {
-                            "from": collections.FRAGMENTS_COLLECTION,
-                            "localField": "fragments.museumNumber",
-                            "foreignField": "museumNumber",
-                            "as": "fragments.isInFragmentarium",
-                        }
-                    },
-                    {
-                        "$set": {
-                            "fragments.isInFragmentarium": {
-                                "$anyElementTrue": "$fragments.isInFragmentarium"
+                        "$match": {
+                            "$expr": {
+                                "$in": [
+                                    "$$number",
+                                    {
+                                        "$map": {
+                                            "input": "$fragments",
+                                            "as": "fragment",
+                                            "in": "$$fragment.museumNumber",
+                                        }
+                                    },
+                                ]
                             }
                         }
                     },
+                    {"$limit": 1},
+                    {"$unwind": "$fragments"},
+                    *is_in_fragmentarium(
+                        "fragments.museumNumber", "fragments.isInFragmentarium"
+                    ),
                     {
                         "$group": {
                             "_id": "$fragments.group",

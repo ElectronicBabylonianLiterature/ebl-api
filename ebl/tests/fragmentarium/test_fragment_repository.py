@@ -4,7 +4,8 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema, JoinSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -27,7 +28,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.fragmentarium.domain.joins import Join
+from ebl.fragmentarium.domain.joins import Join, Joins
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
@@ -109,7 +110,7 @@ def test_query_by_museum_number_joins(database, fragment_repository):
     first_join = Join(museum_number, is_in_fragmentarium=True)
     second_join = Join(MuseumNumber("X", "2"), is_in_fragmentarium=False)
     fragment = LemmatizedFragmentFactory.build(
-        number=museum_number, joins=((first_join,), (second_join,))
+        number=museum_number, joins=Joins(((first_join,), (second_join,)))
     )
     database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
     database[JOINS_COLLECTION].insert_one(
