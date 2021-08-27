@@ -1,5 +1,3 @@
-import os
-
 import pytest
 
 from ebl.transliteration.domain import atf
@@ -7,8 +5,11 @@ from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLi
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 
-if not bool(os.environ.get("CI", False)):
-    pytest.skip("very large number of tests", allow_module_level=True)
+
+pytest.skip(
+    "Very large number of tests. Run only when making changes to the dollar line.",
+    allow_module_level=True,
+)
 
 
 QUALIFICATIONS = [
