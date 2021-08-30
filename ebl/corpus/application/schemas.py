@@ -21,7 +21,7 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_standard_text,
 )
 from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text import ChapterListing, Text
+from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import ValueEnum
@@ -218,15 +218,35 @@ class ChapterSchema(Schema):
         )
 
 
+class UncertainFragmentSchema(Schema):
+    museum_number = fields.Nested(
+        MuseumNumberSchema, required=True, data_key="museumNumber"
+    )
+    is_in_fragmentarium = fields.Boolean(required=True, data_key="isInFragmentarium")
+
+    @post_load
+    def make_uncertai_fragment(self, data: dict, **kwargs) -> UncertainFragment:
+        return UncertainFragment(data["museum_number"], data["is_in_fragmentarium"])
+
+
 class ChapterListingSchema(Schema):
     stage = ValueEnum(Stage, required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
     translation = fields.Nested(TranslationLineSchema, many=True, missing=tuple())
+    uncertain_fragments = fields.Nested(
+        UncertainFragmentSchema,
+        many=True,
+        missing=tuple(),
+        data_key="uncertainFragments",
+    )
 
     @post_load
     def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
         return ChapterListing(
-            Stage(data["stage"]), data["name"], tuple(data["translation"])
+            Stage(data["stage"]),
+            data["name"],
+            tuple(data["translation"]),
+            tuple(data["uncertain_fragments"]),
         )
 
 

@@ -12,6 +12,13 @@ from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class UncertainFragment:
+    museum_number: MuseumNumber
+    is_in_fragmentarium: bool
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -19,6 +26,7 @@ class ChapterListing:
     stage: Stage
     name: str
     translation: Sequence[TranslationLine]
+    uncertain_fragments: Sequence[UncertainFragment]
 
     @property
     def title(self) -> Sequence[MarkupPart]:

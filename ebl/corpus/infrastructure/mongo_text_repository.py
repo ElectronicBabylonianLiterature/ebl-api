@@ -54,16 +54,65 @@ def join_chapters() -> List[dict]:
                             }
                         }
                     },
-                    {"$sort": {"order": 1}},
                     {"$addFields": {"firstLine": {"$first": "$lines"}}},
                     {
                         "$project": {
-                            "_id": 0,
                             "stage": 1,
                             "name": 1,
+                            "order": 1,
                             "translation": "$firstLine.translation",
+                            "uncertainFragments": 1,
                         }
                     },
+                    {
+                        "$unwind": {
+                            "path": "$uncertainFragments",
+                            "preserveNullAndEmptyArrays": True,
+                        }
+                    },
+                    *is_in_fragmentarium("uncertainFragments", "isInFragmentarium"),
+                    {
+                        "$group": {
+                            "_id": "$_id",
+                            "uncertainFragments": {
+                                "$push": {
+                                    "museumNumber": "$uncertainFragments",
+                                    "isInFragmentarium": "$isInFragmentarium",
+                                }
+                            },
+                            "root": {"$first": "$$ROOT"},
+                        }
+                    },
+                    {
+                        "$replaceRoot": {
+                            "newRoot": {
+                                "$mergeObjects": [
+                                    "$root",
+                                    {"uncertainFragments": "$uncertainFragments"},
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "$set": {
+                            "uncertainFragments": {
+                                "$filter": {
+                                    "input": "$uncertainFragments",
+                                    "as": "uncertainFragment",
+                                    "cond": {
+                                        "$ne": [
+                                            {
+                                                "$type": "$$uncertainFragment.museumNumber"
+                                            },
+                                            "missing",
+                                        ]
+                                    },
+                                }
+                            }
+                        }
+                    },
+                    {"$sort": {"order": 1}},
+                    {"$project": {"_id": 0, "isInFragmentarium": 0, "order": 0}},
                 ],
                 "as": "chapters",
             }
