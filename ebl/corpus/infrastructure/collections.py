@@ -1,0 +1,2 @@
+TEXTS_COLLECTION = "texts"
+CHAPTERS_COLLECTION = "chapters"
