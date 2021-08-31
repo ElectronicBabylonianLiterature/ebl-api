@@ -16,6 +16,8 @@ from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.tests.factories.fragment import FragmentFactory
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.corpus.domain.text import UncertainFragment
 
 
 TEXTS_COLLECTION = "texts"
@@ -23,6 +25,7 @@ CHAPTERS_COLLECTION = "chapters"
 JOINS_COLLECTION = "joins"
 MANUSCRIPT_ID = 1
 MUSEUM_NUMBER = MuseumNumber("X", "1")
+UNCERTAIN_FRAGMET = MuseumNumber("X", "2")
 TEXT = TextFactory.build()
 CHAPTER = ChapterFactory.build(
     text_id=TEXT.id,
@@ -36,6 +39,7 @@ CHAPTER = ChapterFactory.build(
     lines=(
         LineFactory.build(manuscript_id=1, translation=TEXT.chapters[0].translation),
     ),
+    uncertain_fragments=tuple(),
 )
 
 
@@ -87,13 +91,26 @@ def test_it_is_not_possible_to_create_duplicate_chapters(text_repository) -> Non
         text_repository.create(CHAPTER)
 
 
-def test_finding_text(database, text_repository, bibliography_repository) -> None:
-    when_text_in_collection(database)
-    when_chapter_in_collection(database)
-    for reference in TEXT.references:
+def test_finding_text(
+    database, text_repository, bibliography_repository, fragment_repository
+) -> None:
+    text = attr.evolve(
+        TEXT,
+        chapters=(
+            attr.evolve(
+                TEXT.chapters[0],
+                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMET, True),),
+            ),
+        ),
+    )
+    chapter = attr.evolve(CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMET,))
+    when_text_in_collection(database, text)
+    when_chapter_in_collection(database, chapter)
+    fragment_repository.create(Fragment(UNCERTAIN_FRAGMET))
+    for reference in text.references:
         bibliography_repository.create(reference.document)
 
-    assert text_repository.find(TEXT.id) == TEXT
+    assert text_repository.find(text.id) == text
 
 
 def test_find_raises_exception_if_text_not_found(text_repository) -> None:

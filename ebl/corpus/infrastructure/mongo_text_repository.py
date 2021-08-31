@@ -7,15 +7,13 @@ from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION, TEXTS_COLLECTION
+from ebl.corpus.infrastructure.queries import chapter_id_query, join_chapters
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
-
-
-TEXTS_COLLECTION = "texts"
-CHAPTERS_COLLECTION = "chapters"
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -24,52 +22,6 @@ def text_not_found(id_: TextId) -> Exception:
 
 def chapter_not_found(id_: ChapterId) -> Exception:
     return NotFoundError(f"Chapter {id_} not found.")
-
-
-def chapter_id_query(id_: ChapterId) -> dict:
-    return {
-        "textId.genre": id_.text_id.genre.value,
-        "textId.category": id_.text_id.category,
-        "textId.index": id_.text_id.index,
-        "stage": id_.stage.value,
-        "name": id_.name,
-    }
-
-
-def join_chapters() -> List[dict]:
-    return [
-        {
-            "$lookup": {
-                "from": CHAPTERS_COLLECTION,
-                "let": {"genre": "$genre", "category": "$category", "index": "$index"},
-                "pipeline": [
-                    {
-                        "$match": {
-                            "$expr": {
-                                "$and": [
-                                    {"$eq": ["$textId.genre", "$$genre"]},
-                                    {"$eq": ["$textId.category", "$$category"]},
-                                    {"$eq": ["$textId.index", "$$index"]},
-                                ]
-                            }
-                        }
-                    },
-                    {"$sort": {"order": 1}},
-                    {"$addFields": {"firstLine": {"$first": "$lines"}}},
-                    {
-                        "$project": {
-                            "_id": 0,
-                            "stage": 1,
-                            "name": 1,
-                            "translation": "$firstLine.translation",
-                        }
-                    },
-                ],
-                "as": "chapters",
-            }
-        },
-        {"$project": {"_id": 0}},
-    ]
 
 
 class MongoTextRepository(TextRepository):
@@ -131,7 +83,7 @@ class MongoTextRepository(TextRepository):
                             }
                         },
                         *join_reference_documents(),
-                        *join_chapters(),
+                        *join_chapters(True),
                         {"$limit": 1},
                     ]
                 )
@@ -154,7 +106,7 @@ class MongoTextRepository(TextRepository):
             self._texts.aggregate(
                 [
                     *join_reference_documents(),
-                    *join_chapters(),
+                    *join_chapters(False),
                     {
                         "$sort": {
                             "category": pymongo.ASCENDING,
