@@ -36,7 +36,58 @@ def chapter_id_query(id_: ChapterId) -> dict:
     }
 
 
-def join_chapters() -> List[dict]:
+def join_uncertain_fragments() -> List[dict]:
+    return [
+        {
+            "$unwind": {
+                "path": "$uncertainFragments",
+                "preserveNullAndEmptyArrays": True,
+            }
+        },
+        *is_in_fragmentarium("uncertainFragments", "isInFragmentarium"),
+        {
+            "$group": {
+                "_id": "$_id",
+                "uncertainFragments": {
+                    "$push": {
+                        "museumNumber": "$uncertainFragments",
+                        "isInFragmentarium": "$isInFragmentarium",
+                    }
+                },
+                "root": {"$first": "$$ROOT"},
+            }
+        },
+        {
+            "$replaceRoot": {
+                "newRoot": {
+                    "$mergeObjects": [
+                        "$root",
+                        {"uncertainFragments": "$uncertainFragments"},
+                    ]
+                }
+            }
+        },
+        {
+            "$set": {
+                "uncertainFragments": {
+                    "$filter": {
+                        "input": "$uncertainFragments",
+                        "as": "uncertainFragment",
+                        "cond": {
+                            "$ne": [
+                                {"$type": "$$uncertainFragment.museumNumber"},
+                                "missing",
+                            ]
+                        },
+                    }
+                }
+            }
+        },
+        {"$project": {"isInFragmentarium": 0}},
+    ]
+
+
+def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
     return [
         {
             "$lookup": {
@@ -64,55 +115,13 @@ def join_chapters() -> List[dict]:
                             "uncertainFragments": 1,
                         }
                     },
-                    {
-                        "$unwind": {
-                            "path": "$uncertainFragments",
-                            "preserveNullAndEmptyArrays": True,
-                        }
-                    },
-                    *is_in_fragmentarium("uncertainFragments", "isInFragmentarium"),
-                    {
-                        "$group": {
-                            "_id": "$_id",
-                            "uncertainFragments": {
-                                "$push": {
-                                    "museumNumber": "$uncertainFragments",
-                                    "isInFragmentarium": "$isInFragmentarium",
-                                }
-                            },
-                            "root": {"$first": "$$ROOT"},
-                        }
-                    },
-                    {
-                        "$replaceRoot": {
-                            "newRoot": {
-                                "$mergeObjects": [
-                                    "$root",
-                                    {"uncertainFragments": "$uncertainFragments"},
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "$set": {
-                            "uncertainFragments": {
-                                "$filter": {
-                                    "input": "$uncertainFragments",
-                                    "as": "uncertainFragment",
-                                    "cond": {
-                                        "$ne": [
-                                            {
-                                                "$type": "$$uncertainFragment.museumNumber"
-                                            },
-                                            "missing",
-                                        ]
-                                    },
-                                }
-                            }
-                        }
-                    },
+                    *(
+                        join_uncertain_fragments()
+                        if include_uncertain_fragmnets
+                        else [{"$project": {"uncertainFragments": 0}}]
+                    ),
                     {"$sort": {"order": 1}},
-                    {"$project": {"_id": 0, "isInFragmentarium": 0, "order": 0}},
+                    {"$project": {"_id": 0, "order": 0}},
                 ],
                 "as": "chapters",
             }
@@ -180,7 +189,7 @@ class MongoTextRepository(TextRepository):
                             }
                         },
                         *join_reference_documents(),
-                        *join_chapters(),
+                        *join_chapters(True),
                         {"$limit": 1},
                     ]
                 )
@@ -203,7 +212,7 @@ class MongoTextRepository(TextRepository):
             self._texts.aggregate(
                 [
                     *join_reference_documents(),
-                    *join_chapters(),
+                    *join_chapters(False),
                     {
                         "$sort": {
                             "category": pymongo.ASCENDING,
