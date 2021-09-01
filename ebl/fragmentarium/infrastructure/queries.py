@@ -239,16 +239,34 @@ def join_joins() -> List[dict]:
                     {
                         "$match": {
                             "$expr": {
-                                "$in": [
-                                    "$$number",
-                                    {
-                                        "$map": {
-                                            "input": "$fragments",
-                                            "as": "fragment",
-                                            "in": "$$fragment.museumNumber",
-                                        }
-                                    },
-                                ]
+                                "$anyElementTrue": {
+                                    "$map": {
+                                        "input": "$fragments",
+                                        "as": "fragment",
+                                        "in": {
+                                            "$and": [
+                                                {
+                                                    "$eq": [
+                                                        "$$fragment.museumNumber.prefix",
+                                                        "$$number.prefix",
+                                                    ]
+                                                },
+                                                {
+                                                    "$eq": [
+                                                        "$$fragment.museumNumber.number",
+                                                        "$$number.number",
+                                                    ]
+                                                },
+                                                {
+                                                    "$eq": [
+                                                        "$$fragment.museumNumber.suffix",
+                                                        "$$number.suffix",
+                                                    ]
+                                                },
+                                            ]
+                                        },
+                                    }
+                                }
                             }
                         }
                     },
