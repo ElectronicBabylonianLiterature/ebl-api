@@ -193,8 +193,35 @@ def is_in_fragmentarium(local_field: str, as_: str) -> List[dict]:
         {
             "$lookup": {
                 "from": collections.FRAGMENTS_COLLECTION,
-                "localField": local_field,
-                "foreignField": "museumNumber",
+                "let": {"number": f"${local_field}"},
+                "pipeline": [
+                    {
+                        "$match": {
+                            "$expr": {
+                                "$and": [
+                                    {
+                                        "$eq": [
+                                            "$museumNumber.prefix",
+                                            "$$number.prefix",
+                                        ]
+                                    },
+                                    {
+                                        "$eq": [
+                                            "$museumNumber.number",
+                                            "$$number.number",
+                                        ]
+                                    },
+                                    {
+                                        "$eq": [
+                                            "$museumNumber.suffix",
+                                            "$$number.suffix",
+                                        ]
+                                    },
+                                ]
+                            }
+                        }
+                    }
+                ],
                 "as": as_,
             }
         },
@@ -212,16 +239,34 @@ def join_joins() -> List[dict]:
                     {
                         "$match": {
                             "$expr": {
-                                "$in": [
-                                    "$$number",
-                                    {
-                                        "$map": {
-                                            "input": "$fragments",
-                                            "as": "fragment",
-                                            "in": "$$fragment.museumNumber",
-                                        }
-                                    },
-                                ]
+                                "$anyElementTrue": {
+                                    "$map": {
+                                        "input": "$fragments",
+                                        "as": "fragment",
+                                        "in": {
+                                            "$and": [
+                                                {
+                                                    "$eq": [
+                                                        "$$fragment.museumNumber.prefix",
+                                                        "$$number.prefix",
+                                                    ]
+                                                },
+                                                {
+                                                    "$eq": [
+                                                        "$$fragment.museumNumber.number",
+                                                        "$$number.number",
+                                                    ]
+                                                },
+                                                {
+                                                    "$eq": [
+                                                        "$$fragment.museumNumber.suffix",
+                                                        "$$number.suffix",
+                                                    ]
+                                                },
+                                            ]
+                                        },
+                                    }
+                                }
                             }
                         }
                     },
