@@ -26,6 +26,11 @@ class Annotation:
     geometry: Geometry
     data: AnnotationData
 
+    @staticmethod
+    def from_prediction(geometry: Geometry):
+        data = AnnotationData(f"generated-{uuid4}", "", "", [-1])
+        return Annotation(geometry, data)
+
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class Annotations:

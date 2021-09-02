@@ -3,7 +3,7 @@ from mockito import mock, verify
 
 import ebl.fragmentarium.retrieve_annotations as retrieve_annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.retrieve_annotations import create_annotations, BBox, Point
+from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox, Point
 from ebl.tests.factories.annotation import AnnotationsFactory, GeometryFactory
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
@@ -28,6 +28,6 @@ def test_create_annotations(context, when, photo):
 def test_bbox_from_geometry():
     geometry = GeometryFactory.build(x=0, y=0, width=100, height=100)
     shape = (640, 480)
-    assert BBox.from_geometry(
-        x_shape=shape[0], y_shape=shape[1], geometry=geometry
-    ) == (BBox(Point(0, 0), Point(640, 0), Point(640, 480), Point(0, 480)))
+    assert BoundingBox.from_relative_to_absolute_coordinates(
+        image_width=shape[0], image_height=shape[1], geometry=geometry
+    ) == (BoundingBox(Point(0, 0), Point(640, 0), Point(640, 480), Point(0, 480)))

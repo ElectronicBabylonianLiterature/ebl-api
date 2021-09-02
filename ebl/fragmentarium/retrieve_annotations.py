@@ -20,23 +20,23 @@ class Point:
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
-class BBox:
+class BoundingBox:
     top_left: Point
     top_right: Point
     bottom_right: Point
     bottom_left: Point
 
     @staticmethod
-    def from_geometry(geometry, x_shape, y_shape) -> "BBox":
-        new_x = int(round(geometry.x / 100 * x_shape))
-        new_y = int(round(geometry.y / 100 * y_shape))
-        new_width = int(round(geometry.width / 100 * x_shape))
-        new_height = int(round(geometry.height / 100 * y_shape))
-        return BBox.from_rectange(new_x, new_y, new_width, new_height)
+    def from_relative_to_absolute_coordinates(absolute_x, absolute_y, absolute_width, absolute_heigth, geometry, image_width, image_height) -> "BoundingBox":
+        relative_x = int(round(absolute_x / 100 * image_width))
+        relative_y = int(round(absolute_y / 100 * image_height))
+        relative_width = int(round(absolute_width / 100 * image_width))
+        relative_height = int(round(absolute_heigth / 100 * image_height))
+        return BoundingBox.from_rectange(relative_x, relative_y, relative_width, relative_height)
 
     @staticmethod
-    def from_rectange(x: float, y: float, width: float, height: float) -> "BBox":
-        return BBox(
+    def from_rectange(x: float, y: float, width: float, height: float) -> "BoundingBox":
+        return BoundingBox(
             Point(x, y),
             Point(x + width, y),
             Point(x + width, y + height),
@@ -58,12 +58,18 @@ class BBox:
         )
 
 
-def convert_bboxes(
-    x_shape: int, y_shape: int, annotations: Sequence[Annotation]
-) -> Sequence[BBox]:
+def convert_to_bounding_boxes(
+    image_width: int, image_height: int, annotations: Sequence[Annotation]
+) -> Sequence[BoundingBox]:
     return tuple(
         [
-            BBox.from_geometry(annotation.geometry, x_shape, y_shape)
+            BoundingBox.from_relative_to_absolute_coordinates(
+                annotation.geometry.x,
+                annotation.geometry.y,
+                annotation.geometry.width,
+                annotation.geometry.height,
+                image_width, image_height
+            )
             for annotation in annotations
         ]
     )
@@ -76,9 +82,9 @@ def create_annotations(
     context: Context,
 ) -> None:
     """
-    Original format from react-annotation tool is bottom left vertex and height and
+    Original format from react-annotation tool is top left=(0,0) vertex and height and
     width values between 0 - 100 relative to image size.
-    We get image size to calculate absolute coordinates.
+    We retrieve image size to calculate absolute coordinates.
     """
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
@@ -89,7 +95,7 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bboxes = convert_bboxes(
+        bboxes = convert_to_bounding_boxes(
             image.size[0], image.size[1], single_annotation.annotations
         )
         write_annotations(
@@ -103,7 +109,7 @@ def create_annotations(
 
 
 def write_annotations(
-    output_folder_annotations: str, file_name: str, bboxes: Sequence[BBox]
+    output_folder_annotations: str, file_name: str, bboxes: Sequence[BoundingBox]
 ) -> None:
     txt_file = join(output_folder_annotations, file_name)
     with open(txt_file, "w+") as file:
