@@ -88,14 +88,11 @@ def _line_to_vec_text(line: TextLine, first_line: bool) -> LineToVecEncodings:
 
 @line_to_vec.register(RulingDollarLine)
 def _line_to_vec_ruling(line: RulingDollarLine, _: bool) -> LineToVecEncodings:
-    if line.number == atf.Ruling.SINGLE:
-        return (LineToVecEncoding.SINGLE_RULING,)
-    elif line.number == atf.Ruling.DOUBLE:
-        return (LineToVecEncoding.DOUBLE_RULING,)
-    elif line.number == atf.Ruling.TRIPLE:
-        return (LineToVecEncoding.TRIPLE_RULING,)
-    else:
-        return tuple()
+    return {
+        atf.Ruling.SINGLE: (LineToVecEncoding.SINGLE_RULING,),
+        atf.Ruling.DOUBLE: (LineToVecEncoding.DOUBLE_RULING,),
+        atf.Ruling.TRIPLE: (LineToVecEncoding.TRIPLE_RULING,),
+    }.get(line.number, tuple())
 
 
 @line_to_vec.register(StateDollarLine)
