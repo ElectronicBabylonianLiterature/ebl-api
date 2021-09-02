@@ -38,6 +38,14 @@ class ManuscriptLine:
             else None
         )
 
+    @property
+    def is_beginning_of_side(self) -> bool:
+        return (
+            cast(TextLine, self.line).line_number.is_beginning_of_side
+            if isinstance(self.line, TextLine)
+            else False
+        )
+
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
         return attr.evolve(other, line=merged_line)
