@@ -1,4 +1,5 @@
 from typing import Sequence
+from uuid import uuid4
 
 import attr
 
@@ -28,7 +29,7 @@ class Annotation:
 
     @staticmethod
     def from_prediction(geometry: Geometry):
-        data = AnnotationData(f"generated-{uuid4}", "", "", [-1])
+        data = AnnotationData(uuid4().hex, "", "", [])
         return Annotation(geometry, data)
 
 
