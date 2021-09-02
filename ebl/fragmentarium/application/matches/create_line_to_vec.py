@@ -102,10 +102,7 @@ def _line_to_vec_ruling(line: RulingDollarLine, _: bool) -> LineToVecEncodings:
 
 @line_to_vec.register(StateDollarLine)
 def _line_to_vec_state(line: StateDollarLine, _: bool) -> LineToVecEncodings:
-    if line.extent == atf.Extent.END_OF:
-        return (LineToVecEncoding.END,)
-    else:
-        return tuple()
+    return (LineToVecEncoding.END,) if line.is_end_of else tuple()
 
 
 @singledispatch
