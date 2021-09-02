@@ -17,9 +17,9 @@ class Geometry:
 @attr.attrs(auto_attribs=True, frozen=True)
 class AnnotationData:
     id: str
-    sign_name: str
     value: str
     path: Sequence[int]
+    sign_name: str
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
@@ -29,7 +29,7 @@ class Annotation:
 
     @staticmethod
     def from_prediction(geometry: Geometry):
-        data = AnnotationData(uuid4().hex, "", "", [])
+        data = AnnotationData(uuid4().hex, "", [], "")
         return Annotation(geometry, data)
 
 

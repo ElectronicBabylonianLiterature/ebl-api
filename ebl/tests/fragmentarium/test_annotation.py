@@ -15,7 +15,8 @@ GEOMETRY = Geometry(X, Y, WIDTH, HEIGHT)
 PATH = [2, 3]
 VALUE = "kur"
 ID = "1234"
-DATA = AnnotationData(ID, VALUE, PATH)
+SIGN_NAME = "KUR"
+DATA = AnnotationData(ID, VALUE, PATH, SIGN_NAME)
 
 ANNOTATION = Annotation(GEOMETRY, DATA)
 
@@ -34,6 +35,7 @@ def test_data():
     assert DATA.id == ID
     assert DATA.value == VALUE
     assert DATA.path == PATH
+    assert DATA.sign_name == SIGN_NAME
 
 
 def test_annotation():

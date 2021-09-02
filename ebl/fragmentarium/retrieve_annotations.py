@@ -27,12 +27,21 @@ class BoundingBox:
     bottom_left: Point
 
     @staticmethod
-    def from_relative_to_absolute_coordinates(absolute_x, absolute_y, absolute_width, absolute_heigth, geometry, image_width, image_height) -> "BoundingBox":
+    def from_relative_to_absolute_coordinates(
+        absolute_x,
+        absolute_y,
+        absolute_width,
+        absolute_height,
+        image_width,
+        image_height,
+    ) -> "BoundingBox":
         relative_x = int(round(absolute_x / 100 * image_width))
         relative_y = int(round(absolute_y / 100 * image_height))
         relative_width = int(round(absolute_width / 100 * image_width))
-        relative_height = int(round(absolute_heigth / 100 * image_height))
-        return BoundingBox.from_rectange(relative_x, relative_y, relative_width, relative_height)
+        relative_height = int(round(absolute_height / 100 * image_height))
+        return BoundingBox.from_rectange(
+            relative_x, relative_y, relative_width, relative_height
+        )
 
     @staticmethod
     def from_rectange(x: float, y: float, width: float, height: float) -> "BoundingBox":
@@ -68,7 +77,8 @@ def convert_to_bounding_boxes(
                 annotation.geometry.y,
                 annotation.geometry.width,
                 annotation.geometry.height,
-                image_width, image_height
+                image_width,
+                image_height,
             )
             for annotation in annotations
         ]
@@ -84,7 +94,7 @@ def create_annotations(
     """
     Original format from react-annotation tool is top left=(0,0) vertex and height and
     width values between 0 - 100 relative to image size.
-    We retrieve image size to calculate absolute coordinates.
+    We retrieve the image size to calculate absolute coordinates.
     """
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
@@ -95,11 +105,11 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bboxes = convert_to_bounding_boxes(
+        bounding_boxes = convert_to_bounding_boxes(
             image.size[0], image.size[1], single_annotation.annotations
         )
         write_annotations(
-            output_folder_annotations, f"gt_{fragment_number}.txt", bboxes
+            output_folder_annotations, f"gt_{fragment_number}.txt", bounding_boxes
         )
         print(
             "{:>20}".format(f"{fragment_number}"),
@@ -109,12 +119,14 @@ def create_annotations(
 
 
 def write_annotations(
-    output_folder_annotations: str, file_name: str, bboxes: Sequence[BoundingBox]
+    output_folder_annotations: str,
+    file_name: str,
+    bounding_boxes: Sequence[BoundingBox],
 ) -> None:
     txt_file = join(output_folder_annotations, file_name)
     with open(txt_file, "w+") as file:
-        for bbox in bboxes:
-            vertices = ",".join(map(str, bbox.to_tuple_counterclockwise()))
+        for bounding_box in bounding_boxes:
+            vertices = ",".join(map(str, bounding_box.to_tuple_counterclockwise()))
             file.write(vertices + "\n")
 
 
