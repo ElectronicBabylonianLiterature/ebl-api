@@ -91,11 +91,6 @@ def create_annotations(
     output_folder_images: str,
     context: Context,
 ) -> None:
-    """
-    Original format from react-annotation tool is top left=(0,0) vertex and height and
-    width values between 0 - 100 relative to image size.
-    We retrieve the image size to calculate absolute coordinates.
-    """
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
 
