@@ -93,6 +93,14 @@ class LineVariant:
             if manuscript_line.label
         ]
 
+    def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
+        return (
+            pydash.chain(self.manuscripts)
+            .filter(lambda manuscript: manuscript.manuscript_id == manuscript_id)
+            .head()
+            .value()
+        )
+
     def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
         return (
             pydash.chain(self.manuscripts)
@@ -150,6 +158,19 @@ class Line:
             for variant in self.variants
             for label in variant.manuscript_line_labels
         ]
+
+    def get_manuscript_line(self, manuscript_id: int) -> ManuscriptLine:
+        manuscript_line = (
+            pydash.chain(self.variants)
+            .map_(lambda variant: variant.get_manuscript_line(manuscript_id))
+            .reject(pydash.is_none)
+            .head()
+            .value()
+        )
+        if manuscript_line is None:
+            raise ValueError(f"No line foun for mauscript {manuscript_id}.")
+        else:
+            return manuscript_line
 
     def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
         return (

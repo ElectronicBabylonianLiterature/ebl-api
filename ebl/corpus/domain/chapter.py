@@ -11,10 +11,12 @@ from ebl.corpus.domain.stage import Stage
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.translation_line import Extent
+from ebl.transliteration.domain.labels import Label
 
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
@@ -57,6 +59,22 @@ class ChapterId:
 
     def __str__(self) -> str:
         return f"{self.text_id} {self.stage} {self.name}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ExtantLine:
+    label: Sequence[Label]
+    line_number: AbstractLineNumber
+    is_side_boundary: bool
+
+    @staticmethod
+    def of(line: Line, manuscript_id: int) -> "ExtantLine":
+        manuscript_line = line.get_manuscript_line(manuscript_id)
+        return ExtantLine(
+            manuscript_line.labels,
+            line.number,
+            manuscript_line.is_beginning_of_side or manuscript_line.is_end_of_side,
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -190,6 +208,13 @@ class Chapter:
         ]
 
     @property
+    def extant_lines(self) -> Mapping[Siglum, Mapping[ManuscriptLineLabel, ExtantLine]]:
+        return {
+            manuscript.siglum: self._get_extant_lines(manuscript.id)
+            for manuscript in self.manuscripts
+        }
+
+    @property
     def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
 
@@ -228,6 +253,22 @@ class Chapter:
 
         merged_lines = Merger(repr, inner_merge).merge(self.lines, other.lines)
         return attr.evolve(other, lines=tuple(merged_lines))
+
+    def _get_extant_lines(
+        self, manuscript_id: int
+    ) -> Mapping[ManuscriptLineLabel, ExtantLine]:
+        return {
+            key: list(group)
+            for key, group in itertools.groupby(
+                (
+                    ExtantLine.of(line, manuscript_id)
+                    for line in self.lines
+                    if manuscript_id in line.manuscript_ids
+                    and line.get_manuscript_text_line(manuscript_id) is not None
+                ),
+                lambda extant_line: extant_line.label,
+            )
+        }
 
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript
