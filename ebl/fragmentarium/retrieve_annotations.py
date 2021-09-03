@@ -28,19 +28,19 @@ class BoundingBox:
 
     @staticmethod
     def from_relative_to_absolute_coordinates(
-        absolute_x,
-        absolute_y,
-        absolute_width,
-        absolute_height,
+        relative_x,
+        relative_y,
+        relative_width,
+        relative_height,
         image_width,
         image_height,
     ) -> "BoundingBox":
-        relative_x = int(round(absolute_x / 100 * image_width))
-        relative_y = int(round(absolute_y / 100 * image_height))
-        relative_width = int(round(absolute_width / 100 * image_width))
-        relative_height = int(round(absolute_height / 100 * image_height))
+        absolute_x = int(round(relative_x / 100 * image_width))
+        absolute_y = int(round(relative_y / 100 * image_height))
+        absolute_width = int(round(relative_width / 100 * image_width))
+        absolute_height = int(round(relative_height / 100 * image_height))
         return BoundingBox.from_rectange(
-            relative_x, relative_y, relative_width, relative_height
+            absolute_x, absolute_y, absolute_width, absolute_height
         )
 
     @staticmethod

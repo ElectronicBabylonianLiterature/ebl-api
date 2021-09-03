@@ -33,5 +33,10 @@ def test_from_relative_to_absolute_coordinates():
     geometry = GeometryFactory.build(x=0, y=0, width=100, height=100)
     shape = (640, 480)
     assert BoundingBox.from_relative_to_absolute_coordinates(
-        image_width=shape[0], image_height=shape[1], geometry=geometry
+        geometry.x,
+        geometry.y,
+        geometry.width,
+        geometry.height,
+        image_width=shape[0],
+        image_height=shape[1],
     ) == (BoundingBox(Point(0, 0), Point(640, 0), Point(640, 480), Point(0, 480)))
