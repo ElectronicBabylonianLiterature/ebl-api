@@ -1,7 +1,7 @@
 from typing import Tuple
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
-from ebl.corpus.web.chapter_schemas import ApiChapterSchema
+from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiManuscriptSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -18,6 +18,7 @@ from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
 
 
 def create(include_documents: bool) -> Tuple[Chapter, dict]:
@@ -53,25 +54,9 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         "order": chapter.order,
         "signs": list(chapter.signs),
         "parserVersion": chapter.parser_version,
-        "manuscripts": [
-            {
-                "id": manuscript.id,
-                "siglumDisambiguator": manuscript.siglum_disambiguator,
-                "museumNumber": str(manuscript.museum_number)
-                if manuscript.museum_number
-                else "",
-                "accession": manuscript.accession,
-                "periodModifier": manuscript.period_modifier.value,
-                "period": manuscript.period.long_name,
-                "provenance": manuscript.provenance.long_name,
-                "type": manuscript.type.long_name,
-                "notes": manuscript.notes,
-                "colophon": manuscript.colophon.atf,
-                "unplacedLines": manuscript.unplaced_lines.atf,
-                "references": ApiReferenceSchema().dump(references, many=True),
-            }
-            for manuscript in chapter.manuscripts
-        ],
+        "manuscripts": ApiManuscriptSchema(
+            exclude=[] if include_documents else ["joins"]
+        ).dump(chapter.manuscripts, many=True),
         "uncertainFragments": [str(number) for number in chapter.uncertain_fragments],
         "lines": [
             {
@@ -137,6 +122,57 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
     }
 
     return chapter, dto
+
+
+def test_serialize_manuscript() -> None:
+    references = (ReferenceFactory.build(with_document=True),)
+    manuscript = ManuscriptFactory.build(references=references)
+    assert ApiManuscriptSchema().dump(manuscript) == {
+        "id": manuscript.id,
+        "siglumDisambiguator": manuscript.siglum_disambiguator,
+        "museumNumber": str(manuscript.museum_number)
+        if manuscript.museum_number
+        else "",
+        "accession": manuscript.accession,
+        "periodModifier": manuscript.period_modifier.value,
+        "period": manuscript.period.long_name,
+        "provenance": manuscript.provenance.long_name,
+        "type": manuscript.type.long_name,
+        "notes": manuscript.notes,
+        "colophon": manuscript.colophon.atf,
+        "unplacedLines": manuscript.unplaced_lines.atf,
+        "references": ApiReferenceSchema().dump(manuscript.references, many=True),
+        "joins": JoinsSchema().dump(manuscript.joins)["fragments"],
+        "isInFragmentarium": manuscript.is_in_fragmentarium,
+    }
+
+
+def test_deserialize_manuscript() -> None:
+    references = (ReferenceFactory.build(with_document=False),)
+    manuscript = ManuscriptFactory.build(references=references)
+    assert (
+        ApiManuscriptSchema().load(
+            {
+                "id": manuscript.id,
+                "siglumDisambiguator": manuscript.siglum_disambiguator,
+                "museumNumber": str(manuscript.museum_number)
+                if manuscript.museum_number
+                else "",
+                "accession": manuscript.accession,
+                "periodModifier": manuscript.period_modifier.value,
+                "period": manuscript.period.long_name,
+                "provenance": manuscript.provenance.long_name,
+                "type": manuscript.type.long_name,
+                "notes": manuscript.notes,
+                "colophon": manuscript.colophon.atf,
+                "unplacedLines": manuscript.unplaced_lines.atf,
+                "references": ApiReferenceSchema().dump(
+                    manuscript.references, many=True
+                ),
+            }
+        )
+        == manuscript
+    )
 
 
 def test_serialize() -> None:

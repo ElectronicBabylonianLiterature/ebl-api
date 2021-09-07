@@ -3,33 +3,55 @@ import pytest
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.errors import DuplicateError, NotFoundError
-from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory, TextFactory
+from ebl.tests.factories.corpus import (
+    ChapterFactory,
+    LineFactory,
+    ManuscriptFactory,
+    TextFactory,
+)
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.text_id import TextId
+from ebl.fragmentarium.application.joins_schema import JoinSchema
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.tests.factories.fragment import FragmentFactory
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.corpus.domain.text import UncertainFragment
 
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
+JOINS_COLLECTION = "joins"
 MANUSCRIPT_ID = 1
+MUSEUM_NUMBER = MuseumNumber("X", "1")
+UNCERTAIN_FRAGMET = MuseumNumber("X", "2")
 TEXT = TextFactory.build()
 CHAPTER = ChapterFactory.build(
     text_id=TEXT.id,
     stage=TEXT.chapters[0].stage,
     name=TEXT.chapters[0].name,
-    manuscripts=(ManuscriptFactory.build(id=1, references=tuple()),),
+    manuscripts=(
+        ManuscriptFactory.build(
+            id=1, museum_number=MUSEUM_NUMBER, accession="", references=tuple()
+        ),
+    ),
+    lines=(
+        LineFactory.build(manuscript_id=1, translation=TEXT.chapters[0].translation),
+    ),
+    uncertain_fragments=tuple(),
 )
 
 
-def when_text_in_collection(database, text=TEXT):
+def when_text_in_collection(database, text=TEXT) -> None:
     database[TEXTS_COLLECTION].insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
 
-def when_chapter_in_collection(database, chapter=CHAPTER):
+def when_chapter_in_collection(database, chapter=CHAPTER) -> None:
     database[CHAPTERS_COLLECTION].insert_one(ChapterSchema().dump(chapter))
 
 
-def test_creating_text(database, text_repository):
+def test_creating_text(database, text_repository) -> None:
     text_repository.create(TEXT)
 
     inserted_text = database[TEXTS_COLLECTION].find_one(
@@ -38,7 +60,7 @@ def test_creating_text(database, text_repository):
     assert inserted_text == TextSchema(exclude=["chapters"]).dump(TEXT)
 
 
-def test_creating_chapter(database, text_repository):
+def test_creating_chapter(database, text_repository) -> None:
     text_repository.create_chapter(CHAPTER)
 
     inserted_chapter = database[CHAPTERS_COLLECTION].find_one(
@@ -53,7 +75,7 @@ def test_creating_chapter(database, text_repository):
     assert inserted_chapter == ChapterSchema().dump(CHAPTER)
 
 
-def test_it_is_not_possible_to_create_duplicate_texts(text_repository):
+def test_it_is_not_possible_to_create_duplicate_texts(text_repository) -> None:
     text_repository.create_indexes()
     text_repository.create(TEXT)
 
@@ -61,7 +83,7 @@ def test_it_is_not_possible_to_create_duplicate_texts(text_repository):
         text_repository.create(TEXT)
 
 
-def test_it_is_not_possible_to_create_duplicate_chapters(text_repository):
+def test_it_is_not_possible_to_create_duplicate_chapters(text_repository) -> None:
     text_repository.create_indexes()
     text_repository.create(CHAPTER)
 
@@ -69,21 +91,34 @@ def test_it_is_not_possible_to_create_duplicate_chapters(text_repository):
         text_repository.create(CHAPTER)
 
 
-def test_finding_text(database, text_repository, bibliography_repository):
-    when_text_in_collection(database)
-    when_chapter_in_collection(database)
-    for reference in TEXT.references:
+def test_finding_text(
+    database, text_repository, bibliography_repository, fragment_repository
+) -> None:
+    text = attr.evolve(
+        TEXT,
+        chapters=(
+            attr.evolve(
+                TEXT.chapters[0],
+                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMET, True),),
+            ),
+        ),
+    )
+    chapter = attr.evolve(CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMET,))
+    when_text_in_collection(database, text)
+    when_chapter_in_collection(database, chapter)
+    fragment_repository.create(Fragment(UNCERTAIN_FRAGMET))
+    for reference in text.references:
         bibliography_repository.create(reference.document)
 
-    assert text_repository.find(TEXT.id) == TEXT
+    assert text_repository.find(text.id) == text
 
 
-def test_find_raises_exception_if_text_not_found(text_repository):
+def test_find_raises_exception_if_text_not_found(text_repository) -> None:
     with pytest.raises(NotFoundError):
         text_repository.find(TextId(Genre.LITERATURE, 1, 1))
 
 
-def test_listing_texts(database, text_repository, bibliography_repository):
+def test_listing_texts(database, text_repository, bibliography_repository) -> None:
     another_text = attr.evolve(TEXT, index=2)
     another_chapter = attr.evolve(
         CHAPTER,
@@ -102,7 +137,7 @@ def test_listing_texts(database, text_repository, bibliography_repository):
     assert text_repository.list() == [TEXT, another_text]
 
 
-def test_updating_chapter(database, text_repository):
+def test_updating_chapter(database, text_repository) -> None:
     updated_chapter = attr.evolve(
         CHAPTER, lines=tuple(), manuscripts=tuple(), signs=tuple()
     )
@@ -122,7 +157,7 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
     "signs,is_match",
     [([["KU"]], True), ([["ABZ075"], ["KU"]], True), ([["UD"]], False)],
 )
-def test_query_by_transliteration(signs, is_match, text_repository):
+def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     text_repository.create_chapter(CHAPTER)
 
     result = text_repository.query_by_transliteration(TransliterationQuery(signs))
@@ -130,7 +165,7 @@ def test_query_by_transliteration(signs, is_match, text_repository):
     assert result == expected
 
 
-def test_query_manuscripts_by_chapter(database, text_repository):
+def test_query_manuscripts_by_chapter(database, text_repository) -> None:
     when_chapter_in_collection(database)
 
     assert text_repository.query_manuscripts_by_chapter(CHAPTER.id_) == list(
@@ -138,6 +173,43 @@ def test_query_manuscripts_by_chapter(database, text_repository):
     )
 
 
-def test_query_manuscripts_by_chapter_not_found(database, text_repository):
+def test_query_manuscripts_by_chapter_not_found(database, text_repository) -> None:
     with pytest.raises(NotFoundError):
         assert text_repository.query_manuscripts_by_chapter(CHAPTER.id_)
+
+
+def test_query_manuscripts_with_joins_by_chapter_no_joins(
+    database, text_repository
+) -> None:
+    when_chapter_in_collection(database)
+
+    assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == list(
+        CHAPTER.manuscripts
+    )
+
+
+def test_query_manuscripts_with_joins_is_in_fragmentarium(
+    database, text_repository, fragment_repository
+) -> None:
+    fragment_repository.create(FragmentFactory.build(number=MUSEUM_NUMBER))
+    when_chapter_in_collection(database)
+
+    assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == [
+        attr.evolve(CHAPTER.manuscripts[0], is_in_fragmentarium=True)
+    ]
+
+
+def test_query_manuscripts_with_joins_by_chapter(database, text_repository) -> None:
+    when_chapter_in_collection(database)
+    join = Join(MUSEUM_NUMBER)
+    database[JOINS_COLLECTION].insert_one(
+        {
+            "fragments": [
+                {**JoinSchema(exclude=["is_in_fragmentarium"]).dump(join), "group": 0}
+            ]
+        }
+    )
+
+    assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == [
+        attr.evolve(CHAPTER.manuscripts[0], joins=Joins(((join,),)))
+    ]

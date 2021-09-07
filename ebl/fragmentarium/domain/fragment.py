@@ -2,13 +2,12 @@ from itertools import groupby
 from typing import Optional, Sequence, Tuple
 
 import attr
-import pydash
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
-from ebl.fragmentarium.domain.joins import Join
+from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
@@ -63,7 +62,7 @@ class Fragment:
     width: Measure = Measure()
     length: Measure = Measure()
     thickness: Measure = Measure()
-    _joins: Sequence[Sequence[Join]] = tuple()
+    joins: Joins = Joins()
     record: Record = Record()
     folios: Folios = Folios()
     text: Text = Text()
@@ -75,25 +74,8 @@ class Fragment:
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
 
     @property
-    def joins(self) -> Sequence[Sequence[Join]]:
-        return sorted(
-            (sorted(group) for group in self._joins),
-            key=lambda group: min(join.museum_number for join in group),
-        )
-
-    @property
     def is_lowest_join(self) -> bool:
-        lowest = (
-            pydash.chain(self.joins)
-            .flatten()
-            .filter("is_in_fragmentarium")
-            .map("museum_number")
-            .sort()
-            .head()
-            .value()
-            or self.number
-        )
-        return lowest == self.number
+        return (self.joins.lowest or self.number) == self.number
 
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)

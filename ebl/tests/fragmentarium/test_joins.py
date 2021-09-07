@@ -1,6 +1,8 @@
 from hamcrest import assert_that, has_properties
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.joins import Join
+from ebl.fragmentarium.domain.joins import Join, Joins
+from hamcrest.library import contains_exactly
+from hamcrest.core.core.isequal import equal_to
 
 
 def test_join() -> None:
@@ -40,3 +42,42 @@ def test_join_default() -> None:
     join = Join(MuseumNumber("X", "1"))
 
     assert_that(join, has_properties(defaults))
+
+
+def test_joins_fragments_sorting():
+    joins = Joins(
+        (
+            (Join(MuseumNumber("B", "2")), Join(MuseumNumber("B", "1"))),
+            (Join(MuseumNumber("Z", "0")), Join(MuseumNumber("A", "3"))),
+        )
+    )
+
+    assert_that(
+        joins.fragments,
+        contains_exactly(
+            contains_exactly(
+                Join(MuseumNumber("A", "3")), Join(MuseumNumber("Z", "0"))
+            ),
+            contains_exactly(
+                Join(MuseumNumber("B", "1")), Join(MuseumNumber("B", "2"))
+            ),
+        ),
+    )
+
+
+def test_joins_lowest():
+    joins = Joins(
+        (
+            (Join(MuseumNumber("B", "2"), is_in_fragmentarium=True),),
+            (
+                Join(MuseumNumber("B", "1"), is_in_fragmentarium=True),
+                Join(MuseumNumber("A", "1"), is_in_fragmentarium=False),
+            ),
+        )
+    )
+
+    assert_that(joins.lowest, equal_to(MuseumNumber("B", "1")))
+
+
+def test_joins_lowest_when_no_fragments():
+    assert_that(Joins().lowest, equal_to(None))

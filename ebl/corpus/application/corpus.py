@@ -59,6 +59,12 @@ class TextRepository(ABC):
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]:
         ...
 
+    @abstractmethod
+    def query_manuscripts_with_joins_by_chapter(
+        self, id_: ChapterId
+    ) -> Sequence[Manuscript]:
+        ...
+
 
 class Corpus:
     def __init__(
@@ -81,7 +87,23 @@ class Corpus:
         return self._hydrate_references(chapter)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
-        return self._repository.query_manuscripts_by_chapter(id_)
+        return self._hydrate_manuscripts(
+            self._repository.query_manuscripts_by_chapter(id_)
+        )
+
+    def find_manuscripts_with_joins(self, id_: ChapterId) -> Sequence[Manuscript]:
+        return self._hydrate_manuscripts(
+            self._repository.query_manuscripts_with_joins_by_chapter(id_)
+        )
+
+    def _hydrate_manuscripts(
+        self, manuscripts: Sequence[Manuscript]
+    ) -> Sequence[Manuscript]:
+        hydrator = ChapterHydartor(self._bibliography)
+        try:
+            return tuple(map(hydrator.hydrate_manuscript, manuscripts))
+        except NotFoundError as error:
+            raise Defect(error) from error
 
     def search_transliteration(self, query: TransliterationQuery) -> List[ChapterInfo]:
         return (
