@@ -1,9 +1,50 @@
+import io
+
+import requests
+from PIL import Image
+from mockito import mock
+
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
+from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.conftest import FakeFile
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 SCHEMA = AnnotationsSchema()
+
+
+def test_generate_annotations(
+    annotations_repository, photo_repository, changelog, when
+):
+    fragment_number = MuseumNumber.of("X.0")
+    image = Image.open("./test_image.jpeg")
+    buf = io.BytesIO()
+    image.save(buf, format="JPEG")
+    image_file = FakeFile(str(fragment_number), buf.getvalue(), {})
+
+    when(photo_repository).query_by_file_name(f"{fragment_number}.jpg").thenReturn(
+        image_file
+    )
+    service = AnnotationsService(annotations_repository, photo_repository, changelog)
+    boundary_results = {
+        "boundaryResults": [
+            {
+                "top_left_x": 0.0,
+                "top_left_y": 0.0,
+                "width": 10.0,
+                "height": 10.0,
+                "probability": 0.99,
+            }
+        ]
+    }
+
+    when(requests).post(...).thenReturn(
+        mock({"json": lambda: boundary_results, "status_code": 200})
+    )
+    annotations = service.generate_annotations(fragment_number, 0)
+    assert isinstance(annotations, Annotations)
+    assert len(annotations.annotations) > 0
 
 
 def test_find(annotations_repository, changelog, when):
