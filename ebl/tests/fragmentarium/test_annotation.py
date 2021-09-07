@@ -71,6 +71,6 @@ def test_bounding_boxes_prediction():
 
 
 def test_bounding_boxes_prediction_from_dict():
-    assert BBOX is BoundingBoxesPrediction.from_dict(
+    assert BBOX == BoundingBoxesPrediction.from_dict(
         {"top_left_x": 1, "top_left_y": 2, "width": 3, "height": 4, "probability": 0.99}
     )
