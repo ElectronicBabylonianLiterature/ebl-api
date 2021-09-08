@@ -1,7 +1,6 @@
 from PIL import Image
 from mockito import mock, verify
 
-import ebl.fragmentarium.retrieve_annotations as retrieve_annotations
 from ebl.fragmentarium.retrieve_annotations import (
     create_annotations,
     BoundingBox,
