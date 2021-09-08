@@ -10,6 +10,7 @@ from PIL import Image
 
 from ebl.app import create_context
 from ebl.context import Context
+from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.domain.annotation import Annotations, Annotation
 
 
@@ -89,13 +90,13 @@ def create_annotations(
     annotation_collection: Sequence[Annotations],
     output_folder_annotations: str,
     output_folder_images: str,
-    context: Context,
+    photo_repository: FileRepository,
 ) -> None:
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
 
         image_filename = f"{fragment_number}.jpg"
-        fragment_image = context.photo_repository.query_by_file_name(image_filename)
+        fragment_image = photo_repository.query_by_file_name(image_filename)
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
@@ -160,6 +161,9 @@ if __name__ == "__main__":
     context = create_context()
     annotation_collection = context.annotations_repository.retrieve_all()
     create_annotations(
-        annotation_collection, args.output_annotations, args.output_imgs, context
+        annotation_collection,
+        args.output_annotations,
+        args.output_imgs,
+        context.photo_repository,
     )
     print("Done")

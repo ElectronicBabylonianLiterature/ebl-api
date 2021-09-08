@@ -10,22 +10,15 @@ from ebl.fragmentarium.retrieve_annotations import (
 from ebl.tests.factories.annotation import AnnotationsFactory, GeometryFactory
 
 
-def test_create_annotations(context, when, photo):
-    annotation_repository = context.annotations_repository
-    photo_repository = context.photo_repository
-
+def test_create_annotations(photo_repository, when, photo):
     annotation = AnnotationsFactory.build()
-
     image = mock({"save": lambda _: None, "size": (640, 480, 3)})
-
-    when(annotation_repository).retrieve_all().thenReturn([annotation])
     when(photo_repository).query_by_file_name(
         f"{annotation.fragment_number}.jpg"
     ).thenReturn(photo)
     when(Image).open(...).thenReturn(image)
-    when(retrieve_annotations).write_annotations(...).thenReturn(None)
 
-    create_annotations([annotation], "", "", context)
+    create_annotations([annotation], "", "", photo_repository)
     verify(image).save(f"{annotation.fragment_number}.jpg")
 
 
