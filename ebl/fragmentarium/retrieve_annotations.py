@@ -9,7 +9,6 @@ import attr
 from PIL import Image
 
 from ebl.app import create_context
-from ebl.context import Context
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.domain.annotation import Annotations, Annotation
 
