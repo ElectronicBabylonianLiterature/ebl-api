@@ -1,22 +1,22 @@
-from enum import Enum, unique
 import itertools
+from enum import Enum, unique
 from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
 import pydash
 
+from ebl.corpus.domain.extant_line import ExtantLine
 from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.stage import Stage
+from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
-from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.translation_line import Extent
-from ebl.transliteration.domain.labels import Label
+from ebl.transliteration.domain.transliteration_query import \
+    TransliterationQuery
 
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
@@ -59,22 +59,6 @@ class ChapterId:
 
     def __str__(self) -> str:
         return f"{self.text_id} {self.stage} {self.name}"
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class ExtantLine:
-    label: Sequence[Label]
-    line_number: AbstractLineNumber
-    is_side_boundary: bool
-
-    @staticmethod
-    def of(line: Line, manuscript_id: int) -> "ExtantLine":
-        manuscript_line = line.get_manuscript_line(manuscript_id)
-        return ExtantLine(
-            manuscript_line.labels,
-            line.number,
-            manuscript_line.is_beginning_of_side or manuscript_line.is_end_of_side,
-        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
