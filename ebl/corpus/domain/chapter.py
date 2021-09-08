@@ -13,10 +13,10 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
+from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.translation_line import Extent
-from ebl.transliteration.domain.transliteration_query import \
-    TransliterationQuery
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
@@ -61,6 +61,129 @@ class ChapterId:
         return f"{self.text_id} {self.stage} {self.name}"
 
 
+def _validate_manuscript_ids(
+    _instance, _attribute, value: Sequence[Manuscript]
+) -> None:
+    duplicate_ids = pydash.duplicates([manuscript.id for manuscript in value])
+    if duplicate_ids:
+        raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
+
+
+def _validate_manuscript_sigla(
+    _instance, _attribute, value: Sequence[Manuscript]
+) -> None:
+    duplicate_sigla = pydash.duplicates([manuscript.siglum for manuscript in value])
+    if duplicate_sigla:
+        raise ValueError(f"Duplicate sigla: {duplicate_sigla}.")
+
+
+def _validate_line_numbers(_instance, _attribute, value: Sequence[Line]) -> None:
+    duplicates = pydash.duplicates([line.number for line in value])
+    if any(duplicates):
+        raise ValueError(f"Duplicate line numbers: {duplicates}.")
+
+
+def _validate_translations(_instance, _attribute, value: Sequence[Line]) -> None:
+    line_numbers = {line.number: index for index, line in enumerate(value)}
+    _validate_extents(line_numbers, value)
+    _validate_extent_ranges(line_numbers, value)
+
+
+def _validate_extents(
+    line_numbers: Mapping[AbstractLineNumber, int], value: Sequence[Line]
+) -> None:
+    errors = [
+        f"Invalid extent {translation.extent} in line {line.number.label}."
+        for index, line in enumerate(value)
+        for translation in line.translation
+        if translation.extent
+        and line_numbers.get(cast(Extent, translation.extent).number, -1) <= index
+    ]
+
+    if errors:
+        raise ValueError(" ".join(errors))
+
+
+def _validate_extent_ranges(
+    line_numbers: Mapping[AbstractLineNumber, int], value: Sequence[Line]
+) -> None:
+    ranges = itertools.groupby(
+        sorted(
+            (
+                (
+                    translation.language,
+                    set(
+                        range(
+                            index,
+                            (
+                                translation.extent
+                                and line_numbers[
+                                    cast(Extent, translation.extent).number
+                                ]
+                                or index
+                            )
+                            + 1,
+                        )
+                    ),
+                )
+                for index, line in enumerate(value)
+                for translation in line.translation
+            ),
+            key=lambda pair: pair[0],
+        ),
+        lambda pair: pair[0],
+    )
+
+    range_errors = [
+        f"Overlapping extents for language {key}."
+        for key, group in ranges
+        if any(
+            pair[0][1] & pair[1][1] for pair in itertools.combinations(list(group), 2)
+        )
+    ]
+
+    if range_errors:
+        raise ValueError(" ".join(range_errors))
+
+
+def _validate_orphan_manuscript_ids(
+    instance: "Chapter", _, value: Sequence[Line]
+) -> None:
+    manuscript_ids = {manuscript.id for manuscript in instance.manuscripts}
+    used_manuscripts_ids = {
+        manuscript_id
+        for line in instance.lines
+        for manuscript_id in line.manuscript_ids
+    }
+    orphans = used_manuscripts_ids - manuscript_ids
+    if orphans:
+        raise ValueError(f"Missing manuscripts: {orphans}.")
+
+
+def _validate_manuscript_line_labels(
+    instance: "Chapter", _, value: Sequence[Line]
+) -> None:
+    duplicates = pydash.duplicates(instance.manuscript_line_labels)
+    if duplicates:
+        readable_labels = _make_labels_readable(instance, duplicates)
+        raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
+
+
+def _make_labels_readable(
+    instance: "Chapter", labels: Sequence[ManuscriptLineLabel]
+) -> str:
+    return ", ".join(
+        " ".join(
+            [
+                str(instance.get_manuscript(label[0]).siglum),
+                *[side.to_value() for side in label[1]],
+                label[2].label,
+            ]
+        )
+        for label in labels
+    )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Chapter:
     text_id: TextId
@@ -69,106 +192,22 @@ class Chapter:
     version: str = ""
     name: str = ""
     order: int = 0
-    manuscripts: Sequence[Manuscript] = attr.ib(default=tuple())
+    manuscripts: Sequence[Manuscript] = attr.ib(
+        default=tuple(),
+        validator=[_validate_manuscript_ids, _validate_manuscript_sigla],
+    )
     uncertain_fragments: Sequence[MuseumNumber] = tuple()
-    lines: Sequence[Line] = attr.ib(default=tuple())
+    lines: Sequence[Line] = attr.ib(
+        default=tuple(),
+        validator=[
+            _validate_line_numbers,
+            _validate_translations,
+            _validate_orphan_manuscript_ids,
+            _validate_manuscript_line_labels,
+        ],
+    )
     signs: Sequence[str] = tuple()
     parser_version: str = ""
-
-    @manuscripts.validator
-    def _validate_manuscript_ids(self, _, value: Sequence[Manuscript]) -> None:
-        duplicate_ids = pydash.duplicates([manuscript.id for manuscript in value])
-        if duplicate_ids:
-            raise ValueError(f"Duplicate manuscript IDs: {duplicate_ids}.")
-
-    @manuscripts.validator
-    def _validate_manuscript_sigla(self, _, value: Sequence[Manuscript]) -> None:
-        duplicate_sigla = pydash.duplicates([manuscript.siglum for manuscript in value])
-        if duplicate_sigla:
-            raise ValueError(f"Duplicate sigla: {duplicate_sigla}.")
-
-    @lines.validator
-    def _validate_orphan_manuscript_ids(self, _, value: Sequence[Line]) -> None:
-        manuscript_ids = {manuscript.id for manuscript in self.manuscripts}
-        used_manuscripts_ids = {
-            manuscript_id
-            for line in self.lines
-            for manuscript_id in line.manuscript_ids
-        }
-        orphans = used_manuscripts_ids - manuscript_ids
-        if orphans:
-            raise ValueError(f"Missing manuscripts: {orphans}.")
-
-    @lines.validator
-    def _validate_line_numbers(self, _, value: Sequence[Line]) -> None:
-        duplicates = pydash.duplicates([line.number for line in value])
-        if any(duplicates):
-            raise ValueError(f"Duplicate line numbers: {duplicates}.")
-
-    @lines.validator
-    def _validate_manuscript_line_labels(self, _, value: Sequence[Line]) -> None:
-        duplicates = pydash.duplicates(self._manuscript_line_labels)
-        if duplicates:
-            readable_labels = self._make_labels_readable(duplicates)
-            raise ValueError(f"Duplicate manuscript line labels: {readable_labels}.")
-
-    @lines.validator
-    def _validate_translations(self, _, value: Sequence[Line]) -> None:
-        line_numbers = {line.number: index for index, line in enumerate(value)}
-        self._validate_extents(line_numbers, value)
-        self._validate_extent_ranges(line_numbers, value)
-
-    def _validate_extents(self, line_numbers, value: Sequence[Line]) -> None:
-        errors = [
-            f"Invalid extent {translation.extent} in line {line.number.label}."
-            for index, line in enumerate(value)
-            for translation in line.translation
-            if translation.extent
-            and line_numbers.get(cast(Extent, translation.extent).number, -1) <= index
-        ]
-
-        if errors:
-            raise ValueError(" ".join(errors))
-
-    def _validate_extent_ranges(self, line_numbers, value: Sequence[Line]) -> None:
-        ranges = itertools.groupby(
-            sorted(
-                (
-                    (
-                        translation.language,
-                        set(
-                            range(
-                                index,
-                                (
-                                    translation.extent
-                                    and line_numbers[
-                                        cast(Extent, translation.extent).number
-                                    ]
-                                    or index
-                                )
-                                + 1,
-                            )
-                        ),
-                    )
-                    for index, line in enumerate(value)
-                    for translation in line.translation
-                ),
-                key=lambda pair: pair[0],
-            ),
-            lambda pair: pair[0],
-        )
-
-        range_errors = [
-            f"Overlapping extents for language {key}."
-            for key, group in ranges
-            if any(
-                pair[0][1] & pair[1][1]
-                for pair in itertools.combinations(list(group), 2)
-            )
-        ]
-
-        if range_errors:
-            raise ValueError(" ".join(range_errors))
 
     @property
     def id_(self) -> ChapterId:
@@ -199,8 +238,16 @@ class Chapter:
         }
 
     @property
-    def _manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
+    def manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [label for line in self.lines for label in line.manuscript_line_labels]
+
+    def get_manuscript(self, id_: int) -> Manuscript:
+        try:
+            return next(
+                manuscript for manuscript in self.manuscripts if manuscript.id == id_
+            )
+        except StopIteration:
+            raise NotFoundError(f"No manuscripts with id {id_}.")
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines
@@ -267,26 +314,6 @@ class Chapter:
             .reject(pydash.is_none)
             .concat([TextLineEntry(line, None) for line in manuscript.text_lines])
             .value()
-        )
-
-    def _get_manuscript(self, id_: int) -> Manuscript:
-        try:
-            return next(
-                manuscript for manuscript in self.manuscripts if manuscript.id == id_
-            )
-        except StopIteration:
-            raise NotFoundError(f"No manuscripts with id {id_}.")
-
-    def _make_labels_readable(self, labels: Sequence[ManuscriptLineLabel]) -> str:
-        return ", ".join(
-            " ".join(
-                [
-                    str(self._get_manuscript(label[0]).siglum),
-                    *[side.to_value() for side in label[1]],
-                    label[2].label,
-                ]
-            )
-            for label in labels
         )
 
     def _match(
