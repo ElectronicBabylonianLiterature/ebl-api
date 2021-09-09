@@ -19,6 +19,7 @@ def test_loose_dollar_line() -> None:
     assert loose_line.text == text
     assert loose_line.atf == f"$ ({text})"
     assert loose_line.display_value == f"({text})"
+    assert loose_line.is_end_of is False
 
 
 def test_image_dollar_line() -> None:
@@ -30,6 +31,7 @@ def test_image_dollar_line() -> None:
     assert image.text == "great"
     assert image.atf == "$ (image 1a = great)"
     assert image.display_value == "(image 1a = great)"
+    assert image.is_end_of is False
 
 
 def test_ruling_dollar_line() -> None:
@@ -40,6 +42,7 @@ def test_ruling_dollar_line() -> None:
     assert ruling_line.status is None
     assert ruling_line.atf == "$ double ruling"
     assert ruling_line.display_value == "double ruling"
+    assert ruling_line.is_end_of is False
 
 
 def test_ruling_dollar_line_status() -> None:
@@ -52,6 +55,7 @@ def test_ruling_dollar_line_status() -> None:
     assert ruling_line.status == atf.DollarStatus.EMENDED_NOT_COLLATED
     assert ruling_line.atf == "$ double ruling !"
     assert ruling_line.display_value == "double ruling !"
+    assert ruling_line.is_end_of is False
 
 
 def test_scope_container() -> None:
@@ -72,6 +76,7 @@ def test_strict_dollar_line_with_none() -> None:
     assert actual.lemmatization == (LemmatizationToken(" several object what"),)
     assert actual.atf == "$ several object what"
     assert actual.display_value == "several object what"
+    assert actual.is_end_of is False
 
 
 def test_state_dollar_line() -> None:
@@ -94,6 +99,7 @@ def test_state_dollar_line() -> None:
     )
     assert actual.atf == "$ at least several columns blank ?"
     assert actual.display_value == "at least several columns blank ?"
+    assert actual.is_end_of is False
 
 
 def test_state_dollar_line_content() -> None:
@@ -109,6 +115,7 @@ def test_state_dollar_line_content() -> None:
     assert actual.scope == scope
     assert actual.lemmatization == (LemmatizationToken(" at least 1 obverse blank ?"),)
     assert actual.display_value == "at least 1 obverse blank ?"
+    assert actual.is_end_of is False
 
 
 def test_state_dollar_line_non_empty_string_error() -> None:
@@ -125,3 +132,14 @@ def test_state_dollar_line_range() -> None:
     assert actual.scope == scope
     assert actual.lemmatization == (LemmatizationToken(" 2-4 lines missing"),)
     assert actual.display_value == "2-4 lines missing"
+    assert actual.is_end_of is False
+
+
+def test_state_dollar_line_end_of() -> None:
+    scope = ScopeContainer(atf.Surface.OBVERSE)
+    actual = StateDollarLine(None, atf.Extent.END_OF, scope, None, None)
+
+    assert actual.scope == scope
+    assert actual.lemmatization == (LemmatizationToken(" end of obverse"),)
+    assert actual.display_value == "end of obverse"
+    assert actual.is_end_of is True

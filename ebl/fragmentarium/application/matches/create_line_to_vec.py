@@ -65,10 +65,8 @@ def _parse_text_line(_: LineNumber) -> LineToVecEncodings:
 def _parse_text_line_line_number_range(
     line_number: LineNumberRange,
 ) -> LineToVecEncodings:
-    return tuple(
-        LineToVecEncoding.TEXT_LINE
-        for _ in range(line_number.start.number, line_number.end.number + 1)
-    )
+    number_of_lines = line_number.end.number - line_number.start.number + 1
+    return (LineToVecEncoding.TEXT_LINE,) * number_of_lines
 
 
 @singledispatch
@@ -90,22 +88,16 @@ def _line_to_vec_text(line: TextLine, first_line: bool) -> LineToVecEncodings:
 
 @line_to_vec.register(RulingDollarLine)
 def _line_to_vec_ruling(line: RulingDollarLine, _: bool) -> LineToVecEncodings:
-    if line.number == atf.Ruling.SINGLE:
-        return (LineToVecEncoding.SINGLE_RULING,)
-    elif line.number == atf.Ruling.DOUBLE:
-        return (LineToVecEncoding.DOUBLE_RULING,)
-    elif line.number == atf.Ruling.TRIPLE:
-        return (LineToVecEncoding.TRIPLE_RULING,)
-    else:
-        return tuple()
+    return {
+        atf.Ruling.SINGLE: (LineToVecEncoding.SINGLE_RULING,),
+        atf.Ruling.DOUBLE: (LineToVecEncoding.DOUBLE_RULING,),
+        atf.Ruling.TRIPLE: (LineToVecEncoding.TRIPLE_RULING,),
+    }.get(line.number, tuple())
 
 
 @line_to_vec.register(StateDollarLine)
 def _line_to_vec_state(line: StateDollarLine, _: bool) -> LineToVecEncodings:
-    if line.extent == atf.Extent.END_OF:
-        return (LineToVecEncoding.END,)
-    else:
-        return tuple()
+    return (LineToVecEncoding.END,) if line.is_end_of else tuple()
 
 
 @singledispatch

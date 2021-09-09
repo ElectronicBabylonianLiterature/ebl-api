@@ -3,7 +3,7 @@ from typing import Sequence
 import attr
 import pytest
 
-from ebl.corpus.domain.chapter import Chapter, Classification, TextLineEntry
+from ebl.corpus.domain.chapter import Chapter, Classification, ExtantLine, TextLineEntry
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -463,3 +463,23 @@ def test_overlapping_languages() -> None:
             ),
         ),
     )
+
+
+def test_extant_lines() -> None:
+    manuscript = Manuscript(MANUSCRIPT_ID)
+    manuscript_line = LINE_VARIANT_1.manuscripts[0]
+    chapter = Chapter(
+        TextId(GENRE, 0, 0),
+        manuscripts=(manuscript,),
+        lines=(
+            Line(LineNumber(1), (LINE_VARIANT_1,)),
+            Line(LineNumber(2), (LINE_VARIANT_2,)),
+        ),
+    )
+    assert chapter.extant_lines == {
+        manuscript.siglum: {
+            manuscript_line.labels: [
+                ExtantLine(manuscript_line.labels, LineNumber(1), True)
+            ]
+        }
+    }

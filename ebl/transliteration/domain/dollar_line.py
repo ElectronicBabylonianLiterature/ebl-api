@@ -26,6 +26,10 @@ class DollarLine(Line):
     def lemmatization(self) -> Tuple[LemmatizationToken]:
         return (LemmatizationToken(f" {self.display_value}"),)
 
+    @property
+    def is_end_of(self) -> bool:
+        return False
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class SealDollarLine(DollarLine):
@@ -115,16 +119,20 @@ class StateDollarLine(DollarLine):
     @property
     def display_value(self) -> str:
         return " ".join(
-            StateDollarLine.to_atf(x)
-            for x in [
+            StateDollarLine.to_atf(column)
+            for column in [
                 self.qualification,
                 self.extent,
                 self.scope,
                 self.state,
                 self.status,
             ]
-            if x
+            if column
         )
+
+    @property
+    def is_end_of(self) -> bool:
+        return self.extent == atf.Extent.END_OF
 
     @staticmethod
     def to_atf(column) -> str:

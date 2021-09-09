@@ -11,6 +11,11 @@ class AbstractLineNumber(ABC):
         ...
 
     @property
+    @abstractmethod
+    def is_beginning_of_side(self) -> bool:
+        ...
+
+    @property
     def atf(self) -> str:
         return f"{self.label}."
 
@@ -29,6 +34,10 @@ class LineNumber(AbstractLineNumber):
         suffix = self.suffix_modifier or ""
         return f"{prefix}{self.number}{prime}{suffix}"
 
+    @property
+    def is_beginning_of_side(self) -> bool:
+        return self.number == 1 and not self.has_prime and self.prefix_modifier is None
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineNumberRange(AbstractLineNumber):
@@ -38,3 +47,7 @@ class LineNumberRange(AbstractLineNumber):
     @property
     def label(self) -> str:
         return f"{self.start.label}-{self.end.label}"
+
+    @property
+    def is_beginning_of_side(self) -> bool:
+        return self.start.is_beginning_of_side
