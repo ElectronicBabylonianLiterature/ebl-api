@@ -1,4 +1,3 @@
-import itertools
 from enum import Enum, unique
 from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
@@ -167,18 +166,15 @@ class Chapter:
     def _get_extant_lines(
         self, manuscript_id: int
     ) -> Mapping[ManuscriptLineLabel, ExtantLine]:
-        return {
-            key: list(group)
-            for key, group in itertools.groupby(
-                (
-                    ExtantLine.of(line, manuscript_id)
-                    for line in self.lines
-                    if manuscript_id in line.manuscript_ids
-                    and line.get_manuscript_text_line(manuscript_id) is not None
-                ),
-                lambda extant_line: extant_line.label,
-            )
-        }
+        return pydash.group_by(
+            (
+                ExtantLine.of(line, manuscript_id)
+                for line in self.lines
+                if manuscript_id in line.manuscript_ids
+                and line.get_manuscript_text_line(manuscript_id) is not None
+            ),
+            lambda extant_line: extant_line.label,
+        )
 
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript
