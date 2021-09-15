@@ -1,4 +1,6 @@
+import pydash
 import pytest
+
 from ebl.bibliography.domain.reference import Reference, ReferenceType, BibliographyId
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.markup import (
@@ -8,12 +10,15 @@ from ebl.transliteration.domain.markup import (
     MarkupPart,
     StringPart,
 )
-from ebl.transliteration.domain.sign_tokens import Divider
+from ebl.transliteration.domain.sign_tokens import Divider, Reading
 
 PUNCTUATION = ";,:.-–—"
-LANGUAGE_PART = LanguagePart(Language.AKKADIAN, [Divider.of(":")])
+TEXT = "sed nec tortor varius, iaculis."
+LANGUAGE_PART = LanguagePart(
+    Language.AKKADIAN, [Reading.of_name("kur"), Divider.of(":")]
+)
 BIBLIOGRAPHY_PART = BibliographyPart(
-    Reference(BibliographyId("1"), ReferenceType.DISCUSSION, PUNCTUATION)
+    Reference(BibliographyId("1"), ReferenceType.DISCUSSION, TEXT + PUNCTUATION)
 )
 
 
@@ -34,3 +39,16 @@ BIBLIOGRAPHY_PART = BibliographyPart(
 )
 def test_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
     assert part.rstrip() == expected
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "part,expected",
+    [
+        (StringPart(TEXT), StringPart(pydash.title_case(TEXT))),
+        (EmphasisPart(TEXT), EmphasisPart(pydash.title_case(TEXT))),
+        (LANGUAGE_PART, LANGUAGE_PART),
+        (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
+    ],
+)
+def test_title(part: MarkupPart, expected: MarkupPart) -> None:
+    assert part.title_case() == expected

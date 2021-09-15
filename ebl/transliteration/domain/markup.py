@@ -3,6 +3,7 @@ import re
 from typing import Iterable, Pattern, Sequence, Tuple, TypeVar
 
 import attr
+import pydash
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
@@ -13,6 +14,7 @@ from ebl.transliteration.domain.tokens import Token
 
 
 SPECIAL_CHARACTERS: Pattern[str] = re.compile(r"[@{}\\]")
+PUNCTUATION: str = ";,:.-–—"
 
 
 def escape(unescaped: str) -> str:
@@ -37,13 +39,19 @@ class MarkupPart(ABC):
     def rstrip(self: MARKUP) -> MARKUP:
         return self
 
+    def title_case(self: MARKUP) -> MARKUP:
+        return self
+
 
 @attr.s(frozen=True, auto_attribs=True)
 class TextPart(MarkupPart):
     text: str
 
     def rstrip(self: TEXT) -> TEXT:
-        return attr.evolve(self, text=self.text.rstrip(";,:.-–—"))
+        return attr.evolve(self, text=self.text.rstrip(PUNCTUATION))
+
+    def title_case(self: TEXT) -> TEXT:
+        return attr.evolve(self, text=pydash.title_case(self.text))
 
 
 @attr.s(frozen=True, auto_attribs=True)
