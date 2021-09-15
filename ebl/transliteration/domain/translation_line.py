@@ -68,4 +68,7 @@ class TranslationLine(Line):
             return self
 
         [*head, tail] = self.parts
-        return attr.evolve(self, parts=[*head, tail.rstrip()])
+        return attr.evolve(self, parts=(*head, tail.rstrip()))
+
+    def title_case(self) -> "TranslationLine":
+        return attr.evolve(self, parts=(part.title_case() for part in self.parts))
