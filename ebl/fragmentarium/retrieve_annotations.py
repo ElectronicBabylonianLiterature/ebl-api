@@ -3,7 +3,7 @@ import os
 import shutil
 from io import BytesIO
 from os.path import join
-from typing import Sequence, Tuple
+from typing import Sequence
 
 import attr
 from PIL import Image
@@ -14,20 +14,18 @@ from ebl.fragmentarium.domain.annotation import Annotations, Annotation
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
-class Point:
-    x: float
-    y: float
-
-
-@attr.attrs(auto_attribs=True, frozen=True)
 class BoundingBox:
-    top_left: Point
-    top_right: Point
-    bottom_right: Point
-    bottom_left: Point
+    top_left_x: float
+    top_left_y: float
+    width: float
+    height: float
 
-    @staticmethod
-    def from_relative_to_absolute_coordinates(
+    def to_list(self) -> Sequence[float]:
+        return [self.top_left_x, self.top_left_y, self.width, self.height]
+
+    @classmethod
+    def from_relative(
+        cls,
         relative_x,
         relative_y,
         relative_width,
@@ -39,50 +37,28 @@ class BoundingBox:
         absolute_y = int(round(relative_y / 100 * image_height))
         absolute_width = int(round(relative_width / 100 * image_width))
         absolute_height = int(round(relative_height / 100 * image_height))
-        return BoundingBox.from_rectange(
+        return cls(
             absolute_x, absolute_y, absolute_width, absolute_height
         )
 
     @staticmethod
-    def from_rectange(x: float, y: float, width: float, height: float) -> "BoundingBox":
-        return BoundingBox(
-            Point(x, y),
-            Point(x + width, y),
-            Point(x + width, y + height),
-            Point(x, y + height),
+    def convert_to_bounding_boxes(
+            image_width: int, image_height: int, annotations: Sequence[Annotation]
+    ) -> Sequence["BoundingBox"]:
+        return tuple(
+            [
+                BoundingBox.from_relative(
+                    annotation.geometry.x,
+                    annotation.geometry.y,
+                    annotation.geometry.width,
+                    annotation.geometry.height,
+                    image_width,
+                    image_height,
+                )
+                for annotation in annotations
+            ]
         )
 
-    def to_tuple_counterclockwise(
-        self
-    ) -> Tuple[float, float, float, float, float, float, float, float]:
-        return (
-            self.top_left.x,
-            self.top_left.y,
-            self.top_right.x,
-            self.top_right.y,
-            self.bottom_right.x,
-            self.bottom_right.y,
-            self.bottom_left.x,
-            self.bottom_right.y,
-        )
-
-
-def convert_to_bounding_boxes(
-    image_width: int, image_height: int, annotations: Sequence[Annotation]
-) -> Sequence[BoundingBox]:
-    return tuple(
-        [
-            BoundingBox.from_relative_to_absolute_coordinates(
-                annotation.geometry.x,
-                annotation.geometry.y,
-                annotation.geometry.width,
-                annotation.geometry.height,
-                image_width,
-                image_height,
-            )
-            for annotation in annotations
-        ]
-    )
 
 
 def create_annotations(
@@ -100,7 +76,7 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bounding_boxes = convert_to_bounding_boxes(
+        bounding_boxes = BoundingBox.convert_to_bounding_boxes(
             image.size[0], image.size[1], single_annotation.annotations
         )
         write_annotations(
@@ -121,8 +97,8 @@ def write_annotations(
     txt_file = join(output_folder_annotations, file_name)
     with open(txt_file, "w+") as file:
         for bounding_box in bounding_boxes:
-            vertices = ",".join(map(str, bounding_box.to_tuple_counterclockwise()))
-            file.write(vertices + "\n")
+            rectangle_attributes = [str(int(rectangle_attribute)) for rectangle_attribute in bounding_box.to_list()]
+            file.write(",".join(rectangle_attributes) + "\n")
 
 
 def create_directory(path: str) -> None:
@@ -151,11 +127,11 @@ if __name__ == "__main__":
         )
 
     if args.output_annotations is None and args.output_imgs is None:
-        create_directory("annotations")
-        create_directory("annotations/annotations")
-        create_directory("annotations/imgs")
-        args.output_annotations = "annotations/annotations"
-        args.output_imgs = "annotations/imgs"
+        create_directory("./annotations")
+        create_directory("./annotations/annotations")
+        create_directory("./annotations/imgs")
+        args.output_annotations = "./annotations/annotations"
+        args.output_imgs = "./annotations/imgs"
 
     context = create_context()
     annotation_collection = context.annotations_repository.retrieve_all()
