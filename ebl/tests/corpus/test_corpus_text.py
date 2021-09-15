@@ -2,8 +2,10 @@ from ebl.corpus.domain.chapter import Classification
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.corpus.domain.text_id import TextId
-from ebl.transliteration.domain.genre import Genre
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.markup import StringPart
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 GENRE = Genre.LITERATURE
 CATEGORY = 1
@@ -15,22 +17,18 @@ CLASSIFICATION = Classification.ANCIENT
 STAGE = Stage.NEO_BABYLONIAN
 INTRO = "**Intro**"
 CHAPTER_NAME = "I"
-TRANSLATION = tuple()
-UNCERTAIN_FRAGMENTS = (UncertainFragment(MuseumNumber("X", "1"), True),)
-
-TEXT = Text(
-    GENRE,
-    CATEGORY,
-    INDEX,
-    NAME,
-    VERSES,
-    APPROXIMATE,
-    INTRO,
-    (ChapterListing(STAGE, CHAPTER_NAME, TRANSLATION, UNCERTAIN_FRAGMENTS),),
+TRANSLATION = (
+    TranslationLine([StringPart("not the title")], "de"),
+    TranslationLine([StringPart("the title,")], "en"),
 )
+UNCERTAIN_FRAGMENTS = (UncertainFragment(MuseumNumber("X", "1"), True),)
+CHAPTER = ChapterListing(STAGE, CHAPTER_NAME, TRANSLATION, UNCERTAIN_FRAGMENTS)
 
 
-def test_text_constructor_sets_correct_fields():
+TEXT = Text(GENRE, CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, INTRO, (CHAPTER,))
+
+
+def test_text_constructor_sets_correct_fields() -> None:
     assert TEXT.id == TextId(GENRE, CATEGORY, INDEX)
     assert TEXT.genre == GENRE
     assert TEXT.category == CATEGORY
@@ -43,3 +41,7 @@ def test_text_constructor_sets_correct_fields():
     assert TEXT.chapters[0].name == CHAPTER_NAME
     assert TEXT.chapters[0].translation == TRANSLATION
     assert TEXT.chapters[0].uncertain_fragments == UNCERTAIN_FRAGMENTS
+
+
+def test_title() -> None:
+    assert CHAPTER.title == (StringPart("The Title"),)

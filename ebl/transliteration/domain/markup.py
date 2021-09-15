@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import re
-from typing import Iterable, Pattern, Sequence, Tuple
+from typing import Iterable, Pattern, Sequence, Tuple, TypeVar
 
 import attr
 
@@ -13,10 +13,15 @@ from ebl.transliteration.domain.tokens import Token
 
 
 SPECIAL_CHARACTERS: Pattern[str] = re.compile(r"[@{}\\]")
+PUNCTUATION: str = ";,:.-–—"
 
 
 def escape(unescaped: str) -> str:
     return SPECIAL_CHARACTERS.sub(lambda match: f"\\{match.group(0)}", unescaped)
+
+
+MARKUP = TypeVar("MARKUP", bound="MarkupPart")
+TEXT = TypeVar("TEXT", bound="TextPart")
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -30,20 +35,33 @@ class MarkupPart(ABC):
     def key(self) -> str:
         return self.value
 
+    def rstrip(self: MARKUP) -> MARKUP:
+        return self
+
+    def title_case(self: MARKUP) -> MARKUP:
+        return self
+
 
 @attr.s(frozen=True, auto_attribs=True)
-class StringPart(MarkupPart):
+class TextPart(MarkupPart):
     text: str
 
+    def rstrip(self: TEXT) -> TEXT:
+        return attr.evolve(self, text=self.text.rstrip(PUNCTUATION))
+
+    def title_case(self: TEXT) -> TEXT:
+        return attr.evolve(self, text=self.text.title())
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class StringPart(TextPart):
     @property
     def value(self) -> str:
         return self.text
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class EmphasisPart(MarkupPart):
-    text: str
-
+class EmphasisPart(TextPart):
     @property
     def value(self) -> str:
         return f"@i{{{self.text}}}"
