@@ -3,7 +3,6 @@ import re
 from typing import Iterable, Pattern, Sequence, Tuple, TypeVar
 
 import attr
-import pydash
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
@@ -51,7 +50,7 @@ class TextPart(MarkupPart):
         return attr.evolve(self, text=self.text.rstrip(PUNCTUATION))
 
     def title_case(self: TEXT) -> TEXT:
-        return attr.evolve(self, text=pydash.title_case(self.text))
+        return attr.evolve(self, text=self.text.title())
 
 
 @attr.s(frozen=True, auto_attribs=True)

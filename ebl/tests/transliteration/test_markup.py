@@ -1,4 +1,3 @@
-import pydash
 import pytest
 
 from ebl.bibliography.domain.reference import Reference, ReferenceType, BibliographyId
@@ -44,8 +43,8 @@ def test_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "part,expected",
     [
-        (StringPart(TEXT), StringPart(pydash.title_case(TEXT))),
-        (EmphasisPart(TEXT), EmphasisPart(pydash.title_case(TEXT))),
+        (StringPart(TEXT), StringPart(TEXT.title())),
+        (EmphasisPart(TEXT), EmphasisPart(TEXT.title())),
         (LANGUAGE_PART, LANGUAGE_PART),
         (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
     ],
