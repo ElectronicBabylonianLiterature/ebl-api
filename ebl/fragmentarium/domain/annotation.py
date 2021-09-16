@@ -4,20 +4,17 @@ from uuid import uuid4
 import attr
 
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.retrieve_annotations import BoundingBox
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class BoundingBoxesPrediction:
-    top_left_x: float
-    top_left_y: float
-    width: float
-    height: float
+class BoundingBoxPrediction(BoundingBox):
     probability: float
 
     @classmethod
     def from_dict(
         cls, bounding_boxes_prediction_dict: Dict
-    ) -> "BoundingBoxesPrediction":
+    ) -> "BoundingBoxPrediction":
         return cls(
             bounding_boxes_prediction_dict["top_left_x"],
             bounding_boxes_prediction_dict["top_left_y"],
@@ -63,7 +60,7 @@ class Annotations:
     def from_bounding_boxes_predictions(
         cls,
         fragment_number: MuseumNumber,
-        bboxes: Sequence[BoundingBoxesPrediction],
+        bboxes: Sequence[BoundingBoxPrediction],
         image_height: int,
         image_width: int,
     ) -> "Annotations":

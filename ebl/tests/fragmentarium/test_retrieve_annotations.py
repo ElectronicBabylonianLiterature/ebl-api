@@ -1,10 +1,7 @@
 from PIL import Image
 from mockito import mock, verify
 
-from ebl.fragmentarium.retrieve_annotations import (
-    create_annotations,
-    BoundingBox,
-)
+from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
 from ebl.tests.factories.annotation import AnnotationsFactory, GeometryFactory
 
 
@@ -30,4 +27,4 @@ def test_from_relative_to_absolute_coordinates():
         geometry.height,
         image_width=shape[0],
         image_height=shape[1],
-    ) == (BoundingBox(0,0,640, 480))
+    ) == (BoundingBox(0, 0, 640, 480))

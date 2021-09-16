@@ -37,13 +37,11 @@ class BoundingBox:
         absolute_y = int(round(relative_y / 100 * image_height))
         absolute_width = int(round(relative_width / 100 * image_width))
         absolute_height = int(round(relative_height / 100 * image_height))
-        return cls(
-            absolute_x, absolute_y, absolute_width, absolute_height
-        )
+        return cls(absolute_x, absolute_y, absolute_width, absolute_height)
 
     @staticmethod
     def convert_to_bounding_boxes(
-            image_width: int, image_height: int, annotations: Sequence[Annotation]
+        image_width: int, image_height: int, annotations: Sequence[Annotation]
     ) -> Sequence["BoundingBox"]:
         return tuple(
             [
@@ -58,7 +56,6 @@ class BoundingBox:
                 for annotation in annotations
             ]
         )
-
 
 
 def create_annotations(
@@ -97,7 +94,10 @@ def write_annotations(
     txt_file = join(output_folder_annotations, file_name)
     with open(txt_file, "w+") as file:
         for bounding_box in bounding_boxes:
-            rectangle_attributes = [str(int(rectangle_attribute)) for rectangle_attribute in bounding_box.to_list()]
+            rectangle_attributes = [
+                str(int(rectangle_attribute))
+                for rectangle_attribute in bounding_box.to_list()
+            ]
             file.write(",".join(rectangle_attributes) + "\n")
 
 

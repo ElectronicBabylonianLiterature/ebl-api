@@ -3,7 +3,7 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationData,
     Annotation,
     Annotations,
-    BoundingBoxesPrediction,
+    BoundingBoxPrediction,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -50,8 +50,8 @@ def test_annotations():
 
 
 def test_annotations_from_bounding_box_predictions():
-    bbox_1 = BoundingBoxesPrediction(0, 0, 10, 100, 0.99)
-    bbox_2 = BoundingBoxesPrediction(500, 500, 100, 10, 0.99)
+    bbox_1 = BoundingBoxPrediction(0, 0, 10, 100, 0.99)
+    bbox_2 = BoundingBoxPrediction(500, 500, 100, 10, 0.99)
     annotations = Annotations.from_bounding_boxes_predictions(
         MUSEUM_NUMBER, [bbox_1, bbox_2], 1000, 1000
     )
@@ -59,7 +59,7 @@ def test_annotations_from_bounding_box_predictions():
     assert annotations.annotations[1].geometry == Geometry(50.0, 50.0, 10.0, 1.0)
 
 
-BBOX = BoundingBoxesPrediction(1, 2, 3, 4, 0.99)
+BBOX = BoundingBoxPrediction(1, 2, 3, 4, 0.99)
 
 
 def test_bounding_boxes_prediction():
@@ -71,6 +71,6 @@ def test_bounding_boxes_prediction():
 
 
 def test_bounding_boxes_prediction_from_dict():
-    assert BBOX == BoundingBoxesPrediction.from_dict(
+    assert BBOX == BoundingBoxPrediction.from_dict(
         {"top_left_x": 1, "top_left_y": 2, "width": 3, "height": 4, "probability": 0.99}
     )

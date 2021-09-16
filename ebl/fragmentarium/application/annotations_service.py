@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 
 import requests
@@ -6,7 +7,7 @@ from PIL import Image
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
-from ebl.fragmentarium.domain.annotation import Annotations, BoundingBoxesPrediction
+from ebl.fragmentarium.domain.annotation import Annotations, BoundingBoxPrediction
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
@@ -30,7 +31,7 @@ class AnnotationsService:
         buf = BytesIO(image_bytes)
         width, height = Image.open(buf).size
         res = requests.post(
-            "http://localhost:8001/generate",
+            f"{os.environ['EBL_AI_API']}/generate",
             data=buf.getvalue(),
             headers={"content-type": "image/png"},
         )
@@ -39,7 +40,7 @@ class AnnotationsService:
             boundary_results = res.json()
             bounding_boxes_predictions = list(
                 map(
-                    BoundingBoxesPrediction.from_dict,
+                    BoundingBoxPrediction.from_dict,
                     boundary_results["boundaryResults"],
                 )
             )
