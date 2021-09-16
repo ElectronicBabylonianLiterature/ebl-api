@@ -40,7 +40,7 @@ class BoundingBox:
         return cls(absolute_x, absolute_y, absolute_width, absolute_height)
 
     @staticmethod
-    def convert_to_bounding_boxes(
+    def from_relatives(
         image_width: int, image_height: int, annotations: Sequence[Annotation]
     ) -> Sequence["BoundingBox"]:
         return tuple(
@@ -73,7 +73,7 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bounding_boxes = BoundingBox.convert_to_bounding_boxes(
+        bounding_boxes = BoundingBox.from_relatives(
             image.size[0], image.size[1], single_annotation.annotations
         )
         write_annotations(

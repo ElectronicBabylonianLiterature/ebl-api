@@ -40,8 +40,7 @@ class AnnotationsService:
             boundary_results = res.json()
             bounding_boxes_predictions = list(
                 map(
-                    BoundingBoxPrediction.from_dict,
-                    boundary_results["boundaryResults"],
+                    BoundingBoxPrediction.from_dict, boundary_results["boundaryResults"]
                 )
             )
             bounding_boxes_predictions = list(

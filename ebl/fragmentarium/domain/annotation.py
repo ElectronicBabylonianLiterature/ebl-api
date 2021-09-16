@@ -12,9 +12,7 @@ class BoundingBoxPrediction(BoundingBox):
     probability: float
 
     @classmethod
-    def from_dict(
-        cls, bounding_boxes_prediction_dict: Dict
-    ) -> "BoundingBoxPrediction":
+    def from_dict(cls, bounding_boxes_prediction_dict: Dict) -> "BoundingBoxPrediction":
         return cls(
             bounding_boxes_prediction_dict["top_left_x"],
             bounding_boxes_prediction_dict["top_left_y"],
