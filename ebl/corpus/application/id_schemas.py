@@ -6,7 +6,7 @@ from ebl.transliteration.domain.genre import Genre
 
 
 class TextIdSchema(Schema):
-    genre = ValueEnum(Genre, missing=Genre.LITERATURE)
+    genre = ValueEnum(Genre, load_default=Genre.LITERATURE)
     category = fields.Integer(required=True, validate=validate.Range(min=0))
     index = fields.Integer(required=True, validate=validate.Range(min=0))
 

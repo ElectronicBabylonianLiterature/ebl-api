@@ -47,7 +47,7 @@ class ImageDollarLineSchema(DollarLineSchema):
 
 class RulingDollarLineSchema(DollarLineSchema):
     number = NameEnum(atf.Ruling, required=True)
-    status = NameEnum(atf.DollarStatus, missing=None)
+    status = NameEnum(atf.DollarStatus, load_default=None)
     display_value = fields.String(data_key="displayValue")
 
     @post_load

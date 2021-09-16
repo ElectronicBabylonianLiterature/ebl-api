@@ -70,9 +70,9 @@ class BaseTokenSchema(Schema):
     value = fields.String(required=True)
     clean_value = fields.String(data_key="cleanValue")
     enclosure_type = fields.List(
-        NameEnum(EnclosureType), missing=list, data_key="enclosureType"
+        NameEnum(EnclosureType), load_default=list, data_key="enclosureType"
     )
-    erasure = NameEnum(ErasureState, missing=ErasureState.NONE)
+    erasure = NameEnum(ErasureState, load_default=ErasureState.NONE)
 
 
 class ValueTokenSchema(BaseTokenSchema):
@@ -230,7 +230,7 @@ class DividerSchema(BaseTokenSchema):
 
 
 class ColumnSchema(BaseTokenSchema):
-    number = fields.Integer(missing=None)
+    number = fields.Integer(load_default=None)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -309,7 +309,9 @@ class ReadingSchema(NamedSignSchema):
 
 
 class LogogramSchema(NamedSignSchema):
-    surrogate = fields.List(fields.Nested(lambda: OneOfTokenSchema()), missing=tuple())
+    surrogate = fields.List(
+        fields.Nested(lambda: OneOfTokenSchema()), load_default=tuple()
+    )
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -350,8 +352,10 @@ class BaseWordSchema(BaseTokenSchema):
     lemmatizable = fields.Boolean(required=True)
     alignable = fields.Boolean()
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
-    alignment = fields.Integer(allow_none=True, missing=None)
-    variant = fields.Nested(lambda: OneOfWordSchema(), allow_none=True, missing=None)
+    alignment = fields.Integer(allow_none=True, load_default=None)
+    variant = fields.Nested(
+        lambda: OneOfWordSchema(), allow_none=True, load_default=None
+    )
 
 
 class WordSchema(BaseWordSchema):

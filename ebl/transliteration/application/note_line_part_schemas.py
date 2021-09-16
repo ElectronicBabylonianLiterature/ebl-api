@@ -33,7 +33,7 @@ class EmphasisPartSchema(Schema):
 
 class LanguagePartSchema(Schema):
     language = NameEnum(Language, required=True)
-    tokens = fields.Nested(OneOfTokenSchema, many=True, missing=None)
+    tokens = fields.Nested(OneOfTokenSchema, many=True, load_default=None)
 
     @post_load
     def make_part(self, data, **kwargs) -> LanguagePart:

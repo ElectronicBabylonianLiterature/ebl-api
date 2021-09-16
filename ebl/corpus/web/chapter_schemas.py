@@ -72,8 +72,10 @@ class ApiManuscriptSchema(ManuscriptSchema):
         data_key="unplacedLines",
     )
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
-    joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins())
-    is_in_fragmentarium = fields.Boolean(missing=False, data_key="isInFragmentarium")
+    joins = fields.Pluck(JoinsSchema, "fragments", load_default=Joins())
+    is_in_fragmentarium = fields.Boolean(
+        load_default=False, data_key="isInFragmentarium"
+    )
 
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:
@@ -229,6 +231,6 @@ class ApiLineSchema(Schema):
 class ApiChapterSchema(ChapterSchema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
     uncertain_fragments = fields.List(
-        MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
+        MuseumNumberString(), load_default=tuple(), data_key="uncertainFragments"
     )
     lines = fields.Nested(ApiLineSchema, many=True, required=True)

@@ -15,8 +15,8 @@ from ebl.fragmentarium.domain.joins import Joins
 
 
 class MeasureSchema(Schema):
-    value = fields.Float(missing=None)
-    note = fields.String(missing=None)
+    value = fields.Float(load_default=None)
+    note = fields.String(load_default=None)
 
     @post_load
     def make_measure(self, data, **kwargs):
@@ -85,22 +85,24 @@ class FragmentSchema(Schema):
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
     thickness = fields.Nested(MeasureSchema, required=True)
-    joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins())
+    joins = fields.Pluck(JoinsSchema, "fragments", load_default=Joins())
     record = fields.Pluck(RecordSchema, "entries")
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
-    signs = fields.String(missing="")
+    signs = fields.String(load_default="")
     notes = fields.String(required=True)
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     uncurated_references = fields.Nested(
         UncuratedReferenceSchema,
         many=True,
         data_key="uncuratedReferences",
-        missing=None,
+        load_default=None,
     )
-    genres = fields.Nested(GenreSchema, many=True, missing=tuple())
+    genres = fields.Nested(GenreSchema, many=True, load_default=tuple())
     line_to_vec = fields.List(
-        fields.List(ValueEnum(LineToVecEncoding)), missing=tuple(), data_key="lineToVec"
+        fields.List(ValueEnum(LineToVecEncoding)),
+        load_default=tuple(),
+        data_key="lineToVec",
     )
 
     @post_load

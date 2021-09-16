@@ -13,12 +13,12 @@ class FragmentInfoSchema(Schema):
     accession = fields.String(required=True)
     script = fields.String(required=True)
     description = fields.String(required=True)
-    editor = fields.String(missing="")
-    edition_date = fields.String(data_key="editionDate", missing="")
+    editor = fields.String(load_default="")
+    edition_date = fields.String(data_key="editionDate", load_default="")
     matching_lines = fields.List(
-        fields.List(fields.String()), data_key="matchingLines", missing=tuple()
+        fields.List(fields.String()), data_key="matchingLines", load_default=tuple()
     )
-    references = fields.Nested(ReferenceSchema, many=True, missing=tuple())
+    references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
 
     @post_load
     def make_fragment_info(self, data, **kwargs):
