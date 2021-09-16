@@ -82,7 +82,7 @@ class SurfaceAtLineSchema(AtLineSchema):
 class ObjectAtLineSchema(AtLineSchema):
     status = fields.List(NameEnum(atf.Status), load_only=True)
     object_label = NameEnum(atf.Object, load_only=True)
-    text = fields.String(default="", load_only=True)
+    text = fields.String(dump_default="", load_only=True)
     label = fields.Nested(ObjectLabelSchema)
     display_value = fields.String(data_key="displayValue")
 
@@ -93,7 +93,7 @@ class ObjectAtLineSchema(AtLineSchema):
 
 class DivisionAtLineSchema(AtLineSchema):
     text = fields.String(required=True)
-    number = fields.Int(required=False, allow_none=True, default=None)
+    number = fields.Int(required=False, allow_none=True, dump_default=None)
     display_value = fields.String(data_key="displayValue")
 
     @post_load
@@ -104,7 +104,7 @@ class DivisionAtLineSchema(AtLineSchema):
 class CompositeAtLineSchema(AtLineSchema):
     composite = NameEnum(atf.Composite, required=True)
     text = fields.String(required=True)
-    number = fields.Int(required=False, allow_none=True, default=None)
+    number = fields.Int(required=False, allow_none=True, dump_default=None)
     display_value = fields.String(data_key="displayValue")
 
     @post_load
