@@ -5,57 +5,11 @@ from io import BytesIO
 from os.path import join
 from typing import Sequence
 
-import attr
 from PIL import Image
 
 from ebl.app import create_context
 from ebl.files.application.file_repository import FileRepository
-from ebl.fragmentarium.domain.annotation import Annotations, Annotation
-
-
-@attr.attrs(auto_attribs=True, frozen=True)
-class BoundingBox:
-    top_left_x: float
-    top_left_y: float
-    width: float
-    height: float
-
-    def to_list(self) -> Sequence[float]:
-        return [self.top_left_x, self.top_left_y, self.width, self.height]
-
-    @classmethod
-    def from_relative(
-        cls,
-        relative_x,
-        relative_y,
-        relative_width,
-        relative_height,
-        image_width,
-        image_height,
-    ) -> "BoundingBox":
-        absolute_x = int(round(relative_x / 100 * image_width))
-        absolute_y = int(round(relative_y / 100 * image_height))
-        absolute_width = int(round(relative_width / 100 * image_width))
-        absolute_height = int(round(relative_height / 100 * image_height))
-        return cls(absolute_x, absolute_y, absolute_width, absolute_height)
-
-    @staticmethod
-    def from_relatives(
-        image_width: int, image_height: int, annotations: Sequence[Annotation]
-    ) -> Sequence["BoundingBox"]:
-        return tuple(
-            [
-                BoundingBox.from_relative(
-                    annotation.geometry.x,
-                    annotation.geometry.y,
-                    annotation.geometry.width,
-                    annotation.geometry.height,
-                    image_width,
-                    image_height,
-                )
-                for annotation in annotations
-            ]
-        )
+from ebl.fragmentarium.domain.annotation import Annotations, BoundingBox
 
 
 def create_annotations(

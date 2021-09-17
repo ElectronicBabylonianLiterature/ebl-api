@@ -4,22 +4,6 @@ from uuid import uuid4
 import attr
 
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.retrieve_annotations import BoundingBox
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class BoundingBoxPrediction(BoundingBox):
-    probability: float
-
-    @classmethod
-    def from_dict(cls, bounding_boxes_prediction_dict: Dict) -> "BoundingBoxPrediction":
-        return cls(
-            bounding_boxes_prediction_dict["top_left_x"],
-            bounding_boxes_prediction_dict["top_left_y"],
-            bounding_boxes_prediction_dict["width"],
-            bounding_boxes_prediction_dict["height"],
-            bounding_boxes_prediction_dict["probability"],
-        )
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
@@ -47,6 +31,66 @@ class Annotation:
     def from_prediction(cls, geometry: Geometry) -> "Annotation":
         data = AnnotationData(uuid4().hex, "", [], "")
         return cls(geometry, data)
+
+
+@attr.attrs(auto_attribs=True, frozen=True)
+class BoundingBox:
+    top_left_x: float
+    top_left_y: float
+    width: float
+    height: float
+
+    def to_list(self) -> Sequence[float]:
+        return [self.top_left_x, self.top_left_y, self.width, self.height]
+
+    @classmethod
+    def from_relative(
+        cls,
+        relative_x,
+        relative_y,
+        relative_width,
+        relative_height,
+        image_width,
+        image_height,
+    ) -> "BoundingBox":
+        absolute_x = int(round(relative_x / 100 * image_width))
+        absolute_y = int(round(relative_y / 100 * image_height))
+        absolute_width = int(round(relative_width / 100 * image_width))
+        absolute_height = int(round(relative_height / 100 * image_height))
+        return cls(absolute_x, absolute_y, absolute_width, absolute_height)
+
+    @staticmethod
+    def from_relatives(
+        image_width: int, image_height: int, annotations: Sequence[Annotation]
+    ) -> Sequence["BoundingBox"]:
+        return tuple(
+            [
+                BoundingBox.from_relative(
+                    annotation.geometry.x,
+                    annotation.geometry.y,
+                    annotation.geometry.width,
+                    annotation.geometry.height,
+                    image_width,
+                    image_height,
+                )
+                for annotation in annotations
+            ]
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class BoundingBoxPrediction(BoundingBox):
+    probability: float
+
+    @classmethod
+    def from_dict(cls, bounding_boxes_prediction_dict: Dict) -> "BoundingBoxPrediction":
+        return cls(
+            bounding_boxes_prediction_dict["top_left_x"],
+            bounding_boxes_prediction_dict["top_left_y"],
+            bounding_boxes_prediction_dict["width"],
+            bounding_boxes_prediction_dict["height"],
+            bounding_boxes_prediction_dict["probability"],
+        )
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
