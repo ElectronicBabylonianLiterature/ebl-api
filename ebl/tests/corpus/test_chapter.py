@@ -3,7 +3,7 @@ from typing import Sequence
 import attr
 import pytest
 
-from ebl.corpus.domain.chapter import Chapter, Classification, TextLineEntry
+from ebl.corpus.domain.chapter import Chapter, Classification, ExtantLine, TextLineEntry
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -23,7 +23,7 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
 from ebl.transliteration.domain.line import EmptyLine
-from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import NoteLine
@@ -34,6 +34,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.tokens import UnknownNumberOfSigns
 
 
 GENRE = Genre.LITERATURE
@@ -463,3 +464,99 @@ def test_overlapping_languages() -> None:
             ),
         ),
     )
+
+
+def test_extant_lines() -> None:
+    manuscript = Manuscript(MANUSCRIPT_ID)
+    manuscript_line = LINE_VARIANT_1.manuscripts[0]
+    chapter = Chapter(
+        TEXT_ID,
+        manuscripts=(manuscript,),
+        lines=(
+            Line(LineNumber(1), (LINE_VARIANT_1,)),
+            Line(LineNumber(2), (LINE_VARIANT_2,)),
+        ),
+    )
+    assert chapter.extant_lines == {
+        manuscript.siglum: {
+            manuscript_line.labels: [
+                ExtantLine(manuscript_line.labels, LineNumber(1), True)
+            ]
+        }
+    }
+
+
+def test_extant_lines_mixed_sides() -> None:
+    manuscript = Manuscript(
+        MANUSCRIPT_ID,
+        siglum_disambiguator="1",
+        period_modifier=PeriodModifier.NONE,
+        period=Period.LATE_BABYLONIAN,
+        provenance=Provenance.BABYLON,
+        type=ManuscriptType.SCHOOL,
+    )
+    manuscript_line = ManuscriptLine(
+        MANUSCRIPT_ID,
+        LABELS,
+        TextLine(
+            LineNumberRange(LineNumber(1), LineNumber(3, suffix_modifier="b")),
+            (UnknownNumberOfSigns.of(),),
+        ),
+        PARATEXT,
+        OMITTED_WORDS,
+    )
+    manuscript_line2 = ManuscriptLine(
+        MANUSCRIPT_ID,
+        tuple(),
+        TextLine(LineNumber(2), (UnknownNumberOfSigns.of(),)),
+        PARATEXT,
+        OMITTED_WORDS,
+    )
+    manuscript_line3 = ManuscriptLine(
+        MANUSCRIPT_ID,
+        LABELS,
+        TextLine(LineNumber(3), (UnknownNumberOfSigns.of(),)),
+        PARATEXT,
+        OMITTED_WORDS,
+    )
+    chapter = Chapter(
+        TEXT_ID,
+        manuscripts=(manuscript,),
+        lines=(
+            Line(
+                LineNumber(1),
+                (
+                    LineVariant(
+                        LINE_RECONSTRUCTION, NOTE, (manuscript_line,), PARALLEL_LINES
+                    ),
+                ),
+            ),
+            Line(
+                LineNumber(2),
+                (
+                    LineVariant(
+                        LINE_RECONSTRUCTION, NOTE, (manuscript_line2,), PARALLEL_LINES
+                    ),
+                ),
+            ),
+            Line(
+                LineNumber(3),
+                (
+                    LineVariant(
+                        LINE_RECONSTRUCTION, NOTE, (manuscript_line3,), PARALLEL_LINES
+                    ),
+                ),
+            ),
+        ),
+    )
+    assert chapter.extant_lines == {
+        manuscript.siglum: {
+            manuscript_line.labels: [
+                ExtantLine(manuscript_line.labels, LineNumber(1), True),
+                ExtantLine(manuscript_line3.labels, LineNumber(3), False),
+            ],
+            manuscript_line2.labels: [
+                ExtantLine(manuscript_line2.labels, LineNumber(2), False)
+            ],
+        }
+    }

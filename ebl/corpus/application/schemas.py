@@ -71,15 +71,15 @@ class ManuscriptSchema(Schema):
     )
     notes = fields.String(required=True)
     colophon: fields.Field = fields.Nested(
-        TransliterationSchema, missing=Transliteration()
+        TransliterationSchema, load_default=Transliteration()
     )
     unplaced_lines: fields.Field = fields.Nested(
-        TransliterationSchema, missing=Transliteration(), data_key="unplacedLines"
+        TransliterationSchema, load_default=Transliteration(), data_key="unplacedLines"
     )
     references = fields.Nested(ReferenceSchema, many=True, required=True)
-    joins = fields.Pluck(JoinsSchema, "fragments", missing=Joins(), load_only=True)
+    joins = fields.Pluck(JoinsSchema, "fragments", load_default=Joins(), load_only=True)
     is_in_fragmentarium = fields.Boolean(
-        missing=False, data_key="isInFragmentarium", load_only=True
+        load_default=False, data_key="isInFragmentarium", load_only=True
     )
 
     @validates_schema
@@ -149,7 +149,7 @@ class LineVariantSchema(Schema):
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
     parallel_lines = fields.Nested(
-        ParallelLineSchema, many=True, missing=tuple(), data_key="parallelLines"
+        ParallelLineSchema, many=True, load_default=tuple(), data_key="parallelLines"
     )
 
     @post_load
@@ -173,7 +173,7 @@ class LineSchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    translation = fields.Nested(TranslationLineSchema, many=True, missing=tuple())
+    translation = fields.Nested(TranslationLineSchema, many=True, load_default=tuple())
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
@@ -195,11 +195,14 @@ class ChapterSchema(Schema):
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
     uncertain_fragments: fields.Field = fields.Nested(
-        MuseumNumberSchema, many=True, missing=tuple(), data_key="uncertainFragments"
+        MuseumNumberSchema,
+        many=True,
+        load_default=tuple(),
+        data_key="uncertainFragments",
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
-    signs = fields.List(fields.String(), missing=tuple())
-    parser_version = fields.String(missing="", data_key="parserVersion")
+    signs = fields.List(fields.String(), load_default=tuple())
+    parser_version = fields.String(load_default="", data_key="parserVersion")
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
@@ -232,11 +235,11 @@ class UncertainFragmentSchema(Schema):
 class ChapterListingSchema(Schema):
     stage = ValueEnum(Stage, required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
-    translation = fields.Nested(TranslationLineSchema, many=True, missing=tuple())
+    translation = fields.Nested(TranslationLineSchema, many=True, load_default=tuple())
     uncertain_fragments = fields.Nested(
         UncertainFragmentSchema,
         many=True,
-        missing=tuple(),
+        load_default=tuple(),
         data_key="uncertainFragments",
     )
 
@@ -251,7 +254,7 @@ class ChapterListingSchema(Schema):
 
 
 class TextSchema(Schema):
-    genre = ValueEnum(Genre, missing=Genre.LITERATURE)
+    genre = ValueEnum(Genre, load_default=Genre.LITERATURE)
     category = fields.Integer(required=True, validate=validate.Range(min=0))
     index = fields.Integer(required=True, validate=validate.Range(min=0))
     name = fields.String(required=True, validate=validate.Length(min=1))
@@ -259,9 +262,9 @@ class TextSchema(Schema):
         required=True, data_key="numberOfVerses", validate=validate.Range(min=0)
     )
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
-    intro = fields.String(missing="")
+    intro = fields.String(load_default="")
     chapters = fields.Nested(ChapterListingSchema, many=True, required=True)
-    references = fields.Nested(ReferenceSchema, many=True, missing=tuple())
+    references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
 
     @post_load
     def make_text(self, data: dict, **kwargs) -> Text:

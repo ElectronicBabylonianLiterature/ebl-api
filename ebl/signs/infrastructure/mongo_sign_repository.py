@@ -29,7 +29,7 @@ class SignListRecordSchema(Schema):
 
 class ValueSchema(Schema):
     value = fields.String(required=True)
-    sub_index = fields.Int(missing=None, data_key="subIndex")
+    sub_index = fields.Int(load_default=None, data_key="subIndex")
 
     @post_load
     def make_value(self, data, **kwargs):
@@ -56,9 +56,9 @@ class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
-    logograms = fields.Nested(LogogramSchema, many=True, missing=tuple())
-    mes_zl = fields.String(data_key="mesZl", missing="", allow_none=True)
-    unicode = fields.List(fields.Int(), missing=tuple())
+    logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
+    mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
+    unicode = fields.List(fields.Int(), load_default=tuple())
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:

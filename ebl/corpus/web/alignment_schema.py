@@ -16,10 +16,10 @@ from ebl.transliteration.domain.word_tokens import AbstractWord
 
 class AlignmentTokenSchema(Schema):
     value = fields.String(required=True)
-    alignment = fields.Integer(missing=None)
-    variant = fields.String(missing="", load_only=True)
-    type = fields.String(missing="", load_only=True)
-    language = fields.String(missing="", load_only=True)
+    alignment = fields.Integer(load_default=None)
+    variant = fields.String(load_default="", load_only=True)
+    type = fields.String(load_default="", load_only=True)
+    language = fields.String(load_default="", load_only=True)
 
     @post_load
     def make_alignment_token(self, data: dict, **kwargs) -> AlignmentToken:

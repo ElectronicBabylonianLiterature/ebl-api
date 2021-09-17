@@ -33,6 +33,7 @@ class ChapterListing:
         return (
             pydash.chain(self.translation)
             .filter(lambda line: line.language == DEFAULT_LANGUAGE)
+            .map(lambda line: line.rstrip().title_case())
             .map(lambda line: line.parts)
             .head()
             .value()

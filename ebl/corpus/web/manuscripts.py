@@ -14,7 +14,7 @@ from marshmallow import Schema, fields
 class ManuscriptDtoSchema(Schema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
     uncertain_fragments = fields.List(
-        MuseumNumberString(), missing=tuple(), data_key="uncertainFragments"
+        MuseumNumberString(), load_default=tuple(), data_key="uncertainFragments"
     )
 
 

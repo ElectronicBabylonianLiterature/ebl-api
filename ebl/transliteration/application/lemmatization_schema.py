@@ -5,7 +5,7 @@ from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 class LemmatizationTokenSchema(Schema):
     value = fields.String(required=True)
-    unique_lemma = fields.List(fields.String, missing=None, data_key="uniqueLemma")
+    unique_lemma = fields.List(fields.String, load_default=None, data_key="uniqueLemma")
 
     @post_load
     def make_token(self, data, **kwargs):

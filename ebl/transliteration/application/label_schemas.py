@@ -41,7 +41,7 @@ class ColumnLabelSchema(LabelSchema):
 
 class SurfaceLabelSchema(LabelSchema):
     surface = NameEnum(atf.Surface, required=True)
-    text = fields.String(default="")
+    text = fields.String(dump_default="")
 
     @post_load
     def make_label(self, data, **kwargs) -> SurfaceLabel:
@@ -50,7 +50,7 @@ class SurfaceLabelSchema(LabelSchema):
 
 class ObjectLabelSchema(LabelSchema):
     object = NameEnum(atf.Object, required=True)
-    text = fields.String(default="")
+    text = fields.String(dump_default="")
 
     @post_load
     def make_label(self, data, **kwargs) -> ObjectLabel:

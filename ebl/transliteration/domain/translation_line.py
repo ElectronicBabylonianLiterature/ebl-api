@@ -62,3 +62,13 @@ class TranslationLine(Line):
     @property
     def lemmatization(self) -> Sequence[LemmatizationToken]:
         return (LemmatizationToken(self.translation),)
+
+    def rstrip(self) -> "TranslationLine":
+        if not self.parts:
+            return self
+
+        [*head, tail] = self.parts
+        return attr.evolve(self, parts=(*head, tail.rstrip()))
+
+    def title_case(self) -> "TranslationLine":
+        return attr.evolve(self, parts=(part.title_case() for part in self.parts))

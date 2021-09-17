@@ -38,6 +38,20 @@ class ManuscriptLine:
             else None
         )
 
+    @property
+    def is_beginning_of_side(self) -> bool:
+        return (
+            cast(TextLine, self.line).line_number.is_beginning_of_side
+            if isinstance(self.line, TextLine)
+            else False
+        )
+
+    @property
+    def is_end_of_side(self) -> bool:
+        return any(
+            line.is_end_of for line in self.paratext if isinstance(line, DollarLine)
+        )
+
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
         return attr.evolve(other, line=merged_line)
@@ -78,6 +92,14 @@ class LineVariant:
             for manuscript_line in self.manuscripts
             if manuscript_line.label
         ]
+
+    def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
+        return (
+            pydash.chain(self.manuscripts)
+            .filter(lambda manuscript: manuscript.manuscript_id == manuscript_id)
+            .head()
+            .value()
+        )
 
     def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
         return (
@@ -136,6 +158,19 @@ class Line:
             for variant in self.variants
             for label in variant.manuscript_line_labels
         ]
+
+    def get_manuscript_line(self, manuscript_id: int) -> ManuscriptLine:
+        manuscript_line = (
+            pydash.chain(self.variants)
+            .map_(lambda variant: variant.get_manuscript_line(manuscript_id))
+            .reject(pydash.is_none)
+            .head()
+            .value()
+        )
+        if manuscript_line is None:
+            raise ValueError(f"No line foun for mauscript {manuscript_id}.")
+        else:
+            return manuscript_line
 
     def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
         return (
