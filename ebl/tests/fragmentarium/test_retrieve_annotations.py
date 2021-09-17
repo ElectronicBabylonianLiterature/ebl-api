@@ -1,6 +1,6 @@
 from PIL import Image
 from mockito import mock, verify
-
+from ebl.fragmentarium import retrieve_annotations
 from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
 from ebl.tests.factories.annotation import AnnotationsFactory, GeometryFactory
 
@@ -12,6 +12,7 @@ def test_create_annotations(photo_repository, when, photo):
         f"{annotation.fragment_number}.jpg"
     ).thenReturn(photo)
     when(Image).open(...).thenReturn(image)
+    when(retrieve_annotations).write_annotations(...).thenReturn(None)
 
     create_annotations([annotation], "", "", photo_repository)
     verify(image).save(f"{annotation.fragment_number}.jpg")
