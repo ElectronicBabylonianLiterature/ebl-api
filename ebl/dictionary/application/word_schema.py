@@ -66,6 +66,12 @@ class OraccWordSchema(Schema):
     lemma = fields.String(required=True)
     guideWord = fields.String(required=True)
 
+class akkadischeGlossareUndIndices(Schema):
+    mainWord = fields.String(required=True)
+    note = fields.String(required=True)
+    reference = fields.String(required=True)
+    AfO = fields.String(required=True)
+    agiID = fields.String(required=True)
 
 class WordSchema(Schema):
     _id = fields.String(required=True)
@@ -86,4 +92,5 @@ class WordSchema(Schema):
     pos = fields.List(fields.String(), required=True)
     guideWord = fields.String(validate=Length(1), required=True)
     oraccWords = fields.Nested(OraccWordSchema, required=True, many=True)
+    akkadischeGlossareUndIndices = fields.Nested(akkadischeGlossareUndIndices, missing=None, many=True)
     origin = fields.String(required=True)
