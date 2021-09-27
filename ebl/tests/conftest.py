@@ -357,12 +357,12 @@ def word():
         "origin": "test",
         "akkadischeGlossareUndIndices": [
             {
-                "mainWord" = "word",
-                "note" = "a note",
-                "reference" = "reference",
-                "AfO" = "AfO",
-                "agiID" = "agiID",
-            }
+                "mainWord" : "word",
+                "note" : "a note",
+                "reference" : "reference",
+                "AfO" : "AfO",
+                "agiID" : "agiID",
+            },
         ],
     }
 
