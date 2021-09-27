@@ -355,6 +355,15 @@ def word():
         "guideWord": "meaning",
         "oraccWords": [{"lemma": "oracc lemma", "guideWord": "oracc meaning"}],
         "origin": "test",
+        "akkadischeGlossareUndIndices": [
+            {
+                "mainWord" = "word",
+                "note" = "a note",
+                "reference" = "reference",
+                "AfO" = "AfO",
+                "agiID" = "agiID",
+            }
+        ],
     }
 
 
