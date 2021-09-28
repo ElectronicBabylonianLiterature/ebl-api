@@ -1,12 +1,13 @@
 from alignment.sequencealigner import Scoring
 from alignment.vocabulary import Vocabulary
 
-match = 4
-mismatch = -2
-breakMatch = 10
-breakMismatch = -20
+match = 2
+mismatch = -1
+breakMatch = 2
+breakMismatch = -10
 xMatch = 1
-xMismatch = 1
+xMismatch = -0.5
+
 
 class EblScoring(Scoring):
     def __init__(self, v: Vocabulary):

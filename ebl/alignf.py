@@ -34,14 +34,14 @@ t0 = time.time()
 v = Vocabulary()
 
 fsequences = [
-    (number, v.encodeSequence(Sequence(string.replace("\n", " # ").split(" "))))
+    (number, v.encodeSequence(Sequence(re.sub(r" +", " ", string.replace("\n", " # ").replace("X", " ")).strip().split(" "))))
     for number, string in fragments
 ]
 
 sequences = [
     (
         chapter.manuscripts[index].siglum,
-        v.encodeSequence(Sequence(string.replace("\n", " # ").split(" "))),
+        v.encodeSequence(Sequence(re.sub(r" +", " ", string.replace("\n", " # ").replace("X", " ")).strip().split(" "))),
     )
     for index, string in enumerate(chapter.signs)
     if not re.fullmatch(r"[X\\n\s]*", string)
