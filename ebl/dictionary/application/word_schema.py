@@ -67,7 +67,7 @@ class OraccWordSchema(Schema):
     guideWord = fields.String(required=True)
 
 
-class akkadischeGlossareUndIndices(Schema):
+class AkkadischeGlossareUndIndicesSchema(Schema):
     mainWord = fields.String(required=True)
     note = fields.String(required=True)
     reference = fields.String(required=True)
@@ -95,6 +95,6 @@ class WordSchema(Schema):
     guideWord = fields.String(validate=Length(1), required=True)
     oraccWords = fields.Nested(OraccWordSchema, required=True, many=True)
     akkadischeGlossareUndIndices = fields.Nested(
-        akkadischeGlossareUndIndices, missing=None, many=True
+        AkkadischeGlossareUndIndicesSchema, missing=None, many=True
     )
     origin = fields.String(required=True)
