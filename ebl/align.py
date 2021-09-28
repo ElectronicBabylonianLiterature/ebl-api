@@ -1,23 +1,65 @@
+from typing import List
+from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepository
+from ebl.transliteration.domain.sign import Sign
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.app import create_context
 import sys
 import re
 from collections import Counter
-from typing import Sequence
 
 import pydash
 
-from alignment.sequencealigner import LocalSequenceAligner, GlobalSequenceAligner
+from alignment.sequencealigner import LocalSequenceAligner, GlobalSequenceAligner, SequenceAlignment
+from alignment.sequence import Sequence
 
 from ebl.ebl_scoring import EblScoring
 
 sys.setrecursionlimit(50000)
 
 
+context = create_context()
+signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
+
+
 def make_sequence(string: str) -> Sequence:
     return Sequence(re.sub(" +", " ", string.replace("\n", " # ").replace("X", " ")).strip().split(" "))
 
 
+def get_unicode(sign: Sign) -> List[str]:
+    return [chr(codepoint) for codepoint in sign.unicode] if sign.unicode else [sign.name]
+
+def map_sign(sign: str) -> str:
+    match = re.match(r"(\D+)(\d+)", sign)
+    signs = signs_repository.search_by_lists_name(match.groups()[0], match.groups()[1]) if match else []
+    if signs:
+        unicodes = {
+            unicode
+            for s in signs
+            for unicode in get_unicode(s) 
+        }
+        return "|".join(sorted(unicodes))
+    else:
+        return sign
+
+def to_unicode_signs(alignment: SequenceAlignment) -> str:
+    lines = [
+        [map_sign(sign) for sign in line.split(" ")]
+        for line in str(alignment).split("\n")
+    ]
+    pairs = pydash.zip_(lines[0], lines[1])
+    
+    line0 = []
+    line1 = []
+    for pair in pairs:
+        length = max(len(pair[0]), len(pair[1]))
+        line0.append(pair[0].ljust(length))
+        line1.append(pair[1].ljust(length))
+
+
+    return "\t".join(line0) + "\n" + "\t".join(line1)
+
 minScore = 3
-gapScore = -2
+gapScore = -2  
 local = False
 
 
@@ -62,13 +104,14 @@ def align(pairs, v):
             )
 
             for alignment in alignments:
-                print(alignment)
+                result = str(alignment)  # to_unicode_signs(alignment)
+                print(result)
                 print("Alignment score:", alignment.score)
                 print("Percent identity:", alignment.percentIdentity())
                 print("Percent similarity:", alignment.percentSimilarity())
                 print()
 
-                lines = [re.split(r"\s+", line) for line in str(alignment).split("\n")]
+                lines = [re.split(r"\s+", line) for line in result.split("\n")]
                 pairs = pydash.zip_(lines[0], lines[1])
                 pairs = [
                     frozenset(pair)

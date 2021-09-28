@@ -1,8 +1,6 @@
-import sys
 import time
 import re
 
-from alignment.sequence import Sequence
 from alignment.vocabulary import Vocabulary
 
 from ebl.app import create_context
@@ -10,11 +8,12 @@ from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
 from ebl.align import align, make_sequence
 
+i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
+iii3 = ChapterId(TextId(Genre.LITERATURE, 3, 3), Stage.STANDARD_BABYLONIAN, "-")
+
 context = create_context()
 repository = context.text_repository
-chapter = repository.find_chapter(
-    ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
-)
+chapter = repository.find_chapter(iii3)
 print(chapter.id_, end="\n\n")
 
 fragments = []
