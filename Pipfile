@@ -25,6 +25,8 @@ singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
 newrelic = "*"
+alignment = "*"
+numpy = "*"
 
 [dev-packages]
 pytest = "*"
@@ -42,7 +44,7 @@ black = "==19.3b0"
 pymongo-inmemory = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
 
 [scripts]
 test = "pytest --cov=ebl --cov-report term --cov-report xml"
