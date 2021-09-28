@@ -73,7 +73,7 @@ t = time.time()
 print(f"Time: {(t-t0)/60} min\n")
 
 for result in sorted(
-    results, key=lambda result: result[4][0].percentIdentity(), reverse=True
+    results, key=lambda result: (result[4][0].percentIdentity(),result[4][0].score), reverse=True
 ):
     encodeds = result[4]
     alignments = [v.decodeSequenceAlignment(encoded) for encoded in encodeds]
