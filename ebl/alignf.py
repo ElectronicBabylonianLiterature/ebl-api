@@ -8,7 +8,7 @@ from alignment.vocabulary import Vocabulary
 from ebl.app import create_context
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
-from ebl.align import align
+from ebl.align import align, make_sequence
 
 context = create_context()
 repository = context.text_repository
@@ -34,14 +34,14 @@ t0 = time.time()
 v = Vocabulary()
 
 fsequences = [
-    (number, v.encodeSequence(Sequence(re.sub(r" +", " ", string.replace("\n", " # ").replace("X", " ")).strip().split(" "))))
+    (number, v.encodeSequence(make_sequence(string)))
     for number, string in fragments
 ]
 
 sequences = [
     (
         chapter.manuscripts[index].siglum,
-        v.encodeSequence(Sequence(re.sub(r" +", " ", string.replace("\n", " # ").replace("X", " ")).strip().split(" "))),
+        v.encodeSequence(make_sequence(string)),
     )
     for index, string in enumerate(chapter.signs)
     if not re.fullmatch(r"[X\\n\s]*", string)

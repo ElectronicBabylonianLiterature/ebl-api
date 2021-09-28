@@ -1,6 +1,7 @@
 import sys
 import re
 from collections import Counter
+from typing import Sequence
 
 import pydash
 
@@ -9,6 +10,11 @@ from alignment.sequencealigner import LocalSequenceAligner, GlobalSequenceAligne
 from ebl.ebl_scoring import EblScoring
 
 sys.setrecursionlimit(50000)
+
+
+def make_sequence(string: str) -> Sequence:
+    return Sequence(re.sub(" +", " ", string.replace("\n", " # ").replace("X", " ")).strip().split(" "))
+
 
 minScore = 3
 gapScore = -2
