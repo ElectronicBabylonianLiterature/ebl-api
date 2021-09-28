@@ -1,12 +1,16 @@
 from alignment.sequencealigner import Scoring
 from alignment.vocabulary import Vocabulary
 
+match = 4
+mismatch = -2
+breakMatch = 10
+breakMismatch = -20
+xMatch = 1
+xMismatch = 1
 
 class EblScoring(Scoring):
-    def __init__(self, matchScore, mismatchScore, v: Vocabulary):
+    def __init__(self, v: Vocabulary):
         self.v = v
-        self.matchScore = matchScore
-        self.mismatchScore = mismatchScore
         self.line_break = v.encode("#")
         self.x = v.encode("X")
 
@@ -14,9 +18,9 @@ class EblScoring(Scoring):
         firstDecoded = self.v.decode(firstElement)
         secondDecoded = self.v.decode(secondElement)
         if firstElement == self.line_break or secondElement == self.line_break:
-            return self.matchScore if firstElement == secondElement else -10
+            return breakMatch if firstElement == secondElement else breakMismatch
         elif firstElement == self.x or secondElement == self.x:
-            return 1 if firstElement == secondElement else -0.5
+            return xMatch if firstElement == secondElement else xMismatch
         elif "/" in firstDecoded or "/" in secondDecoded:
             result = []
             for a in firstDecoded.split("/"):
@@ -24,6 +28,6 @@ class EblScoring(Scoring):
                     result.append(self(self.v.encode(a), self.v.encode(b)))
             return max(result)
         elif firstElement == secondElement:
-            return self.matchScore
+            return match
         else:
-            return self.mismatchScore
+            return mismatch

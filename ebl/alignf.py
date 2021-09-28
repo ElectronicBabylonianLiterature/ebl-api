@@ -4,14 +4,11 @@ import re
 
 from alignment.sequence import Sequence
 from alignment.vocabulary import Vocabulary
-from alignment.sequencealigner import LocalSequenceAligner
 
 from ebl.app import create_context
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
-from ebl.ebl_scoring import EblScoring
-
-sys.setrecursionlimit(10000)
+from ebl.align import align
 
 context = create_context()
 repository = context.text_repository
@@ -50,46 +47,12 @@ sequences = [
     if not re.fullmatch(r"[X\\n\s]*", string)
 ]
 
-no_alignment = []
-results = []
-x = 1
+pairs = []
 for a in fsequences:
     for b in sequences:
-        aEncoded = a[1]
-        bEncoded = b[1]
+        pairs.append((a,b))
 
-        # Create a scoring and align the sequences using global aligner.
-        scoring = EblScoring(2, -1, v)
-        aligner = LocalSequenceAligner(scoring, -2)
-        score, encodeds = aligner.align(aEncoded, bEncoded, backtrace=True)
-
-        if score > 0 and len(encodeds) > 0:
-            results.append((x, a[0], b[0], score, encodeds))
-        else:
-            no_alignment.append((a[0], b[0]))
-        x += 1
+align(pairs, v)
 
 t = time.time()
 print(f"Time: {(t-t0)/60} min\n")
-
-for result in sorted(
-    results, key=lambda result: (result[4][0].percentIdentity(),result[4][0].score), reverse=True
-):
-    encodeds = result[4]
-    alignments = [v.decodeSequenceAlignment(encoded) for encoded in encodeds]
-    alignments = [
-        alignment
-        for alignment in alignments
-        if not any([re.fullmatch(r"[X\s#\-]+", row) for row in str(alignment).split("\n")])
-    ]
-    if alignments:
-        print(
-            f"\n{result[0]} == {result[1]} vs {result[2]} ============================================="
-        )
-
-        for alignment in alignments:
-            print(alignment)
-            print("Alignment score:", alignment.score)
-            print("Percent identity:", alignment.percentIdentity())
-            print("Percent similarity:", alignment.percentSimilarity())
-            print()
