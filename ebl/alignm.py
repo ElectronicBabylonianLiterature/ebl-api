@@ -11,7 +11,7 @@ from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
 from ebl.align import align, make_sequence
 
 i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
-iii3 = ChapterId(TextId(Genre.LITERATURE, 3, 3), Stage.STANDARD_BABYLONIAN, "I")
+iii3 = ChapterId(TextId(Genre.LITERATURE, 3, 3), Stage.STANDARD_BABYLONIAN, "-")
 
 context = create_context()
 repository = context.text_repository

@@ -16,6 +16,10 @@ from ebl.ebl_scoring import EblScoring
 
 sys.setrecursionlimit(50000)
 
+identity_cutoff = 80
+minScore = 3
+gapScore = -2  
+local = True
 
 context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
@@ -58,10 +62,6 @@ def to_unicode_signs(alignment: SequenceAlignment) -> str:
 
     return "\t".join(line0) + "\n" + "\t".join(line1)
 
-minScore = 3
-gapScore = -2  
-local = False
-
 
 def align(pairs, v):
     substitutions = []
@@ -72,7 +72,6 @@ def align(pairs, v):
         aEncoded = a[1]
         bEncoded = b[1]
 
-        # Create a scoring and align the sequences using global aligner.
         scoring = EblScoring(v)
         aligner = (LocalSequenceAligner if local else GlobalSequenceAligner)(
             scoring, gapScore
@@ -111,14 +110,15 @@ def align(pairs, v):
                 print("Percent similarity:", alignment.percentSimilarity())
                 print()
 
-                lines = [re.split(r"\s+", line) for line in result.split("\n")]
-                pairs = pydash.zip_(lines[0], lines[1])
-                pairs = [
-                    frozenset(pair)
-                    for pair in pairs
-                    if "#" not in pair and "-" not in pair and "X" not in pair
-                ]
-                substitutions.extend(pairs)
+                if alignment.percentIdentity() >= identity_cutoff:
+                    lines = [re.split(r"\s+", line) for line in result.split("\n")]
+                    pairs = pydash.zip_(lines[0], lines[1])
+                    pairs = [
+                        frozenset(pair)
+                        for pair in pairs
+                        if "#" not in pair and "-" not in pair and "X" not in pair
+                    ]
+                    substitutions.extend(pairs)
 
     pure_substitutions = [s for s in substitutions if len(s) == 2]
     print("\n\n=====================================")
@@ -128,4 +128,7 @@ def align(pairs, v):
 
     c = Counter(pure_substitutions)
     for cc, n in c.most_common():
-        print(", ".join(cc), "\t\t\t\t", n)
+        print(str(n).rjust(4), "\t\t",", ".join(
+            f"{sign} ({map_sign(sign)})"
+            for sign in cc
+        ))
