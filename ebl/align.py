@@ -1,6 +1,9 @@
 import sys
 import time
 import re
+from collections import Counter
+
+import pydash
 
 from alignment.sequence import Sequence
 from alignment.vocabulary import Vocabulary
@@ -14,11 +17,11 @@ from ebl.ebl_scoring import EblScoring
 sys.setrecursionlimit(50000)
 
 minScore = 6
-gapScore = -2
-local = False
+gapScore = -2 
+local = True
 
 def align(pairs, v):
-    no_alignment = []
+    substitutions = []
     results = []
     x = 1
 
@@ -46,13 +49,28 @@ def align(pairs, v):
             if not any([re.fullmatch(r"[X\s#\-]+", row) for row in str(alignment).split("\n")]) and alignment.score > minScore
         ]
         if alignments:
-            print(
-                f"\n{result[0]} == {result[1]} vs {result[2]} ============================================="
-            )
+            #print(
+            #    f"\n{result[0]} == {result[1]} vs {result[2]} ============================================="
+            #)
 
             for alignment in alignments:
-                print(alignment)
-                print("Alignment score:", alignment.score)
-                print("Percent identity:", alignment.percentIdentity())
-                print("Percent similarity:", alignment.percentSimilarity())
-                print()
+                #print(alignment)
+                #print("Alignment score:", alignment.score)
+                #print("Percent identity:", alignment.percentIdentity())
+                #print("Percent similarity:", alignment.percentSimilarity())
+                #print()
+
+                lines = [re.split(r"\s+", line) for line in str(alignment).split("\n")]
+                pairs = pydash.zip_(lines[0], lines[1])
+                pairs = [frozenset(pair) for pair in pairs if "#" not in pair  and "-" not in pair and "X" not in pair]
+                substitutions.extend(pairs)
+
+
+    pure_substitutions = [s for s in substitutions if len(s) == 2]
+    print("Total pairs: ", len(substitutions))
+    print("Total substitutions: ", len(pure_substitutions))
+    print("Total unique substitutions: ", len(set(pure_substitutions)))
+
+    c = Counter(pure_substitutions)
+    for cc, n in c.most_common():
+        print(", ".join(cc), "\t\t\t", n)
