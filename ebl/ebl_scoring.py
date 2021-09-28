@@ -22,7 +22,6 @@ class EblScoring(Scoring):
             for a in firstDecoded.split("/"):
                 for b in secondDecoded.split("/"):
                     result.append(self(self.v.encode(a), self.v.encode(b)))
-            print("XXX", firstDecoded, secondDecoded, result)
             return max(result)
         elif firstElement == secondElement:
             return self.matchScore
