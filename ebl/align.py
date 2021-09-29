@@ -63,6 +63,14 @@ def to_unicode_signs(alignment: SequenceAlignment) -> str:
     return "\t".join(line0) + "\n" + "\t".join(line1)
 
 
+def print_counter(c: Counter) -> None:
+    for cc, n in c.most_common():
+        print(str(n).rjust(4), "\t\t",", ".join(
+            f"{sign} ({map_sign(sign)})"
+            for sign in cc
+        ))
+
+
 def align(pairs, v):
     substitutions = []
     results = []
@@ -99,16 +107,16 @@ def align(pairs, v):
         ]
         if alignments:
             print(
-                f"\n{result[0]} == {result[1]} vs {result[2]} ============================================="
+                f"{result[0]} == {result[1]} vs {result[2]} ============================================="
             )
 
             for alignment in alignments:
                 result = str(alignment)  # to_unicode_signs(alignment)
-                print(result)
-                print("Alignment score:", alignment.score)
-                print("Percent identity:", alignment.percentIdentity())
-                print("Percent similarity:", alignment.percentSimilarity())
-                print()
+                #print(result)
+                #print("Alignment score:", alignment.score)
+                #print("Percent identity:", alignment.percentIdentity())
+                #print("Percent similarity:", alignment.percentSimilarity())
+                #print()
 
                 if alignment.percentIdentity() >= identity_cutoff:
                     lines = [re.split(r"\s+", line) for line in result.split("\n")]
@@ -121,14 +129,12 @@ def align(pairs, v):
                     substitutions.extend(pairs)
 
     pure_substitutions = [s for s in substitutions if len(s) == 2]
-    print("\n\n=====================================")
-    print("\nTotal pairs: ", len(substitutions))
-    print("Total substitutions: ", len(pure_substitutions))
-    print("Total unique substitutions: ", len(set(pure_substitutions)))
+    #print("\n\n=====================================")
+    #print("\nTotal pairs: ", len(substitutions))
+    #print("Total substitutions: ", len(pure_substitutions))
+    #print("Total unique substitutions: ", len(set(pure_substitutions)))
 
     c = Counter(pure_substitutions)
-    for cc, n in c.most_common():
-        print(str(n).rjust(4), "\t\t",", ".join(
-            f"{sign} ({map_sign(sign)})"
-            for sign in cc
-        ))
+    #print_counter(c)
+
+    return c
