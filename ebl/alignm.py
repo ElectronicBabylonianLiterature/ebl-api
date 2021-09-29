@@ -40,7 +40,7 @@ def align_chapter_manuscripts(chapter):
 
 
     pairs = itertools.combinations(sequences, 2)
-    c = align(pairs, v)
+    c = align(pairs, v, not all)
 
     t = time.time()
     print(f"Time: {(t-t0)/60} min", end="\n\n", flush=True)
@@ -52,11 +52,12 @@ if all:
     for text in repository.list():
         for listing in text.chapters:
             chapter = repository.find_chapter(ChapterId(text.id, listing.stage, listing.name))
-            c = c + align_chapter_manuscripts(chapter)
+            c = c + align_chapter_manuscripts(chapter, False)
 else:
     chapter = repository.find_chapter(i2)
-    c = c + align_chapter_manuscripts(chapter)
+    c = c + align_chapter_manuscripts(chapter, True)
         
 
-print("\n\nSubstitutions", end="\n\n")
-print_counter(c)
+if all:
+    print("\n\nSubstitutions", end="\n\n")
+    print_counter(c)
