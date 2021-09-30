@@ -13,7 +13,7 @@ gapScore = -2
 identity_cutoff = 80
 minScore = 3
 
-substitutions = frozenset(
+curated_substitutions = frozenset(
     [
         frozenset(["ABZ545", "ABZ354"]),
         frozenset(["ABZ545", "ABZ597"]),
@@ -64,7 +64,7 @@ class EblScoring(Scoring):
             return breakMatch if firstElement == secondElement else breakMismatch
         elif firstElement == self.x or secondElement == self.x:
             return xMatch if firstElement == secondElement else xMismatch
-        elif frozenset([firstDecoded, secondDecoded]) in substitutions:
+        elif frozenset([firstDecoded, secondDecoded]) in curated_substitutions:
             return commonMismatch
         elif "/" in firstDecoded or "/" in secondDecoded:
             result = []

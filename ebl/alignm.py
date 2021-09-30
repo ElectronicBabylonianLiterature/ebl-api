@@ -54,11 +54,9 @@ if all:
         for listing in text.chapters:
             chapter = repository.find_chapter(ChapterId(text.id, listing.stage, listing.name))
             c = c + align_chapter_manuscripts(chapter)
-else:
-    chapter = repository.find_chapter(i2)
-    c = c + align_chapter_manuscripts(chapter)
-        
 
-if all:
     print("\n\nSubstitutions", end="\n\n")
     print_counter(c)
+else:
+    chapter = repository.find_chapter(iii4)
+    align_chapter_manuscripts(chapter)

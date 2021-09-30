@@ -19,7 +19,7 @@ from alignment.sequencealigner import (
 )
 from alignment.sequence import EncodedSequence, Sequence
 
-from ebl.ebl_scoring import EblScoring, gapScore, minScore, identity_cutoff
+from ebl.ebl_scoring import EblScoring, gapScore, minScore, identity_cutoff, curated_substitutions
 
 sys.setrecursionlimit(50000)
 
@@ -145,13 +145,15 @@ def align(
                     substitutions.extend(pairs)
 
     pure_substitutions = [s for s in substitutions if len(s) == 2]
-    c = Counter(pure_substitutions)
+    uncurated_substitutions = [s for s in pure_substitutions if s not in curated_substitutions]
+    c = Counter(uncurated_substitutions)
 
     if verbose:
         print(80 * "=")
         print("Total pairs: ", len(substitutions))
         print("Total substitutions: ", len(pure_substitutions))
         print("Total unique substitutions: ", len(set(pure_substitutions)))
+        print("Total unique uncurated substitutions: ", len(set(uncurated_substitutions)))
         print_counter(c)
 
     return c
