@@ -1,18 +1,21 @@
 from alignment.sequencealigner import Scoring
 from alignment.vocabulary import Vocabulary
 
+# Scoring
 match = 2
 mismatch = -1
-commonMismatch = 1
+curatedMismatch = 1
 breakMatch = 2
 breakMismatch = -10
 xMatch = 1
 xMismatch = -0.5
 gapScore = -2
 
-identity_cutoff = 80
+# Result filtering
 minScore = 3
 
+# Substitute collection
+identity_cutoff = 80
 curated_substitutions = frozenset(
     [
         frozenset(["ABZ545", "ABZ354"]),
@@ -65,7 +68,7 @@ class EblScoring(Scoring):
         elif firstElement == self.x or secondElement == self.x:
             return xMatch if firstElement == secondElement else xMismatch
         elif frozenset([firstDecoded, secondDecoded]) in curated_substitutions:
-            return commonMismatch
+            return curatedMismatch
         elif "/" in firstDecoded or "/" in secondDecoded:
             result = []
             for a in firstDecoded.split("/"):
