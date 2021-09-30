@@ -19,13 +19,11 @@ from alignment.sequencealigner import (
 )
 from alignment.sequence import EncodedSequence, Sequence
 
-from ebl.ebl_scoring import EblScoring
+from ebl.ebl_scoring import EblScoring, gapScore, minScore, identity_cutoff
 
 sys.setrecursionlimit(50000)
 
-identity_cutoff = 80
-minScore = 3
-gapScore = -2
+
 local = True
 
 context = create_context()
@@ -87,9 +85,7 @@ def print_counter(c: Counter) -> None:
 
 
 def align(
-    pairs: List[
-        Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]
-    ],
+    pairs: List[Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]],
     v: Vocabulary,
     verbose: bool,
 ) -> Counter:
@@ -127,9 +123,7 @@ def align(
             and alignment.score > minScore
         ]
         if alignments:
-            print(
-                f"{result[0]} -- {result[1]} vs {result[2]} ".ljust(80, '-')
-            )
+            print(f"{result[0]} -- {result[1]} vs {result[2]} ".ljust(80, "-"))
 
             for alignment in alignments:
                 result = str(alignment)
@@ -154,8 +148,8 @@ def align(
     c = Counter(pure_substitutions)
 
     if verbose:
-        print(80*'=')
-        print("\nTotal pairs: ", len(substitutions))
+        print(80 * "=")
+        print("Total pairs: ", len(substitutions))
         print("Total substitutions: ", len(pure_substitutions))
         print("Total unique substitutions: ", len(set(pure_substitutions)))
         print_counter(c)

@@ -44,6 +44,7 @@ def align_chapter_manuscripts(chapter):
 
     t = time.time()
     print(f"Time: {(t-t0)/60} min", end="\n\n", flush=True)
+    return c
 
 
 c = Counter()
@@ -52,10 +53,10 @@ if all:
     for text in repository.list():
         for listing in text.chapters:
             chapter = repository.find_chapter(ChapterId(text.id, listing.stage, listing.name))
-            c = c + align_chapter_manuscripts(chapter, False)
+            c = c + align_chapter_manuscripts(chapter)
 else:
     chapter = repository.find_chapter(i2)
-    c = c + align_chapter_manuscripts(chapter, True)
+    c = c + align_chapter_manuscripts(chapter)
         
 
 if all:
