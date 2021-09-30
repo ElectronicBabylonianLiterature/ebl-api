@@ -5,6 +5,7 @@ from typing import Counter
 from alignment.vocabulary import Vocabulary
 
 from ebl.app import create_context
+from ebl.ebl_scoring import print_config
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
@@ -46,15 +47,17 @@ def align_fragment(fragment, chapter):
     for b in sequences:
         pairs.append((fsequence,b))
 
-    c = align(pairs, v, True)
+    c = align(pairs, v, True, lambda result: result[3])
 
     t = time.time()
     print(f"Time: {(t-t0)/60} min", end="\n\n", flush=True)
 
     return c
 
+print_config()
+
 c = Counter()
-fragment = context.fragment_repository.query_by_museum_number(k19352)
+fragment = context.fragment_repository.query_by_museum_number(k17700)
 if all:
     for text in repository.list():
         for listing in text.chapters:

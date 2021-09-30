@@ -2,17 +2,17 @@ from alignment.sequencealigner import Scoring
 from alignment.vocabulary import Vocabulary
 
 # Scoring
-match = 2
-mismatch = -1
-curatedMismatch = 1
-breakMatch = 2
-breakMismatch = -10
+match = 3
+mismatch = -2
+commonMismatch = 2
+breakMatch = 3
+breakMismatch = -8
 xMatch = 1
-xMismatch = -0.5
-gapScore = -2
+xMismatch = -1
+gapScore = -1
 
 # Result filtering
-minScore = 3
+minScore = 7
 
 # Substitute collection
 identity_cutoff = 80
@@ -54,6 +54,24 @@ curated_substitutions = frozenset(
 )
 
 
+def print_config() -> None:
+    print("match =", match)
+    print("mismatch =",  mismatch)
+    print("commonMismatch =", commonMismatch)
+    print("breakMatch =",  breakMatch)
+    print("breakMismatch",  breakMismatch)
+    print("xMatch =",  xMatch)
+    print("xMismatch",  xMismatch)
+    print("gapScore =",  gapScore)
+    print()
+    print("minScore =",  minScore)
+    print()
+    print("identity_cutoff =",  identity_cutoff)
+    print("curated_substitutions:")
+    print("\n".join(", ".join(sub) for sub in curated_substitutions))
+    print()
+
+
 class EblScoring(Scoring):
     def __init__(self, v: Vocabulary):
         self.v = v
@@ -68,7 +86,7 @@ class EblScoring(Scoring):
         elif firstElement == self.x or secondElement == self.x:
             return xMatch if firstElement == secondElement else xMismatch
         elif frozenset([firstDecoded, secondDecoded]) in curated_substitutions:
-            return curatedMismatch
+            return commonMismatch
         elif "/" in firstDecoded or "/" in secondDecoded:
             result = []
             for a in firstDecoded.split("/"):

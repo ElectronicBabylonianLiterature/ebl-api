@@ -88,6 +88,7 @@ def align(
     pairs: List[Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]],
     v: Vocabulary,
     verbose: bool,
+    key = lambda result: (result[4][0].percentIdentity(), result[4][0].score)
 ) -> Counter:
     substitutions = []
     results = []
@@ -109,7 +110,7 @@ def align(
 
     for result in sorted(
         results,
-        key=lambda result: (result[4][0].percentIdentity(), result[4][0].score),
+        key=key,
         reverse=True,
     ):
         encodeds = result[4]
