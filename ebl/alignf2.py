@@ -43,10 +43,7 @@ def align_fragment(fragment, chapter):
         if not re.fullmatch(r"[X\\n\s]*", string)
     ]
 
-    pairs = []
-    for b in sequences:
-        pairs.append((fsequence,b))
-
+    pairs = [(fsequence,b) for b in sequences]
     c = align(pairs, v, True, lambda result: result[3])
 
     t = time.time()

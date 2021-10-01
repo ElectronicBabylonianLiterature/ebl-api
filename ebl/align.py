@@ -106,9 +106,7 @@ def align(
 ) -> Counter:
     substitutions = []
     results = []
-    x = 1
-
-    for a, b in pairs:
+    for x, (a, b) in enumerate(pairs, start=1):
         aEncoded = a[1]
         bEncoded = b[1]
 
@@ -120,7 +118,6 @@ def align(
 
         if score > minScore and len(encodeds) > 0:
             results.append((x, a[0], b[0], score, encodeds))
-        x += 1
 
     for result in sorted(results, key=key, reverse=True):
         encodeds = result[4]
@@ -129,12 +126,14 @@ def align(
             alignment
             for alignment in alignments
             if not any(
-                [re.fullmatch(r"[X\s#\-]+", row) for row in str(alignment).split("\n")]
+                re.fullmatch(r"[X\s#\-]+", row)
+                for row in str(alignment).split("\n")
             )
             and alignment.score >= minScore
             and alignment.percentIdentity() >= minIdentity
             and alignment.percentSimilarity() >= minSimilarity
         ]
+
         if alignments:
             print(f"{result[0]} -- {result[1]} vs {result[2]} ".ljust(80, "-"))
 
