@@ -22,7 +22,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
                 "LAL",
                 "ABZ207a\\u002F207b\\u0020X",
                 "KU",
-                "HU",
+                "ABZ78",
                 "HI",
                 "ŠU₂",
                 "3×AN",
@@ -52,6 +52,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("%grc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("%akkgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("%suxgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
+        ("|BUL.U₁₈|", ["BUL", "U₁₈"])
     ],
 )
 def test_signs_visitor(text: str, expected: Sequence[str], sign_repository, signs):
