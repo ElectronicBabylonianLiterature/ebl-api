@@ -19,7 +19,15 @@ from alignment.sequencealigner import (
 )
 from alignment.sequence import EncodedSequence, Sequence
 
-from ebl.ebl_scoring import EblScoring, gapScore, minScore, identity_cutoff, curated_substitutions
+from ebl.ebl_scoring import (
+    EblScoring,
+    gapScore,
+    minScore,
+    minIdentity,
+    minSimilarity,
+    identity_cutoff,
+    curated_substitutions,
+)
 
 sys.setrecursionlimit(50000)
 
@@ -36,12 +44,11 @@ def replace_line_breaks(string: str) -> str:
 
 def collapse_spaces(string: str) -> str:
     return re.sub(r"\s+", " ", string).strip()
-    
+
 
 def make_sequence(string: str) -> Sequence:
     return Sequence(
-        collapse_spaces(replace_line_breaks(string).replace("X", " "))
-        .split(" ")
+        collapse_spaces(replace_line_breaks(string).replace("X", " ")).split(" ")
     )
 
 
@@ -95,7 +102,7 @@ def align(
     pairs: List[Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]],
     v: Vocabulary,
     verbose: bool,
-    key = lambda result: (result[4][0].percentIdentity(), result[4][0].score)
+    key=lambda result: (result[4][0].percentIdentity(), result[4][0].score),
 ) -> Counter:
     substitutions = []
     results = []
@@ -115,11 +122,7 @@ def align(
             results.append((x, a[0], b[0], score, encodeds))
         x += 1
 
-    for result in sorted(
-        results,
-        key=key,
-        reverse=True,
-    ):
+    for result in sorted(results, key=key, reverse=True):
         encodeds = result[4]
         alignments = [v.decodeSequenceAlignment(encoded) for encoded in encodeds]
         alignments = [
@@ -128,7 +131,9 @@ def align(
             if not any(
                 [re.fullmatch(r"[X\s#\-]+", row) for row in str(alignment).split("\n")]
             )
-            and alignment.score > minScore
+            and alignment.score >= minScore
+            and alignment.percentIdentity() >= minIdentity
+            and alignment.percentSimilarity() >= minSimilarity
         ]
         if alignments:
             print(f"{result[0]} -- {result[1]} vs {result[2]} ".ljust(80, "-"))
@@ -153,7 +158,9 @@ def align(
                     substitutions.extend(pairs)
 
     pure_substitutions = [s for s in substitutions if len(s) == 2]
-    uncurated_substitutions = [s for s in pure_substitutions if s not in curated_substitutions]
+    uncurated_substitutions = [
+        s for s in pure_substitutions if s not in curated_substitutions
+    ]
     c = Counter(uncurated_substitutions)
 
     if verbose:
@@ -161,7 +168,9 @@ def align(
         print("Total pairs: ", len(substitutions))
         print("Total substitutions: ", len(pure_substitutions))
         print("Total unique substitutions: ", len(set(pure_substitutions)))
-        print("Total unique uncurated substitutions: ", len(set(uncurated_substitutions)))
+        print(
+            "Total unique uncurated substitutions: ", len(set(uncurated_substitutions))
+        )
         print_counter(c)
 
     return c

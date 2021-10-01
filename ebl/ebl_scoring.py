@@ -13,6 +13,8 @@ gapScore = -1
 
 # Result filtering
 minScore = 7
+minIdentity = 0
+minSimilarity = 0
 
 # Substitute collection
 identity_cutoff = 80
@@ -65,6 +67,8 @@ def print_config() -> None:
     print("gapScore =",  gapScore)
     print()
     print("minScore =",  minScore)
+    print("minIdentity =", minIdentity)
+    print("minSimilarity =", minSimilarity)
     print()
     print("identity_cutoff =",  identity_cutoff)
     print("curated_substitutions:")
