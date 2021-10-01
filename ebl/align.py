@@ -30,10 +30,17 @@ context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
 
 
+def replace_line_breaks(string: str) -> str:
+    return string.replace("\n", " # ").strip()
+
+
+def collapse_spaces(string: str) -> str:
+    return re.sub(r"\s+", " ", string).strip()
+    
+
 def make_sequence(string: str) -> Sequence:
     return Sequence(
-        re.sub(" +", " ", string.replace("\n", " # ").replace("X", " "))
-        .strip()
+        collapse_spaces(replace_line_breaks(string).replace("X", " "))
         .split(" ")
     )
 
