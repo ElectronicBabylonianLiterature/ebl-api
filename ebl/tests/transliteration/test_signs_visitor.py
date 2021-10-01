@@ -52,7 +52,8 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("%grc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("%akkgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("%suxgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
-        ("|BUL.U₁₈|", ["BUL", "U₁₈"])
+        ("|BUL.U₁₈|", ["ABZ11", "ABZ78"]),
+        ("|NOTREADING.NOTREADING|", ["NOTREADING", "NOTREADING"]),
     ],
 )
 def test_signs_visitor(text: str, expected: Sequence[str], sign_repository, signs):

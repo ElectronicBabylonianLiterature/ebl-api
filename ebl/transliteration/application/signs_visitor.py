@@ -8,7 +8,11 @@ from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
 from ebl.transliteration.domain.enclosure_tokens import Gloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.lark_parser import parse_compound_grapheme
+from ebl.transliteration.domain.lark_parser import (
+    PARSE_ERRORS,
+    parse_compound_grapheme,
+    parse_reading,
+)
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -122,15 +126,21 @@ class SignsVisitor(TokenVisitor):
     @skip_enclosures
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if self._is_deep and is_splittable(grapheme.name):
-            standardizations: Sequence[Standardization] = [
-                self._find(SignName(strip_flags(part)))
-                for part in grapheme.compound_parts
-            ]
-            self._standardizations.extend(standardizations)
+            for part in grapheme.compound_parts:
+                self._visit_compount_grapheme_part(strip_flags(part))
         else:
             self._standardizations.append(
                 self._find(SignName(strip_flags(grapheme.name)))
             )
+
+    def _visit_compount_grapheme_part(self, stripped_part: str) -> None:
+        try:
+            reading = parse_reading(stripped_part.lower())
+            self.visit_named_sign(reading)
+            if self._standardizations[-1] == INVALID:
+                self._standardizations[-1] = self._find(SignName(stripped_part))
+        except PARSE_ERRORS:
+            self._standardizations.append(self._find(SignName(stripped_part)))
 
     def visit_grapheme(self, grapheme: Grapheme) -> None:
         self._standardizations.append(self._find(grapheme.name))
