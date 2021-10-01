@@ -618,7 +618,7 @@ See [Editorial-conventions-(Corpus)](https://github.com/ElectronicBabylonianLite
 ```ebnf
 chapter = chapter-line, { eol, eol, chapter-line };
 
-chapter-line = line-variant, { eol line-variant };
+chapter-line = { translation-line, eol }, line-variant, { eol, line-variant };
 line-variant = reconstruction, { eol, manuscript-line };
 reconstruction = text-line, [ eol, note-line ], { eol, parallel-line };
 
