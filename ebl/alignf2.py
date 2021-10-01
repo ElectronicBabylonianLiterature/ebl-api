@@ -24,10 +24,9 @@ repository = context.text_repository
 
 def align_fragment(fragment, chapter):
     if(not any(chapter.signs)):
-        print("Skip", chapter.id_, end="\n\n", flush=True)
         return Counter()
     else:
-        print(chapter.id_, end="\n", flush=True)
+        print(f"{chapter.id_}   ".ljust(80, "≡"), end="\n\n", flush=True)
 
     t0 = time.time()
     v = Vocabulary()

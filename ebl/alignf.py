@@ -19,11 +19,10 @@ repository = context.text_repository
 
 
 def align_chapter_manuscripts(chapter):
-    if(not any(chapter.signs)):
-        print("Skip", chapter.id_, end="\n\n", flush=True)
+    if(not any(chapter.signs)):        
         return Counter()
     else:
-        print(chapter.id_, end="\n", flush=True)
+        print(f"{chapter.id_}   ".ljust(80, "≡"), end="\n\n", flush=True)
 
     fragments = []
     for manuscript in chapter.manuscripts:

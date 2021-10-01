@@ -13,7 +13,7 @@ for text in repository.list():
         chapter = repository.find_chapter(
             ChapterId(text.id, listing.stage, listing.name)
         )
-        signs = signs + [
+        signs += [
             sign
             for manuscript in chapter.signs
             for sign in collapse_spaces(replace_line_breaks(manuscript)).split(" ")
