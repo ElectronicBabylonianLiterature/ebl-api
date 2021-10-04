@@ -85,7 +85,7 @@ class ChapterTransformer(
         return Line(
             line_number,
             (main_variant, *[variant for _, variant in tail]),
-            translation=translation if translation else tuple(),
+            translation=translation or tuple(),
         )
 
     def chapter(self, lines):
