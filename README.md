@@ -225,6 +225,12 @@ docker build -t ebl/api .
 docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
 ```
 
+If you need to run custom operations inside Docker you can start the shell:
+
+```shell script
+docker run --rm -it --env-file=.env --name ebl-shell --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api bash
+```
+
 ### Docker Compose
 
 Build the images:
@@ -286,19 +292,13 @@ pipenv run python -m ebl.fragmentarium.update_fragments
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=FILE --name ebl-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.fragmentarium.update_fragments
+docker run --rm -it --env-file=.env --name ebl-updater ebl/api pipenv run python -m ebl.fragmentarium.update_fragments
 ```
 
 , or with `docker-compose`:
 
 ```shell script
 docker-compose -f ./docker-compose-updater.yml up
-```
-
-If you need to run custom operations inside Docker you can start the shell:
-
-```shell script
-docker run --rm -it --env-file=.env --name ebl-shell --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api bash
 ```
 
 ### Corpus
@@ -317,7 +317,7 @@ pipenv run python -m ebl.corpus.update_texts
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=FILE --name ebl-corpus-updater --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api pipenv run python -m ebl.corpus.update_texts
+docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api pipenv run python -m ebl.corpus.update_texts
 ```
 
 ### Steps to update the production database
