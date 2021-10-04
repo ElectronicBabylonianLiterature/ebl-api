@@ -25,6 +25,7 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
+from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.translation_line_transformer import (
     TranslationLineTransformer,
@@ -116,7 +117,7 @@ def parse_parallel_line(atf: str) -> ParallelLine:
     return LineTransformer().transform(tree)
 
 
-def parse_translation_line(atf: str) -> ParallelLine:
+def parse_translation_line(atf: str) -> TranslationLine:
     tree = TRANSLATION_LINE_PARSER.parse(atf)
     return LineTransformer().transform(tree)
 

@@ -18,6 +18,7 @@ from ebl.transliteration.domain.lark_parser import (
     parse_note_line,
     parse_parallel_line,
     parse_text_line,
+    parse_translation_line,
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
@@ -247,6 +248,35 @@ def test_parse_chapter_line(lines, expected) -> None:
     assert parse_chapter_line(atf) == expected
 
 
+@pytest.mark.parametrize(
+    "lines,expected",
+    [
+        (
+            ["#tr.en: translation", "1. kur"],
+            Line(
+                LineNumber(1),
+                (parse_line_variant("1. kur")[1],),
+                translation=(parse_translation_line("#tr.en: translation"),),
+            ),
+        ),
+        (
+            ["#tr.en: translation", "#tr.de: translation", "1. kur"],
+            Line(
+                LineNumber(1),
+                (parse_line_variant("1. kur")[1],),
+                translation=(
+                    parse_translation_line("#tr.en: translation"),
+                    parse_translation_line("#tr.de: translation"),
+                ),
+            ),
+        ),
+    ],
+)
+def test_parse_translation(lines, expected) -> None:
+    atf = "\n".join(lines)
+    assert parse_chapter_line(atf) == expected
+
+
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "lines,expected",
     [
@@ -261,3 +291,9 @@ def test_parse_chapter_line(lines, expected) -> None:
 def test_parse_chapter(lines, expected) -> None:
     atf = "\n\n".join(lines)
     assert parse_chapter(atf, MANUSCRIPTS) == expected
+
+
+def test_parse_chapter_empty() -> None:
+    with pytest.raises(DataError):
+        f = parse_chapter("", MANUSCRIPTS)
+        print(f)
