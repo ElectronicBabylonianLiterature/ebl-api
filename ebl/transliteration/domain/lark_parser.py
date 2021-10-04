@@ -20,7 +20,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
-from ebl.transliteration.domain.sign_tokens import CompoundGrapheme
+from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
@@ -93,6 +93,11 @@ def parse_greek_word(atf: str) -> GreekWord:
 
 def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
     tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
+    return LineTransformer().transform(tree)
+
+
+def parse_reading(atf: str) -> Reading:
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__reading")
     return LineTransformer().transform(tree)
 
 
