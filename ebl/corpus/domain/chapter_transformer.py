@@ -16,12 +16,16 @@ from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
+from ebl.transliteration.domain.translation_line_transformer import (
+    TranslationLineTransformer,
+)
 
 
 class ChapterTransformer(
     DollarLineTransfomer,
     NoteLineTransformer,
     TextLineTransformer,
+    TranslationLineTransformer,
     ParallelLineTransformer,
     LabelTransformer,
 ):
@@ -72,10 +76,17 @@ class ChapterTransformer(
             LineVariant(text_line.content, notes, tuple(manuscripts), parallel_lines),
         )
 
+    def chapter_translation(self, lines):
+        return tuple(lines)
+
     @v_args(inline=True)
-    def chapter_line(self, head, *tail):
+    def chapter_line(self, translation, head, *tail):
         line_number, main_variant = head
-        return Line(line_number, (main_variant, *[variant for _, variant in tail]))
+        return Line(
+            line_number,
+            (main_variant, *[variant for _, variant in tail]),
+            translation=translation or tuple(),
+        )
 
     def chapter(self, lines):
         return tuple(lines)

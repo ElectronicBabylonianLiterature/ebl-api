@@ -24,7 +24,8 @@ empty_line: /\s+/?
 
 chapter: chapter_line (_NEWLINE _NEWLINE+ chapter_line)*
 
-chapter_line: line_variant (_NEWLINE line_variant)*
+chapter_line: [chapter_translation] line_variant (_NEWLINE line_variant)*
+chapter_translation: (translation_line _NEWLINE)+
 
 line_variant: reconstruction (_NEWLINE manuscript_line)*
 
