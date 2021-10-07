@@ -43,7 +43,7 @@ def test_find(annotations_repository, photo_repository, changelog, when):
     when(annotations_repository).query_by_museum_number(
         annotations.fragment_number
     ).thenReturn(annotations)
-    service = AnnotationsService(annotations_repository, photo_repository, changelog)
+    service = AnnotationsService(EblAiClient(""),annotations_repository, photo_repository, changelog)
 
     assert service.find(annotations.fragment_number) == annotations
 
@@ -64,6 +64,6 @@ def test_update(annotations_repository, photo_repository, when, user, changelog)
         {"_id": str(fragment_number), **SCHEMA.dump(updated_annotations)},
     ).thenReturn()
 
-    service = AnnotationsService(annotations_repository, photo_repository, changelog)
+    service = AnnotationsService(EblAiClient(""), annotations_repository, photo_repository, changelog)
 
     assert service.update(updated_annotations, user) == updated_annotations
