@@ -44,7 +44,7 @@ class BoundingBox:
         return [self.top_left_x, self.top_left_y, self.width, self.height]
 
     @classmethod
-    def from_relative(
+    def from_relative_coordinates(
         cls,
         relative_x,
         relative_y,
@@ -60,12 +60,12 @@ class BoundingBox:
         return cls(absolute_x, absolute_y, absolute_width, absolute_height)
 
     @staticmethod
-    def from_relatives(
+    def from_annotations(
         image_width: int, image_height: int, annotations: Sequence[Annotation]
     ) -> Sequence["BoundingBox"]:
         return tuple(
             [
-                BoundingBox.from_relative(
+                BoundingBox.from_relative_coordinates(
                     annotation.geometry.x,
                     annotation.geometry.y,
                     annotation.geometry.width,

@@ -27,7 +27,7 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bounding_boxes = BoundingBox.from_relatives(
+        bounding_boxes = BoundingBox.from_annotations(
             image.size[0], image.size[1], single_annotation.annotations
         )
         write_annotations(

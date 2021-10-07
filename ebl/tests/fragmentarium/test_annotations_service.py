@@ -1,9 +1,8 @@
 import io
 
-import requests
 from PIL import Image
-from mockito import mock
 
+from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.domain.annotation import Annotations
@@ -26,25 +25,17 @@ def test_generate_annotations(
     when(photo_repository).query_by_file_name(f"{fragment_number}.jpg").thenReturn(
         image_file
     )
-    service = AnnotationsService(annotations_repository, photo_repository, changelog)
-    boundary_results = {
-        "boundaryResults": [
-            {
-                "top_left_x": 0.0,
-                "top_left_y": 0.0,
-                "width": 10.0,
-                "height": 10.0,
-                "probability": 0.99,
-            }
-        ]
-    }
-
-    when(requests).post(...).thenReturn(
-        mock({"json": lambda: boundary_results, "status_code": 200})
+    ebl_ai_client = EblAiClient("")
+    service = AnnotationsService(
+        ebl_ai_client, annotations_repository, photo_repository, changelog
     )
+
+    expected = Annotations(fragment_number, tuple())
+    when(ebl_ai_client).generate_annotations(...).thenReturn(expected)
+
     annotations = service.generate_annotations(fragment_number, 0)
     assert isinstance(annotations, Annotations)
-    assert len(annotations.annotations) > 0
+    assert annotations == expected
 
 
 def test_find(annotations_repository, photo_repository, changelog, when):

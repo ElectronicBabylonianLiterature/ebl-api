@@ -6,6 +6,7 @@ from ebl.bibliography.application.bibliography_repository import BibliographyRep
 from ebl.changelog import Changelog
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
+from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -22,6 +23,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 
 @attr.s(auto_attribs=True, frozen=True)
 class Context:
+    ebl_ai_client: EblAiClient
     auth_backend: AuthBackend
     word_repository: WordRepository
     sign_repository: SignRepository
