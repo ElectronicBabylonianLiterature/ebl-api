@@ -23,6 +23,7 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
+from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -81,6 +82,10 @@ def word_repository(database):
 @pytest.fixture
 def dictionary(word_repository, changelog):
     return Dictionary(word_repository, changelog)
+
+@pytest.fixture
+def ebl_ai_client():
+    return EblAiClient("")
 
 
 class TestBibliographyRepository(MongoBibliographyRepository):
@@ -281,6 +286,7 @@ def user() -> User:
 
 @pytest.fixture
 def context(
+    ebl_ai_client,
     word_repository,
     sign_repository,
     file_repository,
@@ -296,6 +302,7 @@ def context(
     user,
 ):
     return ebl.context.Context(
+        ebl_ai_client=ebl_ai_client,
         auth_backend=NoneAuthBackend(lambda: user),
         word_repository=word_repository,
         sign_repository=sign_repository,
