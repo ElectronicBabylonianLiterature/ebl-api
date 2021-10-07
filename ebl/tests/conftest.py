@@ -83,6 +83,7 @@ def word_repository(database):
 def dictionary(word_repository, changelog):
     return Dictionary(word_repository, changelog)
 
+
 @pytest.fixture
 def ebl_ai_client():
     return EblAiClient("")
