@@ -9,7 +9,8 @@ breakMatch = 3
 breakMismatch = -8
 xMatch = 1
 xMismatch = -1
-gapScore = -1
+gapStart = -1
+gapExtension = -1
 
 # Result filtering
 minScore = 7
@@ -58,19 +59,20 @@ curated_substitutions = frozenset(
 
 def print_config() -> None:
     print("match =", match)
-    print("mismatch =",  mismatch)
+    print("mismatch =", mismatch)
     print("commonMismatch =", commonMismatch)
-    print("breakMatch =",  breakMatch)
-    print("breakMismatch",  breakMismatch)
-    print("xMatch =",  xMatch)
-    print("xMismatch",  xMismatch)
-    print("gapScore =",  gapScore)
+    print("breakMatch =", breakMatch)
+    print("breakMismatch", breakMismatch)
+    print("xMatch =", xMatch)
+    print("xMismatch", xMismatch)
+    print("gapStart =", gapStart)
+    print("gapExtension =", gapExtension)
     print()
-    print("minScore =",  minScore)
+    print("minScore =", minScore)
     print("minIdentity =", minIdentity)
     print("minSimilarity =", minSimilarity)
     print()
-    print("identity_cutoff =",  identity_cutoff)
+    print("identity_cutoff =", identity_cutoff)
     print("curated_substitutions:")
     print("\n".join(", ".join(sub) for sub in curated_substitutions))
     print()

@@ -21,7 +21,8 @@ from alignment.sequence import EncodedSequence, Sequence
 
 from ebl.ebl_scoring import (
     EblScoring,
-    gapScore,
+    gapStart,
+    gapExtension,
     minScore,
     minIdentity,
     minSimilarity,
@@ -112,7 +113,7 @@ def align(
 
         scoring = EblScoring(v)
         aligner = (LocalSequenceAligner if local else GlobalSequenceAligner)(
-            scoring, gapScore
+            scoring, gapStart, gapExtension
         )
         score, encodeds = aligner.align(aEncoded, bEncoded, backtrace=True)
 
@@ -122,17 +123,20 @@ def align(
     for result in sorted(results, key=key, reverse=True):
         encodeds = result[4]
         alignments = [v.decodeSequenceAlignment(encoded) for encoded in encodeds]
-        alignments = [
-            alignment
-            for alignment in alignments
-            if not any(
-                re.fullmatch(r"[X\s#\-]+", row)
-                for row in str(alignment).split("\n")
-            )
-            and alignment.score >= minScore
-            and alignment.percentIdentity() >= minIdentity
-            and alignment.percentSimilarity() >= minSimilarity
-        ]
+        alignments = sorted(
+            (
+                alignment
+                for alignment in alignments
+                if not any(
+                    re.fullmatch(r"[X\s#\-]+", row)
+                    for row in str(alignment).split("\n")
+                )
+                and alignment.score >= minScore
+                and alignment.percentIdentity() >= minIdentity
+                and alignment.percentSimilarity() >= minSimilarity
+            ),
+            key=lambda alignment: alignment.quality(),
+        )
 
         if alignments:
             print(f"{result[0]} -- {result[1]} vs {result[2]} ".ljust(80, "-"))

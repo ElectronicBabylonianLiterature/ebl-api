@@ -23,7 +23,7 @@ repository = context.text_repository
 
 
 def align_fragment(fragment, chapter):
-    if(not any(chapter.signs)):
+    if not any(chapter.signs):
         return Counter()
     else:
         print(f"{chapter.id_}   ".ljust(80, "≡"), end="\n\n", flush=True)
@@ -34,21 +34,19 @@ def align_fragment(fragment, chapter):
     fsequence = (fragment.number, v.encodeSequence(make_sequence(fragment.signs)))
 
     sequences = [
-        (
-            chapter.manuscripts[index].siglum,
-            v.encodeSequence(make_sequence(string)),
-        )
+        (chapter.manuscripts[index].siglum, v.encodeSequence(make_sequence(string)))
         for index, string in enumerate(chapter.signs)
         if not re.fullmatch(r"[X\\n\s]*", string)
     ]
 
-    pairs = [(fsequence,b) for b in sequences]
+    pairs = [(fsequence, b) for b in sequences]
     c = align(pairs, v, True, lambda result: result[3])
 
     t = time.time()
     print(f"Time: {(t-t0)/60} min", end="\n\n", flush=True)
 
     return c
+
 
 print_config()
 
@@ -57,9 +55,11 @@ fragment = context.fragment_repository.query_by_museum_number(k17700)
 if all:
     for text in repository.list():
         for listing in text.chapters:
-            chapter = repository.find_chapter(ChapterId(text.id, listing.stage, listing.name))
+            chapter = repository.find_chapter(
+                ChapterId(text.id, listing.stage, listing.name)
+            )
             c = c + align_fragment(fragment, chapter)
-    
+
     print("\n\nSubstitutions", end="\n\n")
     print_counter(c)
 else:
