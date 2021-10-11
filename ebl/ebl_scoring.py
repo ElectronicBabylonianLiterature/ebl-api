@@ -1,16 +1,17 @@
-from alignment.sequencealigner import Scoring
+from alignment.sequencealigner import Scoring, GapScoring
 from alignment.vocabulary import Vocabulary
 
 # Scoring
-match = 3
-mismatch = -2
-commonMismatch = 2
-breakMatch = 3
-breakMismatch = -8
-xMatch = 1
-xMismatch = -1
-gapStart = -1
+match = 16
+mismatch = -5
+commonMismatch = 7
+breakMatch = 6
+breakMismatch = -10
+xMatch = 3
+xMismatch = -3
+gapStart = -5
 gapExtension = -1
+breakGapExtension = breakMismatch
 
 # Result filtering
 minScore = 7
@@ -67,6 +68,7 @@ def print_config() -> None:
     print("xMismatch", xMismatch)
     print("gapStart =", gapStart)
     print("gapExtension =", gapExtension)
+    print("breakGapExtension =", breakGapExtension)
     print()
     print("minScore =", minScore)
     print("minIdentity =", minIdentity)
@@ -78,7 +80,7 @@ def print_config() -> None:
     print()
 
 
-class EblScoring(Scoring):
+class EblScoring(GapScoring, Scoring):
     def __init__(self, v: Vocabulary):
         self.v = v
         self.line_break = v.encode("#")
@@ -103,3 +105,9 @@ class EblScoring(Scoring):
             return match
         else:
             return mismatch
+
+    def gapStart(self, element):
+        return gapStart
+
+    def gapExtension(self, element):
+        return breakGapExtension if element == self.line_break else gapExtension

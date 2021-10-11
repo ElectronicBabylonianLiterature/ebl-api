@@ -112,12 +112,14 @@ def align(
         bEncoded = b[1]
 
         scoring = EblScoring(v)
-        aligner = (LocalSequenceAligner if local else GlobalSequenceAligner)(
-            scoring, gapStart, gapExtension
+        aligner = (
+            LocalSequenceAligner(scoring)
+            if local
+            else GlobalSequenceAligner(scoring, gapStart, gapExtension)
         )
         score, encodeds = aligner.align(aEncoded, bEncoded, backtrace=True)
 
-        if score > minScore and len(encodeds) > 0:
+        if score >= minScore and len(encodeds) > 0:
             results.append((x, a[0], b[0], score, encodeds))
 
     for result in sorted(results, key=key, reverse=True):
