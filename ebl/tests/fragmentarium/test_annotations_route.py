@@ -1,9 +1,9 @@
 import json
 
 import falcon
-import requests
 from mockito import when, mock
 
+from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -39,11 +39,9 @@ def test_generate_annotations(client, photo_repository, photo_jpeg):
             }
         ]
     }
-    when(requests).post(
-        "mock-localhost:8001/generate",
-        data=photo_jpeg.data,
-        headers={"content-type": "image/png"},
-    ).thenReturn(mock({"json": lambda: boundary_results, "status_code": 200}))
+    when(EblAiClient)._request_generate_annotations(photo_jpeg.data).thenReturn(
+        mock({"json": lambda: boundary_results, "status_code": 200})
+    )
 
     result = client.simulate_get(
         f"/fragments/{fragment_number}/annotations",

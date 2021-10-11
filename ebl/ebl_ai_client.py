@@ -37,12 +37,11 @@ class EblAiClient:
 
     def __init__(self, api_url: str):
         self.api_url = api_url
+        self.generate_endpoint = f"{self.api_url}/generate"
 
-    def request_generate_annotations(self, data: bytes) -> List[BoundingBoxPrediction]:
-        generate_endpoint = f"{self.api_url}/generate"
-
+    def _request_generate_annotations(self, data: bytes) -> List[BoundingBoxPrediction]:
         res = requests.post(
-            generate_endpoint, data=data, headers={"content-type": "image/png"}
+            self.generate_endpoint, data=data, headers={"content-type": "image/png"}
         )
         if res.status_code != 200:
             raise EblAiApiError(f"Ebl-Ai-Api Error with status code: {res.status_code}")
@@ -57,7 +56,7 @@ class EblAiClient:
         image_bytes = fragment_image.read()
         buf = BytesIO(image_bytes)
         width, height = Image.open(buf).size
-        bounding_boxes_predictions = self.request_generate_annotations(buf.getvalue())
+        bounding_boxes_predictions = self._request_generate_annotations(buf.getvalue())
 
         bounding_boxes_predictions = list(
             filter(
