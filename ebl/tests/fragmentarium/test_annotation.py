@@ -68,4 +68,3 @@ def test_bounding_boxes_prediction():
     assert BBOX.width == 3
     assert BBOX.height == 4
     assert BBOX.probability == 0.99
-

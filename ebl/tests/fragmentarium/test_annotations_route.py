@@ -1,13 +1,13 @@
 import json
 
 import falcon
-from mockito import when
+import requests
+from mockito import when, mock
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
-from ebl.fragmentarium.application.annotations_service import AnnotationsService
 
 
 def test_find_annotations(client):
@@ -25,23 +25,37 @@ def test_find_annotations(client):
     assert result.json == expected_json
 
 
-def test_generate_annotations(client):
-    fragment_number = MuseumNumber("X", "2")
-    annotations = Annotations(fragment_number)
+def test_generate_annotations(client, photo_repository, photo_jpeg):
+    fragment_number = MuseumNumber.of("K.2")
 
-    when(AnnotationsService).generate_annotations(fragment_number).thenReturn(
-        annotations
-    )
+    boundary_results = {
+        "boundaryResults": [
+            {
+                "top_left_x": 0.0,
+                "top_left_y": 0.0,
+                "width": 10.0,
+                "height": 10.0,
+                "probability": 0.99,
+            }
+        ]
+    }
+    when(requests).post(
+        "mock-localhost:8001/generate",
+        data=photo_jpeg.data,
+        headers={"content-type": "image/png"},
+    ).thenReturn(mock({"json": lambda: boundary_results, "status_code": 200}))
 
     result = client.simulate_get(
         f"/fragments/{fragment_number}/annotations",
         params={"generateAnnotations": True},
     )
 
-    expected_json = AnnotationsSchema().dump(annotations)
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"
-    assert result.json == expected_json
+    assert result.json is not None
+    assert result.json["fragmentNumber"] == "K.2"
+    assert result.json["annotations"][0]["geometry"]["x"] == 0.0
+    assert result.json["annotations"][0]["geometry"]["y"] == 0.0
 
 
 def test_find_not_allowed(guest_client):

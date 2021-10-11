@@ -1,12 +1,13 @@
 import datetime
 import io
 import json
-from typing import Any, Mapping, Sequence, Union
 import uuid
+from typing import Any, Mapping, Sequence, Union
 
 import attr
 import pydash
 import pytest
+from PIL import Image
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
@@ -33,6 +34,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
@@ -40,12 +42,12 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
-from ebl.tests.factories.bibliography import BibliographyEntryFactory
-from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.signs.infrastructure.mongo_sign_repository import (
     MongoSignRepository,
     SignSchema,
 )
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -244,9 +246,21 @@ def photo():
     return FakeFile("K.1.jpg", b"yVGSDbnTth", {})
 
 
+def create_test_photo(number: Union[MuseumNumber, str]):
+    image = Image.open("ebl/tests/test_image.jpeg")
+    buf = io.BytesIO()
+    image.save(buf, format="JPEG")
+    return FakeFile(f"{number}.jpg", buf.getvalue(), {})
+
+
 @pytest.fixture
-def photo_repository(database, photo):
-    return TestFilesRepository(database, "photos", photo)
+def photo_jpeg():
+    return create_test_photo("K.2")
+
+
+@pytest.fixture
+def photo_repository(database, photo, photo_jpeg):
+    return TestFilesRepository(database, "photos", photo, photo_jpeg)
 
 
 @pytest.fixture

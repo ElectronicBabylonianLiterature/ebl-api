@@ -1,15 +1,12 @@
-import io
-
 import pytest
 import requests
-from PIL import Image
 from mockito import mock
 
 from ebl.ebl_ai_client import EblAiClient, BoundingBoxPredictionSchema, EblAiApiError
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import BoundingBoxPrediction
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.tests.conftest import FakeFile
+from ebl.tests.conftest import create_test_photo
 
 SCHEMA = AnnotationsSchema()
 
@@ -32,11 +29,7 @@ def test_generate_annotations(
     annotations_repository, photo_repository, changelog, when
 ):
     fragment_number = MuseumNumber.of("X.0")
-    image = Image.open("ebl/tests/fragmentarium/test_image.jpeg")
-    buf = io.BytesIO()
-    image.save(buf, format="JPEG")
-    raw_bytes = buf.getvalue()
-    image_file = FakeFile(str(fragment_number), raw_bytes, {})
+    image_file = create_test_photo(fragment_number)
 
     ebl_ai_client = EblAiClient("mock-localhost:8001")
     boundary_results = {
@@ -53,7 +46,7 @@ def test_generate_annotations(
 
     when(requests).post(
         "mock-localhost:8001/generate",
-        data=raw_bytes,
+        data=image_file.data,
         headers={"content-type": "image/png"},
     ).thenReturn(mock({"json": lambda: boundary_results, "status_code": 200}))
 
@@ -68,17 +61,13 @@ def test_generate_annotations_error(
     annotations_repository, photo_repository, changelog, when
 ):
     fragment_number = MuseumNumber.of("X.0")
-    image = Image.open("ebl/tests/fragmentarium/test_image.jpeg")
-    buf = io.BytesIO()
-    image.save(buf, format="JPEG")
-    raw_bytes = buf.getvalue()
-    image_file = FakeFile(str(fragment_number), raw_bytes, {})
+    image_file = create_test_photo(fragment_number)
 
     ebl_ai_client = EblAiClient("mock-localhost:8001")
 
     when(requests).post(
         "mock-localhost:8001/generate",
-        data=raw_bytes,
+        data=image_file.data,
         headers={"content-type": "image/png"},
     ).thenReturn(mock({"status_code": 400}))
     with pytest.raises(EblAiApiError):
