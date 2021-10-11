@@ -86,7 +86,7 @@ def dictionary(word_repository, changelog):
 
 @pytest.fixture
 def ebl_ai_client():
-    return EblAiClient("")
+    return EblAiClient("mock-localhost:8001")
 
 
 class TestBibliographyRepository(MongoBibliographyRepository):

@@ -1,4 +1,4 @@
-from typing import Sequence, Dict
+from typing import Sequence
 from uuid import uuid4
 
 import attr
@@ -81,16 +81,6 @@ class BoundingBox:
 @attr.s(auto_attribs=True, frozen=True)
 class BoundingBoxPrediction(BoundingBox):
     probability: float
-
-    @classmethod
-    def from_dict(cls, bounding_boxes_prediction_dict: Dict) -> "BoundingBoxPrediction":
-        return cls(
-            bounding_boxes_prediction_dict["top_left_x"],
-            bounding_boxes_prediction_dict["top_left_y"],
-            bounding_boxes_prediction_dict["width"],
-            bounding_boxes_prediction_dict["height"],
-            bounding_boxes_prediction_dict["probability"],
-        )
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

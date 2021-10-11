@@ -1,18 +1,42 @@
 import json
 
 import falcon
+from mockito import when
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
+from ebl.fragmentarium.application.annotations_service import AnnotationsService
 
 
 def test_find_annotations(client):
     fragment_number = MuseumNumber("X", "2")
     annotations = Annotations(fragment_number)
 
-    result = client.simulate_get(f"/fragments/{fragment_number}/annotations")
+    result = client.simulate_get(
+        f"/fragments/{fragment_number}/annotations",
+        params={"generateAnnotations": False},
+    )
+
+    expected_json = AnnotationsSchema().dump(annotations)
+    assert result.status == falcon.HTTP_OK
+    assert result.headers["Access-Control-Allow-Origin"] == "*"
+    assert result.json == expected_json
+
+
+def test_generate_annotations(client):
+    fragment_number = MuseumNumber("X", "2")
+    annotations = Annotations(fragment_number)
+
+    when(AnnotationsService).generate_annotations(fragment_number).thenReturn(
+        annotations
+    )
+
+    result = client.simulate_get(
+        f"/fragments/{fragment_number}/annotations",
+        params={"generateAnnotations": True},
+    )
 
     expected_json = AnnotationsSchema().dump(annotations)
     assert result.status == falcon.HTTP_OK
@@ -21,7 +45,9 @@ def test_find_annotations(client):
 
 
 def test_find_not_allowed(guest_client):
-    result = guest_client.simulate_get("/fragments/X.1/annotations")
+    result = guest_client.simulate_get(
+        "/fragments/X.1/annotations", params={"generateAnnotations": False}
+    )
 
     assert result.status == falcon.HTTP_FORBIDDEN
 
@@ -39,7 +65,10 @@ def test_update(client):
     assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == expected_json
 
-    get_result = client.simulate_get(f"/fragments/{fragment_number}/annotations")
+    get_result = client.simulate_get(
+        f"/fragments/{fragment_number}/annotations",
+        params={"generateAnnotations": False},
+    )
     assert get_result.json == expected_json
 
 
