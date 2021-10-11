@@ -31,7 +31,7 @@ def test_generate_annotations(
     )
 
     expected = Annotations(fragment_number, tuple())
-    when(ebl_ai_client).generate_annotations(...).thenReturn(expected)
+    when(ebl_ai_client).generate_annotations(fragment_number, image_file, 0).thenReturn(expected)
 
     annotations = service.generate_annotations(fragment_number, 0)
     assert isinstance(annotations, Annotations)

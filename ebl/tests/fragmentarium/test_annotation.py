@@ -69,8 +69,3 @@ def test_bounding_boxes_prediction():
     assert BBOX.height == 4
     assert BBOX.probability == 0.99
 
-
-def test_bounding_boxes_prediction_from_dict():
-    assert BBOX == BoundingBoxPrediction.from_dict(
-        {"top_left_x": 1, "top_left_y": 2, "width": 3, "height": 4, "probability": 0.99}
-    )
