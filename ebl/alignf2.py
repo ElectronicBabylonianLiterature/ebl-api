@@ -53,6 +53,7 @@ print_config()
 c = Counter()
 fragment = context.fragment_repository.query_by_museum_number(k17700)
 if all:
+    t0 = time.time()
     for text in repository.list():
         for listing in text.chapters:
             chapter = repository.find_chapter(
@@ -60,7 +61,10 @@ if all:
             )
             c = c + align_fragment(fragment, chapter)
 
-    print("\n\nSubstitutions", end="\n\n")
+    t = time.time()
+    print("\n\n")
+    print(f"Time: {(t-t0)/60} min", flush=True)
+    print("Substitutions", end="\n\n")
     print_counter(c)
 else:
     chapter = repository.find_chapter(iii4)
