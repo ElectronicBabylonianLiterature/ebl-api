@@ -103,7 +103,7 @@ def align(
     pairs: List[Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]],
     v: Vocabulary,
     verbose: bool,
-    key=lambda result: (result[4][0].percentIdentity(), result[4][0].score),
+    key=lambda result: (result[4][0].percentPreservedIdentity(), result[4][0].score),
 ) -> Counter:
     substitutions = []
     results = []
@@ -134,10 +134,14 @@ def align(
                     for row in str(alignment).split("\n")
                 )
                 and alignment.score >= minScore
-                and alignment.percentIdentity() >= minIdentity
-                and alignment.percentSimilarity() >= minSimilarity
+                and alignment.percentPreservedIdentity() >= minIdentity
+                and alignment.percentPreservedSimilarity() >= minSimilarity
             ),
-            key=lambda alignment: alignment.quality(),
+            key=lambda alignment: (
+                alignment.score,
+                alignment.percentPreservedIdentity(),
+                alignment.percentPreservedSimilarity()
+            ),
         )
 
         if alignments:
@@ -148,8 +152,8 @@ def align(
                 if verbose:
                     print(result)
                     print("Alignment score:", alignment.score)
-                    print("Percent identity:", alignment.percentIdentity())
-                    print("Percent similarity:", alignment.percentSimilarity())
+                    print("Percent preserved identity:", alignment.percentPreservedIdentity())
+                    print("Percent preserved similarity:", alignment.percentPreservedSimilarity())
                     print()
 
                 if alignment.percentIdentity() >= identity_cutoff:
