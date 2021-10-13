@@ -18,6 +18,21 @@ iii4 = ChapterId(TextId(Genre.LITERATURE, 3, 4), Stage.STANDARD_BABYLONIAN, "-")
 k17700 = MuseumNumber.of("K.17700")
 k19352 = MuseumNumber.of("K.19352")
 
+test_set = [
+    MuseumNumber.of("BM.36681"),  # School
+    MuseumNumber.of("BM.36688"),  # School
+    MuseumNumber.of("BM.99811"),  # School, matches two texts
+    MuseumNumber.of("BM.101558"),  # School, matches two texts
+    MuseumNumber.of("K.20949"),  # School, matches two texts
+    MuseumNumber.of("K.17591"),  # Fragment
+    MuseumNumber.of("K.18617"),  # Fragment
+    MuseumNumber.of("K.19604"),  # Fragment
+    MuseumNumber.of("K.20637"),  # Fragment
+    MuseumNumber.of("K.21209"),  # Fragment
+    MuseumNumber.of("Rm.468"),  # Fragment
+]
+
+
 context = create_context()
 repository = context.text_repository
 
