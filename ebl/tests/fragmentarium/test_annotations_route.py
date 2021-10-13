@@ -1,9 +1,9 @@
 import json
 
 import falcon
+import requests
 from mockito import when, mock
 
-from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -25,7 +25,7 @@ def test_find_annotations(client):
     assert result.json == expected_json
 
 
-def test_generate_annotations(client, photo_repository, photo_jpeg):
+def test_generate_annotations(client, photo_repository):
     fragment_number = MuseumNumber.of("K.2")
 
     boundary_results = {
@@ -39,7 +39,7 @@ def test_generate_annotations(client, photo_repository, photo_jpeg):
             }
         ]
     }
-    when(EblAiClient)._request_generate_annotations(photo_jpeg.data).thenReturn(
+    when(requests).post(...).thenReturn(
         mock({"json": lambda: boundary_results, "status_code": 200})
     )
 
