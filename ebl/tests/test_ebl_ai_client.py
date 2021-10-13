@@ -72,5 +72,5 @@ def test_generate_annotations_error(
 
     httpretty.register_uri(httpretty.POST, "http://localhost:8001/generate", status=404)
 
-    with pytest.raises(EblAiApiError):
+    with pytest.raises(EblAiApiError, match="Ebl-Ai-Api Error with status code: 404"):
         ebl_ai_client.generate_annotations(fragment_number, image_file)
