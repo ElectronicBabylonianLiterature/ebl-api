@@ -14,7 +14,7 @@ gapExtension = -1
 breakGapExtension = breakMismatch
 
 # Result filtering
-minScore = 7
+minScore = 39
 minIdentity = 0
 minSimilarity = 0
 
