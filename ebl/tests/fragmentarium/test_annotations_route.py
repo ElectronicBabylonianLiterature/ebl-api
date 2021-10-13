@@ -1,8 +1,7 @@
 import json
 
 import falcon
-import requests
-from mockito import when, mock
+import httpretty
 
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
@@ -25,6 +24,7 @@ def test_find_annotations(client):
     assert result.json == expected_json
 
 
+@httpretty.activate
 def test_generate_annotations(client, photo_repository):
     fragment_number = MuseumNumber.of("K.2")
 
@@ -39,8 +39,11 @@ def test_generate_annotations(client, photo_repository):
             }
         ]
     }
-    when(requests).post(...).thenReturn(
-        mock({"json": lambda: boundary_results, "status_code": 200})
+    httpretty.register_uri(
+        httpretty.POST,
+        "http://localhost:8001/generate",
+        body=json.dumps(boundary_results),
+        content_type="image/jpeg",
     )
 
     result = client.simulate_get(

@@ -1,6 +1,7 @@
+import json
+
+import httpretty
 import pytest
-import requests
-from mockito import mock
 
 from ebl.ebl_ai_client import EblAiClient, BoundingBoxPredictionSchema, EblAiApiError
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
@@ -25,13 +26,12 @@ def test_bounding_box_predition_schema():
     )
 
 
+@httpretty.activate
 def test_generate_annotations(
     annotations_repository, photo_repository, changelog, when
 ):
     fragment_number = MuseumNumber.of("X.0")
-    image_file = create_test_photo(fragment_number)
 
-    ebl_ai_client = EblAiClient("mock-localhost:8001")
     boundary_results = {
         "boundaryResults": [
             {
@@ -44,11 +44,15 @@ def test_generate_annotations(
         ]
     }
 
-    when(requests).post(
-        "mock-localhost:8001/generate",
-        data=image_file.data,
-        headers={"content-type": "image/png"},
-    ).thenReturn(mock({"json": lambda: boundary_results, "status_code": 200}))
+    httpretty.register_uri(
+        httpretty.POST,
+        "http://mock-localhost:8001/generate",
+        body=json.dumps(boundary_results),
+        content_type="image/jpeg",
+    )
+
+    image_file = create_test_photo(fragment_number)
+    ebl_ai_client = EblAiClient("http://mock-localhost:8001")
 
     annotations = ebl_ai_client.generate_annotations(fragment_number, image_file)
     assert annotations.fragment_number == fragment_number
@@ -57,18 +61,16 @@ def test_generate_annotations(
     assert annotations.annotations[0].geometry.y == 0.0
 
 
+@httpretty.activate
 def test_generate_annotations_error(
     annotations_repository, photo_repository, changelog, when
 ):
     fragment_number = MuseumNumber.of("X.0")
     image_file = create_test_photo(fragment_number)
 
-    ebl_ai_client = EblAiClient("mock-localhost:8001")
+    ebl_ai_client = EblAiClient("http://localhost:8001")
 
-    when(requests).post(
-        "mock-localhost:8001/generate",
-        data=image_file.data,
-        headers={"content-type": "image/png"},
-    ).thenReturn(mock({"status_code": 400}))
+    httpretty.register_uri(httpretty.POST, "http://localhost:8001/generate", status=404)
+
     with pytest.raises(EblAiApiError):
         ebl_ai_client.generate_annotations(fragment_number, image_file)
