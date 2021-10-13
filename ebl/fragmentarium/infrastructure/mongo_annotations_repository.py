@@ -1,3 +1,5 @@
+from typing import List
+
 from marshmallow import EXCLUDE
 from pymongo.database import Database
 
@@ -33,3 +35,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
             return AnnotationsSchema().load(result, unknown=EXCLUDE)
         except NotFoundError:
             return Annotations(number)
+
+    def retrieve_all(self) -> List[Annotations]:
+        result = self._collection.find_many({})
+        return AnnotationsSchema().load(result, unknown=EXCLUDE, many=True)

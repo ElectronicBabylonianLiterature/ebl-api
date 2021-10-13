@@ -24,6 +24,10 @@ class AnnotationResource:
 
     @falcon.before(require_scope, "read:fragments")
     @validate(None, AnnotationsSchema())
-    def on_get(self, _, resp: falcon.Response, number: str):
-        annotations = self._annotation_service.find(parse_museum_number(number))
+    def on_get(self, req, resp: falcon.Response, number: str):
+        museum_number = parse_museum_number(number)
+        if req.params.get("generateAnnotations") == "true":
+            annotations = self._annotation_service.generate_annotations(museum_number)
+        else:
+            annotations = self._annotation_service.find(museum_number)
         resp.media = AnnotationsSchema().dump(annotations)

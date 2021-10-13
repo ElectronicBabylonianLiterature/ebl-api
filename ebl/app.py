@@ -20,6 +20,7 @@ from ebl.corpus.web.bootstrap import create_corpus_routes
 from ebl.cors_component import CorsComponent
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
+from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
@@ -48,6 +49,7 @@ def set_sentry_user(id_: str) -> None:
 
 
 def create_context():
+    ebl_ai_client = EblAiClient(os.environ["EBL_AI_API"])
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     auth_backend = Auth0Backend(
@@ -57,6 +59,7 @@ def create_context():
         set_sentry_user,
     )
     return Context(
+        ebl_ai_client=ebl_ai_client,
         auth_backend=auth_backend,
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),

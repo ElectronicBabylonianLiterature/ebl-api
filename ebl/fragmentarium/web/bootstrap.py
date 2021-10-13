@@ -34,7 +34,10 @@ def create_fragmentarium_routes(api: falcon.API, context: Context):
     )
     updater = context.get_fragment_updater()
     annotations_service = AnnotationsService(
-        context.annotations_repository, context.changelog
+        context.ebl_ai_client,
+        context.annotations_repository,
+        context.photo_repository,
+        context.changelog,
     )
 
     statistics = StatisticsResource(fragmentarium)

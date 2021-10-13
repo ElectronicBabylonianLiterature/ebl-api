@@ -22,7 +22,7 @@ class File(ABC):
         ...
 
     @abstractmethod
-    def read(self, size: int) -> bytes:
+    def read(self, size=-1) -> bytes:
         ...
 
     @abstractmethod

@@ -6,6 +6,13 @@ from ebl.tests.factories.annotation import AnnotationsFactory
 COLLECTION = "annotations"
 
 
+def test_retrieve_all(database, annotations_repository):
+    annotations = AnnotationsFactory.build_batch(5)
+    database[COLLECTION].insert_many(AnnotationsSchema(many=True).dump(annotations))
+
+    assert annotations_repository.retrieve_all() == annotations
+
+
 def test_create(database, annotations_repository):
     annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number

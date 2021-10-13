@@ -15,8 +15,10 @@ X = 0.04
 PATH = [3, 4, 6]
 VALUE = "kur"
 ID = "abc123"
-
-ANNOTATION = Annotation(Geometry(X, Y, WIDTH, HEIGHT), AnnotationData(ID, VALUE, PATH))
+SIGN_NAME = "KUR"
+ANNOTATION = Annotation(
+    Geometry(X, Y, WIDTH, HEIGHT), AnnotationData(ID, VALUE, PATH, SIGN_NAME)
+)
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
 ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION])
@@ -26,7 +28,7 @@ SERIALIZED = {
     "annotations": [
         {
             "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
-            "data": {"id": ID, "value": VALUE, "path": PATH},
+            "data": {"id": ID, "value": VALUE, "signName": SIGN_NAME, "path": PATH},
         }
     ],
 }

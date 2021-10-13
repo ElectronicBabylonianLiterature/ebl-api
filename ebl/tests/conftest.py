@@ -1,12 +1,13 @@
 import datetime
 import io
 import json
-from typing import Any, Mapping, Sequence, Union
 import uuid
+from typing import Any, Mapping, Sequence, Union
 
 import attr
 import pydash
 import pytest
+from PIL import Image
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
@@ -23,6 +24,7 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary import Dictionary
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
+from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -32,6 +34,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
@@ -39,12 +42,12 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
-from ebl.tests.factories.bibliography import BibliographyEntryFactory
-from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.signs.infrastructure.mongo_sign_repository import (
     MongoSignRepository,
     SignSchema,
 )
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -81,6 +84,11 @@ def word_repository(database):
 @pytest.fixture
 def dictionary(word_repository, changelog):
     return Dictionary(word_repository, changelog)
+
+
+@pytest.fixture
+def ebl_ai_client():
+    return EblAiClient("http://localhost:8001")
 
 
 class TestBibliographyRepository(MongoBibliographyRepository):
@@ -238,9 +246,21 @@ def photo():
     return FakeFile("K.1.jpg", b"yVGSDbnTth", {})
 
 
+def create_test_photo(number: Union[MuseumNumber, str]):
+    image = Image.open("ebl/tests/test_image.jpeg")
+    buf = io.BytesIO()
+    image.save(buf, format="JPEG")
+    return FakeFile(f"{number}.jpg", buf.getvalue(), {})
+
+
 @pytest.fixture
-def photo_repository(database, photo):
-    return TestFilesRepository(database, "photos", photo)
+def photo_jpeg():
+    return create_test_photo("K.2")
+
+
+@pytest.fixture
+def photo_repository(database, photo, photo_jpeg):
+    return TestFilesRepository(database, "photos", photo, photo_jpeg)
 
 
 @pytest.fixture
@@ -281,6 +301,7 @@ def user() -> User:
 
 @pytest.fixture
 def context(
+    ebl_ai_client,
     word_repository,
     sign_repository,
     file_repository,
@@ -296,6 +317,7 @@ def context(
     user,
 ):
     return ebl.context.Context(
+        ebl_ai_client=ebl_ai_client,
         auth_backend=NoneAuthBackend(lambda: user),
         word_repository=word_repository,
         sign_repository=sign_repository,
