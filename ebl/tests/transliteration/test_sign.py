@@ -28,7 +28,12 @@ def test_sign():
         ),
     )
     sign = Sign(
-        name, lists=lists, values=values, logograms=logogram, mes_zl="test_mesZl", labasi="test_LaBaSi"
+        name,
+        lists=lists,
+        values=values,
+        logograms=logogram,
+        mes_zl="test_mesZl",
+        labasi="test_LaBaSi",
     )
 
     assert sign.name == name
