@@ -33,6 +33,7 @@ class Sign:
     lists: Sequence[SignListRecord] = tuple()
     values: Sequence[Value] = tuple()
     mes_zl: str = ""
+    labasi: str = ""
     logograms: Sequence[Logogram] = tuple()
     unicode: Sequence[int] = tuple()
 
