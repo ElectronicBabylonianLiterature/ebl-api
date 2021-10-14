@@ -28,7 +28,7 @@ def test_sign():
         ),
     )
     sign = Sign(
-        name, lists=lists, values=values, logograms=logogram, mes_zl="test_mesZl"
+        name, lists=lists, values=values, logograms=logogram, mes_zl="test_mesZl", labasi="test_LaBaSi"
     )
 
     assert sign.name == name
@@ -36,6 +36,7 @@ def test_sign():
     assert sign.values == values
     assert sign.logograms == logogram
     assert sign.mes_zl == "test_mesZl"
+    assert sign.labasi == "test_LaBaSi"
 
 
 def test_standardization_abz():
