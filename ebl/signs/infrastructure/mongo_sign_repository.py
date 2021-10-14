@@ -58,6 +58,7 @@ class SignSchema(Schema):
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
+    labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
     unicode = fields.List(fields.Int(), load_default=tuple())
 
     @post_load
@@ -141,6 +142,7 @@ class MongoSignRepository(SignRepository):
                         "lists": {"$first": "$lists"},
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
+                        "LaBaSi": {"$first": "$LaBaSi"},
                         "Logograms": {"$push": "$Logograms"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},

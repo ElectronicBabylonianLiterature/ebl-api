@@ -35,6 +35,7 @@ def test_sign_schema():
         "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
         "unicode": [],
         "mesZl": "",
+        "LaBaSi": "",
         "logograms": [],
     }
     sign = Sign(
@@ -57,6 +58,7 @@ def test_sign_dto_schema():
         "lists": [{"name": "ABZ", "number": "03+53"}],
         "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
         "mesZl": "",
+        "LaBaSi": "",
         "unicode": [],
         "logograms": [],
     }
