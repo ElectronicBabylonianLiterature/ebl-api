@@ -21,8 +21,6 @@ from alignment.sequence import EncodedSequence, Sequence
 
 from ebl.ebl_scoring import (
     EblScoring,
-    gapStart,
-    gapExtension,
     minScore,
     minIdentity,
     minSimilarity,
@@ -33,7 +31,7 @@ from ebl.ebl_scoring import (
 sys.setrecursionlimit(50000)
 
 
-local = True
+local = False
 
 context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
@@ -115,7 +113,7 @@ def align(
         aligner = (
             LocalSequenceAligner(scoring)
             if local
-            else GlobalSequenceAligner(scoring, gapStart, gapExtension)
+            else GlobalSequenceAligner(scoring)
         )
         score, encodeds = aligner.align(aEncoded, bEncoded, backtrace=True)
 

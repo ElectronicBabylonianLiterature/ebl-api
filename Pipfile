@@ -26,7 +26,7 @@ pycryptodomex = "*"
 cryptography = "==3.3.2"
 newrelic = "*"
 numpy = "*"
-alignment = {editable = true, ref = "variable-gap-extension-score", git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
+alignment = {editable = true, ref = "global-alignment-affine-gap", git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 
 [dev-packages]
 pytest = "*"
