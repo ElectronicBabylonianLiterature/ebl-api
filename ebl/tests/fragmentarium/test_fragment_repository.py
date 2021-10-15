@@ -145,7 +145,9 @@ def test_fragment_not_found(fragment_repository):
         fragment_repository.query_by_museum_number(MuseumNumber("unknown", "id"))
 
 
-def test_find_random(fragment_repository,):
+def test_find_random(
+    fragment_repository,
+):
     fragment = FragmentFactory.build()
     transliterated_fragment = TransliteratedFragmentFactory.build()
     for a_fragment in fragment, transliterated_fragment:

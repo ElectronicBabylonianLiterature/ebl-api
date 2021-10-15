@@ -22,8 +22,7 @@ def test_get_word(client, saved_word):
 
 
 def test_word_not_found(client):
-    unique_lemma = "not found"
-    result = client.simulate_get(f"/words/{unique_lemma}")
+    result = client.simulate_get(f"/words/not found")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
