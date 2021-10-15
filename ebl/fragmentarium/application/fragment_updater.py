@@ -34,7 +34,9 @@ class FragmentUpdater:
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
 
-        updated_fragment = fragment.update_transliteration(transliteration, user)
+        updated_fragment = fragment.update_lowest_join_transliteration(
+            transliteration, user
+        )
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
