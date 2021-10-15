@@ -7,8 +7,10 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Measure,
+    NotLowestJoinError,
     UncuratedReference,
 )
+from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -28,7 +30,6 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.fragmentarium.domain.joins import Joins
 
 
 def test_number():
@@ -207,6 +208,19 @@ def test_update_transliteration(user):
     )
 
     assert updated_fragment == expected_fragment
+
+
+def test_add_lowest_join_transliteration(user):
+    fragment = FragmentFactory.build(
+        number=MuseumNumber.of("X.2"),
+        joins=Joins([[Join(MuseumNumber.of("X.1"), is_in_fragmentarium=True)]]),
+    )
+    atf = Atf("1. x x")
+    text = parse_atf_lark(atf)
+    transliteration = TransliterationUpdate(text, fragment.notes)
+
+    with pytest.raises(NotLowestJoinError):
+        fragment.update_lowest_join_transliteration(transliteration, user)
 
 
 def test_update_notes(user):

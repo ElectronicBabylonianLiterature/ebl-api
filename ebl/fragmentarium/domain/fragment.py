@@ -80,27 +80,30 @@ class Fragment:
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
-    def update_transliteration(
+    def update_lowest_join_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
         if transliteration.text.is_empty or self.is_lowest_join:
-            record = self.record.add_entry(
-                self.text.atf, transliteration.text.atf, user
-            )
-            text = self.text.merge(transliteration.text)
-
-            return attr.evolve(
-                self,
-                text=text,
-                notes=transliteration.notes,
-                signs=transliteration.signs,
-                record=record,
-                line_to_vec=create_line_to_vec(text.lines),
-            )
+            return self.update_transliteration(transliteration, user)
         else:
             raise NotLowestJoinError(
                 "Transliteration must be empty unless fragment is the lowest in join."
             )
+
+    def update_transliteration(
+        self, transliteration: TransliterationUpdate, user: User
+    ) -> "Fragment":
+        record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
+        text = self.text.merge(transliteration.text)
+
+        return attr.evolve(
+            self,
+            text=text,
+            notes=transliteration.notes,
+            signs=transliteration.signs,
+            record=record,
+            line_to_vec=create_line_to_vec(text.lines),
+        )
 
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
         return attr.evolve(self, genres=tuple(genres_new))
