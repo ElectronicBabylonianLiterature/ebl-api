@@ -21,14 +21,11 @@ def test_create_annotations(photo_repository, when, photo):
 def test_from_relative_to_absolute_coordinates():
     geometry = GeometryFactory.build(x=0, y=0, width=100, height=100)
     shape = (640, 480)
-    assert (
-        BoundingBox.from_relative_coordinates(
-            geometry.x,
-            geometry.y,
-            geometry.width,
-            geometry.height,
-            image_width=shape[0],
-            image_height=shape[1],
-        )
-        == (BoundingBox(0, 0, 640, 480))
-    )
+    assert BoundingBox.from_relative_coordinates(
+        geometry.x,
+        geometry.y,
+        geometry.width,
+        geometry.height,
+        image_width=shape[0],
+        image_height=shape[1],
+    ) == (BoundingBox(0, 0, 640, 480))

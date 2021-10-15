@@ -16,9 +16,9 @@ DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 class Surface(Enum):
     """
     See "Surface" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
+    http://oracc.org/doc/help/editinginatf/labels/index.html#d2e21408
     and "Surfaces" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
+    http://oracc.org/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
     """
 
     OBVERSE = ("obverse", "o")
@@ -47,7 +47,7 @@ class Surface(Enum):
 @unique
 class Status(Enum):
     """See "Status" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
+    http://oracc.org/doc/help/editinginatf/primer/structuretutorial/index.html
     """
 
     PRIME = "'"
@@ -73,7 +73,7 @@ class DollarStatus(Enum):
 @unique
 class CommentaryProtocol(Enum):
     """See
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html
+    http://oracc.org/doc/help/editinginatf/commentary/index.html
     """
 
     QUOTATION = "!qt"
@@ -85,7 +85,7 @@ class CommentaryProtocol(Enum):
 @unique
 class Flag(Enum):
     """See "Metadata" in
-    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html
+    http://oracc.org/doc/help/editinginatf/primer/inlinetutorial/index.html
     """
 
     DAMAGE = "#"
