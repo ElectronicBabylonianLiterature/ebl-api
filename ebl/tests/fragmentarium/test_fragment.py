@@ -210,7 +210,6 @@ def test_update_transliteration(user):
     assert updated_fragment == expected_fragment
 
 
-@freeze_time("2018-09-07 15:41:24.032")
 def test_add_lowest_join_transliteration(user):
     fragment = FragmentFactory.build(
         number=MuseumNumber.of("X.2"),
