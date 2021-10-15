@@ -22,7 +22,7 @@ class GeometrySchema(Schema):
 
 class AnnotationDataSchema(Schema):
     id = fields.String(required=True)
-    sign_name = fields.String(missing="", data_key="signName")
+    sign_name = fields.String(load_default="", data_key="signName")
     value = fields.String(required=True)
     path = fields.List(fields.Int, required=True)
 

@@ -1,9 +1,11 @@
-import pytest
 from freezegun import freeze_time
+import pytest
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Genre
+from ebl.fragmentarium.domain.fragment import Genre, NotLowestJoinError
+from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -11,14 +13,29 @@ from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragment
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
+
 SCHEMA = FragmentSchema()
 
 
 @freeze_time("2018-09-07 15:41:24.032")
+@pytest.mark.parametrize(
+    "number,ignore_lowest_join",
+    [(MuseumNumber.of("X.1"), False), (MuseumNumber.of("X.3"), True)],
+)
 def test_update_transliteration(
-    fragment_updater, user, fragment_repository, changelog, when
+    number,
+    ignore_lowest_join,
+    fragment_updater,
+    user,
+    fragment_repository,
+    changelog,
+    when,
 ):
-    transliterated_fragment = TransliteratedFragmentFactory.build(line_to_vec=None)
+    transliterated_fragment = TransliteratedFragmentFactory.build(
+        number=number,
+        joins=Joins([[Join(MuseumNumber.of("X.1"), is_in_fragmentarium=True)]]),
+        line_to_vec=None,
+    )
     number = transliterated_fragment.number
     atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(
@@ -42,7 +59,7 @@ def test_update_transliteration(
     (when(fragment_repository).update_transliteration(expected_fragment).thenReturn())
 
     updated_fragment = fragment_updater.update_transliteration(
-        number, transliteration, user
+        number, transliteration, user, ignore_lowest_join
     )
     assert updated_fragment == (expected_fragment, False)
 
@@ -58,6 +75,30 @@ def test_update_update_transliteration_not_found(
             number,
             TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"),
             user,
+        )
+
+
+def test_update_update_transliteration_not_lowest_join(
+    fragment_updater, user, fragment_repository, when
+):
+    number = MuseumNumber.of("X.2")
+    transliterated_fragment = TransliteratedFragmentFactory.build(
+        number=number,
+        joins=Joins([[Join(MuseumNumber.of("X.1"), is_in_fragmentarium=True)]]),
+    )
+
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(transliterated_fragment)
+    )
+
+    with pytest.raises(NotLowestJoinError):
+        fragment_updater.update_transliteration(
+            number,
+            TransliterationUpdate(parse_atf_lark("1. x"), "updated notes", "X"),
+            user,
+            False,
         )
 
 

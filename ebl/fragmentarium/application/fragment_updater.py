@@ -30,11 +30,19 @@ class FragmentUpdater:
         self._photos = photos
 
     def update_transliteration(
-        self, number: MuseumNumber, transliteration: TransliterationUpdate, user: User
+        self,
+        number: MuseumNumber,
+        transliteration: TransliterationUpdate,
+        user: User,
+        ignore_lowest_join: bool = False,
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
 
-        updated_fragment = fragment.update_transliteration(transliteration, user)
+        updated_fragment = (
+            fragment.update_transliteration(transliteration, user)
+            if ignore_lowest_join
+            else fragment.update_lowest_join_transliteration(transliteration, user)
+        )
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
