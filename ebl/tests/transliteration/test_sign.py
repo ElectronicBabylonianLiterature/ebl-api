@@ -1,10 +1,12 @@
 from ebl.transliteration.domain.atf import Atf
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.sign import (
     Sign,
     SignListRecord,
     SignName,
     Value,
     Logogram,
+    Fossey,
 )
 
 
@@ -18,20 +20,64 @@ def test_logogram():
     assert logogram.schramm_logogramme == "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
 
 
+def test_fossey():
+    fossey = Fossey(
+        405,
+        25728,
+        "Mai: MDP, VI, 11.I, 11",
+        "Paulus AOAT 50, 981",
+        "NABU 1997/1",
+        "P123456",
+        MuseumNumber("K", "4562", ""),
+        "dcclt",
+        "Das Zeichen ist eigentlich ZA₇",
+        "Marduk-apla-iddina I, 1171-1159 BC",
+        "me-luḫ-ḫa",
+        "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
+    )
+    assert fossey.page == 405
+    assert fossey.number == 25728
+    assert fossey.reference == "Mai: MDP, VI, 11.I, 11"
+    assert fossey.newEdition == "Paulus AOAT 50, 981"
+    assert fossey.secondaryLiterature == "NABU 1997/1"
+    assert fossey.cdliNumber == "P123456"
+    assert fossey.museumNumber == ("K", "4562", "")
+    assert fossey.externalProject == "dcclt"
+    assert fossey.notes == "Das Zeichen ist eigentlich ZA₇"
+    assert fossey.date == "Marduk-apla-iddina I, 1171-1159 BC"
+    assert fossey.transliteration == "me-luḫ-ḫa"
+    assert (
+        fossey.sign == "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2"
+    )
+
+
 def test_sign():
     name = SignName("KUR")
     lists = (SignListRecord("FOO", "123"),)
     values = (Value("kur", 8), Value("ruk"))
-    logogram = (
-        Logogram(
-            "AŠ-IKU", Atf("AŠ-IKU"), ["ikû I"], "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
-        ),
+    logogram = Logogram(
+        "AŠ-IKU", Atf("AŠ-IKU"), ["ikû I"], "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
+    )
+    fossey = Fossey(
+        405,
+        25728,
+        "Mai: MDP, VI, 11.I, 11",
+        "Paulus AOAT 50, 981",
+        "NABU 1997/1",
+        "P123456",
+        MuseumNumber("K", "4562", ""),
+        "dcclt",
+        "Das Zeichen ist eigentlich ZA₇",
+        "Marduk-apla-iddina I, 1171-1159 BC",
+        "me-luḫ-ḫa",
+        "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
     )
     sign = Sign(
         name,
         lists=lists,
         values=values,
         logograms=logogram,
+        fossey=fossey,
         mes_zl="test_mesZl",
         labasi="test_LaBaSi",
     )
@@ -40,6 +86,7 @@ def test_sign():
     assert sign.lists == lists
     assert sign.values == values
     assert sign.logograms == logogram
+    assert sign.fossey == fossey
     assert sign.mes_zl == "test_mesZl"
     assert sign.labasi == "test_LaBaSi"
 

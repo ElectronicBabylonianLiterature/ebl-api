@@ -124,6 +124,22 @@ def mongo_sign_si_2():
                 "ME 43 CD 126b ZL 290",
             },
         ],
+        "fossey": [
+            {
+                "page": 405,
+                "number": 25728,
+                "reference": "Mai: MDP, VI, 11.I, 11",
+                "newEdition": "Paulus AOAT 50, 981",
+                "secondaryLiterature": "NABU 1997/1",
+                "cdliNumber": "P123456",
+                "museumNumber": {"prefix": "K", "number": "4562", "suffix": ""},
+                "externalProject": "dcclt",
+                "notes": "Das Zeichen ist eigentlich ZA₇",
+                "date": "Marduk-apla-iddina I, 1171-1159 BC",
+                "transliteration": "me-luḫ-ḫa",
+                "sign": "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
+            }
+        ],
     }
 
 

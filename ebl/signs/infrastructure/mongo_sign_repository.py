@@ -13,7 +13,10 @@ from ebl.transliteration.domain.sign import (
     SignName,
     Value,
     Logogram,
+    Fossey,
 )
+
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 COLLECTION = "signs"
 
@@ -52,11 +55,32 @@ class LogogramSchema(Schema):
         return Logogram(**data)
 
 
+class FosseySchema(Schema):
+    page = fields.Integer(required=True)
+    number = fields.Integer(required=True)
+    reference = fields.String(required=True)
+    newEdition = fields.String(required=True)
+    secondaryLiterature = fields.String(required=True)
+    museumNumber = fields.Nested(MuseumNumberSchema, many=True, required=True)
+    cdliNumber = fields.String(required=True)
+    externalProject = fields.String(required=True)
+    notes = fields.String(required=True)
+    date = fields.String(required=True)
+    transliteration = fields.String(required=True)
+    sign = fields.String(required=True)
+
+    @post_load
+    def make_fossey(self, data, **kwargs) -> Fossey:
+        data["museumNumber"] = tuple(data["museumNumber"])
+        return Fossey(**data)
+
+
 class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
+    fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
     unicode = fields.List(fields.Int(), load_default=tuple())
@@ -144,6 +168,7 @@ class MongoSignRepository(SignRepository):
                         "mesZl": {"$first": "$mesZl"},
                         "LaBaSi": {"$first": "$LaBaSi"},
                         "Logograms": {"$push": "$Logograms"},
+                        "Fossey": {"$push": "$Fossey"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }
