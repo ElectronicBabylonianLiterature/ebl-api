@@ -16,7 +16,7 @@ def test_signs_get(client, sign_repository):
 
 
 def test_signs_not_found(client):
-    result = client.simulate_get(f'/words/not found')
+    result = client.simulate_get('/words/not found')
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
