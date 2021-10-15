@@ -3,6 +3,7 @@ from typing import NewType, Optional, Sequence
 import attr
 
 from ebl.transliteration.domain.atf import Atf
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 SignName = NewType("SignName", str)
 
@@ -28,11 +29,28 @@ class Logogram:
 
 
 @attr.s(frozen=True, auto_attribs=True)
+class Fossey:
+    page: int = 0
+    number: int = 0
+    reference: str = ""
+    newEdition: str = ""
+    secondaryLiterature: str = ""
+    museumNumber: Sequence[MuseumNumber] = tuple()
+    cdliNumber: str = ""
+    externalProject: str = ""
+    notes: str = ""
+    date: str = ""
+    transliteration: str = ""
+    sign: str = ""
+
+
+@attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
     lists: Sequence[SignListRecord] = tuple()
     values: Sequence[Value] = tuple()
     mes_zl: str = ""
+    labasi: str = ""
     logograms: Sequence[Logogram] = tuple()
     unicode: Sequence[int] = tuple()
 

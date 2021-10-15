@@ -1,12 +1,14 @@
 from ebl.signs.infrastructure.mongo_sign_repository import (
     SignSchema,
     LogogramSchema,
+    FosseySchema,
     SignDtoSchema,
 )
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.sign import (
     Sign,
     Logogram,
+    Fossey,
     Value,
     SignName,
     SignListRecord,
@@ -28,6 +30,40 @@ def test_logogram_schema():
     assert LogogramSchema().dump(logogram) == data
 
 
+def test_fossey_schema():
+    data = {
+        "page": 405,
+        "number": 25728,
+        "reference": "Mai: MDP, VI, 11.I, 11",
+        "newEdition": "Paulus AOAT 50, 981",
+        "secondaryLiterature": "NABU 1997/1",
+        "cdliNumber": "P123456",
+        "museumNumber": {"prefix": "K", "number": "4562", "suffix": ""},
+        "externalProject": "dcclt",
+        "notes": "Das Zeichen ist eigentlich ZA₇",
+        "date": "Marduk-apla-iddina I, 1171-1159 BC",
+        "transliteration": "me-luḫ-ḫa",
+        "sign": "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
+    }
+    fossey = Fossey(
+        405,
+        25728,
+        "Mai: MDP, VI, 11.I, 11",
+        "Paulus AOAT 50, 981",
+        "NABU 1997/1",
+        "P123456",
+        ("K", "4562", ""),
+        "dcclt",
+        "Das Zeichen ist eigentlich ZA₇",
+        "Marduk-apla-iddina I, 1171-1159 BC",
+        "me-luḫ-ḫa",
+        "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
+    )
+
+    assert FosseySchema().load(data) == fossey
+    assert FosseySchema().dump(fossey) == data
+
+
 def test_sign_schema():
     data = {
         "_id": "KUR",
@@ -37,6 +73,7 @@ def test_sign_schema():
         "mesZl": "",
         "LaBaSi": "",
         "logograms": [],
+        "fossey": [],
     }
     sign = Sign(
         SignName("KUR"),
@@ -61,5 +98,6 @@ def test_sign_dto_schema():
         "LaBaSi": "",
         "unicode": [],
         "logograms": [],
+        "fossey": [],
     }
     assert SignDtoSchema().dump(sign) == expected
