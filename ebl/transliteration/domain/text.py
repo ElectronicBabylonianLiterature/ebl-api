@@ -102,7 +102,9 @@ class Text:
         return Atf("\n".join(line.atf for line in self.lines))
 
     @property
-    def labels(self,) -> Sequence[LineLabel]:
+    def labels(
+        self,
+    ) -> Sequence[LineLabel]:
         current: LineLabel = LineLabel(None, None, None, None)
         labels: List[LineLabel] = []
 

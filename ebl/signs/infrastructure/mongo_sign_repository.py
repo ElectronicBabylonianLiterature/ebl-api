@@ -90,6 +90,7 @@ class SignSchema(Schema):
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])
         data["logograms"] = tuple(data["logograms"])
+        data["fossey"] = tuple(data["fossey"])
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
 

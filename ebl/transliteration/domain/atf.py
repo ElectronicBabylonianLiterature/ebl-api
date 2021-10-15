@@ -15,10 +15,10 @@ DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 @unique
 class Surface(Enum):
     """
-See "Surface" in
-http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
-and "Surfaces" in
-http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
+    See "Surface" in
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html#d2e21408
+    and "Surfaces" in
+    http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
     """
 
     OBVERSE = ("obverse", "o")
@@ -46,7 +46,7 @@ http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/ind
 
 @unique
 class Status(Enum):
-    """ See "Status" in
+    """See "Status" in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html
     """
 
@@ -72,7 +72,7 @@ class DollarStatus(Enum):
 
 @unique
 class CommentaryProtocol(Enum):
-    """ See
+    """See
     http://oracc.museum.upenn.edu/doc/help/editinginatf/commentary/index.html
     """
 
@@ -84,7 +84,7 @@ class CommentaryProtocol(Enum):
 
 @unique
 class Flag(Enum):
-    """ See "Metadata" in
+    """See "Metadata" in
     http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html
     """
 
