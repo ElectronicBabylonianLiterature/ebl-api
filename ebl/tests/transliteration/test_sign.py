@@ -38,11 +38,11 @@ def test_fossey():
     assert fossey.page == 405
     assert fossey.number == 25728
     assert fossey.reference == "Mai: MDP, VI, 11.I, 11"
-    assert fossey.newEdition == "Paulus AOAT 50, 981"
-    assert fossey.secondaryLiterature == "NABU 1997/1"
-    assert fossey.cdliNumber == "P123456"
-    assert fossey.museumNumber == ("K", "4562", "")
-    assert fossey.externalProject == "dcclt"
+    assert fossey.new_edition == "Paulus AOAT 50, 981"
+    assert fossey.secondary_literature == "NABU 1997/1"
+    assert fossey.cdli_number == "P123456"
+    assert fossey.museum_number == ("K", "4562", "")
+    assert fossey.external_project == "dcclt"
     assert fossey.notes == "Das Zeichen ist eigentlich ZA₇"
     assert fossey.date == "Marduk-apla-iddina I, 1171-1159 BC"
     assert fossey.transliteration == "me-luḫ-ḫa"

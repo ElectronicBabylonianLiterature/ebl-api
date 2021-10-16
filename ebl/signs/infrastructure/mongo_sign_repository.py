@@ -59,11 +59,11 @@ class FosseySchema(Schema):
     page = fields.Integer(required=True)
     number = fields.Integer(required=True)
     reference = fields.String(required=True)
-    newEdition = fields.String(required=True)
-    secondaryLiterature = fields.String(required=True)
-    museumNumber = fields.Nested(MuseumNumberSchema, many=True, required=True)
-    cdliNumber = fields.String(required=True)
-    externalProject = fields.String(required=True)
+    new_edition = fields.String(required=True)
+    secondary_literature = fields.String(required=True)
+    museum_number = fields.Nested(MuseumNumberSchema, many=True, required=True)
+    cdli_number = fields.String(required=True)
+    external_project = fields.String(required=True)
     notes = fields.String(required=True)
     date = fields.String(required=True)
     transliteration = fields.String(required=True)
@@ -71,7 +71,7 @@ class FosseySchema(Schema):
 
     @post_load
     def make_fossey(self, data, **kwargs) -> Fossey:
-        data["museumNumber"] = tuple(data["museumNumber"])
+        data["museum_number"] = tuple(data["museum_number"])
         return Fossey(**data)
 
 

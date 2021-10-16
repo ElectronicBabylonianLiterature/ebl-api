@@ -33,11 +33,11 @@ class Fossey:
     page: int = 0
     number: int = 0
     reference: str = ""
-    newEdition: str = ""
-    secondaryLiterature: str = ""
-    museumNumber: Sequence[MuseumNumber] = tuple()
-    cdliNumber: str = ""
-    externalProject: str = ""
+    new_edition: str = ""
+    secondary_literature: str = ""
+    museum_number: Sequence[MuseumNumber] = tuple()
+    cdli_number: str = ""
+    external_project: str = ""
     notes: str = ""
     date: str = ""
     transliteration: str = ""
