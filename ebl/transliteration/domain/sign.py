@@ -52,6 +52,7 @@ class Sign:
     mes_zl: str = ""
     labasi: str = ""
     logograms: Sequence[Logogram] = tuple()
+    fossey: Sequence[Fossey] = tuple()
     unicode: Sequence[int] = tuple()
 
     @property
