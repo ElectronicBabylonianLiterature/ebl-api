@@ -61,7 +61,9 @@ class FosseySchema(Schema):
     reference = fields.String(required=True)
     new_edition = fields.String(required=True, data_key="newEdition")
     secondary_literature = fields.String(required=True, data_key="secondaryLiterature")
-    museum_number = fields.Nested(MuseumNumberSchema, many=True, required=True, data_key="museumNumber")
+    museum_number = fields.Nested(
+        MuseumNumberSchema, many=True, required=True, data_key="museumNumber"
+    )
     cdli_number = fields.String(required=True, data_key="cdliNumber")
     external_project = fields.String(required=True, data_key="externalProject")
     notes = fields.String(required=True)
