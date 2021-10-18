@@ -4,6 +4,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Annotations,
     BoundingBoxPrediction,
+    AnnotationValueType,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -15,9 +16,10 @@ GEOMETRY = Geometry(X, Y, WIDTH, HEIGHT)
 
 PATH = [2, 3]
 VALUE = "kur"
+TYPE = AnnotationValueType.READING
 ID = "1234"
 SIGN_NAME = "KUR"
-DATA = AnnotationData(ID, VALUE, PATH, SIGN_NAME)
+DATA = AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME)
 
 ANNOTATION = Annotation(GEOMETRY, DATA)
 

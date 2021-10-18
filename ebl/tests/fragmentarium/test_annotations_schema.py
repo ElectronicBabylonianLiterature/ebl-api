@@ -4,6 +4,7 @@ from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,
     Annotations,
+    AnnotationValueType,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -14,10 +15,11 @@ X = 0.04
 
 PATH = [3, 4, 6]
 VALUE = "kur"
+TYPE = AnnotationValueType.READING
 ID = "abc123"
 SIGN_NAME = "KUR"
 ANNOTATION = Annotation(
-    Geometry(X, Y, WIDTH, HEIGHT), AnnotationData(ID, VALUE, PATH, SIGN_NAME)
+    Geometry(X, Y, WIDTH, HEIGHT), AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME)
 )
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
@@ -28,7 +30,13 @@ SERIALIZED = {
     "annotations": [
         {
             "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
-            "data": {"id": ID, "value": VALUE, "signName": SIGN_NAME, "path": PATH},
+            "data": {
+                "id": ID,
+                "value": VALUE,
+                "type": "Reading",
+                "signName": SIGN_NAME,
+                "path": PATH,
+            },
         }
     ],
 }

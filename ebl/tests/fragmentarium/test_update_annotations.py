@@ -1,5 +1,6 @@
 import attr
 
+from ebl.fragmentarium.domain.annotation import AnnotationValueType
 from ebl.fragmentarium.update_annotations import parse_value, update_annotations
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
@@ -36,8 +37,12 @@ def test_update_annotations(context, signs, when):
     when(annotations_repository).retrieve_all().thenReturn([annotation])
     when(sign_repository).search(...).thenReturn(sign)
 
-    expected_annotation_data_1 = attr.evolve(annotation_data[0], sign_name=sign.name)
-    expected_annotation_data_2 = attr.evolve(annotation_data[1], sign_name=sign.name)
+    expected_annotation_data_1 = attr.evolve(
+        annotation_data[0], sign_name=sign.name, type=AnnotationValueType.READING
+    )
+    expected_annotation_data_2 = attr.evolve(
+        annotation_data[1], sign_name=sign.name, type=AnnotationValueType.READING
+    )
     expected_annotation_1 = attr.evolve(annotation_1, data=expected_annotation_data_1)
     expected_annotation_2 = attr.evolve(annotation_2, data=expected_annotation_data_2)
     expected = attr.evolve(
@@ -49,4 +54,5 @@ def test_update_annotations(context, signs, when):
     annotation_with_sign = annotations_repository.query_by_museum_number(
         annotation.fragment_number
     )
-    assert expected == annotation_with_sign
+
+    assert annotation_with_sign == expected
