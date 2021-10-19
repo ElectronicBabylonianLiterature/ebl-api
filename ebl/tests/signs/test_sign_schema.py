@@ -16,6 +16,7 @@ from ebl.transliteration.domain.sign import (
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
+
 def test_logogram_schema():
     data = {
         "logogram": "AŠ-IKU",
