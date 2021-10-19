@@ -33,6 +33,14 @@ The following are needed to run application:
 * [Auth0](https://auth0.com)
 * [Sentry](https://sentry.io)
 
+Depending on your system you might need to configure [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory). 
+E.g. for Ubuntu add the following environment variables:
+
+```dotenv
+PYMONGOIM__MONGO_VERSION=4.4
+PYMONGOIM__OPERATING_SYSTEM=ubuntu
+```
+
 ### Gitpod
 
 The project comes with a [Gitpod](https://www.gitpod.io) configuration including
