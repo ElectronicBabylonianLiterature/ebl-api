@@ -28,7 +28,7 @@ def test_fossey():
         "Paulus AOAT 50, 981",
         "NABU 1997/1",
         "P123456",
-        MuseumNumber("K", "4562", ""),
+        MuseumNumber("K", "4562"),
         "dcclt",
         "Das Zeichen ist eigentlich ZA₇",
         "Marduk-apla-iddina I, 1171-1159 BC",
@@ -41,7 +41,7 @@ def test_fossey():
     assert fossey.new_edition == "Paulus AOAT 50, 981"
     assert fossey.secondary_literature == "NABU 1997/1"
     assert fossey.cdli_number == "P123456"
-    assert fossey.museum_number == ("K", "4562", "")
+    assert fossey.museum_number == MuseumNumber("K", "4562")
     assert fossey.external_project == "dcclt"
     assert fossey.notes == "Das Zeichen ist eigentlich ZA₇"
     assert fossey.date == "Marduk-apla-iddina I, 1171-1159 BC"
@@ -65,7 +65,7 @@ def test_sign():
         "Paulus AOAT 50, 981",
         "NABU 1997/1",
         "P123456",
-        MuseumNumber("K", "4562", ""),
+        MuseumNumber("K", "4562"),
         "dcclt",
         "Das Zeichen ist eigentlich ZA₇",
         "Marduk-apla-iddina I, 1171-1159 BC",

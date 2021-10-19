@@ -13,7 +13,8 @@ from ebl.transliteration.domain.sign import (
     SignName,
     SignListRecord,
 )
-
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 def test_logogram_schema():
     data = {
@@ -38,7 +39,7 @@ def test_fossey_schema():
         "newEdition": "Paulus AOAT 50, 981",
         "secondaryLiterature": "NABU 1997/1",
         "cdliNumber": "P123456",
-        "museumNumber": {"prefix": "K", "number": "4562", "suffix": ""},
+        "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.4562")),
         "externalProject": "dcclt",
         "notes": "Das Zeichen ist eigentlich ZA₇",
         "date": "Marduk-apla-iddina I, 1171-1159 BC",
@@ -52,7 +53,7 @@ def test_fossey_schema():
         "Paulus AOAT 50, 981",
         "NABU 1997/1",
         "P123456",
-        ("K", "4562", ""),
+        MuseumNumber.of("K.4562"),
         "dcclt",
         "Das Zeichen ist eigentlich ZA₇",
         "Marduk-apla-iddina I, 1171-1159 BC",

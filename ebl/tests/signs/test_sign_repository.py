@@ -4,6 +4,9 @@ from marshmallow import EXCLUDE
 from ebl.errors import NotFoundError
 from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
 
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+
 COLLECTION = "signs"
 
 
@@ -132,7 +135,7 @@ def mongo_sign_si_2():
                 "newEdition": "Paulus AOAT 50, 981",
                 "secondaryLiterature": "NABU 1997/1",
                 "cdliNumber": "P123456",
-                "museumNumber": {"prefix": "K", "number": "4562", "suffix": ""},
+                "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.4562")),
                 "externalProject": "dcclt",
                 "notes": "Das Zeichen ist eigentlich ZA₇",
                 "date": "Marduk-apla-iddina I, 1171-1159 BC",

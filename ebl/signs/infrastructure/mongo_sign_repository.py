@@ -62,7 +62,7 @@ class FosseySchema(Schema):
     new_edition = fields.String(required=True, data_key="newEdition")
     secondary_literature = fields.String(required=True, data_key="secondaryLiterature")
     museum_number = fields.Nested(
-        MuseumNumberSchema, many=True, required=True, data_key="museumNumber"
+        MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
     cdli_number = fields.String(required=True, data_key="cdliNumber")
     external_project = fields.String(required=True, data_key="externalProject")
@@ -72,8 +72,7 @@ class FosseySchema(Schema):
     sign = fields.String(required=True)
 
     @post_load
-    def make_fossey(self, data, **kwargs) -> Fossey:
-        data["museum_number"] = tuple(data["museum_number"])
+    def make_fossey(self, data, **kwargs):
         return Fossey(**data)
 
 

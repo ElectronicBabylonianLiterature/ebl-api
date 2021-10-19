@@ -30,6 +30,7 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
@@ -44,6 +45,7 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
@@ -58,6 +60,7 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
@@ -72,6 +75,7 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
