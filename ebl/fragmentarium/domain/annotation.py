@@ -24,7 +24,6 @@ class AnnotationValueType(Enum):
     RULINGDOLLARLINE = "RulingDollarLine"
     BLANK = "Blank"
     DISABLED = "Disabled"
-    BROKEN = "BrokenAway"
     PREDICTED = "Predicted"
 
 
