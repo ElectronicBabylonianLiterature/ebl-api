@@ -14,3 +14,5 @@ RUN python -m ensurepip
 RUN python -m pip install --upgrade pip pipenv
 
 ENV NODE_OPTIONS=--experimental-worker
+ENV PYMONGOIM__MONGO_VERSION=4.4
+ENV PYMONGOIM__OPERATING_SYSTEM=ubuntu
