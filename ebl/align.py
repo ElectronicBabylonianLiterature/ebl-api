@@ -32,6 +32,7 @@ sys.setrecursionlimit(50000)
 
 
 local = False
+fastBacktrace = True
 
 context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
@@ -113,7 +114,7 @@ def align(
         aligner = (
             LocalSequenceAligner(scoring)
             if local
-            else GlobalSequenceAligner(scoring)
+            else GlobalSequenceAligner(scoring, fastBacktrace)
         )
         score, encodeds = aligner.align(aEncoded, bEncoded, backtrace=True)
 
@@ -170,7 +171,7 @@ def align(
     ]
     c = Counter(uncurated_substitutions)
 
-    if verbose:
+    if verbose and len(substitutions) > 0 :
         print(80 * "=")
         print("Total pairs: ", len(substitutions))
         print("Total substitutions: ", len(pure_substitutions))

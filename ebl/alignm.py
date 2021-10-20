@@ -37,7 +37,6 @@ def align_chapter_manuscripts(chapter):
         if not re.fullmatch(r"[X\\n\s]*", string)
     ]
 
-
     pairs = itertools.combinations(sequences, 2)
     c = align(pairs, v, not all)
 
