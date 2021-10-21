@@ -31,7 +31,7 @@ def update_annotation_annotation(
         data=attr.evolve(
             annotation_annotation.data,
             sign_name=sign.name,
-            type=AnnotationValueType.READING,
+            type=AnnotationValueType.HASSIGN,
         ),
     )
 

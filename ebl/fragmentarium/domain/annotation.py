@@ -16,9 +16,7 @@ class Geometry:
 
 
 class AnnotationValueType(Enum):
-    READING = "Reading"
-    LOGOGRAM = "Logogram"
-    COMPOUNDGRAPHEME = "CompoundGrapheme"
+    HASSIGN = "HasSign"
     NUMBER = "Number"
     SURFACEATLINE = "SurfaceAtLine"
     RULINGDOLLARLINE = "RulingDollarLine"
