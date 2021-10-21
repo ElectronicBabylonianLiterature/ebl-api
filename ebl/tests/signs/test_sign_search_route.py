@@ -16,8 +16,7 @@ def test_signs_get(client, sign_repository):
 
 
 def test_signs_not_found(client):
-    unique_lemma = "not found"
-    result = client.simulate_get(f"/words/{unique_lemma}")
+    result = client.simulate_get("/words/not found")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
@@ -31,7 +30,9 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
+                    "LaBaSi": "",
                     "name": "P₂",
                     "unicode": [],
                     "values": [{"subIndex": 1, "value": ":"}],
@@ -44,7 +45,9 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
+                    "LaBaSi": "",
                     "name": "P₂",
                     "unicode": [],
                     "values": [{"subIndex": 1, "value": ":"}],
@@ -57,7 +60,9 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
+                    "LaBaSi": "",
                     "name": "P₂",
                     "unicode": [],
                     "values": [{"subIndex": 1, "value": ":"}],
@@ -70,7 +75,9 @@ def test_signs_not_found(client):
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
                     "logograms": [],
+                    "fossey": [],
                     "mesZl": "",
+                    "LaBaSi": "",
                     "name": "P₂",
                     "unicode": [],
                     "values": [{"subIndex": 1, "value": ":"}],

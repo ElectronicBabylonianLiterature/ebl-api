@@ -4,6 +4,9 @@ from marshmallow import EXCLUDE
 from ebl.errors import NotFoundError
 from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
 
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+
 COLLECTION = "signs"
 
 
@@ -107,6 +110,7 @@ def mongo_sign_si_2():
         ],
         "forms": [],
         "mesZl": """<div align="center">1	**AŠ**	𒀸</div>""",
+        "LaBaSi": "12",
         "logograms": [
             {
                 "logogram": "AŠ-IKU",
@@ -122,6 +126,22 @@ def mongo_sign_si_2():
                 "schrammLogogramme": "<sup>mul</sup>AŠ-IKU; *ikû* (Sternbild Pegasus); "
                 "ME 43 CD 126b ZL 290",
             },
+        ],
+        "fossey": [
+            {
+                "page": 405,
+                "number": 25728,
+                "reference": "Mai: MDP, VI, 11.I, 11",
+                "newEdition": "Paulus AOAT 50, 981",
+                "secondaryLiterature": "NABU 1997/1",
+                "cdliNumber": "P123456",
+                "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.4562")),
+                "externalProject": "dcclt",
+                "notes": "Das Zeichen ist eigentlich ZA₇",
+                "date": "Marduk-apla-iddina I, 1171-1159 BC",
+                "transliteration": "me-luḫ-ḫa",
+                "sign": "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
+            }
         ],
     }
 

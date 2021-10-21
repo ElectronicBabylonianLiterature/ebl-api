@@ -13,7 +13,10 @@ from ebl.transliteration.domain.sign import (
     SignName,
     Value,
     Logogram,
+    Fossey,
 )
+
+from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 
 COLLECTION = "signs"
 
@@ -52,12 +55,35 @@ class LogogramSchema(Schema):
         return Logogram(**data)
 
 
+class FosseySchema(Schema):
+    page = fields.Integer(required=True)
+    number = fields.Integer(required=True)
+    reference = fields.String(required=True)
+    new_edition = fields.String(required=True, data_key="newEdition")
+    secondary_literature = fields.String(required=True, data_key="secondaryLiterature")
+    museum_number = fields.Nested(
+        MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
+    )
+    cdli_number = fields.String(required=True, data_key="cdliNumber")
+    external_project = fields.String(required=True, data_key="externalProject")
+    notes = fields.String(required=True)
+    date = fields.String(required=True)
+    transliteration = fields.String(required=True)
+    sign = fields.String(required=True)
+
+    @post_load
+    def make_fossey(self, data, **kwargs):
+        return Fossey(**data)
+
+
 class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
     logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
+    fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
+    labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
     unicode = fields.List(fields.Int(), load_default=tuple())
 
     @post_load
@@ -65,6 +91,7 @@ class SignSchema(Schema):
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])
         data["logograms"] = tuple(data["logograms"])
+        data["fossey"] = tuple(data["fossey"])
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
 
@@ -141,7 +168,9 @@ class MongoSignRepository(SignRepository):
                         "lists": {"$first": "$lists"},
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
+                        "LaBaSi": {"$first": "$LaBaSi"},
                         "Logograms": {"$push": "$Logograms"},
+                        "Fossey": {"$push": "$Fossey"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }
