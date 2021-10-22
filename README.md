@@ -218,6 +218,20 @@ MONGOEXPRESS_LOGIN=<Mongo Express login username>
 MONGOEXPRESS_PASSWORD=<Mongo Express login password>
 ```
 
+Please specify [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api) Url.
+You can leave it empty:
+
+```dotenv
+EBL_AI_API=""
+```
+
+or specify the url.
+
+```dotenv
+EBL_AI_API=http://localhost:8001/
+```
+
+
 ### Locally
 
 ```shell script
