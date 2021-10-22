@@ -36,6 +36,7 @@ def test_fossey_schema():
     data = {
         "page": 405,
         "number": 25728,
+        "suffix": "B",
         "reference": "Mai: MDP, VI, 11.I, 11",
         "newEdition": "Paulus AOAT 50, 981",
         "secondaryLiterature": "NABU 1997/1",
@@ -50,6 +51,7 @@ def test_fossey_schema():
     fossey = Fossey(
         405,
         25728,
+        "B",
         "Mai: MDP, VI, 11.I, 11",
         "Paulus AOAT 50, 981",
         "NABU 1997/1",
