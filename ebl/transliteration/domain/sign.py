@@ -36,7 +36,7 @@ class Fossey:
     new_edition: str = ""
     secondary_literature: str = ""
     cdli_number: str = ""
-    museum_number: Sequence[MuseumNumber] = tuple()
+    museum_number: Optional[MuseumNumber] = None
     external_project: str = ""
     notes: str = ""
     date: str = ""
