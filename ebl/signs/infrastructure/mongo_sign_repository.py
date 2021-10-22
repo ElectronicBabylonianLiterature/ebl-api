@@ -58,6 +58,7 @@ class LogogramSchema(Schema):
 class FosseySchema(Schema):
     page = fields.Integer(required=True)
     number = fields.Integer(required=True)
+    suffix = fields.String(required=True)
     reference = fields.String(required=True)
     new_edition = fields.String(required=True, data_key="newEdition")
     secondary_literature = fields.String(required=True, data_key="secondaryLiterature")

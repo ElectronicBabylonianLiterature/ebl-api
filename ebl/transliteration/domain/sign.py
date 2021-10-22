@@ -32,6 +32,7 @@ class Logogram:
 class Fossey:
     page: int = 0
     number: int = 0
+    suffix: str = ""
     reference: str = ""
     new_edition: str = ""
     secondary_literature: str = ""
