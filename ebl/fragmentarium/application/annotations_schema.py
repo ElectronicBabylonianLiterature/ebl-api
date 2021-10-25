@@ -5,8 +5,10 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationData,
     Annotation,
     Annotations,
+    AnnotationValueType,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.schemas import ValueEnum
 
 
 class GeometrySchema(Schema):
@@ -22,6 +24,7 @@ class GeometrySchema(Schema):
 
 class AnnotationDataSchema(Schema):
     id = fields.String(required=True)
+    type = ValueEnum(AnnotationValueType, load_default=AnnotationValueType.HASSIGN)
     sign_name = fields.String(load_default="", data_key="signName")
     value = fields.String(required=True)
     path = fields.List(fields.Int, required=True)

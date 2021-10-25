@@ -5,6 +5,7 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationData,
     Annotations,
     Geometry,
+    AnnotationValueType,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -24,6 +25,7 @@ class AnnotationDataFactory(factory.Factory):
         model = AnnotationData
 
     id = factory.Sequence(lambda n: f"annotation-{n}")
+    type = AnnotationValueType.HASSIGN
     sign_name = factory.Faker("word")
     value = factory.Faker("word")
     path = factory.List(

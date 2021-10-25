@@ -4,7 +4,7 @@ import attr
 
 from ebl.app import create_context
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.domain.annotation import Annotation
+from ebl.fragmentarium.domain.annotation import Annotation, AnnotationValueType
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import NamedSign
@@ -28,7 +28,11 @@ def update_annotation_annotation(
         raise Exception("No sign corresponding to annotation data value")
     return attr.evolve(
         annotation_annotation,
-        data=attr.evolve(annotation_annotation.data, sign_name=sign.name),
+        data=attr.evolve(
+            annotation_annotation.data,
+            sign_name=sign.name,
+            type=AnnotationValueType.HASSIGN,
+        ),
     )
 
 

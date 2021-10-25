@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Sequence
 from uuid import uuid4
 
@@ -14,10 +15,20 @@ class Geometry:
     height: float
 
 
+class AnnotationValueType(Enum):
+    HASSIGN = "HasSign"
+    NUMBER = "Number"
+    SURFACEATLINE = "SurfaceAtLine"
+    RULINGDOLLARLINE = "RulingDollarLine"
+    BLANK = "Blank"
+    PREDICTED = "Predicted"
+
+
 @attr.attrs(auto_attribs=True, frozen=True)
 class AnnotationData:
     id: str
     value: str
+    type: AnnotationValueType
     path: Sequence[int]
     sign_name: str
 
@@ -29,7 +40,7 @@ class Annotation:
 
     @classmethod
     def from_prediction(cls, geometry: Geometry) -> "Annotation":
-        data = AnnotationData(uuid4().hex, "", [], "")
+        data = AnnotationData(uuid4().hex, "", AnnotationValueType.PREDICTED, [], "")
         return cls(geometry, data)
 
 
