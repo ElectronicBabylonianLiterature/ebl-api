@@ -21,7 +21,6 @@ class AnnotationValueType(Enum):
     SURFACEATLINE = "SurfaceAtLine"
     RULINGDOLLARLINE = "RulingDollarLine"
     BLANK = "Blank"
-    DISABLED = "Disabled"
     PREDICTED = "Predicted"
 
 
