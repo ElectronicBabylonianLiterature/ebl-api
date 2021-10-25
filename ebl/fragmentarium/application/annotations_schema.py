@@ -24,7 +24,7 @@ class GeometrySchema(Schema):
 
 class AnnotationDataSchema(Schema):
     id = fields.String(required=True)
-    type = ValueEnum(AnnotationValueType, load_default=AnnotationValueType.READING)
+    type = ValueEnum(AnnotationValueType, load_default=AnnotationValueType.HASSIGN)
     sign_name = fields.String(load_default="", data_key="signName")
     value = fields.String(required=True)
     path = fields.List(fields.Int, required=True)
