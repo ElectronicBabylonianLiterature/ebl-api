@@ -74,19 +74,14 @@ class BoundingBox:
     def from_annotations(
         image_width: int, image_height: int, annotations: Sequence[Annotation]
     ) -> Sequence["BoundingBox"]:
-        return tuple(
-            [
-                BoundingBox.from_relative_coordinates(
+        return tuple(BoundingBox.from_relative_coordinates(
                     annotation.geometry.x,
                     annotation.geometry.y,
                     annotation.geometry.width,
                     annotation.geometry.height,
                     image_width,
                     image_height,
-                )
-                for annotation in annotations
-            ]
-        )
+                ) for annotation in annotations)
 
 
 @attr.s(auto_attribs=True, frozen=True)
