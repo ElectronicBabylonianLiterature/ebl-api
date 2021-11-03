@@ -9,14 +9,14 @@ from ebl.ebl_scoring import print_config
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
-from ebl.align import align, make_sequence, print_counter
+from ebl.align import align, make_sequence, print_counter, NamedSequence
 
 all = True
 i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
 iii3 = ChapterId(TextId(Genre.LITERATURE, 3, 3), Stage.STANDARD_BABYLONIAN, "-")
 iii4 = ChapterId(TextId(Genre.LITERATURE, 3, 4), Stage.STANDARD_BABYLONIAN, "-")
-k17700 = MuseumNumber.of("K.17700")
-k19352 = MuseumNumber.of("K.19352")
+k17700 = MuseumNumber.of("K.17700")  #
+k19352 = MuseumNumber.of("K.19352")  #
 
 test_set = [
     MuseumNumber.of("BM.36681"),  # School
@@ -46,7 +46,7 @@ def align_fragment(fragment, chapter):
     t0 = time.time()
     v = Vocabulary()
 
-    fsequence = (fragment.number, v.encodeSequence(make_sequence(fragment.signs)))
+    fsequence = NamedSequence(fragment.number, v.encodeSequence(make_sequence(fragment.signs)))
 
     sequences = [
         (chapter.manuscripts[index].siglum, v.encodeSequence(make_sequence(string)))
@@ -66,7 +66,7 @@ def align_fragment(fragment, chapter):
 print_config()
 
 c = Counter()
-fragment = context.fragment_repository.query_by_museum_number(k17700)
+fragment = context.fragment_repository.query_by_museum_number(MuseumNumber.of("K.21209"))
 if all:
     t0 = time.time()
     for text in repository.list():

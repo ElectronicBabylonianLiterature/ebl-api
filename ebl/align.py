@@ -1,32 +1,31 @@
-from ebl.corpus.domain.manuscript import Siglum
+import re
+import sys
+from collections import Counter
 from typing import List, Tuple
 
-from alignment.vocabulary import Vocabulary
-from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepository
-from ebl.transliteration.domain.sign import Sign
-from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.app import create_context
-import sys
-import re
-from collections import Counter
-
+import attr
 import pydash
 
+from alignment.sequence import EncodedSequence, Sequence
 from alignment.sequencealigner import (
-    LocalSequenceAligner,
     GlobalSequenceAligner,
+    LocalSequenceAligner,
     SequenceAlignment,
 )
-from alignment.sequence import EncodedSequence, Sequence
+from alignment.vocabulary import Vocabulary
 
+from ebl.app import create_context
 from ebl.ebl_scoring import (
     EblScoring,
-    minScore,
-    minIdentity,
-    minSimilarity,
-    identity_cutoff,
     curated_substitutions,
+    identity_cutoff,
+    minIdentity,
+    minScore,
+    minSimilarity,
 )
+from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepository
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.sign import Sign
 
 sys.setrecursionlimit(50000)
 
@@ -36,6 +35,12 @@ fastBacktrace = True
 
 context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
+
+
+@attr.s(auto_attrib=True)
+class NamedSequence:
+    name: str = attr.ib(converter=str)
+    sequence: EncodedSequence
 
 
 def replace_line_breaks(string: str) -> str:
@@ -98,21 +103,20 @@ def print_counter(c: Counter) -> None:
         )
 
 
-def align_pair(a, b, v):
-    aEncoded = a[1]
-    bEncoded = b[1]
-
+def align_pair(
+    a: NamedSequence, b: NamedSequence, v: Vocabulary
+) -> Tuple[int, List[SequenceAlignment]]:
     scoring = EblScoring(v)
     aligner = (
         LocalSequenceAligner(scoring)
         if local
         else GlobalSequenceAligner(scoring, fastBacktrace)
     )
-    return aligner.align(aEncoded, bEncoded, backtrace=True)
+    return aligner.align(a.sequence, b.sequence, backtrace=True)
 
 
 def align(
-    pairs: List[Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]],
+    pairs: List[Tuple[NamedSequence, NamedSequence]],
     v: Vocabulary,
     verbose: bool,
     key=lambda result: (result[4][0].percentPreservedIdentity(), result[4][0].score),
@@ -123,7 +127,7 @@ def align(
         score, encodeds = align_pair(a, b, v)
 
         if score >= minScore and len(encodeds) > 0:
-            results.append((x, a[0], b[0], score, encodeds))
+            results.append((x, a.name, b.name, score, encodeds))
 
     for result in sorted(results, key=key, reverse=True):
         encodeds = result[4]
@@ -143,7 +147,7 @@ def align(
             key=lambda alignment: (
                 alignment.score,
                 alignment.percentPreservedIdentity(),
-                alignment.percentPreservedSimilarity()
+                alignment.percentPreservedSimilarity(),
             ),
         )
 
@@ -155,8 +159,14 @@ def align(
                 if verbose:
                     print(result)
                     print("Alignment score:", alignment.score)
-                    print("Percent preserved identity:", alignment.percentPreservedIdentity())
-                    print("Percent preserved similarity:", alignment.percentPreservedSimilarity())
+                    print(
+                        "Percent preserved identity:",
+                        alignment.percentPreservedIdentity(),
+                    )
+                    print(
+                        "Percent preserved similarity:",
+                        alignment.percentPreservedSimilarity(),
+                    )
                     print()
 
                 if alignment.percentIdentity() >= identity_cutoff:
@@ -175,7 +185,7 @@ def align(
     ]
     c = Counter(uncurated_substitutions)
 
-    if verbose and len(substitutions) > 0 :
+    if verbose and len(substitutions) > 0:
         print(80 * "=")
         print("Total pairs: ", len(substitutions))
         print("Total substitutions: ", len(pure_substitutions))

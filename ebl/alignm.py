@@ -8,7 +8,7 @@ from alignment.vocabulary import Vocabulary
 from ebl.app import create_context
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
-from ebl.align import align, make_sequence, print_counter
+from ebl.align import align, make_sequence, print_counter, NamedSequence
 
 all = False
 i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
@@ -29,7 +29,7 @@ def align_chapter_manuscripts(chapter):
     v = Vocabulary()
 
     sequences = [
-        (
+        NamedSequence(
             chapter.manuscripts[index].siglum,
             v.encodeSequence(make_sequence(string)),
         )

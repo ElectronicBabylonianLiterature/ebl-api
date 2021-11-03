@@ -7,7 +7,7 @@ from alignment.vocabulary import Vocabulary
 from ebl.app import create_context
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
-from ebl.align import align, make_sequence, print_counter
+from ebl.align import align, make_sequence, print_counter, NamedSequence
 
 all = False
 i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
@@ -19,7 +19,7 @@ repository = context.text_repository
 
 
 def align_chapter_manuscripts(chapter):
-    if(not any(chapter.signs)):        
+    if not any(chapter.signs):
         return Counter()
     else:
         print(f"{chapter.id_}   ".ljust(80, "≡"), end="\n\n", flush=True)
@@ -41,14 +41,13 @@ def align_chapter_manuscripts(chapter):
     v = Vocabulary()
 
     fsequences = [
-        (number, v.encodeSequence(make_sequence(string)))
+        NamedSequence(number, v.encodeSequence(make_sequence(string)))
         for number, string in fragments
     ]
 
     sequences = [
-        (
-            chapter.manuscripts[index].siglum,
-            v.encodeSequence(make_sequence(string)),
+        NamedSequence(
+            chapter.manuscripts[index].siglum, v.encodeSequence(make_sequence(string))
         )
         for index, string in enumerate(chapter.signs)
         if not re.fullmatch(r"[X\\n\s]*", string)
@@ -57,7 +56,7 @@ def align_chapter_manuscripts(chapter):
     pairs = []
     for a in fsequences:
         for b in sequences:
-            pairs.append((a,b))
+            pairs.append((a, b))
 
     c = align(pairs, v, not all)
 
@@ -66,13 +65,16 @@ def align_chapter_manuscripts(chapter):
 
     return c
 
+
 c = Counter()
 if all:
     for text in repository.list():
         for listing in text.chapters:
-            chapter = repository.find_chapter(ChapterId(text.id, listing.stage, listing.name))
+            chapter = repository.find_chapter(
+                ChapterId(text.id, listing.stage, listing.name)
+            )
             c = c + align_chapter_manuscripts(chapter)
-    
+
     print("\n\nSubstitutions", end="\n\n")
     print_counter(c)
 else:
