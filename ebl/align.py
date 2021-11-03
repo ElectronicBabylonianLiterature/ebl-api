@@ -98,6 +98,19 @@ def print_counter(c: Counter) -> None:
         )
 
 
+def align_pair(a, b, v):
+    aEncoded = a[1]
+    bEncoded = b[1]
+
+    scoring = EblScoring(v)
+    aligner = (
+        LocalSequenceAligner(scoring)
+        if local
+        else GlobalSequenceAligner(scoring, fastBacktrace)
+    )
+    return aligner.align(aEncoded, bEncoded, backtrace=True)
+
+
 def align(
     pairs: List[Tuple[Tuple[Siglum, EncodedSequence], Tuple[Siglum, EncodedSequence]]],
     v: Vocabulary,
@@ -107,16 +120,7 @@ def align(
     substitutions = []
     results = []
     for x, (a, b) in enumerate(pairs, start=1):
-        aEncoded = a[1]
-        bEncoded = b[1]
-
-        scoring = EblScoring(v)
-        aligner = (
-            LocalSequenceAligner(scoring)
-            if local
-            else GlobalSequenceAligner(scoring, fastBacktrace)
-        )
-        score, encodeds = aligner.align(aEncoded, bEncoded, backtrace=True)
+        score, encodeds = align_pair(a, b, v)
 
         if score >= minScore and len(encodeds) > 0:
             results.append((x, a[0], b[0], score, encodeds))
