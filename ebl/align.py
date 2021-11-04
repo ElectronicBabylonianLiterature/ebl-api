@@ -1,7 +1,7 @@
 import re
 import sys
 from collections import Counter
-from typing import List, Tuple
+from typing import Callable, List, Tuple, Union
 
 import attr
 import pydash
@@ -37,10 +37,47 @@ context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
 
 
-@attr.s(auto_attrib=True)
+@attr.s(auto_attribs=True)
 class NamedSequence:
     name: str = attr.ib(converter=str)
     sequence: EncodedSequence
+
+
+@attr.s(auto_attribs=True)
+class AlignmentResult:
+    score: int
+    a: NamedSequence
+    b: NamedSequence
+    alignments: List[SequenceAlignment]
+
+    @property
+    def title(self) -> str:
+        return f"{self.a.name}, {self.b.name}"
+
+    @property
+    def include(self) -> bool:
+        return self.score >= minScore and len(self.alignments) > 0
+
+    @property
+    def selected_aligments(self) -> List[SequenceAlignment]:
+        return sorted(
+            (
+                alignment
+                for alignment in self.alignments
+                if not any(
+                    re.fullmatch(r"[X\s#\-]+", row)
+                    for row in str(alignment).split("\n")
+                )
+                and alignment.score >= minScore
+                and alignment.percentPreservedIdentity() >= minIdentity
+                and alignment.percentPreservedSimilarity() >= minSimilarity
+            ),
+            key=lambda alignment: (
+                alignment.score,
+                alignment.percentPreservedIdentity(),
+                alignment.percentPreservedSimilarity(),
+            ),
+        )
 
 
 def replace_line_breaks(string: str) -> str:
@@ -103,61 +140,49 @@ def print_counter(c: Counter) -> None:
         )
 
 
-def align_pair(
-    a: NamedSequence, b: NamedSequence, v: Vocabulary
-) -> Tuple[int, List[SequenceAlignment]]:
+def align_pair(a: NamedSequence, b: NamedSequence, v: Vocabulary) -> AlignmentResult:
     scoring = EblScoring(v)
     aligner = (
         LocalSequenceAligner(scoring)
         if local
         else GlobalSequenceAligner(scoring, fastBacktrace)
     )
-    return aligner.align(a.sequence, b.sequence, backtrace=True)
+    score, alignments = aligner.align(a.sequence, b.sequence, backtrace=True)
+    return AlignmentResult(
+        score, a, b, [v.decodeSequenceAlignment(encoded) for encoded in alignments]
+    )
+
+
+def default_key(result: AlignmentResult) -> Tuple[Union[int, float], ...]:
+    return (result.alignments[0].percentPreservedIdentity(), result.alignments[0].score)
 
 
 def align(
     pairs: List[Tuple[NamedSequence, NamedSequence]],
     v: Vocabulary,
     verbose: bool,
-    key=lambda result: (result[4][0].percentPreservedIdentity(), result[4][0].score),
+    key: Callable[
+        [AlignmentResult], Union[int, float, Tuple[Union[int, float], ...]]
+    ] = default_key,
 ) -> Counter:
     substitutions = []
-    results = []
-    for x, (a, b) in enumerate(pairs, start=1):
-        score, encodeds = align_pair(a, b, v)
+    results: List[AlignmentResult] = []
+    for (a, b) in pairs:
+        result = align_pair(a, b, v)
 
-        if score >= minScore and len(encodeds) > 0:
-            results.append((x, a.name, b.name, score, encodeds))
+        if result.include:
+            results.append(result)
 
     for result in sorted(results, key=key, reverse=True):
-        encodeds = result[4]
-        alignments = [v.decodeSequenceAlignment(encoded) for encoded in encodeds]
-        alignments = sorted(
-            (
-                alignment
-                for alignment in alignments
-                if not any(
-                    re.fullmatch(r"[X\s#\-]+", row)
-                    for row in str(alignment).split("\n")
-                )
-                and alignment.score >= minScore
-                and alignment.percentPreservedIdentity() >= minIdentity
-                and alignment.percentPreservedSimilarity() >= minSimilarity
-            ),
-            key=lambda alignment: (
-                alignment.score,
-                alignment.percentPreservedIdentity(),
-                alignment.percentPreservedSimilarity(),
-            ),
-        )
+        alignments = result.selected_aligments
 
         if alignments:
-            print(f"{result[0]} -- {result[1]} vs {result[2]} ".ljust(80, "-"))
 
             for alignment in alignments:
-                result = str(alignment)
+                visual_alignment = str(alignment)
                 if verbose:
-                    print(result)
+                    print(f"{result.title} ".ljust(80, "-"))
+                    print(visual_alignment)
                     print("Alignment score:", alignment.score)
                     print(
                         "Percent preserved identity:",
@@ -168,9 +193,13 @@ def align(
                         alignment.percentPreservedSimilarity(),
                     )
                     print()
+                else:
+                    print(
+                        f"{result.title}, {alignment.score}, {alignment.percentPreservedIdentity()}, {alignment.percentPreservedSimilarity()}"
+                    )
 
                 if alignment.percentIdentity() >= identity_cutoff:
-                    lines = [re.split(r"\s+", line) for line in result.split("\n")]
+                    lines = [re.split(r"\s+", line) for line in visual_alignment.split("\n")]
                     pairs = pydash.zip_(lines[0], lines[1])
                     pairs = [
                         frozenset(pair)

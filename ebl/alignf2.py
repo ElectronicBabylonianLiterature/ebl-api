@@ -11,6 +11,7 @@ from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
 from ebl.align import align, make_sequence, print_counter, NamedSequence
 
+verbose = False
 all = True
 i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
 iii3 = ChapterId(TextId(Genre.LITERATURE, 3, 3), Stage.STANDARD_BABYLONIAN, "-")
@@ -37,50 +38,74 @@ context = create_context()
 repository = context.text_repository
 
 
-def align_fragment(fragment, chapter):
+def align_fragment_and_chapter(fragment, chapter):
     if not any(chapter.signs):
         return Counter()
-    else:
-        print(f"{chapter.id_}   ".ljust(80, "≡"), end="\n\n", flush=True)
 
     t0 = time.time()
     v = Vocabulary()
 
-    fsequence = NamedSequence(fragment.number, v.encodeSequence(make_sequence(fragment.signs)))
+    fsequence = NamedSequence(
+        fragment.number, v.encodeSequence(make_sequence(fragment.signs))
+    )
 
     sequences = [
-        (chapter.manuscripts[index].siglum, v.encodeSequence(make_sequence(string)))
+        NamedSequence(
+            f"{chapter.id_}, {chapter.manuscripts[index].siglum}{'*' if fragment.number == chapter.manuscripts[index].museum_number else ''}",
+            v.encodeSequence(make_sequence(string)),
+        )
         for index, string in enumerate(chapter.signs)
         if not re.fullmatch(r"[X\\n\s]*", string)
     ]
 
     pairs = [(fsequence, b) for b in sequences]
-    c = align(pairs, v, True, lambda result: result[3])
+    c = align(pairs, v, verbose, lambda result: result.score)
 
     t = time.time()
-    print(f"Time: {(t-t0)/60} min", end="\n\n", flush=True)
+    if verbose:
+        print(f"Time: {(t-t0)/60} min", end="\n\n", flush=True)
 
     return c
 
 
-print_config()
+chapters = [
+    repository.find_chapter(ChapterId(text.id, listing.stage, listing.name))
+    for text in repository.list()
+    for listing in text.chapters
+]
 
-c = Counter()
-fragment = context.fragment_repository.query_by_museum_number(MuseumNumber.of("K.21209"))
-if all:
+
+def align_fragment(number):
     t0 = time.time()
-    for text in repository.list():
-        for listing in text.chapters:
-            chapter = repository.find_chapter(
-                ChapterId(text.id, listing.stage, listing.name)
-            )
-            c = c + align_fragment(fragment, chapter)
+    c = Counter()
+
+    fragment = context.fragment_repository.query_by_museum_number(number)
+
+    for chapter in chapters:
+        c = c + align_fragment_and_chapter(fragment, chapter)
 
     t = time.time()
-    print("\n\n")
-    print(f"Time: {(t-t0)/60} min", flush=True)
-    print("Substitutions", end="\n\n")
-    print_counter(c)
-else:
-    chapter = repository.find_chapter(iii4)
-    align_fragment(fragment, chapter)
+    if verbose:
+        print("\n\n")
+        print(f"Time: {(t-t0)/60} min", flush=True)
+        print("Substitutions", end="\n\n")
+        print_counter(c)
+    else:
+        print()
+
+
+print_config()
+
+
+print()
+print("fragment, chapter, manuscript, score, preserved identity, preserved similarity")
+
+t0 = time.time()
+
+for number in test_set:
+    align_fragment(number)
+
+t = time.time()
+
+print("\n\n")
+print(f"Time: {(t-t0)/60} min", flush=True)

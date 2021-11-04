@@ -56,7 +56,7 @@ class ChapterId:
         )
 
     def __str__(self) -> str:
-        return f"{self.text_id} {self.stage} {self.name}"
+        return f"{self.text_id} {self.stage.abbreviation} {self.name}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
