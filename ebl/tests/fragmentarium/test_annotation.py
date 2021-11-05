@@ -16,7 +16,7 @@ GEOMETRY = Geometry(X, Y, WIDTH, HEIGHT)
 
 PATH = [2, 3]
 VALUE = "kur"
-TYPE = AnnotationValueType.HASSIGN
+TYPE = AnnotationValueType.HAS_SIGN
 ID = "1234"
 SIGN_NAME = "KUR"
 DATA = AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME)

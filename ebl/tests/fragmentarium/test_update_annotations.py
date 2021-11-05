@@ -38,10 +38,10 @@ def test_update_annotations(context, signs, when):
     when(sign_repository).search(...).thenReturn(sign)
 
     expected_annotation_data_1 = attr.evolve(
-        annotation_data[0], sign_name=sign.name, type=AnnotationValueType.HASSIGN
+        annotation_data[0], sign_name=sign.name, type=AnnotationValueType.HAS_SIGN
     )
     expected_annotation_data_2 = attr.evolve(
-        annotation_data[1], sign_name=sign.name, type=AnnotationValueType.HASSIGN
+        annotation_data[1], sign_name=sign.name, type=AnnotationValueType.HAS_SIGN
     )
     expected_annotation_1 = attr.evolve(annotation_1, data=expected_annotation_data_1)
     expected_annotation_2 = attr.evolve(annotation_2, data=expected_annotation_data_2)
