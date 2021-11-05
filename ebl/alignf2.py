@@ -7,19 +7,13 @@ from alignment.vocabulary import Vocabulary
 from ebl.app import create_context
 from ebl.ebl_scoring import print_config
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.genre import Genre
-from ebl.corpus.domain.chapter import ChapterId, TextId, Stage
+from ebl.corpus.domain.chapter import ChapterId
 from ebl.align import align, make_sequence, print_counter, NamedSequence
 
 verbose = False
-all = True
-i2 = ChapterId(TextId(Genre.LITERATURE, 1, 2), Stage.STANDARD_BABYLONIAN, "I")
-iii3 = ChapterId(TextId(Genre.LITERATURE, 3, 3), Stage.STANDARD_BABYLONIAN, "-")
-iii4 = ChapterId(TextId(Genre.LITERATURE, 3, 4), Stage.STANDARD_BABYLONIAN, "-")
-k17700 = MuseumNumber.of("K.17700")  #
-k19352 = MuseumNumber.of("K.19352")  #
-
-test_set = [
+development_set = [
+    MuseumNumber.of("K.17700"),
+    MuseumNumber.of("K.19352"),
     MuseumNumber.of("BM.36681"),  # School
     MuseumNumber.of("BM.36688"),  # School
     MuseumNumber.of("BM.99811"),  # School, matches two texts
@@ -31,6 +25,14 @@ test_set = [
     MuseumNumber.of("K.20637"),  # Fragment
     MuseumNumber.of("K.21209"),  # Fragment
     MuseumNumber.of("Rm.468"),  # Fragment
+]
+
+development_set_not_in_corpus = [
+    MuseumNumber("K", "20074"),
+    MuseumNumber("BM", "110295"),
+    MuseumNumber("BM", "82855"),
+    MuseumNumber("K", "20703"),
+    MuseumNumber("K", "15836"),
 ]
 
 
@@ -91,7 +93,7 @@ def align_fragment(number):
         print("Substitutions", end="\n\n")
         print_counter(c)
     else:
-        print()
+        print("", flush=True)
 
 
 print_config()
@@ -102,7 +104,7 @@ print("fragment, chapter, manuscript, score, preserved identity, preserved simil
 
 t0 = time.time()
 
-for number in test_set:
+for number in development_set_not_in_corpus:
     align_fragment(number)
 
 t = time.time()
