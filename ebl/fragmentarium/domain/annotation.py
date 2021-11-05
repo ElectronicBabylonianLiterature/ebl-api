@@ -22,6 +22,7 @@ class AnnotationValueType(Enum):
     RULINGDOLLARLINE = "RulingDollarLine"
     BLANK = "Blank"
     PREDICTED = "Predicted"
+    PARTIALLY_BROKEN = "PartiallyBroken"
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
