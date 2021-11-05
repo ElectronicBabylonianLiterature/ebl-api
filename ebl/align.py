@@ -195,7 +195,7 @@ def align(
                     print()
                 else:
                     print(
-                        f"{result.title}, {alignment.score}, {alignment.percentPreservedIdentity()}, {alignment.percentPreservedSimilarity()}"
+                        f"{result.title}, {alignment.score}, {round(alignment.percentPreservedIdentity(), 2)}, {round(alignment.percentPreservedSimilarity(), 2)}"
                     )
 
                 if alignment.percentIdentity() >= identity_cutoff:
