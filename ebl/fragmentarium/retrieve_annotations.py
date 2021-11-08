@@ -3,7 +3,8 @@ import os
 import shutil
 from io import BytesIO
 from os.path import join
-from typing import Sequence
+from pathlib import Path
+from typing import Sequence, Union
 
 from PIL import Image
 
@@ -30,29 +31,38 @@ def create_annotations(
         bounding_boxes = BoundingBox.from_annotations(
             image.size[0], image.size[1], single_annotation.annotations
         )
+        signs = [
+            annotations.data.sign_name for annotations in single_annotation.annotations
+        ]
+
+        if len(signs) != len(bounding_boxes):
+            raise ValueError(
+                f"Number of Bounding Boxes doesn't match number of "
+                f"Signs on Annotation: {fragment_number}"
+            )
+
         write_annotations(
-            output_folder_annotations, f"gt_{fragment_number}.txt", bounding_boxes
+            join(output_folder_annotations, f"gt_{fragment_number}.txt"),
+            bounding_boxes,
+            signs,
         )
         print(
             "{:>20}".format(f"{fragment_number}"),
-            "{:>4}".format(f" {counter} of"),
+            "{:>4}".format(f" {counter + 1} of"),
             "{:>4}".format(len(annotation_collection)),
         )
 
 
 def write_annotations(
-    output_folder_annotations: str,
-    file_name: str,
-    bounding_boxes: Sequence[BoundingBox],
+    path: Union[str, Path], bounding_boxes: Sequence[BoundingBox], signs: Sequence[str]
 ) -> None:
-    txt_file = join(output_folder_annotations, file_name)
-    with open(txt_file, "w+") as file:
-        for bounding_box in bounding_boxes:
+    with open(path, "w+") as file:
+        for bounding_box, sign in zip(bounding_boxes, signs):
             rectangle_attributes = [
                 str(int(rectangle_attribute))
                 for rectangle_attribute in bounding_box.to_list()
             ]
-            file.write(",".join(rectangle_attributes) + "\n")
+            file.write(",".join(rectangle_attributes) + f" {sign}" + "\n")
 
 
 def create_directory(path: str) -> None:

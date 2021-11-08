@@ -1,5 +1,6 @@
 from PIL import Image
 from mockito import mock, verify
+
 from ebl.fragmentarium import retrieve_annotations
 from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
 from ebl.tests.factories.annotation import AnnotationsFactory, GeometryFactory
@@ -29,3 +30,14 @@ def test_from_relative_to_absolute_coordinates():
         image_width=shape[0],
         image_height=shape[1],
     ) == (BoundingBox(0, 0, 640, 480))
+
+
+def test_write_annotations(tmp_path):
+    dir = tmp_path / "annotations"
+    dir.mkdir()
+    file_name = dir / "annotation_1.txt"
+    bounding_boxes = [BoundingBox(0.1, 1, 2, 100.543), BoundingBox(10, 11, 12, 13)]
+    retrieve_annotations.write_annotations(
+        file_name, bounding_boxes, ["KUR", "A.GUD×KUR"]
+    )
+    assert file_name.read_text() == "0,1,2,100 KUR\n10,11,12,13 A.GUD×KUR\n"
