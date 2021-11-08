@@ -25,7 +25,10 @@ def update_annotation_annotation(
 ) -> Annotation:
     sign = sign_repository.search(*parse_value(annotation_annotation.data.value))
     if not sign:
-        raise Exception(f"No sign corresponding to reading: '{annotation_annotation.data.value}' with id: '{annotation_annotation.data.id}'")
+        print(
+            f"No sign corresponding to reading: '{annotation_annotation.data.value}' with id: '{annotation_annotation.data.id}'"
+        )
+        return annotation_annotation
     return attr.evolve(
         annotation_annotation,
         data=attr.evolve(
@@ -43,7 +46,21 @@ def update_annotations(
     for counter, annotation in enumerate(annotation_collection):
         new_annotation_annotations = []
         for annotation_annotation in annotation.annotations:
-            if annotation_annotation.data.sign_name:
+            if annotation_annotation.data.value == "blank":
+                new_annotation_annotations.append(
+                    attr.evolve(
+                        annotation_annotation,
+                        data=attr.evolve(
+                            annotation_annotation.data,
+                            sign_name="",
+                            type=AnnotationValueType.BLANK,
+                        ),
+                    )
+                )
+            elif (
+                annotation_annotation.data.sign_name
+                or annotation_annotation.data.type != AnnotationValueType.HAS_SIGN
+            ):
                 new_annotation_annotations.append(annotation_annotation)
             else:
                 new_annotation_annotations.append(
@@ -51,7 +68,7 @@ def update_annotations(
                 )
         new_annotation = attr.evolve(annotation, annotations=new_annotation_annotations)
         annotations_repository.create_or_update(new_annotation)
-        print("{:5}".format(counter), f" of {len(annotation_collection)}")
+        print("{:5}".format(counter + 1), f" of {len(annotation_collection)}")
 
 
 if __name__ == "__main__":
