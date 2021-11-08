@@ -28,6 +28,7 @@ def update_annotation_annotation(
         print(
             f"No sign corresponding to reading: '{annotation_annotation.data.value}' "
             f"with id: '{annotation_annotation.data.id}'"
+            f"with fragmentNumber: '{fragment_number}'"
         )
         return annotation_annotation
     return attr.evolve(
