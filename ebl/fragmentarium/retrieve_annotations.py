@@ -19,13 +19,10 @@ from ebl.fragmentarium.domain.annotation import (
 
 
 def filter_annotation(annotation: Annotation) -> bool:
-    if (
-        annotation.data.type != AnnotationValueType.RULINGDOLLARLINE
-        and annotation.data.type != AnnotationValueType.SURFACEATLINE
-    ):
-        return True
-    else:
-        return False
+    return annotation.data.type not in [
+        AnnotationValueType.RULINGDOLLARLINE,
+        AnnotationValueType.SURFACEATLINE,
+    ]
 
 
 def prepare_annotations(
@@ -37,9 +34,7 @@ def prepare_annotations(
         image_width, image_height, annotations_with_signs
     )
     signs = [
-        annotation.data.sign_name
-        if annotation.data.sign_name
-        else annotation.data.value
+        annotation.data.sign_name or annotation.data.value
         for annotation in annotations_with_signs
     ]
 
