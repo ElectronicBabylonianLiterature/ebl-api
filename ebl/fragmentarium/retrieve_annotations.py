@@ -20,8 +20,8 @@ from ebl.fragmentarium.domain.annotation import (
 
 def filter_annotation(annotation: Annotation) -> bool:
     return annotation.data.type not in [
-        AnnotationValueType.RULINGDOLLARLINE,
-        AnnotationValueType.SURFACEATLINE,
+        AnnotationValueType.RULING_DOLLAR_LINE,
+        AnnotationValueType.SURFACE_AT_LINE,
     ]
 
 
