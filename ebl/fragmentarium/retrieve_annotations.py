@@ -10,20 +10,38 @@ from PIL import Image
 
 from ebl.app import create_context
 from ebl.files.application.file_repository import FileRepository
-from ebl.fragmentarium.domain.annotation import Annotations, BoundingBox
+from ebl.fragmentarium.domain.annotation import (
+    Annotations,
+    BoundingBox,
+    Annotation,
+    AnnotationValueType,
+)
+
+
+def filter_annotation(annotation: Annotation) -> bool:
+    if (
+        annotation.data.type != AnnotationValueType.RULINGDOLLARLINE
+        and annotation.data.type != AnnotationValueType.SURFACEATLINE
+    ):
+        return True
+    else:
+        return False
 
 
 def prepare_annotations(
     annotation: Annotations, image_width: int, image_height: int
 ) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
-    annotations_with_signs = list(
-        filter(lambda annotation_annotation: annotation_annotation.data.sign_name, annotation.annotations)
-    )
+    annotations_with_signs = list(filter(filter_annotation, annotation.annotations))
 
     bounding_boxes = BoundingBox.from_annotations(
         image_width, image_height, annotations_with_signs
     )
-    signs = [annotation.data.sign_name for annotation in annotations_with_signs]
+    signs = [
+        annotation.data.sign_name
+        if annotation.data.sign_name
+        else annotation.data.value
+        for annotation in annotations_with_signs
+    ]
 
     if len(signs) != len(bounding_boxes):
         raise ValueError(
@@ -48,7 +66,9 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bounding_boxes, signs = prepare_annotations(single_annotation, image.size[0], image.size[1])
+        bounding_boxes, signs = prepare_annotations(
+            single_annotation, image.size[0], image.size[1]
+        )
 
         write_annotations(
             join(output_folder_annotations, f"gt_{fragment_number}.txt"),
