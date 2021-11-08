@@ -3,13 +3,47 @@ import os
 import shutil
 from io import BytesIO
 from os.path import join
-from typing import Sequence
+from pathlib import Path
+from typing import Sequence, Union, Tuple
 
 from PIL import Image
 
 from ebl.app import create_context
 from ebl.files.application.file_repository import FileRepository
-from ebl.fragmentarium.domain.annotation import Annotations, BoundingBox
+from ebl.fragmentarium.domain.annotation import (
+    Annotations,
+    BoundingBox,
+    Annotation,
+    AnnotationValueType,
+)
+
+
+def filter_annotation(annotation: Annotation) -> bool:
+    return annotation.data.type not in [
+        AnnotationValueType.RULINGDOLLARLINE,
+        AnnotationValueType.SURFACEATLINE,
+    ]
+
+
+def prepare_annotations(
+    annotation: Annotations, image_width: int, image_height: int
+) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
+    annotations_with_signs = list(filter(filter_annotation, annotation.annotations))
+
+    bounding_boxes = BoundingBox.from_annotations(
+        image_width, image_height, annotations_with_signs
+    )
+    signs = [
+        annotation.data.sign_name or annotation.data.value
+        for annotation in annotations_with_signs
+    ]
+
+    if len(signs) != len(bounding_boxes):
+        raise ValueError(
+            f"Number of Bounding Boxes doesn't match number of "
+            f"Signs on Annotation: {annotation.fragment_number}"
+        )
+    return bounding_boxes, signs
 
 
 def create_annotations(
@@ -27,32 +61,32 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bounding_boxes = BoundingBox.from_annotations(
-            image.size[0], image.size[1], single_annotation.annotations
+        bounding_boxes, signs = prepare_annotations(
+            single_annotation, image.size[0], image.size[1]
         )
+
         write_annotations(
-            output_folder_annotations, f"gt_{fragment_number}.txt", bounding_boxes
+            join(output_folder_annotations, f"gt_{fragment_number}.txt"),
+            bounding_boxes,
+            signs,
         )
         print(
             "{:>20}".format(f"{fragment_number}"),
-            "{:>4}".format(f" {counter} of"),
+            "{:>4}".format(f" {counter + 1} of"),
             "{:>4}".format(len(annotation_collection)),
         )
 
 
 def write_annotations(
-    output_folder_annotations: str,
-    file_name: str,
-    bounding_boxes: Sequence[BoundingBox],
+    path: Union[str, Path], bounding_boxes: Sequence[BoundingBox], signs: Sequence[str]
 ) -> None:
-    txt_file = join(output_folder_annotations, file_name)
-    with open(txt_file, "w+") as file:
-        for bounding_box in bounding_boxes:
+    with open(path, "w+") as file:
+        for bounding_box, sign in zip(bounding_boxes, signs):
             rectangle_attributes = [
                 str(int(rectangle_attribute))
                 for rectangle_attribute in bounding_box.to_list()
             ]
-            file.write(",".join(rectangle_attributes) + "\n")
+            file.write(",".join(rectangle_attributes) + f" {sign}" + "\n")
 
 
 def create_directory(path: str) -> None:
