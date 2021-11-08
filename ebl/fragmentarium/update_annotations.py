@@ -26,7 +26,8 @@ def update_annotation_annotation(
     sign = sign_repository.search(*parse_value(annotation_annotation.data.value))
     if not sign:
         print(
-            f"No sign corresponding to reading: '{annotation_annotation.data.value}' with id: '{annotation_annotation.data.id}'"
+            f"No sign corresponding to reading: '{annotation_annotation.data.value}' "
+            f"with id: '{annotation_annotation.data.id}'"
         )
         return annotation_annotation
     return attr.evolve(
