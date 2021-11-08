@@ -5,6 +5,7 @@ import attr
 from ebl.app import create_context
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.domain.annotation import Annotation, AnnotationValueType
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.lark_parser import parse_word
 from ebl.transliteration.domain.sign_tokens import NamedSign
@@ -21,7 +22,9 @@ def parse_value(value) -> Tuple[str, Optional[int]]:
 
 
 def update_annotation_annotation(
-    sign_repository: SignRepository, annotation_annotation: Annotation
+    fragment_number: MuseumNumber,
+    sign_repository: SignRepository,
+    annotation_annotation: Annotation,
 ) -> Annotation:
     sign = sign_repository.search(*parse_value(annotation_annotation.data.value))
     if not sign:
@@ -66,7 +69,11 @@ def update_annotations(
                 new_annotation_annotations.append(annotation_annotation)
             else:
                 new_annotation_annotations.append(
-                    update_annotation_annotation(sign_repository, annotation_annotation)
+                    update_annotation_annotation(
+                        annotation.fragment_number,
+                        sign_repository,
+                        annotation_annotation,
+                    )
                 )
         new_annotation = attr.evolve(annotation, annotations=new_annotation_annotations)
         annotations_repository.create_or_update(new_annotation)
