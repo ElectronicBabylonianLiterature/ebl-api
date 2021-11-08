@@ -4,13 +4,33 @@ import shutil
 from io import BytesIO
 from os.path import join
 from pathlib import Path
-from typing import Sequence, Union
+from typing import Sequence, Union, Tuple
 
 from PIL import Image
 
 from ebl.app import create_context
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.domain.annotation import Annotations, BoundingBox
+
+
+def prepare_annotations(
+    annotation: Annotations, image_width: int, image_height: int
+) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
+    annotations_with_signs = list(
+        filter(lambda annotation_annotation: annotation_annotation.data.sign_name, annotation.annotations)
+    )
+
+    bounding_boxes = BoundingBox.from_annotations(
+        image_width, image_height, annotations_with_signs
+    )
+    signs = [annotation.data.sign_name for annotation in annotations_with_signs]
+
+    if len(signs) != len(bounding_boxes):
+        raise ValueError(
+            f"Number of Bounding Boxes doesn't match number of "
+            f"Signs on Annotation: {annotation.fragment_number}"
+        )
+    return bounding_boxes, signs
 
 
 def create_annotations(
@@ -28,18 +48,7 @@ def create_annotations(
         image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
-        bounding_boxes = BoundingBox.from_annotations(
-            image.size[0], image.size[1], single_annotation.annotations
-        )
-        signs = [
-            annotations.data.sign_name for annotations in single_annotation.annotations
-        ]
-
-        if len(signs) != len(bounding_boxes):
-            raise ValueError(
-                f"Number of Bounding Boxes doesn't match number of "
-                f"Signs on Annotation: {fragment_number}"
-            )
+        bounding_boxes, signs = prepare_annotations(single_annotation, image.size[0], image.size[1])
 
         write_annotations(
             join(output_folder_annotations, f"gt_{fragment_number}.txt"),
