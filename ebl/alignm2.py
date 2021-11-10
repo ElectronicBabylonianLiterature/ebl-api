@@ -101,7 +101,7 @@ if all:
         for index, string in enumerate(chapter.signs)
         if not re.fullmatch(r"[X\\n\s]*", string)
     ]
-    query_sequences = [
+    query_sequences = random.sample([
         NamedSequence(
             f"{chapter.id_}; {chapter.manuscripts[index].siglum}",
             v.encodeSequence(make_sequence(string)),
@@ -110,7 +110,7 @@ if all:
         if any(chapter.signs) and chapter.id_.text_id == TextId(Genre.LITERATURE, 1, 2)
         for index, string in enumerate(chapter.signs)
         if not re.fullmatch(r"[X\\n\s]*", string) and len(string.split("\n")) <= 20
-    ][:2]
+    ], 100)
     #query_sequences = random.sample(
     #    [
     #        mask(chapter, index, string)
