@@ -37,13 +37,13 @@ context = create_context()
 signs_repository: SignRepository = MemoizingSignRepository(context.sign_repository)
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class NamedSequence:
     name: str = attr.ib(converter=str)
     sequence: EncodedSequence
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class AlignmentResult:
     score: int
     a: NamedSequence
@@ -132,11 +132,11 @@ def to_unicode_signs(alignment: SequenceAlignment) -> str:
 
 
 def print_counter(c: Counter) -> None:
-    for cc, n in c.most_common():
+    for signs, n in c.most_common():
         print(
             str(n).rjust(4),
             "\t\t",
-            ", ".join(f"{sign} ({map_sign(sign)})" for sign in cc),
+            ", ".join(f"{sign} ({map_sign(sign)})" for sign in signs),
         )
 
 
@@ -176,8 +176,7 @@ def align(
     for result in sorted(results, key=key, reverse=True):
         alignments = result.selected_aligments
 
-        if alignments:
-
+        if alignments and result.include:
             for alignment in alignments:
                 visual_alignment = str(alignment)
                 if verbose:
@@ -195,7 +194,7 @@ def align(
                     print()
                 else:
                     print(
-                        f"{result.title}, {alignment.score}, {round(alignment.percentPreservedIdentity(), 2)}, {round(alignment.percentPreservedSimilarity(), 2)}"
+                        f"{result.title}, {alignment.score}, {round(alignment.percentPreservedIdentity(), 2)}, {round(alignment.percentPreservedSimilarity(), 2)},"
                     )
 
                 if alignment.percentIdentity() >= identity_cutoff:
@@ -207,6 +206,10 @@ def align(
                         if "#" not in pair and "-" not in pair and "X" not in pair
                     ]
                     substitutions.extend(pairs)
+        else:
+            print(
+                f"{result.title}, , , # No match or filtered"
+            )
 
     pure_substitutions = [s for s in substitutions if len(s) == 2]
     uncurated_substitutions = [

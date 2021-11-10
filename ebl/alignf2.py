@@ -97,14 +97,12 @@ def align_fragment(number):
 
 
 print_config()
-
-
 print()
 print("fragment, chapter, manuscript, score, preserved identity, preserved similarity")
 
 t0 = time.time()
 
-for number in development_set_not_in_corpus:
+for number in development_set:
     align_fragment(number)
 
 t = time.time()
