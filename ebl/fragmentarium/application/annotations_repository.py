@@ -11,7 +11,7 @@ class AnnotationsRepository(ABC):
         ...
 
     @abstractmethod
-    def retrieve_all(self) -> List[Annotations]:
+    def retrieve_all_non_empty(self) -> List[Annotations]:
         ...
 
     @abstractmethod

@@ -68,4 +68,4 @@ def test_write_annotations(tmp_path):
     retrieve_annotations.write_annotations(
         file_name, bounding_boxes, ["KUR", "A.GUD×KUR"]
     )
-    assert file_name.read_text() == "0,1,2,100 KUR\n10,11,12,13 A.GUD×KUR\n"
+    assert file_name.read_text() == "0,1,2,100,KUR\n10,11,12,13,A.GUD×KUR\n"

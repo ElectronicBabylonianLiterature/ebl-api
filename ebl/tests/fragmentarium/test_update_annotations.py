@@ -34,7 +34,7 @@ def test_update_annotations(context, signs, when):
     annotation_2 = AnnotationFactory.build(data=annotation_data[1])
     annotation = AnnotationsFactory.build(annotations=[annotation_1, annotation_2])
 
-    when(annotations_repository).retrieve_all().thenReturn([annotation])
+    when(annotations_repository).retrieve_all_non_empty().thenReturn([annotation])
     when(sign_repository).search(...).thenReturn(sign)
 
     expected_annotation_data_1 = attr.evolve(

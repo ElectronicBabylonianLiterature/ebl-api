@@ -10,7 +10,18 @@ def test_retrieve_all(database, annotations_repository):
     annotations = AnnotationsFactory.build_batch(5)
     database[COLLECTION].insert_many(AnnotationsSchema(many=True).dump(annotations))
 
-    assert annotations_repository.retrieve_all() == annotations
+    assert annotations_repository.retrieve_all_non_empty() == annotations
+
+
+def test_retrieve_all_non_empty(database, annotations_repository):
+    empty_annotation = AnnotationsFactory.build(annotations=[])
+    annotations = AnnotationsFactory.build_batch(4)
+
+    database[COLLECTION].insert_many(
+        AnnotationsSchema(many=True).dump([*annotations, empty_annotation])
+    )
+
+    assert annotations_repository.retrieve_all_non_empty() == annotations
 
 
 def test_create(database, annotations_repository):

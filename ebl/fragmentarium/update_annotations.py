@@ -47,7 +47,7 @@ def update_annotation_annotation(
 def update_annotations(
     annotations_repository: AnnotationsRepository, sign_repository: SignRepository
 ) -> None:
-    annotation_collection = annotations_repository.retrieve_all()
+    annotation_collection = annotations_repository.retrieve_all_non_empty()
     for counter, annotation in enumerate(annotation_collection):
         new_annotation_annotations = []
         for annotation_annotation in annotation.annotations:
