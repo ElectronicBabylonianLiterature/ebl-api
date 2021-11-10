@@ -15,7 +15,7 @@ X = 0.04
 
 PATH = [3, 4, 6]
 VALUE = "kur"
-TYPE = AnnotationValueType.HASSIGN
+TYPE = AnnotationValueType.HAS_SIGN
 ID = "abc123"
 SIGN_NAME = "KUR"
 ANNOTATION = Annotation(

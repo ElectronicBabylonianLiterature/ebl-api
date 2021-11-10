@@ -15,7 +15,7 @@ from ebl.tests.factories.annotation import (
 def test_prepare_annotations():
     annotations_1 = AnnotationFactory.build()
     annotations_2 = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(type=AnnotationValueType.RULINGDOLLARLINE)
+        data=AnnotationDataFactory.build(type=AnnotationValueType.RULING_DOLLAR_LINE)
     )
     annotations_3 = AnnotationFactory.build(
         data=AnnotationDataFactory.build(sign_name="")
