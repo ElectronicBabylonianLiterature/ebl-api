@@ -156,5 +156,7 @@ if __name__ == "__main__":
         args.output_imgs,
         context.photo_repository,
     )
-    write_fragment_numbers(annotation_collection, f"./Annotations_{date.today()}.txt")
+    write_fragment_numbers(
+        annotation_collection, f"./annotations/Annotations_{date.today()}.txt"
+    )
     print("Done")

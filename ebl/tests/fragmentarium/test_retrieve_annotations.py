@@ -10,7 +10,13 @@ from ebl.tests.factories.annotation import (
     AnnotationDataFactory,
     AnnotationFactory,
 )
-
+def test_handle_blank_annotation_type():
+    annotation_data = AnnotationDataFactory.build(type=AnnotationValueType.BLANK)
+    assert retrieve_annotations.handle_blank_annotation_type(annotation_data) == "BLANK"
+    annotation_data = AnnotationDataFactory.build()
+    assert retrieve_annotations.handle_blank_annotation_type(annotation_data) == annotation_data.sign_name
+    annotation_data = AnnotationDataFactory.build(sign_name="")
+    assert retrieve_annotations.handle_blank_annotation_type(annotation_data) == annotation_data.value
 
 def test_prepare_annotations():
     annotations_1 = AnnotationFactory.build()
@@ -69,3 +75,12 @@ def test_write_annotations(tmp_path):
         file_name, bounding_boxes, ["KUR", "A.GUD×KUR"]
     )
     assert file_name.read_text() == "0,1,2,100,KUR\n10,11,12,13,A.GUD×KUR\n"
+
+def test_write_fragment_numbers(tmp_path):
+    annotations = AnnotationsFactory.build_batch(5)
+    dir = tmp_path / "annotations"
+    dir.mkdir()
+    file_name = dir / "Annotation_numbers.txt"
+    retrieve_annotations.write_fragment_numbers( annotations, file_name)
+    result = '\n'.join([str(annotation.fragment_number) for annotation in annotations])
+    assert file_name.read_text() == f"Total of 5 Annotations\n{result}\n"
