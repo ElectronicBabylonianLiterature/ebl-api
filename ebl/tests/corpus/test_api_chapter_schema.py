@@ -76,6 +76,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                         "reconstructionTokens": OneOfTokenSchema().dump(
                             variant.reconstruction, many=True
                         ),
+                        "intertext": "".join(part.value for part in variant.intertext),
                         "manuscripts": [
                             {
                                 "manuscriptId": manuscript_line.manuscript_id,

@@ -24,12 +24,16 @@ from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.joins import Joins
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.label_schemas import labels
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
     NoteLineSchema,
     TranslationLineSchema,
+)
+from ebl.transliteration.application.note_line_part_schemas import (
+    OneOfNoteLinePartSchema,
 )
 from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
@@ -41,7 +45,6 @@ from ebl.transliteration.application.text_schema import (
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
-from ebl.fragmentarium.domain.joins import Joins
 
 
 class ManuscriptSchema(Schema):
@@ -151,6 +154,9 @@ class LineVariantSchema(Schema):
     parallel_lines = fields.Nested(
         ParallelLineSchema, many=True, load_default=tuple(), data_key="parallelLines"
     )
+    intertext: fields.Field = fields.Nested(
+        OneOfNoteLinePartSchema, many=True, load_default=tuple()
+    )
 
     @post_load
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
@@ -159,6 +165,7 @@ class LineVariantSchema(Schema):
             data["note"],
             tuple(data["manuscripts"]),
             tuple(data["parallel_lines"]),
+            tuple(data["intertext"]),
         )
 
 
