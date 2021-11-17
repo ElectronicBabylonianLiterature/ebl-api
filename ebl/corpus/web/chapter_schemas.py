@@ -31,6 +31,7 @@ from ebl.transliteration.domain.lark_parser import (
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
+from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
@@ -206,6 +207,17 @@ class ApiLineVariantSchema(LineVariantSchema):
         )
 
 
+def deserialize_translation(atf: str) -> Sequence[TranslationLine]:
+    try:
+        return (
+            tuple(parse_translation_line(line) for line in atf.split("\n"))
+            if atf
+            else tuple()
+        )
+    except PARSE_ERRORS as error:
+        raise ValidationError(f"Invalid translation: {atf}.", "translation") from error
+
+
 class ApiLineSchema(Schema):
     number = LineNumberString(required=True)
     variants = fields.Nested(
@@ -219,9 +231,7 @@ class ApiLineSchema(Schema):
     )
     translation = fields.Function(
         lambda line: "\n".join(translation.atf for translation in line.translation),
-        lambda value: tuple(parse_translation_line(line) for line in value.split("\n"))
-        if value
-        else tuple(),
+        deserialize_translation,
         required=True,
     )
 
