@@ -189,10 +189,8 @@ def test_importing(client, bibliography, sign_repository, signs, text_repository
         ).line_number.number
         + 1
     )
-    atf = (
-        f"{chapter.lines[0].number.number+1}. bu\n"
-        f"{str(chapter.manuscripts[0].siglum)} {next_line_mumber}. ..."
-    )
+    atf = f'{chapter.lines[0].number.number + 1}. bu\n{chapter.manuscripts[0].siglum} {next_line_mumber}. ...'
+
 
     updated_chapter = attr.evolve(
         chapter,
