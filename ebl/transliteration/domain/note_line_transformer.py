@@ -17,6 +17,9 @@ from ebl.transliteration.domain.tokens import Token as EblToken
 
 
 class MarkupTransformer(Transformer):
+    def markup(self, children) -> Sequence[MarkupPart]:
+        return tuple(children)
+
     @v_args(inline=True)
     def ebl_atf_text_line__language_part(
         self, language: Token, transliteration: Sequence[EblToken]

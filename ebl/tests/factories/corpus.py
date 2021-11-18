@@ -129,6 +129,7 @@ class LineVariantFactory(factory.Factory):
     )
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
     manuscripts = factory.List([factory.SelfAttribute("..manuscript")], TupleFactory)
+    intertext = factory.fuzzy.FuzzyChoice([tuple(), (StringPart("bar"),)])
 
 
 class LineFactory(factory.Factory):

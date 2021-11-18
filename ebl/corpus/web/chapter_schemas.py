@@ -26,10 +26,12 @@ from ebl.transliteration.domain.lark_parser import (
     parse_parallel_line,
     parse_text_line,
     parse_translation_line,
+    parse_markup,
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
+from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
@@ -191,11 +193,29 @@ class ApiLineVariantSchema(LineVariantSchema):
         OneOfTokenSchema, many=True, attribute="reconstruction", dump_only=True
     )
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
+    intertext = fields.Function(
+        lambda line: "".join(part.value for part in line.intertext),
+        lambda value: parse_markup(value) if value else tuple(),
+        load_default="",
+    )
 
     @post_load
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
         text, note, parallel_lines = _parse_recontsruction(data["reconstruction"])
-        return LineVariant(text, note, tuple(data["manuscripts"]), parallel_lines)
+        return LineVariant(
+            text, note, tuple(data["manuscripts"]), parallel_lines, data["intertext"]
+        )
+
+
+def deserialize_translation(atf: str) -> Sequence[TranslationLine]:
+    try:
+        return (
+            tuple(parse_translation_line(line) for line in atf.split("\n"))
+            if atf
+            else tuple()
+        )
+    except PARSE_ERRORS as error:
+        raise ValidationError(f"Invalid translation: {atf}.", "translation") from error
 
 
 class ApiLineSchema(Schema):
@@ -211,9 +231,7 @@ class ApiLineSchema(Schema):
     )
     translation = fields.Function(
         lambda line: "\n".join(translation.atf for translation in line.translation),
-        lambda value: tuple(parse_translation_line(line) for line in value.split("\n"))
-        if value
-        else tuple(),
+        deserialize_translation,
         required=True,
     )
 

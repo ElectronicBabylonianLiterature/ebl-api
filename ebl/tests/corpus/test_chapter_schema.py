@@ -1,5 +1,4 @@
 import attr
-
 from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
@@ -21,6 +20,9 @@ from ebl.transliteration.application.line_schemas import (
     NoteLineSchema,
     TranslationLineSchema,
 )
+from ebl.transliteration.application.note_line_part_schemas import (
+    OneOfNoteLinePartSchema,
+)
 from ebl.transliteration.application.one_of_line_schema import (
     OneOfLineSchema,
     ParallelLineSchema,
@@ -28,9 +30,9 @@ from ebl.transliteration.application.one_of_line_schema import (
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.translation_line import TranslationLine
-from ebl.transliteration.domain.markup import StringPart
 
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
@@ -42,6 +44,7 @@ SECOND_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id
 LINE_VARIANT = LineVariantFactory.build(
     manuscripts=(FIRST_MANUSCRIPT_LINE, SECOND_MANUSCRIPT_LINE),
     parallel_lines=(ParallelComposition(False, "name", LineNumber(2)),),
+    intertext=(StringPart("bar"),),
 )
 TRANSLATION_LINE = TranslationLine((StringPart("foo"),), "en", None)
 LINE = LineFactory.build(variants=(LINE_VARIANT,), translation=(TRANSLATION_LINE,))
@@ -116,6 +119,9 @@ def to_dict(chapter: Chapter, include_documents=False):
                         "note": variant.note and NoteLineSchema().dump(variant.note),
                         "parallelLines": ParallelLineSchema().dump(
                             variant.parallel_lines, many=True
+                        ),
+                        "intertext": OneOfNoteLinePartSchema().dump(
+                            variant.intertext, many=True
                         ),
                         "manuscripts": [
                             {

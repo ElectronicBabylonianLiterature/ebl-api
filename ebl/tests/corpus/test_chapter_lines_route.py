@@ -134,6 +134,11 @@ TOO_MANY_NOTES = {
     "reconstruction": "kur\n#note: extra note\n#note: extra note",
 }
 
+INVALID_TRANSLATION = {
+    **ApiLineSchema().dump(ChapterFactory.build().lines[0]),
+    "translation": "invalid",
+}
+
 
 @pytest.mark.parametrize(
     "dto,expected_status",
@@ -145,6 +150,14 @@ TOO_MANY_NOTES = {
                 "new": [],
                 "deleted": [],
                 "edited": [{"index": 0, "line": TOO_MANY_NOTES}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": INVALID_TRANSLATION}],
             },
             falcon.HTTP_BAD_REQUEST,
         ],
@@ -178,7 +191,7 @@ def test_importing(client, bibliography, sign_repository, signs, text_repository
     )
     atf = (
         f"{chapter.lines[0].number.number+1}. bu\n"
-        f"{str(chapter.manuscripts[0].siglum)} {next_line_mumber}. ..."
+        f"{chapter.manuscripts[0].siglum} {next_line_mumber}. ..."
     )
 
     updated_chapter = attr.evolve(
