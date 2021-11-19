@@ -129,14 +129,18 @@ def test_updating_invalid_id(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
+LINE_DTO = ApiLineSchema().dump(ChapterFactory.build().lines[0])
+
 TOO_MANY_NOTES = {
-    **ApiLineSchema().dump(ChapterFactory.build().lines[0]),
+    **LINE_DTO,
     "reconstruction": "kur\n#note: extra note\n#note: extra note",
 }
 
-INVALID_TRANSLATION = {
-    **ApiLineSchema().dump(ChapterFactory.build().lines[0]),
-    "translation": "invalid",
+INVALID_TRANSLATION = {**LINE_DTO, "translation": "invalid"}
+
+INVALID_INTERTEXT = {
+    **LINE_DTO,
+    "variants": [{**LINE_DTO["variants"][0], "intertext": "@akk{öö}"}],
 }
 
 
@@ -158,6 +162,14 @@ INVALID_TRANSLATION = {
                 "new": [],
                 "deleted": [],
                 "edited": [{"index": 0, "line": INVALID_TRANSLATION}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": INVALID_INTERTEXT}],
             },
             falcon.HTTP_BAD_REQUEST,
         ],

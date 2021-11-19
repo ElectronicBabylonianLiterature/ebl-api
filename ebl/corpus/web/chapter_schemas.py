@@ -29,6 +29,7 @@ from ebl.transliteration.domain.lark_parser import (
     parse_markup,
 )
 from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.translation_line import TranslationLine
@@ -170,7 +171,16 @@ def _parse_recontsruction(
             tuple(parse_parallel_line(line) for line in parallel_lines),
         )
     except PARSE_ERRORS as error:
-        raise ValidationError(f"Invalid reconstruction: {reconstruction}. {error}")
+        raise ValidationError(
+            f"Invalid reconstruction: {reconstruction}. {error}"
+        ) from error
+
+
+def _parse_intertext(intertext: str) -> Sequence[MarkupPart]:
+    try:
+        return parse_markup(intertext) if intertext else tuple()
+    except PARSE_ERRORS as error:
+        raise ValidationError(f"Invalid intertext: {intertext}. {error}") from error
 
 
 class ApiLineVariantSchema(LineVariantSchema):
@@ -195,7 +205,7 @@ class ApiLineVariantSchema(LineVariantSchema):
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
     intertext = fields.Function(
         lambda line: "".join(part.value for part in line.intertext),
-        lambda value: parse_markup(value) if value else tuple(),
+        _parse_intertext,
         load_default="",
     )
 
