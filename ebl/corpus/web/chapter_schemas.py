@@ -170,7 +170,7 @@ def _parse_recontsruction(
             note and parse_note_line(note),
             tuple(parse_parallel_line(line) for line in parallel_lines),
         )
-    except PARSE_ERRORS as error:
+    except (*PARSE_ERRORS, ValueError) as error:
         raise ValidationError(
             f"Invalid reconstruction: {reconstruction}. {error}"
         ) from error

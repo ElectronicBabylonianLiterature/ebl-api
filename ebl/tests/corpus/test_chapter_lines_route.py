@@ -131,9 +131,21 @@ def test_updating_invalid_id(client):
 
 LINE_DTO = ApiLineSchema().dump(ChapterFactory.build().lines[0])
 
+INVALID_LINE = {**LINE_DTO, "invalid": True}
+
 TOO_MANY_NOTES = {
     **LINE_DTO,
-    "reconstruction": "kur\n#note: extra note\n#note: extra note",
+    "variants": [
+        {
+            **LINE_DTO["variants"][0],
+            "reconstruction": "kur\n#note: extra note\n#note: extra note",
+        }
+    ],
+}
+
+INVALID_RECONSTRUCTION = {
+    **LINE_DTO,
+    "variants": [{**LINE_DTO["variants"][0], "reconstruction": "öö"}],
 }
 
 INVALID_TRANSLATION = {**LINE_DTO, "translation": "invalid"}
@@ -150,10 +162,22 @@ INVALID_INTERTEXT = {
         [[], falcon.HTTP_BAD_REQUEST],
         [{}, falcon.HTTP_BAD_REQUEST],
         [
+            {"new": [], "deleted": [], "edited": [{"index": 0, "line": INVALID_LINE}]},
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
             {
                 "new": [],
                 "deleted": [],
                 "edited": [{"index": 0, "line": TOO_MANY_NOTES}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": INVALID_RECONSTRUCTION}],
             },
             falcon.HTTP_BAD_REQUEST,
         ],
