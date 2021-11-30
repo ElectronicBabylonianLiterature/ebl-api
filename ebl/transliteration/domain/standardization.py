@@ -1,5 +1,6 @@
 import attr
 
+from ebl.transliteration.domain.atf import VARIANT_SEPARATOR
 from ebl.transliteration.domain.sign import Sign
 
 
@@ -27,7 +28,9 @@ class Standardization:
 
     @staticmethod
     def escape_standardization(sign: Sign) -> str:
-        return sign.standardization.replace("/", "\\u002F").replace(" ", "\\u0020")
+        return sign.standardization.replace(VARIANT_SEPARATOR, "\\u002F").replace(
+            " ", "\\u0020"
+        )
 
 
 def is_splittable(grapheme: str) -> bool:

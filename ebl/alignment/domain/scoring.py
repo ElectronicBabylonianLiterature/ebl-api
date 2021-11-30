@@ -1,6 +1,8 @@
 from alignment.sequencealigner import Scoring, GapScoring  # pyre-ignore[21]
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+
 from ebl.alignment.domain.sequence import UNCLEAR_OR_UNKNOWN_SIGN, LINE_BREAK
+from ebl.transliteration.domain.atf import VARIANT_SEPARATOR
 
 match = 16
 mismatch = -5
@@ -67,10 +69,10 @@ class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
             return x_match if firstElement == secondElement else x_mismatch
         elif frozenset([first_decoded, second_decoded]) in curated_substitutions:
             return common_mismatch
-        elif "/" in first_decoded or "/" in second_decoded:
+        elif VARIANT_SEPARATOR in first_decoded or VARIANT_SEPARATOR in second_decoded:
             result = []
-            for first_part in first_decoded.split("/"):
-                for second_part in second_decoded.split("/"):
+            for first_part in first_decoded.split(VARIANT_SEPARATOR):
+                for second_part in second_decoded.split(VARIANT_SEPARATOR):
                     result.append(
                         self(
                             self.vocabulary.encode(first_part),
