@@ -10,7 +10,7 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.align import align, make_sequence, print_counter, NamedSequence
 
-verbose = False
+verbose = True
 development_set = [
     MuseumNumber.of("K.17700"),
     MuseumNumber.of("K.19352"),
@@ -35,6 +35,7 @@ development_set_not_in_corpus = [
     MuseumNumber("K", "15836"),
 ]
 
+new_set = [MuseumNumber("K", "19822")]
 
 context = create_context()
 repository = context.text_repository
@@ -102,7 +103,7 @@ print("fragment, chapter, manuscript, score, preserved identity, preserved simil
 
 t0 = time.time()
 
-for number in development_set:
+for number in new_set:
     align_fragment(number)
 
 t = time.time()

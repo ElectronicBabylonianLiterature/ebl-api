@@ -169,14 +169,12 @@ def align(
     results: List[AlignmentResult] = []
     for (a, b) in pairs:
         result = align_pair(a, b, v)
-
-        if result.include:
-            results.append(result)
+        results.append(result)
 
     for result in sorted(results, key=key, reverse=True):
-        alignments = result.selected_aligments
+        alignments = result.alignments
 
-        if alignments and result.include:
+        if alignments:  # and result.include:
             for alignment in alignments:
                 visual_alignment = str(alignment)
                 if verbose:
@@ -207,9 +205,15 @@ def align(
                     ]
                     substitutions.extend(pairs)
         else:
-            print(
-                f"{result.title}, , , # No match or filtered"
-            )
+            if verbose:
+                    print(f"{result.title} ".ljust(80, "-"))
+                    print("No alignments.")
+                    print("Alignment score:", result.score)
+                    print()
+            else:
+                print(
+                    f"{result.title}, {result.score}, , # No match or filtered"
+                )
 
     pure_substitutions = [s for s in substitutions if len(s) == 2]
     uncurated_substitutions = [
