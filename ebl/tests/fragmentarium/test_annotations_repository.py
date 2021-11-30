@@ -6,6 +6,20 @@ from ebl.tests.factories.annotation import AnnotationsFactory
 COLLECTION = "annotations"
 
 
+def test_find_by_sign(database, annotations_repository):
+    annotations = AnnotationsFactory.build_batch(5)
+    sign_query = annotations[0].annotations[0].data.sign_name
+    database[COLLECTION].insert_many(AnnotationsSchema(many=True).dump(annotations))
+
+    results = annotations_repository.find_by_sign(sign_query)
+
+    assert len(results) >= 1
+    for result in results:
+        for annotation in result.annotations:
+            assert annotation.data.sign_name == sign_query
+
+
+
 def test_retrieve_all(database, annotations_repository):
     annotations = AnnotationsFactory.build_batch(5)
     database[COLLECTION].insert_many(AnnotationsSchema(many=True).dump(annotations))
