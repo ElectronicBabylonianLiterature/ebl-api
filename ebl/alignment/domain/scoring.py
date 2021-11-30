@@ -1,6 +1,6 @@
 from alignment.sequencealigner import Scoring, GapScoring  # pyre-ignore[21]
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
-
+from ebl.alignment.domain.sequence import UNCLEAR_OR_UNKNOWN_SIGN, LINE_BREAK
 
 match = 16
 mismatch = -5
@@ -54,8 +54,8 @@ curated_substitutions = frozenset(
 class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
     def __init__(self, vocabulary: Vocabulary):  # pyre-ignore[11]
         self.vocabulary = vocabulary
-        self.line_break = vocabulary.encode("#")
-        self.x = vocabulary.encode("X")
+        self.line_break = vocabulary.encode(LINE_BREAK)
+        self.x = vocabulary.encode(UNCLEAR_OR_UNKNOWN_SIGN)
 
     def __call__(self, firstElement, secondElement) -> int:
         first_decoded = self.vocabulary.decode(firstElement)
