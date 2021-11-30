@@ -32,8 +32,8 @@ class NamedSequence:
 
     @staticmethod
     def of_signs(
-        name, signs: str, vocabulary: Vocabulary
-    ) -> "NamedSequence":  # pyre-ignore[11]
-        return NamedSequence(
+        name, signs: str, vocabulary: Vocabulary  # pyre-ignore[11]
+    ) -> "NamedSequence":
+        return NamedSequence(  # pyre-ignore[19]
             name, vocabulary.encodeSequence(make_sequence(signs))
-        )  # pyre-ignore[19]
+        )
