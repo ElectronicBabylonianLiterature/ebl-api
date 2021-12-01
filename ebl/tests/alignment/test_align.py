@@ -1,4 +1,5 @@
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from hamcrest import assert_that, has_properties, contains_exactly
 
 from ebl.alignment.application.align import align, align_pair
 from ebl.alignment.domain.sequence import NamedSequence
@@ -26,4 +27,10 @@ def test_align() -> None:
 
     result = align([(sequence_1, sequence_3), (sequence_1, sequence_2)], vocabulary)
 
-    assert result == "name1, name2, 16, 100.0, 100.0\nname1, name3, 0, 0.0, 0.0"
+    assert_that(
+        result,
+        contains_exactly(
+            has_properties({"title": "name1, name2", "score": 16}),
+            has_properties({"title": "name1, name3", "score": 0}),
+        ),
+    )

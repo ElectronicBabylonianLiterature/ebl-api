@@ -26,10 +26,9 @@ def align_pair(
 
 def align(
     pairs: List[Tuple[NamedSequence, NamedSequence]], vocabulary: Vocabulary
-) -> str:
-    results = [align_pair(first, second, vocabulary) for (first, second) in pairs]
-
-    return "\n".join(
-        result.to_csv()
-        for result in sorted(results, key=lambda result: result.score, reverse=True)
+) -> List[AlignmentResult]:
+    return sorted(
+        (align_pair(first, second, vocabulary) for (first, second) in pairs),
+        key=lambda result: result.score,
+        reverse=True,
     )

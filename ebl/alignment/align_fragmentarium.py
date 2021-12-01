@@ -2,11 +2,12 @@ import argparse
 import re
 import sys
 import time
-from typing import Iterable
+from typing import Iterable, List
 
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 
 from ebl.alignment.application.align import align
+from ebl.alignment.domain.result import AlignmentResult
 from ebl.alignment.domain.sequence import NamedSequence
 from ebl.app import create_context
 from ebl.corpus.domain.chapter import ChapterId, Chapter
@@ -26,7 +27,9 @@ def make_title(chapter: Chapter, index: int, fragment: Fragment) -> str:
     )
 
 
-def align_fragment_and_chapter(fragment: Fragment, chapter: Chapter) -> None:
+def align_fragment_and_chapter(
+    fragment: Fragment, chapter: Chapter
+) -> List[AlignmentResult]:
     vocabulary = Vocabulary()
 
     fragment_sequence = NamedSequence.of_signs(
@@ -43,16 +46,21 @@ def align_fragment_and_chapter(fragment: Fragment, chapter: Chapter) -> None:
         for index, signs in enumerate(chapter.signs)
         if has_clear_signs(signs)
     ]
-    print(align(pairs, vocabulary), flush=True)
+
+    return align(pairs, vocabulary)
 
 
-def align_fragment(fragment: Fragment, chapters: Iterable[Chapter]) -> None:
+def align_fragment(
+    fragment: Fragment, chapters: Iterable[Chapter], min_score: float
+) -> None:
     fragment = context.fragment_repository.query_by_museum_number(number)
-
-    for chapter in chapters:
-        align_fragment_and_chapter(fragment, chapter)
-
-    print("", flush=True)
+    result = "\n".join(
+        result.to_csv()
+        for chapter in chapters
+        for result in align_fragment_and_chapter(fragment, chapter)
+        if result.score >= min_score
+    )
+    print(result, flush=True)
 
 
 if __name__ == "__main__":
@@ -62,6 +70,13 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-l", "--limit", type=int, default=10, help="Number of fragments to align."
+    )
+    parser.add_argument(
+        "--minScore",
+        dest="min_score",
+        type=float,
+        default=100,
+        help="Minimum score to show in the results.",
     )
     args = parser.parse_args()
     start = args.skip
@@ -89,7 +104,7 @@ if __name__ == "__main__":
 
     for number in fragment_numbers[start:end]:
         fragment = fragments.query_by_museum_number(number)
-        align_fragment(fragment, chapters_with_signs)
+        align_fragment(fragment, chapters_with_signs, args.min_score)
 
     t = time.time()
 
