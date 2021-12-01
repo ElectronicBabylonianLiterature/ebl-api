@@ -1,3 +1,4 @@
+from typing import Callable, Generator, Tuple
 from alignment.sequencealigner import Scoring, GapScoring  # pyre-ignore[21]
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 
@@ -71,16 +72,29 @@ class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
         first_decoded = self.vocabulary.decode(firstElement)
         second_decoded = self.vocabulary.decode(secondElement)
 
-        if self._is_break(firstElement, secondElement):
-            return self._get_break_score(firstElement, secondElement)
-        elif self._is_x(firstElement, secondElement):
-            return self._get_x_score(firstElement, secondElement)
-        elif is_curated(first_decoded, second_decoded):
-            return common_mismatch
-        elif is_variant(first_decoded, second_decoded):
-            return self._get_variant_score(first_decoded, second_decoded)
-        else:
-            return match if firstElement == secondElement else mismatch
+        def scores() -> Generator[Tuple[Callable[[], bool], Callable[[], int]], None, None]:
+            yield (
+                lambda: self._is_break(firstElement, secondElement),
+                lambda: self._get_break_score(firstElement, secondElement),
+            )
+            yield (
+                lambda: self._is_x(firstElement, secondElement),
+                lambda: self._get_x_score(firstElement, secondElement),
+            )
+            yield (
+                lambda: is_curated(first_decoded, second_decoded),
+                lambda: common_mismatch,
+            )
+            yield (
+                lambda: is_variant(first_decoded, second_decoded),
+                lambda: self._get_variant_score(first_decoded, second_decoded),
+            )
+            yield (
+                lambda: True,
+                lambda: match if firstElement == secondElement else mismatch,
+            )
+
+        return next(score() for (predicate, score) in scores() if predicate())
 
     def gapStart(self, element) -> int:
         return gap_start
