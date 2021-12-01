@@ -1,4 +1,4 @@
-from typing import Callable, List, Tuple, Union
+from typing import List, Tuple
 
 from alignment.sequencealigner import GlobalSequenceAligner  # pyre-ignore[21]
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
@@ -19,23 +19,10 @@ def align_pair(
     )
 
 
-def default_key(result: AlignmentResult) -> Tuple[Union[int, float], ...]:
-    return (
-        (result.alignments[0].percentPreservedIdentity(), result.alignments[0].score)
-        if result.alignments
-        else (0, 0, result.score)
-    )
-
-
-def align(
-    pairs: List[Tuple[NamedSequence, NamedSequence]],
-    v: Vocabulary,
-    key: Callable[
-        [AlignmentResult], Union[int, float, Tuple[Union[int, float], ...]]
-    ] = default_key,
-) -> str:
+def align(pairs: List[Tuple[NamedSequence, NamedSequence]], v: Vocabulary) -> str:
     results = [align_pair(a, b, v) for (a, b) in pairs]
 
     return "\n".join(
-        result.to_csv() for result in sorted(results, key=key, reverse=True)
+        result.to_csv()
+        for result in sorted(results, key=lambda result: result.score, reverse=True)
     )

@@ -43,7 +43,7 @@ def align_fragment_and_chapter(fragment: Fragment, chapter: Chapter) -> None:
         for index, signs in enumerate(chapter.signs)
         if has_clear_signs(signs)
     ]
-    print(align(pairs, vocabulary, lambda result: result.score), flush=True)
+    print(align(pairs, vocabulary), flush=True)
 
 
 def align_fragment(fragment: Fragment, chapters: Iterable[Chapter]) -> None:
