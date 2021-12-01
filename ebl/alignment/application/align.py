@@ -37,13 +37,5 @@ def align(
     results = [align_pair(a, b, v) for (a, b) in pairs]
 
     return "\n".join(
-        "\n".join(
-            f"{result.title}, {alignment.score}, "
-            f"{round(alignment.percentPreservedIdentity(), 2)}, "
-            f"{round(alignment.percentPreservedSimilarity(), 2)}"
-            for alignment in result.alignments
-        )
-        if result.alignments
-        else f"{result.title}, {result.score}, , "
-        for result in sorted(results, key=key, reverse=True)
+        result.to_csv() for result in sorted(results, key=key, reverse=True)
     )

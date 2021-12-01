@@ -16,3 +16,15 @@ class AlignmentResult:
     @property
     def title(self) -> str:
         return f"{self.a.name}, {self.b.name}"
+
+    def to_csv(self) -> str:
+        return (
+            "\n".join(
+                f"{self.title}, {alignment.score}, "
+                f"{round(alignment.percentPreservedIdentity(), 2)}, "
+                f"{round(alignment.percentPreservedSimilarity(), 2)}"
+                for alignment in self.alignments
+            )
+            if self.alignments
+            else f"{self.title}, {self.score}, , "
+        )
