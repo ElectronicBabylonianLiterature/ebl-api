@@ -79,10 +79,8 @@ class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
             return common_mismatch
         elif is_variant(first_decoded, second_decoded):
             return self._get_variant_score(first_decoded, second_decoded)
-        elif firstElement == secondElement:
-            return match
         else:
-            return mismatch
+            return match if firstElement == secondElement else mismatch
 
     def gapStart(self, element) -> int:
         return gap_start
