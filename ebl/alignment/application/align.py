@@ -9,18 +9,25 @@ from ebl.alignment.domain.result import AlignmentResult
 
 
 def align_pair(
-    a: NamedSequence, b: NamedSequence, v: Vocabulary  # pyre-ignore[11]
+    first: NamedSequence,
+    second: NamedSequence,
+    vocabulary: Vocabulary,  # pyre-ignore[11]
 ) -> AlignmentResult:
-    scoring = EblScoring(v)
+    scoring = EblScoring(vocabulary)
     aligner = GlobalSequenceAligner(scoring, True)
-    score, alignments = aligner.align(a.sequence, b.sequence, backtrace=True)
+    score, alignments = aligner.align(first.sequence, second.sequence, backtrace=True)
     return AlignmentResult(  # pyre-ignore[19]
-        score, a, b, [v.decodeSequenceAlignment(encoded) for encoded in alignments]
+        score,
+        first,
+        second,
+        [vocabulary.decodeSequenceAlignment(encoded) for encoded in alignments],
     )
 
 
-def align(pairs: List[Tuple[NamedSequence, NamedSequence]], v: Vocabulary) -> str:
-    results = [align_pair(a, b, v) for (a, b) in pairs]
+def align(
+    pairs: List[Tuple[NamedSequence, NamedSequence]], vocabulary: Vocabulary
+) -> str:
+    results = [align_pair(first, second, vocabulary) for (first, second) in pairs]
 
     return "\n".join(
         result.to_csv()
