@@ -394,13 +394,29 @@ def test_search_signs(signs, is_match, fragment_repository):
 
 
 def test_find_transliterated(database, fragment_repository):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+    transliterated_fragment_1 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.1")
+    )
+    transliterated_fragment_2 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.2")
+    )
     database[COLLECTION].insert_many(
-        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
+        [
+            {
+                **SCHEMA.dump(transliterated_fragment_2),
+                "_id": str(transliterated_fragment_2.number),
+            },
+            SCHEMA.dump(FragmentFactory.build()),
+            {
+                **SCHEMA.dump(transliterated_fragment_1),
+                "_id": str(transliterated_fragment_1.number),
+            },
+        ]
     )
 
     assert fragment_repository.query_transliterated_numbers() == [
-        transliterated_fragment.number
+        transliterated_fragment_1.number,
+        transliterated_fragment_2.number,
     ]
 
 
