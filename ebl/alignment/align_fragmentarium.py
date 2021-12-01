@@ -51,7 +51,7 @@ def align_fragment_and_chapter(
 
 
 def align_fragment(
-    fragment: Fragment, chapters: Iterable[Chapter], min_score: float
+    fragment: Fragment, chapters: Iterable[Chapter], min_score: int
 ) -> None:
     fragment = context.fragment_repository.query_by_museum_number(number)
     result = "\n".join(
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--minScore",
         dest="min_score",
-        type=float,
+        type=int,
         default=100,
         help="Minimum score to show in the results.",
     )
