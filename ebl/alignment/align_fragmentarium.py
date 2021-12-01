@@ -2,43 +2,51 @@ import argparse
 import re
 import sys
 import time
+from typing import Iterable
 
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 
 from ebl.alignment.application.align import align
 from ebl.alignment.domain.sequence import NamedSequence
 from ebl.app import create_context
-from ebl.corpus.domain.chapter import ChapterId
+from ebl.corpus.domain.chapter import ChapterId, Chapter
+from ebl.fragmentarium.domain.fragment import Fragment
 
 
-def align_fragment_and_chapter(fragment, chapter):
-    if any(chapter.signs):
-        vocabulary = Vocabulary()
+def has_clear_signs(signs: str) -> bool:
+    return not re.fullmatch(r"[X\\n\s]*", signs)
 
-        fragment_sequence = NamedSequence.of_signs(
-            fragment.number, fragment.signs, vocabulary
-        )
 
-        sequences = [
+def make_title(chapter: Chapter, index: int, fragment: Fragment) -> str:
+    has_same_number = fragment.number == chapter.manuscripts[index].museum_number
+    return (
+        f"{chapter.id_}, "
+        f"{chapter.manuscripts[index].siglum}"
+        f"{'*' if has_same_number else ''}"
+    )
+
+
+def align_fragment_and_chapter(fragment: Fragment, chapter: Chapter) -> None:
+    vocabulary = Vocabulary()
+
+    fragment_sequence = NamedSequence.of_signs(
+        fragment.number, fragment.signs, vocabulary
+    )
+
+    pairs = [
+        (
+            fragment_sequence,
             NamedSequence.of_signs(
-                f"{chapter.id_}, "
-                f"{chapter.manuscripts[index].siglum}"
-                f"{'*' if fragment.number == chapter.manuscripts[index].museum_number else ''}",
-                signs,
-                vocabulary,
-            )
-            for index, signs in enumerate(chapter.signs)
-            if not re.fullmatch(r"[X\\n\s]*", signs)
-        ]
-
-        pairs = [
-            (fragment_sequence, manuscript_sequence)
-            for manuscript_sequence in sequences
-        ]
-        print(align(pairs, vocabulary, lambda result: result.score), flush=True)
+                make_title(chapter, index, fragment), signs, vocabulary
+            ),
+        )
+        for index, signs in enumerate(chapter.signs)
+        if has_clear_signs(signs)
+    ]
+    print(align(pairs, vocabulary, lambda result: result.score), flush=True)
 
 
-def align_fragment(fragment, chapters):
+def align_fragment(fragment: Fragment, chapters: Iterable[Chapter]) -> None:
     fragment = context.fragment_repository.query_by_museum_number(number)
 
     for chapter in chapters:
@@ -77,12 +85,12 @@ if __name__ == "__main__":
         for text in texts.list()
         for listing in text.chapters
     ]
+    chapters_with_signs = [chapter for chapter in chapters if any(chapter.signs)]
 
     for number in fragment_numbers[start:end]:
         fragment = fragments.query_by_museum_number(number)
-        align_fragment(fragment, chapters)
+        align_fragment(fragment, chapters_with_signs)
 
     t = time.time()
 
-    print("\n\n")
     print(f"# Time: {(t-t0)/60} min", flush=True)
