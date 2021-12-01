@@ -69,38 +69,38 @@ class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
         self.x = vocabulary.encode(UNCLEAR_OR_UNKNOWN_SIGN)
 
     def __call__(self, firstElement, secondElement) -> int:
-        first_decoded = self.vocabulary.decode(firstElement)
-        second_decoded = self.vocabulary.decode(secondElement)
-
-        def scores() -> Generator[Tuple[Callable[[], bool], Callable[[], int]], None, None]:
-            yield (
-                lambda: self._is_break(firstElement, secondElement),
-                lambda: self._get_break_score(firstElement, secondElement),
-            )
-            yield (
-                lambda: self._is_x(firstElement, secondElement),
-                lambda: self._get_x_score(firstElement, secondElement),
-            )
-            yield (
-                lambda: is_curated(first_decoded, second_decoded),
-                lambda: common_mismatch,
-            )
-            yield (
-                lambda: is_variant(first_decoded, second_decoded),
-                lambda: self._get_variant_score(first_decoded, second_decoded),
-            )
-            yield (
-                lambda: True,
-                lambda: match if firstElement == secondElement else mismatch,
-            )
-
-        return next(score() for (predicate, score) in scores() if predicate())
+        return next(
+            score()
+            for (predicate, score) in self._get_scores(firstElement, secondElement)
+            if predicate
+        )
 
     def gapStart(self, element) -> int:
         return gap_start
 
     def gapExtension(self, element) -> int:
         return break_gap_extension if element == self.line_break else gap_extension
+
+    def _get_scores(
+        self, firstElement, secondElement
+    ) -> Generator[Tuple[bool, Callable[[], int]], None, None]:
+        first_decoded = self.vocabulary.decode(firstElement)
+        second_decoded = self.vocabulary.decode(secondElement)
+
+        yield (
+            self._is_break(firstElement, secondElement),
+            lambda: self._get_break_score(firstElement, secondElement),
+        )
+        yield (
+            self._is_x(firstElement, secondElement),
+            lambda: self._get_x_score(firstElement, secondElement),
+        )
+        yield (is_curated(first_decoded, second_decoded), lambda: common_mismatch)
+        yield (
+            is_variant(first_decoded, second_decoded),
+            lambda: self._get_variant_score(first_decoded, second_decoded),
+        )
+        yield (True, lambda: match if firstElement == secondElement else mismatch)
 
     def _is_break(self, first_element, second_element) -> bool:
         return first_element == self.line_break or second_element == self.line_break
