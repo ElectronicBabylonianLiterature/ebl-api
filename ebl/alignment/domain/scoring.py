@@ -53,6 +53,14 @@ curated_substitutions = frozenset(
 )
 
 
+def is_curated(first_sign: str, second_sign: str) -> bool:
+    return frozenset([first_sign, second_sign]) in curated_substitutions
+
+
+def is_variant(first_decoded: str, second_decoded: str) -> bool:
+    return VARIANT_SEPARATOR in first_decoded or VARIANT_SEPARATOR in second_decoded
+
+
 class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
     def __init__(self, vocabulary: Vocabulary):  # pyre-ignore[11]
         self.vocabulary = vocabulary
@@ -63,23 +71,14 @@ class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
         first_decoded = self.vocabulary.decode(firstElement)
         second_decoded = self.vocabulary.decode(secondElement)
 
-        if firstElement == self.line_break or secondElement == self.line_break:
-            return break_match if firstElement == secondElement else break_mismatch
-        elif firstElement == self.x or secondElement == self.x:
-            return x_match if firstElement == secondElement else x_mismatch
-        elif frozenset([first_decoded, second_decoded]) in curated_substitutions:
+        if self._is_break(firstElement, secondElement):
+            return self._get_break_score(firstElement, secondElement)
+        elif self._is_x(firstElement, secondElement):
+            return self._get_x_score(firstElement, secondElement)
+        elif is_curated(first_decoded, second_decoded):
             return common_mismatch
-        elif VARIANT_SEPARATOR in first_decoded or VARIANT_SEPARATOR in second_decoded:
-            result = []
-            for first_part in first_decoded.split(VARIANT_SEPARATOR):
-                for second_part in second_decoded.split(VARIANT_SEPARATOR):
-                    result.append(
-                        self(
-                            self.vocabulary.encode(first_part),
-                            self.vocabulary.encode(second_part),
-                        )
-                    )
-            return max(result)
+        elif is_variant(first_decoded, second_decoded):
+            return self._get_variant_score(first_decoded, second_decoded)
         elif firstElement == secondElement:
             return match
         else:
@@ -90,3 +89,27 @@ class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
 
     def gapExtension(self, element) -> int:
         return break_gap_extension if element == self.line_break else gap_extension
+
+    def _is_break(self, first_element, second_element) -> bool:
+        return first_element == self.line_break or second_element == self.line_break
+
+    def _is_x(self, first_element, second_element) -> bool:
+        return first_element == self.x or second_element == self.x
+
+    def _get_break_score(self, first_element, second_element) -> int:
+        return break_match if first_element == second_element else break_mismatch
+
+    def _get_x_score(self, first_element, second_element) -> int:
+        return x_match if first_element == second_element else x_mismatch
+
+    def _get_variant_score(self, first_decoded: str, second_decoded: str) -> int:
+        result = []
+        for first_part in first_decoded.split(VARIANT_SEPARATOR):
+            for second_part in second_decoded.split(VARIANT_SEPARATOR):
+                result.append(
+                    self(
+                        self.vocabulary.encode(first_part),
+                        self.vocabulary.encode(second_part),
+                    )
+                )
+        return max(result)
