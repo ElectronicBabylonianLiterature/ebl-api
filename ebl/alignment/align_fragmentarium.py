@@ -10,6 +10,7 @@ from ebl.alignment.application.align import align
 from ebl.alignment.domain.result import AlignmentResult
 from ebl.alignment.domain.sequence import NamedSequence
 from ebl.app import create_context
+from ebl.context import Context
 from ebl.corpus.domain.chapter import ChapterId, Chapter
 from ebl.fragmentarium.domain.fragment import Fragment
 
@@ -51,16 +52,26 @@ def align_fragment_and_chapter(
 
 
 def align_fragment(
-    fragment: Fragment, chapters: Iterable[Chapter], min_score: int
-) -> None:
-    fragment = context.fragment_repository.query_by_museum_number(number)
-    result = "\n".join(
-        result.to_csv()
+    fragment: Fragment, chapters: Iterable[Chapter]
+) -> List[AlignmentResult]:
+    return [
+        result
         for chapter in chapters
         for result in align_fragment_and_chapter(fragment, chapter)
-        if result.score >= min_score
-    )
-    print(result, flush=True)
+    ]
+
+
+def load_chapters(context: Context) -> List[Chapter]:
+    texts = context.text_repository
+    return [
+        chapter
+        for chapter in (
+            texts.find_chapter(ChapterId(text.id, listing.stage, listing.name))
+            for text in texts.list()
+            for listing in text.chapters
+        )
+        if any(chapter.signs)
+    ]
 
 
 if __name__ == "__main__":
@@ -78,6 +89,13 @@ if __name__ == "__main__":
         default=100,
         help="Minimum score to show in the results.",
     )
+    parser.add_argument(
+        "--maxLines",
+        dest="max_lines",
+        type=int,
+        default=20,
+        help="Maximum size of fragment to align.",
+    )
     args = parser.parse_args()
     start = args.skip
     end = args.skip + args.limit
@@ -85,7 +103,6 @@ if __name__ == "__main__":
     sys.setrecursionlimit(50000)
 
     context = create_context()
-    texts = context.text_repository
     fragments = context.fragment_repository
 
     print(
@@ -95,17 +112,20 @@ if __name__ == "__main__":
     t0 = time.time()
 
     fragment_numbers = fragments.query_transliterated_numbers()
-    chapters = [
-        texts.find_chapter(ChapterId(text.id, listing.stage, listing.name))
-        for text in texts.list()
-        for listing in text.chapters
-    ]
-    chapters_with_signs = [chapter for chapter in chapters if any(chapter.signs)]
+    chapters = load_chapters(context)
 
-    for number in fragment_numbers[start:end]:
-        fragment = fragments.query_by_museum_number(number)
-        align_fragment(fragment, chapters_with_signs, args.min_score)
+    result = "\n".join(
+        result.to_csv()
+        for fragment in (
+            fragments.query_by_museum_number(number)
+            for number in fragment_numbers[start:end]
+        )
+        for result in align_fragment(fragment, chapters)
+        if fragment.text.number_of_lines <= args.max_lines
+        if result.score >= args.min_score
+    )
 
     t = time.time()
 
-    print(f"# Time: {(t-t0)/60} min", flush=True)
+    print(result)
+    print(f"# Time: {(t-t0)/60} min")
