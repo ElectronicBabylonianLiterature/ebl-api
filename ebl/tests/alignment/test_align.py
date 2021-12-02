@@ -29,8 +29,5 @@ def test_align() -> None:
 
     assert_that(
         result,
-        contains_exactly(
-            has_properties({"title": "name1, name2", "score": 16}),
-            has_properties({"title": "name1, name3", "score": 0}),
-        ),
+        contains_exactly(has_properties({"score": 16}), has_properties({"score": 0})),
     )

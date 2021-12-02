@@ -20,16 +20,20 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
+SEPARATOR = "; "
+
+
 def has_clear_signs(signs: str) -> bool:
     return not re.fullmatch(r"[X\\n\s]*", signs)
 
 
 def make_title(chapter: Chapter, index: int, fragment: Fragment) -> str:
     has_same_number = fragment.number == chapter.manuscripts[index].museum_number
-    return (
-        f"{chapter.id_}, "
-        f"{chapter.manuscripts[index].siglum}"
-        f"{'*' if has_same_number else ''}"
+    return SEPARATOR.join(
+        [
+            str(chapter.id_),
+            f"{chapter.manuscripts[index].siglum}{'*' if has_same_number else ''}",
+        ]
     )
 
 
@@ -66,7 +70,7 @@ def align_fragment(
     ]
 
 
-def align_chunck(
+def align_chunk(
     id_: int,
     numbers: Iterable[MuseumNumber],
     chapters: Iterable[Chapter],
@@ -79,7 +83,7 @@ def align_chunck(
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         fragment = context.fragment_repository.query_by_museum_number(number)
         results.extend(
-            result.to_csv()
+            result.to_csv(SEPARATOR)
             for result in align_fragment(fragment, chapters)
             if fragment.text.number_of_lines <= max_lines
             if result.score >= min_score
@@ -160,7 +164,7 @@ if __name__ == "__main__":
     chunks = pydash.chunk(fragment_numbers[start:end], chunk_size)
 
     results = Parallel(n_jobs=args.workers, prefer=prefer)(
-        delayed(align_chunck)(index, subset, chapters, args.max_lines, args.min_score)
+        delayed(align_chunk)(index, subset, chapters, args.max_lines, args.min_score)
         for index, subset in enumerate(chunks)
     )
 
@@ -168,7 +172,16 @@ if __name__ == "__main__":
 
     with open(args.output, "w", encoding="utf-8") as file:
         file.write(
-            "fragment, chapter, manuscript, score, preserved identity, preserved similarity\n"
+            SEPARATOR.join(
+                [
+                    "fragment",
+                    "chapter",
+                    "manuscript",
+                    "score",
+                    "preserved identity",
+                    "preserved similarity\n",
+                ]
+            )
         )
         file.writelines(f"{result}\n" for chunk in results for result in chunk)
         file.write(f"# Time: {(t-t0)/60} min")
