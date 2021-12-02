@@ -3,8 +3,8 @@ import falcon
 from ebl.context import Context
 from ebl.fragmentarium.application.annotations_image_extractor import AnnotationImageExtractor
 from ebl.signs.web.sign_search import SignsSearch
-from ebl.signs.web.signs import SignsImageResource
-from ebl.signs.web.signs_images import SignsResource
+from ebl.signs.web.signs import SignsResource
+from ebl.signs.web.signs_images import SignsImageResource
 
 
 def create_signs_routes(api: falcon.API, context: Context):

@@ -1,14 +1,19 @@
+import base64
+import json
+
 import falcon
 
-from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
-from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.fragmentarium.application.annotations_image_extractor import AnnotationImageExtractor
 from ebl.users.web.require_scope import require_scope
 
 
-class SignsResource:
-    def __init__(self, signs: SignRepository):
-        self._signs = signs
+class SignsImageResource:
+    def __init__(self, annotation_image_extractor: AnnotationImageExtractor):
+        self._image_extractor = annotation_image_extractor
 
     @falcon.before(require_scope, "read:words")
     def on_get(self, _req, resp, sign_name):
-        resp.media = SignDtoSchema().dump(self._signs.find(sign_name))
+        images = self._image_extractor.cropped_images_from_sign(sign_name)
+        encoded_images = [base64.b64encode(image).decode("utf-8") for image in images]
+        x = encoded_images[0]
+        resp.media = json.dumps({"images":  x})
