@@ -25,7 +25,7 @@ singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
 newrelic = "*"
-alignment = {editable = true, ref = "no-numpy", git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
+alignment = {editable = true, ref = "master", git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 
 [dev-packages]
 pytest = "*"
