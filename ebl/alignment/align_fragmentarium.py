@@ -96,6 +96,13 @@ def parse_arguments() -> argparse.Namespace:
         default=20,
         help="Maximum size of fragment to align.",
     )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        default="alignment.csv",
+        help="Filename for saving the results.",
+    )
     return parser.parse_args()
 
 
@@ -109,16 +116,12 @@ if __name__ == "__main__":
     context = create_context()
     fragments = context.fragment_repository
 
-    print(
-        "fragment, chapter, manuscript, score, preserved identity, preserved similarity"
-    )
-
     t0 = time.time()
 
     fragment_numbers = fragments.query_transliterated_numbers()
     chapters = load_chapters(context)
 
-    result = "\n".join(
+    results = [
         result.to_csv()
         for fragment in (
             fragments.query_by_museum_number(number)
@@ -127,9 +130,13 @@ if __name__ == "__main__":
         for result in align_fragment(fragment, chapters)
         if fragment.text.number_of_lines <= args.max_lines
         if result.score >= args.min_score
-    )
+    ]
 
     t = time.time()
 
-    print(result)
-    print(f"# Time: {(t-t0)/60} min")
+    with open(args.output, "w", encoding="utf-8") as file:
+        file.write(
+            "fragment, chapter, manuscript, score, preserved identity, preserved similarity\n"
+        )
+        file.writelines(f"{result}\n" for result in results)
+        file.write(f"# Time: {(t-t0)/60} min")
