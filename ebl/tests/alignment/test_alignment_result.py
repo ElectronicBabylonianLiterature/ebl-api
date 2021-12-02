@@ -18,4 +18,3 @@ def test_alignment_result() -> None:
     assert result.a == sequence_1
     assert result.b == sequence_2
     assert result.alignments == alignments
-    assert result.to_csv(", ") == f"name1, name2, {score}, , "
