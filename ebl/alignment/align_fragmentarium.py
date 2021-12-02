@@ -1,10 +1,14 @@
 import argparse
 import re
+import math
 import sys
 import time
 from typing import Iterable, List
 
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from joblib import Parallel, delayed
+import pydash
+from tqdm import tqdm
 
 from ebl.alignment.application.align import align
 from ebl.alignment.domain.result import AlignmentResult
@@ -13,6 +17,7 @@ from ebl.app import create_context
 from ebl.context import Context
 from ebl.corpus.domain.chapter import ChapterId, Chapter
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
 def has_clear_signs(signs: str) -> bool:
@@ -61,6 +66,28 @@ def align_fragment(
     ]
 
 
+def align_chunck(
+    id_: int,
+    numbers: Iterable[MuseumNumber],
+    chapters: Iterable[Chapter],
+    max_lines: int,
+    min_score: int,
+) -> List[str]:
+    sys.setrecursionlimit(50000)
+    context = create_context()
+    results = []
+    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
+        fragment = context.fragment_repository.query_by_museum_number(number)
+        results.extend(
+            result.to_csv()
+            for result in align_fragment(fragment, chapters)
+            if fragment.text.number_of_lines <= max_lines
+            if result.score >= min_score
+        )
+
+    return results
+
+
 def load_chapters(context: Context) -> List[Chapter]:
     texts = context.text_repository
     return [
@@ -103,6 +130,15 @@ def parse_arguments() -> argparse.Namespace:
         default="alignment.csv",
         help="Filename for saving the results.",
     )
+    parser.add_argument(
+        "-w", "--workers", type=int, default=4, help="Number of parallel workers."
+    )
+    parser.add_argument(
+        "-t",
+        "--threads",
+        action="store_true",
+        help="Use threads instead of processes for workers.",
+    )
     return parser.parse_args()
 
 
@@ -110,8 +146,7 @@ if __name__ == "__main__":
     args = parse_arguments()
     start = args.skip
     end = args.skip + args.limit
-
-    sys.setrecursionlimit(50000)
+    prefer = "threads" if args.threads else None
 
     context = create_context()
     fragments = context.fragment_repository
@@ -121,16 +156,13 @@ if __name__ == "__main__":
     fragment_numbers = fragments.query_transliterated_numbers()
     chapters = load_chapters(context)
 
-    results = [
-        result.to_csv()
-        for fragment in (
-            fragments.query_by_museum_number(number)
-            for number in fragment_numbers[start:end]
-        )
-        for result in align_fragment(fragment, chapters)
-        if fragment.text.number_of_lines <= args.max_lines
-        if result.score >= args.min_score
-    ]
+    chunk_size = math.ceil(args.limit / args.workers)
+    chunks = pydash.chunk(fragment_numbers[start:end], chunk_size)
+
+    results = Parallel(n_jobs=args.workers, prefer=prefer)(
+        delayed(align_chunck)(index, subset, chapters, args.max_lines, args.min_score)
+        for index, subset in enumerate(chunks)
+    )
 
     t = time.time()
 
@@ -138,5 +170,7 @@ if __name__ == "__main__":
         file.write(
             "fragment, chapter, manuscript, score, preserved identity, preserved similarity\n"
         )
-        file.writelines(f"{result}\n" for result in results)
+        file.writelines(f"{result}\n" for chunk in results for result in chunk)
         file.write(f"# Time: {(t-t0)/60} min")
+
+    print("\nDone.")
