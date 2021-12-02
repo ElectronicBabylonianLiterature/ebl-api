@@ -74,7 +74,7 @@ def load_chapters(context: Context) -> List[Chapter]:
     ]
 
 
-if __name__ == "__main__":
+def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-s", "--skip", type=int, default=0, help="Number of fragments to skip."
@@ -96,7 +96,11 @@ if __name__ == "__main__":
         default=20,
         help="Maximum size of fragment to align.",
     )
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = parse_arguments()
     start = args.skip
     end = args.skip + args.limit
 
