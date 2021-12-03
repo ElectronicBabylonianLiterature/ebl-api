@@ -153,7 +153,7 @@ class MongoFragmentRepository(FragmentRepository):
     def query_transliterated_numbers(self):
         cursor = self._fragments.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber"]
-        )
+        ).sort("_id", pymongo.ASCENDING)
 
         return MuseumNumberSchema(many=True).load(
             fragment["museumNumber"] for fragment in cursor

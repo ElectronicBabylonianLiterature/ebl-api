@@ -161,7 +161,7 @@ class Token(ABC):
         visitor.visit(self)
 
 
-VT = TypeVar("T", bound="ValueToken")
+VT = TypeVar("VT", bound="ValueToken")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -273,11 +273,11 @@ class Variant(Token):
 
     @property
     def value(self) -> str:
-        return "/".join(token.value for token in self.tokens)
+        return atf.VARIANT_SEPARATOR.join(token.value for token in self.tokens)
 
     @property
     def clean_value(self) -> str:
-        return "/".join(token.clean_value for token in self.tokens)
+        return atf.VARIANT_SEPARATOR.join(token.clean_value for token in self.tokens)
 
     @property
     def parts(self):
