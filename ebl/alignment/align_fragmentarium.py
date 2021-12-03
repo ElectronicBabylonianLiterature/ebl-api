@@ -57,16 +57,15 @@ def to_dict(
         "chapter": f"{chapter.stage.abbreviation} {chapter.name}",
         "notes": fragment.notes,
     }
-    if result.alignments:
-        alignment = result.alignments[0]
-        return {
-            **common,
-            "score": alignment.score,
-            "preserved identity": round(alignment.percentPreservedIdentity(), 2),
-            "preserved similarity": round(alignment.percentPreservedSimilarity(), 2),
-        }
-    else:
+    if not result.alignments:
         return {**common, "score": result.score}
+    alignment = result.alignments[0]
+    return {
+        **common,
+        "score": alignment.score,
+        "preserved identity": round(alignment.percentPreservedIdentity(), 2),
+        "preserved similarity": round(alignment.percentPreservedSimilarity(), 2),
+    }
 
 
 def align_fragment(
