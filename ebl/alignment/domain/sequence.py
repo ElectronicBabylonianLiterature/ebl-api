@@ -4,8 +4,11 @@ import attr
 from alignment.sequence import EncodedSequence, Sequence  # pyre-ignore[21]
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.transliteration.domain.standardization import UNKNOWN
 
-UNCLEAR_OR_UNKNOWN_SIGN = "X"
+
+UNCLEAR_OR_UNKNOWN_SIGN = UNKNOWN.deep
 LINE_BREAK = "#"
 
 
@@ -37,3 +40,7 @@ class NamedSequence:
         return NamedSequence(  # pyre-ignore[19]
             name, vocabulary.encodeSequence(make_sequence(signs))
         )
+
+    @staticmethod
+    def of_fragment(fragment: Fragment, vocabulary: Vocabulary) -> "NamedSequence":
+        return NamedSequence.of_signs(fragment.number, fragment.signs, vocabulary)

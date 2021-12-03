@@ -26,25 +26,17 @@ def has_clear_signs(signs: str) -> bool:
     return not re.fullmatch(r"[X\\n\s]*", signs)
 
 
-def make_title(chapter: Chapter, index: int, fragment: Fragment) -> str:
-    has_same_number = fragment.number == chapter.manuscripts[index].museum_number
-    siglum = chapter.manuscripts[index].siglum
-    return f"{siglum}{'*' if has_same_number else ''}"
-
-
 def align_fragment_and_chapter(
     fragment: Fragment, chapter: Chapter
 ) -> List[AlignmentResult]:
     vocabulary = Vocabulary()
-    fragment_sequence = NamedSequence.of_signs(
-        fragment.number, fragment.signs, vocabulary
-    )
+    fragment_sequence = NamedSequence.of_fragment(fragment, vocabulary)
 
     pairs = [
         (
             fragment_sequence,
             NamedSequence.of_signs(
-                make_title(chapter, index, fragment), signs, vocabulary
+                chapter.manuscripts[index].siglum, signs, vocabulary
             ),
         )
         for index, signs in enumerate(chapter.signs)

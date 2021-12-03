@@ -1,14 +1,25 @@
 from alignment.sequence import Sequence  # pyre-ignore[21]
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 from ebl.alignment.domain.sequence import NamedSequence
+from ebl.tests.factories.fragment import FragmentFactory
+
+signs = "X X ABZ001\nABZ002\nX X X\n"
+sequence = Sequence(["ABZ001", "#", "ABZ002", "#", "#"])
 
 
 def test_of_signs() -> None:
     vocabulary = Vocabulary()
     name = 1234
-    named = NamedSequence.of_signs(name, "X X ABZ001\nABZ002\nX X X\n", vocabulary)
+    named = NamedSequence.of_signs(name, signs, vocabulary)
 
     assert named.name == str(name)
-    assert named.sequence == vocabulary.encodeSequence(
-        Sequence(["ABZ001", "#", "ABZ002", "#", "#"])
-    )
+    assert named.sequence == vocabulary.encodeSequence(sequence)
+
+
+def test_of_fragment() -> None:
+    vocabulary = Vocabulary()
+    fragment = FragmentFactory.build(signs=signs)
+    named = NamedSequence.of_fragment(fragment, vocabulary)
+
+    assert named.name == str(fragment.number)
+    assert named.sequence == vocabulary.encodeSequence(sequence)
