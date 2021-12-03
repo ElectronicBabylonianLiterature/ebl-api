@@ -4,7 +4,7 @@ import re
 import math
 import sys
 import time
-from typing import Iterable, List, Mapping, Union
+from typing import Iterable, List, Mapping, Tuple, Union
 
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 from joblib import Parallel, delayed
@@ -17,11 +17,9 @@ from ebl.alignment.domain.sequence import NamedSequence
 from ebl.app import create_context
 from ebl.context import Context
 from ebl.corpus.domain.chapter import ChapterId, Chapter
+from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-
-
-SEPARATOR = "; "
 
 
 def has_clear_signs(signs: str) -> bool:
@@ -31,7 +29,7 @@ def has_clear_signs(signs: str) -> bool:
 def make_title(chapter: Chapter, index: int, fragment: Fragment) -> str:
     has_same_number = fragment.number == chapter.manuscripts[index].museum_number
     siglum = chapter.manuscripts[index].siglum
-    return f"{chapter.id_}{SEPARATOR}{siglum}{'*' if has_same_number else ''}"
+    return f"{siglum}{'*' if has_same_number else ''}"
 
 
 def align_fragment_and_chapter(
@@ -56,19 +54,8 @@ def align_fragment_and_chapter(
     return align(pairs, vocabulary)
 
 
-def align_fragment(
-    fragment: Fragment, chapters: Iterable[Chapter]
-) -> List[AlignmentResult]:
-    return [
-        result
-        for chapter in chapters
-        for result in align_fragment_and_chapter(fragment, chapter)
-    ]
-
-
 def to_dict(result: AlignmentResult) -> List[Mapping[str, Union[int, float, str]]]:
-    chapter, manuscript = result.b.name.split(SEPARATOR)
-    title = {"fragment": result.a.name, "chapter": chapter, "manuscript": manuscript}
+    title = {"fragment": result.a.name, "manuscript": result.b.name}
     return (
         [
             {
@@ -89,7 +76,7 @@ def to_dict(result: AlignmentResult) -> List[Mapping[str, Union[int, float, str]
 def align_chunk(
     id_: int,
     numbers: Iterable[MuseumNumber],
-    chapters: Iterable[Chapter],
+    chapters: Iterable[Tuple[Text, Chapter]],
     max_lines: int,
     min_score: int,
 ) -> List[Mapping[str, Union[int, float, str]]]:
@@ -100,8 +87,15 @@ def align_chunk(
         fragment = context.fragment_repository.query_by_museum_number(number)
         if fragment.text.number_of_lines <= max_lines:
             results.extend(
-                {**sub_result, "notes": fragment.notes}
-                for result in align_fragment(fragment, chapters)
+                {
+                    **sub_result,
+                    "text id": text.id,
+                    "text name": text.name,
+                    "chapter": f"{chapter.stage.abbreviation} {chapter.name}",
+                    "notes": fragment.notes,
+                }
+                for (text, chapter) in chapters
+                for result in align_fragment_and_chapter(fragment, chapter)
                 for sub_result in to_dict(result)
                 if result.score >= min_score
             )
@@ -109,12 +103,12 @@ def align_chunk(
     return results
 
 
-def load_chapters(context: Context) -> List[Chapter]:
+def load_chapters(context: Context) -> List[Tuple[Text, Chapter]]:
     texts = context.text_repository
     return [
-        chapter
-        for chapter in (
-            texts.find_chapter(ChapterId(text.id, listing.stage, listing.name))
+        (text, chapter)
+        for (text, chapter) in (
+            (text, texts.find_chapter(ChapterId(text.id, listing.stage, listing.name)))
             for text in texts.list()
             for listing in text.chapters
         )
@@ -190,6 +184,8 @@ if __name__ == "__main__":
     with open(args.output, "w", encoding="utf-8") as file:
         fieldnames = [
             "fragment",
+            "text id",
+            "text name",
             "chapter",
             "manuscript",
             "score",
