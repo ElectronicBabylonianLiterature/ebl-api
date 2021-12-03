@@ -4,7 +4,7 @@ import re
 import math
 import sys
 import time
-from typing import Iterable, List, Mapping, Tuple, Union
+from typing import Iterable, List, Tuple
 
 from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
 from joblib import Parallel, delayed
@@ -54,23 +54,38 @@ def align_fragment_and_chapter(
     return align(pairs, vocabulary)
 
 
-def to_dict(result: AlignmentResult) -> List[Mapping[str, Union[int, float, str]]]:
-    title = {"fragment": result.a.name, "manuscript": result.b.name}
-    return (
-        [
-            {
-                **title,
-                "score": alignment.score,
-                "preserved identity": round(alignment.percentPreservedIdentity(), 2),
-                "preserved similarity": round(
-                    alignment.percentPreservedSimilarity(), 2
-                ),
-            }
-            for alignment in result.alignments
-        ]
-        if result.alignments
-        else [{**title, "score": result.score}]
-    )
+def to_dict(
+    fragment: Fragment, text: Text, chapter: Chapter, result: AlignmentResult
+) -> dict:
+    common = {
+        "fragment": result.a.name,
+        "manuscript": result.b.name,
+        "text id": text.id,
+        "text name": text.name,
+        "chapter": f"{chapter.stage.abbreviation} {chapter.name}",
+        "notes": fragment.notes,
+    }
+    if result.alignments:
+        alignment = result.alignments[0]
+        return {
+            **common,
+            "score": alignment.score,
+            "preserved identity": round(alignment.percentPreservedIdentity(), 2),
+            "preserved similarity": round(alignment.percentPreservedSimilarity(), 2),
+        }
+    else:
+        return {**common, "score": result.score}
+
+
+def align_fragment(
+    fragment: Fragment, chapters: Iterable[Tuple[Text, Chapter]], min_score: int
+) -> List[dict]:
+    return [
+        to_dict(fragment, text, chapter, result)
+        for (text, chapter) in chapters
+        for result in align_fragment_and_chapter(fragment, chapter)
+        if result.score >= min_score
+    ]
 
 
 def align_chunk(
@@ -79,26 +94,14 @@ def align_chunk(
     chapters: Iterable[Tuple[Text, Chapter]],
     max_lines: int,
     min_score: int,
-) -> List[Mapping[str, Union[int, float, str]]]:
+) -> List[dict]:
     sys.setrecursionlimit(50000)
     context = create_context()
-    results: List[Mapping[str, Union[int, float, str]]] = []
+    results: List[dict] = []
     for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
         fragment = context.fragment_repository.query_by_museum_number(number)
         if fragment.text.number_of_lines <= max_lines:
-            results.extend(
-                {
-                    **sub_result,
-                    "text id": text.id,
-                    "text name": text.name,
-                    "chapter": f"{chapter.stage.abbreviation} {chapter.name}",
-                    "notes": fragment.notes,
-                }
-                for (text, chapter) in chapters
-                for result in align_fragment_and_chapter(fragment, chapter)
-                for sub_result in to_dict(result)
-                if result.score >= min_score
-            )
+            results.extend(align_fragment(fragment, chapters, min_score))
 
     return results
 
