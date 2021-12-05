@@ -13,4 +13,4 @@ def create_signs_routes(api: falcon.API, context: Context):
     signs_images = SignsImageResource(AnnotationImageExtractor(context.annotations_repository, context.photo_repository))
     api.add_route("/signs", signs_search)
     api.add_route("/signs/{sign_name}", signs)
-    api.add_route("/signs/{sign_name}/image", signs_images)
+    api.add_route("/signs/{sign_name}/images", signs_images)

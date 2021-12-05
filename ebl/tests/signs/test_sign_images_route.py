@@ -12,7 +12,7 @@ def test_signs_get(client, annotations_repository, photo_repository, when):
     annotation = AnnotationFactory.build(data=annotation_data)
     annotations_repository.create_or_update(AnnotationsFactory.build(fragment_number="K.2", annotations=[annotation]))
 
-    result = client.simulate_get(f"/signs/{sign_name}/image")
+    result = client.simulate_get(f"/signs/{sign_name}/images")
 
     assert len(json.loads(result.json)["images"]) > 0
     assert result.status == falcon.HTTP_OK
