@@ -14,8 +14,7 @@ def test_signs_get(client, annotations_repository, photo_repository, when):
 
     result = client.simulate_get(f"/signs/{sign_name}/image")
 
-    photo = photo_repository.query_by_file_name("K.2.jpg")
-    x = json.loads(result.json)
+    assert len(json.loads(result.json)["images"]) > 0
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"
 

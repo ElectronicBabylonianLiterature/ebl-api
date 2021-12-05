@@ -33,10 +33,10 @@ class AnnotationImageExtractor:
         )
         cropped_images = []
         for bbox in bounding_boxes:
-            area = (bbox.top_left_x, bbox.top_left_y, bbox.width, bbox.height)
+            area = (bbox.top_left_x, bbox.top_left_y, bbox.top_left_x + bbox.width, bbox.top_left_y + bbox.height)
             cropped_image = image.crop(area)
             buf = io.BytesIO()
-            cropped_image.save(buf, format="JPEG")
+            cropped_image.save(buf, format="PNG")
             cropped_images.append(buf.getvalue())
         return cropped_images
 

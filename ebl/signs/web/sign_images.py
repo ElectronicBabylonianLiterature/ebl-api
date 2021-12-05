@@ -15,5 +15,4 @@ class SignsImageResource:
     def on_get(self, _req, resp, sign_name):
         images = self._image_extractor.cropped_images_from_sign(sign_name)
         encoded_images = [base64.b64encode(image).decode("utf-8") for image in images]
-        x = encoded_images[0]
-        resp.media = json.dumps({"images":  x})
+        resp.media = json.dumps({"images":  encoded_images})

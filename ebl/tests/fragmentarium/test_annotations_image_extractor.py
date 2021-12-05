@@ -7,7 +7,7 @@ from ebl.tests.conftest import FakeFile
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 
-def test_cropped_images_from_sign(annotations_repository, photo_repository, photo_jpeg, when):
+def test_cropped_images_from_sign(annotations_repository, photo_repository, when):
     image = Image.open("ebl/tests/test_image.jpeg")
     buf = io.BytesIO()
     image.save(buf, format="JPEG")
