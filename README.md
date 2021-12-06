@@ -29,9 +29,10 @@ pipenv install --dev
 The following are needed to run application:
 
 * MongoDB 4.4.4
-* Docker (optional, see [Running the application](#running-the-application))
+* [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api)
 * [Auth0](https://auth0.com)
 * [Sentry](https://sentry.io)
+* Docker (optional, see [Running the application](#running-the-application))
 
 Depending on your system you might need to configure [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory).
 E.g. for Ubuntu add the following environment variables:
@@ -208,32 +209,9 @@ AUTH0_ISSUER=<the Domain from Auth Application Setttings, or the custom domain f
 AUTH0_PEM=<Signing Certificate (PEM) from the Auth0 Application Advanced Settings. The whole certificate needs to be base64 encoded again before adding to environment.>
 MONGODB_URI=<MongoDB connection URI with database>
 MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
+EBL_AI_API=<AI API URL. If you do not have access to and do not need the AI API use a safe dummy value.>
 SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
-```
-
-In addition to the variables specified above, the following environment
-variables are needed:
-
-```dotenv
-MONGODB_URI=mongodb://ebl-api:<password>@mongo:27017/ebl`
-MONGO_INITDB_ROOT_USERNAME=<Mongo root user>
-MONGO_INITDB_ROOT_PASSWORD=<Mongo root user password>
-MONGOEXPRESS_LOGIN=<Mongo Express login username>
-MONGOEXPRESS_PASSWORD=<Mongo Express login password>
-```
-
-Please specify [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api) Url.
-You can leave it empty:
-
-```dotenv
-EBL_AI_API=""
-```
-
-or specify the url.
-
-```dotenv
-EBL_AI_API=http://localhost:8001/
 ```
 
 ### Locally
@@ -291,6 +269,17 @@ db.createUser(
     ]
   }
 )
+```
+
+In addition to the variables specified above, the following environment
+variables are needed:
+
+```dotenv
+MONGODB_URI=mongodb://ebl-api:<password>@mongo:27017/ebl`
+MONGO_INITDB_ROOT_USERNAME=<Mongo root user>
+MONGO_INITDB_ROOT_PASSWORD=<Mongo root user password>
+MONGOEXPRESS_LOGIN=<Mongo Express login username>
+MONGOEXPRESS_PASSWORD=<Mongo Express login password>
 ```
 
 ## Updating data
