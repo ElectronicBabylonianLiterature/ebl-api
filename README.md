@@ -91,7 +91,7 @@ pipenv run lint
 pipenv run pyre check
 pipenv run pytest
 pipenv run pytest -n auto  # Run tests in parallel.
-pipenv run test            # Run tests in parallel with coverage (slow in PyPy).
+pipenv run test            # Run tests with coverage (slow in PyPy).
 ```
 
 See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
