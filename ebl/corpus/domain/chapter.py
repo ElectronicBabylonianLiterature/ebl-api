@@ -12,6 +12,11 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
+from ebl.transliteration.domain.markup import MarkupPart
+from ebl.transliteration.domain.translation_line import (
+    DEFAULT_LANGUAGE,
+    TranslationLine,
+)
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 import ebl.corpus.domain.chapter_validators as validators
@@ -57,6 +62,19 @@ class ChapterId:
 
     def __str__(self) -> str:
         return f"{self.text_id} {self.stage.abbreviation} {self.name}"
+
+
+@property
+def get_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
+    return (
+        pydash.chain(translation)
+        .filter(lambda line: line.language == DEFAULT_LANGUAGE)
+        .map(lambda line: line.rstrip().title_case())
+        .map(lambda line: line.parts)
+        .head()
+        .value()
+        or tuple()
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True)
