@@ -1,4 +1,4 @@
-from ebl.corpus.domain.chapter import get_title
+from ebl.corpus.domain.chapter import make_title
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.translation_line import TranslationLine
 
@@ -8,5 +8,5 @@ TRANSLATION = (
 )
 
 
-def test_get_title() -> None:
-    assert get_title(TRANSLATION) == (StringPart("The Title"),)
+def test_make_title() -> None:
+    assert make_title(TRANSLATION) == (StringPart("The Title"),)

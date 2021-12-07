@@ -64,8 +64,7 @@ class ChapterId:
         return f"{self.text_id} {self.stage.abbreviation} {self.name}"
 
 
-@property
-def get_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
+def make_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
     return (
         pydash.chain(translation)
         .filter(lambda line: line.language == DEFAULT_LANGUAGE)

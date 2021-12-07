@@ -3,7 +3,7 @@ from typing import Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.domain.chapter import get_title
+from ebl.corpus.domain.chapter import make_title
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.genre import Genre
@@ -27,7 +27,7 @@ class ChapterListing:
 
     @property
     def title(self) -> Sequence[MarkupPart]:
-        return get_title(self.translation)
+        return make_title(self.translation)
 
 
 @attr.s(auto_attribs=True, frozen=True)
