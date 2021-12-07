@@ -7,7 +7,7 @@ RUN sudo apt-get update \
         mongo-tools \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=pypy3.7-7.3.3
+ARG PYTHON_VERSION=pypy3.7-7.3.5
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 RUN python -m ensurepip
