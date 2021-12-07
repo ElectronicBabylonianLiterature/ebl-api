@@ -159,7 +159,7 @@ class MongoFragmentRepository(FragmentRepository):
             fragment["museumNumber"] for fragment in cursor
         )
 
-    def query_transliterated_line_to_vec(self,) -> List[LineToVecEntry]:
+    def query_transliterated_line_to_vec(self) -> List[LineToVecEntry]:
         cursor = self._fragments.find_many(HAS_TRANSLITERATION, {"text": False})
         return [
             LineToVecEntry(
