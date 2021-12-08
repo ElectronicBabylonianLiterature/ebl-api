@@ -1,15 +1,7 @@
 from marshmallow import Schema, fields
 
-from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.corpus.domain.stage import Stage
+from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.web.chapter_schemas import ApiLineSchema
-from ebl.schemas import ValueEnum
-
-
-class ChapterIdSchema(Schema):
-    text_id = fields.Nested(TextIdSchema, data_key="textId")
-    stage = ValueEnum(Stage)
-    name = fields.String()
 
 
 class LineSchema(Schema):
