@@ -11,8 +11,10 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 class LineDisplaySchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
-    reconstruction = fields.List(fields.Nested(OneOfTokenSchema), required=True)
-    translation = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
+    reconstruction = fields.List(fields.Nested(OneOfTokenSchema), load_default=tuple())
+    translation = fields.List(
+        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple()
+    )
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> LineDisplay:
