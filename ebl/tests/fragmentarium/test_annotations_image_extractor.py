@@ -5,12 +5,10 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
 def test_cropped_images_from_sign(annotations_repository, photo_repository, fragment_repository, when, photo_jpeg):
-
     image_extractor = AnnotationImageExtractor(fragment_repository, annotations_repository, photo_repository)
 
     annotation = AnnotationsFactory.build()
     sign = "test-sign"
-
 
     fragment = TransliteratedFragmentFactory.build()
     (when(annotations_repository).find_by_sign(sign).thenReturn([annotation]))

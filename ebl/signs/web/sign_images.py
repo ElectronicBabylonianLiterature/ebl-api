@@ -1,9 +1,8 @@
-import base64
-
 import falcon
 
 from ebl.fragmentarium.application.annotations_image_extractor import \
     AnnotationImageExtractor
+from ebl.signs.web.cropped_annotation_schema import CroppedAnnotationSchema
 from ebl.users.web.require_scope import require_scope
 
 
@@ -13,6 +12,5 @@ class SignsImageResource:
 
     @falcon.before(require_scope, "read:words")
     def on_get(self, _req, resp, sign_name):
-        images = self._image_extractor.cropped_images_from_sign(sign_name)
-        encoded_images = [base64.b64encode(image).decode("utf-8") for image in images]
-        resp.media = encoded_images
+        cropped_signs = self._image_extractor.cropped_images_from_sign(sign_name)
+        resp.media = CroppedAnnotationSchema().dump(cropped_signs, many=True)
