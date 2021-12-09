@@ -196,7 +196,7 @@ class FakeFile(File):
         self._file.close()
 
     def read(self, size=-1):
-        return self._file.read(size)
+        return self._file.getvalue()
 
 
 class TestFilesRepository(GridFsFileRepository):

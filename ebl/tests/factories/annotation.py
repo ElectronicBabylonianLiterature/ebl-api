@@ -30,9 +30,9 @@ class AnnotationDataFactory(factory.Factory):
     value = factory.Faker("word")
     path = factory.List(
         [
-            factory.Faker("random_int", min=0),
-            factory.Faker("random_int", min=0),
-            factory.Faker("random_int", min=0),
+            factory.Faker("random_int", min=0, max=10),
+            factory.Faker("random_int", min=0, max=10),
+            factory.Faker("random_int", min=0, max=10),
         ]
     )
 

@@ -58,6 +58,8 @@ class MongoAnnotationsRepository(AnnotationsRepository):
     }},
 }},
 ])
+
+
         """
         result = self._collection.aggregate([
 {"$match": {"annotations.data.signName": query}},
@@ -81,4 +83,5 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
 """
         return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)
+
 
