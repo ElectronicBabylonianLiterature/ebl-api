@@ -771,9 +771,7 @@ def test_merging_lines(
 def test_update_lines_raises_exception_if_invalid_signs(
     corpus, text_repository, bibliography, when
 ) -> None:
-    lines = LinesUpdate(
-        [], set(), {index: line for index, line in enumerate(CHAPTER.lines)}
-    )
+    lines = LinesUpdate([], set(), dict(enumerate(CHAPTER.lines)))
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
