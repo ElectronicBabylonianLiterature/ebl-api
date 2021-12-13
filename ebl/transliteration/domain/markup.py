@@ -130,3 +130,15 @@ class BibliographyPart(MarkupPart):
 
 def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
     return tuple(parts)
+
+
+def rstrip(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
+    return tuple([*parts[:-1], parts[-1].rstrip()]) if parts else parts
+
+
+def title_case(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
+    return tuple(part.title_case() for part in parts)
+
+
+def to_title(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
+    return title_case(rstrip(parts))

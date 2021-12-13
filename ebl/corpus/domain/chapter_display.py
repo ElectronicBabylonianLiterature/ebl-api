@@ -10,7 +10,7 @@ from ebl.transliteration.domain.translation_line import (
 )
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.markup import MarkupPart
+from ebl.transliteration.domain.markup import MarkupPart, to_title
 
 
 def get_default_translation(
@@ -32,6 +32,10 @@ class LineDisplay:
     reconstruction: Sequence[Token]
     translation: Sequence[MarkupPart]
 
+    @property
+    def title(self) -> Sequence[MarkupPart]:
+        return to_title(self.translation)
+
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
         return LineDisplay(
@@ -46,6 +50,10 @@ class ChapterDisplay:
     id_: ChapterId
     text_name: str
     lines: Sequence[LineDisplay]
+
+    @property
+    def title(self) -> Sequence[MarkupPart]:
+        return self.lines[0].title if self.lines else tuple()
 
     @staticmethod
     def of_chapter(text: Text, chapter: Chapter) -> "ChapterDisplay":

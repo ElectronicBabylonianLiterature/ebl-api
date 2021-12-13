@@ -1,3 +1,4 @@
+from ebl.corpus.domain.chapter import make_title
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.tests.factories.corpus import ChapterFactory, LineFactory, TextFactory
 from ebl.transliteration.domain.markup import StringPart
@@ -14,16 +15,24 @@ def test_line_display_of_line() -> None:
         TranslationLine(expected_translation, DEFAULT_LANGUAGE, None),
     )
     line = LineFactory.build(translation=translation_lines)
-    assert LineDisplay.of_line(line) == LineDisplay(
+
+    line_display = LineDisplay.of_line(line)
+
+    assert line_display == LineDisplay(
         line.number, line.variants[0].reconstruction, expected_translation
     )
+    assert line_display.title == make_title(translation_lines)
 
 
 def test_chapter_display_of_chapter() -> None:
     text = TextFactory.build()
     chapter = ChapterFactory.build()
-    assert ChapterDisplay.of_chapter(text, chapter) == ChapterDisplay(
+
+    chapter_display = ChapterDisplay.of_chapter(text, chapter)
+
+    assert chapter_display == ChapterDisplay(
         chapter.id_,
         text.name,
         tuple(LineDisplay.of_line(line) for line in chapter.lines),
     )
+    assert chapter_display.title == make_title(chapter.lines[0].translation)

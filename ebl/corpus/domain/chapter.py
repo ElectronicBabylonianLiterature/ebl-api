@@ -12,7 +12,7 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
-from ebl.transliteration.domain.markup import MarkupPart
+from ebl.transliteration.domain.markup import MarkupPart, to_title
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
@@ -65,14 +65,13 @@ class ChapterId:
 
 
 def make_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
-    return (
-        pydash.chain(translation)
-        .filter(lambda line: line.language == DEFAULT_LANGUAGE)
-        .map(lambda line: line.rstrip().title_case())
-        .map(lambda line: line.parts)
-        .head()
-        .value()
-        or tuple()
+    return next(
+        (
+            to_title(line.parts)
+            for line in translation
+            if line.language == DEFAULT_LANGUAGE
+        ),
+        tuple(),
     )
 
 
