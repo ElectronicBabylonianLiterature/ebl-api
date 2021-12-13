@@ -1,6 +1,7 @@
 from ebl.fragmentarium.application.annotations_image_extractor import \
     AnnotationImageExtractor, CroppedAnnotation
 from ebl.tests.factories.annotation import AnnotationsFactory
+from ebl.tests.factories.corpus import ManuscriptLineFactory
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 

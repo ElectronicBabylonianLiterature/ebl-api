@@ -3,8 +3,8 @@ import io
 from io import BytesIO
 from typing import Sequence, NewType
 
-from PIL import Image
 import attr
+from PIL import Image
 
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
@@ -13,6 +13,9 @@ from ebl.fragmentarium.domain.annotation import BoundingBox, Annotation
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 Base64 = NewType("Base64", str)
+
+
+
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedAnnotation:
@@ -48,12 +51,10 @@ class AnnotationImageExtractor:
         return result
 
 
-
     def _get_info(self, annotation: Annotation, fragmen_number: MuseumNumber):
         fragment = self._fragments_repository.query_by_museum_number(fragmen_number)
         script = fragment.script
-        line = fragment.text.lines[annotation.data.path[0]]
-        return script, f"{annotation.data.path[0]}'"
+        return script, "test-label"
 
     def _crop_from_annotation(self, annotation: Annotation, fragment_number: MuseumNumber) -> Base64:
         fragment_image = self._photos_repository.query_by_file_name(f"{fragment_number}.jpg")
