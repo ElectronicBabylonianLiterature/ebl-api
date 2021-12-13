@@ -41,7 +41,10 @@ def to_dict(chapter: ChapterDisplay) -> dict:
 
 
 def test_dump():
-    assert ChapterDisplaySchema().dump(CHAPTER_DISPLAY) == to_dict(CHAPTER_DISPLAY)
+    assert ChapterDisplaySchema().dump(CHAPTER_DISPLAY) == {
+        **to_dict(CHAPTER_DISPLAY),
+        "title": OneOfNoteLinePartSchema().dump(CHAPTER_DISPLAY.title, many=True),
+    }
 
 
 def test_load():

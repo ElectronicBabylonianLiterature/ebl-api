@@ -28,6 +28,7 @@ class LineDisplaySchema(Schema):
 class ChapterDisplaySchema(Schema):
     id_ = fields.Nested(ChapterIdSchema, required=True, data_key="id")
     text_name = fields.String(required=True, data_key="textName")
+    title = fields.List(fields.Nested(OneOfNoteLinePartSchema), dump_only=True)
     lines = fields.Nested(LineDisplaySchema, many=True, required=True)
 
     @post_load
