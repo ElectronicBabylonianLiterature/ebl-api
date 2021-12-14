@@ -149,6 +149,18 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                                     0,
                                 ]
                             },
+                            "intertext": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.intertext",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
                             "reconstruction": {
                                 "$arrayElemAt": [
                                     {

@@ -28,6 +28,9 @@ def to_dict(chapter: ChapterDisplay) -> dict:
         "lines": [
             {
                 "number": OneOfLineNumberSchema().dump(line.number),
+                "intertext": OneOfNoteLinePartSchema().dump(
+                    line.intertext, many=True
+                ),
                 "reconstruction": OneOfTokenSchema().dump(
                     line.reconstruction, many=True
                 ),
