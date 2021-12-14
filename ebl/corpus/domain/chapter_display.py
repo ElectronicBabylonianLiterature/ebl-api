@@ -29,6 +29,7 @@ def get_default_translation(
 @attr.s(frozen=True, auto_attribs=True)
 class LineDisplay:
     number: AbstractLineNumber
+    intertext: Sequence[MarkupPart]
     reconstruction: Sequence[Token]
     translation: Sequence[MarkupPart]
 
@@ -40,6 +41,7 @@ class LineDisplay:
     def of_line(line: Line) -> "LineDisplay":
         return LineDisplay(
             line.number,
+            line.variants[0].intertext,
             line.variants[0].reconstruction,
             get_default_translation(line.translation),
         )

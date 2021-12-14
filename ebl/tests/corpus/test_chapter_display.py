@@ -19,7 +19,10 @@ def test_line_display_of_line() -> None:
     line_display = LineDisplay.of_line(line)
 
     assert line_display == LineDisplay(
-        line.number, line.variants[0].reconstruction, expected_translation
+        line.number,
+        line.variants[0].intertext,
+        line.variants[0].reconstruction,
+        expected_translation,
     )
     assert line_display.title == make_title(translation_lines)
 

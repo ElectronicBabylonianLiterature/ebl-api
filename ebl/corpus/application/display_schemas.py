@@ -20,6 +20,7 @@ class LineDisplaySchema(Schema):
     def make_line(self, data: dict, **kwargs) -> LineDisplay:
         return LineDisplay(
             data["number"],
+            tuple(),
             tuple(data["reconstruction"]),
             tuple(data["translation"]),
         )
