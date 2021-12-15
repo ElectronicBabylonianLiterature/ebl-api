@@ -1,4 +1,4 @@
-from ebl.corpus.domain.chapter import Classification
+from ebl.corpus.domain.chapter import Classification, make_title
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.corpus.domain.text_id import TextId
@@ -44,4 +44,4 @@ def test_text_constructor_sets_correct_fields() -> None:
 
 
 def test_title() -> None:
-    assert CHAPTER.title == (StringPart("The Title"),)
+    assert CHAPTER.title == make_title(TRANSLATION)

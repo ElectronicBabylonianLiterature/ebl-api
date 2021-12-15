@@ -3,6 +3,7 @@ from typing import List
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium
+from ebl.transliteration.domain.translation_line import DEFAULT_LANGUAGE
 
 
 def chapter_id_query(id_: ChapterId) -> dict:
@@ -106,4 +107,82 @@ def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
             }
         },
         {"$project": {"_id": 0}},
+    ]
+
+
+def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
+    return [
+        {"$match": chapter_id_query(id_)},
+        {
+            "$addFields": {
+                "id": {
+                    "textId": "$textId",
+                    "stage": "$stage",
+                    "name": "$name",
+                },
+                "lines": {
+                    "$map": {
+                        "input": "$lines",
+                        "as": "line",
+                        "in": {
+                            "number": "$$line.number",
+                            "translation": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": {
+                                                "$filter": {
+                                                    "input": "$$line.translation",
+                                                    "as": "translation",
+                                                    "cond": {
+                                                        "eq": [
+                                                            "$$translation.language",
+                                                            DEFAULT_LANGUAGE,
+                                                        ]
+                                                    },
+                                                }
+                                            },
+                                            "as": "en_translation",
+                                            "in": "$$en_translation.parts",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
+                            "intertext": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.intertext",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
+                            "reconstruction": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.reconstruction",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
+                        },
+                    }
+                },
+            }
+        },
+        {
+            "$project": {
+                "_id": False,
+                "id": True,
+                "lines": True,
+            }
+        },
     ]

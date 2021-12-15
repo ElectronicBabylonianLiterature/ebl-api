@@ -1,0 +1,56 @@
+from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.tests.factories.corpus import (
+    ChapterFactory,
+    TextFactory,
+)
+from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.note_line_part_schemas import (
+    OneOfNoteLinePartSchema,
+)
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+
+
+CHAPTER_DISPLAY = ChapterDisplay.of_chapter(TextFactory.build(), ChapterFactory.build())
+
+
+def to_dict(chapter: ChapterDisplay) -> dict:
+    return {
+        "id": {
+            "stage": chapter.id_.stage.value,
+            "name": chapter.id_.name,
+            "textId": {
+                "genre": chapter.id_.text_id.genre.value,
+                "category": chapter.id_.text_id.category,
+                "index": chapter.id_.text_id.index,
+            },
+        },
+        "textName": chapter.text_name,
+        "isSingleStage": chapter.is_single_stage,
+        "lines": [
+            {
+                "number": OneOfLineNumberSchema().dump(line.number),
+                "intertext": OneOfNoteLinePartSchema().dump(
+                    line.intertext, many=True
+                ),
+                "reconstruction": OneOfTokenSchema().dump(
+                    line.reconstruction, many=True
+                ),
+                "translation": OneOfNoteLinePartSchema().dump(
+                    line.translation, many=True
+                ),
+            }
+            for line in chapter.lines
+        ],
+    }
+
+
+def test_dump():
+    assert ChapterDisplaySchema().dump(CHAPTER_DISPLAY) == {
+        **to_dict(CHAPTER_DISPLAY),
+        "title": OneOfNoteLinePartSchema().dump(CHAPTER_DISPLAY.title, many=True),
+    }
+
+
+def test_load():
+    assert ChapterDisplaySchema().load(to_dict(CHAPTER_DISPLAY)) == CHAPTER_DISPLAY

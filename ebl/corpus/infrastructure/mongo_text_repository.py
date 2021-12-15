@@ -4,16 +4,22 @@ import pymongo
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
+from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION, TEXTS_COLLECTION
-from ebl.corpus.infrastructure.queries import chapter_id_query, join_chapters
+from ebl.corpus.infrastructure.queries import (
+    aggregate_chapter_display,
+    chapter_id_query,
+    join_chapters,
+)
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
-from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -100,6 +106,22 @@ class MongoTextRepository(TextRepository):
             return ChapterSchema().load(chapter)
         except NotFoundError:
             raise chapter_not_found(id_)
+
+    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+        try:
+            text = self.find(id_.text_id)
+            chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
+            return ChapterDisplaySchema().load(
+                {
+                    **next(chapters),
+                    "textName": text.name,
+                    "isSingleStage": not text.has_multiple_stages,
+                }
+            )
+        except NotFoundError as error:
+            raise text_not_found(id_.text_id) from error
+        except StopIteration as error:
+            raise chapter_not_found(id_) from error
 
     def list(self) -> List[Text]:
         return TextSchema().load(
