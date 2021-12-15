@@ -25,6 +25,8 @@ def to_dict(chapter: ChapterDisplay) -> dict:
                 "index": chapter.id_.text_id.index,
             },
         },
+        "textName": chapter.text_name,
+        "isSingleStage": chapter.is_single_stage,
         "lines": [
             {
                 "number": OneOfLineNumberSchema().dump(line.number),

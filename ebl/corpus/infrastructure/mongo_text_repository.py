@@ -112,7 +112,11 @@ class MongoTextRepository(TextRepository):
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
             return ChapterDisplaySchema().load(
-                {**next(chapters), "textName": text.name}
+                {
+                    **next(chapters),
+                    "textName": text.name,
+                    "isSingleStage": not text.has_multiple_stages,
+                }
             )
         except NotFoundError as error:
             raise text_not_found(id_.text_id) from error

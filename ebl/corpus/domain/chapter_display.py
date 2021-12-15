@@ -51,6 +51,7 @@ class LineDisplay:
 class ChapterDisplay:
     id_: ChapterId
     text_name: str
+    is_single_stage: bool
     lines: Sequence[LineDisplay]
 
     @property
@@ -62,5 +63,6 @@ class ChapterDisplay:
         return ChapterDisplay(
             chapter.id_,
             text.name,
+            not text.has_multiple_stages,
             tuple(map(LineDisplay.of_line, chapter.lines)),
         )

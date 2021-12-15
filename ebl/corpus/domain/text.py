@@ -45,3 +45,7 @@ class Text:
     @property
     def id(self) -> TextId:
         return TextId(self.genre, self.category, self.index)
+
+    @property
+    def has_multiple_stages(self) -> bool:
+        return len({chapter.stage for chapter in self.chapters}) > 1
