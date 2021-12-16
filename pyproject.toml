@@ -5,43 +5,46 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 falcon = "~=2.0.0"
 falcon-auth = "*"
-cryptography = "*"
 pymongo = "*"
-newrelic = "*"
 pydash = "*"
 requests = "*"
 dictdiffer = "*"
 jsonschema = "*"
 attrs = "*"
-sentry-sdk = {extras = ["falcon"], version = "*"}
+sentry-sdk = {extras = ["falcon"],version = "*"}
 roman = "*"
 waitress = "*"
-falcon-apispec = "*"
-lark-parser = "*"
+lark-parser = "==0.11.2"
 marshmallow = "*"
 inflect = "*"
 joblib = "*"
 tqdm = "*"
 marshmallow-oneofschema = "*"
+singledispatchmethod = "*"
+pycryptodomex = "*"
+cryptography = "==3.3.2"
+newrelic = "*"
+alignment = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
 pytest-cov = "*"
-mongomock = "*"
 freezegun = "*"
 pytest-watch = "*"
 pytest-mockito = "*"
 factory-boy = "*"
-rope = "*"
 flake8 = "*"
 pyhamcrest = "*"
 flake8-bugbear = "*"
 httpretty = "*"
-pyre-check = "==0.0.46"
-black = "==19.3b0"
+pyre-check = "==0.0.60"
+black = "*"
+pymongo-inmemory = "*"
+pillow = "*"
+pytest-xdist = "*"
 
 
 [tool.poetry.scripts]
@@ -49,6 +52,8 @@ test = "pytest --cov=ebl --cov-report term --cov-report xml"
 test-watch = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
 start = "waitress-serve --port=8000 --call ebl.app:get_app"
 lint = "flake8 ebl"
+format  = "black ebl"
+type = "pyre check"
 
 
 [build-system]
