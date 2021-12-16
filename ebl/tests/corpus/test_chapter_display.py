@@ -20,6 +20,8 @@ def test_line_display_of_line() -> None:
 
     assert line_display == LineDisplay(
         line.number,
+        line.is_second_line_of_parallelism,
+        line.is_beginning_of_section,
         line.variants[0].intertext,
         line.variants[0].reconstruction,
         expected_translation,

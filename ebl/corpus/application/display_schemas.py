@@ -11,6 +11,12 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 class LineDisplaySchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
+    is_second_line_of_parallelism = fields.Boolean(
+        required=True, data_key="isSecondLineOfParallelism"
+    )
+    is_beginning_of_section = fields.Boolean(
+        required=True, data_key="isBeginningOfSection"
+    )
     intertext = fields.List(
         fields.Nested(OneOfNoteLinePartSchema), load_default=tuple()
     )
@@ -23,6 +29,8 @@ class LineDisplaySchema(Schema):
     def make_line(self, data: dict, **kwargs) -> LineDisplay:
         return LineDisplay(
             data["number"],
+            data["is_second_line_of_parallelism"],
+            data["is_beginning_of_section"],
             tuple(data["intertext"]),
             tuple(data["reconstruction"]),
             tuple(data["translation"]),

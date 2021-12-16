@@ -29,6 +29,8 @@ def get_default_translation(
 @attr.s(frozen=True, auto_attribs=True)
 class LineDisplay:
     number: AbstractLineNumber
+    is_second_line_of_parallelism: bool
+    is_beginning_of_section: bool
     intertext: Sequence[MarkupPart]
     reconstruction: Sequence[Token]
     translation: Sequence[MarkupPart]
@@ -39,10 +41,13 @@ class LineDisplay:
 
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
+        first_variant = line.variants[0]
         return LineDisplay(
             line.number,
-            line.variants[0].intertext,
-            line.variants[0].reconstruction,
+            line.is_second_line_of_parallelism,
+            line.is_beginning_of_section,
+            first_variant.intertext,
+            first_variant.reconstruction,
             get_default_translation(line.translation),
         )
 

@@ -126,6 +126,8 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                         "as": "line",
                         "in": {
                             "number": "$$line.number",
+                            "isSecondLineOfParallelism": "$$line.isSecondLineOfParallelism",
+                            "isBeginningOfSection": "$$line.isBeginningOfSection",
                             "translation": {
                                 "$arrayElemAt": [
                                     {
