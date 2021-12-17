@@ -7,14 +7,15 @@ RUN sudo apt-get update \
         mongo-tools \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=pypy3.7-7.3.5
+ARG PYTHON_VERSION=pypy3.8-7.3.7
+RUN pyenv update
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 RUN python -m ensurepip
 RUN python -m pip install --upgrade pip
 
 RUN pip install pdm
-RUN pdm --pep582 >> ~/.bash_profile
+RUN pdm --pep582 bash >> ~/.bash_profile
 RUN pdm completion bash > /etc/bash_completion.d/pdm.bash-completion
 
 ENV NODE_OPTIONS=--experimental-worker
