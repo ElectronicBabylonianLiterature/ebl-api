@@ -13,7 +13,7 @@ RUN pyenv global $PYTHON_VERSION
 
 RUN python -m ensurepip
 RUN pip install --upgrade pip
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN curl -sSL https://install.python-poetry.org | python -
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
