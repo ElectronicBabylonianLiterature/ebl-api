@@ -11,13 +11,11 @@ ARG PYTHON_VERSION=pypy3.7-7.3.5
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 
+# See: https://github.com/gitpod-io/gitpod/issues/479
+ENV PIP_USER=no
 RUN python -m ensurepip
-RUN pip install --upgrade pip
-RUN curl -sSL https://install.python-poetry.org | python -
+RUN pip install --upgrade pip poetry
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
 ENV PYMONGOIM__OPERATING_SYSTEM=ubuntu
-
-# See: https://github.com/gitpod-io/gitpod/issues/479
-ENV PIP_USER=no
