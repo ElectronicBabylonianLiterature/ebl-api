@@ -13,7 +13,7 @@ RUN pyenv global $PYTHON_VERSION
 RUN python -m ensurepip
 RUN python -m pip install --upgrade pip
 
-RUN pip install --user pdm
+RUN pip install pdm
 RUN pdm --pep582 >> ~/.bash_profile
 RUN pdm completion bash > /etc/bash_completion.d/pdm.bash-completion
 
