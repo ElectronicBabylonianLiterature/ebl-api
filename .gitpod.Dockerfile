@@ -16,7 +16,7 @@ RUN python -m pip install --upgrade pip
 
 RUN brew install pdm
 RUN pdm --pep582 bash >> ~/.bash_profile
-RUN sudo pdm completion bash > /etc/bash_completion.d/pdm.bash-completion
+# RUN sudo pdm completion bash > /etc/bash_completion.d/pdm.bash-completion
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
