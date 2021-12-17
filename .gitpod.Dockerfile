@@ -11,7 +11,11 @@ ARG PYTHON_VERSION=pypy3.7-7.3.5
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 RUN python -m ensurepip
-RUN python -m pip install --upgrade pip pipenv
+RUN python -m pip install --upgrade pip
+
+RUN curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python -
+RUN pdm --pep582 >> ~/.bash_profile
+RUN  pdm completion bash > /etc/bash_completion.d/pdm.bash-completion
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
