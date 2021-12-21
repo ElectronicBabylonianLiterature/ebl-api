@@ -6,10 +6,8 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import (
-    AnnotationsSchema,
-)
-from ebl.fragmentarium.domain.annotation import Annotations, Annotation
+from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.mongo_collection import MongoCollection
 
@@ -43,7 +41,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         result = self._collection.find_many({})
         return AnnotationsSchema().load(result, unknown=EXCLUDE, many=True)
 
-    def find_by_sign(self, sign: str) -> Sequence[Annotation]:
+    def find_by_sign(self, sign: str) -> Sequence[Annotations]:
         query = {"$regex": re.escape(sign), "$options": "i"}
         result = self._collection.aggregate(
             [

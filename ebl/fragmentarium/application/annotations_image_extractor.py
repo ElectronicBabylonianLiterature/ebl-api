@@ -1,9 +1,10 @@
 import base64
 import io
 from io import BytesIO
-from typing import Sequence, NewType
+from typing import Sequence, NewType, List, Tuple
 
 import attr
+import pydash
 from PIL import Image
 
 from ebl.files.application.file_repository import FileRepository
@@ -11,6 +12,10 @@ from ebl.fragmentarium.application.annotations_repository import AnnotationsRepo
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.annotation import BoundingBox, Annotation
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.at_line import ObjectAtLine, SurfaceAtLine, ColumnAtLine
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_label import LineLabel
+from ebl.transliteration.domain.text_line import TextLine
 
 Base64 = NewType("Base64", str)
 
@@ -40,7 +45,13 @@ class AnnotationImageExtractor:
         for single_annotation in annotations:
             fragment_number = single_annotation.fragment_number
             for annotation in single_annotation.annotations:
-                script, label = self._get_info(annotation, fragment_number)
+                fragment = self._fragments_repository.query_by_museum_number(
+                    fragment_number
+                )
+                script = fragment.script
+                label = self._get_label_of_line(
+                    annotation.data.path[0], fragment.text.lines
+                )
                 cropped_image = self._crop_from_annotation(annotation, fragment_number)
                 cropped_image_result = CroppedAnnotation(
                     cropped_image, fragment_number, script, label
@@ -48,10 +59,40 @@ class AnnotationImageExtractor:
                 result.append(cropped_image_result)
         return result
 
-    def _get_info(self, annotation: Annotation, fragmen_number: MuseumNumber):
-        fragment = self._fragments_repository.query_by_museum_number(fragmen_number)
-        script = fragment.script
-        return script, "test-label"
+    @staticmethod
+    def _calculate_label(total: Tuple[LineLabel, Sequence[Line]], line: Line):
+        label = total[0]
+        lines = total[1]
+        if isinstance(line, TextLine):
+            return label, [*lines, [label.set_line_number(line.line_number), line]]
+        elif isinstance(line, ObjectAtLine):
+            return label.set_object(line.label), lines
+        elif isinstance(line, SurfaceAtLine):
+            return label.set_surface(line.surface_label), lines
+        elif isinstance(line, ColumnAtLine):
+            return label.set_column(line.column_label), lines
+        else:
+            return label, lines
+
+    def _extract_label_of_line_number(
+        self, line_number: int, labels_with_lines: List[Tuple[LineLabel, Line]]
+    ) -> str:
+        result = ""
+        for label, line in labels_with_lines:
+            if line.line_number.number == line_number:
+                result = label.abbreviation
+        return result
+
+    def _get_label_of_line(self, line_number: int, lines: Sequence[Line]) -> str:
+        label_prefix = ""
+        line = lines[line_number]
+        if hasattr(line, "line_number"):
+            label_prefix = line.line_number.label
+
+        init_value = LineLabel(None, None, None, None), []
+        labels_with_lines = pydash.reduce_(lines, self._calculate_label, init_value)[1]
+        label = self._extract_label_of_line_number(line_number, labels_with_lines)
+        return label + " " + label_prefix if label else label_prefix
 
     def _crop_from_annotation(
         self, annotation: Annotation, fragment_number: MuseumNumber

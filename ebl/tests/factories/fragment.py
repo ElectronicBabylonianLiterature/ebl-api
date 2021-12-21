@@ -292,6 +292,34 @@ class TransliteratedFragmentFactory(FragmentFactory):
             DiscourseAtLine(atf.Discourse.DATE),
             DivisionAtLine("paragraph", 5),
             CompositeAtLine(atf.Composite.DIV, "part", 1),
+            TextLine.of_iterable(
+                LineNumber(8, True),
+                (
+                    Word.of(
+                        [
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                    Word.of([Logogram.of_name("GI", 6)]),
+                    Word.of([Reading.of_name("ana")]),
+                    Word.of(
+                        [
+                            Reading.of_name("u", 4),
+                            Joiner.hyphen(),
+                            Reading.of(
+                                (
+                                    ValueToken.of("š"),
+                                    BrokenAway.open(),
+                                    ValueToken.of("u"),
+                                )
+                            ),
+                        ]
+                    ),
+                    Word.of([UnknownNumberOfSigns.of(), BrokenAway.close()]),
+                ),
+            ),
             NoteLine(
                 (
                     StringPart("a note "),

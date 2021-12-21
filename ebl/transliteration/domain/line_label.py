@@ -24,3 +24,10 @@ class LineLabel:
 
     def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "LineLabel":
         return attr.evolve(self, line_number=line_number)
+
+    @property
+    def abbreviation(self) -> str:
+        column = self.column.abbreviation if self.column else ""  # pyre-ignore[18]
+        surface = " " + self.surface.abbreviation if self.surface else ""  # pyre-ignore[18]
+        object = " " + self.object.abbreviation if self.object else ""  # pyre-ignore[18]
+        return column + surface + object
