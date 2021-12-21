@@ -6,7 +6,9 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema, AnnotationSchema
+from ebl.fragmentarium.application.annotations_schema import (
+    AnnotationsSchema,
+)
 from ebl.fragmentarium.domain.annotation import Annotations, Annotation
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.mongo_collection import MongoCollection
@@ -43,22 +45,23 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
     def find_by_sign(self, sign: str) -> Sequence[Annotation]:
         query = {"$regex": re.escape(sign), "$options": "i"}
-        result = self._collection.aggregate([
-{"$match": {"annotations.data.signName": query}},
-{"$project": {
-    "fragmentNumber": 1,
-    "annotations": {
-        "$filter": {
-            "input": "$annotations",
-            "as": "annotation",
-            "cond": {
-                "$eq": ["$$annotation.data.signName", sign]
-                }
-
-    }},
-}},
-])
-
+        result = self._collection.aggregate(
+            [
+                {"$match": {"annotations.data.signName": query}},
+                {
+                    "$project": {
+                        "fragmentNumber": 1,
+                        "annotations": {
+                            "$filter": {
+                                "input": "$annotations",
+                                "as": "annotation",
+                                "cond": {"$eq": ["$$annotation.data.signName", sign]},
+                            }
+                        },
+                    }
+                },
+            ]
+        )
 
         """
         result = self._collection.aggregate([
@@ -83,5 +86,3 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
 """
         return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)
-
-

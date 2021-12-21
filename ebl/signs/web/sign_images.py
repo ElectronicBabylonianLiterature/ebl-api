@@ -1,7 +1,8 @@
 import falcon
 
-from ebl.fragmentarium.application.annotations_image_extractor import \
-    AnnotationImageExtractor
+from ebl.fragmentarium.application.annotations_image_extractor import (
+    AnnotationImageExtractor,
+)
 from ebl.signs.web.cropped_annotation_schema import CroppedAnnotationSchema
 from ebl.users.web.require_scope import require_scope
 

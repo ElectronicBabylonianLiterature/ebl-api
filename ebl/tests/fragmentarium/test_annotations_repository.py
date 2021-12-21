@@ -19,7 +19,6 @@ def test_find_by_sign(database, annotations_repository):
             assert annotation.data.sign_name == sign_query
 
 
-
 def test_retrieve_all(database, annotations_repository):
     annotations = AnnotationsFactory.build_batch(5)
     database[COLLECTION].insert_many(AnnotationsSchema(many=True).dump(annotations))
