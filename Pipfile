@@ -25,6 +25,7 @@ singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
 newrelic = "*"
+alignment = {editable = true, ref = "master", git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 
 [dev-packages]
 pytest = "*"
@@ -38,9 +39,10 @@ pyhamcrest = "*"
 flake8-bugbear = "*"
 httpretty = "*"
 pyre-check = "==0.0.60"
-black = "==19.3b0"
+black = "*"
 pymongo-inmemory = "*"
 pillow = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.7"

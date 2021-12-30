@@ -29,11 +29,12 @@ pipenv install --dev
 The following are needed to run application:
 
 * MongoDB 4.4.4
-* Docker (optional, see [Running the application](#running-the-application))
+* [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api)
 * [Auth0](https://auth0.com)
 * [Sentry](https://sentry.io)
+* Docker (optional, see [Running the application](#running-the-application))
 
-Depending on your system you might need to configure [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory). 
+Depending on your system you might need to configure [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory).
 E.g. for Ubuntu add the following environment variables:
 
 ```dotenv
@@ -88,8 +89,13 @@ pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 pipenv run black ebl --check
 pipenv run lint
 pipenv run pyre check
-pipenv run test
+pipenv run pytest
+pipenv run pytest -n auto  # Run tests in parallel.
+pipenv run test            # Run tests with coverage (slow in PyPy).
 ```
+
+See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
+for more information on parallel tests.
 
 ## Database
 
@@ -203,34 +209,10 @@ AUTH0_ISSUER=<the Domain from Auth Application Setttings, or the custom domain f
 AUTH0_PEM=<Signing Certificate (PEM) from the Auth0 Application Advanced Settings. The whole certificate needs to be base64 encoded again before adding to environment.>
 MONGODB_URI=<MongoDB connection URI with database>
 MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
+EBL_AI_API=<AI API URL. If you do not have access to and do not need the AI API use a safe dummy value.>
 SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
 ```
-
-In addition to the variables specified above, the following environment
-variables are needed:
-
-```dotenv
-MONGODB_URI=mongodb://ebl-api:<password>@mongo:27017/ebl`
-MONGO_INITDB_ROOT_USERNAME=<Mongo root user>
-MONGO_INITDB_ROOT_PASSWORD=<Mongo root user password>
-MONGOEXPRESS_LOGIN=<Mongo Express login username>
-MONGOEXPRESS_PASSWORD=<Mongo Express login password>
-```
-
-Please specify [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api) Url.
-You can leave it empty:
-
-```dotenv
-EBL_AI_API=""
-```
-
-or specify the url.
-
-```dotenv
-EBL_AI_API=http://localhost:8001/
-```
-
 
 ### Locally
 
@@ -289,6 +271,17 @@ db.createUser(
 )
 ```
 
+In addition to the variables specified above, the following environment
+variables are needed:
+
+```dotenv
+MONGODB_URI=mongodb://ebl-api:<password>@mongo:27017/ebl`
+MONGO_INITDB_ROOT_USERNAME=<Mongo root user>
+MONGO_INITDB_ROOT_PASSWORD=<Mongo root user password>
+MONGOEXPRESS_LOGIN=<Mongo Express login username>
+MONGOEXPRESS_PASSWORD=<Mongo Express login password>
+```
+
 ## Updating data
 
 Changes to the schemas or parsers can lead the data in the database to become obsolete.
@@ -342,6 +335,36 @@ docker build -t ebl/api .
 docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api pipenv run python -m ebl.corpus.update_texts
 ```
 
+### Alignment
+
+The `ebl.alignment.align_fragmentarium` module can be used to save align all
+fragments in the Fragmentarium with the Corpus.
+The scripts accepts the following arguments:
+
+```text
+-h, --help                     show this help message and exit
+-s SKIP, --skip SKIP           Number of fragments to skip.
+-l LIMIT, --limit LIMIT        Number of fragments to align.
+--minScore MIN_SCORE           Minimum score to show in the results.
+--maxLines MAX_LINES           Maximum size of fragment to align.
+-o OUTPUT, --output OUTPUT     Filename for saving the results.
+-w WORKERS, --workers WORKERS  Number of parallel workers.
+-t, --threads                  Use threads instead of processes for workers.
+```
+
+The script can be run locally:
+
+```shell script
+pipenv run python -m ebl.alignment.align_fragmentarium
+```
+
+or as stand alone container:
+
+```shell script
+docker build -t ebl/api .
+docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api pipenv run python -m ebl.alignment.align_fragmentarium
+```
+
 ### Steps to update the production database
 
 1) Implement the new functionality.
@@ -356,39 +379,40 @@ docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api pipenv run
 ### Importing .atf files
 
 Importing and conversion of external .atf files which are encoded according to the oracc and c-ATF standards to the eBL-ATF standard.
+
 * For a description of eBL-ATF see: [eBL-ATF specification](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/docs/ebl-atf.md)
 * For a list of differences between the ATF flavors see: [eBL ATF and other ATF flavors](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/eBL-ATF-and-other-ATF-flavors)
 
 To run use:
 <!-- usage -->
 ```sh-session
-$ pipenv run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
+pipenv run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
 
 ```
 <!-- usagestop -->
 #### Command line options
- * `-h` shows help message and exits the script.
- * `-i` INPUT, `--input` INPUT : Path of the input directory (`required`).
- * `-l` LOGDIR, `--logdir` LOGDIR : Path of the log files directory (`required`).
- * `-g` GLOSSARY, `--glossary` GLOSSARY : Path to the glossary file (`required`).
- * `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported fragements. If not specified a name needs to be entered manually for every fragment (`optional`).
- * `-s` STYLE, `--style` STYLE : Specify import style by entering one of the following: (`Oracc ATF`|`Oracc C-ATF`|`CDLI`). If omitted defaulting to Oracc ATF (`optional`).
 
-* The importer always tries to import all .atf files from one given input `-i` folder. To every imported folder a glossary file must be specified via `-g`. The import style can be set via the `-s` option, which is not mandatory. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment. 
+* `-h` shows help message and exits the script.
+* `-i` INPUT, `--input` INPUT : Path of the input directory (`required`).
+* `-l` LOGDIR, `--logdir` LOGDIR : Path of the log files directory (`required`).
+* `-g` GLOSSARY, `--glossary` GLOSSARY : Path to the glossary file (`required`).
+* `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported fragements. If not specified a name needs to be entered manually for every fragment (`optional`).
+* `-s` STYLE, `--style` STYLE : Specify import style by entering one of the following: (`Oracc ATF`|`Oracc C-ATF`|`CDLI`). If omitted defaulting to Oracc ATF (`optional`).
+
+* The importer always tries to import all .atf files from one given input `-i` folder. To every imported folder a glossary file must be specified via `-g`. The import style can be set via the `-s` option, which is not mandatory. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment.
 
 Example calls:
 
 ```sh-session
-$ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "atf_importer"
-$ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_cdli_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "CDLI"
-$ pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
+pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "atf_importer"
+pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_cdli_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "CDLI"
+pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
 ```
 
 #### Troubleshooting
 
 If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparseable_lines_[fragment_file].txt`, `not_imported.txt`) and see which lines could not be parsed.
 If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `not_lemmatized.txt`.
-
 
 ## Acknowledgements
 

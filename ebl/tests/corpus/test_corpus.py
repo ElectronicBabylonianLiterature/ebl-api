@@ -7,7 +7,9 @@ from ebl.corpus.application.lemmatization import (
 )
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
@@ -25,7 +27,7 @@ from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.corpus.domain.lines_update import LinesUpdate
+
 
 CHAPTERS_COLLECTION = "chapters"
 TEXT = TextFactory.build()
@@ -131,6 +133,15 @@ def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
     expect_bibliography(bibliography, when)
 
     assert corpus.find_chapter(CHAPTER.id_) == CHAPTER
+
+
+def test_find_chapter_for_display(corpus, text_repository, when) -> None:
+    chapter_display = ChapterDisplay.of_chapter(TEXT, CHAPTER)
+    when(text_repository).find_chapter_for_display(CHAPTER.id_).thenReturn(
+        chapter_display
+    )
+
+    assert corpus.find_chapter_for_display(CHAPTER.id_) == chapter_display
 
 
 def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
@@ -760,9 +771,7 @@ def test_merging_lines(
 def test_update_lines_raises_exception_if_invalid_signs(
     corpus, text_repository, bibliography, when
 ) -> None:
-    lines = LinesUpdate(
-        [], set(), {index: line for index, line in enumerate(CHAPTER.lines)}
-    )
+    lines = LinesUpdate([], set(), dict(enumerate(CHAPTER.lines)))
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )

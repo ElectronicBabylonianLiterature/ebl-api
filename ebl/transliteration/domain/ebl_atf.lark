@@ -1,7 +1,7 @@
 %import common.CR
 %import common.LF
 %import common.WS_INLINE
-%import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels)
+%import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup)
 %import .ebl_atf_dollar_line (dollar_line)
 %import .ebl_atf_text_line (at_line)
 
@@ -18,7 +18,6 @@
 
 empty_line: /\s+/?
 !control_line.-2: ("=:" | "&" | "#") /.+/?
-
 
 ?paratext: note_line | dollar_line
 

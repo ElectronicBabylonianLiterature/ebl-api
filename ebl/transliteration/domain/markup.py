@@ -20,8 +20,8 @@ def escape(unescaped: str) -> str:
     return SPECIAL_CHARACTERS.sub(lambda match: f"\\{match.group(0)}", unescaped)
 
 
-MARKUP = TypeVar("MARKUP", bound="MarkupPart")
-TEXT = TypeVar("TEXT", bound="TextPart")
+MP = TypeVar("MP", bound="MarkupPart")
+TP = TypeVar("TP", bound="TextPart")
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -35,10 +35,10 @@ class MarkupPart(ABC):
     def key(self) -> str:
         return self.value
 
-    def rstrip(self: MARKUP) -> MARKUP:
+    def rstrip(self: MP) -> MP:
         return self
 
-    def title_case(self: MARKUP) -> MARKUP:
+    def title_case(self: MP) -> MP:
         return self
 
 
@@ -46,10 +46,10 @@ class MarkupPart(ABC):
 class TextPart(MarkupPart):
     text: str
 
-    def rstrip(self: TEXT) -> TEXT:
+    def rstrip(self: TP) -> TP:
         return attr.evolve(self, text=self.text.rstrip(PUNCTUATION))
 
-    def title_case(self: TEXT) -> TEXT:
+    def title_case(self: TP) -> TP:
         return attr.evolve(self, text=self.text.title())
 
 
@@ -130,3 +130,15 @@ class BibliographyPart(MarkupPart):
 
 def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
     return tuple(parts)
+
+
+def rstrip(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
+    return tuple([*parts[:-1], parts[-1].rstrip()]) if parts else parts
+
+
+def title_case(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
+    return tuple(part.title_case() for part in parts)
+
+
+def to_title(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
+    return title_case(rstrip(parts))

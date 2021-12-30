@@ -20,7 +20,7 @@ def _require_suffix_if_contains_period(
     museum_number: "MuseumNumber", attribute: attr.Attribute, value: str
 ) -> None:
     if "." in value and not museum_number.suffix:
-        raise ValueError("If {attribute} contains period suffix cannot be empty.")
+        raise ValueError(f"If {attribute} contains period suffix cannot be empty.")
 
 
 PREFIX_ORER: Mapping[str, int] = {

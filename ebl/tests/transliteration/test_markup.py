@@ -1,3 +1,5 @@
+from typing import Sequence
+
 import pytest
 
 from ebl.bibliography.domain.reference import Reference, ReferenceType, BibliographyId
@@ -8,6 +10,9 @@ from ebl.transliteration.domain.markup import (
     LanguagePart,
     MarkupPart,
     StringPart,
+    rstrip,
+    title_case,
+    to_title,
 )
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
 
@@ -36,7 +41,7 @@ BIBLIOGRAPHY_PART = BibliographyPart(
         (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
     ],
 )
-def test_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
+def test_part_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
     assert part.rstrip() == expected
 
 
@@ -49,5 +54,47 @@ def test_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
         (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
     ],
 )
-def test_title(part: MarkupPart, expected: MarkupPart) -> None:
+def test_part_title_case(part: MarkupPart, expected: MarkupPart) -> None:
     assert part.title_case() == expected
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "parts,expected",
+    [
+        (tuple(), tuple()),
+        ([StringPart("foo--")], (StringPart("foo"),)),
+        (
+            [StringPart("foo--"), StringPart("foo--")],
+            (StringPart("foo--"), StringPart("foo")),
+        ),
+    ],
+)
+def test_rstrip(parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]) -> None:
+    assert rstrip(parts) == expected
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "parts,expected",
+    [
+        (tuple(), tuple()),
+        (
+            [StringPart("foo bar")],
+            (StringPart("Foo Bar"),),
+        ),
+    ],
+)
+def test_title_case(
+    parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]
+) -> None:
+    assert title_case(parts) == expected
+
+
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "parts",
+    [
+        tuple(),
+        [StringPart("foo-- bar--")],
+    ],
+)
+def test_to_title(parts: Sequence[MarkupPart]) -> None:
+    assert to_title(parts) == title_case(rstrip(parts))

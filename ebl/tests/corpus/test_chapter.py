@@ -1,5 +1,3 @@
-from typing import Sequence
-
 import attr
 import pytest
 
@@ -19,9 +17,8 @@ from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.genre import Genre
-from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.markup import StringPart
@@ -31,10 +28,9 @@ from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.tokens import UnknownNumberOfSigns
 
 
 GENRE = Genre.LITERATURE
@@ -166,14 +162,7 @@ def test_constructor_sets_correct_fields():
     assert CHAPTER.manuscripts[0].unplaced_lines == UNPLACED_LINES
     assert CHAPTER.manuscripts[0].references == REFERENCES
     assert CHAPTER.lines[0].number == LINE_NUMBER
-    assert CHAPTER.lines[0].variants[0].reconstruction == LINE_RECONSTRUCTION
-    assert CHAPTER.lines[0].variants[0].note == NOTE
-    assert CHAPTER.lines[0].variants[0].parallel_lines == PARALLEL_LINES
-    assert CHAPTER.lines[0].variants[0].manuscripts[0].manuscript_id == MANUSCRIPT_ID
-    assert CHAPTER.lines[0].variants[0].manuscripts[0].labels == LABELS
-    assert CHAPTER.lines[0].variants[0].manuscripts[0].line == MANUSCRIPT_TEXT_1
-    assert CHAPTER.lines[0].variants[0].manuscripts[0].paratext == PARATEXT
-    assert CHAPTER.lines[0].variants[0].manuscripts[0].omitted_words == OMITTED_WORDS
+    assert CHAPTER.lines[0].variants == (LINE_VARIANT_1,)
     assert (
         CHAPTER.lines[0].is_second_line_of_parallelism == IS_SECOND_LINE_OF_PARALLELISM
     )
@@ -312,71 +301,10 @@ def test_duplicate_line_numbers_invalid():
         Chapter(TEXT_ID, lines=(LINE_1, LINE_1))
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
-    "labels",
-    [
-        (ColumnLabel.from_label("i"), ColumnLabel.from_label("ii")),
-        (
-            SurfaceLabel.from_label(Surface.OBVERSE),
-            SurfaceLabel.from_label(Surface.REVERSE),
-        ),
-        (ColumnLabel.from_label("i"), SurfaceLabel.from_label(Surface.REVERSE)),
-    ],
-)
-def test_invalid_labels(labels: Sequence[Label]):
-    with pytest.raises(ValueError):
-        ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine(LineNumber(1)))
-
-
-def test_invalid_reconstruction():
-    with pytest.raises(ValueError):
-        Line(
-            LINE_NUMBER,
-            (LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple()),),
-            False,
-            False,
-        )
-
-
 def test_stage():
     periods = [period.long_name for period in Period if period is not Period.NONE]
     stages = [stage.value for stage in Stage]
     assert stages == [*periods, "Standard Babylonian"]
-
-
-def test_update_manuscript_alignment():
-    word1 = Word.of(
-        [Reading.of_name("ku")], alignment=0, variant=Word.of([Reading.of_name("uk")])
-    )
-    word2 = Word.of(
-        [Reading.of_name("ra")], alignment=1, variant=Word.of([Reading.of_name("ar")])
-    )
-    word3 = Word.of(
-        [Reading.of_name("pa")], alignment=2, variant=Word.of([Reading.of_name("ap")])
-    )
-    manuscript = ManuscriptLine(
-        MANUSCRIPT_ID,
-        LABELS,
-        TextLine(LineNumber(1), (word1, word2, word3)),
-        PARATEXT,
-        (1, 3),
-    )
-    expected = ManuscriptLine(
-        MANUSCRIPT_ID,
-        LABELS,
-        TextLine(
-            LineNumber(1),
-            (
-                word1.set_alignment(None, None),
-                word2.set_alignment(0, word2.variant),
-                word3.set_alignment(None, None),
-            ),
-        ),
-        PARATEXT,
-        (0,),
-    )
-
-    assert manuscript.update_alignments([None, 0]) == expected
 
 
 def test_text_lines() -> None:

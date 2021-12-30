@@ -31,4 +31,4 @@ def parse_museum_number(number: str) -> MuseumNumber:
     try:
         return MuseumNumber.of(number)
     except ValueError as error:
-        raise DataError(error)
+        raise DataError(error) from error

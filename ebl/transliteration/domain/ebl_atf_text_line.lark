@@ -4,9 +4,10 @@
 %import .ebl_atf_common (free_text)
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
-%import .ebl_atf_common (seal, _markup)
+%import .ebl_atf_common (seal)
 
 note_line: "#note: " _markup
+markup: _markup
 _markup: (emphasis_part | language_part | bibliography_part | string_part)+
 language_part: "@" LANGUAGE "{" text "}"
 emphasis_part: "@i{" note_text "}"
