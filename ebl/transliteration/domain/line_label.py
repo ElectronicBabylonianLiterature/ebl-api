@@ -27,7 +27,8 @@ class LineLabel:
 
     @property
     def abbreviation(self) -> str:
-        column = self.column.abbreviation if self.column else ""  # pyre-ignore[18]
-        surface = " " + self.surface.abbreviation if self.surface else ""  # pyre-ignore[18]
-        object = " " + self.object.abbreviation if self.object else ""  # pyre-ignore[18]
-        return column + surface + object
+        line = self.line_number.atf if self.line_number else ""  # pyre-ignore[16]
+        column = self.column.abbreviation if self.column else ""  # pyre-ignore[16]
+        surface = self.surface.abbreviation if self.surface else ""  # pyre-ignore[16]
+        object = self.object.abbreviation if self.object else ""  # pyre-ignore[16]
+        return " ".join(filter(bool, [line, column, surface, object]))

@@ -39,26 +39,6 @@ class AnnotationImageExtractor:
         self._annotations_repository = annotations_repository
         self._photos_repository = photos_repository
 
-    def cropped_images_from_sign(self, sign: str) -> Sequence[CroppedAnnotation]:
-        annotations = self._annotations_repository.find_by_sign(sign)
-        result = []
-        for single_annotation in annotations:
-            fragment_number = single_annotation.fragment_number
-            for annotation in single_annotation.annotations:
-                fragment = self._fragments_repository.query_by_museum_number(
-                    fragment_number
-                )
-                script = fragment.script
-                label = self._get_label_of_line(
-                    annotation.data.path[0], fragment.text.lines
-                )
-                cropped_image = self._crop_from_annotation(annotation, fragment_number)
-                cropped_image_result = CroppedAnnotation(
-                    cropped_image, fragment_number, script, label
-                )
-                result.append(cropped_image_result)
-        return result
-
     @staticmethod
     def _calculate_label(total: Tuple[LineLabel, Sequence[Line]], line: Line):
         label = total[0]
@@ -74,27 +54,26 @@ class AnnotationImageExtractor:
         else:
             return label, lines
 
-    def _extract_label_of_line_number(
+    def _extract_label(
         self, line_number: int, labels_with_lines: List[Tuple[LineLabel, Line]]
     ) -> str:
-        result = ""
-        for label, line in labels_with_lines:
-            if line.line_number.number == line_number:
-                result = label.abbreviation
-        return result
+        return next(
+            (
+                label.abbreviation
+                for label, line in labels_with_lines
+                if hasattr(line, "line_number")
+                and line.line_number.number == line_number  # pyre-ignore[16]
+            ),
+            "",
+        )
 
     def _get_label_of_line(self, line_number: int, lines: Sequence[Line]) -> str:
-        label_prefix = ""
-        line = lines[line_number]
-        if hasattr(line, "line_number"):
-            label_prefix = line.line_number.label
-
         init_value = LineLabel(None, None, None, None), []
         labels_with_lines = pydash.reduce_(lines, self._calculate_label, init_value)[1]
-        label = self._extract_label_of_line_number(line_number, labels_with_lines)
-        return label + " " + label_prefix if label else label_prefix
+        label = self._extract_label(line_number, labels_with_lines)
+        return label
 
-    def _crop_from_annotation(
+    def _cropped_image_from_annotation(
         self, annotation: Annotation, fragment_number: MuseumNumber
     ) -> Base64:
         fragment_image = self._photos_repository.query_by_file_name(
@@ -115,3 +94,34 @@ class AnnotationImageExtractor:
         buf = io.BytesIO()
         cropped_image.save(buf, format="PNG")
         return Base64(base64.b64encode(buf.getvalue()).decode("utf-8"))
+
+    def _cropped_image_from_annotations(
+        self, fragment_number: MuseumNumber, annotations: Sequence[Annotation]
+    ):
+        cropped_annotations = []
+        for annotation in annotations:
+            fragment = self._fragments_repository.query_by_museum_number(
+                fragment_number
+            )
+            script = fragment.script
+            label = self._get_label_of_line(
+                annotation.data.path[0], fragment.text.lines
+            )
+            cropped_image = self._cropped_image_from_annotation(
+                annotation, fragment_number
+            )
+            cropped_annotations.append(
+                CroppedAnnotation(cropped_image, fragment_number, script, label)
+            )
+        return cropped_annotations
+
+    def cropped_images_from_sign(self, sign: str) -> Sequence[CroppedAnnotation]:
+        annotations = self._annotations_repository.find_by_sign(sign)
+        cropped_annotations = []
+        for single_annotation in annotations:
+            fragment_number = single_annotation.fragment_number
+            cropped_annotations_of_single_annotation = self._cropped_image_from_annotations(
+                fragment_number, single_annotation.annotations
+            )
+            cropped_annotations.extend(cropped_annotations_of_single_annotation)
+        return cropped_annotations
