@@ -19,12 +19,30 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationData,
 )
 
+MINIMUM_BOUNDING_BOX_SIZE = 0.3
 
-def filter_annotation(annotation: Annotation) -> bool:
+
+def filter_empty_annotation(annotation: Annotation) -> bool:
+    sizes = annotation.geometry.width, annotation.geometry.height
+    if any(filter(lambda x: x < MINIMUM_BOUNDING_BOX_SIZE, sizes)):
+        print(
+            f"AnnotationData with id: '{annotation.data.id}' has bounding box smaller "
+            f"than minimum size"
+        )
+        return False
+    else:
+        return True
+
+
+def filter_annotation_by_type(annotation: Annotation) -> bool:
     return annotation.data.type not in [
         AnnotationValueType.RULING_DOLLAR_LINE,
         AnnotationValueType.SURFACE_AT_LINE,
     ]
+
+
+def filter_annotation(annotation: Annotation) -> bool:
+    return filter_annotation_by_type(annotation) and filter_empty_annotation(annotation)
 
 
 def handle_blank_annotation_type(annotation_data: AnnotationData) -> str:

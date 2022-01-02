@@ -75,13 +75,7 @@ def test_rstrip(parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]) -> 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "parts,expected",
-    [
-        (tuple(), tuple()),
-        (
-            [StringPart("foo bar")],
-            (StringPart("Foo Bar"),),
-        ),
-    ],
+    [(tuple(), tuple()), ([StringPart("foo bar")], (StringPart("Foo Bar"),))],
 )
 def test_title_case(
     parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]
@@ -90,11 +84,7 @@ def test_title_case(
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
-    "parts",
-    [
-        tuple(),
-        [StringPart("foo-- bar--")],
-    ],
+    "parts", [tuple(), [StringPart("foo-- bar--")]]
 )
 def test_to_title(parts: Sequence[MarkupPart]) -> None:
     assert to_title(parts) == title_case(rstrip(parts))
