@@ -60,9 +60,8 @@ class AnnotationImageExtractor:
         return next(
             (
                 label.abbreviation
-                for label, line in labels_with_lines
-                if hasattr(line, "line_number")
-                and line.line_number.number == line_number  # pyre-ignore[16]
+                for label, _ in labels_with_lines
+                if label.matches_line_number(line_number)
             ),
             "",
         )

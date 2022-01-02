@@ -3,7 +3,11 @@ from typing import Optional
 import attr
 
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
-from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.line_number import (
+    AbstractLineNumber,
+    LineNumberRange,
+    LineNumber,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -25,10 +29,34 @@ class LineLabel:
     def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "LineLabel":
         return attr.evolve(self, line_number=line_number)
 
+    def matches_line_number(self, line_number_to_match: int) -> bool:
+        line_number = self.line_number
+
+        if line_number:
+            if (
+                isinstance(line_number, LineNumberRange)
+                and line_number.start.number
+                <= line_number_to_match
+                <= line_number.end.number
+            ):
+                return True
+            elif (
+                isinstance(line_number, LineNumber)
+                and line_number.number == line_number_to_match
+            ):
+                return True
+        return False
+
     @property
     def abbreviation(self) -> str:
-        line = self.line_number.atf if self.line_number else ""  # pyre-ignore[16]
-        column = self.column.abbreviation if self.column else ""  # pyre-ignore[16]
-        surface = self.surface.abbreviation if self.surface else ""  # pyre-ignore[16]
-        object = self.object.abbreviation if self.object else ""  # pyre-ignore[16]
-        return " ".join(filter(bool, [line, column, surface, object]))
+        line_number = self.line_number
+        column = self.column
+        surface = self.surface
+        object = self.object
+        line_atf = line_number.atf if line_number else ""
+        column_abbr = column.abbreviation if column else ""
+        surface_abbr = surface.abbreviation if surface else ""
+        object_abbr = object.abbreviation if object else ""
+        return " ".join(
+            filter(bool, [line_atf, column_abbr, surface_abbr, object_abbr])
+        )
