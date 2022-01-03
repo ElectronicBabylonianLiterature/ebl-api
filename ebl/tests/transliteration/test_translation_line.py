@@ -34,32 +34,3 @@ def test_parallel_fragment(parts, language, extent, prefix, translation) -> None
     assert line.translation == translation
     assert line.atf == Atf(f"{prefix}: {translation}")
     assert line.lemmatization == (LemmatizationToken(translation),)
-
-
-@pytest.mark.parametrize(
-    "line,expected",
-    [
-        (TranslationLine(tuple()), TranslationLine(tuple())),
-        (TranslationLine([StringPart("foo--")]), TranslationLine([StringPart("foo")])),
-        (
-            TranslationLine([StringPart("foo--"), StringPart("foo--")]),
-            TranslationLine([StringPart("foo--"), StringPart("foo")]),
-        ),
-    ],
-)
-def test_rstrip(line: TranslationLine, expected: TranslationLine) -> None:
-    assert line.rstrip() == expected
-
-
-@pytest.mark.parametrize(
-    "line,expected",
-    [
-        (TranslationLine(tuple()), TranslationLine(tuple())),
-        (
-            TranslationLine([StringPart("foo bar")]),
-            TranslationLine([StringPart("Foo Bar")]),
-        ),
-    ],
-)
-def test_title_case(line: TranslationLine, expected: TranslationLine) -> None:
-    assert line.title_case() == expected

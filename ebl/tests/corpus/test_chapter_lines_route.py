@@ -129,9 +129,30 @@ def test_updating_invalid_id(client):
     assert post_result.status == falcon.HTTP_NOT_FOUND
 
 
+LINE_DTO = ApiLineSchema().dump(ChapterFactory.build().lines[0])
+
+INVALID_LINE = {**LINE_DTO, "invalid": True}
+
 TOO_MANY_NOTES = {
-    **ApiLineSchema().dump(ChapterFactory.build().lines[0]),
-    "reconstruction": "kur\n#note: extra note\n#note: extra note",
+    **LINE_DTO,
+    "variants": [
+        {
+            **LINE_DTO["variants"][0],
+            "reconstruction": "kur\n#note: extra note\n#note: extra note",
+        }
+    ],
+}
+
+INVALID_RECONSTRUCTION = {
+    **LINE_DTO,
+    "variants": [{**LINE_DTO["variants"][0], "reconstruction": "öö"}],
+}
+
+INVALID_TRANSLATION = {**LINE_DTO, "translation": "invalid"}
+
+INVALID_INTERTEXT = {
+    **LINE_DTO,
+    "variants": [{**LINE_DTO["variants"][0], "intertext": "@akk{öö}"}],
 }
 
 
@@ -141,10 +162,38 @@ TOO_MANY_NOTES = {
         [[], falcon.HTTP_BAD_REQUEST],
         [{}, falcon.HTTP_BAD_REQUEST],
         [
+            {"new": [], "deleted": [], "edited": [{"index": 0, "line": INVALID_LINE}]},
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
             {
                 "new": [],
                 "deleted": [],
                 "edited": [{"index": 0, "line": TOO_MANY_NOTES}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": INVALID_RECONSTRUCTION}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": INVALID_TRANSLATION}],
+            },
+            falcon.HTTP_BAD_REQUEST,
+        ],
+        [
+            {
+                "new": [],
+                "deleted": [],
+                "edited": [{"index": 0, "line": INVALID_INTERTEXT}],
             },
             falcon.HTTP_BAD_REQUEST,
         ],
@@ -178,7 +227,7 @@ def test_importing(client, bibliography, sign_repository, signs, text_repository
     )
     atf = (
         f"{chapter.lines[0].number.number+1}. bu\n"
-        f"{str(chapter.manuscripts[0].siglum)} {next_line_mumber}. ..."
+        f"{chapter.manuscripts[0].siglum} {next_line_mumber}. ..."
     )
 
     updated_chapter = attr.evolve(

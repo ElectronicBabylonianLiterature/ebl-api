@@ -25,7 +25,7 @@ class AnnotationDataFactory(factory.Factory):
         model = AnnotationData
 
     id = factory.Sequence(lambda n: f"annotation-{n}")
-    type = AnnotationValueType.HASSIGN
+    type = AnnotationValueType.HAS_SIGN
     sign_name = factory.Faker("word")
     value = factory.Faker("word")
     path = factory.List(

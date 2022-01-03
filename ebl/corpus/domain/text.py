@@ -1,17 +1,14 @@
 from typing import Sequence
 
 import attr
-import pydash
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.corpus.domain.chapter import make_title
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.markup import MarkupPart
-from ebl.transliteration.domain.translation_line import (
-    DEFAULT_LANGUAGE,
-    TranslationLine,
-)
+from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
@@ -30,15 +27,7 @@ class ChapterListing:
 
     @property
     def title(self) -> Sequence[MarkupPart]:
-        return (
-            pydash.chain(self.translation)
-            .filter(lambda line: line.language == DEFAULT_LANGUAGE)
-            .map(lambda line: line.rstrip().title_case())
-            .map(lambda line: line.parts)
-            .head()
-            .value()
-            or tuple()
-        )
+        return make_title(self.translation)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -56,3 +45,7 @@ class Text:
     @property
     def id(self) -> TextId:
         return TextId(self.genre, self.category, self.index)
+
+    @property
+    def has_multiple_stages(self) -> bool:
+        return len({chapter.stage for chapter in self.chapters}) > 1

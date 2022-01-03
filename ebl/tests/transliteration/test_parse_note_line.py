@@ -2,7 +2,11 @@ import pytest
 
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import LINE_PARSER, parse_atf_lark
+from ebl.transliteration.domain.lark_parser import (
+    LINE_PARSER,
+    parse_atf_lark,
+    parse_markup,
+)
 from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
@@ -23,52 +27,39 @@ def expected_language_part(language: Language, transliteration: str) -> Language
     return LanguagePart.of_transliteration(language, parse_text(transliteration))
 
 
-@pytest.mark.parametrize(
-    "atf,expected_line",
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "atf,expected",
     [
-        ("#note: this is a note ", NoteLine([StringPart("this is a note ")])),
-        ("#note: @i{italic text}", NoteLine([EmphasisPart("italic text")])),
+        ("this is a note ", (StringPart("this is a note "),)),
+        ("@i{italic text}", (EmphasisPart("italic text"),)),
+        ("@akk{{d}kur}", (expected_language_part(Language.AKKADIAN, "{d}kur"),)),
+        ("@sux{kur}", (expected_language_part(Language.SUMERIAN, "kur"),)),
+        ("@es{kur}", (expected_language_part(Language.EMESAL, "kur"),)),
         (
-            "#note: @akk{{d}kur}",
-            NoteLine([expected_language_part(Language.AKKADIAN, "{d}kur")]),
+            "@bib{RN123@x 2-3a}",
+            (BibliographyPart.of(BibliographyId("RN123"), "x 2-3a"),),
         ),
+        ("@bib{RN1\\}@2}", (BibliographyPart.of(BibliographyId("RN1}"), "2"),)),
+        ("@bib{RN1@1\\}2}", (BibliographyPart.of(BibliographyId("RN1"), "1}2"),)),
+        ("@bib{RN12\\@3@3}", (BibliographyPart.of(BibliographyId("RN12@3"), "3"),)),
+        ("@bib{RN@1\\}\\@2}", (BibliographyPart.of(BibliographyId("RN"), "1}@2"),)),
         (
-            "#note: @sux{kur}",
-            NoteLine([expected_language_part(Language.SUMERIAN, "kur")]),
-        ),
-        ("#note: @es{kur}", NoteLine([expected_language_part(Language.EMESAL, "kur")])),
-        (
-            "#note: @bib{RN123@x 2-3a}",
-            NoteLine([BibliographyPart.of(BibliographyId("RN123"), "x 2-3a")]),
-        ),
-        (
-            "#note: @bib{RN1\\}@2}",
-            NoteLine([BibliographyPart.of(BibliographyId("RN1}"), "2")]),
-        ),
-        (
-            "#note: @bib{RN1@1\\}2}",
-            NoteLine([BibliographyPart.of(BibliographyId("RN1"), "1}2")]),
-        ),
-        (
-            "#note: @bib{RN12\\@3@3}",
-            NoteLine([BibliographyPart.of(BibliographyId("RN12@3"), "3")]),
-        ),
-        (
-            "#note: @bib{RN@1\\}\\@2}",
-            NoteLine([BibliographyPart.of(BibliographyId("RN"), "1}@2")]),
-        ),
-        (
-            ("#note: this is a note " "@i{italic text}@akk{kur}@sux{kur}"),
-            NoteLine(
-                [
-                    StringPart("this is a note "),
-                    EmphasisPart("italic text"),
-                    expected_language_part(Language.AKKADIAN, "kur"),
-                    expected_language_part(Language.SUMERIAN, "kur"),
-                ]
+            "this is a note @i{italic text}@akk{kur}@sux{kur}",
+            (
+                StringPart("this is a note "),
+                EmphasisPart("italic text"),
+                expected_language_part(Language.AKKADIAN, "kur"),
+                expected_language_part(Language.SUMERIAN, "kur"),
             ),
         ),
     ],
 )
-def test_parse_note_line(atf, expected_line) -> None:
+def test_parse_markup(atf, expected) -> None:
+    assert parse_markup(atf) == expected
+
+
+def test_parse_note_line() -> None:
+    markup = "this is a note @i{italic text}@akk{kur}@sux{kur}"
+    atf = f"#note: {markup}"
+    expected_line = NoteLine(parse_markup(markup))
     assert parse_atf_lark(atf).lines == Text.of_iterable([expected_line]).lines

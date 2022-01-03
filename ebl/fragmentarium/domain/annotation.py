@@ -16,10 +16,10 @@ class Geometry:
 
 
 class AnnotationValueType(Enum):
-    HASSIGN = "HasSign"
+    HAS_SIGN = "HasSign"
     NUMBER = "Number"
-    SURFACEATLINE = "SurfaceAtLine"
-    RULINGDOLLARLINE = "RulingDollarLine"
+    SURFACE_AT_LINE = "SurfaceAtLine"
+    RULING_DOLLAR_LINE = "RulingDollarLine"
     BLANK = "Blank"
     PREDICTED = "Predicted"
     PARTIALLY_BROKEN = "PartiallyBroken"

@@ -2,22 +2,23 @@ import attr
 import pytest
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
+from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.text import UncertainFragment
+from ebl.corpus.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
+from ebl.fragmentarium.application.joins_schema import JoinSchema
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
     ManuscriptFactory,
     TextFactory,
 )
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.transliteration.domain.genre import Genre
-from ebl.corpus.domain.text_id import TextId
-from ebl.fragmentarium.application.joins_schema import JoinSchema
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.corpus.domain.text import UncertainFragment
+from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 TEXTS_COLLECTION = "texts"
@@ -135,6 +136,21 @@ def test_listing_texts(database, text_repository, bibliography_repository) -> No
         bibliography_repository.create(reference.document)
 
     assert text_repository.list() == [TEXT, another_text]
+
+
+def test_finding_chapter(database, text_repository) -> None:
+    when_chapter_in_collection(database)
+
+    assert text_repository.find_chapter(CHAPTER.id_) == CHAPTER
+
+
+def test_finding_chapter_for_display(database, text_repository) -> None:
+    when_text_in_collection(database)
+    when_chapter_in_collection(database)
+
+    assert text_repository.find_chapter_for_display(
+        CHAPTER.id_
+    ) == ChapterDisplay.of_chapter(TEXT, CHAPTER)
 
 
 def test_updating_chapter(database, text_repository) -> None:

@@ -12,6 +12,7 @@ from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
@@ -41,6 +42,10 @@ class TextRepository(ABC):
 
     @abstractmethod
     def find_chapter(self, id_: ChapterId) -> Chapter:
+        ...
+
+    @abstractmethod
+    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         ...
 
     @abstractmethod
@@ -85,6 +90,9 @@ class Corpus:
     def find_chapter(self, id_: ChapterId) -> Chapter:
         chapter = self._repository.find_chapter(id_)
         return self._hydrate_references(chapter)
+
+    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+        return self._repository.find_chapter_for_display(id_)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
         return self._hydrate_manuscripts(

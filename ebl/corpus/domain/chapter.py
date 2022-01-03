@@ -12,6 +12,11 @@ from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
+from ebl.transliteration.domain.markup import MarkupPart, to_title
+from ebl.transliteration.domain.translation_line import (
+    DEFAULT_LANGUAGE,
+    TranslationLine,
+)
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 import ebl.corpus.domain.chapter_validators as validators
@@ -56,7 +61,18 @@ class ChapterId:
         )
 
     def __str__(self) -> str:
-        return f"{self.text_id} {self.stage} {self.name}"
+        return f"{self.text_id} {self.stage.abbreviation} {self.name}"
+
+
+def make_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
+    return next(
+        (
+            to_title(line.parts)
+            for line in translation
+            if line.language == DEFAULT_LANGUAGE
+        ),
+        tuple(),
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True)

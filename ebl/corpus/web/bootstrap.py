@@ -3,7 +3,7 @@ import falcon
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
-from ebl.corpus.web.chapters import ChaptersResource
+from ebl.corpus.web.chapters import ChaptersDisplayResource, ChaptersResource
 from ebl.corpus.web.colophons import ColophonsResource
 from ebl.corpus.web.extant_lines import ExtantLinesResource
 from ebl.corpus.web.lemmatizations import LemmatizationResource
@@ -31,6 +31,7 @@ def create_corpus_routes(api: falcon.API, context: Context):
         corpus, TransliterationQueryFactory(context.sign_repository)
     )
     chapters = ChaptersResource(corpus)
+    chapters_display = ChaptersDisplayResource(corpus)
     alignment = AlignmentResource(corpus)
     manuscript_lemmatization = LemmatizationResource(corpus)
     manuscript = ManuscriptsResource(corpus)
@@ -40,36 +41,29 @@ def create_corpus_routes(api: falcon.API, context: Context):
     unplaced_lines = UnplacedLinesResource(corpus)
     extant_lines = ExtantLinesResource(corpus)
 
+    text_url = "/texts/{genre}/{category}/{index}"
+    chapter_url = text_url + "/chapters/{stage}/{name}"
+
     api.add_route("/texts", texts)
     api.add_route("/textsearch", text_search)
-    api.add_route("/texts/{genre}/{category}/{index}", text)
-    api.add_route("/texts/{genre}/{category}/{index}/chapters/{stage}/{name}", chapters)
+    api.add_route(text_url, text)
+
+    api.add_route(chapter_url, chapters)
+    api.add_route(f"{chapter_url}/display", chapters_display)
+    api.add_route(f"{chapter_url}/alignment", alignment)
+    api.add_route(f"{chapter_url}/lemmatization", manuscript_lemmatization)
     api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/alignment", alignment
-    )
-    api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/lemmatization",
-        manuscript_lemmatization,
-    )
-    api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/manuscripts",
+        f"{chapter_url}/manuscripts",
         manuscript,
     )
-
+    api.add_route(f"{chapter_url}/lines", lines)
+    api.add_route(f"{chapter_url}/import", lines_import)
+    api.add_route(f"{chapter_url}/colophons", colophons)
     api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/lines", lines
-    )
-    api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/import", lines_import
-    )
-    api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/colophons", colophons
-    )
-    api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/unplaced_lines",
+        f"{chapter_url}/unplaced_lines",
         unplaced_lines,
     )
     api.add_route(
-        "/texts/{genre}/{category}/{index}/chapters/{stage}/{name}/extant_lines",
+        f"{chapter_url}/extant_lines",
         extant_lines,
     )
