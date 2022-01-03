@@ -119,8 +119,9 @@ class AnnotationImageExtractor:
         cropped_annotations = []
         for single_annotation in annotations:
             fragment_number = single_annotation.fragment_number
-            cropped_annotations_of_single_annotation = self._cropped_image_from_annotations(
-                fragment_number, single_annotation.annotations
+            cropped_annotations.extend(
+                self._cropped_image_from_annotations(
+                    fragment_number, single_annotation.annotations
+                )
             )
-            cropped_annotations.extend(cropped_annotations_of_single_annotation)
         return cropped_annotations
