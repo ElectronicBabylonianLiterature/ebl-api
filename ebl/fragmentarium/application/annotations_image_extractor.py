@@ -69,8 +69,7 @@ class AnnotationImageExtractor:
     def _get_label_of_line(self, line_number: int, lines: Sequence[Line]) -> str:
         init_value = LineLabel(None, None, None, None), []
         labels_with_lines = pydash.reduce_(lines, self._calculate_label, init_value)[1]
-        label = self._extract_label(line_number, labels_with_lines)
-        return label
+        return self._extract_label(line_number, labels_with_lines)
 
     def _cropped_image_from_annotation(
         self, annotation: Annotation, fragment_number: MuseumNumber
