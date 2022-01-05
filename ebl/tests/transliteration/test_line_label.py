@@ -16,13 +16,13 @@ from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
                 ObjectLabel([], atf.Object.OBJECT, "Stone wig"),
                 LineNumber(2),
             ),
-            "2. i Stone wig Stone wig",
+            "i Stone wig Stone wig 2",
         ),
         (
             LineLabel(
                 None, None, None, LineNumberRange(LineNumber(1, True), LineNumber(3))
             ),
-            "1'-3.",
+            "1'-3",
         ),
     ],
 )

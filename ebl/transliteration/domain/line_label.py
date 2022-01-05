@@ -58,5 +58,8 @@ class LineLabel:
         surface_abbr = surface.abbreviation if surface else ""
         object_abbr = object.abbreviation if object else ""
         return " ".join(
-            filter(bool, [line_atf, column_abbr, surface_abbr, object_abbr])
+            filter(
+                bool,
+                [column_abbr, surface_abbr, object_abbr, line_atf.replace(".", "")],
+            )
         )

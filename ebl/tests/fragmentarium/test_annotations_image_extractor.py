@@ -42,4 +42,4 @@ def test_cropped_images_from_sign(
     first_cropped_annotation = result[0]
     assert isinstance(first_cropped_annotation, CroppedAnnotation)
     assert first_cropped_annotation.script == fragment.script
-    assert first_cropped_annotation.label != "'8'.i stone wig i'"
+    assert first_cropped_annotation.label != "i stone wig i 8'"
