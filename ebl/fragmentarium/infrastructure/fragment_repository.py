@@ -1,5 +1,7 @@
-from typing import List, Sequence
+import re
+from typing import List, Sequence, Dict, Tuple
 
+import pydash
 from marshmallow import EXCLUDE
 import pymongo
 
@@ -261,34 +263,79 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def query_next_and_previous_fragment(self, number: MuseumNumber):
-        next_ = (
-            self._fragments.find_many({"_id": {"$gt": f"{str(number)}"}})
-            .sort("_id", 1)
-            .limit(1)
-        )
-        previous = (
-            self._fragments.find_many({"_id": {"$lt": f"{str(number)}"}})
-            .sort("_id", -1)
-            .limit(1)
-        )
+    def query_next_and_previous_fragment(self, number: MuseumNumber) -> Dict[str, MuseumNumber]:
+        def _query_next_and_previous_fragment(prefix: str) -> Tuple[MuseumNumber, MuseumNumber]:
+            cursor = self._fragments.aggregate([
+                {"$project": {"_id": 0, "museumNumber": 1}},
+                {"$match": {"museumNumber.prefix": prefix}},
+            ])
+            museum_numbers = sorted(MuseumNumberSchema(many=True).load(
+                fragment["museumNumber"] for fragment in cursor))
+            return pydash.find(museum_numbers, lambda x: x > number), pydash.find(museum_numbers, lambda x: x < number)
 
-        def get_numbers(cursor):
-            try:
-                return next(cursor)["_id"]
-            except StopIteration:
-                return None
 
-        first = self._fragments.find_many({}).sort("_id", 1).limit(1)
-        last = self._fragments.find_many({}).sort("_id", -1).limit(1)
-        result = {
-            "previous": get_numbers(previous) or get_numbers(last),
-            "next": get_numbers(next_) or get_numbers(first),
-        }
-        if has_none_values(result):
-            raise NotFoundError("Could not retrieve any fragments")
-        else:
-            return result
+        prefix = number.prefix
+        next, previous = _query_next_and_previous_fragment(prefix)
+
+        PREFIX_ORDER = ["K",
+                       "Sm",
+                       "DT",
+                       "Rm",
+                       "Rm-II",
+
+                       "BM",
+                       "CBS",
+                       "UM",
+                       "N"]
+
+        PREFIX_ORDER_TOTAL = ["K",
+                       "Sm",
+                       "DT",
+                       "Rm",
+                       "Rm-II",
+                       "NUMBER_PREFIX_ORDER",
+                       "BM",
+                       "CBS",
+                       "UM",
+                       "N", "DEFAULT_PREFIX_ORDER"]
+
+
+        def calculate_prefix(prefix: str, counter: int) -> str:
+            if prefix not in PREFIX_ORDER:
+                if prefix.isdigit():
+                        new_prefix = int(prefix) + counter
+                        new_prefix = str(new_prefix) if new_prefix >= 0 else "Rm-II"
+                else:
+                    new_prefix = chr(int(prefix[0]) + counter )
+            else:
+                new_prefix = PREFIX_ORDER_TOTAL[PREFIX_ORDER.index(prefix) + counter]
+                if new_prefix == "NUMBER_PREFIX_ORDER":
+                    new_prefix = "0"
+                elif new_prefix == "N":
+                    new_prefix = "A"
+            return new_prefix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def update_references(self, fragment):
         self._fragments.update_one(
