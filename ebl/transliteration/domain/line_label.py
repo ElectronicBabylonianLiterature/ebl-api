@@ -29,7 +29,7 @@ class LineLabel:
     def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "LineLabel":
         return attr.evolve(self, line_number=line_number)
 
-    def matches_line_number(self, line_number_to_match: int) -> bool:
+    def is_line_number(self, line_number_to_match: int) -> bool:
         line_number = self.line_number
         is_matching = False
         if line_number:

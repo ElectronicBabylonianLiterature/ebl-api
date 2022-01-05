@@ -76,4 +76,4 @@ def test_line_label(line_label, expected):
     ],
 )
 def test_line_label_match_line_number(line_label, line_number, expected):
-    assert line_label.matches_line_number(line_number) == expected
+    assert line_label.is_line_number(line_number) == expected

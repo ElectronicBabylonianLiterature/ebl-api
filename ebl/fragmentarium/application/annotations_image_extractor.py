@@ -62,7 +62,7 @@ class AnnotationImageExtractor:
             (
                 label.abbreviation
                 for label, _ in labels_with_lines
-                if label.matches_line_number(line_number)
+                if label.is_line_number(line_number)
             ),
             "",
         )
