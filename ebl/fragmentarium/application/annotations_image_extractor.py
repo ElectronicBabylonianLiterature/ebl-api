@@ -44,16 +44,15 @@ class AnnotationImageExtractor:
         label = total[0]
         lines = total[1]
         if isinstance(line, TextLine):
-            result = label, [*lines, [label.set_line_number(line.line_number), line]]
+            return label, [*lines, [label.set_line_number(line.line_number), line]]
         elif isinstance(line, ObjectAtLine):
-            result = label.set_object(line.label), lines
+            return label.set_object(line.label), lines
         elif isinstance(line, SurfaceAtLine):
-            result = label.set_surface(line.surface_label), lines
+            return label.set_surface(line.surface_label), lines
         elif isinstance(line, ColumnAtLine):
-            result = label.set_column(line.column_label), lines
+            return label.set_column(line.column_label), lines
         else:
-            result = label, lines
-        return result
+            return label, lines
 
     def _extract_label(
         self, line_number: int, labels_with_lines: List[Tuple[LineLabel, Line]]
