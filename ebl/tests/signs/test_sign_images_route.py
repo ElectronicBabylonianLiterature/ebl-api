@@ -28,7 +28,7 @@ def test_signs_get(
     assert len(result.json) > 0
     result_json = result.json[0]
 
-    assert result_json["fragment_number"] == str(fragment.number)
+    assert result_json["fragmentNumber"] == str(fragment.number)
     assert isinstance(result_json["image"], str)
     assert result_json["script"] == fragment.script
     assert isinstance(result_json["label"], str)

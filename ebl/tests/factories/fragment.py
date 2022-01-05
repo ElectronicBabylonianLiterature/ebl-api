@@ -356,6 +356,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
             LineToVecEncoding.TEXT_LINE,
             LineToVecEncoding.TEXT_LINE,
             LineToVecEncoding.SINGLE_RULING,
+            LineToVecEncoding.TEXT_LINE,
         ),
     )
 

@@ -71,13 +71,10 @@ def test_dump_line():
 def test_load_line(lines):
     parser_version = "2.3.1"
     serialized_lines = OneOfLineSchema().dump(lines, many=True)
-    assert (
-        TextSchema().load(
-            {
-                "lines": serialized_lines,
-                "parser_version": parser_version,
-                "numberOfLines": 1,
-            }
-        )
-        == Text.of_iterable(lines).set_parser_version(parser_version)
-    )
+    assert TextSchema().load(
+        {
+            "lines": serialized_lines,
+            "parser_version": parser_version,
+            "numberOfLines": 1,
+        }
+    ) == Text.of_iterable(lines).set_parser_version(parser_version)

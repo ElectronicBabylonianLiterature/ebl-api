@@ -60,27 +60,4 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                 },
             ]
         )
-
-        """
-        result = self._collection.aggregate([
-{"$match": {"annotations.data.signName": query}},
-{"$project": {
-    "fragmentNumber": 1,
-    "annotations": {
-        "$filter": {
-            "input": "$annotations",
-            "as": "annotation",
-            "cond": {
-                 "$regexMatch": {
-                                "input": "$$annotation.data.signName",
-                                "regex": query
-                 }
-                }
-
-    }},
-}},
-{"$unwind": "$annotations"},
-])
-
-"""
         return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)

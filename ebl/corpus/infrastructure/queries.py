@@ -115,11 +115,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
         {"$match": chapter_id_query(id_)},
         {
             "$addFields": {
-                "id": {
-                    "textId": "$textId",
-                    "stage": "$stage",
-                    "name": "$name",
-                },
+                "id": {"textId": "$textId", "stage": "$stage", "name": "$name"},
                 "lines": {
                     "$map": {
                         "input": "$lines",
@@ -180,11 +176,5 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                 },
             }
         },
-        {
-            "$project": {
-                "_id": False,
-                "id": True,
-                "lines": True,
-            }
-        },
+        {"$project": {"_id": False, "id": True, "lines": True}},
     ]

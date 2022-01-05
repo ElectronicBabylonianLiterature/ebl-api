@@ -31,7 +31,7 @@ class LineLabel:
 
     def matches_line_number(self, line_number_to_match: int) -> bool:
         line_number = self.line_number
-
+        is_matching = False
         if line_number:
             if (
                 isinstance(line_number, LineNumberRange)
@@ -39,13 +39,13 @@ class LineLabel:
                 <= line_number_to_match
                 <= line_number.end.number
             ):
-                return True
+                is_matching = True
             elif (
                 isinstance(line_number, LineNumber)
                 and line_number.number == line_number_to_match
             ):
-                return True
-        return False
+                is_matching = True
+        return is_matching
 
     @property
     def abbreviation(self) -> str:
