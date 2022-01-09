@@ -162,28 +162,44 @@ def test_folio_pager_exception(fragment_repository):
         fragment_repository.query_next_and_previous_fragment(query)
 
 
-FRAGMENTS = ["1841-07-26.54", "1841-07-26.57", "1841-07-26.63"]
+FRAGMENTS = [
+    "K.1",
+    "CBS.1",
+    "1841-07-26.54",
+    "1841-07-26.57",
+    "1841-07-26.63",
+    "A.0",
+    "X.0",
+    "X.1",
+]
 
 
 @pytest.mark.parametrize(
-    "query,  existing,expected",
+    "query, expected",
     [
-        ("1841-07-26.57", FRAGMENTS, ["1841-07-26.54", "1841-07-26.63"]),
-        ("1841-07-26.63", FRAGMENTS, ["1841-07-26.57", "1841-07-26.54"]),
-        ("1841-07-26.54", FRAGMENTS, ["1841-07-26.63", "1841-07-26.57"]),
-        ("1841-07-26.54", FRAGMENTS[:2], ["1841-07-26.57", "1841-07-26.57"]),
+        ("1841-07-26.57", ["1841-07-26.54", "1841-07-26.63"]),
+        ("1841-07-26.63", ["1841-07-26.57", "A.0"]),
+        ("1841-07-26.54", ["CBS.1", "1841-07-26.57"]),
+        ("K.1", ["X.1", "CBS.1"]),
+        ("CBS.1", ["K.1", "1841-07-26.54"]),
+        ("A.0", ["1841-07-26.63", "X.0"]),
+        ("X.0", ["A.0", "X.1"]),
+        ("X.1", ["X.0", "K.1"]),
     ],
 )
-def test_query_next_and_previous_fragment(
-    query, existing, expected, fragment_repository
-):
-    for fragmentNumber in existing:
+def test_query_next_and_previous_fragment(query, expected, fragment_repository):
+    for fragmentNumber in FRAGMENTS:
         fragment_repository.create(
             FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
 
-    results = fragment_repository.query_next_and_previous_fragment(MuseumNumber.of(query))
-    assert results == {"previous": MuseumNumber.of(expected[0]), "next": MuseumNumber.of(expected[1])}
+    results = fragment_repository.query_next_and_previous_fragment(
+        MuseumNumber.of(query)
+    )
+    assert results == {
+        "previous": MuseumNumber.of(expected[0]),
+        "next": MuseumNumber.of(expected[1]),
+    }
 
 
 def test_query_next_and_previous_fragment_exception(fragment_repository):

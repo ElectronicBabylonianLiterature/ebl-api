@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dictionary.application.dictionary import Dictionary
@@ -94,7 +94,7 @@ class FragmentFinder:
             folio_name, folio_number, number
         )
 
-    def fragment_pager(self, number: MuseumNumber) -> dict:
+    def fragment_pager(self, number: MuseumNumber) -> Dict[str, MuseumNumber]:
         return self._repository.query_next_and_previous_fragment(number)
 
     def find_folio(self, folio: Folio) -> File:

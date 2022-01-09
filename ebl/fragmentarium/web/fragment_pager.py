@@ -12,5 +12,10 @@ class FragmentPagerResource:
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req, resp, number):
-        fragment = self._finder.fragment_pager(parse_museum_number(number))
-        resp.media = FragmentPagerInfoSchema().dump(fragment)
+        pager_elements = {
+            key: str(value)
+            for key, value in self._finder.fragment_pager(
+                parse_museum_number(number)
+            ).items()
+        }
+        resp.media = FragmentPagerInfoSchema().dump(pager_elements)

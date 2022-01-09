@@ -1,10 +1,10 @@
-import re
-from typing import List, Sequence, Dict, Tuple
+from typing import List, Sequence, Dict
 
 import pydash
-from marshmallow import EXCLUDE
 import pymongo
+from marshmallow import EXCLUDE
 
+from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -28,7 +28,6 @@ from ebl.fragmentarium.infrastructure.queries import (
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
-from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -263,79 +262,92 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def query_next_and_previous_fragment(self, number: MuseumNumber) -> Dict[str, MuseumNumber]:
-        def _query_next_and_previous_fragment(prefix: str) -> Tuple[MuseumNumber, MuseumNumber]:
-            cursor = self._fragments.aggregate([
+    def query_next_and_previous_fragment(
+        self, museum_number: MuseumNumber
+    ) -> Dict[str, MuseumNumber]:
+        cursor = self._fragments.aggregate(
+            [
                 {"$project": {"_id": 0, "museumNumber": 1}},
-                {"$match": {"museumNumber.prefix": prefix}},
-            ])
-            museum_numbers = sorted(MuseumNumberSchema(many=True).load(
-                fragment["museumNumber"] for fragment in cursor))
-            return pydash.find(museum_numbers, lambda x: x > number), pydash.find(museum_numbers, lambda x: x < number)
+                {"$match": {"museumNumber.prefix": {"$regex": "\d*"}}},
+            ]
+        )
+        museum_numbers_numbers = sorted(
+            MuseumNumberSchema(many=True).load(
+                fragment["museumNumber"] for fragment in cursor
+            )
+        )
+        cursor = self._fragments.aggregate(
+            [
+                {"$project": {"_id": 0, "museumNumber": 1}},
+                {
+                    "$match": {
+                        "museumNumber.prefix": {
+                            "$regex": "/^[abcdefghijlmopqrstuvwxyz]$/i"
+                        }
+                    }
+                },
+            ]
+        )
+        museum_numbers_alphabet = sorted(
+            MuseumNumberSchema(many=True).load(
+                fragment["museumNumber"] for fragment in cursor
+            )
+        )
 
+        cursor = self._fragments.aggregate(
+            [
+                {"$project": {"_id": 0, "museumNumber": 1}},
+                {
+                    "$match": {
+                        "museumNumber.prefix": {"$regex": "/^(k|sm|dt|rm|rm-ii)$/i"}
+                    }
+                },
+            ]
+        )
+        museum_numbers_prefix_order_1 = sorted(
+            MuseumNumberSchema(many=True).load(
+                fragment["museumNumber"] for fragment in cursor
+            )
+        )
 
-        prefix = number.prefix
-        next, previous = _query_next_and_previous_fragment(prefix)
+        cursor = self._fragments.aggregate(
+            [
+                {"$project": {"_id": 0, "museumNumber": 1}},
+                {"$match": {"museumNumber.prefix": {"$regex": "/^(bm|cbs|um|n)$/i"}}},
+            ]
+        )
+        museum_numbers_prefix_order_2 = sorted(
+            MuseumNumberSchema(many=True).load(
+                fragment["museumNumber"] for fragment in cursor
+            )
+        )
+        all_museum_number_ordered = [
+            *museum_numbers_prefix_order_1,
+            *museum_numbers_numbers,
+            *museum_numbers_prefix_order_2,
+            *museum_numbers_alphabet,
+        ]
+        length = len(all_museum_number_ordered)
 
-        PREFIX_ORDER = ["K",
-                       "Sm",
-                       "DT",
-                       "Rm",
-                       "Rm-II",
-
-                       "BM",
-                       "CBS",
-                       "UM",
-                       "N"]
-
-        PREFIX_ORDER_TOTAL = ["K",
-                       "Sm",
-                       "DT",
-                       "Rm",
-                       "Rm-II",
-                       "NUMBER_PREFIX_ORDER",
-                       "BM",
-                       "CBS",
-                       "UM",
-                       "N", "DEFAULT_PREFIX_ORDER"]
-
-
-        def calculate_prefix(prefix: str, counter: int) -> str:
-            if prefix not in PREFIX_ORDER:
-                if prefix.isdigit():
-                        new_prefix = int(prefix) + counter
-                        new_prefix = str(new_prefix) if new_prefix >= 0 else "Rm-II"
-                else:
-                    new_prefix = chr(int(prefix[0]) + counter )
-            else:
-                new_prefix = PREFIX_ORDER_TOTAL[PREFIX_ORDER.index(prefix) + counter]
-                if new_prefix == "NUMBER_PREFIX_ORDER":
-                    new_prefix = "0"
-                elif new_prefix == "N":
-                    new_prefix = "A"
-            return new_prefix
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        index = pydash.find_index(
+            all_museum_number_ordered, lambda x: str(x) == str(museum_number)
+        )
+        print(index)
+        print(all_museum_number_ordered[index])
+        print(isinstance(museum_number, MuseumNumber))
+        print(museum_number)
+        print(len(all_museum_number_ordered))
+        if index != -1:
+            return {
+                "next": all_museum_number_ordered[index + 1]
+                if index < length - 1
+                else all_museum_number_ordered[0],
+                "previous": all_museum_number_ordered[index - 1]
+                if index - 1 >= 0
+                else all_museum_number_ordered[-1],
+            }
+        else:
+            raise NotFoundError("Could not retrieve any fragments")
 
     def update_references(self, fragment):
         self._fragments.update_one(
