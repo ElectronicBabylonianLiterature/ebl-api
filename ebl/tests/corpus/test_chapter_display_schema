@@ -1,3 +1,5 @@
+import attr
+
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.tests.factories.corpus import (
@@ -14,7 +16,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 CHAPTER_DISPLAY = ChapterDisplay.of_chapter(TextFactory.build(), ChapterFactory.build())
 
 
-def to_dict(chapter: ChapterDisplay) -> dict:
+def to_dict(chapter: ChapterDisplay, missing_intertext: bool = False, missing_translation: bool = False) -> dict:
     return {
         "id": {
             "stage": chapter.id_.stage.value,
@@ -32,13 +34,13 @@ def to_dict(chapter: ChapterDisplay) -> dict:
                 "number": OneOfLineNumberSchema().dump(line.number),
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
-                "intertext": OneOfNoteLinePartSchema().dump(
+                "intertext": None if missing_intertext else OneOfNoteLinePartSchema().dump(
                     line.intertext, many=True
                 ),
                 "reconstruction": OneOfTokenSchema().dump(
                     line.reconstruction, many=True
                 ),
-                "translation": OneOfNoteLinePartSchema().dump(
+                "translation": None if missing_translation else OneOfNoteLinePartSchema().dump(
                     line.translation, many=True
                 ),
             }
@@ -56,3 +58,10 @@ def test_dump():
 
 def test_load():
     assert ChapterDisplaySchema().load(to_dict(CHAPTER_DISPLAY)) == CHAPTER_DISPLAY
+
+
+def test_load_missing_dat():
+    chapter_display = attr.evolve(CHAPTER_DISPLAY, lines=(
+        attr.evolve(CHAPTER_DISPLAY.lines[0], reconstrcution=tuple(), translation=tuple())
+    ))
+    assert ChapterDisplaySchema().load(to_dict(chapter_display, True, True)) == chapter_display

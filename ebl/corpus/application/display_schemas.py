@@ -18,11 +18,11 @@ class LineDisplaySchema(Schema):
         required=True, data_key="isBeginningOfSection"
     )
     intertext = fields.List(
-        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple()
+        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple(), allow_none=True
     )
     reconstruction = fields.List(fields.Nested(OneOfTokenSchema), load_default=tuple())
     translation = fields.List(
-        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple()
+        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple(), allow_none=True
     )
 
     @post_load
@@ -31,9 +31,9 @@ class LineDisplaySchema(Schema):
             data["number"],
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            tuple(data["intertext"]),
+            tuple(data["intertext"] or []),
             tuple(data["reconstruction"]),
-            tuple(data["translation"]),
+            tuple(data["translation"] or []),
         )
 
 
