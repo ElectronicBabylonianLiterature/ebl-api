@@ -5,6 +5,7 @@ from typing import Sequence, NewType, List, Tuple
 
 import attr
 import pydash
+from singledispatchmethod import singledispatchmethod
 from PIL import Image
 
 from ebl.files.application.file_repository import FileRepository
@@ -39,20 +40,30 @@ class AnnotationImageExtractor:
         self._annotations_repository = annotations_repository
         self._photos_repository = photos_repository
 
-    @staticmethod
-    def _calculate_label(total: Tuple[LineLabel, Sequence[Line]], line: Line):
-        label = total[0]
-        lines = total[1]
-        if isinstance(line, TextLine):
-            return label, [*lines, [label.set_line_number(line.line_number), line]]
-        elif isinstance(line, ObjectAtLine):
-            return label.set_object(line.label), lines
-        elif isinstance(line, SurfaceAtLine):
-            return label.set_surface(line.surface_label), lines
-        elif isinstance(line, ColumnAtLine):
-            return label.set_column(line.column_label), lines
-        else:
-            return label, lines
+    @singledispatchmethod
+    def _calculate_label_by_type(
+        self, line: Line, label: LineLabel, lines: Sequence[Line]
+    ):
+        return label, lines
+
+    @_calculate_label_by_type.register(TextLine)
+    def _(self, line: TextLine, label: LineLabel, lines: Sequence[Line]):
+        return label, [*lines, [label.set_line_number(line.line_number), line]]
+
+    @_calculate_label_by_type.register(ObjectAtLine)
+    def _(self, line: ObjectAtLine, label: LineLabel, lines: Sequence[Line]):
+        return label.set_object(line.label), lines
+
+    @_calculate_label_by_type.register(SurfaceAtLine)
+    def _(self, line: SurfaceAtLine, label: LineLabel, lines: Sequence[Line]):
+        return label.set_surface(line.surface_label), lines
+
+    @_calculate_label_by_type.register(ColumnAtLine)
+    def _(self, line: ColumnAtLine, label: LineLabel, lines: Sequence[Line]):
+        return label.set_column(line.column_label), lines
+
+    def _calculate_label(self, total: Tuple[LineLabel, Sequence[Line]], line: Line):
+        return self._calculate_label_by_type(line, total[0], total[1])
 
     def _extract_label(
         self, line_number: int, labels_with_lines: List[Tuple[LineLabel, Line]]
