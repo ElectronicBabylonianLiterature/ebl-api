@@ -36,6 +36,8 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         except NotFoundError:
             return Annotations(number)
 
-    def retrieve_all(self) -> List[Annotations]:
-        result = self._collection.find_many({})
+    def retrieve_all_non_empty(self) -> List[Annotations]:
+        result = self._collection.find_many(
+            {"annotations": {"$exists": True, "$ne": []}}
+        )
         return AnnotationsSchema().load(result, unknown=EXCLUDE, many=True)

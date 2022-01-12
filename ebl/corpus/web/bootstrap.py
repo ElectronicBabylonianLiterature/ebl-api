@@ -52,18 +52,9 @@ def create_corpus_routes(api: falcon.API, context: Context):
     api.add_route(f"{chapter_url}/display", chapters_display)
     api.add_route(f"{chapter_url}/alignment", alignment)
     api.add_route(f"{chapter_url}/lemmatization", manuscript_lemmatization)
-    api.add_route(
-        f"{chapter_url}/manuscripts",
-        manuscript,
-    )
+    api.add_route(f"{chapter_url}/manuscripts", manuscript)
     api.add_route(f"{chapter_url}/lines", lines)
     api.add_route(f"{chapter_url}/import", lines_import)
     api.add_route(f"{chapter_url}/colophons", colophons)
-    api.add_route(
-        f"{chapter_url}/unplaced_lines",
-        unplaced_lines,
-    )
-    api.add_route(
-        f"{chapter_url}/extant_lines",
-        extant_lines,
-    )
+    api.add_route(f"{chapter_url}/unplaced_lines", unplaced_lines)
+    api.add_route(f"{chapter_url}/extant_lines", extant_lines)

@@ -1,6 +1,7 @@
 import argparse
 import os
 import shutil
+from datetime import date
 from io import BytesIO
 from os.path import join
 from pathlib import Path
@@ -15,14 +16,49 @@ from ebl.fragmentarium.domain.annotation import (
     BoundingBox,
     Annotation,
     AnnotationValueType,
+    AnnotationData,
 )
 
+MINIMUM_BOUNDING_BOX_SIZE = 0.3
 
-def filter_annotation(annotation: Annotation) -> bool:
+
+def filter_empty_annotation(annotation: Annotation) -> bool:
+    sizes = annotation.geometry.width, annotation.geometry.height
+    if any(filter(lambda x: x < MINIMUM_BOUNDING_BOX_SIZE, sizes)):
+        print(
+            f"AnnotationData with id: '{annotation.data.id}' has bounding box smaller "
+            f"than minimum size"
+        )
+        return False
+    else:
+        return True
+
+
+def filter_annotation_by_type(annotation: Annotation) -> bool:
     return annotation.data.type not in [
         AnnotationValueType.RULING_DOLLAR_LINE,
         AnnotationValueType.SURFACE_AT_LINE,
     ]
+
+
+def filter_annotation(annotation: Annotation) -> bool:
+    return filter_annotation_by_type(annotation) and filter_empty_annotation(annotation)
+
+
+def handle_blank_annotation_type(annotation_data: AnnotationData) -> str:
+    if annotation_data.type == AnnotationValueType.BLANK:
+        ground_truth = AnnotationValueType.BLANK.name
+    else:
+        ground_truth = annotation_data.sign_name or annotation_data.value
+    if not ground_truth:
+        raise ValueError(
+            f"AnnotationData with id: '{annotation_data.id}', "
+            f"value: '{annotation_data.value}' "
+            f"sign: '{annotation_data.sign_name}' and "
+            f"type: '{annotation_data.type.value}' "
+            f"results in empty ground truth label"
+        )
+    return ground_truth
 
 
 def prepare_annotations(
@@ -34,7 +70,7 @@ def prepare_annotations(
         image_width, image_height, annotations_with_signs
     )
     signs = [
-        annotation.data.sign_name or annotation.data.value
+        handle_blank_annotation_type(annotation.data)
         for annotation in annotations_with_signs
     ]
 
@@ -86,13 +122,22 @@ def write_annotations(
                 str(int(rectangle_attribute))
                 for rectangle_attribute in bounding_box.to_list()
             ]
-            file.write(",".join(rectangle_attributes) + f" {sign}" + "\n")
+            file.write(",".join(rectangle_attributes) + f",{sign}" + "\n")
 
 
 def create_directory(path: str) -> None:
     if os.path.exists(path):
         shutil.rmtree(path)
     os.makedirs(path)
+
+
+def write_fragment_numbers(
+    annotation_collection: Sequence[Annotations], path: Union[str, Path]
+) -> None:
+    with open(path, "w+") as file:
+        file.write(f"Total of {len(annotation_collection)} Annotations\n")
+        for annotation in annotation_collection:
+            file.write(f"{annotation.fragment_number}\n")
 
 
 if __name__ == "__main__":
@@ -122,11 +167,14 @@ if __name__ == "__main__":
         args.output_imgs = "./annotations/imgs"
 
     context = create_context()
-    annotation_collection = context.annotations_repository.retrieve_all()
+    annotation_collection = context.annotations_repository.retrieve_all_non_empty()
     create_annotations(
         annotation_collection,
         args.output_annotations,
         args.output_imgs,
         context.photo_repository,
+    )
+    write_fragment_numbers(
+        annotation_collection, f"./annotations/Annotations_{date.today()}.txt"
     )
     print("Done")
