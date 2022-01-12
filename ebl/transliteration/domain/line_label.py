@@ -1,7 +1,7 @@
 from typing import Optional
-
+from functools import singledispatch
 import attr
-from singledispatchmethod import singledispatchmethod
+
 
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import (
@@ -30,7 +30,7 @@ class LineLabel:
     def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "LineLabel":
         return attr.evolve(self, line_number=line_number)
 
-    @singledispatchmethod
+    @singledispatch
     def handle_line_number(self, line_number: AbstractLineNumber, number: int) -> bool:
         raise ValueError("No default for overloading")
 

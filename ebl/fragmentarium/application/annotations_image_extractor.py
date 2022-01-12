@@ -1,11 +1,11 @@
 import base64
 import io
+from functools import singledispatch
 from io import BytesIO
 from typing import Sequence, NewType, List, Tuple
 
 import attr
 import pydash
-from singledispatchmethod import singledispatchmethod
 from PIL import Image
 
 from ebl.files.application.file_repository import FileRepository
@@ -40,7 +40,7 @@ class AnnotationImageExtractor:
         self._annotations_repository = annotations_repository
         self._photos_repository = photos_repository
 
-    @singledispatchmethod
+    @singledispatch
     def _calculate_label_by_type(
         self, line: Line, label: LineLabel, lines: Sequence[Line]
     ):
@@ -66,10 +66,14 @@ class AnnotationImageExtractor:
         return self._calculate_label_by_type(line, total[0], total[1])
 
     def _format_label(self, label: LineLabel) -> str:
-        line_atf = label.line_number.atf if label.line_number else ""
-        column_abbr = label.column.abbreviation if label.column else ""
-        surface_abbr = label.surface.abbreviation if label.surface else ""
-        object_abbr = label.object.abbreviation if label.object else ""
+        line_number = label.line_number
+        column = label.column
+        surface = label.surface
+        object = label.object
+        line_atf = line_number.atf if line_number else ""
+        column_abbr = column.abbreviation if column else ""
+        surface_abbr = surface.abbreviation if surface else ""
+        object_abbr = object.abbreviation if object else ""
         return " ".join(
             filter(
                 bool,
@@ -82,7 +86,7 @@ class AnnotationImageExtractor:
     ) -> str:
         return next(
             (
-                self._format_label(label.abbreviation)
+                self._format_label(label)
                 for label, _ in labels_with_lines
                 if label.is_line_number(line_number)
             ),
@@ -118,7 +122,7 @@ class AnnotationImageExtractor:
 
     def _cropped_image_from_annotations(
         self, fragment_number: MuseumNumber, annotations: Sequence[Annotation]
-    ):
+    ) -> Sequence[CroppedAnnotation]:
         cropped_annotations = []
         for annotation in annotations:
             fragment = self._fragments_repository.query_by_museum_number(
