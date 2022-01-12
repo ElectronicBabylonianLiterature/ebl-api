@@ -65,12 +65,24 @@ class AnnotationImageExtractor:
     def _calculate_label(self, total: Tuple[LineLabel, Sequence[Line]], line: Line):
         return self._calculate_label_by_type(line, total[0], total[1])
 
+    def _format_label(self, label: LineLabel) -> str:
+        line_atf = label.line_number.atf if label.line_number else ""
+        column_abbr = label.column.abbreviation if label.column else ""
+        surface_abbr = label.surface.abbreviation if label.surface else ""
+        object_abbr = label.object.abbreviation if label.object else ""
+        return " ".join(
+            filter(
+                bool,
+                [column_abbr, surface_abbr, object_abbr, line_atf.replace(".", "")],
+            )
+        )
+
     def _extract_label(
         self, line_number: int, labels_with_lines: List[Tuple[LineLabel, Line]]
     ) -> str:
         return next(
             (
-                label.abbreviation
+                self._format_label(label.abbreviation)
                 for label, _ in labels_with_lines
                 if label.is_line_number(line_number)
             ),

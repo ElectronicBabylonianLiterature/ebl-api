@@ -48,20 +48,3 @@ class LineLabel:
             if self.line_number
             else False
         )
-
-    @property
-    def abbreviation(self) -> str:
-        line_number = self.line_number
-        column = self.column
-        surface = self.surface
-        object = self.object
-        line_atf = line_number.atf if line_number else ""
-        column_abbr = column.abbreviation if column else ""
-        surface_abbr = surface.abbreviation if surface else ""
-        object_abbr = object.abbreviation if object else ""
-        return " ".join(
-            filter(
-                bool,
-                [column_abbr, surface_abbr, object_abbr, line_atf.replace(".", "")],
-            )
-        )
