@@ -1,6 +1,7 @@
 from typing import Optional
 
 import attr
+from singledispatchmethod import singledispatchmethod
 
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import (
@@ -29,23 +30,24 @@ class LineLabel:
     def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "LineLabel":
         return attr.evolve(self, line_number=line_number)
 
+    @singledispatchmethod
+    def handle_line_number(self, line_number: AbstractLineNumber, number: int) -> bool:
+        raise ValueError("No default for overloading")
+
+    @handle_line_number.register(LineNumber)
+    def _(self, line_number: LineNumber, number: int):
+        return number == line_number.number
+
+    @handle_line_number.register(LineNumberRange)
+    def _(self, line_number: LineNumberRange, number: int):
+        return line_number.start.number <= number <= line_number.end.number
+
     def is_line_number(self, line_number_to_match: int) -> bool:
-        line_number = self.line_number
-        is_matching = False
-        if line_number:
-            if (
-                isinstance(line_number, LineNumberRange)
-                and line_number.start.number
-                <= line_number_to_match
-                <= line_number.end.number
-            ):
-                is_matching = True
-            elif (
-                isinstance(line_number, LineNumber)
-                and line_number.number == line_number_to_match
-            ):
-                is_matching = True
-        return is_matching
+        return (
+            self.handle_line_number(self.line_number, line_number_to_match)
+            if self.line_number
+            else False
+        )
 
     @property
     def abbreviation(self) -> str:
