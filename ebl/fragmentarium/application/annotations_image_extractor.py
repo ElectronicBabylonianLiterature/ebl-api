@@ -1,11 +1,10 @@
 import base64
 import io
-from functools import singledispatch
+from singledispatchmethod import singledispatchmethod
 from io import BytesIO
-from typing import Sequence, NewType, List, Tuple
+from typing import Sequence, NewType
 
 import attr
-import pydash
 from PIL import Image
 
 from ebl.files.application.file_repository import FileRepository
@@ -13,10 +12,12 @@ from ebl.fragmentarium.application.annotations_repository import AnnotationsRepo
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.annotation import BoundingBox, Annotation
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.at_line import ObjectAtLine, SurfaceAtLine, ColumnAtLine
-from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
-from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.line_number import (
+    AbstractLineNumber,
+    LineNumber,
+    LineNumberRange,
+)
 
 Base64 = NewType("Base64", str)
 
@@ -40,31 +41,6 @@ class AnnotationImageExtractor:
         self._annotations_repository = annotations_repository
         self._photos_repository = photos_repository
 
-    @singledispatch
-    def _calculate_label_by_type(
-        self, line: Line, label: LineLabel, lines: Sequence[Line]
-    ):
-        return label, lines
-
-    @_calculate_label_by_type.register(TextLine)
-    def _(self, line: TextLine, label: LineLabel, lines: Sequence[Line]):
-        return label, [*lines, [label.set_line_number(line.line_number), line]]
-
-    @_calculate_label_by_type.register(ObjectAtLine)
-    def _(self, line: ObjectAtLine, label: LineLabel, lines: Sequence[Line]):
-        return label.set_object(line.label), lines
-
-    @_calculate_label_by_type.register(SurfaceAtLine)
-    def _(self, line: SurfaceAtLine, label: LineLabel, lines: Sequence[Line]):
-        return label.set_surface(line.surface_label), lines
-
-    @_calculate_label_by_type.register(ColumnAtLine)
-    def _(self, line: ColumnAtLine, label: LineLabel, lines: Sequence[Line]):
-        return label.set_column(line.column_label), lines
-
-    def _calculate_label(self, total: Tuple[LineLabel, Sequence[Line]], line: Line):
-        return self._calculate_label_by_type(line, total[0], total[1])
-
     def _format_label(self, label: LineLabel) -> str:
         line_number = label.line_number
         column = label.column
@@ -80,23 +56,6 @@ class AnnotationImageExtractor:
                 [column_abbr, surface_abbr, object_abbr, line_atf.replace(".", "")],
             )
         )
-
-    def _extract_label(
-        self, line_number: int, labels_with_lines: List[Tuple[LineLabel, Line]]
-    ) -> str:
-        return next(
-            (
-                self._format_label(label)
-                for label, _ in labels_with_lines
-                if label.is_line_number(line_number)
-            ),
-            "",
-        )
-
-    def _get_label_of_line(self, line_number: int, lines: Sequence[Line]) -> str:
-        init_value = LineLabel(None, None, None, None), []
-        labels_with_lines = pydash.reduce_(lines, self._calculate_label, init_value)[1]
-        return self._extract_label(line_number, labels_with_lines)
 
     def _cropped_image_from_annotation(
         self, annotation: Annotation, fragment_number: MuseumNumber
@@ -120,6 +79,18 @@ class AnnotationImageExtractor:
         cropped_image.save(buf, format="PNG")
         return Base64(base64.b64encode(buf.getvalue()).decode("utf-8"))
 
+    @singledispatchmethod
+    def _is_matching_number(self, line_number: AbstractLineNumber, number: int) -> bool:
+        raise ValueError("No default for overloading")
+
+    @_is_matching_number.register(LineNumber)
+    def _(self, line_number: LineNumber, number: int):
+        return number == line_number.number
+
+    @_is_matching_number.register(LineNumberRange)
+    def _(self, line_number: LineNumberRange, number: int):
+        return line_number.start.number <= number <= line_number.end.number
+
     def _cropped_image_from_annotations(
         self, fragment_number: MuseumNumber, annotations: Sequence[Annotation]
     ) -> Sequence[CroppedAnnotation]:
@@ -129,14 +100,28 @@ class AnnotationImageExtractor:
                 fragment_number
             )
             script = fragment.script
-            label = self._get_label_of_line(
-                annotation.data.path[0], fragment.text.lines
+            labels = fragment.text.labels
+            label = next(
+                (
+                    label
+                    for label in labels
+                    if self._is_matching_number(
+                        label.line_number, annotation.data.path[0]
+                    )
+                ),
+                None,
             )
+
             cropped_image = self._cropped_image_from_annotation(
                 annotation, fragment_number
             )
             cropped_annotations.append(
-                CroppedAnnotation(cropped_image, fragment_number, script, label)
+                CroppedAnnotation(
+                    cropped_image,
+                    fragment_number,
+                    script,
+                    self._format_label(label) if label else "",
+                )
             )
         return cropped_annotations
 

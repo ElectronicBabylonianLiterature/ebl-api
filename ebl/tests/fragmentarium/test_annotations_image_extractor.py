@@ -45,8 +45,52 @@ def test_format_line_label(
     assert image_extractor._format_label(line_label) == expected
 
 
+@pytest.mark.parametrize(
+    "line_label, line_number, expected",
+    [
+        (
+            LineNumber(2),
+            2,
+            True,
+        ),
+        (
+            LineNumber(2),
+            1,
+            False,
+        ),
+        (
+            LineNumberRange(LineNumber(1, True), LineNumber(3)),
+            2,
+            True,
+        ),
+        (
+            LineNumberRange(LineNumber(1, True), LineNumber(3)),
+            4,
+            False,
+        ),
+    ],
+)
+def test_line_label_match_line_number(
+    line_label,
+    line_number,
+    expected,
+    fragment_repository,
+    annotations_repository,
+    photo_repository,
+):
+    image_extractor = AnnotationImageExtractor(
+        fragment_repository, annotations_repository, photo_repository
+    )
+    assert image_extractor._is_matching_number(line_label, line_number) == expected
+
+
 def test_cropped_images_from_sign(
-    annotations_repository, photo_repository, fragment_repository, when, photo_jpeg
+    annotations_repository,
+    photo_repository,
+    fragment_repository,
+    when,
+    photo_jpeg,
+    text_with_labels,
 ):
 
     image_extractor = AnnotationImageExtractor(
@@ -54,12 +98,12 @@ def test_cropped_images_from_sign(
     )
 
     single_annotation = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(path=[8, 0, 0])
+        data=AnnotationDataFactory.build(path=[2, 0, 0])
     )
     annotation = AnnotationsFactory.build(annotations=[single_annotation])
     sign = "test-sign"
 
-    fragment = TransliteratedFragmentFactory.build()
+    fragment = TransliteratedFragmentFactory.build(text=text_with_labels)
     (when(annotations_repository).find_by_sign(sign).thenReturn([annotation]))
     (
         when(fragment_repository)
@@ -77,4 +121,4 @@ def test_cropped_images_from_sign(
     first_cropped_annotation = result[0]
     assert isinstance(first_cropped_annotation, CroppedAnnotation)
     assert first_cropped_annotation.script == fragment.script
-    assert first_cropped_annotation.label != "i stone wig i 8'"
+    assert first_cropped_annotation.label == "i Stone wig Stone wig 2"

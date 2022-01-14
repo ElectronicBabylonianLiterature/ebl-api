@@ -47,7 +47,15 @@ from ebl.signs.infrastructure.mongo_sign_repository import (
     SignSchema,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -345,6 +353,19 @@ def guest_client(context):
         attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
     )
     return testing.TestClient(api)
+
+
+@pytest.fixture
+def text_with_labels():
+    return Text.of_iterable(
+        [
+            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
+            ColumnAtLine(ColumnLabel.from_int(1)),
+            SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")),
+            ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "Stone wig")),
+            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
+        ]
+    )
 
 
 @pytest.fixture

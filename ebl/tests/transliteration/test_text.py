@@ -9,7 +9,6 @@ from ebl.lemmatization.domain.lemmatization import (
     LemmatizationToken,
 )
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.line import Line
@@ -111,17 +110,8 @@ def test_update_lemmatization_wrong_lines() -> None:
         TEXT.update_lemmatization(lemmatization)
 
 
-def test_labels() -> None:
-    text = Text.of_iterable(
-        [
-            TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
-            ColumnAtLine(ColumnLabel.from_int(1)),
-            SurfaceAtLine(SurfaceLabel([], atf.Surface.SURFACE, "Stone wig")),
-            ObjectAtLine(ObjectLabel([], atf.Object.OBJECT, "Stone wig")),
-            TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
-        ]
-    )
-    assert text.labels == [
+def test_labels(text_with_labels) -> None:
+    assert text_with_labels.labels == [
         LineLabel(None, None, None, LineNumber(1)),
         LineLabel(
             ColumnLabel.from_int(1),
